@@ -56,12 +56,6 @@ function isAllowedHtmlTag(node: commonmark.Node): boolean {
 function isMultiLine(node: commonmark.Node): boolean {
     let par = node;
     while (par.parent) {
-        // commonmark Parser separate quotes with blank quoted lines between them with
-        // paragraphs, so we need to consider it when the markdown is only a multiline quote.
-        if (par.type === 'block_quote') {
-            break;
-        }
-
         par = par.parent;
     }
     return par.firstChild != par.lastChild;
@@ -135,7 +129,10 @@ export default class Markdown {
             // 'inline', rather than unnecessarily wrapped in its own
             // p tag. If, however, we have multiple nodes, each gets
             // its own p tag to keep them as separate paragraphs.
-            if (isMultiLine(node)) {
+            // However, if it's a blockquote, adds a p tag anyway
+            // in order to avoid deviation to commonmark and unexpected
+            // results when parsing the formatted HTML.
+            if (node.parent.type === 'block_quote'|| isMultiLine(node)) {
                 realParagraph.call(this, node, entering);
             }
         };
