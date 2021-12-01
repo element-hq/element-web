@@ -332,10 +332,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Preferences") }</div>
 
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{ _t("Room list") }</span>
-                    { this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS) }
-                </div>
+                { !SettingsStore.getValue("feature_breadcrumbs_v2") &&
+                    <div className="mx_SettingsTab_section">
+                        <span className="mx_SettingsTab_subheading">{ _t("Room list") }</span>
+                        { this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS) }
+                    </div>
+                }
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>

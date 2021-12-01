@@ -133,7 +133,8 @@ $roomListCollapsedWidth: 68px;
                     display: none;
                 }
 
-                & + .mx_LeftPanel_exploreButton {
+                & + .mx_LeftPanel_exploreButton,
+                & + .mx_LeftPanel_recentsButton {
                     // Cheaty way to return the occupied space to the filter input
                     flex-basis: 0;
                     margin: 0;
@@ -166,11 +167,12 @@ $roomListCollapsedWidth: 68px;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-content;
+                    background-color: $secondary-content;
                 }
             }
 
-            .mx_LeftPanel_exploreButton {
+            .mx_LeftPanel_exploreButton,
+            .mx_LeftPanel_recentsButton {
                 width: 32px;
                 height: 32px;
                 border-radius: 8px;
@@ -185,11 +187,10 @@ $roomListCollapsedWidth: 68px;
                     left: 8px;
                     width: 16px;
                     height: 16px;
-                    mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-content;
+                    background-color: $secondary-content;
                 }
 
                 &:hover {
@@ -199,6 +200,14 @@ $roomListCollapsedWidth: 68px;
                         background-color: $background;
                     }
                 }
+            }
+
+            .mx_LeftPanel_exploreButton::before {
+                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+            }
+
+            .mx_LeftPanel_recentsButton::before {
+                mask-image: url('$(res)/img/element-icons/clock.svg');
             }
         }
 
@@ -257,7 +266,8 @@ $roomListCollapsedWidth: 68px;
                     background-color: transparent;
                 }
 
-                .mx_LeftPanel_exploreButton {
+                .mx_LeftPanel_exploreButton,
+                .mx_LeftPanel_recentsButton {
                     margin-left: 0;
                     margin-top: 8px;
                 }

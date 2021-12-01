@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingsStore from "../settings/SettingsStore";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+
+import SettingsStore from "../settings/SettingsStore";
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { SettingLevel } from "../settings/SettingLevel";
-import SpaceStore from "./spaces/SpaceStore";
 import { Action } from "../dispatcher/actions";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
 
@@ -44,6 +44,7 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
 
         SettingsStore.monitorSetting("breadcrumb_rooms", null);
         SettingsStore.monitorSetting("breadcrumbs", null);
+        SettingsStore.monitorSetting("feature_breadcrumbs_v2", null);
     }
 
     public static get instance(): BreadcrumbsStore {
@@ -58,8 +59,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         return this.state.enabled && this.meetsRoomRequirement;
     }
 
-    private get meetsRoomRequirement(): boolean {
-        return this.matrixClient && this.matrixClient.getVisibleRooms().length >= 20;
+    public get meetsRoomRequirement(): boolean {
+        if (SettingsStore.getValue("feature_breadcrumbs_v2")) return true;
+        return this.matrixClient?.getVisibleRooms().length >= 20;
     }
 
     protected async onAction(payload: ActionPayload) {
@@ -69,7 +71,9 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
             const settingUpdatedPayload = payload as SettingUpdatedPayload;
             if (settingUpdatedPayload.settingName === 'breadcrumb_rooms') {
                 await this.updateRooms();
-            } else if (settingUpdatedPayload.settingName === 'breadcrumbs') {
+            } else if (settingUpdatedPayload.settingName === 'breadcrumbs' ||
+                settingUpdatedPayload.settingName === 'feature_breadcrumbs_v2'
+            ) {
                 await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
             }
         } else if (payload.action === Action.ViewRoom) {
@@ -126,7 +130,6 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
     }
 
     private async appendRoom(room: Room) {
-        if (SpaceStore.spacesEnabled && room.isSpaceRoom()) return; // hide space rooms
         let updated = false;
         const rooms = (this.state.rooms || []).slice(); // cheap clone
 
