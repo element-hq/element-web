@@ -175,6 +175,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                     value={this.state.displayName}
                     autoComplete="off"
                     onChange={this.onChangeDisplayName}
+                    autoFocus
                 />
                 <AccessibleButton onClick={this.onRenameSubmit} kind="confirm_sm" />
                 <AccessibleButton onClick={this.onRenameCancel} kind="cancel_sm" />
