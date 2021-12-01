@@ -50,6 +50,7 @@ import {
     UPDATE_SUGGESTED_ROOMS,
     UPDATE_TOP_LEVEL_SPACES,
 } from ".";
+import { getCachedRoomIDForAlias } from "../../RoomAliasCache";
 
 interface IState {}
 
@@ -834,8 +835,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 // Don't auto-switch rooms when reacting to a context-switch
                 // as this is not helpful and can create loops of rooms/space switching
                 if (payload.context_switch) break;
+                let roomId = payload.room_id;
 
-                const roomId = payload.room_id;
+                if (payload.room_alias && !roomId) {
+                    roomId = getCachedRoomIDForAlias(payload.room_alias);
+                }
+
+                if (!roomId) return; // we'll get re-fired with the room ID shortly
+
                 const room = this.matrixClient?.getRoom(roomId);
                 if (room?.isSpaceRoom()) {
                     // Don't context switch when navigating to the space room
