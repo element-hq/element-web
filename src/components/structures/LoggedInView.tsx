@@ -138,7 +138,7 @@ interface IState {
  * This is what our MatrixChat shows when we are logged in. The precise view is
  * determined by the page_type property.
  *
- * Currently it's very tightly coupled with MatrixChat. We should try to do
+ * Currently, it's very tightly coupled with MatrixChat. We should try to do
  * something about that.
  *
  * Components mounted below us can access the matrix client via the react context.
@@ -147,7 +147,6 @@ interface IState {
 class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 
-    private dispatcherRef: string;
     protected readonly _matrixClient: MatrixClient;
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<HTMLDivElement>;
@@ -213,7 +212,6 @@ class LoggedInView extends React.Component<IProps, IState> {
     componentWillUnmount() {
         document.removeEventListener('keydown', this.onNativeKeyDown, false);
         CallHandler.instance.removeListener(CallHandlerEvent.CallState, this.onCallState);
-        dis.unregister(this.dispatcherRef);
         this._matrixClient.removeListener("accountData", this.onAccountData);
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);

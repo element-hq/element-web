@@ -106,13 +106,19 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
                 </React.Fragment>;
             }
 
+            let clearCacheButton: JSX.Element;
+            // we only show this button if there is an initialised MatrixClient otherwise we can't clear the cache
+            if (MatrixClientPeg.get()) {
+                clearCacheButton = <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
+                    { _t("Clear cache and reload") }
+                </AccessibleButton>;
+            }
+
             return <div className="mx_ErrorBoundary">
                 <div className="mx_ErrorBoundary_body">
                     <h1>{ _t("Something went wrong!") }</h1>
                     { bugReportSection }
-                    <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
-                        { _t("Clear cache and reload") }
-                    </AccessibleButton>
+                    { clearCacheButton }
                 </div>
             </div>;
         }
