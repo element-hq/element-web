@@ -270,8 +270,6 @@ $activeBorderColor: $primary-content;
 
         .mx_BaseAvatar:not(.mx_UserMenu_userAvatar_BaseAvatar) .mx_BaseAvatar_initial {
             color: $secondary-content;
-            width: 32px;
-            height: 32px;
             border-radius: 8px;
             background-color: $panel-actions;
             font-size: $font-15px !important; // override inline style
@@ -280,13 +278,6 @@ $activeBorderColor: $primary-content;
 
             & + .mx_BaseAvatar_image {
                 visibility: hidden;
-            }
-        }
-
-        .mx_SpaceTreeLevel {
-            .mx_BaseAvatar_initial {
-                width: 24px;
-                height: 24px;
             }
         }
     }
