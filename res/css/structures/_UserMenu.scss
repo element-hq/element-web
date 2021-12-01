@@ -19,10 +19,11 @@ limitations under the License.
     border-bottom: 1px solid $quinary-content;
     margin-left: 18px;
     margin-bottom: 4px;
+    margin-top: 12px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    width: max-content;
+    width: calc(100% - 20px);
 
     .mx_UserMenu_userAvatar {
         position: relative;

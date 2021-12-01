@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React, { ComponentProps, createRef } from "react";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 
-interface IProps {
+interface IProps extends Omit<ComponentProps<typeof AutoHideScrollbar>, "onWheel"> {
     // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
     // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
     // by the parent element.
@@ -55,6 +55,7 @@ export default class IndicatorScrollbar extends React.Component<IProps, IState> 
     }
 
     private collectScroller = (scroller: HTMLDivElement): void => {
+        this.props.wrappedRef?.(scroller);
         if (scroller && !this.scrollElement) {
             this.scrollElement = scroller;
             // Using the passive option to not block the main thread
@@ -185,10 +186,10 @@ export default class IndicatorScrollbar extends React.Component<IProps, IState> 
             ? <div className="mx_IndicatorScrollbar_rightOverflowIndicator" style={rightIndicatorStyle} /> : null;
 
         return (<AutoHideScrollbar
+            {...otherProps}
             ref={this.autoHideScrollbar}
             wrappedRef={this.collectScroller}
             onWheel={this.onMouseWheel}
-            {...otherProps}
         >
             { leftOverflowIndicator }
             { children }

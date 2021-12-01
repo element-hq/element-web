@@ -35,11 +35,6 @@ $activeBorderColor: $primary-content;
     display: flex;
     flex-direction: column;
 
-    .mx_SpacePanel_spaceTreeWrapper {
-        flex: 1;
-        padding: 12px 8px 16px 0;
-    }
-
     .mx_SpacePanel_toggleCollapse {
         margin: 0 auto;
         position: relative;
@@ -336,6 +331,9 @@ $activeBorderColor: $primary-content;
 
     /* root space buttons are bigger and not indented */
     & > .mx_AutoHideScrollbar {
+        flex: 1;
+        padding: 0 8px 16px 0;
+
         & > .mx_SpaceButton {
             height: $topLevelHeight;
 
@@ -346,6 +344,18 @@ $activeBorderColor: $primary-content;
 
         & > ul {
             padding-left: 0;
+        }
+
+        &.mx_IndicatorScrollbar_topOverflow {
+            mask-image: linear-gradient(180deg, transparent, black 5%);
+        }
+
+        &.mx_IndicatorScrollbar_bottomOverflow {
+            mask-image: linear-gradient(180deg, black, black 95%, transparent);
+        }
+
+        &.mx_IndicatorScrollbar_topOverflow.mx_IndicatorScrollbar_bottomOverflow {
+            mask-image: linear-gradient(180deg, transparent, black 5%, black 95%, transparent);
         }
     }
 }

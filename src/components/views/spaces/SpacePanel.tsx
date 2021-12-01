@@ -44,7 +44,6 @@ import {
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
 } from "../../../stores/spaces";
-import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
@@ -58,6 +57,7 @@ import UIStore from "../../../stores/UIStore";
 import QuickSettingsButton from "./QuickSettingsButton";
 import { useSettingValue } from "../../../hooks/useSettings";
 import UserMenu from "../../structures/UserMenu";
+import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -252,7 +252,6 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
     });
 
     return <div className="mx_SpaceTreeLevel">
-        <UserMenu isPanelCollapsed={isPanelCollapsed} />
         { metaSpacesSection }
         { invites.map(s => (
             <SpaceItem
@@ -308,9 +307,10 @@ const SpacePanel = () => {
                         aria-label={_t("Spaces")}
                         ref={ref}
                     >
+                        <UserMenu isPanelCollapsed={isPanelCollapsed} />
                         <Droppable droppableId="top-level-spaces">
                             { (provided, snapshot) => (
-                                <AutoHideScrollbar
+                                <IndicatorScrollbar
                                     {...provided.droppableProps}
                                     wrappedRef={provided.innerRef}
                                     className="mx_SpacePanel_spaceTreeWrapper"
@@ -324,7 +324,7 @@ const SpacePanel = () => {
                                     >
                                         { provided.placeholder }
                                     </InnerSpacePanel>
-                                </AutoHideScrollbar>
+                                </IndicatorScrollbar>
                             ) }
                         </Droppable>
                         <AccessibleTooltipButton
