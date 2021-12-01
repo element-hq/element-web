@@ -1008,7 +1008,7 @@
     "To avoid losing your chat history, you must export your room keys before logging out. You will need to go back to the newer version of %(brand)s to do this": "Abyste po odhlášení nepřišli o přístup k historii šifrovaných konverzací, měli byste si před odhlášením exportovat šifrovací klíče místností. Prosím vraťte se k novější verzi %(brand)su a exportujte si klíče",
     "Room Settings - %(roomName)s": "Nastavení místnosti - %(roomName)s",
     "Could not load user profile": "Nepovedlo se načíst profil uživatele",
-    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Zda používáte funkci „breadcrumb“ (ikony nad seznamem místností)",
+    "Whether or not you're using the 'breadcrumbs' feature (avatars above the room list)": "Zda používáte funkci „drobky“ (ikony nad seznamem místností)",
     "Replying With Files": "Odpovídání souborem",
     "At this time it is not possible to reply with a file. Would you like to upload this file without replying?": "V tuto chvíli není možné odpovědět souborem. Chcete tento soubor nahrát bez odpovědi?",
     "The file '%(fileName)s' failed to upload.": "Soubor '%(fileName)s' se nepodařilo nahrát.",
@@ -3400,5 +3400,7 @@
     "Add people": "Přidat lidi",
     "You do not have permissions to invite people to this space": "Nemáte oprávnění zvát lidi do tohoto prostoru",
     "Invite to space": "Pozvat do prostoru",
-    "Start new chat": "Zahájit nový chat"
+    "Start new chat": "Zahájit nový chat",
+    "Use new room breadcrumbs": "Používat drobky místnosti",
+    "Recently viewed": "Nedávno zobrazené"
 }
