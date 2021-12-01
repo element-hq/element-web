@@ -315,9 +315,9 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                     />
                     <PassphraseConfirmField
                         name="reset_password_confirm"
-                        label={_t('Confirm')}
-                        labelRequired={_t("A new password must be entered.")}
-                        labelInvalid={_t("New passwords must match each other.")}
+                        label={_td('Confirm')}
+                        labelRequired={_td("A new password must be entered.")}
+                        labelInvalid={_td("New passwords must match each other.")}
                         value={this.state.password2}
                         password={this.state.password}
                         fieldRef={field => this[ForgotPasswordField.PasswordConfirm] = field}

@@ -21,7 +21,7 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AccessibleButton from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
 import withValidation, { IFieldState, IValidationResult } from '../elements/Validation';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
 import CountlyAnalytics from "../../../CountlyAnalytics";
@@ -376,7 +376,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
                             <PassphraseField
                                 fieldRef={field => this[FIELD_NEW_PASSWORD] = field}
                                 type="password"
-                                label='New Password'
+                                label={_td("New Password")}
                                 minScore={PASSWORD_MIN_SCORE}
                                 value={this.state.newPassword}
                                 autoFocus={this.props.autoFocusNewPasswordInput}
