@@ -17,13 +17,10 @@ limitations under the License.
 .mx_UserMenu {
     padding: 0 2px 8px;
     border-bottom: 1px solid $quinary-content;
-    margin-left: 18px;
-    margin-bottom: 4px;
-    margin-top: 12px;
+    margin: 12px 14px 4px 18px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    width: calc(100% - 20px);
 
     .mx_UserMenu_userAvatar {
         position: relative;
