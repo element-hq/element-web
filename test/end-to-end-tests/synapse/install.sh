@@ -2,7 +2,7 @@
 set -e
 
 # config
-SYNAPSE_BRANCH=release-v1.47
+SYNAPSE_BRANCH=develop
 INSTALLATION_NAME=consent
 SERVER_DIR=installations/$INSTALLATION_NAME
 CONFIG_TEMPLATE=consent
