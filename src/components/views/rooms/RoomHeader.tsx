@@ -28,8 +28,6 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import Modal from '../../../Modal';
-import InfoDialog from "../dialogs/InfoDialog";
 import { throttle } from 'lodash';
 import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
 import { E2EStatus } from '../../../utils/ShieldUtils';
@@ -112,14 +110,6 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     private rateLimitedUpdate = throttle(() => {
         this.forceUpdate();
     }, 500, { leading: true, trailing: true });
-
-    private displayInfoDialogAboutScreensharing() {
-        Modal.createDialog(InfoDialog, {
-            title: _t("Screen sharing is here!"),
-            description: _t("You can now share your screen by pressing the \"screen share\" " +
-            "button during a call. You can even do this in audio calls if both sides support it!"),
-        });
-    }
 
     private onContextMenuOpenClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
@@ -219,8 +209,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             />;
             const videoCallButton = <AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
-                onClick={(ev: React.MouseEvent<Element>) => ev.shiftKey ?
-                    this.displayInfoDialogAboutScreensharing() : this.props.onCallPlaced(CallType.Video)}
+                onClick={() => this.props.onCallPlaced(CallType.Video)}
                 title={_t("Video call")}
                 key="video"
             />;
