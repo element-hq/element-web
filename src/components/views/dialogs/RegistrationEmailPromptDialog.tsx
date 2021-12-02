@@ -16,7 +16,7 @@ limitations under the License.
 
 import * as React from "react";
 
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import { IDialogProps } from "./IDialogProps";
 import { useRef, useState } from "react";
 import Field from "../elements/Field";
@@ -64,7 +64,7 @@ const RegistrationEmailPromptDialog: React.FC<IProps> = ({ onFinished }) => {
                 <EmailField
                     fieldRef={fieldRef}
                     autoFocus={true}
-                    label={_t("Email (optional)")}
+                    label={_td("Email (optional)")}
                     value={email}
                     onChange={ev => {
                         const target = ev.target as HTMLInputElement;
