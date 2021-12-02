@@ -46,7 +46,7 @@ interface IState {
 
 @replaceableComponent("structures.RoomSearch")
 export default class RoomSearch extends React.PureComponent<IProps, IState> {
-    private dispatcherRef: string;
+    private readonly dispatcherRef: string;
     private inputRef: React.RefObject<HTMLInputElement> = createRef();
     private searchFilter: NameFilterCondition = new NameFilterCondition();
 
@@ -136,9 +136,9 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         }
     };
 
-    public focus(): void {
+    public focus = (): void => {
         this.inputRef.current?.focus();
-    }
+    };
 
     public render(): React.ReactNode {
         const classes = classNames({
@@ -154,7 +154,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         });
 
         let icon = (
-            <div className='mx_RoomSearch_icon' />
+            <div className="mx_RoomSearch_icon" onClick={this.focus} />
         );
         let input = (
             <input
@@ -178,7 +178,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 onClick={this.clearInput}
             />
         );
-        let shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt">
+        let shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt" onClick={this.focus}>
             { isMac ? "⌘ K" : "Ctrl K" }
         </div>;
 
