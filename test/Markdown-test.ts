@@ -46,7 +46,7 @@ describe("Markdown parser test", () => {
             "https://riot.im/app/#/room/#_foonetic_xkcd:matrix.org",
         ].join("\n");
 
-        it('tests that links are getting properly HTML formatted', () => {
+        it('tests that links with markdown empasis in them are getting properly HTML formatted', () => {
             /* eslint-disable max-len */
             const expectedResult = [
                 "<p>Test1:<br />#_foonetic_xkcd:matrix.org<br />http://google.com/_thing_<br />https://matrix.org/_matrix/client/foo/123_<br />#_foonetic_xkcd:matrix.org</p>",
@@ -125,7 +125,7 @@ describe("Markdown parser test", () => {
             expect(md.toHTML()).toEqual(expectedResult);
         });
 
-        it('expects that links in one line will be "escaped" properly', () => {
+        it('expects that links with emphasis are "escaped" correctly', () => {
             /* eslint-disable max-len */
             const testString = [
                 'http://domain.xyz/foo/bar-_stuff-like-this_-in-it.jpg' + " " + 'http://domain.xyz/foo/bar-_stuff-like-this_-in-it.jpg',
@@ -134,6 +134,30 @@ describe("Markdown parser test", () => {
             const expectedResult = [
                 "http://domain.xyz/foo/bar-_stuff-like-this_-in-it.jpg http://domain.xyz/foo/bar-_stuff-like-this_-in-it.jpg",
                 "http://domain.xyz/foo/bar-_stuff-like-this_-in-it.jpg http://domain.xyz/foo/bar-_stuff-like-this_-in-it.jpg",
+            ].join('<br />');
+            /* eslint-enable max-len */
+            const md = new Markdown(testString);
+            expect(md.toHTML()).toEqual(expectedResult);
+        });
+
+        it('expects that the link part will not be accidentally added to <strong>', () => {
+            /* eslint-disable max-len */
+            const testString = `https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py`;
+            const expectedResult = 'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py';
+            /* eslint-enable max-len */
+            const md = new Markdown(testString);
+            expect(md.toHTML()).toEqual(expectedResult);
+        });
+
+        it('expects that the link part will not be accidentally added to <strong> for multiline links', () => {
+            /* eslint-disable max-len */
+            const testString = [
+                'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py' + " " + 'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py',
+                'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py' + " " + 'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py',
+            ].join('\n');
+            const expectedResult = [
+                'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py' + " " + 'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py',
+                'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py' + " " + 'https://github.com/matrix-org/synapse/blob/develop/synapse/module_api/__init__.py',
             ].join('<br />');
             /* eslint-enable max-len */
             const md = new Markdown(testString);

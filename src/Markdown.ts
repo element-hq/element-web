@@ -93,6 +93,11 @@ function getTextUntilEndOrLinebreak(node: commonmark.Node) {
     return text;
 }
 
+const formattingChangesByNodeType = {
+    'emph': '_',
+    'strong': '__',
+};
+
 /**
  * Class that wraps commonmark, adding the ability to see whether
  * a given message actually uses any markdown syntax or whether
@@ -128,7 +133,7 @@ export default class Markdown {
         let text = '';
         let isInPara = false;
         let previousNode: commonmark.Node | null = null;
-        let shouldUnlinkEmphasisNode = false;
+        let shouldUnlinkFormattingNode = false;
         while ((event = walker.next())) {
             const { node } = event;
             if (node.type === 'paragraph') {
@@ -152,7 +157,7 @@ export default class Markdown {
                     text += node.literal;
                 }
                 // We should not do this if previous node was not a textnode, as we can't combine it then.
-                if (node.type === 'emph' && previousNode.type === 'text') {
+                if ((node.type === 'emph' || node.type === 'strong') && previousNode.type === 'text') {
                     if (event.entering) {
                         const foundLinks = linkify.find(text);
                         for (const { value } of foundLinks) {
@@ -161,7 +166,8 @@ export default class Markdown {
                                  * NOTE: This technically should unlink the emph node and create LINK nodes instead, adding all the next elements as siblings
                                  * but this solution seems to work well and is hopefully slightly easier to understand too
                                  */
-                                const nonEmphasizedText = `_${node.firstChild.literal}_`;
+                                const format = formattingChangesByNodeType[node.type];
+                                const nonEmphasizedText = `${format}${node.firstChild.literal}${format}`;
                                 const f = getTextUntilEndOrLinebreak(node);
                                 const newText = value + nonEmphasizedText + f;
                                 const newLinks = linkify.find(newText);
@@ -175,7 +181,7 @@ export default class Markdown {
                                     // Remove `em` opening and closing nodes
                                     node.unlink();
                                     previousNode.insertAfter(event.node);
-                                    shouldUnlinkEmphasisNode = true;
+                                    shouldUnlinkFormattingNode = true;
                                 } else {
                                     logger.error(
                                         "Markdown links escaping found too many links for following text: ",
@@ -189,9 +195,9 @@ export default class Markdown {
                             }
                         }
                     } else {
-                        if (shouldUnlinkEmphasisNode) {
+                        if (shouldUnlinkFormattingNode) {
                             node.unlink();
-                            shouldUnlinkEmphasisNode = false;
+                            shouldUnlinkFormattingNode = false;
                         }
                     }
                 }
