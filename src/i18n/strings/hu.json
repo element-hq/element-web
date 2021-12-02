@@ -3391,5 +3391,9 @@
     "You do not have permissions to invite people to this space": "Nincs jogosultságod embereket meghívni erre a térre",
     "Invite to space": "Meghívás a térbe",
     "Start new chat": "Új beszélgetés indítása",
-    "Recently viewed": "Nemrég megtekintett"
+    "Recently viewed": "Nemrég megtekintett",
+    "Your status will be shown to people you have a DM with.": "Az állapota azoknak jelenik meg, akikkel közvetlen beszélgetése van.",
+    "We're testing some design changes": "Dizájnváltoztatásokat próbálunk ki",
+    "Your feedback is wanted as we try out some design changes.": "Kíváncsiak vagyunk a visszajelzésére, mert bizonyos dizájnmódosításokat próbálunk ki.",
+    "To view all keyboard shortcuts, <a>click here</a>.": "Az összes gyorsbillentyű megtekintéséhez <a>kattintson ide</a>."
 }
