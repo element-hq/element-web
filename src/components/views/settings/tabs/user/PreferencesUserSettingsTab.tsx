@@ -359,9 +359,13 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Keyboard shortcuts") }</span>
-                    <AccessibleButton className="mx_SettingsFlag" onClick={KeyboardShortcuts.toggleDialog}>
-                        { _t("To view all keyboard shortcuts, click here.") }
-                    </AccessibleButton>
+                    <div className="mx_SettingsFlag">
+                        { _t("To view all keyboard shortcuts, <a>click here</a>.", {}, {
+                            a: sub => <AccessibleButton kind="link" onClick={KeyboardShortcuts.toggleDialog}>
+                                { sub }
+                            </AccessibleButton>,
+                        }) }
+                    </div>
                     { this.renderGroup(PreferencesUserSettingsTab.KEYBINDINGS_SETTINGS) }
                 </div>
 

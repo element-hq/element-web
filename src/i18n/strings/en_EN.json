@@ -1429,7 +1429,7 @@
     "Show my Communities": "Show my Communities",
     "If a community isn't shown you may not have permission to convert it.": "If a community isn't shown you may not have permission to convert it.",
     "Keyboard shortcuts": "Keyboard shortcuts",
-    "To view all keyboard shortcuts, click here.": "To view all keyboard shortcuts, click here.",
+    "To view all keyboard shortcuts, <a>click here</a>.": "To view all keyboard shortcuts, <a>click here</a>.",
     "Displaying time": "Displaying time",
     "Composer": "Composer",
     "Code blocks": "Code blocks",
