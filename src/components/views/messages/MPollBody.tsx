@@ -36,14 +36,15 @@ import ErrorDialog from '../dialogs/ErrorDialog';
 const TEXT_NODE_TYPE = "org.matrix.msc1767.text";
 
 interface IState {
-    selected?: string;
-    pollRelations: Relations;
+    selected?: string; // Which option was clicked by the local user
+    pollRelations: Relations; // Allows us to access voting events
 }
 
 @replaceableComponent("views.messages.MPollBody")
 export default class MPollBody extends React.Component<IBodyProps, IState> {
-    static contextType = MatrixClientContext;
+    public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
+    private seenEventIds: string[] = []; // Events we have already seen
 
     constructor(props: IBodyProps) {
         super(props);
@@ -98,7 +99,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
 
     private onRelationsChange = () => {
         // We hold pollRelations in our state, and it has changed under us
-        this.forceUpdate();
+        this.unselectIfNewEventFromMe();
     };
 
     private selectOption(answerId: string) {
@@ -120,7 +121,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             this.props.mxEvent.getRoomId(),
             POLL_RESPONSE_EVENT_TYPE.name,
             responseContent,
-        ).catch(e => {
+        ).catch((e: any) => {
             console.error("Failed to submit poll response event:", e);
 
             Modal.createTrackedDialog(
@@ -163,6 +164,33 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             this.context.getUserId(),
             this.state.selected,
         );
+    }
+
+    /**
+     * If we've just received a new event that we hadn't seen
+     * before, and that event is me voting (e.g. from a different
+     * device) then forget when the local user selected.
+     *
+     * Either way, calls setState to update our list of events we
+     * have already seen.
+     */
+    private unselectIfNewEventFromMe() {
+        const newEvents: MatrixEvent[] = this.state.pollRelations.getRelations()
+            .filter(isPollResponse)
+            .filter((mxEvent: MatrixEvent) =>
+                !this.seenEventIds.includes(mxEvent.getId()));
+        let newSelected = this.state.selected;
+
+        if (newEvents.length > 0) {
+            for (const mxEvent of newEvents) {
+                if (mxEvent.getSender() === this.context.getUserId()) {
+                    newSelected = null;
+                }
+            }
+        }
+        const newEventIds = newEvents.map((mxEvent: MatrixEvent) => mxEvent.getId());
+        this.seenEventIds = this.seenEventIds.concat(newEventIds);
+        this.setState( { selected: newSelected } );
     }
 
     private totalVotes(collectedVotes: Map<string, number>): number {
@@ -254,13 +282,6 @@ function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
 }
 
 export function allVotes(pollRelations: Relations): Array<UserVote> {
-    function isPollResponse(responseEvent: MatrixEvent): boolean {
-        return (
-            responseEvent.getType() === POLL_RESPONSE_EVENT_TYPE.name &&
-            responseEvent.getContent().hasOwnProperty(POLL_RESPONSE_EVENT_TYPE.name)
-        );
-    }
-
     if (pollRelations) {
         return pollRelations.getRelations()
             .filter(isPollResponse)
@@ -268,6 +289,13 @@ export function allVotes(pollRelations: Relations): Array<UserVote> {
     } else {
         return [];
     }
+}
+
+function isPollResponse(responseEvent: MatrixEvent): boolean {
+    return (
+        POLL_RESPONSE_EVENT_TYPE.matches(responseEvent.getType()) &&
+        POLL_RESPONSE_EVENT_TYPE.findIn(responseEvent.getContent())
+    );
 }
 
 /**
