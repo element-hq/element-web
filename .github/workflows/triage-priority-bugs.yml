@@ -1,4 +1,4 @@
-name: Move labelled issues into the Priority bugs column for the Web App Team
+name: Move P1 bugs to boards
 
 on:
   issues:

@@ -3,7 +3,7 @@ name: Move unlabelled from needs info columns to triaged
 on:
   issues:
     types: [unlabeled]
-    
+
 jobs:
   Move_Unabeled_Issue_On_Project_Board:
     name: Move no longer X-Needs-Info issues to Triaged
