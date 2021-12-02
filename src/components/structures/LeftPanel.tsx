@@ -43,6 +43,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import IndicatorScrollbar from "./IndicatorScrollbar";
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import SettingsStore from "../../settings/SettingsStore";
+import UserMenu from "./UserMenu";
 
 interface IProps {
     isMinimized: boolean;
@@ -380,6 +381,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 onBlur={this.onBlur}
                 onKeyDown={this.onKeyDown}
             >
+                { !SpaceStore.spacesEnabled && <UserMenu isPanelCollapsed={true} /> }
                 <RoomSearch
                     isMinimized={this.props.isMinimized}
                     ref={this.roomSearchRef}
@@ -420,7 +422,12 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 <aside className="mx_LeftPanel_roomListContainer">
                     { this.renderSearchDialExplore() }
                     { this.renderBreadcrumbs() }
-                    { !this.props.isMinimized && <RoomListHeader onVisibilityChange={this.refreshStickyHeaders} /> }
+                    { !this.props.isMinimized && (
+                        <RoomListHeader
+                            onVisibilityChange={this.refreshStickyHeaders}
+                            spacePanelDisabled={!SpaceStore.spacesEnabled}
+                        />
+                    ) }
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}

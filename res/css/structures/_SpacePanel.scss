@@ -349,6 +349,12 @@ $activeBorderColor: $primary-content;
             mask-image: linear-gradient(180deg, transparent, black 5%, black 95%, transparent);
         }
     }
+
+    .mx_UserMenu {
+        padding: 0 2px 8px;
+        border-bottom: 1px solid $quinary-content;
+        margin: 12px 14px 4px 18px;
+    }
 }
 
 .mx_SpacePanel_contextMenu {

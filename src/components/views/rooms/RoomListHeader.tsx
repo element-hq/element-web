@@ -148,10 +148,11 @@ const useJoiningRooms = (): Set<string> => {
 };
 
 interface IProps {
+    spacePanelDisabled: boolean;
     onVisibilityChange?(): void;
 }
 
-const RoomListHeader = ({ onVisibilityChange }: IProps) => {
+const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
     const cli = useContext(MatrixClientContext);
     const [mainMenuDisplayed, mainMenuHandle, openMainMenu, closeMainMenu] = useContextMenu<HTMLDivElement>();
     const [plusMenuDisplayed, plusMenuHandle, openPlusMenu, closePlusMenu] = useContextMenu<HTMLDivElement>();
@@ -183,6 +184,8 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         return <div className="mx_LeftPanel_roomListFilterCount">
             { _t("%(count)s results", { count }) }
         </div>;
+    } else if (spacePanelDisabled) {
+        return null;
     }
 
     const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
