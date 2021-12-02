@@ -5905,10 +5905,10 @@ matrix-react-test-utils@^0.2.3:
     "@babel/traverse" "^7.13.17"
     walk "^2.3.14"
 
-matrix-widget-api@^0.1.0-beta.17:
-  version "0.1.0-beta.17"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.17.tgz#392be2bf42990e8f7e16aeadf2546f18681af49b"
-  integrity sha512-hyaDLQNvGvV67Ss23vI69y/ZwVMVz2160LJ2nYyhO0C4mk9zTl0Rbe9jNQ9B453V8MadHLiUUdjzoe++WW+6jA==
+matrix-widget-api@^0.1.0-beta.18:
+  version "0.1.0-beta.18"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-0.1.0-beta.18.tgz#4efd30edec3eeb4211285985464c062fcab59795"
+  integrity sha512-kCpcs6rrB94Mmr2/1gBJ+6auWyZ5UvOMOn5K2VFafz2/NDMzZg9OVWj9KFYnNAuwwBE5/tCztYEj6OQ+hgbwOQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
