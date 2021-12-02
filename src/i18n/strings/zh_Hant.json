@@ -3400,5 +3400,7 @@
     "Add people": "新增夥伴",
     "You do not have permissions to invite people to this space": "您無權邀請其他人加入此空間",
     "Invite to space": "邀請至空間",
-    "Start new chat": "開始新聊天"
+    "Start new chat": "開始新聊天",
+    "Recently viewed": "最近檢視",
+    "Use new room breadcrumbs": "使用新的聊天室頁面路徑"
 }
