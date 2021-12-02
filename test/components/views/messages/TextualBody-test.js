@@ -282,6 +282,30 @@ describe("<TextualBody />", () => {
                 '!ZxbRYPQXDXKGmDnJNg:example.com</a></span> with vias</span>',
             );
         });
+
+        it('renders formatted body without html corretly', () => {
+            const ev = mkEvent({
+                type: "m.room.message",
+                room: "room_id",
+                user: "sender",
+                content: {
+                    body: "escaped \\*markdown\\*",
+                    msgtype: "m.text",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "escaped *markdown*",
+                },
+                event: true,
+            });
+
+            const wrapper = mount(<TextualBody mxEvent={ev} />);
+
+            const content = wrapper.find(".mx_EventTile_body");
+            expect(content.html()).toBe(
+                '<span class="mx_EventTile_body" dir="auto">' +
+                'escaped *markdown*' +
+                '</span>',
+            );
+        });
     });
 
     it("renders url previews correctly", () => {
