@@ -20,6 +20,13 @@ limitations under the License.
 
         .mx_SettingsFlag {
             margin-right: 0; // remove right margin to align with beta cards
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .mx_ToggleSwitch {
+                float: unset;
+            }
         }
     }
 }
