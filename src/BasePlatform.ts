@@ -19,6 +19,10 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { encodeUnpaddedBase64 } from "matrix-js-sdk/src/crypto/olmlib";
+import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import dis from './dispatcher/dispatcher';
 import BaseEventIndexManager from './indexing/BaseEventIndexManager';
 import { ActionPayload } from "./dispatcher/payloads";
@@ -27,8 +31,6 @@ import { Action } from "./dispatcher/actions";
 import { hideToast as hideUpdateToast } from "./toasts/UpdateToast";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -168,9 +170,9 @@ export default abstract class BasePlatform {
      */
     abstract requestNotificationPermission(): Promise<string>;
 
-    abstract displayNotification(title: string, msg: string, avatarUrl: string, room: Object);
+    abstract displayNotification(title: string, msg: string, avatarUrl: string, room: Room);
 
-    loudNotification(ev: Event, room: Object) {
+    loudNotification(ev: MatrixEvent, room: Room) {
     }
 
     clearNotification(notif: Notification) {
