@@ -3399,5 +3399,11 @@
     "Add people": "Aggiungi persone",
     "You do not have permissions to invite people to this space": "Non hai l'autorizzazione di invitare persone in questo spazio",
     "Invite to space": "Invita nello spazio",
-    "Start new chat": "Inizia nuova chat"
+    "Start new chat": "Inizia nuova chat",
+    "%(count)s votes cast. Vote to see the results|one": "%(count)s voto. Vota per vedere i risultati",
+    "%(count)s votes cast. Vote to see the results|other": "%(count)s voti. Vota per vedere i risultati",
+    "No votes cast": "Nessun voto",
+    "Recently viewed": "Visti di recente",
+    "To view all keyboard shortcuts, <a>click here</a>.": "Per vedere tutte le scorciatoie, <a>clicca qui</a>.",
+    "Use new room breadcrumbs": "Usa nuovi \"breadcrumbs\" delle stanze"
 }
