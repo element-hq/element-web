@@ -1,5 +1,346 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`MPollBody renders a poll that I have not voted in 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <StyledRadioButton
+            checked={false}
+            childrenInLabel={true}
+            className=""
+            name="poll_answer_select-$mypoll"
+            onChange={[Function]}
+            value="pizza"
+          >
+            <label
+              className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+            >
+              <input
+                checked={false}
+                name="poll_answer_select-$mypoll"
+                onChange={[Function]}
+                type="radio"
+                value="pizza"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                className="mx_StyledRadioButton_content"
+              >
+                <div
+                  className="mx_MPollBody_optionDescription"
+                >
+                  <div
+                    className="mx_MPollBody_optionText"
+                  >
+                    Pizza
+                  </div>
+                  <div
+                    className="mx_MPollBody_optionVoteCount"
+                  />
+                </div>
+              </div>
+              <div
+                className="mx_StyledRadioButton_spacer"
+              />
+            </label>
+          </StyledRadioButton>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <StyledRadioButton
+            checked={false}
+            childrenInLabel={true}
+            className=""
+            name="poll_answer_select-$mypoll"
+            onChange={[Function]}
+            value="poutine"
+          >
+            <label
+              className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+            >
+              <input
+                checked={false}
+                name="poll_answer_select-$mypoll"
+                onChange={[Function]}
+                type="radio"
+                value="poutine"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                className="mx_StyledRadioButton_content"
+              >
+                <div
+                  className="mx_MPollBody_optionDescription"
+                >
+                  <div
+                    className="mx_MPollBody_optionText"
+                  >
+                    Poutine
+                  </div>
+                  <div
+                    className="mx_MPollBody_optionVoteCount"
+                  />
+                </div>
+              </div>
+              <div
+                className="mx_StyledRadioButton_spacer"
+              />
+            </label>
+          </StyledRadioButton>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="italian"
+          onClick={[Function]}
+        >
+          <StyledRadioButton
+            checked={false}
+            childrenInLabel={true}
+            className=""
+            name="poll_answer_select-$mypoll"
+            onChange={[Function]}
+            value="italian"
+          >
+            <label
+              className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+            >
+              <input
+                checked={false}
+                name="poll_answer_select-$mypoll"
+                onChange={[Function]}
+                type="radio"
+                value="italian"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                className="mx_StyledRadioButton_content"
+              >
+                <div
+                  className="mx_MPollBody_optionDescription"
+                >
+                  <div
+                    className="mx_MPollBody_optionText"
+                  >
+                    Italian
+                  </div>
+                  <div
+                    className="mx_MPollBody_optionVoteCount"
+                  />
+                </div>
+              </div>
+              <div
+                className="mx_StyledRadioButton_spacer"
+              />
+            </label>
+          </StyledRadioButton>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="wings"
+          onClick={[Function]}
+        >
+          <StyledRadioButton
+            checked={false}
+            childrenInLabel={true}
+            className=""
+            name="poll_answer_select-$mypoll"
+            onChange={[Function]}
+            value="wings"
+          >
+            <label
+              className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+            >
+              <input
+                checked={false}
+                name="poll_answer_select-$mypoll"
+                onChange={[Function]}
+                type="radio"
+                value="wings"
+              />
+              <div>
+                <div />
+              </div>
+              <div
+                className="mx_StyledRadioButton_content"
+              >
+                <div
+                  className="mx_MPollBody_optionDescription"
+                >
+                  <div
+                    className="mx_MPollBody_optionText"
+                  >
+                    Wings
+                  </div>
+                  <div
+                    className="mx_MPollBody_optionVoteCount"
+                  />
+                </div>
+              </div>
+              <div
+                className="mx_StyledRadioButton_spacer"
+              />
+            </label>
+          </StyledRadioButton>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        3 votes cast. Vote to see the results
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;
+
 exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = `
 <Wrapper
   getRelationsForEvent={[Function]}
@@ -478,9 +819,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                   </div>
                   <div
                     className="mx_MPollBody_optionVoteCount"
-                  >
-                    0 votes
-                  </div>
+                  />
                 </div>
               </div>
               <div
@@ -540,9 +879,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                   </div>
                   <div
                     className="mx_MPollBody_optionVoteCount"
-                  >
-                    0 votes
-                  </div>
+                  />
                 </div>
               </div>
               <div
@@ -602,9 +939,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                   </div>
                   <div
                     className="mx_MPollBody_optionVoteCount"
-                  >
-                    0 votes
-                  </div>
+                  />
                 </div>
               </div>
               <div
@@ -664,9 +999,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
                   </div>
                   <div
                     className="mx_MPollBody_optionVoteCount"
-                  >
-                    0 votes
-                  </div>
+                  />
                 </div>
               </div>
               <div
@@ -691,7 +1024,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
       <div
         className="mx_MPollBody_totalVotes"
       >
-        Based on 0 votes
+        No votes cast
       </div>
     </div>
   </MPollBody>
@@ -975,12 +1308,12 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_checked"
           key="wings"
           onClick={[Function]}
         >
           <StyledRadioButton
-            checked={false}
+            checked={true}
             childrenInLabel={true}
             className=""
             name="poll_answer_select-$mypoll"
@@ -988,10 +1321,10 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             value="wings"
           >
             <label
-              className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              className="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
             >
               <input
-                checked={false}
+                checked={true}
                 name="poll_answer_select-$mypoll"
                 onChange={[Function]}
                 type="radio"

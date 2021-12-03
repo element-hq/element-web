@@ -215,6 +215,19 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         const totalVotes = this.totalVotes(votes);
         const userId = this.context.getUserId();
         const myVote = userVotes.get(userId)?.answers[0];
+        let totalText: string;
+        if (myVote === undefined) {
+            if (totalVotes === 0) {
+                totalText = _t("No votes cast");
+            } else {
+                totalText = _t(
+                    "%(count)s votes cast. Vote to see the results",
+                    { count: totalVotes },
+                );
+            }
+        } else {
+            totalText = _t( "Based on %(count)s votes", { count: totalVotes } );
+        }
 
         return <div className="mx_MPollBody">
             <h2>{ pollInfo.question[TEXT_NODE_TYPE] }</h2>
@@ -225,7 +238,12 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                         const classNames = `mx_MPollBody_option${
                             checked ? " mx_MPollBody_option_checked": ""
                         }`;
-                        const answerVotes = votes.get(answer.id) ?? 0;
+                        let answerVotes = 0;
+                        let votesText = "";
+                        if (myVote !== undefined) { // Votes hidden if I didn't vote
+                            answerVotes = votes.get(answer.id) ?? 0;
+                            votesText = _t("%(count)s votes", { count: answerVotes });
+                        }
                         const answerPercent = Math.round(
                             100.0 * answerVotes / totalVotes);
                         return <div
@@ -244,7 +262,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                                         { answer[TEXT_NODE_TYPE] }
                                     </div>
                                     <div className="mx_MPollBody_optionVoteCount">
-                                        { _t("%(count)s votes", { count: answerVotes }) }
+                                        { votesText }
                                     </div>
                                 </div>
                             </StyledRadioButton>
@@ -259,7 +277,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                 }
             </div>
             <div className="mx_MPollBody_totalVotes">
-                { _t( "Based on %(count)s votes", { count: totalVotes } ) }
+                { totalText }
             </div>
         </div>;
     }

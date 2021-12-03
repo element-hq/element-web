@@ -63,19 +63,19 @@ describe("MPollBody", () => {
         ]);
     });
 
-    it("finds no votes if none were made", () => {
+    it("renders no votes if none were made", () => {
         const votes = [];
         const body = newMPollBody(votes);
-        expect(votesCount(body, "pizza")).toBe("0 votes");
-        expect(votesCount(body, "poutine")).toBe("0 votes");
-        expect(votesCount(body, "italian")).toBe("0 votes");
-        expect(votesCount(body, "wings")).toBe("0 votes");
-        expect(body.find(".mx_MPollBody_totalVotes").text()).toBe("Based on 0 votes");
+        expect(votesCount(body, "pizza")).toBe("");
+        expect(votesCount(body, "poutine")).toBe("");
+        expect(votesCount(body, "italian")).toBe("");
+        expect(votesCount(body, "wings")).toBe("");
+        expect(body.find(".mx_MPollBody_totalVotes").text()).toBe("No votes cast");
     });
 
     it("finds votes from multiple people", () => {
         const votes = [
-            responseEvent("@andyb:example.com", "pizza"),
+            responseEvent("@me:example.com", "pizza"),
             responseEvent("@bellc:example.com", "pizza"),
             responseEvent("@catrd:example.com", "poutine"),
             responseEvent("@dune2:example.com", "wings"),
@@ -88,10 +88,39 @@ describe("MPollBody", () => {
         expect(body.find(".mx_MPollBody_totalVotes").text()).toBe("Based on 4 votes");
     });
 
+    it("hides scores if I have not voted", () => {
+        const votes = [
+            responseEvent("@alice:example.com", "pizza"),
+            responseEvent("@bellc:example.com", "pizza"),
+            responseEvent("@catrd:example.com", "poutine"),
+            responseEvent("@dune2:example.com", "wings"),
+        ];
+        const body = newMPollBody(votes);
+        expect(votesCount(body, "pizza")).toBe("");
+        expect(votesCount(body, "poutine")).toBe("");
+        expect(votesCount(body, "italian")).toBe("");
+        expect(votesCount(body, "wings")).toBe("");
+        expect(body.find(".mx_MPollBody_totalVotes").text()).toBe(
+            "4 votes cast. Vote to see the results");
+    });
+
+    it("hides a single vote if I have not voted", () => {
+        const votes = [
+            responseEvent("@alice:example.com", "pizza"),
+        ];
+        const body = newMPollBody(votes);
+        expect(votesCount(body, "pizza")).toBe("");
+        expect(votesCount(body, "poutine")).toBe("");
+        expect(votesCount(body, "italian")).toBe("");
+        expect(votesCount(body, "wings")).toBe("");
+        expect(body.find(".mx_MPollBody_totalVotes").text()).toBe(
+            "1 vote cast. Vote to see the results");
+    });
+
     it("takes someone's most recent vote if they voted several times", () => {
         const votes = [
-            responseEvent("@fiona:example.com", "pizza", 12),
-            responseEvent("@fiona:example.com", "wings", 20),   // latest fiona
+            responseEvent("@me:example.com", "pizza", 12),
+            responseEvent("@me:example.com", "wings", 20),   // latest me
             responseEvent("@qbert:example.com", "pizza", 14),
             responseEvent("@qbert:example.com", "poutine", 16), // latest qbert
             responseEvent("@qbert:example.com", "wings", 15),
@@ -219,7 +248,7 @@ describe("MPollBody", () => {
         // When cb votes for 2 things, we consider the first only
         const votes = [
             responseEvent("@cb:example.com", ["pizza", "wings"]),
-            responseEvent("@da:example.com", "wings"),
+            responseEvent("@me:example.com", "wings"),
         ];
         const body = newMPollBody(votes);
         expect(votesCount(body, "pizza")).toBe("1 vote");
@@ -233,7 +262,7 @@ describe("MPollBody", () => {
         const votes = [
             responseEvent("@nc:example.com", "pizza", 12),
             responseEvent("@nc:example.com", [], 13),
-            responseEvent("@md:example.com", "italian"),
+            responseEvent("@me:example.com", "italian"),
         ];
         const body = newMPollBody(votes);
         expect(votesCount(body, "pizza")).toBe("0 votes");
@@ -248,7 +277,7 @@ describe("MPollBody", () => {
             responseEvent("@op:example.com", "pizza", 12),
             responseEvent("@op:example.com", [], 13),
             responseEvent("@op:example.com", "italian", 14),
-            responseEvent("@qr:example.com", "italian"),
+            responseEvent("@me:example.com", "italian"),
         ];
         const body = newMPollBody(votes);
         expect(votesCount(body, "pizza")).toBe("0 votes");
@@ -263,8 +292,8 @@ describe("MPollBody", () => {
         // the ballot is still spoiled because the second answer is
         // invalid, even though we would ignore it if we continued.
         const votes = [
-            responseEvent("@tr:example.com", "pizza", 12),
-            responseEvent("@tr:example.com", ["pizza", "doesntexist"], 13),
+            responseEvent("@me:example.com", "pizza", 12),
+            responseEvent("@me:example.com", ["pizza", "doesntexist"], 13),
             responseEvent("@uy:example.com", "italian", 14),
             responseEvent("@uy:example.com", "doesntexist", 15),
         ];
@@ -278,8 +307,8 @@ describe("MPollBody", () => {
 
     it("allows re-voting after a spoiled ballot", () => {
         const votes = [
-            responseEvent("@tr:example.com", "pizza", 12),
-            responseEvent("@tr:example.com", ["pizza", "doesntexist"], 13),
+            responseEvent("@me:example.com", "pizza", 12),
+            responseEvent("@me:example.com", ["pizza", "doesntexist"], 13),
             responseEvent("@uy:example.com", "italian", 14),
             responseEvent("@uy:example.com", "doesntexist", 15),
             responseEvent("@uy:example.com", "poutine", 16),
@@ -389,7 +418,7 @@ describe("MPollBody", () => {
             responseEvent("@op:example.com", "pizza", 12),
             responseEvent("@op:example.com", [], 13),
             responseEvent("@op:example.com", "italian", 14),
-            responseEvent("@st:example.com", "wings", 15),
+            responseEvent("@me:example.com", "wings", 15),
             responseEvent("@qr:example.com", "italian", 16),
         ];
         const body = newMPollBody(votes);
@@ -407,6 +436,18 @@ describe("MPollBody", () => {
         ];
         const body = newMPollBody(votes);
         clickRadio(body, "italian");
+        expect(body).toMatchSnapshot();
+    });
+
+    it("renders a poll that I have not voted in", () => {
+        const votes = [
+            responseEvent("@op:example.com", "pizza", 12),
+            responseEvent("@op:example.com", [], 13),
+            responseEvent("@op:example.com", "italian", 14),
+            responseEvent("@yo:example.com", "wings", 15),
+            responseEvent("@qr:example.com", "italian", 16),
+        ];
+        const body = newMPollBody(votes);
         expect(body).toMatchSnapshot();
     });
 });
