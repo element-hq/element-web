@@ -810,11 +810,11 @@ describe("SpaceStore", () => {
             expect(store.activeSpace).toBe(space1);
         });
 
-        it("switch to home for orphaned room", async () => {
+        it("switch to other rooms for orphaned room", async () => {
             viewRoom(room1);
             store.setActiveSpace(space1, false);
             viewRoom(orphan1);
-            expect(store.activeSpace).toBe(MetaSpace.Home);
+            expect(store.activeSpace).toBe(MetaSpace.Orphans);
         });
 
         it("switch to first space when selected metaspace is disabled", async () => {
