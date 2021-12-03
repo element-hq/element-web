@@ -20,9 +20,7 @@ limitations under the License.
 import React, { ReactNode } from 'react';
 import sanitizeHtml from 'sanitize-html';
 import cheerio from 'cheerio';
-import * as linkify from 'linkifyjs';
-import _linkifyElement from 'linkifyjs/element';
-import _linkifyString from 'linkifyjs/string';
+import { _linkifyElement, _linkifyString } from './linkify-matrix';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
 import katex from 'katex';
@@ -30,14 +28,12 @@ import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
 
 import { IExtendedSanitizeOptions } from './@types/sanitize-html';
-import linkifyMatrix from './linkify-matrix';
 import SettingsStore from './settings/SettingsStore';
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { getEmojiFromUnicode } from "./emoji";
 import ReplyChain from "./components/views/elements/ReplyChain";
 import { mediaFromMxc } from "./customisations/Media";
-
-linkifyMatrix(linkify);
+import { ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from './linkify-matrix';
 
 // Anything outside the basic multilingual plane will be a surrogate pair
 const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
@@ -180,7 +176,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             attribs.target = '_blank'; // by default
 
             const transformed = tryTransformPermalinkToLocalHref(attribs.href);
-            if (transformed !== attribs.href || attribs.href.match(linkifyMatrix.ELEMENT_URL_PATTERN)) {
+            if (transformed !== attribs.href || attribs.href.match(ELEMENT_URL_PATTERN)) {
                 attribs.href = transformed;
                 delete attribs.target;
             }
@@ -537,10 +533,10 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
  * Linkifies the given string. This is a wrapper around 'linkifyjs/string'.
  *
  * @param {string} str string to linkify
- * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrixOptions
  * @returns {string} Linkified string
  */
-export function linkifyString(str: string, options = linkifyMatrix.options): string {
+export function linkifyString(str: string, options = linkifyMatrixOptions): string {
     return _linkifyString(str, options);
 }
 
@@ -548,10 +544,10 @@ export function linkifyString(str: string, options = linkifyMatrix.options): str
  * Linkifies the given DOM element. This is a wrapper around 'linkifyjs/element'.
  *
  * @param {object} element DOM element to linkify
- * @param {object} [options] Options for linkifyElement. Default: linkifyMatrix.options
+ * @param {object} [options] Options for linkifyElement. Default: linkifyMatrixOptions
  * @returns {object}
  */
-export function linkifyElement(element: HTMLElement, options = linkifyMatrix.options): HTMLElement {
+export function linkifyElement(element: HTMLElement, options = linkifyMatrixOptions): HTMLElement {
     return _linkifyElement(element, options);
 }
 
@@ -559,10 +555,10 @@ export function linkifyElement(element: HTMLElement, options = linkifyMatrix.opt
  * Linkify the given string and sanitize the HTML afterwards.
  *
  * @param {string} dirtyHtml The HTML string to sanitize and linkify
- * @param {object} [options] Options for linkifyString. Default: linkifyMatrix.options
+ * @param {object} [options] Options for linkifyString. Default: linkifyMatrixOptions
  * @returns {string}
  */
-export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrix.options): string {
+export function linkifyAndSanitizeHtml(dirtyHtml: string, options = linkifyMatrixOptions): string {
     return sanitizeHtml(linkifyString(dirtyHtml, options), sanitizeHtmlParams);
 }
 

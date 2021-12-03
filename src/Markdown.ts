@@ -18,7 +18,7 @@ limitations under the License.
 import * as commonmark from 'commonmark';
 import { escape } from "lodash";
 import { logger } from 'matrix-js-sdk/src/logger';
-import * as linkify from 'linkifyjs';
+import { linkify } from './linkify-matrix';
 
 const ALLOWED_HTML_TAGS = ['sub', 'sup', 'del', 'u'];
 

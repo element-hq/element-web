@@ -17,7 +17,6 @@ limitations under the License.
 import React, { ComponentType, createRef } from 'react';
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { sleep, defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 
@@ -38,7 +37,6 @@ import Notifier from '../../Notifier';
 import Modal from "../../Modal";
 import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
-import linkifyMatrix from "../../linkify-matrix";
 import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 import '../../stores/LifecycleStore';
@@ -59,7 +57,6 @@ import { storeRoomAliasInCache } from '../../RoomAliasCache';
 import ToastStore from "../../stores/ToastStore";
 import * as StorageManager from "../../utils/StorageManager";
 import type LoggedInViewType from "./LoggedInView";
-import { ViewUserPayload } from "../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../dispatcher/actions";
 import {
     showToast as showAnalyticsToast,
@@ -346,18 +343,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         // object field used for tracking the status info appended to the title tag.
         // we don't do it as react state as i'm scared about triggering needless react refreshes.
         this.subTitleStatus = '';
-
-        // this can technically be done anywhere but doing this here keeps all
-        // the routing url path logic together.
-        if (this.onAliasClick) {
-            linkifyMatrix.onAliasClick = this.onAliasClick;
-        }
-        if (this.onUserClick) {
-            linkifyMatrix.onUserClick = this.onUserClick;
-        }
-        if (this.onGroupClick) {
-            linkifyMatrix.onGroupClick = this.onGroupClick;
-        }
 
         // the first thing to do is to try the token params in the query-string
         // if the session isn't soft logged out (ie: is a clean session being logged in)
@@ -1898,28 +1883,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
         this.setPageSubtitle();
     }
-
-    onAliasClick(event: MouseEvent, alias: string) {
-        event.preventDefault();
-        dis.dispatch({ action: Action.ViewRoom, room_alias: alias });
-    }
-
-    onUserClick(event: MouseEvent, userId: string) {
-        event.preventDefault();
-
-        const member = new RoomMember(null, userId);
-        if (!member) { return; }
-        dis.dispatch<ViewUserPayload>({
-            action: Action.ViewUser,
-            member: member,
-        });
-    }
-
-    onGroupClick(event: MouseEvent, groupId: string) {
-        event.preventDefault();
-        dis.dispatch({ action: 'view_group', group_id: groupId });
-    }
-
     onLogoutClick(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
         dis.dispatch({
             action: 'logout',
