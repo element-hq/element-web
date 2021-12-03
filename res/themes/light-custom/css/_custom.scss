@@ -46,6 +46,7 @@ $menu-bg-color: var(--timeline-background-color);
 $message-action-bar-bg-color: var(--timeline-background-color);
 $background: var(--timeline-background-color);
 $togglesw-ball-color: var(--timeline-background-color);
+$togglesw-off-color: var(--togglesw-off-color);
 $droptarget-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .5
 $authpage-modal-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .59
 $roomheader-bg-color: var(--timeline-background-color);
@@ -99,6 +100,11 @@ $settings-subsection-fg-color: var(--timeline-text-secondary-color);
 $roomheader-addroom-bg-color: var(--timeline-text-secondary-color);
 // was #747474
 $light-fg-color: var(--timeline-text-secondary-color);
+$focus-bg-color: var(--focus-bg-color, $focus-bg-color);
+$room-highlight-color: var(--room-highlight-color);
+
+$rte-room-pill-color: $room-highlight-color;
+
 // was #888888
 $info-plinth-fg-color: var(--timeline-text-secondary-color);
 //
@@ -130,3 +136,8 @@ $eventbubble-self-bg: var(--eventbubble-self-bg, $eventbubble-self-bg);
 $eventbubble-others-bg: var(--eventbubble-others-bg, $eventbubble-others-bg);
 $eventbubble-bg-hover: var(--eventbubble-bg-hover, $eventbubble-bg-hover);
 $eventbubble-reply-color: var(--eventbubble-reply-color, $eventbubble-reply-color);
+
+$reaction-row-button-selected-bg-color: var(--reaction-row-button-selected-bg-color, $reaction-row-button-selected-bg-color);
+
+$menu-selected-color: var(--menu-selected-color, $menu-selected-color);
+$other-user-pill-bg-color: var(--other-user-pill-bg-color, $other-user-pill-bg-color);
