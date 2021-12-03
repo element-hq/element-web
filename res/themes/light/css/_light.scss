@@ -219,7 +219,6 @@ $message-action-bar-hover-border-color: $focus-bg-color;
 
 // Reaction row
 // ********************
-$reaction-row-button-border-color: $message-action-bar-border-color;
 $reaction-row-button-hover-border-color: $focus-bg-color;
 $reaction-row-button-selected-bg-color: #e9fff9;
 // ********************
@@ -263,7 +262,7 @@ $voipcall-plinth-color: $system;
 // One-off colors
 // ********************
 $progressbar-bg-color: $panel-actions;
-$kbd-border-color: $reaction-row-button-border-color;
+$kbd-border-color: $message-action-bar-border-color;
 $visual-bell-bg-color: #faa;
 $event-timestamp-color: #acacac;
 $slider-background-color: $togglesw-off-color;

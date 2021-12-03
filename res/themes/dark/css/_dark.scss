@@ -74,7 +74,6 @@ $menu-selected-color: $room-highlight-color;
 
 // Settings
 // ********************
-$settings-grey-fg-color: #a2a2a2;
 $settings-profile-overlay-placeholder-fg-color: #454545;
 $settings-profile-button-bg-color: #e7e7e7;
 $settings-subsection-fg-color: $text-secondary-color;
@@ -85,6 +84,7 @@ $settings-subsection-fg-color: $text-secondary-color;
 $roomheader-addroom-bg-color: rgba(92, 100, 112, 0.3);
 $roomheader-addroom-fg-color: $primary-content;
 // ********************
+
 // Rich-text-editor
 // ********************
 $rte-room-pill-color: $room-highlight-color;
@@ -147,7 +147,6 @@ $message-action-bar-hover-border-color: $header-panel-text-primary-color;
 
 // Reaction row
 // ********************
-$reaction-row-button-border-color: $message-action-bar-border-color;
 $reaction-row-button-hover-border-color: $header-panel-text-primary-color;
 $reaction-row-button-selected-bg-color: #1f6954;
 // ********************
