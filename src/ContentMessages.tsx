@@ -419,9 +419,16 @@ export default class ContentMessages {
     private inprogress: IUpload[] = [];
     private mediaConfig: IMediaConfig = null;
 
-    sendStickerContentToRoom(url: string, roomId: string, info: IImageInfo, text: string, matrixClient: MatrixClient) {
+    sendStickerContentToRoom(
+        url: string,
+        roomId: string,
+        threadId: string | null,
+        info: IImageInfo,
+        text: string,
+        matrixClient: MatrixClient,
+    ) {
         const startTime = CountlyAnalytics.getTimestamp();
-        const prom = matrixClient.sendStickerMessage(roomId, url, info, text).catch((e) => {
+        const prom = matrixClient.sendStickerMessage(roomId, threadId, url, info, text).catch((e) => {
             logger.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });

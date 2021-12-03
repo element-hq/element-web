@@ -843,7 +843,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 this.injectSticker(
                     payload.data.content.url,
                     payload.data.content.info,
-                    payload.data.description || payload.data.name);
+                    payload.data.description || payload.data.name,
+                    payload.data.threadId);
                 break;
             case 'picture_snapshot':
                 ContentMessages.sharedInstance().sendContentListToRoom(
@@ -1352,13 +1353,14 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private injectSticker(url: string, info: object, text: string) {
+    private injectSticker(url: string, info: object, text: string, threadId: string | null) {
         if (this.context.isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;
         }
 
-        ContentMessages.sharedInstance().sendStickerContentToRoom(url, this.state.room.roomId, info, text, this.context)
+        ContentMessages.sharedInstance()
+            .sendStickerContentToRoom(url, this.state.room.roomId, threadId, info, text, this.context)
             .then(undefined, (error) => {
                 if (error.name === "UnknownDeviceError") {
                     // Let the staus bar handle this

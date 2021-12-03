@@ -47,6 +47,7 @@ interface IProps {
     // If room is not specified then it is an account level widget
     // which bypasses permission prompts as it was added explicitly by that user
     room: Room;
+    threadId?: string | null;
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
     fullWidth?: boolean;
@@ -100,6 +101,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         handleMinimisePointerEvents: false,
         userWidget: false,
         miniMode: false,
+        threadId: null,
     };
 
     private contextMenuButton = createRef<any>();
@@ -322,7 +324,13 @@ export default class AppTile extends React.Component<IProps, IState> {
             switch (payload.action) {
                 case 'm.sticker':
                     if (this.sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)) {
-                        dis.dispatch({ action: 'post_sticker_message', data: payload.data });
+                        dis.dispatch({
+                            action: 'post_sticker_message',
+                            data: {
+                                ...payload.data,
+                                threadId: this.props.threadId,
+                            },
+                        });
                         dis.dispatch({ action: 'stickerpicker_close' });
                     } else {
                         logger.warn('Ignoring sticker message. Invalid capability');

@@ -656,9 +656,15 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 yOffset={-50}
             />;
         }
+
+        const threadId = this.props.relation?.rel_type === RelationType.Thread
+            ? this.props.relation.event_id
+            : null;
+
         controls.push(
             <Stickerpicker
                 room={this.props.room}
+                threadId={threadId}
                 showStickers={this.state.showStickers}
                 setShowStickers={this.showStickers}
                 menuPosition={menuPosition}

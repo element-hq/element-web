@@ -46,6 +46,7 @@ const PERSISTED_ELEMENT_KEY = "stickerPicker";
 
 interface IProps {
     room: Room;
+    threadId?: string | null;
     showStickers: boolean;
     menuPosition?: any;
     setShowStickers: (showStickers: boolean) => void;
@@ -62,6 +63,10 @@ interface IState {
 
 @replaceableComponent("views.rooms.Stickerpicker")
 export default class Stickerpicker extends React.PureComponent<IProps, IState> {
+    static defaultProps = {
+        threadId: null,
+    };
+
     static currentWidget;
 
     private dispatcherRef: string;
@@ -287,6 +292,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                             <AppTile
                                 app={stickerApp}
                                 room={this.props.room}
+                                threadId={this.props.threadId}
                                 fullWidth={true}
                                 userId={MatrixClientPeg.get().credentials.userId}
                                 creatorUserId={stickerpickerWidget.sender || MatrixClientPeg.get().credentials.userId}
