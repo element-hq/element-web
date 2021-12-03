@@ -3403,5 +3403,8 @@
     "Start new chat": "Zahájit nový chat",
     "Use new room breadcrumbs": "Používat drobky místnosti",
     "Recently viewed": "Nedávno zobrazené",
-    "To view all keyboard shortcuts, <a>click here</a>.": "Pro zobrazení všech klávesových zkratek, <a>klikněte zde</a>."
+    "To view all keyboard shortcuts, <a>click here</a>.": "Pro zobrazení všech klávesových zkratek, <a>klikněte zde</a>.",
+    "%(count)s votes cast. Vote to see the results|other": "%(count)s hlasů. Hlasujte a podívejte se na výsledky",
+    "No votes cast": "Nikdo zatím nehlasoval",
+    "%(count)s votes cast. Vote to see the results|one": "%(count)s hlas. Hlasujte a podívejte se na výsledky"
 }
