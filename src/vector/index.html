@@ -53,7 +53,7 @@
         var tag = htmlWebpackPlugin.tags.headTags[i];
         var path = tag.attributes && tag.attributes.href;
         if (path.indexOf("Inter") !== -1) { %>
-            <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
+            <link rel="preload" as="font" href=".<%= path %>" crossorigin="anonymous"/>
         <% }
     } %>
 
