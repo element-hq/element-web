@@ -167,3 +167,8 @@ been designed, and it will not exit labs until it has**.
 For this to work, you must specify a valid maptiler.com API key in
 `"map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=YOUR_KEY_GOES_HERE"`
 in your config.json, or find an alternative map tile server.
+
+## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
+
+Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
+triggered by the button to the right of the filter field.
