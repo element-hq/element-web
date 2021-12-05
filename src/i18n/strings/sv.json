@@ -3322,5 +3322,6 @@
     "%(senderName)s has updated the room layout": "%(senderName)s har uppdaterat rummets arrangemang",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s och %(count)s till",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s och %(count)s till"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s och %(count)s till",
+    "Other rooms": "Andra rum"
 }
