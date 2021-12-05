@@ -33,5 +33,5 @@
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s שולחן עבודה %(platformName)s",
     "The message from the parser is: %(message)s": "ההודעה מהמנתח היא: %(message)s",
     "Missing indexeddb worker script!": "סקריפט indexeddb worker חסר!",
-    "Switch to space by number": "עבור אל 'Space' על פי מספרו"
+    "Switch to space by number": "עבור 'למרחב' על פי המספר שלו"
 }
