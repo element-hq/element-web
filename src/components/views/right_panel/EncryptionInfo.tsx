@@ -67,7 +67,11 @@ const EncryptionInfo: React.FC<IProps> = ({
         content = <PendingActionSpinner text={text} />;
     } else {
         content = (
-            <AccessibleButton kind="primary" className="mx_UserInfo_wideButton" onClick={onStartVerification}>
+            <AccessibleButton
+                kind="primary"
+                className="mx_UserInfo_wideButton mx_UserInfo_startVerification"
+                onClick={onStartVerification}
+            >
                 { _t("Start Verification") }
             </AccessibleButton>
         );

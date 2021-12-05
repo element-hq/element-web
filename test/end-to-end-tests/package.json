@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc -p ./tsconfig.json"
     },
     "author": "",
     "license": "ISC",
@@ -15,5 +16,8 @@
         "request": "^2.88.0",
         "request-promise-native": "^1.0.7",
         "uuid": "^3.3.2"
+    },
+    "devDependencies": {
+        "@types/puppeteer": "^5.4.4"
     }
 }
