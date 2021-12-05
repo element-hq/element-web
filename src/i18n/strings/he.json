@@ -2531,7 +2531,7 @@
     "Set my room layout for everyone": "הגדר את פריסת החדר שלי עבור כולם",
     "Open dial pad": "פתח לוח חיוג",
     "Back up your encryption keys with your account data in case you lose access to your sessions. Your keys will be secured with a unique Security Key.": "גבה את מפתחות ההצפנה שלך עם נתוני חשבונך במקרה שתאבד את הגישה להפעלות שלך. המפתחות שלך מאובטחים באמצעות מפתח אבטחה ייחודי.",
-    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "אם שכחת את מפתח האבטחה שלך תוכל <button>להגדיר אפשרויות שחזור חדשות<button/>",
+    "If you've forgotten your Security Key you can <button>set up new recovery options</button>": "אם שכחת את מפתח האבטחה שלך תוכל <button> להגדיר אפשרויות שחזור חדשות</button>",
     "Search (must be enabled)": "חיפוש (חייב להיות מופעל)",
     "Make a copy of your Security Key": "צור עותק של מפתח האבטחה שלך",
     "Your Security Key": "מפתח האבטחה שלך",
