@@ -17,9 +17,7 @@ limitations under the License.
 import {
     Anonymity,
     getRedactedCurrentLocation,
-    IAnonymousEvent,
-    IPseudonymousEvent,
-    IRoomEvent,
+    IEvent,
     PosthogAnalytics,
 } from '../src/PosthogAnalytics';
 
@@ -41,25 +39,9 @@ class FakePosthog {
     }
 }
 
-export interface ITestEvent extends IAnonymousEvent {
-    key: "jest_test_event";
-    properties: {
-        foo: string;
-    };
-}
-
-export interface ITestPseudonymousEvent extends IPseudonymousEvent {
-    key: "jest_test_pseudo_event";
-    properties: {
-        foo: string;
-    };
-}
-
-export interface ITestRoomEvent extends IRoomEvent {
-    key: "jest_test_room_event";
-    properties: {
-        foo: string;
-    };
+export interface ITestEvent extends IEvent {
+    eventName: "JestTestEvents";
+    foo: string;
 }
 
 describe("PosthogAnalytics", () => {
@@ -127,27 +109,20 @@ describe("PosthogAnalytics", () => {
             analytics = new PosthogAnalytics(fakePosthog);
         });
 
-        it("Should pass trackAnonymousEvent() to posthog", async () => {
+        it("Should pass event to posthog", () => {
             analytics.setAnonymity(Anonymity.Pseudonymous);
-            await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
+            analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
                 foo: "bar",
             });
-            expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_event");
+            expect(fakePosthog.capture.mock.calls[0][0]).toBe("JestTestEvents");
             expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
         });
 
-        it("Should pass trackPseudonymousEvent() to posthog", async () => {
-            analytics.setAnonymity(Anonymity.Pseudonymous);
-            await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_pseudo_event", {
-                foo: "bar",
-            });
-            expect(fakePosthog.capture.mock.calls[0][0]).toBe("jest_test_pseudo_event");
-            expect(fakePosthog.capture.mock.calls[0][1]["foo"]).toEqual("bar");
-        });
-
-        it("Should not track pseudonymous messages if anonymous", async () => {
+        it("Should not track events if anonymous", async () => {
             analytics.setAnonymity(Anonymity.Anonymous);
-            await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_event", {
+            await analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
                 foo: "bar",
             });
             expect(fakePosthog.capture.mock.calls.length).toBe(0);
@@ -155,43 +130,25 @@ describe("PosthogAnalytics", () => {
 
         it("Should not track any events if disabled", async () => {
             analytics.setAnonymity(Anonymity.Disabled);
-            await analytics.trackPseudonymousEvent<ITestEvent>("jest_test_event", {
+            analytics.trackEvent<ITestEvent>({
+                eventName: "JestTestEvents",
                 foo: "bar",
             });
-            await analytics.trackAnonymousEvent<ITestEvent>("jest_test_event", {
-                foo: "bar",
-            });
-            await analytics.trackPageView(200);
             expect(fakePosthog.capture.mock.calls.length).toBe(0);
         });
 
-        it("Should pseudonymise a location of a known screen", async () => {
-            const location = await getRedactedCurrentLocation(
-                "https://foo.bar", "#/register/some/pii", "/", Anonymity.Pseudonymous);
+        it("Should anonymise location of a known screen", async () => {
+            const location = getRedactedCurrentLocation("https://foo.bar", "#/register/some/pii", "/");
             expect(location).toBe("https://foo.bar/#/register/<redacted>");
         });
 
-        it("Should anonymise a location of a known screen", async () => {
-            const location = await getRedactedCurrentLocation(
-                "https://foo.bar", "#/register/some/pii", "/", Anonymity.Anonymous);
-            expect(location).toBe("https://foo.bar/#/register/<redacted>");
-        });
-
-        it("Should pseudonymise a location of an unknown screen", async () => {
-            const location = await getRedactedCurrentLocation(
-                "https://foo.bar", "#/not_a_screen_name/some/pii", "/", Anonymity.Pseudonymous);
-            expect(location).toBe("https://foo.bar/#/<redacted_screen_name>/<redacted>");
-        });
-
-        it("Should anonymise a location of an unknown screen", async () => {
-            const location = await getRedactedCurrentLocation(
-                "https://foo.bar", "#/not_a_screen_name/some/pii", "/", Anonymity.Anonymous);
+        it("Should anonymise location of an unknown screen", async () => {
+            const location = getRedactedCurrentLocation("https://foo.bar", "#/not_a_screen_name/some/pii", "/");
             expect(location).toBe("https://foo.bar/#/<redacted_screen_name>/<redacted>");
         });
 
         it("Should handle an empty hash", async () => {
-            const location = await getRedactedCurrentLocation(
-                "https://foo.bar", "", "/", Anonymity.Anonymous);
+            const location = getRedactedCurrentLocation("https://foo.bar", "", "/");
             expect(location).toBe("https://foo.bar/");
         });
 

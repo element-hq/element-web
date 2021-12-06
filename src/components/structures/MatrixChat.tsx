@@ -18,6 +18,8 @@ import React, { ComponentType, createRef } from 'react';
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Error as ErrorEvent } from "matrix-analytics-events/types/typescript/Error";
+import { Screen as ScreenEvent } from "matrix-analytics-events/types/typescript/Screen";
 import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
@@ -446,7 +448,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             const durationMs = this.stopPageChangeTimer();
             Analytics.trackPageChange(durationMs);
             CountlyAnalytics.instance.trackPageChange(durationMs);
-            PosthogAnalytics.instance.trackPageView(durationMs);
+            this.trackScreenChange(durationMs);
         }
         if (this.focusComposer) {
             dis.fire(Action.FocusSendMessageComposer);
@@ -463,6 +465,36 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.state.resizeNotifier.removeListener("middlePanelResized", this.dispatchTimelineResize);
 
         if (this.accountPasswordTimer !== null) clearTimeout(this.accountPasswordTimer);
+    }
+
+    public trackScreenChange(durationMs: number): void {
+        const notLoggedInMap = {};
+        notLoggedInMap[Views.LOADING] = "WebLoading";
+        notLoggedInMap[Views.WELCOME] = "WebWelcome";
+        notLoggedInMap[Views.LOGIN] = "WebLogin";
+        notLoggedInMap[Views.REGISTER] = "WebRegister";
+        notLoggedInMap[Views.FORGOT_PASSWORD] = "WebForgotPassword";
+        notLoggedInMap[Views.COMPLETE_SECURITY] = "WebCompleteSecurity";
+        notLoggedInMap[Views.E2E_SETUP] = "WebE2ESetup";
+        notLoggedInMap[Views.SOFT_LOGOUT] = "WebSoftLogout";
+
+        const loggedInPageTypeMap = {};
+        loggedInPageTypeMap[PageType.HomePage] = "Home";
+        loggedInPageTypeMap[PageType.RoomView] = "Room";
+        loggedInPageTypeMap[PageType.RoomDirectory] = "RoomDirectory";
+        loggedInPageTypeMap[PageType.UserView] = "User";
+        loggedInPageTypeMap[PageType.GroupView] = "Group";
+        loggedInPageTypeMap[PageType.MyGroups] = "MyGroups";
+
+        const screenName = this.state.view === Views.LOGGED_IN ?
+            loggedInPageTypeMap[this.state.page_type] :
+            notLoggedInMap[this.state.view];
+
+        return PosthogAnalytics.instance.trackEvent<ScreenEvent>({
+            eventName: "Screen",
+            screenName,
+            durationMs,
+        });
     }
 
     getFallbackHsUrl() {
@@ -1595,17 +1627,22 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const dft = new DecryptionFailureTracker((total, errorCode) => {
             Analytics.trackEvent('E2E', 'Decryption failure', errorCode, String(total));
             CountlyAnalytics.instance.track("decryption_failure", { errorCode }, null, { sum: total });
+            PosthogAnalytics.instance.trackEvent<ErrorEvent>({
+                eventName: "Error",
+                domain: "E2EE",
+                name: errorCode,
+            });
         }, (errorCode) => {
             // Map JS-SDK error codes to tracker codes for aggregation
             switch (errorCode) {
                 case 'MEGOLM_UNKNOWN_INBOUND_SESSION_ID':
-                    return 'olm_keys_not_sent_error';
+                    return 'OlmKeysNotSentError';
                 case 'OLM_UNKNOWN_MESSAGE_INDEX':
-                    return 'olm_index_error';
+                    return 'OlmIndexError';
                 case undefined:
-                    return 'unexpected_error';
+                    return 'OlmUnspecifiedError';
                 default:
-                    return 'unspecified_error';
+                    return 'UnknownError';
             }
         });
 

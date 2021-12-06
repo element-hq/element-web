@@ -25,8 +25,11 @@ export class DecryptionFailure {
     }
 }
 
-type TrackingFn = (count: number, trackedErrCode: string) => void;
-type ErrCodeMapFn = (errcode: string) => string;
+type ErrorCode = "OlmKeysNotSentError" | "OlmIndexError" | "UnknownError" | "OlmUnspecifiedError";
+
+type TrackingFn = (count: number, trackedErrCode: ErrorCode) => void;
+
+export type ErrCodeMapFn = (errcode: string) => ErrorCode;
 
 export class DecryptionFailureTracker {
     // Array of items of type DecryptionFailure. Every `CHECK_INTERVAL_MS`, this list
@@ -73,12 +76,12 @@ export class DecryptionFailureTracker {
      * @param {function?} errorCodeMapFn The function used to map error codes to the
      * trackedErrorCode. If not provided, the `.code` of errors will be used.
      */
-    constructor(private readonly fn: TrackingFn, private readonly errorCodeMapFn?: ErrCodeMapFn) {
+    constructor(private readonly fn: TrackingFn, private readonly errorCodeMapFn: ErrCodeMapFn) {
         if (!fn || typeof fn !== 'function') {
             throw new Error('DecryptionFailureTracker requires tracking function');
         }
 
-        if (errorCodeMapFn && typeof errorCodeMapFn !== 'function') {
+        if (typeof errorCodeMapFn !== 'function') {
             throw new Error('DecryptionFailureTracker second constructor argument should be a function');
         }
     }
@@ -195,7 +198,7 @@ export class DecryptionFailureTracker {
     public trackFailures(): void {
         for (const errorCode of Object.keys(this.failureCounts)) {
             if (this.failureCounts[errorCode] > 0) {
-                const trackedErrorCode = this.errorCodeMapFn ? this.errorCodeMapFn(errorCode) : errorCode;
+                const trackedErrorCode = this.errorCodeMapFn(errorCode);
 
                 this.fn(this.failureCounts[errorCode], trackedErrorCode);
                 this.failureCounts[errorCode] = 0;

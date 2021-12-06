@@ -40,12 +40,8 @@ import SettingsStore from "./settings/SettingsStore";
  */
 
 interface IEvent {
-    // The event name that will be used by PostHog. Event names should use snake_case.
+    // The event name that will be used by PostHog. Event names should use camelCase.
     eventName: string;
-
-    // The properties of the event that will be stored in PostHog. This is just a placeholder,
-    // extending interfaces must override this with a concrete definition to do type validation.
-    properties: {};
 }
 
 export enum Anonymity {
@@ -54,39 +50,16 @@ export enum Anonymity {
     Pseudonymous
 }
 
-// If an event extends IPseudonymousEvent, the event contains pseudonymous data
-// that won't be sent unless the user has explicitly consented to pseudonymous tracking.
-// For example, it might contain hashed user IDs or room IDs.
-// Such events will be automatically dropped if PosthogAnalytics.anonymity isn't set to Pseudonymous.
-export interface IPseudonymousEvent extends IEvent {}
-
-// If an event extends IAnonymousEvent, the event strictly contains *only* anonymous data;
-// i.e. no identifiers that can be associated with the user.
-export interface IAnonymousEvent extends IEvent {}
-
-export interface IRoomEvent extends IPseudonymousEvent {
-    hashedRoomId: string;
-}
-
-interface IPageView extends IAnonymousEvent {
-    eventName: "$pageview";
-    properties: {
-        durationMs?: number;
-        screen?: string;
-    };
-}
-
 const whitelistedScreens = new Set([
     "register", "login", "forgot_password", "soft_logout", "new", "settings", "welcome", "home", "start", "directory",
     "start_sso", "start_cas", "groups", "complete_security", "post_registration", "room", "user", "group",
 ]);
 
-export async function getRedactedCurrentLocation(
+export function getRedactedCurrentLocation(
     origin: string,
     hash: string,
     pathname: string,
-    anonymity: Anonymity,
-): Promise<string> {
+): string {
     // Redact PII from the current location.
     // For known screens, assumes a URL structure of /<screen name>/might/be/pii
     if (origin.startsWith('file://')) {
@@ -219,13 +192,12 @@ export class PosthogAnalytics {
         };
     }
 
-    private async capture(eventName: string, properties: posthog.Properties) {
+    private capture(eventName: string, properties: posthog.Properties) {
         if (!this.enabled) {
             return;
         }
         const { origin, hash, pathname } = window.location;
-        properties['$redacted_current_url'] = await getRedactedCurrentLocation(
-            origin, hash, pathname, this.anonymity);
+        properties['$redacted_current_url'] = getRedactedCurrentLocation(origin, hash, pathname);
         this.posthog.capture(eventName, properties);
     }
 
@@ -288,35 +260,13 @@ export class PosthogAnalytics {
         this.setAnonymity(Anonymity.Disabled);
     }
 
-    public async trackPseudonymousEvent<E extends IPseudonymousEvent>(
-        eventName: E["eventName"],
-        properties: E["properties"] = {},
-    ) {
-        if (this.anonymity == Anonymity.Anonymous || this.anonymity == Anonymity.Disabled) return;
-        await this.capture(eventName, properties);
-    }
-
-    public async trackAnonymousEvent<E extends IAnonymousEvent>(
-        eventName: E["eventName"],
-        properties: E["properties"] = {},
-    ): Promise<void> {
-        if (this.anonymity == Anonymity.Disabled) return;
-        await this.capture(eventName, properties);
-    }
-
-    public async trackPageView(durationMs: number): Promise<void> {
-        const hash = window.location.hash;
-
-        let screen = null;
-        const split = hash.split("/");
-        if (split.length >= 2) {
-            screen = split[1];
-        }
-
-        await this.trackAnonymousEvent<IPageView>("$pageview", {
-            durationMs,
-            screen,
-        });
+    public trackEvent<E extends IEvent>(
+        event: E,
+    ): void {
+        if (this.anonymity == Anonymity.Disabled || this.anonymity == Anonymity.Anonymous) return;
+        const eventWithoutName = { ...event };
+        delete eventWithoutName.eventName;
+        this.capture(event.eventName, eventWithoutName);
     }
 
     public async updatePlatformSuperProperties(): Promise<void> {
