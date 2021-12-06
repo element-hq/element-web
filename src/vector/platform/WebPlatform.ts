@@ -128,7 +128,7 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    getAppVersion(): Promise<string> {
+    getNormalizedAppVersion(): string {
         let ver = process.env.VERSION;
 
         // if version looks like semver with leading v, strip it
@@ -137,7 +137,11 @@ export default class WebPlatform extends VectorBasePlatform {
         if (semVerRegex.test(process.env.VERSION)) {
             ver = process.env.VERSION.substr(1);
         }
-        return Promise.resolve(ver);
+        return ver;
+    }
+
+    getAppVersion(): Promise<string> {
+        return Promise.resolve(this.getNormalizedAppVersion());
     }
 
     startUpdater() {
@@ -151,9 +155,11 @@ export default class WebPlatform extends VectorBasePlatform {
 
     pollForUpdate = () => {
         return this.getMostRecentVersion().then((mostRecentVersion) => {
-            if (process.env.VERSION !== mostRecentVersion) {
+            const currentVersion = this.getNormalizedAppVersion();
+
+            if (currentVersion !== mostRecentVersion) {
                 if (this.shouldShowUpdate(mostRecentVersion)) {
-                    showUpdateToast(process.env.VERSION, mostRecentVersion);
+                    showUpdateToast(currentVersion, mostRecentVersion);
                 }
                 return { status: UpdateCheckStatus.Ready };
             } else {
