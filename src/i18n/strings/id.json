@@ -3358,5 +3358,6 @@
     "You cannot place calls without a connection to the server.": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
     "Connectivity to the server has been lost": "Koneksi ke server telah hilang",
     "You cannot place calls in this browser.": "Anda tidak dapat membuat panggilan di browser ini.",
-    "Calls are unsupported": "Panggilan tidak didukung"
+    "Calls are unsupported": "Panggilan tidak didukung",
+    "Share custom location": "Bagikan lokasi kustom"
 }
