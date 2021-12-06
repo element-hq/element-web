@@ -28,7 +28,6 @@
     "features": { },
     "default_federate": true,
     "default_theme": "light",
-    "map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=YOUR_KEY_GOES_HERE",
     "roomDirectory": {
         "servers": [
             "matrix.org"
