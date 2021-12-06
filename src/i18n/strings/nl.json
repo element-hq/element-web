@@ -3396,5 +3396,22 @@
     "Invite to space": "Voor Space uitnodigen",
     "Start new chat": "Nieuwe chat beginnen",
     "Recently viewed": "Recent bekeken",
-    "Use new room breadcrumbs": "Gebruik nieuwe kamer broodkruimels"
+    "Use new room breadcrumbs": "Gebruik nieuwe kamer broodkruimels",
+    "You can turn this off anytime in settings": "U kan dit elk moment uitzetten in instellingen",
+    "We <Bold>don't</Bold> share information with third parties": "We delen <Bold>geen</Bold> informatie met derde partijen",
+    "We <Bold>don't</Bold> record or profile any account data": "We verwerken of bewaren <Bold>geen</Bold> accountgegevens",
+    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Help ons problemen te identificeren en Element te verbeteren door anonieme gedragsgegevens te delen. Voor personen met meerdere apparaten genereren we een willekeurige ID, die we delen met uw apparaten.",
+    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "U kan alle voorwaarden <PrivacyPolicyUrl>hier</PrivacyPolicyUrl> lezen",
+    "%(count)s votes cast. Vote to see the results|one": "%(count)s stem uitgebracht. Stem om de resultaten te zien",
+    "%(count)s votes cast. Vote to see the results|other": "%(count)s stemmen uitgebracht. Stem om de resultaten te zien",
+    "No votes cast": "Geen stemmen uitgebracht",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Deel anonieme gedragsdata om ons te helpen problemen te identificeren. Geen persoonsgegevens. Geen derde partijen.",
+    "Okay": "Oké",
+    "To view all keyboard shortcuts, <a>click here</a>.": "Om alle sneltoetsen te bekijken, <a>klik hier</a>.",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Deel anonieme data om ons problemen te laten opsporen. Geen persoonsgegeven. Geen derde partijen. <LearnMoreLink>Lees Meer</LearnMoreLink>",
+    "You previously consented to share anonymous usage data with us. We're updating how that works.": "U heeft eerdere ingestemd met verzamelen van anonieme gedragsdata met ons. We updaten nu hoe dit werkt.",
+    "Help improve %(analyticsOwner)s": "Help %(analyticsOwner)s verbeteren",
+    "That's fine": "Dat is prima",
+    "Some examples of the information being sent to us to help make %(brand)s better includes:": "Sommige voorbeelden die gestuurd worden helpen ons %(brand)s beter maken zoals:",
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Ons complete cookiebeleid kan <CookiePolicyLink>hier</CookiePolicyLink> gevonden worden."
 }
