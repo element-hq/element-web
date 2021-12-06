@@ -3419,5 +3419,9 @@
     "Help improve %(analyticsOwner)s": "Pomozte zlepšit %(analyticsOwner)s",
     "That's fine": "To je v pořádku",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Některé příklady informací, které nám byly zaslány, aby nám pomohly zlepšit %(brand)s, zahrnují:",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Naše úplné zásady používání souborů cookie naleznete <CookiePolicyLink>zde</CookiePolicyLink>."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Naše úplné zásady používání souborů cookie naleznete <CookiePolicyLink>zde</CookiePolicyLink>.",
+    "You cannot place calls without a connection to the server.": "Bez připojení k serveru nelze uskutečňovat hovory.",
+    "Connectivity to the server has been lost": "Došlo ke ztrátě připojení k serveru",
+    "You cannot place calls in this browser.": "V tomto prohlížeči nelze uskutečňovat hovory.",
+    "Calls are unsupported": "Hovory nejsou podporovány"
 }
