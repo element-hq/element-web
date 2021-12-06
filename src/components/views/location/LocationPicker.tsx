@@ -41,7 +41,7 @@ const LocationShareTypeDropdown = ({
     onChange,
 }: IDropdownProps) => {
     const options = [
-        // <div key={LocationShareType.Custom}>{ _t("Share custom location") }</div>,
+        <div key={LocationShareType.Custom}>{ _t("Share custom location") }</div>,
         <div key={LocationShareType.OnceOff}>{ _t("Share my current location as a once off") }</div>,
         // <div key={LocationShareType.OneMin}>{ _t("Share my current location for one minute") }</div>,
         // <div key={LocationShareType.FiveMins}>{ _t("Share my current location for five minutes") }</div>,
@@ -56,7 +56,9 @@ const LocationShareTypeDropdown = ({
     return <Dropdown
         id="mx_LocationShareTypeDropdown"
         className="mx_LocationShareTypeDropdown"
-        onOptionChange={(key: string)=>{ onChange(LocationShareType[LocationShareType[parseInt(key)]]); }}
+        onOptionChange={(key: string) => {
+            onChange(LocationShareType[LocationShareType[parseInt(key)]]);
+        }}
         menuWidth={width}
         label={label}
         value={value.toString()}
@@ -74,13 +76,14 @@ interface IState {
     description: string;
     type: LocationShareType;
     position?: GeolocationPosition;
-    manual: boolean;
+    manualPosition?: GeolocationPosition;
     error: Error;
 }
 
 @replaceableComponent("views.location.LocationPicker")
 class LocationPicker extends React.Component<IProps, IState> {
     private map: maplibregl.Map;
+    private marker: maplibregl.Marker;
     private geolocate: maplibregl.GeolocateControl;
 
     constructor(props) {
@@ -90,7 +93,7 @@ class LocationPicker extends React.Component<IProps, IState> {
             description: _t("My location"),
             type: LocationShareType.OnceOff,
             position: undefined,
-            manual: false,
+            manualPosition: undefined,
             error: undefined,
         };
     }
@@ -113,23 +116,63 @@ class LocationPicker extends React.Component<IProps, IState> {
         });
         this.map.addControl(this.geolocate);
 
-        this.map.on('error', (e)=>{
+        this.map.on('error', (e) => {
             logger.error("Failed to load map: check map_style_url in config.json has a valid URL and API key", e.error);
             this.setState({ error: e.error });
         });
 
-        this.map.on('load', ()=>{
+        this.map.on('load', () => {
             this.geolocate.trigger();
         });
 
+        this.map.on('click', (e) => {
+            this.addMarker(e.lngLat);
+            this.storeManualPosition(e.lngLat);
+            this.setState({ type: LocationShareType.Custom });
+        });
+
         this.geolocate.on('geolocate', this.onGeolocate);
+    }
+
+    private addMarker(lngLat: maplibregl.LngLat): void {
+        if (this.marker) return;
+        this.marker = new maplibregl.Marker({
+            draggable: true,
+        })
+            .setLngLat(lngLat)
+            .addTo(this.map)
+            .on('dragend', () => {
+                this.storeManualPosition(this.marker.getLngLat());
+            });
+    }
+
+    private removeMarker(): void {
+        if (!this.marker) return;
+        this.marker.remove();
+        this.marker = undefined;
+    }
+
+    private storeManualPosition(lngLat: maplibregl.LngLat): void {
+        const manualPosition: GeolocationPosition = {
+            coords: {
+                longitude: lngLat.lng,
+                latitude: lngLat.lat,
+                altitude: undefined,
+                accuracy: undefined,
+                altitudeAccuracy: undefined,
+                heading: undefined,
+                speed: undefined,
+            },
+            timestamp: Date.now(),
+        };
+        this.setState({ manualPosition });
     }
 
     componentWillUnmount() {
         this.geolocate.off('geolocate', this.onGeolocate);
     }
 
-    private onGeolocate = (position) => {
+    private onGeolocate = (position: GeolocationPosition) => {
         this.setState({ position });
     };
 
@@ -146,9 +189,12 @@ class LocationPicker extends React.Component<IProps, IState> {
     };
 
     private onOk = () => {
+        const position = (this.state.type == LocationShareType.Custom) ?
+            this.state.manualPosition : this.state.position;
+
         this.props.onChoose(
-            this.state.position ? this.getGeoUri(this.state.position) : undefined,
-            this.state.position ? this.state.position.timestamp : undefined,
+            position ? this.getGeoUri(position) : undefined,
+            position ? position.timestamp : undefined,
             this.state.type,
             this.state.description,
         );
@@ -156,6 +202,20 @@ class LocationPicker extends React.Component<IProps, IState> {
     };
 
     private onTypeChange= (type: LocationShareType) => {
+        if (type == LocationShareType.Custom) {
+            if (!this.state.manualPosition) {
+                this.setState({ manualPosition: this.state.position });
+            }
+            if (this.state.manualPosition) {
+                this.addMarker(new maplibregl.LngLat(
+                    this.state.manualPosition?.coords.longitude,
+                    this.state.manualPosition?.coords.latitude,
+                ));
+            }
+        } else {
+            this.removeMarker();
+        }
+
         this.setState({ type });
     };
 
@@ -189,7 +249,7 @@ class LocationPicker extends React.Component<IProps, IState> {
                         <DialogButtons primaryButton={_t('Share')}
                             onPrimaryButtonClick={this.onOk}
                             onCancel={this.props.onFinished}
-                            disabled={!this.state.position} />
+                            primaryDisabled={!this.state.position} />
                     </form>
                 </div>
             </div>

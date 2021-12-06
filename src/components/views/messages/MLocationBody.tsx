@@ -76,15 +76,22 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 
     componentDidMount() {
         const config = SdkConfig.get();
+        const coordinates = new maplibregl.LngLat(this.coords.longitude, this.coords.latitude);
+
         this.map = new maplibregl.Map({
             container: this.getBodyId(),
             style: config.map_style_url,
-            center: [this.coords.longitude, this.coords.latitude],
+            center: coordinates,
             zoom: 13,
         });
 
-        new maplibregl.Marker()
-            .setLngLat([this.coords.longitude, this.coords.latitude])
+        new maplibregl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            closeOnMove: false,
+        })
+            .setLngLat(coordinates)
+            .setHTML(this.description)
             .addTo(this.map);
 
         this.map.on('error', (e)=>{
@@ -106,7 +113,6 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         return <div className="mx_MLocationBody">
             <div id={this.getBodyId()} className="mx_MLocationBody_map" />
             { error }
-            <span className="mx_EventTile_body">{ this.description }</span>
         </div>;
     }
 }
