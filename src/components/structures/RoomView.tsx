@@ -929,7 +929,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             }
 
             case "scroll_to_bottom":
-                if (payload.timelineRenderingType === this.context.timelineRenderingType) {
+                if (payload.timelineRenderingType === TimelineRenderingType.Room) {
                     this.messagePanel?.jumpToLiveTimeline();
                 }
                 break;
