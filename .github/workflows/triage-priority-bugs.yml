@@ -1,11 +1,11 @@
-name: Move labelled issues into the Priority bugs column for the Web App Team
+name: Move P1 bugs to boards
 
 on:
   issues:
     types: [labeled, unlabeled]
 
 jobs:
-  Move_high_priority_issues_to_team_workboard:
+  p1_issues_to_team_workboard:
     runs-on: ubuntu-latest
     if: >
         (!contains(github.event.issue.labels.*.name, 'A-E2EE') &&
@@ -31,7 +31,7 @@ jobs:
           column: P1
           repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-  Move_high_priority_issues_to_crypto_team_workboard:
+  P1_issues_to_crypto_team_workboard:
     runs-on: ubuntu-latest
     if: >
         (contains(github.event.issue.labels.*.name, 'A-E2EE') ||
