@@ -59,5 +59,6 @@
     },
     "features": {
         "feature_spaces_metaspaces": true
-    }
+    },
+    "map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=JCdnMQY3oGklTYYLIvtI"
 }
