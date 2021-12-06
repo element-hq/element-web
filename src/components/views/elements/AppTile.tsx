@@ -443,7 +443,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         const appTileBodyClass = 'mx_AppTileBody' + (this.props.miniMode ? '_mini  ' : ' ');
         const appTileBodyStyles = {};
         if (this.props.pointerEvents) {
-            appTileBodyStyles['pointer-events'] = this.props.pointerEvents;
+            appTileBodyStyles['pointerEvents'] = this.props.pointerEvents;
         }
 
         const loadingElement = (
