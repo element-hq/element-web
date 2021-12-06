@@ -3403,5 +3403,21 @@
     "Start new chat": "開始新聊天",
     "Recently viewed": "最近檢視",
     "Use new room breadcrumbs": "使用新的聊天室頁面路徑",
-    "To view all keyboard shortcuts, <a>click here</a>.": "要檢視所有鍵盤快捷鍵，<a>點擊此處</a>。"
+    "To view all keyboard shortcuts, <a>click here</a>.": "要檢視所有鍵盤快捷鍵，<a>點擊此處</a>。",
+    "You can turn this off anytime in settings": "您可以隨時在設定中關閉此功能",
+    "We <Bold>don't</Bold> share information with third parties": "我們<Bold>不會</Bold>與第三方分享資料",
+    "We <Bold>don't</Bold> record or profile any account data": "我們<Bold>不會</Bold>記錄或分析任何帳號資料",
+    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "協助我們透過分享匿名使用資料來識別問題並改善 Element。為了了解人們如何使用多個裝置，我們將會產生一個隨機識別字串，在您的裝置上共享。",
+    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "您可以<PrivacyPolicyUrl>在此</PrivacyPolicyUrl>閱讀我們的條款",
+    "%(count)s votes cast. Vote to see the results|one": "%(count)s 票。投票以檢視結果",
+    "%(count)s votes cast. Vote to see the results|other": "%(count)s 票。投票以檢視結果",
+    "No votes cast": "沒有投票",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "分享匿名資料以協助我們識別問題。無個人資料。與第三方無關。",
+    "Okay": "是",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "分享匿名資料以協助我們識別問題。無個人資料。與第三方無關。<LearnMoreLink>取得更多資訊</LearnMoreLink>",
+    "You previously consented to share anonymous usage data with us. We're updating how that works.": "您先前曾同意與我們分享匿名使用資料。我們正在更新其運作方式。",
+    "Help improve %(analyticsOwner)s": "協助改善 %(analyticsOwner)s",
+    "That's fine": "沒關係",
+    "Some examples of the information being sent to us to help make %(brand)s better includes:": "傳送一些範例資訊給我們以協助我們讓 %(brand)s 變得更好，其中包含了：",
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "我們完整的 cookie 政策可<CookiePolicyLink>在此</CookiePolicyLink>找到。"
 }
