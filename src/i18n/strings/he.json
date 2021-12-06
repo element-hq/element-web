@@ -12,7 +12,7 @@
     "Go to your browser to complete Sign In": "עבור לדפדפן להמשך ההתחברות",
     "Explore rooms": "גלה חדרים",
     "Create Account": "יצירת חשבון",
-    "Sign In": "כניסה",
+    "Sign In": "התחברות",
     "Previous/next recently visited room or community": "הבא\\קודם חדרים וקהילות שביקרתם לאחרונה",
     "Open": "פתח",
     "Download Completed": "ההורדה הושלמה",
@@ -33,5 +33,6 @@
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s שולחן עבודה %(platformName)s",
     "The message from the parser is: %(message)s": "ההודעה מהמנתח היא: %(message)s",
     "Missing indexeddb worker script!": "סקריפט indexeddb worker חסר!",
-    "Switch to space by number": "עבור אל 'Space' על פי מספרו"
+    "Switch to space by number": "עבור 'למרחב' על פי המספר שלו",
+    "Use %(brand)s on mobile": "השתמש ב%(brand)s  במכשיר הנייד"
 }
