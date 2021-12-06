@@ -12,3 +12,6 @@ Object.defineProperty(window, 'matchMedia', {
         dispatchEvent: jest.fn(),
     })),
 });
+
+// maplibre requires a createObjectURL mock
+global.URL.createObjectURL = jest.fn();
