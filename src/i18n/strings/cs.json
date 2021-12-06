@@ -3406,5 +3406,18 @@
     "To view all keyboard shortcuts, <a>click here</a>.": "Pro zobrazení všech klávesových zkratek, <a>klikněte zde</a>.",
     "%(count)s votes cast. Vote to see the results|other": "%(count)s hlasů. Hlasujte a podívejte se na výsledky",
     "No votes cast": "Nikdo zatím nehlasoval",
-    "%(count)s votes cast. Vote to see the results|one": "%(count)s hlas. Hlasujte a podívejte se na výsledky"
+    "%(count)s votes cast. Vote to see the results|one": "%(count)s hlas. Hlasujte a podívejte se na výsledky",
+    "You can turn this off anytime in settings": "Tuto funkci můžete kdykoli vypnout v nastavení",
+    "We <Bold>don't</Bold> share information with third parties": "<Bold>Nesdílíme</Bold> informace s třetími stranami",
+    "We <Bold>don't</Bold> record or profile any account data": "<Bold>Nezaznamenáváme ani neprofilujeme</Bold> žádné údaje o účtu",
+    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Pomozte nám identifikovat problémy a zlepšit Element sdílením anonymních údajů o používání. Abychom pochopili, jak lidé používají více zařízení, vygenerujeme náhodný identifikátor sdílený vašimi zařízeními.",
+    "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "Všechny naše podmínky si můžete přečíst <PrivacyPolicyUrl>zde</PrivacyPolicyUrl>",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties.": "Sdílejte anonymní údaje, které nám pomohou identifikovat problémy. Nic osobního. Žádné třetí strany.",
+    "Okay": "Dobře",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Sdílejte anonymní údaje, které nám pomohou identifikovat problémy. Nic osobního. Žádné třetí strany. <LearnMoreLink>Zjistěte více</LearnMoreLink>",
+    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Dříve jste nám dali souhlas se sdílením anonymních údajů o používání. Aktualizujeme způsob, jakým to funguje.",
+    "Help improve %(analyticsOwner)s": "Pomozte zlepšit %(analyticsOwner)s",
+    "That's fine": "To je v pořádku",
+    "Some examples of the information being sent to us to help make %(brand)s better includes:": "Některé příklady informací, které nám byly zaslány, aby nám pomohly zlepšit %(brand)s, zahrnují:",
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Naše úplné zásady používání souborů cookie naleznete <CookiePolicyLink>zde</CookiePolicyLink>."
 }
