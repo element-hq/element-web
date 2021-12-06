@@ -88,11 +88,11 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                 );
             });
 
-            groups.get(LabGroup.Widgets).push(
+            groups.getOrCreate(LabGroup.Widgets, []).push(
                 <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />,
             );
 
-            groups.get(LabGroup.Experimental).push(
+            groups.getOrCreate(LabGroup.Experimental, []).push(
                 <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />,
             );
 
@@ -101,12 +101,12 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                 <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />,
             );
 
-            groups.get(LabGroup.Analytics).push(
+            groups.getOrCreate(LabGroup.Analytics, []).push(
                 <SettingsFlag name="automaticErrorReporting" level={SettingLevel.DEVICE} />,
             );
 
             if (this.state.showHiddenReadReceipts) {
-                groups.get(LabGroup.Messaging).push(
+                groups.getOrCreate(LabGroup.Messaging, []).push(
                     <SettingsFlag name="feature_hidden_read_receipts" level={SettingLevel.DEVICE} />,
                 );
             }
