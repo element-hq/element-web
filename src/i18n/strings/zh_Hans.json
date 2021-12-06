@@ -3428,5 +3428,6 @@
     "Failed to load map": "加载地图失败",
     "Share location": "共享位置",
     "Manage pinned events": "管理置顶事件",
-    "Location sharing (under active development)": "位置共享(正在积极开发中)"
+    "Location sharing (under active development)": "位置共享(正在积极开发中)",
+    "Share custom location": "共享自定义位置"
 }
