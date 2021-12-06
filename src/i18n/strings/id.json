@@ -3347,5 +3347,16 @@
     "Help improve %(analyticsOwner)s": "Bantu membuat %(analyticsOwner)s lebih baik",
     "That's fine": "Saya tidak keberatan",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Beberapa contoh informasi yang akan dikirim ke kami untuk membuat %(brand)s lebih baik termasuk:",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Kebijakan cookie kami yang lengkap dapat ditemukan <CookiePolicyLink>di sini</CookiePolicyLink>."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Kebijakan cookie kami yang lengkap dapat ditemukan <CookiePolicyLink>di sini</CookiePolicyLink>.",
+    "Type of location share": "Ketik deskripsi",
+    "My location": "Lokasi saya",
+    "Share my current location as a once off": "Bagikan lokasi saya saat ini (sekali saja)",
+    "Failed to load map": "Gagal untuk memuat peta",
+    "Share location": "Bagikan lokasi",
+    "Manage pinned events": "Kelola peristiwa yang disematkan",
+    "Location sharing (under active development)": "Pembagian lokasi (masih dalam pengembangan)",
+    "You cannot place calls without a connection to the server.": "Anda tidak dapat membuat panggilan tanpa terhubung ke server.",
+    "Connectivity to the server has been lost": "Koneksi ke server telah hilang",
+    "You cannot place calls in this browser.": "Anda tidak dapat membuat panggilan di browser ini.",
+    "Calls are unsupported": "Panggilan tidak didukung"
 }
