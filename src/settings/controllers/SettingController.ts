@@ -54,6 +54,8 @@ export default abstract class SettingController {
      */
     public onChange(level: SettingLevel, roomId: string, newValue: any) {
         // do nothing by default
+
+        // FIXME: force a fresh on the RoomView for the roomId in question
     }
 
     /**

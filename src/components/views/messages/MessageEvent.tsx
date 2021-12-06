@@ -125,6 +125,14 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                     BodyType = sdk.getComponent('messages.MPollBody');
                 }
             }
+
+            if ((type && type === "org.matrix.msc3488.location") ||
+                (type && type === EventType.RoomMessage && msgtype && msgtype === MsgType.Location)) {
+                // TODO: tidy this up once location sharing is out of labs
+                if (SettingsStore.getValue("feature_location_share")) {
+                    BodyType = sdk.getComponent('messages.MLocationBody');
+                }
+            }
         }
 
         if (SettingsStore.getValue("feature_mjolnir")) {

@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017 - 2019 New Vector Ltd
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ limitations under the License.
 @import "./_font-sizes.scss";
 @import "./_font-weights.scss";
 @import "./_animations.scss";
+@import url("maplibre-gl/dist/maplibre-gl.css");
 
 $hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
 
