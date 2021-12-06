@@ -29,6 +29,7 @@ import ErrorDialog from '../../../dialogs/ErrorDialog';
 import PowerSelector from "../../../elements/PowerSelector";
 
 import { logger } from "matrix-js-sdk/src/logger";
+import SettingsStore from "../../../../../settings/SettingsStore";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -54,6 +55,7 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
     [EventType.RoomTombstone]: { isState: true, hideForSpace: true },
     [EventType.RoomEncryption]: { isState: true, hideForSpace: true },
     [EventType.RoomServerAcl]: { isState: true, hideForSpace: true },
+    [EventType.RoomPinnedEvents]: { isState: true, hideForSpace: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": { isState: true, hideForSpace: true },
@@ -236,6 +238,10 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("Modify widgets"),
         };
+
+        if (SettingsStore.getValue("feature_pinning")) {
+            plEventsToLabels[EventType.RoomPinnedEvents] = _td("Manage pinned events");
+        }
 
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
