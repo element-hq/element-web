@@ -616,6 +616,14 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     alwaysVisible = false;
                 }
 
+                let forceExpanded = false;
+                if (
+                    (this.props.activeSpace === MetaSpace.Favourites && orderedTagId === DefaultTagID.Favourite) ||
+                    (this.props.activeSpace === MetaSpace.People && orderedTagId === DefaultTagID.DM)
+                ) {
+                    forceExpanded = true;
+                }
+
                 // The cost of mounting/unmounting this component offsets the cost
                 // of keeping it in the DOM and hiding it when it is not required
                 return <RoomSublist
@@ -631,6 +639,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     resizeNotifier={this.props.resizeNotifier}
                     alwaysVisible={alwaysVisible}
                     onListCollapse={this.props.onListCollapse}
+                    forceExpanded={forceExpanded}
                 />;
             });
     }

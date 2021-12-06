@@ -79,6 +79,7 @@ interface IProps {
     tagId: TagID;
     showSkeleton?: boolean;
     alwaysVisible?: boolean;
+    forceExpanded?: boolean;
     resizeNotifier: ResizeNotifier;
     extraTiles?: ReactComponentElement<typeof ExtraTile>[];
     onListCollapse?: (isExpanded: boolean) => void;
@@ -460,6 +461,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private toggleCollapsed = () => {
+        if (this.props.forceExpanded) return;
         this.layout.isCollapsed = this.state.isExpanded;
         this.setState({ isExpanded: !this.layout.isCollapsed });
         if (this.props.onListCollapse) {
@@ -508,7 +510,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private renderVisibleTiles(): React.ReactElement[] {
-        if (!this.state.isExpanded) {
+        if (!this.state.isExpanded && !this.props.forceExpanded) {
             // don't waste time on rendering
             return [];
         }
@@ -516,7 +518,11 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         const tiles: React.ReactElement[] = [];
 
         if (this.state.rooms) {
-            const visibleRooms = this.state.rooms.slice(0, this.numVisibleTiles);
+            let visibleRooms = this.state.rooms;
+            if (!this.props.forceExpanded) {
+                visibleRooms = visibleRooms.slice(0, this.numVisibleTiles);
+            }
+
             for (const room of visibleRooms) {
                 tiles.push(<RoomTile
                     room={room}
@@ -537,7 +543,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         // to avoid spending cycles on slicing. It's generally fine to do this though
         // as users are unlikely to have more than a handful of tiles when the extra
         // tiles are used.
-        if (tiles.length > this.numVisibleTiles) {
+        if (tiles.length > this.numVisibleTiles && !this.props.forceExpanded) {
             return tiles.slice(0, this.numVisibleTiles);
         }
 
@@ -731,7 +737,13 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         });
 
         let content = null;
-        if (visibleTiles.length > 0) {
+        if (visibleTiles.length > 0 && this.props.forceExpanded) {
+            content = <div className="mx_RoomSublist_resizeBox">
+                <div className="mx_RoomSublist_tiles" ref={this.tilesRef}>
+                    { visibleTiles }
+                </div>
+            </div>;
+        } else if (visibleTiles.length > 0) {
             const layout = this.layout; // to shorten calls
 
             const minTiles = Math.min(layout.minVisibleTiles, this.numTiles);
