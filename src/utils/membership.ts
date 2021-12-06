@@ -16,14 +16,16 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
+import { EventStatus } from "matrix-js-sdk/src/models/event";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
-import Modal from "../Modal";
+import Modal, { IHandle } from "../Modal";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import React from "react";
 import dis from "../dispatcher/dispatcher";
 import RoomViewStore from "../stores/RoomViewStore";
+import Spinner from "../components/views/elements/Spinner";
 
 /**
  * Approximation of a membership status for a given room.
@@ -85,7 +87,12 @@ export function isJoinedOrNearlyJoined(membership: string): boolean {
     return effective === EffectiveMembership.Join || effective === EffectiveMembership.Invite;
 }
 
-export async function leaveRoomBehaviour(roomId: string, retry = true) {
+export async function leaveRoomBehaviour(roomId: string, retry = true, spinner = true) {
+    let spinnerModal: IHandle<any>;
+    if (spinner) {
+        spinnerModal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
+    }
+
     const cli = MatrixClientPeg.get();
     let leavingAllVersions = true;
     const history = cli.getRoomUpgradeHistory(roomId);
@@ -97,6 +104,26 @@ export async function leaveRoomBehaviour(roomId: string, retry = true) {
             leavingAllVersions = false;
         }
     }
+
+    const room = cli.getRoom(roomId);
+    // await any queued messages being sent so that they do not fail
+    await Promise.all(room.getPendingEvents().filter(ev => {
+        return [EventStatus.QUEUED, EventStatus.ENCRYPTING, EventStatus.SENDING].includes(ev.status);
+    }).map(ev => new Promise<void>((resolve, reject) => {
+        const handler = () => {
+            if (ev.status === EventStatus.NOT_SENT) {
+                spinnerModal?.close();
+                reject(ev.error);
+            }
+
+            if (!ev.status || ev.status === EventStatus.SENT) {
+                ev.off("Event.status", handler);
+                resolve();
+            }
+        };
+
+        ev.on("Event.status", handler);
+    })));
 
     let results: { [roomId: string]: Error & { errcode?: string, message: string, data?: Record<string, any> } } = {};
     if (!leavingAllVersions) {
@@ -118,9 +145,11 @@ export async function leaveRoomBehaviour(roomId: string, retry = true) {
         const limitExceededError = Object.values(results).find(e => e?.errcode === "M_LIMIT_EXCEEDED");
         if (limitExceededError) {
             await sleep(limitExceededError.data.retry_after_ms ?? 100);
-            return leaveRoomBehaviour(roomId, false);
+            return leaveRoomBehaviour(roomId, false, false);
         }
     }
+
+    spinnerModal?.close();
 
     const errors = Object.entries(results).filter(r => !!r[1]);
     if (errors.length > 0) {

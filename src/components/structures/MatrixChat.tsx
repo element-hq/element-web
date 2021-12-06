@@ -1180,12 +1180,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             button: _t("Leave"),
             onFinished: (shouldLeave) => {
                 if (shouldLeave) {
-                    const d = leaveRoomBehaviour(roomId);
+                    leaveRoomBehaviour(roomId);
 
-                    // FIXME: controller shouldn't be loading a view :(
-                    const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
-
-                    d.finally(() => modal.close());
                     dis.dispatch({
                         action: "after_leave_room",
                         room_id: roomId,
