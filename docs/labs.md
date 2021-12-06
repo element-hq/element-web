@@ -130,10 +130,6 @@ Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-
 
 Adds a "Message layout" section under `Settings -> Appearance`, where the user can select their preferred message layout (e.g. IRC or Modern). Additionally, adds a new "Message bubbles" layout.
 
-## Pseudonymous Analytics opt-in (`feature_pseudonymous_analytics_opt_in`)
-
-Opts in to collection of pseudonymous analytics data via Posthog. See https://github.com/matrix-org/matrix-react-sdk/pull/6495
-
 ## Polls (`feature_polls`) [In Development]
 
 Polls are a way to gauge interest from your community about a certain topic with a simple voting mechanic
