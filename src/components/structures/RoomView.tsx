@@ -27,6 +27,10 @@ import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventSubscription } from "fbemitter";
 import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
+import { logger } from "matrix-js-sdk/src/logger";
+import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
+import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -89,9 +93,6 @@ import MessageComposer from '../views/rooms/MessageComposer';
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
-import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { dispatchShowThreadEvent } from '../../dispatcher/dispatch-actions/threads';
 import { fetchInitialEvent } from "../../utils/EventUtils";
 import { ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
@@ -1164,10 +1165,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
-    private onRoomStateEvents = (ev: MatrixEvent, state) => {
+    private onRoomStateEvents = (ev: MatrixEvent, state: RoomState) => {
         // ignore if we don't have a room yet
         if (!this.state.room || this.state.room.roomId !== state.roomId) {
             return;
+        }
+
+        if (ev.getType() === EventType.RoomCanonicalAlias) {
+            // re-view the room so MatrixChat can manage the alias in the URL properly
+            dis.dispatch({
+                action: Action.ViewRoom,
+                room_id: this.state.room.roomId,
+            });
+            return; // this event cannot affect permissions so bail
         }
 
         this.updatePermissions(this.state.room);

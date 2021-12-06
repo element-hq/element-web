@@ -114,6 +114,7 @@ import GenericToast from "../views/toasts/GenericToast";
 import InfoDialog from "../views/dialogs/InfoDialog";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import AccessibleButton from "../views/elements/AccessibleButton";
+import { ActionPayload } from "../../dispatcher/payloads";
 
 /** constants for MatrixChat.state.view */
 export enum Views {
@@ -542,13 +543,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setState(newState);
     }
 
-    onAction = (payload) => {
+    private onAction = (payload: ActionPayload) => {
         // console.log(`MatrixClientPeg.onAction: ${payload.action}`);
 
         // Start the onboarding process for certain actions
-        if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest() &&
-            ONBOARDING_FLOW_STARTERS.includes(payload.action)
-        ) {
+        if (MatrixClientPeg.get()?.isGuest() && ONBOARDING_FLOW_STARTERS.includes(payload.action)) {
             // This will cause `payload` to be dispatched later, once a
             // sync has reached the "prepared" state. Setting a matrix ID
             // will cause a full login and sync and finally the deferred
@@ -590,7 +589,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 Lifecycle.logout();
                 break;
             case 'require_registration':
-                startAnyRegistrationFlow(payload);
+                startAnyRegistrationFlow(payload as any);
                 break;
             case 'start_registration':
                 if (Lifecycle.isSoftLogout()) {
@@ -666,7 +665,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                const promise = this.viewRoom(payload);
+                const promise = this.viewRoom(payload as any);
                 if (payload.deferred_action) {
                     promise.then(() => {
                         dis.dispatch(payload.deferred_action);
@@ -897,73 +896,73 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     // @param {Object=} roomInfo.oob_data Object of additional data about the room
     //                               that has been passed out-of-band (eg.
     //                               room name and avatar from an invite email)
-    private viewRoom(roomInfo: IRoomInfo) {
+    private async viewRoom(roomInfo: IRoomInfo) {
         this.focusComposer = true;
 
         if (roomInfo.room_alias) {
-            logger.log(
-                `Switching to room alias ${roomInfo.room_alias} at event ` +
-                roomInfo.event_id,
-            );
+            logger.log(`Switching to room alias ${roomInfo.room_alias} at event ${roomInfo.event_id}`);
         } else {
-            logger.log(`Switching to room id ${roomInfo.room_id} at event ` +
-                roomInfo.event_id,
-            );
+            logger.log(`Switching to room id ${roomInfo.room_id} at event ${roomInfo.event_id}`);
         }
 
         // Wait for the first sync to complete so that if a room does have an alias,
         // it would have been retrieved.
-        let waitFor = Promise.resolve(null);
         if (!this.firstSyncComplete) {
             if (!this.firstSyncPromise) {
                 logger.warn('Cannot view a room before first sync. room_id:', roomInfo.room_id);
                 return;
             }
-            waitFor = this.firstSyncPromise.promise;
+            await this.firstSyncPromise.promise;
         }
 
-        return waitFor.then(() => {
-            let presentedId = roomInfo.room_alias || roomInfo.room_id;
-            const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
-            if (room) {
-                // Not all timeline events are decrypted ahead of time anymore
-                // Only the critical ones for a typical UI are
-                // This will start the decryption process for all events when a
-                // user views a room
-                room.decryptAllEvents();
-                const theAlias = Rooms.getDisplayAliasForRoom(room);
-                if (theAlias) {
-                    presentedId = theAlias;
-                    // Store display alias of the presented room in cache to speed future
-                    // navigation.
-                    storeRoomAliasInCache(theAlias, room.roomId);
-                }
-
-                // Store this as the ID of the last room accessed. This is so that we can
-                // persist which room is being stored across refreshes and browser quits.
-                if (localStorage) {
-                    localStorage.setItem('mx_last_room_id', room.roomId);
-                }
+        let presentedId = roomInfo.room_alias || roomInfo.room_id;
+        const room = MatrixClientPeg.get().getRoom(roomInfo.room_id);
+        if (room) {
+            // Not all timeline events are decrypted ahead of time anymore
+            // Only the critical ones for a typical UI are
+            // This will start the decryption process for all events when a
+            // user views a room
+            room.decryptAllEvents();
+            const theAlias = Rooms.getDisplayAliasForRoom(room);
+            if (theAlias) {
+                presentedId = theAlias;
+                // Store display alias of the presented room in cache to speed future
+                // navigation.
+                storeRoomAliasInCache(theAlias, room.roomId);
             }
 
-            // If we are redirecting to a Room Alias and it is for the room we already showing then replace history item
-            const replaceLast = presentedId[0] === "#" && roomInfo.room_id === this.state.currentRoomId;
-
-            if (roomInfo.event_id && roomInfo.highlighted) {
-                presentedId += "/" + roomInfo.event_id;
+            // Store this as the ID of the last room accessed. This is so that we can
+            // persist which room is being stored across refreshes and browser quits.
+            if (localStorage) {
+                localStorage.setItem('mx_last_room_id', room.roomId);
             }
-            this.setState({
-                view: Views.LOGGED_IN,
-                currentRoomId: roomInfo.room_id || null,
-                page_type: PageType.RoomView,
-                threepidInvite: roomInfo.threepid_invite,
-                roomOobData: roomInfo.oob_data,
-                forceTimeline: roomInfo.forceTimeline,
-                ready: true,
-                roomJustCreatedOpts: roomInfo.justCreatedOpts,
-            }, () => {
-                this.notifyNewScreen('room/' + presentedId, replaceLast);
-            });
+        }
+
+        // If we are redirecting to a Room Alias and it is for the room we already showing then replace history item
+        const replaceLast = presentedId[0] === "#" && roomInfo.room_id === this.state.currentRoomId;
+
+        if (roomInfo.room_id === this.state.currentRoomId) {
+            // if we are re-viewing the same room then copy any state we already know
+            roomInfo.threepid_invite = roomInfo.threepid_invite ?? this.state.threepidInvite;
+            roomInfo.oob_data = roomInfo.oob_data ?? this.state.roomOobData;
+            roomInfo.forceTimeline = roomInfo.forceTimeline ?? this.state.forceTimeline;
+            roomInfo.justCreatedOpts = roomInfo.justCreatedOpts ?? this.state.roomJustCreatedOpts;
+        }
+
+        if (roomInfo.event_id && roomInfo.highlighted) {
+            presentedId += "/" + roomInfo.event_id;
+        }
+        this.setState({
+            view: Views.LOGGED_IN,
+            currentRoomId: roomInfo.room_id || null,
+            page_type: PageType.RoomView,
+            threepidInvite: roomInfo.threepid_invite,
+            roomOobData: roomInfo.oob_data,
+            forceTimeline: roomInfo.forceTimeline,
+            ready: true,
+            roomJustCreatedOpts: roomInfo.justCreatedOpts,
+        }, () => {
+            this.notifyNewScreen('room/' + presentedId, replaceLast);
         });
     }
 
