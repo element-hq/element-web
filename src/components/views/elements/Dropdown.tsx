@@ -222,14 +222,22 @@ export default class Dropdown extends React.Component<IProps, IState> {
                 this.close();
                 break;
             case Key.ARROW_DOWN:
-                this.setState({
-                    highlightedOption: this.nextOption(this.state.highlightedOption),
-                });
+                if (this.state.expanded) {
+                    this.setState({
+                        highlightedOption: this.nextOption(this.state.highlightedOption),
+                    });
+                } else {
+                    this.setState({ expanded: true });
+                }
                 break;
             case Key.ARROW_UP:
-                this.setState({
-                    highlightedOption: this.prevOption(this.state.highlightedOption),
-                });
+                if (this.state.expanded) {
+                    this.setState({
+                        highlightedOption: this.prevOption(this.state.highlightedOption),
+                    });
+                } else {
+                    this.setState({ expanded: true });
+                }
                 break;
             default:
                 handled = false;
