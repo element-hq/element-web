@@ -33,6 +33,7 @@ $slider-dot-size: 1em;
 $slider-selection-dot-size: 2.4em;
 
 $container-border-width: 8px;
+$container-gap-width: 8px; // only even numbers should be used because otherwise we get 0.5px margin values.
 
 $timeline-image-border-radius: 8px;
 :root {

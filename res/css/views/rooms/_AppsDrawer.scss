@@ -18,19 +18,22 @@ limitations under the License.
 $MiniAppTileHeight: 200px;
 
 .mx_AppsDrawer {
-    margin: 5px;
+    margin: $container-gap-width;
+    margin-right: calc($container-gap-width / 2); // The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser.
     margin-bottom: 0; // No bottom margin for the correct gap to the CallView below.
-    margin-left: 13px; // 5+8px to compensate for the scroll bar padding on the right.
     position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     flex-grow: 1;
 
+    &.mx_AppsDrawer_maximise {
+        margin-bottom: $container-gap-width;
+    }
+
     .mx_AppsContainer_resizerHandleContainer {
         width: 100%;
         height: 10px;
-        margin-top: -3px; // move it up so the interactions are slightly more comfortable
         display: block;
         position: relative;
     }
@@ -44,7 +47,7 @@ $MiniAppTileHeight: 200px;
 
         // This is positioned directly below frame
         position: absolute;
-        bottom: 0 !important; // override from library
+        bottom: 50% !important; // override from library
 
         // We then render the pill handle in an ::after to keep it in the handle's
         // area without being a massive line across the screen
@@ -53,8 +56,7 @@ $MiniAppTileHeight: 200px;
             position: absolute;
             border-radius: 3px;
 
-            // The combination of these two should make the pill 4px high
-            top: 6px;
+            height: 4px;
             bottom: 0;
 
             // Together, these make the bar 64px wide
@@ -89,7 +91,7 @@ $MiniAppTileHeight: 200px;
 }
 
 .mx_AppsContainer_resizer {
-    margin-bottom: 8px;
+    margin-bottom: $container-gap-width;
 }
 
 .mx_AppsContainer {

@@ -19,7 +19,6 @@ limitations under the License.
 
     .mx_CallViewForRoom_ResizeWrapper {
         display: flex;
-        margin-bottom: 8px;
 
         &:hover .mx_CallViewForRoom_ResizeHandle {
             // Need to use important to override element style attributes
@@ -31,8 +30,6 @@ limitations under the License.
 
             &::after {
                 content: '';
-                margin-top: 3px;
-
                 border-radius: 4px;
 
                 height: 4px;
