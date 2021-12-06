@@ -3421,5 +3421,12 @@
     "You cannot place calls without a connection to the server.": "您不能在没有连接到服务器的情况下拨打电话。",
     "Connectivity to the server has been lost": "与服务器的连接已丢失",
     "You cannot place calls in this browser.": "您无法在此浏览器中拨打电话。",
-    "Calls are unsupported": "不支持通话"
+    "Calls are unsupported": "不支持通话",
+    "Type of location share": "位置共享类型",
+    "My location": "我的位置",
+    "Share my current location as a once off": "一次性的当前位置共享",
+    "Failed to load map": "加载地图失败",
+    "Share location": "共享位置",
+    "Manage pinned events": "管理置顶事件",
+    "Location sharing (under active development)": "位置共享(正在积极开发中)"
 }
