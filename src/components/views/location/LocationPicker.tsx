@@ -249,7 +249,7 @@ class LocationPicker extends React.Component<IProps, IState> {
                         <DialogButtons primaryButton={_t('Share')}
                             onPrimaryButtonClick={this.onOk}
                             onCancel={this.props.onFinished}
-                            primaryDisabled={!this.state.position} />
+                            primaryDisabled={!this.state.position && !this.state.manualPosition} />
                     </form>
                 </div>
             </div>
