@@ -16,14 +16,11 @@ WORKDIR /src
 COPY . /src
 RUN dos2unix /src/scripts/docker-link-repos.sh && bash /src/scripts/docker-link-repos.sh
 RUN yarn --network-timeout=100000 install
-RUN yarn build
+
+RUN dos2unix /src/scripts/docker-package.sh && bash /src/scripts/docker-package.sh
 
 # Copy the config now so that we don't create another layer in the app image
 RUN cp /src/config.sample.json /src/webapp/config.json
-
-# Ensure we populate the version file
-RUN dos2unix /src/scripts/docker-write-version.sh && bash /src/scripts/docker-write-version.sh
-
 
 # App
 FROM nginx:alpine
