@@ -73,7 +73,7 @@ import LegacyCommunityPreview from "./LegacyCommunityPreview";
 // NB. this is just for server notices rather than pinned messages in general.
 const MAX_PINNED_NOTICES_PER_ROOM = 2;
 
-function getInputableElement(el: HTMLElement): HTMLElement | null {
+export function getInputableElement(el: HTMLElement): HTMLElement | null {
     return el.closest("input, textarea, select, [contenteditable=true]");
 }
 

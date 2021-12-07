@@ -25,6 +25,7 @@ import { Key } from "../../Keyboard";
 import { Writeable } from "../../@types/common";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
+import { getInputableElement } from "./LoggedInView";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -247,6 +248,9 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
             }
             return;
         }
+
+        // only handle escape when in an input field
+        if (ev.key !== Key.ESCAPE && getInputableElement(ev.target as HTMLElement)) return;
 
         let handled = true;
 
