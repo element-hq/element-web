@@ -3312,7 +3312,7 @@
     "Write something...": "Schrijf iets...",
     "Question or topic": "Vraag of onderwerp",
     "What is your poll question or topic?": "Wat is uw poll vraag of onderwerp?",
-    "Create Poll": "Poll maken",
+    "Create Poll": "Poll aanmaken",
     "Based on %(count)s votes|one": "Gebaseerd op %(count)s stem",
     "Based on %(count)s votes|other": "Gebaseerd op %(count)s stemmen",
     "%(count)s votes|one": "%(count)s stem",
@@ -3364,7 +3364,7 @@
     "Store your Security Key somewhere safe, like a password manager or a safe, as it's used to safeguard your encrypted data.": "Bewaar uw veiligheidssleutel op een veilige plaats, zoals in een wachtwoordmanager of een kluis, aangezien hiermee uw versleutelde gegevens zijn beveiligd.",
     "Someone already has that username, please try another.": "Iemand heeft die inlognaam al, probeer een andere.",
     "Sorry, the poll you tried to create was not posted.": "Sorry, de poll die u probeerde aan te maken is niet geplaatst.",
-    "Failed to post poll": "Geen poll geplaatst",
+    "Failed to post poll": "Poll plaatsen mislukt",
     "Sorry, your vote was not registered. Please try again.": "Sorry, uw stem is niet geregistreerd. Probeer het alstublieft opnieuw.",
     "Vote not registered": "Stem niet geregistreerd",
     "Pin to sidebar": "Vastprikken aan zijbalk",
@@ -3425,5 +3425,6 @@
     "You cannot place calls without a connection to the server.": "U kunt geen oproepen plaatsen zonder een verbinding met de server.",
     "Connectivity to the server has been lost": "De verbinding met de server is verbroken",
     "You cannot place calls in this browser.": "U kunt geen oproepen plaatsen in deze browser.",
-    "Calls are unsupported": "Oproepen worden niet ondersteund"
+    "Calls are unsupported": "Oproepen worden niet ondersteund",
+    "Toggle space panel": "Spacepaneel in- of uitschakelen"
 }
