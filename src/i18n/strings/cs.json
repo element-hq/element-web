@@ -3431,5 +3431,6 @@
     "Failed to load map": "Nepodařilo se načíst mapu",
     "Share location": "Sdílení polohy",
     "Manage pinned events": "Správa připnutých událostí",
-    "Location sharing (under active development)": "Sdílení polohy (v aktivním vývoji)"
+    "Location sharing (under active development)": "Sdílení polohy (v aktivním vývoji)",
+    "Toggle space panel": "Přepnout panel prostoru"
 }
