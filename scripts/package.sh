@@ -21,12 +21,7 @@ cp -r webapp element-$version
 # Just in case you have a local config, remove it before packaging
 rm element-$version/config.json || true
 
-# if $version looks like semver with leading v, strip it before writing to file
-if [[ ${version} =~ ^v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+(-.+)?$ ]]; then
-    echo ${version:1} > element-$version/version
-else
-    echo ${version} > element-$version/version
-fi
+$(dirname $0)/normalize-version.sh ${version} > element-$version/version
 
 tar chvzf dist/element-$version.tar.gz element-$version
 rm -r element-$version
