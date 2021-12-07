@@ -2390,5 +2390,6 @@
     "Rename": "Перейменувати",
     "Unverified devices": "Неперевірені пристрої",
     "Verified devices": "Перевірені пристрої",
-    "Last seen %(date)s at %(ip)s": "Останні відвідини %(date)s о %(ip)s"
+    "Last seen %(date)s at %(ip)s": "Останні відвідини %(date)s о %(ip)s",
+    "The server is offline.": "Сервер вимкнено."
 }
