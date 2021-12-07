@@ -738,7 +738,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
         let content = null;
         if (visibleTiles.length > 0 && this.props.forceExpanded) {
-            content = <div className="mx_RoomSublist_resizeBox">
+            content = <div className="mx_RoomSublist_resizeBox mx_RoomSublist_resizeBox_forceExpanded">
                 <div className="mx_RoomSublist_tiles" ref={this.tilesRef}>
                     { visibleTiles }
                 </div>
