@@ -2986,5 +2986,12 @@
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s enviou uma figurinha.",
     "Light high contrast": "Claro (alto contraste)",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s modificou quem pode se juntar a esta sala.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s modificou quem pode se juntar a esta sala. <a>Ver configurações</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s modificou quem pode se juntar a esta sala. <a>Ver configurações</a>.",
+    "Space selection": "Seleção de Espaços",
+    "Use a more compact 'Modern' layout": "Usar um layout \"moderno\" mais compacto",
+    "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s mudou a foto da sala",
+    "%(spaceName)s and %(count)s others|one": "%(spaceName)s e %(count)s outro",
+    "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s e outros %(count)s",
+    "%(date)s at %(time)s": "%(date)s às %(time)s"
 }
