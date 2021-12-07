@@ -3419,5 +3419,17 @@
     "Help improve %(analyticsOwner)s": "協助改善 %(analyticsOwner)s",
     "That's fine": "沒關係",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "傳送一些範例資訊給我們以協助我們讓 %(brand)s 變得更好，其中包含了：",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "我們完整的 cookie 政策可<CookiePolicyLink>在此</CookiePolicyLink>找到。"
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "我們完整的 cookie 政策可<CookiePolicyLink>在此</CookiePolicyLink>找到。",
+    "Type of location share": "位置分享類型",
+    "My location": "我的位置",
+    "Share my current location as a once off": "一次分享我目前的位置",
+    "Share custom location": "分享自訂位置",
+    "Failed to load map": "載入地圖失敗",
+    "Share location": "分享位置",
+    "Manage pinned events": "管理已釘選的活動",
+    "Location sharing (under active development)": "位置分享（正在積極開發中）",
+    "You cannot place calls without a connection to the server.": "您無法在未連線至伺服器的情況下撥打通話。",
+    "Connectivity to the server has been lost": "與伺服器的連線已遺失",
+    "You cannot place calls in this browser.": "您無法在此瀏覽器中撥打通話。",
+    "Calls are unsupported": "不支援通話"
 }
