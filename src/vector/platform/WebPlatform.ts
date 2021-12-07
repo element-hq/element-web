@@ -107,7 +107,7 @@ export default class WebPlatform extends VectorBasePlatform {
         // presence of intermediate caching proxies), but still: we're trying
         // to tell the user that there is a new version.
 
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             request(
                 {
                     method: "GET",
