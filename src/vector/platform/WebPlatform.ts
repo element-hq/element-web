@@ -107,7 +107,7 @@ export default class WebPlatform extends VectorBasePlatform {
         // presence of intermediate caching proxies), but still: we're trying
         // to tell the user that there is a new version.
 
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             request(
                 {
                     method: "GET",
@@ -121,27 +121,24 @@ export default class WebPlatform extends VectorBasePlatform {
                         return;
                     }
 
-                    const ver = body.trim();
-                    resolve(ver);
+                    resolve(this.getNormalizedAppVersion(body.trim()));
                 },
             );
         });
     }
 
-    getNormalizedAppVersion(): string {
-        let ver = process.env.VERSION;
-
+    getNormalizedAppVersion(version: string): string {
         // if version looks like semver with leading v, strip it
-        // (matches scripts/package.sh)
+        // (matches scripts/normalize-version.sh)
         const semVerRegex = new RegExp("^v[0-9]+.[0-9]+.[0-9]+(-.+)?$");
-        if (semVerRegex.test(process.env.VERSION)) {
-            ver = process.env.VERSION.substr(1);
+        if (semVerRegex.test(version)) {
+            return version.substr(1);
         }
-        return ver;
+        return version;
     }
 
     getAppVersion(): Promise<string> {
-        return Promise.resolve(this.getNormalizedAppVersion());
+        return Promise.resolve(this.getNormalizedAppVersion(process.env.VERSION));
     }
 
     startUpdater() {
@@ -155,7 +152,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     pollForUpdate = () => {
         return this.getMostRecentVersion().then((mostRecentVersion) => {
-            const currentVersion = this.getNormalizedAppVersion();
+            const currentVersion = this.getNormalizedAppVersion(process.env.VERSION);
 
             if (currentVersion !== mostRecentVersion) {
                 if (this.shouldShowUpdate(mostRecentVersion)) {
