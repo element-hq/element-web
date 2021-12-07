@@ -107,31 +107,37 @@ class LocationPicker extends React.Component<IProps, IState> {
             zoom: 1,
         });
 
-        // Add geolocate control to the map.
-        this.geolocate = new maplibregl.GeolocateControl({
-            positionOptions: {
-                enableHighAccuracy: true,
-            },
-            trackUserLocation: true,
-        });
-        this.map.addControl(this.geolocate);
+        try {
+            // Add geolocate control to the map.
+            this.geolocate = new maplibregl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true,
+                },
+                trackUserLocation: true,
+            });
+            this.map.addControl(this.geolocate);
 
-        this.map.on('error', (e) => {
-            logger.error("Failed to load map: check map_style_url in config.json has a valid URL and API key", e.error);
+            this.map.on('error', (e) => {
+                logger.error("Failed to load map: check map_style_url in config.json has a valid URL and API key",
+                    e.error);
+                this.setState({ error: e.error });
+            });
+
+            this.map.on('load', () => {
+                this.geolocate.trigger();
+            });
+
+            this.map.on('click', (e) => {
+                this.addMarker(e.lngLat);
+                this.storeManualPosition(e.lngLat);
+                this.setState({ type: LocationShareType.Custom });
+            });
+
+            this.geolocate.on('geolocate', this.onGeolocate);
+        } catch (e) {
+            logger.error("Failed to render map", e.error);
             this.setState({ error: e.error });
-        });
-
-        this.map.on('load', () => {
-            this.geolocate.trigger();
-        });
-
-        this.map.on('click', (e) => {
-            this.addMarker(e.lngLat);
-            this.storeManualPosition(e.lngLat);
-            this.setState({ type: LocationShareType.Custom });
-        });
-
-        this.geolocate.on('geolocate', this.onGeolocate);
+        }
     }
 
     private addMarker(lngLat: maplibregl.LngLat): void {
@@ -169,7 +175,7 @@ class LocationPicker extends React.Component<IProps, IState> {
     }
 
     componentWillUnmount() {
-        this.geolocate.off('geolocate', this.onGeolocate);
+        this.geolocate?.off('geolocate', this.onGeolocate);
     }
 
     private onGeolocate = (position: GeolocationPosition) => {
