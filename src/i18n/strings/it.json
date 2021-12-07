@@ -29,7 +29,7 @@
     "Microphone": "Microfono",
     "Camera": "Videocamera",
     "Advanced": "Avanzato",
-    "Always show message timestamps": "Mostra sempre il timestamps dei messaggi",
+    "Always show message timestamps": "Mostra sempre l'orario dei messaggi",
     "Authentication": "Autenticazione",
     "Edit": "Modifica",
     "This email address is already in use": "Questo indirizzo e-mail è già in uso",
@@ -1798,7 +1798,7 @@
     "%(displayName)s cancelled verification.": "%(displayName)s ha annullato la verifica.",
     "You cancelled verification.": "Hai annullato la verifica.",
     "%(name)s is requesting verification": "%(name)s sta richiedendo la verifica",
-    "well formed": "formattato bene",
+    "well formed": "formattata bene",
     "unexpected type": "tipo inatteso",
     "Confirm deleting these sessions by using Single Sign On to prove your identity.|other": "Conferma l'eliminazione di queste sessioni usando Single Sign On per dare prova della tua identità.",
     "Confirm deleting these sessions by using Single Sign On to prove your identity.|one": "Conferma l'eliminazione di questa sessione usando Single Sign On per dare prova della tua identità.",
@@ -3179,7 +3179,7 @@
     "%(senderDisplayName)s sent a sticker.": "%(senderDisplayName)s ha inviato uno sticker.",
     "%(senderDisplayName)s changed the room avatar.": "%(senderDisplayName)s ha cambiato l'avatar della stanza.",
     "%(date)s at %(time)s": "%(date)s alle %(time)s",
-    "Displaying time": "Mostrando l'ora",
+    "Displaying time": "Visualizzazione dell'ora",
     "Please only proceed if you're sure you've lost all of your other devices and your security key.": "Procedi solo se sei sicuro di avere perso tutti gli altri tuoi dispositivi e la chiave di sicurezza.",
     "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.": "La reimpostazione delle chiavi di verifica non può essere annullata. Dopo averlo fatto, non avrai accesso ai vecchi messaggi cifrati, e gli amici che ti avevano verificato in precedenza vedranno avvisi di sicurezza fino a quando non ti ri-verifichi con loro.",
     "I'll verify later": "Verificherò dopo",
@@ -3430,5 +3430,6 @@
     "You cannot place calls in this browser.": "Non puoi fare chiamate in questo browser.",
     "Calls are unsupported": "Le chiamate non sono supportate",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Alcuni esempi delle informazioni che ci vengono inviate per aiutarci a migliorare %(brand)s includono:",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "La nostra informativa completa sui cookie può essere trovata <CookiePolicyLink>qui</CookiePolicyLink>."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "La nostra informativa completa sui cookie può essere trovata <CookiePolicyLink>qui</CookiePolicyLink>.",
+    "Toggle space panel": "Apri/chiudi pannello spazio"
 }
