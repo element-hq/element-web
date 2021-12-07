@@ -36,12 +36,9 @@ $activeBorderColor: $primary-content;
     flex-direction: column;
 
     .mx_SpacePanel_toggleCollapse {
-        margin: 0 auto;
         position: relative;
-        min-width: 32px;
-        min-height: 32px;
-        line-height: 32px;
-        color: $secondary-content;
+        height: 32px;
+        width: 32px;
 
         &::before {
             content: "";
@@ -50,21 +47,43 @@ $activeBorderColor: $primary-content;
             height: 32px;
             left: 0;
             mask-position: center;
-            mask-size: contain;
+            mask-size: 24px;
             mask-repeat: no-repeat;
             background-color: $secondary-content;
-            mask-image: url('$(res)/img/element-icons/expand-space-panel.svg');
+            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            transform: rotate(270deg);
+        }
+
+        &:not(.expanded) {
+            position: absolute;
+            left: 68px;
+            top: 12px;
+            border-radius: 0 8px 8px 0;
+            background-color: $primary-content;
+            opacity: 0;
+
+            &::before {
+                background-color: $background;
+            }
         }
 
         &.expanded {
-            padding-left: 48px;
-            padding-right: 8px;
-            margin-left: $gutterSize;
+            margin-left: auto;
+            margin-right: -8px; // overflow into .mx_UserMenu's margin without butchering its bottom stroke
+            border-radius: 8px;
 
             &::before {
-                transform: scaleX(-1);
+                transform: rotate(90deg);
+            }
+
+            &:hover {
+                background-color: $panel-actions;
             }
         }
+    }
+
+    &:hover .mx_SpacePanel_toggleCollapse {
+        opacity: 100%;
     }
 
     ul {

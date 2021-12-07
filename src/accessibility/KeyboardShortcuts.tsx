@@ -255,6 +255,12 @@ const shortcuts: Record<Categories, IShortcut[]> = {
             description: _td("Activate selected button"),
         }, {
             keybinds: [{
+                modifiers: [CMD_OR_CTRL, Modifiers.SHIFT],
+                key: Key.D,
+            }],
+            description: _td("Toggle space panel"),
+        }, {
+            keybinds: [{
                 modifiers: [CMD_OR_CTRL],
                 key: Key.PERIOD,
             }],
@@ -348,7 +354,7 @@ const Shortcut: React.FC<{
             }
 
             return <div key={s.key}>
-                { s.modifiers && s.modifiers.map(m => {
+                { s.modifiers?.map(m => {
                     return <React.Fragment key={m}>
                         <kbd>{ modifierIcon[m] || _t(m) }</kbd>+
                     </React.Fragment>;

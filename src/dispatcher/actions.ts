@@ -78,6 +78,11 @@ export enum Action {
     ToggleUserMenu = "toggle_user_menu",
 
     /**
+     * Toggles the Space panel. No additional payload information required.
+     */
+    ToggleSpacePanel = "toggle_space_panel",
+
+    /**
      * Sets the apps root font size. Should be used with UpdateFontSizePayload
      */
     UpdateFontSize = "update_font_size",

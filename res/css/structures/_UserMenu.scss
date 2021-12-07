@@ -19,6 +19,11 @@ limitations under the License.
     display: flex;
     align-items: center;
 
+    .mx_AccessibleButton {
+        display: flex;
+        align-items: center;
+    }
+
     .mx_UserMenu_userAvatar {
         position: relative;
     }
@@ -30,7 +35,7 @@ limitations under the License.
         margin-left: 10px;
     }
 
-    &.mx_UserMenu_cutout .mx_BaseAvatar {
+    .mx_UserMenu_cutout .mx_BaseAvatar {
         mask-image: url('$(res)/img/element-icons/roomlist/dnd-avatar-mask.svg');
         mask-position: center;
         mask-size: contain;

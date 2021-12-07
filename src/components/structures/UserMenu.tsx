@@ -523,14 +523,14 @@ export default class UserMenu extends React.Component<IProps, IState> {
             </div>;
         }
 
-        return (
+        return <div className="mx_UserMenu">
             <ContextMenuButton
                 onClick={this.onOpenMenuClick}
                 inputRef={this.buttonRef}
                 label={_t("User menu")}
                 isExpanded={!!this.state.contextMenuPosition}
                 onContextMenu={this.onContextMenu}
-                className={classNames("mx_UserMenu", {
+                className={classNames({
                     mx_UserMenu_cutout: badge,
                 })}
             >
@@ -550,6 +550,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
 
                 { this.renderContextMenu() }
             </ContextMenuButton>
-        );
+
+            { this.props.children }
+        </div>;
     }
 }
