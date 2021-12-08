@@ -194,6 +194,8 @@ limitations under the License.
             display: flex;
             flex-direction: column;
             align-self: stretch;
+            // without this Firefox will prefer pushing the resizer & show more/less button into the overflow
+            min-height: 0;
 
             mask-image: linear-gradient(0deg, transparent, black 4px);
         }
