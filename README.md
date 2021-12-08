@@ -375,20 +375,11 @@ Running the tests
 -----------------
 
 There are a number of application-level tests in the `tests` directory; these
-are designed to run in a browser instance under the control of
-[karma](https://karma-runner.github.io). To run them:
+are designed to run with Jest and JSDOM. To run them
 
-* Make sure you have Chrome installed (a recent version, like 59)
-* Make sure you have `matrix-js-sdk` and `matrix-react-sdk` installed and
-  built, as above
-* `yarn test`
-
-The above will run the tests under Chrome in a `headless` mode.
-
-You can also tell karma to run the tests in a loop (every time the source
-changes), in an instance of Chrome on your desktop, with `yarn
-test-multi`. This also gives you the option of running the tests in 'debug'
-mode, which is useful for stepping through the tests in the developer tools.
+```
+yarn test
+```
 
 ### End-to-End tests
 
