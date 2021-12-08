@@ -15,29 +15,125 @@ limitations under the License.
 */
 
 import React from 'react';
+import classNames from 'classnames';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Modal from '../../../Modal';
 import { IBodyProps } from "./IBodyProps";
+import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import {
     IPollAnswer,
     IPollContent,
-    IPollResponse,
+    IPollResponseContent,
+    POLL_END_EVENT_TYPE,
     POLL_RESPONSE_EVENT_TYPE,
     POLL_START_EVENT_TYPE,
+    TEXT_NODE_TYPE,
 } from '../../../polls/consts';
 import StyledRadioButton from '../elements/StyledRadioButton';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from '../dialogs/ErrorDialog';
-
-// TODO: [andyb] Use extensible events library when ready
-const TEXT_NODE_TYPE = "org.matrix.msc1767.text";
+import { MatrixClient } from 'matrix-js-sdk/src/matrix';
 
 interface IState {
     selected?: string; // Which option was clicked by the local user
-    pollRelations: Relations; // Allows us to access voting events
+    voteRelations: Relations; // Voting (response) events
+    endRelations: Relations; // Poll end events
+}
+
+export function findTopAnswer(
+    pollEvent: MatrixEvent,
+    matrixClient: MatrixClient,
+    getRelationsForEvent?: (
+        eventId: string,
+        relationType: string,
+        eventType: string
+    ) => Relations,
+): string {
+    if (!getRelationsForEvent) {
+        return "";
+    }
+
+    const pollContents: IPollContent = pollEvent.getContent();
+
+    const findAnswerText = (answerId: string) => {
+        for (const answer of pollContents[POLL_START_EVENT_TYPE.name].answers) {
+            if (answer.id == answerId) {
+                return answer[TEXT_NODE_TYPE.name];
+            }
+        }
+        return "";
+    };
+
+    const voteRelations: Relations = getRelationsForEvent(
+        pollEvent.getId(),
+        "m.reference",
+        POLL_RESPONSE_EVENT_TYPE.name,
+    );
+
+    const endRelations: Relations = getRelationsForEvent(
+        pollEvent.getId(),
+        "m.reference",
+        POLL_END_EVENT_TYPE.name,
+    );
+
+    const userVotes: Map<string, UserVote> = collectUserVotes(
+        allVotes(pollEvent, matrixClient, voteRelations, endRelations),
+        matrixClient.getUserId(),
+        null,
+    );
+
+    const votes: Map<string, number> = countVotes(userVotes, pollEvent.getContent());
+    const highestScore: number = Math.max(...votes.values());
+
+    const bestAnswerIds: string[] = [];
+    for (const [answerId, score] of votes) {
+        if (score == highestScore) {
+            bestAnswerIds.push(answerId);
+        }
+    }
+
+    const bestAnswerTexts = bestAnswerIds.map(findAnswerText);
+
+    return formatCommaSeparatedList(bestAnswerTexts, 3);
+}
+
+export function isPollEnded(
+    pollEvent: MatrixEvent,
+    matrixClient: MatrixClient,
+    getRelationsForEvent?: (
+        eventId: string,
+        relationType: string,
+        eventType: string
+    ) => Relations,
+): boolean {
+    if (!getRelationsForEvent) {
+        return false;
+    }
+
+    const roomCurrentState = matrixClient.getRoom(pollEvent.getRoomId()).currentState;
+    function userCanRedact(endEvent: MatrixEvent) {
+        return roomCurrentState.maySendRedactionForEvent(
+            pollEvent,
+            endEvent.getSender(),
+        );
+    }
+
+    const endRelations = getRelationsForEvent(
+        pollEvent.getId(),
+        "m.reference",
+        POLL_END_EVENT_TYPE.name,
+    );
+
+    if (!endRelations) {
+        return false;
+    }
+
+    const authorisedRelations = endRelations.getRelations().filter(userCanRedact);
+
+    return authorisedRelations.length > 0;
 }
 
 @replaceableComponent("views.messages.MPollBody")
@@ -45,60 +141,83 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
     private seenEventIds: string[] = []; // Events we have already seen
+    private voteRelationsReceived = false;
+    private endRelationsReceived = false;
 
     constructor(props: IBodyProps) {
         super(props);
 
         this.state = {
             selected: null,
-            pollRelations: this.fetchPollRelations(),
+            voteRelations: this.fetchVoteRelations(),
+            endRelations: this.fetchEndRelations(),
         };
 
-        this.addListeners(this.state.pollRelations);
-        this.props.mxEvent.on("Event.relationsCreated", this.onPollRelationsCreated);
+        this.addListeners(this.state.voteRelations, this.state.endRelations);
+        this.props.mxEvent.on("Event.relationsCreated", this.onRelationsCreated);
     }
 
     componentWillUnmount() {
-        this.props.mxEvent.off("Event.relationsCreated", this.onPollRelationsCreated);
-        this.removeListeners(this.state.pollRelations);
+        this.props.mxEvent.off("Event.relationsCreated", this.onRelationsCreated);
+        this.removeListeners(this.state.voteRelations, this.state.endRelations);
     }
 
-    private addListeners(pollRelations?: Relations) {
-        if (pollRelations) {
-            pollRelations.on("Relations.add", this.onRelationsChange);
-            pollRelations.on("Relations.remove", this.onRelationsChange);
-            pollRelations.on("Relations.redaction", this.onRelationsChange);
+    private addListeners(voteRelations?: Relations, endRelations?: Relations) {
+        if (voteRelations) {
+            voteRelations.on("Relations.add", this.onRelationsChange);
+            voteRelations.on("Relations.remove", this.onRelationsChange);
+            voteRelations.on("Relations.redaction", this.onRelationsChange);
+        }
+        if (endRelations) {
+            endRelations.on("Relations.add", this.onRelationsChange);
+            endRelations.on("Relations.remove", this.onRelationsChange);
+            endRelations.on("Relations.redaction", this.onRelationsChange);
         }
     }
 
-    private removeListeners(pollRelations?: Relations) {
-        if (pollRelations) {
-            pollRelations.off("Relations.add", this.onRelationsChange);
-            pollRelations.off("Relations.remove", this.onRelationsChange);
-            pollRelations.off("Relations.redaction", this.onRelationsChange);
+    private removeListeners(voteRelations?: Relations, endRelations?: Relations) {
+        if (voteRelations) {
+            voteRelations.off("Relations.add", this.onRelationsChange);
+            voteRelations.off("Relations.remove", this.onRelationsChange);
+            voteRelations.off("Relations.redaction", this.onRelationsChange);
+        }
+        if (endRelations) {
+            endRelations.off("Relations.add", this.onRelationsChange);
+            endRelations.off("Relations.remove", this.onRelationsChange);
+            endRelations.off("Relations.redaction", this.onRelationsChange);
         }
     }
 
-    private onPollRelationsCreated = (relationType: string, eventType: string) => {
-        if (
-            relationType === "m.reference" &&
-            POLL_RESPONSE_EVENT_TYPE.matches(eventType)
-        ) {
+    private onRelationsCreated = (relationType: string, eventType: string) => {
+        if (relationType !== "m.reference") {
+            return;
+        }
+
+        if (POLL_RESPONSE_EVENT_TYPE.matches(eventType)) {
+            this.voteRelationsReceived = true;
+            const newVoteRelations = this.fetchVoteRelations();
+            this.addListeners(newVoteRelations);
+            this.removeListeners(this.state.voteRelations);
+            this.setState({ voteRelations: newVoteRelations });
+        } else if (POLL_END_EVENT_TYPE.matches(eventType)) {
+            this.endRelationsReceived = true;
+            const newEndRelations = this.fetchEndRelations();
+            this.addListeners(newEndRelations);
+            this.removeListeners(this.state.endRelations);
+            this.setState({ endRelations: newEndRelations });
+        }
+
+        if (this.voteRelationsReceived && this.endRelationsReceived) {
             this.props.mxEvent.removeListener(
-                "Event.relationsCreated", this.onPollRelationsCreated);
-
-            const newPollRelations = this.fetchPollRelations();
-            this.addListeners(newPollRelations);
-            this.removeListeners(this.state.pollRelations);
-
-            this.setState({
-                pollRelations: newPollRelations,
-            });
+                "Event.relationsCreated", this.onRelationsCreated);
         }
     };
 
     private onRelationsChange = () => {
-        // We hold pollRelations in our state, and it has changed under us
+        // We hold Relations in our state, and they changed under us.
+        // Check whether we should delete our selection, and then
+        // re-render.
+        // Note: re-rendering is a side effect of unselectIfNewEventFromMe().
         this.unselectIfNewEventFromMe();
     };
 
@@ -106,8 +225,11 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         if (answerId === this.state.selected) {
             return;
         }
+        if (this.isEnded()) {
+            return;
+        }
 
-        const responseContent: IPollResponse = {
+        const responseContent: IPollResponseContent = {
             [POLL_RESPONSE_EVENT_TYPE.name]: {
                 "answers": [answerId],
             },
@@ -143,12 +265,20 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         this.selectOption(e.currentTarget.value);
     };
 
-    private fetchPollRelations(): Relations | null {
+    private fetchVoteRelations(): Relations | null {
+        return this.fetchRelations(POLL_RESPONSE_EVENT_TYPE.name);
+    }
+
+    private fetchEndRelations(): Relations | null {
+        return this.fetchRelations(POLL_END_EVENT_TYPE.name);
+    }
+
+    private fetchRelations(eventType: string): Relations | null {
         if (this.props.getRelationsForEvent) {
             return this.props.getRelationsForEvent(
                 this.props.mxEvent.getId(),
                 "m.reference",
-                POLL_RESPONSE_EVENT_TYPE.name,
+                eventType,
             );
         } else {
             return null;
@@ -160,7 +290,12 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
      */
     private collectUserVotes(): Map<string, UserVote> {
         return collectUserVotes(
-            allVotes(this.state.pollRelations),
+            allVotes(
+                this.props.mxEvent,
+                this.context,
+                this.state.voteRelations,
+                this.state.endRelations,
+            ),
             this.context.getUserId(),
             this.state.selected,
         );
@@ -175,7 +310,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
      * have already seen.
      */
     private unselectIfNewEventFromMe() {
-        const newEvents: MatrixEvent[] = this.state.pollRelations.getRelations()
+        const newEvents: MatrixEvent[] = this.state.voteRelations.getRelations()
             .filter(isPollResponse)
             .filter((mxEvent: MatrixEvent) =>
                 !this.seenEventIds.includes(mxEvent.getId()));
@@ -201,6 +336,14 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         return sum;
     }
 
+    private isEnded(): boolean {
+        return isPollEnded(
+            this.props.mxEvent,
+            this.context,
+            this.props.getRelationsForEvent,
+        );
+    }
+
     render() {
         const pollStart: IPollContent = this.props.mxEvent.getContent();
         const pollInfo = pollStart[POLL_START_EVENT_TYPE.name];
@@ -209,14 +352,22 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
             return null;
         }
 
+        const ended = this.isEnded();
         const pollId = this.props.mxEvent.getId();
         const userVotes = this.collectUserVotes();
         const votes = countVotes(userVotes, this.props.mxEvent.getContent());
         const totalVotes = this.totalVotes(votes);
+        const winCount = Math.max(...votes.values());
         const userId = this.context.getUserId();
         const myVote = userVotes.get(userId)?.answers[0];
+
         let totalText: string;
-        if (myVote === undefined) {
+        if (ended) {
+            totalText = _t(
+                "Final result based on %(count)s votes",
+                { count: totalVotes },
+            );
+        } else if (myVote === undefined) {
             if (totalVotes === 0) {
                 totalText = _t("No votes cast");
             } else {
@@ -230,42 +381,51 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         }
 
         return <div className="mx_MPollBody">
-            <h2>{ pollInfo.question[TEXT_NODE_TYPE] }</h2>
+            <h2>{ pollInfo.question[TEXT_NODE_TYPE.name] }</h2>
             <div className="mx_MPollBody_allOptions">
                 {
                     pollInfo.answers.map((answer: IPollAnswer) => {
-                        const checked = myVote === answer.id;
-                        const classNames = `mx_MPollBody_option${
-                            checked ? " mx_MPollBody_option_checked": ""
-                        }`;
                         let answerVotes = 0;
                         let votesText = "";
-                        if (myVote !== undefined) { // Votes hidden if I didn't vote
+
+                        // Votes are hidden until I vote or the poll ends
+                        if (ended || myVote !== undefined) {
                             answerVotes = votes.get(answer.id) ?? 0;
                             votesText = _t("%(count)s votes", { count: answerVotes });
                         }
-                        const answerPercent = Math.round(
-                            100.0 * answerVotes / totalVotes);
+
+                        const checked = (
+                            (!ended && myVote === answer.id) ||
+                            (ended && answerVotes === winCount)
+                        );
+                        const cls = classNames({
+                            "mx_MPollBody_option": true,
+                            "mx_MPollBody_option_checked": checked,
+                        });
+
+                        const answerPercent = (
+                            totalVotes === 0
+                                ? 0
+                                : Math.round(100.0 * answerVotes / totalVotes)
+                        );
                         return <div
                             key={answer.id}
-                            className={classNames}
+                            className={cls}
                             onClick={() => this.selectOption(answer.id)}
                         >
-                            <StyledRadioButton
-                                name={`poll_answer_select-${pollId}`}
-                                value={answer.id}
-                                checked={checked}
-                                onChange={this.onOptionSelected}
-                            >
-                                <div className="mx_MPollBody_optionDescription">
-                                    <div className="mx_MPollBody_optionText">
-                                        { answer[TEXT_NODE_TYPE] }
-                                    </div>
-                                    <div className="mx_MPollBody_optionVoteCount">
-                                        { votesText }
-                                    </div>
-                                </div>
-                            </StyledRadioButton>
+                            { (
+                                ended
+                                    ? <EndedPollOption
+                                        answer={answer}
+                                        checked={checked}
+                                        votesText={votesText} />
+                                    : <LivePollOption
+                                        pollId={pollId}
+                                        answer={answer}
+                                        checked={checked}
+                                        votesText={votesText}
+                                        onOptionSelected={this.onOptionSelected} />
+                            ) }
                             <div className="mx_MPollBody_popularityBackground">
                                 <div
                                     className="mx_MPollBody_popularityAmount"
@@ -283,13 +443,62 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     }
 }
 
+interface IEndedPollOptionProps {
+    answer: IPollAnswer;
+    checked: boolean;
+    votesText: string;
+}
+
+function EndedPollOption(props: IEndedPollOptionProps) {
+    const cls = classNames({
+        "mx_MPollBody_endedOption": true,
+        "mx_MPollBody_endedOptionWinner": props.checked,
+    });
+    return <div className={cls} data-value={props.answer.id}>
+        <div className="mx_MPollBody_optionDescription">
+            <div className="mx_MPollBody_optionText">
+                { props.answer[TEXT_NODE_TYPE.name] }
+            </div>
+            <div className="mx_MPollBody_optionVoteCount">
+                { props.votesText }
+            </div>
+        </div>
+    </div>;
+}
+
+interface ILivePollOptionProps {
+    pollId: string;
+    answer: IPollAnswer;
+    checked: boolean;
+    votesText: string;
+    onOptionSelected: (e: React.FormEvent<HTMLInputElement>) => void;
+}
+
+function LivePollOption(props: ILivePollOptionProps) {
+    return <StyledRadioButton
+        name={`poll_answer_select-${props.pollId}`}
+        value={props.answer.id}
+        checked={props.checked}
+        onChange={props.onOptionSelected}
+    >
+        <div className="mx_MPollBody_optionDescription">
+            <div className="mx_MPollBody_optionText">
+                { props.answer[TEXT_NODE_TYPE.name] }
+            </div>
+            <div className="mx_MPollBody_optionVoteCount">
+                { props.votesText }
+            </div>
+        </div>
+    </StyledRadioButton>;
+}
+
 export class UserVote {
     constructor(public readonly ts: number, public readonly sender: string, public readonly answers: string[]) {
     }
 }
 
 function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
-    const pr = event.getContent() as IPollResponse;
+    const pr = event.getContent() as IPollResponseContent;
     const answers = pr[POLL_RESPONSE_EVENT_TYPE.name].answers;
 
     return new UserVote(
@@ -299,13 +508,65 @@ function userResponseFromPollResponseEvent(event: MatrixEvent): UserVote {
     );
 }
 
-export function allVotes(pollRelations: Relations): Array<UserVote> {
-    if (pollRelations) {
-        return pollRelations.getRelations()
+export function allVotes(
+    pollEvent: MatrixEvent,
+    matrixClient: MatrixClient,
+    voteRelations: Relations,
+    endRelations: Relations,
+): Array<UserVote> {
+    const endTs = pollEndTs(pollEvent, matrixClient, endRelations);
+
+    function isOnOrBeforeEnd(responseEvent: MatrixEvent): boolean {
+        // From MSC3381:
+        // "Votes sent on or before the end event's timestamp are valid votes"
+        return (
+            endTs === null ||
+            responseEvent.getTs() <= endTs
+        );
+    }
+
+    if (voteRelations) {
+        return voteRelations.getRelations()
             .filter(isPollResponse)
+            .filter(isOnOrBeforeEnd)
             .map(userResponseFromPollResponseEvent);
     } else {
         return [];
+    }
+}
+
+/**
+ * Returns the earliest timestamp from the supplied list of end_poll events
+ * or null if there are no authorised events.
+ */
+export function pollEndTs(
+    pollEvent: MatrixEvent,
+    matrixClient: MatrixClient,
+    endRelations: Relations,
+): number | null {
+    if (!endRelations) {
+        return null;
+    }
+
+    const roomCurrentState = matrixClient.getRoom(pollEvent.getRoomId()).currentState;
+    function userCanRedact(endEvent: MatrixEvent) {
+        return roomCurrentState.maySendRedactionForEvent(
+            pollEvent,
+            endEvent.getSender(),
+        );
+    }
+
+    const tss: number[] = (
+        endRelations
+            .getRelations()
+            .filter(userCanRedact)
+            .map((evt: MatrixEvent) => evt.getTs())
+    );
+
+    if (tss.length === 0) {
+        return null;
+    } else {
+        return Math.min(...tss);
     }
 }
 

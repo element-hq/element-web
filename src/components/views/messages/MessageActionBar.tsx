@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import type { Relations } from 'matrix-js-sdk/src/models/relations';
 
@@ -51,46 +51,58 @@ interface IOptionsButtonProps {
     getReplyChain: () => ReplyChain;
     permalinkCreator: RoomPermalinkCreator;
     onFocusChange: (menuDisplayed: boolean) => void;
+    getRelationsForEvent?: (
+        eventId: string,
+        relationType: string,
+        eventType: string
+    ) => Relations;
 }
 
-const OptionsButton: React.FC<IOptionsButtonProps> =
-    ({ mxEvent, getTile, getReplyChain, permalinkCreator, onFocusChange }) => {
-        const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
-        const [onFocus, isActive, ref] = useRovingTabIndex(button);
-        useEffect(() => {
-            onFocusChange(menuDisplayed);
-        }, [onFocusChange, menuDisplayed]);
+const OptionsButton: React.FC<IOptionsButtonProps> = ({
+    mxEvent,
+    getTile,
+    getReplyChain,
+    permalinkCreator,
+    onFocusChange,
+    getRelationsForEvent,
+}) => {
+    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    const [onFocus, isActive, ref] = useRovingTabIndex(button);
+    useEffect(() => {
+        onFocusChange(menuDisplayed);
+    }, [onFocusChange, menuDisplayed]);
 
-        let contextMenu;
-        if (menuDisplayed) {
-            const tile = getTile && getTile();
-            const replyChain = getReplyChain && getReplyChain();
+    let contextMenu: ReactElement | null;
+    if (menuDisplayed) {
+        const tile = getTile && getTile();
+        const replyChain = getReplyChain && getReplyChain();
 
-            const buttonRect = button.current.getBoundingClientRect();
-            contextMenu = <MessageContextMenu
-                {...aboveLeftOf(buttonRect)}
-                mxEvent={mxEvent}
-                permalinkCreator={permalinkCreator}
-                eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
-                collapseReplyChain={replyChain && replyChain.canCollapse() ? replyChain.collapse : undefined}
-                onFinished={closeMenu}
-            />;
-        }
+        const buttonRect = button.current.getBoundingClientRect();
+        contextMenu = <MessageContextMenu
+            {...aboveLeftOf(buttonRect)}
+            mxEvent={mxEvent}
+            permalinkCreator={permalinkCreator}
+            eventTileOps={tile && tile.getEventTileOps ? tile.getEventTileOps() : undefined}
+            collapseReplyChain={replyChain && replyChain.canCollapse() ? replyChain.collapse : undefined}
+            onFinished={closeMenu}
+            getRelationsForEvent={getRelationsForEvent}
+        />;
+    }
 
-        return <React.Fragment>
-            <ContextMenuTooltipButton
-                className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
-                title={_t("Options")}
-                onClick={openMenu}
-                isExpanded={menuDisplayed}
-                inputRef={ref}
-                onFocus={onFocus}
-                tabIndex={isActive ? 0 : -1}
-            />
+    return <React.Fragment>
+        <ContextMenuTooltipButton
+            className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
+            title={_t("Options")}
+            onClick={openMenu}
+            isExpanded={menuDisplayed}
+            inputRef={ref}
+            onFocus={onFocus}
+            tabIndex={isActive ? 0 : -1}
+        />
 
-            { contextMenu }
-        </React.Fragment>;
-    };
+        { contextMenu }
+    </React.Fragment>;
+};
 
 interface IReactButtonProps {
     mxEvent: MatrixEvent;
@@ -138,6 +150,11 @@ interface IMessageActionBarProps {
     onFocusChange?: (menuDisplayed: boolean) => void;
     toggleThreadExpanded: () => void;
     isQuoteExpanded?: boolean;
+    getRelationsForEvent?: (
+        eventId: string,
+        relationType: string,
+        eventType: string
+    ) => Relations;
 }
 
 @replaceableComponent("views.messages.MessageActionBar")
@@ -378,6 +395,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 permalinkCreator={this.props.permalinkCreator}
                 onFocusChange={this.onFocusChange}
                 key="menu"
+                getRelationsForEvent={this.props.getRelationsForEvent}
             />);
         }
 

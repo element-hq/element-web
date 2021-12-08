@@ -19,31 +19,44 @@ import { IContent } from "matrix-js-sdk/src/models/event";
 
 export const POLL_START_EVENT_TYPE = new UnstableValue("m.poll.start", "org.matrix.msc3381.poll.start");
 export const POLL_RESPONSE_EVENT_TYPE = new UnstableValue("m.poll.response", "org.matrix.msc3381.poll.response");
+export const POLL_END_EVENT_TYPE = new UnstableValue("m.poll.end", "org.matrix.msc3381.poll.end");
 export const POLL_KIND_DISCLOSED = new UnstableValue("m.poll.disclosed", "org.matrix.msc3381.poll.disclosed");
 export const POLL_KIND_UNDISCLOSED = new UnstableValue("m.poll.undisclosed", "org.matrix.msc3381.poll.undisclosed");
 
 // TODO: [TravisR] Use extensible events library when ready
-const TEXT_NODE_TYPE = "org.matrix.msc1767.text";
+export const TEXT_NODE_TYPE = new UnstableValue("m.text", "org.matrix.msc1767.text");
 
 export interface IPollAnswer extends IContent {
     id: string;
-    [TEXT_NODE_TYPE]: string;
+    [TEXT_NODE_TYPE.name]: string;
 }
 
 export interface IPollContent extends IContent {
     [POLL_START_EVENT_TYPE.name]: {
         kind: string; // disclosed or undisclosed (untypeable for now)
         question: {
-            [TEXT_NODE_TYPE]: string;
+            [TEXT_NODE_TYPE.name]: string;
         };
         answers: IPollAnswer[];
     };
-    [TEXT_NODE_TYPE]: string;
+    [TEXT_NODE_TYPE.name]: string;
 }
 
-export interface IPollResponse extends IContent {
+export interface IPollResponseContent extends IContent {
     [POLL_RESPONSE_EVENT_TYPE.name]: {
         answers: string[];
+    };
+    "m.relates_to": {
+        "event_id": string;
+        "rel_type": string;
+    };
+}
+
+export interface IPollEndContent extends IContent {
+    [POLL_END_EVENT_TYPE.name]: {};
+    "m.relates_to": {
+        "event_id": string;
+        "rel_type": string;
     };
 }
 
@@ -51,13 +64,15 @@ export function makePollContent(question: string, answers: string[], kind: strin
     question = question.trim();
     answers = answers.map(a => a.trim()).filter(a => !!a);
     return {
-        [TEXT_NODE_TYPE]: `${question}\n${answers.map((a, i) => `${i + 1}. ${a}`).join('\n')}`,
+        [TEXT_NODE_TYPE.name]: `${question}\n${answers.map((a, i) => `${i + 1}. ${a}`).join('\n')}`,
         [POLL_START_EVENT_TYPE.name]: {
             kind: kind,
             question: {
-                [TEXT_NODE_TYPE]: question,
+                [TEXT_NODE_TYPE.name]: question,
             },
-            answers: answers.map((a, i) => ({ id: `${i}-${a}`, [TEXT_NODE_TYPE]: a })),
+            answers: answers.map(
+                (a, i) => ({ id: `${i}-${a}`, [TEXT_NODE_TYPE.name]: a }),
+            ),
         },
     };
 }
