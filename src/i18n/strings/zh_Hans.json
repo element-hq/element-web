@@ -3430,5 +3430,13 @@
     "Manage pinned events": "管理置顶事件",
     "Location sharing (under active development)": "位置共享(正在积极开发中)",
     "Share custom location": "共享自定义位置",
-    "Toggle space panel": "切换空间仪表板"
+    "Toggle space panel": "切换空间仪表板",
+    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "您确定要结束此投票吗？ 这将显示投票的最终结果并阻止人们投票。",
+    "End Poll": "结束投票",
+    "Sorry, the poll did not end. Please try again.": "抱歉，投票没有结束。 请再试一次。",
+    "Failed to end poll": "结束投票失败",
+    "The poll has ended. Top answer: %(topAnswer)s": "投票已经结束。 得票最多答案：%(topAnswer)s",
+    "The poll has ended. No votes were cast.": "投票已经结束。 没有投票。",
+    "Final result based on %(count)s votes|one": "基于 %(count)s 票数的最终结果",
+    "Final result based on %(count)s votes|other": "基于 %(count)s 票数的最终结果"
 }
