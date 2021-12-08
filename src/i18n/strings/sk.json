@@ -986,7 +986,7 @@
     "Are you sure you want to sign out?": "Naozaj sa chcete odhlásiť?",
     "Go back": "Naspäť",
     "Room Settings - %(roomName)s": "Nastavenia miestnosti - %(roomName)s",
-    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Pozor</b>: Zálohovanie šifrovacích kľúčov by ste mali nastavovať na dôverihodnom počítači.",
+    "<b>Warning</b>: you should only set up key backup from a trusted computer.": "<b>Varovanie</b>: zálohovanie šifrovacích kľúčov by ste mali nastavovať na dôveryhodnom počítači.",
     "Update status": "Aktualizovať stav",
     "Set status": "Nastaviť stav",
     "Hide": "Skryť",
