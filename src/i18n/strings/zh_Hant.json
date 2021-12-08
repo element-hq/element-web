@@ -3431,5 +3431,6 @@
     "You cannot place calls without a connection to the server.": "您無法在未連線至伺服器的情況下撥打通話。",
     "Connectivity to the server has been lost": "與伺服器的連線已遺失",
     "You cannot place calls in this browser.": "您無法在此瀏覽器中撥打通話。",
-    "Calls are unsupported": "不支援通話"
+    "Calls are unsupported": "不支援通話",
+    "Toggle space panel": "切換空間面板"
 }
