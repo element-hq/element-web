@@ -32,8 +32,6 @@ import VectorBasePlatform from './VectorBasePlatform';
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
-    private runningVersion: string = null;
-
     constructor() {
         super();
         // Register service worker if available on this platform
@@ -101,14 +99,14 @@ export default class WebPlatform extends VectorBasePlatform {
         return notification;
     }
 
-    private getVersion(): Promise<string> {
+    private getMostRecentVersion(): Promise<string> {
         // We add a cachebuster to the request to make sure that we know about
         // the most recent version on the origin server. That might not
         // actually be the version we'd get on a reload (particularly in the
         // presence of intermediate caching proxies), but still: we're trying
         // to tell the user that there is a new version.
 
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             request(
                 {
                     method: "GET",
@@ -122,18 +120,24 @@ export default class WebPlatform extends VectorBasePlatform {
                         return;
                     }
 
-                    const ver = body.trim();
-                    resolve(ver);
+                    resolve(this.getNormalizedAppVersion(body.trim()));
                 },
             );
         });
     }
 
-    getAppVersion(): Promise<string> {
-        if (this.runningVersion !== null) {
-            return Promise.resolve(this.runningVersion);
+    getNormalizedAppVersion(version: string): string {
+        // if version looks like semver with leading v, strip it
+        // (matches scripts/normalize-version.sh)
+        const semVerRegex = new RegExp("^v[0-9]+.[0-9]+.[0-9]+(-.+)?$");
+        if (semVerRegex.test(version)) {
+            return version.substr(1);
         }
-        return this.getVersion();
+        return version;
+    }
+
+    getAppVersion(): Promise<string> {
+        return Promise.resolve(this.getNormalizedAppVersion(process.env.VERSION));
     }
 
     startUpdater() {
@@ -146,12 +150,12 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     pollForUpdate = () => {
-        return this.getVersion().then((ver) => {
-            if (this.runningVersion === null) {
-                this.runningVersion = ver;
-            } else if (this.runningVersion !== ver) {
-                if (this.shouldShowUpdate(ver)) {
-                    showUpdateToast(this.runningVersion, ver);
+        return this.getMostRecentVersion().then((mostRecentVersion) => {
+            const currentVersion = this.getNormalizedAppVersion(process.env.VERSION);
+
+            if (currentVersion !== mostRecentVersion) {
+                if (this.shouldShowUpdate(mostRecentVersion)) {
+                    showUpdateToast(currentVersion, mostRecentVersion);
                 }
                 return { status: UpdateCheckStatus.Ready };
             } else {

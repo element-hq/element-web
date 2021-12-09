@@ -130,10 +130,6 @@ Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-
 
 Adds a "Message layout" section under `Settings -> Appearance`, where the user can select their preferred message layout (e.g. IRC or Modern). Additionally, adds a new "Message bubbles" layout.
 
-## Pseudonymous Analytics opt-in (`feature_pseudonymous_analytics_opt_in`)
-
-Opts in to collection of pseudonymous analytics data via Posthog. See https://github.com/matrix-org/matrix-react-sdk/pull/6495
-
 ## Polls (`feature_polls`) [In Development]
 
 Polls are a way to gauge interest from your community about a certain topic with a simple voting mechanic
@@ -142,3 +138,33 @@ entirely incomplete and may not work at all - it is not recommended for general 
 
 Bug reports, feature requests, etc are not currently accepted for this feature flag. A later stage of
 development will provide opportunities for feedback.
+
+## Maximised widgets (`feature_maximised_widgets`) [In Development]
+
+Maximised widgets provide a room layout in which a widget is (temporarily) the primary focus of the room. The whole chat area is then used for the widget. The chat is moved into the right panel.
+
+Note that this feature is currently under active development and therefore is
+entirely incomplete and may not work at all - it is not recommended for general use at this time.
+
+## Metaspaces (`feature_spaces_metaspaces`) [In Development]
+
+Metaspaces are automatically populated spaces you can enable in your Space panel.
+By default, you'll have Home or All rooms, but you can opt in to a People, Favourites, and Other Rooms metaspace too.
+
+## Location sharing (`feature_location_share`) [In Development]
+
+Allows users to send and display location data using [maplibre](https://maplibre.org).
+
+The current implementation is a quick in-progress development spike to
+demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-doc/pull/3488)
+and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
+been designed, and it will not exit labs until it has**.
+
+For this to work, you must specify a valid maptiler.com API key in
+`"map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=YOUR_KEY_GOES_HERE"`
+in your config.json, or find an alternative map tile server.
+
+## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
+
+Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
+triggered by the button to the right of the filter field.
