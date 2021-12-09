@@ -1,7 +1,6 @@
 name: Layered Preview Build
 on:
     pull_request:
-        branches: [develop]
 jobs:
     build:
         runs-on: ubuntu-latest

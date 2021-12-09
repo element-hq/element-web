@@ -11,7 +11,7 @@ a 'skin'. A skin provides:
  * The containing application
  * Zero or more 'modules' containing non-UI functionality
 
-As of Aug 2018, the only skin that exists is `vector-im/element-web`; it and
+As of Aug 2018, the only skin that exists is [`vector-im/element-web`](https://github.com/vector-im/element-web/); it and
 `matrix-org/matrix-react-sdk` should effectively
 be considered as a single project (for instance, matrix-react-sdk bugs
 are currently filed against vector-im/element-web rather than this project).
@@ -138,7 +138,7 @@ guide](https://classic.yarnpkg.com/docs/install) if you do not have it
 already. This project has not yet been migrated to Yarn 2, so please ensure
 `yarn --version` shows a version from the 1.x series.
 
-`matrix-react-sdk` depends on `matrix-js-sdk`. To make use of changes in the
+`matrix-react-sdk` depends on [`matrix-js-sdk`](https://github.com/matrix-org/matrix-js-sdk). To make use of changes in the
 latter and to ensure tests run against the develop branch of `matrix-js-sdk`,
 you should set up `matrix-js-sdk`:
 
@@ -158,6 +158,9 @@ cd matrix-react-sdk
 git checkout develop
 yarn link matrix-js-sdk
 yarn install
+
+# Generate the `component-index.js` file.
+yarn reskindex
 ```
 
 See the [help for `yarn link`](https://classic.yarnpkg.com/docs/cli/link) for
@@ -175,4 +178,4 @@ yarn test
 ## End-to-End tests
 
 Make sure you've got your Element development server running (by doing `yarn start` in element-web), and then in this project, run `yarn run e2etests`.
-See `test/end-to-end-tests/README.md` for more information.
+See [`test/end-to-end-tests/README.md`](https://github.com/matrix-org/matrix-react-sdk/blob/develop/test/end-to-end-tests/README.md) for more information.

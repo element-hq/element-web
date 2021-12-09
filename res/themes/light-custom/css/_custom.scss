@@ -37,27 +37,16 @@ $space-nav: rgba($panel-base, 0.1);
 
 //
 // --accent-color
-$accent-color: var(--accent-color);
-$accent-bg-color: var(--accent-color-15pct);
-$button-bg-color: var(--accent-color);
-$button-link-fg-color: var(--accent-color);
-$button-primary-bg-color: var(--accent-color);
-$input-valid-border-color: var(--accent-color);
-$reaction-row-button-selected-border-color: var(--accent-color);
-$tab-label-active-bg-color: var(--accent-color);
-$togglesw-on-color: var(--accent-color);
 $username-variant3-color: var(--accent-color);
-$accent-color-50pct: var(--accent-color-50pct); //still needs alpha at .5
 //
 // --timeline-background-color
-$authpage-body-bg-color: var(--timeline-background-color);
 $button-secondary-bg-color: var(--timeline-background-color);
 $lightbox-border-color: var(--timeline-background-color);
 $menu-bg-color: var(--timeline-background-color);
-$avatar-bg-color: var(--timeline-background-color);
 $message-action-bar-bg-color: var(--timeline-background-color);
 $background: var(--timeline-background-color);
 $togglesw-ball-color: var(--timeline-background-color);
+$togglesw-off-color: var(--togglesw-off-color);
 $droptarget-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .5
 $authpage-modal-bg-color: var(--timeline-background-color-50pct); //still needs alpha at .59
 $roomheader-bg-color: var(--timeline-background-color);
@@ -69,16 +58,13 @@ $panel-actions: var(--roomlist-highlights-color);
 $groupFilterPanel-bg-color: var(--sidebar-color);
 $tooltip-timeline-bg-color: var(--sidebar-color);
 $dialog-backdrop-color: var(--sidebar-color-50pct);
-$roomlist-button-bg-color: var(--sidebar-color-15pct);
 //
 // --roomlist-background-color
 $header-panel-bg-color: var(--roomlist-background-color);
-$reaction-row-button-bg-color: var(--roomlist-background-color);
 $panel-gradient: var(--roomlist-background-color-0pct), var(--roomlist-background-color);
 // these were #f2f5f8 instead of #f3f8fd, but close enough
 $dark-panel-bg-color: var(--roomlist-background-color);
 $input-lighter-bg-color: var(--roomlist-background-color);
-$plinth-bg-color: var(--roomlist-background-color);
 $secondary-accent-color: var(--roomlist-background-color);
 $selected-color: var(--roomlist-background-color);
 $widget-menu-bar-bg-color: var(--roomlist-background-color);
@@ -90,7 +76,6 @@ $primary-content: var(--timeline-text-color);
 $settings-profile-overlay-placeholder-fg-color: var(--timeline-text-color);
 $roomtopic-color: var(--timeline-text-color-50pct);
 $tab-label-fg-color: var(--timeline-text-color);
-$tab-label-icon-bg-color: var(--timeline-text-color);   //was #454545
 // was #212121
 $topleftmenu-color: var(--timeline-text-color);
 // was #45474a
@@ -98,7 +83,6 @@ $dialog-title-fg-color: var(--timeline-text-color);
 $tab-label-fg-color: var(--timeline-text-color);
 // was #4e5054
 $authpage-lang-color: var(--timeline-text-color);
-$roomheader-color: var(--timeline-text-color);
 // was #232f32
 $authpage-primary-color: var(--timeline-text-color);
 // --roomlist-text-secondary-color
@@ -107,36 +91,27 @@ $roomtile-default-badge-bg-color: var(--roomlist-text-secondary-color);
 //
 // --roomlist-separator-color
 $input-darker-bg-color: var(--roomlist-separator-color);
-$panel-divider-color: var(--roomlist-separator-color);// originally #dee1f3, but close enough
 $primary-hairline-color: var(--roomlist-separator-color);// originally #e5e5e5, but close enough
 //
 // --timeline-text-secondary-color
 $authpage-secondary-color: var(--timeline-text-secondary-color);
-$memberstatus-placeholder-color: var(--timeline-text-secondary-color);
 $pinned-color: var(--timeline-text-secondary-color);
 $settings-subsection-fg-color: var(--timeline-text-secondary-color);
 $roomheader-addroom-bg-color: var(--timeline-text-secondary-color);
 // was #747474
 $light-fg-color: var(--timeline-text-secondary-color);
-// was #777777
-$blockquote-fg-color: var(--timeline-text-secondary-color);
+$focus-bg-color: var(--focus-bg-color, $focus-bg-color);
+$room-highlight-color: var(--room-highlight-color);
+
+$rte-room-pill-color: $room-highlight-color;
+
 // was #888888
-$greyed-fg-color: var(--timeline-text-secondary-color);
 $info-plinth-fg-color: var(--timeline-text-secondary-color);
-$preview-widget-fg-color: var(--timeline-text-secondary-color);
 //
 // --primary-color
-$accent-color-alt: var(--primary-color);
-$input-focused-border-color: var(--primary-color);
+$accent-alt: var(--primary-color);
 //
 // --warning-color
-$button-danger-bg-color: var(--warning-color);
-$event-highlight-fg-color: var(--warning-color);
-$input-invalid-border-color: var(--warning-color);
-$mention-user-pill-bg-color: var(--warning-color);
-$notice-primary-color: var(--warning-color);
-$pinned-unread-color: var(--warning-color);
-$warning-color: var(--warning-color);
 $button-danger-disabled-bg-color: var(--warning-color-50pct); // still needs alpha at 0.5
 //
 // --username colors (which use a 0-based index)
@@ -160,5 +135,9 @@ $settings-grey-fg-color: $primary-content;
 $eventbubble-self-bg: var(--eventbubble-self-bg, $eventbubble-self-bg);
 $eventbubble-others-bg: var(--eventbubble-others-bg, $eventbubble-others-bg);
 $eventbubble-bg-hover: var(--eventbubble-bg-hover, $eventbubble-bg-hover);
-$eventbubble-avatar-outline: var(--eventbubble-avatar-outline, $eventbubble-avatar-outline);
 $eventbubble-reply-color: var(--eventbubble-reply-color, $eventbubble-reply-color);
+
+$reaction-row-button-selected-bg-color: var(--reaction-row-button-selected-bg-color, $reaction-row-button-selected-bg-color);
+
+$menu-selected-color: var(--menu-selected-color, $menu-selected-color);
+$other-user-pill-bg-color: var(--other-user-pill-bg-color, $other-user-pill-bg-color);

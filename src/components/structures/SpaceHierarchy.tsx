@@ -49,7 +49,7 @@ import { mediaFromMxc } from "../../customisations/Media";
 import InfoTooltip from "../views/elements/InfoTooltip";
 import TextWithTooltip from "../views/elements/TextWithTooltip";
 import { useStateToggle } from "../../hooks/useStateToggle";
-import { getChildOrder } from "../../stores/SpaceStore";
+import { getChildOrder } from "../../stores/spaces/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { linkifyElement } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
@@ -68,7 +68,6 @@ interface IProps {
     initialText?: string;
     additionalButtons?: ReactNode;
     showRoom(cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string, roomType?: RoomType): void;
-    joinRoom(cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string): void;
 }
 
 interface ITileProps {
@@ -78,7 +77,7 @@ interface ITileProps {
     numChildRooms?: number;
     hasPermissions?: boolean;
     onViewRoomClick(): void;
-    onJoinRoomClick(): void;
+    onJoinRoomClick(): Promise<unknown>;
     onToggleClick?(): void;
 }
 
@@ -115,9 +114,9 @@ const Tile: React.FC<ITileProps> = ({
         setBusy(true);
         ev.preventDefault();
         ev.stopPropagation();
-        onJoinRoomClick();
-        setJoinedRoom(await awaitRoomDownSync(cli, room.room_id));
-        setBusy(false);
+        onJoinRoomClick().then(() => awaitRoomDownSync(cli, room.room_id)).then(setJoinedRoom).finally(() => {
+            setBusy(false);
+        });
     };
 
     let button;
@@ -141,7 +140,7 @@ const Tile: React.FC<ITileProps> = ({
         >
             { _t("View") }
         </AccessibleButton>;
-    } else if (onJoinClick) {
+    } else {
         button = <AccessibleButton
             onClick={onJoinClick}
             kind="primary"
@@ -343,7 +342,7 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
     });
 };
 
-export const joinRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string): void => {
+export const joinRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: string): Promise<unknown> => {
     // Don't let the user view a room they won't be able to either peek or join:
     // fail earlier so they don't have to click back to the directory.
     if (cli.isGuest()) {
@@ -351,11 +350,15 @@ export const joinRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
         return;
     }
 
-    cli.joinRoom(roomId, {
+    const prom = cli.joinRoom(roomId, {
         viaServers: Array.from(hierarchy.viaMap.get(roomId) || []),
-    }).catch(err => {
+    });
+
+    prom.catch(err => {
         RoomViewStore.showJoinRoomError(err, roomId);
     });
+
+    return prom;
 };
 
 interface IHierarchyLevelProps {
@@ -365,7 +368,7 @@ interface IHierarchyLevelProps {
     parents: Set<string>;
     selectedMap?: Map<string, Set<string>>;
     onViewRoomClick(roomId: string, roomType?: RoomType): void;
-    onJoinRoomClick(roomId: string): void;
+    onJoinRoomClick(roomId: string): Promise<unknown>;
     onToggleClick?(parentId: string, childId: string): void;
 }
 

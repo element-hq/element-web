@@ -24,7 +24,7 @@ import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
-import { aboveLeftOf, ContextMenu, useContextMenu } from "../../structures/ContextMenu";
+import ContextMenu, { aboveLeftOf, useContextMenu } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ReactionsRowButton from "./ReactionsRowButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

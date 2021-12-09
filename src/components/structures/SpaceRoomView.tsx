@@ -49,6 +49,7 @@ import { SetRightPanelPhasePayload } from "../../dispatcher/payloads/SetRightPan
 import { useStateArray } from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
 import {
+    shouldShowSpaceInvite,
     shouldShowSpaceSettings,
     showAddExistingRooms,
     showCreateNewRoom,
@@ -56,9 +57,9 @@ import {
     showSpaceInvite,
     showSpaceSettings,
 } from "../../utils/space";
-import SpaceHierarchy, { joinRoom, showRoom } from "./SpaceHierarchy";
+import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
-import SpaceStore from "../../stores/SpaceStore";
+import SpaceStore from "../../stores/spaces/SpaceStore";
 import FacePile from "../views/elements/FacePile";
 import {
     AddExistingToSpace,
@@ -127,6 +128,7 @@ const useMyRoomMembership = (room: Room) => {
 };
 
 const SpaceInfo = ({ space }: { space: Room }) => {
+    // summary will begin as undefined whilst loading and go null if it fails to load.
     const summary = useAsyncMemo(async () => {
         if (space.getMyMembership() !== "invite") return;
         try {
@@ -155,7 +157,7 @@ const SpaceInfo = ({ space }: { space: Room }) => {
         memberSection = <span className="mx_SpaceRoomView_info_memberCount">
             { _t("%(count)s members", { count: summary.num_joined_members }) }
         </span>;
-    } else if (summary === null) {
+    } else if (summary !== undefined) { // summary is not still loading
         memberSection = <RoomMemberCount room={space}>
             { (count) => count > 0 ? (
                 <AccessibleButton
@@ -394,7 +396,7 @@ const SpaceLandingAddButton = ({ space }) => {
                 />
                 <IconizedContextMenuOption
                     label={_t("Add existing room")}
-                    iconClassName="mx_RoomList_iconHash"
+                    iconClassName="mx_RoomList_iconAddExistingRoom"
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -438,9 +440,7 @@ const SpaceLanding = ({ space }: { space: Room }) => {
     const userId = cli.getUserId();
 
     let inviteButton;
-    if (((myMembership === "join" && space.canInvite(userId)) || space.getJoinRule() === JoinRule.Public) &&
-        shouldShowComponent(UIComponent.InviteUsers)
-    ) {
+    if (shouldShowSpaceInvite(space) && shouldShowComponent(UIComponent.InviteUsers)) {
         inviteButton = (
             <AccessibleButton
                 kind="primary"
@@ -507,7 +507,7 @@ const SpaceLanding = ({ space }: { space: Room }) => {
             ) }
         </RoomTopic>
 
-        <SpaceHierarchy space={space} showRoom={showRoom} joinRoom={joinRoom} additionalButtons={addRoomButton} />
+        <SpaceHierarchy space={space} showRoom={showRoom} additionalButtons={addRoomButton} />
     </div>;
 };
 

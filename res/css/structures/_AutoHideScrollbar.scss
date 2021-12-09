@@ -16,7 +16,7 @@ limitations under the License.
 
 // make any scrollbar grey and thin
 html {
-    scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+    scrollbar-color: $scrollbar-thumb-color transparent;
 }
 // scrollbar-width is not inherited (but -color is, why?!),
 // so declare it on every element
@@ -27,7 +27,6 @@ html {
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
-    background-color: $scrollbar-track-color;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -37,11 +36,7 @@ html {
 
 // make auto-hide scrollbars not transparent again on hover
 .mx_AutoHideScrollbar:hover {
-    scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
-
-    &::-webkit-scrollbar {
-        background-color: $scrollbar-track-color;
-    }
+    scrollbar-color: $scrollbar-thumb-color transparent;
 
     &::-webkit-scrollbar-thumb {
         background-color: $scrollbar-thumb-color;

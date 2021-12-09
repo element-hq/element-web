@@ -21,9 +21,8 @@ import { IProtocol } from "matrix-js-sdk/src/client";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { instanceForInstanceId } from '../../../utils/DirectoryUtils';
-import {
+import ContextMenu, {
     ChevronFace,
-    ContextMenu,
     ContextMenuButton,
     MenuGroup,
     MenuItem,

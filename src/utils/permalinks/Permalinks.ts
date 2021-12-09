@@ -20,14 +20,15 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import SpecPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./SpecPermalinkConstructor";
 import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
-import matrixLinkify from "../../linkify-matrix";
 import SdkConfig from "../../SdkConfig";
+
+import { logger } from "matrix-js-sdk/src/logger";
+import { ELEMENT_URL_PATTERN } from "../../linkify-matrix";
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
@@ -347,7 +348,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
     }
 
     try {
-        const m = decodeURIComponent(permalink).match(matrixLinkify.ELEMENT_URL_PATTERN);
+        const m = decodeURIComponent(permalink).match(ELEMENT_URL_PATTERN);
         if (m) {
             return m[1];
         }
@@ -385,7 +386,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 
         // If not a permalink, try the vector patterns.
         if (!permalinkParts) {
-            const m = permalink.match(matrixLinkify.ELEMENT_URL_PATTERN);
+            const m = permalink.match(ELEMENT_URL_PATTERN);
             if (m) {
                 // A bit of a hack, but it gets the job done
                 const handler = new ElementPermalinkConstructor("http://localhost");

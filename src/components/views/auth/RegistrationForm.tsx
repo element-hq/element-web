@@ -16,12 +16,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import * as Email from '../../../email';
 import { looksValid as phoneNumberLooksValid } from '../../../phonenumber';
 import Modal from '../../../Modal';
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import { SAFE_LOCALPART_REGEX } from '../../../Registration';
 import withValidation, { IValidationResult } from '../elements/Validation';
@@ -33,6 +33,9 @@ import Field from '../elements/Field';
 import RegistrationEmailPromptDialog from '../dialogs/RegistrationEmailPromptDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CountryDropdown from "./CountryDropdown";
+
+import { logger } from "matrix-js-sdk/src/logger";
+import PassphraseConfirmField from "./PassphraseConfirmField";
 
 enum RegistrationField {
     Email = "field_email",
@@ -56,6 +59,7 @@ interface IProps {
     }[];
     serverConfig: ValidatedServerConfig;
     canSubmit?: boolean;
+    matrixClient: MatrixClient;
 
     onRegisterClick(params: {
         username: string;
@@ -292,28 +296,9 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         });
     };
 
-    private onPasswordConfirmValidate = async fieldState => {
-        const result = await this.validatePasswordConfirmRules(fieldState);
+    private onPasswordConfirmValidate = (result: IValidationResult) => {
         this.markFieldValid(RegistrationField.PasswordConfirm, result.valid);
-        return result;
     };
-
-    private validatePasswordConfirmRules = withValidation({
-        rules: [
-            {
-                key: "required",
-                test: ({ value, allowEmpty }) => allowEmpty || !!value,
-                invalid: () => _t("Confirm password"),
-            },
-            {
-                key: "match",
-                test(this: RegistrationForm, { value }) {
-                    return !value || value === this.state.password;
-                },
-                invalid: () => _t("Passwords don't match"),
-            },
-        ],
-    });
 
     private onPhoneCountryChange = newVal => {
         this.setState({
@@ -365,7 +350,11 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     };
 
     private validateUsernameRules = withValidation({
-        description: () => _t("Use lowercase letters, numbers, dashes and underscores only"),
+        description: (_, results) => {
+            // omit the description if the only failing result is the `available` one as it makes no sense for it.
+            if (results.every(({ key, valid }) => key === "available" || valid)) return;
+            return _t("Use lowercase letters, numbers, dashes and underscores only");
+        },
         hideDescriptionIfValid: true,
         rules: [
             {
@@ -377,6 +366,23 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                 key: "safeLocalpart",
                 test: ({ value }) => !value || SAFE_LOCALPART_REGEX.test(value),
                 invalid: () => _t("Some characters not allowed"),
+            },
+            {
+                key: "available",
+                final: true,
+                test: async ({ value }) => {
+                    if (!value) {
+                        return true;
+                    }
+
+                    try {
+                        await this.props.matrixClient.isUsernameAvailable(value);
+                        return true;
+                    } catch (err) {
+                        return false;
+                    }
+                },
+                invalid: () => _t("Someone already has that username. Try another or if it is you, sign in below."),
             },
         ],
     });
@@ -425,8 +431,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             return null;
         }
         const emailLabel = this.authStepIsRequired('m.login.email.identity') ?
-            _t("Email") :
-            _t("Email (optional)");
+            _td("Email") :
+            _td("Email (optional)");
         return <EmailField
             fieldRef={field => this[RegistrationField.Email] = field}
             label={emailLabel}
@@ -453,13 +459,12 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
     }
 
     renderPasswordConfirm() {
-        return <Field
+        return <PassphraseConfirmField
             id="mx_RegistrationForm_passwordConfirm"
-            ref={field => this[RegistrationField.PasswordConfirm] = field}
-            type="password"
+            fieldRef={field => this[RegistrationField.PasswordConfirm] = field}
             autoComplete="new-password"
-            label={_t("Confirm password")}
             value={this.state.passwordConfirm}
+            password={this.state.password}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
             onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_focus")}

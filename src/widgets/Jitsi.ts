@@ -92,7 +92,9 @@ export class Jitsi {
         const parsed = new URL(url);
         if (parsed.hostname !== this.preferredDomain) return null; // invalid
         return {
-            conferenceId: parsed.pathname,
+            // URL pathnames always contain a leading slash.
+            // Remove it to be left with just the conference name.
+            conferenceId: parsed.pathname.substring(1),
             domain: parsed.hostname,
             isAudioOnly: false,
         };

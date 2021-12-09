@@ -19,6 +19,7 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import dis from '../../../dispatcher/dispatcher';
+import { Action } from '../../../dispatcher/actions';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -38,7 +39,7 @@ export default class RoomCreate extends React.Component<IProps> {
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
 
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             event_id: predecessor['event_id'],
             highlighted: true,
             room_id: predecessor['room_id'],

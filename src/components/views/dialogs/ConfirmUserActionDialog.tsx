@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ChangeEvent, ReactNode } from 'react';
+import React, { ChangeEvent, FormEvent, ReactNode } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import classNames from "classnames";
@@ -76,7 +76,8 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
         };
     }
 
-    private onOk = (): void => {
+    private onOk = (ev: FormEvent): void => {
+        ev.preventDefault();
         this.props.onFinished(true, this.state.reason);
     };
 
@@ -144,7 +145,8 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
                     { reasonBox }
                     { this.props.children }
                 </div>
-                <DialogButtons primaryButton={this.props.action}
+                <DialogButtons
+                    primaryButton={this.props.action}
                     onPrimaryButtonClick={this.onOk}
                     primaryButtonClass={confirmButtonClass}
                     focus={!this.props.askReason}

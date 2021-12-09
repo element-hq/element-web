@@ -23,7 +23,7 @@ import StyledRadioGroup, { IDefinition } from "../elements/StyledRadioGroup";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
 import ManageRestrictedJoinRuleDialog from "../dialogs/ManageRestrictedJoinRuleDialog";
@@ -67,8 +67,8 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
 
     const editRestrictedRoomIds = async (): Promise<string[] | undefined> => {
         let selected = restrictedAllowRoomIds;
-        if (!selected?.length && SpaceStore.instance.activeSpace) {
-            selected = [SpaceStore.instance.activeSpace.roomId];
+        if (!selected?.length && SpaceStore.instance.activeSpaceRoom) {
+            selected = [SpaceStore.instance.activeSpaceRoom.roomId];
         }
 
         const matrixClient = MatrixClientPeg.get();
@@ -176,9 +176,9 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
                     { moreText && <span>{ moreText }</span> }
                 </div>
             </div>;
-        } else if (SpaceStore.instance.activeSpace) {
+        } else if (SpaceStore.instance.activeSpaceRoom) {
             description = _t("Anyone in <spaceName/> can find and join. You can select other spaces too.", {}, {
-                spaceName: () => <b>{ SpaceStore.instance.activeSpace.name }</b>,
+                spaceName: () => <b>{ SpaceStore.instance.activeSpaceRoom.name }</b>,
             });
         } else {
             description = _t("Anyone in a space can find and join. You can select multiple spaces.");
@@ -215,7 +215,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
                     .some(roomId => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId));
                 if (unableToUpdateSomeParents) {
                     warning = <b>
-                        { _t("This room is in some spaces you’re not an admin of. " +
+                        { _t("This room is in some spaces you're not an admin of. " +
                             "In those spaces, the old room will still be shown, " +
                             "but people will be prompted to join the new one.") }
                     </b>;

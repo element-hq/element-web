@@ -22,6 +22,7 @@
 @import "./structures/_MyGroups.scss";
 @import "./structures/_NonUrgentToastContainer.scss";
 @import "./structures/_NotificationPanel.scss";
+@import "./structures/_QuickSettingsButton.scss";
 @import "./structures/_RightPanel.scss";
 @import "./structures/_RoomDirectory.scss";
 @import "./structures/_RoomSearch.scss";
@@ -59,21 +60,21 @@
 @import "./views/auth/_Welcome.scss";
 @import "./views/avatars/_BaseAvatar.scss";
 @import "./views/avatars/_DecoratedRoomAvatar.scss";
-@import "./views/avatars/_MemberStatusMessageAvatar.scss";
 @import "./views/avatars/_WidgetAvatar.scss";
 @import "./views/beta/_BetaCard.scss";
 @import "./views/context_menus/_CallContextMenu.scss";
 @import "./views/context_menus/_IconizedContextMenu.scss";
 @import "./views/context_menus/_MessageContextMenu.scss";
-@import "./views/context_menus/_StatusMessageContextMenu.scss";
 @import "./views/context_menus/_TagTileContextMenu.scss";
 @import "./views/dialogs/_AddExistingToSpaceDialog.scss";
 @import "./views/dialogs/_AddressPickerDialog.scss";
 @import "./views/dialogs/_Analytics.scss";
+@import "./views/dialogs/_AnalyticsLearnMoreDialog.scss";
 @import "./views/dialogs/_BugReportDialog.scss";
 @import "./views/dialogs/_ChangelogDialog.scss";
 @import "./views/dialogs/_ChatCreateOrReuseChatDialog.scss";
 @import "./views/dialogs/_CommunityPrototypeInviteDialog.scss";
+@import "./views/dialogs/_CompoundDialog.scss";
 @import "./views/dialogs/_ConfirmSpaceUserActionDialog.scss";
 @import "./views/dialogs/_ConfirmUserActionDialog.scss";
 @import "./views/dialogs/_CreateCommunityPrototypeDialog.scss";
@@ -99,6 +100,7 @@
 @import "./views/dialogs/_MessageEditHistoryDialog.scss";
 @import "./views/dialogs/_ModalWidgetDialog.scss";
 @import "./views/dialogs/_NewSessionReviewDialog.scss";
+@import "./views/dialogs/_PollCreateDialog.scss";
 @import "./views/dialogs/_RegistrationEmailPromptDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialog.scss";
 @import "./views/dialogs/_RoomSettingsDialogBridges.scss";
@@ -142,6 +144,7 @@
 @import "./views/elements/_ImageView.scss";
 @import "./views/elements/_InfoTooltip.scss";
 @import "./views/elements/_InlineSpinner.scss";
+@import "./views/elements/_InteractiveTooltip.scss";
 @import "./views/elements/_InviteReason.scss";
 @import "./views/elements/_ManageIntegsButton.scss";
 @import "./views/elements/_MiniAvatarUploader.scss";
@@ -170,6 +173,7 @@
 @import "./views/groups/_GroupPublicityToggle.scss";
 @import "./views/groups/_GroupRoomList.scss";
 @import "./views/groups/_GroupUserSettings.scss";
+@import "./views/location/_LocationPicker.scss";
 @import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
@@ -179,7 +183,9 @@
 @import "./views/messages/_MImageBody.scss";
 @import "./views/messages/_MImageReplyBody.scss";
 @import "./views/messages/_MJitsiWidgetEvent.scss";
+@import "./views/messages/_MLocationBody.scss";
 @import "./views/messages/_MNoticeBody.scss";
+@import "./views/messages/_MPollBody.scss";
 @import "./views/messages/_MStickerBody.scss";
 @import "./views/messages/_MTextBody.scss";
 @import "./views/messages/_MVideoBody.scss";
@@ -201,6 +207,7 @@
 @import "./views/right_panel/_PinnedMessagesCard.scss";
 @import "./views/right_panel/_RoomSummaryCard.scss";
 @import "./views/right_panel/_ThreadPanel.scss";
+@import "./views/right_panel/_TimelineCard.scss";
 @import "./views/right_panel/_UserInfo.scss";
 @import "./views/right_panel/_VerificationPanel.scss";
 @import "./views/right_panel/_WidgetCard.scss";
@@ -227,11 +234,13 @@
 @import "./views/rooms/_NotificationBadge.scss";
 @import "./views/rooms/_PinnedEventTile.scss";
 @import "./views/rooms/_PresenceLabel.scss";
+@import "./views/rooms/_RecentlyViewedButton.scss";
 @import "./views/rooms/_ReplyPreview.scss";
 @import "./views/rooms/_ReplyTile.scss";
 @import "./views/rooms/_RoomBreadcrumbs.scss";
 @import "./views/rooms/_RoomHeader.scss";
 @import "./views/rooms/_RoomList.scss";
+@import "./views/rooms/_RoomListHeader.scss";
 @import "./views/rooms/_RoomPreviewBar.scss";
 @import "./views/rooms/_RoomSublist.scss";
 @import "./views/rooms/_RoomTile.scss";
@@ -249,6 +258,7 @@
 @import "./views/settings/_E2eAdvancedPanel.scss";
 @import "./views/settings/_EmailAddresses.scss";
 @import "./views/settings/_FontScalingPanel.scss";
+@import "./views/settings/_ImageSizePanel.scss";
 @import "./views/settings/_IntegrationManager.scss";
 @import "./views/settings/_JoinRuleSettings.scss";
 @import "./views/settings/_LayoutSwitcher.scss";
@@ -263,6 +273,7 @@
 @import "./views/settings/_UpdateCheckButton.scss";
 @import "./views/settings/tabs/_SettingsTab.scss";
 @import "./views/settings/tabs/room/_GeneralRoomSettingsTab.scss";
+@import "./views/settings/tabs/room/_NotificationSettingsTab.scss";
 @import "./views/settings/tabs/room/_RolesRoomSettingsTab.scss";
 @import "./views/settings/tabs/room/_SecurityRoomSettingsTab.scss";
 @import "./views/settings/tabs/user/_AppearanceUserSettingsTab.scss";
@@ -273,6 +284,7 @@
 @import "./views/settings/tabs/user/_NotificationUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_PreferencesUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_SecurityUserSettingsTab.scss";
+@import "./views/settings/tabs/user/_SidebarUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_VoiceUserSettingsTab.scss";
 @import "./views/spaces/_SpaceBasicSettings.scss";
 @import "./views/spaces/_SpaceChildrenPicker.scss";

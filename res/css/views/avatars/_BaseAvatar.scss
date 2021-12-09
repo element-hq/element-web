@@ -27,11 +27,17 @@ limitations under the License.
     // https://bugzilla.mozilla.org/show_bug.cgi?id=255139
     display: inline-block;
     user-select: none;
+
+    &.mx_RoomAvatar_isSpaceRoom {
+        &.mx_BaseAvatar_image, .mx_BaseAvatar_image {
+            border-radius: 8px;
+        }
+    }
 }
 
 .mx_BaseAvatar_initial {
     position: absolute;
-    left: 0px;
+    left: 0;
     color: $avatar-initial-color;
     text-align: center;
     speak: none;
@@ -43,5 +49,5 @@ limitations under the License.
     object-fit: cover;
     border-radius: 125px;
     vertical-align: top;
-    background-color: $avatar-bg-color;
+    background-color: $background;
 }

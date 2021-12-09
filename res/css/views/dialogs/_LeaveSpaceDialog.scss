@@ -69,8 +69,8 @@ limitations under the License.
         margin-top: 20px;
 
         .mx_Dialog_primary {
-            background-color: $notice-primary-color !important; // override default colour
-            border-color: $notice-primary-color;
+            background-color: $alert !important; // override default colour
+            border-color: $alert;
         }
     }
 }

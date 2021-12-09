@@ -41,6 +41,11 @@ $irc-line-height: $font-18px;
             margin-right: $right-padding;
         }
 
+        .mx_ThreadInfo {
+            margin-right: 0;
+            margin-left: 0;
+        }
+
         > .mx_EventTile_msgOption {
             order: 5;
             flex-shrink: 0;

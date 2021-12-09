@@ -49,10 +49,10 @@ $SpaceRoomViewInnerWidth: 428px;
     }
 
     &:hover {
-        border-color: $accent-color;
+        border-color: $accent;
 
         &::before {
-            background-color: $accent-color;
+            background-color: $accent;
         }
 
         > span {
@@ -128,7 +128,7 @@ $SpaceRoomViewInnerWidth: 428px;
             font-weight: $font-semi-bold;
             font-size: $font-12px;
             line-height: $font-15px;
-            color: $notice-primary-color;
+            color: $alert;
             margin-bottom: 28px;
         }
 
@@ -427,11 +427,11 @@ $SpaceRoomViewInnerWidth: 428px;
             }
 
             .mx_SpaceRoomView_inviteTeammates_inviteDialogButton {
-                color: $accent-color;
+                color: $accent;
 
                 &::before {
                     mask-image: url('$(res)/img/element-icons/room/invite.svg');
-                    background-color: $accent-color;
+                    background-color: $accent;
                 }
             }
         }

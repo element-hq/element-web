@@ -52,7 +52,7 @@ limitations under the License.
 
     &:not(:disabled):hover {
         background-color: $focus-bg-color;
-        border-bottom: 2px solid $button-bg-color;
+        border-bottom: 2px solid $accent;
     }
 }
 
@@ -82,7 +82,7 @@ limitations under the License.
 .mx_EmojiPicker_anchor_symbols::before { mask-image: url('$(res)/img/emojipicker/symbols.svg'); }
 
 .mx_EmojiPicker_anchor_visible {
-    border-bottom: 2px solid $button-bg-color;
+    border-bottom: 2px solid $accent;
 }
 
 .mx_EmojiPicker_search {
@@ -178,7 +178,7 @@ limitations under the License.
 
 .mx_EmojiPicker_item_selected {
     color: rgba(0, 0, 0, .5);
-    border: 1px solid $input-valid-border-color;
+    border: 1px solid $accent;
     padding: 4px;
 }
 

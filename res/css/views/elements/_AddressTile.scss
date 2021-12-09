@@ -28,8 +28,8 @@ limitations under the License.
 
 .mx_AddressTile.mx_AddressTile_error {
     background-color: rgba(255, 0, 100, 0.1);
-    color: $warning-color;
-    border-color: $warning-color;
+    color: $alert;
+    border-color: $alert;
 }
 
 .mx_AddressTile_network {

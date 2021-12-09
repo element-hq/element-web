@@ -40,7 +40,7 @@ import SecurityCustomisations from "./customisations/Security";
 
 export interface IMatrixClientCreds {
     homeserverUrl: string;
-    identityServerUrl: string;
+    identityServerUrl?: string;
     userId: string;
     deviceId?: string;
     accessToken: string;

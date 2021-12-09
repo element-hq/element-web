@@ -43,7 +43,7 @@ limitations under the License.
             background-color: $event-highlight-bg-color;
         }
 
-        color: $event-highlight-fg-color;
+        color: $alert;
     }
 
     /* For replies */
@@ -219,7 +219,7 @@ limitations under the License.
         line-height: 1;
         z-index: 9;
         img {
-            box-shadow: 0 0 0 3px $eventbubble-avatar-outline;
+            box-shadow: 0 0 0 3px $background;
             border-radius: 50%;
         }
     }

@@ -70,7 +70,7 @@ describe('ThreadPanel', () => {
             wrapper.find(ContextMenuButton).simulate('click');
             const found = wrapper.find(ThreadPanelHeaderFilterOptionItem);
             expect(found.length).toEqual(2);
-            const foundButton = found.find('[aria-selected=true]').first();
+            const foundButton = found.find('[aria-checked=true]').first();
             expect(foundButton.text()).toEqual(`${_t("All threads")}${_t('Shows all threads from current room')}`);
             expect(foundButton).toMatchSnapshot();
         });

@@ -114,7 +114,7 @@ export default class VerificationShowSas extends React.Component<IProps, IState>
         } else {
             return <div>
                 { _t("Unable to find a supported verification method.") }
-                <AccessibleButton kind="primary" onClick={this.props.onCancel} className="mx_UserInfo_wideButton">
+                <AccessibleButton kind="primary" onClick={this.props.onCancel}>
                     { _t('Cancel') }
                 </AccessibleButton>
             </div>;

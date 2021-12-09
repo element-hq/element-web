@@ -19,16 +19,16 @@ limitations under the License.
 * width
 */
 
-.mx_RadioButton {
-    $radio-circle-color: $muted-fg-color;
-    $active-radio-circle-color: $accent-color;
+.mx_StyledRadioButton {
+    $radio-circle-color: $quaternary-content;
+    $active-radio-circle-color: $accent;
     position: relative;
 
     display: flex;
     align-items: baseline;
     flex-grow: 1;
 
-    > .mx_RadioButton_content {
+    > .mx_StyledRadioButton_content {
         flex-grow: 1;
 
         display: flex;
@@ -38,7 +38,7 @@ limitations under the License.
         margin-right: 8px;
     }
 
-    .mx_RadioButton_spacer {
+    .mx_StyledRadioButton_spacer {
         flex-shrink: 0;
         flex-grow: 0;
 
@@ -113,18 +113,18 @@ limitations under the License.
         }
     }
 
-    .mx_RadioButton_innerLabel {
+    .mx_StyledRadioButton_innerLabel {
         display: flex;
         position: relative;
         top: 4px;
     }
 }
 
-.mx_RadioButton_outlined {
+.mx_StyledRadioButton_outlined {
     border: 1px solid $input-darker-bg-color;
     border-radius: 8px;
 }
 
-.mx_RadioButton_checked {
-    border-color: $accent-color;
+.mx_StyledRadioButton_checked {
+    border-color: $accent;
 }

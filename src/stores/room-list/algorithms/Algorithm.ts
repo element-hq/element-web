@@ -35,7 +35,7 @@ import { EffectiveMembership, getEffectiveMembership, splitRoomsByMembership } f
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 import { getListAlgorithmInstance } from "./list-ordering";
 import { VisibilityProvider } from "../filters/VisibilityProvider";
-import SpaceStore from "../../SpaceStore";
+import SpaceStore from "../../spaces/SpaceStore";
 
 /**
  * Fired when the Algorithm has determined a list has been updated.
@@ -721,7 +721,8 @@ export class Algorithm extends EventEmitter {
                 cause = RoomUpdateCause.Timeline;
                 didTagChange = true;
             } else {
-                cause = RoomUpdateCause.Timeline;
+                // This is a tag change update and no tags were changed, nothing to do!
+                return false;
             }
 
             if (didTagChange && isSticky) {

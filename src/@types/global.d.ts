@@ -41,7 +41,7 @@ import UserActivity from "../UserActivity";
 import { ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import VoipUserMapper from "../VoipUserMapper";
-import { SpaceStoreClass } from "../stores/SpaceStore";
+import { SpaceStoreClass } from "../stores/spaces/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { EventIndexPeg } from "../indexing/EventIndexPeg";
 import { VoiceRecordingStore } from "../stores/VoiceRecordingStore";
@@ -100,6 +100,7 @@ declare global {
         mxOnRecaptchaLoaded?: () => void;
         electron?: Electron;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
+        mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
     }
 
     interface DesktopCapturerSource {

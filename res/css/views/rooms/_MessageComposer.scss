@@ -20,7 +20,7 @@ limitations under the License.
     margin: auto;
     border-top: 1px solid $primary-hairline-color;
     position: relative;
-    padding-left: 82px;
+    padding-left: 42px;
     padding-right: 6px;
 }
 
@@ -74,7 +74,7 @@ limitations under the License.
 
 .mx_MessageComposer_e2eIcon.mx_E2EIcon {
     position: absolute;
-    left: 60px;
+    left: 20px;
     margin-right: 0; // Counteract the E2EIcon class
     margin-left: 3px; // Counteract the E2EIcon class
     width: 12px;
@@ -85,7 +85,7 @@ limitations under the License.
     width: 100%;
     height: 60px;
     font-style: italic;
-    color: $greyed-fg-color;
+    color: $info-plinth-fg-color;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -137,13 +137,6 @@ limitations under the License.
     animation: 0.2s visualbell;
 }
 
-.mx_MessageComposer_input blockquote {
-    color: $blockquote-fg-color;
-    margin: 0 0 16px;
-    padding: 0 15px;
-    border-left: 4px solid $blockquote-bar-color;
-}
-
 .mx_MessageComposer_input pre {
     background-color: $rte-code-bg-color;
     border-radius: 3px;
@@ -170,18 +163,18 @@ limitations under the License.
 /* hack for FF as vertical alignment of custom placeholder text is broken */
 .mx_MessageComposer_input textarea::-moz-placeholder {
     line-height: 100%;
-    color: $accent-color;
+    color: $accent;
     opacity: 1.0;
 }
 .mx_MessageComposer_input textarea::-webkit-input-placeholder {
-    color: $accent-color;
+    color: $accent;
 }
 
 .mx_MessageComposer_button_highlight {
-    background: rgba($accent-color, 0.25);
+    background: rgba($accent, 0.25);
     // make the icon the accent color too
     &::before {
-        background-color: $accent-color !important;
+        background-color: $accent !important;
     }
 }
 
@@ -234,16 +227,16 @@ limitations under the License.
     &:hover,
     &.mx_MessageComposer_closeButtonMenu {
         &::after {
-            background: rgba($accent-color, 0.1);
+            background: rgba($accent, 0.1);
         }
 
         &::before {
-            background-color: $accent-color;
+            background-color: $accent;
         }
     }
 
     &.mx_MessageComposer_hangup:not(.mx_AccessibleButton_disabled)::before {
-        background-color: $warning-color;
+        background-color: $alert;
     }
 }
 
@@ -261,6 +254,10 @@ limitations under the License.
 
 .mx_MessageComposer_emoji::before {
     mask-image: url('$(res)/img/element-icons/room/composer/emoji.svg');
+}
+
+.mx_MessageComposer_location::before {
+    mask-image: url('$(res)/img/element-icons/room/composer/location.svg');
 }
 
 .mx_MessageComposer_stickers::before {
@@ -282,7 +279,7 @@ limitations under the License.
     width: 32px;
     height: 32px;
     border-radius: 100%;
-    background-color: $button-bg-color;
+    background-color: $accent;
 
     &::before {
         position: absolute;
@@ -326,7 +323,7 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     font-size: $font-10px;
-    color: $greyed-fg-color;
+    color: $info-plinth-fg-color;
 }
 
 .mx_MessageComposer_formatbar * {
@@ -388,6 +385,12 @@ limitations under the License.
 
     .mx_MessageComposer_wrapper {
         padding: 0 0 0 25px;
+    }
+
+    &:not(.mx_MessageComposer_e2eStatus) {
+        .mx_MessageComposer_wrapper {
+            padding: 0;
+        }
     }
 
     .mx_MessageComposer_button:last-child {

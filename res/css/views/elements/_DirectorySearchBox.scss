@@ -25,7 +25,7 @@ limitations under the License.
     padding: 3px;
     padding-left: 10px;
     padding-right: 10px;
-    background-color: $plinth-bg-color;
+    background-color: $secondary-accent-color;
     border-radius: 3px;
     background-image: url('$(res)/img/icon-return.svg');
     background-position: 8px 70%;
@@ -38,7 +38,7 @@ limitations under the License.
 }
 
 .mx_DirectorySearchBox_clear {
-    background-color: $warning-color;
+    background-color: $alert;
     mask: url('$(res)/img/cancel.svg');
     mask-repeat: no-repeat;
     mask-position: center;

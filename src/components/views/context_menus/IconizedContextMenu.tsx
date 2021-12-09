@@ -17,13 +17,13 @@ limitations under the License.
 import React from "react";
 import classNames from "classnames";
 
-import {
+import ContextMenu, {
     ChevronFace,
-    ContextMenu,
     IProps as IContextMenuProps,
     MenuItem,
     MenuItemCheckbox, MenuItemRadio,
 } from "../../structures/ContextMenu";
+import { _t } from "../../../languageHandler";
 
 interface IProps extends IContextMenuProps {
     className?: string;
@@ -42,6 +42,7 @@ interface IOptionProps extends React.ComponentProps<typeof MenuItem> {
 
 interface ICheckboxProps extends React.ComponentProps<typeof MenuItemCheckbox> {
     iconClassName: string;
+    words?: boolean;
 }
 
 interface IRadioProps extends React.ComponentProps<typeof MenuItemRadio> {
@@ -74,8 +75,21 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
     iconClassName,
     active,
     className,
+    words,
     ...props
 }) => {
+    let marker: JSX.Element;
+    if (words) {
+        marker = <span className="mx_IconizedContextMenu_activeText">
+            { active ? _t("On") : _t("Off") }
+        </span>;
+    } else {
+        marker = <span className={classNames("mx_IconizedContextMenu_icon", {
+            mx_IconizedContextMenu_checked: active,
+            mx_IconizedContextMenu_unchecked: !active,
+        })} />;
+    }
+
     return <MenuItemCheckbox
         {...props}
         className={classNames(className, {
@@ -86,10 +100,7 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
     >
         <span className={classNames("mx_IconizedContextMenu_icon", iconClassName)} />
         <span className="mx_IconizedContextMenu_label">{ label }</span>
-        <span className={classNames("mx_IconizedContextMenu_icon", {
-            mx_IconizedContextMenu_checked: active,
-            mx_IconizedContextMenu_unchecked: !active,
-        })} />
+        { marker }
     </MenuItemCheckbox>;
 };
 

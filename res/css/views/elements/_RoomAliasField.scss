@@ -30,12 +30,12 @@ limitations under the License.
     }
 
     input::placeholder {
-        color: $greyed-fg-color;
+        color: $info-plinth-fg-color;
         font-weight: normal;
     }
 
     .mx_Field_prefix, .mx_Field_postfix {
-        color: $greyed-fg-color;
+        color: $info-plinth-fg-color;
         border-left: none;
         border-right: none;
         font-weight: 600;

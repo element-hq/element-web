@@ -24,6 +24,7 @@ import RoomUpgradeDialog from "../../../dialogs/RoomUpgradeDialog";
 import DevtoolsDialog from "../../../dialogs/DevtoolsDialog";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
+import { Action } from '../../../../../dispatcher/actions';
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 
 interface IProps {
@@ -89,7 +90,7 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         e.stopPropagation();
 
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             room_id: this.state.oldRoomId,
             event_id: this.state.oldEventId,
         });

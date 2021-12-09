@@ -1,0 +1,2468 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MPollBody renders a finished poll 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="pizza"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Pizza
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="poutine"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Poutine
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          key="italian"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              }
+            }
+            checked={true}
+            votesText="2 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+              data-value="italian"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Italian
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  2 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "67%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="wings"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              }
+            }
+            checked={false}
+            votesText="1 vote"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="wings"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Wings
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  1 vote
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "33%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        Final result based on 3 votes
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;
+
+exports[`MPollBody renders a finished poll with multiple winners 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              }
+            }
+            checked={true}
+            votesText="2 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+              data-value="pizza"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Pizza
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  2 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "50%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="poutine"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Poutine
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="italian"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="italian"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Italian
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          key="wings"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              }
+            }
+            checked={true}
+            votesText="2 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption mx_MPollBody_endedOptionWinner"
+              data-value="wings"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Wings
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  2 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "50%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        Final result based on 4 votes
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;
+
+exports[`MPollBody renders a finished poll with no votes 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="pizza"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Pizza
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="poutine"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Poutine
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="italian"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="italian"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Italian
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="wings"
+          onClick={[Function]}
+        >
+          <EndedPollOption
+            answer={
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              }
+            }
+            checked={false}
+            votesText="0 votes"
+          >
+            <div
+              className="mx_MPollBody_endedOption"
+              data-value="wings"
+            >
+              <div
+                className="mx_MPollBody_optionDescription"
+              >
+                <div
+                  className="mx_MPollBody_optionText"
+                >
+                  Wings
+                </div>
+                <div
+                  className="mx_MPollBody_optionVoteCount"
+                >
+                  0 votes
+                </div>
+              </div>
+            </div>
+          </EndedPollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        Final result based on 0 votes
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;
+
+exports[`MPollBody renders a poll that I have not voted in 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="pizza"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="pizza"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Pizza
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="poutine"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="poutine"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Poutine
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="italian"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="italian"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="italian"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Italian
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="wings"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="wings"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="wings"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Wings
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        3 votes cast. Vote to see the results
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;
+
+exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="1 vote"
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="pizza"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="pizza"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Pizza
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      1 vote
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "20%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="0 votes"
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="poutine"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="poutine"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Poutine
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      0 votes
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          key="italian"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              }
+            }
+            checked={true}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="3 votes"
+          >
+            <StyledRadioButton
+              checked={true}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="italian"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+              >
+                <input
+                  checked={true}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="italian"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Italian
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      3 votes
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "60%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="wings"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="1 vote"
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="wings"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="wings"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Wings
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      1 vote
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "20%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        Based on 5 votes
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;
+
+exports[`MPollBody renders a poll with no votes 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="pizza"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="pizza"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Pizza
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="poutine"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="poutine"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Poutine
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="italian"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="italian"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="italian"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Italian
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="wings"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText=""
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="wings"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="wings"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Wings
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    />
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        No votes cast
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;
+
+exports[`MPollBody renders a poll with only non-local votes 1`] = `
+<Wrapper
+  getRelationsForEvent={[Function]}
+  mxEvent={
+    Object {
+      "content": Object {
+        "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+        "org.matrix.msc3381.poll.start": Object {
+          "answers": Array [
+            Object {
+              "id": "pizza",
+              "org.matrix.msc1767.text": "Pizza",
+            },
+            Object {
+              "id": "poutine",
+              "org.matrix.msc1767.text": "Poutine",
+            },
+            Object {
+              "id": "italian",
+              "org.matrix.msc1767.text": "Italian",
+            },
+            Object {
+              "id": "wings",
+              "org.matrix.msc1767.text": "Wings",
+            },
+          ],
+          "kind": "org.matrix.msc3381.poll.disclosed",
+          "question": Object {
+            "org.matrix.msc1767.text": "What should we order for the party?",
+          },
+        },
+      },
+      "event_id": "$mypoll",
+      "room_id": "#myroom:example.com",
+    }
+  }
+>
+  <MPollBody
+    getRelationsForEvent={[Function]}
+    mxEvent={
+      Object {
+        "content": Object {
+          "org.matrix.msc1767.text": "What should we order for the party?
+1. Pizza
+2. Poutine
+3. Italian
+4. Wings",
+          "org.matrix.msc3381.poll.start": Object {
+            "answers": Array [
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              },
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              },
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              },
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              },
+            ],
+            "kind": "org.matrix.msc3381.poll.disclosed",
+            "question": Object {
+              "org.matrix.msc1767.text": "What should we order for the party?",
+            },
+          },
+        },
+        "event_id": "$mypoll",
+        "room_id": "#myroom:example.com",
+      }
+    }
+  >
+    <div
+      className="mx_MPollBody"
+    >
+      <h2>
+        What should we order for the party?
+      </h2>
+      <div
+        className="mx_MPollBody_allOptions"
+      >
+        <div
+          className="mx_MPollBody_option"
+          key="pizza"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "pizza",
+                "org.matrix.msc1767.text": "Pizza",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="0 votes"
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="pizza"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="pizza"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Pizza
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      0 votes
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="poutine"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "poutine",
+                "org.matrix.msc1767.text": "Poutine",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="0 votes"
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="poutine"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="poutine"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Poutine
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      0 votes
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "0%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option"
+          key="italian"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "italian",
+                "org.matrix.msc1767.text": "Italian",
+              }
+            }
+            checked={false}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="2 votes"
+          >
+            <StyledRadioButton
+              checked={false}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="italian"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+              >
+                <input
+                  checked={false}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="italian"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Italian
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      2 votes
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "67%",
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          key="wings"
+          onClick={[Function]}
+        >
+          <LivePollOption
+            answer={
+              Object {
+                "id": "wings",
+                "org.matrix.msc1767.text": "Wings",
+              }
+            }
+            checked={true}
+            onOptionSelected={[Function]}
+            pollId="$mypoll"
+            votesText="1 vote"
+          >
+            <StyledRadioButton
+              checked={true}
+              childrenInLabel={true}
+              className=""
+              name="poll_answer_select-$mypoll"
+              onChange={[Function]}
+              value="wings"
+            >
+              <label
+                className="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+              >
+                <input
+                  checked={true}
+                  name="poll_answer_select-$mypoll"
+                  onChange={[Function]}
+                  type="radio"
+                  value="wings"
+                />
+                <div>
+                  <div />
+                </div>
+                <div
+                  className="mx_StyledRadioButton_content"
+                >
+                  <div
+                    className="mx_MPollBody_optionDescription"
+                  >
+                    <div
+                      className="mx_MPollBody_optionText"
+                    >
+                      Wings
+                    </div>
+                    <div
+                      className="mx_MPollBody_optionVoteCount"
+                    >
+                      1 vote
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="mx_StyledRadioButton_spacer"
+                />
+              </label>
+            </StyledRadioButton>
+          </LivePollOption>
+          <div
+            className="mx_MPollBody_popularityBackground"
+          >
+            <div
+              className="mx_MPollBody_popularityAmount"
+              style={
+                Object {
+                  "width": "33%",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="mx_MPollBody_totalVotes"
+      >
+        Based on 3 votes
+      </div>
+    </div>
+  </MPollBody>
+</Wrapper>
+`;

@@ -31,7 +31,7 @@ limitations under the License.
         cursor: pointer;
         width: 37px;
         height: 37px;
-        background-color: $accent-color;
+        background-color: $accent;
         mask: url('$(res)/img/feather-customised/search-input.svg');
         mask-repeat: no-repeat;
         mask-position: center;
@@ -48,7 +48,7 @@ limitations under the License.
         font-size: $font-15px;
         cursor: pointer;
         color: $primary-content;
-        border-bottom: 2px solid $accent-color;
+        border-bottom: 2px solid $accent;
         font-weight: 600;
     }
 
@@ -58,7 +58,7 @@ limitations under the License.
     }
 
     .mx_SearchBar_cancel {
-        background-color: $warning-color;
+        background-color: $alert;
         mask: url('$(res)/img/cancel.svg');
         mask-repeat: no-repeat;
         mask-position: center;

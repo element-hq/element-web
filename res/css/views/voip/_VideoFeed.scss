@@ -26,14 +26,6 @@ limitations under the License.
         aspect-ratio: 16 / 9;
     }
 
-    &.mx_VideoFeed_speaking {
-        border: $accent-color 2px solid;
-
-        .mx_VideoFeed_video {
-            border-radius: 0;
-        }
-    }
-
     .mx_VideoFeed_video {
         width: 100%;
         background-color: transparent;

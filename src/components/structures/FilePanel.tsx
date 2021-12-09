@@ -35,7 +35,7 @@ import ResizeNotifier from '../../utils/ResizeNotifier';
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { TileShape } from '../views/rooms/EventTile';
-import { Layout } from "../../settings/Layout";
+import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 
 interface IProps {

@@ -15,24 +15,26 @@ limitations under the License.
 */
 
 import React from 'react';
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
-import { logger } from "matrix-js-sdk/src/logger";
-
 import { _t, _td } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { compare } from "../../../../../utils/strings";
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 import PowerSelector from "../../../elements/PowerSelector";
 
+import { logger } from "matrix-js-sdk/src/logger";
+import SettingsStore from "../../../../../settings/SettingsStore";
+
 interface IEventShowOpts {
     isState?: boolean;
     hideForSpace?: boolean;
+    hideForRoom?: boolean;
 }
 
 interface IPowerLevelDescriptor {
@@ -46,12 +48,14 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
     [EventType.RoomAvatar]: { isState: true },
     [EventType.RoomName]: { isState: true },
     [EventType.RoomCanonicalAlias]: { isState: true },
+    [EventType.SpaceChild]: { isState: true, hideForRoom: true },
     [EventType.RoomHistoryVisibility]: { isState: true, hideForSpace: true },
     [EventType.RoomPowerLevels]: { isState: true },
     [EventType.RoomTopic]: { isState: true },
     [EventType.RoomTombstone]: { isState: true, hideForSpace: true },
     [EventType.RoomEncryption]: { isState: true, hideForSpace: true },
     [EventType.RoomServerAcl]: { isState: true, hideForSpace: true },
+    [EventType.RoomPinnedEvents]: { isState: true, hideForSpace: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": { isState: true, hideForSpace: true },
@@ -223,6 +227,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             [EventType.RoomCanonicalAlias]: isSpaceRoom
                 ? _td("Change main address for the space")
                 : _td("Change main address for the room"),
+            [EventType.SpaceChild]: _td("Manage rooms in this space"),
             [EventType.RoomHistoryVisibility]: _td("Change history visibility"),
             [EventType.RoomPowerLevels]: _td("Change permissions"),
             [EventType.RoomTopic]: isSpaceRoom ? _td("Change description") : _td("Change topic"),
@@ -233,6 +238,10 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
             "im.vector.modular.widgets": isSpaceRoom ? null : _td("Modify widgets"),
         };
+
+        if (SettingsStore.getValue("feature_pinning")) {
+            plEventsToLabels[EventType.RoomPinnedEvents] = _td("Manage pinned events");
+        }
 
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
@@ -411,7 +420,9 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         }
 
         const eventPowerSelectors = Object.keys(eventsLevels).map((eventType, i) => {
-            if (isSpaceRoom && plEventsToShow[eventType].hideForSpace) {
+            if (isSpaceRoom && plEventsToShow[eventType]?.hideForSpace) {
+                return null;
+            } else if (!isSpaceRoom && plEventsToShow[eventType]?.hideForRoom) {
                 return null;
             }
 

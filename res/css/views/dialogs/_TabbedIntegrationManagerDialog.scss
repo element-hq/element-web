@@ -35,7 +35,7 @@ limitations under the License.
     .mx_TabbedIntegrationManagerDialog_currentManager {
         width: 100%;
         height: 100%;
-        border-top: 1px solid $accent-color;
+        border-top: 1px solid $accent;
 
         iframe {
             background-color: #fff;
@@ -48,7 +48,7 @@ limitations under the License.
 
 .mx_TabbedIntegrationManagerDialog_tab {
     display: inline-block;
-    border: 1px solid $accent-color;
+    border: 1px solid $accent;
     border-bottom: 0;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
@@ -57,6 +57,6 @@ limitations under the License.
 }
 
 .mx_TabbedIntegrationManagerDialog_currentTab {
-    background-color: $accent-color;
+    background-color: $accent;
     color: $accent-fg-color;
 }

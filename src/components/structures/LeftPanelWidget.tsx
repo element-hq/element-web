@@ -131,7 +131,7 @@ const LeftPanelWidget: React.FC = () => {
                     }}
                     className="mx_LeftPanelWidget_maximizeButton"
                     tooltipClassName="mx_LeftPanelWidget_maximizeButtonTooltip"
-                    title={_t("Maximize")}
+                    title={_t("Maximise")}
                 />*/ }
             </div>
         </div>

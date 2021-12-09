@@ -18,19 +18,17 @@ limitations under the License.
 
 import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { IUploadOpts } from "matrix-js-sdk/src/@types/requests";
-import { MsgType } from "matrix-js-sdk/src/@types/event";
-import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
-import { logger } from "matrix-js-sdk/src/logger";
-import encrypt from "browser-encrypt-attachment";
-import extractPngChunks from "png-chunks-extract";
-
 import { IEncryptedFile, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
+import { IUploadOpts } from "matrix-js-sdk/src/@types/requests";
+import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
+
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import RoomViewStore from './stores/RoomViewStore';
+import encrypt from "browser-encrypt-attachment";
+import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
@@ -42,9 +40,13 @@ import {
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { IUpload } from "./models/IUpload";
+import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
 import { BlurhashEncoder } from "./BlurhashEncoder";
 import SettingsStore from "./settings/SettingsStore";
 import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerformanceMetrics";
+
+import { logger } from "matrix-js-sdk/src/logger";
+import { IEventRelation } from "matrix-js-sdk/src";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -417,9 +419,16 @@ export default class ContentMessages {
     private inprogress: IUpload[] = [];
     private mediaConfig: IMediaConfig = null;
 
-    sendStickerContentToRoom(url: string, roomId: string, info: IImageInfo, text: string, matrixClient: MatrixClient) {
+    sendStickerContentToRoom(
+        url: string,
+        roomId: string,
+        threadId: string | null,
+        info: IImageInfo,
+        text: string,
+        matrixClient: MatrixClient,
+    ) {
         const startTime = CountlyAnalytics.getTimestamp();
-        const prom = matrixClient.sendStickerMessage(roomId, url, info, text).catch((e) => {
+        const prom = matrixClient.sendStickerMessage(roomId, threadId, url, info, text).catch((e) => {
             logger.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
@@ -435,7 +444,12 @@ export default class ContentMessages {
         }
     }
 
-    async sendContentListToRoom(files: File[], roomId: string, matrixClient: MatrixClient) {
+    async sendContentListToRoom(
+        files: File[],
+        roomId: string,
+        relation: IEventRelation | null,
+        matrixClient: MatrixClient,
+    ) {
         if (matrixClient.isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;
@@ -511,11 +525,21 @@ export default class ContentMessages {
                     uploadAll = true;
                 }
             }
-            promBefore = this.sendContentToRoom(file, roomId, matrixClient, promBefore);
+
+            promBefore = this.sendContentToRoom(file, roomId, relation, matrixClient, promBefore);
         }
     }
 
-    getCurrentUploads() {
+    getCurrentUploads(relation?: IEventRelation) {
+        return this.inprogress.filter(upload => {
+            const noRelation = !relation && !upload.relation;
+            const matchingRelation = relation && upload.relation
+                && relation.rel_type === upload.relation.rel_type
+                && relation.event_id === upload.relation.event_id;
+
+            return (noRelation || matchingRelation) && !upload.canceled;
+        });
+
         return this.inprogress.filter(u => !u.canceled);
     }
 
@@ -534,7 +558,13 @@ export default class ContentMessages {
         }
     }
 
-    private sendContentToRoom(file: File, roomId: string, matrixClient: MatrixClient, promBefore: Promise<any>) {
+    private sendContentToRoom(
+        file: File,
+        roomId: string,
+        relation: IEventRelation,
+        matrixClient: MatrixClient,
+        promBefore: Promise<any>,
+    ) {
         const startTime = CountlyAnalytics.getTimestamp();
         const content: IContent = {
             body: file.name || 'Attachment',
@@ -543,6 +573,10 @@ export default class ContentMessages {
             },
             msgtype: "", // set later
         };
+
+        if (relation) {
+            content["m.relates_to"] = relation;
+        }
 
         if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
             decorateStartSendingTime(content);
@@ -589,7 +623,8 @@ export default class ContentMessages {
 
         const upload: IUpload = {
             fileName: file.name || 'Attachment',
-            roomId: roomId,
+            roomId,
+            relation,
             total: file.size,
             loaded: 0,
             promise: prom,
@@ -622,7 +657,10 @@ export default class ContentMessages {
             return promBefore;
         }).then(function() {
             if (upload.canceled) throw new UploadCanceledError();
-            const prom = matrixClient.sendMessage(roomId, content);
+            const threadId = relation?.rel_type === RelationType.Thread
+                ? relation.event_id
+                : null;
+            const prom = matrixClient.sendMessage(roomId, threadId, content);
             if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
                 prom.then(resp => {
                     sendRoundTripMetric(matrixClient, roomId, resp.event_id);

@@ -20,6 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
 import AccessibleButton from "../elements/AccessibleButton";
 import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -45,7 +46,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
 
     private onTileClicked = () => {
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             event_id: this.props.event.getId(),
             highlighted: true,
             room_id: this.props.event.getRoomId(),

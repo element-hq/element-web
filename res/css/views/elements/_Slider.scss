@@ -56,7 +56,7 @@ limitations under the License.
     position: absolute;
     width: $slider-selection-dot-size;
     height: $slider-selection-dot-size;
-    background-color: $slider-selection-color;
+    background-color: $accent;
     border-radius: 50%;
     z-index: 10;
 }
@@ -72,7 +72,7 @@ limitations under the License.
 
 .mx_Slider_selection > hr {
     margin: 0;
-    border: 0.2em solid $slider-selection-color;
+    border: 0.2em solid $accent;
 }
 
 .mx_Slider_dot {
@@ -84,7 +84,7 @@ limitations under the License.
 }
 
 .mx_Slider_dotActive {
-    background-color: $slider-selection-color;
+    background-color: $accent;
 }
 
 .mx_Slider_dotValue {

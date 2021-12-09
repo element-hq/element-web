@@ -15,185 +15,57 @@ limitations under the License.
 */
 
 .mx_UserMenu {
-    // to make the menu button sort of aligned with the explore button below
-    padding-right: 6px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
 
-    &.mx_UserMenu_prototype {
-        // The margin & padding combination between here and the ::after is to
-        // align the border line with the tag panel.
-        margin-bottom: 6px;
-
-        padding-right: 0; // make the right edge line up with the explore button
-
-        .mx_UserMenu_headerButtons {
-            // considering we've eliminated right padding on the menu itself, we need to
-            // push the chevron in slightly (roughly lining up with the center of the
-            // plus buttons)
-            margin-right: 2px;
-        }
-
-        // we cheat opacity on the theme colour with an after selector here
-        &::after {
-            content: '';
-            border-bottom: 1px solid $primary-content;
-            opacity: 0.2;
-            display: block;
-            padding-top: 8px;
-        }
+    .mx_AccessibleButton {
+        display: flex;
+        align-items: center;
     }
 
-    .mx_UserMenu_headerButtons {
+    .mx_UserMenu_userAvatar {
+        position: relative;
+    }
+
+    .mx_UserMenu_name {
+        font-weight: $font-semi-bold;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        margin-left: 10px;
+    }
+
+    .mx_UserMenu_cutout .mx_BaseAvatar {
+        mask-image: url('$(res)/img/element-icons/roomlist/dnd-avatar-mask.svg');
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+    }
+
+    .mx_UserMenu_dndBadge {
+        position: absolute;
+        bottom: -2px;
+        right: -7px;
         width: 16px;
         height: 16px;
-        position: relative;
-        display: block;
+        border-radius: 50%;
 
         &::before {
             content: '';
             width: 16px;
             height: 16px;
             position: absolute;
-            top: 0;
-            left: 0;
             mask-position: center;
             mask-size: contain;
             mask-repeat: no-repeat;
-            background: $tertiary-content;
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
-        }
-    }
-
-    .mx_UserMenu_row {
-        // Create a row-based flexbox to ensure items stay aligned correctly.
-        display: flex;
-        align-items: center;
-
-        .mx_UserMenu_userAvatarContainer {
-            position: relative; // to make default avatars work
-            margin-right: 8px;
-            height: 32px; // to remove the unknown 4px gap the browser puts below it
-            padding: 3px 0; // to align with and without using doubleName
-
-            .mx_UserMenu_userAvatar {
-                border-radius: 32px; // should match avatar size
-                object-fit: cover;
-            }
-        }
-
-        .mx_UserMenu_doubleName {
-            flex: 1;
-            min-width: 0; // make flexbox aware that it can crush this to a tiny width
-
-            .mx_UserMenu_userName,
-            .mx_UserMenu_subUserName {
-                display: block;
-            }
-
-            .mx_UserMenu_subUserName {
-                color: $muted-fg-color;
-                font-size: $font-13px;
-                line-height: $font-18px;
-                flex: 1;
-
-                // Ellipsize any text overflow
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-            }
-        }
-
-        .mx_UserMenu_userName {
-            font-weight: 600;
-            font-size: $font-15px;
-            line-height: $font-20px;
-            flex: 1;
-
-            // Ellipsize any text overflow
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .mx_UserMenu_headerButtons {
-            // No special styles: the rest of the layout happens to make it work.
-        }
-
-        .mx_UserMenu_dnd {
-            width: 24px;
-            height: 24px;
-            margin-right: 8px;
-            position: relative;
-
-            &::before {
-                content: '';
-                position: absolute;
-                width: 24px;
-                height: 24px;
-                mask-position: center;
-                mask-size: contain;
-                mask-repeat: no-repeat;
-                background: $muted-fg-color;
-            }
-
-            &.mx_UserMenu_dnd_noisy::before {
-                mask-image: url('$(res)/img/element-icons/notifications.svg');
-            }
-
-            &.mx_UserMenu_dnd_muted::before {
-                mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
-            }
-        }
-    }
-
-    &.mx_UserMenu_minimized {
-        padding-right: 0px;
-
-        .mx_UserMenu_userAvatarContainer {
-            margin-right: 0px;
+            background-color: $alert;
+            mask-image: url('$(res)/img/element-icons/roomlist/dnd.svg');
         }
     }
 }
 
 .mx_UserMenu_contextMenu {
     width: 258px;
-
-    // These override the styles already present on the user menu rather than try to
-    // define a new menu. They are specifically for the stacked menu when a community
-    // is being represented as a prototype.
-    &.mx_UserMenu_contextMenu_prototype {
-        padding-bottom: 16px;
-
-        .mx_UserMenu_contextMenu_header {
-            padding-bottom: 0;
-            padding-top: 16px;
-
-            &:nth-child(n + 2) {
-                padding-top: 8px;
-            }
-        }
-
-        hr {
-            width: 85%;
-            opacity: 0.2;
-            border: none;
-            border-bottom: 1px solid $primary-content;
-        }
-
-        &.mx_IconizedContextMenu {
-            > .mx_IconizedContextMenu_optionList {
-                margin-top: 4px;
-
-                &::before {
-                    border: none;
-                }
-
-                > .mx_AccessibleButton {
-                    padding-top: 2px;
-                    padding-bottom: 2px;
-                }
-            }
-        }
-    }
 
     &.mx_IconizedContextMenu .mx_IconizedContextMenu_optionList_red {
         .mx_AccessibleButton {
@@ -299,6 +171,15 @@ limitations under the License.
     .mx_UserMenu_iconHome::before {
         mask-image: url('$(res)/img/element-icons/roomlist/home.svg');
     }
+
+    .mx_UserMenu_iconDnd::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/dnd.svg');
+    }
+
+    .mx_UserMenu_iconDndOff::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/dnd-cross.svg');
+    }
+
     .mx_UserMenu_iconHosting::before {
         mask-image: url('$(res)/img/element-icons/brands/element.svg');
     }
@@ -315,23 +196,37 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/settings.svg');
     }
 
-    .mx_UserMenu_iconArchive::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/archived.svg');
-    }
-
     .mx_UserMenu_iconMessage::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/feedback.svg');
+        mask-image: url('$(res)/img/element-icons/feedback.svg');
     }
 
     .mx_UserMenu_iconSignOut::before {
         mask-image: url('$(res)/img/element-icons/leave.svg');
     }
+}
 
-    .mx_UserMenu_iconMembers::before {
-        mask-image: url('$(res)/img/element-icons/room/members.svg');
+.mx_UserMenu_CustomStatusSection {
+    margin: 0 12px 8px;
+
+    .mx_UserMenu_CustomStatusSection_input {
+        position: relative;
+        display: flex;
+
+        > input {
+            border: 1px solid $accent;
+            border-radius: 8px;
+            width: 100%;
+        }
     }
 
-    .mx_UserMenu_iconInvite::before {
-        mask-image: url('$(res)/img/element-icons/room/invite.svg');
+    > p {
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+        margin: 4px 0;
+    }
+
+    .mx_AccessibleButton_kind_primary_outline {
+        display: block;
     }
 }

@@ -19,7 +19,7 @@ limitations under the License.
     width: 500px;
     font-size: $font-12px;
     color: $authpage-secondary-color;
-    background-color: $authpage-body-bg-color;
+    background-color: $background;
     border-radius: 0 4px 4px 0;
     padding: 25px 60px;
     box-sizing: border-box;
@@ -55,7 +55,7 @@ limitations under the License.
     .mx_Field input,
     .mx_Field select {
         color: $authpage-primary-color;
-        background-color: $authpage-body-bg-color;
+        background-color: $background;
     }
 
     .mx_Field_labelAlwaysTopLeft label,
@@ -64,11 +64,11 @@ limitations under the License.
     .mx_Field input:not(:placeholder-shown) + label,
     .mx_Field textarea:focus + label,
     .mx_Field textarea:not(:placeholder-shown) + label {
-        background-color: $authpage-body-bg-color;
+        background-color: $background;
     }
 
     input.error {
-        color: $warning-color;
+        color: $alert;
     }
 
     .mx_Field input {
@@ -88,7 +88,7 @@ limitations under the License.
     }
 
     .mx_Dropdown_menu {
-        background-color: $authpage-body-bg-color;
+        background-color: $background;
 
         .mx_Dropdown_option_highlight {
             background-color: $authpage-focus-bg-color;

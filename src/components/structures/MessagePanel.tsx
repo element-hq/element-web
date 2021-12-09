@@ -28,7 +28,7 @@ import { wantsDateSeparator } from '../../DateUtils';
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import SettingsStore from '../../settings/SettingsStore';
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
-import { Layout } from "../../settings/Layout";
+import { Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
 import EventTile, { haveTileForEvent, IReadReceiptProps, TileShape } from "../views/rooms/EventTile";
 import { hasText } from "../../TextForEvent";
@@ -179,6 +179,7 @@ interface IProps {
     getRelationsForEvent?(eventId: string, relationType: string, eventType: string): Relations;
 
     hideThreadedMessages?: boolean;
+    disableGrouping?: boolean;
 }
 
 interface IState {
@@ -197,6 +198,10 @@ interface IReadReceiptForUser {
 export default class MessagePanel extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
+
+    static defaultProps = {
+        disableGrouping: false,
+    };
 
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations
@@ -652,7 +657,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             }
 
             for (const Grouper of groupers) {
-                if (Grouper.canStartGroup(this, mxEv)) {
+                if (Grouper.canStartGroup(this, mxEv) && !this.props.disableGrouping) {
                     grouper = new Grouper(
                         this,
                         mxEv,

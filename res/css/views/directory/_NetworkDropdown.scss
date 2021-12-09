@@ -73,7 +73,7 @@ limitations under the License.
                 mask-position: center;
                 mask-size: contain;
                 mask-image: url('$(res)/img/feather-customised/x.svg');
-                background-color: $notice-primary-color;
+                background-color: $alert;
             }
         }
     }
@@ -108,7 +108,7 @@ limitations under the License.
             mask-position: center;
             mask-size: contain;
             mask-image: url('$(res)/img/feather-customised/check.svg');
-            background-color: $input-valid-border-color;
+            background-color: $accent;
         }
     }
 }

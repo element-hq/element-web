@@ -50,7 +50,7 @@ limitations under the License.
 .mx_DialPad_dialButton {
     /* Always show the dial button in the center grid column */
     grid-column: 2;
-    background-color: $accent-color;
+    background-color: $accent;
 
     &::before {
         content: '';

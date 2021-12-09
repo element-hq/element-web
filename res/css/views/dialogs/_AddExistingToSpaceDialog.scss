@@ -98,7 +98,7 @@ limitations under the License.
                 font-weight: $font-semi-bold;
                 font-size: $font-15px;
                 line-height: $font-18px;
-                color: $notice-primary-color;
+                color: $alert;
             }
 
             .mx_AddExistingToSpace_errorCaption {
@@ -199,7 +199,7 @@ limitations under the License.
 
         .mx_Dropdown_menu {
             .mx_SubspaceSelector_dropdownOptionActive {
-                color: $accent-color;
+                color: $accent;
                 padding-right: 32px;
                 position: relative;
 
@@ -213,7 +213,7 @@ limitations under the License.
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background-color: $accent-color;
+                    background-color: $accent;
                     mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
                 }
             }

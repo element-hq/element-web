@@ -61,7 +61,7 @@ limitations under the License.
                 }
 
                 .mx_MessageActionBar_optionsButton {
-                    background: $roomlist-button-bg-color;
+                    background: $panel-actions;
                     border-radius: 6px;
                     z-index: 1;
 
@@ -86,5 +86,9 @@ limitations under the License.
                 color: $secondary-content;
             }
         }
+    }
+
+    .mx_EventTile_body {
+        word-break: break-word;
     }
 }

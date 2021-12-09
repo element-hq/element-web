@@ -20,7 +20,7 @@ $gutterSize: 16px;
 $activeBorderTransparentGap: 1px;
 
 $activeBackgroundColor: $panel-actions;
-$activeBorderColor: $secondary-content;
+$activeBorderColor: $primary-content;
 
 .mx_SpacePanel {
     background-color: $groupFilterPanel-bg-color;
@@ -35,26 +35,55 @@ $activeBorderColor: $secondary-content;
     display: flex;
     flex-direction: column;
 
-    .mx_SpacePanel_spaceTreeWrapper {
-        flex: 1;
-        padding: 8px 8px 16px 0;
-    }
-
     .mx_SpacePanel_toggleCollapse {
-        flex: 0 0 auto;
-        width: 40px;
-        height: 40px;
-        mask-position: center;
-        mask-size: 32px;
-        mask-repeat: no-repeat;
-        margin-left: $gutterSize;
-        margin-bottom: 12px;
-        background-color: $tertiary-content;
-        mask-image: url('$(res)/img/element-icons/expand-space-panel.svg');
+        position: relative;
+        height: 32px;
+        width: 32px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            left: 0;
+            mask-position: center;
+            mask-size: 24px;
+            mask-repeat: no-repeat;
+            background-color: $secondary-content;
+            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            transform: rotate(270deg);
+        }
+
+        &:not(.expanded) {
+            position: absolute;
+            left: 68px;
+            top: 12px;
+            border-radius: 0 8px 8px 0;
+            background-color: $primary-content;
+            opacity: 0;
+
+            &::before {
+                background-color: $background;
+            }
+        }
 
         &.expanded {
-            transform: scaleX(-1);
+            margin-left: auto;
+            margin-right: -8px; // overflow into .mx_UserMenu's margin without butchering its bottom stroke
+            border-radius: 8px;
+
+            &::before {
+                transform: rotate(90deg);
+            }
+
+            &:hover {
+                background-color: $panel-actions;
+            }
         }
+    }
+
+    &:hover .mx_SpacePanel_toggleCollapse {
+        opacity: 100%;
     }
 
     ul {
@@ -75,13 +104,6 @@ $activeBorderColor: $secondary-content;
         .mx_SpaceButton_toggleCollapse {
             visibility: hidden;
         }
-    }
-
-    .mx_SpaceTreeLevel {
-        display: flex;
-        flex-direction: column;
-        max-width: 250px;
-        flex-grow: 1;
     }
 
     .mx_SpaceItem {
@@ -144,7 +166,7 @@ $activeBorderColor: $secondary-content;
             align-items: center;
             border-radius: 12px;
             padding: 4px;
-            width: 100%;
+            width: calc(100% - 32px);
         }
 
         .mx_SpaceButton_name {
@@ -160,6 +182,7 @@ $activeBorderColor: $secondary-content;
 
         .mx_SpaceButton_toggleCollapse {
             width: $gutterSize;
+            min-width: $gutterSize;
             height: 20px;
             mask-position: center;
             mask-size: 20px;
@@ -188,18 +211,36 @@ $activeBorderColor: $secondary-content;
             }
         }
 
-        &.mx_SpaceButton_home .mx_SpaceButton_icon {
-            background-color: #ffffff;
+        &.mx_SpaceButton_home,
+        &.mx_SpaceButton_favourites,
+        &.mx_SpaceButton_people,
+        &.mx_SpaceButton_orphans {
+            .mx_SpaceButton_icon {
+                background-color: $panel-actions;
 
-            &::before {
-                background-color: #3f3d3d;
-                mask-image: url('$(res)/img/element-icons/home.svg');
+                &::before {
+                    background-color: $secondary-content;
+                }
             }
         }
 
-        &.mx_SpaceButton_new .mx_SpaceButton_icon {
-            background-color: $roomlist-button-bg-color;
+        &.mx_SpaceButton_home .mx_SpaceButton_icon::before {
+            mask-image: url('$(res)/img/element-icons/home.svg');
+        }
 
+        &.mx_SpaceButton_favourites .mx_SpaceButton_icon::before {
+            mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+        }
+
+        &.mx_SpaceButton_people .mx_SpaceButton_icon::before {
+            mask-image: url('$(res)/img/element-icons/room/members.svg');
+        }
+
+        &.mx_SpaceButton_orphans .mx_SpaceButton_icon::before {
+            mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+        }
+
+        &.mx_SpaceButton_new .mx_SpaceButton_icon {
             &::before {
                 background-color: $primary-content;
                 mask-image: url('$(res)/img/element-icons/plus.svg');
@@ -221,11 +262,11 @@ $activeBorderColor: $secondary-content;
             height: 20px;
             margin-top: auto;
             margin-bottom: auto;
-            visibility: hidden;
+            display: none;
             position: relative;
 
             &::before {
-                top: 2px;
+                top: 3px;
                 left: 2px;
                 content: '';
                 width: 16px;
@@ -236,6 +277,26 @@ $activeBorderColor: $secondary-content;
                 mask-repeat: no-repeat;
                 mask-image: url('$(res)/img/element-icons/context-menu.svg');
                 background: $primary-content;
+            }
+        }
+    }
+
+    .mx_SpaceTreeLevel {
+        display: flex;
+        flex-direction: column;
+        max-width: 250px;
+        flex-grow: 1;
+
+        .mx_BaseAvatar:not(.mx_UserMenu_userAvatar_BaseAvatar) .mx_BaseAvatar_initial {
+            color: $secondary-content;
+            border-radius: 8px;
+            background-color: $panel-actions;
+            font-size: $font-15px !important; // override inline style
+            font-weight: $font-semi-bold;
+            line-height: $font-18px;
+
+            & + .mx_BaseAvatar_image {
+                visibility: hidden;
             }
         }
     }
@@ -270,20 +331,19 @@ $activeBorderColor: $secondary-content;
         }
     }
 
-    .mx_SpaceButton_narrow .mx_SpaceButton_menuButton {
-        display: none;
-    }
-
     .mx_SpaceButton:hover,
     .mx_SpaceButton:focus-within,
     .mx_SpaceButton_hasMenuOpen {
-        &:not(.mx_SpaceButton_invite) .mx_SpaceButton_menuButton {
-            visibility: visible;
+        &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_menuButton {
+            display: block;
         }
     }
 
     /* root space buttons are bigger and not indented */
     & > .mx_AutoHideScrollbar {
+        flex: 1;
+        padding: 0 8px 16px 0;
+
         & > .mx_SpaceButton {
             height: $topLevelHeight;
 
@@ -295,6 +355,24 @@ $activeBorderColor: $secondary-content;
         & > ul {
             padding-left: 0;
         }
+
+        &.mx_IndicatorScrollbar_topOverflow {
+            mask-image: linear-gradient(180deg, transparent, black 5%);
+        }
+
+        &.mx_IndicatorScrollbar_bottomOverflow {
+            mask-image: linear-gradient(180deg, black, black 95%, transparent);
+        }
+
+        &.mx_IndicatorScrollbar_topOverflow.mx_IndicatorScrollbar_bottomOverflow {
+            mask-image: linear-gradient(180deg, transparent, black 5%, black 95%, transparent);
+        }
+    }
+
+    .mx_UserMenu {
+        padding: 0 2px 8px;
+        border-bottom: 1px solid $quinary-content;
+        margin: 12px 14px 4px 18px;
     }
 }
 
@@ -306,13 +384,8 @@ $activeBorderColor: $secondary-content;
         line-height: $font-18px;
     }
 
-    .mx_IconizedContextMenu_optionList .mx_AccessibleButton.mx_SpacePanel_contextMenu_inviteButton {
-        color: $accent-color;
-
-        .mx_SpacePanel_iconInvite::before {
-            background-color: $accent-color;
-            mask-image: url('$(res)/img/element-icons/room/invite.svg');
-        }
+    .mx_SpacePanel_iconInvite::before {
+        mask-image: url('$(res)/img/element-icons/room/invite.svg');
     }
 
     .mx_SpacePanel_iconSettings::before {
@@ -328,15 +401,11 @@ $activeBorderColor: $secondary-content;
     }
 
     .mx_SpacePanel_iconPlus::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
-    }
-
-    .mx_SpacePanel_iconHash::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+        mask-image: url('$(res)/img/element-icons/plus.svg');
     }
 
     .mx_SpacePanel_iconExplore::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/search.svg');
     }
 
     .mx_SpacePanel_noIcon {
@@ -345,6 +414,14 @@ $activeBorderColor: $secondary-content;
         & + .mx_IconizedContextMenu_label {
             padding-left: 5px !important; // override default iconized label style to align with header
         }
+    }
+
+    .mx_SpacePanel_contextMenu_separatorLabel {
+        color: $tertiary-content;
+        font-size: $font-10px;
+        line-height: $font-12px;
+        font-weight: $font-semi-bold;
+        //margin-left: 8px;
     }
 }
 

@@ -106,7 +106,7 @@ limitations under the License.
                 font-weight: $font-semi-bold;
                 font-size: $font-15px;
                 line-height: $font-18px;
-                color: $notice-primary-color;
+                color: $alert;
             }
 
             .mx_CreateSpaceFromCommunityDialog_errorCaption {
@@ -168,7 +168,7 @@ limitations under the License.
     .mx_CreateSpaceFromCommunityDialog_SuccessInfoDialog_checkmark {
         position: relative;
         border-radius: 50%;
-        border: 3px solid $accent-color;
+        border: 3px solid $accent;
         width: 68px;
         height: 68px;
         margin: 12px auto 32px;
@@ -178,7 +178,7 @@ limitations under the License.
             height: inherit;
             content: '';
             position: absolute;
-            background-color: $accent-color;
+            background-color: $accent;
             mask-repeat: no-repeat;
             mask-position: center;
             mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');

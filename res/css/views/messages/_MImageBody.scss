@@ -1,5 +1,6 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2021 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$timelineImageBorderRadius: 4px;
+$timeline-image-border-radius: 8px;
 
 .mx_MImageBody_thumbnail--blurhash {
     position: absolute;
@@ -24,7 +25,7 @@ $timelineImageBorderRadius: 4px;
 
 .mx_MImageBody_thumbnail {
     object-fit: contain;
-    border-radius: $timelineImageBorderRadius;
+    border-radius: $timeline-image-border-radius;
 
     display: flex;
     justify-content: center;
@@ -32,9 +33,10 @@ $timelineImageBorderRadius: 4px;
     height: 100%;
     width: 100%;
 
+    // this is needed so that the Blurhash can get have rounded corners without beeing the correct size during loading.
+    overflow: hidden;
     .mx_Blurhash > canvas {
         animation: mx--anim-pulse 1.75s infinite cubic-bezier(.4, 0, .6, 1);
-        border-radius: $timelineImageBorderRadius;
     }
 
     .mx_no-image-placeholder {
@@ -81,12 +83,12 @@ $timelineImageBorderRadius: 4px;
     background-color: $header-panel-bg-color;
 
     .mx_HiddenImagePlaceholder_button {
-        color: $accent-color;
+        color: $accent;
 
         span.mx_HiddenImagePlaceholder_eye {
             margin-right: 8px;
 
-            background-color: $accent-color;
+            background-color: $accent;
             mask-image: url('$(res)/img/feather-customised/eye.svg');
             display: inline-block;
             width: 18px;

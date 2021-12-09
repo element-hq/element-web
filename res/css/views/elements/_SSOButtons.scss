@@ -46,13 +46,13 @@ limitations under the License.
     }
 
     .mx_SSOButton_default {
-        color: $button-primary-bg-color;
+        color: $accent;
         background-color: $button-secondary-bg-color;
-        border-color: $button-primary-bg-color;
+        border-color: $accent;
     }
     .mx_SSOButton_default.mx_SSOButton_primary {
         color: $button-primary-fg-color;
-        background-color: $button-primary-bg-color;
+        background-color: $accent;
     }
 
     .mx_SSOButton_mini {

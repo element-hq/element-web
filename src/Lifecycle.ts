@@ -59,6 +59,8 @@ import LazyLoadingDisabledDialog from "./components/views/dialogs/LazyLoadingDis
 import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestoreErrorDialog";
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 
+import { setSentryUser } from "./sentry";
+
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
 
@@ -322,7 +324,9 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
     let accessToken;
     try {
         accessToken = await StorageManager.idbLoad("account", "mx_access_token");
-    } catch (e) {}
+    } catch (e) {
+        logger.error("StorageManager.idbLoad failed for account:mx_access_token", e);
+    }
     if (!accessToken) {
         accessToken = localStorage.getItem("mx_access_token");
         if (accessToken) {
@@ -330,7 +334,9 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
                 // try to migrate access token to IndexedDB if we can
                 await StorageManager.idbSave("account", "mx_access_token", accessToken);
                 localStorage.removeItem("mx_access_token");
-            } catch (e) {}
+            } catch (e) {
+                logger.error("migration of access token to IndexedDB failed", e);
+            }
         }
     }
     // if we pre-date storing "mx_has_access_token", but we retrieved an access
@@ -454,7 +460,7 @@ async function handleLoadSessionFailure(e: Error): Promise<boolean> {
     logger.error("Unable to load session", e);
 
     const modal = Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
-        error: e.message,
+        error: e,
     });
 
     const [success] = await modal.finished;
@@ -532,8 +538,8 @@ export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixC
  * fires on_logging_in, optionally clears localstorage, persists new credentials
  * to localstorage, starts the new client.
  *
- * @param {MatrixClientCreds} credentials
- * @param {Boolean} clearStorage
+ * @param {IMatrixClientCreds} credentials
+ * @param {Boolean} clearStorageEnabled
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
@@ -579,10 +585,13 @@ async function doSetLoggedIn(
 
     MatrixClientPeg.replaceUsingCreds(credentials);
 
-    PosthogAnalytics.instance.updateAnonymityFromSettings(credentials.userId);
+    setSentryUser(credentials.userId);
+
+    if (PosthogAnalytics.instance.isEnabled()) {
+        PosthogAnalytics.instance.startListeningToSettingsChanges();
+    }
 
     const client = MatrixClientPeg.get();
-
     if (credentials.freshLogin && SettingsStore.getValue("feature_dehydration")) {
         // If we just logged in, try to rehydrate a device instead of using a
         // new device.  If it succeeds, we'll get a new device ID, so make sure
@@ -786,7 +795,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     DMRoomMap.makeShared().start();
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
-    CallHandler.sharedInstance().start();
+    CallHandler.instance.start();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
     // the thing just wastes CPU cycles, but should result in no actual functionality
@@ -854,7 +863,9 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
 
         try {
             await StorageManager.idbDelete("account", "mx_access_token");
-        } catch (e) {}
+        } catch (e) {
+            logger.error("idbDelete failed for account:mx_access_token", e);
+        }
 
         // now restore those invites
         if (!opts?.deleteEverything) {
@@ -887,7 +898,7 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
  */
 export function stopMatrixClient(unsetClient = true): void {
     Notifier.stop();
-    CallHandler.sharedInstance().stop();
+    CallHandler.instance.stop();
     UserActivity.sharedInstance().stop();
     TypingStore.sharedInstance().reset();
     Presence.stop();
@@ -908,3 +919,17 @@ export function stopMatrixClient(unsetClient = true): void {
         }
     }
 }
+
+// Utility method to perform a login with an existing access_token
+window.mxLoginWithAccessToken = async (hsUrl: string, accessToken: string): Promise<void> => {
+    const tempClient = createClient({
+        baseUrl: hsUrl,
+        accessToken,
+    });
+    const { user_id: userId } = await tempClient.whoami();
+    await doSetLoggedIn({
+        homeserverUrl: hsUrl,
+        accessToken,
+        userId,
+    }, true);
+};

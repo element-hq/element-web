@@ -63,7 +63,6 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import * as ContextMenu from "../../structures/ContextMenu";
 import { toRightOf } from "../../structures/ContextMenu";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
-import { TransferCallPayload } from '../../../dispatcher/payloads/TransferCallPayload';
 import Field from '../elements/Field';
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
 import Dialpad from '../voip/DialPad';
@@ -71,7 +70,8 @@ import QuestionDialog from "./QuestionDialog";
 import Spinner from "../elements/Spinner";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import CallHandler from "../../../CallHandler";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -675,7 +675,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
         if (existingRoom) {
             dis.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: existingRoom.roomId,
                 should_peek: false,
                 joining: false,
@@ -804,19 +804,17 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 return;
             }
 
-            dis.dispatch({
-                action: Action.TransferCallToMatrixID,
-                call: this.props.call,
-                destination: targetIds[0],
-                consultFirst: this.state.consultFirst,
-            } as TransferCallPayload);
+            CallHandler.instance.startTransferToMatrixID(
+                this.props.call,
+                targetIds[0],
+                this.state.consultFirst,
+            );
         } else {
-            dis.dispatch({
-                action: Action.TransferCallToPhoneNumber,
-                call: this.props.call,
-                destination: this.state.dialPadValue,
-                consultFirst: this.state.consultFirst,
-            } as TransferCallPayload);
+            CallHandler.instance.startTransferToPhoneNumber(
+                this.props.call,
+                this.state.dialPadValue,
+                this.state.consultFirst,
+            );
         }
         this.props.onFinished();
     };
@@ -1410,7 +1408,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             goButtonFn = this.startDm;
             extraSection = <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
                 <span>{ _t("Some suggestions may be hidden for privacy.") }</span>
-                <p>{ _t("If you can't see who you’re looking for, send them your invite link below.") }</p>
+                <p>{ _t("If you can't see who you're looking for, send them your invite link below.") }</p>
             </div>;
             const link = makeUserPermalink(MatrixClientPeg.get().getUserId());
             footer = <div className="mx_InviteDialog_footer">

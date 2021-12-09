@@ -18,6 +18,8 @@ import '../skinned-sdk'; // Must be first for skinning to work
 import { parseEvent } from "../../src/editor/deserialize";
 import { createPartCreator } from "./mock";
 
+const FOUR_SPACES = " ".repeat(4);
+
 function htmlMessage(formattedBody, msgtype = "m.text") {
     return {
         getContent() {
@@ -197,7 +199,6 @@ describe('editor/deserialize', function() {
         it('code block with no trailing text', function() {
             const html = "<pre><code>0xDEADBEEF\n</code></pre>\n";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
-            console.log(parts);
             expect(parts.length).toBe(5);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "```" });
             expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
@@ -235,6 +236,26 @@ describe('editor/deserialize', function() {
             expect(parts[2]).toStrictEqual({ type: "plain", text: "2. Continue" });
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[4]).toStrictEqual({ type: "plain", text: "3. Finish" });
+        });
+        it('nested unordered lists', () => {
+            const html = "<ul><li>Oak<ul><li>Spruce<ul><li>Birch</li></ul></li></ul></li></ul>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(5);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "- Oak" });
+            expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}- Spruce` });
+            expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}- Birch` });
+        });
+        it('nested ordered lists', () => {
+            const html = "<ol><li>Oak<ol><li>Spruce<ol><li>Birch</li></ol></li></ol></li></ol>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(5);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "1. Oak" });
+            expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}1. Spruce` });
+            expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}1. Birch` });
         });
         it('mx-reply is stripped', function() {
             const html = "<mx-reply>foo</mx-reply>bar";

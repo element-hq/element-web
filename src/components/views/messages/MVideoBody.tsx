@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 import { decode } from "blurhash";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -27,6 +26,9 @@ import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 import MFileBody from "./MFileBody";
+
+import { logger } from "matrix-js-sdk/src/logger";
+import { ImageSize, suggestedSize as suggestedVideoSize } from "../../../settings/enums/ImageSize";
 
 interface IState {
     decryptedUrl?: string;
@@ -41,6 +43,7 @@ interface IState {
 @replaceableComponent("views.messages.MVideoBody")
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
     private videoRef = React.createRef<HTMLVideoElement>();
+    private sizeWatcher: string;
 
     constructor(props) {
         super(props);
@@ -56,25 +59,36 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         };
     }
 
-    thumbScale(fullWidth: number, fullHeight: number, thumbWidth = 480, thumbHeight = 360) {
+    private suggestedDimensions(isPortrait): { w: number, h: number } {
+        return suggestedVideoSize(SettingsStore.getValue("Images.size") as ImageSize);
+    }
+
+    private thumbScale(
+        fullWidth: number,
+        fullHeight: number,
+        thumbWidth?: number,
+        thumbHeight?: number,
+    ): number {
         if (!fullWidth || !fullHeight) {
             // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
             // log this because it's spammy
             return undefined;
         }
+
+        if (!thumbWidth || !thumbHeight) {
+            const dims = this.suggestedDimensions(fullWidth < fullHeight);
+            thumbWidth = dims.w;
+            thumbHeight = dims.h;
+        }
+
         if (fullWidth < thumbWidth && fullHeight < thumbHeight) {
             // no scaling needs to be applied
             return 1;
         }
+
+        // always scale the videos based on their width.
         const widthMulti = thumbWidth / fullWidth;
-        const heightMulti = thumbHeight / fullHeight;
-        if (widthMulti < heightMulti) {
-            // width is the dominant dimension so scaling will be fixed on that
-            return widthMulti;
-        } else {
-            // height is the dominant dimension so scaling will be fixed on that
-            return heightMulti;
-        }
+        return widthMulti;
     }
 
     private getContentUrl(): string|null {
@@ -151,12 +165,16 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         }
     }
 
-    async componentDidMount() {
-        const autoplay = SettingsStore.getValue("autoplayVideo") as boolean;
+    public async componentDidMount() {
+        this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
+            this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
+        });
+
         this.loadBlurhash();
 
         if (this.props.mediaEventHelper.media.isEncrypted && this.state.decryptedUrl === null) {
             try {
+                const autoplay = SettingsStore.getValue("autoplayVideo") as boolean;
                 const thumbnailUrl = await this.props.mediaEventHelper.thumbnailUrl.value;
                 if (autoplay) {
                     logger.log("Preloading video");
@@ -186,6 +204,10 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                 });
             }
         }
+    }
+
+    public componentWillUnmount() {
+        SettingsStore.unwatchSetting(this.sizeWatcher);
     }
 
     private videoOnPlay = async () => {
@@ -248,8 +270,9 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
         const contentUrl = this.getContentUrl();
         const thumbUrl = this.getThumbUrl();
-        let height = null;
-        let width = null;
+        const defaultDims = this.suggestedDimensions(false);
+        let height = defaultDims.h;
+        let width = defaultDims.w;
         let poster = null;
         let preload = "metadata";
         if (content.info) {

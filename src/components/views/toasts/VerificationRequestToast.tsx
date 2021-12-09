@@ -111,7 +111,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         try {
             if (request.channel.roomId) {
                 dis.dispatch({
-                    action: 'view_room',
+                    action: Action.ViewRoom,
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });

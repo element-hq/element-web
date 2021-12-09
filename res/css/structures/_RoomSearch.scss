@@ -18,7 +18,7 @@ limitations under the License.
 .mx_RoomSearch {
     flex: 1;
     border-radius: 8px;
-    background-color: $roomlist-button-bg-color;
+    background-color: $panel-actions;
     // keep border thickness consistent to prevent movement
     border: 1px solid transparent;
     height: 28px;
@@ -67,12 +67,22 @@ limitations under the License.
         .mx_RoomSearch_clearButton {
             width: 16px;
             height: 16px;
-            mask-image: url('$(res)/img/element-icons/roomlist/search-clear.svg');
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background-color: $secondary-content;
             margin-right: 8px;
+            background-color: $quinary-content;
+            border-radius: 50%;
+            position: relative;
+
+            &::before {
+                content: "";
+                position: absolute;
+                width: inherit;
+                height: inherit;
+                mask-image: url('$(res)/img/feather-customised/x.svg');
+                mask-position: center;
+                mask-size: 12px;
+                mask-repeat: no-repeat;
+                background-color: $secondary-content;
+            }
         }
     }
 
@@ -82,13 +92,20 @@ limitations under the License.
     }
 
     &.mx_RoomSearch_minimized {
-        border-radius: 32px;
         height: auto;
         width: auto;
-        padding: 8px;
+        padding: 5px;
 
         .mx_RoomSearch_icon {
             margin-left: 0;
+        }
+
+        &:hover {
+            background-color: $tertiary-content;
+
+            .mx_RoomSearch_icon {
+                background-color: $background;
+            }
         }
     }
 }

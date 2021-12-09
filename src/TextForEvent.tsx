@@ -495,7 +495,7 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
 
 const onPinnedOrUnpinnedMessageClick = (messageId: string, roomId: string): void => {
     defaultDispatcher.dispatch({
-        action: 'view_room',
+        action: Action.ViewRoom,
         event_id: messageId,
         highlighted: true,
         room_id: roomId,
@@ -623,7 +623,7 @@ function textForWidgetEvent(event: MatrixEvent): () => string | null {
 
 function textForWidgetLayoutEvent(event: MatrixEvent): () => string | null {
     const senderName = event.sender?.name || event.getSender();
-    return () => _t("%(senderName)s has updated the widget layout", { senderName });
+    return () => _t("%(senderName)s has updated the room layout", { senderName });
 }
 
 function textForMjolnirEvent(event: MatrixEvent): () => string | null {

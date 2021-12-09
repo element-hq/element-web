@@ -18,16 +18,22 @@ limitations under the License.
 $MiniAppTileHeight: 200px;
 
 .mx_AppsDrawer {
-    margin: 5px 5px 5px 18px;
+    margin: $container-gap-width;
+    margin-right: calc($container-gap-width / 2); // The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser.
+    margin-bottom: 0; // No bottom margin for the correct gap to the CallView below.
     position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    flex-grow: 1;
+
+    &.mx_AppsDrawer_maximise {
+        margin-bottom: $container-gap-width;
+    }
 
     .mx_AppsContainer_resizerHandleContainer {
         width: 100%;
         height: 10px;
-        margin-top: -3px; // move it up so the interactions are slightly more comfortable
         display: block;
         position: relative;
     }
@@ -41,7 +47,7 @@ $MiniAppTileHeight: 200px;
 
         // This is positioned directly below frame
         position: absolute;
-        bottom: 0 !important; // override from library
+        bottom: 50% !important; // override from library
 
         // We then render the pill handle in an ::after to keep it in the handle's
         // area without being a massive line across the screen
@@ -50,8 +56,7 @@ $MiniAppTileHeight: 200px;
             position: absolute;
             border-radius: 3px;
 
-            // The combination of these two should make the pill 4px high
-            top: 6px;
+            height: 4px;
             bottom: 0;
 
             // Together, these make the bar 64px wide
@@ -86,7 +91,7 @@ $MiniAppTileHeight: 200px;
 }
 
 .mx_AppsContainer_resizer {
-    margin-bottom: 8px;
+    margin-bottom: $container-gap-width;
 }
 
 .mx_AppsContainer {
@@ -100,11 +105,11 @@ $MiniAppTileHeight: 200px;
     min-height: 0;
 
     .mx_AppTile:first-of-type {
-        border-left-width: 8px;
+        border-left-width: $container-border-width;
         border-radius: 10px 0 0 10px;
     }
     .mx_AppTile:last-of-type {
-        border-right-width: 8px;
+        border-right-width: $container-border-width;
         border-radius: 0 10px 10px 0;
     }
 
@@ -142,7 +147,7 @@ $MinWidth: 240px;
 .mx_AppTile {
     width: 50%;
     min-width: $MinWidth;
-    border: 8px solid $widget-menu-bar-bg-color;
+    border: $container-border-width solid $widget-menu-bar-bg-color;
     border-left-width: 5px;
     border-right-width: 5px;
     display: flex;
@@ -155,7 +160,7 @@ $MinWidth: 240px;
     width: 100% !important; // to override the inline style set by the resizer
     margin: 0;
     padding: 0;
-    border: 5px solid $widget-menu-bar-bg-color;
+    border: $container-border-width solid $widget-menu-bar-bg-color;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -224,15 +229,25 @@ $MinWidth: 240px;
     mask-position: 0 center;
     mask-size: auto 12px;
     background-color: $topleftmenu-color;
-    margin: 0 3px;
-}
+    margin: 0 5px;
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_popout {
-    mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
-}
+    &.mx_AppTileMenuBar_iconButton_minWidget {
+        mask-size: auto 10px;
+        mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
+    }
 
-.mx_AppTileMenuBar_iconButton.mx_AppTileMenuBar_iconButton_menu {
-    mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
+    &.mx_AppTileMenuBar_iconButton_maxWidget {
+        mask-size: auto 10px;
+        mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+    }
+
+    &.mx_AppTileMenuBar_iconButton_popout {
+        mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
+    }
+
+    &.mx_AppTileMenuBar_iconButton_menu {
+        mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
+    }
 }
 
 .mx_AppTileBody {
@@ -310,7 +325,7 @@ $MinWidth: 240px;
 
 .mx_AppPermissionWarning_helpIcon::before {
     display: inline-block;
-    background-color: $accent-color;
+    background-color: $accent;
     mask-repeat: no-repeat;
     mask-size: 12px;
     width: 12px;

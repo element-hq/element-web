@@ -14,23 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, ReactComponentElement } from "react";
-import { Dispatcher } from "flux";
+import React, { ComponentType, createRef, ReactComponentElement, RefObject } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import * as fbEmitter from "fbemitter";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { _t, _td } from "../../../languageHandler";
-import { RovingTabIndexProvider, IState as IRovingTabIndexState } from "../../../accessibility/RovingTabIndex";
+import { IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, isCustomTag, TagID } from "../../../stores/room-list/models";
-import dis from "../../../dispatcher/dispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import RoomSublist from "./RoomSublist";
+import RoomSublist, { IAuxButtonProps } from "./RoomSublist";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import GroupAvatar from "../avatars/GroupAvatar";
@@ -42,16 +39,29 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import CustomRoomTagStore from "../../../stores/CustomRoomTagStore";
 import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
 import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
-import { IconizedContextMenuOption, IconizedContextMenuOptionList } from "../context_menus/IconizedContextMenu";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
 import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
-import SpaceStore, { ISuggestedRoom, SUGGESTED_ROOMS } from "../../../stores/SpaceStore";
-import { showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import {
+    ISuggestedRoom,
+    MetaSpace,
+    SpaceKey,
+    UPDATE_SUGGESTED_ROOMS,
+    UPDATE_SELECTED_SPACE,
+} from "../../../stores/spaces";
+import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -61,7 +71,7 @@ interface IProps {
     onListCollapse?: (isExpanded: boolean) => void;
     resizeNotifier: ResizeNotifier;
     isMinimized: boolean;
-    activeSpace: Room;
+    activeSpace: SpaceKey;
 }
 
 interface IState {
@@ -93,9 +103,7 @@ const ALWAYS_VISIBLE_TAGS: TagID[] = [
 interface ITagAesthetics {
     sectionLabel: string;
     sectionLabelRaw?: string;
-    addRoomLabel?: string;
-    onAddRoom?: (dispatcher?: Dispatcher<ActionPayload>) => void;
-    addRoomContextMenu?: (onFinished: () => void) => React.ReactNode;
+    AuxButtonComponent?: ComponentType<IAuxButtonProps>;
     isInvite: boolean;
     defaultHidden: boolean;
 }
@@ -104,6 +112,194 @@ interface ITagAestheticsMap {
     // @ts-ignore - TS wants this to be a string but we know better
     [tagId: TagID]: ITagAesthetics;
 }
+
+const auxButtonContextMenuPosition = (handle: RefObject<HTMLDivElement>) => {
+    const rect = handle.current.getBoundingClientRect();
+    return {
+        chevronFace: ChevronFace.None,
+        left: rect.left - 7,
+        top: rect.top + rect.height,
+    };
+};
+
+const DmAuxButton = ({ tabIndex, dispatcher = defaultDispatcher }: IAuxButtonProps) => {
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+    const activeSpace = useEventEmitterState<Room>(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
+        return SpaceStore.instance.activeSpaceRoom;
+    });
+
+    const showCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
+    const showInviteUsers = shouldShowComponent(UIComponent.InviteUsers);
+
+    if (activeSpace && (showCreateRooms || showInviteUsers)) {
+        let contextMenu: JSX.Element;
+        if (menuDisplayed) {
+            const canInvite = shouldShowSpaceInvite(activeSpace);
+
+            contextMenu = <IconizedContextMenu {...auxButtonContextMenuPosition(handle)} onFinished={closeMenu} compact>
+                <IconizedContextMenuOptionList first>
+                    { showCreateRooms && <IconizedContextMenuOption
+                        label={_t("Start new chat")}
+                        iconClassName="mx_RoomList_iconStartChat"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMenu();
+                            defaultDispatcher.dispatch({ action: "view_create_chat" });
+                        }}
+                    /> }
+                    { showInviteUsers && <IconizedContextMenuOption
+                        label={_t("Invite to space")}
+                        iconClassName="mx_RoomList_iconInvite"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMenu();
+                            showSpaceInvite(activeSpace);
+                        }}
+                        disabled={!canInvite}
+                        tooltip={canInvite ? undefined
+                            : _t("You do not have permissions to invite people to this space")}
+                    /> }
+                </IconizedContextMenuOptionList>
+            </IconizedContextMenu>;
+        }
+
+        return <>
+            <ContextMenuTooltipButton
+                tabIndex={tabIndex}
+                onClick={openMenu}
+                className="mx_RoomSublist_auxButton"
+                tooltipClassName="mx_RoomSublist_addRoomTooltip"
+                aria-label={_t("Add people")}
+                title={_t("Add people")}
+                isExpanded={menuDisplayed}
+                inputRef={handle}
+            />
+
+            { contextMenu }
+        </>;
+    } else if (!activeSpace && showCreateRooms) {
+        return <AccessibleTooltipButton
+            tabIndex={tabIndex}
+            onClick={() => dispatcher.dispatch({ action: 'view_create_chat' })}
+            className="mx_RoomSublist_auxButton"
+            tooltipClassName="mx_RoomSublist_addRoomTooltip"
+            aria-label={_t("Start chat")}
+            title={_t("Start chat")}
+        />;
+    }
+};
+
+const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
+    const activeSpace = useEventEmitterState<Room>(SpaceStore.instance, UPDATE_SELECTED_SPACE, () => {
+        return SpaceStore.instance.activeSpaceRoom;
+    });
+
+    const showCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
+
+    let contextMenuContent: JSX.Element;
+    if (menuDisplayed && activeSpace) {
+        const canAddRooms = activeSpace.currentState.maySendStateEvent(EventType.SpaceChild,
+            MatrixClientPeg.get().getUserId());
+
+        contextMenuContent = <IconizedContextMenuOptionList first>
+            <IconizedContextMenuOption
+                label={_t("Explore rooms")}
+                iconClassName="mx_RoomList_iconExplore"
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                    defaultDispatcher.dispatch({
+                        action: "view_room",
+                        room_id: activeSpace.roomId,
+                    });
+                }}
+            />
+            {
+                showCreateRoom
+                    ? (<>
+                        <IconizedContextMenuOption
+                            label={_t("Create new room")}
+                            iconClassName="mx_RoomList_iconCreateNewRoom"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                closeMenu();
+                                showCreateNewRoom(activeSpace);
+                            }}
+                            disabled={!canAddRooms}
+                            tooltip={canAddRooms ? undefined
+                                : _t("You do not have permissions to create new rooms in this space")}
+                        />
+                        <IconizedContextMenuOption
+                            label={_t("Add existing room")}
+                            iconClassName="mx_RoomList_iconAddExistingRoom"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                closeMenu();
+                                showAddExistingRooms(activeSpace);
+                            }}
+                            disabled={!canAddRooms}
+                            tooltip={canAddRooms ? undefined
+                                : _t("You do not have permissions to add rooms to this space")}
+                        />
+                    </>)
+                    : null
+            }
+        </IconizedContextMenuOptionList>;
+    } else if (menuDisplayed) {
+        contextMenuContent = <IconizedContextMenuOptionList first>
+            { showCreateRoom && <IconizedContextMenuOption
+                label={_t("Create new room")}
+                iconClassName="mx_RoomList_iconCreateNewRoom"
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                    defaultDispatcher.dispatch({ action: "view_create_room" });
+                }}
+            /> }
+            <IconizedContextMenuOption
+                label={CommunityPrototypeStore.instance.getSelectedCommunityId()
+                    ? _t("Explore community rooms")
+                    : _t("Explore public rooms")}
+                iconClassName="mx_RoomList_iconExplore"
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeMenu();
+                    defaultDispatcher.fire(Action.ViewRoomDirectory);
+                }}
+            />
+        </IconizedContextMenuOptionList>;
+    }
+
+    let contextMenu: JSX.Element;
+    if (menuDisplayed) {
+        contextMenu = <IconizedContextMenu {...auxButtonContextMenuPosition(handle)} onFinished={closeMenu} compact>
+            { contextMenuContent }
+        </IconizedContextMenu>;
+    }
+
+    return <>
+        <ContextMenuTooltipButton
+            tabIndex={tabIndex}
+            onClick={openMenu}
+            className="mx_RoomSublist_auxButton"
+            tooltipClassName="mx_RoomSublist_addRoomTooltip"
+            aria-label={_td("Add room")}
+            title={_td("Add room")}
+            isExpanded={menuDisplayed}
+            inputRef={handle}
+        />
+
+        { contextMenu }
+    </>;
+};
 
 const TAG_AESTHETICS: ITagAestheticsMap = {
     [DefaultTagID.Invite]: {
@@ -120,92 +316,13 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
         sectionLabel: _td("People"),
         isInvite: false,
         defaultHidden: false,
-        addRoomLabel: _td("Start chat"),
-        onAddRoom: (dispatcher?: Dispatcher<ActionPayload>) => {
-            (dispatcher || defaultDispatcher).dispatch({ action: 'view_create_chat' });
-        },
+        AuxButtonComponent: DmAuxButton,
     },
     [DefaultTagID.Untagged]: {
         sectionLabel: _td("Rooms"),
         isInvite: false,
         defaultHidden: false,
-        addRoomLabel: _td("Add room"),
-        addRoomContextMenu: (onFinished: () => void) => {
-            if (SpaceStore.instance.activeSpace) {
-                const canAddRooms = SpaceStore.instance.activeSpace.currentState.maySendStateEvent(EventType.SpaceChild,
-                    MatrixClientPeg.get().getUserId());
-
-                return <IconizedContextMenuOptionList first>
-                    {
-                        shouldShowComponent(UIComponent.CreateRooms)
-                            ? (<>
-                                <IconizedContextMenuOption
-                                    label={_t("Create new room")}
-                                    iconClassName="mx_RoomList_iconPlus"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        onFinished();
-                                        showCreateNewRoom(SpaceStore.instance.activeSpace);
-                                    }}
-                                    disabled={!canAddRooms}
-                                    tooltip={canAddRooms ? undefined
-                                        : _t("You do not have permissions to create new rooms in this space")}
-                                />
-                                <IconizedContextMenuOption
-                                    label={_t("Add existing room")}
-                                    iconClassName="mx_RoomList_iconHash"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        onFinished();
-                                        showAddExistingRooms(SpaceStore.instance.activeSpace);
-                                    }}
-                                    disabled={!canAddRooms}
-                                    tooltip={canAddRooms ? undefined
-                                        : _t("You do not have permissions to add rooms to this space")}
-                                />
-                            </>)
-                            : null
-                    }
-                    <IconizedContextMenuOption
-                        label={_t("Explore rooms")}
-                        iconClassName="mx_RoomList_iconBrowse"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onFinished();
-                            defaultDispatcher.fire(Action.ViewRoomDirectory);
-                        }}
-                    />
-                </IconizedContextMenuOptionList>;
-            }
-
-            return <IconizedContextMenuOptionList first>
-                <IconizedContextMenuOption
-                    label={_t("Create new room")}
-                    iconClassName="mx_RoomList_iconPlus"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onFinished();
-                        defaultDispatcher.dispatch({ action: "view_create_room" });
-                    }}
-                />
-                <IconizedContextMenuOption
-                    label={CommunityPrototypeStore.instance.getSelectedCommunityId()
-                        ? _t("Explore community rooms")
-                        : _t("Explore public rooms")}
-                    iconClassName="mx_RoomList_iconExplore"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onFinished();
-                        defaultDispatcher.fire(Action.ViewRoomDirectory);
-                    }}
-                />
-            </IconizedContextMenuOptionList>;
-        },
+        AuxButtonComponent: UntaggedAuxButton,
     },
     [DefaultTagID.LowPriority]: {
         sectionLabel: _td("Low priority"),
@@ -251,6 +368,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     private roomStoreToken: fbEmitter.EventSubscription;
     private treeRef = createRef<HTMLDivElement>();
 
+    static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
     constructor(props: IProps) {
         super(props);
 
@@ -264,14 +384,14 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
-        SpaceStore.instance.on(SUGGESTED_ROOMS, this.updateSuggestedRooms);
+        SpaceStore.instance.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
         this.customTagStoreRef = CustomRoomTagStore.addListener(this.updateLists);
         this.updateLists(); // trigger the first update
     }
 
     public componentWillUnmount() {
-        SpaceStore.instance.off(SUGGESTED_ROOMS, this.updateSuggestedRooms);
+        SpaceStore.instance.off(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         defaultDispatcher.unregister(this.dispatcherRef);
         if (this.customTagStoreRef) this.customTagStoreRef.remove();
@@ -290,8 +410,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const currentRoomId = RoomViewStore.getRoomId();
             const room = this.getRoomDelta(currentRoomId, viewRoomDeltaPayload.delta, viewRoomDeltaPayload.unread);
             if (room) {
-                dis.dispatch({
-                    action: 'view_room',
+                defaultDispatcher.dispatch({
+                    action: Action.ViewRoom,
                     room_id: room.roomId,
                     show_room_tile: true, // to make sure the room gets scrolled into view
                 });
@@ -369,17 +489,19 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private onStartChat = () => {
         const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
-        dis.dispatch({ action: "view_create_chat", initialText });
+        defaultDispatcher.dispatch({ action: "view_create_chat", initialText });
     };
 
     private onExplore = () => {
-        const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
-        dis.dispatch({ action: Action.ViewRoomDirectory, initialText });
-    };
-
-    private onSpaceInviteClick = () => {
-        const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
-        showSpaceInvite(this.props.activeSpace, initialText);
+        if (this.props.activeSpace[0] === "!") {
+            defaultDispatcher.dispatch({
+                action: "view_room",
+                room_id: SpaceStore.instance.activeSpace,
+            });
+        } else {
+            const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
+            defaultDispatcher.dispatch({ action: Action.ViewRoomDirectory, initialText });
+        }
     };
 
     private renderSuggestedRooms(): ReactComponentElement<typeof ExtraTile>[] {
@@ -485,6 +607,23 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     : TAG_AESTHETICS[orderedTagId];
                 if (!aesthetics) throw new Error(`Tag ${orderedTagId} does not have aesthetics`);
 
+                let alwaysVisible = ALWAYS_VISIBLE_TAGS.includes(orderedTagId);
+                if (
+                    (this.props.activeSpace === MetaSpace.Favourites && orderedTagId !== DefaultTagID.Favourite) ||
+                    (this.props.activeSpace === MetaSpace.People && orderedTagId !== DefaultTagID.DM) ||
+                    (this.props.activeSpace === MetaSpace.Orphans && orderedTagId === DefaultTagID.DM)
+                ) {
+                    alwaysVisible = false;
+                }
+
+                let forceExpanded = false;
+                if (
+                    (this.props.activeSpace === MetaSpace.Favourites && orderedTagId === DefaultTagID.Favourite) ||
+                    (this.props.activeSpace === MetaSpace.People && orderedTagId === DefaultTagID.DM)
+                ) {
+                    forceExpanded = true;
+                }
+
                 // The cost of mounting/unmounting this component offsets the cost
                 // of keeping it in the DOM and hiding it when it is not required
                 return <RoomSublist
@@ -493,15 +632,14 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     forRooms={true}
                     startAsHidden={aesthetics.defaultHidden}
                     label={aesthetics.sectionLabelRaw ? aesthetics.sectionLabelRaw : _t(aesthetics.sectionLabel)}
-                    onAddRoom={aesthetics.onAddRoom}
-                    addRoomLabel={aesthetics.addRoomLabel ? _t(aesthetics.addRoomLabel) : aesthetics.addRoomLabel}
-                    addRoomContextMenu={aesthetics.addRoomContextMenu}
+                    AuxButtonComponent={aesthetics.AuxButtonComponent}
                     isMinimized={this.props.isMinimized}
                     showSkeleton={showSkeleton}
                     extraTiles={extraTiles}
                     resizeNotifier={this.props.resizeNotifier}
-                    alwaysVisible={ALWAYS_VISIBLE_TAGS.includes(orderedTagId)}
+                    alwaysVisible={alwaysVisible}
                     onListCollapse={this.props.onListCollapse}
+                    forceExpanded={forceExpanded}
                 />;
             });
     }
@@ -513,14 +651,11 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
-        const cli = MatrixClientPeg.get();
-        const userId = cli.getUserId();
-
         let explorePrompt: JSX.Element;
         if (!this.props.isMinimized) {
             if (this.state.isNameFiltering) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">
-                    <div>{ _t("Can't see what you’re looking for?") }</div>
+                    <div>{ _t("Can't see what you're looking for?") }</div>
                     <AccessibleButton
                         className="mx_RoomList_explorePrompt_startChat"
                         kind="link"
@@ -533,59 +668,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         kind="link"
                         onClick={this.onExplore}
                     >
-                        { this.props.activeSpace ? _t("Explore rooms") : _t("Explore all public rooms") }
+                        { this.props.activeSpace[0] === "!" ? _t("Explore rooms") : _t("Explore all public rooms") }
                     </AccessibleButton>
                 </div>;
-            } else if (
-                this.props.activeSpace?.canInvite(userId) ||
-                this.props.activeSpace?.getMyMembership() === "join" ||
-                this.props.activeSpace?.getJoinRule() === JoinRule.Public
-            ) {
-                const spaceName = this.props.activeSpace.name;
-                const canInvite = this.props.activeSpace?.canInvite(userId) ||
-                    this.props.activeSpace?.getJoinRule() === JoinRule.Public;
-                explorePrompt = <div className="mx_RoomList_explorePrompt">
-                    <div>{ _t("Quick actions") }</div>
-                    { canInvite && <AccessibleTooltipButton
-                        className="mx_RoomList_explorePrompt_spaceInvite"
-                        onClick={this.onSpaceInviteClick}
-                        title={_t("Invite to %(spaceName)s", { spaceName })}
-                    >
-                        { _t("Invite people") }
-                    </AccessibleTooltipButton> }
-                    { this.props.activeSpace?.getMyMembership() === "join" && <AccessibleTooltipButton
-                        className="mx_RoomList_explorePrompt_spaceExplore"
-                        onClick={this.onExplore}
-                        title={_t("Explore %(spaceName)s", { spaceName })}
-                    >
-                        { _t("Explore rooms") }
-                    </AccessibleTooltipButton> }
-                </div>;
-            } else if (Object.values(this.state.sublists).some(list => list.length > 0)) {
-                const unfilteredLists = RoomListStore.instance.unfilteredLists;
-                const unfilteredRooms = unfilteredLists[DefaultTagID.Untagged] || [];
-                const unfilteredHistorical = unfilteredLists[DefaultTagID.Archived] || [];
-                const unfilteredFavourite = unfilteredLists[DefaultTagID.Favourite] || [];
-                // show a prompt to join/create rooms if the user is in 0 rooms and no historical
-                if (unfilteredRooms.length < 1 && unfilteredHistorical.length < 1 && unfilteredFavourite.length < 1) {
-                    explorePrompt = <div className="mx_RoomList_explorePrompt">
-                        <div>{ _t("Use the + to make a new room or explore existing ones below") }</div>
-                        <AccessibleButton
-                            className="mx_RoomList_explorePrompt_startChat"
-                            kind="link"
-                            onClick={this.onStartChat}
-                        >
-                            { _t("Start a new chat") }
-                        </AccessibleButton>
-                        <AccessibleButton
-                            className="mx_RoomList_explorePrompt_explore"
-                            kind="link"
-                            onClick={this.onExplore}
-                        >
-                            { _t("Explore all public rooms") }
-                        </AccessibleButton>
-                    </div>;
-                }
             }
         }
 

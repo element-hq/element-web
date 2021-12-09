@@ -35,7 +35,7 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import SpecPermalinkConstructor from "../../../../src/utils/permalinks/SpecPermalinkConstructor";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import DocumentOffset from '../../../../src/editor/offset';
-import { Layout } from '../../../../src/settings/Layout';
+import { Layout } from '../../../../src/settings/enums/Layout';
 
 jest.mock("../../../../src/stores/RoomViewStore");
 

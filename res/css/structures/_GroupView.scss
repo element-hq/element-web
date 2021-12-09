@@ -56,7 +56,7 @@ limitations under the License.
         position: absolute;
         height: 20px;
         width: 20px;
-        background-color: $groupheader-button-color;
+        background-color: $header-panel-text-primary-color;
         mask-repeat: no-repeat;
         mask-size: contain;
     }
@@ -81,13 +81,13 @@ limitations under the License.
 }
 
 .mx_GroupView_editable:focus {
-    border-bottom: 1px solid $accent-color !important;
+    border-bottom: 1px solid $accent !important;
     outline: none;
     box-shadow: none;
 }
 
 .mx_GroupView_header_isUserMember .mx_GroupView_header_name:hover div:not(.mx_GroupView_editable) {
-    color: $accent-color;
+    color: $accent;
     cursor: pointer;
 }
 
@@ -229,7 +229,7 @@ limitations under the License.
     vertical-align: top;
     line-height: $font-24px;
     padding-left: 28px;
-    color: $accent-color;
+    color: $accent;
 }
 
 .mx_GroupView_rooms .mx_RoomDetailList {
@@ -244,7 +244,7 @@ limitations under the License.
 }
 
 .mx_GroupView_membershipSection {
-    color: $greyed-fg-color;
+    color: $info-plinth-fg-color;
     margin-top: 10px;
 }
 

@@ -215,7 +215,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         if (this.state.keyBackupNeeded) {
             introText = _t(
                 "Regain access to your account and recover encryption keys stored in this session. " +
-                "Without them, you won’t be able to read all of your secure messages in any session.");
+                "Without them, you won't be able to read all of your secure messages in any session.");
         }
 
         if (this.state.loginView === LOGIN_VIEW.PASSWORD) {

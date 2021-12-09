@@ -49,14 +49,14 @@ limitations under the License.
         }
 
         // Override StyledRadioButton default styles
-        .mx_RadioButton {
+        .mx_StyledRadioButton {
             justify-content: center;
 
-            .mx_RadioButton_content {
+            .mx_StyledRadioButton_content {
                 display: none;
             }
 
-            .mx_RadioButton_spacer {
+            .mx_StyledRadioButton_spacer {
                 display: none;
             }
         }

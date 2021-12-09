@@ -39,7 +39,7 @@ const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
 interface IProps extends IDialogProps {
-    verifier: VerificationBase; // TODO types
+    verifier: VerificationBase;
 }
 
 interface IState {

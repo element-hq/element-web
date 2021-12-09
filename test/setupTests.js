@@ -16,3 +16,5 @@ global.TextDecoder = TextDecoder;
 
 configure({ adapter: new Adapter() });
 
+// maplibre requires a createObjectURL mock
+global.URL.createObjectURL = jest.fn();

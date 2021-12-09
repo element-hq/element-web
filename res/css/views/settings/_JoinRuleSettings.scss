@@ -17,9 +17,9 @@ limitations under the License.
 .mx_JoinRuleSettings_upgradeRequired {
     margin-left: 16px;
     padding: 4px 16px;
-    border: 1px solid $accent-color;
+    border: 1px solid $accent;
     border-radius: 8px;
-    color: $accent-color;
+    color: $accent;
     font-size: $font-12px;
     line-height: $font-15px;
 }
@@ -59,7 +59,7 @@ limitations under the License.
     padding-top: 16px;
     margin-bottom: 8px;
 
-    .mx_RadioButton_content {
+    .mx_StyledRadioButton_content {
         margin-left: 14px;
         font-weight: $font-semi-bold;
         font-size: $font-15px;
@@ -76,7 +76,7 @@ limitations under the License.
         line-height: $font-24px;
         color: $secondary-content;
 
-        & + .mx_RadioButton {
+        & + .mx_StyledRadioButton {
             border-top: 1px solid $menu-border-color;
         }
     }

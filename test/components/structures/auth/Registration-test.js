@@ -14,13 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import sdk from '../../../skinned-sdk';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
+import { createClient } from 'matrix-js-sdk/src/matrix';
 
-import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
-import { mkServerConfig } from "../../../test-utils";
+import { createTestClient, mkServerConfig } from "../../../test-utils";
+
+jest.mock('matrix-js-sdk/src/matrix');
+jest.useFakeTimers();
 
 const Registration = sdk.getComponent(
     'structures.auth.Registration',
@@ -32,6 +37,7 @@ describe('Registration', function() {
     beforeEach(function() {
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
+        createClient.mockImplementation(() => createTestClient());
     });
 
     afterEach(function() {
@@ -49,13 +55,13 @@ describe('Registration', function() {
         />, parentDiv);
     }
 
-    it('should show server picker', function() {
+    it('should show server picker', async function() {
         const root = render();
         const selector = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_ServerPicker");
         expect(selector).toBeTruthy();
     });
 
-    it('should show form when custom URLs disabled', function() {
+    it('should show form when custom URLs disabled', async function() {
         jest.spyOn(SdkConfig, "get").mockReturnValue({
             disable_custom_urls: true,
         });
@@ -78,7 +84,7 @@ describe('Registration', function() {
         expect(form).toBeTruthy();
     });
 
-    it("should show SSO options if those are available", () => {
+    it("should show SSO options if those are available", async () => {
         jest.spyOn(SdkConfig, "get").mockReturnValue({
             disable_custom_urls: true,
         });

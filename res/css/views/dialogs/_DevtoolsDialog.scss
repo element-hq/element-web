@@ -215,7 +215,7 @@ limitations under the License.
 
         th {
             // Colour choice: first one autocomplete gave me.
-            border-bottom: 1px solid $accent-color;
+            border-bottom: 1px solid $accent;
             text-align: left;
         }
 
@@ -233,16 +233,16 @@ limitations under the License.
 
         tr:hover {
             // Colour choice: first one autocomplete gave me.
-            background-color: $accent-color-50pct;
+            background-color: $accent;
         }
     }
 
     .mx_DevTools_SettingsExplorer_mutable {
-        background-color: $accent-color;
+        background-color: $accent;
     }
 
     .mx_DevTools_SettingsExplorer_immutable {
-        background-color: $warning-color;
+        background-color: $alert;
     }
 
     .mx_DevTools_SettingsExplorer_edit {
@@ -251,7 +251,7 @@ limitations under the License.
     }
 
     .mx_DevTools_SettingsExplorer_warning {
-        border: 2px solid $warning-color;
+        border: 2px solid $alert;
         border-radius: 4px;
         padding: 4px;
         margin-bottom: 8px;

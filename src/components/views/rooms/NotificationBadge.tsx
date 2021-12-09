@@ -21,7 +21,7 @@ import { formatCount } from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
-import { NOTIFICATION_STATE_UPDATE, NotificationState } from "../../../stores/notifications/NotificationState";
+import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
 import { _t } from "../../../languageHandler";
@@ -61,7 +61,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     constructor(props: IProps) {
         super(props);
-        this.props.notification.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
 
         this.state = {
             showCounts: SettingsStore.getValue("Notifications.alwaysShowBadgeCounts", this.roomId),
@@ -81,15 +81,15 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
     public componentWillUnmount() {
         SettingsStore.unwatchSetting(this.countWatcherRef);
-        this.props.notification.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.props.notification.off(NotificationStateEvents.Update, this.onNotificationUpdate);
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>) {
         if (prevProps.notification) {
-            prevProps.notification.off(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+            prevProps.notification.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         }
 
-        this.props.notification.on(NOTIFICATION_STATE_UPDATE, this.onNotificationUpdate);
+        this.props.notification.on(NotificationStateEvents.Update, this.onNotificationUpdate);
     }
 
     private countPreferenceChanged = () => {

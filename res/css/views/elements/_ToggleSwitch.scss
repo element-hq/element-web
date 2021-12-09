@@ -32,7 +32,7 @@ limitations under the License.
 }
 
 .mx_ToggleSwitch.mx_ToggleSwitch_on {
-    background-color: $togglesw-on-color;
+    background-color: $accent;
 
     > .mx_ToggleSwitch_ball {
         left: calc(100% - $font-20px);

@@ -23,6 +23,7 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import Autocompleter, { ICompletion, ISelectionRange, IProviderCompletions } from '../../../autocomplete/Autocompleter';
 import SettingsStore from "../../../settings/SettingsStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import RoomContext from '../../../contexts/RoomContext';
 
 const MAX_PROVIDER_MATCHES = 20;
 
@@ -56,10 +57,10 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     debounceCompletionsRequest: number;
     private containerRef = createRef<HTMLDivElement>();
 
+    public static contextType = RoomContext;
+
     constructor(props) {
         super(props);
-
-        this.autocompleter = new Autocompleter(props.room);
 
         this.state = {
             // list of completionResults, each containing completions
@@ -81,6 +82,7 @@ export default class Autocomplete extends React.PureComponent<IProps, IState> {
     }
 
     componentDidMount() {
+        this.autocompleter = new Autocompleter(this.props.room, this.context.timelineRenderingType);
         this.applyNewProps();
     }
 

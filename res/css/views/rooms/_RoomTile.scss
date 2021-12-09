@@ -189,8 +189,40 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/roomlist/low-priority.svg');
     }
 
+    .mx_RoomTile_iconNotificationsDefault::before {
+        mask-image: url('$(res)/img/element-icons/notifications.svg');
+    }
+
+    .mx_RoomTile_iconNotificationsAllMessages::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/notifications-default.svg');
+    }
+
+    .mx_RoomTile_iconNotificationsMentionsKeywords::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/notifications-dm.svg');
+    }
+
+    .mx_RoomTile_iconNotificationsNone::before {
+        mask-image: url('$(res)/img/element-icons/roomlist/notifications-off.svg');
+    }
+
+    .mx_RoomTile_iconPeople::before {
+        mask-image: url('$(res)/img/element-icons/room/members.svg');
+    }
+
+    .mx_RoomTile_iconFiles::before {
+        mask-image: url('$(res)/img/element-icons/room/files.svg');
+    }
+
+    .mx_RoomTile_iconWidgets::before {
+        mask-image: url('$(res)/img/element-icons/room/apps.svg');
+    }
+
     .mx_RoomTile_iconSettings::before {
         mask-image: url('$(res)/img/element-icons/settings.svg');
+    }
+
+    .mx_RoomTile_iconExport::before {
+        mask-image: url('$(res)/img/element-icons/export.svg');
     }
 
     .mx_RoomTile_iconCopyLink::before {

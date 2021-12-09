@@ -14,8 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AutocompleteAction, IKeyBindingsProvider, KeyBinding, MessageComposerAction, NavigationAction, RoomAction,
-    RoomListAction } from "./KeyBindingsManager";
+import {
+    AutocompleteAction,
+    IKeyBindingsProvider,
+    KeyBinding,
+    MessageComposerAction,
+    NavigationAction,
+    RoomAction,
+    RoomListAction,
+} from "./KeyBindingsManager";
 import { isMac, Key } from "./Keyboard";
 import SettingsStore from "./settings/SettingsStore";
 
@@ -319,6 +326,14 @@ const navigationBindings = (): KeyBinding<NavigationAction>[] => {
             keyCombo: {
                 key: Key.K,
                 ctrlOrCmd: true,
+            },
+        },
+        {
+            action: NavigationAction.ToggleSpacePanel,
+            keyCombo: {
+                key: Key.D,
+                ctrlOrCmd: true,
+                shiftKey: true,
             },
         },
         {

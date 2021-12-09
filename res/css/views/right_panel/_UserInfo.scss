@@ -40,7 +40,7 @@ limitations under the License.
             mask-image: url('$(res)/img/minimise.svg');
             mask-repeat: no-repeat;
             mask-position: 7px center;
-            background-color: $rightpanel-button-color;
+            background-color: $header-panel-text-primary-color;
         }
     }
 
@@ -116,8 +116,14 @@ limitations under the License.
         transition: font-size 0.5s;
     }
 
-    .mx_UserInfo_avatar .mx_BaseAvatar.mx_BaseAvatar_image {
-        cursor: zoom-in;
+    .mx_UserInfo_avatar .mx_BaseAvatar {
+        .mx_BaseAvatar_initial + .mx_BaseAvatar_image {
+            cursor: default;
+        }
+
+        &.mx_BaseAvatar_image {
+            cursor: zoom-in;
+        }
     }
 
     h3 {
@@ -188,12 +194,12 @@ limitations under the License.
 
     .mx_UserInfo_field {
         cursor: pointer;
-        color: $accent-color;
+        color: $accent;
         line-height: $font-16px;
         margin: 8px 0;
 
         &.mx_UserInfo_destructive {
-            color: $warning-color;
+            color: $alert;
         }
     }
 
@@ -225,12 +231,12 @@ limitations under the License.
 
             &.mx_UserInfo_device_verified {
                 .mx_UserInfo_device_trusted {
-                    color: $accent-color;
+                    color: $accent;
                 }
             }
             &.mx_UserInfo_device_unverified {
                 .mx_UserInfo_device_trusted {
-                    color: $warning-color;
+                    color: $alert;
                 }
             }
 
@@ -258,18 +264,6 @@ limitations under the License.
 
     .mx_AccessibleButton.mx_AccessibleButton_hasKind {
         padding: 8px 18px;
-    }
-
-    .mx_VerificationShowSas .mx_AccessibleButton,
-    .mx_UserInfo_wideButton {
-        display: block;
-        margin: 16px 0 8px;
-    }
-
-    .mx_VerificationShowSas {
-        .mx_AccessibleButton + .mx_AccessibleButton {
-            margin: 8px 0; // space between buttons
-        }
     }
 }
 

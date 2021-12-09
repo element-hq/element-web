@@ -18,9 +18,10 @@ import React from 'react';
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import * as sdk from "../../../index";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IDialogProps } from "./IDialogProps";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps extends IDialogProps {}
 
@@ -32,8 +33,6 @@ export default class IntegrationsImpossibleDialog extends React.Component<IProps
 
     public render(): JSX.Element {
         const brand = SdkConfig.get().brand;
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
 
         return (
             <BaseDialog

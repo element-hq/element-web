@@ -22,7 +22,7 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import * as Avatar from '../../../Avatar';
 import EventTile from '../rooms/EventTile';
 import SettingsStore from "../../../settings/SettingsStore";
-import { Layout } from "../../../settings/Layout";
+import { Layout } from "../../../settings/enums/Layout";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from './Spinner';

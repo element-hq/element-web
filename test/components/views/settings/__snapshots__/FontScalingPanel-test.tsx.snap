@@ -243,7 +243,7 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
           onChange={[Function]}
         >
           <span
-            className="mx_Checkbox "
+            className="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
           >
             <input
               checked={false}
@@ -258,8 +258,8 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
               <div
                 className="mx_Checkbox_background"
               >
-                <img
-                  src="image-file-stub"
+                <div
+                  className="mx_Checkbox_checkmark"
                 />
               </div>
               <div>

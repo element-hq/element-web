@@ -103,7 +103,7 @@ limitations under the License.
 .mx_RoomView_auxPanel_hiddenHighlights {
     border-bottom: 1px solid $primary-hairline-color;
     padding: 10px 26px;
-    color: $warning-color;
+    color: $alert;
     cursor: pointer;
 }
 
@@ -120,6 +120,10 @@ limitations under the License.
     overflow-y: auto;
     flex: 1 1 0;
     overflow-anchor: none;
+
+    &[data-scrollbar=false] {
+        overflow-y: hidden;
+    }
 }
 
 .mx_RoomView_messagePanelSearchSpinner {
@@ -132,7 +136,7 @@ limitations under the License.
 }
 
 .mx_RoomView_messagePanelSearchSpinner::before {
-    background-color: $greyed-fg-color;
+    background-color: $info-plinth-fg-color;
     mask: url('$(res)/img/feather-customised/search-input.svg');
     mask-repeat: no-repeat;
     mask-position: center;
@@ -162,6 +166,7 @@ limitations under the License.
     flex: 1;
     display: flex;
     flex-direction: column;
+    margin-right: calc($container-gap-width / 2);
 }
 
 .mx_RoomView_statusArea {
@@ -241,8 +246,8 @@ li.mx_RoomView_myReadMarker_container {
 }
 
 hr.mx_RoomView_myReadMarker {
-    border-top: solid 1px $accent-color;
-    border-bottom: solid 1px $accent-color;
+    border-top: solid 1px $accent;
+    border-bottom: solid 1px $accent;
     margin-top: 0px;
     position: relative;
     top: -1px;
@@ -299,7 +304,7 @@ hr.mx_RoomView_myReadMarker {
 .mx_RoomView_ongoingConfCallNotification {
     width: 100%;
     text-align: center;
-    background-color: $warning-color;
+    background-color: $alert;
     color: $accent-fg-color;
     font-weight: bold;
     padding: 6px 0;

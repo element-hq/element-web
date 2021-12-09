@@ -24,7 +24,7 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { TileShape } from "../views/rooms/EventTile";
-import { Layout } from "../../settings/Layout";
+import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 
 interface IProps {
@@ -39,7 +39,7 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
     static contextType = RoomContext;
     render() {
         const emptyState = (<div className="mx_RightPanel_empty mx_NotificationPanel_empty">
-            <h2>{ _t('You’re all caught up') }</h2>
+            <h2>{ _t("You're all caught up") }</h2>
             <p>{ _t('You have no visible notifications.') }</p>
         </div>);
 

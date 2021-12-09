@@ -31,6 +31,7 @@ import MessageTimestamp from "../messages/MessageTimestamp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { formatFullDate } from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
+import { Action } from '../../../dispatcher/actions';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
@@ -333,7 +334,7 @@ export default class ImageView extends React.Component<IProps, IState> {
         // matrix.to, but also for it to enable routing within Element when clicked.
         ev.preventDefault();
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),

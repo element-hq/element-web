@@ -28,7 +28,7 @@ limitations under the License.
 
 .mx_HeaderButtons::before {
     content: "";
-    background-color: $header-divider-color;
+    background-color: $header-panel-text-primary-color;
     opacity: 0.5;
     margin: 6px 8px;
     border-radius: 1px;

@@ -52,7 +52,6 @@ limitations under the License.
     display: none;
     position: fixed;
     border-radius: 8px;
-    box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
     z-index: 6000; // Higher than context menu so tooltips can be used everywhere
     padding: 10px;
     pointer-events: none;
@@ -63,7 +62,7 @@ limitations under the License.
     word-break: break-word;
     margin-right: 50px;
 
-    background-color: $inverted-bg-color;
+    background-color: #21262C; // Same on both themes
     color: $accent-fg-color;
     border: 0;
     text-align: center;

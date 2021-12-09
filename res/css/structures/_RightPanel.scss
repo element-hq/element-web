@@ -22,7 +22,7 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-    padding: 4px 0;
+    padding: $container-border-width 0;
     box-sizing: border-box;
     height: 100%;
     contain: strict;
@@ -71,10 +71,10 @@ limitations under the License.
     }
 
     &:hover {
-        background: rgba($accent-color, 0.1);
+        background: rgba($accent, 0.1);
 
         &::before {
-            background-color: $accent-color;
+            background-color: $accent;
         }
     }
 }
@@ -103,44 +103,68 @@ limitations under the License.
     mask-position: center;
 }
 
-$dot-size: 8px;
-$pulse-color: $pinned-unread-color;
+$dot-size: 7px;
+$pulse-color: $alert;
 
 .mx_RightPanel_pinnedMessagesButton {
     &::before {
         mask-image: url('$(res)/img/element-icons/room/pin.svg');
         mask-position: center;
     }
+}
+.mx_RightPanel_headerButton_unreadIndicator_bg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 4px;
+    width: $dot-size;
+    height: $dot-size;
+    border-radius: 50%;
+    transform: scale(1.6);
+    transform-origin: center center;
+    background: rgba($background, 1);
+}
 
-    .mx_RightPanel_pinnedMessagesButton_unreadIndicator {
+.mx_RightPanel_headerButton_unreadIndicator {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 4px;
+    width: $dot-size;
+    height: $dot-size;
+    border-radius: 50%;
+    transform: scale(1);
+    background: rgba($pulse-color, 1);
+    box-shadow: 0 0 0 0 rgba($pulse-color, 1);
+    animation: mx_RightPanel_indicator_pulse 2s infinite;
+    animation-iteration-count: 1;
+
+    &.mx_Indicator_gray {
+        background: rgba($input-darker-fg-color, 1);
+        box-shadow: rgba($input-darker-fg-color, 1);
+    }
+
+    &::after {
+        content: "";
         position: absolute;
-        right: 0;
+        width: inherit;
+        height: inherit;
         top: 0;
-        margin: 4px;
-        width: $dot-size;
-        height: $dot-size;
-        border-radius: 50%;
+        left: 0;
         transform: scale(1);
-        background: rgba($pulse-color, 1);
-        box-shadow: 0 0 0 0 rgba($pulse-color, 1);
-        animation: mx_RightPanel_indicator_pulse 2s infinite;
-        animation-iteration-count: 1;
+        transform-origin: center center;
+        animation-name: mx_RightPanel_indicator_pulse_shadow;
+        animation-duration: inherit;
+        animation-iteration-count: inherit;
+        border-radius: 50%;
+        background: inherit;
+    }
+}
 
-        &::after {
-            content: "";
-            position: absolute;
-            width: inherit;
-            height: inherit;
-            top: 0;
-            left: 0;
-            transform: scale(1);
-            transform-origin: center center;
-            animation-name: mx_RightPanel_indicator_pulse_shadow;
-            animation-duration: inherit;
-            animation-iteration-count: inherit;
-            border-radius: 50%;
-            background: rgba($pulse-color, 1);
-        }
+.mx_RightPanel_timelineCardButton {
+    &::before {
+        mask-image: url('$(res)/img/element-icons/feedback.svg');
+        mask-position: center;
     }
 }
 
@@ -175,7 +199,7 @@ $pulse-color: $pinned-unread-color;
 
 .mx_RightPanel_headerButton_highlight {
     &::before {
-        background-color: $accent-color !important;
+        background-color: $accent !important;
     }
 }
 
@@ -183,7 +207,7 @@ $pulse-color: $pinned-unread-color;
     font-size: $font-8px;
     border-radius: 8px;
     color: $accent-fg-color;
-    background-color: $accent-color;
+    background-color: $accent;
     font-weight: bold;
     position: absolute;
     top: -4px;
@@ -229,7 +253,7 @@ $pulse-color: $pinned-unread-color;
         margin: 11px auto 29px auto;
         height: 42px;
         width: 42px;
-        background-color: $rightpanel-button-color;
+        background-color: $header-panel-text-primary-color;
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;

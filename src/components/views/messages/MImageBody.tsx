@@ -17,10 +17,6 @@ limitations under the License.
 
 import React, { ComponentProps, createRef } from 'react';
 import { Blurhash } from "react-blurhash";
-import { SyncState } from 'matrix-js-sdk/src/sync.api';
-import classNames from 'classnames';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-import { logger } from "matrix-js-sdk/src/logger";
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
@@ -33,7 +29,14 @@ import { Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
+import { SyncState } from 'matrix-js-sdk/src/sync.api';
 import { IBodyProps } from "./IBodyProps";
+import classNames from 'classnames';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
+
+import { logger } from "matrix-js-sdk/src/logger";
+import { TileShape } from '../rooms/EventTile';
+import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 
 interface IState {
     decryptedUrl?: string;
@@ -57,6 +60,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     private unmounted = true;
     private image = createRef<HTMLImageElement>();
     private timeout?: number;
+    private sizeWatcher: string;
 
     constructor(props: IBodyProps) {
         super(props);
@@ -316,12 +320,17 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 }
             }, 150);
         }
+
+        this.sizeWatcher = SettingsStore.watchSetting("Images.size", null, () => {
+            this.forceUpdate(); // we don't really have a reliable thing to update, so just update the whole thing
+        });
     }
 
     componentWillUnmount() {
         this.unmounted = true;
         this.context.removeListener('sync', this.onClientSync);
         this.clearBlurhashTimeout();
+        SettingsStore.unwatchSetting(this.sizeWatcher);
     }
 
     protected messageContent(
@@ -366,11 +375,28 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             infoHeight = this.state.loadedImageDimensions.naturalHeight;
         }
 
-        // The maximum height of the thumbnail as it is rendered as an <img>
-        const maxHeight = forcedHeight || Math.min((this.props.maxImageHeight || 600), infoHeight);
-        // The maximum width of the thumbnail, as dictated by its natural
-        // maximum height.
-        const maxWidth = infoWidth * maxHeight / infoHeight;
+        // The maximum size of the thumbnail as it is rendered as an <img>
+        // check for any height constraints
+        const imageSize = SettingsStore.getValue("Images.size") as ImageSize;
+        const isPortrait = infoWidth < infoHeight;
+        const suggestedAndPossibleWidth = Math.min(suggestedImageSize(imageSize, isPortrait).w, infoWidth);
+        const suggestedAndPossibleHeight = Math.min(suggestedImageSize(imageSize, isPortrait).h, infoHeight);
+        const aspectRatio = infoWidth / infoHeight;
+
+        let maxWidth;
+        let maxHeight;
+        const maxHeightConstraint = forcedHeight || this.props.maxImageHeight || suggestedAndPossibleHeight;
+        if (maxHeightConstraint * aspectRatio < suggestedAndPossibleWidth || imageSize === ImageSize.Large) {
+            // The width is dictated by the maximum height that was defined by the props or the function param `forcedHeight`
+            // If the thumbnail size is set to Large, we always let the size be dictated by the height.
+            maxWidth = maxHeightConstraint * aspectRatio;
+            // there is no need to check for infoHeight here since this is done with `maxHeightConstraint * aspectRatio < suggestedAndPossibleWidth`
+            maxHeight = maxHeightConstraint;
+        } else {
+            // height is dictated by suggestedWidth (based on the Image.size setting)
+            maxWidth = suggestedAndPossibleWidth;
+            maxHeight = suggestedAndPossibleWidth / aspectRatio;
+        }
 
         let img = null;
         let placeholder = null;
@@ -495,8 +521,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     // Overidden by MStickerBody
     protected getFileBody(): string | JSX.Element {
         if (this.props.forExport) return null;
-        // We only ever need the download bar if we're appearing outside of the timeline
-        if (this.props.tileShape) {
+        /*
+         * In the room timeline or the thread context we don't need the download
+         * link as the message action bar will fullfil that
+         */
+        const hasMessageActionBar = !this.props.tileShape
+            || this.props.tileShape === TileShape.Thread
+            || this.props.tileShape === TileShape.ThreadPanel;
+        if (!hasMessageActionBar) {
             return <MFileBody {...this.props} showGenericPlaceholder={false} />;
         }
     }

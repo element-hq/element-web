@@ -193,6 +193,11 @@ export async function sendSentryReport(userText: string, issueUrl: string, error
     }
 }
 
+export function setSentryUser(mxid: string): void {
+    if (!SdkConfig.get().sentry || !SettingsStore.getValue("automaticErrorReporting")) return;
+    Sentry.setUser({ username: mxid });
+}
+
 interface ISentryConfig {
     dsn: string;
     environment?: string;
@@ -200,21 +205,28 @@ interface ISentryConfig {
 
 export async function initSentry(sentryConfig: ISentryConfig): Promise<void> {
     if (!sentryConfig) return;
+    // Only enable Integrations.GlobalHandlers, which hooks uncaught exceptions, if automaticErrorReporting is true
+    const integrations = [
+        new Sentry.Integrations.InboundFilters(),
+        new Sentry.Integrations.FunctionToString(),
+        new Sentry.Integrations.Breadcrumbs(),
+        new Sentry.Integrations.UserAgent(),
+        new Sentry.Integrations.Dedupe(),
+    ];
+
+    if (SettingsStore.getValue("automaticErrorReporting")) {
+        integrations.push(new Sentry.Integrations.GlobalHandlers(
+            { onerror: false, onunhandledrejection: true }));
+        integrations.push(new Sentry.Integrations.TryCatch());
+    }
+
     Sentry.init({
         dsn: sentryConfig.dsn,
         release: process.env.VERSION,
         environment: sentryConfig.environment,
         defaultIntegrations: false,
         autoSessionTracking: false,
-        integrations: [
-            // specifically disable Integrations.GlobalHandlers, which hooks uncaught exceptions - we don't
-            // want to capture those at this stage, just explicit rageshakes
-            new Sentry.Integrations.InboundFilters(),
-            new Sentry.Integrations.FunctionToString(),
-            new Sentry.Integrations.Breadcrumbs(),
-            new Sentry.Integrations.UserAgent(),
-            new Sentry.Integrations.Dedupe(),
-        ],
+        integrations,
         // Set to 1.0 which is reasonable if we're only submitting Rageshakes; will need to be set < 1.0
         // if we collect more frequently.
         tracesSampleRate: 1.0,

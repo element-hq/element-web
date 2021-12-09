@@ -1,7 +1,8 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
-Copyright 2017 New Vector Ltd
+Copyright 2017 - 2019 New Vector Ltd
+Copyright 2019 - 2021 The Matrix.org Foundation C.I.C
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ limitations under the License.
 @import "./_font-sizes.scss";
 @import "./_font-weights.scss";
 @import "./_animations.scss";
+@import url("maplibre-gl/dist/maplibre-gl.css");
 
 $hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
 
@@ -30,6 +32,10 @@ $MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $selected-mess
 $slider-dot-size: 1em;
 $slider-selection-dot-size: 2.4em;
 
+$container-border-width: 8px;
+$container-gap-width: 8px; // only even numbers should be used because otherwise we get 0.5px margin values.
+
+$timeline-image-border-radius: 8px;
 :root {
     font-size: 10px;
 
@@ -74,11 +80,11 @@ pre, code {
 
 .error, .warning,
 .text-error, .text-warning {
-    color: $warning-color;
+    color: $alert;
 }
 
 .text-success {
-    color: $accent-color;
+    color: $accent;
 }
 
 .text-muted {
@@ -102,7 +108,7 @@ h2 {
 a:hover,
 a:link,
 a:visited {
-    color: $accent-color-alt;
+    color: $accent-alt;
 }
 
 input[type=text],
@@ -221,7 +227,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
     :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
     .mx_textinput {
-        color: $input-lighter-fg-color;
+        color: $input-darker-fg-color;
         background-color: $input-lighter-bg-color;
         border: none;
     }
@@ -238,15 +244,11 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 //
 // They are not used for layout!!
 #mx_theme_accentColor {
-    color: $accent-color;
+    color: $accent;
 }
 
 #mx_theme_secondaryAccentColor {
     color: $secondary-accent-color;
-}
-
-#mx_theme_tertiaryAccentColor {
-    color: $tertiary-accent-color;
 }
 
 /* Expected z-indexes for dialogs:
@@ -364,7 +366,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 }
 
 .mx_Dialog_title.danger {
-    color: $warning-color;
+    color: $alert;
 }
 
 .mx_Dialog_cancelButton {
@@ -404,49 +406,68 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
  * We should go through and have one consistent set of styles for buttons throughout the app.
  * For now, I am duplicating the selectors here for mx_Dialog and mx_DialogButtons.
  */
-.mx_Dialog button, .mx_Dialog input[type="submit"], .mx_Dialog_buttons button, .mx_Dialog_buttons input[type="submit"] {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton),
+.mx_Dialog input[type="submit"],
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton),
+.mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
     margin-right: 8px;
 
     // flip colours for the secondary ones
     font-weight: 600;
-    border: 1px solid $accent-color;
-    color: $accent-color;
+    border: 1px solid $accent;
+    color: $accent;
     background-color: $button-secondary-bg-color;
     font-family: inherit;
 }
 
-.mx_Dialog button:last-child {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):last-child {
     margin-right: 0px;
 }
 
-.mx_Dialog button:hover, .mx_Dialog input[type="submit"]:hover, .mx_Dialog_buttons button:hover, .mx_Dialog_buttons input[type="submit"]:hover {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):hover,
+.mx_Dialog input[type="submit"]:hover,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):hover,
+.mx_Dialog_buttons input[type="submit"]:hover {
     @mixin mx_DialogButton_hover;
 }
 
-.mx_Dialog button:focus, .mx_Dialog input[type="submit"]:focus, .mx_Dialog_buttons button:focus, .mx_Dialog_buttons input[type="submit"]:focus {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):focus,
+.mx_Dialog input[type="submit"]:focus,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):focus,
+.mx_Dialog_buttons input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
 
-.mx_Dialog button.mx_Dialog_primary, .mx_Dialog input[type="submit"].mx_Dialog_primary, .mx_Dialog_buttons button.mx_Dialog_primary, .mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
+.mx_Dialog button.mx_Dialog_primary,
+.mx_Dialog input[type="submit"].mx_Dialog_primary,
+.mx_Dialog_buttons button.mx_Dialog_primary,
+.mx_Dialog_buttons input[type="submit"].mx_Dialog_primary {
     color: $accent-fg-color;
-    background-color: $accent-color;
+    background-color: $accent;
     min-width: 156px;
 }
 
-.mx_Dialog button.danger, .mx_Dialog input[type="submit"].danger, .mx_Dialog_buttons button.danger, .mx_Dialog_buttons input[type="submit"].danger {
-    background-color: $warning-color;
-    border: solid 1px $warning-color;
+.mx_Dialog button.danger,
+.mx_Dialog input[type="submit"].danger,
+.mx_Dialog_buttons button.danger,
+.mx_Dialog_buttons input[type="submit"].danger {
+    background-color: $alert;
+    border: solid 1px $alert;
     color: $accent-fg-color;
 }
 
-.mx_Dialog button.warning, .mx_Dialog input[type="submit"].warning {
-    border: solid 1px $warning-color;
-    color: $warning-color;
+.mx_Dialog button.warning,
+.mx_Dialog input[type="submit"].warning {
+    border: solid 1px $alert;
+    color: $alert;
 }
 
-.mx_Dialog button:disabled, .mx_Dialog input[type="submit"]:disabled, .mx_Dialog_buttons button:disabled, .mx_Dialog_buttons input[type="submit"]:disabled {
+.mx_Dialog button:not(.mx_Dialog_nonDialogButton):disabled,
+.mx_Dialog input[type="submit"]:disabled,
+.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):disabled,
+.mx_Dialog_buttons input[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;
     opacity: 0.7;
@@ -462,6 +483,15 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     /* Don't show scroll-bars on spinner dialogs */
     overflow-x: hidden;
     overflow-y: hidden;
+}
+
+.mx_DialogDesignChanges_wrapper .mx_Dialog_fixedWidth {
+    max-width: 636px; // match splash image width
+
+    .mx_AccessibleButton_kind_link {
+        font-size: inherit;
+        padding: 0;
+    }
 }
 
 // TODO: Review mx_GeneralButton usage to see if it can use a different class
@@ -480,7 +510,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .mx_linkButton {
     cursor: pointer;
-    color: $accent-color;
+    color: $accent;
 }
 
 .mx_TextInputDialog_label {

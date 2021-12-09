@@ -22,7 +22,6 @@ import { IJoinRuleEventContent, JoinRule } from "matrix-js-sdk/src/@types/partia
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import classNames from 'classnames';
 
-import * as sdk from '../../../index';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
@@ -37,6 +36,7 @@ import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
 import { UIFeature } from "../../../settings/UIFeature";
 import SettingsStore from "../../../settings/SettingsStore";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 const MemberEventHtmlReasonField = "io.element.html_reason";
 
@@ -465,7 +465,6 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 break;
             }
             case MessageCase.Invite: {
-                const RoomAvatar = sdk.getComponent("views.avatars.RoomAvatar");
                 const oobData = Object.assign({}, this.props.oobData, {
                     avatarUrl: this.communityProfile().avatarMxc,
                 });

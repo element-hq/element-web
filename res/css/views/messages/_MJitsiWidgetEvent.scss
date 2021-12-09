@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_MJitsiWidgetEvent {
     &::before {
-        background-color: $composer-e2e-icon-color; // XXX: Variable abuse
+        background-color: $header-panel-text-primary-color; // XXX: Variable abuse
         mask-image: url('$(res)/img/element-icons/call/video-call.svg');
     }
 }

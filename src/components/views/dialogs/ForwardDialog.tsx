@@ -25,7 +25,7 @@ import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import { useSettingValue, useFeatureEnabled } from "../../../hooks/useSettings";
 import { UIFeature } from "../../../settings/UIFeature";
-import { Layout } from "../../../settings/Layout";
+import { Layout } from "../../../settings/enums/Layout";
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import { avatarUrlForUser } from "../../../Avatar";
@@ -43,7 +43,8 @@ import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import { roomContextDetailsText } from "../../../Rooms";
 
 const AVATAR_SIZE = 30;
 
@@ -121,6 +122,8 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
         />;
     }
 
+    const detailsText = roomContextDetailsText(room);
+
     return <div className="mx_ForwardList_entry">
         <AccessibleTooltipButton
             className="mx_ForwardList_roomButton"
@@ -131,6 +134,9 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
         >
             <DecoratedRoomAvatar room={room} avatarSize={32} />
             <span className="mx_ForwardList_entry_name">{ room.name }</span>
+            { detailsText && <span className="mx_ForwardList_entry_detail">
+                { detailsText }
+            </span> }
         </AccessibleTooltipButton>
         <AccessibleTooltipButton
             kind={sendState === SendState.Failed ? "danger_outline" : "primary_outline"}

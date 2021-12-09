@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2016",
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "outDir": "./lib",
+    "declaration": true,
+    "lib": [
+      "es2019",
+      "dom",
+      "dom.iterable"
+    ],
+  },
+  "include": [
+    "./src/**/*.ts",
+    "start.ts"
+  ]
+}

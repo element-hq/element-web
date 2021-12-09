@@ -17,25 +17,25 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import escapeHtml from "escape-html";
-import sanitizeHtml from "sanitize-html";
-import { Room } from 'matrix-js-sdk/src/models/room';
-import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Layout } from "../../../settings/Layout";
+import { Layout } from "../../../settings/enums/Layout";
+import escapeHtml from "escape-html";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
+import sanitizeHtml from "sanitize-html";
 import { PERMITTED_URL_SCHEMES } from "../../../HtmlUtils";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -110,6 +110,8 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         if (mRelatesTo && mRelatesTo['m.in_reply_to']) {
             const mInReplyTo = mRelatesTo['m.in_reply_to'];
             if (mInReplyTo && mInReplyTo['event_id']) return mInReplyTo['event_id'];
+        } else if (!SettingsStore.getValue("feature_thread") && ev.isThreadRelation) {
+            return ev.threadRootId;
         }
     }
 

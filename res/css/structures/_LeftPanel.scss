@@ -101,8 +101,9 @@ $roomListCollapsedWidth: 68px;
         }
 
         .mx_LeftPanel_filterContainer {
-            margin-left: 12px;
-            margin-right: 12px;
+            margin: 0 12px;
+            padding: 12px 0 8px;
+            border-bottom: 1px solid $quinary-content;
 
             flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
 
@@ -110,8 +111,34 @@ $roomListCollapsedWidth: 68px;
             display: flex;
             align-items: center;
 
+            .mx_UserMenu {
+                // mini-mode for when Space Panel is disabled
+                margin-right: 12px;
+            }
+
+            & + .mx_RoomListHeader {
+                margin-top: 12px;
+            }
+
+            .mx_RoomSearch_shortcutPrompt {
+                border-radius: 6px;
+                background-color: $panel-actions;
+                padding: 2px 4px;
+                user-select: none;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                font-weight: $font-semi-bold;
+                color: $light-fg-color;
+                margin-right: 6px;
+            }
+
             .mx_RoomSearch_focused, .mx_RoomSearch_hasQuery {
-                & + .mx_LeftPanel_exploreButton {
+                .mx_RoomSearch_shortcutPrompt {
+                    display: none;
+                }
+
+                & + .mx_LeftPanel_exploreButton,
+                & + .mx_LeftPanel_recentsButton {
                     // Cheaty way to return the occupied space to the filter input
                     flex-basis: 0;
                     margin: 0;
@@ -129,7 +156,7 @@ $roomListCollapsedWidth: 68px;
                 width: 32px;
                 height: 32px;
                 border-radius: 8px;
-                background-color: $roomlist-button-bg-color;
+                background-color: $panel-actions;
                 position: relative;
                 margin-left: 8px;
 
@@ -144,15 +171,16 @@ $roomListCollapsedWidth: 68px;
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-content;
+                    background-color: $secondary-content;
                 }
             }
 
-            .mx_LeftPanel_exploreButton {
+            .mx_LeftPanel_exploreButton,
+            .mx_LeftPanel_recentsButton {
                 width: 32px;
                 height: 32px;
                 border-radius: 8px;
-                background-color: $roomlist-button-bg-color;
+                background-color: $panel-actions;
                 position: relative;
                 margin-left: 8px;
 
@@ -163,16 +191,27 @@ $roomListCollapsedWidth: 68px;
                     left: 8px;
                     width: 16px;
                     height: 16px;
-                    mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
                     mask-position: center;
                     mask-size: contain;
                     mask-repeat: no-repeat;
-                    background: $secondary-content;
+                    background-color: $secondary-content;
                 }
 
-                &.mx_LeftPanel_exploreButton_space::before {
-                    mask-image: url('$(res)/img/element-icons/roomlist/browse.svg');
+                &:hover {
+                    background-color: $tertiary-content;
+
+                    &::before {
+                        background-color: $background;
+                    }
                 }
+            }
+
+            .mx_LeftPanel_exploreButton::before {
+                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+            }
+
+            .mx_LeftPanel_recentsButton::before {
+                mask-image: url('$(res)/img/element-icons/clock.svg');
             }
         }
 
@@ -231,10 +270,10 @@ $roomListCollapsedWidth: 68px;
                     background-color: transparent;
                 }
 
-                .mx_LeftPanel_exploreButton {
+                .mx_LeftPanel_exploreButton,
+                .mx_LeftPanel_recentsButton {
                     margin-left: 0;
                     margin-top: 8px;
-                    background-color: transparent;
                 }
             }
         }

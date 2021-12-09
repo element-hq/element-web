@@ -30,10 +30,32 @@ limitations under the License.
 
     .mx_FeedbackDialog_section {
         position: relative;
-        padding-left: 52px;
+        padding: 12px 52px 12px 68px;
+        border-radius: 8px;
+        border: 1px solid $quinary-content;
+
+        & + .mx_FeedbackDialog_section {
+            margin-top: 16px;
+        }
+
+        > h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-weight: $font-semi-bold;
+            font-size: $font-18px;
+            line-height: $font-22px;
+        }
 
         > p {
-            color: $tertiary-content;
+            color: $secondary-content;
+            font-size: $font-15px;
+            line-height: $font-24px;
+            margin: 8px 0 0;
+        }
+
+        .mx_FeedbackDialog_section_microcopy {
+            font-size: $font-12px;
+            line-height: $font-15px;
         }
 
         .mx_AccessibleButton_kind_link {
@@ -42,7 +64,7 @@ limitations under the License.
         }
 
         a, .mx_AccessibleButton_kind_link {
-            color: $accent-color;
+            color: $accent;
             text-decoration: underline;
         }
 
@@ -51,13 +73,13 @@ limitations under the License.
             position: absolute;
             width: 40px;
             height: 40px;
-            left: 0;
-            top: 0;
+            left: 16px;
+            top: 12px;
         }
 
         &::before {
             background-color: $icon-button-color;
-            border-radius: 20px;
+            border-radius: 8px;
         }
 
         &::after {
@@ -75,7 +97,7 @@ limitations under the License.
     }
 
     .mx_FeedbackDialog_rateApp {
-        .mx_RadioButton {
+        .mx_StyledRadioButton {
             display: inline-flex;
             font-size: 20px;
             transition: font-size 1s, border .5s;
@@ -90,7 +112,7 @@ limitations under the License.
                 display: none;
             }
 
-            .mx_RadioButton_content {
+            .mx_StyledRadioButton_content {
                 background: $icon-button-color;
                 width: 40px;
                 height: 40px;
@@ -100,18 +122,18 @@ limitations under the License.
                 margin: 5px;
             }
 
-            .mx_RadioButton_spacer {
+            .mx_StyledRadioButton_spacer {
                 display: none;
             }
 
-            & + .mx_RadioButton {
+            & + .mx_StyledRadioButton {
                 margin-left: 16px;
             }
         }
 
-        .mx_RadioButton_checked {
+        .mx_StyledRadioButton_checked {
             font-size: 24px;
-            border-color: $accent-color;
+            border-color: $accent;
         }
 
         &::after {

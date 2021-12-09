@@ -70,7 +70,7 @@ import RoomName from "../elements/RoomName";
 import { mediaFromMxc } from "../../../customisations/Media";
 import UIStore from "../../../stores/UIStore";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
-import SpaceStore from "../../../stores/SpaceStore";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
 import ConfirmSpaceUserActionDialog from "../dialogs/ConfirmSpaceUserActionDialog";
 import { bulkSpaceBehaviour } from "../../../utils/space";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
@@ -125,7 +125,7 @@ async function openDMForUser(matrixClient: MatrixClient, userId: string) {
 
     if (lastActiveRoom) {
         dis.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             room_id: lastActiveRoom.roomId,
         });
         return;
@@ -367,7 +367,7 @@ const UserOptionsSection: React.FC<{
             const onReadReceiptButton = function() {
                 const room = cli.getRoom(member.roomId);
                 dis.dispatch({
-                    action: 'view_room',
+                    action: Action.ViewRoom,
                     highlighted: true,
                     event_id: room.getEventReadUpTo(member.userId),
                     room_id: member.roomId,
@@ -1121,6 +1121,10 @@ const PowerLevelEditor: React.FC<{
     const cli = useContext(MatrixClientContext);
 
     const [selectedPowerLevel, setSelectedPowerLevel] = useState(user.powerLevel);
+    useEffect(() => {
+        setSelectedPowerLevel(user.powerLevel);
+    }, [user]);
+
     const onPowerChange = useCallback(async (powerLevel: number) => {
         setSelectedPowerLevel(powerLevel);
 

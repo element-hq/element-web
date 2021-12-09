@@ -129,7 +129,9 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
         case "U":
             return partCreator.plain(`<u>${n.textContent}</u>`);
         case "LI": {
-            const indent = "  ".repeat(state.listDepth - 1);
+            const BASE_INDENT = 4;
+            const depth = state.listDepth - 1;
+            const indent = " ".repeat(BASE_INDENT * depth);
             if (n.parentElement.nodeName === "OL") {
                 // The markdown parser doesn't do nested indexed lists at all, but this supports it anyway.
                 const index = state.listIndex[state.listIndex.length - 1];

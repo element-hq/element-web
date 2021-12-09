@@ -16,10 +16,11 @@ limitations under the License.
 
 import { _t } from '../languageHandler';
 import dis from "../dispatcher/dispatcher";
-import { MatrixClientPeg } from '../MatrixClientPeg';
 import DeviceListener from '../DeviceListener';
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
+import { Action } from "../dispatcher/actions";
+import { UserTab } from "../components/views/dialogs/UserSettingsDialog";
 
 const TOAST_KEY = "reviewsessions";
 
@@ -28,8 +29,8 @@ export const showToast = (deviceIds: Set<string>) => {
         DeviceListener.sharedInstance().dismissUnverifiedSessions(deviceIds);
 
         dis.dispatch({
-            action: 'view_user_info',
-            userId: MatrixClientPeg.get().getUserId(),
+            action: Action.ViewUserSettings,
+            initialTabId: UserTab.Security,
         });
     };
 

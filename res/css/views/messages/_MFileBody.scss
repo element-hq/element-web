@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_MFileBody_download {
-    color: $accent-color;
+    color: $accent;
 
     .mx_MFileBody_download_icon {
         // 12px instead of 14px to better match surrounding font size
@@ -26,13 +26,13 @@ limitations under the License.
         mask-position: center;
         mask-repeat: no-repeat;
         mask-image: url("$(res)/img/download.svg");
-        background-color: $accent-color;
+        background-color: $accent;
         display: inline-block;
     }
 }
 
 .mx_MFileBody_download a {
-    color: $accent-color;
+    color: $accent;
     text-decoration: none;
     cursor: pointer;
 }

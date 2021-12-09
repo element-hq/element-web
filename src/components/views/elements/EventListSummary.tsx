@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect } from "react";
+import { uniqBy } from "lodash";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
@@ -22,7 +23,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
 import { useStateToggle } from "../../../hooks/useStateToggle";
 import AccessibleButton from "./AccessibleButton";
-import { Layout } from '../../../settings/Layout';
+import { Layout } from '../../../settings/enums/Layout';
 
 interface IProps {
     // An array of member events to summarise
@@ -80,7 +81,8 @@ const EventListSummary: React.FC<IProps> = ({
             { children }
         </React.Fragment>;
     } else {
-        const avatars = summaryMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
+        const uniqueMembers = uniqBy(summaryMembers, member => member.getMxcAvatarUrl());
+        const avatars = uniqueMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
         body = (
             <div className="mx_EventTile_line">
                 <div className="mx_EventTile_info">

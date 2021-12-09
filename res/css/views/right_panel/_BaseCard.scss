@@ -22,7 +22,7 @@ limitations under the License.
     flex: 1;
 
     .mx_BaseCard_header {
-        margin: 8px 0;
+        margin: 4px 0;
 
         > h2 {
             margin: 0 44px;
@@ -40,18 +40,18 @@ limitations under the License.
             width: 20px;
             margin: 12px;
             top: 0;
-            border-radius: 10px;
+            border-radius: 50%;
 
             &::before {
                 content: "";
                 position: absolute;
-                height: 20px;
-                width: 20px;
+                height: inherit;
+                width: inherit;
                 top: 0;
                 left: 0;
                 mask-repeat: no-repeat;
                 mask-position: center;
-                background-color: $rightpanel-button-color;
+                background-color: $header-panel-text-primary-color;
             }
         }
 
@@ -99,7 +99,7 @@ limitations under the License.
         }
 
         .mx_BaseCard_Button {
-            padding: 10px 38px 10px 12px;
+            padding: 10px 10px 10px 12px;
             margin: 0;
             position: relative;
             font-size: $font-13px;
@@ -109,24 +109,15 @@ limitations under the License.
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            display: flex;
+
+            .mx_BaseCard_Button_sublabel {
+                color: $tertiary-content;
+                margin-left: auto;
+            }
 
             &:hover {
                 background-color: rgba(141, 151, 165, 0.1);
-            }
-
-            &::after {
-                content: '';
-                position: absolute;
-                top: 10px;
-                right: 6px;
-                height: 20px;
-                width: 20px;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                background-color: $icon-button-color;
-                transform: rotate(270deg);
-                mask-size: 20px;
-                mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
             }
 
             &.mx_AccessibleButton_disabled {

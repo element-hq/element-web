@@ -16,14 +16,8 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import FileSaver from 'file-saver';
-import { logger } from "matrix-js-sdk/src/logger";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
-import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
-import { CrossSigningKeys } from "matrix-js-sdk";
-import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
-
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
+import FileSaver from 'file-saver';
 import { _t, _td } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../SecurityManager';
@@ -41,11 +35,17 @@ import {
     SecureBackupSetupMethod,
 } from '../../../../utils/WellKnownUtils';
 import SecurityCustomisations from "../../../../customisations/Security";
+
+import { logger } from "matrix-js-sdk/src/logger";
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
+import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
+import { CrossSigningKeys } from "matrix-js-sdk/src";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
+import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
 import { IValidationResult } from "../../../../components/views/elements/Validation";
 
 // I made a mistake while converting this and it has to be fixed!
@@ -502,7 +502,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                     <span className="mx_CreateSecretStorageDialog_optionIcon mx_CreateSecretStorageDialog_optionIcon_secureBackup" />
                     { _t("Generate a Security Key") }
                 </div>
-                <div>{ _t("We’ll generate a Security Key for you to store somewhere safe, like a password manager or a safe.") }</div>
+                <div>{ _t("We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.") }</div>
             </StyledRadioButton>
         );
     }
@@ -606,8 +606,8 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
     private renderPhasePassPhrase(): JSX.Element {
         return <form onSubmit={this.onPassPhraseNextClick}>
             <p>{ _t(
-                "Enter a security phrase only you know, as it’s used to safeguard your data. " +
-                "To be secure, you shouldn’t re-use your account password.",
+                "Enter a security phrase only you know, as it's used to safeguard your data. " +
+                "To be secure, you shouldn't re-use your account password.",
             ) }</p>
 
             <div className="mx_CreateSecretStorageDialog_passPhraseContainer">
@@ -714,12 +714,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                 <InlineSpinner />
             </div>;
         }
+
         return <div>
             <p>{ _t(
                 "Store your Security Key somewhere safe, like a password manager or a safe, " +
-                "as it’s used to safeguard your encrypted data.",
+                "as it's used to safeguard your encrypted data.",
             ) }</p>
-            <div className="mx_CreateSecretStorageDialog_primaryContainer">
+            <div className="mx_CreateSecretStorageDialog_primaryContainer mx_CreateSecretStorageDialog_recoveryKeyPrimarycontainer">
                 <div className="mx_CreateSecretStorageDialog_recoveryKeyContainer">
                     <div className="mx_CreateSecretStorageDialog_recoveryKey">
                         <code ref={this.recoveryKeyNode}>{ this.recoveryKey.encodedPrivateKey }</code>
@@ -739,7 +740,20 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                             onClick={this.onCopyClick}
                             disabled={this.state.phase === Phase.Storing}
                         >
-                            { this.state.copied ? _t("Copied!") : _t("Copy") }
+                            <span
+                                className="mx_CreateSecretStorageDialog_recoveryKeyCopyButtonText"
+                                style={{ height: this.state.copied ? '0' : 'auto' }}
+                                aria-hidden={this.state.copied}
+                            >
+                                { _t("Copy") }
+                            </span>
+                            <span
+                                className="mx_CreateSecretStorageDialog_recoveryKeyCopyButtonText"
+                                style={{ height: this.state.copied ? 'auto' : '0' }}
+                                aria-hidden={!this.state.copied}
+                            >
+                                { _t("Copied!") }
+                            </span>
                         </AccessibleButton>
                     </div>
                 </div>

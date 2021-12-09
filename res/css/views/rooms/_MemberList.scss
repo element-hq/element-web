@@ -86,7 +86,7 @@ limitations under the License.
 .mx_MemberList_invite {
     flex: 0 0 auto;
     position: relative;
-    background-color: $button-bg-color;
+    background-color: $accent;
     border-radius: 4px;
     margin: 5px 9px 9px;
     display: flex;
@@ -96,7 +96,7 @@ limitations under the License.
 }
 
 .mx_MemberList_invite.mx_AccessibleButton_disabled {
-    background-color: $greyed-fg-color;
+    background-color: $info-plinth-fg-color;
     cursor: not-allowed;
 }
 

@@ -110,18 +110,28 @@ limitations under the License.
                         margin-right: 12px;
                     }
 
-                    .mx_ForwardList_entry_name {
-                        font-size: $font-15px;
+                    .mx_ForwardList_entry_name,
+                    .mx_ForwardList_entry_detail {
                         line-height: 30px;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
-                        margin-right: 12px;
+                    }
+
+                    .mx_ForwardList_entry_name {
+                        font-size: $font-15px;
+                    }
+
+                    .mx_ForwardList_entry_detail {
+                        font-size: $font-12px;
+                        margin-left: 8px;
+                        color: $tertiary-content;
                     }
                 }
 
                 .mx_ForwardList_sendButton {
                     position: relative;
+                    margin-left: 12px;
 
                     &:not(.mx_ForwardList_canSend) .mx_ForwardList_sendLabel {
                         // Hide the "Send" label while preserving button size
@@ -138,7 +148,7 @@ limitations under the License.
                     }
 
                     &.mx_ForwardList_sending .mx_ForwardList_sendIcon {
-                        background-color: $button-primary-bg-color;
+                        background-color: $accent;
                         mask-image: url('$(res)/img/element-icons/circle-sending.svg');
                         mask-position: center;
                         mask-repeat: no-repeat;
@@ -148,7 +158,7 @@ limitations under the License.
                     }
 
                     &.mx_ForwardList_sent .mx_ForwardList_sendIcon {
-                        background-color: $button-primary-bg-color;
+                        background-color: $accent;
                         mask-image: url('$(res)/img/element-icons/circle-sent.svg');
                         mask-position: center;
                         mask-repeat: no-repeat;

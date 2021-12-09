@@ -19,6 +19,6 @@ limitations under the License.
     margin-top: $font-14px;
 
     a.mx_SetupEncryptionBody_reset_link:is(:link, :hover, :visited) {
-        color: $warning-color;
+        color: $alert;
     }
 }

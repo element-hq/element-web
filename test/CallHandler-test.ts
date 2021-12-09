@@ -16,17 +16,16 @@ limitations under the License.
 
 import './skinned-sdk';
 
-import { CallEvent, CallState } from 'matrix-js-sdk/src/webrtc/call';
-import EventEmitter from 'events';
-
-import CallHandler, { PlaceCallType, CallHandlerEvent } from '../src/CallHandler';
+import CallHandler, { CallHandlerEvent } from '../src/CallHandler';
 import { stubClient, mkStubRoom } from './test-utils';
 import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
+import { CallEvent, CallState, CallType } from 'matrix-js-sdk/src/webrtc/call';
 import DMRoomMap from '../src/utils/DMRoomMap';
+import EventEmitter from 'events';
 import SdkConfig from '../src/SdkConfig';
 import { ActionPayload } from '../src/dispatcher/payloads';
-import { Action } from '../src/dispatcher/actions';
+import { Action } from "../src/dispatcher/actions";
 
 const REAL_ROOM_ID = '$room1:example.org';
 const MAPPED_ROOM_ID = '$room2:example.org';
@@ -85,6 +84,14 @@ function untilDispatch(waitForAction: string): Promise<ActionPayload> {
                 dis.unregister(dispatchHandle);
                 resolve(payload);
             }
+        });
+    });
+}
+
+function untilCallHandlerEvent(callHandler: CallHandler, event: CallHandlerEvent): Promise<void> {
+    return new Promise<void>((resolve) => {
+        callHandler.addListener(event, () => {
+            resolve();
         });
     });
 }
@@ -174,12 +181,9 @@ describe('CallHandler', () => {
             },
         }]);
 
-        dis.dispatch({
-            action: Action.DialNumber,
-            number: '01818118181',
-        }, true);
+        await callHandler.dialNumber('01818118181');
 
-        const viewRoomPayload = await untilDispatch('view_room');
+        const viewRoomPayload = await untilDispatch(Action.ViewRoom);
         expect(viewRoomPayload.room_id).toEqual(MAPPED_ROOM_ID);
 
         // Check that a call was started
@@ -187,14 +191,9 @@ describe('CallHandler', () => {
     });
 
     it('should move calls between rooms when remote asserted identity changes', async () => {
-        dis.dispatch({
-            action: 'place_call',
-            type: PlaceCallType.Voice,
-            room_id: REAL_ROOM_ID,
-        }, true);
+        callHandler.placeCall(REAL_ROOM_ID, CallType.Voice);
 
-        // wait for the call to be set up
-        await untilDispatch('call_state');
+        await untilCallHandlerEvent(callHandler, CallHandlerEvent.CallState);
 
         // should start off in the actual room ID it's in at the protocol level
         expect(callHandler.getCallForRoom(REAL_ROOM_ID)).toBe(fakeCall);
