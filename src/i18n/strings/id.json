@@ -3368,5 +3368,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "Poll telah berakhir. Jawaban teratas: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Poll telah berakhir. Tidak ada yang memberi suara.",
     "Final result based on %(count)s votes|other": "Hasil akhir bedasarkan dari %(count)s suara",
-    "Final result based on %(count)s votes|one": "Hasil akhir bedasarkan dari %(count)s suara"
+    "Final result based on %(count)s votes|one": "Hasil akhir bedasarkan dari %(count)s suara",
+    "Link to room": "Tautan ke ruangan"
 }
