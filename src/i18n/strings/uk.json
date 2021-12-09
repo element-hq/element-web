@@ -2551,5 +2551,16 @@
     "End Poll": "Завершити опитування",
     "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Точно завершити опитування? Це покаже остаточні підсумки опитування, і більше ніхто не зможе голосувати.",
     "Link to room": "Лінк кімнати",
-    "Show options to enable 'Do not disturb' mode": "Показувати опцію увімкнення режиму «Не турбувати»"
+    "Show options to enable 'Do not disturb' mode": "Показувати опцію увімкнення режиму «Не турбувати»",
+    "Use high contrast": "Висока контрастність",
+    "Your homeserver does not support device management.": "Ваш домашній сервер не підтримує керування пристроями.",
+    "Unable to load device list": "Не вдалося звантажити список пристроїв",
+    "Devices without encryption support": "Пристрої без підтримки шифрування",
+    "You aren't signed into any other devices.": "Ви не авторизовані на жодних інших пристроях.",
+    "Matrix.org is the biggest public homeserver in the world, so it's a good place for many.": "Matrix.org — найбільший загальнодоступний домашній сервер у світі, він підійде багатьом.",
+    "We call the places where you can host your account 'homeservers'.": "Ми називаємо місця, де ви можете розмістити обліковий запис, \"домашніми серверами\".",
+    "You're all caught up": "Ви в курсі всього",
+    "Shows all threads you've participated in": "Показує всі треди, де ви брали участь",
+    "We'll generate a Security Key for you to store somewhere safe, like a password manager or a safe.": "Ми створимо ключ безпеки. Зберігайте його в надійному місці, скажімо в менеджері паролів чи сейфі.",
+    "Enter a security phrase only you know, as it's used to safeguard your data. To be secure, you shouldn't re-use your account password.": "Введіть секретну фразу, відому лише вам, бо вона оберігатиме ваші дані. Задля безпеки, використайте щось відмінне від паролю свого облікового запису."
 }
