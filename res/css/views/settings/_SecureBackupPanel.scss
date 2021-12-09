@@ -34,6 +34,9 @@ limitations under the License.
 
 .mx_SecureBackupPanel_buttonRow {
     margin: 1em 0;
+    display: inline-flex;
+    flex-flow: wrap;
+    row-gap: 10px;
 
     :nth-child(n + 1) {
         margin-inline-end: 10px;

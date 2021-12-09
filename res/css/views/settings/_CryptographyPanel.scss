@@ -20,4 +20,7 @@
 
 .mx_CryptographyPanel_importExportButtons {
     margin-bottom: 15px;
+    display: inline-flex;
+    flex-flow: wrap;
+    row-gap: 10px;
 }
