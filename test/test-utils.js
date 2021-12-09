@@ -104,6 +104,10 @@ export function createTestClient() {
         getCapabilities: jest.fn().mockResolvedValue({}),
         supportsExperimentalThreads: () => false,
         getRoomUpgradeHistory: jest.fn().mockReturnValue([]),
+        getOpenIdToken: jest.fn().mockResolvedValue(),
+        registerWithIdentityServer: jest.fn().mockResolvedValue({}),
+        getIdentityAccount: jest.fn().mockResolvedValue({}),
+        getTerms: jest.fn().mockResolvedValueOnce(),
     };
 }
 

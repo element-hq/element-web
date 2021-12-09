@@ -593,10 +593,25 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             );
         }
 
+        const isPanel = this.props.canPreview;
+
         const classes = classNames("mx_RoomPreviewBar", "dark-panel", `mx_RoomPreviewBar_${messageCase}`, {
-            "mx_RoomPreviewBar_panel": this.props.canPreview,
-            "mx_RoomPreviewBar_dialog": !this.props.canPreview,
+            "mx_RoomPreviewBar_panel": isPanel,
+            "mx_RoomPreviewBar_dialog": !isPanel,
         });
+
+        // ensure correct tab order for both views
+        const actions = isPanel
+            ? <>
+                { secondaryButton }
+                { extraComponents }
+                { primaryButton }
+            </>
+            : <>
+                { primaryButton }
+                { extraComponents }
+                { secondaryButton }
+            </>;
 
         return (
             <div className={classes}>
@@ -606,9 +621,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 </div>
                 { reasonElement }
                 <div className="mx_RoomPreviewBar_actions">
-                    { secondaryButton }
-                    { extraComponents }
-                    { primaryButton }
+                    { actions }
                 </div>
                 <div className="mx_RoomPreviewBar_footer">
                     { footer }
