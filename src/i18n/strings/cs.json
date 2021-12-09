@@ -3440,5 +3440,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "Hlasování skončilo. Nejčastější odpověď: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Hlasování skončilo. Nikdo nehlasoval.",
     "Final result based on %(count)s votes|one": "Konečný výsledek na základě %(count)s hlasu",
-    "Final result based on %(count)s votes|other": "Konečný výsledek na základě %(count)s hlasů"
+    "Final result based on %(count)s votes|other": "Konečný výsledek na základě %(count)s hlasů",
+    "Link to room": "Odkaz na místnost"
 }
