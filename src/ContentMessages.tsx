@@ -539,8 +539,6 @@ export default class ContentMessages {
 
             return (noRelation || matchingRelation) && !upload.canceled;
         });
-
-        return this.inprogress.filter(u => !u.canceled);
     }
 
     cancelUpload(promise: Promise<any>, matrixClient: MatrixClient) {
