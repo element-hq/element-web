@@ -2464,5 +2464,22 @@
     "Maximised widgets": "",
     "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "",
     "Render LaTeX maths in messages": "",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": ""
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "",
+    "Multiple integration managers (requires manual setup)": "Кілька менеджерів інтеграцій (потрібне ручне налаштування)",
+    "Low bandwidth mode (requires compatible homeserver)": "Заощаджувати трафік (потрібен сумісний сервер)",
+    "Developer": "Розробка",
+    "Moderation": "Модерування",
+    "Experimental": "Експериментально",
+    "Themes": "Теми",
+    "Report to moderators prototype. In rooms that support moderation, the `report` button will let you report abuse to room moderators": "Прототип скарг модераторам. У кімнатах із підтримкою модерації, кнопка \"Поскаржитись\" дозволятиме сповіщати модераторів кімнати про зловживання",
+    "Surround selected text when typing special characters": "Обгортати виділений текст при введенні особливих символів",
+    "Use Command + F to search timeline": "Command + F для пошуку в стрічці",
+    "Jump to the bottom of the timeline when you send a message": "Стрибати донизу стрічки при надсиланні повідомлення",
+    "Timeline": "Стрічка",
+    "Images, GIFs and videos": "Зображення, GIF та відео",
+    "Displaying time": "Формат часу",
+    "Code blocks": "Блоки коду",
+    "Show line numbers in code blocks": "Нумерувати рядки блоків коду",
+    "Expand code blocks by default": "Розгортати блоки коду одразу",
+    "Use Ctrl + F to search timeline": "Ctrl + F для пошуку в стрічці"
 }
