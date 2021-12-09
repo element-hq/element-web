@@ -3432,5 +3432,13 @@
     "Share location": "Sdílení polohy",
     "Manage pinned events": "Správa připnutých událostí",
     "Location sharing (under active development)": "Sdílení polohy (v aktivním vývoji)",
-    "Toggle space panel": "Přepnout panel prostoru"
+    "Toggle space panel": "Přepnout panel prostoru",
+    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Chcete ukončit toto hlasování? Zobrazí se konečné výsledky hlasování a lidé nebudou moci dále hlasovat.",
+    "End Poll": "Ukončit hlasování",
+    "Sorry, the poll did not end. Please try again.": "Omlouváme se, ale hlasování neskončilo. Zkuste to prosím znovu.",
+    "Failed to end poll": "Nepodařilo se ukončit hlasování",
+    "The poll has ended. Top answer: %(topAnswer)s": "Hlasování skončilo. Nejčastější odpověď: %(topAnswer)s",
+    "The poll has ended. No votes were cast.": "Hlasování skončilo. Nikdo nehlasoval.",
+    "Final result based on %(count)s votes|one": "Konečný výsledek na základě %(count)s hlasu",
+    "Final result based on %(count)s votes|other": "Konečný výsledek na základě %(count)s hlasů"
 }
