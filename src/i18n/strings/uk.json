@@ -2638,5 +2638,9 @@
     "Be found by phone or email": "Бути знайденим за номером телефону або е-поштою",
     "Find others by phone or email": "Шукати інших за номером телефону або е-поштою",
     "You can't disable this later. Bridges & most bots won't work yet.": "Ви не зможете вимкнути це пізніше. Мости й більшість ботів поки не працюватимуть.",
-    "Only people invited will be able to find and join this room.": "Лише запрошені до цієї кімнати люди зможуть знайти й приєднатися до неї."
+    "Only people invited will be able to find and join this room.": "Лише запрошені до цієї кімнати люди зможуть знайти й приєднатися до неї.",
+    "This will allow you to reset your password and receive notifications.": "Це дозволить вам скинути пароль і отримувати сповіщення.",
+    "Reset event store?": "Очистити сховище подій?",
+    "Other homeserver": "Інший домашній сервер",
+    "Sign into your homeserver": "Увійдіть на ваш домашній сервер"
 }
