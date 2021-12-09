@@ -44,6 +44,7 @@ import { Action } from "../../../dispatcher/actions";
 import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
 import { ROOM_NOTIFICATIONS_TAB } from "../dialogs/RoomSettingsDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import DMRoomMap from "../../../utils/DMRoomMap";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -96,8 +97,10 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         />;
     }
 
+    const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+
     let inviteOption: JSX.Element;
-    if (room.canInvite(cli.getUserId())) {
+    if (room.canInvite(cli.getUserId()) && !isDm) {
         const onInviteClick = (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -179,6 +182,42 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         </IconizedContextMenuOption>;
     }
 
+    let peopleOption: JSX.Element;
+    let copyLinkOption: JSX.Element;
+    if (!isDm) {
+        peopleOption = <IconizedContextMenuOption
+            onClick={(ev: ButtonEvent) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                ensureViewingRoom();
+                onRoomMembersClick(false);
+                onFinished();
+            }}
+            label={_t("People")}
+            iconClassName="mx_RoomTile_iconPeople"
+        >
+            <span className="mx_IconizedContextMenu_sublabel">
+                { room.getJoinedMemberCount() }
+            </span>
+        </IconizedContextMenuOption>;
+
+        copyLinkOption = <IconizedContextMenuOption
+            onClick={(ev: ButtonEvent) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                dis.dispatch({
+                    action: "copy_room",
+                    room_id: room.roomId,
+                });
+                onFinished();
+            }}
+            label={_t("Copy link")}
+            iconClassName="mx_RoomTile_iconCopyLink"
+        />;
+    }
+
     const onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -212,23 +251,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
             { inviteOption }
             { notificationOption }
             { favouriteOption }
-
-            <IconizedContextMenuOption
-                onClick={(ev: ButtonEvent) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
-
-                    ensureViewingRoom();
-                    onRoomMembersClick(false);
-                    onFinished();
-                }}
-                label={_t("People")}
-                iconClassName="mx_RoomTile_iconPeople"
-            >
-                <span className="mx_IconizedContextMenu_sublabel">
-                    { room.getJoinedMemberCount() }
-                </span>
-            </IconizedContextMenuOption>
+            { peopleOption }
 
             <IconizedContextMenuOption
                 onClick={(ev: ButtonEvent) => {
@@ -261,21 +284,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
             />
 
             { lowPriorityOption }
-
-            <IconizedContextMenuOption
-                onClick={(ev: ButtonEvent) => {
-                    ev.preventDefault();
-                    ev.stopPropagation();
-
-                    dis.dispatch({
-                        action: "copy_room",
-                        room_id: room.roomId,
-                    });
-                    onFinished();
-                }}
-                label={_t("Copy link")}
-                iconClassName="mx_RoomTile_iconCopyLink"
-            />
+            { copyLinkOption }
 
             <IconizedContextMenuOption
                 onClick={(ev: ButtonEvent) => {
