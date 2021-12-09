@@ -3426,5 +3426,13 @@
     "Connectivity to the server has been lost": "De verbinding met de server is verbroken",
     "You cannot place calls in this browser.": "U kunt geen oproepen plaatsen in deze browser.",
     "Calls are unsupported": "Oproepen worden niet ondersteund",
-    "Toggle space panel": "Spacepaneel in- of uitschakelen"
+    "Toggle space panel": "Spacepaneel in- of uitschakelen",
+    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Weet u zeker dat u de poll wil sluiten? Dit zal zichtbaar zijn in de einduitslag van de poll en personen kunnen dan niet langer stemmen.",
+    "End Poll": "Poll sluiten",
+    "Sorry, the poll did not end. Please try again.": "Helaas, de poll is niet gesloten. Probeer het opnieuw.",
+    "Failed to end poll": "Poll sluiten is mislukt",
+    "The poll has ended. Top answer: %(topAnswer)s": "De poll is gesloten. Meest gestemd: %(topAnswer)s",
+    "The poll has ended. No votes were cast.": "De poll is gesloten. Er kan niet meer worden gestemd.",
+    "Final result based on %(count)s votes|one": "Einduitslag gebaseerd op %(count)s stem",
+    "Final result based on %(count)s votes|other": "Einduitslag gebaseerd op %(count)s stemmen"
 }
