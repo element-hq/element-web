@@ -34,7 +34,7 @@ jobs:
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
-            mutation add_to_project($projectid:String!,$contentid:String!) {
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
               addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
                 projectNextItem {
                   id
@@ -60,7 +60,7 @@ jobs:
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
-            mutation add_to_project($projectid:String!,$contentid:String!) {
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
               addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
                 projectNextItem {
                   id
@@ -83,7 +83,7 @@ jobs:
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
-            mutation add_to_project($projectid:String!,$contentid:String!) {
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
               addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
                 projectNextItem {
                   id
@@ -106,7 +106,7 @@ jobs:
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
-            mutation add_to_project($projectid:String!,$contentid:String!) {
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
               addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
                 projectNextItem {
                   id
@@ -129,7 +129,7 @@ jobs:
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
-            mutation add_to_project($projectid:String!,$contentid:String!) {
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
               addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
                 projectNextItem {
                   id
