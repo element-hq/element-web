@@ -3431,5 +3431,12 @@
     "Calls are unsupported": "Le chiamate non sono supportate",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Alcuni esempi delle informazioni che ci vengono inviate per aiutarci a migliorare %(brand)s includono:",
     "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "La nostra informativa completa sui cookie può essere trovata <CookiePolicyLink>qui</CookiePolicyLink>.",
-    "Toggle space panel": "Apri/chiudi pannello spazio"
+    "Toggle space panel": "Apri/chiudi pannello spazio",
+    "End Poll": "Termina sondaggio",
+    "Sorry, the poll did not end. Please try again.": "Spiacenti, il sondaggio non è terminato. Riprova.",
+    "Failed to end poll": "Chiusura del sondaggio fallita",
+    "The poll has ended. Top answer: %(topAnswer)s": "Il sondaggio è terminato. Risposta più scelta: %(topAnswer)s",
+    "The poll has ended. No votes were cast.": "Il sondaggio è terminato. Nessun voto inviato.",
+    "Final result based on %(count)s votes|one": "Risultato finale basato su %(count)s voto",
+    "Final result based on %(count)s votes|other": "Risultato finale basato su %(count)s voti"
 }
