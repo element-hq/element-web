@@ -93,16 +93,18 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
         } else {
             return (
                 <div className="mx_SettingsFlag">
-                    <span className="mx_SettingsFlag_label">{ label }</span>
+                    <label className="mx_SettingsFlag_label">
+                        <span className="mx_SettingsFlag_labelText">{ label }</span>
+                        { description && <span className="mx_SettingsFlag_microcopy">
+                            { description }
+                        </span> }
+                    </label>
                     <ToggleSwitch
                         checked={this.state.value}
                         onChange={this.onChange}
                         disabled={this.props.disabled || !canChange}
                         aria-label={label}
                     />
-                    { description && <div className="mx_SettingsFlag_microcopy">
-                        { description }
-                    </div> }
                 </div>
             );
         }

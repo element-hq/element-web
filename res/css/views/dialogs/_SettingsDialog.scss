@@ -29,6 +29,8 @@ limitations under the License.
         box-sizing: border-box;
         min-width: 580px;
         padding-right: 100px;
+        display: flex;
+        flex-direction: column;
 
         // Put some padding on the bottom to avoid the settings tab from
         // colliding harshly with the dialog when scrolled down.

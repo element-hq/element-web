@@ -98,15 +98,13 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn 
     if (space.getJoinRule() === JoinRule.Public) {
         addressesSection = <>
             <span className="mx_SettingsTab_subheading">{ _t("Address") }</span>
-            <div className="mx_SettingsTab_section mx_SettingsTab_subsectionText">
-                <AliasSettings
-                    roomId={space.roomId}
-                    canSetCanonicalAlias={canSetCanonical}
-                    canSetAliases={true}
-                    canonicalAliasEvent={canonicalAliasEv}
-                    hidePublishSetting={true}
-                />
-            </div>
+            <AliasSettings
+                roomId={space.roomId}
+                canSetCanonicalAlias={canSetCanonical}
+                canSetAliases={true}
+                canonicalAliasEvent={canonicalAliasEv}
+                hidePublishSetting={true}
+            />
         </>;
     }
 

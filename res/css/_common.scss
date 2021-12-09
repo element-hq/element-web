@@ -172,6 +172,21 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     outline: none;
 }
 
+// override defaults
+fieldset {
+    display: inline-block;
+    margin-inline: unset;
+    padding-block: unset;
+    padding-inline: unset;
+    min-inline-size: unset;
+    border: none;
+}
+
+legend {
+    padding-inline: unset;
+    border: none;
+}
+
 // .mx_textinput is a container for a text input
 // + some other controls like buttons, ...
 // it has the appearance of a text box so the controls

@@ -66,15 +66,9 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
         const canChangeGroups = room.currentState.mayClientSendStateEvent("m.room.related_groups", client);
         const groupsEvent = room.currentState.getStateEvents("m.room.related_groups", "");
 
-        let urlPreviewSettings = <>
-            <span className='mx_SettingsTab_subheading'>{ _t("URL Previews") }</span>
-            <div className='mx_SettingsTab_section'>
-                <UrlPreviewSettings room={room} />
-            </div>
-        </>;
-        if (!SettingsStore.getValue(UIFeature.URLPreviews)) {
-            urlPreviewSettings = null;
-        }
+        const urlPreviewSettings = SettingsStore.getValue(UIFeature.URLPreviews) ?
+            <UrlPreviewSettings room={room} /> :
+            null;
 
         let flairSection;
         if (SettingsStore.getValue(UIFeature.Flair)) {
@@ -110,14 +104,12 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
                 </div>
 
                 <div className="mx_SettingsTab_heading">{ _t("Room Addresses") }</div>
-                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <AliasSettings
-                        roomId={this.props.roomId}
-                        canSetCanonicalAlias={canSetCanonical}
-                        canSetAliases={canSetAliases}
-                        canonicalAliasEvent={canonicalAliasEv}
-                    />
-                </div>
+                <AliasSettings
+                    roomId={this.props.roomId}
+                    canSetCanonicalAlias={canSetCanonical}
+                    canSetAliases={canSetAliases}
+                    canonicalAliasEvent={canonicalAliasEv}
+                />
                 <div className="mx_SettingsTab_heading">{ _t("Other") }</div>
                 { flairSection }
                 { urlPreviewSettings }

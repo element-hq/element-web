@@ -28,6 +28,7 @@ import Modal from "../../../Modal";
 import RoomPublishSetting from "./RoomPublishSetting";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAliasField from "../elements/RoomAliasField";
+import SettingsFieldset from "../settings/SettingsFieldset";
 
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -380,6 +381,17 @@ export default class AliasSettings extends React.Component<IProps, IState> {
 
         return (
             <div className='mx_AliasSettings'>
+                <SettingsFieldset
+                    legend={_t("Published Addresses")}
+                    description={<>
+                        { isSpaceRoom
+                            ? _t("Published addresses can be used by anyone on any server to join your space.")
+                            : _t("Published addresses can be used by anyone on any server to join your room.") }
+                        &nbsp;
+                        { _t("To publish an address, it needs to be set as a local address first.") }
+                    </>}
+                >
+                    { /*
                 <span className='mx_SettingsTab_subheading'>{ _t("Published Addresses") }</span>
                 <p>
                     { isSpaceRoom
@@ -387,47 +399,46 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         : _t("Published addresses can be used by anyone on any server to join your room.") }
                     &nbsp;
                     { _t("To publish an address, it needs to be set as a local address first.") }
-                </p>
-                { canonicalAliasSection }
-                { this.props.hidePublishSetting
-                    ? null
-                    : <RoomPublishSetting
-                        roomId={this.props.roomId}
-                        canSetCanonicalAlias={this.props.canSetCanonicalAlias}
-                    /> }
-                <datalist id="mx_AliasSettings_altRecommendations">
-                    { this.getLocalNonAltAliases().map(alias => {
-                        return <option value={alias} key={alias} />;
-                    }) };
-                </datalist>
-                <EditableAliasesList
-                    id="roomAltAliases"
-                    items={this.state.altAliases}
-                    newItem={this.state.newAltAlias}
-                    onNewItemChanged={this.onNewAltAliasChanged}
-                    canRemove={this.props.canSetCanonicalAlias}
-                    canEdit={this.props.canSetCanonicalAlias}
-                    onItemAdded={this.onAltAliasAdded}
-                    onItemRemoved={this.onAltAliasDeleted}
-                    suggestionsListId="mx_AliasSettings_altRecommendations"
-                    itemsLabel={_t('Other published addresses:')}
-                    noItemsLabel={_t('No other published addresses yet, add one below')}
-                    placeholder={_t('New published address (e.g. #alias:server)')}
-                />
-                <span className='mx_SettingsTab_subheading mx_AliasSettings_localAliasHeader'>
-                    { _t("Local Addresses") }
-                </span>
-                <p>
-                    { isSpaceRoom
+                </p> */ }
+                    { canonicalAliasSection }
+                    { this.props.hidePublishSetting
+                        ? null
+                        : <RoomPublishSetting
+                            roomId={this.props.roomId}
+                            canSetCanonicalAlias={this.props.canSetCanonicalAlias}
+                        /> }
+                    <datalist id="mx_AliasSettings_altRecommendations">
+                        { this.getLocalNonAltAliases().map(alias => {
+                            return <option value={alias} key={alias} />;
+                        }) };
+                    </datalist>
+                    <EditableAliasesList
+                        id="roomAltAliases"
+                        items={this.state.altAliases}
+                        newItem={this.state.newAltAlias}
+                        onNewItemChanged={this.onNewAltAliasChanged}
+                        canRemove={this.props.canSetCanonicalAlias}
+                        canEdit={this.props.canSetCanonicalAlias}
+                        onItemAdded={this.onAltAliasAdded}
+                        onItemRemoved={this.onAltAliasDeleted}
+                        suggestionsListId="mx_AliasSettings_altRecommendations"
+                        itemsLabel={_t('Other published addresses:')}
+                        noItemsLabel={_t('No other published addresses yet, add one below')}
+                        placeholder={_t('New published address (e.g. #alias:server)')}
+                    />
+                </SettingsFieldset>
+                <SettingsFieldset legend={_t("Local Addresses")}
+                    description={isSpaceRoom
                         ? _t("Set addresses for this space so users can find this space " +
                             "through your homeserver (%(localDomain)s)", { localDomain })
                         : _t("Set addresses for this room so users can find this room " +
-                        "through your homeserver (%(localDomain)s)", { localDomain }) }
-                </p>
-                <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
-                    <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more") }</summary>
-                    { localAliasesList }
-                </details>
+                        "through your homeserver (%(localDomain)s)", { localDomain })}>
+                    <details onToggle={this.onLocalAliasesToggled} open={this.state.detailsOpen}>
+                        <summary>{ this.state.detailsOpen ? _t('Show less') : _t("Show more") }</summary>
+                        { localAliasesList }
+                    </details>
+                </SettingsFieldset>
+
             </div>
         );
     }
