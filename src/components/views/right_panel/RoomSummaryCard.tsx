@@ -96,6 +96,11 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     const name = WidgetUtils.getWidgetName(app);
     const dataTitle = WidgetUtils.getWidgetDataTitle(app);
     const subtitle = dataTitle && " - " + dataTitle;
+    const [canModifyWidget, setCanModifyWidget] = useState<boolean>();
+
+    useEffect(() => {
+        setCanModifyWidget(WidgetUtils.canUserModifyWidgets(room.roomId));
+    }, [room.roomId]);
 
     const onOpenWidgetClick = () => {
         defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
@@ -167,7 +172,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             { subtitle }
         </AccessibleTooltipButton>
 
-        <ContextMenuTooltipButton
+        { canModifyWidget && <ContextMenuTooltipButton
             className={classNames({
                 "mx_RoomSummaryCard_app_options": true,
                 "mx_RoomSummaryCard_maximised_widget": SettingsStore.getValue("feature_maximised_widgets"),
@@ -176,7 +181,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             onClick={openMenu}
             title={_t("Options")}
             yOffset={-24}
-        />
+        /> }
 
         <AccessibleTooltipButton
             className="mx_RoomSummaryCard_app_pinToggle"
