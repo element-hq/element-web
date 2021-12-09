@@ -2445,5 +2445,12 @@
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Серед збираної нами інформації, що допомагає поліпшувати %(brand)s:",
     "Unable to remove contact information": "Не вдалося вилучити контактні дані",
     "Automatically send debug logs on any error": "Автоматично надсилати журнал зневадження про всі помилки",
-    "Developer mode": "Режим розробника"
+    "Developer mode": "Режим розробника",
+    "Deselect all": "Зняти все виділення",
+    "Select all": "Виділити всі",
+    "Manage your signed-in devices below. A device's name is visible to people you communicate with.": "Керуйте авторизованими вами пристроями нижче. Назву пристрою бачать люди, з якими ви спілкуєтесь.",
+    "Where you're signed in": "Звідки ви входили",
+    "Request media permissions": "Запитати медіа-дозволи",
+    "Missing media permissions, click the button below to request.": "Бракує медіа-дозволів, натисніть кнопку нижче, щоб їх надати.",
+    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Здійснювати дзвінки 1:1 без сервера-посередника (інший бік знатиме вашу IP-адресу)"
 }
