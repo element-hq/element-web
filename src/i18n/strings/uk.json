@@ -2481,5 +2481,14 @@
     "Code blocks": "Блоки коду",
     "Show line numbers in code blocks": "Нумерувати рядки блоків коду",
     "Expand code blocks by default": "Розгортати блоки коду одразу",
-    "Use Ctrl + F to search timeline": "Ctrl + F для пошуку в стрічці"
+    "Use Ctrl + F to search timeline": "Ctrl + F для пошуку в стрічці",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Якщо ви надіслали баг у наш GitHub, журнали зневадження допоможуть нам відстежити проблему. Журнали зневадження містять дані про використання, зокрема ваше користувацьке ім'я, ідентифікатори чи назви відвіданих вами кімнат або груп, використані вами нещодавно елементи інтерфейсу та користувацькі імена інших користувачів. Вони не містять повідомлень.",
+    "Olm version:": "версія Olm:",
+    "Your access token gives full access to your account. Do not share it with anyone.": "Токен доступу надає повний доступ до вашого акаунта. Не передавайте його нікому.",
+    "Access Token": "Токен доступу",
+    "Identity server is": "Сервер ідентифікації —",
+    "Messaging": "Спілкування",
+    "Show message previews for reactions in all rooms": "Показувати повідомлення, на які реагують, з усіх кімнат",
+    "Show message previews for reactions in DMs": "Показувати особисті повідомлення, на які реагують",
+    "Message Previews": "Позір повідомлень"
 }
