@@ -18,7 +18,8 @@ import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-c
 import { WebStorageSessionStore } from "matrix-js-sdk/src/store/session/webstorage";
 import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
 
-import IndexedDBWorker from "../workers/indexeddb.worker.ts"; // @ts-ignore - `.ts` is needed here to make TS happy
+// @ts-ignore - `.ts` is needed here to make TS happy
+import IndexedDBWorker from "../workers/indexeddb.worker.ts";
 
 const localStorage = window.localStorage;
 
