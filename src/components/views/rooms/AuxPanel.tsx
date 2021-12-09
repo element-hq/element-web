@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { lexicographicCompare } from 'matrix-js-sdk/src/utils';
 import { Room } from 'matrix-js-sdk/src/models/room';
+import { throttle } from 'lodash';
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AppsDrawer from './AppsDrawer';
@@ -27,7 +28,6 @@ import ResizeNotifier from "../../../utils/ResizeNotifier";
 import CallViewForRoom from '../voip/CallViewForRoom';
 import { objectHasDiff } from "../../../utils/objects";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { throttle } from 'lodash';
 
 interface IProps {
     // js-sdk room object

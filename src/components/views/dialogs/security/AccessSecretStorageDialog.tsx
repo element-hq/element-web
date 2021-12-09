@@ -18,6 +18,7 @@ import { debounce } from "lodash";
 import classNames from 'classnames';
 import React, { ChangeEvent, FormEvent } from 'react';
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import * as sdk from '../../../../index';
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
@@ -27,8 +28,6 @@ import { _t } from '../../../../languageHandler';
 import { IDialogProps } from "../IDialogProps";
 import { accessSecretStorage } from "../../../../SecurityManager";
 import Modal from "../../../../Modal";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // Maximum acceptable size of a key file. It's 59 characters including the spaces we encode,
 // so this should be plenty and allow for people putting extra whitespace in the file because

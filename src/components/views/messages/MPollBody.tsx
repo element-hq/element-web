@@ -16,6 +16,10 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Relations } from 'matrix-js-sdk/src/models/relations';
+import { MatrixClient } from 'matrix-js-sdk/src/matrix';
+
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Modal from '../../../Modal';
@@ -31,11 +35,8 @@ import {
     TEXT_NODE_TYPE,
 } from '../../../polls/consts';
 import StyledRadioButton from '../elements/StyledRadioButton';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Relations } from 'matrix-js-sdk/src/models/relations';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from '../dialogs/ErrorDialog';
-import { MatrixClient } from 'matrix-js-sdk/src/matrix';
 
 interface IState {
     selected?: string; // Which option was clicked by the local user

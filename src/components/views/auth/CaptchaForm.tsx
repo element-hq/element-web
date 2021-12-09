@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from '../../../languageHandler';
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const DIV_ID = 'mx_recaptcha';
 

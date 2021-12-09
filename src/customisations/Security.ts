@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/crypto/api';
+
 import { IMatrixClientCreds } from "../MatrixClientPeg";
 import { Kind as SetupEncryptionKind } from "../toasts/SetupEncryptionToast";
-import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/crypto/api';
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 function examineLoginResponse(

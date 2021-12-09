@@ -2,10 +2,10 @@ import '../../../skinned-sdk'; // Must be first for skinning to work
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 import { EventEmitter } from 'events';
-import * as TestUtils from '../../../test-utils';
-
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk';
+
+import * as TestUtils from '../../../test-utils';
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import MKeyVerificationConclusion from '../../../../src/components/views/messages/MKeyVerificationConclusion';
 
 const trustworthy = () => ({ isCrossSigningVerified: () => true });

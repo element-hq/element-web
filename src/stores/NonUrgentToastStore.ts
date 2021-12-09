@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
+
 import { ComponentClass } from "../@types/common";
 import { UPDATE_EVENT } from "./AsyncStore";
 

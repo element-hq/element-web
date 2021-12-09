@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { groupMemberFromApiObject, groupRoomFromApiObject } from '../groups';
 import FlairStore from './FlairStore';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import dis from '../dispatcher/dispatcher';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export function parseMembersResponse(response) {
     return response.chunk.map((apiMember) => groupMemberFromApiObject(apiMember));

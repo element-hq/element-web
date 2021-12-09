@@ -15,9 +15,9 @@
  */
 
 import React, { ReactHTML } from 'react';
+import classnames from 'classnames';
 
 import { Key } from '../../../Keyboard';
-import classnames from 'classnames';
 
 export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
 

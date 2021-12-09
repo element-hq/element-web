@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React, { ChangeEvent } from 'react';
+
 import EventTilePreview from '../elements/EventTilePreview';
 import Field from '../elements/Field';
-import React, { ChangeEvent } from 'react';
 import SettingsFlag from '../elements/SettingsFlag';
 import SettingsStore from "../../../settings/SettingsStore";
 import Slider from "../elements/Slider";

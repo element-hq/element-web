@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+
 import { _t, pickBestLanguage } from "../../../languageHandler";
 import { objectClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";

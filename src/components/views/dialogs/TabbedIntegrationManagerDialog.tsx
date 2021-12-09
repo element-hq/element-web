@@ -15,10 +15,12 @@ limitations under the License.
 */
 
 import React from 'react';
-import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { dialogTermsInteractionCallback, TermsNotSignedError } from "../../../Terms";
 import classNames from 'classnames';
+import { logger } from "matrix-js-sdk/src/logger";
+
+import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
+import { dialogTermsInteractionCallback, TermsNotSignedError } from "../../../Terms";
 import * as ScalarMessaging from "../../../ScalarMessaging";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
@@ -26,8 +28,6 @@ import ScalarAuthClient from "../../../ScalarAuthClient";
 import AccessibleButton from "../elements/AccessibleButton";
 import IntegrationManager from "../settings/IntegrationManager";
 import { IDialogProps } from "./IDialogProps";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends IDialogProps {
     /**

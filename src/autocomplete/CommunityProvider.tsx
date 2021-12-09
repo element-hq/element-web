@@ -17,18 +17,19 @@ limitations under the License.
 
 import React from 'react';
 import Group from "matrix-js-sdk/src/models/group";
+import { sortBy } from "lodash";
+import { Room } from 'matrix-js-sdk/src/models/room';
+
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
 import { PillCompletion } from './Components';
-import { sortBy } from "lodash";
 import { makeGroupPermalink } from "../utils/permalinks/Permalinks";
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import FlairStore from "../stores/FlairStore";
 import { mediaFromMxc } from "../customisations/Media";
 import BaseAvatar from '../components/views/avatars/BaseAvatar';
-import { Room } from 'matrix-js-sdk/src/models/room';
 import { TimelineRenderingType } from '../contexts/RoomContext';
 
 const COMMUNITY_REGEX = /\B\+\S*/g;

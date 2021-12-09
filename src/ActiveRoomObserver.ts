@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import { EventSubscription } from 'fbemitter';
-import RoomViewStore from './stores/RoomViewStore';
-
 import { logger } from "matrix-js-sdk/src/logger";
+
+import RoomViewStore from './stores/RoomViewStore';
 
 type Listener = (isActive: boolean) => void;
 

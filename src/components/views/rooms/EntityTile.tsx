@@ -17,9 +17,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import classNames from "classnames";
+
 import AccessibleButton from '../elements/AccessibleButton';
 import { _td } from '../../../languageHandler';
-import classNames from "classnames";
 import E2EIcon, { E2EState } from './E2EIcon';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseAvatar from '../avatars/BaseAvatar';

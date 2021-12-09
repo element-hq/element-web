@@ -15,15 +15,16 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import classNames from 'classnames';
+
 import * as HtmlUtils from '../../../HtmlUtils';
 import { editBodyDiffToHtml } from '../../../utils/MessageDiffUtils';
 import { formatTime } from '../../../DateUtils';
-import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { pillifyLinks, unmountPills } from '../../../utils/pillify';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
-import classNames from 'classnames';
 import RedactedBody from "./RedactedBody";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";

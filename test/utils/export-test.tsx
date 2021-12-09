@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { renderToString } from "react-dom/server";
 import { IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
+
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { IExportOptions, ExportType, ExportFormat } from "../../src/utils/exportUtils/exportUtils";
 import '../skinned-sdk';
@@ -22,7 +24,6 @@ import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
 import HTMLExporter from "../../src/utils/exportUtils/HtmlExport";
 import * as TestUtilsMatrix from '../test-utils';
 import { stubClient } from '../test-utils';
-import { renderToString } from "react-dom/server";
 
 let client: MatrixClient;
 

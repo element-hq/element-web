@@ -15,9 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import dis from '../dispatcher/dispatcher';
 import EventEmitter from 'events';
 import { throttle } from "lodash";
+
+import dis from '../dispatcher/dispatcher';
 import SettingsStore from "../settings/SettingsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "./room-list/RoomListStore";
 import { RoomNotificationStateStore } from "./notifications/RoomNotificationStateStore";

@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { RoomUpdateCause, TagID } from "../../models";
 import { SortAlgorithm } from "../models";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 /**
  * Represents a list ordering algorithm. Subclasses should populate the

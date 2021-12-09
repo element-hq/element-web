@@ -15,6 +15,9 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { Relations } from 'matrix-js-sdk/src/models/relations';
+
 import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
@@ -25,10 +28,8 @@ import { IMediaBody } from "./IMediaBody";
 import { IOperableEventTile } from "../context_menus/MessageContextMenu";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ReactAnyComponent } from "../../../@types/common";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { IBodyProps } from "./IBodyProps";
 import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
-import { Relations } from 'matrix-js-sdk/src/models/relations';
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {

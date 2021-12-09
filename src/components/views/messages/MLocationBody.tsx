@@ -16,10 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import maplibregl from 'maplibre-gl';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import SdkConfig from '../../../SdkConfig';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IBodyProps } from "./IBodyProps";
-import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from '../../../languageHandler';
 
 interface IState {

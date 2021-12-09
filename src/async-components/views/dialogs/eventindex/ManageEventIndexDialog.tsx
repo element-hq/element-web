@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { _t } from '../../../../languageHandler';
 import SdkConfig from '../../../../SdkConfig';
 import SettingsStore from "../../../../settings/SettingsStore";
-
 import Modal from '../../../../Modal';
 import { formatBytes, formatCountLong } from "../../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../../indexing/EventIndexPeg";

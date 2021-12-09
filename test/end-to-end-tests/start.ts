@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import * as fs from "fs";
+import program = require('commander');
+
 import { ElementSession } from './src/session';
 import { scenario } from './src/scenario';
 import { RestSessionCreator } from './src/rest/creator';
-import * as fs from "fs";
 
-import program = require('commander');
 program
     .option('--no-logs', "don't output logs, document html on error", false)
     .option('--app-url [url]', "url to test", "http://localhost:5000")

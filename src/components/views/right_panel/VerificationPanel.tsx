@@ -15,27 +15,23 @@ limitations under the License.
 */
 
 import React from "react";
-
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { verificationMethods } from 'matrix-js-sdk/src/crypto';
-import { SCAN_QR_CODE_METHOD } from "matrix-js-sdk/src/crypto/verification/QRCode";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { SCAN_QR_CODE_METHOD, ReciprocateQRCode } from "matrix-js-sdk/src/crypto/verification/QRCode";
+import { VerificationRequest, Phase } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
-import { ReciprocateQRCode } from "matrix-js-sdk/src/crypto/verification/QRCode";
 import { SAS } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { logger } from "matrix-js-sdk/src/logger";
 
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import VerificationQRCode from "../elements/crypto/VerificationQRCode";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import E2EIcon, { E2EState } from "../rooms/E2EIcon";
-import { Phase } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import Spinner from "../elements/Spinner";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 import VerificationShowSas from "../verification/VerificationShowSas";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     layout: string;

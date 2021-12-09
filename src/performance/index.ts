@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { PerformanceEntryNames } from "./entry-names";
-
 import { logger } from "matrix-js-sdk/src/logger";
+
+import { PerformanceEntryNames } from "./entry-names";
 
 interface GetEntriesOptions {
     name?: string;

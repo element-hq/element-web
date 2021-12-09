@@ -21,6 +21,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Error as ErrorEvent } from "matrix-analytics-events/types/typescript/Error";
 import { Screen as ScreenEvent } from "matrix-analytics-events/types/typescript/Screen";
 import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/src/logger";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
@@ -35,7 +36,6 @@ import PlatformPeg from "../../PlatformPeg";
 import SdkConfig from "../../SdkConfig";
 import dis from "../../dispatcher/dispatcher";
 import Notifier from '../../Notifier';
-
 import Modal from "../../Modal";
 import { showRoomInviteDialog, showStartChatInviteDialog } from '../../RoomInvite';
 import * as Rooms from '../../Rooms';
@@ -43,7 +43,6 @@ import * as Lifecycle from '../../Lifecycle';
 // LifecycleStore is not used but does listen to and dispatch actions
 import '../../stores/LifecycleStore';
 import PageType from '../../PageTypes';
-
 import createRoom, { IOpts } from "../../createRoom";
 import { _t, _td, getCurrentLanguage } from '../../languageHandler';
 import SettingsStore from "../../settings/SettingsStore";
@@ -100,7 +99,6 @@ import Registration from './auth/Registration';
 import Login from "./auth/Login";
 import ErrorBoundary from '../views/elements/ErrorBoundary';
 import VerificationRequestToast from '../views/toasts/VerificationRequestToast';
-
 import PerformanceMonitor, { PerformanceEntryNames } from "../../performance";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 import SoftLogout from './auth/SoftLogout';
@@ -109,8 +107,6 @@ import { copyPlaintext } from "../../utils/strings";
 import { PosthogAnalytics } from '../../PosthogAnalytics';
 import { initSentry } from "../../sentry";
 import CallHandler from "../../CallHandler";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { showSpaceInvite } from "../../utils/space";
 import GenericToast from "../views/toasts/GenericToast";
 import InfoDialog from "../views/dialogs/InfoDialog";

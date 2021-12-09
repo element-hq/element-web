@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import Modal from "../../../Modal";
@@ -28,8 +30,6 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ErrorDialog from '../dialogs/ErrorDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 import SpaceStore from "../../../stores/spaces/SpaceStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     event: MatrixEvent;

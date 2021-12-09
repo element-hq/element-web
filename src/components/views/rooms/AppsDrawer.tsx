@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import { Resizable } from "re-resizable";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import AppTile from '../elements/AppTile';
 import dis from '../../../dispatcher/dispatcher';
@@ -33,7 +34,6 @@ import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
 import { useStateCallback } from "../../../hooks/useStateCallback";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { IApp } from "../../../stores/WidgetStore";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import Spinner from "../elements/Spinner";

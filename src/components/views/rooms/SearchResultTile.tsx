@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from "react";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
+
 import RoomContext from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";

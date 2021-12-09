@@ -14,11 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as sdk from '../../../index';
 import React, { createRef } from 'react';
+import PropTypes from 'prop-types';
+
+import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
-import PropTypes from 'prop-types';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { getDisplayAliasForAliasSet } from '../../../Rooms';

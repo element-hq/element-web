@@ -16,9 +16,11 @@ limitations under the License.
 
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
+import filesize from "filesize";
+import { IEventRelation } from 'matrix-js-sdk/src';
+
 import ContentMessages from '../../ContentMessages';
 import dis from "../../dispatcher/dispatcher";
-import filesize from "filesize";
 import { _t } from '../../languageHandler';
 import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
@@ -27,7 +29,6 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import { IUpload } from "../../models/IUpload";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { IEventRelation } from 'matrix-js-sdk/src';
 
 interface IProps {
     room: Room;

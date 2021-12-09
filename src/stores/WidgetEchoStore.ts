@@ -17,6 +17,7 @@ limitations under the License.
 import EventEmitter from 'events';
 import { IWidget } from 'matrix-widget-api';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { WidgetType } from "../widgets/WidgetType";
 
 /**

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { IMyDevice } from 'matrix-js-sdk/src/client';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -30,8 +31,6 @@ import Modal from "../../../Modal";
 import SetupEncryptionDialog from '../dialogs/security/SetupEncryptionDialog';
 import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
 import LogoutDialog from '../dialogs/LogoutDialog';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     device: IMyDevice;

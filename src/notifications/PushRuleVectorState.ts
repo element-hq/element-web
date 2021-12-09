@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IPushRule } from "matrix-js-sdk/src/@types/PushRules";
+
 import { StandardActions } from "./StandardActions";
 import { NotificationUtils } from "./NotificationUtils";
-import { IPushRule } from "matrix-js-sdk/src/@types/PushRules";
 
 export enum VectorState {
     /** The push rule is disabled */

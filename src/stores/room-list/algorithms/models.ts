@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { TagID } from "../models";
 import { Room } from "matrix-js-sdk/src/models/room";
+
+import { TagID } from "../models";
 import { OrderingAlgorithm } from "./list-ordering/OrderingAlgorithm";
 
 export enum SortAlgorithm {

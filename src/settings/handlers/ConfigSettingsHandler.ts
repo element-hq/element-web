@@ -15,9 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+
 import SettingsHandler from "./SettingsHandler";
 import SdkConfig from "../../SdkConfig";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 /**
  * Gets and sets settings at the "config" level. This handler does not make use of the

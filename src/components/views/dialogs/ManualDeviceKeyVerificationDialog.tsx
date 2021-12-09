@@ -19,12 +19,13 @@ limitations under the License.
 */
 
 import React from 'react';
+import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
+
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import QuestionDialog from "./QuestionDialog";
-import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { IDialogProps } from "./IDialogProps";
 
 interface IProps extends IDialogProps {

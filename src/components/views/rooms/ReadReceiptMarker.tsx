@@ -17,16 +17,14 @@ limitations under the License.
 
 import React, { createRef, RefObject } from 'react';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { formatDate } from '../../../DateUtils';
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
 import MemberAvatar from '../avatars/MemberAvatar';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     // the RoomMember to show the RR for

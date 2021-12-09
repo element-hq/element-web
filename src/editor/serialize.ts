@@ -15,13 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { AllHtmlEntities } from 'html-entities';
+import cheerio from 'cheerio';
+
 import Markdown from '../Markdown';
 import { makeGenericPermalink } from "../utils/permalinks/Permalinks";
 import EditorModel from "./model";
-import { AllHtmlEntities } from 'html-entities';
 import SettingsStore from '../settings/SettingsStore';
 import SdkConfig from '../SdkConfig';
-import cheerio from 'cheerio';
 import { Type } from './parts';
 
 export function mdSerialize(model: EditorModel): string {

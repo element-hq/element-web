@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 import React from 'react';
-import { _t } from '../../../languageHandler';
 import filesize from "filesize";
+
+import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getBlobSafeMimeType } from '../../../utils/blobs';
 import BaseDialog from "./BaseDialog";

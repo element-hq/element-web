@@ -16,6 +16,8 @@ limitations under the License.
 
 import React from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t, _td } from '../../../languageHandler';
 import AppTile from '../elements/AppTile';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -34,8 +36,6 @@ import { ActionPayload } from '../../../dispatcher/payloads';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 import { IApp } from "../../../stores/WidgetStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.

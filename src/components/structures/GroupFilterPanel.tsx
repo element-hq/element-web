@@ -15,16 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { EventSubscription } from "fbemitter";
 import React from 'react';
+import classNames from 'classnames';
+
+import type { EventSubscription } from "fbemitter";
 import GroupFilterOrderStore from '../../stores/GroupFilterOrderStore';
-
 import GroupActions from '../../actions/GroupActions';
-
 import dis from '../../dispatcher/dispatcher';
 import { _t } from '../../languageHandler';
-
-import classNames from 'classnames';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import SettingsStore from "../../settings/SettingsStore";

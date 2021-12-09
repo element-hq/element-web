@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Playback } from "../../../audio/Playback";
 import InlineSpinner from '../elements/InlineSpinner';
@@ -26,8 +28,6 @@ import { IBodyProps } from "./IBodyProps";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 import { PlaybackQueue } from "../../../audio/PlaybackQueue";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IState {
     error?: Error;

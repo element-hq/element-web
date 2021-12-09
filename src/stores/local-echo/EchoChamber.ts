@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomEchoChamber } from "./RoomEchoChamber";
 import { Room } from "matrix-js-sdk/src/models/room";
+
+import { RoomEchoChamber } from "./RoomEchoChamber";
 import { EchoStore } from "./EchoStore";
 
 /**

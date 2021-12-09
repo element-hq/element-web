@@ -17,13 +17,13 @@ limitations under the License.
 */
 
 import * as React from "react";
+import classNames from "classnames";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from '../../languageHandler';
 import AutoHideScrollbar from './AutoHideScrollbar';
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import classNames from "classnames";
 import AccessibleButton from "../views/elements/AccessibleButton";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 /**
  * Represents a tab for the TabbedView.

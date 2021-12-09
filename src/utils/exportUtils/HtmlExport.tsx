@@ -16,29 +16,30 @@ limitations under the License.
 
 import React from "react";
 import ReactDOM from "react-dom";
-import Exporter from "./Exporter";
-import { mediaFromMxc } from "../../customisations/Media";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { renderToStaticMarkup } from "react-dom/server";
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
+import { logger } from "matrix-js-sdk/src/logger";
+
+import Exporter from "./Exporter";
+import { mediaFromMxc } from "../../customisations/Media";
 import { Layout } from "../../settings/enums/Layout";
 import { shouldFormContinuation } from "../../components/structures/MessagePanel";
 import { formatFullDateNoDayNoTime, wantsDateSeparator } from "../../DateUtils";
 import { RoomPermalinkCreator } from "../permalinks/Permalinks";
 import { _t } from "../../languageHandler";
-import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import * as Avatar from "../../Avatar";
 import EventTile, { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import DateSeparator from "../../components/views/messages/DateSeparator";
 import BaseAvatar from "../../components/views/avatars/BaseAvatar";
-import exportJS from "!!raw-loader!./exportJS";
 import { ExportType } from "./exportUtils";
 import { IExportOptions } from "./exportUtils";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import getExportCSS from "./exportCSS";
 import { textForEvent } from "../../TextForEvent";
 
-import { logger } from "matrix-js-sdk/src/logger";
+import exportJS from "!!raw-loader!./exportJS";
 
 export default class HTMLExporter extends Exporter {
     protected avatars: Map<string, boolean>;

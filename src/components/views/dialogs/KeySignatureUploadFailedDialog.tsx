@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { useState, useCallback, useRef } from 'react';
+
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import BaseDialog from "./BaseDialog";

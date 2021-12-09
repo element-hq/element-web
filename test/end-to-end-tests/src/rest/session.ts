@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import request = require('request-promise-native');
+
 import { Logger } from '../logger';
 import { RestRoom } from './room';
 import { approveConsent } from './consent';

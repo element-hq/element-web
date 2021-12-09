@@ -16,9 +16,10 @@ limitations under the License.
 */
 
 import { strict as assert } from 'assert';
+import { ElementHandle } from "puppeteer";
+
 import { openRoomSummaryCard } from "./rightpanel";
 import { ElementSession } from "../session";
-import { ElementHandle } from "puppeteer";
 
 export async function openMemberInfo(session: ElementSession, name: String): Promise<void> {
     const membersAndNames = await getMembersInMemberlist(session);

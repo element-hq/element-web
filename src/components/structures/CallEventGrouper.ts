@@ -17,8 +17,9 @@ limitations under the License.
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { CallEvent, CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
-import CallHandler, { CallHandlerEvent } from '../../CallHandler';
 import { EventEmitter } from 'events';
+
+import CallHandler, { CallHandlerEvent } from '../../CallHandler';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 export enum CallEventGrouperEvent {

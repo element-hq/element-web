@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { _t } from '../../../languageHandler';
 import { ensureDMExists } from "../../../createRoom";
 import { IDialogProps } from "./IDialogProps";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import SdkConfig from '../../../SdkConfig';
 import Markdown from '../../../Markdown';

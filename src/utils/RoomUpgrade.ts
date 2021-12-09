@@ -16,6 +16,8 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { inviteUsersToRoom } from "../RoomInvite";
 import Modal, { IHandle } from "../Modal";
@@ -23,9 +25,6 @@ import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import SpaceStore from "../stores/spaces/SpaceStore";
 import Spinner from "../components/views/elements/Spinner";
-
-import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 
 interface IProgress {
     roomUpgraded: boolean;

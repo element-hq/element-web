@@ -17,22 +17,22 @@ limitations under the License.
 import { ICryptoCallbacks } from 'matrix-js-sdk/src/matrix';
 import { ISecretStorageKeyInfo } from 'matrix-js-sdk/src/crypto/api';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
+import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
+import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
+import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
+import { logger } from "matrix-js-sdk/src/logger";
+import { ComponentType } from "react";
+
 import Modal from './Modal';
 import * as sdk from './index';
 import { MatrixClientPeg } from './MatrixClientPeg';
-import { deriveKey } from 'matrix-js-sdk/src/crypto/key_passphrase';
-import { decodeRecoveryKey } from 'matrix-js-sdk/src/crypto/recoverykey';
 import { _t } from './languageHandler';
-import { encodeBase64 } from "matrix-js-sdk/src/crypto/olmlib";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import AccessSecretStorageDialog from './components/views/dialogs/security/AccessSecretStorageDialog';
 import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreKeyBackupDialog';
 import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
-import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
-
-import { logger } from "matrix-js-sdk/src/logger";
-import { ComponentType } from "react";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is

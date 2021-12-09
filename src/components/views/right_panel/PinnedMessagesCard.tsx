@@ -18,6 +18,7 @@ import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
 import BaseCard from "./BaseCard";
@@ -28,8 +29,6 @@ import PinningUtils from "../../../utils/PinningUtils";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import PinnedEventTile from "../rooms/PinnedEventTile";
 import { useRoomState } from "../../../hooks/useRoomState";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     room: Room;

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";

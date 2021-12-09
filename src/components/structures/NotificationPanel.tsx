@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../languageHandler';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -25,8 +26,6 @@ import Spinner from "../views/elements/Spinner";
 import { TileShape } from "../views/rooms/EventTile";
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     onClose(): void;

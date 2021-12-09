@@ -15,12 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import EventEmitter from 'events';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import SettingsStore from "./settings/SettingsStore";
 import { SettingLevel } from "./settings/SettingLevel";
-import EventEmitter from 'events';
 import { MatrixClientPeg } from "./MatrixClientPeg";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // XXX: MediaDeviceKind is a union type, so we make our own enum
 export enum MediaDeviceKindEnum {

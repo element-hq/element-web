@@ -16,11 +16,12 @@ limitations under the License.
 
 import React, { FormEvent } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import FocusLock from "react-focus-lock";
+
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Key } from "../../../Keyboard";
 import { IDialogProps } from "./IDialogProps";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import FocusLock from "react-focus-lock";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 

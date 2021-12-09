@@ -66,8 +66,8 @@ module.exports = {
     settings: {
         react: {
             version: "detect",
-        }
-    }
+        },
+    },
 };
 
 function buildRestrictedPropertiesOptions(properties, message) {

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
+
 import sdk from '../../../skinned-sdk';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { stubClient } from '../../../test-utils';

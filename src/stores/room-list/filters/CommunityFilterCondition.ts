@@ -15,9 +15,10 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
-import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { Group } from "matrix-js-sdk/src/models/group";
 import { EventEmitter } from "events";
+
+import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import GroupStore from "../../GroupStore";
 import { IDestroyable } from "../../../utils/IDestroyable";
 import DMRoomMap from "../../../utils/DMRoomMap";

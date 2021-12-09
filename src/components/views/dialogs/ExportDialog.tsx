@@ -16,6 +16,8 @@ limitations under the License.
 
 import React, { useRef, useState } from "react";
 import { Room } from "matrix-js-sdk/src";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
@@ -37,8 +39,6 @@ import { useStateCallback } from "../../../hooks/useStateCallback";
 import Exporter from "../../../utils/exportUtils/Exporter";
 import Spinner from "../elements/Spinner";
 import InfoDialog from "./InfoDialog";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends IDialogProps {
     room: Room;

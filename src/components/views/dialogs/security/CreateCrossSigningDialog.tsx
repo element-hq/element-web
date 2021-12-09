@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { CrossSigningKeys } from 'matrix-js-sdk/src/client';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { _t } from '../../../../languageHandler';
@@ -27,8 +28,6 @@ import BaseDialog from '../BaseDialog';
 import Spinner from '../../elements/Spinner';
 import InteractiveAuthDialog from '../InteractiveAuthDialog';
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     accountPassword?: string;

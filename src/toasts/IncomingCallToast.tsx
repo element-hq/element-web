@@ -20,6 +20,7 @@ limitations under the License.
 import React from 'react';
 import { CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
+
 import { replaceableComponent } from '../utils/replaceableComponent';
 import CallHandler, { CallHandlerEvent } from '../CallHandler';
 import { MatrixClientPeg } from '../MatrixClientPeg';

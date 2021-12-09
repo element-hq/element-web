@@ -16,6 +16,7 @@ limitations under the License.
 
 import FakeTimers from '@sinonjs/fake-timers';
 import EventEmitter from 'events';
+
 import UserActivity from '../src/UserActivity';
 
 class FakeDomEventEmitter extends EventEmitter {

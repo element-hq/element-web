@@ -18,9 +18,10 @@ limitations under the License.
 import '../../../skinned-sdk';
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import * as TestUtils from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { Room } from "matrix-js-sdk/src/models/room";
 import _PollCreateDialog from "../../../../src/components/views/elements/PollCreateDialog";
 const PollCreateDialog = TestUtils.wrapInMatrixClientContext(_PollCreateDialog);
 

@@ -17,6 +17,8 @@ limitations under the License.
 import React, { ClipboardEvent } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import classNames from 'classnames';
 
 import { Key } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
@@ -25,7 +27,6 @@ import { fixupColorFonts } from '../../utils/FontManager';
 import dis from '../../dispatcher/dispatcher';
 import { IMatrixClientCreds } from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
-
 import ResizeHandle from '../views/elements/ResizeHandle';
 import { CollapseDistributor, Resizer } from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -51,7 +52,6 @@ import { IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import CallHandler, { CallHandlerEvent } from '../../CallHandler';
-import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
 import { OwnProfileStore } from '../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
@@ -62,7 +62,6 @@ import UserView from "./UserView";
 import GroupView from "./GroupView";
 import BackdropPanel from "./BackdropPanel";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-import classNames from 'classnames';
 import GroupFilterPanel from './GroupFilterPanel';
 import CustomRoomTagPanel from './CustomRoomTagPanel';
 import { mediaFromMxc } from "../../customisations/Media";

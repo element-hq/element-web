@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import uuidv4 = require('uuid/v4');
+
 import { RestSession } from "./session";
 import { Logger } from "../logger";
 

@@ -18,6 +18,7 @@ import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/reque
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
+
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";

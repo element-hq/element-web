@@ -15,10 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClientPeg } from './MatrixClientPeg';
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { ConditionKind, IPushRule, PushRuleActionName, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
+
+import { MatrixClientPeg } from './MatrixClientPeg';
 
 export enum RoomNotifState {
     AllMessagesLoud = 'all_messages_loud',

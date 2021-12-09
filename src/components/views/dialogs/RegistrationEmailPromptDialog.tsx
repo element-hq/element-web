@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import * as React from "react";
+import { useRef, useState } from "react";
 
 import { _t, _td } from '../../../languageHandler';
 import { IDialogProps } from "./IDialogProps";
-import { useRef, useState } from "react";
 import Field from "../elements/Field";
 import CountlyAnalytics from "../../../CountlyAnalytics";
 import BaseDialog from "./BaseDialog";

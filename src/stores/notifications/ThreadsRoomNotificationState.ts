@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IDestroyable } from "../../utils/IDestroyable";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { NotificationState, NotificationStateEvents } from "./NotificationState";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
+
+import { IDestroyable } from "../../utils/IDestroyable";
+import { NotificationState, NotificationStateEvents } from "./NotificationState";
 import { ThreadNotificationState } from "./ThreadNotificationState";
 import { NotificationColor } from "./NotificationColor";
 

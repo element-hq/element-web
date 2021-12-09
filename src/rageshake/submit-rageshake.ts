@@ -17,18 +17,15 @@ limitations under the License.
 */
 
 import pako from 'pako';
+import Tar from "tar-js";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import PlatformPeg from '../PlatformPeg';
 import { _t } from '../languageHandler';
-import Tar from "tar-js";
-
 import * as rageshake from './rageshake';
-
 import SettingsStore from "../settings/SettingsStore";
 import SdkConfig from "../SdkConfig";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IOpts {
     label?: string;

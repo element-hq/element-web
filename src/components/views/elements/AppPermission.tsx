@@ -18,12 +18,13 @@ limitations under the License.
 
 import React from 'react';
 import url from 'url';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import MemberAvatar from '../avatars/MemberAvatar';
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from './AccessibleButton';

@@ -16,6 +16,7 @@ limitations under the License.
 
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
+
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
 

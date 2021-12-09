@@ -16,11 +16,10 @@ limitations under the License.
 
 import { clamp } from "lodash";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { SerializedPart } from "./editor/parts";
 import EditorModel from "./editor/model";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IHistoryItem {
     parts: SerializedPart[];

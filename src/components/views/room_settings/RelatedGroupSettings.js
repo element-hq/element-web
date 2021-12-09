@@ -17,14 +17,14 @@ limitations under the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const GROUP_ID_REGEX = /\+\S+:\S+/;
 

@@ -17,10 +17,9 @@ limitations under the License.
 import { uniq } from "lodash";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 /**
  * Class that takes a Matrix Client and flips the m.direct map

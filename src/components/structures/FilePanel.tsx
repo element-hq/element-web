@@ -16,13 +16,13 @@ limitations under the License.
 */
 
 import React from 'react';
-
 import { Filter } from 'matrix-js-sdk/src/filter';
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
@@ -31,15 +31,12 @@ import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
 import DesktopBuildsNotice, { WarningKind } from "../views/elements/DesktopBuildsNotice";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { TileShape } from '../views/rooms/EventTile';
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     roomId: string;

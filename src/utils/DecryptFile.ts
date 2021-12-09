@@ -16,6 +16,7 @@ limitations under the License.
 
 // Pull in the encryption lib so that we can decrypt attachments.
 import encrypt from 'browser-encrypt-attachment';
+
 import { mediaFromContent } from "../customisations/Media";
 import { IEncryptedFile, IMediaEventInfo } from "../customisations/models/IMediaEventContent";
 import { getBlobSafeMimeType } from "./blobs";

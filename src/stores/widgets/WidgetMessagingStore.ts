@@ -15,6 +15,7 @@
  */
 
 import { ClientWidgetApi, Widget } from "matrix-widget-api";
+
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { ActionPayload } from "../../dispatcher/payloads";

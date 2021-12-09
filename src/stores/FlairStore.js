@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
-
 import { logger } from "matrix-js-sdk/src/logger";
 
 const BULK_REQUEST_DEBOUNCE_MS = 200;

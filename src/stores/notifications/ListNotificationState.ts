@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import { NotificationColor } from "./NotificationColor";
 import { TagID } from "../room-list/models";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { arrayDiff } from "../../utils/arrays";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";

@@ -14,12 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { DefaultTagID, TagID } from "../room-list/models";
 import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";

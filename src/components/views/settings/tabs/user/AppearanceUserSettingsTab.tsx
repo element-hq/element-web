@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
@@ -28,7 +29,6 @@ import { UIFeature } from "../../../../../settings/UIFeature";
 import { Layout } from "../../../../../settings/enums/Layout";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import LayoutSwitcher from "../../LayoutSwitcher";
-
 import FontScalingPanel from '../../FontScalingPanel';
 import ThemeChoicePanel from '../../ThemeChoicePanel';
 import ImageSizePanel from "../../ImageSizePanel";

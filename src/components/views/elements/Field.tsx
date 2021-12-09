@@ -16,8 +16,9 @@ limitations under the License.
 
 import React, { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 import classNames from 'classnames';
-import * as sdk from '../../../index';
 import { debounce } from "lodash";
+
+import * as sdk from '../../../index';
 import { IFieldState, IValidationResult } from "./Validation";
 
 // Invoke validation from user input (when typing, etc.) at most once every N ms.

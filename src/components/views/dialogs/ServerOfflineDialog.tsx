@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as React from 'react';
+
 import BaseDialog from './BaseDialog';
 import { _t } from '../../../languageHandler';
 import { EchoStore } from "../../../stores/local-echo/EchoStore";

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';

@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { AuthType, IAuthData } from 'matrix-js-sdk/src/interactive-auth';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import Analytics from '../../../Analytics';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -27,8 +28,6 @@ import { DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry } from "../auth/Interact
 import StyledCheckbox from "../elements/StyledCheckbox";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     onFinished: (success: boolean) => void;

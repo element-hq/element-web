@@ -16,9 +16,10 @@ limitations under the License.
 
 import * as React from "react";
 import { createRef } from "react";
+import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import ContextMenu, { IProps as IContextMenuProps } from '../../structures/ContextMenu';
-import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import Field from "../elements/Field";
 import DialPad from '../voip/DialPad';
 import { replaceableComponent } from "../../../utils/replaceableComponent";

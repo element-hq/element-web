@@ -17,6 +17,7 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 import React from 'react';
 import request from 'browser-request';
+
 import { _t } from '../../../languageHandler';
 import QuestionDialog from "./QuestionDialog";
 import Spinner from "../elements/Spinner";

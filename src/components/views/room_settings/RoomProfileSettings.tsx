@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";

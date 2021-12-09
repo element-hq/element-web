@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import React from 'react';
+import classNames from 'classnames';
+
 import { _t } from '../../../languageHandler';
 import BaseDialog from "..//dialogs/BaseDialog";
 import DialogButtons from "./DialogButtons";
-import classNames from 'classnames';
 import AccessibleButton from './AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';

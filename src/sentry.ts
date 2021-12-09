@@ -15,10 +15,11 @@ limitations under the License.
 */
 
 import * as Sentry from "@sentry/browser";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 
 /* eslint-disable camelcase */
 

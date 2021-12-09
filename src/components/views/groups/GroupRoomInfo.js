@@ -17,6 +17,8 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import * as sdk from '../../../index';
@@ -26,8 +28,6 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 @replaceableComponent("views.groups.GroupRoomInfo")
 export default class GroupRoomInfo extends React.Component {

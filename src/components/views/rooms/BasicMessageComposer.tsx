@@ -19,6 +19,7 @@ import React, { createRef, ClipboardEvent } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
@@ -49,8 +50,6 @@ import DocumentPosition from "../../../editor/position";
 import { ICompletion } from "../../../autocomplete/Autocompleter";
 import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s|:^$');

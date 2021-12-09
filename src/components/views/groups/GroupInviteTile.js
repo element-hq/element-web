@@ -18,10 +18,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
-import classNames from 'classnames';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import ContextMenu, { ContextMenuButton, toRightOf } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";

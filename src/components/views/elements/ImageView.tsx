@@ -17,10 +17,12 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import FocusLock from "react-focus-lock";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
-import FocusLock from "react-focus-lock";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
@@ -32,7 +34,6 @@ import dis from '../../../dispatcher/dispatcher';
 import { Action } from '../../../dispatcher/actions';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
 import { IDialogProps } from '../dialogs/IDialogProps';
 import UIStore from '../../../stores/UIStore';

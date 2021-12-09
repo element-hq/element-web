@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { RoomListStoreClass } from "./RoomListStore";
 import GroupFilterOrderStore from "../GroupFilterOrderStore";
 import { CommunityFilterCondition } from "./filters/CommunityFilterCondition";
 import { arrayDiff, arrayHasDiff } from "../../utils/arrays";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 /**
  * Watches for changes in groups to manage filters on the provided RoomListStore

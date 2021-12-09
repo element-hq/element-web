@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import React from "react";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+
 import MImageBody from "./MImageBody";
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import SenderProfile from "./SenderProfile";
-import { EventType } from "matrix-js-sdk/src/@types/event";
 import { _t } from "../../../languageHandler";
 
 const FORCED_IMAGE_HEIGHT = 44;

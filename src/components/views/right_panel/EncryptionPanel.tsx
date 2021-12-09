@@ -15,10 +15,13 @@ limitations under the License.
 */
 
 import React, { useCallback, useEffect, useState } from "react";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {
+    VerificationRequest,
+    PHASE_REQUESTED,
+    PHASE_UNSENT,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
-import { PHASE_REQUESTED, PHASE_UNSENT } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 
 import EncryptionInfo from "./EncryptionInfo";
 import VerificationPanel from "./VerificationPanel";

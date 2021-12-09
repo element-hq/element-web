@@ -23,6 +23,8 @@ import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timelin
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import { SyncState } from 'matrix-js-sdk/src/sync.api';
+import { debounce } from 'lodash';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
@@ -48,9 +50,6 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import ErrorDialog from '../views/dialogs/ErrorDialog';
-import { debounce } from 'lodash';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;

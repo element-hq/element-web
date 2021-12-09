@@ -16,6 +16,7 @@ limitations under the License.
 
 import classNames from "classnames";
 import React from "react";
+
 import { sanitizedHtmlNode } from "../../../HtmlUtils";
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";

@@ -20,13 +20,13 @@ limitations under the License.
 import React, { ReactNode } from 'react';
 import sanitizeHtml from 'sanitize-html';
 import cheerio from 'cheerio';
-import { _linkifyElement, _linkifyString } from './linkify-matrix';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
 
+import { _linkifyElement, _linkifyString } from './linkify-matrix';
 import { IExtendedSanitizeOptions } from './@types/sanitize-html';
 import SettingsStore from './settings/SettingsStore';
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";

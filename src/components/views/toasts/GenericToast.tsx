@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
-import AccessibleButton from "../elements/AccessibleButton";
 
+import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
 
 export interface IProps {

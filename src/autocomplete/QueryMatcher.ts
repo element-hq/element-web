@@ -18,6 +18,7 @@ limitations under the License.
 
 import { at, uniq } from 'lodash';
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
+
 import { TimelineRenderingType } from '../contexts/RoomContext';
 
 interface IOptions<T extends {}> {

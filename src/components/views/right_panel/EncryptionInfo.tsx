@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-
-import { _t } from "../../../languageHandler";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { User } from "matrix-js-sdk/src/models/user";
+
+import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
 

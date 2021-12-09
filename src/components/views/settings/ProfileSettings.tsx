@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
@@ -27,9 +29,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from '../elements/AccessibleButton';
 import AvatarSetting from './AvatarSetting';
 
-import { logger } from "matrix-js-sdk/src/logger";
 import ExternalLink from '../elements/ExternalLink';
-
 interface IState {
     userId?: string;
     originalDisplayName?: string;

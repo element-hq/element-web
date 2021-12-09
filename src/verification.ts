@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { User } from "matrix-js-sdk/src/models/user";
+import { verificationMethods as VerificationMethods } from 'matrix-js-sdk/src/crypto';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
@@ -22,7 +23,6 @@ import Modal from './Modal';
 import { RightPanelPhases } from "./stores/RightPanelStorePhases";
 import { findDMForUser } from './createRoom';
 import { accessSecretStorage } from './SecurityManager';
-import { verificationMethods as VerificationMethods } from 'matrix-js-sdk/src/crypto';
 import { Action } from './dispatcher/actions';
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
 import { IDevice } from "./components/views/right_panel/UserInfo";

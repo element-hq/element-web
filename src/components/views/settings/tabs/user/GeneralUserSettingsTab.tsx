@@ -17,6 +17,10 @@ limitations under the License.
 */
 
 import React from 'react';
+import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from "../../../../../languageHandler";
 import ProfileSettings from "../../ProfileSettings";
 import * as languageHandler from "../../../../../languageHandler";
@@ -30,7 +34,6 @@ import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Policies, Service, startTermsFlow } from "../../../../../Terms";
-import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import IdentityAuthClient from "../../../../../IdentityAuthClient";
 import { abbreviateUrl } from "../../../../../utils/UrlUtils";
 import { getThreepidsWithBindStatus } from '../../../../../boundThreepids';
@@ -38,7 +41,6 @@ import Spinner from "../../../elements/Spinner";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
-import { IThreepid } from "matrix-js-sdk/src/@types/threepids";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import AccountPhoneNumbers from "../../account/PhoneNumbers";
@@ -49,8 +51,6 @@ import ChangePassword from "../../ChangePassword";
 import InlineTermsAgreement from "../../../terms/InlineTermsAgreement";
 import SetIdServer from "../../SetIdServer";
 import SetIntegrationManager from "../../SetIntegrationManager";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     closeSettingsFn: () => void;

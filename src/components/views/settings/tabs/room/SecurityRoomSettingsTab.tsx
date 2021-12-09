@@ -18,6 +18,7 @@ import React from 'react';
 import { GuestAccess, HistoryVisibility, JoinRule, RestrictedAllowType } from "matrix-js-sdk/src/@types/partials";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
@@ -36,8 +37,6 @@ import CreateRoomDialog from '../../../dialogs/CreateRoomDialog';
 import JoinRuleSettings from "../../JoinRuleSettings";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import SettingsFieldset from '../../SettingsFieldset';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     roomId: string;

@@ -23,6 +23,7 @@ import React, {
 } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 import RoomAvatar from "../avatars/RoomAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
@@ -40,7 +41,6 @@ import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManag
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 
 interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButton>, "title" | "onClick"> {

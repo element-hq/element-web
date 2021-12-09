@@ -1,16 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Room, PendingEventOrdering, MatrixEvent, MatrixClient } from 'matrix-js-sdk';
 
 import "../../../skinned-sdk";
-
 import * as TestUtils from '../../../test-utils';
-
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-
 import DMRoomMap from '../../../../src/utils/DMRoomMap';
 import RoomHeader from '../../../../src/components/views/rooms/RoomHeader';
-
-import { Room, PendingEventOrdering, MatrixEvent, MatrixClient } from 'matrix-js-sdk';
 import { SearchScope } from '../../../../src/components/views/rooms/SearchBar';
 import { E2EStatus } from '../../../../src/utils/ShieldUtils';
 import { PlaceCallType } from '../../../../src/CallHandler';

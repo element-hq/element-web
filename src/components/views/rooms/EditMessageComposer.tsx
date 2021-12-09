@@ -17,6 +17,9 @@ limitations under the License.
 import React, { createRef, KeyboardEvent } from 'react';
 import classNames from 'classnames';
 import { EventStatus, IContent, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { MsgType } from 'matrix-js-sdk/src/@types/event';
+import { Room } from 'matrix-js-sdk/src/models/room';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -35,16 +38,12 @@ import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindin
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SendHistoryManager from '../../../SendHistoryManager';
 import Modal from '../../../Modal';
-import { MsgType } from 'matrix-js-sdk/src/@types/event';
-import { Room } from 'matrix-js-sdk/src/models/room';
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import AccessibleButton from '../elements/AccessibleButton';
 import { createRedactEventDialog } from '../dialogs/ConfirmRedactDialog';
 import SettingsStore from "../../../settings/SettingsStore";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { withMatrixClientHOC, MatrixClientProps } from '../../../contexts/MatrixClientContext';
 import RoomContext from '../../../contexts/RoomContext';
 import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";

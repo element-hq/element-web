@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ShallowRenderer from "react-test-renderer/shallow";
+
 import sdk from '../../../skinned-sdk';
 import * as testUtils from '../../../test-utils';
 

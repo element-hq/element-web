@@ -17,9 +17,10 @@ limitations under the License.
 
 import React from 'react';
 import { NumberSize, Resizable } from 're-resizable';
+import { Direction } from "re-resizable/lib/resizer";
+
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import ResizeNotifier from "../../utils/ResizeNotifier";
-import { Direction } from "re-resizable/lib/resizer";
 
 interface IProps {
     resizeNotifier: ResizeNotifier;

@@ -17,10 +17,10 @@ limitations under the License.
 import React from 'react';
 import { Room } from 'matrix-js-sdk/src';
 import classNames from 'classnames';
+
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from '../../../dispatcher/actions';
 import { _t } from '../../../languageHandler';
-
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomDetailRow from "./RoomDetailRow";
 

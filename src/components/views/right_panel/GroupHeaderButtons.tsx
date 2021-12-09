@@ -19,6 +19,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, { HeaderKind } from './HeaderButtons';

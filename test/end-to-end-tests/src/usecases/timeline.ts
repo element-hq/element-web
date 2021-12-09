@@ -16,8 +16,9 @@ limitations under the License.
 */
 
 import { strict as assert } from 'assert';
-import { ElementSession } from "../session";
 import { ElementHandle } from "puppeteer";
+
+import { ElementSession } from "../session";
 
 export async function scrollToTimelineTop(session: ElementSession): Promise<void> {
     session.log.step(`scrolls to the top of the timeline`);

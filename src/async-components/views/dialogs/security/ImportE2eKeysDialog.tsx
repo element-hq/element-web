@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
 import { _t } from '../../../../languageHandler';
 import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
-import { logger } from "matrix-js-sdk/src/logger";
 
 function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
     return new Promise((resolve, reject) => {

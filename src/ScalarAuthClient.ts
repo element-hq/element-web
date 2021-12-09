@@ -15,17 +15,16 @@ limitations under the License.
 */
 
 import url from 'url';
+import request from "browser-request";
+import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from './Terms';
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import request from "browser-request";
-
 import SdkConfig from "./SdkConfig";
 import { WidgetType } from "./widgets/WidgetType";
-import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
-import { Room } from "matrix-js-sdk/src/models/room";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // The version of the integration manager API we're intending to work with
 const imApiVersion = "1.1";

@@ -16,13 +16,14 @@ limitations under the License.
 */
 
 import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 import HomePage from "./HomePage";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";

@@ -17,11 +17,11 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { throttle } from "lodash";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from "../../../dispatcher/payloads";
 

@@ -16,20 +16,20 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Direction } from "matrix-js-sdk/src/models/event-timeline";
+import { saveAs } from "file-saver";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { IExportOptions, ExportType } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { isVoiceMessage } from "../EventUtils";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { IMediaEventContent } from "../../customisations/models/IMediaEventContent";
-import { saveAs } from "file-saver";
 import { _t } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 type BlobFile = {
     name: string;

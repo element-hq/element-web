@@ -18,17 +18,20 @@ limitations under the License.
 
 import React from "react";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { IEncryptedFile, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
 import { IUploadOpts } from "matrix-js-sdk/src/@types/requests";
 import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
+import encrypt from "browser-encrypt-attachment";
+import extractPngChunks from "png-chunks-extract";
+import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { logger } from "matrix-js-sdk/src/logger";
+import { IEventRelation } from "matrix-js-sdk/src";
 
+import { IEncryptedFile, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
 import dis from './dispatcher/dispatcher';
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import RoomViewStore from './stores/RoomViewStore';
-import encrypt from "browser-encrypt-attachment";
-import extractPngChunks from "png-chunks-extract";
 import Spinner from "./components/views/elements/Spinner";
 import { Action } from "./dispatcher/actions";
 import CountlyAnalytics from "./CountlyAnalytics";
@@ -40,13 +43,9 @@ import {
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { IUpload } from "./models/IUpload";
-import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
 import { BlurhashEncoder } from "./BlurhashEncoder";
 import SettingsStore from "./settings/SettingsStore";
 import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerformanceMetrics";
-
-import { logger } from "matrix-js-sdk/src/logger";
-import { IEventRelation } from "matrix-js-sdk/src";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;

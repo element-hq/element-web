@@ -15,15 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import SettingController from "./SettingController";
-import { MatrixClientPeg } from '../../MatrixClientPeg';
-import { SettingLevel } from "../SettingLevel";
-
+import { logger } from "matrix-js-sdk/src/logger";
 // XXX: This feels wrong.
 import { PushProcessor } from "matrix-js-sdk/src/pushprocessor";
 import { PushRuleActionName } from "matrix-js-sdk/src/@types/PushRules";
 
-import { logger } from "matrix-js-sdk/src/logger";
+import SettingController from "./SettingController";
+import { MatrixClientPeg } from '../../MatrixClientPeg';
+import { SettingLevel } from "../SettingLevel";
 
 // .m.rule.master being enabled means all events match that push rule
 // default action on this rule is dont_notify, but it could be something else

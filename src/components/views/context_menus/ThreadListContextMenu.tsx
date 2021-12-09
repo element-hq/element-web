@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { useCallback, useEffect, useState } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src";
+
 import { ButtonEvent } from "../elements/AccessibleButton";
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";

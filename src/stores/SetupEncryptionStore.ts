@@ -15,18 +15,19 @@ limitations under the License.
 */
 
 import EventEmitter from 'events';
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {
+    VerificationRequest,
+    PHASE_DONE as VERIF_PHASE_DONE,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
-import { PHASE_DONE as VERIF_PHASE_DONE } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
 import Modal from '../Modal';
 import InteractiveAuthDialog from '../components/views/dialogs/InteractiveAuthDialog';
 import { _t } from '../languageHandler';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export enum Phase {
     Loading = 0,

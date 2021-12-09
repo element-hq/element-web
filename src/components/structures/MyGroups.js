@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import * as sdk from '../../index';
 import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';

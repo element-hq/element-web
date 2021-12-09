@@ -16,12 +16,16 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from 'classnames';
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import { IInvite3PID } from "matrix-js-sdk/src/@types/requests";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
@@ -49,17 +53,13 @@ import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
-import { compare } from '../../../utils/strings';
-import { IInvite3PID } from "matrix-js-sdk/src/@types/requests";
+import { compare, copyPlaintext, selectText } from '../../../utils/strings';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { copyPlaintext, selectText } from "../../../utils/strings";
 import * as ContextMenu from "../../structures/ContextMenu";
 import { toRightOf } from "../../structures/ContextMenu";
 import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
@@ -72,8 +72,6 @@ import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import CallHandler from "../../../CallHandler";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */

@@ -18,6 +18,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import BaseDialog from "./BaseDialog";
@@ -41,8 +42,6 @@ import { UserTab } from "./UserSettingsDialog";
 import TagOrderActions from "../../../actions/TagOrderActions";
 import { inviteUsersToRoom } from "../../../RoomInvite";
 import ProgressBar from "../elements/ProgressBar";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     matrixClient: MatrixClient;

@@ -18,6 +18,15 @@ limitations under the License.
 */
 
 import React from 'react';
+import { base32 } from "rfc4648";
+import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/src/webrtc/call";
+import { CallError } from "matrix-js-sdk/src/webrtc/call";
+import { logger } from 'matrix-js-sdk/src/logger';
+import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
+import EventEmitter from 'events';
+import { RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
+import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
+import { SyncState } from "matrix-js-sdk/src/sync.api";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -28,33 +37,23 @@ import SettingsStore from './settings/SettingsStore';
 import { Jitsi } from "./widgets/Jitsi";
 import { WidgetType } from "./widgets/WidgetType";
 import { SettingLevel } from "./settings/SettingLevel";
-import { base32 } from "rfc4648";
-
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
-import { MatrixCall, CallErrorCode, CallState, CallEvent, CallParty, CallType } from "matrix-js-sdk/src/webrtc/call";
 import Analytics from './Analytics';
 import CountlyAnalytics from "./CountlyAnalytics";
 import { UIFeature } from "./settings/UIFeature";
-import { CallError } from "matrix-js-sdk/src/webrtc/call";
-import { logger } from 'matrix-js-sdk/src/logger';
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
-import { randomUppercaseString, randomLowercaseString } from "matrix-js-sdk/src/randomstring";
-import EventEmitter from 'events';
 import SdkConfig from './SdkConfig';
 import { ensureDMExists, findDMForUser } from './createRoom';
-import { RuleId, TweakName, Tweaks } from "matrix-js-sdk/src/@types/PushRules";
-import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { WidgetLayoutStore, Container } from './stores/widgets/WidgetLayoutStore';
 import { getIncomingCallToastKey } from './toasts/IncomingCallToast';
 import ToastStore from './stores/ToastStore';
 import IncomingCallToast from "./toasts/IncomingCallToast";
-import { SyncState } from "matrix-js-sdk/src/sync.api";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';

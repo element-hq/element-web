@@ -16,10 +16,11 @@ limitations under the License.
 */
 
 import { strict as assert } from 'assert';
+import { ElementHandle } from "puppeteer";
+
 import { openRoomSummaryCard } from "./rightpanel";
 import { acceptDialog } from './dialog';
 import { ElementSession } from "../session";
-import { ElementHandle } from "puppeteer";
 
 export async function setSettingsToggle(session: ElementSession, toggle: ElementHandle, enabled): Promise<boolean> {
     const className = await session.getElementProperty(toggle, "className");

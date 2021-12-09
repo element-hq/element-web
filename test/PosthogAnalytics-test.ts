@@ -20,7 +20,6 @@ import {
     IEvent,
     PosthogAnalytics,
 } from '../src/PosthogAnalytics';
-
 import SdkConfig from '../src/SdkConfig';
 
 class FakePosthog {

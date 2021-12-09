@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';

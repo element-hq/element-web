@@ -17,6 +17,10 @@ limitations under the License.
 
 import React, { ComponentProps, createRef } from 'react';
 import { Blurhash } from "react-blurhash";
+import { SyncState } from 'matrix-js-sdk/src/sync.api';
+import classNames from 'classnames';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
@@ -29,12 +33,7 @@ import { Media, mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
-import { SyncState } from 'matrix-js-sdk/src/sync.api';
 import { IBodyProps } from "./IBodyProps";
-import classNames from 'classnames';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { TileShape } from '../rooms/EventTile';
 import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 

@@ -1,6 +1,7 @@
 // TODO: Rewrite room settings tests for dialog support
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import * as testUtils from '../../../test-utils';
 import sdk from '../../../skinned-sdk';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';

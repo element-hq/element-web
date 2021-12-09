@@ -15,22 +15,22 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { defer } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
 import { wantsDateSeparator } from '../../../DateUtils';
 import SettingsStore from '../../../settings/SettingsStore';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import BaseDialog from "./BaseDialog";
 import ScrollPanel from "../../structures/ScrollPanel";
 import Spinner from "../elements/Spinner";
 import EditHistoryMessage from "../messages/EditHistoryMessage";
 import DateSeparator from "../messages/DateSeparator";
 import { IDialogProps } from "./IDialogProps";
-import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
-import { defer } from "matrix-js-sdk/src/utils";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends IDialogProps {
     mxEvent: MatrixEvent;

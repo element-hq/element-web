@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { ClientWidgetApi } from "matrix-widget-api";
+
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SdkConfig from "./SdkConfig";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";

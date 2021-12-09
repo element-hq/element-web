@@ -14,17 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import Exporter from "./Exporter";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { logger } from "matrix-js-sdk/src/logger";
+
+import Exporter from "./Exporter";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { _t } from "../../languageHandler";
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
-import { ExportType } from "./exportUtils";
-import { IExportOptions } from "./exportUtils";
+import { ExportType, IExportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export default class PlainTextExporter extends Exporter {
     protected totalSize: number;

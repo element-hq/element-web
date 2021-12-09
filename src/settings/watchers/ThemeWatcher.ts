@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import SettingsStore from '../SettingsStore';
 import dis from '../../dispatcher/dispatcher';
 import { Action } from '../../dispatcher/actions';
@@ -22,8 +24,6 @@ import ThemeController from "../controllers/ThemeController";
 import { findHighContrastTheme, setTheme } from "../../theme";
 import { ActionPayload } from '../../dispatcher/payloads';
 import { SettingLevel } from "../SettingLevel";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export default class ThemeWatcher {
     private themeWatchRef: string;

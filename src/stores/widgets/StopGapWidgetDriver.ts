@@ -29,6 +29,11 @@ import {
     WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { iterableDiff, iterableUnion } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import ActiveRoomObserver from "../../ActiveRoomObserver";
@@ -38,15 +43,10 @@ import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/Widge
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
 import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
-import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
 import dis from "../../dispatcher/dispatcher";
 import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permalinks";
-import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "../../settings/SettingsStore";
 
 // TODO: Purge this from the universe

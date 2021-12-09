@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import "../../skinned-sdk";
-import { stubClient } from '../../test-utils';
-import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
 import { MatrixClient } from 'matrix-js-sdk';
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import CallEventGrouper, { CustomCallState } from "../../../src/components/structures/CallEventGrouper";
 import { CallState } from "matrix-js-sdk/src/webrtc/call";
+
+import { stubClient } from '../../test-utils';
+import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
+import CallEventGrouper, { CustomCallState } from "../../../src/components/structures/CallEventGrouper";
 
 const MY_USER_ID = "@me:here";
 const THEIR_USER_ID = "@they:here";

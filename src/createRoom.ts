@@ -27,6 +27,7 @@ import {
     RestrictedAllowType,
     Visibility,
 } from "matrix-js-sdk/src/@types/partials";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -45,8 +46,6 @@ import { makeSpaceParentEvent } from "./utils/space";
 import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */

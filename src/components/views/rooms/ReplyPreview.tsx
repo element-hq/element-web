@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ReplyTile from './ReplyTile';
-import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 
 function cancelQuoting(context: TimelineRenderingType) {

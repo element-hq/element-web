@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React, { ReactNode } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { Playback, PlaybackState } from "../../../audio/Playback";
 import { TileShape } from "../rooms/EventTile";
-import React, { ReactNode } from "react";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { _t } from "../../../languageHandler";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps {
     // Playback instance to render. Cannot change during component lifecycle: create

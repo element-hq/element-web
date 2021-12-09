@@ -16,8 +16,14 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import FileSaver from 'file-saver';
+import { logger } from "matrix-js-sdk/src/logger";
+import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
+import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
+import { CrossSigningKeys } from "matrix-js-sdk/src";
+import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
+
+import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { _t, _td } from '../../../../languageHandler';
 import Modal from '../../../../Modal';
 import { promptForBackupPassphrase } from '../../../../SecurityManager';
@@ -35,17 +41,11 @@ import {
     SecureBackupSetupMethod,
 } from '../../../../utils/WellKnownUtils';
 import SecurityCustomisations from "../../../../customisations/Security";
-
-import { logger } from "matrix-js-sdk/src/logger";
-import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import Field from "../../../../components/views/elements/Field";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
 import Spinner from "../../../../components/views/elements/Spinner";
-import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
-import { CrossSigningKeys } from "matrix-js-sdk/src";
 import InteractiveAuthDialog from "../../../../components/views/dialogs/InteractiveAuthDialog";
-import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
 import { IValidationResult } from "../../../../components/views/elements/Validation";
 
 // I made a mistake while converting this and it has to be fixed!

@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 import React, { ComponentType } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import * as sdk from './index';
 import { _t } from './languageHandler';
 import { IDialogProps } from "./components/views/dialogs/IDialogProps";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 type AsyncImport<T> = { default: T };
 

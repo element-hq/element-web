@@ -15,15 +15,15 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
+import { SimpleObservable } from "matrix-widget-api";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { UPDATE_EVENT } from "../stores/AsyncStore";
 import { arrayFastResample, arrayRescale, arraySeed, arraySmoothingResample } from "../utils/arrays";
-import { SimpleObservable } from "matrix-widget-api";
 import { IDestroyable } from "../utils/IDestroyable";
 import { PlaybackClock } from "./PlaybackClock";
 import { createAudioContext, decodeOgg } from "./compat";
 import { clamp } from "../utils/numbers";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export enum PlaybackState {
     Decoding = "decoding",

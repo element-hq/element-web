@@ -18,6 +18,11 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { Group } from "matrix-js-sdk/src/models/group";
+import { sleep } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import * as sdk from '../../index';
 import dis from '../../dispatcher/dispatcher';
@@ -29,14 +34,10 @@ import GroupHeaderButtons from '../views/right_panel/GroupHeaderButtons';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
 import Modal from '../../Modal';
-import classnames from 'classnames';
-
 import GroupStore from '../../stores/GroupStore';
 import FlairStore from '../../stores/FlairStore';
 import { showGroupAddRoomDialog } from '../../GroupAddressPicker';
 import { makeGroupPermalink, makeUserPermalink } from "../../utils/permalinks/Permalinks";
-import { Group } from "matrix-js-sdk/src/models/group";
-import { sleep } from "matrix-js-sdk/src/utils";
 import RightPanelStore from "../../stores/RightPanelStore";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { mediaFromMxc } from "../../customisations/Media";
@@ -44,8 +45,6 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import { createSpaceFromCommunity } from "../../utils/space";
 import { Action } from "../../dispatcher/actions";
 import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 const LONG_DESC_PLACEHOLDER = _td(
     `<h1>HTML for your community's page</h1>

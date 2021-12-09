@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import TagOrderActions from '../../../actions/TagOrderActions';

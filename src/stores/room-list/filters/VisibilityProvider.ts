@@ -15,6 +15,7 @@
  */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+
 import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
 import VoipUserMapper from "../../../VoipUserMapper";

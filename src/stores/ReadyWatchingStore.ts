@@ -15,11 +15,12 @@
  */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Dispatcher } from "flux";
+import { EventEmitter } from "events";
+
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ActionPayload } from "../dispatcher/payloads";
-import { Dispatcher } from "flux";
 import { IDestroyable } from "../utils/IDestroyable";
-import { EventEmitter } from "events";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
     protected matrixClient: MatrixClient;

@@ -1,16 +1,13 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
+import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 
 import * as TestUtils from '../../../test-utils';
-
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import sdk from '../../../skinned-sdk';
-
 import dis from '../../../../src/dispatcher/dispatcher';
 import DMRoomMap from '../../../../src/utils/DMRoomMap';
-
-import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk';
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import RoomListStore, { RoomListStoreClass } from "../../../../src/stores/room-list/RoomListStore";
 import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayoutStore";

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { useContext } from "react";
 import { MatrixCapabilities } from "matrix-widget-api";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { ChevronFace } from "../../structures/ContextMenu";
@@ -33,8 +34,6 @@ import { WidgetType } from "../../../widgets/WidgetType";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { getConfigLivestreamUrl, startJitsiAudioLivestream } from "../../../Livestream";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IProps extends React.ComponentProps<typeof IconizedContextMenu> {
     app: IApp;

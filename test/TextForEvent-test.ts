@@ -1,10 +1,11 @@
 import './skinned-sdk';
 
-import { textForEvent } from "../src/TextForEvent";
 import { MatrixEvent } from "matrix-js-sdk";
+import renderer from 'react-test-renderer';
+
+import { textForEvent } from "../src/TextForEvent";
 import SettingsStore from "../src/settings/SettingsStore";
 import { SettingLevel } from "../src/settings/SettingLevel";
-import renderer from 'react-test-renderer';
 
 function mockPinnedEvent(
     pinnedMessageIds?: string[],

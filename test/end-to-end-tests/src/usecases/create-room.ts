@@ -15,9 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import * as puppeteer from "puppeteer";
+
 import { measureStart, measureStop } from '../util';
 import { ElementSession } from "../session";
-import * as puppeteer from "puppeteer";
 
 export async function openRoomDirectory(session: ElementSession): Promise<void> {
     const roomDirectoryButton = await session.query('.mx_LeftPanel_exploreButton');

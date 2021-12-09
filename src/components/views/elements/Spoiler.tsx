@@ -15,6 +15,7 @@
  */
 
 import React from 'react';
+
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { decode } from "blurhash";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -26,8 +27,6 @@ import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 import MFileBody from "./MFileBody";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { ImageSize, suggestedSize as suggestedVideoSize } from "../../../settings/enums/ImageSize";
 
 interface IState {

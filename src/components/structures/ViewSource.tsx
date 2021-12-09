@@ -17,6 +17,8 @@ limitations under the License.
 */
 
 import React from "react";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import SyntaxHighlight from "../views/elements/SyntaxHighlight";
 import { _t } from "../../languageHandler";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -24,7 +26,6 @@ import { SendCustomEvent } from "../views/dialogs/DevtoolsDialog";
 import { canEditContent } from "../../utils/EventUtils";
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
 import BaseDialog from "../views/dialogs/BaseDialog";
 

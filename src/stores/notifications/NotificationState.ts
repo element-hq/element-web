@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
+
 import { NotificationColor } from "./NotificationColor";
 import { IDestroyable } from "../../utils/IDestroyable";
-import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 export interface INotificationStateSnapshotParams {
     symbol: string | null;

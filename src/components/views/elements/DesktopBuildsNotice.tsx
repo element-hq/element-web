@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 export enum WarningKind {
     Files,

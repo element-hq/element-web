@@ -15,21 +15,21 @@ limitations under the License.
 */
 
 import React from 'react';
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t, _td } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
 import { compare } from "../../../../../utils/strings";
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from '../../SettingsFieldset';
-
-import { logger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "../../../../../settings/SettingsStore";
 
 interface IEventShowOpts {

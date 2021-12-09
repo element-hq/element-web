@@ -15,11 +15,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixClient } from "matrix-js-sdk/src/client";
+
 import Analytics from '../Analytics';
 import { asyncAction } from './actionCreators';
 import GroupFilterOrderStore from '../stores/GroupFilterOrderStore';
 import { AsyncActionPayload } from "../dispatcher/payloads";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 
 export default class TagOrderActions {
     /**

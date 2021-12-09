@@ -16,12 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IRequestMsisdnTokenResponse, IRequestTokenResponse } from "matrix-js-sdk/src";
+
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import IdentityAuthClient from './IdentityAuthClient';
 import { SSOAuthEntry } from "./components/views/auth/InteractiveAuthEntryComponents";
-import { IRequestMsisdnTokenResponse, IRequestTokenResponse } from "matrix-js-sdk/src";
 import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 function getIdServerDomain(): string {

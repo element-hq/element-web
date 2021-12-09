@@ -14,13 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { SortAlgorithm } from "../models";
 import { sortRoomsWithAlgorithm } from "../tag-sorting";
 import { OrderingAlgorithm } from "./OrderingAlgorithm";
 import { RoomUpdateCause, TagID } from "../../models";
-import { Room } from "matrix-js-sdk/src/models/room";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 /**
  * Uses the natural tag sorting algorithm order to determine tag ordering. No

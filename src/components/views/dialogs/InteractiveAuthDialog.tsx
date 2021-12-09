@@ -17,16 +17,15 @@ limitations under the License.
 */
 
 import React from 'react';
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from '../../../languageHandler';
-
 import AccessibleButton from '../elements/AccessibleButton';
 import InteractiveAuth, { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import BaseDialog from "./BaseDialog";
-import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
 import { IDialogProps } from "./IDialogProps";
 
 interface IDialogAesthetics {

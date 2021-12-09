@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import * as puppeteer from 'puppeteer';
+
 import { Logger } from './logger';
 import { LogBuffer } from './logbuffer';
 import { delay } from './util';

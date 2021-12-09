@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Relations } from "matrix-js-sdk/src/models/relations";
+
 import { TileShape } from "../rooms/EventTile";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import { Relations } from "matrix-js-sdk/src/models/relations";
 
 export interface IBodyProps {
     mxEvent: MatrixEvent;

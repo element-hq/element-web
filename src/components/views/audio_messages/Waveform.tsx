@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
+import React, { CSSProperties } from "react";
 import classNames from "classnames";
-import { CSSProperties } from "react";
+
+import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface WaveformCSSProperties extends CSSProperties {
     '--barHeight': number;

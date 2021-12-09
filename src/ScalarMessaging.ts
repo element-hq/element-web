@@ -235,8 +235,10 @@ Example:
 }
 */
 
-import { MatrixClientPeg } from './MatrixClientPeg';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { logger } from "matrix-js-sdk/src/logger";
+
+import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
 import RoomViewStore from './stores/RoomViewStore';
@@ -244,8 +246,6 @@ import { _t } from './languageHandler';
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { WidgetType } from "./widgets/WidgetType";
 import { objectClone } from "./utils/objects";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 enum Action {
     CloseScalar = "close_scalar",

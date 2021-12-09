@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { MouseEvent } from "react";
 import classNames from "classnames";
+
 import { formatCount } from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";

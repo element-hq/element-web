@@ -1,11 +1,11 @@
 import '../../../skinned-sdk';
-import * as TestUtils from '../../../test-utils';
 
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import React, { ReactElement } from 'react';
 import ReactDOM from 'react-dom';
-
 import { MatrixClient } from 'matrix-js-sdk';
+
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
+import * as TestUtils from '../../../test-utils';
 import CryptographyPanel from '../../../../src/components/views/settings/CryptographyPanel';
 
 describe('CryptographyPanel', () => {

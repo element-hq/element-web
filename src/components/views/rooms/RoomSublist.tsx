@@ -21,6 +21,10 @@ import { ComponentType, createRef, ReactComponentElement } from "react";
 import { normalize } from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import classNames from 'classnames';
+import { Enable, Resizable } from "re-resizable";
+import { Direction } from "re-resizable/lib/resizer";
+import { Dispatcher } from "flux";
+
 import { RovingAccessibleButton, RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../../views/elements/AccessibleButton";
@@ -42,8 +46,6 @@ import NotificationBadge from "./NotificationBadge";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { Key } from "../../../Keyboard";
 import { ActionPayload } from "../../../dispatcher/payloads";
-import { Enable, Resizable } from "re-resizable";
-import { Direction } from "re-resizable/lib/resizer";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
@@ -54,7 +56,6 @@ import ExtraTile from "./ExtraTile";
 import { ListNotificationState } from "../../../stores/notifications/ListNotificationState";
 import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { Dispatcher } from "flux";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS

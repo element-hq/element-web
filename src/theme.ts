@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import { _t } from "./languageHandler";
-
 import SettingsStore from "./settings/SettingsStore";
 import ThemeWatcher from "./settings/watchers/ThemeWatcher";
 import { compare } from "./utils/strings";
