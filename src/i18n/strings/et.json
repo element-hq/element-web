@@ -3428,5 +3428,13 @@
     "Okay": "Sobib",
     "Use new room breadcrumbs": "Jututoa juures näita jäljerida",
     "Location sharing (under active development)": "Asukoha jagamine (oleme seda võimalust parasjagu arendamas)",
-    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Võimalike vigade leidmiseks jaga meiega anonüümseid andmeid. Isiklikku teavet meie ei kogu ega jaga mitte midagi kolmandate osapooltega. <LearnMoreLink>Lisateave</LearnMoreLink>"
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Võimalike vigade leidmiseks jaga meiega anonüümseid andmeid. Isiklikku teavet meie ei kogu ega jaga mitte midagi kolmandate osapooltega. <LearnMoreLink>Lisateave</LearnMoreLink>",
+    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Kas sa oled kindel, et soovid lõpetada küsitlust? Sellega on tulemused lõplikud ja rohkem osaleda ei saa.",
+    "End Poll": "Lõpeta küsitlus",
+    "Sorry, the poll did not end. Please try again.": "Vabandust, aga küsitlus jäi lõpetamata. Palun proovi uuesti.",
+    "Failed to end poll": "Küsitluse lõpetamine ei õnnestunud",
+    "The poll has ended. Top answer: %(topAnswer)s": "Küsitlus on läbi. Populaarseim vastus: %(topAnswer)s",
+    "The poll has ended. No votes were cast.": "Küsitlus on läbi. Ühtegi osalejate ei ole.",
+    "Final result based on %(count)s votes|one": "%(count)s'l häälel põhinev lõpptulemus",
+    "Final result based on %(count)s votes|other": "%(count)s'l häälel põhinev lõpptulemus"
 }
