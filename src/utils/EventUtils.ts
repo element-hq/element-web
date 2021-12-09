@@ -46,7 +46,10 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
             if (content.msgtype && content.msgtype !== 'm.bad.encrypted' && content.hasOwnProperty('body')) {
                 return true;
             }
-        } else if (mxEvent.getType() === 'm.sticker') {
+        } else if (
+            mxEvent.getType() === 'm.sticker' ||
+            POLL_START_EVENT_TYPE.matches(mxEvent.getType())
+        ) {
             return true;
         }
     }

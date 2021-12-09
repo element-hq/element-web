@@ -139,3 +139,8 @@ limitations under the License.
         font-size: $font-12px;
     }
 }
+
+// Prevent clicking a poll within a reply
+.mx_ReplyTile .mx_MPollBody {
+    pointer-events: none;
+}
