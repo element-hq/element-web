@@ -18,9 +18,10 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 
-import Tooltip, { Alignment } from './Tooltip';
+import { Alignment } from './Tooltip';
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { TooltipTarget } from './TooltipTarget';
 
 export enum InfoTooltipKind {
     Info = "info",
@@ -34,30 +35,11 @@ interface ITooltipProps {
     kind?: InfoTooltipKind;
 }
 
-interface IState {
-    hover: boolean;
-}
-
 @replaceableComponent("views.elements.InfoTooltip")
-export default class InfoTooltip extends React.PureComponent<ITooltipProps, IState> {
+export default class InfoTooltip extends React.PureComponent<ITooltipProps> {
     constructor(props: ITooltipProps) {
         super(props);
-        this.state = {
-            hover: false,
-        };
     }
-
-    onMouseOver = () => {
-        this.setState({
-            hover: true,
-        });
-    };
-
-    onMouseLeave = () => {
-        this.setState({
-            hover: false,
-        });
-    };
 
     render() {
         const { tooltip, children, tooltipClassName, className, kind } = this.props;
@@ -68,22 +50,16 @@ export default class InfoTooltip extends React.PureComponent<ITooltipProps, ISta
         );
 
         // Tooltip are forced on the right for a more natural feel to them on info icons
-        const tip = this.state.hover ? <Tooltip
-            className="mx_InfoTooltip_container"
-            tooltipClassName={classNames("mx_InfoTooltip_tooltip", tooltipClassName)}
-            label={tooltip || title}
-            alignment={Alignment.Right}
-        /> : <div />;
         return (
-            <div
-                onMouseOver={this.onMouseOver}
-                onMouseLeave={this.onMouseLeave}
-                className={classNames("mx_InfoTooltip", className)}
+            <TooltipTarget tooltipTargetClassName={classNames("mx_InfoTooltip", className)}
+                className="mx_InfoTooltip_container"
+                tooltipClassName={classNames("mx_InfoTooltip_tooltip", tooltipClassName)}
+                label={tooltip || title}
+                alignment={Alignment.Right}
             >
                 <span className={classNames("mx_InfoTooltip_icon", iconClassName)} aria-label={title} />
                 { children }
-                { tip }
-            </div>
+            </TooltipTarget>
         );
     }
 }

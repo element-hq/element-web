@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TooltipTarget /> displays tooltip on mouseover 1`] = `
+<div
+  class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
+  style="right: 1008px; top: -26px; display: block;"
+>
+  <div
+    class="mx_Tooltip_chevron"
+  />
+  test label
+</div>
+`;
+
+exports[`<TooltipTarget /> renders container 1`] = `
+<div
+  aria-describedby="test id"
+  class="test tooltipTargetClassName"
+  data-test-id="test"
+  tabindex="0"
+>
+  <span>
+    child
+  </span>
+  <div
+    class="test className"
+  />
+</div>
+`;

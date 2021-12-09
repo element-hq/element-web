@@ -52,14 +52,14 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
         }
     }
 
-    onMouseOver = () => {
+    showTooltip = () => {
         if (this.props.forceHide) return;
         this.setState({
             hover: true,
         });
     };
 
-    onMouseLeave = () => {
+    hideTooltip = () => {
         this.setState({
             hover: false,
         });
@@ -78,8 +78,10 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
         return (
             <AccessibleButton
                 {...props}
-                onMouseOver={this.onMouseOver}
-                onMouseLeave={this.onMouseLeave}
+                onMouseOver={this.showTooltip}
+                onMouseLeave={this.hideTooltip}
+                onFocus={this.showTooltip}
+                onBlur={this.hideTooltip}
                 aria-label={title}
             >
                 { children }
