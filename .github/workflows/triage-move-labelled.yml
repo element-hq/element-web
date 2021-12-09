@@ -47,28 +47,14 @@ jobs:
           PROJECT_ID: "PN_kwDOAM0swc0sUA"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-  spaces_issues_to_old_board:
-    name: Spaces issues to old Delight project board
+  Delight_issues_to_board:
+    name: Delight issues to project board
     runs-on: ubuntu-latest
     if: >
         contains(github.event.issue.labels.*.name, 'A-Spaces') ||
         contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
-        contains(github.event.issue.labels.*.name, 'A-Subspaces')
-    steps:
-      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
-        with:
-          action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-          project-url: "https://github.com/orgs/vector-im/projects/6"
-          column-name: "📥 Inbox"
-          label-name: "A-Spaces"
-
-  spaces_issues_to_new_board:
-    name: Spaces issues to new Delight project board
-    runs-on: ubuntu-latest
-    if: >
-        contains(github.event.issue.labels.*.name, 'A-Spaces') ||
-        contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
-        contains(github.event.issue.labels.*.name, 'A-Subspaces')
+        contains(github.event.issue.labels.*.name, 'A-Subspaces') ||
+        contains(github.event.issue.labels.*.name, 'Z-IA')
     steps:
       - uses: octokit/graphql-action@v2.x
         with:
