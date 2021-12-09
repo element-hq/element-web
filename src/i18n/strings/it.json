@@ -3438,5 +3438,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "Il sondaggio è terminato. Risposta più scelta: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Il sondaggio è terminato. Nessun voto inviato.",
     "Final result based on %(count)s votes|one": "Risultato finale basato su %(count)s voto",
-    "Final result based on %(count)s votes|other": "Risultato finale basato su %(count)s voti"
+    "Final result based on %(count)s votes|other": "Risultato finale basato su %(count)s voti",
+    "Are you sure you want to end this poll? This will show the final results of the poll and stop people from being able to vote.": "Vuoi davvero terminare questo sondaggio? Verranno mostrati i risultati finali e le persone non potranno più votare."
 }
