@@ -2452,5 +2452,17 @@
     "Where you're signed in": "Звідки ви входили",
     "Request media permissions": "Запитати медіа-дозволи",
     "Missing media permissions, click the button below to request.": "Бракує медіа-дозволів, натисніть кнопку нижче, щоб їх надати.",
-    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Здійснювати дзвінки 1:1 без сервера-посередника (інший бік знатиме вашу IP-адресу)"
+    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Здійснювати дзвінки 1:1 без сервера-посередника (інший бік знатиме вашу IP-адресу)",
+    "Use a more compact 'Modern' layout": "Використовувати компактну верстку \"Модерн\"",
+    "Don't send read receipts": "Не сповіщати про прочитання",
+    "Use new room breadcrumbs": "Використовувати нові навігаційні стежки кімнат",
+    "Feeling experimental? Labs are the best way to get things early, test out new features and help shape them before they actually launch. <a>Learn more</a>.": "",
+    "Meta Spaces": "",
+    "New layout switcher (with message bubbles)": "",
+    "Location sharing (under active development)": "",
+    "Polls (under active development)": "",
+    "Maximised widgets": "",
+    "Communities v2 prototypes. Requires compatible homeserver. Highly experimental - use with caution.": "",
+    "Render LaTeX maths in messages": "",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": ""
 }
