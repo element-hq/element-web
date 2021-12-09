@@ -21,17 +21,12 @@ import {
     findRenderedDOMComponentWithClass,
     act,
 } from 'react-dom/test-utils';
-
-import "../../../skinned-sdk";
-
-import { stubClient } from '../../../test-utils';
-
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-
-import DMRoomMap from '../../../../src/utils/DMRoomMap';
-
 import { Room, RoomMember, MatrixError, IContent } from 'matrix-js-sdk';
 
+import "../../../skinned-sdk";
+import { stubClient } from '../../../test-utils';
+import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
+import DMRoomMap from '../../../../src/utils/DMRoomMap';
 import RoomPreviewBar from '../../../../src/components/views/rooms/RoomPreviewBar';
 
 jest.mock('../../../../src/IdentityAuthClient', () => {

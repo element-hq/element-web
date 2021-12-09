@@ -16,6 +16,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
+
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TooltipTarget from './TooltipTarget';
 

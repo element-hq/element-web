@@ -28,8 +28,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from '../elements/AccessibleButton';
 import AvatarSetting from './AvatarSetting';
-
 import ExternalLink from '../elements/ExternalLink';
+
 interface IState {
     userId?: string;
     originalDisplayName?: string;

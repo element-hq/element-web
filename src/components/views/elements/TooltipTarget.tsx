@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { useState, HTMLAttributes } from 'react';
+
 import Tooltip, { ITooltipProps } from './Tooltip';
 
 interface IProps extends HTMLAttributes<HTMLSpanElement>, Omit<ITooltipProps, 'visible'> {
