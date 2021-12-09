@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -22,8 +24,6 @@ import Notifier from "../../../../../Notifier";
 import SettingsStore from '../../../../../settings/SettingsStore';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import { RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
 import { EchoChamber } from '../../../../../stores/local-echo/EchoChamber';
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";

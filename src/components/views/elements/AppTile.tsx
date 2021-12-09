@@ -19,6 +19,11 @@ limitations under the License.
 
 import url from 'url';
 import React, { createRef } from 'react';
+import classNames from 'classnames';
+import { MatrixCapabilities } from "matrix-widget-api";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
@@ -27,21 +32,19 @@ import AppWarning from './AppWarning';
 import Spinner from './Spinner';
 import dis from '../../../dispatcher/dispatcher';
 import ActiveWidgetStore from '../../../stores/ActiveWidgetStore';
-import classNames from 'classnames';
 import SettingsStore from "../../../settings/SettingsStore";
 import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { StopGapWidget } from "../../../stores/widgets/StopGapWidget";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
-import { MatrixCapabilities } from "matrix-widget-api";
 import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CallHandler from '../../../CallHandler';
-import { Room } from "matrix-js-sdk/src/models/room";
 import { IApp } from "../../../stores/WidgetStore";
 import { WidgetLayoutStore, Container } from "../../../stores/widgets/WidgetLayoutStore";
+
 interface IProps {
     app: IApp;
     // If room is not specified then it is an account level widget
@@ -88,8 +91,6 @@ interface IState {
     widgetPageTitle: string;
     requiresClient: boolean;
 }
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 @replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component<IProps, IState> {

@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import posthog, { PostHog } from 'posthog-js';
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import { MatrixClientPeg } from "./MatrixClientPeg";
-import { MatrixClient } from "matrix-js-sdk/src/client";
-
-import { logger } from "matrix-js-sdk/src/logger";
 import SettingsStore from "./settings/SettingsStore";
 
 /* Posthog analytics tracking.

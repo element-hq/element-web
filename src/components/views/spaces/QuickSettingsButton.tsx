@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { useMemo } from "react";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -34,7 +35,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import dis from "../../../dispatcher/dispatcher";
 import { RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
-import classNames from "classnames";
 
 const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
     const orderedThemes = useMemo(getOrderedThemes, []);

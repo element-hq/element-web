@@ -15,8 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ElementSession } from "../session";
+import { strict as assert } from 'assert';
 
+import { ElementSession } from "../session";
 import { sendMessage } from '../usecases/send-message';
 import { acceptInvite } from '../usecases/accept-invite';
 import { receiveMessage } from '../usecases/timeline';
@@ -24,7 +25,6 @@ import { createDm } from '../usecases/create-room';
 import { checkRoomSettings } from '../usecases/room-settings';
 import { startSasVerification, acceptSasVerification } from '../usecases/verify';
 import { setupSecureBackup } from '../usecases/security';
-import { strict as assert } from 'assert';
 import { measureStart, measureStop } from '../util';
 
 export async function e2eEncryptionScenarios(alice: ElementSession, bob: ElementSession) {

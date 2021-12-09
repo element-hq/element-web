@@ -15,6 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { strict as assert } from 'assert';
+
 import { delay } from '../util';
 import { join } from '../usecases/join';
 import { sendMessage } from '../usecases/send-message';
@@ -25,7 +27,6 @@ import {
 import { createRoom } from '../usecases/create-room';
 import { getMembersInMemberlist } from '../usecases/memberlist';
 import { changeRoomSettings } from '../usecases/room-settings';
-import { strict as assert } from 'assert';
 import { RestMultiSession } from "../rest/multi";
 import { ElementSession } from "../session";
 

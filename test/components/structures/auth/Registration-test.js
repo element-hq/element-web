@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import sdk from '../../../skinned-sdk';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { createClient } from 'matrix-js-sdk/src/matrix';
 
+import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
 import { createTestClient, mkServerConfig } from "../../../test-utils";
 

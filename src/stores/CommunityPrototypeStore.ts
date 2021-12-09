@@ -14,22 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room } from "matrix-js-sdk/src/models/room";
+import * as utils from "matrix-js-sdk/src/utils";
+import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { Action } from "../dispatcher/actions";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { EffectiveMembership, getEffectiveMembership } from "../utils/membership";
 import SettingsStore from "../settings/SettingsStore";
-import * as utils from "matrix-js-sdk/src/utils";
 import { UPDATE_EVENT } from "./AsyncStore";
 import FlairStore from "./FlairStore";
 import GroupFilterOrderStore from "./GroupFilterOrderStore";
 import GroupStore from "./GroupStore";
 import dis from "../dispatcher/dispatcher";
-import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 interface IState {
     // nothing of value - we use account data

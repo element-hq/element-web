@@ -19,6 +19,7 @@ limitations under the License.
 import React, { ReactElement, useEffect } from 'react';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import classNames from 'classnames';
+import { MsgType } from 'matrix-js-sdk/src/@types/event';
 
 import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
@@ -40,7 +41,6 @@ import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';
 import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/threads';
 import ReactionPicker from "../emojipicker/ReactionPicker";
-import { MsgType } from 'matrix-js-sdk/src/@types/event';
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;

@@ -20,7 +20,6 @@ import { EventTimelineSet, IEventRelation, MatrixEvent, Room } from 'matrix-js-s
 import { Thread } from 'matrix-js-sdk/src/models/thread';
 
 import BaseCard from "./BaseCard";
-
 import ResizeNotifier from '../../../utils/ResizeNotifier';
 import MessageComposer from '../rooms/MessageComposer';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';

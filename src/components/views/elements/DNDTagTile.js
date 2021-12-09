@@ -15,9 +15,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import TagTile from './TagTile';
-
 import React from 'react';
+
+import TagTile from './TagTile';
 import ContextMenu, { toRightOf, useContextMenu } from "../../structures/ContextMenu";
 import * as sdk from '../../../index';
 

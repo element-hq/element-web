@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import { strict as assert } from 'assert';
+
 import { openMemberInfo } from "./memberlist";
 import { ElementSession } from "../session";
 

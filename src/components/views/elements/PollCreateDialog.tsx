@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React, { ChangeEvent, createRef } from "react";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import { IDialogProps } from "../dialogs/IDialogProps";
 import QuestionDialog from "../dialogs/QuestionDialog";
-import React, { ChangeEvent, createRef } from "react";
 import Modal from '../../../Modal';
 import { _t } from "../../../languageHandler";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { arrayFastClone, arraySeed } from "../../../utils/arrays";
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";

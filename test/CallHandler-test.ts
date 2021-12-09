@@ -16,13 +16,14 @@ limitations under the License.
 
 import './skinned-sdk';
 
+import { CallEvent, CallState, CallType } from 'matrix-js-sdk/src/webrtc/call';
+import EventEmitter from 'events';
+
 import CallHandler, { CallHandlerEvent } from '../src/CallHandler';
 import { stubClient, mkStubRoom } from './test-utils';
 import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
-import { CallEvent, CallState, CallType } from 'matrix-js-sdk/src/webrtc/call';
 import DMRoomMap from '../src/utils/DMRoomMap';
-import EventEmitter from 'events';
 import SdkConfig from '../src/SdkConfig';
 import { ActionPayload } from '../src/dispatcher/payloads';
 import { Action } from "../src/dispatcher/actions";

@@ -1,5 +1,3 @@
-import { ElementSession } from "../session";
-
 /*
 Copyright 2021 The Matrix.org Foundation C.I.C.
 
@@ -17,6 +15,7 @@ limitations under the License.
 */
 
 import { createSpace, inviteSpace } from "../usecases/create-space";
+import { ElementSession } from "../session";
 
 export async function spacesScenarios(alice: ElementSession, bob: ElementSession): Promise<void> {
     console.log(" creating a space for spaces scenarios:");

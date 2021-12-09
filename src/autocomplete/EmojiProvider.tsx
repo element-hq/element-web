@@ -18,17 +18,17 @@ limitations under the License.
 */
 
 import React from 'react';
+import { uniq, sortBy } from 'lodash';
+import EMOTICON_REGEX from 'emojibase-regex/emoticon';
+import { Room } from 'matrix-js-sdk/src/models/room';
+
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
 import QueryMatcher from './QueryMatcher';
 import { PillCompletion } from './Components';
 import { ICompletion, ISelectionRange } from './Autocompleter';
-import { uniq, sortBy } from 'lodash';
 import SettingsStore from "../settings/SettingsStore";
 import { EMOJI, IEmoji } from '../emoji';
-
-import EMOTICON_REGEX from 'emojibase-regex/emoticon';
-import { Room } from 'matrix-js-sdk/src/models/room';
 import { TimelineRenderingType } from '../contexts/RoomContext';
 
 const LIMIT = 20;

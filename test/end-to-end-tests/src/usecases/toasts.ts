@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { strict as assert } from 'assert';
+
 import { ElementSession } from "../session";
 
 export async function assertNoToasts(session: ElementSession): Promise<void> {

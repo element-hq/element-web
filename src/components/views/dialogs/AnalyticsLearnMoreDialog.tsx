@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React from "react";
+
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
-import React from "react";
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
 

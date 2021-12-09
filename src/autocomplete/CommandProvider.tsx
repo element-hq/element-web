@@ -18,6 +18,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { Room } from 'matrix-js-sdk/src/models/room';
 
 import { _t } from '../languageHandler';
 import AutocompleteProvider from './AutocompleteProvider';
@@ -25,7 +26,6 @@ import QueryMatcher from './QueryMatcher';
 import { TextualCompletion } from './Components';
 import { ICompletion, ISelectionRange } from "./Autocompleter";
 import { Command, Commands, CommandMap } from '../SlashCommands';
-import { Room } from 'matrix-js-sdk/src/models/room';
 import { TimelineRenderingType } from '../contexts/RoomContext';
 
 const COMMAND_RE = /(^\/\w*)(?: .*)?/g;

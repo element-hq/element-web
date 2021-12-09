@@ -17,12 +17,12 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { EventStatus } from "matrix-js-sdk/src/models/event";
+import React from "react";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { _t } from "../languageHandler";
 import Modal, { IHandle } from "../Modal";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
-import React from "react";
 import dis from "../dispatcher/dispatcher";
 import RoomViewStore from "../stores/RoomViewStore";
 import Spinner from "../components/views/elements/Spinner";

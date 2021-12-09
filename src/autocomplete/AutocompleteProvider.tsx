@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import React from 'react';
+
 import { TimelineRenderingType } from '../contexts/RoomContext';
 import type { ICompletion, ISelectionRange } from './Autocompleter';
 

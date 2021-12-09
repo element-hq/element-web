@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { Relations } from 'matrix-js-sdk/src/models/relations';
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -43,7 +44,6 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import { WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
 import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
 import EndPollDialog from '../dialogs/EndPollDialog';
-import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { isPollEnded } from '../messages/MPollBody';
 
 export function canCancel(eventStatus: EventStatus): boolean {

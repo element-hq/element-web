@@ -16,9 +16,10 @@ limitations under the License.
 
 import { CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import React from 'react';
+import { Resizable } from "re-resizable";
+
 import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import CallView from './CallView';
-import { Resizable } from "re-resizable";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 

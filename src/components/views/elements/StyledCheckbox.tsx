@@ -16,9 +16,9 @@ limitations under the License.
 
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
+import classnames from 'classnames';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import classnames from 'classnames';
 
 export enum CheckboxStyle {
     Solid = "solid",

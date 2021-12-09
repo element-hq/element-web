@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
+import { Room } from "matrix-js-sdk/src/models/room";
+
 import { NotificationColor } from "./NotificationColor";
 import { IDestroyable } from "../../utils/IDestroyable";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { NotificationState } from "./NotificationState";
-import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
-import { Room } from "matrix-js-sdk/src/models/room";
 
 export class ThreadNotificationState extends NotificationState implements IDestroyable {
     protected _symbol = null;
