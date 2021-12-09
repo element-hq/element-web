@@ -29,7 +29,8 @@ function renderConfigError(message) {
 async function initPage() {
     document.getElementById('back_to_element_button').onclick = onBackToElementClick;
 
-    const config = await getVectorConfig('..');
+    // [Tchap] Not used currently in Tchap.
+/*    const config = await getVectorConfig('..');
 
     // We manually parse the config similar to how validateServerConfig works because
     // calling that function pulls in roughly 4mb of JS we don't use.
@@ -104,7 +105,9 @@ async function initPage() {
             document.getElementById('is_url').style.display = 'block';
             document.getElementById('is_url').innerText = isUrl;
         }
-    }
+    }*/
+    /*document.getElementById('step1_heading').innerHTML= '1: Install the app';
+    document.getElementById('step2_container').style.display = 'block';*/
 }
 
 initPage();

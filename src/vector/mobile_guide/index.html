@@ -10,7 +10,8 @@
 }
 
 body {
-    background: #f9fafb;
+    background: rgba(55, 76, 114, 0.8);
+    color: white;
     max-width: 680px;
     margin: auto;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -40,18 +41,22 @@ body {
 }
 
 .mx_HomePage_header {
-    color: #2E2F32;
+    color: white;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin: 50px;
+}
+
+.mx_HomePage_header_title {
+    font-size: 37px;
+    font-weight: bold;
+    margin: 0;
 }
 
 .mx_HomePage h3 {
     margin-top: 30px;
-}
-
-.mx_HomePage_header {
-    align-items: center;
 }
 
 .mx_HomePage_col {
@@ -68,6 +73,8 @@ body {
 
 .mx_HomePage_logo {
     margin-right: 20px;
+    width: 100px;
+    height: 100px;
 }
 
 .mx_HomePage_container {
@@ -96,8 +103,16 @@ body {
 }
 
 .mx_FooterLink {
-    color: #0dbd8b;
+    color: white;
+    background-color: rgb(22, 45, 88);
+    display: inline-block;
+    width: 150px;
+    height: 30px;
     text-decoration: none;
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px 20px 4px 20px;
+    border-radius: 3px;
 }
 
 .mx_Subtext {
@@ -146,16 +161,17 @@ body {
 
   <div class="mx_HomePage_container">
       <div class="mx_HomePage_header">
-          <span class="mx_HomePage_logo">
-            <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyMC4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMTAyMy4yIDEwMjQuOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTAyMy4yIDEwMjQuODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6dXJsKCNYTUxJRF8yXyk7fQ0KCS5zdDF7ZmlsbDojRkZGRkZGO30NCgkuc3Qye2ZpbGw6I0U1NDM0Rjt9DQo8L3N0eWxlPg0KPHJhZGlhbEdyYWRpZW50IGlkPSJYTUxJRF8yXyIgY3g9Ii04NS4xMjA2IiBjeT0iLTM5LjU4MDYiIHI9IjExMzUuNDU3NCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KCTxzdG9wICBvZmZzZXQ9IjAiIHN0eWxlPSJzdG9wLWNvbG9yOiMxMzJENzgiLz4NCgk8c3RvcCAgb2Zmc2V0PSIwLjM0ODciIHN0eWxlPSJzdG9wLWNvbG9yOiMxMjI5NkUiLz4NCgk8c3RvcCAgb2Zmc2V0PSIwLjkzMiIgc3R5bGU9InN0b3AtY29sb3I6IzBFMUY1NCIvPg0KCTxzdG9wICBvZmZzZXQ9IjEiIHN0eWxlPSJzdG9wLWNvbG9yOiMwRDFFNTEiLz4NCjwvcmFkaWFsR3JhZGllbnQ+DQo8cGF0aCBpZD0iWE1MSURfNzVfIiBjbGFzcz0ic3QwIiBkPSJNNzkzLjIsMGgtNTY0Yy0xMjcsMC0yMzAsMTAzLTIzMCwyMzB2NTY0YzAsMTI3LDEwMywyMzAsMjMwLDIzMGg1NjRjMTI3LDAsMjMwLTEwMywyMzAtMjMwVjIzMA0KCUMxMDIzLjIsMTAzLDkyMC4yLDAsNzkzLjIsMHoiLz4NCjxwb2x5Z29uIGlkPSJYTUxJRF83MV8iIGNsYXNzPSJzdDEiIHBvaW50cz0iODE0LjYsNjc2LjQgNTExLjEsODUxLjYgMjA3LjYsNjc2LjQgMjA3LjYsMzI2IDUxMS4xLDE1MC44IDgxNC42LDMyNiAiLz4NCjxwb2x5Z29uIGNsYXNzPSJzdDIiIHBvaW50cz0iNzAxLjcsMzY1LjEgMzM5LjcsMzY1LjEgMzM5LjcsNDkyLjggMzkyLjMsNDkyLjggMzkyLjMsNDE3LjcgNDg4LjEsNDE3LjcgNDg4LjEsNjk3IDU0MC43LDY5NyANCgk1NDAuNyw0MTcuNyA3MDEuNyw0MTcuNyAiLz4NCjwvc3ZnPg0K" alt="Tchap logo">
-          </span>
-          <p>Set up Tchap on iOS or Android</p>
+          <img class="mx_HomePage_logo" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyMC4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FscXVlXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMTAyMy4yIDEwMjQuOCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTAyMy4yIDEwMjQuODsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4NCgkuc3Qwe2ZpbGw6dXJsKCNYTUxJRF8yXyk7fQ0KCS5zdDF7ZmlsbDojRkZGRkZGO30NCgkuc3Qye2ZpbGw6I0U1NDM0Rjt9DQo8L3N0eWxlPg0KPHJhZGlhbEdyYWRpZW50IGlkPSJYTUxJRF8yXyIgY3g9Ii04NS4xMjA2IiBjeT0iLTM5LjU4MDYiIHI9IjExMzUuNDU3NCIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPg0KCTxzdG9wICBvZmZzZXQ9IjAiIHN0eWxlPSJzdG9wLWNvbG9yOiMxMzJENzgiLz4NCgk8c3RvcCAgb2Zmc2V0PSIwLjM0ODciIHN0eWxlPSJzdG9wLWNvbG9yOiMxMjI5NkUiLz4NCgk8c3RvcCAgb2Zmc2V0PSIwLjkzMiIgc3R5bGU9InN0b3AtY29sb3I6IzBFMUY1NCIvPg0KCTxzdG9wICBvZmZzZXQ9IjEiIHN0eWxlPSJzdG9wLWNvbG9yOiMwRDFFNTEiLz4NCjwvcmFkaWFsR3JhZGllbnQ+DQo8cGF0aCBpZD0iWE1MSURfNzVfIiBjbGFzcz0ic3QwIiBkPSJNNzkzLjIsMGgtNTY0Yy0xMjcsMC0yMzAsMTAzLTIzMCwyMzB2NTY0YzAsMTI3LDEwMywyMzAsMjMwLDIzMGg1NjRjMTI3LDAsMjMwLTEwMywyMzAtMjMwVjIzMA0KCUMxMDIzLjIsMTAzLDkyMC4yLDAsNzkzLjIsMHoiLz4NCjxwb2x5Z29uIGlkPSJYTUxJRF83MV8iIGNsYXNzPSJzdDEiIHBvaW50cz0iODE0LjYsNjc2LjQgNTExLjEsODUxLjYgMjA3LjYsNjc2LjQgMjA3LjYsMzI2IDUxMS4xLDE1MC44IDgxNC42LDMyNiAiLz4NCjxwb2x5Z29uIGNsYXNzPSJzdDIiIHBvaW50cz0iNzAxLjcsMzY1LjEgMzM5LjcsMzY1LjEgMzM5LjcsNDkyLjggMzkyLjMsNDkyLjggMzkyLjMsNDE3LjcgNDg4LjEsNDE3LjcgNDg4LjEsNjk3IDU0MC43LDY5NyANCgk1NDAuNyw0MTcuNyA3MDEuNyw0MTcuNyAiLz4NCjwvc3ZnPg0K" alt="Tchap logo">
+          <div>
+              <p class="mx_HomePage_header_title">Tchap</p>
+              <p>Configurer Tchap sur iOS et Android</p>
+          </div>
       </div>
       <div class="mx_HomePage_col">
         <div class="mx_HomePage_row">
           <div>
-              <h2 id="step1_heading">Install the app</h2>
-              <p><strong>iOS</strong> (iPhone or iPad)</p>
+              <h2 id="step1_heading">1: Installez l'application</h2>
+              <p><strong>iOS</strong> (iPhone ou iPad)</p>
               <a href="https://apps.apple.com/fr/app/tchap/id1446253779" target="_blank" class="mx_ClearDecoration">
                 <svg width="144px" height="48px" viewBox="0 0 120 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <desc>Download on the App Store.</desc>
@@ -259,18 +275,18 @@ body {
           </div>
         </div>
       </div>
-      <div id="step2_container" class="mx_HomePage_col mx_Spacer" style="display: none;">
+      <div id="step2_container" class="mx_HomePage_col mx_Spacer">
         <div class="mx_HomePage_row">
           <div>
-              <h2>2: Register or Log in</h2>
-              <p>Create a new account if you don&apos;t have one, or log in to your existing account.</p>
+              <h2>2: Créez un compte ou connectez vous</h2>
+              <p>Créez un nouveau compte si vous n'en possédez pas, ou connectez vous avec un compte existant.</p>
           </div>
         </div>
       </div>
       <div class="mx_HomePage_row mx_Center mx_Spacer">
          <p class="mx_Spacer">
              <a id="back_to_element_button" href="#" class="mx_FooterLink">
-                 Go to Desktop Site
+                 Retourner sur Tchap
              </a>
          </p>
       </div>
