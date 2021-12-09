@@ -13,7 +13,7 @@
     "declaration": true,
     "jsx": "react",
     "lib": [
-      "es2019",
+      "es2020",
       "dom",
       "dom.iterable"
     ],

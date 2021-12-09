@@ -419,11 +419,18 @@ export default class HTMLExporter extends Exporter {
         this.updateProgress(`Fetched ${res.length} events in ${(fetchEnd - fetchStart)/1000}s`, true, false);
 
         this.updateProgress("Creating HTML...");
+
+        const usedClasses = new Set<string>();
         for (let page = 0; page < res.length / 1000; page++) {
             const html = await this.createHTML(res, page * 1000);
+            const document = new DOMParser().parseFromString(html, "text/html");
+            document.querySelectorAll("*").forEach(element => {
+                element.classList.forEach(c => usedClasses.add(c));
+            });
             this.addFile(`messages${page ? page + 1 : ""}.html`, new Blob([html]));
         }
-        const exportCSS = await getExportCSS();
+
+        const exportCSS = await getExportCSS(usedClasses);
         this.addFile("css/style.css", new Blob([exportCSS]));
         this.addFile("js/script.js", new Blob([exportJS]));
 

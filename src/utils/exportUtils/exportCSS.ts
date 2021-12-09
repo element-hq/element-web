@@ -18,33 +18,52 @@ limitations under the License.
 
 import customCSS from "!!raw-loader!./exportCustomCSS.css";
 
-const getExportCSS = async (): Promise<string> => {
-    const stylesheets: string[] = [];
-    document.querySelectorAll('link[rel="stylesheet"]').forEach((e: any) => {
-        if (e.href.endsWith("bundle.css") || e.href.endsWith("theme-light.css")) {
-            stylesheets.push(e.href);
-        }
+const cssSelectorTextClassesRegex = /\.[\w-]+/g;
+
+function mutateCssText(css: string): string {
+    // replace used fonts so that we don't have to bundle Inter & Inconsalata
+    return css
+        .replace(
+            /font-family: ?(Inter|'Inter'|"Inter")/g,
+            `font-family: -apple-system, BlinkMacSystemFont, avenir next,
+            avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif`,
+        )
+        .replace(
+            /font-family: ?Inconsolata/g,
+            "font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace",
+        );
+}
+
+// naively culls unused css rules based on which classes are present in the html,
+// doesn't cull rules which won't apply due to the full selector not matching but gets rid of a LOT of cruft anyway.
+const getExportCSS = async (usedClasses: Set<string>): Promise<string> => {
+    // only include bundle.css and the data-mx-theme=light styling
+    const stylesheets = Array.from(document.styleSheets).filter(s => {
+        return s.href?.endsWith("bundle.css") || (s.ownerNode as HTMLStyleElement).dataset.mxTheme === "light";
     });
-    let CSS = "";
+
+    let css = "";
     for (const stylesheet of stylesheets) {
-        const res = await fetch(stylesheet);
-        const innerText = await res.text();
-        CSS += innerText;
+        for (const rule of stylesheet.cssRules) {
+            if (rule instanceof CSSFontFaceRule) continue; // we don't want to bundle any fonts
+
+            const selectorText = (rule as CSSStyleRule).selectorText;
+
+            // only skip the rule if all branches (,) of the selector are redundant
+            if (selectorText?.split(",").every(selector => {
+                const classes = selector.match(cssSelectorTextClassesRegex);
+                if (classes && !classes.every(c => usedClasses.has(c.substring(1)))) {
+                    return true; // signal as a redundant selector
+                }
+            })) {
+                continue; // skip this rule as it is redundant
+            }
+
+            css += mutateCssText(rule.cssText) + "\n";
+        }
     }
-    const fontFaceRegex = /@font-face {.*?}/sg;
 
-    CSS = CSS.replace(fontFaceRegex, '');
-    CSS = CSS.replace(
-        /font-family: (Inter|'Inter')/g,
-        `font-family: -apple-system, BlinkMacSystemFont, avenir next, 
-        avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif`,
-    );
-    CSS = CSS.replace(
-        /font-family: Inconsolata/g,
-        "font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace",
-    );
-
-    return CSS + customCSS;
+    return css + customCSS;
 };
 
 export default getExportCSS;
