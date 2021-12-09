@@ -21,7 +21,7 @@ import classNames from 'classnames';
 import { Alignment } from './Tooltip';
 import { _t } from "../../../languageHandler";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { TooltipTarget } from './TooltipTarget';
+import TooltipTarget from './TooltipTarget';
 
 export enum InfoTooltipKind {
     Info = "info",

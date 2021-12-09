@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { TooltipTarget } from './TooltipTarget';
+import TooltipTarget from './TooltipTarget';
 
 interface IProps {
     helpText: React.ReactNode | string;

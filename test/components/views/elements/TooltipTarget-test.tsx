@@ -8,7 +8,7 @@ import {
 import { act } from "react-dom/test-utils";
 
 import { Alignment } from '../../../../src/components/views/elements/Tooltip';
-import { TooltipTarget } from "../../../../src/components/views/elements/TooltipTarget";
+import TooltipTarget from "../../../../src/components/views/elements/TooltipTarget";
 
 describe('<TooltipTarget />', () => {
     const defaultProps = {

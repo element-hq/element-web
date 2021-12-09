@@ -17,7 +17,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { TooltipTarget } from './TooltipTarget';
+import TooltipTarget from './TooltipTarget';
 
 interface IProps {
     class?: string;

@@ -25,7 +25,7 @@ interface IProps extends HTMLAttributes<HTMLSpanElement>, Omit<ITooltipProps, 'v
  * Generic tooltip target element that handles tooltip visibility state
  * and displays children
  */
-export const TooltipTarget: React.FC<IProps> = ({
+const TooltipTarget: React.FC<IProps> = ({
     children,
     tooltipTargetClassName,
     // tooltip pass through props
@@ -66,3 +66,5 @@ export const TooltipTarget: React.FC<IProps> = ({
         </div>
     );
 };
+
+export default TooltipTarget;
