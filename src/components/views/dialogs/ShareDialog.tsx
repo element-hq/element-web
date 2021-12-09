@@ -239,6 +239,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             <div className="mx_ShareDialog_content">
                 <div className="mx_ShareDialog_matrixto">
                     <a
+                        title={_t('Link to room')}
                         href={matrixToUrl}
                         onClick={ShareDialog.onLinkClick}
                         className="mx_ShareDialog_matrixto_link"
