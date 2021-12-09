@@ -3373,5 +3373,17 @@
     "Moderation": "Moderation",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s und %(count)s anderer",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
-    "%(spaceName)s and %(count)s others|other": "%(spaceName)s und %(count)s andere"
+    "%(spaceName)s and %(count)s others|other": "%(spaceName)s und %(count)s andere",
+    "Okay": "Okay",
+    "Location sharing (under active development)": "Teilen des Standorts (wird aktuell entwickelt)",
+    "Share anonymous data to help us identify issues. Nothing personal. No third parties. <LearnMoreLink>Learn More</LearnMoreLink>": "Teile Daten anonymisiert um uns zu helfen Probleme zu identifizieren. Nichts persönliches. Keine Dritten. <LearnMoreLink>Mehr dazu hier</LearnMoreLink>",
+    "You previously consented to share anonymous usage data with us. We're updating how that works.": "Sie haben vorher zugestimmt anonymisierte Nutzungsdaten mit uns zu teilen. Wir updaten wie das funktioniert.",
+    "Help improve %(analyticsOwner)s": "Helf %(analyticsOwner)s zu verbessern",
+    "That's fine": "Das ist okay",
+    "You cannot place calls without a connection to the server.": "Sie können keine Anrufe starten ohne Verbindung zum Server.",
+    "Connectivity to the server has been lost": "Verbindung zum Server unterbrochen",
+    "You cannot place calls in this browser.": "Sie können in diesem Browser keien Anrufe durchführen.",
+    "Calls are unsupported": "Anrufe werden nicht unterstützt",
+    "Some examples of the information being sent to us to help make %(brand)s better includes:": "Einige Beispiele von Informationen die an uns gesendet werden um %(brand)s besser zu machen beinhaltet:",
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Unsere vollständige Cookie-Richtlinie kann <CookiePolicyLink>hier</CookiePolicyLink> gefunden werden."
 }
