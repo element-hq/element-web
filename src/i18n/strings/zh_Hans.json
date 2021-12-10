@@ -3440,7 +3440,7 @@
     "Final result based on %(count)s votes|one": "基于 %(count)s 票数的最终结果",
     "Final result based on %(count)s votes|other": "基于 %(count)s 票数的最终结果",
     "Link to room": "聊天室链接",
-    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "感谢您尝试聚光灯搜索。 您的反馈将有助于通知下一个版本。",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "感谢您尝试聚光灯搜索。 您的反馈将有助于给下一个版本提供信息。",
     "Spotlight search feedback": "聚光灯搜索反馈",
     "Searching rooms and chats you're in": "搜索您所在的聊天室和聊天",
     "Searching rooms and chats you're in and %(spaceName)s": "搜索您所在的聊天室和聊天及%(spaceName)s",
