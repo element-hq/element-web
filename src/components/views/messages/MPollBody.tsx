@@ -223,10 +223,13 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
     };
 
     private selectOption(answerId: string) {
-        if (answerId === this.state.selected) {
+        if (this.isEnded()) {
             return;
         }
-        if (this.isEnded()) {
+        const userVotes = this.collectUserVotes();
+        const userId = this.context.getUserId();
+        const myVote = userVotes.get(userId)?.answers[0];
+        if (answerId === myVote) {
             return;
         }
 
