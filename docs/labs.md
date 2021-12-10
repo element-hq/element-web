@@ -168,3 +168,7 @@ in your config.json, or find an alternative map tile server.
 
 Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
 triggered by the button to the right of the filter field.
+
+## Spotlight search (`feature_spotlight`) [In Development]
+
+Switches to a new room search experience.
