@@ -53,7 +53,7 @@ All actions can return an error response instead of the response outlined below.
 
 invite
 ------
-Invites a user into a room.
+Invites a user into a room. The request will no-op if the user is already joined OR invited to the room.
 
 Request:
  - room_id is the room to invite the user into.
@@ -295,9 +295,9 @@ function inviteUser(event: MessageEvent<any>, roomId: string, userId: string): v
     }
     const room = client.getRoom(roomId);
     if (room) {
-        // if they are already invited we can resolve immediately.
+        // if they are already invited or joined we can resolve immediately.
         const member = room.getMember(userId);
-        if (member && member.membership === "invite") {
+        if (member && ["join", "invite"].includes(member.membership)) {
             sendResponse(event, {
                 success: true,
             });
