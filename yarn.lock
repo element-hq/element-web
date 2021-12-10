@@ -1364,9 +1364,9 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz":
-  version "3.2.3"
-  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz#cc332fdd25c08ef0e40f4d33fc3f822a0f98b6f4"
+"@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.7.tgz":
+  version "3.2.7"
+  resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.7.tgz#d54279ec26cd46518ea06af306bd450aeab207bf"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
@@ -8028,7 +8028,6 @@ mathml-tag-names@^2.1.3:
     browser-request "^0.3.3"
     bs58 "^4.0.1"
     content-type "^1.0.4"
-    eslint-plugin-import "^2.25.2"
     loglevel "^1.7.1"
     p-retry "^4.5.0"
     qs "^6.9.6"
@@ -8064,7 +8063,6 @@ matrix-mock-request@^1.2.3:
     emojibase-data "^6.2.0"
     emojibase-regex "^5.1.3"
     escape-html "^1.0.3"
-    eslint-plugin-import "^2.25.2"
     file-saver "^2.0.5"
     filesize "6.1.0"
     flux "2.1.1"
