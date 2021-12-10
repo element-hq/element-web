@@ -3439,5 +3439,18 @@
     "The poll has ended. No votes were cast.": "投票已经结束。 没有投票。",
     "Final result based on %(count)s votes|one": "基于 %(count)s 票数的最终结果",
     "Final result based on %(count)s votes|other": "基于 %(count)s 票数的最终结果",
-    "Link to room": "聊天室链接"
+    "Link to room": "聊天室链接",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "感谢您尝试聚光灯搜索。 您的反馈将有助于通知下一个版本。",
+    "Spotlight search feedback": "聚光灯搜索反馈",
+    "Searching rooms and chats you're in": "搜索您所在的聊天室和聊天",
+    "Searching rooms and chats you're in and %(spaceName)s": "搜索您所在的聊天室和聊天及%(spaceName)s",
+    "Use <arrows/> to scroll results": "使用 <arrows/> 滚动结果",
+    "Recent searches": "最近的搜索",
+    "To search messages, look for this icon at the top of a room <icon/>": "要搜索消息，请在聊天室顶部查找此图标<icon/>",
+    "Other searches": "其他搜索",
+    "Public rooms": "公共聊天室",
+    "Use \"%(query)s\" to search": "使用 \"%(query)s\" 来搜索",
+    "Other rooms in %(spaceName)s": "%(spaceName)s 中的其他聊天室",
+    "Spaces you're in": "你所在的空间",
+    "New spotlight search experience": "新的聚光灯搜索体验"
 }
