@@ -3441,5 +3441,18 @@
     "The poll has ended. No votes were cast.": "Hlasování skončilo. Nikdo nehlasoval.",
     "Final result based on %(count)s votes|one": "Konečný výsledek na základě %(count)s hlasu",
     "Final result based on %(count)s votes|other": "Konečný výsledek na základě %(count)s hlasů",
-    "Link to room": "Odkaz na místnost"
+    "Link to room": "Odkaz na místnost",
+    "New spotlight search experience": "Nový způsob vyhledávání Spotlight",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "Děkujeme, že jste vyzkoušeli vyhledávání Spotlight. Vaše zpětná vazba pomůže při tvorbě dalších verzí.",
+    "Spotlight search feedback": "Zpětná vazba k vyhledávání Spotlight",
+    "Searching rooms and chats you're in": "Prohledávání místností a chatů, ve kterých se nacházíte",
+    "Searching rooms and chats you're in and %(spaceName)s": "Prohledávání místností a chatů, ve kterých se nacházíte, a %(spaceName)s",
+    "Use <arrows/> to scroll results": "Pro posouvání výsledků použijte <arrows/>",
+    "Recent searches": "Nedávná vyhledávání",
+    "To search messages, look for this icon at the top of a room <icon/>": "Pro vyhledávání zpráv hledejte tuto ikonu v horní části místnosti <icon/>",
+    "Other searches": "Další vyhledávání",
+    "Public rooms": "Veřejné místnosti",
+    "Use \"%(query)s\" to search": "Pro vyhledávání použijte \"%(query)s\"",
+    "Other rooms in %(spaceName)s": "Další místnosti v %(spaceName)s",
+    "Spaces you're in": "Prostory, ve kterých se nacházíte"
 }
