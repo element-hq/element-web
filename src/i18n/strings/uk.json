@@ -2642,5 +2642,10 @@
     "This will allow you to reset your password and receive notifications.": "Це дозволить вам скинути пароль і отримувати сповіщення.",
     "Reset event store?": "Очистити сховище подій?",
     "Other homeserver": "Інший домашній сервер",
-    "Sign into your homeserver": "Увійдіть на ваш домашній сервер"
+    "Sign into your homeserver": "Увійдіть на ваш домашній сервер",
+    "Waiting for partner to confirm...": "Очікування згоди партнера...",
+    "Waiting for %(displayName)s to accept…": "Очікування згоди %(displayName)s…",
+    "Waiting for %(displayName)s to verify…": "Очікування звірки %(displayName)s…",
+    "Waiting for you to verify on your other session…": "Очікування вашої звірки в іншому сеансі…",
+    "Waiting for you to verify on your other session, %(deviceName)s (%(deviceId)s)…": "Очікування вашої звірки в іншому сеансі, %(deviceName)s (%(deviceId)s)…"
 }
