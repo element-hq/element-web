@@ -360,6 +360,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Use new room breadcrumbs"),
         default: false,
     },
+    "feature_spotlight": {
+        isFeature: true,
+        labsGroup: LabGroup.Rooms,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("New spotlight search experience"),
+        default: false,
+    },
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
@@ -596,6 +603,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         // not really a setting
         supportedLevels: [SettingLevel.ACCOUNT],
         default: [],
+    },
+    "SpotlightSearch.recentSearches": {
+        // not really a setting
+        supportedLevels: [SettingLevel.ACCOUNT],
+        default: [], // list of room IDs, most recent first
     },
     "room_directory_servers": {
         supportedLevels: [SettingLevel.ACCOUNT],

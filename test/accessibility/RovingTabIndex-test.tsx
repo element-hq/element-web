@@ -229,17 +229,6 @@ describe("RovingTabIndex", () => {
             state = reducer(state, {
                 type: Type.Register,
                 payload: {
-                    ref: ref1,
-                },
-            });
-            expect(state).toStrictEqual({
-                activeRef: ref1,
-                refs: [ref1],
-            });
-
-            state = reducer(state, {
-                type: Type.Register,
-                payload: {
                     ref: ref2,
                 },
             });

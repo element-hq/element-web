@@ -162,7 +162,7 @@ export function roomContextDetailsText(room: Room): string {
 
     const dmPartner = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     if (dmPartner) {
-        return room.getMember(dmPartner)?.rawDisplayName;
+        return dmPartner;
     }
 
     const [parent, ...otherParents] = SpaceStore.instance.getKnownParents(room.roomId);

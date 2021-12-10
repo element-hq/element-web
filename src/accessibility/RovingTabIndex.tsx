@@ -43,8 +43,6 @@ import { FocusHandler, Ref } from "./roving/types";
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets#Technique_1_Roving_tabindex
  */
 
-const DOCUMENT_POSITION_PRECEDING = 2;
-
 export interface IState {
     activeRef: Ref;
     refs: Ref[];
@@ -55,7 +53,7 @@ interface IContext {
     dispatch: Dispatch<IAction>;
 }
 
-const RovingTabIndexContext = createContext<IContext>({
+export const RovingTabIndexContext = createContext<IContext>({
     state: {
         activeRef: null,
         refs: [], // list of refs in DOM order
@@ -80,37 +78,29 @@ interface IAction {
 export const reducer = (state: IState, action: IAction) => {
     switch (action.type) {
         case Type.Register: {
-            let left = 0;
-            let right = state.refs.length - 1;
-            let index = state.refs.length; // by default append to the end
-
-            // do a binary search to find the right slot
-            while (left <= right) {
-                index = Math.floor((left + right) / 2);
-                const ref = state.refs[index];
-
-                if (ref === action.payload.ref) {
-                    return state; // already in refs, this should not happen
-                }
-
-                if (action.payload.ref.current.compareDocumentPosition(ref.current) & DOCUMENT_POSITION_PRECEDING) {
-                    left = ++index;
-                } else {
-                    right = index - 1;
-                }
-            }
-
             if (!state.activeRef) {
                 // Our list of refs was empty, set activeRef to this first item
                 state.activeRef = action.payload.ref;
             }
 
-            // update the refs list
-            if (index < state.refs.length) {
-                state.refs.splice(index, 0, action.payload.ref);
-            } else {
-                state.refs.push(action.payload.ref);
-            }
+            // Sadly due to the potential of DOM elements swapping order we can't do anything fancy like a binary insert
+            state.refs.push(action.payload.ref);
+            state.refs.sort((a, b) => {
+                if (a === b) {
+                    return 0;
+                }
+
+                const position = a.current.compareDocumentPosition(b.current);
+
+                if (position & Node.DOCUMENT_POSITION_FOLLOWING || position & Node.DOCUMENT_POSITION_CONTAINED_BY) {
+                    return -1;
+                } else if (position & Node.DOCUMENT_POSITION_PRECEDING || position & Node.DOCUMENT_POSITION_CONTAINS) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
             return { ...state };
         }
 

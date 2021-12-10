@@ -1,0 +1,286 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SpotlightDialog_wrapper .mx_Dialog {
+    border-radius: 8px;
+    overflow-y: initial;
+    position: relative;
+    height: 60%;
+    padding: 0;
+    contain: unset; // needed for .mx_SpotlightDialog_keyboardPrompt to not be culled
+
+    .mx_SpotlightDialog_keyboardPrompt {
+        position: absolute;
+        padding: 8px;
+        border-radius: 8px;
+        background-color: $background;
+        top: -60px; // relative to the top of the modal
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+
+        > span > div {
+            display: inline-block;
+            padding: 2px 4px;
+            margin: 0 4px;
+            border-radius: 6px;
+            background-color: $quinary-content;
+            vertical-align: middle;
+            color: $tertiary-content;
+        }
+    }
+}
+
+.mx_SpotlightDialog {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .mx_Dialog_header {
+        margin-bottom: 0;
+    }
+
+    .mx_SpotlightDialog_searchBox {
+        margin: 0;
+        border: none;
+        padding: 12px 16px;
+        border-bottom: 1px solid $system;
+
+        > input {
+            display: block;
+            box-sizing: border-box;
+            background-color: transparent;
+            width: 100%;
+            height: 32px;
+            padding: 0;
+            color: $tertiary-content;
+            font-weight: normal;
+            font-size: $font-15px;
+            line-height: $font-24px;
+        }
+    }
+
+    #mx_SpotlightDialog_content {
+        margin: 16px;
+        height: 100%;
+        overflow-y: auto;
+
+        .mx_SpotlightDialog_section {
+            > h4 {
+                font-weight: $font-semi-bold;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $secondary-content;
+                margin-top: 0;
+                margin-bottom: 8px;
+            }
+
+            & + .mx_SpotlightDialog_section {
+                margin-top: 24px;
+            }
+        }
+
+        .mx_SpotlightDialog_recentlyViewed {
+            > div {
+                display: flex;
+                white-space: nowrap;
+                overflow-x: hidden;
+            }
+
+            .mx_AccessibleButton {
+                border-radius: 8px;
+                padding: 4px;
+                color: $primary-content;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                display: inline-block;
+                width: 50px;
+                min-width: 50px;
+                box-sizing: border-box;
+                text-align: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                .mx_DecoratedRoomAvatar {
+                    margin: 0 5px 4px; // maintain centering
+                }
+
+                & + .mx_AccessibleButton {
+                    margin-left: 16px;
+                }
+
+                &:hover, &[aria-selected=true] {
+                    background-color: $quinary-content;
+                }
+            }
+        }
+
+        .mx_SpotlightDialog_results,
+        .mx_SpotlightDialog_recentSearches,
+        .mx_SpotlightDialog_otherSearches {
+            .mx_AccessibleButton {
+                padding: 6px 4px;
+                border-radius: 8px;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $primary-content;
+                position: relative;
+                display: flex;
+                align-items: center;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+
+                .mx_BaseAvatar {
+                    margin-right: 8px;
+                    display: inline-block;
+                    height: 20px;
+                }
+
+                &:hover, &[aria-selected=true] {
+                    background-color: $system;
+
+                    .mx_SpotlightDialog_enterPrompt {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .mx_SpotlightDialog_otherSearches {
+            .mx_SpotlightDialog_startChat,
+            .mx_SpotlightDialog_explorePublicRooms {
+                padding-left: 32px;
+                position: relative;
+
+                &::before {
+                    background-color: $secondary-content;
+                    content: "";
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                    mask-size: contain;
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    left: 4px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+
+            .mx_SpotlightDialog_startChat::before {
+                mask-image: url('$(res)/img/element-icons/room/members.svg');
+            }
+
+            .mx_SpotlightDialog_explorePublicRooms::before {
+                mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
+            }
+
+            .mx_SpotlightDialog_otherSearches_messageSearchText {
+                font-size: $font-15px;
+                line-height: $font-24px;
+            }
+
+            .mx_SpotlightDialog_otherSearches_messageSearchIcon {
+                display: inline-block;
+                margin-left: 8px;
+                width: 20px;
+                height: 20px;
+                background-color: $secondary-content;
+                vertical-align: text-bottom;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
+            }
+        }
+
+        .mx_SpotlightDialog_result_details {
+            margin-left: 8px;
+            margin-right: 8px;
+            color: $tertiary-content;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mx_SpotlightDialog_recentSearches {
+            overflow-y: hidden;
+            height: calc(100% - 190px);
+
+            > h4 > .mx_AccessibleButton_kind_link {
+                padding: 0;
+                float: right;
+                font-weight: normal;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $secondary-content;
+            }
+        }
+
+        .mx_SpotlightDialog_enterPrompt {
+            padding: 2px 4px;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $tertiary-content;
+            border-radius: 6px;
+            background-color: $quinary-content;
+            margin: 0 4px 0 auto;
+            display: none;
+        }
+    }
+
+    .mx_SpotlightDialog_footer {
+        font-size: $font-12px;
+        line-height: $font-15px;
+        color: $secondary-content;
+        padding: 16px 16px 20px;
+        display: flex;
+        border-top: 1px solid $quinary-content;
+
+        > span {
+            position: relative;
+            padding-left: 20px;
+            align-self: center;
+
+            &::before {
+                background-color: $secondary-content;
+                content: "";
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/room/room-summary.svg');
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+
+        .mx_AccessibleButton_kind_primary_outline {
+            padding: 4px 8px;
+            border-color: $secondary-content;
+            color: $secondary-content;
+            margin-left: auto;
+        }
+    }
+}
