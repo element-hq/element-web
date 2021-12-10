@@ -3369,5 +3369,18 @@
     "The poll has ended. No votes were cast.": "Poll telah berakhir. Tidak ada yang memberi suara.",
     "Final result based on %(count)s votes|other": "Hasil akhir bedasarkan dari %(count)s suara",
     "Final result based on %(count)s votes|one": "Hasil akhir bedasarkan dari %(count)s suara",
-    "Link to room": "Tautan ke ruangan"
+    "Link to room": "Tautan ke ruangan",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "Terima kasih untuk mencoba pencarian spotlight. Masukan Anda akan membantu kami untuk membuat versi berikutnya lebih baik.",
+    "Spotlight search feedback": "Masukan pencarian spotlight",
+    "Searching rooms and chats you're in": "Mencari ruangan dan obrolan yang Anda berada",
+    "Searching rooms and chats you're in and %(spaceName)s": "Mencari ruangan dan obrolan yang Anda berada dan %(spaceName)s",
+    "Use <arrows/> to scroll results": "Gunakan <arrows/> untuk menggulir hasil-hasil",
+    "Recent searches": "Pencarian terkini",
+    "To search messages, look for this icon at the top of a room <icon/>": "Untuk mencari pesan-pesan, lihat ikon ini di atas ruangan <icon/>",
+    "Other searches": "Pencarian lainnya",
+    "Public rooms": "Ruangan publik",
+    "Use \"%(query)s\" to search": "Gunakan \"%(query)s\" untuk mencari",
+    "Other rooms in %(spaceName)s": "Ruangan lainnya di %(spaceName)s",
+    "Spaces you're in": "Space yang Anda berada",
+    "New spotlight search experience": "Pengalaman pencarian spotlight baru"
 }
