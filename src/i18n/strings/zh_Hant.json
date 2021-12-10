@@ -3440,5 +3440,6 @@
     "The poll has ended. Top answer: %(topAnswer)s": "投票已結束。最佳答案：%(topAnswer)s",
     "The poll has ended. No votes were cast.": "投票已結束。沒有投票。",
     "Final result based on %(count)s votes|one": "以 %(count)s 票為基礎的最終結果",
-    "Final result based on %(count)s votes|other": "以 %(count)s 票為基礎的最終結果"
+    "Final result based on %(count)s votes|other": "以 %(count)s 票為基礎的最終結果",
+    "Link to room": "連結到聊天室"
 }
