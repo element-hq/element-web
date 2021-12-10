@@ -31,6 +31,7 @@ import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { POLL_START_EVENT_TYPE } from "../../polls/consts";
+import SettingsStore from "../../settings/SettingsStore";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
@@ -40,10 +41,6 @@ const PREVIEWS = {
     'm.room.message': {
         isState: false,
         previewer: new MessageEventPreview(),
-    },
-    [POLL_START_EVENT_TYPE.name]: {
-        isState: false,
-        previewer: new PollStartEventPreview(),
     },
     'm.call.invite': {
         isState: false,
@@ -66,6 +63,21 @@ const PREVIEWS = {
         previewer: new ReactionEventPreview(),
     },
 };
+
+function previews(): Object {
+    // TODO: when polls comes out of labs, add this to PREVIEWS
+    if (SettingsStore.getValue("feature_polls")) {
+        return {
+            [POLL_START_EVENT_TYPE.name]: {
+                isState: false,
+                previewer: new PollStartEventPreview(),
+            },
+            ...PREVIEWS,
+        };
+    } else {
+        return PREVIEWS;
+    }
+}
 
 // The maximum number of events we're willing to look back on to get a preview.
 const MAX_EVENTS_BACKWARDS = 50;
@@ -117,7 +129,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     }
 
     public generatePreviewForEvent(event: MatrixEvent): string {
-        const previewDef = PREVIEWS[event.getType()];
+        const previewDef = previews()[event.getType()];
         // TODO: Handle case where we don't have
         if (!previewDef) return '';
         const previewText = previewDef.previewer.getTextFor(event, null, true);
@@ -149,7 +161,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
             await this.matrixClient.decryptEventIfNeeded(event);
 
-            const previewDef = PREVIEWS[event.getType()];
+            const previewDef = previews()[event.getType()];
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
 
