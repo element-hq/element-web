@@ -172,6 +172,13 @@ export function getHandlerTile(ev) {
         }
     }
 
+    if (
+        POLL_START_EVENT_TYPE.matches(type) &&
+        !SettingsStore.getValue("feature_polls")
+    ) {
+        return undefined;
+    }
+
     if (ev.isState()) {
         if (stateEventSingular.has(type) && ev.getStateKey() !== "") return undefined;
         return stateEventTileTypes[type];
