@@ -469,6 +469,10 @@ $left-gutter: 64px;
             background: transparent;
         }
     }
+
+    code {
+        white-space: pre; // don't collapse spaces in inline code blocks
+    }
 }
 
 .mx_EventTile_lineNumbers {
