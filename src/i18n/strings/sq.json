@@ -3439,5 +3439,17 @@
     "You cannot place calls in this browser.": "S’mund të bëni thirrje që nga ky shfletues.",
     "Calls are unsupported": "Nuk mbulohen t\thirrje",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Te të dhënat e dërguara te ne për të na ndihmuar ta bëjmë %(brand)s-in më të mirë përfshihen:",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Rregullat tona të plota mbi cookie-t mund të gjenden <CookiePolicyLink>këtu</CookiePolicyLink>."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Rregullat tona të plota mbi cookie-t mund të gjenden <CookiePolicyLink>këtu</CookiePolicyLink>.",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "Faleminderit që provoni kërkimin Spotlight. Përshtypjet tuaja do të ndihmojnë versionet e ardhshëm.",
+    "Searching rooms and chats you're in": "Po kërkohet në dhoma dhe fjalosje ku jeni i pranishëm",
+    "Searching rooms and chats you're in and %(spaceName)s": "Po kërkohet te dhoma dhe fjalosje ku jeni i pranishëm dhe te %(spaceName)s",
+    "Use <arrows/> to scroll results": "Përdorni <arrows/> që të rrëshqisni nëpër përfundime",
+    "Recent searches": "Kërkime së fundi",
+    "To search messages, look for this icon at the top of a room <icon/>": "Që të kërkoni te mesazhet, shihni për këtë ikonë në krye të një dhome <icon/>",
+    "Other searches": "Kërkime të tjera",
+    "Public rooms": "Dhoma publike",
+    "Use \"%(query)s\" to search": "Përdorni \"%(query)s\" për kërkim",
+    "Other rooms in %(spaceName)s": "Dhoma të tjera në %(spaceName)s",
+    "Spaces you're in": "Hapësira ku jeni i pranishëm",
+    "Link to room": "Lidhje për te dhoma"
 }
