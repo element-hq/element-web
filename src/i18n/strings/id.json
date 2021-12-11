@@ -2281,7 +2281,7 @@
     "You are about to remove %(count)s messages by %(user)s. This cannot be undone. Do you wish to continue?|other": "Anda akan menghapus %(count)s pesan dari %(user)s. Ini tidak dapat dibatalkan. Apakah Anda yakin untuk melanjutkan?",
     "Remove recent messages by %(user)s": "Hapus pesan terkini dari %(user)s",
     "No recent messages by %(user)s found": "Tidak ada pesan terkini dari %(user)s yang ditemukan",
-    "Try scrolling up in the timeline to see if there are any earlier ones.": "Coba menggulir ke atas di linimasa untuk melihat apa ada pesan-pesan sebelumnya.",
+    "Try scrolling up in the timeline to see if there are any earlier ones.": "Coba gulir ke atas di linimasa untuk melihat apa ada pesan-pesan sebelumnya.",
     "Failed to kick": "Gagal untuk mengeluarkan",
     "They'll still be able to access whatever you're not an admin of.": "Mereka masih dapat mengakses apa saja yang Anda bukan admin di sana.",
     "Kick them from specific things I'm able to": "Keluarkan dari beberapa hal yang saya dapat melakukan",
