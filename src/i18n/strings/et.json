@@ -3436,5 +3436,19 @@
     "The poll has ended. Top answer: %(topAnswer)s": "Küsitlus on läbi. Populaarseim vastus: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Küsitlus on läbi. Ühtegi osalejate ei ole.",
     "Final result based on %(count)s votes|one": "%(count)s'l häälel põhinev lõpptulemus",
-    "Final result based on %(count)s votes|other": "%(count)s'l häälel põhinev lõpptulemus"
+    "Final result based on %(count)s votes|other": "%(count)s'l häälel põhinev lõpptulemus",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "Tänud, et oled katsetanud uut otsingut. Selle alusel teeme rakenduse järgmised versioonid paremaks.",
+    "Spotlight search feedback": "Tagasiside uuele otsingule",
+    "Searching rooms and chats you're in": "Otsin sinu jututubadest ja vestlustest",
+    "Searching rooms and chats you're in and %(spaceName)s": "Otsin %(spaceName)s kogukonna jututube ja vestlusi",
+    "Use <arrows/> to scroll results": "Tulemuste sirvimiseks kasuta <arrows/>",
+    "Recent searches": "Hiljutised otsingud",
+    "To search messages, look for this icon at the top of a room <icon/>": "Sõnumite otsimiseks klõpsi <icon/> ikooni jututoa ülaosas",
+    "Other searches": "Muud otsingud",
+    "Public rooms": "Avalikud jututoad",
+    "Use \"%(query)s\" to search": "Otsinguks kasuta „%(query)s“",
+    "Other rooms in %(spaceName)s": "Muud jututoad %(spaceName)s kogukonnad",
+    "Spaces you're in": "Kogukonnad, mille liige sa oled",
+    "Link to room": "Link jututoale",
+    "New spotlight search experience": "Uus otsingulahendus"
 }
