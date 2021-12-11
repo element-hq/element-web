@@ -1,0 +1,143 @@
+name: Move labelled issues to correct boards and columns
+
+on:
+  issues:
+    types: [labeled]
+    
+jobs:
+  move_needs_info_issues:
+    name: X-Needs-Info issues to Need info column on triage board
+    runs-on: ubuntu-latest
+    steps:
+      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
+        with:
+          action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
+          project-url: "https://github.com/vector-im/element-web/projects/27"
+          column-name: "Need info"
+          label-name: "X-Needs-Info"
+
+  add_priority_design_issues_to_project:
+    name: P1 X-Needs-Design to Design project board
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
+        (contains(github.event.issue.labels.*.name, 'S-Critical') &&
+         (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+          contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
+         contains(github.event.issue.labels.*.name, 'S-Major') &&
+         contains(github.event.issue.labels.*.name, 'O-Frequent') ||
+         contains(github.event.issue.labels.*.name, 'A11y') &&
+         contains(github.event.issue.labels.*.name, 'O-Frequent'))
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc0sUA"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  Delight_issues_to_board:
+    name: Delight issues to project board
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'A-Spaces') ||
+        contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
+        contains(github.event.issue.labels.*.name, 'A-Subspaces') ||
+        contains(github.event.issue.labels.*.name, 'Z-IA')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc1HvQ"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_voice-message_issues:
+    name: A-Voice Messages to voice message board
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'A-Voice Messages')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc2KCw"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_threads_issues:
+    name: A-Threads to Thread board
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'A-Threads')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc0rRA"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_message_bubbles_issues:
+    name: A-Message-Bubbles to Message bubbles board
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'A-Message-Bubbles')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc3m-g"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
