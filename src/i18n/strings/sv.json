@@ -3323,5 +3323,9 @@
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s och %(count)s till",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
     "%(spaceName)s and %(count)s others|other": "%(spaceName)s och %(count)s till",
-    "Other rooms": "Andra rum"
+    "Other rooms": "Andra rum",
+    "You cannot place calls in this browser.": "Du kan inte ringa samtal i den här webbläsaren.",
+    "Calls are unsupported": "Samtal stöds ej",
+    "Some examples of the information being sent to us to help make %(brand)s better includes:": "Några exempel på information som skickas för att hjälpa oss att förbättra %(brand)s inkluderar:",
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Våran fulla cookiepolicy kan hittas <CookiePolicyLink>här</CookiePolicyLink>."
 }
