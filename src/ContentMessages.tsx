@@ -131,8 +131,8 @@ async function createThumbnail(
         canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
     } else {
         canvas = document.createElement("canvas");
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
+        (canvas as HTMLCanvasElement).width = targetWidth;
+        (canvas as HTMLCanvasElement).height = targetHeight;
     }
 
     const context = canvas.getContext("2d");
