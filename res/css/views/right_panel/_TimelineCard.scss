@@ -33,4 +33,55 @@ limitations under the License.
             right: 0;
         }
     }
+    .mx_AutoHideScrollbar {
+        padding-right: 10px;
+        width: calc(100% - 10px);
+    }
+
+    // Style to optimize the layout for the right panel area
+    .mx_EventTile_content {
+        margin-right: 0;
+    }
+    .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_line {
+        padding-left: 36px;
+        padding-right: 36px;
+    }
+
+    .mx_GroupLayout .mx_EventTile > .mx_SenderProfile {
+        margin-left: 36px;
+    }
+    .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_avatar {
+        top: 12px;
+        left: 0px;
+    }
+
+    .mx_CallEvent_wrapper {
+        justify-content: center;
+        margin: auto 5px;
+        .mx_CallEvent {
+            margin: 4px;
+        }
+    }
+    .mx_EventTile:not([data-layout="bubble"]) .mx_MessageTimestamp {
+        right: -4px;
+        left: auto;
+    }
+
+    .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_msgOption {
+        margin-right: 2px;
+    }
+    .mx_GroupLayout .mx_EventTile .mx_EventTile_line {
+        padding-bottom: 8px;
+    }
+    .mx_EventTile_readAvatars {
+        top: -10px;
+    }
+
+    // mx_EventTile_info
+    .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_line {
+        padding-left: 36px;
+    }
+    .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_avatar {
+        left: 18px;
+    }
 }
