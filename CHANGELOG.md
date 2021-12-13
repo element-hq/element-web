@@ -1,3 +1,9 @@
+Changes in [1.9.7](https://github.com/vector-im/element-web/releases/tag/v1.9.7) (2021-12-13)
+=============================================================================================
+
+ * Security release with updated version of Olm to fix https://matrix.org/blog/2021/12/03/pre-disclosure-upcoming-security-release-of-libolm-and-matrix-js-sdk
+ * Fix a crash on logout
+
 Changes in [1.9.6](https://github.com/vector-im/element-web/releases/tag/v1.9.6) (2021-12-06)
 =============================================================================================
 

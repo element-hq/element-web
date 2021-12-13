@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -55,7 +55,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.7.tgz",
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
     "browser-request": "^0.3.3",
     "eslint-plugin-import": "^2.25.2",
     "gfm.css": "^1.1.2",
