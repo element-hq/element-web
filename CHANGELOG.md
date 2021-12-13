@@ -1,3 +1,9 @@
+Changes in [3.36.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.36.1) (2021-12-13)
+=====================================================================================================
+
+ * Security release with updated version of Olm to fix https://matrix.org/blog/2021/12/03/pre-disclosure-upcoming-security-release-of-libolm-and-matrix-js-sdk
+ * Fix a crash on logout
+
 Changes in [3.36.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.36.0) (2021-12-06)
 =====================================================================================================
 
