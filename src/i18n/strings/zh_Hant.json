@@ -3441,5 +3441,18 @@
     "The poll has ended. No votes were cast.": "投票已結束。沒有投票。",
     "Final result based on %(count)s votes|one": "以 %(count)s 票為基礎的最終結果",
     "Final result based on %(count)s votes|other": "以 %(count)s 票為基礎的最終結果",
-    "Link to room": "連結到聊天室"
+    "Link to room": "連結到聊天室",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "感謝您試用聚焦搜尋。您的回饋有助於改善下一個版本。",
+    "Spotlight search feedback": "聚焦搜尋回饋",
+    "Searching rooms and chats you're in": "搜尋您所在的聊天室與對話",
+    "Searching rooms and chats you're in and %(spaceName)s": "正在搜尋您所在與 %(spaceName)s 中的聊天室與對話",
+    "Use <arrows/> to scroll results": "使用 <arrows/> 以捲動結果",
+    "Recent searches": "近期搜尋",
+    "To search messages, look for this icon at the top of a room <icon/>": "要搜尋訊息，請在聊天室頂部尋找此圖示 <icon/>",
+    "Other searches": "其他搜尋",
+    "Public rooms": "公開聊天室",
+    "Use \"%(query)s\" to search": "使用「%(query)s」搜尋",
+    "Other rooms in %(spaceName)s": "其他在 %(spaceName)s 中的聊天室",
+    "Spaces you're in": "您所在的空間",
+    "New spotlight search experience": "新的聚焦搜尋體驗"
 }
