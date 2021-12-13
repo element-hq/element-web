@@ -133,7 +133,9 @@ export default class CallPreview extends React.Component<IProps, IState> {
         dis.unregister(this.dispatcherRef);
         SettingsStore.unwatchSetting(this.settingsWatcherRef);
         const room = MatrixClientPeg.get().getRoom(this.state.roomId);
-        WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
+        if (room) {
+            WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
+        }
     }
 
     private onRoomViewStoreUpdate = () => {
