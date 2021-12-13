@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { arrayDiff, arrayUnion } from "./arrays";
+import { arrayDiff, arrayMerge, arrayUnion } from "./arrays";
+
+export function iterableMerge<T>(a: Iterable<T>, b: Iterable<T>): Iterable<T> {
+    return arrayMerge(Array.from(a), Array.from(b));
+}
 
 export function iterableUnion<T>(a: Iterable<T>, b: Iterable<T>): Iterable<T> {
     return arrayUnion(Array.from(a), Array.from(b));
