@@ -20,12 +20,12 @@ import {
     arrayFastResample,
     arrayHasDiff,
     arrayHasOrderChange,
-    arrayMerge,
+    arrayUnion,
     arrayRescale,
     arraySeed,
     arraySmoothingResample,
     arrayTrimFill,
-    arrayUnion,
+    arrayIntersection,
     ArrayUtil,
     GroupedArray,
 } from "../../src/utils/arrays";
@@ -276,11 +276,11 @@ describe('arrays', () => {
         });
     });
 
-    describe('arrayUnion', () => {
-        it('should return a union', () => {
+    describe('arrayIntersection', () => {
+        it('should return the intersection', () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4]; // note diff
-            const result = arrayUnion(a, b);
+            const result = arrayIntersection(a, b);
             expect(result).toBeDefined();
             expect(result).toHaveLength(2);
             expect(result).toEqual([1, 2]);
@@ -289,18 +289,18 @@ describe('arrays', () => {
         it('should return an empty array on no matches', () => {
             const a = [1, 2, 3];
             const b = [4, 5, 6];
-            const result = arrayUnion(a, b);
+            const result = arrayIntersection(a, b);
             expect(result).toBeDefined();
             expect(result).toHaveLength(0);
         });
     });
 
-    describe('arrayMerge', () => {
-        it('should merge 3 arrays with deduplication', () => {
+    describe('arrayUnion', () => {
+        it('should union 3 arrays with deduplication', () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4, 5]; // note missing 3
             const c = [6, 7, 8, 9];
-            const result = arrayMerge(a, b, c);
+            const result = arrayUnion(a, b, c);
             expect(result).toBeDefined();
             expect(result).toHaveLength(9);
             expect(result).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
@@ -308,9 +308,9 @@ describe('arrays', () => {
 
         it('should deduplicate a single array', () => {
             // dev note: this is technically an edge case, but it is described behaviour if the
-            // function is only provided one function (it'll merge the array against itself)
+            // function is only provided one array (it'll merge the array against itself)
             const a = [1, 1, 2, 2, 3, 3];
-            const result = arrayMerge(a);
+            const result = arrayUnion(a);
             expect(result).toBeDefined();
             expect(result).toHaveLength(3);
             expect(result).toEqual([1, 2, 3]);

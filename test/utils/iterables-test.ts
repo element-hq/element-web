@@ -14,25 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { iterableDiff, iterableMerge, iterableUnion } from "../../src/utils/iterables";
+import { iterableDiff, iterableUnion, iterableIntersection } from "../../src/utils/iterables";
 
 describe('iterables', () => {
-    describe('iterableMerge', () => {
-        it('should return a merged array', () => {
+    describe('iterableUnion', () => {
+        it('should return the union array', () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4]; // note diff
-            const result = iterableMerge(a, b);
+            const result = iterableUnion(a, b);
             expect(result).toBeDefined();
             expect(result).toHaveLength(4);
             expect(result).toEqual([1, 2, 3, 4]);
         });
     });
 
-    describe('iterableUnion', () => {
-        it('should return a union', () => {
+    describe('iterableIntersection', () => {
+        it('should return the intersection', () => {
             const a = [1, 2, 3];
             const b = [1, 2, 4]; // note diff
-            const result = iterableUnion(a, b);
+            const result = iterableIntersection(a, b);
             expect(result).toBeDefined();
             expect(result).toHaveLength(2);
             expect(result).toEqual([1, 2]);
@@ -41,7 +41,7 @@ describe('iterables', () => {
         it('should return an empty array on no matches', () => {
             const a = [1, 2, 3];
             const b = [4, 5, 6];
-            const result = iterableUnion(a, b);
+            const result = iterableIntersection(a, b);
             expect(result).toBeDefined();
             expect(result).toHaveLength(0);
         });

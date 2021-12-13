@@ -34,7 +34,7 @@ import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { iterableDiff, iterableMerge } from "../../utils/iterables";
+import { iterableDiff, iterableUnion } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import ActiveRoomObserver from "../../ActiveRoomObserver";
 import Modal from "../../Modal";
@@ -131,7 +131,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
             }
         }
 
-        const allAllowed = new Set(iterableMerge(allowedSoFar, requested));
+        const allAllowed = new Set(iterableUnion(allowedSoFar, requested));
 
         if (rememberApproved) {
             setRememberedCapabilitiesForWidget(this.forWidget, Array.from(allAllowed));

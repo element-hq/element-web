@@ -200,21 +200,21 @@ export function arrayDiff<T>(a: T[], b: T[]): { added: T[], removed: T[] } {
 }
 
 /**
- * Returns the union of two arrays.
+ * Returns the intersection of two arrays.
  * @param a The first array. Must be defined.
  * @param b The second array. Must be defined.
- * @returns The union of the arrays.
+ * @returns The intersection of the arrays.
  */
-export function arrayUnion<T>(a: T[], b: T[]): T[] {
+export function arrayIntersection<T>(a: T[], b: T[]): T[] {
     return a.filter(i => b.includes(i));
 }
 
 /**
- * Merges arrays, deduping contents using a Set.
+ * Unions arrays, deduping contents using a Set.
  * @param a The arrays to merge.
- * @returns The merged array.
+ * @returns The union of all given arrays.
  */
-export function arrayMerge<T>(...a: T[][]): T[] {
+export function arrayUnion<T>(...a: T[][]): T[] {
     return Array.from(a.reduce((c, v) => {
         v.forEach(i => c.add(i));
         return c;

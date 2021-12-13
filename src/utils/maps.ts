@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { arrayDiff, arrayMerge, arrayUnion } from "./arrays";
+import { arrayDiff, arrayUnion, arrayIntersection } from "./arrays";
 
 /**
  * Determines the keys added, changed, and removed between two Maps.
@@ -27,7 +27,7 @@ export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[], added
     const aKeys = [...a.keys()];
     const bKeys = [...b.keys()];
     const keyDiff = arrayDiff(aKeys, bKeys);
-    const possibleChanges = arrayUnion(aKeys, bKeys);
+    const possibleChanges = arrayIntersection(aKeys, bKeys);
     const changes = possibleChanges.filter(k => a.get(k) !== b.get(k));
 
     return { changed: changes, added: keyDiff.added, removed: keyDiff.removed };
@@ -42,7 +42,7 @@ export function mapDiff<K, V>(a: Map<K, V>, b: Map<K, V>): { changed: K[], added
  */
 export function mapKeyChanges<K, V>(a: Map<K, V>, b: Map<K, V>): K[] {
     const diff = mapDiff(a, b);
-    return arrayMerge(diff.removed, diff.added, diff.changed);
+    return arrayUnion(diff.removed, diff.added, diff.changed);
 }
 
 /**
