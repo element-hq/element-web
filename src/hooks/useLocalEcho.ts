@@ -16,7 +16,7 @@ limitations under the License.
 
 import { useState } from "react";
 
-export const useLocalEcho = <T extends any>(
+export const useLocalEcho = <T>(
     currentFactory: () => T,
     setterFn: (value: T) => Promise<unknown>,
     errorFn: (error: Error) => void,

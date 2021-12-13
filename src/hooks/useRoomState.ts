@@ -24,6 +24,7 @@ type Mapper<T> = (roomState: RoomState) => T;
 const defaultMapper: Mapper<RoomState> = (roomState: RoomState) => roomState;
 
 // Hook to simplify watching Matrix Room state
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const useRoomState = <T extends any = RoomState>(
     room?: Room,
     mapper: Mapper<T> = defaultMapper as Mapper<T>,

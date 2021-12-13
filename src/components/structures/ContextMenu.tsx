@@ -517,6 +517,7 @@ export const alwaysAboveRightOf = (elementRect: DOMRect, chevronFace = ChevronFa
 };
 
 type ContextMenuTuple<T> = [boolean, RefObject<T>, () => void, () => void, (val: boolean) => void];
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<T> => {
     const button = useRef<T>(null);
     const [isOpen, setIsOpen] = useState(false);
