@@ -36,49 +36,37 @@ $activeBorderColor: $primary-content;
     flex-direction: column;
 
     .mx_SpacePanel_toggleCollapse {
-        position: relative;
-        height: 32px;
-        width: 32px;
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background-color: $tertiary-content;
+        top: 19px; // v-align with avatar
+        right: -8px;
 
         &::before {
             content: "";
             position: absolute;
-            width: 32px;
-            height: 32px;
-            left: 0;
+            width: inherit;
+            height: inherit;
             mask-position: center;
-            mask-size: 24px;
+            mask-size: contain;
             mask-repeat: no-repeat;
-            background-color: $secondary-content;
+            background-color: $background;
             mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
             transform: rotate(270deg);
         }
 
         &:not(.expanded) {
-            position: absolute;
-            left: 68px;
-            top: 12px;
-            border-radius: 0 8px 8px 0;
-            background-color: $primary-content;
             opacity: 0;
 
             &::before {
-                background-color: $background;
+                mask-position: center 1px;
             }
         }
 
-        &.expanded {
-            margin-left: auto;
-            margin-right: -8px; // overflow into .mx_UserMenu's margin without butchering its bottom stroke
-            border-radius: 8px;
-
-            &::before {
-                transform: rotate(90deg);
-            }
-
-            &:hover {
-                background-color: $panel-actions;
-            }
+        &.expanded::before {
+            transform: rotate(90deg);
         }
     }
 
