@@ -22,6 +22,7 @@ import escapeHtml from "escape-html";
 import sanitizeHtml from "sanitize-html";
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
+import { Relations } from 'matrix-js-sdk/src/models/relations';
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -56,6 +57,9 @@ interface IProps {
     forExport?: boolean;
     isQuoteExpanded?: boolean;
     setQuoteExpanded: (isExpanded: boolean) => void;
+    getRelationsForEvent?: (
+        (eventId: string, relationType: string, eventType: string) => Relations
+    );
 }
 
 interface IState {
@@ -420,6 +424,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                         onHeightChanged={this.props.onHeightChanged}
                         permalinkCreator={this.props.permalinkCreator}
                         toggleExpandedQuote={() => this.props.setQuoteExpanded(!this.props.isQuoteExpanded)}
+                        getRelationsForEvent={this.props.getRelationsForEvent}
                     />
                 </blockquote>
             );

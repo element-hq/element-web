@@ -1260,6 +1260,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                     alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
                     isQuoteExpanded={isQuoteExpanded}
                     setQuoteExpanded={this.setQuoteExpanded}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
                 />) : null;
 
         switch (this.props.tileShape) {

@@ -19,6 +19,7 @@ import classNames from 'classnames';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType } from 'matrix-js-sdk/src/@types/event';
 import { logger } from "matrix-js-sdk/src/logger";
+import { Relations } from 'matrix-js-sdk/src/models/relations';
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -39,6 +40,9 @@ interface IProps {
     highlightLink?: string;
     onHeightChanged?(): void;
     toggleExpandedQuote?: () => void;
+    getRelationsForEvent?: (
+        (eventId: string, relationType: string, eventType: string) => Relations
+    );
 }
 
 @replaceableComponent("views.rooms.ReplyTile")
@@ -169,7 +173,8 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                         overrideBodyTypes={msgtypeOverrides}
                         overrideEventTypes={evOverrides}
                         replacingEventId={mxEvent.replacingEventId()}
-                        maxImageHeight={96} />
+                        maxImageHeight={96}
+                        getRelationsForEvent={this.props.getRelationsForEvent} />
                 </a>
             </div>
         );
