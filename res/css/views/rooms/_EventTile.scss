@@ -24,6 +24,24 @@ $left-gutter: 64px;
     font-size: $font-14px;
     position: relative;
 
+    &[data-shape=thread_list][data-notification]::before {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        right: -16px;
+        top: 7px;
+    }
+
+    &[data-shape=thread_list][data-notification=total]::before {
+        background-color: $roomtile-default-badge-bg-color;
+    }
+
+    &[data-shape=thread_list][data-notification=highlight]::before {
+        background-color: $alert;
+    }
+
     .mx_ThreadInfo {
         margin-right: 110px;
         margin-left: 64px;

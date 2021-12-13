@@ -23,6 +23,7 @@ import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { logger } from "matrix-js-sdk/src/logger";
+import { NotificationCountType } from 'matrix-js-sdk/src/models/room';
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from '../../../languageHandler';
@@ -67,6 +68,10 @@ import Toolbar from '../../../accessibility/Toolbar';
 import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
 import { RovingAccessibleTooltipButton } from '../../../accessibility/roving/RovingAccessibleTooltipButton';
 import ThreadListContextMenu from '../context_menus/ThreadListContextMenu';
+import { ThreadNotificationState } from '../../../stores/notifications/ThreadNotificationState';
+import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNotificationStateStore';
+import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
+import { NotificationColor } from '../../../stores/notifications/NotificationColor';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -346,6 +351,7 @@ interface IState {
     hover: boolean;
     isQuoteExpanded?: boolean;
     thread?: Thread;
+    threadNotification?: NotificationCountType;
 }
 
 @replaceableComponent("views.rooms.EventTile")
@@ -355,6 +361,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     // TODO: Types
     private tile = React.createRef<unknown>();
     private replyChain = React.createRef<ReplyChain>();
+    private threadState: ThreadNotificationState;
 
     public readonly ref = createRef<HTMLElement>();
 
@@ -492,17 +499,55 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (SettingsStore.getValue("feature_thread")) {
             this.props.mxEvent.once(ThreadEvent.Ready, this.updateThread);
             this.props.mxEvent.on(ThreadEvent.Update, this.updateThread);
+
+            if (this.thread) {
+                this.setupNotificationListener(this.thread);
+            }
         }
 
         const room = this.context.getRoom(this.props.mxEvent.getRoomId());
         room?.on(ThreadEvent.New, this.onNewThread);
     }
 
-    private updateThread = (thread) => {
+    private setupNotificationListener = (thread): void => {
+        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        const notifications = RoomNotificationStateStore.instance.getThreadsRoomState(room);
+
+        this.threadState = notifications.threadsState.get(thread);
+
+        this.threadState.on(NotificationStateEvents.Update, this.onThreadStateUpdate);
+        this.onThreadStateUpdate();
+    };
+
+    private onThreadStateUpdate = (): void => {
+        let threadNotification = null;
+        switch (this.threadState?.color) {
+            case NotificationColor.Grey:
+                threadNotification = NotificationCountType.Total;
+                break;
+            case NotificationColor.Red:
+                threadNotification = NotificationCountType.Highlight;
+                break;
+        }
+
         this.setState({
-            thread,
+            threadNotification,
         });
-        this.forceUpdate();
+    };
+
+    private updateThread = (thread) => {
+        if (thread !== this.state.thread) {
+            if (this.threadState) {
+                this.threadState.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
+            }
+
+            this.setupNotificationListener(thread);
+            this.setState({
+                thread,
+            });
+
+            this.forceUpdate();
+        }
     };
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -540,6 +585,9 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         const room = this.context.getRoom(this.props.mxEvent.getRoomId());
         room?.off(ThreadEvent.New, this.onNewThread);
+        if (this.threadState) {
+            this.threadState.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -1358,6 +1406,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "data-shape": this.props.tileShape,
                         "data-self": isOwnEvent,
                         "data-has-reply": !!replyChain,
+                        "data-notification": this.state.threadNotification,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
 

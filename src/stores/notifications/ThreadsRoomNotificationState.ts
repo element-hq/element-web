@@ -23,7 +23,7 @@ import { ThreadNotificationState } from "./ThreadNotificationState";
 import { NotificationColor } from "./NotificationColor";
 
 export class ThreadsRoomNotificationState extends NotificationState implements IDestroyable {
-    private threadsState = new Map<Thread, ThreadNotificationState>();
+    public readonly threadsState = new Map<Thread, ThreadNotificationState>();
 
     protected _symbol = null;
     protected _count = 0;
@@ -31,6 +31,11 @@ export class ThreadsRoomNotificationState extends NotificationState implements I
 
     constructor(public readonly room: Room) {
         super();
+        if (this.room?.threads) {
+            for (const [, thread] of this.room.threads) {
+                this.onNewThread(thread);
+            }
+        }
         this.room.on(ThreadEvent.New, this.onNewThread);
     }
 
