@@ -137,11 +137,11 @@ export const ThreadPanelHeader = ({ filterOption, setFilterOption }: {
         isSelected={opt === value}
     />);
     const contextMenu = menuDisplayed ? <ContextMenu
-        top={0}
-        right={25}
+        top={100}
+        right={33}
         onFinished={closeMenu}
         chevronFace={ChevronFace.Top}
-        mountAsChild={true}
+        wrapperClassName="mx_ThreadPanel__header"
     >
         { contextMenuOptions }
     </ContextMenu> : null;

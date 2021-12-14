@@ -71,77 +71,6 @@ limitations under the License.
                 mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
             }
         }
-
-        .mx_ContextualMenu_wrapper {
-            // It's added here due to some weird error if I pass it directly in the style, even though it's a numeric value, so it's being passed 0 instead.
-            // The error: react_devtools_backend.js:2526 Warning: `NaN` is an invalid value for the `top` css style property.
-            top: 43px;
-        }
-
-        .mx_ContextualMenu {
-            position: initial;
-            span:first-of-type {
-                font-weight: 600;
-                font-size: 12px;
-                color: $primary-content;
-            }
-
-            font-size: 12px;
-            color: $secondary-content;
-            padding-top: 10px;
-            padding-bottom: 10px;
-
-            border: 1px solid $quinary-content;
-            box-shadow: 0px 1px 3px rgba(23, 25, 28, 0.05);
-        }
-
-        .mx_ContextualMenu_chevron_top {
-            left: auto;
-            right: 22px;
-            border-bottom-color: $quinary-content;
-            &::after {
-                content: "";
-                border: inherit;
-                border-bottom-color: $background;
-                position: absolute;
-                top: 1px;
-                left: -8px;
-            }
-        }
-
-        .mx_ThreadPanel_Header_FilterOptionItem {
-            display: flex;
-            flex-grow: 1;
-            justify-content: space-between;
-            flex-direction: column;
-            padding: 10px 20px 10px 30px;
-            position: relative;
-
-            &:hover {
-                background-color: $event-selected-color;
-            }
-            &[aria-checked="true"] {
-                :first-child {
-                    margin-left: -20px;
-                }
-                :first-child::before {
-                    content: "";
-                    width: 12px;
-                    height: 12px;
-                    margin-right: 8px;
-                    mask-image: url("$(res)/img/feather-customised/check.svg");
-                    mask-size: 100%;
-                    mask-repeat: no-repeat;
-                    background-color: $primary-content;
-                    display: inline-block;
-                    vertical-align: middle;
-                }
-            }
-
-            :last-child {
-                color: $secondary-content;
-            }
-        }
     }
 
     .mx_ThreadPanel_button {
@@ -345,5 +274,72 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-size: contain;
         background-color: $secondary-content;
+    }
+}
+
+.mx_ContextualMenu_wrapper.mx_ThreadPanel__header {
+    .mx_ContextualMenu {
+        position: initial;
+        span:first-of-type {
+            font-weight: $font-semi-bold;
+            font-size: inherit;
+            color: $primary-content;
+        }
+
+        font-size: $font-12px;
+        color: $secondary-content;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        border: 1px solid $quinary-content;
+        box-shadow: 0px 1px 3px rgba(23, 25, 28, 0.05);
+    }
+
+    .mx_ContextualMenu_chevron_top {
+        left: auto;
+        right: 22px;
+        border-bottom-color: $quinary-content;
+        &::after {
+            content: "";
+            border: inherit;
+            border-bottom-color: $background;
+            position: absolute;
+            top: 1px;
+            left: -8px;
+        }
+    }
+
+    .mx_ThreadPanel_Header_FilterOptionItem {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 10px 20px 10px 30px;
+        position: relative;
+
+        &:hover {
+            background-color: $event-selected-color;
+        }
+        &[aria-checked="true"] {
+            :first-child {
+                margin-left: -20px;
+            }
+            :first-child::before {
+                content: "";
+                width: 12px;
+                height: 12px;
+                margin-right: 8px;
+                mask-image: url("$(res)/img/feather-customised/check.svg");
+                mask-size: 100%;
+                mask-repeat: no-repeat;
+                background-color: $primary-content;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        :last-child {
+            color: $secondary-content;
+        }
     }
 }
