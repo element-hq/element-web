@@ -20,7 +20,6 @@ import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
-import { Room } from "matrix-js-sdk/src/models/room";
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
@@ -28,8 +27,6 @@ import UAParser from 'ua-parser-js';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from './VectorBasePlatform';
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
