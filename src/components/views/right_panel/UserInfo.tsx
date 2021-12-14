@@ -120,7 +120,7 @@ export const getE2EStatus = (cli: MatrixClient, userId: string, devices: IDevice
     return anyDeviceUnverified ? E2EStatus.Warning : E2EStatus.Verified;
 };
 
-async function openDMForUser(matrixClient: MatrixClient, userId: string) {
+async function openDMForUser(matrixClient: MatrixClient, userId: string): Promise<void> {
     const lastActiveRoom = findDMForUser(matrixClient, userId);
 
     if (lastActiveRoom) {
@@ -149,7 +149,7 @@ async function openDMForUser(matrixClient: MatrixClient, userId: string) {
         }
     }
 
-    return createRoom(createRoomOptions);
+    await createRoom(createRoomOptions);
 }
 
 type SetUpdating = (updating: boolean) => void;
@@ -318,6 +318,26 @@ function DevicesSection({ devices, userId, loading }: {devices: IDevice[], userI
     );
 }
 
+const MessageButton = ({ userId }: { userId: string }) => {
+    const cli = useContext(MatrixClientContext);
+    const [busy, setBusy] = useState(false);
+
+    return (
+        <AccessibleButton
+            onClick={async () => {
+                if (busy) return;
+                setBusy(true);
+                await openDMForUser(cli, userId);
+                setBusy(false);
+            }}
+            className="mx_UserInfo_field"
+            disabled={busy}
+        >
+            { _t("Message") }
+        </AccessibleButton>
+    );
+};
+
 const UserOptionsSection: React.FC<{
     member: RoomMember;
     isIgnored: boolean;
@@ -432,13 +452,9 @@ const UserOptionsSection: React.FC<{
         </AccessibleButton>
     );
 
-    let directMessageButton;
+    let directMessageButton: JSX.Element;
     if (!isMe) {
-        directMessageButton = (
-            <AccessibleButton onClick={() => { openDMForUser(cli, member.userId); }} className="mx_UserInfo_field">
-                { _t("Message") }
-            </AccessibleButton>
-        );
+        directMessageButton = <MessageButton userId={member.userId} />;
     }
 
     return (
