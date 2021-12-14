@@ -2713,7 +2713,7 @@
     "Let's create a room for each of them.": "Створімо по кімнаті для кожної.",
     "We'll create rooms for each of them. You can add more later too, including already existing ones.": "Ми створимо по кімнаті для кожного. Згодом ви зможете додати інші, зокрема створені раніше.",
     "You can add more later too, including already existing ones.": "Згодом ви зможете додати більше, зокрема вже наявні.",
-    "Want to add an existing space instead?": "Бажаєте додати наявну кімнату натомість?",
+    "Want to add an existing space instead?": "Бажаєте додати наявний простір натомість?",
     "Add existing room": "Додати наявну кімнату",
     "Invited people will be able to read old messages.": "Запрошені люди зможуть читати старі повідомлення.",
     "Invite someone using their name, username (like <userId/>) or <a>share this space</a>.": "Запросіть когось за іменем, користувацьким іменем (вигляду <userId/>) чи <a>поділіться цим простором</a>.",
@@ -3097,5 +3097,18 @@
     "To view Spaces, hide communities in <a>Preferences</a>": "Щоб переглянути простори, сховайте спільноти в <a>налаштуваннях</a>",
     "Unable to load commit detail: %(msg)s": "Не вдалося звантажити дані про коміт: %(msg)s",
     "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Наведіть додатковий контекст, який може допомогти нам аналізувати проблему, наприклад що ви намагалися зробити, ID кімнат і користувачів тощо.",
-    "Clear": "Очистити"
+    "Clear": "Очистити",
+    "Server did not return valid authentication information.": "Сервер надав хибні дані розпізнання.",
+    "Server did not require any authentication": "Сервер не попросив увійти",
+    "Add a space to a space you manage.": "Додайте простір до іншого простору, яким ви керуєте.",
+    "Settable at room": "Має сенс у кімнатах",
+    "Settable at global": "Має сенс глобально",
+    "Values at explicit levels in this room:": "Значення на явних рівнях у цій кімнаті:",
+    "Values at explicit levels:": "Значення на явних рівнях:",
+    "Values at explicit levels in this room": "Значення на явних рівнях у цій кімнаті",
+    "Values at explicit levels": "Значення на явних рівнях",
+    "Save setting values": "Зберегти значення налаштування",
+    "Setting definition:": "Означення налаштування:",
+    "This UI does NOT check the types of the values. Use at your own risk.": "Цей інтерфейс НЕ перевіряє типи значень. Користуйтесь на свій ризик.",
+    "Settings Explorer": "Огляд налаштувань"
 }
