@@ -379,26 +379,17 @@ export default class ElectronPlatform extends VectorBasePlatform {
             msg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
 
-        // Notifications in Electron use the HTML5 notification API
-        const notifBody = {
-            body: msg,
-            silent: true, // we play our own sounds
-        };
-        if (avatarUrl) notifBody['icon'] = avatarUrl;
-        const notification = new window.Notification(title, notifBody);
+        const notification = super.displayNotification(
+            title,
+            msg,
+            avatarUrl,
+            room,
+            ev,
+        );
 
+        const handler = notification.onclick as Function;
         notification.onclick = () => {
-            const payload: ActionPayload = {
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-            };
-
-            if (ev.getThread()) {
-                payload.event_id = ev.getId();
-            }
-
-            dis.dispatch(payload);
-            window.focus();
+            handler?.();
             this.ipcCall('focusWindow');
         };
 

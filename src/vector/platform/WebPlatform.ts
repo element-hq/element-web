@@ -80,31 +80,6 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Room, ev?: MatrixEvent) {
-        const notifBody = {
-            body: msg,
-            silent: true, // we play our own sounds
-        };
-        if (avatarUrl) notifBody['icon'] = avatarUrl;
-        const notification = new window.Notification(title, notifBody);
-
-        notification.onclick = function() {
-            const payload: ActionPayload = {
-                action: Action.ViewRoom,
-                room_id: room.roomId,
-            };
-
-            if (ev.getThread()) {
-                payload.event_id = ev.getId();
-            }
-
-            dis.dispatch(payload);
-            notification.close();
-        };
-
-        return notification;
-    }
-
     private getMostRecentVersion(): Promise<string> {
         // We add a cachebuster to the request to make sure that we know about
         // the most recent version on the origin server. That might not
