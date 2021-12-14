@@ -57,7 +57,7 @@ export function messageForResourceLimitError(
     }
 }
 
-export function messageForSyncError(err: MatrixError | Error): ReactNode {
+export function messageForSyncError(err: MatrixError): ReactNode {
     if (err.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
         const limitError = messageForResourceLimitError(
             err.data.limit_type,

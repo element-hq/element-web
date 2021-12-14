@@ -18,6 +18,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import * as utils from "matrix-js-sdk/src/utils";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
+import { Method } from "matrix-js-sdk/src/http-api";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
@@ -131,7 +132,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
                 try {
                     const path = utils.encodeUri("/rooms/$roomId/group_info", { $roomId: room.roomId });
                     const profile = await this.matrixClient.http.authedRequest(
-                        undefined, "GET", path,
+                        undefined, Method.Get, path,
                         undefined, undefined,
                         { prefix: "/_matrix/client/unstable/im.vector.custom" });
                     // we use global account data because per-room account data on invites is unreliable

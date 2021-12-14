@@ -94,9 +94,9 @@ export class DecryptionFailureTracker {
     //     localStorage.setItem('mx-decryption-failure-event-id-hashes', JSON.stringify(this.trackedEventHashMap));
     // }
 
-    public eventDecrypted(e: MatrixEvent, err: MatrixError | Error): void {
+    public eventDecrypted(e: MatrixEvent, err: MatrixError): void {
         if (err) {
-            this.addDecryptionFailure(new DecryptionFailure(e.getId(), err.code));
+            this.addDecryptionFailure(new DecryptionFailure(e.getId(), err.errcode));
         } else {
             // Could be an event in the failures, remove it
             this.removeDecryptionFailuresForEvent(e);

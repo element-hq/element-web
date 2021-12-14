@@ -33,6 +33,7 @@ import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
+import { MatrixError } from 'matrix-js-sdk/src/http-api';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -164,7 +165,7 @@ export interface IRoomState {
     // error object, as from the matrix client/server API
     // If we failed to load information about the room,
     // store the error here.
-    roomLoadError?: Error;
+    roomLoadError?: MatrixError;
     // Have we sent a request to join the room that we're waiting to complete?
     joining: boolean;
     // this is true if we are fully scrolled-down, and are looking at

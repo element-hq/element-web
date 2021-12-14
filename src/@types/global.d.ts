@@ -163,6 +163,16 @@ declare global {
 
     interface HTMLAudioElement {
         type?: string;
+        // sinkId & setSinkId are experimental and typescript doesn't know about them
+        sinkId: string;
+        setSinkId(outputId: string): void;
+    }
+
+    interface HTMLVideoElement {
+        type?: string;
+        // sinkId & setSinkId are experimental and typescript doesn't know about them
+        sinkId: string;
+        setSinkId(outputId: string): void;
     }
 
     interface HTMLStyleElement {
