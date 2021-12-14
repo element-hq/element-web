@@ -28,6 +28,8 @@ import UAParser from 'ua-parser-js';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from './VectorBasePlatform';
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -78,7 +80,7 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Room) {
+    displayNotification(title: string, msg: string, avatarUrl: string, room: Room, ev?: MatrixEvent) {
         const notifBody = {
             body: msg,
             tag: "vector",
@@ -88,11 +90,16 @@ export default class WebPlatform extends VectorBasePlatform {
         const notification = new window.Notification(title, notifBody);
 
         notification.onclick = function() {
-            dis.dispatch({
-                action: 'view_room',
+            const payload: ActionPayload = {
+                action: Action.ViewRoom,
                 room_id: room.roomId,
-            });
-            window.focus();
+            };
+
+            if (ev.getThread()) {
+                payload.event_id = ev.getId();
+            }
+
+            dis.dispatch(payload);
             notification.close();
         };
 
