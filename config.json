@@ -1,0 +1,72 @@
+{
+    "disable_custom_urls": true,
+    "disable_guests": true,
+    "disable_login_language_selector": false,
+    "disable_3pid_login": false,
+    "brand": "Tchap",
+    "desktopBuilds": false,
+    "bug_report_endpoint_url": "/bugreports/submit",
+    "showLabsSettings": false,
+    "features": {
+        "feature_new_spinner": false
+    },
+    "default_federate": true,
+    "default_theme": "tchap",
+    "roomDirectory": {
+        "servers": [
+            "matrix.org"
+        ]
+    },
+    "welcomeUserId": "@riot-bot:matrix.org",
+    "piwik": {
+        "url": "https://piwik.riot.im/",
+        "whitelistedHSUrls": ["https://matrix.org"],
+        "whitelistedISUrls": ["https://vector.im", "https://matrix.org"],
+        "siteId": 1
+    },
+    "settingDefaults": {
+        "breadcrumbs": true
+    },
+    "jitsi": {
+        "preferredDomain": "jitsi.riot.im"
+    },
+    "base_host_url": "https://tchap.gouv.fr",
+    "generic_endpoints": {
+        "faq": "/faq/",
+        "tac": "/tac/",
+        "user_guide": "/tchap-prise-en-main.pdf",
+        "encryption_info": "/faq/#_Toc4344727",
+        "export_info": "/faq/#_Toc4344728",
+        "mobile_info": "/faq/#_Toc4344729",
+        "browser_session_info": "/faq/#_Toc4344730",
+        "mobile_download": "/mobile_guide"
+    },
+    "branding": {
+        "authFooterLinks": [
+            {"text": "Legifrance", "url": "https://www.legifrance.gouv.fr/"},
+            {"text": "Service-public", "url": "https://www.service-public.fr/"},
+            {"text": "Gouvernement", "url": "https://www.gouvernement.fr/"},
+            {"text": "OpenData", "url": "https://www.data.gouv.fr/fr/"},
+            {"text": "Mentions Légales", "url": "https://www.tchap.gouv.fr/faq/#_Toc4344726"},
+            {"text": "Contact", "url": "https://www.tchap.gouv.fr/faq/#_Toc4344725"}
+        ]
+    },
+    "permalinkPrefix": "https://tchap.gouv.fr",
+    "hs_url_list": [
+        "agent.tchap.gouv.fr",
+        "agent.dev-durable.tchap.gouv.fr",
+        "agent.dinum.tchap.gouv.fr",
+        "agent.intradef.tchap.gouv.fr",
+        "agent.diplomatie.tchap.gouv.fr",
+        "agent.justice.tchap.gouv.fr",
+        "agent.agriculture.tchap.gouv.fr",
+        "agent.interieur.tchap.gouv.fr",
+        "agent.social.tchap.gouv.fr",
+        "agent.education.tchap.gouv.fr",
+        "agent.finances.tchap.gouv.fr",
+        "agent.ssi.tchap.gouv.fr",
+        "agent.pm.tchap.gouv.fr",
+        "agent.elysee.tchap.gouv.fr",
+        "agent.culture.tchap.gouv.fr"
+    ]
+}
