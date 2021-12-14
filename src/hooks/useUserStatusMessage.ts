@@ -25,7 +25,7 @@ import { useFeatureEnabled } from "./useSettings";
 
 const getUser = (cli: MatrixClient, user: Member): User => cli.getUser(user?.userId);
 const getStatusMessage = (cli: MatrixClient, user: Member): string => {
-    return getUser(cli, user).unstable_statusMessage;
+    return getUser(cli, user)?.unstable_statusMessage;
 };
 
 // Hook to simplify handling Matrix User status
