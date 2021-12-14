@@ -52,7 +52,7 @@ const Toolbar: React.FC<IProps> = ({ children, ...props }) => {
         }
     };
 
-    return <RovingTabIndexProvider handleHomeEnd={true} onKeyDown={onKeyDown}>
+    return <RovingTabIndexProvider handleHomeEnd handleLeftRight onKeyDown={onKeyDown}>
         { ({ onKeyDownHandler }) => <div {...props} onKeyDown={onKeyDownHandler} role="toolbar">
             { children }
         </div> }

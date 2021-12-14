@@ -91,7 +91,13 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
         <ContextMenuTooltipButton
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
             title={_t("Options")}
-            onClick={openMenu}
+            onClick={() => {
+                openMenu();
+                // when the context menu is opened directly, e.g. via mouse click, the onFocus handler which tracks
+                // the element that is currently focused is skipped. So we want to call onFocus manually to keep the
+                // position in the page even when someone is clicking around.
+                onFocus();
+            }}
             isExpanded={menuDisplayed}
             inputRef={ref}
             onFocus={onFocus}
@@ -127,7 +133,13 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
         <ContextMenuTooltipButton
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_reactButton"
             title={_t("React")}
-            onClick={openMenu}
+            onClick={() => {
+                openMenu();
+                // when the context menu is opened directly, e.g. via mouse click, the onFocus handler which tracks
+                // the element that is currently focused is skipped. So we want to call onFocus manually to keep the
+                // position in the page even when someone is clicking around.
+                onFocus();
+            }}
             isExpanded={menuDisplayed}
             inputRef={ref}
             onFocus={onFocus}
@@ -196,10 +208,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
     };
 
     private onFocusChange = (focused: boolean): void => {
-        if (!this.props.onFocusChange) {
-            return;
-        }
-        this.props.onFocusChange(focused);
+        this.props.onFocusChange?.(focused);
     };
 
     private onReplyClick = (ev: React.MouseEvent): void => {

@@ -566,13 +566,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         if (typeof name !== 'string') name = '';
         name = name.replace(":", ":\u200b"); // add a zero-width space to allow linewrapping after the colon
 
-        const roomAvatar = <DecoratedRoomAvatar
-            room={this.props.room}
-            avatarSize={32}
-            displayBadge={this.props.isMinimized}
-            oobData={({ avatarUrl: roomProfile.avatarMxc })}
-        />;
-
         let badge: React.ReactNode;
         if (!this.props.isMinimized && this.notificationState) {
             // aria-hidden because we summarise the unread count/highlight status in a manual aria-label below
@@ -663,7 +656,13 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                             aria-selected={this.state.selected}
                             aria-describedby={ariaDescribedBy}
                         >
-                            { roomAvatar }
+                            <DecoratedRoomAvatar
+                                room={this.props.room}
+                                avatarSize={32}
+                                displayBadge={this.props.isMinimized}
+                                oobData={({ avatarUrl: roomProfile.avatarMxc })}
+                                tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
+                            />
                             { nameContainer }
                             { badge }
                             { this.renderGeneralMenu() }

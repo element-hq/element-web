@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { RefObject, useCallback, useEffect } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src";
 
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -22,16 +22,24 @@ import dis from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../../utils/strings";
-import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
+import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import { _t } from "../../../languageHandler";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 
 interface IProps {
     mxEvent: MatrixEvent;
     permalinkCreator: RoomPermalinkCreator;
     onMenuToggle?: (open: boolean) => void;
+}
+
+interface IExtendedProps extends IProps {
+    // Props for making the button into a roving one
+    tabIndex?: number;
+    inputRef?: RefObject<HTMLElement>;
+    onFocus?(): void;
 }
 
 const contextMenuBelow = (elementRect: DOMRect) => {
@@ -42,11 +50,27 @@ const contextMenuBelow = (elementRect: DOMRect) => {
     return { left, top, chevronFace };
 };
 
-const ThreadListContextMenu: React.FC<IProps> = ({ mxEvent, permalinkCreator, onMenuToggle }) => {
-    const [optionsPosition, setOptionsPosition] = useState(null);
-    const closeThreadOptions = useCallback(() => {
-        setOptionsPosition(null);
-    }, []);
+export const RovingThreadListContextMenu: React.FC<IProps> = (props) => {
+    const [onFocus, isActive, ref] = useRovingTabIndex();
+
+    return <ThreadListContextMenu
+        {...props}
+        onFocus={onFocus}
+        tabIndex={isActive ? 0 : -1}
+        inputRef={ref}
+    />;
+};
+
+const ThreadListContextMenu: React.FC<IExtendedProps> = ({
+    mxEvent,
+    permalinkCreator,
+    onMenuToggle,
+    onFocus,
+    inputRef,
+    ...props
+}) => {
+    const [menuDisplayed, _ref, openMenu, closeThreadOptions] = useContextMenu();
+    const button = inputRef ?? _ref; // prefer the ref we receive via props in case we are being controlled
 
     const viewInRoom = useCallback((evt: ButtonEvent): void => {
         evt.preventDefault();
@@ -68,37 +92,31 @@ const ThreadListContextMenu: React.FC<IProps> = ({ mxEvent, permalinkCreator, on
         closeThreadOptions();
     }, [mxEvent, closeThreadOptions, permalinkCreator]);
 
-    const toggleOptionsMenu = useCallback((ev: ButtonEvent): void => {
-        if (!!optionsPosition) {
-            closeThreadOptions();
-        } else {
-            const position = ev.currentTarget.getBoundingClientRect();
-            setOptionsPosition(position);
-        }
-    }, [closeThreadOptions, optionsPosition]);
-
     useEffect(() => {
         if (onMenuToggle) {
-            onMenuToggle(!!optionsPosition);
+            onMenuToggle(menuDisplayed);
         }
-    }, [optionsPosition, onMenuToggle]);
+        onFocus?.();
+    }, [menuDisplayed, onMenuToggle, onFocus]);
 
     const isMainSplitTimelineShown = !WidgetLayoutStore.instance.hasMaximisedWidget(
         MatrixClientPeg.get().getRoom(mxEvent.getRoomId()),
     );
     return <React.Fragment>
         <ContextMenuTooltipButton
+            {...props}
             className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
-            onClick={toggleOptionsMenu}
+            onClick={openMenu}
             title={_t("Thread options")}
-            isExpanded={!!optionsPosition}
+            isExpanded={menuDisplayed}
+            inputRef={button}
         />
-        { !!optionsPosition && (<IconizedContextMenu
+        { menuDisplayed && (<IconizedContextMenu
             onFinished={closeThreadOptions}
             className="mx_RoomTile_contextMenu"
             compact
             rightAligned
-            {...contextMenuBelow(optionsPosition)}
+            {...contextMenuBelow(button.current.getBoundingClientRect())}
         >
             <IconizedContextMenuOptionList>
                 { isMainSplitTimelineShown &&

@@ -24,7 +24,7 @@ interface IProps {
     class?: string;
     tooltipClass?: string;
     tooltip: React.ReactNode;
-    tooltipProps?: {};
+    tooltipProps?: Omit<React.ComponentProps<typeof TooltipTarget>, "label" | "tooltipClassName" | "className">;
     onClick?: (ev?: React.MouseEvent) => void;
 }
 

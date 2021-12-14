@@ -67,7 +67,7 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import Toolbar from '../../../accessibility/Toolbar';
 import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
 import { RovingAccessibleTooltipButton } from '../../../accessibility/roving/RovingAccessibleTooltipButton';
-import ThreadListContextMenu from '../context_menus/ThreadListContextMenu';
+import { RovingThreadListContextMenu } from '../context_menus/ThreadListContextMenu';
 import { ThreadNotificationState } from '../../../stores/notifications/ThreadNotificationState';
 import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNotificationStateStore';
 import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
@@ -1432,7 +1432,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 onClick={() => dispatchShowThreadEvent(this.props.mxEvent)}
                                 key="thread"
                             />
-                            <ThreadListContextMenu
+                            <RovingThreadListContextMenu
                                 mxEvent={this.props.mxEvent}
                                 permalinkCreator={this.props.permalinkCreator}
                                 onMenuToggle={this.onActionBarFocusChange}
