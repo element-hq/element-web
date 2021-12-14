@@ -667,7 +667,7 @@
     "FAQ": "ЧаПи",
     "Keyboard Shortcuts": "Гарячі клавіші",
     "Versions": "Версії",
-    "%(brand)s version:": "версія %(brand)s:",
+    "%(brand)s version:": "Версія %(brand)s:",
     "Labs": "Лабораторія",
     "Ignored/Blocked": "Ігноровані/Заблоковані",
     "Error adding ignored user/server": "Помилка при додаванні ігнорованого користувача/сервера",
@@ -3110,5 +3110,13 @@
     "Save setting values": "Зберегти значення налаштування",
     "Setting definition:": "Означення налаштування:",
     "This UI does NOT check the types of the values. Use at your own risk.": "Цей інтерфейс НЕ перевіряє типи значень. Користуйтесь на свій ризик.",
-    "Settings Explorer": "Огляд налаштувань"
+    "Settings Explorer": "Огляд налаштувань",
+    "If you didn't remove the recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Якщо ви не видаляли способу відновлення, ймовірно хтось намагається зламати ваш обліковий запис. Негайно змініть пароль до свого облікового запису й встановіть новий спосіб відновлення в налаштуваннях.",
+    "If you did this accidentally, you can setup Secure Messages on this session which will re-encrypt this session's message history with a new recovery method.": "Якщо це ненароком зробили ви, налаштуйте захищені повідомлення для цього сеансу, щоб повторно зашифрувати історію листування цього сеансу з новим способом відновлення.",
+    "This session has detected that your Security Phrase and key for Secure Messages have been removed.": "Цей сеанс виявив, що ваша фраза безпеки й ключ до захищених повідомлень були видалені.",
+    "If you didn't set the new recovery method, an attacker may be trying to access your account. Change your account password and set a new recovery method immediately in Settings.": "Якщо ви не встановлювали нового способу відновлення, ймовірно хтось намагається зламати ваш обліковий запис. Негайно змініть пароль до свого облікового запису й встановіть новий спосіб відновлення в налаштуваннях.",
+    "A new Security Phrase and key for Secure Messages have been detected.": "Виявлено зміну фрази безпеки й ключа до захищених повідомлень.",
+    "The exported file will allow anyone who can read it to decrypt any encrypted messages that you can see, so you should be careful to keep it secure. To help with this, you should enter a passphrase below, which will be used to encrypt the exported data. It will only be possible to import the data by using the same passphrase.": "Експортований файл дасть змогу всім, хто його прочитає, розшифрувати всі видимі вам зашифровані повідомлення. Щоб захистити його, введіть знизу парольну фразу, яку буде використано для шифрування експортованих даних. Імпортувати дані можливо буде лише за допомогою цієї парольної фрази.",
+    "This process allows you to export the keys for messages you have received in encrypted rooms to a local file. You will then be able to import the file into another Matrix client in the future, so that client will also be able to decrypt these messages.": "",
+    "Export room keys": ""
 }
