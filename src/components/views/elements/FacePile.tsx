@@ -38,7 +38,9 @@ const isKnownMember = (member: RoomMember) => !!DMRoomMap.shared().getDMRoomsFor
 
 const FacePile = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, ...props }: IProps) => {
     const cli = useContext(MatrixClientContext);
+    const isJoined = room.getMyMembership() === "join";
     let members = useRoomMembers(room);
+    const count = members.length;
 
     // sort users with an explicit avatar first
     const iteratees = [member => !!member.getMxcAvatarUrl()];
@@ -59,19 +61,33 @@ const FacePile = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, .
 
     let tooltip: ReactNode;
     if (props.onClick) {
+        let subText: string;
+        if (isJoined) {
+            subText = _t("Including you, %(commaSeparatedMembers)s", { commaSeparatedMembers });
+        } else {
+            subText = _t("Including %(commaSeparatedMembers)s", { commaSeparatedMembers });
+        }
+
         tooltip = <div>
             <div className="mx_Tooltip_title">
-                { _t("View all %(count)s members", { count: members.length }) }
+                { _t("View all %(count)s members", { count }) }
             </div>
             <div className="mx_Tooltip_sub">
-                { _t("Including %(commaSeparatedMembers)s", { commaSeparatedMembers }) }
+                { subText }
             </div>
         </div>;
     } else {
-        tooltip = _t("%(count)s members including %(commaSeparatedMembers)s", {
-            count: members.length,
-            commaSeparatedMembers,
-        });
+        if (isJoined) {
+            tooltip = _t("%(count)s members including you, %(commaSeparatedMembers)s", {
+                count: count - 1,
+                commaSeparatedMembers,
+            });
+        } else {
+            tooltip = _t("%(count)s members including %(commaSeparatedMembers)s", {
+                count,
+                commaSeparatedMembers,
+            });
+        }
     }
 
     return <div {...props} className="mx_FacePile">
