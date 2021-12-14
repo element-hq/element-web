@@ -89,25 +89,49 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
             });
 
             groups.getOrCreate(LabGroup.Widgets, []).push(
-                <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />,
+                <SettingsFlag
+                    key="enableWidgetScreenshots"
+                    name="enableWidgetScreenshots"
+                    level={SettingLevel.ACCOUNT}
+                />,
             );
 
             groups.getOrCreate(LabGroup.Experimental, []).push(
-                <SettingsFlag name="lowBandwidth" level={SettingLevel.DEVICE} />,
+                <SettingsFlag
+                    key="lowBandwidth"
+                    name="lowBandwidth"
+                    level={SettingLevel.DEVICE}
+                />,
             );
 
             groups.getOrCreate(LabGroup.Developer, []).push(
-                <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />,
-                <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />,
+                <SettingsFlag
+                    key="developerMode"
+                    name="developerMode"
+                    level={SettingLevel.ACCOUNT}
+                />,
+                <SettingsFlag
+                    key="showHiddenEventsInTimeline"
+                    name="showHiddenEventsInTimeline"
+                    level={SettingLevel.DEVICE}
+                />,
             );
 
             groups.getOrCreate(LabGroup.Analytics, []).push(
-                <SettingsFlag name="automaticErrorReporting" level={SettingLevel.DEVICE} />,
+                <SettingsFlag
+                    key="automaticErrorReporting"
+                    name="automaticErrorReporting"
+                    level={SettingLevel.DEVICE}
+                />,
             );
 
             if (this.state.showHiddenReadReceipts) {
                 groups.getOrCreate(LabGroup.Messaging, []).push(
-                    <SettingsFlag name="feature_hidden_read_receipts" level={SettingLevel.DEVICE} />,
+                    <SettingsFlag
+                        key="feature_hidden_read_receipts"
+                        name="feature_hidden_read_receipts"
+                        level={SettingLevel.DEVICE}
+                    />,
                 );
             }
 
