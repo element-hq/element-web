@@ -3454,5 +3454,9 @@
     "Use \"%(query)s\" to search": "使用「%(query)s」搜尋",
     "Other rooms in %(spaceName)s": "其他在 %(spaceName)s 中的聊天室",
     "Spaces you're in": "您所在的空間",
-    "New spotlight search experience": "新的聚焦搜尋體驗"
+    "New spotlight search experience": "新的聚焦搜尋體驗",
+    "%(count)s members including you, %(commaSeparatedMembers)s|one": "包含您與 %(commaSeparatedMembers)s 共 %(count)s 個成員",
+    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "您",
+    "%(count)s members including you, %(commaSeparatedMembers)s|other": "包含您 %(count)s 個成員，%(commaSeparatedMembers)s",
+    "Including you, %(commaSeparatedMembers)s": "包含您，%(commaSeparatedMembers)s"
 }
