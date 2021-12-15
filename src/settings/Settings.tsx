@@ -367,6 +367,15 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("New spotlight search experience"),
         default: false,
     },
+    "feature_jump_to_date": {
+        // We purposely leave out `isFeature: true` so it doesn't show in Labs
+        // by default. We will conditionally show it depending on whether we can
+        // detect MSC3030 support (see LabUserSettingsTab.tsx).
+        // labsGroup: LabGroup.Messaging,
+        displayName: _td("Jump to date (adds /jumptodate)"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "RoomList.backgroundImage": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,

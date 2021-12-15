@@ -49,6 +49,7 @@ export class LabsSettingToggle extends React.Component<ILabsSettingToggleProps> 
 
 interface IState {
     showHiddenReadReceipts: boolean;
+    showJumpToDate: boolean;
 }
 
 @replaceableComponent("views.settings.tabs.user.LabsUserSettingsTab")
@@ -60,8 +61,13 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
             this.setState({ showHiddenReadReceipts });
         });
 
+        MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2716").then((showJumpToDate) => {
+            this.setState({ showJumpToDate });
+        });
+
         this.state = {
             showHiddenReadReceipts: false,
+            showJumpToDate: false,
         };
     }
 
@@ -130,6 +136,16 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                     <SettingsFlag
                         key="feature_hidden_read_receipts"
                         name="feature_hidden_read_receipts"
+                        level={SettingLevel.DEVICE}
+                    />,
+                );
+            }
+
+            if (this.state.showJumpToDate) {
+                groups.getOrCreate(LabGroup.Messaging, []).push(
+                    <SettingsFlag
+                        key="feature_jump_to_date"
+                        name="feature_jump_to_date"
                         level={SettingLevel.DEVICE}
                     />,
                 );
