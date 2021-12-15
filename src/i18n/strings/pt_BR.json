@@ -3026,7 +3026,7 @@
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Alguns exemplos das informações que estão sendo enviadas para nos ajudar %(brand)s melhorar incluem:",
     "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Nossa política de cookies completa pode ser encontrada <CookiePolicyLink>aqui</CookiePolicyLink>.",
     "Error fetching file": "Erro ao buscar arquivo",
-    "Cross-signing is ready but keys are not backed up.": "Verificação está pronta mas as chaves não tem um backup configurado.",
+    "Cross-signing is ready but keys are not backed up.": "A verificação está pronta mas as chaves não tem um backup configurado.",
     "Thank you for trying Spaces. Your feedback will help inform the next versions.": "Agradecemos por experimentar os Espaços. Seu feedback nos ajudará a desenvolver as próximas versões.",
     "Sends the given message with a space themed effect": "Envia a mensagem com um efeito com tema espacial",
     "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Permite chamadas 1:1 via par-a-par (ao habilitar isto, o outro envolvido na chamada pode ver seu endereço de IP)",
@@ -3047,5 +3047,8 @@
     "Click the button below to confirm signing out these devices.|one": "Clique no botão abaixo para confirmar a desconexão deste dispositivos.",
     "Confirm signing out these devices": "Confirmar desconexão desses dispositivos",
     "Unable to load device list": "Não foi possível carregar a lista de dispositivos",
-    "Your homeserver does not support device management.": "Seu homeserver não suporta gerenciamento de dispositivos."
+    "Your homeserver does not support device management.": "Seu homeserver não suporta gerenciamento de dispositivos.",
+    "Click the button below to confirm signing out these devices.|other": "Clique no botão abaixo para confirmar a desconexão de outros dispositivos.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Confirme o logout deste dispositivo usando o logon único para provar sua identidade.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Confirme o logout desses dispositivos usando o logon único para provar sua identidade."
 }
