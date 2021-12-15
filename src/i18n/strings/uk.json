@@ -3266,5 +3266,11 @@
     "You can also set up Secure Backup & manage your keys in Settings.": "Ввімкнути захищене резервне копіювання й керувати своїми ключами можна в налаштуваннях.",
     "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Якщо скасуєте це й загубите пристрій, то втратите зашифровані повідомлення й дані.",
     "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Звірка цього користувача позначить його сеанс довіреним вам, а ваш йому.",
-    "Copy room link": "Скопіювати посилання на кімнату"
+    "Copy room link": "Скопіювати посилання на кімнату",
+    "Joined": "Приєднано",
+    "Joining": "Приєднання",
+    "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Відновіть доступ до облікового запису й ключів шифрування, збережених у цьому сеансі. Без них ваші сеанси показуватимуть не всі ваші захищені повідомлення.",
+    "Jump to date (adds /jumptodate)": "Перейти до дати (вписує /jumptodate)",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Не вдалося розпізнати вказану дату (%(inputDate)s). Спробуйте формат рррр-мм-дд.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Перейти до вказаної дати в стрічці (рррр-мм-дд)"
 }
