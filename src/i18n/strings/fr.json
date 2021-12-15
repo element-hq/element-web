@@ -3440,5 +3440,6 @@
     "You cannot place calls in this browser.": "Vous ne pouvez pas passer d’appels dans ce navigateur.",
     "Calls are unsupported": "Les appels ne sont pas supportés",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Voici quelques exemples d’informations qui nous sont envoyées pour améliorer %(brand)s :",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Notre politique de cookies peut être consultée dans sa totalité <CookiePolicyLink>ici</CookiePolicyLink>."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Notre politique de cookies peut être consultée dans sa totalité <CookiePolicyLink>ici</CookiePolicyLink>.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Aller à la date suivante dans l’historique (YYYY-MM-DD)"
 }
