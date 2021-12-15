@@ -3462,5 +3462,22 @@
     "Copy room link": "Kopírovat odkaz",
     "Jump to date (adds /jumptodate)": "Přejít na datum (přidá /jumptodate)",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Nebyli jsme schopni porozumět zadanému datu (%(inputDate)s). Zkuste použít formát RRRR-MM-DD.",
-    "Jump to the given date in the timeline (YYYY-MM-DD)": "Přejít na zadané datum na časové ose (RRRR-MM-DD)"
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Přejít na zadané datum na časové ose (RRRR-MM-DD)",
+    "Processing...": "Zpracování...",
+    "Creating output...": "Vytváření výstupu...",
+    "Fetching events...": "Načítání událostí...",
+    "Starting export process...": "Zahájení procesu exportu...",
+    "Exported %(count)s events in %(seconds)s seconds|one": "Exportována %(count)s událost za %(seconds)s sekund",
+    "Exported %(count)s events in %(seconds)s seconds|other": "Exportováno %(count)s událostí za %(seconds)s sekund",
+    "Export successful!": "Export byl úspěšný!",
+    "Creating HTML...": "Vytváření HTML...",
+    "Fetched %(count)s events in %(seconds)ss|one": "Načtena %(count)s událost za %(seconds)ss",
+    "Fetched %(count)s events in %(seconds)ss|other": "Načteno %(count)s událostí za %(seconds)ss",
+    "Starting export...": "Zahájení exportu...",
+    "Processing event %(number)s out of %(total)s": "Zpracování události %(number)s z %(total)s",
+    "Fetched %(count)s events so far|one": "Načtena %(count)s událost",
+    "Fetched %(count)s events so far|other": "Načteno %(count)s událostí",
+    "Fetched %(count)s events out of %(total)s|one": "Načtena %(count)s událost z %(total)s",
+    "Fetched %(count)s events out of %(total)s|other": "Načteno %(count)s událostí z %(total)s",
+    "Generating a ZIP": "Vytvoření souboru ZIP"
 }
