@@ -3459,5 +3459,8 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Vy",
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s členů včetně vás, %(commaSeparatedMembers)s",
     "Including you, %(commaSeparatedMembers)s": "Včetně vás, %(commaSeparatedMembers)s",
-    "Copy room link": "Kopírovat odkaz"
+    "Copy room link": "Kopírovat odkaz",
+    "Jump to date (adds /jumptodate)": "Přejít na datum (přidá /jumptodate)",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Nebyli jsme schopni porozumět zadanému datu (%(inputDate)s). Zkuste použít formát RRRR-MM-DD.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Přejít na zadané datum na časové ose (RRRR-MM-DD)"
 }
