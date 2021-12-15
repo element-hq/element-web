@@ -1053,7 +1053,7 @@
     "Enter passphrase": "Masukkan frasa sandi",
     "Unknown error": "Kesalahan tidak diketahui",
     "Incorrect password": "Kata sandi salah",
-    "New Password": "Kata Sandi Baru",
+    "New Password": "Kata sandi baru",
     "Show:": "Tampilkan:",
     "Results": "Hasil",
     "Joined": "Tergabung",
@@ -3382,5 +3382,9 @@
     "Use \"%(query)s\" to search": "Gunakan \"%(query)s\" untuk mencari",
     "Other rooms in %(spaceName)s": "Ruangan lainnya di %(spaceName)s",
     "Spaces you're in": "Space yang Anda berada",
-    "New spotlight search experience": "Pengalaman pencarian spotlight baru"
+    "New spotlight search experience": "Pengalaman pencarian spotlight baru",
+    "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s anggota termasuk Anda dan %(commaSeparatedMembers)s",
+    "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s anggota termasuk Anda, %(commaSeparatedMembers)s",
+    "Including you, %(commaSeparatedMembers)s": "Termasuk Anda, %(commaSeparatedMembers)s",
+    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Anda"
 }
