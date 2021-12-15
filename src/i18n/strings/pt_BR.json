@@ -3043,5 +3043,9 @@
     "Use new room breadcrumbs": "Use a localização atual da nova sala",
     "Meta Spaces": "Meta Espaços",
     "Location sharing (under active development)": "Compartilhamento de localização (em desenvolvimento ativo)",
-    "Polls (under active development)": "Pesquisas (em desenvolvimento ativo)"
+    "Polls (under active development)": "Pesquisas (em desenvolvimento ativo)",
+    "Click the button below to confirm signing out these devices.|one": "Clique no botão abaixo para confirmar a desconexão deste dispositivos.",
+    "Confirm signing out these devices": "Confirmar desconexão desses dispositivos",
+    "Unable to load device list": "Não foi possível carregar a lista de dispositivos",
+    "Your homeserver does not support device management.": "Seu homeserver não suporta gerenciamento de dispositivos."
 }
