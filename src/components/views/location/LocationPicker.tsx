@@ -188,9 +188,10 @@ class LocationPicker extends React.Component<IProps, IState> {
     private getGeoUri = (position) => {
         return (`geo:${ position.coords.latitude },` +
                 position.coords.longitude +
-                ( position.coords.altitude != null ?
+                ( position.coords.altitude !== undefined ?
                     `,${ position.coords.altitude }` : '' ) +
-                `;u=${ position.coords.accuracy }`);
+                ( position.coords.accuracy !== undefined ?
+                    `;u=${ position.coords.accuracy }` : '' ));
     };
 
     private onOk = () => {
