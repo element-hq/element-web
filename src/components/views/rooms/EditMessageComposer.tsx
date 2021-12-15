@@ -160,9 +160,11 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         switch (action) {
             case MessageComposerAction.Send:
                 this.sendEdit();
+                event.stopPropagation();
                 event.preventDefault();
                 break;
             case MessageComposerAction.CancelEditing:
+                event.stopPropagation();
                 this.cancelEdit();
                 break;
             case MessageComposerAction.EditPrevMessage: {
