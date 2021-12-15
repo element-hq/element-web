@@ -3036,5 +3036,12 @@
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Consultar com %(transferTarget)s. Tranferir para <a> %(transferee)s</a>",
     "sends rainfall": "Enviar efeito de chuva",
     "Sends the given message with rainfall": "Envia a mensagem dada com um efeito de chuva",
-    "Developer mode": "Modo desenvolvedor"
+    "Developer mode": "Modo desenvolvedor",
+    "Automatically send debug logs on any error": "Enviar automaticamente logs de depuração em qualquer erro",
+    "Surround selected text when typing special characters": "Circule o texto selecionado ao digitar caracteres especiais",
+    "New spotlight search experience": "Nova experiência de pesquisa de destaque",
+    "Use new room breadcrumbs": "Use a localização atual da nova sala",
+    "Meta Spaces": "Meta Espaços",
+    "Location sharing (under active development)": "Compartilhamento de localização (em desenvolvimento ativo)",
+    "Polls (under active development)": "Pesquisas (em desenvolvimento ativo)"
 }
