@@ -27,7 +27,7 @@ interface IProps extends Omit<HTMLAttributes<HTMLDivElement>, "onScroll"> {
 }
 
 export default class AutoHideScrollbar extends React.Component<IProps> {
-    private containerRef: React.RefObject<HTMLDivElement> = React.createRef();
+    public readonly containerRef: React.RefObject<HTMLDivElement> = React.createRef();
 
     public componentDidMount() {
         if (this.containerRef.current && this.props.onScroll) {

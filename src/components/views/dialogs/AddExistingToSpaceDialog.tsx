@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode, useContext, useMemo, useState } from "react";
+import React, { ReactNode, useContext, useMemo, useRef, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
+import { _t, _td } from '../../../languageHandler';
 import BaseDialog from "./BaseDialog";
 import Dropdown from "../elements/Dropdown";
 import SearchBox from "../../structures/SearchBox";
@@ -38,9 +38,12 @@ import { sortRooms } from "../../../stores/room-list/algorithms/tag-sorting/Rece
 import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
-import TruncatedList from "../elements/TruncatedList";
-import EntityTile from "../rooms/EntityTile";
-import BaseAvatar from "../avatars/BaseAvatar";
+import LazyRenderList from "../elements/LazyRenderList";
+
+// These values match CSS
+const ROW_HEIGHT = 32 + 12;
+const HEADER_HEIGHT = 15;
+const GROUP_MARGIN = 24;
 
 interface IProps {
     space: Room;
@@ -64,30 +67,55 @@ export const Entry = ({ room, checked, onChange }) => {
     </label>;
 };
 
+type OnChangeFn = (checked: boolean, room: Room) => void;
+
+type Renderer = (
+    rooms: Room[],
+    selectedToAdd: Set<Room>,
+    scrollState: IScrollState,
+    onChange: undefined | OnChangeFn,
+) => ReactNode;
+
 interface IAddExistingToSpaceProps {
     space: Room;
     footerPrompt?: ReactNode;
     filterPlaceholder: string;
     emptySelectionButton?: ReactNode;
     onFinished(added: boolean): void;
-    roomsRenderer?(
-        rooms: Room[],
-        selectedToAdd: Set<Room>,
-        onChange: undefined | ((checked: boolean, room: Room) => void),
-        truncateAt: number,
-        overflowTile: (overflowCount: number, totalCount: number) => JSX.Element,
-    ): ReactNode;
-    spacesRenderer?(
-        spaces: Room[],
-        selectedToAdd: Set<Room>,
-        onChange?: (checked: boolean, room: Room) => void,
-    ): ReactNode;
-    dmsRenderer?(
-        dms: Room[],
-        selectedToAdd: Set<Room>,
-        onChange?: (checked: boolean, room: Room) => void,
-    ): ReactNode;
+    roomsRenderer?: Renderer;
+    spacesRenderer?: Renderer;
+    dmsRenderer?: Renderer;
 }
+
+interface IScrollState {
+    scrollTop: number;
+    height: number;
+}
+
+const getScrollState = (
+    { scrollTop, height }: IScrollState,
+    numItems: number,
+    ...prevGroupSizes: number[]
+): IScrollState => {
+    let heightBefore = 0;
+    prevGroupSizes.forEach(size => {
+        heightBefore += GROUP_MARGIN + HEADER_HEIGHT + (size * ROW_HEIGHT);
+    });
+
+    const viewportTop = scrollTop;
+    const viewportBottom = viewportTop + height;
+    const listTop = heightBefore + HEADER_HEIGHT;
+    const listBottom = listTop + (numItems * ROW_HEIGHT);
+    const top = Math.max(viewportTop, listTop);
+    const bottom = Math.min(viewportBottom, listBottom);
+    // the viewport height and scrollTop passed to the LazyRenderList
+    // is capped at the intersection with the real viewport, so lists
+    // out of view are passed height 0, so they won't render any items.
+    return {
+        scrollTop: Math.max(0, scrollTop - listTop),
+        height: Math.max(0, bottom - top),
+    };
+};
 
 export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     space,
@@ -101,6 +129,13 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
 }) => {
     const cli = useContext(MatrixClientContext);
     const visibleRooms = useMemo(() => cli.getVisibleRooms().filter(r => r.getMyMembership() === "join"), [cli]);
+
+    const scrollRef = useRef<AutoHideScrollbar>();
+    const [scrollState, setScrollState] = useState<IScrollState>({
+        // these are estimates which update as soon as it mounts
+        scrollTop: 0,
+        height: 600,
+    });
 
     const [selectedToAdd, setSelectedToAdd] = useState(new Set<Room>());
     const [progress, setProgress] = useState<number>(null);
@@ -229,30 +264,32 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
         setSelectedToAdd(new Set(selectedToAdd));
     } : null;
 
-    const [truncateAt, setTruncateAt] = useState(20);
-    function overflowTile(overflowCount: number, totalCount: number): JSX.Element {
-        const text = _t("and %(count)s others...", { count: overflowCount });
-        return (
-            <EntityTile
-                className="mx_EntityTile_ellipsis"
-                avatarJsx={
-                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
-                }
-                name={text}
-                presenceState="online"
-                suppressOnHover={true}
-                onClick={() => setTruncateAt(totalCount)}
-            />
-        );
-    }
+    // only count spaces when alone as they're shown on a separate modal all on their own
+    const numSpaces = (spacesRenderer && !dmsRenderer && !roomsRenderer) ? spaces.length : 0;
 
     let noResults = true;
-    if ((roomsRenderer && rooms.length > 0) ||
-        (dmsRenderer && dms.length > 0) ||
-        (!roomsRenderer && !dmsRenderer && spacesRenderer && spaces.length > 0) // only count spaces when alone
-    ) {
+    if ((roomsRenderer && rooms.length > 0) || (dmsRenderer && dms.length > 0) || (numSpaces > 0)) {
         noResults = false;
     }
+
+    const onScroll = () => {
+        const body = scrollRef.current?.containerRef.current;
+        setScrollState({
+            scrollTop: body.scrollTop,
+            height: body.clientHeight,
+        });
+    };
+
+    const wrappedRef = (body: HTMLDivElement) => {
+        setScrollState({
+            scrollTop: body.scrollTop,
+            height: body.clientHeight,
+        });
+    };
+
+    const roomsScrollState = getScrollState(scrollState, rooms.length);
+    const spacesScrollState = getScrollState(scrollState, numSpaces, rooms.length);
+    const dmsScrollState = getScrollState(scrollState, dms.length, numSpaces, rooms.length);
 
     return <div className="mx_AddExistingToSpace">
         <SearchBox
@@ -261,17 +298,22 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
             onSearch={setQuery}
             autoFocus={true}
         />
-        <AutoHideScrollbar className="mx_AddExistingToSpace_content">
+        <AutoHideScrollbar
+            className="mx_AddExistingToSpace_content"
+            onScroll={onScroll}
+            wrappedRef={wrappedRef}
+            ref={scrollRef}
+        >
             { rooms.length > 0 && roomsRenderer ? (
-                roomsRenderer(rooms, selectedToAdd, onChange, truncateAt, overflowTile)
+                roomsRenderer(rooms, selectedToAdd, roomsScrollState, onChange)
             ) : undefined }
 
             { spaces.length > 0 && spacesRenderer ? (
-                spacesRenderer(spaces, selectedToAdd, onChange)
+                spacesRenderer(spaces, selectedToAdd, spacesScrollState, onChange)
             ) : null }
 
             { dms.length > 0 && dmsRenderer ? (
-                dmsRenderer(dms, selectedToAdd, onChange)
+                dmsRenderer(dms, selectedToAdd, dmsScrollState, onChange)
             ) : null }
 
             { noResults ? <span className="mx_AddExistingToSpace_noResults">
@@ -285,15 +327,20 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     </div>;
 };
 
-export const defaultRoomsRenderer: IAddExistingToSpaceProps["roomsRenderer"] = (
-    rooms, selectedToAdd, onChange, truncateAt, overflowTile,
+const defaultRendererFactory = (title: string): Renderer => (
+    rooms,
+    selectedToAdd,
+    { scrollTop, height },
+    onChange,
 ) => (
     <div className="mx_AddExistingToSpace_section">
-        <h3>{ _t("Rooms") }</h3>
-        <TruncatedList
-            truncateAt={truncateAt}
-            createOverflowElement={overflowTile}
-            getChildren={(start, end) => rooms.slice(start, end).map(room =>
+        <h3>{ _t(title) }</h3>
+        <LazyRenderList
+            itemHeight={ROW_HEIGHT}
+            items={rooms}
+            scrollTop={scrollTop}
+            height={height}
+            renderItem={room => (
                 <Entry
                     key={room.roomId}
                     room={room}
@@ -301,43 +348,15 @@ export const defaultRoomsRenderer: IAddExistingToSpaceProps["roomsRenderer"] = (
                     onChange={onChange ? (checked: boolean) => {
                         onChange(checked, room);
                     } : null}
-                />,
+                />
             )}
-            getChildCount={() => rooms.length}
         />
     </div>
 );
 
-export const defaultSpacesRenderer: IAddExistingToSpaceProps["spacesRenderer"] = (spaces, selectedToAdd, onChange) => (
-    <div className="mx_AddExistingToSpace_section">
-        { spaces.map(space => {
-            return <Entry
-                key={space.roomId}
-                room={space}
-                checked={selectedToAdd.has(space)}
-                onChange={onChange ? (checked) => {
-                    onChange(checked, space);
-                } : null}
-            />;
-        }) }
-    </div>
-);
-
-export const defaultDmsRenderer: IAddExistingToSpaceProps["dmsRenderer"] = (dms, selectedToAdd, onChange) => (
-    <div className="mx_AddExistingToSpace_section">
-        <h3>{ _t("Direct Messages") }</h3>
-        { dms.map(room => {
-            return <Entry
-                key={room.roomId}
-                room={room}
-                checked={selectedToAdd.has(room)}
-                onChange={onChange ? (checked: boolean) => {
-                    onChange(checked, room);
-                } : null}
-            />;
-        }) }
-    </div>
-);
+export const defaultRoomsRenderer = defaultRendererFactory(_td("Rooms"));
+export const defaultSpacesRenderer = defaultRendererFactory(_td("Spaces"));
+export const defaultDmsRenderer = defaultRendererFactory(_td("Direct Messages"));
 
 interface ISubspaceSelectorProps {
     title: string;
