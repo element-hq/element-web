@@ -3265,5 +3265,6 @@
     "Restore": "Відновити",
     "You can also set up Secure Backup & manage your keys in Settings.": "Ввімкнути захищене резервне копіювання й керувати своїми ключами можна в налаштуваннях.",
     "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.": "Якщо скасуєте це й загубите пристрій, то втратите зашифровані повідомлення й дані.",
-    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Звірка цього користувача позначить його сеанс довіреним вам, а ваш йому."
+    "Verifying this user will mark their session as trusted, and also mark your session as trusted to them.": "Звірка цього користувача позначить його сеанс довіреним вам, а ваш йому.",
+    "Copy room link": "Скопіювати посилання на кімнату"
 }
