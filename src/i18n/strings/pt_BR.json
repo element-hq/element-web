@@ -3025,5 +3025,9 @@
     "Calls are unsupported": "Chamadas não suportadas",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Alguns exemplos das informações que estão sendo enviadas para nos ajudar %(brand)s melhorar incluem:",
     "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Nossa política de cookies completa pode ser encontrada <CookiePolicyLink>aqui</CookiePolicyLink>.",
-    "Error fetching file": "Erro ao buscar arquivo"
+    "Error fetching file": "Erro ao buscar arquivo",
+    "Cross-signing is ready but keys are not backed up.": "Verificação está pronta mas as chaves não tem um backup configurado.",
+    "Thank you for trying Spaces. Your feedback will help inform the next versions.": "Agradecemos por experimentar os Espaços. Seu feedback nos ajudará a desenvolver as próximas versões.",
+    "Sends the given message with a space themed effect": "Envia a mensagem com um efeito com tema espacial",
+    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Permite chamadas 1:1 via par-a-par (ao habilitar isto, o outro envolvido na chamada pode ver seu endereço de IP)"
 }
