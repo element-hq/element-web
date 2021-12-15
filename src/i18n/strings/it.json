@@ -3453,5 +3453,13 @@
     "Use \"%(query)s\" to search": "Usa \"%(query)s\" per cercare",
     "Other rooms in %(spaceName)s": "Altre stanze in %(spaceName)s",
     "Spaces you're in": "Spazi in cui sei",
-    "Link to room": "Collegamento alla stanza"
+    "Link to room": "Collegamento alla stanza",
+    "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s membri incluso te e %(commaSeparatedMembers)s",
+    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Tu",
+    "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s membri incluso te, %(commaSeparatedMembers)s",
+    "Including you, %(commaSeparatedMembers)s": "Incluso te, %(commaSeparatedMembers)s",
+    "Copy room link": "Copia collegamento stanza",
+    "Jump to date (adds /jumptodate)": "Salta alla data (aggiunge /jumptodate)",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Non siamo riusciti a capire la data scelta (%(inputDate)s). Prova ad usare il formato YYYY-MM-DD.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Salta alla data scelta nella linea temporale (YYYY-MM-DD)"
 }
