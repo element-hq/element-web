@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
+import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
 import { _t, sanitizeForTranslation } from "../../../languageHandler";
 import { getSenderName, isSelf, shouldPrefixMessagesIn } from "./utils";
-import { POLL_START_EVENT_TYPE, TEXT_NODE_TYPE } from "../../../polls/consts";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 export class PollStartEventPreview implements IPreview {

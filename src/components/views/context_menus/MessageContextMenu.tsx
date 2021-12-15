@@ -19,6 +19,7 @@ import React from 'react';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
+import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -42,7 +43,6 @@ import { IPosition, ChevronFace } from '../../structures/ContextMenu';
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
-import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
 import EndPollDialog from '../dialogs/EndPollDialog';
 import { isPollEnded } from '../messages/MPollBody';
 

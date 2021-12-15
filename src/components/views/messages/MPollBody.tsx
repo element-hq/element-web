@@ -19,12 +19,7 @@ import classNames from 'classnames';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { MatrixClient } from 'matrix-js-sdk/src/matrix';
-
-import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-import Modal from '../../../Modal';
-import { IBodyProps } from "./IBodyProps";
-import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
+import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 import {
     IPollAnswer,
     IPollContent,
@@ -32,8 +27,13 @@ import {
     POLL_END_EVENT_TYPE,
     POLL_RESPONSE_EVENT_TYPE,
     POLL_START_EVENT_TYPE,
-    TEXT_NODE_TYPE,
-} from '../../../polls/consts';
+} from "matrix-js-sdk/src/@types/polls";
+
+import { _t } from '../../../languageHandler';
+import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Modal from '../../../Modal';
+import { IBodyProps } from "./IBodyProps";
+import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import StyledRadioButton from '../elements/StyledRadioButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from '../dialogs/ErrorDialog';

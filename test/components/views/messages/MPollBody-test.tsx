@@ -19,16 +19,16 @@ import { mount, ReactWrapper } from "enzyme";
 import { Callback, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
 import { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
 import { Relations } from "matrix-js-sdk/src/models/relations";
-
-import * as TestUtils from "../../../test-utils";
-import sdk from "../../../skinned-sdk";
 import {
     IPollAnswer,
     IPollContent,
     POLL_END_EVENT_TYPE,
     POLL_RESPONSE_EVENT_TYPE,
-    TEXT_NODE_TYPE,
-} from "../../../../src/polls/consts";
+} from "matrix-js-sdk/src/@types/polls";
+import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
+
+import * as TestUtils from "../../../test-utils";
+import sdk from "../../../skinned-sdk";
 import {
     UserVote,
     allVotes,

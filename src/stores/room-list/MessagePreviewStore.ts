@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -30,7 +31,6 @@ import { CallHangupEvent } from "./previews/CallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
-import { POLL_START_EVENT_TYPE } from "../../polls/consts";
 import SettingsStore from "../../settings/SettingsStore";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which

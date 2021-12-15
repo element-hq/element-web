@@ -18,11 +18,12 @@ import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Relations } from "matrix-js-sdk/src/models/relations";
+import { IPollEndContent, POLL_END_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
+import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
 import QuestionDialog from "./QuestionDialog";
-import { IPollEndContent, POLL_END_EVENT_TYPE, TEXT_NODE_TYPE } from "../../../polls/consts";
 import { findTopAnswer } from "../messages/MPollBody";
 import Modal from "../../../Modal";
 import ErrorDialog from "./ErrorDialog";

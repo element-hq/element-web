@@ -24,6 +24,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { logger } from "matrix-js-sdk/src/logger";
 import { NotificationCountType } from 'matrix-js-sdk/src/models/room';
+import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from '../../../languageHandler';
@@ -65,7 +66,6 @@ import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewSto
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import Toolbar from '../../../accessibility/Toolbar';
-import { POLL_START_EVENT_TYPE } from '../../../polls/consts';
 import { RovingAccessibleTooltipButton } from '../../../accessibility/roving/RovingAccessibleTooltipButton';
 import { RovingThreadListContextMenu } from '../context_menus/ThreadListContextMenu';
 import { ThreadNotificationState } from '../../../stores/notifications/ThreadNotificationState';
