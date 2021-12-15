@@ -3029,5 +3029,12 @@
     "Cross-signing is ready but keys are not backed up.": "Verificação está pronta mas as chaves não tem um backup configurado.",
     "Thank you for trying Spaces. Your feedback will help inform the next versions.": "Agradecemos por experimentar os Espaços. Seu feedback nos ajudará a desenvolver as próximas versões.",
     "Sends the given message with a space themed effect": "Envia a mensagem com um efeito com tema espacial",
-    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Permite chamadas 1:1 via par-a-par (ao habilitar isto, o outro envolvido na chamada pode ver seu endereço de IP)"
+    "Allow Peer-to-Peer for 1:1 calls (if you enable this, the other party might be able to see your IP address)": "Permite chamadas 1:1 via par-a-par (ao habilitar isto, o outro envolvido na chamada pode ver seu endereço de IP)",
+    "Search %(spaceName)s": "Pesquisar %(spaceName)s",
+    "Pin to sidebar": "Fixar na barra lateral",
+    "Quick settings": "Configurações rápidas",
+    "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "Consultar com %(transferTarget)s. Tranferir para <a> %(transferee)s</a>",
+    "sends rainfall": "Enviar efeito de chuva",
+    "Sends the given message with rainfall": "Envia a mensagem dada com um efeito de chuva",
+    "Developer mode": "Modo desenvolvedor"
 }
