@@ -2993,5 +2993,13 @@
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s e %(count)s outro",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
     "%(spaceName)s and %(count)s others|other": "%(spaceName)s e outros %(count)s",
-    "%(date)s at %(time)s": "%(date)s às %(time)s"
+    "%(date)s at %(time)s": "%(date)s às %(time)s",
+    "Maximised widgets": "Widgets maximizados",
+    "Experimental": "Experimental",
+    "Themes": "Temas",
+    "Message Previews": "Pré-visualização de mensagens",
+    "Moderation": "Moderação",
+    "This is the start of export of <roomName/>. Exported by <exporterDetails/> at %(exportDate)s.": "Este é o início da exportação da sala <roomName/>. Exportado por <exporterDetails/> às %(exportDate)s.",
+    "Media omitted - file size limit exceeded": "Mídia omitida - tamanho do arquivo excede o limite",
+    "Media omitted": "Mídia omitida"
 }
