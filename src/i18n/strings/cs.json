@@ -3255,7 +3255,7 @@
     "What projects are your team working on?": "Na jakých projektech váš tým pracuje?",
     "That e-mail address is already in use.": "Tato e-mailová adresa je již použita.",
     "The email address doesn't appear to be valid.": "E-mailová adresa se nezdá být platná.",
-    "See room timeline (devtools)": "Viz časová osa místnosti (devtools)",
+    "See room timeline (devtools)": "Časová osa místnosti (devtools)",
     "Developer mode": "Vývojářský režim",
     "Insert link": "Vložit odkaz",
     "Joined": "Připojeno",
@@ -3458,5 +3458,6 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s člen včetně vás a %(commaSeparatedMembers)s",
     "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Vy",
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s členů včetně vás, %(commaSeparatedMembers)s",
-    "Including you, %(commaSeparatedMembers)s": "Včetně vás, %(commaSeparatedMembers)s"
+    "Including you, %(commaSeparatedMembers)s": "Včetně vás, %(commaSeparatedMembers)s",
+    "Copy room link": "Kopírovat odkaz"
 }
