@@ -22,7 +22,7 @@ import { saveAs } from "file-saver";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import { IExportOptions, ExportType } from "./exportUtils";
+import { ExportType, IExportOptions } from "./exportUtils";
 import { decryptFile } from "../DecryptFile";
 import { mediaFromContent } from "../../customisations/Media";
 import { formatFullDateNoDay } from "../../DateUtils";
@@ -83,7 +83,7 @@ export default abstract class Exporter {
 
         const zip = new JSZip();
         // Create a writable stream to the directory
-        if (!this.cancelled) this.updateProgress("Generating a ZIP");
+        if (!this.cancelled) this.updateProgress(_t("Generating a ZIP"));
         else return this.cleanUp();
 
         for (const file of this.files) zip.file(filenameWithoutExt + "/" + file.name, file.blob);
@@ -172,11 +172,18 @@ export default abstract class Exporter {
                 // }
                 events.push(mxEv);
             }
-            this.updateProgress(
-                ("Fetched " + events.length + " events ") + (this.exportType === ExportType.LastNMessages
-                    ? `out of ${this.exportOptions.numberOfMessages}`
-                    : "so far"),
-            );
+
+            if (this.exportType === ExportType.LastNMessages) {
+                this.updateProgress(_t("Fetched %(count)s events out of %(total)s", {
+                    count: events.length,
+                    total: this.exportOptions.numberOfMessages,
+                }));
+            } else {
+                this.updateProgress(_t("Fetched %(count)s events so far", {
+                    count: events.length,
+                }));
+            }
+
             prevToken = res.end;
         }
         // Reverse the events so that we preserve the order

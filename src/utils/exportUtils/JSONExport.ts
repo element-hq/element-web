@@ -23,6 +23,7 @@ import Exporter from "./Exporter";
 import { formatFullDateNoDay, formatFullDateNoDayNoTime } from "../../DateUtils";
 import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { ExportType, IExportOptions } from "./exportUtils";
+import { _t } from "../../languageHandler";
 
 export default class JSONExporter extends Exporter {
     protected totalSize = 0;
@@ -79,7 +80,10 @@ export default class JSONExporter extends Exporter {
     protected async createOutput(events: MatrixEvent[]) {
         for (let i = 0; i < events.length; i++) {
             const event = events[i];
-            this.updateProgress(`Processing event ${i + 1} out of ${events.length}`, false, true);
+            this.updateProgress(_t("Processing event %(number)s out of %(total)s", {
+                number: i + 1,
+                total: events.length,
+            }), false, true);
             if (this.cancelled) return this.cleanUp();
             if (!haveTileForEvent(event)) continue;
             this.messages.push(await this.getJSONString(event));
