@@ -22,6 +22,7 @@
 .mx_Autocomplete_Completion_block {
     min-height: 34px;
     display: flex;
+    flex-wrap: wrap;
     padding: 0 12px;
     user-select: none;
     cursor: pointer;
@@ -57,6 +58,7 @@
 
 .mx_Autocomplete_Completion_description {
     color: gray;
+    min-width: 150px;
 }
 
 .mx_Autocomplete_Completion_container_pill {
