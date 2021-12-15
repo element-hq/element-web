@@ -16,7 +16,6 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
-import { Room } from "matrix-js-sdk/src/models/room";
 
 import { NotificationColor } from "./NotificationColor";
 import { IDestroyable } from "../../utils/IDestroyable";
@@ -28,7 +27,7 @@ export class ThreadNotificationState extends NotificationState implements IDestr
     protected _count = 0;
     protected _color = NotificationColor.None;
 
-    constructor(public readonly room: Room, public readonly thread: Thread) {
+    constructor(public readonly thread: Thread) {
         super();
         this.thread.on(ThreadEvent.NewReply, this.handleNewThreadReply);
         this.thread.on(ThreadEvent.ViewThread, this.resetThreadNotification);
@@ -46,7 +45,7 @@ export class ThreadNotificationState extends NotificationState implements IDestr
         const myUserId = client.getUserId();
 
         const isOwn = myUserId === event.getSender();
-        const readReceipt = this.room.getReadReceiptForUserId(myUserId);
+        const readReceipt = this.thread.room.getReadReceiptForUserId(myUserId);
 
         if (!isOwn && !readReceipt || event.getTs() >= readReceipt.data.ts) {
             const actions = client.getPushActionsForEvent(event, true);

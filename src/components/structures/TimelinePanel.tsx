@@ -1222,9 +1222,11 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // should use this list, so that they don't advance into pending events.
         const liveEvents = [...events];
 
+        const thread = events[0]?.getThread();
+
         // if we're at the end of the live timeline, append the pending events
         if (!this.timelineWindow.canPaginate(EventTimeline.FORWARDS)) {
-            events.push(...this.props.timelineSet.getPendingEvents());
+            events.push(...this.props.timelineSet.getPendingEvents(thread));
         }
 
         return {

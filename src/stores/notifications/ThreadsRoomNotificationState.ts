@@ -47,8 +47,15 @@ export class ThreadsRoomNotificationState extends NotificationState implements I
         }
     }
 
+    public getThreadRoomState(thread: Thread): ThreadNotificationState {
+        if (!this.threadsState.has(thread)) {
+            this.threadsState.set(thread, new ThreadNotificationState(thread));
+        }
+        return this.threadsState.get(thread);
+    }
+
     private onNewThread = (thread: Thread): void => {
-        const notificationState = new ThreadNotificationState(this.room, thread);
+        const notificationState = new ThreadNotificationState(thread);
         this.threadsState.set(
             thread,
             notificationState,

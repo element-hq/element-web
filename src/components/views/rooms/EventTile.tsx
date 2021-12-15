@@ -513,7 +513,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const room = this.context.getRoom(this.props.mxEvent.getRoomId());
         const notifications = RoomNotificationStateStore.instance.getThreadsRoomState(room);
 
-        this.threadState = notifications.threadsState.get(thread);
+        this.threadState = notifications.getThreadRoomState(thread);
 
         this.threadState.on(NotificationStateEvents.Update, this.onThreadStateUpdate);
         this.onThreadStateUpdate();
