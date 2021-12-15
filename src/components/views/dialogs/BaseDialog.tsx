@@ -27,6 +27,7 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import Heading from '../typography/Heading';
 import { IDialogProps } from "./IDialogProps";
 
 interface IProps extends IDialogProps {
@@ -141,10 +142,10 @@ export default class BaseDialog extends React.Component<IProps> {
                         'mx_Dialog_headerWithButton': !!this.props.headerButton,
                         'mx_Dialog_headerWithCancel': !!cancelButton,
                     })}>
-                        <div className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
+                        <Heading size='h2' className={classNames('mx_Dialog_title', this.props.titleClass)} id='mx_BaseDialog_title'>
                             { headerImage }
                             { this.props.title }
-                        </div>
+                        </Heading>
                         { this.props.headerButton }
                         { cancelButton }
                     </div>

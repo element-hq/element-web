@@ -355,6 +355,7 @@ legend {
 
 .mx_Dialog_header {
     position: relative;
+    padding: 3px 0;
     margin-bottom: 10px;
 }
 
@@ -364,20 +365,21 @@ legend {
     height: 25px;
     margin-left: -2px;
     margin-right: 4px;
+    margin-bottom: 2px;
 }
 
 .mx_Dialog_title {
-    font-size: $font-22px;
-    font-weight: $font-semi-bold;
-    line-height: $font-36px;
     color: $dialog-title-fg-color;
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .mx_Dialog_header.mx_Dialog_headerWithButton > .mx_Dialog_title {
     text-align: center;
 }
-.mx_Dialog_header.mx_Dialog_headerWithCancel > .mx_Dialog_title {
-    margin-right: 20px; // leave space for the 'X' cancel button
+.mx_Dialog_header.mx_Dialog_headerWithCancel {
+    padding-right: 20px; // leave space for the 'X' cancel button
 }
 
 .mx_Dialog_title.danger {
