@@ -230,7 +230,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const { element, prefixComponent, postfixComponent, className, onValidate, children,
             tooltipContent, forceValidity, tooltipClassName, list, validateOnBlur, validateOnChange, validateOnFocus,
-            usePlaceholderAsHint,
+            usePlaceholderAsHint, forceTooltipVisible,
             ...inputProps } = this.props;
 
         // Set some defaults for the <input> element
@@ -276,7 +276,7 @@ export default class Field extends React.PureComponent<PropShapes, IState> {
         if (tooltipContent || this.state.feedback) {
             fieldTooltip = <Tooltip
                 tooltipClassName={classNames("mx_Field_tooltip", tooltipClassName)}
-                visible={(this.state.focused && this.props.forceTooltipVisible) || this.state.feedbackVisible}
+                visible={(this.state.focused && forceTooltipVisible) || this.state.feedbackVisible}
                 label={tooltipContent || this.state.feedback}
                 alignment={Tooltip.Alignment.Right}
             />;

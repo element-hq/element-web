@@ -147,6 +147,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     protected readonly _roomView: React.RefObject<any>;
     protected readonly _resizeContainer: React.RefObject<HTMLDivElement>;
     protected readonly resizeHandler: React.RefObject<HTMLDivElement>;
+    protected layoutWatcherRef: string;
     protected compactLayoutWatcherRef: string;
     protected backgroundImageWatcherRef: string;
     protected resizer: Resizer;
@@ -190,6 +191,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         );
         this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
 
+        this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, this.onCompactLayoutChanged);
         this.compactLayoutWatcherRef = SettingsStore.watchSetting(
             "useCompactLayout", null, this.onCompactLayoutChanged,
         );
@@ -212,6 +214,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         this._matrixClient.removeListener("sync", this.onSync);
         this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.refreshBackgroundImage);
+        SettingsStore.unwatchSetting(this.layoutWatcherRef);
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);
         SettingsStore.unwatchSetting(this.backgroundImageWatcherRef);
         this.resizer.detach();
@@ -295,9 +298,9 @@ class LoggedInView extends React.Component<IProps, IState> {
         }
     };
 
-    onCompactLayoutChanged = (setting, roomId, level, valueAtLevel, newValue) => {
+    private onCompactLayoutChanged = () => {
         this.setState({
-            useCompactLayout: valueAtLevel,
+            useCompactLayout: SettingsStore.getValue("useCompactLayout"),
         });
     };
 
