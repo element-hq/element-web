@@ -3024,5 +3024,6 @@
     "You cannot place calls in this browser.": "Você não pode fazer chamadas neste navegador.",
     "Calls are unsupported": "Chamadas não suportadas",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Alguns exemplos das informações que estão sendo enviadas para nos ajudar %(brand)s melhorar incluem:",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Nossa política de cookies completa pode ser encontrada <CookiePolicyLink>aqui</CookiePolicyLink>."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Nossa política de cookies completa pode ser encontrada <CookiePolicyLink>aqui</CookiePolicyLink>.",
+    "Error fetching file": "Erro ao buscar arquivo"
 }
