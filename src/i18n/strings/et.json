@@ -3454,5 +3454,6 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s liiget, sealhulgas Sina ja %(commaSeparatedMembers)s",
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s liiget, sealhulgas Sina, %(commaSeparatedMembers)s",
     "Including you, %(commaSeparatedMembers)s": "Seahulgas Sina, %(commaSeparatedMembers)s",
-    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Sina"
+    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Sina",
+    "Copy room link": "Kopeeri jututoa link"
 }
