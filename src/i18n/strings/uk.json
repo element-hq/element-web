@@ -3281,5 +3281,13 @@
     "Unable to copy a link to the room to the clipboard.": "Не вдалося скопіювати посилання на цю кімнату до буфера обміну.",
     "Unable to copy room link": "Не вдалося скопіювати посилання на кімнату",
     "To view this Space, hide communities in your <a>preferences</a>": "Щоб переглянути цей простір, вимкніть спільноти в <a>налаштуваннях</a>",
-    "To join this Space, hide communities in your <a>preferences</a>": "Щоб приєднатися до цього простору, вимкніть спільноти в <a>налаштуваннях</a>"
+    "To join this Space, hide communities in your <a>preferences</a>": "Щоб приєднатися до цього простору, вимкніть спільноти в <a>налаштуваннях</a>",
+    "All rooms will be added and all community members will be invited.": "Усі кімнати буде додано, а всіх учасників спільноти буде запрошено.",
+    "A link to the Space will be put in your community description.": "Посилання на простір буде додано до опису вашої спільноти.",
+    "Failed to migrate community": "Не вдалося перетворити спільноту",
+    "To create a Space from another community, just pick the community in Preferences.": "Щоб створити простір з іншої спільноти, просто виберіть спільноту в налаштуваннях.",
+    "There was an error creating your community. The name may be taken or the server is unable to process your request.": "Під час створення вашої спільноти сталася помилка. Назва може вже використовується або сервер не може обробити ваш запит.",
+    "Something went wrong when trying to get your communities.": "Під час спроби отримати перелік ваших спільнот сталася помилка.",
+    "Failed to remove room from community": "Не вдалося вилучити кімнату зі спільноти",
+    "Removing a room from the community will also remove it from the community page.": "Вилучення кімнати зі спільноти також прибере її зі сторінки спільноти."
 }
