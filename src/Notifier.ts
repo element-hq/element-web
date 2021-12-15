@@ -122,7 +122,7 @@ export const Notifier = {
             avatarUrl = Avatar.avatarUrlForMember(ev.sender, 40, 40, 'crop');
         }
 
-        const notif = plaf.displayNotification(title, msg, avatarUrl, room);
+        const notif = plaf.displayNotification(title, msg, avatarUrl, room, ev);
 
         // if displayNotification returns non-null,  the platform supports
         // clearing notifications later, so keep track of this.
@@ -381,7 +381,7 @@ export const Notifier = {
     _evaluateEvent: function(ev: MatrixEvent) {
         const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
-        if (actions && actions.notify) {
+        if (actions?.notify) {
             if (RoomViewStore.getRoomId() === room.roomId &&
                 UserActivity.sharedInstance().userActiveRecently() &&
                 !Modal.hasDialogs()

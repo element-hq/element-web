@@ -170,7 +170,36 @@ export default abstract class BasePlatform {
      */
     abstract requestNotificationPermission(): Promise<string>;
 
-    abstract displayNotification(title: string, msg: string, avatarUrl: string, room: Room);
+    public displayNotification(
+        title: string,
+        msg: string,
+        avatarUrl: string,
+        room: Room,
+        ev?: MatrixEvent,
+    ): Notification {
+        const notifBody = {
+            body: msg,
+            silent: true, // we play our own sounds
+        };
+        if (avatarUrl) notifBody['icon'] = avatarUrl;
+        const notification = new window.Notification(title, notifBody);
+
+        notification.onclick = () => {
+            const payload: ActionPayload = {
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+            };
+
+            if (ev.getThread()) {
+                payload.event_id = ev.getId();
+            }
+
+            dis.dispatch(payload);
+            window.focus();
+        };
+
+        return notification;
+    }
 
     loudNotification(ev: MatrixEvent, room: Room) {
     }
