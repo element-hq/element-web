@@ -3176,5 +3176,10 @@
     "Sign out %(count)s selected devices|one": "Desconectar %(count)s dispositivo selecionado",
     "Sign out %(count)s selected devices|other": "Sair dos %(count)s dispositivos selecionados",
     "Devices without encryption support": "Dispositivos sem suporte para criptografia",
-    "Deselect all": "Desmarcar todos"
+    "Deselect all": "Desmarcar todos",
+    "Unverified devices": "Dispositivos não verificados",
+    "Verified devices": "Dispositivos verificados",
+    "Select all": "Selecionar tudo",
+    "Sign out devices|one": "Desconectar dispositivo",
+    "Sign out devices|other": "Desconectar dispositivos"
 }
