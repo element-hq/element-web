@@ -3272,5 +3272,14 @@
     "Regain access to your account and recover encryption keys stored in this session. Without them, you won't be able to read all of your secure messages in any session.": "Відновіть доступ до облікового запису й ключів шифрування, збережених у цьому сеансі. Без них ваші сеанси показуватимуть не всі ваші захищені повідомлення.",
     "Jump to date (adds /jumptodate)": "Перейти до дати (вписує /jumptodate)",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Не вдалося розпізнати вказану дату (%(inputDate)s). Спробуйте формат рррр-мм-дд.",
-    "Jump to the given date in the timeline (YYYY-MM-DD)": "Перейти до вказаної дати в стрічці (рррр-мм-дд)"
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Перейти до вказаної дати в стрічці (рррр-мм-дд)",
+    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "У вас нема дозволу на перегляд повідомлення за вказаною позицією в стрічці цієї кімнати.",
+    "Tried to load a specific point in this room's timeline, but was unable to find it.": "Не вдалося знайти вказаної позиції в стрічці цієї кімнати.",
+    "You cannot sign in to your account. Please contact your homeserver admin for more information.": "Не вдалося зайти до вашого облікового запису. Зверніться до адміністратора вашого домашнього сервера, щоб дізнатися більше.",
+    "Sign in and regain access to your account.": "Ввійдіть і відновіть доступ до свого облікового запису.",
+    "Enter your password to sign in and regain access to your account.": "Введіть свій пароль, щоб увійти й відновити доступ до облікового запису.",
+    "Unable to copy a link to the room to the clipboard.": "Не вдалося скопіювати посилання на цю кімнату до буферу обміну.",
+    "Unable to copy room link": "Не вдалося скопіювати посилання на кімнату",
+    "To view this Space, hide communities in your <a>preferences</a>": "Щоб переглянути цей простір, вимкніть спільноти в <a>налаштуваннях</a>",
+    "To join this Space, hide communities in your <a>preferences</a>": "Щоб приєднатися до цього простору, вимкніть спільноти в <a>налаштуваннях</a>"
 }
