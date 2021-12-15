@@ -3450,5 +3450,9 @@
     "Other rooms in %(spaceName)s": "Muud jututoad %(spaceName)s kogukonnad",
     "Spaces you're in": "Kogukonnad, mille liige sa oled",
     "Link to room": "Link jututoale",
-    "New spotlight search experience": "Uus otsingulahendus"
+    "New spotlight search experience": "Uus otsingulahendus",
+    "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s liiget, sealhulgas Sina ja %(commaSeparatedMembers)s",
+    "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s liiget, sealhulgas Sina, %(commaSeparatedMembers)s",
+    "Including you, %(commaSeparatedMembers)s": "Seahulgas Sina, %(commaSeparatedMembers)s",
+    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Sina"
 }
