@@ -19,9 +19,9 @@ import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
-import { MsgType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
+import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -505,19 +505,33 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         return true;
     };
 
-    private shareLocation = (uri: string, ts: number, type: LocationShareType, description: string): boolean => {
+    private textForLocation = (
+        uri: string,
+        ts: number,
+        description: string | null,
+    ): string => {
+        const date = new Date(ts).toISOString();
+        // TODO: translation, as soon as we've re-worded this better
+        if (description) {
+            return `${description} at ${uri} as of ${date}`;
+        } else {
+            return `Location at ${uri} as of ${date}`;
+        }
+    };
+
+    private shareLocation = (
+        uri: string,
+        ts: number,
+        _type: LocationShareType,
+        description: string | null,
+    ): boolean => {
         if (!uri) return false;
         try {
-            const text = `${description ? description : 'Location'} at ${uri} as of ${new Date(ts).toISOString()}`;
-            // noinspection ES6MissingAwait - we don't care if it fails, it'll get queued.
-            MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
-                "body": text,
-                "msgtype": MsgType.Location,
-                "geo_uri": uri,
-                "org.matrix.msc3488.location": { uri, description },
-                "org.matrix.msc3488.ts": ts,
-                // TODO: MSC1767 fallbacks for text & thumbnail
-            });
+            const text = this.textForLocation(uri, ts, description);
+            MatrixClientPeg.get().sendMessage(
+                this.props.room.roomId,
+                makeLocationContent(text, uri, ts, description),
+            );
         } catch (e) {
             logger.error("Error sending location:", e);
         }
