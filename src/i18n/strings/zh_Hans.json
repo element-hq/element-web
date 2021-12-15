@@ -3456,5 +3456,6 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "包括你和 %(commaSeparatedMembers)s 在内的 %(count)s 名成员",
     "%(count)s members including you, %(commaSeparatedMembers)s|one": "包括你和 %(commaSeparatedMembers)s 在内的 %(count)s 名成员",
     "%(count)s members including you, %(commaSeparatedMembers)s|zero": "你",
-    "Including you, %(commaSeparatedMembers)s": "包括你，%(commaSeparatedMembers)s"
+    "Including you, %(commaSeparatedMembers)s": "包括你，%(commaSeparatedMembers)s",
+    "Copy room link": "复制聊天室链接"
 }
