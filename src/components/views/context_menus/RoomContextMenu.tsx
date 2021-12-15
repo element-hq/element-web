@@ -213,7 +213,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                 });
                 onFinished();
             }}
-            label={_t("Copy link")}
+            label={_t("Copy room link")}
             iconClassName="mx_RoomTile_iconCopyLink"
         />;
     }
