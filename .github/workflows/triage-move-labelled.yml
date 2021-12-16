@@ -5,6 +5,32 @@ on:
     types: [labeled]
     
 jobs:
+  apply_Z-Labs_label:
+    name: Add Z-Labs label for features behind labs flags
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'A-Maths') || 
+        contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+        contains(github.event.issue.labels.*.name, 'A-Threads') ||
+        contains(github.event.issue.labels.*.name, 'A-Polls') ||
+        contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+        contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
+        contains(github.event.issue.labels.*.name, 'Z-Maximised-Widgets') ||
+        contains(github.event.issue.labels.*.name, 'Z-IA') ||
+        contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+        contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+        contains(github.event.issue.labels.*.name, 'A-Tags')
+    steps:
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['Z-Labs']
+            })
+ 
   move_needs_info_issues:
     name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
