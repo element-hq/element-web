@@ -3453,5 +3453,9 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s membros incluíndote a ti, %(commaSeparatedMembers)s",
     "Including you, %(commaSeparatedMembers)s": "Incluíndote a ti, %(commaSeparatedMembers)s",
     "Final result based on %(count)s votes|one": "Resultado final baseado en %(count)s voto",
-    "Final result based on %(count)s votes|other": "Resultado final baseado en %(count)s votos"
+    "Final result based on %(count)s votes|other": "Resultado final baseado en %(count)s votos",
+    "Copy room link": "Copiar ligazón á sala",
+    "Jump to date (adds /jumptodate)": "Ir á data (adds /jumptodate)",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Non entendemos a data proporcionada (%(inputDate)s). Intenta usar o formato AAAA-MM-DD.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Ir á data indicada na cronoloxía (AAAA-MM-DD)"
 }
