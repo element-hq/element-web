@@ -14,9 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// We have to trick webpack into loading our CSS for us.
-require("./index.scss");
-
 import { KJUR } from 'jsrsasign';
 import {
     IOpenIDCredentials,
@@ -25,8 +22,10 @@ import {
     WidgetApi,
 } from "matrix-widget-api";
 import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
-
 import { logger } from "matrix-js-sdk/src/logger";
+
+// We have to trick webpack into loading our CSS for us.
+require("./index.scss");
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
 

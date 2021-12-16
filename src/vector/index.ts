@@ -18,6 +18,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
+// These are things that can run before the skin loads - be careful not to reference the react-sdk though.
+import { parseQsFromFragment } from "./url_utils";
+import './modernizr';
+
 // Require common CSS here; this will make webpack process it into bundle.css.
 // Our own CSS (which is themed) is imported via separate webpack entry points
 // in webpack.config.js
@@ -33,11 +39,6 @@ require('katex/dist/katex.css');
  */
 require('./devcss');
 require('./localstorage-fix');
-// These are things that can run before the skin loads - be careful not to reference the react-sdk though.
-import { parseQsFromFragment } from "./url_utils";
-import './modernizr';
-
-import { logger } from "matrix-js-sdk/src/logger";
 
 async function settled(...promises: Array<Promise<any>>) {
     for (const prom of promises) {

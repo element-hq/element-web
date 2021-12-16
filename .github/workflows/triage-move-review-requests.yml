@@ -1,7 +1,8 @@
 name: Move pull requests asking for review to the relevant project
 on:
-  pull_request:
+  pull_request_target:
     types: [review_requested]
+
 jobs:
   add_design_pr_to_project:
     name: Move PRs asking for design review to the design board
@@ -46,7 +47,7 @@ jobs:
         with:
           headers: '{"GraphQL-Features": "projects_next_graphql"}'
           query: |
-            mutation add_to_project($projectid:String!, $contentid:String!) {
+            mutation add_to_project($projectid:ID!, $contentid:ID!) {
               addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
                 projectNextItem {
                   id

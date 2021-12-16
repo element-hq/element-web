@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -55,8 +55,9 @@
     "test": "jest"
   },
   "dependencies": {
-    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.3.tgz",
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
     "browser-request": "^0.3.3",
+    "eslint-plugin-import": "^2.25.2",
     "gfm.css": "^1.1.2",
     "jsrsasign": "^10.2.0",
     "katex": "^0.12.0",
@@ -97,8 +98,8 @@
     "@types/react": "17.0.14",
     "@types/react-dom": "17.0.9",
     "@types/sanitize-html": "^2.3.1",
-    "@typescript-eslint/eslint-plugin": "^4.17.0",
-    "@typescript-eslint/parser": "^4.17.0",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
     "allchange": "^1.0.6",
     "autoprefixer": "^9.8.6",
     "babel-jest": "^26.6.3",
@@ -110,7 +111,7 @@
     "dotenv": "^10.0.0",
     "eslint": "7.18.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-matrix-org": "github:matrix-org/eslint-plugin-matrix-org#2306b3d4da4eba908b256014b979f1d3d43d2945",
+    "eslint-plugin-matrix-org": "github:matrix-org/eslint-plugin-matrix-org#48ec1e6af2cfb8310b9a6e23edf2dc7a26ddd580",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -154,7 +155,7 @@
     "stylelint-config-standard": "^20.0.0",
     "stylelint-scss": "^3.18.0",
     "terser-webpack-plugin": "^2.3.8",
-    "typescript": "4.3.5",
+    "typescript": "^4.5.3",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",

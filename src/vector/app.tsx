@@ -19,23 +19,23 @@ limitations under the License.
 */
 
 import React from 'react';
-// add React and ReactPerf to the global namespace, to make them easier to access via the console
-// this incidentally means we can forget our React imports in JSX files without penalty.
-window.React = React;
-
 import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import { _td, newTranslatableError } from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
-import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
 import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
 import { logger } from "matrix-js-sdk/src/logger";
+import { createClient } from "matrix-js-sdk/src/matrix";
 
+import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
 import { parseQs, parseQsFromFragment } from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
-import { createClient } from "matrix-js-sdk/src/matrix";
+
+// add React and ReactPerf to the global namespace, to make them easier to access via the console
+// this incidentally means we can forget our React imports in JSX files without penalty.
+window.React = React;
 
 let lastLocationHashSet: string = null;
 
