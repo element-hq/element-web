@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { EventStatus, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { SyncState } from "matrix-js-sdk/src/sync.api";
-import { ISyncStateData } from "matrix-js-sdk/src/sync";
+import { SyncState, ISyncStateData } from "matrix-js-sdk/src/sync";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t, _td } from '../../languageHandler';

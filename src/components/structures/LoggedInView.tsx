@@ -19,6 +19,8 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
+import { ISyncStateData, SyncState } from 'matrix-js-sdk/src/sync';
+import { IUsageLimit } from 'matrix-js-sdk/src/@types/partials';
 
 import { Key } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
@@ -104,24 +106,8 @@ interface IProps {
     forceTimeline?: boolean; // see props on MatrixChat
 }
 
-interface IUsageLimit {
-    // "hs_disabled" is NOT a specced string, but is used in Synapse
-    // This is tracked over at https://github.com/matrix-org/synapse/issues/9237
-    // eslint-disable-next-line camelcase
-    limit_type: "monthly_active_user" | "hs_disabled" | string;
-    // eslint-disable-next-line camelcase
-    admin_contact?: string;
-}
-
 interface IState {
-    syncErrorData?: {
-        error: {
-            // This is not specced, but used in Synapse. See
-            // https://github.com/matrix-org/synapse/issues/9237#issuecomment-768238922
-            data: IUsageLimit;
-            errcode: string;
-        };
-    };
+    syncErrorData?: ISyncStateData;
     usageLimitDismissed: boolean;
     usageLimitEventContent?: IUsageLimit;
     usageLimitEventTs?: number;
@@ -304,33 +290,23 @@ class LoggedInView extends React.Component<IProps, IState> {
         });
     };
 
-    onSync = (syncState, oldSyncState, data) => {
-        const oldErrCode = (
-            this.state.syncErrorData &&
-            this.state.syncErrorData.error &&
-            this.state.syncErrorData.error.errcode
-        );
+    private onSync = (syncState: SyncState, oldSyncState?: SyncState, data?: ISyncStateData): void => {
+        const oldErrCode = this.state.syncErrorData?.error?.errcode;
         const newErrCode = data && data.error && data.error.errcode;
         if (syncState === oldSyncState && oldErrCode === newErrCode) return;
 
-        if (syncState === 'ERROR') {
-            this.setState({
-                syncErrorData: data,
-            });
-        } else {
-            this.setState({
-                syncErrorData: null,
-            });
-        }
+        this.setState({
+            syncErrorData: syncState === SyncState.Error ? data : null,
+        });
 
-        if (oldSyncState === 'PREPARED' && syncState === 'SYNCING') {
+        if (oldSyncState === SyncState.Prepared && syncState === SyncState.Syncing) {
             this.updateServerNoticeEvents();
         } else {
             this.calculateServerLimitToast(this.state.syncErrorData, this.state.usageLimitEventContent);
         }
     };
 
-    onRoomStateEvents = (ev, state) => {
+    private onRoomStateEvents = (ev: MatrixEvent): void => {
         const serverNoticeList = RoomListStore.instance.orderedLists[DefaultTagID.ServerNotice];
         if (serverNoticeList && serverNoticeList.some(r => r.roomId === ev.getRoomId())) {
             this.updateServerNoticeEvents();
@@ -346,7 +322,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     private calculateServerLimitToast(syncError: IState["syncErrorData"], usageLimitEventContent?: IUsageLimit) {
         const error = syncError && syncError.error && syncError.error.errcode === "M_RESOURCE_LIMIT_EXCEEDED";
         if (error) {
-            usageLimitEventContent = syncError.error.data;
+            usageLimitEventContent = syncError.error.data as IUsageLimit;
         }
 
         // usageLimitDismissed is true when the user has explicitly hidden the toast

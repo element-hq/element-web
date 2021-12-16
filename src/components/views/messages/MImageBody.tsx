@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { ComponentProps, createRef } from 'react';
 import { Blurhash } from "react-blurhash";
-import { SyncState } from 'matrix-js-sdk/src/sync.api';
+import { SyncState } from 'matrix-js-sdk/src/sync';
 import classNames from 'classnames';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { logger } from "matrix-js-sdk/src/logger";
