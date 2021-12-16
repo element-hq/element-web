@@ -50,6 +50,7 @@ import TileErrorBoundary from '../views/messages/TileErrorBoundary';
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from '../../dispatcher/actions';
+import { getEventDisplayInfo } from "../../utils/EventUtils";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -724,7 +725,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         let lastInSection = true;
         if (nextEventWithTile) {
             willWantDateSeparator = this.wantsDateSeparator(mxEv, nextEventWithTile.getDate() || new Date());
-            lastInSection = willWantDateSeparator || mxEv.getSender() !== nextEventWithTile.getSender();
+            lastInSection = willWantDateSeparator || mxEv.getSender() !== nextEventWithTile.getSender() ||
+                getEventDisplayInfo(nextEventWithTile).isInfoMessage;
         }
 
         // is this a continuation of the previous message?
