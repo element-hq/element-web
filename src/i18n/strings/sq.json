@@ -3451,5 +3451,10 @@
     "Use \"%(query)s\" to search": "Përdorni \"%(query)s\" për kërkim",
     "Other rooms in %(spaceName)s": "Dhoma të tjera në %(spaceName)s",
     "Spaces you're in": "Hapësira ku jeni i pranishëm",
-    "Link to room": "Lidhje për te dhoma"
+    "Link to room": "Lidhje për te dhoma",
+    "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s anëtarë, përfshi ju dhe %(commaSeparatedMembers)s",
+    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Ju",
+    "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s anëtarë, përfshi ju, %(commaSeparatedMembers)s",
+    "Including you, %(commaSeparatedMembers)s": "Përfshi ju, %(commaSeparatedMembers)s",
+    "Copy room link": "Kopjo lidhje dhome"
 }
