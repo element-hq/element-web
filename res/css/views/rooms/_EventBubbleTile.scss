@@ -176,6 +176,10 @@ limitations under the License.
             border-top-left-radius: var(--cornerRadius);
             border-top-right-radius: var(--cornerRadius);
         }
+
+        .mx_EventTile_e2eIcon {
+            flex-shrink: 0; // keep it at full size
+        }
     }
 
     .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
