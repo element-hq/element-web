@@ -3458,5 +3458,9 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|one": "包含您與 %(commaSeparatedMembers)s 共 %(count)s 個成員",
     "%(count)s members including you, %(commaSeparatedMembers)s|zero": "您",
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "包含您 %(count)s 個成員，%(commaSeparatedMembers)s",
-    "Including you, %(commaSeparatedMembers)s": "包含您，%(commaSeparatedMembers)s"
+    "Including you, %(commaSeparatedMembers)s": "包含您，%(commaSeparatedMembers)s",
+    "Copy room link": "複製聊天室連結",
+    "Jump to date (adds /jumptodate)": "跳至日期（加上 /jumptodate）",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "我們無法理解指定的日期 (%(inputDate)s)。嘗試使用 YYYY-MM-DD 格式。",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "跳至時間軸中的指定日期 (YYYY-MM-DD)"
 }
