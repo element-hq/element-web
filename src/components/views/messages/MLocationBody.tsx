@@ -45,34 +45,13 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         const loc = content[LOCATION_EVENT_TYPE.name];
         const uri = loc ? loc.uri : content['geo_uri'];
 
-        this.coords = this.parseGeoUri(uri);
+        this.coords = parseGeoUri(uri);
         this.state = {
             error: undefined,
         };
 
         this.description = loc?.description ?? content['body'];
     }
-
-    private parseGeoUri = (uri: string): GeolocationCoordinates => {
-        const m = uri.match(/^\s*geo:(.*?)\s*$/);
-        if (!m) return;
-        const parts = m[1].split(';');
-        const coords = parts[0].split(',');
-        let uncertainty: number;
-        for (const param of parts.slice(1)) {
-            const m = param.match(/u=(.*)/);
-            if (m) uncertainty = parseFloat(m[1]);
-        }
-        return {
-            latitude: parseFloat(coords[0]),
-            longitude: parseFloat(coords[1]),
-            altitude: parseFloat(coords[2]),
-            accuracy: uncertainty,
-            altitudeAccuracy: undefined,
-            heading: undefined,
-            speed: undefined,
-        };
-    };
 
     componentDidMount() {
         const config = SdkConfig.get();
@@ -115,4 +94,25 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
             { error }
         </div>;
     }
+}
+
+export function parseGeoUri(uri: string): GeolocationCoordinates {
+    const m = uri.match(/^\s*geo:(.*?)\s*$/);
+    if (!m) return;
+    const parts = m[1].split(';');
+    const coords = parts[0].split(',');
+    let uncertainty: number;
+    for (const param of parts.slice(1)) {
+        const m = param.match(/u=(.*)/);
+        if (m) uncertainty = parseFloat(m[1]);
+    }
+    return {
+        latitude: parseFloat(coords[0]),
+        longitude: parseFloat(coords[1]),
+        altitude: parseFloat(coords[2]),
+        accuracy: uncertainty,
+        altitudeAccuracy: undefined,
+        heading: undefined,
+        speed: undefined,
+    };
 }
