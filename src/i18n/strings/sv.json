@@ -3341,5 +3341,11 @@
     "Help improve %(analyticsOwner)s": "Hjälp att förbättra %(analyticsOwner)s",
     "That's fine": "Det är okej",
     "You cannot place calls without a connection to the server.": "Du kan inte ringa samtal utan en anslutning till servern.",
-    "Connectivity to the server has been lost": "Anslutningen till servern har förlorats"
+    "Connectivity to the server has been lost": "Anslutningen till servern har förlorats",
+    "Pin to sidebar": "Fäst i sidopanelen",
+    "Quick settings": "Snabbinställningar",
+    "sends rainfall": "skickar regn",
+    "Sends the given message with rainfall": "Skickar det givna meddelandet med regn",
+    "New spotlight search experience": "Ny spotlightsökupplevelse",
+    "Use new room breadcrumbs": "Använd nya rumsbrödsmulor"
 }
