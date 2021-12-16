@@ -3452,5 +3452,13 @@
     "Use \"%(query)s\" to search": "使用 \"%(query)s\" 来搜索",
     "Other rooms in %(spaceName)s": "%(spaceName)s 中的其他聊天室",
     "Spaces you're in": "你所在的空间",
-    "New spotlight search experience": "新的聚光灯搜索体验"
+    "New spotlight search experience": "新的聚光灯搜索体验",
+    "%(count)s members including you, %(commaSeparatedMembers)s|other": "包括你和 %(commaSeparatedMembers)s 在内的 %(count)s 名成员",
+    "%(count)s members including you, %(commaSeparatedMembers)s|one": "包括你和 %(commaSeparatedMembers)s 在内的 %(count)s 名成员",
+    "%(count)s members including you, %(commaSeparatedMembers)s|zero": "你",
+    "Including you, %(commaSeparatedMembers)s": "包括你，%(commaSeparatedMembers)s",
+    "Copy room link": "复制聊天室链接",
+    "Jump to date (adds /jumptodate)": "跳转到日期（添加 / 跳转到日期）",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "我们无法理解给定日期 (%(inputDate)s)。尝试使用如下格式 YYYY-MM-DD。",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "跳转到时间线中的给定日期 (YYYY-MM-DD)"
 }
