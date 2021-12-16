@@ -46,7 +46,7 @@ let jitsiAuth: string;
 let roomId: string;
 let openIdToken: IOpenIDCredentials;
 let roomName: string;
-let startAudioOnly: string;
+let startAudioOnly: boolean;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -108,7 +108,7 @@ let meetApi: any; // JitsiMeetExternalAPI
         jitsiAuth = qsParam('auth', true);
         roomId = qsParam('roomId', true);
         roomName = qsParam('roomName', true);
-        startAudioOnly = qsParam('isAudioOnly', false);
+        startAudioOnly = qsParam('isAudioOnly', true) === "true";
 
         if (widgetApi) {
             await readyPromise;
