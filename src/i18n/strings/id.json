@@ -3403,5 +3403,11 @@
     "Fetched %(count)s events so far|other": "Telah mendapatkan %(count)s peristiwa sejauh ini",
     "Fetched %(count)s events out of %(total)s|one": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa",
     "Fetched %(count)s events out of %(total)s|other": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa",
-    "Generating a ZIP": "Membuat sebuah ZIP"
+    "Generating a ZIP": "Membuat sebuah ZIP",
+    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Ini mengelompokkan obrolan Anda dengan anggota space ini. Menonaktifkan ini akan menyembunyikan obrolan dari tampilan %(spaceName)s Anda.",
+    "Sections to show": "Bagian untuk ditampilkan",
+    "Processing...": "Memproses...",
+    "Creating output...": "Membuat output...",
+    "Fetching events...": "Mendapatkan peristiwa-peristiwa...",
+    "Starting export process...": "Memulai proses pengeksporan..."
 }
