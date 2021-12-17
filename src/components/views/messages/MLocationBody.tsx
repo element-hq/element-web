@@ -97,6 +97,15 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 }
 
 export function parseGeoUri(uri: string): GeolocationCoordinates {
+    function parse(s: string): number {
+        const ret = parseFloat(s);
+        if (Number.isNaN(ret)) {
+            return undefined;
+        } else {
+            return ret;
+        }
+    }
+
     const m = uri.match(/^\s*geo:(.*?)\s*$/);
     if (!m) return;
     const parts = m[1].split(';');
@@ -104,12 +113,12 @@ export function parseGeoUri(uri: string): GeolocationCoordinates {
     let uncertainty: number;
     for (const param of parts.slice(1)) {
         const m = param.match(/u=(.*)/);
-        if (m) uncertainty = parseFloat(m[1]);
+        if (m) uncertainty = parse(m[1]);
     }
     return {
-        latitude: parseFloat(coords[0]),
-        longitude: parseFloat(coords[1]),
-        altitude: parseFloat(coords[2]),
+        latitude: parse(coords[0]),
+        longitude: parse(coords[1]),
+        altitude: parse(coords[2]),
         accuracy: uncertainty,
         altitudeAccuracy: undefined,
         heading: undefined,

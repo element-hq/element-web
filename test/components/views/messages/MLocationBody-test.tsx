@@ -52,7 +52,7 @@ describe("MLocationBody", () => {
                 {
                     latitude: 48.198634,
                     longitude: 16.371648,
-                    altitude: NaN,  // TODO: should be undefined
+                    altitude: undefined,
                     accuracy: 40,
                     altitudeAccuracy: undefined,
                     heading: undefined,
@@ -66,7 +66,7 @@ describe("MLocationBody", () => {
                 {
                     latitude: 90,
                     longitude: -22.43,
-                    altitude: NaN,  // TODO: should be undefined
+                    altitude: undefined,
                     accuracy: undefined,
                     altitudeAccuracy: undefined,
                     heading: undefined,
@@ -80,7 +80,7 @@ describe("MLocationBody", () => {
                 {
                     latitude: 90,
                     longitude: 46,
-                    altitude: NaN,  // TODO: should be undefined
+                    altitude: undefined,
                     accuracy: undefined,
                     altitudeAccuracy: undefined,
                     heading: undefined,
@@ -94,7 +94,7 @@ describe("MLocationBody", () => {
                 {
                     latitude: 66,
                     longitude: 30,
-                    altitude: NaN,  // TODO: should be undefined
+                    altitude: undefined,
                     accuracy: 6.500,
                     altitudeAccuracy: undefined,
                     heading: undefined,
@@ -108,7 +108,7 @@ describe("MLocationBody", () => {
                 {
                     latitude: 66.0,
                     longitude: 30,
-                    altitude: NaN,  // TODO: should be undefined
+                    altitude: undefined,
                     accuracy: 6.5,
                     altitudeAccuracy: undefined,
                     heading: undefined,
@@ -122,7 +122,7 @@ describe("MLocationBody", () => {
                 {
                     latitude: 70,
                     longitude: 20,
-                    altitude: NaN,  // TODO: should be undefined
+                    altitude: undefined,
                     accuracy: undefined,
                     altitudeAccuracy: undefined,
                     heading: undefined,
@@ -136,7 +136,7 @@ describe("MLocationBody", () => {
                 {
                     latitude: -7.5,
                     longitude: 20,
-                    altitude: NaN,  // TODO: should be undefined
+                    altitude: undefined,
                     accuracy: undefined,
                     altitudeAccuracy: undefined,
                     heading: undefined,
