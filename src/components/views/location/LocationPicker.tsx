@@ -185,21 +185,12 @@ class LocationPicker extends React.Component<IProps, IState> {
         this.setState({ description: ev.target.value });
     };
 
-    private getGeoUri = (position) => {
-        return (`geo:${ position.coords.latitude },` +
-                position.coords.longitude +
-                ( position.coords.altitude !== undefined ?
-                    `,${ position.coords.altitude }` : '' ) +
-                ( position.coords.accuracy !== undefined ?
-                    `;u=${ position.coords.accuracy }` : '' ));
-    };
-
     private onOk = () => {
         const position = (this.state.type == LocationShareType.Custom) ?
             this.state.manualPosition : this.state.position;
 
         this.props.onChoose(
-            position ? this.getGeoUri(position) : undefined,
+            position ? getGeoUri(position) : undefined,
             position ? position.timestamp : undefined,
             this.state.type,
             this.state.description,
@@ -261,6 +252,15 @@ class LocationPicker extends React.Component<IProps, IState> {
             </div>
         );
     }
+}
+
+export function getGeoUri(position: GeolocationPosition): string {
+    return (`geo:${ position.coords.latitude },` +
+            position.coords.longitude +
+            ( position.coords.altitude !== undefined ?
+                `,${ position.coords.altitude }` : '' ) +
+            ( position.coords.accuracy !== undefined ?
+                `;u=${ position.coords.accuracy }` : '' ));
 }
 
 export default LocationPicker;
