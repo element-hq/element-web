@@ -402,6 +402,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
     private onTagSortChanged = async (sort: SortAlgorithm) => {
         await RoomListStore.instance.setTagSorting(this.props.tagId, sort);
+        this.forceUpdate();
     };
 
     private onMessagePreviewChanged = () => {

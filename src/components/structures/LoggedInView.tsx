@@ -74,7 +74,10 @@ import LegacyCommunityPreview from "./LegacyCommunityPreview";
 // NB. this is just for server notices rather than pinned messages in general.
 const MAX_PINNED_NOTICES_PER_ROOM = 2;
 
-export function getInputableElement(el: HTMLElement): HTMLElement | null {
+// Used to find the closest inputable thing. Because of how our composer works,
+// your caret might be within a paragraph/font/div/whatever within the
+// contenteditable rather than directly in something inputable.
+function getInputableElement(el: HTMLElement): HTMLElement | null {
     return el.closest("input, textarea, select, [contenteditable=true]");
 }
 

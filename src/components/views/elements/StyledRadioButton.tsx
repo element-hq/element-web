@@ -20,6 +20,7 @@ import classnames from 'classnames';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    inputRef?: React.RefObject<HTMLInputElement>;
     outlined?: boolean;
     // If true (default), the children will be contained within a <label> element
     // If false, they'll be in a div. Putting interactive components that have labels
@@ -38,7 +39,7 @@ export default class StyledRadioButton extends React.PureComponent<IProps, IStat
     };
 
     public render() {
-        const { children, className, disabled, outlined, childrenInLabel, ...otherProps } = this.props;
+        const { children, className, disabled, outlined, childrenInLabel, inputRef, ...otherProps } = this.props;
         const _className = classnames(
             'mx_StyledRadioButton',
             className,
@@ -50,7 +51,13 @@ export default class StyledRadioButton extends React.PureComponent<IProps, IStat
             });
 
         const radioButton = <React.Fragment>
-            <input type='radio' disabled={disabled} {...otherProps} />
+            <input
+                // Pass through the ref - used for keyboard shortcut access to some buttons
+                ref={inputRef}
+                type='radio'
+                disabled={disabled}
+                {...otherProps}
+            />
             { /* Used to render the radio button circle */ }
             <div><div /></div>
         </React.Fragment>;

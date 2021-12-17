@@ -26,6 +26,7 @@ export enum CheckboxStyle {
 }
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    inputRef?: React.RefObject<HTMLInputElement>;
     kind?: CheckboxStyle;
 }
 
@@ -48,7 +49,8 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
 
     public render() {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
-        const { children, className, kind = CheckboxStyle.Solid, ...otherProps } = this.props;
+        const { children, className, kind = CheckboxStyle.Solid, inputRef, ...otherProps } = this.props;
+
         const newClassName = classnames(
             "mx_Checkbox",
             className,
@@ -58,7 +60,13 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
             },
         );
         return <span className={newClassName}>
-            <input id={this.id} {...otherProps} type="checkbox" />
+            <input
+                // Pass through the ref - used for keyboard shortcut access to some buttons
+                ref={inputRef}
+                id={this.id}
+                {...otherProps}
+                type="checkbox"
+            />
             <label htmlFor={this.id}>
                 { /* Using the div to center the image */ }
                 <div className="mx_Checkbox_background">

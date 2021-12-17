@@ -43,6 +43,17 @@ import { FocusHandler, Ref } from "./roving/types";
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets#Technique_1_Roving_tabindex
  */
 
+// Check for form elements which utilize the arrow keys for native functions
+// like many of the text input varieties.
+//
+// i.e. it's ok to press the down arrow on a radio button to move to the next
+// radio. But it's not ok to press the down arrow on a <input type="text"> to
+// move away because the down arrow should move the cursor to the end of the
+// input.
+export function checkInputableElement(el: HTMLElement): boolean {
+    return el.matches('input:not([type="radio"]):not([type="checkbox"]), textarea, select, [contenteditable=true]');
+}
+
 export interface IState {
     activeRef: Ref;
     refs: Ref[];
@@ -187,7 +198,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
 
     const context = useMemo<IContext>(() => ({ state, dispatch }), [state]);
 
-    const onKeyDownHandler = useCallback((ev) => {
+    const onKeyDownHandler = useCallback((ev: React.KeyboardEvent) => {
         if (onKeyDown) {
             onKeyDown(ev, context.state);
             if (ev.defaultPrevented) {
@@ -198,7 +209,18 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
         let handled = false;
         let focusRef: RefObject<HTMLElement>;
         // Don't interfere with input default keydown behaviour
-        if (ev.target.tagName !== "INPUT" && ev.target.tagName !== "TEXTAREA") {
+        // but allow people to move focus from it with Tab.
+        if (checkInputableElement(ev.target as HTMLElement)) {
+            switch (ev.key) {
+                case Key.TAB:
+                    handled = true;
+                    if (context.state.refs.length > 0) {
+                        const idx = context.state.refs.indexOf(context.state.activeRef);
+                        focusRef = findSiblingElement(context.state.refs, idx + (ev.shiftKey ? -1 : 1), ev.shiftKey);
+                    }
+                    break;
+            }
+        } else {
             // check if we actually have any items
             switch (ev.key) {
                 case Key.HOME:
@@ -270,9 +292,11 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
 // onFocus should be called when the index gained focus in any manner
 // isActive should be used to set tabIndex in a manner such as `tabIndex={isActive ? 0 : -1}`
 // ref should be passed to a DOM node which will be used for DOM compareDocumentPosition
-export const useRovingTabIndex = (inputRef?: Ref): [FocusHandler, boolean, Ref] => {
+export const useRovingTabIndex = <T extends HTMLElement>(
+    inputRef?: RefObject<T>,
+): [FocusHandler, boolean, RefObject<T>] => {
     const context = useContext(RovingTabIndexContext);
-    let ref = useRef<HTMLElement>(null);
+    let ref = useRef<T>(null);
 
     if (inputRef) {
         // if we are given a ref, use it instead of ours
