@@ -67,6 +67,15 @@ export function doesRoomHaveUnreadMessages(room: Room): boolean {
         return false;
     }
 
+    // if the read receipt relates to an event is that part of a thread
+    // we consider that there are no unread messages
+    // This might be a false negative, but probably the best we can do until
+    // the read receipts have evolved to cater for threads
+    const event = room.findEventById(readUpToId);
+    if (event?.getThread()) {
+        return false;
+    }
+
     // this just looks at whatever history we have, which if we've only just started
     // up probably won't be very much, so if the last couple of events are ones that
     // don't count, we don't know if there are any events that do count between where
