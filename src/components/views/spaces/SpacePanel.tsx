@@ -19,6 +19,7 @@ import React, {
     Dispatch,
     ReactNode,
     SetStateAction,
+    useCallback,
     useEffect,
     useLayoutEffect,
     useRef,
@@ -33,7 +34,7 @@ import { useContextMenu } from "../../structures/ContextMenu";
 import SpaceCreateMenu from "./SpaceCreateMenu";
 import { SpaceButton, SpaceItem } from "./SpaceTreeLevel";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import {
     getMetaSpaceName,
@@ -45,7 +46,10 @@ import {
     UPDATE_TOP_LEVEL_SPACES,
 } from "../../../stores/spaces";
 import { RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import {
+    RoomNotificationStateStore,
+    UPDATE_STATUS_INDICATOR,
+} from "../../../stores/notifications/RoomNotificationStateStore";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import IconizedContextMenu, {
     IconizedContextMenuCheckbox,
@@ -63,6 +67,7 @@ import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
+import { NotificationState } from "../../../stores/notifications/NotificationState";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -136,10 +141,22 @@ const MetaSpaceButton = ({ selected, isPanelCollapsed, ...props }: IMetaSpaceBut
     </li>;
 };
 
+const getHomeNotificationState = (): NotificationState => {
+    return SpaceStore.instance.allRoomsInHome
+        ? RoomNotificationStateStore.instance.globalState
+        : SpaceStore.instance.getNotificationState(MetaSpace.Home);
+};
+
 const HomeButton = ({ selected, isPanelCollapsed }: MetaSpaceButtonProps) => {
     const allRoomsInHome = useEventEmitterState(SpaceStore.instance, UPDATE_HOME_BEHAVIOUR, () => {
         return SpaceStore.instance.allRoomsInHome;
     });
+    const [notificationState, setNotificationState] = useState(getHomeNotificationState());
+    const updateNotificationState = useCallback(() => {
+        setNotificationState(getHomeNotificationState());
+    }, []);
+    useEffect(updateNotificationState, [updateNotificationState, allRoomsInHome]);
+    useEventEmitter(RoomNotificationStateStore.instance, UPDATE_STATUS_INDICATOR, updateNotificationState);
 
     return <MetaSpaceButton
         spaceKey={MetaSpace.Home}
@@ -147,9 +164,7 @@ const HomeButton = ({ selected, isPanelCollapsed }: MetaSpaceButtonProps) => {
         selected={selected}
         isPanelCollapsed={isPanelCollapsed}
         label={getMetaSpaceName(MetaSpace.Home, allRoomsInHome)}
-        notificationState={allRoomsInHome
-            ? RoomNotificationStateStore.instance.globalState
-            : SpaceStore.instance.getNotificationState(MetaSpace.Home)}
+        notificationState={notificationState}
         ContextMenuComponent={HomeButtonContextMenu}
         contextMenuTooltip={_t("Options")}
     />;

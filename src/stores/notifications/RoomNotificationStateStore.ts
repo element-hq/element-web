@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -23,10 +24,12 @@ import { DefaultTagID, TagID } from "../room-list/models";
 import { FetchRoomFn, ListNotificationState } from "./ListNotificationState";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
-import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 import { ThreadsRoomNotificationState } from "./ThreadsRoomNotificationState";
+import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
 
 interface IState {}
+
+export const UPDATE_STATUS_INDICATOR = Symbol("update-status-indicator");
 
 export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     private static internalInstance = new RoomNotificationStateStore();
@@ -34,6 +37,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     private roomMap = new Map<Room, RoomNotificationState>();
     private roomThreadsMap = new Map<Room, ThreadsRoomNotificationState>();
     private listMap = new Map<TagID, ListNotificationState>();
+    private _globalState = new SummarizedNotificationState();
 
     private constructor() {
         super(defaultDispatcher, {});
@@ -44,18 +48,7 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
      * on the SummarizedNotificationState is equivalent to rooms.
      */
     public get globalState(): SummarizedNotificationState {
-        // If we're not ready yet, just return an empty state
-        if (!this.matrixClient) return new SummarizedNotificationState();
-
-        // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
-        // This will include highlights from the previous version of the room internally
-        const globalState = new SummarizedNotificationState();
-        for (const room of this.matrixClient.getVisibleRooms()) {
-            if (VisibilityProvider.instance.isRoomVisible(room)) {
-                globalState.add(this.getRoomState(room));
-            }
-        }
-        return globalState;
+        return this._globalState;
     }
 
     /**
@@ -106,6 +99,30 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
 
     public static get instance(): RoomNotificationStateStore {
         return RoomNotificationStateStore.internalInstance;
+    }
+
+    private onSync = (state: SyncState, prevState?: SyncState, data?: ISyncStateData) => {
+        // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
+        // This will include highlights from the previous version of the room internally
+        const globalState = new SummarizedNotificationState();
+        for (const room of this.matrixClient.getVisibleRooms()) {
+            if (VisibilityProvider.instance.isRoomVisible(room)) {
+                globalState.add(this.getRoomState(room));
+            }
+        }
+
+        if (this.globalState.symbol !== globalState.symbol ||
+            this.globalState.count !== globalState.count ||
+            this.globalState.color !== globalState.color ||
+            this.globalState.numUnreadStates !== globalState.numUnreadStates
+        ) {
+            this._globalState = globalState;
+            this.emit(UPDATE_STATUS_INDICATOR, globalState, state, prevState, data);
+        }
+    };
+
+    protected async onReady() {
+        this.matrixClient.on("sync", this.onSync);
     }
 
     protected async onNotReady(): Promise<any> {
