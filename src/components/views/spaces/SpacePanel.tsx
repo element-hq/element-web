@@ -97,9 +97,7 @@ export const HomeButtonContextMenu = ({
     hideHeader,
     ...props
 }: ComponentProps<typeof SpaceContextMenu>) => {
-    const allRoomsInHome = useEventEmitterState(SpaceStore.instance, UPDATE_HOME_BEHAVIOUR, () => {
-        return SpaceStore.instance.allRoomsInHome;
-    });
+    const allRoomsInHome = useSettingValue<boolean>("Spaces.allRoomsInHome");
 
     return <IconizedContextMenu
         {...props}

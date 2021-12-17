@@ -109,8 +109,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     private _invitedSpaces = new Set<Room>();
     private spaceOrderLocalEchoMap = new Map<string, string>();
     private _restrictedJoinRuleSupport?: IRoomCapability;
-    private _allRoomsInHome: boolean = SettingsStore.getValue("Spaces.allRoomsInHome");
-    private _enabledMetaSpaces: MetaSpace[] = []; // set by onReady
+    // The following properties are set by onReady as they live in account_data
+    private _allRoomsInHome = false;
+    private _enabledMetaSpaces: MetaSpace[] = [];
 
     constructor() {
         super(defaultDispatcher, {});
@@ -1041,6 +1042,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         const enabledMetaSpaces = SettingsStore.getValue("Spaces.enabledMetaSpaces");
         this._enabledMetaSpaces = metaSpaceOrder.filter(k => enabledMetaSpaces[k]) as MetaSpace[];
+
+        this._allRoomsInHome = SettingsStore.getValue("Spaces.allRoomsInHome");
 
         this.rebuildSpaceHierarchy(); // trigger an initial update
 
