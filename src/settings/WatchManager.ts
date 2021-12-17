@@ -18,7 +18,7 @@ import { SettingLevel } from "./SettingLevel";
 
 export type CallbackFn = (changedInRoomId: string, atLevel: SettingLevel, newValAtLevel: any) => void;
 
-const IRRELEVANT_ROOM = Symbol("irrelevant-room");
+const IRRELEVANT_ROOM: string = null;
 
 /**
  * Generalized management class for dealing with watchers on a per-handler (per-level)

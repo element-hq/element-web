@@ -176,7 +176,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         );
 
         this.state = {
-            collapsed: collapsed,
+            collapsed,
             childSpaces: this.childSpaces,
         };
 

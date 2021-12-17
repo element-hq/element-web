@@ -52,6 +52,7 @@ import {
     SpaceKey,
     UPDATE_SUGGESTED_ROOMS,
     UPDATE_SELECTED_SPACE,
+    isMetaSpace,
 } from "../../../stores/spaces";
 import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -62,6 +63,7 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import SettingsStore from "../../../settings/SettingsStore";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -493,10 +495,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     };
 
     private onExplore = () => {
-        if (this.props.activeSpace[0] === "!") {
+        if (!isMetaSpace(this.props.activeSpace)) {
             defaultDispatcher.dispatch({
                 action: "view_room",
-                room_id: SpaceStore.instance.activeSpace,
+                room_id: this.props.activeSpace,
             });
         } else {
             const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
@@ -611,7 +613,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 if (
                     (this.props.activeSpace === MetaSpace.Favourites && orderedTagId !== DefaultTagID.Favourite) ||
                     (this.props.activeSpace === MetaSpace.People && orderedTagId !== DefaultTagID.DM) ||
-                    (this.props.activeSpace === MetaSpace.Orphans && orderedTagId === DefaultTagID.DM)
+                    (this.props.activeSpace === MetaSpace.Orphans && orderedTagId === DefaultTagID.DM) ||
+                    (
+                        !isMetaSpace(this.props.activeSpace) &&
+                        orderedTagId === DefaultTagID.DM &&
+                        !SettingsStore.getValue("Spaces.showPeopleInSpace", this.props.activeSpace)
+                    )
                 ) {
                     alwaysVisible = false;
                 }
@@ -668,7 +675,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         kind="link"
                         onClick={this.onExplore}
                     >
-                        { this.props.activeSpace[0] === "!" ? _t("Explore rooms") : _t("Explore all public rooms") }
+                        { !isMetaSpace(this.props.activeSpace) ? _t("Explore rooms") : _t("Explore all public rooms") }
                     </AccessibleButton>
                 </div>;
             }

@@ -396,6 +396,10 @@ $activeBorderColor: $primary-content;
         mask-image: url('$(res)/img/element-icons/roomlist/search.svg');
     }
 
+    .mx_SpacePanel_iconPreferences::before {
+        mask-image: url('$(res)/img/element-icons/settings/preference.svg');
+    }
+
     .mx_SpacePanel_noIcon {
         display: none;
 

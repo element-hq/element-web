@@ -29,6 +29,7 @@ import {
     showCreateNewRoom,
     showCreateNewSubspace,
     showSpaceInvite,
+    showSpacePreferences,
     showSpaceSettings,
 } from "../../../utils/space";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -166,6 +167,14 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         </>;
     }
 
+    const onPreferencesClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        showSpacePreferences(space);
+        onFinished();
+    };
+
     const onExploreRoomsClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -192,6 +201,11 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
                 iconClassName="mx_SpacePanel_iconExplore"
                 label={canAddRooms ? _t("Manage & explore rooms") : _t("Explore rooms")}
                 onClick={onExploreRoomsClick}
+            />
+            <IconizedContextMenuOption
+                iconClassName="mx_SpacePanel_iconPreferences"
+                label={_t("Preferences")}
+                onClick={onPreferencesClick}
             />
             { settingsOption }
             { leaveOption }

@@ -2727,6 +2727,8 @@
     "Link to selected message": "Link to selected message",
     "Link to room": "Link to room",
     "Command Help": "Command Help",
+    "Sections to show": "Sections to show",
+    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.",
     "Space settings": "Space settings",
     "Settings - %(spaceName)s": "Settings - %(spaceName)s",
     "Spaces you're in": "Spaces you're in",

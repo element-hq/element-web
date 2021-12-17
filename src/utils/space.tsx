@@ -40,6 +40,7 @@ import Spinner from "../components/views/elements/Spinner";
 import dis from "../dispatcher/dispatcher";
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import CreateSpaceFromCommunityDialog from "../components/views/dialogs/CreateSpaceFromCommunityDialog";
+import SpacePreferencesDialog, { SpacePreferenceTab } from "../components/views/dialogs/SpacePreferencesDialog";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
@@ -196,4 +197,11 @@ export const createSpaceFromCommunity = (cli: MatrixClient, groupId: string): Pr
         matrixClient: cli,
         groupId,
     }, "mx_CreateSpaceFromCommunityDialog_wrapper").finished as Promise<[string?]>;
+};
+
+export const showSpacePreferences = (space: Room, initialTabId?: SpacePreferenceTab): Promise<unknown> => {
+    return Modal.createTrackedDialog("Space preferences", "", SpacePreferencesDialog, {
+        initialTabId,
+        space,
+    }, null, false, true).finished;
 };
