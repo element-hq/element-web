@@ -933,7 +933,7 @@
     "Starting backup...": "Memulai pencadangan...",
     "Create account": "Buat akun",
     "Keep going...": "Lanjutkan...",
-    "Set status": "Atur status",
+    "Set status": "Tetapkan status",
     "Update status": "Perbarui status",
     "Email (optional)": "Email (opsional)",
     "Enable encryption?": "Aktifkan enkripsi?",
@@ -3314,7 +3314,7 @@
     "Do not disturb": "Jangan ganggu",
     "Clear": "Hapus",
     "Set a new status": "Tetapkan status baru",
-    "Your status will be shown to people you have a DM with.": "Status Anda akan ditampilkan ke orang-orang yang memiliki pesan langsung dengan Anda.",
+    "Your status will be shown to people you have a DM with.": "Status akan ditampilkan kepada orang yang Anda tahu.",
     "If you'd like to preview or test some potential upcoming changes, there's an option in feedback to let us contact you.": "Jika Anda ingin lihat atau menguji beberapa perubahan baru, di situ ada opsi di masukan untuk mengizinkan kami untuk menghubungi Anda.",
     "Your ongoing feedback would be very welcome, so if you see anything different you want to comment on, <a>please let us know about it</a>. Click your avatar to find a quick feedback link.": "Masukan Anda akan sangat diterima, jadi jika Anda melihat sesuatu yang berbeda yang ingin Anda komentari, <a>beritahu kami tentang hal itu</a>. Klik pada avatar Anda untuk menemukan tautan masukan cepat.",
     "We're testing some design changes": "Kami mencoba beberapa perubahan desain",
@@ -3409,5 +3409,6 @@
     "Processing...": "Memproses...",
     "Creating output...": "Membuat output...",
     "Fetching events...": "Mendapatkan peristiwa-peristiwa...",
-    "Starting export process...": "Memulai proses pengeksporan..."
+    "Starting export process...": "Memulai proses pengeksporan...",
+    "Failed to load list of rooms.": "Gagal untuk memuat daftar ruangan."
 }
