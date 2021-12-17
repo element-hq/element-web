@@ -477,17 +477,19 @@ export const useRoomHierarchy = (space: Room): {
     loading: boolean;
     rooms: IHierarchyRoom[];
     hierarchy: RoomHierarchy;
-    loadMore(pageSize?: number): Promise <void>;
+    error: Error;
+    loadMore(pageSize?: number): Promise<void>;
 } => {
     const [rooms, setRooms] = useState<IHierarchyRoom[]>([]);
     const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
+    const [error, setError] = useState<Error>();
 
     const resetHierarchy = useCallback(() => {
         const hierarchy = new RoomHierarchy(space, INITIAL_PAGE_SIZE);
         hierarchy.load().then(() => {
             if (space !== hierarchy.root) return; // discard stale results
             setRooms(hierarchy.rooms);
-        });
+        }, setError);
         setHierarchy(hierarchy);
     }, [space]);
     useEffect(resetHierarchy, [resetHierarchy]);
@@ -501,12 +503,12 @@ export const useRoomHierarchy = (space: Room): {
 
     const loadMore = useCallback(async (pageSize?: number) => {
         if (hierarchy.loading || !hierarchy.canLoadMore || hierarchy.noSupport) return;
-        await hierarchy.load(pageSize);
+        await hierarchy.load(pageSize).catch(setError);
         setRooms(hierarchy.rooms);
     }, [hierarchy]);
 
     const loading = hierarchy?.loading ?? true;
-    return { loading, rooms, hierarchy, loadMore };
+    return { loading, rooms, hierarchy, loadMore, error };
 };
 
 const useIntersectionObserver = (callback: () => void) => {
@@ -649,7 +651,7 @@ const SpaceHierarchy = ({
 
     const [selected, setSelected] = useState(new Map<string, Set<string>>()); // Map<parentId, Set<childId>>
 
-    const { loading, rooms, hierarchy, loadMore } = useRoomHierarchy(space);
+    const { loading, rooms, hierarchy, loadMore, error: hierarchyError } = useRoomHierarchy(space);
 
     const filteredRoomSet = useMemo<Set<IHierarchyRoom>>(() => {
         if (!rooms?.length) return new Set();
@@ -677,6 +679,10 @@ const SpaceHierarchy = ({
     }, [rooms, hierarchy, query]);
 
     const [error, setError] = useState("");
+    let errorText = error;
+    if (!error && hierarchyError) {
+        errorText = _t("Failed to load list of rooms.");
+    }
 
     const loaderRef = useIntersectionObserver(loadMore);
 
@@ -759,8 +765,8 @@ const SpaceHierarchy = ({
                             ) }
                         </span>
                     </div>
-                    { error && <div className="mx_SpaceHierarchy_error">
-                        { error }
+                    { errorText && <div className="mx_SpaceHierarchy_error">
+                        { errorText }
                     </div> }
                     <ul
                         className="mx_SpaceHierarchy_list"
