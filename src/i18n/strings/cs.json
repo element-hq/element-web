@@ -3481,5 +3481,6 @@
     "Fetched %(count)s events out of %(total)s|other": "Načteno %(count)s událostí z %(total)s",
     "Generating a ZIP": "Vytvoření souboru ZIP",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Vaše konverzace s členy tohoto prostoru se seskupí. Vypnutím této funkce se tyto chaty skryjí z vašeho pohledu na %(spaceName)s.",
-    "Sections to show": "Sekce pro zobrazení"
+    "Sections to show": "Sekce pro zobrazení",
+    "Failed to load list of rooms.": "Nepodařilo se načíst seznam místností."
 }
