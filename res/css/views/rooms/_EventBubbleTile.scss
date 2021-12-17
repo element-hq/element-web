@@ -401,6 +401,11 @@ limitations under the License.
     }
 }
 
+// increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button
+.mx_EventListSummary[data-layout=bubble][data-expanded=false] + .mx_EventTile[data-layout=bubble][data-self=true] {
+    margin-top: 20px;
+}
+
 /* events that do not require bubble layout */
 .mx_EventListSummary[data-layout=bubble],
 .mx_EventTile.mx_EventTile_bad[data-layout=bubble] {

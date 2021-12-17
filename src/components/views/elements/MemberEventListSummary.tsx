@@ -90,14 +90,15 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         layout: Layout.Group,
     };
 
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate(nextProps: IProps): boolean {
         // Update if
         //  - The number of summarised events has changed
         //  - or if the summary is about to toggle to become collapsed
         //  - or if there are fewEvents, meaning the child eventTiles are shown as-is
         return (
             nextProps.events.length !== this.props.events.length ||
-            nextProps.events.length < this.props.threshold
+            nextProps.events.length < this.props.threshold ||
+            nextProps.layout !== this.props.layout
         );
     }
 
