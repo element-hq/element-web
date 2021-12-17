@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import maplibregl from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -40,16 +40,36 @@ const LocationShareTypeDropdown = ({
     onChange,
 }: IDropdownProps) => {
     const options = [
-        <div key={LocationShareType.Custom}>{ _t("Share custom location") }</div>,
-        <div key={LocationShareType.OnceOff}>{ _t("Share my current location as a once off") }</div>,
-        // <div key={LocationShareType.OneMin}>{ _t("Share my current location for one minute") }</div>,
-        // <div key={LocationShareType.FiveMins}>{ _t("Share my current location for five minutes") }</div>,
-        // <div key={LocationShareType.ThirtyMins}>{ _t("Share my current location for thirty minutes") }</div>,
-        // <div key={LocationShareType.OneHour}>{ _t("Share my current location for one hour") }</div>,
-        // <div key={LocationShareType.ThreeHours}>{ _t("Share my current location for three hours") }</div>,
-        // <div key={LocationShareType.SixHours}>{ _t("Share my current location for six hours") }</div>,
-        // <div key={LocationShareType.OneDay}>{ _t("Share my current location for one day") }</div>,
-        // <div key={LocationShareType.Forever}>{ _t("Share my current location until I disable it") }</div>,
+        <div key={LocationShareType.Custom}>{
+            _t("Share custom location")
+        }</div>,
+        <div key={LocationShareType.OnceOff}>{
+            _t("Share my current location as a once off")
+        }</div>,
+        // <div key={LocationShareType.OneMin}>{
+        //     _t("Share my current location for one minute")
+        // }</div>,
+        // <div key={LocationShareType.FiveMins}>{
+        //     _t("Share my current location for five minutes")
+        // }</div>,
+        // <div key={LocationShareType.ThirtyMins}>{
+        //     _t("Share my current location for thirty minutes")
+        // }</div>,
+        // <div key={LocationShareType.OneHour}>{
+        //     _t("Share my current location for one hour")
+        // }</div>,
+        // <div key={LocationShareType.ThreeHours}>{
+        //     _t("Share my current location for three hours")
+        // }</div>,
+        // <div key={LocationShareType.SixHours}>{
+        //     _t("Share my current location for six hours")
+        // }</div>,
+        // <div key={LocationShareType.OneDay}>{
+        //     _t("Share my current location for one day")
+        // }</div>,
+        // <div key={LocationShareType.Forever}>{
+        //     _t("Share my current location until I disable it")
+        // }</div>,
     ];
 
     return <Dropdown
@@ -67,8 +87,13 @@ const LocationShareTypeDropdown = ({
 };
 
 interface IProps {
-    onChoose(uri: string, ts: number, type: LocationShareType, description: string): boolean;
-    onFinished();
+    onChoose(
+        uri: string,
+        ts: number,
+        type: LocationShareType,
+        description: string,
+    ): boolean;
+    onFinished(ev?: SyntheticEvent): void;
 }
 
 interface IState {
@@ -85,7 +110,7 @@ class LocationPicker extends React.Component<IProps, IState> {
     private marker: maplibregl.Marker;
     private geolocate: maplibregl.GeolocateControl;
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -117,8 +142,11 @@ class LocationPicker extends React.Component<IProps, IState> {
             this.map.addControl(this.geolocate);
 
             this.map.on('error', (e) => {
-                logger.error("Failed to load map: check map_style_url in config.json has a valid URL and API key",
-                    e.error);
+                logger.error(
+                    "Failed to load map: check map_style_url in config.json "
+                        + "has a valid URL and API key",
+                    e.error,
+                );
                 this.setState({ error: e.error });
             });
 
@@ -246,7 +274,10 @@ class LocationPicker extends React.Component<IProps, IState> {
                         <DialogButtons primaryButton={_t('Share')}
                             onPrimaryButtonClick={this.onOk}
                             onCancel={this.props.onFinished}
-                            primaryDisabled={!this.state.position && !this.state.manualPosition} />
+                            primaryDisabled={
+                                !this.state.position &&
+                                !this.state.manualPosition
+                            } />
                     </form>
                 </div>
             </div>
@@ -255,12 +286,19 @@ class LocationPicker extends React.Component<IProps, IState> {
 }
 
 export function getGeoUri(position: GeolocationPosition): string {
-    return (`geo:${ position.coords.latitude },` +
-            position.coords.longitude +
-            ( position.coords.altitude !== undefined ?
-                `,${ position.coords.altitude }` : '' ) +
-            ( position.coords.accuracy !== undefined ?
-                `;u=${ position.coords.accuracy }` : '' ));
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const alt = (
+        position.coords.altitude !== undefined
+            ? `,${position.coords.altitude}`
+            : ""
+    );
+    const acc = (
+        position.coords.accuracy !== undefined
+            ? `;u=${ position.coords.accuracy }`
+            : ""
+    );
+    return `geo:${lat},${lon}${alt}${acc}`;
 }
 
 export default LocationPicker;

@@ -55,7 +55,8 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 
     componentDidMount() {
         const config = SdkConfig.get();
-        const coordinates = new maplibregl.LngLat(this.coords.longitude, this.coords.latitude);
+        const coordinates = new maplibregl.LngLat(
+            this.coords.longitude, this.coords.latitude);
 
         this.map = new maplibregl.Map({
             container: this.getBodyId(),
@@ -74,7 +75,11 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
             .addTo(this.map);
 
         this.map.on('error', (e)=>{
-            logger.error("Failed to load map: check map_style_url in config.json has a valid URL and API key", e.error);
+            logger.error(
+                "Failed to load map: check map_style_url in config.json has a "
+                + "valid URL and API key",
+                e.error,
+            );
             this.setState({ error: e.error });
         });
     }

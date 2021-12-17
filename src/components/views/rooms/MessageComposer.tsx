@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { ComponentProps, createRef } from 'react';
+import React, { ComponentProps, createRef, ReactElement } from 'react';
 import classNames from 'classnames';
 import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -138,13 +138,21 @@ interface ILocationButtonProps extends Pick<ICollapsibleButtonProps, "narrowMode
     narrowMode: boolean;
 }
 
-const LocationButton: React.FC<ILocationButtonProps> = ({ shareLocation, menuPosition, narrowMode }) => {
+const LocationButton: React.FC<ILocationButtonProps> = (
+    { shareLocation, menuPosition, narrowMode },
+) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
-    let contextMenu;
+    let contextMenu: ReactElement;
     if (menuDisplayed) {
-        const position = menuPosition ?? aboveLeftOf(button.current.getBoundingClientRect());
-        contextMenu = <ContextMenu {...position} onFinished={closeMenu} managed={false}>
+        const position = menuPosition ?? aboveLeftOf(
+            button.current.getBoundingClientRect());
+
+        contextMenu = <ContextMenu
+            {...position}
+            onFinished={closeMenu}
+            managed={false}
+        >
             <LocationPicker onChoose={shareLocation} onFinished={closeMenu} />
         </ContextMenu>;
     }
