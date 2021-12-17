@@ -489,7 +489,7 @@ $left-gutter: 64px;
     }
 
     code {
-        white-space: pre; // don't collapse spaces in inline code blocks
+        white-space: pre-wrap; // don't collapse spaces in inline code blocks
     }
 }
 
