@@ -240,3 +240,4 @@ Currently, the following UI feature flags are supported:
   user.
 * `UIFeature.roomHistorySettings` - Whether or not the room history settings are shown to the user.
   This should only be used if the room history visibility options are managed by the server.
+* `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the timeline for recent messages. When false day dates will be used.
