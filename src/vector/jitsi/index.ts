@@ -46,6 +46,7 @@ let jitsiAuth: string;
 let roomId: string;
 let openIdToken: IOpenIDCredentials;
 let roomName: string;
+let startAudioOnly: boolean;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -107,6 +108,7 @@ let meetApi: any; // JitsiMeetExternalAPI
         jitsiAuth = qsParam('auth', true);
         roomId = qsParam('roomId', true);
         roomName = qsParam('roomName', true);
+        startAudioOnly = qsParam('isAudioOnly', true) === "true";
 
         if (widgetApi) {
             await readyPromise;
@@ -237,6 +239,9 @@ function joinConference() { // event handler bound in HTML
             SHOW_WATERMARK_FOR_GUESTS: false,
             MAIN_TOOLBAR_BUTTONS: [],
             VIDEO_LAYOUT_FIT: "height",
+        },
+        configOverwrite: {
+            startAudioOnly,
         },
         jwt: jwt,
     };
