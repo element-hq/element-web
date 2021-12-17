@@ -3456,5 +3456,6 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|zero": "Ju",
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "%(count)s anëtarë, përfshi ju, %(commaSeparatedMembers)s",
     "Including you, %(commaSeparatedMembers)s": "Përfshi ju, %(commaSeparatedMembers)s",
-    "Copy room link": "Kopjo lidhje dhome"
+    "Copy room link": "Kopjo lidhje dhome",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Kalo te data e dhënë, te rrjedha kohore (VVVVV-MM-DD)"
 }
