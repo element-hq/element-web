@@ -3390,5 +3390,18 @@
     "Copy room link": "Salin tautan ruangan",
     "Jump to date (adds /jumptodate)": "Pergi ke tanggal (menambahkan /jumptodate)",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Kami tidak dapat mengerti tanggal yang dicantumkan (%(inputDate)s). Coba menggunakan format TTTT-BB-HH.",
-    "Jump to the given date in the timeline (YYYY-MM-DD)": "Pergi ke tanggal yang dicantumkan di linimasa (TTTT-BB-HH)"
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Pergi ke tanggal yang dicantumkan di linimasa (TTTT-BB-HH)",
+    "Exported %(count)s events in %(seconds)s seconds|one": "Telah mengekspor %(count)s peristiwa dalam %(seconds)s detik",
+    "Exported %(count)s events in %(seconds)s seconds|other": "Telah mengekspor %(count)s peristiwa dalam %(seconds)s detik",
+    "Export successful!": "Pengeksporan berhasil!",
+    "Creating HTML...": "Membuat HTML...",
+    "Fetched %(count)s events in %(seconds)ss|one": "Telah mendapatkan %(count)s peristiwa dalam %(seconds)sd",
+    "Fetched %(count)s events in %(seconds)ss|other": "Telah mendapatkan %(count)s peristiwa dalam %(seconds)sd",
+    "Starting export...": "Memulai pengeksporan...",
+    "Processing event %(number)s out of %(total)s": "Memproses peristiwa %(number)s dari %(total)s peristiwa",
+    "Fetched %(count)s events so far|one": "Telah mendapatkan %(count)s peristiwa sejauh ini",
+    "Fetched %(count)s events so far|other": "Telah mendapatkan %(count)s peristiwa sejauh ini",
+    "Fetched %(count)s events out of %(total)s|one": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa",
+    "Fetched %(count)s events out of %(total)s|other": "Mendapatkan %(count)s peristiwa dari %(total)s peristiwa",
+    "Generating a ZIP": "Membuat sebuah ZIP"
 }
