@@ -33,7 +33,7 @@ export default class DeviceSettingsHandler extends SettingsHandler {
      * @param {string[]} featureNames The names of known features.
      * @param {WatchManager} watchers The watch manager to notify updates to
      */
-    constructor(private featureNames: string[], private watchers: WatchManager) {
+    constructor(private featureNames: string[], public readonly watchers: WatchManager) {
         super();
     }
 

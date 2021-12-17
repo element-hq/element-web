@@ -31,7 +31,7 @@ const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
  * Gets and sets settings at the "room-account" level for the current user.
  */
 export default class RoomAccountSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(private watchers: WatchManager) {
+    constructor(public readonly watchers: WatchManager) {
         super();
     }
 

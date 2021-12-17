@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import SettingsHandler from "./SettingsHandler";
+import { SettingLevel } from "../SettingLevel";
 
 /**
  * A wrapper for a SettingsHandler that performs local echo on
@@ -32,8 +33,9 @@ export default class LocalEchoWrapper extends SettingsHandler {
     /**
      * Creates a new local echo wrapper
      * @param {SettingsHandler} handler The handler to wrap
+     * @param {SettingLevel} level The level to notify updates at
      */
-    constructor(private handler: SettingsHandler) {
+    constructor(private readonly handler: SettingsHandler, private readonly level: SettingLevel) {
         super();
     }
 
@@ -54,8 +56,13 @@ export default class LocalEchoWrapper extends SettingsHandler {
         const cacheRoomId = roomId ? roomId : "UNDEFINED"; // avoid weird keys
         bySetting[cacheRoomId] = newValue;
 
+        const currentValue = this.handler.getValue(settingName, roomId);
         const handlerPromise = this.handler.setValue(settingName, roomId, newValue);
-        return Promise.resolve(handlerPromise).finally(() => {
+        this.handler.watchers?.notifyUpdate(settingName, roomId, this.level, newValue);
+        return Promise.resolve(handlerPromise).catch(() => {
+            // notify of a rollback
+            this.handler.watchers?.notifyUpdate(settingName, roomId, this.level, currentValue);
+        }).finally(() => {
             delete bySetting[cacheRoomId];
         });
     }

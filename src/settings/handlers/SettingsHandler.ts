@@ -15,11 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { WatchManager } from "../WatchManager";
+
 /**
  * Represents the base class for all level handlers. This class performs no logic
  * and should be overridden.
  */
 export default abstract class SettingsHandler {
+    public readonly watchers?: WatchManager;
+
     /**
      * Gets the value for a particular setting at this level for a particular room.
      * If no room is applicable, the roomId may be null. The roomId may not be

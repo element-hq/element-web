@@ -36,8 +36,12 @@ const ANALYTICS_EVENT_TYPE = "im.vector.analytics";
  * This handler does not make use of the roomId parameter.
  */
 export default class AccountSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(private watchers: WatchManager) {
+    constructor(public readonly watchers: WatchManager) {
         super();
+    }
+
+    public get level(): SettingLevel {
+        return SettingLevel.ACCOUNT;
     }
 
     public initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {

@@ -29,7 +29,7 @@ import { WatchManager } from "../WatchManager";
  * Gets and sets settings at the "room" level.
  */
 export default class RoomSettingsHandler extends MatrixClientBackedSettingsHandler {
-    constructor(private watchers: WatchManager) {
+    constructor(public readonly watchers: WatchManager) {
         super();
     }
 

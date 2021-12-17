@@ -24,7 +24,7 @@ import { WatchManager } from "../WatchManager";
  * room.
  */
 export default class RoomDeviceSettingsHandler extends SettingsHandler {
-    constructor(private watchers: WatchManager) {
+    constructor(public readonly watchers: WatchManager) {
         super();
     }
 
