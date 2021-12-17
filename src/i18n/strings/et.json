@@ -3477,5 +3477,6 @@
     "Fetched %(count)s events in %(seconds)ss|one": "%(count)s sündmus laaditud %(seconds)s sekundiga",
     "Fetched %(count)s events in %(seconds)ss|other": "%(count)s sündmust laaditud %(seconds)s sekundiga",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Sellega rühmitad selle kogukonna liikmetega peetavaid vestlusi. Kui seadistus pole kasutusel, siis on neid vestlusi %(spaceName)s kogukonna vaates ei kuvata.",
-    "Sections to show": "Näidatavad valikud"
+    "Sections to show": "Näidatavad valikud",
+    "Failed to load list of rooms.": "Jututubade loendi laadimine ei õnnestunud."
 }
