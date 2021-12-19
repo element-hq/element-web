@@ -1842,7 +1842,7 @@
     "Close this widget to view it in this panel": "Tutup widget ini untuk menampilkannya di panel ini",
     "Unpin this widget to view it in this panel": "Lepaskan pin widget ini untuk menampilkanya di panel ini",
     "Maximise widget": "Maksimalkan widget",
-    "Pinned messages": "Pesan-pesan yang dipasangi pin",
+    "Pinned messages": "Pesan yang dipasangi pin",
     "Nothing pinned, yet": "Belum ada yang dipasangi pin",
     "You can only pin up to %(count)s widgets|other": "Anda hanya dapat memasang pin sampai %(count)s widget",
     "Room Info": "Informasi Ruangan",
