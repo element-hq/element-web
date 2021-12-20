@@ -3347,5 +3347,7 @@
     "sends rainfall": "skickar regn",
     "Sends the given message with rainfall": "Skickar det givna meddelandet med regn",
     "New spotlight search experience": "Ny spotlightsökupplevelse",
-    "Use new room breadcrumbs": "Använd nya rumsbrödsmulor"
+    "Use new room breadcrumbs": "Använd nya rumsbrödsmulor",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Vi kunde inte förstå det givna datumet (%(inputDate)s). Pröva formatet ÅÅÅÅ-MM-DD.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Hoppa till det givna datumet i tidslinjen (ÅÅÅÅ-MM-DD)"
 }
