@@ -3382,5 +3382,16 @@
     "Fetched %(count)s events so far|other": "Знайдено %(count)s подій",
     "Fetched %(count)s events out of %(total)s|one": "Знайдено %(count)s з %(total)s подій",
     "Fetched %(count)s events out of %(total)s|other": "Знайдено %(count)s з %(total)s подій",
-    "Generating a ZIP": "Генерування ZIP-файлу"
+    "Generating a ZIP": "Генерування ZIP-файлу",
+    "Communities can now be made into Spaces": "Відтепер спільноти можна перетворювати на простори",
+    "You can create a Space from this community <a>here</a>.": "Ви можете створити простір з цієї спільноти <a>тут</a>.",
+    "The user '%(displayName)s' could not be removed from the summary.": "Користувача «%(displayName)s» неможливо вилучити з опису.",
+    "Failed to remove a user from the summary of %(groupId)s": "Не вдалося вилучити користувача з опису %(groupId)s",
+    "Failed to add the following users to the summary of %(groupId)s:": "Не вдалося додати цих користувачів до опису %(groupId)s:",
+    "Who would you like to add to this summary?": "Кого хочете додати до цього опису?",
+    "Add users to the community summary": "Додати користувачів до опису спільноти",
+    "The room '%(roomName)s' could not be removed from the summary.": "Кімнату «%(roomName)s» неможливо вилучити з опису.",
+    "Failed to remove the room from the summary of %(groupId)s": "Не вдалося вилучити кімнату з підсумку %(groupId)s",
+    "Failed to add the following rooms to the summary of %(groupId)s:": "Не вдалося додати ці кімнати до опису %(groupId)s:",
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML для сторінки вашої спільноти</h1>\n<p>\n    Використовуйте розгорнутий опис, який розповість новим учасникам спільноти, або поширити\n    важливі <a href=\"foo\">посилання</a>\n</p>\n<p>\n   Ви навіть можете додати зображення з URL-адресою Matrix <img src=\"mxc://url\" />\n</p>\n"
 }
