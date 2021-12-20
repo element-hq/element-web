@@ -1333,7 +1333,7 @@
     "%(severalUsers)sjoined and left %(count)s times|other": "%(severalUsers)sприєдналися й вийшли %(count)s разів",
     "You might disable this if the room will be used for collaborating with external teams who have their own homeserver. This cannot be changed later.": "Ви можете вимкнути це, якщо кімната буде використовуватися для співпраці із зовнішніми командами, які мають власний домашній сервер. Це неможливо змінити пізніше.",
     "%(oneUser)schanged their avatar %(count)s times|one": "%(oneUser)sзмінює свій аватар",
-    "%(oneUser)schanged their avatar %(count)s times|other": "%(oneUser)sзмінюють свої аватари %(count)s разів",
+    "%(oneUser)schanged their avatar %(count)s times|other": "%(oneUser)sзмінює свій аватар %(count)s разів",
     "%(severalUsers)schanged their avatar %(count)s times|one": "%(severalUsers)sзмінюють свої аватари",
     "%(severalUsers)schanged their avatar %(count)s times|other": "%(severalUsers)sзмінюють свої аватари %(count)s разів",
     "%(oneUser)schanged their name %(count)s times|one": "%(oneUser)sзмінює своє ім'я",
@@ -1420,7 +1420,7 @@
     "Trusted": "Довірений",
     "This backup is trusted because it has been restored on this session": "Ця резервна копія довірена, оскільки її було відновлено у цьому сеансі",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "Індивідуально звіряйте кожен сеанс, який використовується користувачем, щоб позначити його довіреним, не довіряючи пристроям перехресного підписування.",
-    "To be secure, do this in person or use a trusted way to communicate.": "Для забезпечення безпеки зробіть це особисто або скористайтесь надійним способом зв'язку.",
+    "To be secure, do this in person or use a trusted way to communicate.": "Для безпеки зробіть це особисто або скористайтесь надійним способом зв'язку.",
     "You can change this at any time from room settings.": "Ви завжди можете змінити це у налаштуваннях кімнати.",
     "Room settings": "Налаштування кімнати",
     "Link to most recent message": "Посилання на останнє повідомлення",
@@ -3393,5 +3393,8 @@
     "The room '%(roomName)s' could not be removed from the summary.": "Кімнату «%(roomName)s» неможливо вилучити з опису.",
     "Failed to remove the room from the summary of %(groupId)s": "Не вдалося вилучити кімнату з підсумку %(groupId)s",
     "Failed to add the following rooms to the summary of %(groupId)s:": "Не вдалося додати ці кімнати до опису %(groupId)s:",
-    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML для сторінки вашої спільноти</h1>\n<p>\n    Використовуйте розгорнутий опис, який розповість новим учасникам спільноти, або поширити\n    важливі <a href=\"foo\">посилання</a>\n</p>\n<p>\n   Ви навіть можете додати зображення з URL-адресою Matrix <img src=\"mxc://url\" />\n</p>\n"
+    "<h1>HTML for your community's page</h1>\n<p>\n    Use the long description to introduce new members to the community, or distribute\n    some important <a href=\"foo\">links</a>\n</p>\n<p>\n    You can even add images with Matrix URLs <img src=\"mxc://url\" />\n</p>\n": "<h1>HTML для сторінки вашої спільноти</h1>\n<p>\n    Використовуйте розгорнутий опис, який розповість новим учасникам спільноти, або поширити\n    важливі <a href=\"foo\">посилання</a>\n</p>\n<p>\n   Ви навіть можете додати зображення з URL-адресою Matrix <img src=\"mxc://url\" />\n</p>\n",
+    "Failed to load list of rooms.": "Не вдалося отримати список кімнат.",
+    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Це групує ваші бесіди з учасниками цього простору. Вимкніть, щоб сховати ці бесіди з вашого огляду %(spaceName)s.",
+    "Disagree": "Відхилити"
 }
