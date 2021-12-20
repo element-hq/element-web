@@ -208,7 +208,7 @@
     "Delete widget": "Eliminar widget",
     "Define the power level of a user": "Define el nivel de autoridad de un usuario",
     "Edit": "Editar",
-    "Enable automatic language detection for syntax highlighting": "Activar la detección automática del lenguaje para resaltar la sintaxis",
+    "Enable automatic language detection for syntax highlighting": "Activar la detección automática del lenguajes de programación para resaltar su sintaxis",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no tiene permiso para ver el mensaje solicitado.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Se ha intentado cargar cierto punto en la cronología de esta sala, pero no se ha podido encontrarlo.",
     "Unable to add email address": "No es posible añadir la dirección de correo electrónico",
@@ -2716,7 +2716,7 @@
     "%(count)s messages deleted.|one": "%(count)s mensaje eliminado.",
     "%(count)s messages deleted.|other": "%(count)s mensajes eliminados.",
     "Invite to %(roomName)s": "Invitar a %(roomName)s",
-    "Edit devices": "Editar dispositivos",
+    "Edit devices": "Gestionar dispositivos",
     "Invite People": "Invitar gente",
     "Invite with email or username": "Invitar correos electrónicos o nombres de usuario",
     "You can change these anytime.": "Puedes cambiar todo esto en cualquier momento.",
@@ -3457,5 +3457,9 @@
     "Connectivity to the server has been lost": "Se ha perdido la conexión con el servidor",
     "You cannot place calls in this browser.": "No puedes llamar usando este navegador de internet.",
     "Calls are unsupported": "Las llamadas no son compatibles",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Puedes encontrar nuestra política de privacidad completa <CookiePolicyLink>aquí</CookiePolicyLink>."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Puedes encontrar nuestra política de privacidad completa <CookiePolicyLink>aquí</CookiePolicyLink>.",
+    "Based on %(count)s votes|other": "%(count)s votos",
+    "Failed to load list of rooms.": "No se ha podido cargar la lista de salas.",
+    "Based on %(count)s votes|one": "%(count)s voto",
+    "Recently viewed": "Visto recientemente"
 }
