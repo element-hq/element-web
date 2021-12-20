@@ -3475,5 +3475,11 @@
     "Fetched %(count)s events out of %(total)s|one": "%(count)s sur %(total)s événement récupéré",
     "Fetched %(count)s events out of %(total)s|other": "%(count)s sur %(total)s événements récupérés",
     "Generating a ZIP": "Génération d’un ZIP",
-    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Nous n’avons pas pu comprendre la date saisie (%(inputDate)s). Veuillez essayer en utilisant le format AAAA-MM-JJ."
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Nous n’avons pas pu comprendre la date saisie (%(inputDate)s). Veuillez essayer en utilisant le format AAAA-MM-JJ.",
+    "Failed to load list of rooms.": "Impossible de charger la liste des salons.",
+    "Thank you for trying Spotlight search. Your feedback will help inform the next versions.": "Merci d’essayer la recherche Spotlight. Vos retours permettront d’améliorer les prochaines versions.",
+    "Spotlight search feedback": "Commentaire sur la recherche Spotlight",
+    "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Cela rassemble vos conversations privées avec les membres de cet espace. Le désactiver masquera ces conversations de votre vue de %(spaceName)s.",
+    "Sections to show": "Sections à afficher",
+    "New spotlight search experience": "Nouvelle méthode de recherche « spotlight »"
 }
