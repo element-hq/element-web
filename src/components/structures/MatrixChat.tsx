@@ -1523,7 +1523,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 showNotificationsToast(false);
             }
 
-            if (!localStorage.getItem("mx_seen_ia_1.1_changes_toast")) {
+            if (!localStorage.getItem("mx_seen_ia_1.1_changes_toast") && SettingsStore.getValue(UIFeature.Feedback)) {
                 const key = "IA_1.1_TOAST";
                 ToastStore.sharedInstance().addOrReplaceToast({
                     key,
