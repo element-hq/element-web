@@ -3341,5 +3341,13 @@
     "Help improve %(analyticsOwner)s": "Hjälp att förbättra %(analyticsOwner)s",
     "That's fine": "Det är okej",
     "You cannot place calls without a connection to the server.": "Du kan inte ringa samtal utan en anslutning till servern.",
-    "Connectivity to the server has been lost": "Anslutningen till servern har förlorats"
+    "Connectivity to the server has been lost": "Anslutningen till servern har förlorats",
+    "Pin to sidebar": "Fäst i sidopanelen",
+    "Quick settings": "Snabbinställningar",
+    "sends rainfall": "skickar regn",
+    "Sends the given message with rainfall": "Skickar det givna meddelandet med regn",
+    "New spotlight search experience": "Ny spotlightsökupplevelse",
+    "Use new room breadcrumbs": "Använd nya rumsbrödsmulor",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "Vi kunde inte förstå det givna datumet (%(inputDate)s). Pröva formatet ÅÅÅÅ-MM-DD.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Hoppa till det givna datumet i tidslinjen (ÅÅÅÅ-MM-DD)"
 }
