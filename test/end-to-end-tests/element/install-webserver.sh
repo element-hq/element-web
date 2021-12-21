@@ -9,11 +9,11 @@ cd $BASE_DIR
     virtualenv -p python3 env
     source env/bin/activate
 
-    # Having been bitten by pip SSL fail too many times, I don't trust the existing pip
-    # to be able to --upgrade itself, so grab a new one fresh from source.
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    python get-pip.py
-    rm get-pip.py
+    pip install --upgrade pip
+
+    # Pin setuptools to work around crash bug in v60
+    # See https://github.com/vector-im/element-web/issues/20287
+    pip install setuptools==v59.8.0
 
     pip install ComplexHttpServer
 

@@ -21,13 +21,18 @@ cd $SERVER_DIR
 virtualenv -p python3 env
 source env/bin/activate
 
-# Having been bitten by pip SSL fail too many times, I don't trust the existing pip
-# to be able to --upgrade itself, so grab a new one fresh from source.
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python get-pip.py
+pip install --upgrade pip
 
-pip install --upgrade setuptools
+# Pin setuptools to work around crash bug in v60
+# See https://github.com/vector-im/element-web/issues/20287
+pip install setuptools==v59.8.0
+
 pip install https://codeload.github.com/matrix-org/synapse/zip/$SYNAPSE_BRANCH
+
+# reivilibre: Suspected bug in frozendict 2.1.2 leading to a core dump...
+# See https://github.com/vector-im/element-web/issues/20287
+pip install frozendict==2.0.2
+
 # apply configuration
 pushd env/bin/
 cp -r $BASE_DIR/config-templates/$CONFIG_TEMPLATE/. ./
