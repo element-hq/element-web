@@ -289,12 +289,12 @@ export function getGeoUri(position: GeolocationPosition): string {
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
     const alt = (
-        position.coords.altitude !== undefined
+        Number.isFinite(position.coords.altitude)
             ? `,${position.coords.altitude}`
             : ""
     );
     const acc = (
-        position.coords.accuracy !== undefined
+        Number.isFinite(position.coords.accuracy)
             ? `;u=${ position.coords.accuracy }`
             : ""
     );

@@ -35,6 +35,22 @@ describe("LocationPicker", () => {
             expect(getGeoUri(pos)).toEqual("geo:43.2,12.4");
         });
 
+        it("Nulls in location are not shown in URI", () => {
+            const pos: GeolocationPosition = {
+                coords: {
+                    latitude: 43.2,
+                    longitude: 12.4,
+                    altitude: null,
+                    accuracy: null,
+                    altitudeAccuracy: null,
+                    heading: null,
+                    speed: null,
+                },
+                timestamp: 12334,
+            };
+            expect(getGeoUri(pos)).toEqual("geo:43.2,12.4");
+        });
+
         it("Renders a URI with 3 coords", () => {
             const pos: GeolocationPosition = {
                 coords: {
