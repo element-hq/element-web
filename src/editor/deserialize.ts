@@ -242,7 +242,19 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
         }
 
         if (n.nodeType === Node.TEXT_NODE) {
-            newParts.push(...parseAtRoomMentions(n.nodeValue, partCreator));
+            let { nodeValue } = n;
+
+            // Sometimes commonmark adds a newline at the end of the list item text
+            if (n.parentNode.nodeName === "LI") {
+                nodeValue = nodeValue.trimEnd();
+            }
+            newParts.push(...parseAtRoomMentions(nodeValue, partCreator));
+
+            const grandParent = n.parentNode.parentNode;
+            const isTight = n.parentNode.nodeName !== "P" || grandParent?.nodeName !== "LI";
+            if (!isTight) {
+                newParts.push(partCreator.newline());
+            }
         } else if (n.nodeType === Node.ELEMENT_NODE) {
             const parseResult = parseElement(n, partCreator, lastNode, state);
             if (parseResult) {

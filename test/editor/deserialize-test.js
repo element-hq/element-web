@@ -237,6 +237,18 @@ describe('editor/deserialize', function() {
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[4]).toStrictEqual({ type: "plain", text: "3. Finish" });
         });
+        it('non tight lists', () => {
+            const html = "<ol><li><p>Start</p></li><li><p>Continue</p></li><li><p>Finish</p></li></ol>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(8);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "1. Start" });
+            expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[2]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[3]).toStrictEqual({ type: "plain", text: "2. Continue" });
+            expect(parts[4]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[5]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[6]).toStrictEqual({ type: "plain", text: "3. Finish" });
+        });
         it('nested unordered lists', () => {
             const html = "<ul><li>Oak<ul><li>Spruce<ul><li>Birch</li></ul></li></ul></li></ul>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
@@ -249,6 +261,16 @@ describe('editor/deserialize', function() {
         });
         it('nested ordered lists', () => {
             const html = "<ol><li>Oak<ol><li>Spruce<ol><li>Birch</li></ol></li></ol></li></ol>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts.length).toBe(5);
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "1. Oak" });
+            expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}1. Spruce` });
+            expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
+            expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}1. Birch` });
+        });
+        it('nested tight lists', () => {
+            const html = "<ol><li>Oak\n<ol><li>Spruce\n<ol><li>Birch</li></ol></li></ol></li></ol>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(5);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "1. Oak" });
