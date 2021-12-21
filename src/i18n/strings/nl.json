@@ -3434,5 +3434,7 @@
     "The poll has ended. Top answer: %(topAnswer)s": "De poll is gesloten. Meest gestemd: %(topAnswer)s",
     "The poll has ended. No votes were cast.": "De poll is gesloten. Er kan niet meer worden gestemd.",
     "Final result based on %(count)s votes|one": "Einduitslag gebaseerd op %(count)s stem",
-    "Final result based on %(count)s votes|other": "Einduitslag gebaseerd op %(count)s stemmen"
+    "Final result based on %(count)s votes|other": "Einduitslag gebaseerd op %(count)s stemmen",
+    "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "We konden de datum niet verwerken (%(inputDate)s). Probeer het opnieuw met het formaat JJJJ-MM-DD.",
+    "Jump to the given date in the timeline (YYYY-MM-DD)": "Spring naar een datum in de tijdlijn (JJJJ-MM-DD)"
 }
