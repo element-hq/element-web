@@ -258,12 +258,16 @@ export default class ElectronPlatform extends VectorBasePlatform {
             dis.fire(Action.ViewUserSettings);
         });
 
-        electron.on('userDownloadCompleted', (ev, { path, name }) => {
-            const key = `DOWNLOAD_TOAST_${path}`;
+        electron.on('userDownloadCompleted', (ev, { id, name }) => {
+            const key = `DOWNLOAD_TOAST_${id}`;
 
             const onAccept = () => {
-                electron.send('userDownloadOpen', { path });
+                electron.send('userDownloadAction', { id, open: true });
                 ToastStore.sharedInstance().dismissToast(key);
+            };
+
+            const onDismiss = () => {
+                electron.send('userDownloadAction', { id });
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -274,6 +278,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
                     acceptLabel: _t("Open"),
                     onAccept,
                     dismissLabel: _t("Dismiss"),
+                    onDismiss,
                     numSeconds: 10,
                 },
                 component: GenericExpiringToast,
