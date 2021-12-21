@@ -2341,5 +2341,6 @@
     "Flags": "Vlajky",
     "edited": "upravené",
     "Re-join": "Znovu sa pripojiť",
-    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Ladiace záznamy obsahujú údaje o používaní aplikácie vrátane vášho používateľského mena, ID alebo aliasov navštívených miestností alebo skupín, prvkov používateľského rozhrania, s ktorými ste naposledy interagovali, a používateľských mien iných používateľov. Neobsahujú správy."
+    "Debug logs contain application usage data including your username, the IDs or aliases of the rooms or groups you have visited, which UI elements you last interacted with, and the usernames of other users. They do not contain messages.": "Ladiace záznamy obsahujú údaje o používaní aplikácie vrátane vášho používateľského mena, ID alebo aliasov navštívených miestností alebo skupín, prvkov používateľského rozhrania, s ktorými ste naposledy interagovali, a používateľských mien iných používateľov. Neobsahujú správy.",
+    "Connectivity to the server has been lost": "Spojenie so serverom bolo prerušené"
 }
