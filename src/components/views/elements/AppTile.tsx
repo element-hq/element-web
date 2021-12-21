@@ -508,7 +508,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     // Also wrap the PersistedElement in a div to fix the height, otherwise
                     // AppTile's border is in the wrong place
                     appTileBody = <div className="mx_AppTile_persistedWrapper">
-                        <PersistedElement persistKey={this.persistKey}>
+                        <PersistedElement zIndex={this.props.miniMode ? 10 : 9}persistKey={this.persistKey}>
                             { appTileBody }
                         </PersistedElement>
                     </div>;
