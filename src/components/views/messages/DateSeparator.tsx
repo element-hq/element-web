@@ -20,6 +20,8 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import { formatFullDateNoTime } from '../../../DateUtils';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import SettingsStore from '../../../settings/SettingsStore';
+import { UIFeature } from '../../../settings/UIFeature';
 
 function getDaysArray(): string[] {
     return [
@@ -42,9 +44,10 @@ interface IProps {
 export default class DateSeparator extends React.Component<IProps> {
     private getLabel() {
         const date = new Date(this.props.ts);
+        const disableRelativeTimestamps = !SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
 
         // During the time the archive is being viewed, a specific day might not make sense, so we return the full date
-        if (this.props.forExport) return formatFullDateNoTime(date);
+        if (this.props.forExport || disableRelativeTimestamps) return formatFullDateNoTime(date);
 
         const today = new Date();
         const yesterday = new Date();
@@ -63,11 +66,12 @@ export default class DateSeparator extends React.Component<IProps> {
     }
 
     render() {
+        const label = this.getLabel();
         // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
         // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
-        return <h2 className="mx_DateSeparator" role="separator" tabIndex={-1} aria-label={this.getLabel()}>
+        return <h2 className="mx_DateSeparator" role="separator" tabIndex={-1} aria-label={label}>
             <hr role="none" />
-            <div aria-hidden="true">{ this.getLabel() }</div>
+            <div aria-hidden="true">{ label }</div>
             <hr role="none" />
         </h2>;
     }

@@ -19,7 +19,6 @@ components['structures.RoomDirectory'] = stubComponent();
 components['views.globals.GuestWarningBar'] = stubComponent();
 components['views.globals.NewVersionBar'] = stubComponent();
 components['views.elements.Spinner'] = stubComponent({ displayName: 'Spinner' });
-components['views.messages.DateSeparator'] = stubComponent({ displayName: 'DateSeparator' });
 components['views.messages.MessageTimestamp'] = stubComponent({ displayName: 'MessageTimestamp' });
 components['views.messages.SenderProfile'] = stubComponent({ displayName: 'SenderProfile' });
 components['views.rooms.SearchBar'] = stubComponent();
