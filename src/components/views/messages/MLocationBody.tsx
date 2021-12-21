@@ -23,6 +23,7 @@ import SdkConfig from '../../../SdkConfig';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IBodyProps } from "./IBodyProps";
 import { _t } from '../../../languageHandler';
+import MemberAvatar from '../avatars/MemberAvatar';
 
 interface IState {
     error: Error;
@@ -32,7 +33,6 @@ interface IState {
 export default class MLocationBody extends React.Component<IBodyProps, IState> {
     private map: maplibregl.Map;
     private coords: GeolocationCoordinates;
-    private description: string;
 
     constructor(props: IBodyProps) {
         super(props);
@@ -49,8 +49,6 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         this.state = {
             error: undefined,
         };
-
-        this.description = loc?.description ?? content['body'];
     }
 
     componentDidMount() {
@@ -65,13 +63,12 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
             zoom: 13,
         });
 
-        new maplibregl.Popup({
-            closeButton: false,
-            closeOnClick: false,
-            closeOnMove: false,
+        new maplibregl.Marker({
+            element: document.getElementById(this.getMarkerId()),
+            anchor: 'bottom',
+            offset: [0, -1],
         })
             .setLngLat(coordinates)
-            .setHTML(this.description)
             .addTo(this.map);
 
         this.map.on('error', (e)=>{
@@ -88,6 +85,10 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         return `mx_MLocationBody_${this.props.mxEvent.getId()}`;
     };
 
+    private getMarkerId = () => {
+        return `mx_MLocationBody_marker_${this.props.mxEvent.getId()}`;
+    };
+
     render() {
         const error = this.state.error ?
             <div className="mx_EventTile_tileError mx_EventTile_body">
@@ -97,6 +98,22 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         return <div className="mx_MLocationBody">
             <div id={this.getBodyId()} className="mx_MLocationBody_map" />
             { error }
+            <div className="mx_MLocationBody_marker" id={this.getMarkerId()}>
+                <div className="mx_MLocationBody_markerBorder">
+                    <MemberAvatar
+                        member={this.props.mxEvent.sender}
+                        width={27}
+                        height={27}
+                        viewUserOnClick={false}
+                    />
+                </div>
+                <img
+                    className="mx_MLocationBody_pointer"
+                    src={require("../../../../res/img/location/pointer.svg")}
+                    width="9"
+                    height="5"
+                />
+            </div>
         </div>;
     }
 }
