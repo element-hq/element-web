@@ -46,6 +46,7 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import { WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
 import EndPollDialog from '../dialogs/EndPollDialog';
 import { isPollEnded } from '../messages/MPollBody';
+import { createMapSiteLink } from "../messages/MLocationBody";
 
 export function canCancel(eventStatus: EventStatus): boolean {
     return eventStatus === EventStatus.QUEUED || eventStatus === EventStatus.NOT_SENT;
@@ -133,9 +134,13 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
     }
 
+    private canOpenInMapSite(mxEvent: MatrixEvent): boolean {
+        return isLocationEvent(mxEvent);
+    }
+
     private canEndPoll(mxEvent: MatrixEvent): boolean {
         return (
-            mxEvent.getType() === POLL_START_EVENT_TYPE.name &&
+            POLL_START_EVENT_TYPE.matches(mxEvent.getType()) &&
             this.state.canRedact &&
             !isPollEnded(mxEvent, MatrixClientPeg.get(), this.props.getRelationsForEvent)
         );
@@ -278,6 +283,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const eventStatus = mxEvent.status;
         const unsentReactionsCount = this.getUnsentReactions().length;
 
+        let openInMapSiteButton: JSX.Element;
         let endPollButton: JSX.Element;
         let resendReactionsButton: JSX.Element;
         let redactButton: JSX.Element;
@@ -309,6 +315,25 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                     iconClassName="mx_MessageContextMenu_iconRedact"
                     label={_t("Remove")}
                     onClick={this.onRedactClick}
+                />
+            );
+        }
+
+        if (this.canOpenInMapSite(mxEvent)) {
+            const mapSiteLink = createMapSiteLink(mxEvent);
+            openInMapSiteButton = (
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconOpenInMapSite"
+                    onClick={null}
+                    label={_t('Open in OpenStreetMap')}
+                    element="a"
+                    {
+                        ...{
+                            href: mapSiteLink,
+                            target: "_blank",
+                            rel: "noreferrer noopener",
+                        }
+                    }
                 />
             );
         }
@@ -459,6 +484,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                     label={_t("View in room")}
                     onClick={this.viewInRoom}
                 /> }
+                { openInMapSiteButton }
                 { endPollButton }
                 { quoteButton }
                 { forwardButton }

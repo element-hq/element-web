@@ -18,6 +18,7 @@ import React from 'react';
 import maplibregl from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 import { LOCATION_EVENT_TYPE } from 'matrix-js-sdk/src/@types/location';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import SdkConfig from '../../../SdkConfig';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -146,4 +147,30 @@ export function parseGeoUri(uri: string): GeolocationCoordinates {
         heading: undefined,
         speed: undefined,
     };
+}
+
+function makeLink(coords: GeolocationCoordinates): string {
+    return (
+        "https://www.openstreetmap.org/" +
+        `?mlat=${coords.latitude}` +
+        `&mlon=${coords.longitude}` +
+        `#map=16/${coords.latitude}/${coords.longitude}`
+    );
+}
+
+export function createMapSiteLink(event: MatrixEvent): string {
+    const content: Object = event.getContent();
+    const mLocation = content[LOCATION_EVENT_TYPE.name];
+    if (mLocation !== undefined) {
+        const uri = mLocation["uri"];
+        if (uri !== undefined) {
+            return makeLink(parseGeoUri(uri));
+        }
+    } else {
+        const geoUri = content["geo_uri"];
+        if (geoUri) {
+            return makeLink(parseGeoUri(geoUri));
+        }
+    }
+    return null;
 }

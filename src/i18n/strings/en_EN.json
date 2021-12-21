@@ -2832,6 +2832,7 @@
     "Are you sure you want to reject the invitation?": "Are you sure you want to reject the invitation?",
     "Unable to reject invite": "Unable to reject invite",
     "Resend %(unsentCount)s reaction(s)": "Resend %(unsentCount)s reaction(s)",
+    "Open in OpenStreetMap": "Open in OpenStreetMap",
     "Forward": "Forward",
     "View source": "View source",
     "Show preview": "Show preview",

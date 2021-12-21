@@ -90,3 +90,4 @@ export function textForLocation(
     }
 }
 
+export default LocationButton;

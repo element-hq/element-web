@@ -14,8 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
+import { LOCATION_EVENT_TYPE } from "matrix-js-sdk/src/@types/location";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+
 import sdk from "../../../skinned-sdk";
-import { parseGeoUri } from "../../../../src/components/views/messages/MLocationBody";
+import { createMapSiteLink, parseGeoUri } from "../../../../src/components/views/messages/MLocationBody";
 
 sdk.getComponent("views.messages.MLocationBody");
 
@@ -159,4 +163,80 @@ describe("MLocationBody", () => {
             );
         });
     });
+
+    describe("createMapSiteLink", () => {
+        it("returns null if event does not contain geouri", () => {
+            expect(createMapSiteLink(nonLocationEvent())).toBeNull();
+        });
+
+        it("returns OpenStreetMap link if event contains m.location", () => {
+            expect(
+                createMapSiteLink(modernLocationEvent("geo:51.5076,-0.1276")),
+            ).toEqual(
+                "https://www.openstreetmap.org/" +
+                "?mlat=51.5076&mlon=-0.1276" +
+                "#map=16/51.5076/-0.1276",
+            );
+        });
+
+        it("returns OpenStreetMap link if event contains geo_uri", () => {
+            expect(
+                createMapSiteLink(oldLocationEvent("geo:51.5076,-0.1276")),
+            ).toEqual(
+                "https://www.openstreetmap.org/" +
+                "?mlat=51.5076&mlon=-0.1276" +
+                "#map=16/51.5076/-0.1276",
+            );
+        });
+    });
 });
+
+function oldLocationEvent(geoUri: string): MatrixEvent {
+    return new MatrixEvent(
+        {
+            "event_id": nextId(),
+            "type": LOCATION_EVENT_TYPE.name,
+            "content": {
+                "body": "Something about where I am",
+                "msgtype": "m.location",
+                "geo_uri": geoUri,
+            },
+        },
+    );
+}
+
+function modernLocationEvent(geoUri: string): MatrixEvent {
+    return new MatrixEvent(
+        {
+            "event_id": nextId(),
+            "type": LOCATION_EVENT_TYPE.name,
+            "content": makeLocationContent(
+                `Found at ${geoUri} at 2021-12-21T12:22+0000`,
+                geoUri,
+                252523,
+                "Human-readable label",
+            ),
+        },
+    );
+}
+
+function nonLocationEvent(): MatrixEvent {
+    return new MatrixEvent(
+        {
+            "event_id": nextId(),
+            "type": "some.event.type",
+            "content": {
+                "m.relates_to": {
+                    "rel_type": "m.reference",
+                    "event_id": "$mypoll",
+                },
+            },
+        },
+    );
+}
+
+let EVENT_ID = 0;
+function nextId(): string {
+    EVENT_ID++;
+    return EVENT_ID.toString();
+}

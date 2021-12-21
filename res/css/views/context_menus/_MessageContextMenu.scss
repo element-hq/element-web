@@ -54,6 +54,10 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/settings/appearance.svg');
     }
 
+    .mx_MessageContextMenu_iconOpenInMapSite::before {
+        mask-image: url('$(res)/img/external-link.svg');
+    }
+
     .mx_MessageContextMenu_iconEndPoll::before {
         mask-image: url('$(res)/img/element-icons/check-white.svg');
     }

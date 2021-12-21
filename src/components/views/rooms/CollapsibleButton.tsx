@@ -32,3 +32,5 @@ export const CollapsibleButton = ({ narrowMode, title, ...props }: ICollapsibleB
         label={narrowMode ? title : undefined}
     />;
 };
+
+export default CollapsibleButton;
