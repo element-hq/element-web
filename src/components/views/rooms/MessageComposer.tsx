@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { ComponentProps, createRef, ReactElement } from 'react';
+import React, { createRef } from 'react';
 import classNames from 'classnames';
 import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -53,7 +53,6 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import { Action } from "../../../dispatcher/actions";
 import EditorModel from "../../../editor/model";
 import EmojiPicker from '../emojipicker/EmojiPicker';
-import LocationPicker from '../location/LocationPicker';
 import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
 import Modal from "../../../Modal";
 import RoomContext from '../../../contexts/RoomContext';
@@ -61,6 +60,8 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import LocationShareType from "../location/LocationShareType";
 import { SettingUpdatedPayload } from "../../../dispatcher/payloads/SettingUpdatedPayload";
+import { CollapsibleButton, ICollapsibleButtonProps } from './CollapsibleButton';
+import { LocationButton, textForLocation } from '../location/LocationButton';
 
 let instanceCount = 0;
 const NARROW_MODE_BREAKPOINT = 500;
@@ -79,19 +80,6 @@ function SendButton(props: ISendButtonProps) {
         />
     );
 }
-
-interface ICollapsibleButtonProps extends ComponentProps<typeof AccessibleTooltipButton> {
-    narrowMode: boolean;
-    title: string;
-}
-
-const CollapsibleButton = ({ narrowMode, title, ...props }: ICollapsibleButtonProps) => {
-    return <AccessibleTooltipButton
-        {...props}
-        title={narrowMode ? undefined : title}
-        label={narrowMode ? title : undefined}
-    />;
-};
 
 interface IEmojiButtonProps extends Pick<ICollapsibleButtonProps, "narrowMode"> {
     addEmoji: (unicode: string) => boolean;
@@ -125,54 +113,6 @@ const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition, narr
             onClick={openMenu}
             narrowMode={narrowMode}
             title={_t("Add emoji")}
-        />
-
-        { contextMenu }
-    </React.Fragment>;
-};
-
-interface ILocationButtonProps extends Pick<ICollapsibleButtonProps, "narrowMode"> {
-    room: Room;
-    shareLocation: (uri: string, ts: number, type: LocationShareType, description: string) => boolean;
-    menuPosition: AboveLeftOf;
-    narrowMode: boolean;
-}
-
-const LocationButton: React.FC<ILocationButtonProps> = (
-    { shareLocation, menuPosition, narrowMode },
-) => {
-    const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
-
-    let contextMenu: ReactElement;
-    if (menuDisplayed) {
-        const position = menuPosition ?? aboveLeftOf(
-            button.current.getBoundingClientRect());
-
-        contextMenu = <ContextMenu
-            {...position}
-            onFinished={closeMenu}
-            managed={false}
-        >
-            <LocationPicker onChoose={shareLocation} onFinished={closeMenu} />
-        </ContextMenu>;
-    }
-
-    const className = classNames(
-        "mx_MessageComposer_button",
-        "mx_MessageComposer_location",
-        {
-            "mx_MessageComposer_button_highlight": menuDisplayed,
-        },
-    );
-
-    // TODO: replace ContextMenuTooltipButton with a unified representation of
-    // the header buttons and the right panel buttons
-    return <React.Fragment>
-        <CollapsibleButton
-            className={className}
-            onClick={openMenu}
-            narrowMode={narrowMode}
-            title={_t("Share location")}
         />
 
         { contextMenu }
@@ -513,20 +453,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         return true;
     };
 
-    private textForLocation = (
-        uri: string,
-        ts: number,
-        description: string | null,
-    ): string => {
-        const date = new Date(ts).toISOString();
-        // TODO: translation, as soon as we've re-worded this better
-        if (description) {
-            return `${description} at ${uri} as of ${date}`;
-        } else {
-            return `Location at ${uri} as of ${date}`;
-        }
-    };
-
     private shareLocation = (
         uri: string,
         ts: number,
@@ -535,7 +461,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     ): boolean => {
         if (!uri) return false;
         try {
-            const text = this.textForLocation(uri, ts, description);
+            const text = textForLocation(uri, ts, description);
             MatrixClientPeg.get().sendMessage(
                 this.props.room.roomId,
                 makeLocationContent(text, uri, ts, description),
