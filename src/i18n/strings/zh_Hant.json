@@ -3482,5 +3482,6 @@
     "Fetched %(count)s events so far|other": "到目前為止已成功擷取 %(count)s 個事件",
     "Fetched %(count)s events out of %(total)s|one": "已擷取 %(total)s 個事件中的 %(count)s 個",
     "Fetched %(count)s events out of %(total)s|other": "從 %(total)s 個事件中擷取了 %(count)s 個",
-    "Generating a ZIP": "產生 ZIP"
+    "Generating a ZIP": "產生 ZIP",
+    "Open in OpenStreetMap": "在 OpenStreetMap 中開啟"
 }
