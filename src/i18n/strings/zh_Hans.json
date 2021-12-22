@@ -3480,5 +3480,6 @@
     "Fetched %(count)s events so far|other": "迄今获取了 %(count)s 事件",
     "Fetched %(count)s events out of %(total)s|other": "已获取 %(total)s 事件中的 %(count)s 个",
     "Generating a ZIP": "生成 ZIP",
-    "Failed to load list of rooms.": "加载聊天室列表失败。"
+    "Failed to load list of rooms.": "加载聊天室列表失败。",
+    "Open in OpenStreetMap": "在 OpenStreetMap 中打开"
 }
