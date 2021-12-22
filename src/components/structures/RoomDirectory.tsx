@@ -393,7 +393,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
     private onFilterChange = (alias: string) => {
         this.setState({
-            filterString: alias || "",
+            filterString: alias?.trim() || "",
         });
 
         // don't send the request for a little bit,
