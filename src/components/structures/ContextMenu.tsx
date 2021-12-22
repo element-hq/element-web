@@ -188,6 +188,8 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
     // We now only handle closing the ContextMenu in this keyDown handler.
     // All of the item/option navigation is delegated to RovingTabIndex.
     private onKeyDown = (ev: React.KeyboardEvent) => {
+        ev.stopPropagation(); // prevent keyboard propagating out of the context menu, we're focus-locked
+
         // If someone is managing their own focus, we will only exit for them with Escape.
         // They are probably using props.focusLock along with this option as well.
         if (!this.props.managed) {
