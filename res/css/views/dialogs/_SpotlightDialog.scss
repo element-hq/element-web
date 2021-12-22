@@ -52,7 +52,7 @@ limitations under the License.
     flex-direction: column;
 
     .mx_Dialog_header {
-        margin-bottom: 0;
+        display: none;
     }
 
     .mx_SpotlightDialog_searchBox {
