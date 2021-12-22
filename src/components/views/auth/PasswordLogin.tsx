@@ -325,7 +325,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     onChange={this.onUsernameChanged}
                     onFocus={this.onUsernameFocus}
                     onBlur={this.onUsernameBlur}
-                    disabled={this.props.disableSubmit}
+                    disabled={this.props.busy}
                     autoFocus={autoFocus}
                     onValidate={this.onEmailValidate}
                     fieldRef={field => this[LoginField.Email] = field}
@@ -344,7 +344,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     onChange={this.onUsernameChanged}
                     onFocus={this.onUsernameFocus}
                     onBlur={this.onUsernameBlur}
-                    disabled={this.props.disableSubmit}
+                    disabled={this.props.busy}
                     autoFocus={autoFocus}
                     onValidate={this.onUsernameValidate}
                     ref={field => this[LoginField.MatrixId] = field}
@@ -371,7 +371,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     onChange={this.onPhoneNumberChanged}
                     onFocus={this.onPhoneNumberFocus}
                     onBlur={this.onPhoneNumberBlur}
-                    disabled={this.props.disableSubmit}
+                    disabled={this.props.busy}
                     autoFocus={autoFocus}
                     onValidate={this.onPhoneNumberValidate}
                     ref={field => this[LoginField.Password] = field}
@@ -422,7 +422,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         element="select"
                         value={this.state.loginType}
                         onChange={this.onLoginTypeChange}
-                        disabled={this.props.disableSubmit}
+                        disabled={this.props.busy}
                     >
                         <option key={LoginField.MatrixId} value={LoginField.MatrixId}>
                             { _t('Username') }
@@ -454,7 +454,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                         label={_t('Password')}
                         value={this.state.password}
                         onChange={this.onPasswordChanged}
-                        disabled={this.props.disableSubmit}
+                        disabled={this.props.busy}
                         autoFocus={autoFocusPassword}
                         onValidate={this.onPasswordValidate}
                         ref={field => this[LoginField.Password] = field}
