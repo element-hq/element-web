@@ -26,6 +26,9 @@ import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import dis from "../dispatcher/dispatcher";
 import RoomViewStore from "../stores/RoomViewStore";
 import Spinner from "../components/views/elements/Spinner";
+import { isMetaSpace } from "../stores/spaces";
+import SpaceStore from "../stores/spaces/SpaceStore";
+import { Action } from "../dispatcher/actions";
 
 /**
  * Approximation of a membership status for a given room.
@@ -179,7 +182,16 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
         return;
     }
 
-    if (RoomViewStore.getRoomId() === roomId) {
+    if (SpaceStore.spacesEnabled &&
+        !isMetaSpace(SpaceStore.instance.activeSpace) &&
+        SpaceStore.instance.activeSpace !== roomId &&
+        RoomViewStore.getRoomId() === roomId
+    ) {
+        dis.dispatch({
+            action: Action.ViewRoom,
+            room_id: SpaceStore.instance.activeSpace,
+        });
+    } else {
         dis.dispatch({ action: 'view_home_page' });
     }
 }

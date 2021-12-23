@@ -768,11 +768,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
     private switchSpaceIfNeeded = throttle(() => {
         const roomId = RoomViewStore.getRoomId();
-        if (this.isRoomInSpace(this.activeSpace, roomId)) return;
-
-        if (this.matrixClient.getRoom(roomId)?.isSpaceRoom()) {
-            this.goToFirstSpace(true);
-        } else {
+        if (!this.isRoomInSpace(this.activeSpace, roomId) && !this.matrixClient.getRoom(roomId)?.isSpaceRoom()) {
             this.switchToRelatedSpace(roomId);
         }
     }, 100, { leading: true, trailing: true });
@@ -1069,9 +1065,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
         switch (payload.action) {
             case "view_room": {
-                // Don't auto-switch rooms when reacting to a context-switch
+                // Don't auto-switch rooms when reacting to a context-switch or for new rooms being created
                 // as this is not helpful and can create loops of rooms/space switching
-                if (payload.context_switch) break;
+                if (payload.context_switch || payload.justCreatedOpts) break;
                 let roomId = payload.room_id;
 
                 if (payload.room_alias && !roomId) {
