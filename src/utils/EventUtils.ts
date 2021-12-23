@@ -17,7 +17,6 @@ limitations under the License.
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { Thread } from 'matrix-js-sdk/src/models/thread';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
 
@@ -194,13 +193,7 @@ export async function fetchInitialEvent(
             const rootEventData = await client.fetchRoomEvent(roomId, initialEvent.threadRootId);
             const rootEvent = new MatrixEvent(rootEventData);
             const room = client.getRoom(roomId);
-            const thread = new Thread(
-                [rootEvent],
-                room,
-                client,
-            );
-            thread.addEvent(initialEvent);
-            room.threads.set(thread.id, thread);
+            room.createThread([rootEvent]);
         } catch (e) {
             logger.warn("Could not find root event: " + initialEvent.threadRootId);
         }

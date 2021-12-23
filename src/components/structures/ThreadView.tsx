@@ -135,16 +135,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     private setupThread = (mxEv: MatrixEvent) => {
         let thread = this.props.room.threads.get(mxEv.getId());
         if (!thread) {
-            const client = MatrixClientPeg.get();
-            // Do not attach this thread object to the event for now
-            // TODO: When local echo gets reintroduced it will be important
-            // to add that back in, and the threads model should go through the
-            // same reconciliation algorithm as events
-            thread = new Thread(
-                [mxEv],
-                this.props.room,
-                client,
-            );
+            thread = this.props.room.createThread([mxEv]);
         }
         thread.on(ThreadEvent.Update, this.updateThread);
         thread.once(ThreadEvent.Ready, this.updateThread);
