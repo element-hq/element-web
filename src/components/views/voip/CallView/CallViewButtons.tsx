@@ -26,7 +26,6 @@ import DialpadContextMenu from "../../context_menus/DialpadContextMenu";
 import { Alignment } from "../../elements/Tooltip";
 import {
     alwaysAboveLeftOf,
-    alwaysAboveRightOf,
     ChevronFace,
     ContextMenuTooltipButton,
 } from '../../../structures/ContextMenu';
@@ -175,7 +174,7 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
         let dialPad;
         if (this.state.showDialpad) {
             dialPad = <DialpadContextMenu
-                {...alwaysAboveRightOf(
+                {...alwaysAboveLeftOf(
                     this.dialpadButton.current.getBoundingClientRect(),
                     ChevronFace.None,
                     CONTEXT_MENU_VPADDING,
