@@ -553,6 +553,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     }
 
     private renderMenu(): React.ReactElement {
+        if (this.props.tagId === DefaultTagID.Suggested) return null; // not sortable
+
         let contextMenu = null;
         if (this.state.contextMenuPosition) {
             const isAlphabetical = RoomListStore.instance.getTagSorting(this.props.tagId) === SortAlgorithm.Alphabetic;
