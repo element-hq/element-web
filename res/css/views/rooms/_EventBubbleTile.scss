@@ -89,6 +89,12 @@ limitations under the License.
         font-size: $font-15px;
     }
 
+    .mx_MessageActionBar {
+        top: -28px;
+        right: 0;
+        z-index: 9; // above the avatar
+    }
+
     &[data-self=false] {
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
@@ -99,11 +105,6 @@ limitations under the License.
         }
         .mx_EventTile_avatar {
             left: -34px;
-        }
-
-        .mx_MessageActionBar {
-            right: 0;
-            transform: translate3d(90%, 50%, 0);
         }
 
         --backgroundColor: $eventbubble-others-bg;
