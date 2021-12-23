@@ -37,6 +37,8 @@ interface IProps {
     reactionEvents: Set<MatrixEvent>;
     // A possible Matrix event if the current user has voted for this type
     myReactionEvent?: MatrixEvent;
+    // Whether to prevent quick-reactions by clicking on this reaction
+    disabled?: boolean;
 }
 
 interface IState {
@@ -121,12 +123,12 @@ export default class ReactionsRowButton extends React.PureComponent<IProps, ISta
                 label = reactors;
             }
         }
-        const isPeeking = room.getMyMembership() !== "join";
+
         return <AccessibleButton
             className={classes}
             aria-label={label}
             onClick={this.onClick}
-            disabled={isPeeking}
+            disabled={this.props.disabled}
             onMouseOver={this.onMouseOver}
             onMouseLeave={this.onMouseLeave}
         >
