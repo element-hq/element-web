@@ -605,10 +605,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 <ContextMenu
                     onFinished={this.toggleButtonMenu}
                     {...menuPosition}
-                    menuPaddingRight={10}
-                    menuPaddingTop={5}
-                    menuPaddingBottom={5}
-                    menuWidth={150}
                     wrapperClassName="mx_MessageComposer_Menu"
                 >
                     { buttons.map((button, index) => (

@@ -405,4 +405,12 @@ limitations under the License.
 .mx_MessageComposer_Menu .mx_CallContextMenu_item {
     display: flex;
     align-items: center;
+    max-width: unset;
+    width: 100%;
+}
+
+.mx_MessageComposer_Menu .mx_ContextualMenu {
+    min-width: 150px;
+    width: max-content;
+    padding: 5px 10px 5px 0;
 }
