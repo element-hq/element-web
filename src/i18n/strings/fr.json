@@ -3481,5 +3481,6 @@
     "Spotlight search feedback": "Commentaire sur la recherche Spotlight",
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Cela rassemble vos conversations privées avec les membres de cet espace. Le désactiver masquera ces conversations de votre vue de %(spaceName)s.",
     "Sections to show": "Sections à afficher",
-    "New spotlight search experience": "Nouvelle méthode de recherche « spotlight »"
+    "New spotlight search experience": "Nouvelle méthode de recherche Spotlight",
+    "Open in OpenStreetMap": "Ouvrir dans OpenStreetMap"
 }
