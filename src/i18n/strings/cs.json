@@ -284,7 +284,7 @@
     "You seem to be in a call, are you sure you want to quit?": "Zřejmě máte probíhající hovor. Chcete přesto odejít?",
     "Idle": "Nečinný/á",
     "Unknown": "Neznámý",
-    "Seen by %(userName)s at %(dateTime)s": "Spatřen uživatelem %(userName)s v %(dateTime)s",
+    "Seen by %(userName)s at %(dateTime)s": "%(userName)s viděl(a) %(dateTime)s",
     "Unnamed room": "Nepojmenovaná místnost",
     "World readable": "Světu čitelné",
     "Guests can join": "Hosté mohou vstoupit",
