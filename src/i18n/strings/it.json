@@ -3481,5 +3481,6 @@
     "Fetched %(count)s events so far|other": "Ricevuti %(count)s eventi finora",
     "Fetched %(count)s events out of %(total)s|one": "Ricevuto %(count)s evento di %(total)s",
     "Fetched %(count)s events out of %(total)s|other": "Ricevuti %(count)s eventi di %(total)s",
-    "Generating a ZIP": "Generazione di uno ZIP"
+    "Generating a ZIP": "Generazione di uno ZIP",
+    "Open in OpenStreetMap": "Apri in OpenStreetMap"
 }
