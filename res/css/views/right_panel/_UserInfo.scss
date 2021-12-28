@@ -204,11 +204,19 @@ limitations under the License.
     }
 
     .mx_UserInfo_statusMessage {
+        $statusLineHeight: 16px;
+        $statusNumberOfLines: 3;
+
         font-size: $font-11px;
+        line-height: $statusLineHeight;
         opacity: 0.5;
         overflow: hidden;
-        white-space: nowrap;
-        text-overflow: clip;
+        word-break: break-word;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        max-height: calc($statusLineHeight * $statusNumberOfLines);
+        -webkit-line-clamp: $statusNumberOfLines;
+        -webkit-box-orient: vertical;
     }
 
     .mx_AutoHideScrollbar {
