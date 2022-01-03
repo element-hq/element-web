@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { IJoinRuleEventContent, JoinRule, RestrictedAllowType } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
@@ -40,9 +40,10 @@ interface IProps {
     closeSettingsFn(): void;
     onError(error: Error): void;
     beforeChange?(joinRule: JoinRule): Promise<boolean>; // if returns false then aborts the change
+    aliasWarning?: ReactNode;
 }
 
-const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSettingsFn }: IProps) => {
+const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeChange, closeSettingsFn }: IProps) => {
     const cli = room.client;
 
     const restrictedRoomCapabilities = SpaceStore.instance.restrictedJoinRuleSupport;
@@ -90,7 +91,10 @@ const JoinRuleSettings = ({ room, promptUpgrade, onError, beforeChange, closeSet
     }, {
         value: JoinRule.Public,
         label: _t("Public"),
-        description: _t("Anyone can find and join."),
+        description: <>
+            { _t("Anyone can find and join.") }
+            { aliasWarning }
+        </>,
     }];
 
     if (roomSupportsRestricted || preferredRestrictionVersion || joinRule === JoinRule.Restricted) {

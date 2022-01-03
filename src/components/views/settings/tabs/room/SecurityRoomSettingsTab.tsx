@@ -270,14 +270,13 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         });
 
         return <SettingsFieldset legend={_t("Access")} description={description}>
-            { aliasWarning }
-
             <JoinRuleSettings
                 room={room}
                 beforeChange={this.onBeforeJoinRuleChange}
                 onError={this.onJoinRuleChangeError}
                 closeSettingsFn={this.props.closeSettingsFn}
                 promptUpgrade={true}
+                aliasWarning={aliasWarning}
             />
         </SettingsFieldset>;
     }
