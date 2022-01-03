@@ -88,7 +88,7 @@ export default class TagTileContextMenu extends React.Component {
         let createSpaceOption;
         if (GroupStore.isUserPrivileged(this.props.tag)) {
             createSpaceOption = <>
-                <hr className="mx_TagTileContextMenu_separator" role="separator" />
+                <hr className="mx_TagTileContextMenu_separator" />
                 <MenuItem className="mx_TagTileContextMenu_item mx_TagTileContextMenu_createSpace" onClick={this._onCreateSpaceClick}>
                     { _t("Create Space") }
                 </MenuItem>
@@ -99,10 +99,10 @@ export default class TagTileContextMenu extends React.Component {
             <MenuItem className="mx_TagTileContextMenu_item mx_TagTileContextMenu_viewCommunity" onClick={this._onViewCommunityClick}>
                 { _t('View Community') }
             </MenuItem>
-            { (moveUp || moveDown) ? <hr className="mx_TagTileContextMenu_separator" role="separator" /> : null }
+            { (moveUp || moveDown) ? <hr className="mx_TagTileContextMenu_separator" /> : null }
             { moveUp }
             { moveDown }
-            <hr className="mx_TagTileContextMenu_separator" role="separator" />
+            <hr className="mx_TagTileContextMenu_separator" />
             <MenuItem className="mx_TagTileContextMenu_item mx_TagTileContextMenu_hideCommunity" onClick={this._onRemoveClick}>
                 { _t("Unpin") }
             </MenuItem>

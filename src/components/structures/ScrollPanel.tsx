@@ -958,7 +958,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             >
                 { this.props.fixedChildren }
                 <div className="mx_RoomView_messageListWrapper">
-                    <ol ref={this.itemlist} className="mx_RoomView_MessageList" aria-live="polite" role="list">
+                    <ol ref={this.itemlist} className="mx_RoomView_MessageList" aria-live="polite">
                         { this.props.children }
                     </ol>
                 </div>
