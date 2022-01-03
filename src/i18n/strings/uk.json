@@ -3433,5 +3433,6 @@
     "Spaces are a new way to make a community, with new features coming.": "Простори — це новий спосіб створення спільноти з новими можливостями.",
     "Changes made to your community <bold1>name</bold1> and <bold2>avatar</bold2> might not be seen by other users for up to 30 minutes.": "Зміну <bold1>назви</bold1> та <bold2>аватара</bold2> спільноти інші користувачі побачать впродовж 30 хвилин.",
     "Want more than a community? <a>Get your own server</a>": "Хочете більше, ніж просто спільноту? <a>Отримайте свій власний сервер</a>",
-    "Open in OpenStreetMap": "Відкрити в OpenStreetMap"
+    "Open in OpenStreetMap": "Відкрити в OpenStreetMap",
+    "toggle event": "перемкнути подію"
 }
