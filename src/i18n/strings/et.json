@@ -3479,5 +3479,6 @@
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Sellega rühmitad selle kogukonna liikmetega peetavaid vestlusi. Kui seadistus pole kasutusel, siis on neid vestlusi %(spaceName)s kogukonna vaates ei kuvata.",
     "Sections to show": "Näidatavad valikud",
     "Failed to load list of rooms.": "Jututubade loendi laadimine ei õnnestunud.",
-    "Open in OpenStreetMap": "Ava OpenStreetMap'is"
+    "Open in OpenStreetMap": "Ava OpenStreetMap'is",
+    "toggle event": "lülita sündmus sisse/välja"
 }
