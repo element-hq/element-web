@@ -96,9 +96,9 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                 <div className="mx_SettingsFlag">
                     <label className="mx_SettingsFlag_label">
                         <span className="mx_SettingsFlag_labelText">{ label }</span>
-                        { description && <span className="mx_SettingsFlag_microcopy">
+                        { description && <div className="mx_SettingsFlag_microcopy">
                             { description }
-                        </span> }
+                        </div> }
                     </label>
                     <ToggleSwitch
                         checked={this.state.value}
