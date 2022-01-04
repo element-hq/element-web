@@ -68,10 +68,6 @@ interface IState {
     vidMuted: boolean;
     screensharing: boolean;
     callState: CallState;
-    controlsVisible: boolean;
-    hoveringControls: boolean;
-    showMoreMenu: boolean;
-    showDialpad: boolean;
     primaryFeed: CallFeed;
     secondaryFeeds: Array<CallFeed>;
     sidebarShown: boolean;
@@ -123,10 +119,6 @@ export default class CallView extends React.Component<IProps, IState> {
             vidMuted: this.props.call.isLocalVideoMuted(),
             screensharing: this.props.call.isScreensharing(),
             callState: this.props.call.state,
-            controlsVisible: true,
-            hoveringControls: false,
-            showMoreMenu: false,
-            showDialpad: false,
             primaryFeed: primary,
             secondaryFeeds: secondary,
             sidebarShown: true,
@@ -573,10 +565,6 @@ export default class CallView extends React.Component<IProps, IState> {
 
             let toast;
             if (someoneIsScreensharing) {
-                const presentingClasses = classNames({
-                    mx_CallView_presenting: true,
-                    mx_CallView_presenting_hidden: !this.state.controlsVisible,
-                });
                 const sharerName = this.state.primaryFeed.getMember().name;
                 let text = isScreensharing
                     ? _t("You are presenting")
@@ -588,7 +576,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 }
 
                 toast = (
-                    <div className={presentingClasses}>
+                    <div className="mx_CallView_presenting">
                         { text }
                     </div>
                 );

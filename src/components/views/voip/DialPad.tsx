@@ -18,6 +18,7 @@ import * as React from "react";
 
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { _t } from "../../../languageHandler";
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'];
 const BUTTON_LETTERS = ['', 'ABC', 'DEF', 'GHI', 'JKL', 'MNO', 'PQRS', 'TUV', 'WXYZ', '', '+', ''];
@@ -49,7 +50,11 @@ class DialPadButton extends React.PureComponent<IButtonProps> {
                     </div>
                 </AccessibleButton>;
             case DialPadButtonKind.Dial:
-                return <AccessibleButton className="mx_DialPad_button mx_DialPad_dialButton" onClick={this.onClick} />;
+                return <AccessibleButton
+                    className="mx_DialPad_button mx_DialPad_dialButton"
+                    onClick={this.onClick}
+                    aria-label={_t("Dial")}
+                />;
         }
     }
 }

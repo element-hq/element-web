@@ -16,6 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// data-whatintent makes more sense here semantically but then the tooltip would stay visible without the button
+// which looks broken, so we match the behaviour of tooltips which is fine too.
+[data-whatinput="mouse"] .mx_CallViewButtons.mx_CallViewButtons_hidden {
+    opacity: 0.001; // opacity 0 can cause a re-layout
+    pointer-events: none;
+}
+
 .mx_CallViewButtons {
     position: absolute;
     display: flex;
@@ -25,11 +32,6 @@ limitations under the License.
     transition: opacity 0.5s;
     z-index: 200; // To be above _all_ feeds
     gap: 18px;
-
-    &.mx_CallViewButtons_hidden {
-        opacity: 0.001; // opacity 0 can cause a re-layout
-        pointer-events: none;
-    }
 
     .mx_CallViewButtons_button {
         cursor: pointer;
