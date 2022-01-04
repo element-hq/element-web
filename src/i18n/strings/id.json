@@ -3412,5 +3412,7 @@
     "Starting export process...": "Memulai proses pengeksporan...",
     "Failed to load list of rooms.": "Gagal untuk memuat daftar ruangan.",
     "Open in OpenStreetMap": "Buka di OpenStreetMap",
-    "toggle event": "alih peristiwa"
+    "toggle event": "alih peristiwa",
+    "Backspace": "Backspace",
+    "Dial": "Dial"
 }
