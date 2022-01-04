@@ -3414,5 +3414,7 @@
     "Open in OpenStreetMap": "Buka di OpenStreetMap",
     "toggle event": "alih peristiwa",
     "Backspace": "Backspace",
-    "Dial": "Dial"
+    "Dial": "Dial",
+    "Missing room name or separator e.g. (my-room:domain.org)": "Kurang nama ruangan atau pemisah mis. (ruangan-saya:domain.org)",
+    "Missing domain separator e.g. (:domain.org)": "Kurang pemisah domain mis. (:domain.org)"
 }
