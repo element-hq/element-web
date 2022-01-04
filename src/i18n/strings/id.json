@@ -3416,5 +3416,6 @@
     "Backspace": "Backspace",
     "Dial": "Dial",
     "Missing room name or separator e.g. (my-room:domain.org)": "Kurang nama ruangan atau pemisah mis. (ruangan-saya:domain.org)",
-    "Missing domain separator e.g. (:domain.org)": "Kurang pemisah domain mis. (:domain.org)"
+    "Missing domain separator e.g. (:domain.org)": "Kurang pemisah domain mis. (:domain.org)",
+    "This address had invalid server or is already in use": "Alamat ini memiliki server yang tidak valid atau telah digunakan"
 }
