@@ -3483,5 +3483,6 @@
     "Fetched %(count)s events out of %(total)s|one": "已擷取 %(total)s 個事件中的 %(count)s 個",
     "Fetched %(count)s events out of %(total)s|other": "從 %(total)s 個事件中擷取了 %(count)s 個",
     "Generating a ZIP": "產生 ZIP",
-    "Open in OpenStreetMap": "在 OpenStreetMap 中開啟"
+    "Open in OpenStreetMap": "在 OpenStreetMap 中開啟",
+    "toggle event": "切換事件"
 }
