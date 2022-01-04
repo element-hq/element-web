@@ -31,11 +31,19 @@ interface ITextualCompletionProps {
 }
 
 export const TextualCompletion = forwardRef<ITextualCompletionProps, any>((props, ref) => {
-    const { title, subtitle, description, className, ...restProps } = props;
+    const {
+        title,
+        subtitle,
+        description,
+        className,
+        'aria-selected': ariaSelectedAttribute,
+        ...restProps
+    } = props;
     return (
         <div {...restProps}
             className={classNames('mx_Autocomplete_Completion_block', className)}
             role="option"
+            aria-selected={ariaSelectedAttribute}
             ref={ref}
         >
             <span className="mx_Autocomplete_Completion_title">{ title }</span>
@@ -50,11 +58,20 @@ interface IPillCompletionProps extends ITextualCompletionProps {
 }
 
 export const PillCompletion = forwardRef<IPillCompletionProps, any>((props, ref) => {
-    const { title, subtitle, description, className, children, ...restProps } = props;
+    const {
+        title,
+        subtitle,
+        description,
+        className,
+        children,
+        'aria-selected': ariaSelectedAttribute,
+        ...restProps
+    } = props;
     return (
         <div {...restProps}
             className={classNames('mx_Autocomplete_Completion_pill', className)}
             role="option"
+            aria-selected={ariaSelectedAttribute}
             ref={ref}
         >
             { children }
