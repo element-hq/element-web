@@ -44,17 +44,12 @@ limitations under the License.
             pointer-events: none;
         }
 
-        .mx_EventTile_msgOption {
-            display: none;
-        }
-
         // When forwarding messages from encrypted rooms, EventTile will complain
         // that our preview is unencrypted, which doesn't actually matter
-        .mx_EventTile_e2eIcon_unencrypted {
-            display: none;
-        }
-
         // We also hide download links to not encourage users to try interacting
+        .mx_EventTile_msgOption,
+        .mx_EventTile_e2eIcon_unencrypted,
+        .mx_EventTile_e2eIcon_warning,
         .mx_MFileBody_download {
             display: none;
         }
