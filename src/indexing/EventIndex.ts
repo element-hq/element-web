@@ -25,6 +25,8 @@ import { TimelineIndex, TimelineWindow } from 'matrix-js-sdk/src/timeline-window
 import { sleep } from "matrix-js-sdk/src/utils";
 import { IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -69,7 +71,6 @@ export default class EventIndex extends EventEmitter {
         client.on('sync', this.onSync);
         client.on('Room.timeline', this.onRoomTimeline);
         client.on('Room.timelineReset', this.onTimelineReset);
-        client.on('Room.redaction', this.onRedaction);
         client.on('RoomState.events', this.onRoomStateEvent);
     }
 
@@ -83,7 +84,6 @@ export default class EventIndex extends EventEmitter {
         client.removeListener('sync', this.onSync);
         client.removeListener('Room.timeline', this.onRoomTimeline);
         client.removeListener('Room.timelineReset', this.onTimelineReset);
-        client.removeListener('Room.redaction', this.onRedaction);
         client.removeListener('RoomState.events', this.onRoomStateEvent);
     }
 
@@ -199,10 +199,12 @@ export default class EventIndex extends EventEmitter {
         // We only index encrypted rooms locally.
         if (!client.isRoomEncrypted(room.roomId)) return;
 
-        // If it isn't a live event or if it's redacted there's nothing to
-        // do.
-        if (toStartOfTimeline || !data || !data.liveEvent
-            || ev.isRedacted()) {
+        if (ev.isRedaction()) {
+            return this.redactEvent(ev);
+        }
+
+        // If it isn't a live event or if it's redacted there's nothing to do.
+        if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) {
             return;
         }
 
@@ -214,20 +216,17 @@ export default class EventIndex extends EventEmitter {
     private onRoomStateEvent = async (ev: MatrixEvent, state: RoomState) => {
         if (!MatrixClientPeg.get().isRoomEncrypted(state.roomId)) return;
 
-        if (ev.getType() === "m.room.encryption" && !(await this.isRoomIndexed(state.roomId))) {
+        if (ev.getType() === EventType.RoomEncryption && !(await this.isRoomIndexed(state.roomId))) {
             logger.log("EventIndex: Adding a checkpoint for a newly encrypted room", state.roomId);
             this.addRoomCheckpoint(state.roomId, true);
         }
     };
 
     /*
-     * The Room.redaction listener.
-     *
      * Removes a redacted event from our event index.
+     * We cannot rely on Room.redaction as this only fires if the redaction applied to an event the js-sdk has loaded.
      */
-    private onRedaction = async (ev: MatrixEvent, room: Room) => {
-        // We only index encrypted rooms locally.
-        if (!MatrixClientPeg.get().isRoomEncrypted(room.roomId)) return;
+    private redactEvent = async (ev: MatrixEvent) => {
         const indexManager = PlatformPeg.get().getEventIndexingManager();
 
         try {
@@ -259,18 +258,22 @@ export default class EventIndex extends EventEmitter {
      * Most notably we filter events for which decryption failed, are redacted
      * or aren't of a type that we know how to index.
      *
-     * @param {MatrixEvent} ev The event that should checked.
+     * @param {MatrixEvent} ev The event that should be checked.
      * @returns {bool} Returns true if the event can be indexed, false
      * otherwise.
      */
-    private isValidEvent(ev: MatrixEvent) {
-        const isUsefulType = ["m.room.message", "m.room.name", "m.room.topic"].includes(ev.getType());
+    private isValidEvent(ev: MatrixEvent): boolean {
+        const isUsefulType = [
+            EventType.RoomMessage,
+            EventType.RoomName,
+            EventType.RoomTopic,
+        ].includes(ev.getType() as EventType);
         const validEventType = isUsefulType && !ev.isRedacted() && !ev.isDecryptionFailure();
 
         let validMsgType = true;
         let hasContentValue = true;
 
-        if (ev.getType() === "m.room.message" && !ev.isRedacted()) {
+        if (ev.getType() === EventType.RoomMessage && !ev.isRedacted()) {
             // Expand this if there are more invalid msgtypes.
             const msgtype = ev.getContent().msgtype;
 
@@ -278,9 +281,9 @@ export default class EventIndex extends EventEmitter {
             else validMsgType = !msgtype.startsWith("m.key.verification");
 
             if (!ev.getContent().body) hasContentValue = false;
-        } else if (ev.getType() === "m.room.topic" && !ev.isRedacted()) {
+        } else if (ev.getType() === EventType.RoomTopic && !ev.isRedacted()) {
             if (!ev.getContent().topic) hasContentValue = false;
-        } else if (ev.getType() === "m.room.name" && !ev.isRedacted()) {
+        } else if (ev.getType() === EventType.RoomName && !ev.isRedacted()) {
             if (!ev.getContent().name) hasContentValue = false;
         }
 
@@ -399,7 +402,7 @@ export default class EventIndex extends EventEmitter {
      *
      * If a /room/{roomId}/messages request doesn't contain any events, stop the
      * crawl, otherwise create a new checkpoint and push it to the
-     * crawlerCheckpoints queue so we go through them in a round-robin way.
+     * crawlerCheckpoints queue, so we go through them in a round-robin way.
      */
     private async crawlerFunc() {
         let cancelled = false;
@@ -455,7 +458,7 @@ export default class EventIndex extends EventEmitter {
             const eventMapper = client.getEventMapper({ preventReEmit: true });
             // TODO we need to ensure to use member lazy loading with this
             // request so we get the correct profiles.
-            let res;
+            let res: Awaited<ReturnType<MatrixClient["createMessagesRequest"]>>;
 
             try {
                 res = await client.createMessagesRequest(
@@ -539,11 +542,8 @@ export default class EventIndex extends EventEmitter {
             // stage?
             const filteredEvents = matrixEvents.filter(this.isValidEvent);
 
-            // Collect the redaction events so we can delete the redacted events
-            // from the index.
-            const redactionEvents = matrixEvents.filter((ev) => {
-                return ev.getType() === "m.room.redaction";
-            });
+            // Collect the redaction events, so we can delete the redacted events from the index.
+            const redactionEvents = matrixEvents.filter(ev => ev.isRedaction());
 
             // Let us convert the events back into a format that EventIndex can
             // consume.
@@ -738,7 +738,7 @@ export default class EventIndex extends EventEmitter {
                         avatar_url: e.profile.avatar_url,
                         displayname: e.profile.displayname,
                     },
-                    type: "m.room.member",
+                    type: EventType.RoomMember,
                     event_id: matrixEvent.getId() + ":eventIndex",
                     room_id: matrixEvent.getRoomId(),
                     sender: matrixEvent.getSender(),
