@@ -3482,5 +3482,11 @@
     "Fetched %(count)s events out of %(total)s|one": "Ricevuto %(count)s evento di %(total)s",
     "Fetched %(count)s events out of %(total)s|other": "Ricevuti %(count)s eventi di %(total)s",
     "Generating a ZIP": "Generazione di uno ZIP",
-    "Open in OpenStreetMap": "Apri in OpenStreetMap"
+    "Open in OpenStreetMap": "Apri in OpenStreetMap",
+    "This address had invalid server or is already in use": "Questo indirizzo aveva un server non valido o è già in uso",
+    "Missing room name or separator e.g. (my-room:domain.org)": "Nome o separatore della stanza mancante, es. (mia-stanza:dominio.org)",
+    "Missing domain separator e.g. (:domain.org)": "Separatore del dominio mancante, es. (:dominio.org)",
+    "Backspace": "Backspace",
+    "toggle event": "commuta evento",
+    "Dial": "Componi"
 }
