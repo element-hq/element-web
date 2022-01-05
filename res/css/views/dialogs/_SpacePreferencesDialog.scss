@@ -18,16 +18,28 @@ limitations under the License.
     width: 700px;
     height: 400px;
 
-    .mx_TabbedView .mx_SettingsTab {
-        min-width: unset;
+    > h4 {
+        margin: -12px 0 0;
+        font-weight: normal;
+        font-size: $font-15px;
+        line-height: $font-24px;
+        color: $secondary-content;
+    }
 
-        .mx_SettingsTab_section {
-            font-size: $font-15px;
-            line-height: $font-24px;
+    .mx_TabbedView {
+        top: 80px;
 
-            .mx_Checkbox + p {
-                color: $secondary-content;
-                margin: 0 20px 0 24px;
+        .mx_SettingsTab {
+            min-width: unset;
+
+            .mx_SettingsTab_section {
+                font-size: $font-15px;
+                line-height: $font-24px;
+
+                .mx_Checkbox + p {
+                    color: $secondary-content;
+                    margin: 0 20px 0 24px;
+                }
             }
         }
     }
