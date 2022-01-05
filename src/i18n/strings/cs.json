@@ -3484,5 +3484,10 @@
     "Sections to show": "Sekce pro zobrazení",
     "Failed to load list of rooms.": "Nepodařilo se načíst seznam místností.",
     "Open in OpenStreetMap": "Otevřít v OpenStreetMap",
-    "toggle event": "přepnout událost"
+    "toggle event": "přepnout událost",
+    "This address had invalid server or is already in use": "Tato adresa měla neplatný server nebo je již používána",
+    "Missing domain separator e.g. (:domain.org)": "Chybí oddělovač domény, např. (:domain.org)",
+    "Missing room name or separator e.g. (my-room:domain.org)": "Chybí název místnosti nebo oddělovač, např. (my-room:domain.org)",
+    "Backspace": "Backspace",
+    "Dial": "Vytočit"
 }
