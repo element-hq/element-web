@@ -24,14 +24,15 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useTimeout } from "../../../hooks/useTimeout";
 import Analytics from "../../../Analytics";
 import CountlyAnalytics from '../../../CountlyAnalytics';
+import { TranslatedString } from '../../../languageHandler';
 import RoomContext from "../../../contexts/RoomContext";
 
 export const AVATAR_SIZE = 52;
 
 interface IProps {
     hasAvatar: boolean;
-    noAvatarLabel?: string;
-    hasAvatarLabel?: string;
+    noAvatarLabel?: TranslatedString;
+    hasAvatarLabel?: TranslatedString;
     setAvatarUrl(url: string): Promise<unknown>;
 }
 

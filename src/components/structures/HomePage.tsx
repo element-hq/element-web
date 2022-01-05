@@ -19,7 +19,7 @@ import { useContext, useState } from "react";
 
 import AutoHideScrollbar from './AutoHideScrollbar';
 import { getHomePageUrl } from "../../utils/pages";
-import { _t } from "../../languageHandler";
+import { _tDom } from "../../languageHandler";
 import SdkConfig from "../../SdkConfig";
 import * as sdk from "../../index";
 import dis from "../../dispatcher/dispatcher";
@@ -72,8 +72,8 @@ const UserWelcomeTop = () => {
     return <div>
         <MiniAvatarUploader
             hasAvatar={!!ownProfile.avatarUrl}
-            hasAvatarLabel={_t("Great, that'll help people know it's you")}
-            noAvatarLabel={_t("Add a photo so people know it's you.")}
+            hasAvatarLabel={_tDom("Great, that'll help people know it's you")}
+            noAvatarLabel={_tDom("Add a photo so people know it's you.")}
             setAvatarUrl={url => cli.setAvatarUrl(url)}
         >
             <BaseAvatar
@@ -86,8 +86,8 @@ const UserWelcomeTop = () => {
             />
         </MiniAvatarUploader>
 
-        <h1>{ _t("Welcome %(name)s", { name: ownProfile.displayName }) }</h1>
-        <h4>{ _t("Now, let's help you get started") }</h4>
+        <h1>{ _tDom("Welcome %(name)s", { name: ownProfile.displayName }) }</h1>
+        <h4>{ _tDom("Now, let's help you get started") }</h4>
     </div>;
 };
 
@@ -113,8 +113,8 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
 
         introSection = <React.Fragment>
             <img src={logoUrl} alt={config.brand} />
-            <h1>{ _t("Welcome to %(appName)s", { appName: config.brand }) }</h1>
-            <h4>{ _t("Own your conversations.") }</h4>
+            <h1>{ _tDom("Welcome to %(appName)s", { appName: config.brand }) }</h1>
+            <h4>{ _tDom("Own your conversations.") }</h4>
         </React.Fragment>;
     }
 
@@ -123,13 +123,13 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
             { introSection }
             <div className="mx_HomePage_default_buttons">
                 <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
-                    { _t("Send a Direct Message") }
+                    { _tDom("Send a Direct Message") }
                 </AccessibleButton>
                 <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
-                    { _t("Explore Public Rooms") }
+                    { _tDom("Explore Public Rooms") }
                 </AccessibleButton>
                 <AccessibleButton onClick={onClickNewRoom} className="mx_HomePage_button_createGroup">
-                    { _t("Create a Group Chat") }
+                    { _tDom("Create a Group Chat") }
                 </AccessibleButton>
             </div>
         </div>
