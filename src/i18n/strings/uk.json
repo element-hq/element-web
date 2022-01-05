@@ -3439,5 +3439,8 @@
     "This address had invalid server or is already in use": "Ця адреса містить хибний сервер чи вже використовується",
     "Missing room name or separator e.g. (my-room:domain.org)": "Бракує назви кімнати чи розділювача (my-room:domain.org)",
     "Missing domain separator e.g. (:domain.org)": "Бракує розділювача домену (:domain.org)",
-    "Dial": "Виклик"
+    "Dial": "Виклик",
+    "Back to thread": "Назад у тред",
+    "Room members": "Учасники кімнати",
+    "Back to chat": "Назад у бесіду"
 }
