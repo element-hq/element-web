@@ -23,14 +23,12 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { useWidgets } from "./RoomSummaryCard";
-import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
-import { Action } from "../../../dispatcher/actions";
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import UIStore from "../../../stores/UIStore";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 
 interface IProps {
     room: Room;
@@ -50,10 +48,9 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     useEffect(() => {
         if (!app || isPinned) {
             // stop showing this card
-            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                action: Action.SetRightPanelPhase,
-                phase: RightPanelPhases.RoomSummary,
-            });
+
+            //TODO RightPanelStore (will be addressed in a follow up PR): here we want to just pop the widget card.
+            RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary });
         }
     }, [app, isPinned]);
 

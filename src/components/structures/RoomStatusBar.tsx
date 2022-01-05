@@ -84,6 +84,7 @@ interface IState {
 
 @replaceableComponent("structures.RoomStatusBar")
 export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
+    private unmounted = false;
     public static contextType = MatrixClientContext;
 
     constructor(props: IProps, context: typeof MatrixClientContext) {
@@ -110,6 +111,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
+        this.unmounted = true;
         // we may have entirely lost our client as we're logging out before clicking login on the guest bar...
         const client = this.context;
         if (client) {
@@ -122,6 +124,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         if (state === "SYNCING" && prevState === "SYNCING") {
             return;
         }
+        if (this.unmounted) return;
         this.setState({
             syncState: state,
             syncStateData: data,

@@ -16,17 +16,18 @@ limitations under the License.
 
 import { User } from "matrix-js-sdk/src/models/user";
 import { verificationMethods as VerificationMethods } from 'matrix-js-sdk/src/crypto';
+import { RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
 import Modal from './Modal';
-import { RightPanelPhases } from "./stores/RightPanelStorePhases";
+import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import { findDMForUser } from './createRoom';
 import { accessSecretStorage } from './SecurityManager';
-import { Action } from './dispatcher/actions';
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
-import { IDevice } from "./components/views/right_panel/UserInfo";
+import { GroupMember, IDevice } from "./components/views/right_panel/UserInfo";
 import ManualDeviceKeyVerificationDialog from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
+import RightPanelStore from "./stores/right-panel/RightPanelStore";
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
@@ -65,10 +66,9 @@ export async function verifyDevice(user: User, device: IDevice) {
                     device.deviceId,
                     VerificationMethods.SAS,
                 );
-                dis.dispatch({
-                    action: Action.SetRightPanelPhase,
+                RightPanelStore.instance.setCard({
                     phase: RightPanelPhases.EncryptionPanel,
-                    refireParams: { member: user, verificationRequestPromise },
+                    state: { member: user, verificationRequestPromise },
                 });
             } else if (action === "legacy") {
                 Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
@@ -96,10 +96,9 @@ export async function legacyVerifyUser(user: User) {
         }
     }
     const verificationRequestPromise = cli.requestVerification(user.userId);
-    dis.dispatch({
-        action: Action.SetRightPanelPhase,
+    RightPanelStore.instance.setCard({
         phase: RightPanelPhases.EncryptionPanel,
-        refireParams: { member: user, verificationRequestPromise },
+        state: { member: user, verificationRequestPromise },
     });
 }
 
@@ -113,17 +112,13 @@ export async function verifyUser(user: User) {
         return;
     }
     const existingRequest = pendingVerificationRequestForUser(user);
-    dis.dispatch({
-        action: Action.SetRightPanelPhase,
+    RightPanelStore.instance.setCard({
         phase: RightPanelPhases.EncryptionPanel,
-        refireParams: {
-            member: user,
-            verificationRequest: existingRequest,
-        },
+        state: { member: user, verificationRequest: existingRequest },
     });
 }
 
-export function pendingVerificationRequestForUser(user: User) {
+export function pendingVerificationRequestForUser(user: User | RoomMember | GroupMember ) {
     const cli = MatrixClientPeg.get();
     const dmRoom = findDMForUser(cli, user.userId);
     if (dmRoom) {

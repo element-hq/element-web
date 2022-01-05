@@ -55,7 +55,7 @@ interface IState {
     editState?: EditorStateTransfer;
     replyToEvent?: MatrixEvent;
     initialEventId?: string;
-    initialEventHighlighted?: boolean;
+    isInitialEventHighlighted?: boolean;
 
     // settings:
     showReadReceipts?: boolean;
@@ -103,7 +103,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
             // roomLoadError: RoomViewStore.getRoomLoadError(),
 
             initialEventId: RoomViewStore.getInitialEventId(),
-            initialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
+            isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
             replyToEvent: RoomViewStore.getQuotingEvent(),
         };
 
@@ -127,7 +127,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     };
 
     private onScroll = (): void => {
-        if (this.state.initialEventId && this.state.initialEventHighlighted) {
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
             dis.dispatch({
                 action: Action.ViewRoom,
                 room_id: this.props.room.roomId,
@@ -145,7 +145,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        const highlightedEventId = this.state.initialEventHighlighted
+        const highlightedEventId = this.state.isInitialEventHighlighted
             ? this.state.initialEventId
             : null;
 

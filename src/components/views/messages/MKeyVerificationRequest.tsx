@@ -22,12 +22,11 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import { getNameForEventRoom, userLabelForEventRoom }
     from '../../../utils/KeyVerificationStateObserver';
-import dis from "../../../dispatcher/dispatcher";
-import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
-import { Action } from "../../../dispatcher/actions";
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from '../elements/AccessibleButton';
+import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -52,10 +51,9 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
     private openRequest = () => {
         const { verificationRequest } = this.props.mxEvent;
         const member = MatrixClientPeg.get().getUser(verificationRequest.otherUserId);
-        dis.dispatch({
-            action: Action.SetRightPanelPhase,
+        RightPanelStore.instance.setCard({
             phase: RightPanelPhases.EncryptionPanel,
-            refireParams: { verificationRequest, member },
+            state: { verificationRequest, member },
         });
     };
 

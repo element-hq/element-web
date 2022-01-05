@@ -38,7 +38,7 @@ import { ContextMenuTooltipButton } from '../../structures/ContextMenu';
 import RoomContextMenu from "../context_menus/RoomContextMenu";
 import { contextMenuBelow } from './RoomTile';
 import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNotificationStateStore';
-import { RightPanelPhases } from '../../../stores/RightPanelStorePhases';
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
 
 export interface ISearchInfo {

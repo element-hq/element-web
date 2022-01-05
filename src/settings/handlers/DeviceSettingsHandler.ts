@@ -57,17 +57,6 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return null; // wrong type or otherwise not set
         }
 
-        // Special case the right panel - see `setValue` for rationale.
-        if ([
-            "showRightPanelInRoom",
-            "showRightPanelInGroup",
-            "lastRightPanelPhaseForRoom",
-            "lastRightPanelPhaseForGroup",
-        ].includes(settingName)) {
-            const val = JSON.parse(localStorage.getItem(`mx_${settingName}`) || "{}");
-            return val['value'];
-        }
-
         // Special case for old useIRCLayout setting
         if (settingName === "layout") {
             const settings = this.getSettings() || {};
@@ -102,20 +91,6 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             return Promise.resolve();
         } else if (settingName === "audioNotificationsEnabled") {
             localStorage.setItem("audio_notifications_enabled", newValue);
-            this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
-            return Promise.resolve();
-        }
-
-        // Special case the right panel because we want to be able to update these all
-        // concurrently without stomping on one another. We could use async/await, though
-        // that introduces just enough latency to be annoying.
-        if ([
-            "showRightPanelInRoom",
-            "showRightPanelInGroup",
-            "lastRightPanelPhaseForRoom",
-            "lastRightPanelPhaseForGroup",
-        ].includes(settingName)) {
-            localStorage.setItem(`mx_${settingName}`, JSON.stringify({ value: newValue }));
             this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         }

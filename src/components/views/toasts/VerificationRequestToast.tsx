@@ -21,8 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
-import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { userLabelForEventRoom } from "../../../utils/KeyVerificationStateObserver";
 import dis from "../../../dispatcher/dispatcher";
 import ToastStore from "../../../stores/ToastStore";
@@ -31,6 +30,7 @@ import GenericToast from "./GenericToast";
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
+import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 
 interface IProps {
     toastKey: string;
@@ -115,14 +115,14 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });
-                dis.dispatch<SetRightPanelPhasePayload>({
-                    action: Action.SetRightPanelPhase,
-                    phase: RightPanelPhases.EncryptionPanel,
-                    refireParams: {
-                        verificationRequest: request,
-                        member: cli.getUser(request.otherUserId),
+                RightPanelStore.instance.setCard(
+                    {
+                        phase: RightPanelPhases.EncryptionPanel,
+                        state: { verificationRequest: request, member: cli.getUser(request.otherUserId) },
                     },
-                });
+                    undefined,
+                    request.channel.roomId,
+                );
             } else {
                 Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
                     verificationRequest: request,

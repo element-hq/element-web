@@ -18,7 +18,6 @@ import React, { RefObject, useContext, useRef, useState } from "react";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule, Preset } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { EventSubscription } from "fbemitter";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -43,9 +42,8 @@ import MainSplit from './MainSplit';
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import { ActionPayload } from "../../dispatcher/payloads";
 import RightPanel from "./RightPanel";
-import RightPanelStore from "../../stores/RightPanelStore";
-import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
-import { SetRightPanelPhasePayload } from "../../dispatcher/payloads/SetRightPanelPhasePayload";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import { useStateArray } from "../../hooks/useStateArray";
 import SpacePublicShare from "../views/spaces/SpacePublicShare";
 import {
@@ -85,6 +83,7 @@ import { useDispatcher } from "../../hooks/useDispatcher";
 import { useRoomState } from "../../hooks/useRoomState";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
+import { UPDATE_EVENT } from "../../stores/AsyncStore";
 
 interface IProps {
     space: Room;
@@ -164,10 +163,9 @@ const SpaceInfo = ({ space }: { space: Room }) => {
                     kind="link"
                     className="mx_SpaceRoomView_info_memberCount"
                     onClick={() => {
-                        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                            action: Action.SetRightPanelPhase,
+                        RightPanelStore.instance.setCard({
                             phase: RightPanelPhases.RoomMemberList,
-                            refireParams: { space },
+                            state: { spaceId: space.roomId },
                         });
                     }}
                 >
@@ -473,11 +471,7 @@ const SpaceLanding = ({ space }: { space: Room }) => {
     }
 
     const onMembersClick = () => {
-        defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-            action: Action.SetRightPanelPhase,
-            phase: RightPanelPhases.RoomMemberList,
-            refireParams: { space },
-        });
+        RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomMemberList, state: { spaceId: space.roomId } });
     };
 
     return <div className="mx_SpaceRoomView_landing">
@@ -796,7 +790,6 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
     private readonly creator: string;
     private readonly dispatcherRef: string;
-    private readonly rightPanelStoreToken: EventSubscription;
 
     constructor(props, context) {
         super(props, context);
@@ -813,18 +806,18 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
         this.state = {
             phase,
-            showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
+            showRightPanel: RightPanelStore.instance.isOpenForRoom,
             myMembership: this.props.space.getMyMembership(),
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        this.rightPanelStoreToken = RightPanelStore.getSharedInstance().addListener(this.onRightPanelStoreUpdate);
+        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         this.context.on("Room.myMembership", this.onMyMembership);
     }
 
     componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
-        this.rightPanelStoreToken.remove();
+        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         this.context.off("Room.myMembership", this.onMyMembership);
     }
 
@@ -836,7 +829,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
 
     private onRightPanelStoreUpdate = () => {
         this.setState({
-            showRightPanel: RightPanelStore.getSharedInstance().isOpenForRoom,
+            showRightPanel: RightPanelStore.instance.isOpenForRoom,
         });
     };
 
@@ -849,28 +842,19 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         if (payload.action !== Action.ViewUser && payload.action !== "view_3pid_invite") return;
 
         if (payload.action === Action.ViewUser && payload.member) {
-            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                action: Action.SetRightPanelPhase,
+            RightPanelStore.instance.setCard({
                 phase: RightPanelPhases.SpaceMemberInfo,
-                refireParams: {
-                    space: this.props.space,
-                    member: payload.member,
-                },
+                state: { spaceId: this.props.space.roomId, member: payload.member },
             });
         } else if (payload.action === "view_3pid_invite" && payload.event) {
-            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                action: Action.SetRightPanelPhase,
+            RightPanelStore.instance.setCard({
                 phase: RightPanelPhases.Space3pidMemberInfo,
-                refireParams: {
-                    space: this.props.space,
-                    event: payload.event,
-                },
+                state: { spaceId: this.props.space.roomId, member: payload.member },
             });
         } else {
-            defaultDispatcher.dispatch<SetRightPanelPhasePayload>({
-                action: Action.SetRightPanelPhase,
+            RightPanelStore.instance.setCard({
                 phase: RightPanelPhases.SpaceMemberList,
-                refireParams: { space: this.props.space },
+                state: { spaceId: this.props.space.roomId },
             });
         }
     };

@@ -29,6 +29,7 @@ import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import Spinner from "../views/elements/Spinner";
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 interface IProps {
     userId?: string;
@@ -88,7 +89,10 @@ export default class UserView extends React.Component<IProps, IState> {
         if (this.state.loading) {
             return <Spinner />;
         } else if (this.state.member) {
-            const panel = <RightPanel member={this.state.member} resizeNotifier={this.props.resizeNotifier} />;
+            const panel = <RightPanel
+                overwriteCard={{ phase: RightPanelPhases.RoomMemberInfo, state: { member: this.state.member } }}
+                resizeNotifier={this.props.resizeNotifier}
+            />;
             return (<MainSplit panel={panel} resizeNotifier={this.props.resizeNotifier}>
                 <HomePage />
             </MainSplit>);

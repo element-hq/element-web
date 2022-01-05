@@ -44,7 +44,7 @@ import E2EIcon from "../rooms/E2EIcon";
 import { useEventEmitter } from "../../../hooks/useEventEmitter";
 import { textualPowerLevel } from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { legacyVerifyUser, verifyDevice, verifyUser } from '../../../verification';
@@ -63,7 +63,6 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
 import InfoDialog from "../dialogs/InfoDialog";
-import { SetRightPanelPhasePayload } from "../../../dispatcher/payloads/SetRightPanelPhasePayload";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { mediaFromMxc } from "../../../customisations/Media";
@@ -75,6 +74,8 @@ import { bulkSpaceBehaviour } from "../../../utils/space";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
+import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
+import { IRightPanelCardState } from '../../../stores/right-panel/RightPanelStoreIPanelState';
 import { useUserStatusMessage } from "../../../hooks/useUserStatusMessage";
 
 export interface IDevice {
@@ -1649,25 +1650,22 @@ const UserInfo: React.FC<IProps> = ({
 
     const classes = ["mx_UserInfo"];
 
-    let refireParams;
+    let cardState: IRightPanelCardState;
     let previousPhase: RightPanelPhases;
     // We have no previousPhase for when viewing a UserInfo from a Group or without a Room at this time
     if (room && phase === RightPanelPhases.EncryptionPanel) {
         previousPhase = RightPanelPhases.RoomMemberInfo;
-        refireParams = { member };
+        cardState = { member };
     } else if (room?.isSpaceRoom() && SpaceStore.spacesEnabled) {
-        previousPhase = previousPhase = RightPanelPhases.SpaceMemberList;
-        refireParams = { space: room };
+        previousPhase = RightPanelPhases.SpaceMemberList;
+        cardState = { spaceId: room.roomId };
     } else if (room) {
         previousPhase = RightPanelPhases.RoomMemberList;
     }
 
     const onEncryptionPanelClose = () => {
-        dis.dispatch<SetRightPanelPhasePayload>({
-            action: Action.SetRightPanelPhase,
-            phase: previousPhase,
-            refireParams: refireParams,
-        });
+        // TODO RightPanelStore (will be addressed in a follow up PR): here we want to pop the panel
+        RightPanelStore.instance.setCard({ phase: previousPhase, state: cardState });
     };
 
     let content;
@@ -1723,7 +1721,7 @@ const UserInfo: React.FC<IProps> = ({
         onClose={onClose}
         closeLabel={closeLabel}
         previousPhase={previousPhase}
-        refireParams={refireParams}
+        cardState={cardState}
     >
         { content }
     </BaseCard>;

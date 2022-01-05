@@ -23,7 +23,7 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import HeaderButton from './HeaderButton';
 import HeaderButtons, { HeaderKind } from './HeaderButtons';
-import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { Action } from "../../../dispatcher/actions";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";

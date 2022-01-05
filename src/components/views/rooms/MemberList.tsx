@@ -33,7 +33,7 @@ import { isValid3pidInvite } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import BaseCard from "../right_panel/BaseCard";
-import { RightPanelPhases } from "../../../stores/RightPanelStorePhases";
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { replaceableComponent } from "../../../utils/replaceableComponent";

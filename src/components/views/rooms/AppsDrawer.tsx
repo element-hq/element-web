@@ -56,6 +56,7 @@ interface IState {
 
 @replaceableComponent("views.rooms.AppsDrawer")
 export default class AppsDrawer extends React.Component<IProps, IState> {
+    private unmounted = false;
     private resizeContainer: HTMLDivElement;
     private resizer: Resizer;
     private dispatcherRef: string;
@@ -85,6 +86,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
+        this.unmounted = true;
         ScalarMessaging.stopListening();
         WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.updateApps);
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
@@ -213,6 +215,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
     private centerApps = (): IApp[] => this.state.apps[Container.Center];
 
     private updateApps = (): void => {
+        if (this.unmounted) return;
         this.setState({
             apps: this.getApps(),
         });

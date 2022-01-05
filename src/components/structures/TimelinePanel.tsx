@@ -680,6 +680,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     };
 
     private onSync = (clientSyncState: SyncState, prevState: SyncState, data: object): void => {
+        if (this.unmounted) return;
         this.setState({ clientSyncState });
     };
 

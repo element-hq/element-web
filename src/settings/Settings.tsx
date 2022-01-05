@@ -32,7 +32,6 @@ import SystemFontController from './controllers/SystemFontController';
 import UseSystemFontController from './controllers/UseSystemFontController';
 import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
-import { RightPanelPhases } from "../stores/RightPanelStorePhases";
 import { isMac } from '../Keyboard';
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
@@ -771,21 +770,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show previews/thumbnails for images"),
         default: true,
     },
-    "showRightPanelInRoom": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
+    "RightPanel.phasesGlobal": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: null,
     },
-    "showRightPanelInGroup": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: false,
-    },
-    "lastRightPanelPhaseForRoom": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: RightPanelPhases.RoomSummary,
-    },
-    "lastRightPanelPhaseForGroup": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
-        default: RightPanelPhases.GroupMemberList,
+    "RightPanel.phases": {
+        supportedLevels: [SettingLevel.ROOM_DEVICE],
+        default: null,
     },
     "enableEventIndexing": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,

@@ -44,7 +44,6 @@ import CallContainer from '../views/voip/CallContainer';
 import { ViewRoomDeltaPayload } from "../../dispatcher/payloads/ViewRoomDeltaPayload";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import NonUrgentToastContainer from "./NonUrgentToastContainer";
-import { ToggleRightPanelPayload } from "../../dispatcher/payloads/ToggleRightPanelPayload";
 import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
@@ -68,6 +67,7 @@ import GroupFilterPanel from './GroupFilterPanel';
 import CustomRoomTagPanel from './CustomRoomTagPanel';
 import { mediaFromMxc } from "../../customisations/Media";
 import LegacyCommunityPreview from "./LegacyCommunityPreview";
+import RightPanelStore from '../../stores/right-panel/RightPanelStore';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -489,10 +489,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
             case NavigationAction.ToggleRoomSidePanel:
                 if (this.props.page_type === "room_view" || this.props.page_type === "group_view") {
-                    dis.dispatch<ToggleRightPanelPayload>({
-                        action: Action.ToggleRightPanel,
-                        type: this.props.page_type === "room_view" ? "room" : "group",
-                    });
+                    RightPanelStore.instance.togglePanel();
                     handled = true;
                 }
                 break;

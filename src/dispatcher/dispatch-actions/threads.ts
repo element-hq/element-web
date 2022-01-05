@@ -15,31 +15,26 @@ limitations under the License.
 */
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import { RightPanelPhases } from "../../stores/RightPanelStorePhases";
-import { Action } from "../actions";
-import dis from '../dispatcher';
-import { SetRightPanelPhasePayload } from "../payloads/SetRightPanelPhasePayload";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
 export const dispatchShowThreadEvent = (
     rootEvent: MatrixEvent,
     initialEvent?: MatrixEvent,
     highlighted?: boolean,
 ) => {
-    dis.dispatch({
-        action: Action.SetRightPanelPhase,
+    // TODO RightPanelStore (will be addressed in a follow up PR): this should really be a push!
+    RightPanelStore.instance.setCard({
         phase: RightPanelPhases.ThreadView,
-        refireParams: {
-            event: rootEvent,
+        state: {
+            threadHeadEvent: rootEvent,
             initialEvent,
-            highlighted,
+            isInitialEventHighlighted: highlighted,
         },
     });
 };
 
 export const dispatchShowThreadsPanelEvent = () => {
-    dis.dispatch<SetRightPanelPhasePayload>({
-        action: Action.SetRightPanelPhase,
-        phase: RightPanelPhases.ThreadPanel,
-    });
+    RightPanelStore.instance.setCard({ phase: RightPanelPhases.ThreadPanel });
 };
 
