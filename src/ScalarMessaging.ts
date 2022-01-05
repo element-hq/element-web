@@ -250,7 +250,6 @@ import { objectClone } from "./utils/objects";
 enum Action {
     CloseScalar = "close_scalar",
     GetWidgets = "get_widgets",
-    SetWidgets = "set_widgets",
     SetWidget = "set_widget",
     JoinRulesState = "join_rules_state",
     SetPlumbingState = "set_plumbing_state",
@@ -630,7 +629,7 @@ const onMessage = function(event: MessageEvent<any>): void {
         if (event.data.action === Action.GetWidgets) {
             getWidgets(event, null);
             return;
-        } else if (event.data.action === Action.SetWidgets) {
+        } else if (event.data.action === Action.SetWidget) {
             setWidget(event, null);
             return;
         } else {
