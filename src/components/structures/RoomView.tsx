@@ -99,6 +99,7 @@ import { fetchInitialEvent } from "../../utils/EventUtils";
 import { ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import AppsDrawer from '../views/rooms/AppsDrawer';
 import { RightPanelPhases } from '../../stores/right-panel/RightPanelStorePhases';
+import { ActionPayload } from "../../dispatcher/payloads";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -818,7 +819,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.setState({ callState: call ? call.state : null });
     };
 
-    private onAction = payload => {
+    private onAction = async (payload: ActionPayload): Promise<void> => {
         switch (payload.action) {
             case 'message_sent':
                 this.checkDesktopNotifications();
@@ -897,6 +898,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
             case Action.ComposerInsert: {
                 if (payload.composerType) break;
+
+                if (this.state.searching && payload.timelineRenderingType === TimelineRenderingType.Room) {
+                    // we don't have the composer rendered in this state, so bring it back first
+                    await this.onCancelSearchClick();
+                }
+
                 // re-dispatch to the correct composer
                 dis.dispatch({
                     ...payload,
@@ -1612,10 +1619,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private onCancelSearchClick = () => {
-        this.setState({
-            searching: false,
-            searchResults: null,
+    private onCancelSearchClick = (): Promise<void> => {
+        return new Promise<void>(resolve => {
+            this.setState({
+                searching: false,
+                searchResults: null,
+            }, resolve);
         });
     };
 
