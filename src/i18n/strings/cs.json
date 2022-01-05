@@ -3489,5 +3489,8 @@
     "Missing domain separator e.g. (:domain.org)": "Chybí oddělovač domény, např. (:domain.org)",
     "Missing room name or separator e.g. (my-room:domain.org)": "Chybí název místnosti nebo oddělovač, např. (my-room:domain.org)",
     "Backspace": "Backspace",
-    "Dial": "Vytočit"
+    "Dial": "Vytočit",
+    "Back to thread": "Zpět do vlákna",
+    "Room members": "Členové místnosti",
+    "Back to chat": "Zpět do chatu"
 }
