@@ -3484,5 +3484,10 @@
     "Fetched %(count)s events out of %(total)s|other": "從 %(total)s 個事件中擷取了 %(count)s 個",
     "Generating a ZIP": "產生 ZIP",
     "Open in OpenStreetMap": "在 OpenStreetMap 中開啟",
-    "toggle event": "切換事件"
+    "toggle event": "切換事件",
+    "This address had invalid server or is already in use": "此地址的伺服器無效或已被使用",
+    "Missing room name or separator e.g. (my-room:domain.org)": "缺少聊天室名稱或分隔符號，例如 (my-room:domain.org)",
+    "Missing domain separator e.g. (:domain.org)": "缺少域名分隔符號，例如 (:domain.org)",
+    "Backspace": "Backspace",
+    "Dial": "撥號"
 }
