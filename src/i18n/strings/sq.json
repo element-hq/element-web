@@ -3484,5 +3484,8 @@
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "S’qemë në gjendje të kuptojmë datën e dhënë (%(inputDate)s). Provoni të përdorni formatin YYYY-MM-DD.",
     "This address had invalid server or is already in use": "Kjo adresë kishte një shërbyes të pavlefshëm ose është e përdorur tashmë",
     "Missing room name or separator e.g. (my-room:domain.org)": "Mungon emër ose ndarës dhome, p.sh. (dhoma-ime:përkatësi.org)",
-    "Missing domain separator e.g. (:domain.org)": "Mungon ndarë përkatësie, p.sh. (:domain.org)"
+    "Missing domain separator e.g. (:domain.org)": "Mungon ndarë përkatësie, p.sh. (:domain.org)",
+    "Back to thread": "Mbrapsht te rrjedha",
+    "Room members": "Anëtarë dhome",
+    "Back to chat": "Mbrapsht te fjalosja"
 }
