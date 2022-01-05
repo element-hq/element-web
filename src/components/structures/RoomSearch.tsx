@@ -93,11 +93,11 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private onAction = (payload: ActionPayload) => {
         if (payload.action === Action.ViewRoom && payload.clear_search) {
             this.clearInput();
-        } else if (payload.action === 'focus_room_filter' && this.inputRef.current) {
+        } else if (payload.action === 'focus_room_filter') {
             if (SettingsStore.getValue("feature_spotlight")) {
                 this.openSpotlight();
             } else {
-                this.inputRef.current.focus();
+                this.inputRef.current?.focus();
             }
         }
     };
@@ -109,8 +109,12 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private openSearch = () => {
-        defaultDispatcher.dispatch({ action: "show_left_panel" });
-        defaultDispatcher.dispatch({ action: "focus_room_filter" });
+        if (SettingsStore.getValue("feature_spotlight")) {
+            this.openSpotlight();
+        } else {
+            defaultDispatcher.dispatch({ action: "show_left_panel" });
+            defaultDispatcher.dispatch({ action: "focus_room_filter" });
+        }
     };
 
     private onChange = () => {

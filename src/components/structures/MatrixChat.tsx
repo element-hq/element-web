@@ -794,6 +794,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
                 break;
             case 'focus_room_filter': // for CtrlOrCmd+K to work by expanding the left panel first
+                if (SettingsStore.getValue("feature_spotlight")) break; // don't expand if spotlight enabled
+                // fallthrough
             case 'show_left_panel':
                 this.setState({
                     collapseLhs: false,
