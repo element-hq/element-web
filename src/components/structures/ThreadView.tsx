@@ -40,8 +40,6 @@ import UploadBar from './UploadBar';
 import { _t } from '../../languageHandler';
 import ThreadListContextMenu from '../views/context_menus/ThreadListContextMenu';
 import RightPanelStore from '../../stores/right-panel/RightPanelStore';
-import SettingsStore from '../../settings/SettingsStore';
-import { WidgetLayoutStore } from '../../stores/widgets/WidgetLayoutStore';
 
 interface IProps {
     room: Room;
@@ -194,24 +192,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
             event_id: this.state.thread?.id,
         };
 
-        let previousPhase = RightPanelStore.instance.previousCard.phase;
-        if (!SettingsStore.getValue("feature_maximised_widgets")) {
-            previousPhase = RightPanelPhases.ThreadPanel;
-        }
-
-        // change the previous phase to the threadPanel in case there is no maximised widget anymore
-        if (!WidgetLayoutStore.instance.hasMaximisedWidget(this.props.room)) {
-            previousPhase = RightPanelPhases.ThreadPanel;
-        }
-
-        // Make sure the previous Phase is always one of the two: Timeline or ThreadPanel
-        if (![RightPanelPhases.ThreadPanel, RightPanelPhases.Timeline].includes(previousPhase)) {
-            previousPhase = RightPanelPhases.ThreadPanel;
-        }
-        const previousPhaseLabels = {};
-        previousPhaseLabels[RightPanelPhases.ThreadPanel] = _t("All threads");
-        previousPhaseLabels[RightPanelPhases.Timeline] = _t("Chat");
-
         return (
             <RoomContext.Provider value={{
                 ...this.context,
@@ -222,8 +202,6 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 <BaseCard
                     className="mx_ThreadView mx_ThreadPanel"
                     onClose={this.props.onClose}
-                    previousPhase={previousPhase}
-                    previousPhaseLabel={previousPhaseLabels[previousPhase]}
                     withoutScrollContainer={true}
                     header={this.renderThreadViewHeader()}
                 >

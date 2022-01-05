@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventSubscription } from 'fbemitter';
 
 import defaultDispatcher from '../../dispatcher/dispatcher';
 import { pendingVerificationRequestForUser } from '../../verification';
@@ -31,7 +30,6 @@ import {
     convertToStatePanel,
     convertToStorePanel,
     IRightPanelForRoom,
-    convertCardToStore,
 } from './RightPanelStoreIPanelState';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 // import RoomViewStore from '../RoomViewStore';
@@ -63,7 +61,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     private viewedRoomId: string;
     private isViewingRoom?: boolean;
     private dispatcherRefRightPanelStore: string;
-    private roomStoreToken: EventSubscription;
+    private isReady = false;
 
     private global?: IRightPanelForRoom = null;
     private byRoom: {
@@ -76,6 +74,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     protected async onReady(): Promise<any> {
+        this.isReady = true;
         // TODO RightPanelStore (will be addressed when dropping groups): This should be used instead of the onDispatch callback when groups are removed.
         // RoomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequestUpdate);
@@ -90,9 +89,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     protected async onNotReady(): Promise<any> {
-        if (this.roomStoreToken) {
-            this.roomStoreToken.remove();
-        }
+        this.isReady = false;
         MatrixClientPeg.get().off("crypto.verification.request", this.onVerificationRequestUpdate);
         // TODO RightPanelStore (will be addressed when dropping groups): User this instead of the dispatcher.
         // RoomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
@@ -140,8 +137,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     // Setters
     public setCard(card: IRightPanelCard, allowClose = true, roomId?: string) {
         const rId = roomId ?? this.viewedRoomId;
-        // this was previously a very multifunctional command:
-        // Toggle panel: if the same phase is send but without a state
+        // This function behaves as following:
         // Update state: if the same phase is send but with a state
         // Set right panel and erase history: if a "different to the current" phase is send (with or without a state)
         const redirect = this.getVerificationRedirect(card);
@@ -149,30 +145,27 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const cardState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
 
         // Checks for wrong SetRightPanelPhase requests
-        if (!this.isPhaseActionIsValid(targetPhase)) return;
+        if (!this.isPhaseActionValid(targetPhase)) return;
 
-        if (targetPhase === this.currentCard?.phase &&
-            allowClose &&
-            (this.compareCards({ phase: targetPhase, state: cardState }, this.currentCard) || !cardState)
-        ) {
-            // Toggle panel: a toggle command needs to fullfil the following:
-            // - the same phase
-            // - the panel can be closed
-            // - does not contain any state information (state)
-            if (targetPhase != RightPanelPhases.EncryptionPanel) {
-                this.togglePanel(rId);
-            }
-            return;
-        } else if ((targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState)) {
+        if ((targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState)) {
             // Update state: set right panel with a new state but keep the phase (dont know it this is ever needed...)
             const hist = this.byRoom[rId]?.history ?? [];
             hist[hist.length - 1].state = cardState;
             this.emitAndUpdateSettings();
             return;
-        } else if (targetPhase !== this.currentCard?.phase) {
+        }
+
+        if (targetPhase !== this.currentCard?.phase) {
             // Set right panel and erase history.
             this.setRightPanelCache({ phase: targetPhase, state: cardState ?? {} }, rId);
         }
+    }
+
+    public setCards(cards: IRightPanelCard[], allowClose = true, roomId: string = null) {
+        const rId = roomId ?? this.viewedRoomId;
+        const history = cards.map(c => ({ phase: c.phase, state: c.state ?? {} }));
+        this.byRoom[rId] = { history, isOpen: true };
+        this.emitAndUpdateSettings();
     }
 
     public pushCard(
@@ -186,7 +179,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const pState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
 
         // Checks for wrong SetRightPanelPhase requests
-        if (!this.isPhaseActionIsValid(targetPhase)) return;
+        if (!this.isPhaseActionValid(targetPhase)) return;
 
         let roomCache = this.byRoom[rId];
         if (!!roomCache) {
@@ -236,10 +229,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
     }
 
-    private compareCards(a: IRightPanelCard, b: IRightPanelCard): boolean {
-        return JSON.stringify(convertCardToStore(a)) == JSON.stringify(convertCardToStore(b));
-    }
-
     private emitAndUpdateSettings() {
         const storePanelGlobal = convertToStorePanel(this.global);
         SettingsStore.setValue("RightPanel.phasesGlobal", null, SettingLevel.DEVICE, storePanelGlobal);
@@ -257,10 +246,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     private setRightPanelCache(card: IRightPanelCard, roomId?: string) {
-        this.byRoom[roomId ?? this.viewedRoomId] = {
-            history: [{ phase: card.phase, state: card.state ?? {} }],
-            isOpen: true,
-        };
+        const history = [{ phase: card.phase, state: card.state ?? {} }];
+        this.byRoom[roomId ?? this.viewedRoomId] = { history, isOpen: true };
         this.emitAndUpdateSettings();
     }
 
@@ -282,7 +269,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return null;
     }
 
-    private isPhaseActionIsValid(targetPhase) {
+    private isPhaseActionValid(targetPhase) {
         if (!RightPanelPhases[targetPhase]) {
             logger.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
             return false;
@@ -305,6 +292,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     private onVerificationRequestUpdate = () => {
         const { member } = this.currentCard.state;
+        if (!member) return;
         const pendingRequest = pendingVerificationRequestForUser(member);
         if (pendingRequest) {
             this.currentCard.state.verificationRequest = pendingRequest;
@@ -312,13 +300,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
     };
 
-    onRoomViewStoreUpdate() {
+    onRoomViewStoreUpdate = () => {
         // TODO: use this function instead of the onDispatch (the whole onDispatch can get removed!) as soon groups are removed
         // this.viewedRoomId = RoomViewStore.getRoomId();
         // this.isViewingRoom = true; // Is viewing room will of course be removed when removing groups
         // // load values from byRoomCache with the viewedRoomId.
         // this.loadCacheFromSettings();
-    }
+    };
 
     onDispatch(payload: ActionPayload) {
         switch (payload.action) {
@@ -347,9 +335,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 _this.viewedRoomId = payload.room_id;
                 _this.isViewingRoom = payload.action == Action.ViewRoom;
                 // load values from byRoomCache with the viewedRoomId.
-                if (!!_this.roomStoreToken) {
-                    // skip loading here since we need the client to be ready to get the events form the ids of the settings
-                    // this loading will be done in the onReady function
+                if (_this.isReady) {
+                    // we need the client to be ready to get the events form the ids of the settings
+                    // the loading will be done in the onReady function (to catch up with the changes done here before it was ready)
                     // all the logic in this case is not necessary anymore as soon as groups are dropped and we use: onRoomViewStoreUpdate
                     _this.loadCacheFromSettings();
                     _this.emitAndUpdateSettings();

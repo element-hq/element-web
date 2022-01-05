@@ -89,48 +89,43 @@ export function convertToStatePanel(storeRoom: IRightPanelForRoomStored, room: R
 }
 
 export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCardStored {
-    const panelStateThisRoomStored = { ...panelState.state } as any;
-    if (!!panelState?.state?.threadHeadEvent?.getId()) {
-        panelStateThisRoomStored.threadHeadEventId = panelState.state.threadHeadEvent.getId();
-    }
-    if (!!panelState?.state?.memberInfoEvent?.getId()) {
-        panelStateThisRoomStored.memberInfoEventId = panelState.state.memberInfoEvent.getId();
-    }
-    if (!!panelState?.state?.initialEvent?.getId()) {
-        panelStateThisRoomStored.initialEventId = panelState.state.initialEvent.getId();
-    }
-    if (!!panelState?.state?.member?.userId) {
-        panelStateThisRoomStored.memberId = panelState.state.member.userId;
-    }
-    delete panelStateThisRoomStored.threadHeadEvent;
-    delete panelStateThisRoomStored.initialEvent;
-    delete panelStateThisRoomStored.memberInfoEvent;
-    delete panelStateThisRoomStored.verificationRequest;
-    delete panelStateThisRoomStored.verificationRequestPromise;
-    delete panelStateThisRoomStored.member;
+    const state = panelState.state ?? {};
+    const stateStored: IRightPanelCardStateStored = {
+        groupId: state.groupId,
+        groupRoomId: state.groupRoomId,
+        widgetId: state.widgetId,
+        spaceId: state.spaceId,
+        isInitialEventHighlighted: state.isInitialEventHighlighted,
+        threadHeadEventId: !!state?.threadHeadEvent?.getId() ?
+            panelState.state.threadHeadEvent.getId() : undefined,
+        memberInfoEventId: !!state?.memberInfoEvent?.getId() ?
+            panelState.state.memberInfoEvent.getId() : undefined,
+        initialEventId: !!state?.initialEvent?.getId() ?
+            panelState.state.initialEvent.getId() : undefined,
+        memberId: !!state?.member?.userId ?
+            panelState.state.member.userId : undefined,
+    };
 
-    const storedCard = { state: panelStateThisRoomStored as IRightPanelCardStored, phase: panelState.phase };
-    return storedCard as IRightPanelCardStored;
+    return { state: stateStored, phase: panelState.phase };
 }
 
 function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room): IRightPanelCard {
-    const panelStateThisRoom = { ...panelStateStore?.state } as any;
-    if (!!panelStateThisRoom.threadHeadEventId) {
-        panelStateThisRoom.threadHeadEvent = room.findEventById(panelStateThisRoom.threadHeadEventId);
-    }
-    if (!!panelStateThisRoom.memberInfoEventId) {
-        panelStateThisRoom.memberInfoEvent = room.findEventById(panelStateThisRoom.memberInfoEventId);
-    }
-    if (!!panelStateThisRoom.initialEventId) {
-        panelStateThisRoom.initialEvent = room.findEventById(panelStateThisRoom.initialEventId);
-    }
-    if (!!panelStateThisRoom.memberId) {
-        panelStateThisRoom.member = room.getMember(panelStateThisRoom.memberId);
-    }
-    delete panelStateThisRoom.threadHeadEventId;
-    delete panelStateThisRoom.initialEventId;
-    delete panelStateThisRoom.memberInfoEventId;
-    delete panelStateThisRoom.memberId;
+    const stateStored = panelStateStore.state ?? {};
+    const state: IRightPanelCardState = {
+        groupId: stateStored.groupId,
+        groupRoomId: stateStored.groupRoomId,
+        widgetId: stateStored.widgetId,
+        spaceId: stateStored.spaceId,
+        isInitialEventHighlighted: stateStored.isInitialEventHighlighted,
+        threadHeadEvent: !!stateStored?.threadHeadEventId ?
+            room.findEventById(stateStored.threadHeadEventId) : undefined,
+        memberInfoEvent: !!stateStored?.memberInfoEventId ?
+            room.findEventById(stateStored.memberInfoEventId) : undefined,
+        initialEvent: !!stateStored?.initialEventId ?
+            room.findEventById(stateStored.initialEventId) : undefined,
+        member: !!stateStored?.memberId ?
+            room.getMember(stateStored.memberId) : undefined,
+    };
 
-    return { state: panelStateThisRoom as IRightPanelCardState, phase: panelStateStore.phase } as IRightPanelCard;
+    return { state: state, phase: panelStateStore.phase };
 }

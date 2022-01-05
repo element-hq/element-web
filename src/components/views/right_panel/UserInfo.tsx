@@ -1651,21 +1651,15 @@ const UserInfo: React.FC<IProps> = ({
     const classes = ["mx_UserInfo"];
 
     let cardState: IRightPanelCardState;
-    let previousPhase: RightPanelPhases;
     // We have no previousPhase for when viewing a UserInfo from a Group or without a Room at this time
     if (room && phase === RightPanelPhases.EncryptionPanel) {
-        previousPhase = RightPanelPhases.RoomMemberInfo;
         cardState = { member };
     } else if (room?.isSpaceRoom() && SpaceStore.spacesEnabled) {
-        previousPhase = RightPanelPhases.SpaceMemberList;
         cardState = { spaceId: room.roomId };
-    } else if (room) {
-        previousPhase = RightPanelPhases.RoomMemberList;
     }
 
     const onEncryptionPanelClose = () => {
-        // TODO RightPanelStore (will be addressed in a follow up PR): here we want to pop the panel
-        RightPanelStore.instance.setCard({ phase: previousPhase, state: cardState });
+        RightPanelStore.instance.popCard();
     };
 
     let content;
@@ -1679,7 +1673,8 @@ const UserInfo: React.FC<IProps> = ({
                     member={member as User}
                     groupId={groupId as string}
                     devices={devices}
-                    isRoomEncrypted={isRoomEncrypted} />
+                    isRoomEncrypted={isRoomEncrypted}
+                />
             );
             break;
         case RightPanelPhases.EncryptionPanel:
@@ -1720,7 +1715,6 @@ const UserInfo: React.FC<IProps> = ({
         header={header}
         onClose={onClose}
         closeLabel={closeLabel}
-        previousPhase={previousPhase}
         cardState={cardState}
     >
         { content }

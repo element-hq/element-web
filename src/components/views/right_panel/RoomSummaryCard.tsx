@@ -102,8 +102,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     }, [room.roomId]);
 
     const onOpenWidgetClick = () => {
-        // TODO RightPanelStore (will be addressed in a follow up PR): should push the widget
-        RightPanelStore.instance.setCard({
+        RightPanelStore.instance.pushCard({
             phase: RightPanelPhases.Widget,
             state: { widgetId: app.id },
         });
@@ -234,13 +233,11 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
 };
 
 export const onRoomMembersClick = (allowClose = true) => {
-    // TODO RightPanelStore (will be addressed in a follow up PR): should push the phase
-    RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomMemberList }, allowClose);
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, allowClose);
 };
 
 export const onRoomFilesClick = (allowClose = true) => {
-    // TODO RightPanelStore (will be addressed in a follow up PR): should push the phase
-    RightPanelStore.instance.setCard({ phase: RightPanelPhases.FilePanel }, allowClose);
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, allowClose);
 };
 
 const onRoomSettingsClick = () => {

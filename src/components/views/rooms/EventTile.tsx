@@ -61,7 +61,7 @@ import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
 import SettingsStore from "../../../settings/SettingsStore";
 import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
-import { dispatchShowThreadEvent } from '../../../dispatcher/dispatch-actions/threads';
+import { showThread } from '../../../dispatcher/dispatch-actions/threads';
 import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewStore';
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -72,6 +72,7 @@ import { ThreadNotificationState } from '../../../stores/notifications/ThreadNot
 import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNotificationStateStore';
 import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
 import { NotificationColor } from '../../../stores/notifications/NotificationColor';
+import { CardContext } from '../right_panel/BaseCard';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -670,21 +671,23 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         return (
-            <div
-                className="mx_ThreadInfo"
-                onClick={() => {
-                    dispatchShowThreadEvent(
-                        this.props.mxEvent,
-                    );
-                }}
-            >
-                <span className="mx_ThreadInfo_threads-amount">
-                    { _t("%(count)s reply", {
-                        count: this.thread.length,
-                    }) }
-                </span>
-                { this.renderThreadLastMessagePreview() }
-            </div>
+            <CardContext.Consumer>
+                { context =>
+                    <div
+                        className="mx_ThreadInfo"
+                        onClick={() => {
+                            showThread({ rootEvent: this.props.mxEvent, push: context.isCard });
+                        }}
+                    >
+                        <span className="mx_ThreadInfo_threads-amount">
+                            { _t("%(count)s reply", {
+                                count: this.thread.length,
+                            }) }
+                        </span>
+                        { this.renderThreadLastMessagePreview() }
+                    </div>
+                }
+            </CardContext.Consumer>
         );
     }
 
@@ -1411,7 +1414,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "data-notification": this.state.threadNotification,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
-                        "onClick": () => dispatchShowThreadEvent(this.props.mxEvent),
+                        "onClick": () => showThread({ rootEvent: this.props.mxEvent, push: true }),
                     }, <>
                         { sender }
                         { avatar }
@@ -1430,7 +1433,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             <RovingAccessibleTooltipButton
                                 className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
                                 title={_t("Reply in thread")}
-                                onClick={() => dispatchShowThreadEvent(this.props.mxEvent)}
+                                onClick={() => showThread({ rootEvent: this.props.mxEvent, push: true })}
                                 key="thread"
                             />
                             <RovingThreadListContextMenu

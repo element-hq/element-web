@@ -199,6 +199,7 @@ export default class MemberTile extends React.Component<IProps, IState> {
         dis.dispatch({
             action: Action.ViewUser,
             member: this.props.member,
+            push: true,
         });
     };
 

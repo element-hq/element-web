@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { _t } from "../../languageHandler";
+
 // These are in their own file because of circular imports being a problem.
 export enum RightPanelPhases {
     // Room stuff
@@ -42,6 +44,17 @@ export enum RightPanelPhases {
     // Thread stuff
     ThreadView = "ThreadView",
     ThreadPanel = "ThreadPanel",
+}
+
+export function backLabelForPhase(phase: RightPanelPhases) {
+    switch (phase) {
+        case RightPanelPhases.ThreadPanel: return _t("Threads");
+        case RightPanelPhases.Timeline: return _t("Back to chat");
+        case RightPanelPhases.RoomSummary: return _t("Room information");
+        case RightPanelPhases.RoomMemberList: return _t("Room members");
+        case RightPanelPhases.ThreadView: return _t("Back to thread");
+    }
+    return null;
 }
 
 // These are the phases that are safe to persist (the ones that don't require additional

@@ -33,7 +33,6 @@ import { isValid3pidInvite } from "../../../RoomInvite";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import BaseCard from "../right_panel/BaseCard";
-import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -513,7 +512,6 @@ export default class MemberList extends React.Component<IProps, IState> {
             return <BaseCard
                 className="mx_MemberList"
                 onClose={this.props.onClose}
-                previousPhase={RightPanelPhases.RoomSummary}
             >
                 <Spinner />
             </BaseCard>;
@@ -567,11 +565,8 @@ export default class MemberList extends React.Component<IProps, IState> {
             />
         );
 
-        let previousPhase = RightPanelPhases.RoomSummary;
-        // We have no previousPhase for when viewing a MemberList from a Space
         let scopeHeader;
         if (SpaceStore.spacesEnabled && room?.isSpaceRoom()) {
-            previousPhase = undefined;
             scopeHeader = <div className="mx_RightPanel_scopeHeader">
                 <RoomAvatar room={room} height={32} width={32} />
                 <RoomName room={room} />
@@ -586,7 +581,6 @@ export default class MemberList extends React.Component<IProps, IState> {
             </React.Fragment>}
             footer={footer}
             onClose={this.props.onClose}
-            previousPhase={previousPhase}
         >
             <div className="mx_MemberList_wrapper">
                 <TruncatedList

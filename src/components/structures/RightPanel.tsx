@@ -27,12 +27,10 @@ import GroupStore from '../../stores/GroupStore';
 import { RightPanelPhases } from '../../stores/right-panel/RightPanelStorePhases';
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { Action } from "../../dispatcher/actions";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import SettingsStore from "../../settings/SettingsStore";
-import { ActionPayload } from "../../dispatcher/payloads";
 import MemberList from "../views/rooms/MemberList";
 import GroupMemberList from "../views/groups/GroupMemberList";
 import GroupRoomList from "../views/groups/GroupRoomList";
@@ -47,7 +45,6 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 import PinnedMessagesCard from "../views/right_panel/PinnedMessagesCard";
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { E2EStatus } from '../../utils/ShieldUtils';
-import { dispatchShowThreadsPanelEvent } from '../../dispatcher/dispatch-actions/threads';
 import TimelineCard from '../views/right_panel/TimelineCard';
 import { UPDATE_EVENT } from '../../stores/AsyncStore';
 import { IRightPanelCard, IRightPanelCardState } from '../../stores/right-panel/RightPanelStoreIPanelState';
@@ -72,8 +69,6 @@ interface IState {
 export default class RightPanel extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
 
-    private dispatcherRef: string;
-
     constructor(props, context) {
         super(props, context);
 
@@ -90,7 +85,6 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }, 500, { leading: true, trailing: true });
 
     public componentDidMount(): void {
-        this.dispatcherRef = dis.register(this.onAction);
         const cli = this.context;
         cli.on("RoomState.members", this.onRoomStateMember);
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
@@ -98,7 +92,6 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     public componentWillUnmount(): void {
-        dis.unregister(this.dispatcherRef);
         if (this.context) {
             this.context.removeListener("RoomState.members", this.onRoomStateMember);
         }
@@ -151,14 +144,6 @@ export default class RightPanel extends React.Component<IProps, IState> {
             cardState: currentPanel.state,
             phase: currentPanel.phase,
         });
-    };
-
-    private onAction = (payload: ActionPayload) => {
-        const isChangingRoom = payload.action === Action.ViewRoom && payload.room_id !== this.props.room.roomId;
-        const isViewingThread = this.state.phase === RightPanelPhases.ThreadView;
-        if (isChangingRoom && isViewingThread) {
-            dispatchShowThreadsPanelEvent();
-        }
     };
 
     private onClose = () => {

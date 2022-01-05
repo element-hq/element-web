@@ -28,6 +28,7 @@ import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDia
 import { GroupMember, IDevice } from "./components/views/right_panel/UserInfo";
 import ManualDeviceKeyVerificationDialog from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
+import { IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();
@@ -66,10 +67,7 @@ export async function verifyDevice(user: User, device: IDevice) {
                     device.deviceId,
                     VerificationMethods.SAS,
                 );
-                RightPanelStore.instance.setCard({
-                    phase: RightPanelPhases.EncryptionPanel,
-                    state: { member: user, verificationRequestPromise },
-                });
+                setRightPanel({ member: user, verificationRequestPromise });
             } else if (action === "legacy") {
                 Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
                     ManualDeviceKeyVerificationDialog,
@@ -96,10 +94,7 @@ export async function legacyVerifyUser(user: User) {
         }
     }
     const verificationRequestPromise = cli.requestVerification(user.userId);
-    RightPanelStore.instance.setCard({
-        phase: RightPanelPhases.EncryptionPanel,
-        state: { member: user, verificationRequestPromise },
-    });
+    setRightPanel({ member: user, verificationRequestPromise });
 }
 
 export async function verifyUser(user: User) {
@@ -112,10 +107,21 @@ export async function verifyUser(user: User) {
         return;
     }
     const existingRequest = pendingVerificationRequestForUser(user);
-    RightPanelStore.instance.setCard({
-        phase: RightPanelPhases.EncryptionPanel,
-        state: { member: user, verificationRequest: existingRequest },
-    });
+    setRightPanel({ member: user, verificationRequest: existingRequest });
+}
+
+function setRightPanel(state: IRightPanelCardState) {
+    if (RightPanelStore.instance.roomPhaseHistory.some((card) => (card.phase == RightPanelPhases.RoomSummary))) {
+        RightPanelStore.instance.pushCard(
+            { phase: RightPanelPhases.EncryptionPanel, state },
+        );
+    } else {
+        RightPanelStore.instance.setCards([
+            { phase: RightPanelPhases.RoomSummary },
+            { phase: RightPanelPhases.RoomMemberInfo, state: { member: state.member } },
+            { phase: RightPanelPhases.EncryptionPanel, state },
+        ]);
+    }
 }
 
 export function pendingVerificationRequestForUser(user: User | RoomMember | GroupMember ) {

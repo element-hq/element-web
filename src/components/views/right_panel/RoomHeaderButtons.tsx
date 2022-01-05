@@ -32,7 +32,7 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { useReadPinnedEvents, usePinnedEvents } from './PinnedMessagesCard';
-import { dispatchShowThreadsPanelEvent } from "../../../dispatcher/dispatch-actions/threads";
+import { showThreadPanel } from "../../../dispatcher/dispatch-actions/threads";
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
@@ -154,7 +154,17 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     protected onAction(payload: ActionPayload) {
         if (payload.action === Action.ViewUser) {
             if (payload.member) {
-                this.setPhase(RightPanelPhases.RoomMemberInfo, { member: payload.member });
+                if (payload.push) {
+                    RightPanelStore.instance.pushCard(
+                        { phase: RightPanelPhases.RoomMemberInfo, state: { member: payload.member } },
+                    );
+                } else {
+                    RightPanelStore.instance.setCards([
+                        { phase: RightPanelPhases.RoomSummary },
+                        { phase: RightPanelPhases.RoomMemberList },
+                        { phase: RightPanelPhases.RoomMemberInfo, state: { member: payload.member } },
+                    ]);
+                }
             } else {
                 this.setPhase(RightPanelPhases.RoomMemberList);
             }
@@ -199,7 +209,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         if (RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
             RightPanelStore.instance.togglePanel();
         } else {
-            dispatchShowThreadsPanelEvent();
+            showThreadPanel();
         }
     };
 

@@ -115,11 +115,13 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     room_id: request.channel.roomId,
                     should_peek: false,
                 });
-                RightPanelStore.instance.setCard(
-                    {
-                        phase: RightPanelPhases.EncryptionPanel,
-                        state: { verificationRequest: request, member: cli.getUser(request.otherUserId) },
-                    },
+                const member = cli.getUser(request.otherUserId);
+                RightPanelStore.instance.setCards(
+                    [
+                        { phase: RightPanelPhases.RoomSummary },
+                        { phase: RightPanelPhases.RoomMemberInfo, state: { member } },
+                        { phase: RightPanelPhases.EncryptionPanel, state: { verificationRequest: request, member } },
+                    ],
                     undefined,
                     request.channel.roomId,
                 );

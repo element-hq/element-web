@@ -94,7 +94,7 @@ import MessageComposer from '../views/rooms/MessageComposer';
 import JumpToBottomButton from "../views/rooms/JumpToBottomButton";
 import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import SpaceStore from "../../stores/spaces/SpaceStore";
-import { dispatchShowThreadEvent } from '../../dispatcher/dispatch-actions/threads';
+import { showThread } from '../../dispatcher/dispatch-actions/threads';
 import { fetchInitialEvent } from "../../utils/EventUtils";
 import { ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import AppsDrawer from '../views/rooms/AppsDrawer';
@@ -338,6 +338,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (WidgetLayoutStore.instance.hasMaximisedWidget(this.state.room)) {
             // Show chat in right panel when a widget is maximised
             RightPanelStore.instance.setCard({ phase: RightPanelPhases.Timeline });
+        } else if (
+            RightPanelStore.instance.isOpenForRoom &&
+            RightPanelStore.instance.roomPhaseHistory.some(card => (card.phase === RightPanelPhases.Timeline))
+        ) {
+            // hide chat in right panel when the widget is minimized
+            RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary });
+            RightPanelStore.instance.togglePanel();
         }
         this.checkWidgets(this.state.room);
     };
@@ -424,21 +431,21 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
             const thread = initialEvent?.getThread();
             if (thread && !initialEvent?.isThreadRoot) {
-                dispatchShowThreadEvent(
-                    thread.rootEvent,
+                showThread({
+                    rootEvent: thread.rootEvent,
                     initialEvent,
-                    RoomViewStore.isInitialEventHighlighted(),
-                );
+                    highlighted: RoomViewStore.isInitialEventHighlighted(),
+                });
             } else {
                 newState.initialEventId = initialEventId;
                 newState.isInitialEventHighlighted = RoomViewStore.isInitialEventHighlighted();
 
                 if (thread && initialEvent?.isThreadRoot) {
-                    dispatchShowThreadEvent(
-                        thread.rootEvent,
+                    showThread({
+                        rootEvent: thread.rootEvent,
                         initialEvent,
-                        RoomViewStore.isInitialEventHighlighted(),
-                    );
+                        highlighted: RoomViewStore.isInitialEventHighlighted(),
+                    });
                 }
             }
         }

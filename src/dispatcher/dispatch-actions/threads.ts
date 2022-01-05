@@ -18,23 +18,32 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 
-export const dispatchShowThreadEvent = (
-    rootEvent: MatrixEvent,
-    initialEvent?: MatrixEvent,
-    highlighted?: boolean,
-) => {
-    // TODO RightPanelStore (will be addressed in a follow up PR): this should really be a push!
-    RightPanelStore.instance.setCard({
+export const showThread = (props: {
+    rootEvent: MatrixEvent;
+    initialEvent?: MatrixEvent;
+    highlighted?: boolean;
+    push?: boolean;
+}) => {
+    const push = props.push ?? false;
+    const threadViewCard = {
         phase: RightPanelPhases.ThreadView,
         state: {
-            threadHeadEvent: rootEvent,
-            initialEvent,
-            isInitialEventHighlighted: highlighted,
+            threadHeadEvent: props.rootEvent,
+            initialEvent: props.initialEvent,
+            isInitialEventHighlighted: props.highlighted,
         },
-    });
+    };
+    if (push) {
+        RightPanelStore.instance.pushCard(threadViewCard);
+    } else {
+        RightPanelStore.instance.setCards([
+            { phase: RightPanelPhases.ThreadPanel },
+            threadViewCard,
+        ]);
+    }
 };
 
-export const dispatchShowThreadsPanelEvent = () => {
+export const showThreadPanel = () => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.ThreadPanel });
 };
 

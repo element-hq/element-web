@@ -27,7 +27,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClientPeg } from '../../MatrixClientPeg';
 import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
-import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import DesktopBuildsNotice, { WarningKind } from "../views/elements/DesktopBuildsNotice";
 import BaseCard from "../views/right_panel/BaseCard";
 import { replaceableComponent } from "../../utils/replaceableComponent";
@@ -221,7 +220,6 @@ class FilePanel extends React.Component<IProps, IState> {
             return <BaseCard
                 className="mx_FilePanel mx_RoomView_messageListWrapper"
                 onClose={this.props.onClose}
-                previousPhase={RightPanelPhases.RoomSummary}
             >
                 <div className="mx_RoomView_empty">
                     { _t("You must <a>register</a> to use this functionality",
@@ -234,7 +232,6 @@ class FilePanel extends React.Component<IProps, IState> {
             return <BaseCard
                 className="mx_FilePanel mx_RoomView_messageListWrapper"
                 onClose={this.props.onClose}
-                previousPhase={RightPanelPhases.RoomSummary}
             >
                 <div className="mx_RoomView_empty">{ _t("You must join the room to see its files") }</div>
             </BaseCard>;
@@ -258,7 +255,6 @@ class FilePanel extends React.Component<IProps, IState> {
                     <BaseCard
                         className="mx_FilePanel"
                         onClose={this.props.onClose}
-                        previousPhase={RightPanelPhases.RoomSummary}
                         withoutScrollContainer
                     >
                         <DesktopBuildsNotice isRoomEncrypted={isRoomEncrypted} kind={WarningKind.Files} />
@@ -285,7 +281,6 @@ class FilePanel extends React.Component<IProps, IState> {
                     <BaseCard
                         className="mx_FilePanel"
                         onClose={this.props.onClose}
-                        previousPhase={RightPanelPhases.RoomSummary}
                     >
                         <Spinner />
                     </BaseCard>

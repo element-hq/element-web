@@ -23,7 +23,6 @@ import WidgetUtils from "../../../utils/WidgetUtils";
 import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { useWidgets } from "./RoomSummaryCard";
-import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { ChevronFace, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
@@ -48,9 +47,7 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
     useEffect(() => {
         if (!app || isPinned) {
             // stop showing this card
-
-            //TODO RightPanelStore (will be addressed in a follow up PR): here we want to just pop the widget card.
-            RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary });
+            RightPanelStore.instance.popCard();
         }
     }, [app, isPinned]);
 
@@ -88,7 +85,6 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
         header={header}
         className="mx_WidgetCard"
         onClose={onClose}
-        previousPhase={RightPanelPhases.RoomSummary}
         withoutScrollContainer
     >
         <AppTile
