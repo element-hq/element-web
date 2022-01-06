@@ -23,6 +23,7 @@ limitations under the License.
 import './modernizr';
 import * as ReactDOM from "react-dom";
 import React, { ChangeEvent, ReactElement } from 'react';
+
 import { MatrixClientPeg } from "matrix-react-sdk/src/MatrixClientPeg";
 import { screenshotNotificationUserSettingsTab } from './screenshots/notification_user_settings_tab';
 
