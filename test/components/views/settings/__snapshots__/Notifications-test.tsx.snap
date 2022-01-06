@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Notifications /> main notification switches email switches renders email switches correctly when email 3pids exist 1`] = `
+<LabelledToggleSwitch
+  data-test-id="notif-email-switch"
+  disabled={false}
+  key="tester@test.com"
+  label="Enable email notifications for tester@test.com"
+  onChange={[Function]}
+  value={false}
+>
+  <div
+    className="mx_SettingsFlag "
+  >
+    <span
+      className="mx_SettingsFlag_label"
+    >
+      Enable email notifications for tester@test.com
+    </span>
+    <_default
+      aria-label="Enable email notifications for tester@test.com"
+      checked={false}
+      disabled={false}
+      onChange={[Function]}
+    >
+      <AccessibleButton
+        aria-checked={false}
+        aria-disabled={false}
+        aria-label="Enable email notifications for tester@test.com"
+        className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
+        element="div"
+        onClick={[Function]}
+        role="switch"
+        tabIndex={0}
+      >
+        <div
+          aria-checked={false}
+          aria-disabled={false}
+          aria-label="Enable email notifications for tester@test.com"
+          className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          role="switch"
+          tabIndex={0}
+        >
+          <div
+            className="mx_ToggleSwitch_ball"
+          />
+        </div>
+      </AccessibleButton>
+    </_default>
+  </div>
+</LabelledToggleSwitch>
+`;
+
+exports[`<Notifications /> main notification switches renders only enable notifications switch when notifications are disabled 1`] = `
+<Notifications>
+  <div
+    className="mx_UserNotifSettings"
+  >
+    <LabelledToggleSwitch
+      data-test-id="notif-master-switch"
+      disabled={false}
+      label="Enable for this account"
+      onChange={[Function]}
+      value={false}
+    >
+      <div
+        className="mx_SettingsFlag "
+      >
+        <span
+          className="mx_SettingsFlag_label"
+        >
+          Enable for this account
+        </span>
+        <_default
+          aria-label="Enable for this account"
+          checked={false}
+          disabled={false}
+          onChange={[Function]}
+        >
+          <AccessibleButton
+            aria-checked={false}
+            aria-disabled={false}
+            aria-label="Enable for this account"
+            className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            element="div"
+            onClick={[Function]}
+            role="switch"
+            tabIndex={0}
+          >
+            <div
+              aria-checked={false}
+              aria-disabled={false}
+              aria-label="Enable for this account"
+              className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              role="switch"
+              tabIndex={0}
+            >
+              <div
+                className="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </AccessibleButton>
+        </_default>
+      </div>
+    </LabelledToggleSwitch>
+  </div>
+</Notifications>
+`;

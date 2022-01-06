@@ -113,6 +113,12 @@ export function createTestClient() {
         registerWithIdentityServer: jest.fn().mockResolvedValue({}),
         getIdentityAccount: jest.fn().mockResolvedValue({}),
         getTerms: jest.fn().mockResolvedValueOnce(),
+        getPushRules: jest.fn().mockResolvedValue(),
+        getPushers: jest.fn().mockResolvedValue({ pushers: [] }),
+        getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
+        setPusher: jest.fn().mockResolvedValue(),
+        setPushRuleEnabled: jest.fn().mockResolvedValue(),
+        setPushRuleActions: jest.fn().mockResolvedValue(),
     };
 }
 
