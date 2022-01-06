@@ -3489,5 +3489,8 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "缺少聊天室名稱或分隔符號，例如 (my-room:domain.org)",
     "Missing domain separator e.g. (:domain.org)": "缺少域名分隔符號，例如 (:domain.org)",
     "Backspace": "Backspace",
-    "Dial": "撥號"
+    "Dial": "撥號",
+    "Back to thread": "回到討論串",
+    "Room members": "聊天室成員",
+    "Back to chat": "回到聊天"
 }
