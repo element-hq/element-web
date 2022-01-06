@@ -572,7 +572,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
         const makeRadio = (r: IVectorPushRule, s: VectorState) => (
             <StyledRadioButton
-                key={r.ruleId}
+                key={r.ruleId + s}
                 name={r.ruleId}
                 checked={r.vectorState === s}
                 onChange={this.onRadioChecked.bind(this, r, s)}
@@ -581,15 +581,17 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             />
         );
 
-        const rows = this.state.vectorPushRules[category].map(r => <tr
-            data-test-id={category + r.ruleId}
-            key={category + r.ruleId}
-        >
-            <td>{ r.description }</td>
-            <td>{ makeRadio(r, VectorState.Off) }</td>
-            <td>{ makeRadio(r, VectorState.On) }</td>
-            <td>{ makeRadio(r, VectorState.Loud) }</td>
-        </tr>);
+        const fieldsetRows = this.state.vectorPushRules[category].map(r =>
+            <fieldset
+                key={category + r.ruleId}
+                data-test-id={category + r.ruleId}
+                className='mx_UserNotifSettings_gridRowContainer'
+            >
+                <legend className='mx_UserNotifSettings_gridRowLabel'>{ r.description }</legend>
+                { makeRadio(r, VectorState.Off) }
+                { makeRadio(r, VectorState.On) }
+                { makeRadio(r, VectorState.Loud) }
+            </fieldset>);
 
         let sectionName: TranslatedString;
         switch (category) {
@@ -607,19 +609,13 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
         }
 
         return <>
-            <table data-test-id={`notif-section-${category}`} className='mx_UserNotifSettings_pushRulesTable'>
-                <thead>
-                    <tr>
-                        <th>{ sectionName }</th>
-                        <th>{ VectorStateToLabel[VectorState.Off] }</th>
-                        <th>{ VectorStateToLabel[VectorState.On] }</th>
-                        <th>{ VectorStateToLabel[VectorState.Loud] }</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { rows }
-                </tbody>
-            </table>
+            <div data-test-id={`notif-section-${category}`} className='mx_UserNotifSettings_grid'>
+                <span className='mx_UserNotifSettings_gridRowLabel mx_UserNotifSettings_gridRowHeading'>{ sectionName }</span>
+                <span className='mx_UserNotifSettings_gridColumnLabel'>{ VectorStateToLabel[VectorState.Off] }</span>
+                <span className='mx_UserNotifSettings_gridColumnLabel'>{ VectorStateToLabel[VectorState.On] }</span>
+                <span className='mx_UserNotifSettings_gridColumnLabel'>{ VectorStateToLabel[VectorState.Loud] }</span>
+                { fieldsetRows }
+            </div>
             { clearNotifsButton }
             { keywordComposer }
         </>;

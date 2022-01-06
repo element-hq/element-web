@@ -245,8 +245,8 @@ describe('<Notifications />', () => {
             const section = 'vector_global';
 
             const globalSection = findByTestId(component, `notif-section-${section}`);
-            // 16 notification rules with class 'global'
-            expect(globalSection.find('td').length).toEqual(16);
+            // 4 notification rules with class 'global'
+            expect(globalSection.find('fieldset').length).toEqual(4);
             // oneToOneRule is set to 'on'
             const oneToOneRuleElement = findByTestId(component, section + oneToOneRule.rule_id);
             expect(getCheckedRadioForRule(oneToOneRuleElement)).toEqual('On');
