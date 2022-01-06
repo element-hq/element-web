@@ -2899,7 +2899,7 @@
     "Move down": "Liiguta alla",
     "Move up": "Liiguta üles",
     "Report": "Teata sisust",
-    "Collapse reply thread": "Ahenda vastuste jutulõng",
+    "Collapse reply thread": "Ahenda vastuste jutulõnga",
     "Show preview": "Näita eelvaadet",
     "View source": "Vaata algset teavet",
     "Forward": "Edasta",
@@ -3485,5 +3485,8 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "Jututoa nimi või eraldaja on puudu (näiteks jututuba:domeen.ee)",
     "Missing domain separator e.g. (:domain.org)": "Domeeni eraldaja on puudu (näiteks :domeen.ee)",
     "Backspace": "Tagasisammuklahv",
-    "Dial": "Helista"
+    "Dial": "Helista",
+    "Back to thread": "Tagasi jutulõnga manu",
+    "Room members": "Jututoa liikmed",
+    "Back to chat": "Tagasi vestluse manu"
 }
