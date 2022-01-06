@@ -54,7 +54,6 @@ limitations under the License.
 
 .mx_ProfileSettings_profileForm {
     @mixin mx_Settings_fullWidthField;
-    border-bottom: 1px solid $menu-border-color;
 }
 
 .mx_ProfileSettings_buttons {

@@ -2,6 +2,7 @@ import React from 'react';
 import EventEmitter from "events";
 import ShallowRenderer from 'react-test-renderer/shallow';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { JoinRule } from 'matrix-js-sdk/src/@types/partials';
 
 import { MatrixClientPeg as peg } from '../src/MatrixClientPeg';
 import dis from '../src/dispatcher/dispatcher';
@@ -88,6 +89,7 @@ export function createTestClient() {
         setRoomAccountData: jest.fn(),
         sendTyping: jest.fn().mockResolvedValue({}),
         sendMessage: () => jest.fn().mockResolvedValue({}),
+        sendStateEvent: jest.fn().mockResolvedValue(),
         getSyncState: () => "SYNCING",
         generateClientSecret: () => "t35tcl1Ent5ECr3T",
         isGuest: () => false,
@@ -113,6 +115,7 @@ export function createTestClient() {
         registerWithIdentityServer: jest.fn().mockResolvedValue({}),
         getIdentityAccount: jest.fn().mockResolvedValue({}),
         getTerms: jest.fn().mockResolvedValueOnce(),
+        doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(),
         getPushRules: jest.fn().mockResolvedValue(),
         getPushers: jest.fn().mockResolvedValue({ pushers: [] }),
         getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
@@ -154,6 +157,7 @@ export function mkEvent(opts) {
         "m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
         "m.room.power_levels", "m.room.topic", "m.room.history_visibility",
         "m.room.encryption", "m.room.member", "com.example.state",
+        "m.room.guest_access",
     ].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }
@@ -281,6 +285,8 @@ export function mkStubRoom(roomId = null, name, client) {
             maySendStateEvent: jest.fn().mockReturnValue(true),
             maySendEvent: jest.fn().mockReturnValue(true),
             members: [],
+            getJoinRule: jest.fn().mockReturnValue(JoinRule.Invite),
+            on: jest.fn(),
         },
         tags: {},
         setBlacklistUnverifiedDevices: jest.fn(),

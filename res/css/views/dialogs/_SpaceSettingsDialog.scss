@@ -38,7 +38,7 @@ limitations under the License.
         }
 
         & + .mx_SettingsTab_subheading {
-            border-top: 1px solid $quinary-content;
+            border-top: 1px solid $menu-border-color;
             margin-top: 0;
             padding-top: 24px;
         }
@@ -60,15 +60,6 @@ limitations under the License.
                 margin-left: 26px;
             }
         }
-
-        .mx_SettingsTab_showAdvanced {
-            margin: 16px 0;
-            padding: 0;
-        }
-
-        .mx_SettingsFlag {
-            margin-top: 24px;
-        }
     }
 
     .mx_SpaceSettingsDialog_buttons {
@@ -86,6 +77,11 @@ limitations under the License.
 
     .mx_AccessibleButton_hasKind {
         padding: 8px 22px;
+
+        &.mx_SettingsTab_showAdvanced {
+            margin: 16px 0;
+            padding: 0;
+        }
     }
 
     .mx_TabbedView_tabLabel {

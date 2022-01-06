@@ -384,6 +384,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         return (
             <div className='mx_AliasSettings'>
                 <SettingsFieldset
+                    data-test-id='published-address-fieldset'
                     legend={_t("Published Addresses")}
                     description={<>
                         { isSpaceRoom
@@ -429,7 +430,9 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                         placeholder={_t('New published address (e.g. #alias:server)')}
                     />
                 </SettingsFieldset>
-                <SettingsFieldset legend={_t("Local Addresses")}
+                <SettingsFieldset
+                    data-test-id='local-address-fieldset'
+                    legend={_t("Local Addresses")}
                     description={isSpaceRoom
                         ? _t("Set addresses for this space so users can find this space " +
                             "through your homeserver (%(localDomain)s)", { localDomain })
