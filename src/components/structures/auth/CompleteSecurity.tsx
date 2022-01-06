@@ -69,20 +69,20 @@ export default class CompleteSecurity extends React.Component<IProps, IState> {
         } else if (phase === Phase.Intro) {
             if (lostKeys) {
                 icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-                title = _t("Unable to verify this login");
+                title = _t("Unable to verify this device");
             } else {
                 icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-                title = _t("Verify this login");
+                title = _t("Verify this device");
             }
         } else if (phase === Phase.Done) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_verified" />;
-            title = _t("Session verified");
+            title = _t("Device verified");
         } else if (phase === Phase.ConfirmSkip) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
             title = _t("Are you sure?");
         } else if (phase === Phase.Busy) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
-            title = _t("Verify this login");
+            title = _t("Verify this device");
         } else if (phase === Phase.ConfirmReset) {
             icon = <span className="mx_CompleteSecurity_headerIcon mx_E2EIcon_warning" />;
             title = _t("Really reset verification keys?");

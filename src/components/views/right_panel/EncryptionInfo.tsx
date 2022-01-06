@@ -52,7 +52,7 @@ const EncryptionInfo: React.FC<IProps> = ({
     if (waitingForOtherParty && isSelfVerification) {
         content = (
             <div>
-                { _t("To proceed, please accept the verification request on your other login.") }
+                { _t("To proceed, please accept the verification request on your other device.") }
             </div>
         );
     } else if (waitingForOtherParty || waitingForNetwork) {

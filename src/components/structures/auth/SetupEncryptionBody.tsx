@@ -198,7 +198,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
                 let verifyButton;
                 if (store.hasDevicesToVerifyAgainst) {
                     verifyButton = <AccessibleButton kind="primary" onClick={this.onVerifyClick}>
-                        { _t("Verify with another login") }
+                        { _t("Verify with another device") }
                     </AccessibleButton>;
                 }
 
@@ -227,12 +227,12 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
             let message;
             if (this.state.backupInfo) {
                 message = <p>{ _t(
-                    "Your new session is now verified. It has access to your " +
+                    "Your new device is now verified. It has access to your " +
                     "encrypted messages, and other users will see it as trusted.",
                 ) }</p>;
             } else {
                 message = <p>{ _t(
-                    "Your new session is now verified. Other users will see it as trusted.",
+                    "Your new device is now verified. Other users will see it as trusted.",
                 ) }</p>;
             }
             return (
