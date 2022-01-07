@@ -6176,7 +6176,7 @@ matrix-react-test-utils@^0.2.3:
 
 "matrix-web-i18n@github:matrix-org/matrix-web-i18n":
   version "1.1.2"
-  resolved "https://codeload.github.com/matrix-org/matrix-web-i18n/tar.gz/e5c7071e0cdf715de87ef39dc8260e11d7add2f8"
+  resolved "https://codeload.github.com/matrix-org/matrix-web-i18n/tar.gz/a8a01807c057595948a6da3587516c46df77de18"
   dependencies:
     "@babel/parser" "^7.13.16"
     "@babel/traverse" "^7.13.17"
