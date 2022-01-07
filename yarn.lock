@@ -4766,9 +4766,10 @@ eslint-plugin-import@^2.25.2:
     resolve "^1.20.0"
     tsconfig-paths "^3.11.0"
 
-"eslint-plugin-matrix-org@github:matrix-org/eslint-plugin-matrix-org#48ec1e6af2cfb8310b9a6e23edf2dc7a26ddd580":
-  version "0.3.5"
-  resolved "https://codeload.github.com/matrix-org/eslint-plugin-matrix-org/tar.gz/48ec1e6af2cfb8310b9a6e23edf2dc7a26ddd580"
+eslint-plugin-matrix-org@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.4.0.tgz#de2d2db1cd471d637728133ce9a2b921690e5cd1"
+  integrity sha512-yVkNwtc33qtrQB4PPzpU+PUdFzdkENPan3JF4zhtAQJRUYXyvKEXnYSrXLUWYRXoYFxs9LbyI2CnhJL/RnHJaQ==
 
 eslint-plugin-react-hooks@^4.2.0:
   version "4.3.0"
