@@ -924,5 +924,6 @@
     "%(senderName)s set their display name to %(displayName)s": "Ο/η %(senderName)s καθόρισε το εμφανιζόμενο όνομα του σε %(displayName)s",
     "%(oldDisplayName)s changed their display name to %(displayName)s": "Ο/η %(oldDisplayName)s άλλαξε το εμφανιζόμενο όνομα σε %(displayName)s",
     "%(senderName)s banned %(targetName)s": "Ο %(senderName)s απέκλεισε τον/την %(targetName)s",
-    "%(senderName)s banned %(targetName)s: %(reason)s": "Ο %(senderName)s απέκλεισε τον/την %(targetName)s: %(reason)s"
+    "%(senderName)s banned %(targetName)s: %(reason)s": "Ο %(senderName)s απέκλεισε τον/την %(targetName)s: %(reason)s",
+    "%(senderName)s changed the <a>pinned messages</a> for the room.": "Ο/Η %(senderName)s άλλαξε τα  <a>καρφιτσωμένα μηνύματα </a> του δωματίου."
 }
