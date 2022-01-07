@@ -3492,5 +3492,21 @@
     "Dial": "Vytočit",
     "Back to thread": "Zpět do vlákna",
     "Room members": "Členové místnosti",
-    "Back to chat": "Zpět do chatu"
+    "Back to chat": "Zpět do chatu",
+    "Your new device is now verified. Other users will see it as trusted.": "Vaše nové zařízení je nyní ověřeno. Ostatní uživatelé jej uvidí jako důvěryhodné.",
+    "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Vaše nové zařízení je nyní ověřeno. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé jej budou považovat za důvěryhodné.",
+    "Verify with another device": "Ověřit pomocí jiného zařízení",
+    "Device verified": "Zařízení ověřeno",
+    "Verify this device": "Ověřit toto zařízení",
+    "Unable to verify this device": "Nelze ověřit toto zařízení",
+    "Verify other device": "Ověřit jiné zařízení",
+    "You cancelled verification on your other device.": "Ověřování na jiném zařízení jste zrušili.",
+    "Almost there! Is your other device showing the same shield?": "Už to skoro je! Zobrazuje vaše druhé zařízení stejný štít?",
+    "Verify this device by completing one of the following:": "Ověřte toto zařízení dokončením jedné z následujících položek:",
+    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Zařízení, které se snažíte ověřit, neumožňuje ověření QR kódem ani pomocí emotikonů, které %(brand)s podporuje. Zkuste použít jiného klienta.",
+    "To proceed, please accept the verification request on your other device.": "Pro pokračování, přijměte žádost o ověření na svém dalším zařízení.",
+    "Waiting for you to verify on your other device…": "Čekáme na ověření na jiném zařízení…",
+    "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Čekáme na ověření na vašem dalším zařízení, %(deviceName)s (%(deviceId)s)…",
+    "Verify this device by confirming the following number appears on its screen.": "Ověřte toto zařízení tak, že potvrdíte, že se na jeho obrazovce zobrazí následující číslo.",
+    "Confirm the emoji below are displayed on both devices, in the same order:": "Potvrďte, že se následující emotikony zobrazují na obou zařízeních ve stejném pořadí:"
 }
