@@ -36,6 +36,7 @@ const TooltipTarget: React.FC<IProps> = ({
     alignment,
     yOffset,
     tooltipClassName,
+    maxParentWidth,
     ...rest
 }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -63,6 +64,7 @@ const TooltipTarget: React.FC<IProps> = ({
                 yOffset={yOffset}
                 alignment={alignment}
                 visible={isVisible}
+                maxParentWidth={maxParentWidth}
             />
         </div>
     );
