@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StyledRadioGroup /> renders radios correctly when no value is provided 1`] = `
+<StyledRadioGroup
+  className="test-class"
+  definitions={
+    Array [
+      Object {
+        "className": "a-class",
+        "description": "anteater description",
+        "label": <span>
+          Anteater label
+        </span>,
+        "value": "Anteater",
+      },
+      Object {
+        "label": <span>
+          Badger label
+        </span>,
+        "value": "Badger",
+      },
+      Object {
+        "description": <span>
+          Canary description
+        </span>,
+        "label": <span>
+          Canary label
+        </span>,
+        "value": "Canary",
+      },
+    ]
+  }
+  name="test"
+  onChange={[MockFunction]}
+>
+  <StyledRadioButton
+    aria-describedby="test-Anteater-description"
+    checked={false}
+    childrenInLabel={true}
+    className="test-class a-class"
+    id="test-Anteater"
+    name="test"
+    onChange={[Function]}
+    value="Anteater"
+  >
+    <label
+      className="mx_StyledRadioButton test-class a-class mx_StyledRadioButton_enabled"
+    >
+      <input
+        aria-describedby="test-Anteater-description"
+        checked={false}
+        id="test-Anteater"
+        name="test"
+        onChange={[Function]}
+        type="radio"
+        value="Anteater"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        className="mx_StyledRadioButton_content"
+      >
+        <span>
+          Anteater label
+        </span>
+      </div>
+      <div
+        className="mx_StyledRadioButton_spacer"
+      />
+    </label>
+  </StyledRadioButton>
+  <span
+    id="test-Anteater-description"
+  >
+    anteater description
+  </span>
+  <StyledRadioButton
+    checked={false}
+    childrenInLabel={true}
+    className="test-class"
+    id="test-Badger"
+    name="test"
+    onChange={[Function]}
+    value="Badger"
+  >
+    <label
+      className="mx_StyledRadioButton test-class mx_StyledRadioButton_enabled"
+    >
+      <input
+        checked={false}
+        id="test-Badger"
+        name="test"
+        onChange={[Function]}
+        type="radio"
+        value="Badger"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        className="mx_StyledRadioButton_content"
+      >
+        <span>
+          Badger label
+        </span>
+      </div>
+      <div
+        className="mx_StyledRadioButton_spacer"
+      />
+    </label>
+  </StyledRadioButton>
+  <StyledRadioButton
+    aria-describedby="test-Canary-description"
+    checked={false}
+    childrenInLabel={true}
+    className="test-class"
+    id="test-Canary"
+    name="test"
+    onChange={[Function]}
+    value="Canary"
+  >
+    <label
+      className="mx_StyledRadioButton test-class mx_StyledRadioButton_enabled"
+    >
+      <input
+        aria-describedby="test-Canary-description"
+        checked={false}
+        id="test-Canary"
+        name="test"
+        onChange={[Function]}
+        type="radio"
+        value="Canary"
+      />
+      <div>
+        <div />
+      </div>
+      <div
+        className="mx_StyledRadioButton_content"
+      >
+        <span>
+          Canary label
+        </span>
+      </div>
+      <div
+        className="mx_StyledRadioButton_spacer"
+      />
+    </label>
+  </StyledRadioButton>
+  <span
+    id="test-Canary-description"
+  >
+    <span>
+      Canary description
+    </span>
+  </span>
+</StyledRadioGroup>
+`;

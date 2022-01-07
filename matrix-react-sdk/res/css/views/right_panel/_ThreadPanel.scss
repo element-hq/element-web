@@ -1,0 +1,345 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ThreadPanel {
+    display: flex;
+    flex-direction: column;
+
+    .mx_BaseCard_header {
+        margin-bottom: 12px;
+        .mx_BaseCard_close,
+        .mx_BaseCard_back {
+            width: 24px;
+            height: 24px;
+        }
+        .mx_BaseCard_back {
+            left: -4px;
+        }
+        .mx_BaseCard_close {
+            right: -4px;
+        }
+    }
+
+    .mx_BaseCard_back ~ .mx_ThreadPanel__header {
+        width: calc(100% - 60px);
+        margin-left: 30px;
+    }
+
+    .mx_ThreadPanel__header {
+        width: calc(100% - 30px);
+        height: 24px;
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+        align-items: center;
+
+        span:first-of-type {
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 18px;
+            color: $secondary-content;
+        }
+
+        .mx_AccessibleButton {
+            font-size: 12px;
+            color: $secondary-content;
+        }
+
+        .mx_MessageActionBar_optionsButton {
+            position: relative;
+        }
+
+        .mx_MessageActionBar_maskButton {
+            --size: 24px;
+            width: var(--size);
+            height: var(--size);
+            &::after {
+                mask-size: var(--size);
+                mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
+            }
+        }
+    }
+
+    .mx_ThreadPanel_button {
+        width: 20px;
+        height: 20px;
+        margin-top: -3px;
+        margin-bottom: auto;
+        position: relative;
+
+        &::before {
+            top: 2px;
+            left: 2px;
+            content: '';
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background: $primary-content;
+        }
+
+        &.mx_ThreadPanel_OptionsButton::before {
+            mask-image: url('$(res)/img/element-icons/context-menu.svg');
+        }
+    }
+
+    .mx_AutoHideScrollbar {
+        background: #fff;
+        background-color: $background;
+        border-radius: 8px;
+        width: calc(100% - 16px);
+        padding-right: 16px;
+    }
+
+    .mx_RoomView_MessageList {
+        padding-left: 12px;
+        padding-right: 0;
+    }
+
+    .mx_EventTile, .mx_EventListSummary {
+        // Account for scrollbar when hovering
+        padding-top: 0;
+
+        .mx_ThreadInfo {
+            position: relative;
+            padding-right: 11px;
+            &::after {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 0;
+                bottom: -16px;
+                height: 1px;
+                width: 100%;
+                border-bottom: 1px solid $message-action-bar-border-color;
+            }
+        }
+
+        .mx_DateSeparator {
+            display: none;
+        }
+
+        &.mx_EventTile_clamp:hover {
+            cursor: pointer;
+        }
+    }
+
+    .mx_EventTile:not([data-layout=bubble]) {
+        .mx_EventTile_e2eIcon {
+            left: 8px;
+        }
+    }
+
+    .mx_MessageComposer {
+        background-color: $background;
+        border-radius: 8px;
+        margin-top: 8px;
+        padding: 0 8px;
+        box-sizing: border-box;
+    }
+
+    .mx_ThreadPanel_dropdown {
+        padding: 3px 8px;
+        border-radius: 4px;
+        line-height: 1.5;
+        user-select: none;
+    }
+
+    .mx_ThreadPanel_dropdown:hover,
+    .mx_ThreadPanel_dropdown[aria-expanded=true] {
+        background: $quinary-content;
+    }
+
+    .mx_ThreadPanel_dropdown::before {
+        content: "";
+        width: 18px;
+        height: 18px;
+        background: currentColor;
+        mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+        mask-size: 100%;
+        mask-repeat: no-repeat;
+        float: right;
+    }
+
+    .mx_ThreadPanel_dropdown[aria-expanded=true]::before {
+        transform: rotate(180deg);
+    }
+
+    .mx_MessageTimestamp {
+        font-size: $font-12px;
+    }
+}
+
+.mx_ThreadPanel_replies {
+    margin-top: 8px;
+}
+
+.mx_ThreadPanel_repliesSummary {
+    &::before {
+        content: "";
+        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+        mask-position: center;
+        display: inline-block;
+        height: 18px;
+        min-width: 18px;
+        background-color: currentColor;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    color: $secondary-content;
+    font-weight: 600;
+    float: left;
+    margin-right: 12px;
+    font-size: $font-12px;
+}
+
+.mx_ThreadPanel_viewInRoom::before {
+    mask-image: url('$(res)/img/element-icons/view-in-room.svg');
+}
+
+.mx_ThreadPanel_copyLinkToThread::before {
+    mask-image: url('$(res)/img/element-icons/link.svg');
+}
+
+.mx_ThreadPanel_empty {
+    border-radius: 8px;
+    background: $background;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 48px;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    padding: 20px;
+
+    h2 {
+        color: $primary-content;
+        font-weight: 600;
+        font-size: $font-18px;
+    }
+
+    p {
+        font-size: $font-15px;
+        color: $secondary-content;
+    }
+
+    button {
+        border: none;
+        background: none;
+        color: $accent;
+
+        &:hover,
+        &:active {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+}
+
+.mx_ThreadPanel_largeIcon {
+    width: 28px;
+    height: 28px;
+    padding: 18px;
+    background: $system;
+    border-radius: 50%;
+
+    &::after {
+        content: "";
+        width: inherit;
+        height: inherit;
+        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+        mask-position: center;
+        display: inline-block;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        background-color: $secondary-content;
+    }
+}
+
+.mx_ContextualMenu_wrapper.mx_ThreadPanel__header {
+    .mx_ContextualMenu {
+        position: initial;
+        span:first-of-type {
+            font-weight: $font-semi-bold;
+            font-size: inherit;
+            color: $primary-content;
+        }
+
+        font-size: $font-12px;
+        color: $secondary-content;
+        padding-top: 10px;
+        padding-bottom: 10px;
+
+        border: 1px solid $quinary-content;
+        box-shadow: 0px 1px 3px rgba(23, 25, 28, 0.05);
+    }
+
+    .mx_ContextualMenu_chevron_top {
+        left: auto;
+        right: 22px;
+        border-bottom-color: $quinary-content;
+        &::after {
+            content: "";
+            border: inherit;
+            border-bottom-color: $background;
+            position: absolute;
+            top: 1px;
+            left: -8px;
+        }
+    }
+
+    .mx_ThreadPanel_Header_FilterOptionItem {
+        display: flex;
+        flex-grow: 1;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 10px 20px 10px 30px;
+        position: relative;
+
+        &:hover {
+            background-color: $event-selected-color;
+        }
+        &[aria-checked="true"] {
+            :first-child {
+                margin-left: -20px;
+            }
+            :first-child::before {
+                content: "";
+                width: 12px;
+                height: 12px;
+                margin-right: 8px;
+                mask-image: url("$(res)/img/feather-customised/check.svg");
+                mask-size: 100%;
+                mask-repeat: no-repeat;
+                background-color: $primary-content;
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        :last-child {
+            color: $secondary-content;
+        }
+    }
+}

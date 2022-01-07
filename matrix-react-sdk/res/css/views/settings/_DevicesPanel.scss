@@ -1,0 +1,95 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_DevicesPanel {
+    width: auto;
+    max-width: 880px;
+
+    hr {
+        opacity: 0.2;
+        border: none;
+        border-bottom: 1px solid $primary-content;
+    }
+}
+
+.mx_DevicesPanel_header {
+    display: flex;
+    align-items: center;
+    margin-block: 10px;
+
+    .mx_DevicesPanel_header_title {
+        font-size: $font-18px;
+        font-weight: 600;
+        color: $primary-content;
+    }
+
+    .mx_DevicesPanel_selectButton {
+        padding-top: 9px;
+    }
+
+    .mx_E2EIcon {
+        width: 24px;
+        height: 24px;
+        margin-left: 0;
+        margin-right: 5px;
+    }
+}
+
+.mx_DevicesPanel_deleteButton {
+    margin-top: 10px;
+}
+
+.mx_DevicesPanel_device {
+    display: flex;
+    align-items: flex-start;
+    margin-block: 10px;
+    min-height: 35px;
+}
+
+.mx_DevicesPanel_icon, .mx_DevicesPanel_checkbox {
+    margin-left: 9px;
+    margin-top: 2px;
+}
+
+.mx_DevicesPanel_deviceInfo {
+    flex-grow: 1;
+}
+
+.mx_DevicesPanel_deviceName {
+    color: $primary-content;
+}
+
+.mx_DevicesPanel_lastSeen {
+    font-size: $font-12px;
+}
+
+.mx_DevicesPanel_deviceButtons {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.mx_DevicesPanel_renameForm {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .mx_Field_input {
+        width: 240px;
+        margin: 0;
+    }
+}

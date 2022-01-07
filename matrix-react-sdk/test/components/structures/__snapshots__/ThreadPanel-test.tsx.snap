@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThreadPanel Header expect that All filter for ThreadPanelHeader properly renders Show: All threads 1`] = `
+<div
+  className="mx_ThreadPanel__header"
+>
+  <span>
+    Threads
+  </span>
+  <ContextMenuButton
+    className="mx_ThreadPanel_dropdown"
+    inputRef={
+      Object {
+        "current": null,
+      }
+    }
+    isExpanded={false}
+    onClick={[Function]}
+  >
+    Show: All threads
+  </ContextMenuButton>
+</div>
+`;
+
+exports[`ThreadPanel Header expect that My filter for ThreadPanelHeader properly renders Show: My threads 1`] = `
+<div
+  className="mx_ThreadPanel__header"
+>
+  <span>
+    Threads
+  </span>
+  <ContextMenuButton
+    className="mx_ThreadPanel_dropdown"
+    inputRef={
+      Object {
+        "current": null,
+      }
+    }
+    isExpanded={false}
+    onClick={[Function]}
+  >
+    Show: My threads
+  </ContextMenuButton>
+</div>
+`;
+
+exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option selected in the context menu 1`] = `
+<RovingAccessibleButton
+  aria-checked={true}
+  className="mx_ThreadPanel_Header_FilterOptionItem"
+  onClick={[Function]}
+  role="menuitemradio"
+>
+  <AccessibleButton
+    aria-checked={true}
+    className="mx_ThreadPanel_Header_FilterOptionItem"
+    element="div"
+    inputRef={
+      Object {
+        "current": <div
+          aria-checked="true"
+          class="mx_AccessibleButton mx_ThreadPanel_Header_FilterOptionItem"
+          role="menuitemradio"
+          tabindex="-1"
+        >
+          <span>
+            All threads
+          </span>
+          <span>
+            Shows all threads from current room
+          </span>
+        </div>,
+      }
+    }
+    onClick={[Function]}
+    onFocus={[Function]}
+    role="menuitemradio"
+    tabIndex={-1}
+  >
+    <div
+      aria-checked={true}
+      className="mx_AccessibleButton mx_ThreadPanel_Header_FilterOptionItem"
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      role="menuitemradio"
+      tabIndex={-1}
+    >
+      <span>
+        All threads
+      </span>
+      <span>
+        Shows all threads from current room
+      </span>
+    </div>
+  </AccessibleButton>
+</RovingAccessibleButton>
+`;

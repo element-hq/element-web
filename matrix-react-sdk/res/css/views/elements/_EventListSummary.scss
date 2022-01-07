@@ -1,0 +1,71 @@
+/*
+Copyright 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_EventListSummary {
+    position: relative;
+}
+
+.mx_TextualEvent.mx_EventListSummary_summary {
+    font-size: $font-14px;
+    display: inline-flex;
+}
+
+.mx_EventListSummary_avatars {
+    display: inline-block;
+    margin-right: 8px;
+    padding-top: 8px;
+    line-height: $font-12px;
+}
+
+.mx_EventListSummary_avatars .mx_BaseAvatar {
+    margin-right: -4px;
+    cursor: pointer;
+}
+
+.mx_EventListSummary_toggle {
+    color: $accent;
+    cursor: pointer;
+    float: right;
+    margin-right: 10px;
+    margin-top: 8px;
+}
+
+.mx_EventListSummary_line {
+    border-bottom: 1px solid $primary-hairline-color;
+    margin-left: 63px;
+    line-height: $font-30px;
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_EventListSummary {
+        font-size: $font-13px;
+        .mx_EventTile_line {
+            line-height: $font-20px;
+        }
+    }
+
+    .mx_EventListSummary_line {
+        line-height: $font-22px;
+    }
+
+    .mx_EventListSummary_toggle {
+        margin-top: 3px;
+    }
+
+    .mx_TextualEvent.mx_EventListSummary_summary {
+        font-size: $font-13px;
+    }
+}

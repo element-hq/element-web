@@ -1,0 +1,121 @@
+// XXX: bleurgh, what is this? These classes totally break the component
+// naming scheme; it's completely unclear where or how they're being used
+// --Matthew
+
+.mx_UserPill,
+.mx_RoomPill,
+.mx_GroupPill,
+.mx_AtRoomPill {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    border-radius: $font-16px;
+    line-height: $font-15px;
+    padding-left: 0;
+}
+
+a.mx_Pill {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.mx_Pill {
+    padding: $font-1px;
+    padding-right: 0.4em;
+    vertical-align: text-top;
+    line-height: $font-17px;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_GroupPill,
+.mx_GroupPill {
+    color: $accent-fg-color;
+    background-color: $rte-room-pill-color;
+}
+
+/* More specific to override `.markdown-body a` text-decoration */
+.mx_EventTile_content .markdown-body a.mx_Pill {
+    text-decoration: none;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_UserPill,
+.mx_UserPill {
+    color: $primary-content;
+    background-color: $other-user-pill-bg-color;
+}
+
+.mx_UserPill_selected {
+    background-color: $accent !important;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_highlight .mx_EventTile_content .markdown-body a.mx_UserPill_me,
+.mx_EventTile_content .markdown-body a.mx_AtRoomPill,
+.mx_EventTile_content .mx_AtRoomPill,
+.mx_MessageComposer_input .mx_AtRoomPill {
+    color: $accent-fg-color;
+    background-color: $alert;
+}
+
+/* More specific to override `.markdown-body a` color */
+.mx_EventTile_content .markdown-body a.mx_RoomPill,
+.mx_EventTile_content .markdown-body a.mx_GroupPill,
+.mx_RoomPill,
+.mx_GroupPill {
+    color: $accent-fg-color;
+    background-color: $rte-room-pill-color;
+}
+
+.mx_EventTile_body .mx_UserPill,
+.mx_EventTile_body .mx_RoomPill,
+.mx_EventTile_body .mx_GroupPill {
+    cursor: pointer;
+}
+
+.mx_UserPill .mx_BaseAvatar,
+.mx_RoomPill .mx_BaseAvatar,
+.mx_GroupPill .mx_BaseAvatar,
+.mx_AtRoomPill .mx_BaseAvatar {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10rem;
+    margin-right: 0.24rem;
+}
+
+.mx_Markdown_BOLD {
+    font-weight: bold;
+}
+
+.mx_Markdown_ITALIC {
+    font-style: italic;
+    /*
+    // interestingly, *not* using the explicit italic font
+    // variant seems yield better results.
+
+    // compensate for Nunito italics being terrible
+    // https://github.com/google/fonts/issues/1726
+    transform: skewX(-14deg);
+    display: inline-block;
+    */
+}
+
+.mx_Markdown_CODE {
+    padding: .2em 0;
+    margin: 0;
+    font-size: 85%;
+    background-color: $rte-code-bg-color;
+    border-radius: 3px;
+}
+
+.mx_Markdown_HR {
+    display: block;
+    background: $rte-bg-color;
+}
+
+.mx_Markdown_STRIKETHROUGH {
+    text-decoration: line-through;
+}

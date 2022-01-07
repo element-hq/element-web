@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test Crypto in Browser</title>
+    <script src="lib/olm.js"></script>
+    <script src="lib/matrix.js"></script>
+</head>
+<body>
+    <h1>Testing export/import of Olm devices in the browser</h1>
+    <ul>
+        <li>
+            Make sure you built the current version of the Matrix JS SDK
+            (<code>yarn build</code>)
+        </li>
+        <li>
+            copy <code>olm.js</code> and <code>olm.wasm</code>
+            from a recent release of Olm (was tested with version 3.1.4)
+            in directory <code>lib/</code>
+        </li>
+        <li>start a local Matrix homeserver (on port 8008, or change the port in the code)</li>
+        <li>Serve this HTML file (e.g. <code>python3 -m http.server</code>) and go to it through your browser</li>
+        <li>
+            in the JS console, do:
+            <pre>
+aliceMatrixClient = await newMatrixClient("alice-"+randomHex());
+await aliceMatrixClient.exportDevice();
+await aliceMatrixClient.getAccessToken();
+            </pre>
+        </li>
+        <li>
+            copy the result of <code>exportDevice</code> and <code>getAccessToken</code> somewhere
+            (<strong>not</strong> in a JS variable as it will be destroyed when you refresh the page)
+        </li>
+        <li><strong>refresh the page (F5)</strong> to make sure the client is destroyed</li>
+        <li>
+            Do the following, replacing <code>ALICE_ID</code>
+            with the user ID of Alice (you can find it in the exported data)
+            <pre>
+bobMatrixClient = await newMatrixClient("bob-"+randomHex());
+roomId = await bobMatrixClient.createEncryptedRoom([ALICE_ID]);
+await bobMatrixClient.sendTextMessage('Hi Alice!', roomId);
+            </pre>
+        </li>
+        <li>Again, <strong>refresh the page (F5)</strong>. You may want to clear your console as well.</li>
+        <li>
+            Now do the following, using the exported data and the access token you saved previously:
+            <pre>
+aliceMatrixClient = await importMatrixClient(EXPORTED_DATA, ACCESS_TOKEN);
+            </pre>
+        </li>
+        <li>You should see the message sent by Bob printed in the console.</li>
+    </ul>
+
+    <script src="olm-device-export-import.js"></script>
+</body>
+</html>

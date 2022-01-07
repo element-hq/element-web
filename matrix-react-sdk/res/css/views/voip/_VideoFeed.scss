@@ -1,0 +1,70 @@
+/*
+Copyright 2015, 2016, 2020 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_VideoFeed {
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    border: transparent 2px solid;
+    display: flex;
+
+    &.mx_VideoFeed_voice {
+        background-color: $inverted-bg-color;
+        aspect-ratio: 16 / 9;
+    }
+
+    .mx_VideoFeed_video {
+        width: 100%;
+        background-color: transparent;
+
+        &.mx_VideoFeed_video_mirror {
+            transform: scale(-1, 1);
+        }
+    }
+
+    .mx_VideoFeed_mic {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 24px;
+        height: 24px;
+
+        background-color: rgba(0, 0, 0, 0.5); // Same on both themes
+        border-radius: 100%;
+
+        &::before {
+            position: absolute;
+            content: "";
+            width: 16px;
+            height: 16px;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            mask-position: center;
+            background-color: white; // Same on both themes
+            border-radius: 7px;
+        }
+
+        &.mx_VideoFeed_mic_muted::before {
+            mask-image: url('$(res)/img/voip/mic-muted.svg');
+        }
+
+        &.mx_VideoFeed_mic_unmuted::before {
+            mask-image: url('$(res)/img/voip/mic-unmuted.svg');
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "plugins": [
+    "node_modules/better-docs/category",
+    "node_modules/better-docs/typescript"
+  ],
+  "source": {
+    "include": [
+      "src"
+    ],
+    "includePattern": ".(ts|js)$"
+  },
+  "opts": {
+    "encoding": "utf8",
+    "destination": ".jsdoc",
+    "readme": "README.md",
+    "recurse": true,
+    "verbose": true,
+    "template": "node_modules/docdash"
+  },
+  "docdash": {
+    "static": true,
+    "private": false,
+    "search": true,
+    "collapse": true,
+    "typedefs": true
+  }
+}

@@ -1,0 +1,188 @@
+/*
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CreateSpaceFromCommunityDialog_wrapper {
+    .mx_Dialog {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.mx_CreateSpaceFromCommunityDialog {
+    width: 480px;
+    color: $primary-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 0;
+
+    .mx_CreateSpaceFromCommunityDialog_content {
+        > p {
+            font-size: $font-15px;
+            line-height: $font-24px;
+
+            &:first-of-type {
+                margin-top: 0;
+            }
+
+            &.mx_CreateSpaceFromCommunityDialog_flairNotice {
+                font-size: $font-12px;
+                line-height: $font-15px;
+            }
+        }
+
+        .mx_SpaceBasicSettings {
+            > p {
+                font-size: $font-12px;
+                line-height: $font-15px;
+                margin: 16px 0;
+            }
+
+            .mx_Field_textarea {
+                margin-bottom: 0;
+            }
+        }
+
+        .mx_JoinRuleDropdown .mx_Dropdown_menu {
+            width: auto !important; // override fixed width
+        }
+
+        .mx_CreateSpaceFromCommunityDialog_nonPublicSpacer {
+            height: 63px; // balance the height of the missing room alias field to prevent modal bouncing
+        }
+    }
+
+    .mx_CreateSpaceFromCommunityDialog_footer {
+        display: flex;
+        margin-top: 20px;
+
+        > span {
+            flex-grow: 1;
+            font-size: $font-12px;
+            line-height: $font-15px;
+            color: $secondary-content;
+            margin-top: -13px; // match height of buttons to prevent height changing
+
+            .mx_ProgressBar {
+                height: 8px;
+                width: 100%;
+
+                @mixin ProgressBarBorderRadius 8px;
+            }
+
+            .mx_CreateSpaceFromCommunityDialog_progressText {
+                margin-top: 8px;
+                font-size: $font-15px;
+                line-height: $font-24px;
+                color: $primary-content;
+            }
+
+            > * {
+                vertical-align: middle;
+            }
+        }
+
+        .mx_CreateSpaceFromCommunityDialog_error {
+            padding-left: 12px;
+
+            > img {
+                align-self: center;
+            }
+
+            .mx_CreateSpaceFromCommunityDialog_errorHeading {
+                font-weight: $font-semi-bold;
+                font-size: $font-15px;
+                line-height: $font-18px;
+                color: $alert;
+            }
+
+            .mx_CreateSpaceFromCommunityDialog_errorCaption {
+                margin-top: 4px;
+                font-size: $font-12px;
+                line-height: $font-15px;
+                color: $primary-content;
+            }
+        }
+
+        .mx_AccessibleButton {
+            display: inline-block;
+            align-self: center;
+        }
+
+        .mx_AccessibleButton_kind_primary {
+            padding: 8px 36px;
+            margin-left: 24px;
+        }
+
+        .mx_AccessibleButton_kind_primary_outline {
+            margin-left: auto;
+        }
+
+        .mx_CreateSpaceFromCommunityDialog_retryButton {
+            margin-left: 12px;
+            padding-left: 24px;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                background-color: $primary-content;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                mask-image: url('$(res)/img/element-icons/retry.svg');
+                width: 18px;
+                height: 18px;
+                left: 0;
+            }
+        }
+
+        .mx_AccessibleButton_kind_link {
+            padding: 0;
+        }
+    }
+}
+
+.mx_CreateSpaceFromCommunityDialog_SuccessInfoDialog {
+    .mx_InfoDialog {
+        max-width: 500px;
+    }
+
+    .mx_AccessibleButton_kind_link {
+        padding: 0;
+    }
+
+    .mx_CreateSpaceFromCommunityDialog_SuccessInfoDialog_checkmark {
+        position: relative;
+        border-radius: 50%;
+        border: 3px solid $accent;
+        width: 68px;
+        height: 68px;
+        margin: 12px auto 32px;
+
+        &::before {
+            width: inherit;
+            height: inherit;
+            content: '';
+            position: absolute;
+            background-color: $accent;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-image: url('$(res)/img/element-icons/roomlist/checkmark.svg');
+            mask-size: 48px;
+        }
+    }
+}

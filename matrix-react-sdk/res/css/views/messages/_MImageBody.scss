@@ -1,0 +1,106 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+$timeline-image-border-radius: 8px;
+
+.mx_MImageBody_thumbnail--blurhash {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.mx_MImageBody_thumbnail {
+    object-fit: contain;
+    border-radius: $timeline-image-border-radius;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    // this is needed so that the Blurhash can get have rounded corners without beeing the correct size during loading.
+    overflow: hidden;
+    .mx_Blurhash > canvas {
+        animation: mx--anim-pulse 1.75s infinite cubic-bezier(.4, 0, .6, 1);
+    }
+
+    .mx_no-image-placeholder {
+        background-color: $primary-content;
+    }
+}
+
+.mx_MImageBody_thumbnail_container {
+    // Prevent the padding-bottom (added inline in MImageBody.js) from
+    // affecting elements below the container.
+    overflow: hidden;
+
+    // Make sure the _thumbnail is positioned relative to the _container
+    position: relative;
+}
+
+.mx_MImageBody_gifLabel {
+    position: absolute;
+    display: block;
+    top: 0px;
+    left: 14px;
+    padding: 5px;
+    border-radius: 5px;
+    background: $imagebody-giflabel;
+    border: 2px solid $imagebody-giflabel-border;
+    color: $imagebody-giflabel-color;
+    pointer-events: none;
+}
+
+.mx_HiddenImagePlaceholder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+
+    // To center the text in the middle of the frame
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    cursor: pointer;
+    background-color: $header-panel-bg-color;
+
+    .mx_HiddenImagePlaceholder_button {
+        color: $accent;
+
+        span.mx_HiddenImagePlaceholder_eye {
+            margin-right: 8px;
+
+            background-color: $accent;
+            mask-image: url('$(res)/img/feather-customised/eye.svg');
+            display: inline-block;
+            width: 18px;
+            height: 14px;
+        }
+
+        span:not(.mx_HiddenImagePlaceholder_eye) {
+            vertical-align: text-bottom;
+        }
+    }
+}
+
+.mx_EventTile:hover .mx_HiddenImagePlaceholder {
+    background-color: $background;
+}

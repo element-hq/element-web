@@ -1,0 +1,130 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_NotificationPanel {
+    order: 2;
+    flex: 1 1 0;
+    overflow-y: auto;
+    display: flex;
+}
+
+.mx_NotificationPanel .mx_RoomView_messageListWrapper {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.mx_NotificationPanel .mx_RoomView_MessageList {
+    width: 100%;
+}
+
+.mx_NotificationPanel .mx_RoomView_MessageList h2 {
+    margin-left: 0px;
+}
+
+/* FIXME: rather than having EventTile's default CSS be for MessagePanel,
+   we should make EventTile a base CSS class and customise it specifically
+   for usage in {Message,File,Notification}Panel. */
+
+.mx_NotificationPanel .mx_EventTile {
+    word-break: break-word;
+    position: relative;
+    padding-bottom: 18px;
+
+    &:not(.mx_EventTile_last):not(.mx_EventTile_lastInSection)::after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: $tertiary-content;
+        height: 1px;
+        opacity: 0.4;
+        content: '';
+    }
+}
+
+.mx_NotificationPanel .mx_EventTile_roomName {
+    font-weight: bold;
+    font-size: $font-14px;
+
+    > * {
+        vertical-align: middle;
+    }
+
+    > .mx_BaseAvatar {
+        margin-right: 8px;
+    }
+}
+
+.mx_NotificationPanel .mx_EventTile_roomName a {
+    color: $primary-content;
+}
+
+.mx_NotificationPanel .mx_EventTile_avatar {
+    display: none; // we don't need this in this view
+}
+
+.mx_NotificationPanel .mx_EventTile .mx_SenderProfile,
+.mx_NotificationPanel .mx_EventTile .mx_MessageTimestamp {
+    color: $primary-content;
+    font-size: $font-12px;
+    display: inline;
+}
+
+.mx_NotificationPanel .mx_EventTile:not([data-layout=bubble]) .mx_EventTile_senderDetails {
+    padding-left: 36px; // align with the room name
+    position: relative;
+
+    a {
+        display: flex;
+    }
+}
+
+.mx_NotificationPanel .mx_EventTile_roomName a,
+.mx_NotificationPanel .mx_EventTile_senderDetails a {
+    text-decoration: none !important;
+}
+
+.mx_NotificationPanel .mx_EventTile .mx_MessageTimestamp {
+    visibility: visible;
+    position: initial;
+    display: inline;
+    padding-left: 5px;
+}
+
+.mx_NotificationPanel .mx_EventTile:not([data-layout=bubble]) .mx_EventTile_line {
+    margin-right: 0px;
+    padding-left: 36px; // align with the room name
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
+}
+
+.mx_NotificationPanel .mx_EventTile_selected .mx_EventTile_line {
+    padding-left: 0px;
+}
+
+.mx_NotificationPanel .mx_EventTile:hover .mx_EventTile_line {
+    background-color: $background;
+}
+
+.mx_NotificationPanel .mx_EventTile_content {
+    margin-right: 0px;
+}
+
+.mx_NotificationPanel_empty::before {
+    mask-image: url('$(res)/img/element-icons/notifications.svg');
+}

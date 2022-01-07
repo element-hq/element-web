@@ -11,6 +11,7 @@ module.exports = {
     rules: {
         // Things we do that break the ideal style
         "quotes": "off",
+        "linebreak-style": "off",
     },
     overrides: [{
         files: ["src/**/*.{ts,tsx}"],

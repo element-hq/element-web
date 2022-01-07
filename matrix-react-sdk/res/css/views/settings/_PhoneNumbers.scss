@@ -1,0 +1,60 @@
+/*
+Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_ExistingPhoneNumber {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.mx_ExistingPhoneNumber_delete {
+    margin-right: 5px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.mx_ExistingPhoneNumber_address,
+.mx_ExistingPhoneNumber_promptText {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.mx_ExistingPhoneNumber_confirmBtn {
+    margin-left: 5px;
+}
+
+.mx_ExistingPhoneNumber_verification {
+    display: inline-flex;
+    align-items: center;
+
+    .mx_Field {
+        margin: 0 0 0 1em;
+    }
+}
+
+.mx_PhoneNumbers_input {
+    display: flex;
+    align-items: center;
+}
+
+.mx_PhoneNumbers_input > .mx_Field {
+    flex-grow: 1;
+}
+
+.mx_PhoneNumbers_country {
+    width: 80px;
+}

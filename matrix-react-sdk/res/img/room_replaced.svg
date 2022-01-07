@@ -1,0 +1,13 @@
+<svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="31" height="31" fill="black" fill-opacity="0"/>
+<circle cx="15.5" cy="15.5" r="15.5" fill="#A2A2A2"/>
+<path d="M22.8553 15.5C22.8553 19.5622 19.5622 22.8553 15.5 22.8553C11.4378 22.8553 8.14474 19.5622 8.14474 15.5C8.14474 11.4378 11.4378 8.14474 15.5 8.14474C19.5622 8.14474 22.8553 11.4378 22.8553 15.5ZM15.5 24.25C20.3325 24.25 24.25 20.3325 24.25 15.5C24.25 10.6675 20.3325 6.75 15.5 6.75C10.6675 6.75 6.75 10.6675 6.75 15.5C6.75 20.3325 10.6675 24.25 15.5 24.25Z" fill="white" stroke="white" stroke-width="0.5"/>
+<rect x="16.2666" y="30.5032" width="1.5" height="29.4046" transform="rotate(179.987 16.2666 30.5032)" fill="#A2A2A2"/>
+<rect x="8.89404" y="28.8434" width="1.5" height="29.6593" transform="rotate(-149.607 8.89404 28.8434)" fill="#A2A2A2"/>
+<rect x="2.87988" y="24.495" width="1.5" height="30.0747" transform="rotate(-121.597 2.87988 24.495)" fill="#A2A2A2"/>
+<rect x="2.16284" y="23.3413" width="1.5" height="29.6434" transform="rotate(-116.581 2.16284 23.3413)" fill="#A2A2A2"/>
+<rect x="1.55176" y="22.1343" width="1.5" height="29.5016" transform="rotate(-111.584 1.55176 22.1343)" fill="#A2A2A2"/>
+<path d="M9.5 17L7.5 20L5.5 17L9.5 17Z" fill="white" stroke="white"/>
+<path d="M21.5 15L23.5 12L25.5 15H21.5Z" fill="white" stroke="white"/>
+</svg>
+

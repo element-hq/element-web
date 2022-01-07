@@ -1,0 +1,12 @@
+name: Preview Changelog
+on:
+  pull_request_target:
+    types: [ opened, edited, labeled ]
+jobs:
+    changelog:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Preview Changelog
+              uses: matrix-org/allchange@main
+              with:
+                  ghToken: ${{ secrets.GITHUB_TOKEN }}

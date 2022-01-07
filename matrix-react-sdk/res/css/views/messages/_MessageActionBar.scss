@@ -1,0 +1,132 @@
+/*
+Copyright 2019 New Vector Ltd
+Copyright 2019 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MessageActionBar {
+    position: absolute;
+    visibility: hidden;
+    cursor: pointer;
+    display: flex;
+    height: 32px;
+    line-height: $font-24px;
+    border-radius: 8px;
+    background: $background;
+    border: 1px solid $input-border-color;
+    top: -32px;
+    right: 8px;
+    user-select: none;
+    // Ensure the action bar appears above over things, like the read marker.
+    z-index: 1;
+
+    // Adds a previous event safe area so that you can't accidentally hover the
+    // previous event while trying to mouse into the action bar or from the
+    // react button to its tooltip.
+    &::before {
+        content: '';
+        position: absolute;
+        // tooltip safe mousing area + tooltip overhang +
+        // action bar + action bar offset from event
+        width: calc(10px + 48px + 100% + 8px);
+        // safe area + action bar
+        height: calc(20px + 100%);
+        top: -12px;
+        left: -58px;
+        z-index: -1;
+        cursor: initial;
+    }
+
+    > * {
+        white-space: nowrap;
+        display: inline-block;
+        position: relative;
+        margin: 2px;
+
+        &:hover {
+            background: $panel-actions;
+            border-radius: 6px;
+            z-index: 1;
+        }
+    }
+}
+
+.mx_MessageActionBar_maskButton {
+    width: 28px;
+    height: 28px;
+}
+
+.mx_MessageActionBar_maskButton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    mask-size: 18px;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    background-color: $secondary-content;
+}
+
+.mx_MessageActionBar_maskButton:hover::after {
+    background-color: $primary-content;
+}
+
+.mx_MessageActionBar_reactButton::after {
+    mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
+}
+
+.mx_MessageActionBar_replyButton::after {
+    mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
+}
+
+.mx_MessageActionBar_threadButton::after {
+    mask-image: url('$(res)/img/element-icons/message/thread.svg');
+}
+
+.mx_MessageActionBar_editButton::after {
+    mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
+}
+
+.mx_MessageActionBar_optionsButton::after {
+    mask-image: url('$(res)/img/element-icons/context-menu.svg');
+}
+
+.mx_MessageActionBar_resendButton::after {
+    mask-image: url('$(res)/img/element-icons/retry.svg');
+}
+
+.mx_MessageActionBar_cancelButton::after {
+    mask-image: url('$(res)/img/element-icons/trashcan.svg');
+}
+
+.mx_MessageActionBar_downloadButton::after {
+    mask-size: 14px;
+    mask-image: url('$(res)/img/download.svg');
+}
+
+.mx_MessageActionBar_expandMessageButton::after {
+    mask-size: 12px;
+    mask-image: url('$(res)/img/element-icons/expand-message.svg');
+}
+
+.mx_MessageActionBar_collapseMessageButton::after {
+    mask-size: 12px;
+    mask-image: url('$(res)/img/element-icons/collapse-message.svg');
+}
+
+.mx_MessageActionBar_downloadButton.mx_MessageActionBar_downloadSpinnerButton::after {
+    background-color: transparent; // hide the download icon mask
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Copyright (c) 2016, Missive
+From https://github.com/missive/emoji-mart/blob/master/src/svgs/index.js
+Licensed under BSD-3-Clause: https://github.com/missive/emoji-mart/blob/master/LICENSE
+-->
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="13"
+    height="13"
+    viewBox="0 0 20 20"
+    opacity="0.5"
+>
+    <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
+</svg>

@@ -1,0 +1,255 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomHeader {
+    flex: 0 0 50px;
+    border-bottom: 1px solid $primary-hairline-color;
+    background-color: $background;
+
+    .mx_RoomHeader_e2eIcon {
+        height: 12px;
+        width: 12px;
+
+        .mx_E2EIcon {
+            margin: 0;
+            position: absolute;
+            height: 12px;
+            width: 12px;
+        }
+    }
+}
+
+.mx_RoomHeader_wrapper {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    margin: 0 20px 0 16px;
+    padding-top: 8px;
+    border-bottom: 1px solid $system;
+
+    .mx_InviteOnlyIcon_large {
+        margin: 0;
+    }
+}
+
+.mx_RoomHeader_spinner {
+    flex: 1;
+    height: 36px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.mx_RoomHeader_textButton {
+    @mixin mx_DialogButton;
+    margin-right: 8px;
+    margin-top: -5px;
+}
+
+.mx_RoomHeader_textButton:hover {
+    @mixin mx_DialogButton_hover;
+}
+
+.mx_RoomHeader_textButton_danger {
+    background-color: $alert;
+}
+
+.mx_RoomHeader_cancelButton {
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.mx_RoomHeader_buttons {
+    display: flex;
+    background-color: $background;
+}
+
+.mx_RoomHeader_info {
+    display: flex;
+    flex: 1;
+    align-items: center;
+}
+
+.mx_RoomHeader_simpleHeader {
+    line-height: $font-52px;
+    color: $primary-content;
+    font-size: $font-18px;
+    font-weight: $font-semi-bold;
+    overflow: hidden;
+    margin-left: 63px;
+    text-overflow: ellipsis;
+    width: 100%;
+
+    .mx_RoomHeader_cancelButton {
+        float: right;
+    }
+
+    .mx_RoomHeader_icon {
+        margin-left: 14px;
+        margin-right: 24px;
+        vertical-align: -4px;
+    }
+}
+
+.mx_RoomHeader_name {
+    flex: 0 1 auto;
+    overflow: hidden;
+    color: $primary-content;
+    font-weight: $font-semi-bold;
+    font-size: $font-18px;
+    border-radius: 6px;
+    margin: 0 7px;
+    padding: 1px 4px;
+    display: flex;
+    user-select: none;
+
+    &:hover {
+        background-color: $quinary-content;
+    }
+
+    .mx_RoomHeader_nametext {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .mx_RoomHeader_chevron {
+        align-self: center;
+        width: 16px;
+        height: 16px;
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+        background-color: $tertiary-content;
+    }
+
+    &[aria-expanded=true] {
+        background-color: $quinary-content;
+
+        .mx_RoomHeader_chevron {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.mx_RoomHeader_settingsHint {
+    color: $settings-grey-fg-color !important;
+}
+
+.mx_RoomHeader_searchStatus {
+    font-weight: normal;
+    opacity: 0.6;
+}
+
+.mx_RoomHeader_name,
+.mx_RoomHeader_avatar {
+    cursor: pointer;
+}
+
+.mx_RoomHeader_topic {
+    flex: 1;
+    color: $roomtopic-color;
+    font-weight: 400;
+    font-size: $font-13px;
+    // to align baseline of topic with room name
+    margin: 4px 7px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid transparent;
+    line-height: 1.2em;
+    max-height: 2.4em;
+}
+
+.mx_RoomHeader_avatar {
+    flex: 0;
+    margin: 0 6px 0 7px;
+    position: relative;
+}
+
+.mx_RoomHeader_avatar .mx_BaseAvatar_image {
+    object-fit: cover;
+}
+
+.mx_RoomHeader_button {
+    position: relative;
+    margin-left: 1px;
+    margin-right: 1px;
+    cursor: pointer;
+    height: 32px;
+    width: 32px;
+    border-radius: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 4px; // center with parent of 32px
+        left: 4px; // center with parent of 32px
+        height: 24px;
+        width: 24px;
+        background-color: $icon-button-color;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+    }
+
+    &:hover {
+        background: rgba($accent, 0.1);
+
+        &::before {
+            background-color: $accent;
+        }
+    }
+}
+
+.mx_RoomHeader_forgetButton::before {
+    mask-image: url('$(res)/img/element-icons/leave.svg');
+    width: 26px;
+}
+
+.mx_RoomHeader_appsButton::before {
+    mask-image: url('$(res)/img/element-icons/room/apps.svg');
+}
+.mx_RoomHeader_appsButton_highlight::before {
+    background-color: $accent;
+}
+
+.mx_RoomHeader_searchButton::before {
+    mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
+}
+
+.mx_RoomHeader_voiceCallButton::before {
+    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+
+    // The call button SVG is padded slightly differently, so match it up to the size
+    // of the other icons
+    mask-size: 20px;
+    mask-position: center;
+}
+
+.mx_RoomHeader_videoCallButton::before {
+    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+}
+
+@media only screen and (max-width: 480px) {
+    .mx_RoomHeader_wrapper {
+        padding: 0;
+        margin: 0;
+    }
+    .mx_RoomHeader {
+        overflow: hidden;
+    }
+}

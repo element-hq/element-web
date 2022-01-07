@@ -1,0 +1,93 @@
+.mx_Autocomplete {
+    position: absolute;
+    bottom: 0;
+    z-index: 1001;
+    width: 100%;
+    border: 1px solid $primary-hairline-color;
+    background: $background;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px -16px 32px $composer-shadow-color;
+}
+
+.mx_Autocomplete_ProviderSection {
+    border-bottom: 1px solid $primary-hairline-color;
+    width: 100%;
+}
+
+/* a "block" completion takes up a whole line */
+.mx_Autocomplete_Completion_block {
+    min-height: 34px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 12px;
+    user-select: none;
+    cursor: pointer;
+    align-items: center;
+    color: $primary-content;
+}
+
+.mx_Autocomplete_Completion_block * {
+    margin: 0 3px;
+}
+
+.mx_Autocomplete_Completion_pill {
+    box-sizing: border-box;
+    border-radius: 2rem;
+    height: $font-34px;
+    padding: 0.4rem;
+    display: flex;
+    user-select: none;
+    cursor: pointer;
+    align-items: center;
+    color: $primary-content;
+}
+
+.mx_Autocomplete_Completion_pill > * {
+    margin-right: 0.3rem;
+}
+
+/* styling for common completion elements */
+.mx_Autocomplete_Completion_subtitle {
+    font-style: italic;
+    flex: 1;
+}
+
+.mx_Autocomplete_Completion_description {
+    color: gray;
+    min-width: 150px;
+}
+
+.mx_Autocomplete_Completion_container_pill {
+    margin: 12px;
+    height: 100%;
+    overflow-y: scroll;
+    max-height: 35vh;
+}
+
+.mx_Autocomplete_Completion_container_truncate {
+    .mx_Autocomplete_Completion_title,
+    .mx_Autocomplete_Completion_subtitle,
+    .mx_Autocomplete_Completion_description {
+        /* Ellipsis for long names/subtitles/descriptions */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.mx_Autocomplete_Completion.selected,
+.mx_Autocomplete_Completion:hover {
+    background: $selected-color;
+    outline: none;
+}
+
+.mx_Autocomplete_provider_name {
+    margin: 12px;
+    color: $primary-content;
+    font-weight: 400;
+    opacity: 0.4;
+}

@@ -1,0 +1,104 @@
+/*
+Copyright 2019, 2020 New Vector Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_SettingsTab {
+    color: $primary-content;
+}
+
+.mx_SettingsTab_warningText {
+    color: $alert;
+}
+
+.mx_SettingsTab_heading {
+    font-size: $font-20px;
+    font-weight: 600;
+    color: $primary-content;
+    margin-bottom: 10px;
+}
+
+.mx_SettingsTab_heading:nth-child(n + 2) {
+    margin-top: 30px;
+}
+
+.mx_SettingsTab_subheading {
+    font-size: $font-16px;
+    display: block;
+    font-weight: 600;
+    color: $primary-content;
+    margin-bottom: 10px;
+    margin-top: 12px;
+}
+
+.mx_SettingsTab_subsectionText {
+    color: $settings-subsection-fg-color;
+    font-size: $font-14px;
+    display: block;
+    margin: 10px 80px 10px 0; // Align with the rest of the view
+}
+
+.mx_SettingsTab_section {
+    $right-gutter: 80px;
+
+    margin-bottom: 24px;
+
+    .mx_SettingsFlag {
+        margin-right: $right-gutter;
+        margin-bottom: 10px;
+    }
+
+    > p {
+        margin-right: $right-gutter;
+    }
+
+    &.mx_SettingsTab_subsectionText .mx_SettingsFlag {
+        margin-right: 0 !important;
+    }
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_label {
+    vertical-align: middle;
+    display: inline-block;
+    font-size: $font-14px;
+    color: $primary-content;
+    max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
+    box-sizing: border-box;
+    padding-right: 10px;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_microcopy {
+    margin-top: 4px;
+    font-size: $font-12px;
+    line-height: $font-15px;
+    color: $secondary-content;
+}
+
+.mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
+    float: right;
+}
+
+.mx_SettingsTab_linkBtn {
+    cursor: pointer;
+    color: $accent;
+    word-break: break-all;
+}
+
+.mx_SettingsTab a {
+    color: $accent-alt;
+}
+
+.mx_SettingsTab_toggleWithDescription {
+    margin-top: 24px;
+}

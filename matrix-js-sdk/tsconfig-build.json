@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": false,
+    "emitDecoratorMetadata": true,
+    "outDir": "./lib",
+    "rootDir": "src"
+  },
+  "exclude": [
+    "./spec/**/*.ts"
+  ]
+}

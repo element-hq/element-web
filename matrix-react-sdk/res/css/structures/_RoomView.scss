@@ -1,0 +1,326 @@
+/*
+Copyright 2015, 2016 OpenMarket Ltd
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_RoomView_wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    justify-content: center;
+    // Contain the amount of layers rendered by constraining what actually needs re-layering via css
+    contain: strict;
+}
+
+.mx_RoomView {
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+}
+
+@keyframes mx_RoomView_fileDropTarget_animation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.95;
+    }
+}
+
+.mx_RoomView_fileDropTarget {
+    min-width: 0px;
+    width: 100%;
+    height: 100%;
+
+    font-size: $font-18px;
+    text-align: center;
+
+    pointer-events: none;
+
+    background-color: $background;
+    opacity: 0.95;
+
+    position: absolute;
+    z-index: 3000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    animation: mx_RoomView_fileDropTarget_animation;
+    animation-duration: 0.5s;
+}
+
+@keyframes mx_RoomView_fileDropTarget_image_animation {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.mx_RoomView_fileDropTarget_image {
+    width: 32px;
+    animation: mx_RoomView_fileDropTarget_image_animation;
+    animation-duration: 0.5s;
+    margin-bottom: 16px;
+}
+
+.mx_RoomView_auxPanel {
+    min-width: 0px;
+    width: 100%;
+    margin: 0px auto;
+
+    overflow: auto;
+}
+
+.mx_RoomView_auxPanel_fullHeight {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3000;
+    background-color: $background;
+}
+
+.mx_RoomView_auxPanel_hiddenHighlights {
+    border-bottom: 1px solid $primary-hairline-color;
+    padding: 10px 26px;
+    color: $alert;
+    cursor: pointer;
+}
+
+.mx_RoomView_auxPanel_apps {
+    max-width: 1920px !important;
+}
+
+.mx_RoomView .mx_MainSplit {
+    flex: 1 1 0;
+}
+
+.mx_RoomView_messagePanel {
+    width: 100%;
+    overflow-y: auto;
+    flex: 1 1 0;
+    overflow-anchor: none;
+
+    &[data-scrollbar=false] {
+        overflow-y: hidden;
+    }
+}
+
+.mx_RoomView_messagePanelSearchSpinner {
+    flex: 1;
+    background-image: url('$(res)/img/typing-indicator-2x.gif');
+    background-position: center 367px;
+    background-size: 25px;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.mx_RoomView_messagePanelSearchSpinner::before {
+    background-color: $info-plinth-fg-color;
+    mask: url('$(res)/img/feather-customised/search-input.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 50px;
+    content: '';
+    position: absolute;
+    top: 286px;
+    left: 0;
+    right: 0;
+    height: 50px;
+}
+
+.mx_RoomView_body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+
+    .mx_RoomView_messagePanel, .mx_RoomView_messagePanelSpinner, .mx_RoomView_messagePanelSearchSpinner {
+        order: 2;
+    }
+}
+
+.mx_RoomView_body .mx_RoomView_timeline {
+    /* offset parent for mx_RoomView_topUnreadMessagesBar  */
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-right: calc($container-gap-width / 2);
+}
+
+.mx_RoomView_statusArea {
+    width: 100%;
+    flex: 0 0 auto;
+
+    max-height: 0px;
+    background-color: $background;
+    z-index: 1000;
+    overflow: hidden;
+
+    transition: all .2s ease-out;
+}
+
+.mx_RoomView_statusArea_expanded {
+    max-height: 100px;
+}
+
+.mx_RoomView_statusAreaBox {
+    margin: auto;
+    min-height: 50px;
+}
+
+.mx_RoomView_statusAreaBox_line {
+    margin-left: 65px;
+    border-top: 1px solid $primary-hairline-color;
+    height: 1px;
+}
+
+.mx_RoomView_messageListWrapper {
+    min-height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: flex-end;
+}
+
+.mx_RoomView_searchResultsPanel {
+    .mx_RoomView_messageListWrapper {
+        justify-content: flex-start;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+}
+
+.mx_RoomView_empty {
+    font-size: $font-13px;
+    padding: 0 24px;
+    margin-right: 30px;
+    text-align: center;
+    margin-bottom: 80px; // visually center the content (intentional offset)
+}
+
+.mx_RoomView_MessageList {
+    list-style-type: none;
+    padding: 18px;
+    margin: 0;
+    /* needed as min-height is set to clientHeight in ScrollPanel
+    to prevent shrinking when WhoIsTypingTile is hidden */
+    box-sizing: border-box;
+}
+
+.mx_RoomView_MessageList li {
+    clear: both;
+}
+
+li.mx_RoomView_myReadMarker_container {
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+
+hr.mx_RoomView_myReadMarker {
+    border-top: solid 1px $accent;
+    border-bottom: solid 1px $accent;
+    margin-top: 0px;
+    position: relative;
+    top: -1px;
+    z-index: 1;
+    will-change: width;
+    transition: width 400ms easeinsine 1s, opacity 400ms easeinsine 1s;
+    width: 99%;
+    opacity: 1;
+}
+
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
+    background-color: $background;
+}
+
+.mx_RoomView_callStatusBar .mx_UploadBar_uploadFilename {
+    color: $accent-fg-color;
+    opacity: 1.0;
+}
+
+.mx_RoomView_inCall .mx_RoomView_statusAreaBox_line {
+    margin-top: 2px;
+    border: none;
+    height: 0px;
+}
+
+.mx_RoomView_inCall .mx_MessageComposer_wrapper {
+    border-top: 2px hidden;
+    padding-top: 1px;
+}
+
+.mx_RoomView_voipChevron {
+    position: absolute;
+    bottom: -11px;
+    right: 11px;
+}
+
+.mx_RoomView_voipButton {
+    float: right;
+    margin-right: 13px;
+    margin-top: 13px;
+    cursor: pointer;
+}
+
+.mx_RoomView_voipButton object {
+    pointer-events: none;
+}
+
+.mx_RoomView .mx_MessageComposer {
+    width: 100%;
+    flex: 0 0 auto;
+    margin-right: 2px;
+}
+
+.mx_RoomView_ongoingConfCallNotification {
+    width: 100%;
+    text-align: center;
+    background-color: $alert;
+    color: $accent-fg-color;
+    font-weight: bold;
+    padding: 6px 0;
+    cursor: pointer;
+}
+
+.mx_RoomView_ongoingConfCallNotification a {
+    color: $accent-fg-color !important;
+}
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_RoomView_MessageList {
+        margin-bottom: 4px;
+    }
+
+    .mx_RoomView_statusAreaBox {
+        min-height: 42px;
+    }
+}

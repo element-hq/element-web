@@ -1,0 +1,2349 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PollCreateDialog renders a blank poll 1`] = `
+<Wrapper
+  onFinished={[MockFunction]}
+  room={
+    Room {
+      "_events": Object {},
+      "_eventsCount": 0,
+      "_maxListeners": 100,
+      "accountData": Object {},
+      "blacklistUnverifiedDevices": null,
+      "client": null,
+      "currentState": RoomState {
+        "_events": Object {},
+        "_eventsCount": 0,
+        "_maxListeners": undefined,
+        "displayNameToUserIds": Object {},
+        "events": Map {},
+        "invitedMemberCount": null,
+        "joinedMemberCount": null,
+        "members": Object {},
+        "modified": 2345678901234,
+        "oobMemberFlags": Object {
+          "status": 0,
+        },
+        "paginationToken": null,
+        "roomId": "roomid",
+        "sentinels": Object {},
+        "summaryInvitedMemberCount": null,
+        "summaryJoinedMemberCount": null,
+        "tokenToInvite": Object {},
+        "userIdsToDisplayNames": Object {},
+        Symbol(kCapture): false,
+      },
+      "filteredTimelineSets": Object {},
+      "getTypeWarning": false,
+      "getVersionWarning": false,
+      "membersPromise": Promise {},
+      "myUserId": "@name:example.com",
+      "name": "roomid",
+      "normalizedName": undefined,
+      "notificationCounts": Object {},
+      "oldState": RoomState {
+        "_events": Object {},
+        "_eventsCount": 0,
+        "_maxListeners": undefined,
+        "displayNameToUserIds": Object {},
+        "events": Map {},
+        "invitedMemberCount": null,
+        "joinedMemberCount": null,
+        "members": Object {},
+        "modified": 2345678901234,
+        "oobMemberFlags": Object {
+          "status": 0,
+        },
+        "paginationToken": null,
+        "roomId": "roomid",
+        "sentinels": Object {},
+        "summaryInvitedMemberCount": null,
+        "summaryJoinedMemberCount": null,
+        "tokenToInvite": Object {},
+        "userIdsToDisplayNames": Object {},
+        Symbol(kCapture): false,
+      },
+      "opts": Object {
+        "pendingEventOrdering": "chronological",
+      },
+      "pendingEventList": undefined,
+      "reEmitter": ReEmitter {
+        "target": [Circular],
+      },
+      "realReceipts": Object {},
+      "receiptCacheByEventId": Object {},
+      "receipts": Object {},
+      "roomId": "roomid",
+      "selfMembership": null,
+      "storageToken": undefined,
+      "summary": null,
+      "summaryHeroes": null,
+      "tags": Object {},
+      "threads": Map {},
+      "timeline": Array [],
+      "timelineSets": Array [
+        EventTimelineSet {
+          "_eventIdToTimeline": Object {},
+          "_events": Object {
+            "Room.timeline": [Function],
+            "Room.timelineReset": [Function],
+          },
+          "_eventsCount": 2,
+          "_maxListeners": undefined,
+          "displayPendingEvents": true,
+          "filter": undefined,
+          "liveTimeline": EventTimeline {
+            "baseIndex": 0,
+            "endState": RoomState {
+              "_events": Object {},
+              "_eventsCount": 0,
+              "_maxListeners": undefined,
+              "displayNameToUserIds": Object {},
+              "events": Map {},
+              "invitedMemberCount": null,
+              "joinedMemberCount": null,
+              "members": Object {},
+              "modified": 2345678901234,
+              "oobMemberFlags": Object {
+                "status": 0,
+              },
+              "paginationToken": null,
+              "roomId": "roomid",
+              "sentinels": Object {},
+              "summaryInvitedMemberCount": null,
+              "summaryJoinedMemberCount": null,
+              "tokenToInvite": Object {},
+              "userIdsToDisplayNames": Object {},
+              Symbol(kCapture): false,
+            },
+            "eventTimelineSet": [Circular],
+            "events": Array [],
+            "name": "roomid:2021-11-23T14:35:14.240Z",
+            "nextTimeline": null,
+            "paginationRequests": Object {
+              "b": null,
+              "f": null,
+            },
+            "prevTimeline": null,
+            "roomId": "roomid",
+            "startState": RoomState {
+              "_events": Object {},
+              "_eventsCount": 0,
+              "_maxListeners": undefined,
+              "displayNameToUserIds": Object {},
+              "events": Map {},
+              "invitedMemberCount": null,
+              "joinedMemberCount": null,
+              "members": Object {},
+              "modified": 2345678901234,
+              "oobMemberFlags": Object {
+                "status": 0,
+              },
+              "paginationToken": null,
+              "roomId": "roomid",
+              "sentinels": Object {},
+              "summaryInvitedMemberCount": null,
+              "summaryJoinedMemberCount": null,
+              "tokenToInvite": Object {},
+              "userIdsToDisplayNames": Object {},
+              Symbol(kCapture): false,
+            },
+          },
+          "relations": undefined,
+          "room": [Circular],
+          "timelineSupport": false,
+          "timelines": Array [
+            EventTimeline {
+              "baseIndex": 0,
+              "endState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+              "eventTimelineSet": [Circular],
+              "events": Array [],
+              "name": "roomid:2021-11-23T14:35:14.240Z",
+              "nextTimeline": null,
+              "paginationRequests": Object {
+                "b": null,
+                "f": null,
+              },
+              "prevTimeline": null,
+              "roomId": "roomid",
+              "startState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+            },
+          ],
+          "unstableClientRelationAggregation": false,
+          Symbol(kCapture): false,
+        },
+      ],
+      "txnToEvent": Object {},
+      Symbol(kCapture): false,
+    }
+  }
+>
+  <PollCreateDialog
+    onFinished={[MockFunction]}
+    room={
+      Room {
+        "_events": Object {},
+        "_eventsCount": 0,
+        "_maxListeners": 100,
+        "accountData": Object {},
+        "blacklistUnverifiedDevices": null,
+        "client": null,
+        "currentState": RoomState {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          "displayNameToUserIds": Object {},
+          "events": Map {},
+          "invitedMemberCount": null,
+          "joinedMemberCount": null,
+          "members": Object {},
+          "modified": 2345678901234,
+          "oobMemberFlags": Object {
+            "status": 0,
+          },
+          "paginationToken": null,
+          "roomId": "roomid",
+          "sentinels": Object {},
+          "summaryInvitedMemberCount": null,
+          "summaryJoinedMemberCount": null,
+          "tokenToInvite": Object {},
+          "userIdsToDisplayNames": Object {},
+          Symbol(kCapture): false,
+        },
+        "filteredTimelineSets": Object {},
+        "getTypeWarning": false,
+        "getVersionWarning": false,
+        "membersPromise": Promise {},
+        "myUserId": "@name:example.com",
+        "name": "roomid",
+        "normalizedName": undefined,
+        "notificationCounts": Object {},
+        "oldState": RoomState {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          "displayNameToUserIds": Object {},
+          "events": Map {},
+          "invitedMemberCount": null,
+          "joinedMemberCount": null,
+          "members": Object {},
+          "modified": 2345678901234,
+          "oobMemberFlags": Object {
+            "status": 0,
+          },
+          "paginationToken": null,
+          "roomId": "roomid",
+          "sentinels": Object {},
+          "summaryInvitedMemberCount": null,
+          "summaryJoinedMemberCount": null,
+          "tokenToInvite": Object {},
+          "userIdsToDisplayNames": Object {},
+          Symbol(kCapture): false,
+        },
+        "opts": Object {
+          "pendingEventOrdering": "chronological",
+        },
+        "pendingEventList": undefined,
+        "reEmitter": ReEmitter {
+          "target": [Circular],
+        },
+        "realReceipts": Object {},
+        "receiptCacheByEventId": Object {},
+        "receipts": Object {},
+        "roomId": "roomid",
+        "selfMembership": null,
+        "storageToken": undefined,
+        "summary": null,
+        "summaryHeroes": null,
+        "tags": Object {},
+        "threads": Map {},
+        "timeline": Array [],
+        "timelineSets": Array [
+          EventTimelineSet {
+            "_eventIdToTimeline": Object {},
+            "_events": Object {
+              "Room.timeline": [Function],
+              "Room.timelineReset": [Function],
+            },
+            "_eventsCount": 2,
+            "_maxListeners": undefined,
+            "displayPendingEvents": true,
+            "filter": undefined,
+            "liveTimeline": EventTimeline {
+              "baseIndex": 0,
+              "endState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+              "eventTimelineSet": [Circular],
+              "events": Array [],
+              "name": "roomid:2021-11-23T14:35:14.240Z",
+              "nextTimeline": null,
+              "paginationRequests": Object {
+                "b": null,
+                "f": null,
+              },
+              "prevTimeline": null,
+              "roomId": "roomid",
+              "startState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+            },
+            "relations": undefined,
+            "room": [Circular],
+            "timelineSupport": false,
+            "timelines": Array [
+              EventTimeline {
+                "baseIndex": 0,
+                "endState": RoomState {
+                  "_events": Object {},
+                  "_eventsCount": 0,
+                  "_maxListeners": undefined,
+                  "displayNameToUserIds": Object {},
+                  "events": Map {},
+                  "invitedMemberCount": null,
+                  "joinedMemberCount": null,
+                  "members": Object {},
+                  "modified": 2345678901234,
+                  "oobMemberFlags": Object {
+                    "status": 0,
+                  },
+                  "paginationToken": null,
+                  "roomId": "roomid",
+                  "sentinels": Object {},
+                  "summaryInvitedMemberCount": null,
+                  "summaryJoinedMemberCount": null,
+                  "tokenToInvite": Object {},
+                  "userIdsToDisplayNames": Object {},
+                  Symbol(kCapture): false,
+                },
+                "eventTimelineSet": [Circular],
+                "events": Array [],
+                "name": "roomid:2021-11-23T14:35:14.240Z",
+                "nextTimeline": null,
+                "paginationRequests": Object {
+                  "b": null,
+                  "f": null,
+                },
+                "prevTimeline": null,
+                "roomId": "roomid",
+                "startState": RoomState {
+                  "_events": Object {},
+                  "_eventsCount": 0,
+                  "_maxListeners": undefined,
+                  "displayNameToUserIds": Object {},
+                  "events": Map {},
+                  "invitedMemberCount": null,
+                  "joinedMemberCount": null,
+                  "members": Object {},
+                  "modified": 2345678901234,
+                  "oobMemberFlags": Object {
+                    "status": 0,
+                  },
+                  "paginationToken": null,
+                  "roomId": "roomid",
+                  "sentinels": Object {},
+                  "summaryInvitedMemberCount": null,
+                  "summaryJoinedMemberCount": null,
+                  "tokenToInvite": Object {},
+                  "userIdsToDisplayNames": Object {},
+                  Symbol(kCapture): false,
+                },
+              },
+            ],
+            "unstableClientRelationAggregation": false,
+            Symbol(kCapture): false,
+          },
+        ],
+        "txnToEvent": Object {},
+        Symbol(kCapture): false,
+      }
+    }
+  >
+    <ForwardRef(FocusLockUICombination)
+      className="mx_CompoundDialog mx_ScrollableBaseDialog"
+      lockProps={
+        Object {
+          "aria-describedby": "mx_CompoundDialog_content",
+          "aria-labelledby": "mx_CompoundDialog_title",
+          "onKeyDown": [Function],
+          "role": "dialog",
+        }
+      }
+      returnFocus={true}
+    >
+      <ForwardRef(FocusLockUI)
+        as="div"
+        autoFocus={true}
+        className="mx_CompoundDialog mx_ScrollableBaseDialog"
+        crossFrame={true}
+        disabled={false}
+        lockProps={
+          Object {
+            "aria-describedby": "mx_CompoundDialog_content",
+            "aria-labelledby": "mx_CompoundDialog_title",
+            "onKeyDown": [Function],
+            "role": "dialog",
+          }
+        }
+        noFocusGuards={false}
+        persistentFocus={false}
+        returnFocus={true}
+        sideCar={[Function]}
+      >
+        <div
+          data-focus-guard={true}
+          key="guard-first"
+          style={
+            Object {
+              "height": "0px",
+              "left": "1px",
+              "overflow": "hidden",
+              "padding": 0,
+              "position": "fixed",
+              "top": "1px",
+              "width": "1px",
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          data-focus-guard={true}
+          key="guard-nearest"
+          style={
+            Object {
+              "height": "0px",
+              "left": "1px",
+              "overflow": "hidden",
+              "padding": 0,
+              "position": "fixed",
+              "top": "1px",
+              "width": "1px",
+            }
+          }
+          tabIndex={1}
+        />
+        <SideEffect(FocusWatcher)
+          autoFocus={true}
+          crossFrame={true}
+          disabled={false}
+          id={Object {}}
+          observed={
+            <div
+              aria-describedby="mx_CompoundDialog_content"
+              aria-labelledby="mx_CompoundDialog_title"
+              class="mx_CompoundDialog mx_ScrollableBaseDialog"
+              data-focus-lock-disabled="false"
+              role="dialog"
+            >
+              <div
+                class="mx_CompoundDialog_header"
+              >
+                <h1>
+                  Create poll
+                </h1>
+                <div
+                  aria-label="Close dialog"
+                  class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+                  role="button"
+                  tabindex="0"
+                />
+              </div>
+              <form>
+                <div
+                  class="mx_CompoundDialog_content"
+                >
+                  <div
+                    class="mx_PollCreateDialog"
+                  >
+                    <h2>
+                      What is your poll question or topic?
+                    </h2>
+                    <div
+                      class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                    >
+                      <input
+                        id="mx_Field_1"
+                        label="Question or topic"
+                        maxlength="340"
+                        placeholder="Write something..."
+                        type="text"
+                        value=""
+                      />
+                      <label
+                        for="mx_Field_1"
+                      >
+                        Question or topic
+                      </label>
+                    </div>
+                    <h2>
+                      Create options
+                    </h2>
+                    <div
+                      class="mx_PollCreateDialog_option"
+                    >
+                      <div
+                        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                      >
+                        <input
+                          id="mx_Field_2"
+                          label="Option 1"
+                          maxlength="340"
+                          placeholder="Write an option"
+                          type="text"
+                          value=""
+                        />
+                        <label
+                          for="mx_Field_2"
+                        >
+                          Option 1
+                        </label>
+                      </div>
+                      <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                        role="button"
+                        tabindex="0"
+                      />
+                    </div>
+                    <div
+                      class="mx_PollCreateDialog_option"
+                    >
+                      <div
+                        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                      >
+                        <input
+                          id="mx_Field_3"
+                          label="Option 2"
+                          maxlength="340"
+                          placeholder="Write an option"
+                          type="text"
+                          value=""
+                        />
+                        <label
+                          for="mx_Field_3"
+                        >
+                          Option 2
+                        </label>
+                      </div>
+                      <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                        role="button"
+                        tabindex="0"
+                      />
+                    </div>
+                    <div
+                      class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Add option
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="mx_CompoundDialog_footer"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                    role="button"
+                    tabindex="0"
+                  >
+                    Cancel
+                  </div>
+                  <button
+                    aria-disabled="true"
+                    class="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+                    role="button"
+                    tabindex="0"
+                    type="submit"
+                  >
+                    Create Poll
+                  </button>
+                </div>
+              </form>
+            </div>
+          }
+          onActivation={[Function]}
+          onDeactivation={[Function]}
+          persistentFocus={false}
+          returnFocus={[Function]}
+          shards={Array []}
+          sideCar={
+            Object {
+              "assignMedium": [Function],
+              "assignSyncMedium": [Function],
+              "options": Object {
+                "async": true,
+                "ssr": false,
+              },
+              "read": [Function],
+              "useMedium": [Function],
+            }
+          }
+        >
+          <FocusWatcher
+            autoFocus={true}
+            crossFrame={true}
+            disabled={false}
+            id={Object {}}
+            observed={
+              <div
+                aria-describedby="mx_CompoundDialog_content"
+                aria-labelledby="mx_CompoundDialog_title"
+                class="mx_CompoundDialog mx_ScrollableBaseDialog"
+                data-focus-lock-disabled="false"
+                role="dialog"
+              >
+                <div
+                  class="mx_CompoundDialog_header"
+                >
+                  <h1>
+                    Create poll
+                  </h1>
+                  <div
+                    aria-label="Close dialog"
+                    class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+                    role="button"
+                    tabindex="0"
+                  />
+                </div>
+                <form>
+                  <div
+                    class="mx_CompoundDialog_content"
+                  >
+                    <div
+                      class="mx_PollCreateDialog"
+                    >
+                      <h2>
+                        What is your poll question or topic?
+                      </h2>
+                      <div
+                        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                      >
+                        <input
+                          id="mx_Field_1"
+                          label="Question or topic"
+                          maxlength="340"
+                          placeholder="Write something..."
+                          type="text"
+                          value=""
+                        />
+                        <label
+                          for="mx_Field_1"
+                        >
+                          Question or topic
+                        </label>
+                      </div>
+                      <h2>
+                        Create options
+                      </h2>
+                      <div
+                        class="mx_PollCreateDialog_option"
+                      >
+                        <div
+                          class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                        >
+                          <input
+                            id="mx_Field_2"
+                            label="Option 1"
+                            maxlength="340"
+                            placeholder="Write an option"
+                            type="text"
+                            value=""
+                          />
+                          <label
+                            for="mx_Field_2"
+                          >
+                            Option 1
+                          </label>
+                        </div>
+                        <div
+                          class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                          role="button"
+                          tabindex="0"
+                        />
+                      </div>
+                      <div
+                        class="mx_PollCreateDialog_option"
+                      >
+                        <div
+                          class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                        >
+                          <input
+                            id="mx_Field_3"
+                            label="Option 2"
+                            maxlength="340"
+                            placeholder="Write an option"
+                            type="text"
+                            value=""
+                          />
+                          <label
+                            for="mx_Field_3"
+                          >
+                            Option 2
+                          </label>
+                        </div>
+                        <div
+                          class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                          role="button"
+                          tabindex="0"
+                        />
+                      </div>
+                      <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                        role="button"
+                        tabindex="0"
+                      >
+                        Add option
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="mx_CompoundDialog_footer"
+                  >
+                    <div
+                      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Cancel
+                    </div>
+                    <button
+                      aria-disabled="true"
+                      class="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+                      role="button"
+                      tabindex="0"
+                      type="submit"
+                    >
+                      Create Poll
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+            onActivation={[Function]}
+            onDeactivation={[Function]}
+            persistentFocus={false}
+            returnFocus={[Function]}
+            shards={Array []}
+            sideCar={
+              Object {
+                "assignMedium": [Function],
+                "assignSyncMedium": [Function],
+                "options": Object {
+                  "async": true,
+                  "ssr": false,
+                },
+                "read": [Function],
+                "useMedium": [Function],
+              }
+            }
+          />
+        </SideEffect(FocusWatcher)>
+        <div
+          aria-describedby="mx_CompoundDialog_content"
+          aria-labelledby="mx_CompoundDialog_title"
+          className="mx_CompoundDialog mx_ScrollableBaseDialog"
+          data-focus-lock-disabled={false}
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          role="dialog"
+        >
+          <div
+            className="mx_CompoundDialog_header"
+          >
+            <h1>
+              Create poll
+            </h1>
+            <AccessibleButton
+              aria-label="Close dialog"
+              className="mx_CompoundDialog_cancelButton"
+              element="div"
+              onClick={[Function]}
+              role="button"
+              tabIndex={0}
+            >
+              <div
+                aria-label="Close dialog"
+                className="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                onKeyUp={[Function]}
+                role="button"
+                tabIndex={0}
+              />
+            </AccessibleButton>
+          </div>
+          <form
+            onSubmit={[Function]}
+          >
+            <div
+              className="mx_CompoundDialog_content"
+            >
+              <div
+                className="mx_PollCreateDialog"
+              >
+                <h2>
+                  What is your poll question or topic?
+                </h2>
+                <Field
+                  disabled={false}
+                  element="input"
+                  label="Question or topic"
+                  maxLength={340}
+                  onChange={[Function]}
+                  placeholder="Write something..."
+                  type="text"
+                  usePlaceholderAsHint={true}
+                  validateOnBlur={true}
+                  validateOnChange={true}
+                  validateOnFocus={true}
+                  value=""
+                >
+                  <div
+                    className="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                  >
+                    <input
+                      disabled={false}
+                      id="mx_Field_1"
+                      label="Question or topic"
+                      maxLength={340}
+                      onBlur={[Function]}
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Write something..."
+                      type="text"
+                      value=""
+                    />
+                    <label
+                      htmlFor="mx_Field_1"
+                    >
+                      Question or topic
+                    </label>
+                  </div>
+                </Field>
+                <h2>
+                  Create options
+                </h2>
+                <div
+                  className="mx_PollCreateDialog_option"
+                  key="option_0"
+                >
+                  <Field
+                    disabled={false}
+                    element="input"
+                    label="Option 1"
+                    maxLength={340}
+                    onChange={[Function]}
+                    placeholder="Write an option"
+                    type="text"
+                    usePlaceholderAsHint={true}
+                    validateOnBlur={true}
+                    validateOnChange={true}
+                    validateOnFocus={true}
+                    value=""
+                  >
+                    <div
+                      className="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                    >
+                      <input
+                        disabled={false}
+                        id="mx_Field_2"
+                        label="Option 1"
+                        maxLength={340}
+                        onBlur={[Function]}
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        placeholder="Write an option"
+                        type="text"
+                        value=""
+                      />
+                      <label
+                        htmlFor="mx_Field_2"
+                      >
+                        Option 1
+                      </label>
+                    </div>
+                  </Field>
+                  <AccessibleButton
+                    className="mx_PollCreateDialog_removeOption"
+                    disabled={false}
+                    element="div"
+                    onClick={[Function]}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div
+                      className="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      onKeyUp={[Function]}
+                      role="button"
+                      tabIndex={0}
+                    />
+                  </AccessibleButton>
+                </div>
+                <div
+                  className="mx_PollCreateDialog_option"
+                  key="option_1"
+                >
+                  <Field
+                    disabled={false}
+                    element="input"
+                    label="Option 2"
+                    maxLength={340}
+                    onChange={[Function]}
+                    placeholder="Write an option"
+                    type="text"
+                    usePlaceholderAsHint={true}
+                    validateOnBlur={true}
+                    validateOnChange={true}
+                    validateOnFocus={true}
+                    value=""
+                  >
+                    <div
+                      className="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                    >
+                      <input
+                        disabled={false}
+                        id="mx_Field_3"
+                        label="Option 2"
+                        maxLength={340}
+                        onBlur={[Function]}
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        placeholder="Write an option"
+                        type="text"
+                        value=""
+                      />
+                      <label
+                        htmlFor="mx_Field_3"
+                      >
+                        Option 2
+                      </label>
+                    </div>
+                  </Field>
+                  <AccessibleButton
+                    className="mx_PollCreateDialog_removeOption"
+                    disabled={false}
+                    element="div"
+                    onClick={[Function]}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div
+                      className="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      onKeyUp={[Function]}
+                      role="button"
+                      tabIndex={0}
+                    />
+                  </AccessibleButton>
+                </div>
+                <AccessibleButton
+                  className="mx_PollCreateDialog_addOption"
+                  disabled={false}
+                  element="div"
+                  inputRef={
+                    Object {
+                      "current": <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                        role="button"
+                        tabindex="0"
+                      >
+                        Add option
+                      </div>,
+                    }
+                  }
+                  kind="secondary"
+                  onClick={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div
+                    className="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    onKeyUp={[Function]}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    Add option
+                  </div>
+                </AccessibleButton>
+              </div>
+            </div>
+            <div
+              className="mx_CompoundDialog_footer"
+            >
+              <AccessibleButton
+                element="div"
+                kind="primary_outline"
+                onClick={[Function]}
+                role="button"
+                tabIndex={0}
+              >
+                <div
+                  className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  Cancel
+                </div>
+              </AccessibleButton>
+              <AccessibleButton
+                className="mx_Dialog_nonDialogButton"
+                disabled={true}
+                element="button"
+                kind="primary"
+                onClick={[Function]}
+                role="button"
+                tabIndex={0}
+                type="submit"
+              >
+                <button
+                  aria-disabled={true}
+                  className="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+                  role="button"
+                  tabIndex={0}
+                  type="submit"
+                >
+                  Create Poll
+                </button>
+              </AccessibleButton>
+            </div>
+          </form>
+        </div>
+        <div
+          data-focus-guard={true}
+          style={
+            Object {
+              "height": "0px",
+              "left": "1px",
+              "overflow": "hidden",
+              "padding": 0,
+              "position": "fixed",
+              "top": "1px",
+              "width": "1px",
+            }
+          }
+          tabIndex={0}
+        />
+      </ForwardRef(FocusLockUI)>
+    </ForwardRef(FocusLockUICombination)>
+  </PollCreateDialog>
+</Wrapper>
+`;
+
+exports[`PollCreateDialog renders a question and some options 1`] = `
+<Wrapper
+  onFinished={[MockFunction]}
+  room={
+    Room {
+      "_events": Object {},
+      "_eventsCount": 0,
+      "_maxListeners": 100,
+      "accountData": Object {},
+      "blacklistUnverifiedDevices": null,
+      "client": null,
+      "currentState": RoomState {
+        "_events": Object {},
+        "_eventsCount": 0,
+        "_maxListeners": undefined,
+        "displayNameToUserIds": Object {},
+        "events": Map {},
+        "invitedMemberCount": null,
+        "joinedMemberCount": null,
+        "members": Object {},
+        "modified": 2345678901234,
+        "oobMemberFlags": Object {
+          "status": 0,
+        },
+        "paginationToken": null,
+        "roomId": "roomid",
+        "sentinels": Object {},
+        "summaryInvitedMemberCount": null,
+        "summaryJoinedMemberCount": null,
+        "tokenToInvite": Object {},
+        "userIdsToDisplayNames": Object {},
+        Symbol(kCapture): false,
+      },
+      "filteredTimelineSets": Object {},
+      "getTypeWarning": false,
+      "getVersionWarning": false,
+      "membersPromise": Promise {},
+      "myUserId": "@name:example.com",
+      "name": "roomid",
+      "normalizedName": undefined,
+      "notificationCounts": Object {},
+      "oldState": RoomState {
+        "_events": Object {},
+        "_eventsCount": 0,
+        "_maxListeners": undefined,
+        "displayNameToUserIds": Object {},
+        "events": Map {},
+        "invitedMemberCount": null,
+        "joinedMemberCount": null,
+        "members": Object {},
+        "modified": 2345678901234,
+        "oobMemberFlags": Object {
+          "status": 0,
+        },
+        "paginationToken": null,
+        "roomId": "roomid",
+        "sentinels": Object {},
+        "summaryInvitedMemberCount": null,
+        "summaryJoinedMemberCount": null,
+        "tokenToInvite": Object {},
+        "userIdsToDisplayNames": Object {},
+        Symbol(kCapture): false,
+      },
+      "opts": Object {
+        "pendingEventOrdering": "chronological",
+      },
+      "pendingEventList": undefined,
+      "reEmitter": ReEmitter {
+        "target": [Circular],
+      },
+      "realReceipts": Object {},
+      "receiptCacheByEventId": Object {},
+      "receipts": Object {},
+      "roomId": "roomid",
+      "selfMembership": null,
+      "storageToken": undefined,
+      "summary": null,
+      "summaryHeroes": null,
+      "tags": Object {},
+      "threads": Map {},
+      "timeline": Array [],
+      "timelineSets": Array [
+        EventTimelineSet {
+          "_eventIdToTimeline": Object {},
+          "_events": Object {
+            "Room.timeline": [Function],
+            "Room.timelineReset": [Function],
+          },
+          "_eventsCount": 2,
+          "_maxListeners": undefined,
+          "displayPendingEvents": true,
+          "filter": undefined,
+          "liveTimeline": EventTimeline {
+            "baseIndex": 0,
+            "endState": RoomState {
+              "_events": Object {},
+              "_eventsCount": 0,
+              "_maxListeners": undefined,
+              "displayNameToUserIds": Object {},
+              "events": Map {},
+              "invitedMemberCount": null,
+              "joinedMemberCount": null,
+              "members": Object {},
+              "modified": 2345678901234,
+              "oobMemberFlags": Object {
+                "status": 0,
+              },
+              "paginationToken": null,
+              "roomId": "roomid",
+              "sentinels": Object {},
+              "summaryInvitedMemberCount": null,
+              "summaryJoinedMemberCount": null,
+              "tokenToInvite": Object {},
+              "userIdsToDisplayNames": Object {},
+              Symbol(kCapture): false,
+            },
+            "eventTimelineSet": [Circular],
+            "events": Array [],
+            "name": "roomid:2021-11-23T14:35:14.240Z",
+            "nextTimeline": null,
+            "paginationRequests": Object {
+              "b": null,
+              "f": null,
+            },
+            "prevTimeline": null,
+            "roomId": "roomid",
+            "startState": RoomState {
+              "_events": Object {},
+              "_eventsCount": 0,
+              "_maxListeners": undefined,
+              "displayNameToUserIds": Object {},
+              "events": Map {},
+              "invitedMemberCount": null,
+              "joinedMemberCount": null,
+              "members": Object {},
+              "modified": 2345678901234,
+              "oobMemberFlags": Object {
+                "status": 0,
+              },
+              "paginationToken": null,
+              "roomId": "roomid",
+              "sentinels": Object {},
+              "summaryInvitedMemberCount": null,
+              "summaryJoinedMemberCount": null,
+              "tokenToInvite": Object {},
+              "userIdsToDisplayNames": Object {},
+              Symbol(kCapture): false,
+            },
+          },
+          "relations": undefined,
+          "room": [Circular],
+          "timelineSupport": false,
+          "timelines": Array [
+            EventTimeline {
+              "baseIndex": 0,
+              "endState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+              "eventTimelineSet": [Circular],
+              "events": Array [],
+              "name": "roomid:2021-11-23T14:35:14.240Z",
+              "nextTimeline": null,
+              "paginationRequests": Object {
+                "b": null,
+                "f": null,
+              },
+              "prevTimeline": null,
+              "roomId": "roomid",
+              "startState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+            },
+          ],
+          "unstableClientRelationAggregation": false,
+          Symbol(kCapture): false,
+        },
+      ],
+      "txnToEvent": Object {},
+      Symbol(kCapture): false,
+    }
+  }
+>
+  <PollCreateDialog
+    onFinished={[MockFunction]}
+    room={
+      Room {
+        "_events": Object {},
+        "_eventsCount": 0,
+        "_maxListeners": 100,
+        "accountData": Object {},
+        "blacklistUnverifiedDevices": null,
+        "client": null,
+        "currentState": RoomState {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          "displayNameToUserIds": Object {},
+          "events": Map {},
+          "invitedMemberCount": null,
+          "joinedMemberCount": null,
+          "members": Object {},
+          "modified": 2345678901234,
+          "oobMemberFlags": Object {
+            "status": 0,
+          },
+          "paginationToken": null,
+          "roomId": "roomid",
+          "sentinels": Object {},
+          "summaryInvitedMemberCount": null,
+          "summaryJoinedMemberCount": null,
+          "tokenToInvite": Object {},
+          "userIdsToDisplayNames": Object {},
+          Symbol(kCapture): false,
+        },
+        "filteredTimelineSets": Object {},
+        "getTypeWarning": false,
+        "getVersionWarning": false,
+        "membersPromise": Promise {},
+        "myUserId": "@name:example.com",
+        "name": "roomid",
+        "normalizedName": undefined,
+        "notificationCounts": Object {},
+        "oldState": RoomState {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          "displayNameToUserIds": Object {},
+          "events": Map {},
+          "invitedMemberCount": null,
+          "joinedMemberCount": null,
+          "members": Object {},
+          "modified": 2345678901234,
+          "oobMemberFlags": Object {
+            "status": 0,
+          },
+          "paginationToken": null,
+          "roomId": "roomid",
+          "sentinels": Object {},
+          "summaryInvitedMemberCount": null,
+          "summaryJoinedMemberCount": null,
+          "tokenToInvite": Object {},
+          "userIdsToDisplayNames": Object {},
+          Symbol(kCapture): false,
+        },
+        "opts": Object {
+          "pendingEventOrdering": "chronological",
+        },
+        "pendingEventList": undefined,
+        "reEmitter": ReEmitter {
+          "target": [Circular],
+        },
+        "realReceipts": Object {},
+        "receiptCacheByEventId": Object {},
+        "receipts": Object {},
+        "roomId": "roomid",
+        "selfMembership": null,
+        "storageToken": undefined,
+        "summary": null,
+        "summaryHeroes": null,
+        "tags": Object {},
+        "threads": Map {},
+        "timeline": Array [],
+        "timelineSets": Array [
+          EventTimelineSet {
+            "_eventIdToTimeline": Object {},
+            "_events": Object {
+              "Room.timeline": [Function],
+              "Room.timelineReset": [Function],
+            },
+            "_eventsCount": 2,
+            "_maxListeners": undefined,
+            "displayPendingEvents": true,
+            "filter": undefined,
+            "liveTimeline": EventTimeline {
+              "baseIndex": 0,
+              "endState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+              "eventTimelineSet": [Circular],
+              "events": Array [],
+              "name": "roomid:2021-11-23T14:35:14.240Z",
+              "nextTimeline": null,
+              "paginationRequests": Object {
+                "b": null,
+                "f": null,
+              },
+              "prevTimeline": null,
+              "roomId": "roomid",
+              "startState": RoomState {
+                "_events": Object {},
+                "_eventsCount": 0,
+                "_maxListeners": undefined,
+                "displayNameToUserIds": Object {},
+                "events": Map {},
+                "invitedMemberCount": null,
+                "joinedMemberCount": null,
+                "members": Object {},
+                "modified": 2345678901234,
+                "oobMemberFlags": Object {
+                  "status": 0,
+                },
+                "paginationToken": null,
+                "roomId": "roomid",
+                "sentinels": Object {},
+                "summaryInvitedMemberCount": null,
+                "summaryJoinedMemberCount": null,
+                "tokenToInvite": Object {},
+                "userIdsToDisplayNames": Object {},
+                Symbol(kCapture): false,
+              },
+            },
+            "relations": undefined,
+            "room": [Circular],
+            "timelineSupport": false,
+            "timelines": Array [
+              EventTimeline {
+                "baseIndex": 0,
+                "endState": RoomState {
+                  "_events": Object {},
+                  "_eventsCount": 0,
+                  "_maxListeners": undefined,
+                  "displayNameToUserIds": Object {},
+                  "events": Map {},
+                  "invitedMemberCount": null,
+                  "joinedMemberCount": null,
+                  "members": Object {},
+                  "modified": 2345678901234,
+                  "oobMemberFlags": Object {
+                    "status": 0,
+                  },
+                  "paginationToken": null,
+                  "roomId": "roomid",
+                  "sentinels": Object {},
+                  "summaryInvitedMemberCount": null,
+                  "summaryJoinedMemberCount": null,
+                  "tokenToInvite": Object {},
+                  "userIdsToDisplayNames": Object {},
+                  Symbol(kCapture): false,
+                },
+                "eventTimelineSet": [Circular],
+                "events": Array [],
+                "name": "roomid:2021-11-23T14:35:14.240Z",
+                "nextTimeline": null,
+                "paginationRequests": Object {
+                  "b": null,
+                  "f": null,
+                },
+                "prevTimeline": null,
+                "roomId": "roomid",
+                "startState": RoomState {
+                  "_events": Object {},
+                  "_eventsCount": 0,
+                  "_maxListeners": undefined,
+                  "displayNameToUserIds": Object {},
+                  "events": Map {},
+                  "invitedMemberCount": null,
+                  "joinedMemberCount": null,
+                  "members": Object {},
+                  "modified": 2345678901234,
+                  "oobMemberFlags": Object {
+                    "status": 0,
+                  },
+                  "paginationToken": null,
+                  "roomId": "roomid",
+                  "sentinels": Object {},
+                  "summaryInvitedMemberCount": null,
+                  "summaryJoinedMemberCount": null,
+                  "tokenToInvite": Object {},
+                  "userIdsToDisplayNames": Object {},
+                  Symbol(kCapture): false,
+                },
+              },
+            ],
+            "unstableClientRelationAggregation": false,
+            Symbol(kCapture): false,
+          },
+        ],
+        "txnToEvent": Object {},
+        Symbol(kCapture): false,
+      }
+    }
+  >
+    <ForwardRef(FocusLockUICombination)
+      className="mx_CompoundDialog mx_ScrollableBaseDialog"
+      lockProps={
+        Object {
+          "aria-describedby": "mx_CompoundDialog_content",
+          "aria-labelledby": "mx_CompoundDialog_title",
+          "onKeyDown": [Function],
+          "role": "dialog",
+        }
+      }
+      returnFocus={true}
+    >
+      <ForwardRef(FocusLockUI)
+        as="div"
+        autoFocus={true}
+        className="mx_CompoundDialog mx_ScrollableBaseDialog"
+        crossFrame={true}
+        disabled={false}
+        lockProps={
+          Object {
+            "aria-describedby": "mx_CompoundDialog_content",
+            "aria-labelledby": "mx_CompoundDialog_title",
+            "onKeyDown": [Function],
+            "role": "dialog",
+          }
+        }
+        noFocusGuards={false}
+        persistentFocus={false}
+        returnFocus={true}
+        sideCar={[Function]}
+      >
+        <div
+          data-focus-guard={true}
+          key="guard-first"
+          style={
+            Object {
+              "height": "0px",
+              "left": "1px",
+              "overflow": "hidden",
+              "padding": 0,
+              "position": "fixed",
+              "top": "1px",
+              "width": "1px",
+            }
+          }
+          tabIndex={0}
+        />
+        <div
+          data-focus-guard={true}
+          key="guard-nearest"
+          style={
+            Object {
+              "height": "0px",
+              "left": "1px",
+              "overflow": "hidden",
+              "padding": 0,
+              "position": "fixed",
+              "top": "1px",
+              "width": "1px",
+            }
+          }
+          tabIndex={1}
+        />
+        <SideEffect(FocusWatcher)
+          autoFocus={true}
+          crossFrame={true}
+          disabled={false}
+          id={Object {}}
+          observed={
+            <div
+              aria-describedby="mx_CompoundDialog_content"
+              aria-labelledby="mx_CompoundDialog_title"
+              class="mx_CompoundDialog mx_ScrollableBaseDialog"
+              data-focus-lock-disabled="false"
+              role="dialog"
+            >
+              <div
+                class="mx_CompoundDialog_header"
+              >
+                <h1>
+                  Create poll
+                </h1>
+                <div
+                  aria-label="Close dialog"
+                  class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+                  role="button"
+                  tabindex="0"
+                />
+              </div>
+              <form>
+                <div
+                  class="mx_CompoundDialog_content"
+                >
+                  <div
+                    class="mx_PollCreateDialog"
+                  >
+                    <h2>
+                      What is your poll question or topic?
+                    </h2>
+                    <div
+                      class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                    >
+                      <input
+                        id="mx_Field_4"
+                        label="Question or topic"
+                        maxlength="340"
+                        placeholder="Write something..."
+                        type="text"
+                        value="How many turnips is the optimal number?"
+                      />
+                      <label
+                        for="mx_Field_4"
+                      >
+                        Question or topic
+                      </label>
+                    </div>
+                    <h2>
+                      Create options
+                    </h2>
+                    <div
+                      class="mx_PollCreateDialog_option"
+                    >
+                      <div
+                        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                      >
+                        <input
+                          id="mx_Field_5"
+                          label="Option 1"
+                          maxlength="340"
+                          placeholder="Write an option"
+                          type="text"
+                          value="As many as my neighbour"
+                        />
+                        <label
+                          for="mx_Field_5"
+                        >
+                          Option 1
+                        </label>
+                      </div>
+                      <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                        role="button"
+                        tabindex="0"
+                      />
+                    </div>
+                    <div
+                      class="mx_PollCreateDialog_option"
+                    >
+                      <div
+                        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                      >
+                        <input
+                          id="mx_Field_6"
+                          label="Option 2"
+                          maxlength="340"
+                          placeholder="Write an option"
+                          type="text"
+                          value="The question is meaningless"
+                        />
+                        <label
+                          for="mx_Field_6"
+                        >
+                          Option 2
+                        </label>
+                      </div>
+                      <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                        role="button"
+                        tabindex="0"
+                      />
+                    </div>
+                    <div
+                      class="mx_PollCreateDialog_option"
+                    >
+                      <div
+                        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                      >
+                        <input
+                          id="mx_Field_7"
+                          label="Option 3"
+                          maxlength="340"
+                          placeholder="Write an option"
+                          type="text"
+                          value="Mu"
+                        />
+                        <label
+                          for="mx_Field_7"
+                        >
+                          Option 3
+                        </label>
+                      </div>
+                      <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                        role="button"
+                        tabindex="0"
+                      />
+                    </div>
+                    <div
+                      class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Add option
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="mx_CompoundDialog_footer"
+                >
+                  <div
+                    class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                    role="button"
+                    tabindex="0"
+                  >
+                    Cancel
+                  </div>
+                  <button
+                    class="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                    role="button"
+                    tabindex="0"
+                    type="submit"
+                  >
+                    Create Poll
+                  </button>
+                </div>
+              </form>
+            </div>
+          }
+          onActivation={[Function]}
+          onDeactivation={[Function]}
+          persistentFocus={false}
+          returnFocus={[Function]}
+          shards={Array []}
+          sideCar={
+            Object {
+              "assignMedium": [Function],
+              "assignSyncMedium": [Function],
+              "options": Object {
+                "async": true,
+                "ssr": false,
+              },
+              "read": [Function],
+              "useMedium": [Function],
+            }
+          }
+        >
+          <FocusWatcher
+            autoFocus={true}
+            crossFrame={true}
+            disabled={false}
+            id={Object {}}
+            observed={
+              <div
+                aria-describedby="mx_CompoundDialog_content"
+                aria-labelledby="mx_CompoundDialog_title"
+                class="mx_CompoundDialog mx_ScrollableBaseDialog"
+                data-focus-lock-disabled="false"
+                role="dialog"
+              >
+                <div
+                  class="mx_CompoundDialog_header"
+                >
+                  <h1>
+                    Create poll
+                  </h1>
+                  <div
+                    aria-label="Close dialog"
+                    class="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+                    role="button"
+                    tabindex="0"
+                  />
+                </div>
+                <form>
+                  <div
+                    class="mx_CompoundDialog_content"
+                  >
+                    <div
+                      class="mx_PollCreateDialog"
+                    >
+                      <h2>
+                        What is your poll question or topic?
+                      </h2>
+                      <div
+                        class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                      >
+                        <input
+                          id="mx_Field_4"
+                          label="Question or topic"
+                          maxlength="340"
+                          placeholder="Write something..."
+                          type="text"
+                          value="How many turnips is the optimal number?"
+                        />
+                        <label
+                          for="mx_Field_4"
+                        >
+                          Question or topic
+                        </label>
+                      </div>
+                      <h2>
+                        Create options
+                      </h2>
+                      <div
+                        class="mx_PollCreateDialog_option"
+                      >
+                        <div
+                          class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                        >
+                          <input
+                            id="mx_Field_5"
+                            label="Option 1"
+                            maxlength="340"
+                            placeholder="Write an option"
+                            type="text"
+                            value="As many as my neighbour"
+                          />
+                          <label
+                            for="mx_Field_5"
+                          >
+                            Option 1
+                          </label>
+                        </div>
+                        <div
+                          class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                          role="button"
+                          tabindex="0"
+                        />
+                      </div>
+                      <div
+                        class="mx_PollCreateDialog_option"
+                      >
+                        <div
+                          class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                        >
+                          <input
+                            id="mx_Field_6"
+                            label="Option 2"
+                            maxlength="340"
+                            placeholder="Write an option"
+                            type="text"
+                            value="The question is meaningless"
+                          />
+                          <label
+                            for="mx_Field_6"
+                          >
+                            Option 2
+                          </label>
+                        </div>
+                        <div
+                          class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                          role="button"
+                          tabindex="0"
+                        />
+                      </div>
+                      <div
+                        class="mx_PollCreateDialog_option"
+                      >
+                        <div
+                          class="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                        >
+                          <input
+                            id="mx_Field_7"
+                            label="Option 3"
+                            maxlength="340"
+                            placeholder="Write an option"
+                            type="text"
+                            value="Mu"
+                          />
+                          <label
+                            for="mx_Field_7"
+                          >
+                            Option 3
+                          </label>
+                        </div>
+                        <div
+                          class="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                          role="button"
+                          tabindex="0"
+                        />
+                      </div>
+                      <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                        role="button"
+                        tabindex="0"
+                      >
+                        Add option
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="mx_CompoundDialog_footer"
+                  >
+                    <div
+                      class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                      role="button"
+                      tabindex="0"
+                    >
+                      Cancel
+                    </div>
+                    <button
+                      class="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                      role="button"
+                      tabindex="0"
+                      type="submit"
+                    >
+                      Create Poll
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+            onActivation={[Function]}
+            onDeactivation={[Function]}
+            persistentFocus={false}
+            returnFocus={[Function]}
+            shards={Array []}
+            sideCar={
+              Object {
+                "assignMedium": [Function],
+                "assignSyncMedium": [Function],
+                "options": Object {
+                  "async": true,
+                  "ssr": false,
+                },
+                "read": [Function],
+                "useMedium": [Function],
+              }
+            }
+          />
+        </SideEffect(FocusWatcher)>
+        <div
+          aria-describedby="mx_CompoundDialog_content"
+          aria-labelledby="mx_CompoundDialog_title"
+          className="mx_CompoundDialog mx_ScrollableBaseDialog"
+          data-focus-lock-disabled={false}
+          onBlur={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          role="dialog"
+        >
+          <div
+            className="mx_CompoundDialog_header"
+          >
+            <h1>
+              Create poll
+            </h1>
+            <AccessibleButton
+              aria-label="Close dialog"
+              className="mx_CompoundDialog_cancelButton"
+              element="div"
+              onClick={[Function]}
+              role="button"
+              tabIndex={0}
+            >
+              <div
+                aria-label="Close dialog"
+                className="mx_AccessibleButton mx_CompoundDialog_cancelButton"
+                onClick={[Function]}
+                onKeyDown={[Function]}
+                onKeyUp={[Function]}
+                role="button"
+                tabIndex={0}
+              />
+            </AccessibleButton>
+          </div>
+          <form
+            onSubmit={[Function]}
+          >
+            <div
+              className="mx_CompoundDialog_content"
+            >
+              <div
+                className="mx_PollCreateDialog"
+              >
+                <h2>
+                  What is your poll question or topic?
+                </h2>
+                <Field
+                  disabled={false}
+                  element="input"
+                  label="Question or topic"
+                  maxLength={340}
+                  onChange={[Function]}
+                  placeholder="Write something..."
+                  type="text"
+                  usePlaceholderAsHint={true}
+                  validateOnBlur={true}
+                  validateOnChange={true}
+                  validateOnFocus={true}
+                  value="How many turnips is the optimal number?"
+                >
+                  <div
+                    className="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                  >
+                    <input
+                      disabled={false}
+                      id="mx_Field_4"
+                      label="Question or topic"
+                      maxLength={340}
+                      onBlur={[Function]}
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      placeholder="Write something..."
+                      type="text"
+                      value="How many turnips is the optimal number?"
+                    />
+                    <label
+                      htmlFor="mx_Field_4"
+                    >
+                      Question or topic
+                    </label>
+                  </div>
+                </Field>
+                <h2>
+                  Create options
+                </h2>
+                <div
+                  className="mx_PollCreateDialog_option"
+                  key="option_0"
+                >
+                  <Field
+                    disabled={false}
+                    element="input"
+                    label="Option 1"
+                    maxLength={340}
+                    onChange={[Function]}
+                    placeholder="Write an option"
+                    type="text"
+                    usePlaceholderAsHint={true}
+                    validateOnBlur={true}
+                    validateOnChange={true}
+                    validateOnFocus={true}
+                    value="As many as my neighbour"
+                  >
+                    <div
+                      className="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                    >
+                      <input
+                        disabled={false}
+                        id="mx_Field_5"
+                        label="Option 1"
+                        maxLength={340}
+                        onBlur={[Function]}
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        placeholder="Write an option"
+                        type="text"
+                        value="As many as my neighbour"
+                      />
+                      <label
+                        htmlFor="mx_Field_5"
+                      >
+                        Option 1
+                      </label>
+                    </div>
+                  </Field>
+                  <AccessibleButton
+                    className="mx_PollCreateDialog_removeOption"
+                    disabled={false}
+                    element="div"
+                    onClick={[Function]}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div
+                      className="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      onKeyUp={[Function]}
+                      role="button"
+                      tabIndex={0}
+                    />
+                  </AccessibleButton>
+                </div>
+                <div
+                  className="mx_PollCreateDialog_option"
+                  key="option_1"
+                >
+                  <Field
+                    disabled={false}
+                    element="input"
+                    label="Option 2"
+                    maxLength={340}
+                    onChange={[Function]}
+                    placeholder="Write an option"
+                    type="text"
+                    usePlaceholderAsHint={true}
+                    validateOnBlur={true}
+                    validateOnChange={true}
+                    validateOnFocus={true}
+                    value="The question is meaningless"
+                  >
+                    <div
+                      className="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                    >
+                      <input
+                        disabled={false}
+                        id="mx_Field_6"
+                        label="Option 2"
+                        maxLength={340}
+                        onBlur={[Function]}
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        placeholder="Write an option"
+                        type="text"
+                        value="The question is meaningless"
+                      />
+                      <label
+                        htmlFor="mx_Field_6"
+                      >
+                        Option 2
+                      </label>
+                    </div>
+                  </Field>
+                  <AccessibleButton
+                    className="mx_PollCreateDialog_removeOption"
+                    disabled={false}
+                    element="div"
+                    onClick={[Function]}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div
+                      className="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      onKeyUp={[Function]}
+                      role="button"
+                      tabIndex={0}
+                    />
+                  </AccessibleButton>
+                </div>
+                <div
+                  className="mx_PollCreateDialog_option"
+                  key="option_2"
+                >
+                  <Field
+                    disabled={false}
+                    element="input"
+                    label="Option 3"
+                    maxLength={340}
+                    onChange={[Function]}
+                    placeholder="Write an option"
+                    type="text"
+                    usePlaceholderAsHint={true}
+                    validateOnBlur={true}
+                    validateOnChange={true}
+                    validateOnFocus={true}
+                    value="Mu"
+                  >
+                    <div
+                      className="mx_Field mx_Field_input mx_Field_labelAlwaysTopLeft mx_Field_placeholderIsHint"
+                    >
+                      <input
+                        disabled={false}
+                        id="mx_Field_7"
+                        label="Option 3"
+                        maxLength={340}
+                        onBlur={[Function]}
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        placeholder="Write an option"
+                        type="text"
+                        value="Mu"
+                      />
+                      <label
+                        htmlFor="mx_Field_7"
+                      >
+                        Option 3
+                      </label>
+                    </div>
+                  </Field>
+                  <AccessibleButton
+                    className="mx_PollCreateDialog_removeOption"
+                    disabled={false}
+                    element="div"
+                    onClick={[Function]}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div
+                      className="mx_AccessibleButton mx_PollCreateDialog_removeOption"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      onKeyUp={[Function]}
+                      role="button"
+                      tabIndex={0}
+                    />
+                  </AccessibleButton>
+                </div>
+                <AccessibleButton
+                  className="mx_PollCreateDialog_addOption"
+                  disabled={false}
+                  element="div"
+                  inputRef={
+                    Object {
+                      "current": <div
+                        class="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                        role="button"
+                        tabindex="0"
+                      >
+                        Add option
+                      </div>,
+                    }
+                  }
+                  kind="secondary"
+                  onClick={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div
+                    className="mx_AccessibleButton mx_PollCreateDialog_addOption mx_AccessibleButton_hasKind mx_AccessibleButton_kind_secondary"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    onKeyUp={[Function]}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    Add option
+                  </div>
+                </AccessibleButton>
+              </div>
+            </div>
+            <div
+              className="mx_CompoundDialog_footer"
+            >
+              <AccessibleButton
+                element="div"
+                kind="primary_outline"
+                onClick={[Function]}
+                role="button"
+                tabIndex={0}
+              >
+                <div
+                  className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  role="button"
+                  tabIndex={0}
+                >
+                  Cancel
+                </div>
+              </AccessibleButton>
+              <AccessibleButton
+                className="mx_Dialog_nonDialogButton"
+                disabled={false}
+                element="button"
+                kind="primary"
+                onClick={[Function]}
+                role="button"
+                tabIndex={0}
+                type="submit"
+              >
+                <button
+                  className="mx_AccessibleButton mx_Dialog_nonDialogButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  onKeyUp={[Function]}
+                  role="button"
+                  tabIndex={0}
+                  type="submit"
+                >
+                  Create Poll
+                </button>
+              </AccessibleButton>
+            </div>
+          </form>
+        </div>
+        <div
+          data-focus-guard={true}
+          style={
+            Object {
+              "height": "0px",
+              "left": "1px",
+              "overflow": "hidden",
+              "padding": 0,
+              "position": "fixed",
+              "top": "1px",
+              "width": "1px",
+            }
+          }
+          tabIndex={0}
+        />
+      </ForwardRef(FocusLockUI)>
+    </ForwardRef(FocusLockUICombination)>
+  </PollCreateDialog>
+</Wrapper>
+`;

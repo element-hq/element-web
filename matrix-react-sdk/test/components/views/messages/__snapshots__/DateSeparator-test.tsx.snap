@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DateSeparator renders the date separator correctly 1`] = `
+<Wrapper
+  now="2021-12-17T08:09:00.000Z"
+  ts={1639728540000}
+>
+  <DateSeparator
+    now="2021-12-17T08:09:00.000Z"
+    ts={1639728540000}
+  >
+    <h2
+      aria-label="Today"
+      className="mx_DateSeparator"
+      role="separator"
+      tabIndex={-1}
+    >
+      <hr
+        role="none"
+      />
+      <div
+        aria-hidden="true"
+      >
+        Today
+      </div>
+      <hr
+        role="none"
+      />
+    </h2>
+  </DateSeparator>
+</Wrapper>
+`;

@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Heading /> renders h1 with correct attributes 1`] = `
+<h1
+  class="mx_Heading_h1 test"
+  data-test-id="test"
+>
+  <div>
+    test
+  </div>
+</h1>
+`;
+
+exports[`<Heading /> renders h2 with correct attributes 1`] = `
+<h2
+  class="mx_Heading_h2 test"
+  data-test-id="test"
+>
+  <div>
+    test
+  </div>
+</h2>
+`;
+
+exports[`<Heading /> renders h3 with correct attributes 1`] = `
+<h3
+  class="mx_Heading_h3 test"
+  data-test-id="test"
+>
+  <div>
+    test
+  </div>
+</h3>
+`;

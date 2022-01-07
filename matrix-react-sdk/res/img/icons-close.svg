@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="-11 13 9.1202002 9.2202005"
+   xml:space="preserve"
+   sodipodi:docname="icons-close.svg"
+   width="9.1202002"
+   height="9.2202005"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
+   id="metadata21"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>icons_create_room</dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs19" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1016"
+   id="namedview17"
+   showgrid="false"
+   showguides="false"
+   inkscape:zoom="9.8333333"
+   inkscape:cx="-0.15658729"
+   inkscape:cy="-1.4622263"
+   inkscape:window-x="0"
+   inkscape:window-y="27"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="icons_create_room"
+   fit-margin-top="0"
+   fit-margin-left="0"
+   fit-margin-right="0"
+   fit-margin-bottom="0" />
+<style
+   type="text/css"
+   id="style2">
+	.st1{fill:none;stroke-width:2;stroke-linecap:round;}
+</style>
+<title
+   id="title4">icons_create_room</title>
+<desc
+   id="desc6">Created with sketchtool.</desc>
+<g
+   id="_x30_3-Input"
+   sketch:type="MSPage"
+   transform="translate(-7.4898998,-7.3898998)">
+	<g
+   id="_x30_3_x5F_4-Uploading"
+   transform="translate(-20,-726)"
+   sketch:type="MSArtboardGroup">
+		<g
+   id="Room-list"
+   sketch:type="MSLayerGroup">
+			<g
+   id="Room-list_x2F_Footer"
+   transform="translate(0,708)"
+   sketch:type="MSShapeGroup">
+				<g
+   id="icons_create_room"
+   transform="translate(20,18)">
+
+					<path
+   id="Line"
+   class="st1"
+   d="M -2.5,28.5 4.6,21.4"
+   style="fill:none;stroke:#454545;stroke-width:2;stroke-linecap:round;stroke-opacity:1"
+   inkscape:connector-curvature="0" />
+					<path
+   id="Line_1_"
+   class="st1"
+   d="m -2.5,21.5 7.1,7.1"
+   style="fill:none;stroke:#454545;stroke-width:2;stroke-linecap:round;stroke-opacity:1"
+   inkscape:connector-curvature="0" />
+				</g>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>
