@@ -2,6 +2,7 @@ const en = require("../src/i18n/strings/en_EN");
 const de = require("../src/i18n/strings/de_DE");
 const lv = {
     "Save": "Saglabāt",
+    "Uploading %(filename)s and %(count)s others|one": "Качване на %(filename)s и %(count)s друг",
 };
 
 // Mock the browser-request for the languageHandler tests to return
