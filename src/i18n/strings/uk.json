@@ -3442,5 +3442,21 @@
     "Dial": "Виклик",
     "Back to thread": "Назад у тред",
     "Room members": "Учасники кімнати",
-    "Back to chat": "Назад у бесіду"
+    "Back to chat": "Назад у бесіду",
+    "Your new device is now verified. Other users will see it as trusted.": "Ваш новий пристрій звірено. Інші користувачі бачитимуть його довіреним.",
+    "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Ваш новий пристрій звірено. Він має доступ до ваших зашифрованих повідомлень, а інші користувачі бачитимуть його довіреним.",
+    "Verify with another device": "Звірити за допомогою іншого пристрою",
+    "Device verified": "Пристрій звірено",
+    "Verify this device": "Звірити цей пристрій",
+    "Unable to verify this device": "Не вдалося звірити цей пристрій",
+    "Verify other device": "Звірити інший пристрій",
+    "You cancelled verification on your other device.": "Ви скасували звірення на іншому пристрої.",
+    "Almost there! Is your other device showing the same shield?": "Майже готово! Чи показує інший пристрій такий самий щит?",
+    "Verify this device by completing one of the following:": "Звірте цей пристрій одним із запропонованих способів:",
+    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Пристрій, який ви намагаєтесь звірити, не підтримує сканування QR-коду або звірення за допомогою емоджі, що є підтримувані %(brand)s. Спробуйте використати інший клієнт.",
+    "To proceed, please accept the verification request on your other device.": "Щоб продовжити, прийміть запит підтвердження на вашому іншому пристрої.",
+    "Waiting for you to verify on your other device…": "Очікування вашої звірки на іншому пристрої…",
+    "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Очікування вашої звірки на іншому пристрої, %(deviceName)s (%(deviceId)s)…",
+    "Verify this device by confirming the following number appears on its screen.": "Звірте цей пристрій, підтвердивши, що на екрані з'явилося це число.",
+    "Confirm the emoji below are displayed on both devices, in the same order:": "Переконайтеся, що наведені внизу емоджі показано на обох пристроях в однаковому порядку:"
 }
