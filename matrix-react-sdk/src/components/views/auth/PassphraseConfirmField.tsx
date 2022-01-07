@@ -25,6 +25,7 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
     id?: string;
     fieldRef?: RefCallback<Field> | RefObject<Field>;
     autoComplete?: string;
+    placeholder: string;
     value: string;
     password: string; // The password we're confirming
 
@@ -72,9 +73,10 @@ class PassphraseConfirmField extends PureComponent<IProps> {
             id={this.props.id}
             ref={this.props.fieldRef}
             type="password"
-            label={_t(this.props.label)}
+            label={this.props.label}
             autoComplete={this.props.autoComplete}
             value={this.props.value}
+            placeholder={this.props.placeholder}
             onChange={this.props.onChange}
             onValidate={this.onValidate}
         />;

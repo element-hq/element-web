@@ -291,8 +291,8 @@ export default class Registration extends React.Component<IProps, IState> {
                     },
                 );
                 errorText = <div>
-                    <p>{ errorTop }</p>
-                    <p>{ errorDetail }</p>
+                    <p>{errorTop}</p>
+                    <p>{errorDetail}</p>
                 </div>;
             } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
                 let msisdnAvailable = false;
@@ -363,7 +363,7 @@ export default class Registration extends React.Component<IProps, IState> {
             return Promise.resolve();
         }
         const matrixClient = MatrixClientPeg.get();
-        return matrixClient.getPushers().then((resp)=>{
+        return matrixClient.getPushers().then((resp) => {
             const pushers = resp.pushers;
             for (let i = 0; i < pushers.length; ++i) {
                 if (pushers[i].kind === 'email') {
@@ -465,40 +465,40 @@ export default class Registration extends React.Component<IProps, IState> {
             </div>;
         } else if (this.state.flows.length) {
             let ssoSection;
-            if (this.state.ssoFlow) {
-                let continueWithSection;
-                const providers = this.state.ssoFlow.identity_providers || [];
-                // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
-                if (providers.length > 1) {
-                    // i18n: ssoButtons is a placeholder to help translators understand context
-                    continueWithSection = <h3 className="mx_AuthBody_centered">
-                        { _t("Continue with %(ssoButtons)s", { ssoButtons: "" }).trim() }
-                    </h3>;
-                }
+            // if (this.state.ssoFlow) {
+            //     let continueWithSection;
+            //     const providers = this.state.ssoFlow.identity_providers || [];
+            //     // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
+            //     if (providers.length > 1) {
+            //         // i18n: ssoButtons is a placeholder to help translators understand context
+            //         continueWithSection = <h3 className="mx_AuthBody_centered">
+            //             {_t("Continue with %(ssoButtons)s", { ssoButtons: "" }).trim()}
+            //         </h3>;
+            //     }
 
-                // i18n: ssoButtons & usernamePassword are placeholders to help translators understand context
-                ssoSection = <React.Fragment>
-                    { continueWithSection }
-                    <SSOButtons
-                        matrixClient={this.loginLogic.createTemporaryClient()}
-                        flow={this.state.ssoFlow}
-                        loginType={this.state.ssoFlow.type === "m.login.sso" ? "sso" : "cas"}
-                        fragmentAfterLogin={this.props.fragmentAfterLogin}
-                    />
-                    <h3 className="mx_AuthBody_centered">
-                        { _t(
-                            "%(ssoButtons)s Or %(usernamePassword)s",
-                            {
-                                ssoButtons: "",
-                                usernamePassword: "",
-                            },
-                        ).trim() }
-                    </h3>
-                </React.Fragment>;
-            }
+            //     // i18n: ssoButtons & usernamePassword are placeholders to help translators understand context
+            //     ssoSection = <React.Fragment>
+            //         {continueWithSection}
+            //         <SSOButtons
+            //             matrixClient={this.loginLogic.createTemporaryClient()}
+            //             flow={this.state.ssoFlow}
+            //             loginType={this.state.ssoFlow.type === "m.login.sso" ? "sso" : "cas"}
+            //             fragmentAfterLogin={this.props.fragmentAfterLogin}
+            //         />
+            //         <h3 className="mx_AuthBody_centered">
+            //             {_t(
+            //                 "%(ssoButtons)s Or %(usernamePassword)s",
+            //                 {
+            //                     ssoButtons: "",
+            //                     usernamePassword: "",
+            //                 },
+            //             ).trim()}
+            //         </h3>
+            //     </React.Fragment>;
+            // }
 
             return <React.Fragment>
-                { ssoSection }
+                {ssoSection}
                 <RegistrationForm
                     defaultUsername={this.state.formVals.username}
                     defaultEmail={this.state.formVals.email}
@@ -519,7 +519,7 @@ export default class Registration extends React.Component<IProps, IState> {
         let errorText;
         const err = this.state.errorText;
         if (err) {
-            errorText = <div className="mx_Login_error">{ err }</div>;
+            errorText = <div className="mx_Login_error">{err}</div>;
         }
 
         let serverDeadSection;
@@ -531,15 +531,17 @@ export default class Registration extends React.Component<IProps, IState> {
             });
             serverDeadSection = (
                 <div className={classes}>
-                    { this.state.serverDeadError }
+                    {this.state.serverDeadError}
                 </div>
             );
         }
 
+        const madeWithMiami = <span className="mx_AuthBody_changeFlow">Made with  <span className='mx_authBody_sun'> ☀️</span> in Miami, FL</span>;
+
         const signIn = <span className="mx_AuthBody_changeFlow">
-            { _t("Already have an account? <a>Sign in here</a>", {}, {
-                a: sub => <AccessibleButton kind='link_inline' onClick={this.onLoginClick}>{ sub }</AccessibleButton>,
-            }) }
+            {_t("Already have an account? <a>Sign in here</a>", {}, {
+                a: sub => <AccessibleButton kind='link_inline' onClick={this.onLoginClick}>{sub}</AccessibleButton>,
+            })}
         </span>;
 
         // Only show the 'go back' button if you're not looking at the form
@@ -550,7 +552,7 @@ export default class Registration extends React.Component<IProps, IState> {
                 className="mx_AuthBody_changeFlow"
                 onClick={this.onGoToFormClicked}
             >
-                { _t('Go back') }
+                {_t('Go back')}
             </AccessibleButton>;
         }
 
@@ -559,13 +561,13 @@ export default class Registration extends React.Component<IProps, IState> {
             let regDoneText;
             if (this.state.differentLoggedInUserId) {
                 regDoneText = <div>
-                    <p>{ _t(
+                    <p>{_t(
                         "Your new account (%(newAccountId)s) is registered, but you're already " +
                         "logged into a different account (%(loggedInUserId)s).", {
-                            newAccountId: this.state.registeredUsername,
-                            loggedInUserId: this.state.differentLoggedInUserId,
-                        },
-                    ) }</p>
+                        newAccountId: this.state.registeredUsername,
+                        loggedInUserId: this.state.differentLoggedInUserId,
+                    },
+                    )}</p>
                     <p><AccessibleButton
                         element="span"
                         className="mx_linkButton"
@@ -576,54 +578,56 @@ export default class Registration extends React.Component<IProps, IState> {
                             }
                         }}
                     >
-                        { _t("Continue with previous account") }
+                        {_t("Continue with previous account")}
                     </AccessibleButton></p>
                 </div>;
             } else if (this.state.formVals.password) {
                 // We're the client that started the registration
-                regDoneText = <h3>{ _t(
+                regDoneText = <h3>{_t(
                     "<a>Log in</a> to your new account.", {},
                     {
-                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{ sub }</a>,
+                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{sub}</a>,
                     },
-                ) }</h3>;
+                )}</h3>;
             } else {
                 // We're not the original client: the user probably got to us by clicking the
                 // email validation link. We can't offer a 'go straight to your account' link
                 // as we don't have the original creds.
-                regDoneText = <h3>{ _t(
+                regDoneText = <h3>{_t(
                     "You can now close this window or <a>log in</a> to your new account.", {},
                     {
-                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{ sub }</a>,
+                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{sub}</a>,
                     },
-                ) }</h3>;
+                )}</h3>;
             }
             body = <div>
-                <h2>{ _t("Registration Successful") }</h2>
-                { regDoneText }
+                <h2>{_t("Registration Successful")}</h2>
+                {regDoneText}
             </div>;
         } else {
             body = <div>
-                <h2>{ _t('Create account') }</h2>
-                { errorText }
-                { serverDeadSection }
+                <h2>Enter The<br /> Neuron</h2>
+                <AuthHeader />
+                {errorText}
+                {serverDeadSection}
                 <ServerPicker
                     title={_t("Host account on")}
                     dialogTitle={_t("Decide where your account is hosted")}
                     serverConfig={this.props.serverConfig}
                     onServerConfigChange={this.state.doingUIAuth ? undefined : this.props.onServerConfigChange}
                 />
-                { this.renderRegisterComponent() }
-                { goBack }
-                { signIn }
+                {this.renderRegisterComponent()}
+                {goBack}
+                {madeWithMiami}
+                {signIn}
             </div>;
         }
 
         return (
             <AuthPage>
-                <AuthHeader />
+
                 <AuthBody>
-                    { body }
+                    {body}
                 </AuthBody>
             </AuthPage>
         );

@@ -114,33 +114,35 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         ev.preventDefault();
         ev.persist();
 
+       
         if (!this.props.canSubmit) return;
-
+       
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
             CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
             return;
         }
-
+        
         if (this.state.email === '') {
-            if (this.showEmail()) {
-                CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
-                Modal.createTrackedDialog("Email prompt dialog", '', RegistrationEmailPromptDialog, {
-                    onFinished: async (confirmed: boolean, email?: string) => {
-                        if (confirmed) {
-                            this.setState({
-                                email,
-                            }, () => {
-                                this.doSubmit(ev);
-                            });
-                        }
-                    },
-                });
-            } else {
-                // user can't set an e-mail so don't prompt them to
-                this.doSubmit(ev);
-                return;
-            }
+            this.doSubmit(ev);
+            // if (this.showEmail()) {
+            //     CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
+            //     Modal.createTrackedDialog("Email prompt dialog", '', RegistrationEmailPromptDialog, {
+            //         onFinished: async (confirmed: boolean, email?: string) => {
+            //             if (confirmed) {
+            //                 this.setState({
+            //                     email,
+            //                 }, () => {
+            //                     this.doSubmit(ev);
+            //                 });
+            //             }
+            //         },
+            //     });
+            // } else {
+            //     // user can't set an e-mail so don't prompt them to
+            //     this.doSubmit(ev);
+            //     return;
+            // }
         } else {
             this.doSubmit(ev);
         }
@@ -163,7 +165,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
         if (promise) {
             ev.target.disabled = true;
-            promise.finally(function() {
+            promise.finally(function () {
                 ev.target.disabled = false;
             });
         }
@@ -181,8 +183,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             RegistrationField.Username,
             RegistrationField.Password,
             RegistrationField.PasswordConfirm,
-            RegistrationField.Email,
-            RegistrationField.PhoneNumber,
+           // RegistrationField.Email,
+           // RegistrationField.PhoneNumber,
         ];
 
         // Run all fields with stricter validation that no longer allows empty
@@ -208,7 +210,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         }
 
         const invalidField = this.findFirstInvalidField(fieldIDsInDisplayOrder);
-
         if (!invalidField) {
             return true;
         }
@@ -450,6 +451,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             fieldRef={field => this[RegistrationField.Password] = field}
             minScore={PASSWORD_MIN_SCORE}
             value={this.state.password}
+            label=''
+            placeholder='Password'
             onChange={this.onPasswordChange}
             onValidate={this.onPasswordValidate}
             onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_password_focus")}
@@ -464,6 +467,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             autoComplete="new-password"
             value={this.state.passwordConfirm}
             password={this.state.password}
+            label=''
+             placeholder='Confirm Password'
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
             onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_focus")}
@@ -501,8 +506,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             ref={field => this[RegistrationField.Username] = field}
             type="text"
             autoFocus={true}
-            label={_t("Username")}
-            placeholder={_t("Username").toLocaleLowerCase()}
+            label=''
+            placeholder={_t("Username")}
             value={this.state.username}
             onChange={this.onUsernameChange}
             onValidate={this.onUsernameValidate}
@@ -513,7 +518,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
     render() {
         const registerButton = (
-            <input className="mx_Login_submit" type="submit" value={_t("Register")} disabled={!this.props.canSubmit} />
+            <input className="mx_Login_submit" type="submit" value="Register or Log In" disabled={!this.props.canSubmit} />
         );
 
         let emailHelperText = null;
@@ -541,18 +546,18 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             <div>
                 <form onSubmit={this.onSubmit}>
                     <div className="mx_AuthBody_fieldRow">
-                        { this.renderUsername() }
+                        {this.renderUsername()}
                     </div>
                     <div className="mx_AuthBody_fieldRow">
-                        { this.renderPassword() }
-                        { this.renderPasswordConfirm() }
+                        {this.renderPassword()}
+                        {this.renderPasswordConfirm()}
                     </div>
-                    <div className="mx_AuthBody_fieldRow">
+                    {/* <div className="mx_AuthBody_fieldRow">
                         { this.renderEmail() }
                         { this.renderPhoneNumber() }
-                    </div>
-                    { emailHelperText }
-                    { registerButton }
+                    </div> */}
+                    {emailHelperText}
+                    {registerButton}
                 </form>
             </div>
         );
