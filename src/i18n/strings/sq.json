@@ -3503,5 +3503,6 @@
     "Waiting for you to verify on your other device…": "Po pritet që ju të verifikoni në pajisjen tuaj tjetër…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Po pritet që ju të verifikoni në pajisjen tuaj tjetër, %(deviceName)s (%(deviceId)s)…",
     "Verify this device by confirming the following number appears on its screen.": "Verifikoni këtë pajisje duke ripohuar se numri vijues shfaqet në ekranin e saj.",
-    "Confirm the emoji below are displayed on both devices, in the same order:": "Ripohoni se emoji-t më poshtë shfaqen në të dyja pajisjet, sipas të njëjtës radhë:"
+    "Confirm the emoji below are displayed on both devices, in the same order:": "Ripohoni se emoji-t më poshtë shfaqen në të dyja pajisjet, sipas të njëjtës radhë:",
+    "Edit setting": "Përpunoni rregullimin"
 }
