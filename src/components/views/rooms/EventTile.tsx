@@ -72,6 +72,7 @@ import { ThreadNotificationState } from '../../../stores/notifications/ThreadNot
 import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNotificationStateStore';
 import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
 import { NotificationColor } from '../../../stores/notifications/NotificationColor';
+import AccessibleButton from '../elements/AccessibleButton';
 import { CardContext } from '../right_panel/BaseCard';
 
 const eventTileTypes = {
@@ -1262,7 +1263,17 @@ export default class EventTile extends React.Component<IProps, IState> {
             _t(
                 '<requestLink>Re-request encryption keys</requestLink> from your other sessions.',
                 {},
-                { 'requestLink': (sub) => <a tabIndex={0} onClick={this.onRequestKeysClick}>{ sub }</a> },
+                {
+                    'requestLink': (sub) =>
+                        <AccessibleButton
+                            className="mx_EventTile_rerequestKeysCta"
+                            kind='link_inline'
+                            tabIndex={0}
+                            onClick={this.onRequestKeysClick}
+                        >
+                            { sub }
+                        </AccessibleButton>,
+                },
             );
 
         const keyRequestInfo = isEncryptionFailure && !isRedacted ?

@@ -755,7 +755,7 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
 @replaceableComponent("views.auth.FallbackAuthEntry")
 export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     private popupWindow: Window;
-    private fallbackButton = createRef<HTMLAnchorElement>();
+    private fallbackButton = createRef<HTMLButtonElement>();
 
     constructor(props) {
         super(props);
@@ -814,9 +814,9 @@ export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
         }
         return (
             <div>
-                <a href="" ref={this.fallbackButton} onClick={this.onShowFallbackClick}>{
+                <AccessibleButton kind='link_inline' inputRef={this.fallbackButton} onClick={this.onShowFallbackClick}>{
                     _t("Start authentication")
-                }</a>
+                }</AccessibleButton>
                 { errorSection }
             </div>
         );

@@ -1255,8 +1255,14 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                         defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                     },
                     {
-                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{ sub }</a>,
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
+                        default: sub =>
+                            <AccessibleButton kind='link_inline' onClick={this.onUseDefaultIdentityServerClick}>
+                                { sub }
+                            </AccessibleButton>,
+                        settings: sub =>
+                            <AccessibleButton kind='link_inline' onClick={this.onManageSettingsClick}>
+                                { sub }
+                            </AccessibleButton>,
                     },
                 ) }</div>
             );
@@ -1266,7 +1272,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     "Use an identity server to invite by email. " +
                     "Manage in <settings>Settings</settings>.",
                     {}, {
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
+                        settings: sub =>
+                            <AccessibleButton kind='link_inline' onClick={this.onManageSettingsClick}>
+                                { sub }
+                            </AccessibleButton>,
                     },
                 ) }</div>
             );

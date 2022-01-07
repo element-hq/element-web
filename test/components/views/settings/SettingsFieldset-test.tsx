@@ -40,7 +40,7 @@ describe('<SettingsFieldset />', () => {
     });
 
     it('renders fieldset with react description', () => {
-        const description = <><p>Test</p><a href='#'>a link</a></>;
+        const description = <><p>Test</p><a href='#test'>a link</a></>;
         expect(getComponent({ description })).toMatchSnapshot();
     });
 });

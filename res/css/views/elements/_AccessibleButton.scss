@@ -107,6 +107,16 @@ limitations under the License.
     opacity: 0.4;
 }
 
+.mx_AccessibleButton_kind_link_inline {
+    color: $accent;
+    font-size: inherit;
+    padding: 0 2px;
+}
+
+.mx_AccessibleButton_kind_link_inline.mx_AccessibleButton_disabled {
+    opacity: 0.4;
+}
+
 .mx_AccessibleButton_hasKind.mx_AccessibleButton_kind_link_sm {
     padding: 5px 12px;
     color: $accent;

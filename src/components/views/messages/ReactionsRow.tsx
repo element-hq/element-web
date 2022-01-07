@@ -27,6 +27,7 @@ import ContextMenu, { aboveLeftOf, useContextMenu } from "../../structures/Conte
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import ReactionsRowButton from "./ReactionsRowButton";
 import RoomContext from "../../../contexts/RoomContext";
+import AccessibleButton from "../elements/AccessibleButton";
 
 // The maximum number of reactions to initially show on a message.
 const MAX_ITEMS_WHEN_LIMITED = 8;
@@ -201,13 +202,13 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         let showAllButton;
         if ((items.length > MAX_ITEMS_WHEN_LIMITED + 1) && !showAll) {
             items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
-            showAllButton = <a
+            showAllButton = <AccessibleButton
+                kind="link_inline"
                 className="mx_ReactionsRow_showAll"
-                href="#"
                 onClick={this.onShowAllClick}
             >
                 { _t("Show all") }
-            </a>;
+            </AccessibleButton>;
         }
 
         let addReactionButton;

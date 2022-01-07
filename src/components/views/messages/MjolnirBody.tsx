@@ -19,6 +19,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -40,7 +41,11 @@ export default class MjolnirBody extends React.Component<IProps> {
         return (
             <div className='mx_MjolnirBody'><i>{ _t(
                 "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",
-                {}, { a: (sub) => <a href="#" onClick={this.onAllowClick}>{ sub }</a> },
+                {}, {
+                    a: (sub) => <AccessibleButton kind="link_inline" onClick={this.onAllowClick}>
+                        { sub }
+                    </AccessibleButton>,
+                },
             ) }</i></div>
         );
     }

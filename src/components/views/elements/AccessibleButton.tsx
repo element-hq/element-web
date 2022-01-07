@@ -21,6 +21,19 @@ import { Key } from '../../../Keyboard';
 
 export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
 
+type AccessibleButtonKind = | 'primary'
+    | 'primary_outline'
+    | 'primary_sm'
+    | 'secondary'
+    | 'danger'
+    | 'danger_outline'
+    | 'danger_sm'
+    | 'link'
+    | 'link_inline'
+    | 'link_sm'
+    | 'confirm_sm'
+    | 'cancel_sm';
+
 /**
  * children: React's magic prop. Represents all children given to the element.
  * element:  (optional) The base element type. "div" by default.
@@ -32,7 +45,7 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     element?: keyof ReactHTML;
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
-    kind?: string;
+    kind?: AccessibleButtonKind | string;
     // The ARIA role
     role?: string;
     // The tabIndex

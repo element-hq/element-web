@@ -29,6 +29,7 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsFlag from "../elements/SettingsFlag";
 import SettingsFieldset from '../settings/SettingsFieldset';
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
     room: Room;
@@ -55,13 +56,21 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
             if (accountEnabled) {
                 previewsForAccount = (
                     _t("You have <a>enabled</a> URL previews by default.", {}, {
-                        'a': (sub)=><a onClick={this.onClickUserSettings} href=''>{ sub }</a>,
+                        'a': (sub) => <AccessibleButton
+                            kind='link_inline'
+                            onClick={this.onClickUserSettings}>
+                            { sub }
+                        </AccessibleButton>,
                     })
                 );
             } else {
                 previewsForAccount = (
                     _t("You have <a>disabled</a> URL previews by default.", {}, {
-                        'a': (sub)=><a onClick={this.onClickUserSettings} href=''>{ sub }</a>,
+                        'a': (sub) => <AccessibleButton
+                            kind='link_inline'
+                            onClick={this.onClickUserSettings}>
+                            { sub }
+                        </AccessibleButton>,
                     })
                 );
             }

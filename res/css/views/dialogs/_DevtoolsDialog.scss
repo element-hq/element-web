@@ -257,3 +257,10 @@ limitations under the License.
         margin-bottom: 8px;
     }
 }
+
+.mx_DevTools_SettingsExplorer_setting {
+    // override default link button color
+    // as it is the same as the background highlight
+    // used on focus
+    color: $links !important;
+}

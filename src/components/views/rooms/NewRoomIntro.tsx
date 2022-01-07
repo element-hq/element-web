@@ -207,7 +207,7 @@ const NewRoomIntro = () => {
     let subButton;
     if (room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, MatrixClientPeg.get())) {
         subButton = (
-            <a onClick={openRoomSettings} href="#"> { _t("Enable encryption in settings.") }</a>
+            <AccessibleButton kind='link_inline' onClick={openRoomSettings}>{ _t("Enable encryption in settings.") }</AccessibleButton>
         );
     }
 

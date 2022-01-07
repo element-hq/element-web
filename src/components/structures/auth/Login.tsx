@@ -38,6 +38,7 @@ import ServerPicker from "../../views/elements/ServerPicker";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
+import AccessibleButton from '../../views/elements/AccessibleButton';
 
 // These are used in several places, and come from the js-sdk's autodiscovery
 // stuff. We define them here so that they'll be picked up by i18n.
@@ -588,7 +589,10 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             footer = (
                 <span className="mx_AuthBody_changeFlow">
                     { _t("New? <a>Create account</a>", {}, {
-                        a: sub => <a onClick={this.onTryRegisterClick} href="#">{ sub }</a>,
+                        a: sub =>
+                            <AccessibleButton kind='link_inline' onClick={this.onTryRegisterClick}>
+                                { sub }
+                            </AccessibleButton>,
                     }) }
                 </span>
             );

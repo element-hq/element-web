@@ -37,6 +37,7 @@ import AddressSelector from '../elements/AddressSelector';
 import AddressTile from '../elements/AddressTile';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import AccessibleButton from '../elements/AccessibleButton';
 
 const TRUNCATE_QUERY_LIST = 40;
 const QUERY_USER_DIRECTORY_DEBOUNCE_MS = 200;
@@ -712,8 +713,14 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
                         defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
                     },
                     {
-                        default: sub => <a href="#" onClick={this.onUseDefaultIdentityServerClick}>{ sub }</a>,
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
+                        default: sub => (
+                            <AccessibleButton kind="link_inline" onClick={this.onUseDefaultIdentityServerClick}>
+                                { sub }
+                            </AccessibleButton>
+                        ),
+                        settings: sub => <AccessibleButton kind="link_inline" onClick={this.onManageSettingsClick}>
+                            { sub }
+                        </AccessibleButton>,
                     },
                 ) }</div>;
             } else {
@@ -721,7 +728,9 @@ export default class AddressPickerDialog extends React.Component<IProps, IState>
                     "Use an identity server to invite by email. " +
                     "Manage in <settings>Settings</settings>.",
                     {}, {
-                        settings: sub => <a href="#" onClick={this.onManageSettingsClick}>{ sub }</a>,
+                        settings: sub => <AccessibleButton kind="link_inline" onClick={this.onManageSettingsClick}>
+                            { sub }
+                        </AccessibleButton>,
                     },
                 ) }</div>;
             }

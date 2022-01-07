@@ -37,6 +37,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
+import { ButtonEvent } from './AccessibleButton';
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -344,7 +345,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         this.initialize();
     };
 
-    private onQuoteClick = async (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>): Promise<void> => {
+    private onQuoteClick = async (event: ButtonEvent): Promise<void> => {
         const events = [this.state.loadedEv, ...this.state.events];
 
         let loadedEv = null;
@@ -380,7 +381,11 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             header = <blockquote className={`mx_ReplyChain ${this.getReplyChainColorClass(ev)}`}>
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
-                        'a': (sub) => <a onClick={this.onQuoteClick} className="mx_ReplyChain_show">{ sub }</a>,
+                        'a': (sub) => (
+                            <button onClick={this.onQuoteClick} className="mx_ReplyChain_show">
+                                { sub }
+                            </button>
+                        ),
                         'pill': (
                             <Pill
                                 type={Pill.TYPE_USER_MENTION}

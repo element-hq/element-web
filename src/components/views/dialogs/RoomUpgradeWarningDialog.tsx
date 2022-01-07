@@ -29,6 +29,7 @@ import BugReportDialog from './BugReportDialog';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import ProgressBar from "../elements/ProgressBar";
+import AccessibleButton from '../elements/AccessibleButton';
 
 export interface IFinishedOpts {
     continue: boolean;
@@ -135,7 +136,9 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
                         },
                         {
                             "a": (sub) => {
-                                return <a href='#' onClick={this.openBugReportDialog}>{ sub }</a>;
+                                return <AccessibleButton kind='link_inline' onClick={this.openBugReportDialog}>
+                                    { sub }
+                                </AccessibleButton>;
                             },
                         },
                     ) }

@@ -23,6 +23,7 @@ import SdkConfig from "../../../SdkConfig";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
+import AccessibleButton from "./AccessibleButton";
 
 export enum WarningKind {
     Files,
@@ -41,15 +42,19 @@ export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
     if (EventIndexPeg.error) {
         return <>
             { _t("Message search initialisation failed, check <a>your settings</a> for more information", {}, {
-                a: sub => (<a onClick={(evt) => {
-                    evt.preventDefault();
-                    dis.dispatch({
-                        action: Action.ViewUserSettings,
-                        initialTabId: UserTab.Security,
-                    });
-                }}>
-                    { sub }
-                </a>),
+                a: sub => (
+                    <AccessibleButton
+                        kind="link_inline"
+                        onClick={(evt) => {
+                            evt.preventDefault();
+                            dis.dispatch({
+                                action: Action.ViewUserSettings,
+                                initialTabId: UserTab.Security,
+                            });
+                        }}
+                    >
+                        { sub }
+                    </AccessibleButton>),
             }) }
         </>;
     }

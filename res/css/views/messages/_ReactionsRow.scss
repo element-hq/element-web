@@ -57,15 +57,13 @@ limitations under the License.
 }
 
 .mx_ReactionsRow_showAll {
+    @mixin ButtonResetDefault;
     text-decoration: none;
     font-size: $font-12px;
     line-height: $font-20px;
     margin-left: 4px;
     vertical-align: middle;
-
-    &:link, &:visited {
-        color: $tertiary-content;
-    }
+    color: $tertiary-content;
 
     &:hover {
         color: $primary-content;

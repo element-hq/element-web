@@ -18,6 +18,7 @@ limitations under the License.
     display: flex;
     opacity: 0.6;
     font-size: $font-12px;
+    width: 100%;
 
     pre, code {
         flex: 1;
@@ -29,11 +30,15 @@ limitations under the License.
     }
 
     .mx_ViewSourceEvent_toggle {
+        visibility: hidden;
+        // override styles from AccessibleButton
+        border-radius: 0;
+        padding: 0;
+        // icon
         mask-repeat: no-repeat;
         mask-position: 0 center;
         mask-size: auto 12px;
         width: 12px;
-        visibility: hidden;
         background-color: $accent;
         mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
     }

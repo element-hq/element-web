@@ -45,6 +45,7 @@ import EditMessageComposer from '../rooms/EditMessageComposer';
 import LinkPreviewGroup from '../rooms/LinkPreviewGroup';
 import { IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
+import AccessibleButton from '../elements/AccessibleButton';
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 
@@ -529,9 +530,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (this.props.highlightLink) {
             body = <a href={this.props.highlightLink}>{ body }</a>;
         } else if (content.data && typeof content.data["org.matrix.neb.starter_link"] === "string") {
-            body = <a href="#"
+            body = <AccessibleButton kind="link_inline"
                 onClick={this.onStarterLinkClick.bind(this, content.data["org.matrix.neb.starter_link"])}
-            >{ body }</a>;
+            >{ body }</AccessibleButton>;
         }
 
         let widgets;

@@ -538,16 +538,20 @@ export default class Registration extends React.Component<IProps, IState> {
 
         const signIn = <span className="mx_AuthBody_changeFlow">
             { _t("Already have an account? <a>Sign in here</a>", {}, {
-                a: sub => <a onClick={this.onLoginClick} href="#">{ sub }</a>,
+                a: sub => <AccessibleButton kind='link_inline' onClick={this.onLoginClick}>{ sub }</AccessibleButton>,
             }) }
         </span>;
 
         // Only show the 'go back' button if you're not looking at the form
         let goBack;
         if (this.state.doingUIAuth) {
-            goBack = <a className="mx_AuthBody_changeFlow" onClick={this.onGoToFormClicked} href="#">
+            goBack = <AccessibleButton
+                kind='link_inline'
+                className="mx_AuthBody_changeFlow"
+                onClick={this.onGoToFormClicked}
+            >
                 { _t('Go back') }
-            </a>;
+            </AccessibleButton>;
         }
 
         let body;

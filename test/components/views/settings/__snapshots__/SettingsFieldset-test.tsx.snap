@@ -38,7 +38,7 @@ exports[`<SettingsFieldset /> renders fieldset with react description 1`] = `
       Test
     </p>
     <a
-      href="#"
+      href="#test"
     >
       a link
     </a>

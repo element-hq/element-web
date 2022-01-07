@@ -23,6 +23,7 @@ import Modal from '../../../Modal';
 import SdkConfig from "../../../SdkConfig";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BugReportDialog from '../dialogs/BugReportDialog';
+import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -67,9 +68,9 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
 
             let submitLogsButton;
             if (SdkConfig.get().bug_report_endpoint_url) {
-                submitLogsButton = <a onClick={this.onBugReport} href="#">
+                submitLogsButton = <AccessibleButton kind="link_inline" onClick={this.onBugReport}>
                     { _t("Submit logs") }
-                </a>;
+                </AccessibleButton>;
             }
 
             return (<div className={classNames(classes)}>
