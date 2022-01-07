@@ -3420,5 +3420,21 @@
     "This address had invalid server or is already in use": "Alamat ini memiliki server yang tidak valid atau telah digunakan",
     "Back to thread": "Kembali ke utasan",
     "Room members": "Anggota ruangan",
-    "Back to chat": "Kembali ke obrolan"
+    "Back to chat": "Kembali ke obrolan",
+    "Waiting for you to verify on your other device…": "Menunggu Anda untuk verifikasi di perangkat Anda yang lain…",
+    "Your new device is now verified. Other users will see it as trusted.": "Perangkat baru Anda telah diverifikasi. Pengguna lain akan melihat perangkat baru Anda sebagai dipercayai.",
+    "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Perangkat baru Anda telah diverifikasi. Perangkat baru Anda dapat mengakses pesan-pesan terenkripsi Anda, dan pengguna lain akan melihat perangkat baru Anda sebagai dipercayai.",
+    "Verify with another device": "Verifikasi dengan perangkat lain",
+    "Device verified": "Perangkat telah diverifikasi",
+    "Verify this device": "Verifikasi perangkat ini",
+    "Unable to verify this device": "Tidak dapat memverifikasi perangkat ini",
+    "Verify other device": "Verifikasi perangkat lain",
+    "You cancelled verification on your other device.": "Anda membatalkan verifikasi di perangkat Anda yang lain.",
+    "Almost there! Is your other device showing the same shield?": "Hampir selesai! Apakah perangkat lain Anda menampilkan perisai yang sama?",
+    "Verify this device by completing one of the following:": "Verifikasi perangkat ini dengan menyelesaikan salah satu di bawah:",
+    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Perangkat yang Anda sedang verifikasi tidak mendukung pemindaian kode QR atau verifikasi emoji, yang didukung oleh %(brand)s. Coba menggunakan klien yang lain.",
+    "To proceed, please accept the verification request on your other device.": "Untuk melanjutkan, mohon terima permintaan verifikasi di perangkat Anda yang lain.",
+    "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Menunggu Anda untuk memverifikasi perangkat Anda yang lain, %(deviceName)s (%(deviceId)s)…",
+    "Verify this device by confirming the following number appears on its screen.": "Verifikasi perangkat ini dengan mengkonfirmasi nomor berikut ini yang ditampilkan di layarnya.",
+    "Confirm the emoji below are displayed on both devices, in the same order:": "Konfirmasi emoji di bawah yang ditampilkan di kedua perangkat, dalam urutan yang sama:"
 }
