@@ -144,7 +144,9 @@ class RoomViewStore extends Store<ActionPayload> {
                 this.joinRoomError(payload);
                 break;
             case Action.JoinRoomReady:
-                this.setState({ shouldPeek: false });
+                if (this.state.roomId === payload.roomId) {
+                    this.setState({ shouldPeek: false });
+                }
                 break;
             case 'on_client_not_viable':
             case 'on_logged_out':
@@ -279,7 +281,9 @@ class RoomViewStore extends Store<ActionPayload> {
         });
 
         const cli = MatrixClientPeg.get();
-        const address = this.state.roomAlias || this.state.roomId;
+        // take a copy of roomAlias & roomId as they may change by the time the join is complete
+        const { roomAlias, roomId } = this.state;
+        const address = roomAlias || roomId;
         const viaServers = this.state.viaServers || [];
         try {
             await retry<any, MatrixError>(() => cli.joinRoom(address, {
@@ -289,19 +293,19 @@ class RoomViewStore extends Store<ActionPayload> {
                 // if we received a Gateway timeout then retry
                 return err.httpStatus === 504;
             });
-            CountlyAnalytics.instance.trackRoomJoin(startTime, this.state.roomId, payload._type);
+            CountlyAnalytics.instance.trackRoomJoin(startTime, roomId, payload._type);
 
             // We do *not* clear the 'joining' flag because the Room object and/or our 'joined' member event may not
             // have come down the sync stream yet, and that's the point at which we'd consider the user joined to the
             // room.
             dis.dispatch({
                 action: Action.JoinRoomReady,
-                roomId: this.state.roomId,
+                roomId,
             });
         } catch (err) {
             dis.dispatch({
                 action: Action.JoinRoomError,
-                roomId: this.state.roomId,
+                roomId,
                 err: err,
             });
         }
@@ -354,7 +358,7 @@ class RoomViewStore extends Store<ActionPayload> {
             joining: false,
             joinError: payload.err,
         });
-        this.showJoinRoomError(payload.err, this.state.roomId);
+        this.showJoinRoomError(payload.err, payload.roomId);
     }
 
     public reset() {
