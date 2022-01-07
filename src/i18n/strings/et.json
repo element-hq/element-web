@@ -3490,5 +3490,20 @@
     "Room members": "Jututoa liikmed",
     "Back to chat": "Tagasi vestluse manu",
     "Verify this device by confirming the following number appears on its screen.": "Verifitseeri see seade tehes kindlaks, et järgnev number kuvatakse tema ekraanil.",
-    "Confirm the emoji below are displayed on both devices, in the same order:": "Kontrolli, et allpool näidatud emoji'd on kuvatud mõlemas seadmes samas järjekorras:"
+    "Confirm the emoji below are displayed on both devices, in the same order:": "Kontrolli, et allpool näidatud emoji'd on kuvatud mõlemas seadmes samas järjekorras:",
+    "Edit setting": "Muuda seadistust",
+    "Your new device is now verified. Other users will see it as trusted.": "Sinu uus seade on nüüd verifitseeritud. Teiste kasutajate jaoks on ta usaldusväärne.",
+    "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Sinu uus seade on nüüd verifitseeritud. Selles seadmes saad lugeda oma krüptitud sõnumeid ja teiste kasutajate jaoks on ta usaldusväärne.",
+    "Verify with another device": "Verifitseeri teise seadmega",
+    "Device verified": "Seade on verifitseeritud",
+    "Verify this device": "Verifitseeri see seade",
+    "Unable to verify this device": "Selle seadme verifitseerimine ei õnnestunud",
+    "Verify other device": "Verifitseeri oma teine seade",
+    "You cancelled verification on your other device.": "Sina tühistasid verifitseerimise oma teises seadmes.",
+    "Almost there! Is your other device showing the same shield?": "Peaaegu valmis! Kas sinu teine seade kuvab sama kilpi?",
+    "Verify this device by completing one of the following:": "Verifitseeri see seade täites ühe alljärgnevatest:",
+    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "See seade, mida sa tahad verifitseerida ei toeta QR-koodi ega emoji-põhist verifitseerimist, aga just neid %(brand)s oskab kasutada. Proovi mõne muu Matrix'i kliendiga.",
+    "To proceed, please accept the verification request on your other device.": "Jätkamaks palun võta vastu verifitseerimispalve oma teises seadmes.",
+    "Waiting for you to verify on your other device…": "Ootan, et sa verifitseeriksid oma teises seadmes…",
+    "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Ootan, et sa verifitseerid oma teises seadmes: %(deviceName)s (%(deviceId)s)…"
 }
