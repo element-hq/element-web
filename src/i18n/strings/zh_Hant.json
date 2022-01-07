@@ -3492,5 +3492,21 @@
     "Dial": "撥號",
     "Back to thread": "回到討論串",
     "Room members": "聊天室成員",
-    "Back to chat": "回到聊天"
+    "Back to chat": "回到聊天",
+    "Your new device is now verified. Other users will see it as trusted.": "您的新裝置已通過驗證。其他使用者也會看到其為受信任的裝置。",
+    "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "您的新裝置已通過驗證。其可以存取您的加密訊息，其他使用者也會看到其為受信任的裝置。",
+    "Verify with another device": "用另一台裝置驗證",
+    "Device verified": "裝置已驗證",
+    "Verify this device": "驗證此裝置",
+    "Unable to verify this device": "無法驗證此裝置",
+    "Verify other device": "驗證其他裝置",
+    "You cancelled verification on your other device.": "您在其他裝置上取消了驗證。",
+    "Almost there! Is your other device showing the same shield?": "快好了！您的其他裝置是否顯示了相同的盾牌？",
+    "Verify this device by completing one of the following:": "透過完成以下的任何一個操作來驗證此裝置：",
+    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "您正在嘗試驗證的裝置不支援掃描 QR code 或表情符號驗證，這是 %(brand)s 所支援的。請嘗試使用其他客戶端。",
+    "To proceed, please accept the verification request on your other device.": "要繼續，請在您的其他裝置上接受驗證請求。",
+    "Waiting for you to verify on your other device…": "正在等待您在其他裝置上驗證……",
+    "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "正在等待您在其他裝置上驗證，%(deviceName)s (%(deviceId)s)……",
+    "Verify this device by confirming the following number appears on its screen.": "透過確認螢幕上顯示的以下數字來驗證裝置。",
+    "Confirm the emoji below are displayed on both devices, in the same order:": "確認以下的表情符號以相同的順序顯示在兩台裝置上："
 }
