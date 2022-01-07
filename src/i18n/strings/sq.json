@@ -3487,5 +3487,21 @@
     "Missing domain separator e.g. (:domain.org)": "Mungon ndarë përkatësie, p.sh. (:domain.org)",
     "Back to thread": "Mbrapsht te rrjedha",
     "Room members": "Anëtarë dhome",
-    "Back to chat": "Mbrapsht te fjalosja"
+    "Back to chat": "Mbrapsht te fjalosja",
+    "Your new device is now verified. Other users will see it as trusted.": "Pajisja juaj e re tani është e verifikuar. Përdorues të tjerë do ta shohin si të besuar.",
+    "Your new device is now verified. It has access to your encrypted messages, and other users will see it as trusted.": "Pajisja juaj e re tani është e verifikuar. Ajo ka hyrje te mesazhet tuaja të fshehtëzuara dhe përdorues të tjerë do ta shohin si të besuar.",
+    "Verify with another device": "Verifikojeni me pajisje tjetër",
+    "Device verified": "Pajisja u verifikua",
+    "Verify this device": "Verifikoni këtë pajisje",
+    "Unable to verify this device": "S’arrihet të verifikohet kjo pajisje",
+    "Verify other device": "Verifikoni pajisje tjetër",
+    "You cancelled verification on your other device.": "E anuluat verifikimin në pajisjen tuaj tjetër.",
+    "Almost there! Is your other device showing the same shield?": "Thuajse mbaruam! A po shfaq pajisja juaj të njëjtën mburojë?",
+    "Verify this device by completing one of the following:": "Verifikoni këtë pajisje duke plotësuar një nga sa vijon:",
+    "The device you are trying to verify doesn't support scanning a QR code or emoji verification, which is what %(brand)s supports. Try with a different client.": "Pajisja që po provoni të verifikoni nuk mbulon skanim të një kodi QR, apo verifikim me emoji, çka janë ato që mbulohen prej %(brand)s. Provoni me një klient tjetër.",
+    "To proceed, please accept the verification request on your other device.": "Që të vazhdoni më tej, ju lutemi, pranoni në pajisjen tuaj tjetër kërkesën për verifikim.",
+    "Waiting for you to verify on your other device…": "Po pritet që ju të verifikoni në pajisjen tuaj tjetër…",
+    "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Po pritet që ju të verifikoni në pajisjen tuaj tjetër, %(deviceName)s (%(deviceId)s)…",
+    "Verify this device by confirming the following number appears on its screen.": "Verifikoni këtë pajisje duke ripohuar se numri vijues shfaqet në ekranin e saj.",
+    "Confirm the emoji below are displayed on both devices, in the same order:": "Ripohoni se emoji-t më poshtë shfaqen në të dyja pajisjet, sipas të njëjtës radhë:"
 }
