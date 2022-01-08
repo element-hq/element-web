@@ -29,6 +29,7 @@ interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     forceHide?: boolean;
     yOffset?: number;
     alignment?: Alignment;
+    onClick?: any;
 }
 
 interface IState {

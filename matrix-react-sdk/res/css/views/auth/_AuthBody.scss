@@ -27,7 +27,7 @@ limitations under the License.
     h2 {
         font-size: $font-34px;
         font-weight: 600;
-        margin-top: 8px;
+        margin: 0px;
         color: #fff;
         text-align: center;
     }
@@ -35,7 +35,7 @@ limitations under the License.
     h3 {
         font-size: $font-14px;
         font-weight: 600;
-        color: $authpage-secondary-color;
+        color: #fff;
     }
 
     h3.mx_AuthBody_centered {
@@ -100,9 +100,14 @@ limitations under the License.
             background-color: $authpage-focus-bg-color;
         }
     }
-    // .mx_recaptcha{
-    //     span
-    // }
+    .mx_recaptcha_text {
+        text-align: center;
+    }
+    .mx_recaptcha {
+        display: table;
+        margin: 0 auto;
+        margin-bottom: 16px;
+    }
 }
 
 .mx_AuthBody_fieldRow {
@@ -151,7 +156,7 @@ limitations under the License.
     width: 100%;
     color: #fff;
     margin-bottom: 10px;
-    .mx_authBody_sun{
+    .mx_authBody_sun {
         color: #fee142;
     }
     .mx_Login_create_new {

@@ -39,7 +39,7 @@ interface ICaptchaFormState {
 @replaceableComponent("views.auth.CaptchaForm")
 export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICaptchaFormState> {
     static defaultProps = {
-        onCaptchaResponse: () => {},
+        onCaptchaResponse: () => { },
     };
 
     private captchaWidgetId?: string;
@@ -132,18 +132,16 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         if (this.state.errorText) {
             error = (
                 <div className="error">
-                    { this.state.errorText }
+                    {this.state.errorText}
                 </div>
             );
         }
 
         return (
             <div ref={this.recaptchaContainer}>
-                <p>{ _t(
-                    "This Neuron would like to make sure you are not a robot.",
-                ) }</p>
-                <div id={DIV_ID} />
-                { error }
+                <p className='mx_recaptcha_text'>This Neuron would like to make sure you are not a robot.</p>
+                <div className='mx_recaptcha' id={DIV_ID} />
+                {error}
             </div>
         );
     }

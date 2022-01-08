@@ -18,7 +18,7 @@ import * as React from "react";
 import { createRef } from "react";
 import classNames from "classnames";
 
-import dis from "../../dispatcher/dispatcher";
+import dis, { defaultDispatcher } from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList from "../views/rooms/RoomList";
 import CallHandler from "../../CallHandler";
@@ -35,7 +35,7 @@ import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager"
 import UIStore from "../../stores/UIStore";
 import { findSiblingElement, IState as IRovingTabIndexState } from "../../accessibility/RovingTabIndex";
 import RoomListHeader from "../views/rooms/RoomListHeader";
-import { Key } from "../../Keyboard";
+import { isMac, Key } from "../../Keyboard";
 import RecentlyViewedButton from "../views/rooms/RecentlyViewedButton";
 import { BreadcrumbsStore } from "../../stores/BreadcrumbsStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../stores/room-list/RoomListStore";
@@ -44,6 +44,7 @@ import IndicatorScrollbar from "./IndicatorScrollbar";
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import SettingsStore from "../../settings/SettingsStore";
 import UserMenu from "./UserMenu";
+import RoomAvatar from "../views/avatars/RoomAvatar";
 
 interface IProps {
     isMinimized: boolean;
@@ -351,7 +352,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
     private renderSearchDialExplore(): React.ReactNode {
         let dialPadButton = null;
-
+        const isPanelCollapsed = true;
         // If we have dialer support, show a button to bring up the dial pad
         // to start a new call
         if (CallHandler.instance.getSupportsPstnProtocol()) {
@@ -381,15 +382,37 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 onBlur={this.onBlur}
                 onKeyDown={this.onKeyDown}
             >
-                { !SpaceStore.spacesEnabled && <UserMenu isPanelCollapsed={true} /> }
+                {!SpaceStore.spacesEnabled && <UserMenu isPanelCollapsed={true} />}
+                <UserMenu isPanelCollapsed={isPanelCollapsed}>
+                    <AccessibleTooltipButton
+                        className={classNames("mx_SpacePanel_toggleCollapse", { expanded: !isPanelCollapsed })}
+                        //onClick={() => setPanelCollapsed(!isPanelCollapsed)}
+                        title={isPanelCollapsed ? _t("Expand") : _t("Collapse")}
+                        tooltip={<div>
+                            <div className="mx_Tooltip_title">
+                                {isPanelCollapsed ? _t("Expand") : _t("Collapse")}
+                            </div>
+                            <div className="mx_Tooltip_sub">
+                                {isMac ? "⌘ + ⇧ + D" : "Ctrl + Shift + D"}
+                            </div>
+                        </div>}
+                    />
+                </UserMenu>
                 <RoomSearch
                     isMinimized={this.props.isMinimized}
                     ref={this.roomSearchRef}
                     onSelectRoom={this.selectRoom}
                 />
 
-                { dialPadButton }
-                { rightButton }
+                {dialPadButton}
+                {/* {rightButton} */}
+                <AccessibleTooltipButton
+                    onClick={() => defaultDispatcher.dispatch({ action: 'view_create_chat' })}
+                    className="mx_RoomSublist_auxButton"
+                    tooltipClassName="mx_RoomSublist_addRoomTooltip"
+                    aria-label={_t("Start chat")}
+                    title={_t("Start chat")}
+                />
             </div>
         );
     }
@@ -420,14 +443,14 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         return (
             <div className={containerClasses} ref={this.ref}>
                 <aside className="mx_LeftPanel_roomListContainer">
-                    { this.renderSearchDialExplore() }
-                    { this.renderBreadcrumbs() }
-                    { !this.props.isMinimized && (
+                    {this.renderSearchDialExplore()}
+                    {this.renderBreadcrumbs()}
+                    {/* {!this.props.isMinimized && (
                         <RoomListHeader
                             onVisibilityChange={this.refreshStickyHeaders}
                             spacePanelDisabled={!SpaceStore.spacesEnabled}
                         />
-                    ) }
+                    )} */}
                     <div className="mx_LeftPanel_roomListWrapper">
                         <div
                             className={roomListClasses}
@@ -437,10 +460,10 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             tabIndex={-1}
                             onKeyDown={this.onRoomListKeydown}
                         >
-                            { roomList }
+                            {roomList}
                         </div>
                     </div>
-                    { !this.props.isMinimized && <LeftPanelWidget /> }
+                    {!this.props.isMinimized && <LeftPanelWidget />}
                 </aside>
             </div>
         );

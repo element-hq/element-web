@@ -877,7 +877,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 aria-label={this.props.label}
                 onKeyDown={this.onKeyDown}
             >
-                { this.renderHeader() }
+                {/* { this.renderHeader() } */}
                 { content }
             </div>
         );

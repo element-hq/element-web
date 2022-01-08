@@ -14,6 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_RoomSublist_auxButton,
+.mx_RoomSublist_menuButton {
+    margin-left: 8px; // should be the same as the notification badge
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+
+    &::before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        mask-position: center;
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        background: $muted-fg-color;
+    }
+}
+
+.mx_RoomSublist_auxButton:hover,
+.mx_RoomSublist_menuButton:hover {
+    background: $panel-actions;
+}
+
+// Hide the menu button by default
+.mx_RoomSublist_menuButton {
+    visibility: hidden;
+    width: 0;
+    margin: 0;
+}
+
+.mx_RoomSublist_auxButton::before {
+    mask-image: url("$(res)/img/element-icons/roomlist/plus.svg");
+}
+
+.mx_RoomSublist_menuButton::before {
+    mask-image: url("$(res)/img/element-icons/context-menu.svg");
+}
+
 .mx_RoomSublist {
     margin-left: 8px;
     margin-bottom: 4px;
@@ -96,48 +138,6 @@ limitations under the License.
             }
         }
 
-        .mx_RoomSublist_auxButton,
-        .mx_RoomSublist_menuButton {
-            margin-left: 8px; // should be the same as the notification badge
-            position: relative;
-            width: 24px;
-            height: 24px;
-            border-radius: 8px;
-
-            &::before {
-                content: '';
-                width: 16px;
-                height: 16px;
-                position: absolute;
-                top: 4px;
-                left: 4px;
-                mask-position: center;
-                mask-size: contain;
-                mask-repeat: no-repeat;
-                background: $muted-fg-color;
-            }
-        }
-
-        .mx_RoomSublist_auxButton:hover,
-        .mx_RoomSublist_menuButton:hover {
-            background: $panel-actions;
-        }
-
-        // Hide the menu button by default
-        .mx_RoomSublist_menuButton {
-            visibility: hidden;
-            width: 0;
-            margin: 0;
-        }
-
-        .mx_RoomSublist_auxButton::before {
-            mask-image: url('$(res)/img/element-icons/roomlist/plus.svg');
-        }
-
-        .mx_RoomSublist_menuButton::before {
-            mask-image: url('$(res)/img/element-icons/context-menu.svg');
-        }
-
         .mx_RoomSublist_headerText {
             flex: 1;
             max-width: calc(100% - 16px); // 16px is the badge width
@@ -158,7 +158,7 @@ limitations under the License.
                 margin-right: 6px;
 
                 &::before {
-                    content: '';
+                    content: "";
                     width: 18px;
                     height: 18px;
                     position: absolute;
@@ -166,7 +166,7 @@ limitations under the License.
                     mask-size: contain;
                     mask-repeat: no-repeat;
                     background-color: $tertiary-content;
-                    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+                    mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
                 }
 
                 &.mx_RoomSublist_collapseBtn_collapsed::before {
@@ -234,7 +234,8 @@ limitations under the License.
             bottom: 0 !important; // override from library
         }
 
-        &:hover, &.mx_RoomSublist_hasMenuOpen {
+        &:hover,
+        &.mx_RoomSublist_hasMenuOpen {
             .mx_RoomSublist_resizerHandle {
                 opacity: 0.8;
                 background-color: $primary-content;
@@ -272,7 +273,7 @@ limitations under the License.
 
         .mx_RoomSublist_showMoreButtonChevron,
         .mx_RoomSublist_showLessButtonChevron {
-            mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+            mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
         }
 
         .mx_RoomSublist_showLessButtonChevron {
@@ -281,7 +282,8 @@ limitations under the License.
     }
 
     &.mx_RoomSublist_hasMenuOpen,
-    &:not(.mx_RoomSublist_minimized) > .mx_RoomSublist_headerContainer:focus-within,
+    &:not(.mx_RoomSublist_minimized)
+        > .mx_RoomSublist_headerContainer:focus-within,
     &:not(.mx_RoomSublist_minimized) > .mx_RoomSublist_headerContainer:hover {
         .mx_RoomSublist_menuButton {
             visibility: visible;
@@ -389,7 +391,8 @@ limitations under the License.
         margin-bottom: 4px;
     }
 
-    .mx_StyledRadioButton, .mx_Checkbox {
+    .mx_StyledRadioButton,
+    .mx_Checkbox {
         margin-top: 8px;
     }
 }
@@ -409,11 +412,11 @@ limitations under the License.
         width: 100%;
         height: 100%;
 
-        content: '';
+        content: "";
         position: absolute;
         mask-repeat: repeat-y;
         mask-size: auto 48px;
-        mask-image: url('$(res)/img/element-icons/roomlist/skeleton-ui.svg');
+        mask-image: url("$(res)/img/element-icons/roomlist/skeleton-ui.svg");
     }
 }
 

@@ -113,8 +113,8 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
 
         introSection = <React.Fragment>
             <img src={logoUrl} alt={config.brand} />
-            <h1>{ _tDom("Welcome to %(appName)s", { appName: config.brand }) }</h1>
-            <h4>{ _tDom("Own your conversations.") }</h4>
+            <h1>Welcome to {config.brand}s</h1>
+          {/*   <h4>{ _tDom("Own your conversations.") }</h4> */}
         </React.Fragment>;
     }
 
@@ -123,14 +123,14 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
             { introSection }
             <div className="mx_HomePage_default_buttons">
                 <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
-                    { _tDom("Send a Direct Message") }
+                    {"Send Encrypted Messages" }
                 </AccessibleButton>
-                <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
+                {/* <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
                     { _tDom("Explore Public Rooms") }
                 </AccessibleButton>
                 <AccessibleButton onClick={onClickNewRoom} className="mx_HomePage_button_createGroup">
                     { _tDom("Create a Group Chat") }
-                </AccessibleButton>
+                </AccessibleButton> */}
             </div>
         </div>
     </AutoHideScrollbar>;

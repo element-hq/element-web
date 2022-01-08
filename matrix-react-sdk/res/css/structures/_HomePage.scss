@@ -77,23 +77,26 @@ limitations under the License.
             font-size: $font-15px;
             line-height: $font-20px;
             color: #fff; // on all themes
-            background-color: $accent;
+            //background-color: $accent;
+            background-color: #C4C4C4;
 
             &::before {
                 top: 20px;
                 left: 60px; // (160px-40px)/2
                 width: 40px;
                 height: 40px;
-
+                background-image: url('$(res)/img/element-icons/feedback.svg');
+                background-repeat: no-repeat;
+                background-size: contain;
                 content: '';
                 position: absolute;
-                background-color: #fff; // on all themes
+               // background-color: #fff; // on all themes
                 mask-repeat: no-repeat;
                 mask-size: contain;
             }
 
             &.mx_HomePage_button_sendDm::before {
-                mask-image: url('$(res)/img/element-icons/feedback.svg');
+              //  mask-image: url('$(res)/img/element-icons/feedback.svg');
             }
             &.mx_HomePage_button_explore::before {
                 mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');

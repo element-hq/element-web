@@ -647,13 +647,13 @@ class LoggedInView extends React.Component<IProps, IState> {
                                     { SettingsStore.getValue("feature_custom_tags") ? <CustomRoomTagPanel /> : null }
                                 </div>)
                             }
-                            { SpaceStore.spacesEnabled ? <>
+                            {/* { SpaceStore.spacesEnabled ? <>
                                 <BackdropPanel
                                     blurMultiplier={0.5}
                                     backgroundImage={this.state.backgroundImage}
                                 />
                                 <SpacePanel />
-                            </> : null }
+                            </> : null } */}
                             <BackdropPanel
                                 backgroundImage={this.state.backgroundImage}
                             />

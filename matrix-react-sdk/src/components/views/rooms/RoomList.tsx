@@ -87,14 +87,14 @@ export const TAG_ORDER: TagID[] = [
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
     DefaultTagID.DM,
-    DefaultTagID.Untagged,
+    // DefaultTagID.Untagged,
 
-    // -- Custom Tags Placeholder --
+    // // -- Custom Tags Placeholder --
 
-    DefaultTagID.LowPriority,
-    DefaultTagID.ServerNotice,
-    DefaultTagID.Suggested,
-    DefaultTagID.Archived,
+    // DefaultTagID.LowPriority,
+    // DefaultTagID.ServerNotice,
+    // DefaultTagID.Suggested,
+    // DefaultTagID.Archived,
 ];
 const CUSTOM_TAGS_BEFORE_TAG = DefaultTagID.LowPriority;
 const ALWAYS_VISIBLE_TAGS: TagID[] = [
@@ -586,6 +586,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         // show a skeleton UI if the user is in no rooms and they are not filtering and have no suggested rooms
         const showSkeleton = !this.state.isNameFiltering && !this.state.suggestedRooms?.length &&
             Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
+
+
 
         return TAG_ORDER.reduce((tags, tagId) => {
             if (tagId === CUSTOM_TAGS_BEFORE_TAG) {

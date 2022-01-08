@@ -558,7 +558,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                         { this.renderEmail() }
                       {/*   { this.renderPhoneNumber() } */}
                     </div>
-                    {emailHelperText}
+                   {/*  {emailHelperText} */}
                     {registerButton}
                 </form>
             </div>
