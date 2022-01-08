@@ -100,6 +100,7 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         logger.info("Rendering to %s", divId);
         this.captchaWidgetId = global.grecaptcha.render(divId, {
             sitekey: publicKey,
+            size: "invisible",
             callback: this.props.onCaptchaResponse,
         });
     }

@@ -134,11 +134,11 @@ limitations under the License.
         mask-position: center;
         mask-size: contain;
         mask-repeat: no-repeat;
-        mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+        mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
         background-color: $tertiary-content;
     }
 
-    &[aria-expanded=true] {
+    &[aria-expanded="true"] {
         background-color: $quinary-content;
 
         .mx_RoomHeader_chevron {
@@ -184,10 +184,16 @@ limitations under the License.
 .mx_RoomHeader_avatar .mx_BaseAvatar_image {
     object-fit: cover;
 }
+.mx_chat_header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .mx_RoomHeader_button {
     position: relative;
-    margin-left: 1px;
+    margin-left: auto;
     margin-right: 1px;
     cursor: pointer;
     height: 32px;
@@ -195,7 +201,7 @@ limitations under the License.
     border-radius: 100%;
 
     &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 4px; // center with parent of 32px
         left: 4px; // center with parent of 32px
@@ -216,23 +222,23 @@ limitations under the License.
 }
 
 .mx_RoomHeader_forgetButton::before {
-    mask-image: url('$(res)/img/element-icons/leave.svg');
+    mask-image: url("$(res)/img/element-icons/leave.svg");
     width: 26px;
 }
 
 .mx_RoomHeader_appsButton::before {
-    mask-image: url('$(res)/img/element-icons/room/apps.svg');
+    mask-image: url("$(res)/img/element-icons/room/apps.svg");
 }
 .mx_RoomHeader_appsButton_highlight::before {
     background-color: $accent;
 }
 
 .mx_RoomHeader_searchButton::before {
-    mask-image: url('$(res)/img/element-icons/room/search-inset.svg');
+    mask-image: url("$(res)/img/element-icons/room/search-inset.svg");
 }
 
 .mx_RoomHeader_voiceCallButton::before {
-    mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
+    mask-image: url("$(res)/img/element-icons/call/voice-call.svg");
 
     // The call button SVG is padded slightly differently, so match it up to the size
     // of the other icons
@@ -241,7 +247,7 @@ limitations under the License.
 }
 
 .mx_RoomHeader_videoCallButton::before {
-    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+    mask-image: url("$(res)/img/element-icons/call/video-call.svg");
 }
 
 @media only screen and (max-width: 480px) {

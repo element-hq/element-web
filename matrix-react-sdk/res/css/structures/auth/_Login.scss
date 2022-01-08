@@ -88,11 +88,11 @@ limitations under the License.
 div.mx_AccessibleButton_kind_link.mx_Login_forgot {
     display: block;
     text-align: right;
-    margin-bottom: 16px;
+    //margin-bottom: 16px;
     // style it as a link
     font-size: inherit;
     padding: 0;
-    color: #fff;
+    //color: #fff;
 
     &.mx_AccessibleButton_disabled {
         cursor: not-allowed;

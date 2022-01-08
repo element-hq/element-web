@@ -1,0 +1,138 @@
+/* -------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------- */
+/* ------------------------------------- Mobile View ------------------------------------------ */
+/* -------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------- */
+
+@media only screen and (max-width: 1460px) {
+}
+
+@media only screen and (max-width: 1100px) {
+    // .mx_AuthBody {
+    //     max-width: 400;
+    //     width: 100%;
+    // }
+    .mx_ButtonRow {
+        flex-direction: column;
+        .mx_ButtonParent {
+            margin: 10px 0;
+        }
+    }
+    .mx_AuthPage {
+        background-repeat: no-repeat !important;
+        background-size: 1600px !important;
+    }
+    .mx_CompleteSecurityBody {
+        width: 500px;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .mx_AuthPage_modal {
+        margin-top: 0;
+    }
+    .mx_AuthPage {
+        background-size: 1100px !important;
+        &.no_background {
+            background-image: unset !important;
+            background-color: #000 !important;
+        }
+    }
+    .mx_AuthBody {
+        max-width: 320px;
+        width: 100%;
+    }
+    .mx_AuthHeader {
+        padding: 8px 0 0 0;
+    }
+    .mx_AuthBody_fieldRow {
+        flex-direction: column;
+        .mx_PassphraseField {
+            margin-bottom: 10px;
+            margin-right: 0;
+        }
+        .mx_Field {
+            margin-left: 0;
+        }
+    }
+    // chat page
+
+    .mx_UserMenu {
+        margin-right: 0;
+    }
+    .mx_RoomSearch.mx_RoomSearch_minimized {
+        margin-top: 10px;
+    }
+    .mx_LeftPanel_wrapper .mx_LeftPanel_wrapper--user {
+        width: 260px !important;
+    }
+
+    //chat area
+    .mx_InviteDialog_other {
+        height: unset;
+        padding-left: 0;
+    }
+    .mx_InviteDialog_addressBar {
+        margin: 8px 0 0 0;
+    }
+}
+
+/* -------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------- */
+/* ------------------------------------- Mobile View ------------------------------------------ */
+/* -------------------------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------------------------- */
+
+@media only screen and (max-width: 767px) {
+    //chat area
+    .mx_Dialog_fixedWidth {
+        width: 80vw;
+    }
+    .mx_LeftPanel_wrapper {
+        display: none;
+        max-width: unset;
+        width: 100%;
+        &.mx_home_page {
+            display: block;
+        }
+        .mx_LeftPanel_wrapper--user {
+            width: 100% !important;
+            height: 100%;
+        }
+    }
+    .mx_RoomView {
+        height: 100%;
+    }
+    .mx_home_close {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .mx_RoomView_wrapper {
+        display: block;
+        &.mx_home_page {
+            visibility: hidden;
+            width: 0;
+            overflow: hidden;
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .mx_AuthPage {
+        background-size: 960px !important;
+    }
+
+    .mx_AuthBody {
+        max-width: 290px;
+        width: 100%;
+    }
+
+    .mx_CompleteSecurityBody {
+        width: 300px;
+    }
+    .mx_CreateSecretStorageDialog {
+        max-width: 400px;
+        width: 100%;
+    }
+}

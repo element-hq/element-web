@@ -131,7 +131,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             this.props.searchInfo.searchCount !== undefined &&
             this.props.searchInfo.searchCount !== null) {
             searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;
-                { _t("(~%(count)s results)", { count: this.props.searchInfo.searchCount }) }
+                {_t("(~%(count)s results)", { count: this.props.searchInfo.searchCount })}
             </div>;
         }
 
@@ -165,27 +165,35 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const textClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
         const name = (
-            <ContextMenuTooltipButton
-                className="mx_RoomHeader_name"
-                onClick={this.onContextMenuOpenClick}
-                isExpanded={!!this.state.contextMenuPosition}
-                title={_t("Room options")}
-            >
-                <RoomName room={this.props.room}>
-                    { (name) => {
-                        const roomName = name || oobName;
-                        return <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>;
-                    } }
-                </RoomName>
-                { this.props.room && <div className="mx_RoomHeader_chevron" /> }
-                { contextMenu }
-            </ContextMenuTooltipButton>
+            <>
+                <ContextMenuTooltipButton
+                    className="mx_RoomHeader_name"
+                    onClick={this.onContextMenuOpenClick}
+                    isExpanded={!!this.state.contextMenuPosition}
+                    title={_t("Room options")}
+                >
+                    <RoomName room={this.props.room}>
+                        {(name) => {
+                            const roomName = name || oobName;
+                            return <div dir="auto" className={textClasses} title={roomName}>{roomName}</div>;
+                        }}
+                    </RoomName>
+                    {this.props.room && <div className="mx_RoomHeader_chevron" />}
+                    {contextMenu}
+                </ContextMenuTooltipButton>
+                <AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_home_close"
+                    onClick={() => window.location.href = '#/home'}
+                    title={'close'}
+                    key="close"
+                />
+            </>
         );
 
         const topicElement = <RoomTopic room={this.props.room}>
-            { (topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
-                { topic }
-            </div> }
+            {(topic, ref) => <div className="mx_RoomHeader_topic" ref={ref} title={topic} dir="auto">
+                {topic}
+            </div>}
         </RoomTopic>;
 
         let roomAvatar;
@@ -250,7 +258,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const rightRow =
             <div className="mx_RoomHeader_buttons">
-                { buttons }
+                {buttons}
             </div>;
 
         const e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;
@@ -258,13 +266,13 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         return (
             <div className="mx_RoomHeader light-panel">
                 <div className="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
-                    <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
-                    <div className="mx_RoomHeader_e2eIcon">{ e2eIcon }</div>
-                    { name }
-                    { searchStatus }
-                    { topicElement }
-                    { rightRow }
-                    <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} />
+                    <div className="mx_RoomHeader_avatar">{roomAvatar}</div>
+                    <div className="mx_RoomHeader_e2eIcon">{e2eIcon}</div>
+                    <div className="mx_chat_header">{name}</div>
+                    {searchStatus}
+                    {topicElement}
+                    {/* { rightRow } */}
+                    {/* <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} /> */}
                 </div>
             </div>
         );

@@ -18,7 +18,7 @@ import React, { CSSProperties } from 'react';
 import * as sdk from 'matrix-react-sdk/src/index';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
-export default class VectorAuthPage extends React.PureComponent {
+export default class VectorAuthPage extends React.PureComponent<any> {
     static replaces = 'AuthPage';
 
     static welcomeBackgroundUrl;
@@ -64,14 +64,15 @@ export default class VectorAuthPage extends React.PureComponent {
         };
 
         const modalContentStyle: CSSProperties = {
-            // display: 'flex',
+            width: '100%',
             zIndex: 1,
             // background: 'rgba(255, 255, 255, 0.59)',
             // borderRadius: '8px',
         };
+        console.log(this.props.noBackground, 4654654)
 
         return (
-            <div className="mx_AuthPage" style={pageStyle}>
+            <div className={this.props.noBackground ? 'no_background mx_AuthPage' : 'mx_AuthPage'} style={pageStyle}>
                 <div className="mx_AuthPage_modal" style={modalStyle}>
                     <div className="mx_AuthPage_modalBlur" style={blurStyle} />
                     <div className="mx_AuthPage_modalContent" style={modalContentStyle}>

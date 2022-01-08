@@ -624,8 +624,7 @@ export default class Registration extends React.Component<IProps, IState> {
         }
 
         return (
-            <AuthPage>
-
+            <AuthPage noBackground>
                 <AuthBody>
                     {body}
                 </AuthBody>

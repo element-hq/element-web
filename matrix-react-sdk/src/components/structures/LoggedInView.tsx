@@ -636,7 +636,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 >
                     <ToastContainer />
                     <div className={bodyClasses}>
-                        <div className='mx_LeftPanel_wrapper'>
+                        <div className={this.props.page_type === PageTypes.HomePage ? 'mx_LeftPanel_wrapper mx_home_page' : 'mx_LeftPanel_wrapper'} >
                             { SettingsStore.getValue('TagPanel.enableTagPanel') &&
                                 (<div className="mx_GroupFilterPanelContainer">
                                     <BackdropPanel
@@ -669,7 +669,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                             </div>
                         </div>
                         <ResizeHandle passRef={this.resizeHandler} id="lp-resizer" />
-                        <div className="mx_RoomView_wrapper">
+                        <div className={this.props.page_type === PageTypes.HomePage ? 'mx_home_page mx_RoomView_wrapper' : 'mx_RoomView_wrapper'} >
                             { pageElement }
                         </div>
                     </div>

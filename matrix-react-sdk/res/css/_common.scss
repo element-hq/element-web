@@ -22,12 +22,14 @@ limitations under the License.
 @import "./_animations.scss";
 @import url("maplibre-gl/dist/maplibre-gl.css");
 
-$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
+$hover-transition: 0.08s cubic-bezier(0.46, 0.03, 0.52, 0.96); // quadratic
 
 $selected-message-border-width: 4px;
 
 $MessageTimestamp_width: 46px; /* 8 + 30 (avatar) + 8 */
-$MessageTimestamp_width_hover: calc($MessageTimestamp_width - 2 * $selected-message-border-width);
+$MessageTimestamp_width_hover: calc(
+    $MessageTimestamp_width - 2 * $selected-message-border-width
+);
 
 $slider-dot-size: 1em;
 $slider-selection-dot-size: 2.4em;
@@ -39,8 +41,8 @@ $timeline-image-border-radius: 8px;
 :root {
     font-size: 10px;
 
-    --transition-short: .1s;
-    --transition-standard: .3s;
+    --transition-short: 0.1s;
+    --transition-standard: 0.3s;
 }
 
 @media (prefers-reduced-motion) {
@@ -73,13 +75,16 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-pre, code {
+pre,
+code {
     font-family: $monospace-font-family;
     font-size: 100% !important;
 }
 
-.error, .warning,
-.text-error, .text-warning {
+.error,
+.warning,
+.text-error,
+.text-warning {
     color: $alert;
 }
 
@@ -111,9 +116,9 @@ a:visited {
     color: $accent-alt;
 }
 
-input[type=text],
-input[type=search],
-input[type=password] {
+input[type="text"],
+input[type="search"],
+input[type="password"] {
     font-family: inherit;
     padding: 9px;
     font-size: $font-14px;
@@ -121,25 +126,25 @@ input[type=password] {
     min-width: 0;
 }
 
-input[type=text].mx_textinput_icon,
-input[type=search].mx_textinput_icon {
+input[type="text"].mx_textinput_icon,
+input[type="search"].mx_textinput_icon {
     padding-left: 36px;
     background-repeat: no-repeat;
     background-position: 10px center;
 }
 
 // FIXME THEME - Tint by CSS rather than referencing a duplicate asset
-input[type=text].mx_textinput_icon.mx_textinput_search,
-input[type=search].mx_textinput_icon.mx_textinput_search {
-    background-image: url('$(res)/img/feather-customised/search-input.svg');
+input[type="text"].mx_textinput_icon.mx_textinput_search,
+input[type="search"].mx_textinput_icon.mx_textinput_search {
+    background-image: url("$(res)/img/feather-customised/search-input.svg");
 }
 
 // dont search UI as not all browsers support it,
 // we implement it ourselves where needed instead
-input[type=search]::-webkit-search-decoration,
-input[type=search]::-webkit-search-cancel-button,
-input[type=search]::-webkit-search-results-button,
-input[type=search]::-webkit-search-results-decoration {
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
     display: none;
 }
 
@@ -149,7 +154,9 @@ textarea::placeholder {
     opacity: initial;
 }
 
-input[type=text], input[type=password], textarea {
+input[type="text"],
+input[type="password"],
+textarea {
     background-color: transparent;
     color: $primary-content;
 }
@@ -159,7 +166,9 @@ textarea {
     color: $primary-content;
 }
 
-input[type=text]:focus, input[type=password]:focus, textarea:focus {
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
     outline: none;
     box-shadow: none;
 }
@@ -192,23 +201,26 @@ legend {
 // it has the appearance of a text box so the controls
 // appear to be part of the input
 
-.mx_Dialog, .mx_MatrixChat_wrapper {
-    .mx_textinput > input[type=text],
-    .mx_textinput > input[type=search] {
+.mx_Dialog,
+.mx_MatrixChat_wrapper {
+    .mx_textinput > input[type="text"],
+    .mx_textinput > input[type="search"] {
         border: none;
         flex: 1;
         color: $primary-content;
     }
 
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="text"],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="search"],
     .mx_textinput {
         display: block;
         box-sizing: border-box;
         background-color: transparent;
         color: $input-darker-fg-color;
         border-radius: 4px;
-        border: 1px solid rgba($primary-content, .1);
+        border: 1px solid rgba($primary-content, 0.1);
         // these things should probably not be defined globally
         margin: 9px;
     }
@@ -218,10 +230,12 @@ legend {
         align-items: center;
     }
 
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text]::placeholder,
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="text"]::placeholder,
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="search"]::placeholder,
     .mx_textinput input::placeholder {
-        color: rgba($input-darker-fg-color, .75);
+        color: rgba($input-darker-fg-color, 0.75);
     }
 }
 
@@ -229,8 +243,10 @@ legend {
 .dark-panel {
     background-color: $dark-panel-bg-color;
 
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="text"],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="search"],
     .mx_textinput {
         color: $input-darker-fg-color;
         background-color: $background;
@@ -239,8 +255,10 @@ legend {
 }
 
 .light-panel {
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=text],
-    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput) > input[type=search],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="text"],
+    :not(.mx_textinput):not(.mx_Field):not(.mx_no_textinput)
+        > input[type="search"],
     .mx_textinput {
         color: $input-darker-fg-color;
         background-color: $input-lighter-bg-color;
@@ -387,7 +405,7 @@ legend {
 }
 
 .mx_Dialog_cancelButton {
-    mask: url('$(res)/img/feather-customised/cancel.svg');
+    mask: url("$(res)/img/feather-customised/cancel.svg");
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: cover;
@@ -397,6 +415,20 @@ legend {
     cursor: pointer;
     position: absolute;
     top: 10px;
+    right: 0;
+}
+
+.mx_home_close {
+    mask: url("$(res)/img/feather-customised/cancel.svg");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: cover;
+    height: 24px !important;
+    width: 24px !important;
+    background-color: $dialog-close-fg-color;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
     right: 0;
 }
 
@@ -425,7 +457,8 @@ legend {
  */
 .mx_Dialog button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog input[type="submit"],
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
+.mx_Dialog_buttons
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton),
 .mx_Dialog_buttons input[type="submit"] {
     @mixin mx_DialogButton;
     margin-left: 0px;
@@ -440,20 +473,25 @@ legend {
     font-family: inherit;
 }
 
-.mx_Dialog button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):last-child {
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):last-child {
     margin-right: 0px;
 }
 
-.mx_Dialog button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):hover,
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):hover,
 .mx_Dialog input[type="submit"]:hover,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):hover,
+.mx_Dialog_buttons
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):hover,
 .mx_Dialog_buttons input[type="submit"]:hover {
     @mixin mx_DialogButton_hover;
 }
 
-.mx_Dialog button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
 .mx_Dialog input[type="submit"]:focus,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
+.mx_Dialog_buttons
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):focus,
 .mx_Dialog_buttons input[type="submit"]:focus {
     filter: brightness($focus-brightness);
 }
@@ -482,9 +520,11 @@ legend {
     color: $alert;
 }
 
-.mx_Dialog button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
+.mx_Dialog
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
 .mx_Dialog input[type="submit"]:disabled,
-.mx_Dialog_buttons button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
+.mx_Dialog_buttons
+    button:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton):disabled,
 .mx_Dialog_buttons input[type="submit"]:disabled {
     background-color: $light-fg-color;
     border: solid 1px $light-fg-color;

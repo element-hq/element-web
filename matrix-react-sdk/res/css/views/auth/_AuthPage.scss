@@ -17,28 +17,21 @@ limitations under the License.
 .mx_AuthPage {
     width: 100%;
     min-height: 100%;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     background-color: $authpage-bg-color;
+
     //  background-image: center/cover fixed url('themes/element/img/backgrounds/auth-bg.gif');
 }
 
 .mx_AuthPage_modal {
     display: flex;
+    width: 90vw;
 
-   // border-radius: 4px;
-   // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.33);
+    // border-radius: 4px;
+    // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.33);
     background-color: $authpage-modal-bg-color;
-}
-
-@media only screen and (max-width: 480px) {
-    .mx_AuthPage_modal {
-        margin-top: 0;
-    }
-    .mx_AuthPage {
-        background-repeat: no-repeat !important;
-        background-size: 930px !important;
-    }
 }
