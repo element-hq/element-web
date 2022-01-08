@@ -29,6 +29,7 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
     autoFocus?: boolean;
 
     label?: string;
+    placeholder?: string;
     labelRequired?: string;
     labelInvalid?: string;
 
@@ -81,7 +82,8 @@ class EmailField extends PureComponent<IProps> {
             id={this.props.id}
             ref={this.props.fieldRef}
             type="text"
-           label={_t(this.props.label)}
+            label={this.props.label}
+            placeholder={this.props.placeholder}
             value={this.props.value}
             autoFocus={this.props.autoFocus}
             onChange={this.props.onChange}

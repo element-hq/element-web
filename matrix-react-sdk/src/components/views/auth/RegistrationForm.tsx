@@ -125,24 +125,24 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         
         if (this.state.email === '') {
             this.doSubmit(ev);
-            // if (this.showEmail()) {
-            //     CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
-            //     Modal.createTrackedDialog("Email prompt dialog", '', RegistrationEmailPromptDialog, {
-            //         onFinished: async (confirmed: boolean, email?: string) => {
-            //             if (confirmed) {
-            //                 this.setState({
-            //                     email,
-            //                 }, () => {
-            //                     this.doSubmit(ev);
-            //                 });
-            //             }
-            //         },
-            //     });
-            // } else {
-            //     // user can't set an e-mail so don't prompt them to
-            //     this.doSubmit(ev);
-            //     return;
-            // }
+            if (this.showEmail()) {
+                CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
+                Modal.createTrackedDialog("Email prompt dialog", '', RegistrationEmailPromptDialog, {
+                    onFinished: async (confirmed: boolean, email?: string) => {
+                        if (confirmed) {
+                            this.setState({
+                                email,
+                            }, () => {
+                                this.doSubmit(ev);
+                            });
+                        }
+                    },
+                });
+            } else {
+                // user can't set an e-mail so don't prompt them to
+                this.doSubmit(ev);
+                return;
+            }
         } else {
             this.doSubmit(ev);
         }
@@ -183,7 +183,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             RegistrationField.Username,
             RegistrationField.Password,
             RegistrationField.PasswordConfirm,
-           // RegistrationField.Email,
+            RegistrationField.Email,
            // RegistrationField.PhoneNumber,
         ];
 
@@ -435,7 +435,8 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             _td("Email (optional)");
         return <EmailField
             fieldRef={field => this[RegistrationField.Email] = field}
-            label={emailLabel}
+            label=''
+            placeholder='Email'
             value={this.state.email}
             validationRules={this.validateEmailRules.bind(this)}
             onChange={this.onEmailChange}
@@ -548,14 +549,15 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
                     <div className="mx_AuthBody_fieldRow">
                         {this.renderUsername()}
                     </div>
+                    
                     <div className="mx_AuthBody_fieldRow">
                         {this.renderPassword()}
                         {this.renderPasswordConfirm()}
                     </div>
-                    {/* <div className="mx_AuthBody_fieldRow">
+                    <div className="mx_AuthBody_fieldRow">
                         { this.renderEmail() }
-                        { this.renderPhoneNumber() }
-                    </div> */}
+                      {/*   { this.renderPhoneNumber() } */}
+                    </div>
                     {emailHelperText}
                     {registerButton}
                 </form>

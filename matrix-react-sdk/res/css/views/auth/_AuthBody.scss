@@ -18,7 +18,7 @@ limitations under the License.
 .mx_AuthBody {
     width: 400px;
     font-size: $font-12px;
-    color: $lightbox-background-bg-color;
+    color: #fff;
     // background-color: $background;
     border-radius: 0 4px 4px 0;
     padding: 20px;
@@ -100,6 +100,9 @@ limitations under the License.
             background-color: $authpage-focus-bg-color;
         }
     }
+    // .mx_recaptcha{
+    //     span
+    // }
 }
 
 .mx_AuthBody_fieldRow {
