@@ -173,7 +173,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private renderThreadViewHeader = (): JSX.Element => {
+    private renderThreadViewHeader = (): JSX.Neuron => {
         return <div className="mx_ThreadPanel__header">
             <span>{ _t("Thread") }</span>
             <ThreadListContextMenu
@@ -182,7 +182,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         </div>;
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const highlightedEventId = this.props.isInitialEventHighlighted
             ? this.props.initialEvent?.getId()
             : null;

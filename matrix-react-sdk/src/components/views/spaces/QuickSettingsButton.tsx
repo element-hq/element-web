@@ -45,7 +45,7 @@ const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
         [MetaSpace.People]: peopleEnabled,
     } = useSettingValue<Record<MetaSpace, boolean>>("Spaces.enabledMetaSpaces");
 
-    let contextMenu: JSX.Element;
+    let contextMenu: JSX.Neuron;
     if (menuDisplayed) {
         const themeState = ThemeChoicePanel.calculateThemeState();
         const nonHighContrast = findNonHighContrastTheme(themeState.theme);

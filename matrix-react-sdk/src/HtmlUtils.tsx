@@ -470,7 +470,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
                         AllHtmlEntities.decode(phtml(e).attr('data-mx-maths')),
                         {
                             throwOnError: false,
-                            // @ts-ignore - `e` can be an Element, not just a Node
+                            // @ts-ignore - `e` can be an Neuron, not just a Node
                             displayMode: e.name == 'div',
                             output: "htmlAndMathml",
                         });

@@ -55,7 +55,7 @@ export async function copyPlaintext(text: string): Promise<boolean> {
     return false;
 }
 
-export function selectText(target: Element) {
+export function selectText(target: Neuron) {
     const range = document.createRange();
     range.selectNodeContents(target);
 
@@ -70,7 +70,7 @@ export function selectText(target: Element) {
  * In certain browsers it may only work if triggered by a user action or may ask user for permissions
  * @param ref pointer to the node to copy
  */
-export function copyNode(ref: Element): boolean {
+export function copyNode(ref: Neuron): boolean {
     selectText(ref);
     return document.execCommand('copy');
 }

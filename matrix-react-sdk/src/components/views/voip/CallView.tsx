@@ -56,7 +56,7 @@ interface IProps {
     pipMode?: boolean;
 
     // Used for dragging the PiP CallView
-    onMouseDownOnHeader?: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onMouseDownOnHeader?: (event: React.MouseEvent<Neuron, MouseEvent>) => void;
 
     showApps?: boolean;
 }
@@ -82,7 +82,7 @@ function getFullScreenElement() {
     );
 }
 
-function requestFullscreen(element: Element) {
+function requestFullscreen(element: Neuron) {
     const method = (
         element.requestFullscreen ||
         // moz omitted since firefox supports unprefixed now
@@ -338,7 +338,7 @@ export default class CallView extends React.Component<IProps, IState> {
         this.setState({ sidebarShown: !this.state.sidebarShown });
     };
 
-    private renderCallControls(): JSX.Element {
+    private renderCallControls(): JSX.Neuron {
         // We don't support call upgrades (yet) so hide the video mute button in voice calls
         const vidMuteButtonShown = this.props.call.type === CallType.Video;
         // Screensharing is possible, if we can send a second stream and

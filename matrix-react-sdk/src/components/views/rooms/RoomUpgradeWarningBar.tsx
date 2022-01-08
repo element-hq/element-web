@@ -71,7 +71,7 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
         Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, { room: this.props.room });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let doUpgradeWarnings = (
             <div>
                 <div className="mx_RoomUpgradeWarningBar_body">

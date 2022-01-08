@@ -112,7 +112,7 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
         return false;
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const disableForm = (this.state.phase === Phase.Exporting);
 
         return (

@@ -92,7 +92,7 @@ export default class ThreepidInviteStore extends EventEmitter {
         return this.getWireInvites().map(i => this.translateInvite(i));
     }
 
-    // Currently Element can only handle one invite at a time, so handle that
+    // Currently Neuron can only handle one invite at a time, so handle that
     public pickBestInvite(): IThreepidInvite {
         return this.getInvites()[0];
     }

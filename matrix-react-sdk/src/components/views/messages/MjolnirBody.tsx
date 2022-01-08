@@ -37,7 +37,7 @@ export default class MjolnirBody extends React.Component<IProps> {
         this.props.onMessageAllowed();
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <div className='mx_MjolnirBody'><i>{ _t(
                 "You have ignored this user, so their message is hidden. <a>Show anyways.</a>",

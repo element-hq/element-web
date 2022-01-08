@@ -129,7 +129,7 @@ export default class EditableTextContainer extends React.Component<IProps, IStat
         );
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (this.state.busy) {
             return (
                 <Spinner />

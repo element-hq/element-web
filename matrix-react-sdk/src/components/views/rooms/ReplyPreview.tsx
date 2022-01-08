@@ -41,7 +41,7 @@ interface IProps {
 export default class ReplyPreview extends React.Component<IProps> {
     public static contextType = RoomContext;
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (!this.props.replyToEvent) return null;
 
         return <div className="mx_ReplyPreview">

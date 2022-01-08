@@ -1,5 +1,5 @@
 {
-    "Welcome to Element": "Vítá vás Element",
+    "Welcome to Neuron": "Vítá vás Neuron",
     "Unknown device": "Neznámé zařízení",
     "You need to be using HTTPS to place a screen-sharing call.": "Pro uskutečnění hovoru se sdílením obrazovky musíte používat HTTPS.",
     "Dismiss": "Zavřít",
@@ -15,8 +15,8 @@
     "Invalid configuration: no default server specified.": "Neplatná konfigurace: není zadán výchozí server.",
     "Open user settings": "Otevřít uživatelské nastavení",
     "Go to your browser to complete Sign In": "Přejděte do prohlížeče a dokončete přihlášení",
-    "Your Element is misconfigured": "Váš Element je nesprávně nastaven",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Vaše konfigurace Elementu obsahuje nesprávná data JSON. Vyřešte prosím problém a načtěte znovu stránku.",
+    "Your Neuron is misconfigured": "Váš Neuron je nesprávně nastaven",
+    "Your Neuron configuration contains invalid JSON. Please correct the problem and reload the page.": "Vaše konfigurace Elementu obsahuje nesprávná data JSON. Vyřešte prosím problém a načtěte znovu stránku.",
     "Unable to load config file: please refresh the page to try again.": "Nepodařilo se načíst konfigurační soubor: abyste to zkusili znovu, načtěte prosím znovu stránku.",
     "Download Completed": "Stahování dokončeno",
     "Open": "Otevřít",

@@ -144,7 +144,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         this.props.onFinished(true);
     };
 
-    private renderPhaseStart(): JSX.Element {
+    private renderPhaseStart(): JSX.Neuron {
         const isSelf = this.props.verifier.userId === MatrixClientPeg.get().getUserId();
 
         let profile;
@@ -218,7 +218,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         );
     }
 
-    private renderPhaseShowSas(): JSX.Element {
+    private renderPhaseShowSas(): JSX.Neuron {
         return <VerificationShowSas
             sas={this.showSasEvent.sas}
             onCancel={this.onCancelClick}
@@ -228,7 +228,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         />;
     }
 
-    private renderPhaseWaitForPartnerToConfirm(): JSX.Element {
+    private renderPhaseWaitForPartnerToConfirm(): JSX.Neuron {
         return (
             <div>
                 <Spinner />
@@ -237,15 +237,15 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         );
     }
 
-    private renderPhaseVerified(): JSX.Element {
+    private renderPhaseVerified(): JSX.Neuron {
         return <VerificationComplete onDone={this.onVerifiedDoneClick} />;
     }
 
-    private renderPhaseCancelled(): JSX.Element {
+    private renderPhaseCancelled(): JSX.Neuron {
         return <VerificationCancelled onDone={this.onCancelClick} />;
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let body;
         switch (this.state.phase) {
             case PHASE_START:

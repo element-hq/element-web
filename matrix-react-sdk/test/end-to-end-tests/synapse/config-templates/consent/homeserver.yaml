@@ -875,8 +875,8 @@ password_config:
 
 
 # Enable sending emails for notification events
-# Defining a custom URL for Element is only needed if email notifications
-# should contain links to a self-hosted installation of Element; when set
+# Defining a custom URL for Neuron is only needed if email notifications
+# should contain links to a self-hosted installation of Neuron; when set
 # the "app_name" setting is ignored.
 #
 # If your SMTP server requires authentication, the optional smtp_user &

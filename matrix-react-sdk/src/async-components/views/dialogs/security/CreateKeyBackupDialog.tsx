@@ -237,7 +237,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         });
     };
 
-    private renderPhasePassPhrase(): JSX.Element {
+    private renderPhasePassPhrase(): JSX.Neuron {
         return <form onSubmit={this.onPassPhraseNextClick}>
             <p>{ _t(
                 "<b>Warning</b>: You should only set up key backup from a trusted computer.", {},
@@ -283,7 +283,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         </form>;
     }
 
-    private renderPhasePassPhraseConfirm(): JSX.Element {
+    private renderPhasePassPhraseConfirm(): JSX.Neuron {
         let matchText;
         let changeText;
         if (this.state.passPhraseConfirm === this.state.passPhrase) {
@@ -339,7 +339,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         </form>;
     }
 
-    private renderPhaseShowKey(): JSX.Element {
+    private renderPhaseShowKey(): JSX.Neuron {
         return <div>
             <p>{ _t(
                 "Your Security Key is a safety net - you can use it to restore " +
@@ -369,7 +369,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         </div>;
     }
 
-    private renderPhaseKeepItSafe(): JSX.Element {
+    private renderPhaseKeepItSafe(): JSX.Neuron {
         let introText;
         if (this.state.copied) {
             introText = _t(
@@ -397,13 +397,13 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         </div>;
     }
 
-    private renderBusyPhase(): JSX.Element {
+    private renderBusyPhase(): JSX.Neuron {
         return <div>
             <Spinner />
         </div>;
     }
 
-    private renderPhaseDone(): JSX.Element {
+    private renderPhaseDone(): JSX.Neuron {
         return <div>
             <p>{ _t(
                 "Your keys are being backed up (the first backup could take a few minutes).",
@@ -415,7 +415,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         </div>;
     }
 
-    private renderPhaseOptOutConfirm(): JSX.Element {
+    private renderPhaseOptOutConfirm(): JSX.Neuron {
         return <div>
             { _t(
                 "Without setting up Secure Message Recovery, you won't be able to restore your " +
@@ -450,7 +450,7 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         }
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let content;
         if (this.state.error) {
             content = <div>

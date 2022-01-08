@@ -215,7 +215,7 @@ export default class AutoDiscoveryUtils {
         // Note: In the cases where we rely on the default IS from the config (namely
         // lack of identity server provided by the discovery method), we intentionally do not
         // validate it. This has already been validated and this helps some off-the-grid usage
-        // of Element.
+        // of Neuron.
         let preferredIdentityUrl = defaultConfig && defaultConfig['isUrl'];
         if (isResult && isResult.state === AutoDiscovery.SUCCESS) {
             preferredIdentityUrl = isResult["base_url"];

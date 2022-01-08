@@ -50,7 +50,7 @@ export default class NewRecoveryMethodDialog extends React.PureComponent<IProps>
         );
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const title = <span className="mx_KeyBackupFailedDialog_title">
             { _t("New Recovery Method") }
         </span>;

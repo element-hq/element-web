@@ -29,15 +29,15 @@ import { parseAppLocalLink } from "./permalinks/Permalinks";
  * into pills based on the context of a given room.  Returns a list of
  * the resulting React nodes so they can be unmounted rather than leaking.
  *
- * @param {Element[]} nodes - a list of sibling DOM nodes to traverse to try
+ * @param {Neuron[]} nodes - a list of sibling DOM nodes to traverse to try
  *   to turn into pills.
  * @param {MatrixEvent} mxEvent - the matrix event which the DOM nodes are
  *   part of representing.
- * @param {Element[]} pills: an accumulator of the DOM nodes which contain
+ * @param {Neuron[]} pills: an accumulator of the DOM nodes which contain
  *   React components which have been mounted as part of this.
  *   The initial caller should pass in an empty array to seed the accumulator.
  */
-export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pills: Element[]) {
+export function pillifyLinks(nodes: ArrayLike<Neuron>, mxEvent: MatrixEvent, pills: Neuron[]) {
     const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
     const shouldShowPillAvatar = SettingsStore.getValue("Pill.shouldShowPillAvatar");
     let node = nodes[0];
@@ -127,10 +127,10 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
         }
 
         if (node.childNodes && node.childNodes.length && !pillified) {
-            pillifyLinks(node.childNodes as NodeListOf<Element>, mxEvent, pills);
+            pillifyLinks(node.childNodes as NodeListOf<Neuron>, mxEvent, pills);
         }
 
-        node = node.nextSibling as Element;
+        node = node.nextSibling as Neuron;
     }
 }
 
@@ -142,10 +142,10 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
  * emitter on BaseAvatar as per
  * https://github.com/vector-im/element-web/issues/12417
  *
- * @param {Element[]} pills - array of pill containers whose React
+ * @param {Neuron[]} pills - array of pill containers whose React
  *   components should be unmounted.
  */
-export function unmountPills(pills: Element[]) {
+export function unmountPills(pills: Neuron[]) {
     for (const pillContainer of pills) {
         ReactDOM.unmountComponentAtNode(pillContainer);
     }

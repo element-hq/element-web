@@ -40,7 +40,7 @@ export default class ChangeDisplayName extends React.Component {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <EditableTextContainer
                 getInitialValue={this.getDisplayName}

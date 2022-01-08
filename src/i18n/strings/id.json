@@ -3,9 +3,9 @@
     "powered by Matrix": "didukung oleh Matrix",
     "Unknown device": "Perangkat tidak dikenal",
     "You need to be using HTTPS to place a screen-sharing call.": "Anda perlu menggunakan HTTPS untuk melakukan panggilan berbagi layar.",
-    "Welcome to Element": "Selamat datang di Element",
+    "Welcome to Neuron": "Selamat datang di Neuron",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Obrolan &amp; kolaborasi terdecentralisasi dan terenkripsi, diberdayakan oleh [matrix]",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfigurasi Element Anda berisi JSON yang tidak valid. Mohon perbaiki masalahnya dan muat ulang halamannya.",
+    "Your Neuron configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfigurasi Neuron Anda berisi JSON yang tidak valid. Mohon perbaiki masalahnya dan muat ulang halamannya.",
     "Invalid configuration: no default server specified.": "Konfigurasi tidak valid: server bawaan belum ditentukan.",
     "Missing indexeddb worker script!": "Tidak ada script worker indexeddb!",
     "Explore rooms": "Jelajahi ruangan",
@@ -33,6 +33,6 @@
     "Unable to load config file: please refresh the page to try again.": "Tidak dapat memuat file konfigurasi: mohon muat ulang halaman ini untuk mencoba lagi.",
     "Invalid JSON": "JSON tidak valid",
     "The message from the parser is: %(message)s": "Pesan dari pengurai adalah: %(message)s",
-    "Your Element is misconfigured": "Anda mengatur Element dengan salah",
+    "Your Neuron is misconfigured": "Anda mengatur Neuron dengan salah",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurasi tidak valid: hanya bisa menentukan satu dari default_server_config, default_server_name, atau default_hs_url."
 }

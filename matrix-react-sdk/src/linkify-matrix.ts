@@ -127,7 +127,7 @@ const escapeRegExp = function(string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
-// Recognise URLs from both our local and official Element deployments.
+// Recognise URLs from both our local and official Neuron deployments.
 // Anyone else really should be using matrix.to.
 export const ELEMENT_URL_PATTERN =
     "^(?:https?://)?(?:" +

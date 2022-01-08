@@ -105,9 +105,9 @@ export function getUserNameColorClass(userId: string): string {
  * between each item, but with the last item appended as " and [lastItem]".
  */
 export function formatCommaSeparatedList(items: string[], itemLimit?: number): string;
-export function formatCommaSeparatedList(items: JSX.Element[], itemLimit?: number): JSX.Element;
-export function formatCommaSeparatedList(items: Array<JSX.Element | string>, itemLimit?: number): JSX.Element | string;
-export function formatCommaSeparatedList(items: Array<JSX.Element | string>, itemLimit?: number): JSX.Element | string {
+export function formatCommaSeparatedList(items: JSX.Neuron[], itemLimit?: number): JSX.Neuron;
+export function formatCommaSeparatedList(items: Array<JSX.Neuron | string>, itemLimit?: number): JSX.Neuron | string;
+export function formatCommaSeparatedList(items: Array<JSX.Neuron | string>, itemLimit?: number): JSX.Neuron | string {
     const remaining = itemLimit === undefined ? 0 : Math.max(
         items.length - itemLimit, 0,
     );

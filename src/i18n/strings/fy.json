@@ -10,7 +10,7 @@
     "Switch to space by number": "Wikselje fan romte mei nûmer",
     "Unexpected error preparing the app. See console for details.": "Unferwachte flater by it klearmeitsjen fan de applikaasje. Sjoch yn de console foar details.",
     "The message from the parser is: %(message)s": "It berjocht fan de ferwurker is: %(message)s",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Jo Element-konfiguraasje hat ûnjildige JSON. Nei dat jo dit oplost ha, kin dizze side ferfarske wurde.",
+    "Your Neuron configuration contains invalid JSON. Please correct the problem and reload the page.": "Jo Neuron-konfiguraasje hat ûnjildige JSON. Nei dat jo dit oplost ha, kin dizze side ferfarske wurde.",
     "Use %(brand)s on mobile": "Brûk %(brand)s op mobyl",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desintralisearre, fersifere chat &amp; gearwurking fersoarge troch [matrix]",
     "You need to be using HTTPS to place a screen-sharing call.": "Oproppen mei skerm dielen fereasket HTTPS.",
@@ -22,7 +22,7 @@
     "Dismiss": "Slute",
     "Explore rooms": "Keamers ûntdekke",
     "Create Account": "Registrearje",
-    "Welcome to Element": "Wolkom by Element",
+    "Welcome to Neuron": "Wolkom by Neuron",
     "I understand the risks and wish to continue": "Ik begryp de risiko's en wol graach fierder gean",
     "Go to element.io": "Gean nei element.io",
     "Your browser can't run %(brand)s": "Jo browser kin %(brand)s net útfiere",
@@ -30,7 +30,7 @@
     "Unknown device": "Unbekend apparaat",
     "Open": "Iepenje",
     "Invalid JSON": "Unjildige JSON",
-    "Your Element is misconfigured": "Jo Element is net goed konfigurearre",
+    "Your Neuron is misconfigured": "Jo Neuron is net goed konfigurearre",
     "Invalid configuration: no default server specified.": "Unjildiche konfiguraasje: gjin standertserver selektearre.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Unjildige konfiguraasje: kin allinnich kieze út default_server_config, default_server_name, as default_hs_url."
 }

@@ -34,7 +34,7 @@ interface CallViewHeaderProps {
     pipMode: boolean;
     type: CallType;
     callRooms?: Room[];
-    onPipMouseDown: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onPipMouseDown: (event: React.MouseEvent<Neuron, MouseEvent>) => void;
 }
 
 const onFullscreenClick = () => {

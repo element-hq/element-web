@@ -212,7 +212,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
     };
 
-    private defaultStickerpickerContent(): JSX.Element {
+    private defaultStickerpickerContent(): JSX.Neuron {
         return (
             <AccessibleButton onClick={this.launchManageIntegrations}
                 className='mx_Stickers_contentPlaceholder'>
@@ -223,7 +223,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         );
     }
 
-    private errorStickerpickerContent(): JSX.Element {
+    private errorStickerpickerContent(): JSX.Neuron {
         return (
             <div style={{ textAlign: "center" }} className="error">
                 <p> { this.state.imError } </p>
@@ -242,7 +242,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public getStickerpickerContent(): JSX.Element {
+    public getStickerpickerContent(): JSX.Neuron {
         // Handle integration manager errors
         if (this.state.imError) {
             return this.errorStickerpickerContent();
@@ -395,7 +395,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (!this.props.showStickers) return null;
 
         return <ContextMenu

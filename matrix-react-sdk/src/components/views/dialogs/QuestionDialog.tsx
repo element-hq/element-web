@@ -57,7 +57,7 @@ export default class QuestionDialog extends React.Component<IProps> {
         this.props.onFinished(false);
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         // Converting these to imports breaks wrench tests
         const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');

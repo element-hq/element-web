@@ -45,7 +45,7 @@ export default class Spoiler extends React.Component<IProps, IState> {
         this.setState({ visible: !this.state.visible });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const reason = this.props.reason ? (
             <span className="mx_EventTile_spoiler_reason">{ "(" + this.props.reason + ")" }</span>
         ) : null;

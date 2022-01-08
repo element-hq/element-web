@@ -453,7 +453,7 @@ const UserOptionsSection: React.FC<{
         </AccessibleButton>
     );
 
-    let directMessageButton: JSX.Element;
+    let directMessageButton: JSX.Neuron;
     if (!isMe) {
         directMessageButton = <MessageButton userId={member.userId} />;
     }

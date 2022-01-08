@@ -206,7 +206,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { address } = this.props.msisdn;
         const { verifying, bound } = this.state;
 
@@ -262,7 +262,7 @@ interface IProps {
 
 @replaceableComponent("views.settings.discovery.PhoneNumbers")
 export default class PhoneNumbers extends React.Component<IProps> {
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let content;
         if (this.props.msisdns.length > 0) {
             content = this.props.msisdns.map((e) => {

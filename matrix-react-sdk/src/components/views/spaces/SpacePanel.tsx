@@ -227,7 +227,7 @@ const CreateSpaceButton = ({
         openMenu();
     };
 
-    let betaDot: JSX.Element;
+    let betaDot: JSX.Neuron;
     if (!localStorage.getItem("mx_seenSpaces") && !SpaceStore.instance.spacePanelSpaces.length) {
         betaDot = <div className="mx_BetaDot" />;
     }

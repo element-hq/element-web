@@ -57,7 +57,7 @@ export default class SessionRestoreErrorDialog extends React.Component<IProps> {
         window.location.reload();
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const brand = SdkConfig.get().brand;
 
         const clearStorageButton = (

@@ -488,7 +488,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         });
     };
 
-    private renderOptionKey(): JSX.Element {
+    private renderOptionKey(): JSX.Neuron {
         return (
             <StyledRadioButton
                 key={SecureBackupSetupMethod.Key}
@@ -507,7 +507,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         );
     }
 
-    private renderOptionPassphrase(): JSX.Element {
+    private renderOptionPassphrase(): JSX.Neuron {
         return (
             <StyledRadioButton
                 key={SecureBackupSetupMethod.Passphrase}
@@ -526,7 +526,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         );
     }
 
-    private renderPhaseChooseKeyPassphrase(): JSX.Element {
+    private renderPhaseChooseKeyPassphrase(): JSX.Neuron {
         const setupMethods = getSecureBackupSetupMethods();
         const optionKey = setupMethods.includes(SecureBackupSetupMethod.Key) ? this.renderOptionKey() : null;
         const optionPassphrase = setupMethods.includes(SecureBackupSetupMethod.Passphrase)
@@ -551,7 +551,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         </form>;
     }
 
-    private renderPhaseMigrate(): JSX.Element {
+    private renderPhaseMigrate(): JSX.Neuron {
         // TODO: This is a temporary screen so people who have the labs flag turned on and
         // click the button are aware they're making a change to their account.
         // Once we're confident enough in this (and it's supported enough) we can do
@@ -603,7 +603,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         </form>;
     }
 
-    private renderPhasePassPhrase(): JSX.Element {
+    private renderPhasePassPhrase(): JSX.Neuron {
         return <form onSubmit={this.onPassPhraseNextClick}>
             <p>{ _t(
                 "Enter a security phrase only you know, as it's used to safeguard your data. " +
@@ -640,7 +640,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         </form>;
     }
 
-    private renderPhasePassPhraseConfirm(): JSX.Element {
+    private renderPhasePassPhraseConfirm(): JSX.Neuron {
         let matchText;
         let changeText;
         if (this.state.passPhraseConfirm === this.state.passPhrase) {
@@ -701,7 +701,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         </form>;
     }
 
-    private renderPhaseShowKey(): JSX.Element {
+    private renderPhaseShowKey(): JSX.Neuron {
         let continueButton;
         if (this.state.phase === Phase.ShowKey) {
             continueButton = <DialogButtons primaryButton={_t("Continue")}
@@ -762,13 +762,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         </div>;
     }
 
-    private renderBusyPhase(): JSX.Element {
+    private renderBusyPhase(): JSX.Neuron {
         return <div>
             <Spinner />
         </div>;
     }
 
-    private renderPhaseLoadError(): JSX.Element {
+    private renderPhaseLoadError(): JSX.Neuron {
         return <div>
             <p>{ _t("Unable to query secret storage status") }</p>
             <div className="mx_Dialog_buttons">
@@ -781,7 +781,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         </div>;
     }
 
-    private renderPhaseSkipConfirm(): JSX.Element {
+    private renderPhaseSkipConfirm(): JSX.Neuron {
         return <div>
             <p>{ _t(
                 "If you cancel now, you may lose encrypted messages & data if you lose access to your logins.",
@@ -819,7 +819,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         }
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let content;
         if (this.state.error) {
             content = <div>

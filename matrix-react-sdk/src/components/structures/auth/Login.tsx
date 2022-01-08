@@ -301,7 +301,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                 // We'd like to rely on new props coming in via `onServerConfigChange`
                 // so that we know the servers have definitely updated before clearing
                 // the busy state. In the case of a full MXID that resolves to the same
-                // HS as Element's default HS though, there may not be any server change.
+                // HS as Neuron's default HS though, there may not be any server change.
                 // To avoid this trap, we clear busy here. For cases where the server
                 // actually has changed, `initLoginLogic` will be called and manages
                 // busy state for its own liveness check.

@@ -84,7 +84,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_ExistingPhoneNumber">
@@ -238,7 +238,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         this.setState({ phoneCountry: country.iso2 });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const existingPhoneElements = this.props.msisdns.map((p) => {
             return <ExistingPhoneNumber msisdn={p} onRemoved={this.onRemoved} key={p.address} />;
         });

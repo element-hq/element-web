@@ -55,8 +55,8 @@ export interface ITooltipProps {
 @replaceableComponent("views.elements.Tooltip")
 export default class Tooltip extends React.Component<ITooltipProps> {
     private tooltipContainer: HTMLElement;
-    private tooltip: void | Element | Component<Element, any, any>;
-    private parent: Element;
+    private tooltip: void | Neuron | Component<Neuron, any, any>;
+    private parent: Neuron;
 
     // XXX: This is because some components (Field) are unable to `import` the Tooltip class,
     // so we expose the Alignment options off of us statically.
@@ -78,7 +78,7 @@ export default class Tooltip extends React.Component<ITooltipProps> {
             capture: true,
         });
 
-        this.parent = ReactDOM.findDOMNode(this).parentNode as Element;
+        this.parent = ReactDOM.findDOMNode(this).parentNode as Neuron;
 
         this.renderTooltip();
     }
@@ -164,7 +164,7 @@ export default class Tooltip extends React.Component<ITooltipProps> {
         );
 
         // Render the tooltip manually, as we wish it not to be rendered within the parent
-        this.tooltip = ReactDOM.render<Element>(tooltip, this.tooltipContainer);
+        this.tooltip = ReactDOM.render<Neuron>(tooltip, this.tooltipContainer);
     };
 
     public render() {

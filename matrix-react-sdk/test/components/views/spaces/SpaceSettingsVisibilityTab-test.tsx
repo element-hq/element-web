@@ -76,7 +76,7 @@ describe('<SpaceSettingsVisibilityTab />', () => {
         return wrapper.children[0];
     };
 
-    const getByTestId = (container: Element, id: string) => container.querySelector(`[data-test-id=${id}]`);
+    const getByTestId = (container: Neuron, id: string) => container.querySelector(`[data-test-id=${id}]`);
     const toggleGuestAccessSection = async (component) => {
         const toggleButton = getByTestId(component, 'toggle-guest-access-btn');
         await act(async () => {

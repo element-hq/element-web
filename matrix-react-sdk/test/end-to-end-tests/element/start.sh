@@ -11,7 +11,7 @@ if [ -f $PIDFILE ]; then
 fi
 
 cd $BASE_DIR/
-echo -n "Starting Element on http://localhost:$PORT ... "
+echo -n "Starting Neuron on http://localhost:$PORT ... "
 pushd element-web/webapp/ > /dev/null
 
 # backup config file before we copy template

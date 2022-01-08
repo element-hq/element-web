@@ -675,7 +675,7 @@ describe('loading:', function() {
 
 // assert that we are on the loading page
 function assertAtLoadingSpinner(matrixChat) {
-    const domComponent = ReactDOM.findDOMNode(matrixChat) as Element;
+    const domComponent = ReactDOM.findDOMNode(matrixChat) as Neuron;
     expect(domComponent.className).toEqual("mx_MatrixChat_splash");
 
     // just the spinner

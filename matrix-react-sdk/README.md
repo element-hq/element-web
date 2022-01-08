@@ -41,10 +41,10 @@ https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md
 
 Code should be committed as follows:
  * All new components: https://github.com/matrix-org/matrix-react-sdk/tree/master/src/components
- * Element-specific components: https://github.com/vector-im/element-web/tree/master/src/components
+ * Neuron-specific components: https://github.com/vector-im/element-web/tree/master/src/components
    * In practice, `matrix-react-sdk` is still evolving so fast that the maintenance
-     burden of customising and overriding these components for Element can seriously
-     impede development.  So right now, there should be very few (if any) customisations for Element.
+     burden of customising and overriding these components for Neuron can seriously
+     impede development.  So right now, there should be very few (if any) customisations for Neuron.
  * CSS: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/css
  * Theme specific CSS & resources: https://github.com/matrix-org/matrix-react-sdk/tree/master/res/themes
 
@@ -177,5 +177,5 @@ yarn test
 
 ## End-to-End tests
 
-Make sure you've got your Element development server running (by doing `yarn start` in element-web), and then in this project, run `yarn run e2etests`.
+Make sure you've got your Neuron development server running (by doing `yarn start` in element-web), and then in this project, run `yarn run e2etests`.
 See [`test/end-to-end-tests/README.md`](https://github.com/matrix-org/matrix-react-sdk/blob/develop/test/end-to-end-tests/README.md) for more information.

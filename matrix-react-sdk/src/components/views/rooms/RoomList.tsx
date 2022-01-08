@@ -134,7 +134,7 @@ const DmAuxButton = ({ tabIndex, dispatcher = defaultDispatcher }: IAuxButtonPro
     const showInviteUsers = shouldShowComponent(UIComponent.InviteUsers);
 
     if (activeSpace && (showCreateRooms || showInviteUsers)) {
-        let contextMenu: JSX.Element;
+        let contextMenu: JSX.Neuron;
         if (menuDisplayed) {
             const canInvite = shouldShowSpaceInvite(activeSpace);
 
@@ -201,7 +201,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
 
     const showCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
 
-    let contextMenuContent: JSX.Element;
+    let contextMenuContent: JSX.Neuron;
     if (menuDisplayed && activeSpace) {
         const canAddRooms = activeSpace.currentState.maySendStateEvent(EventType.SpaceChild,
             MatrixClientPeg.get().getUserId());
@@ -280,7 +280,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
         </IconizedContextMenuOptionList>;
     }
 
-    let contextMenu: JSX.Element;
+    let contextMenu: JSX.Neuron;
     if (menuDisplayed) {
         contextMenu = <IconizedContextMenu {...auxButtonContextMenuPosition(handle)} onFinished={closeMenu} compact>
             { contextMenuContent }
@@ -660,7 +660,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
-        let explorePrompt: JSX.Element;
+        let explorePrompt: JSX.Neuron;
         if (!this.props.isMinimized) {
             if (this.state.isNameFiltering) {
                 explorePrompt = <div className="mx_RoomList_explorePrompt">

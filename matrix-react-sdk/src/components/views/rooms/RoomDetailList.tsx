@@ -31,7 +31,7 @@ interface IProps {
 
 @replaceableComponent("views.rooms.RoomDetailList")
 export default class RoomDetailList extends React.Component<IProps> {
-    private getRows(): JSX.Element[] {
+    private getRows(): JSX.Neuron[] {
         if (!this.props.rooms) return [];
         return this.props.rooms.map((room, index) => {
             return <RoomDetailRow key={index} room={room} onClick={this.onDetailsClick} />;
@@ -46,7 +46,7 @@ export default class RoomDetailList extends React.Component<IProps> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const rows = this.getRows();
         let rooms;
         if (rows.length === 0) {

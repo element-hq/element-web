@@ -812,7 +812,7 @@
     "The file '%(fileName)s' exceeds this homeserver's size limit for uploads": "Fails '%(fileName)s pārsniedz augšupielādējama faila izmēra limitu šajā bāzes serverī",
     "Please ask the administrator of your homeserver (<code>%(homeserverDomain)s</code>) to configure a TURN server in order for calls to work reliably.": "Lūdzu, jautājiet sava bāzes servera administratoram (<code>%(homeserverDomain)s</code>) sakonfigurēt TURN serveri, lai zvani strādātu stabili.",
     "Join millions for free on the largest public server": "Pievienojieties bez maksas miljoniem lietotāju lielākajā publiskajā serverī",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Jūs varat pielāgot servera parametrus, lai pierakstītos citos Matrix bāzes serveros, norādot atbilstošu bāzes servera URL. Tas ļauj jums izmantot Element ar uz cita bāzes servera izveidotu Matrix kontu.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Neuron with an existing Matrix account on a different homeserver.": "Jūs varat pielāgot servera parametrus, lai pierakstītos citos Matrix bāzes serveros, norādot atbilstošu bāzes servera URL. Tas ļauj jums izmantot Neuron ar uz cita bāzes servera izveidotu Matrix kontu.",
     "Server Options": "Servera parametri",
     "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)s vai %(usernamePassword)s",
     "That username already exists, please try another.": "Šis lietotājvārds jau eksistē, mēģiniet citu.",

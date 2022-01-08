@@ -66,7 +66,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
         const showQR: boolean = request.otherPartySupportsMethod(SCAN_QR_CODE_METHOD);
         const brand = SdkConfig.get().brand;
 
-        const noCommonMethodError: JSX.Element = !showSAS && !showQR ?
+        const noCommonMethodError: JSX.Neuron = !showSAS && !showQR ?
             <p>{ _t(
                 "The device you are trying to verify doesn't support scanning a " +
                 "QR code or emoji verification, which is what %(brand)s supports. Try " +
@@ -77,8 +77,8 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
 
         if (this.props.layout === 'dialog') {
             // HACK: This is a terrible idea.
-            let qrBlockDialog: JSX.Element;
-            let sasBlockDialog: JSX.Element;
+            let qrBlockDialog: JSX.Neuron;
+            let sasBlockDialog: JSX.Neuron;
             if (showQR) {
                 qrBlockDialog =
                     <div className='mx_VerificationPanel_QRPhase_startOption'>
@@ -112,7 +112,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             );
         }
 
-        let qrBlock: JSX.Element;
+        let qrBlock: JSX.Neuron;
         if (showQR) {
             qrBlock = <div className="mx_UserInfo_container">
                 <h3>{ _t("Verify by scanning") }</h3>
@@ -126,7 +126,7 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             </div>;
         }
 
-        let sasBlock: JSX.Element;
+        let sasBlock: JSX.Neuron;
         if (showSAS) {
             const disabled = this.state.emojiButtonClicked;
             const sasLabel = showQR ?
@@ -182,9 +182,9 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
             _t("Almost there! Is %(displayName)s showing the same shield?", {
                 displayName: (member as User).displayName || (member as RoomMember).name || member.userId,
             });
-        let body: JSX.Element;
+        let body: JSX.Neuron;
         if (this.state.reciprocateQREvent) {
-            // Element Web doesn't support scanning yet, so assume here we're the client being scanned.
+            // Neuron Web doesn't support scanning yet, so assume here we're the client being scanned.
             body = <React.Fragment>
                 <p>{ description }</p>
                 <E2EIcon isUser={true} status={E2EState.Verified} size={128} hideTooltip={true} />

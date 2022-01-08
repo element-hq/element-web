@@ -118,7 +118,7 @@ export default class NodeAnimator extends React.Component<IProps> {
         this.nodes[k] = node;
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <>{ Object.values(this.children) }</>
         );

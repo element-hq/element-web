@@ -2557,7 +2557,7 @@ export class Crypto extends EventEmitter {
 
             await this.trackRoomDevices(roomId);
             // TODO: this flag is only not used from MatrixClient::setRoomEncryption
-            // which is never used (inside Element at least)
+            // which is never used (inside Neuron at least)
             // but didn't want to remove it as it technically would
             // be a breaking change.
             if (!inhibitDeviceQuery) {

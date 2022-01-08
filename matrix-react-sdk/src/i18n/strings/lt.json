@@ -1779,7 +1779,7 @@
     "New? <a>Create account</a>": "Naujas vartotojas? <a>Sukurkite paskyrą</a>",
     "Forgot password?": "Pamiršote slaptažodį?",
     "Preparing to download logs": "Ruošiamasi parsiųsti žurnalus",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Jūs galite naudoti serverio parinktis, norėdami prisijungti prie kitų Matrix serverių, nurodydami kitą serverio URL. Tai leidžia jums naudoti Element su egzistuojančia paskyra kitame serveryje.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Neuron with an existing Matrix account on a different homeserver.": "Jūs galite naudoti serverio parinktis, norėdami prisijungti prie kitų Matrix serverių, nurodydami kitą serverio URL. Tai leidžia jums naudoti Neuron su egzistuojančia paskyra kitame serveryje.",
     "Server Options": "Serverio Parinktys",
     "Your homeserver": "Jūsų serveris",
     "Download logs": "Parsisiųsti žurnalus",

@@ -133,7 +133,7 @@ export default class Registration extends React.Component<IProps, IState> {
 
         const { hsUrl, isUrl } = this.props.serverConfig;
         this.loginLogic = new Login(hsUrl, isUrl, null, {
-            defaultDeviceDisplayName: "Element login check", // We shouldn't ever be used
+            defaultDeviceDisplayName: "Neuron login check", // We shouldn't ever be used
         });
     }
 

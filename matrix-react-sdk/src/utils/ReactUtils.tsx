@@ -19,10 +19,10 @@ import React from "react";
 /**
  * Joins an array into one value with a joiner. E.g. join(["hello", "world"], " ") -> <span>hello world</span>
  * @param array the array of element to join
- * @param joiner the string/JSX.Element to join with
+ * @param joiner the string/JSX.Neuron to join with
  * @returns the joined array
  */
-export function jsxJoin(array: Array<string | JSX.Element>, joiner?: string | JSX.Element): JSX.Element {
+export function jsxJoin(array: Array<string | JSX.Neuron>, joiner?: string | JSX.Neuron): JSX.Neuron {
     const newArray = [];
     array.forEach((element, index) => {
         newArray.push(element, (index === array.length - 1) ? null : joiner);

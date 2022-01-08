@@ -187,7 +187,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         return this.state.syncState === "ERROR" && !errorIsMauError;
     }
 
-    private getUnsentMessageContent(): JSX.Element {
+    private getUnsentMessageContent(): JSX.Neuron {
         const unsentMessages = this.state.unsentMessages;
 
         let title;
@@ -278,7 +278,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
         </>;
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (this.shouldShowConnectionError()) {
             return (
                 <div className="mx_RoomStatusBar">

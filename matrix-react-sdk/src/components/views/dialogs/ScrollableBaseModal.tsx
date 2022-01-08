@@ -67,7 +67,7 @@ export default abstract class ScrollableBaseModal<TProps extends IDialogProps, T
     protected abstract submit(): void;
     protected abstract renderContent(): React.ReactNode;
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <MatrixClientContext.Provider value={this.matrixClient}>
                 <FocusLock

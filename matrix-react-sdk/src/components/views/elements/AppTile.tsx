@@ -289,7 +289,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // being optimized out by a browser. Instead, we'll just point
             // the iframe at a page that is reasonably safe to use in the
             // event the iframe doesn't wink away.
-            // This is relative to where the Element instance is located.
+            // This is relative to where the Neuron instance is located.
             this.iframe.src = 'about:blank';
         }
 
@@ -375,7 +375,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         return WidgetType.JITSI.matches(this.props.app.type);
     }
 
-    private getTileTitle(): JSX.Element {
+    private getTileTitle(): JSX.Neuron {
         const name = this.formatAppTileName();
         const titleSpacer = <span>&nbsp;-&nbsp;</span>;
         let title = '';
@@ -426,7 +426,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.setState({ menuDisplayed: false });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let appTileBody;
 
         // Note that there is advice saying allow-scripts shouldn't be used with allow-same-origin

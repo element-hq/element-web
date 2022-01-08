@@ -167,7 +167,7 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         }
     }
 
-    private renderTypingIndicatorAvatars(users: RoomMember[], limit: number): JSX.Element[] {
+    private renderTypingIndicatorAvatars(users: RoomMember[], limit: number): JSX.Neuron[] {
         let othersCount = 0;
         if (users.length > limit) {
             othersCount = users.length - limit + 1;

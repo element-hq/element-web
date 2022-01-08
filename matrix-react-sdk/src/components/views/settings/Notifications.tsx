@@ -529,7 +529,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             return null; // nothing to show for the section
         }
 
-        let clearNotifsButton: JSX.Element;
+        let clearNotifsButton: JSX.Neuron;
         if (
             category === RuleClass.VectorOther
             && MatrixClientPeg.get().getRooms().some(r => r.getUnreadNotificationCount() > 0)
@@ -552,7 +552,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
             return null;
         }
 
-        let keywordComposer: JSX.Element;
+        let keywordComposer: JSX.Neuron;
         if (category === RuleClass.VectorMentions) {
             keywordComposer = <TagComposer
                 tags={this.state.vectorKeywordRuleInfo?.rules.map(r => r.pattern)}

@@ -5,9 +5,9 @@ letting the browser and user interact with the resulting data may be dangerous,
 previously `usercontent.riot.im` was used to act as a sandbox on a different origin to close the attack surface,
 it is now possible to do by using a combination of a sandboxed iframe and some code written into the app which consumes this SDK.
 
-Usercontent is an iframe sandbox target for allowing a user to safely download a decrypted attachment from a sandboxed origin where it cannot be used to XSS your Element session out from under you.
+Usercontent is an iframe sandbox target for allowing a user to safely download a decrypted attachment from a sandboxed origin where it cannot be used to XSS your Neuron session out from under you.
 
-Its function is to create an Object URL for the user/browser to use but bound to an origin different to that of the Element instance to protect against XSS.
+Its function is to create an Object URL for the user/browser to use but bound to an origin different to that of the Neuron instance to protect against XSS.
 
 It exposes a function over a postMessage API, when sent an object with the matching fields to render a download link with the Object URL:
 

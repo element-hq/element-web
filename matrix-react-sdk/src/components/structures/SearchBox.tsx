@@ -97,7 +97,7 @@ export default class SearchBox extends React.Component<IProps, IState> {
         }
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         /* eslint @typescript-eslint/no-unused-vars: ["error", { "ignoreRestSiblings": true }] */
         const { onSearch, onCleared, onKeyDown, onFocus, onBlur, className = "", placeholder, blurredPlaceholder,
             autoFocus, initialValue, collapsed, ...props } = this.props;

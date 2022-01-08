@@ -192,7 +192,7 @@ function checkDescendInto(node) {
 
 function checkIgnored(n) {
     if (n.nodeType === Node.TEXT_NODE) {
-        // Element adds \n text nodes in a lot of places,
+        // Neuron adds \n text nodes in a lot of places,
         // which should be ignored
         return n.nodeValue === "\n";
     } else if (n.nodeType === Node.ELEMENT_NODE) {

@@ -34,7 +34,7 @@ interface IProps {
     disabled?: boolean;
 }
 
-export default function LanguageSelector({ disabled }: IProps): JSX.Element {
+export default function LanguageSelector({ disabled }: IProps): JSX.Neuron {
     if (SdkConfig.get()['disable_login_language_selector']) return <div />;
     return <LanguageDropdown
         className="mx_AuthBody_language"

@@ -152,7 +152,7 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let avatarImg;
         // Having just set an avatar we just display that since it will take a little
         // time to propagate through to the RoomAvatar.

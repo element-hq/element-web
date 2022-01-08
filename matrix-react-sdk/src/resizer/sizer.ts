@@ -26,7 +26,7 @@ export default class Sizer {
     ) {}
 
     /**
-        @param {Element} item the dom element being resized
+        @param {Neuron} item the dom element being resized
         @return {number} how far the edge of the item is from the edge of the container
     */
     public getItemOffset(item: HTMLElement): number {
@@ -39,7 +39,7 @@ export default class Sizer {
     }
 
     /**
-        @param {Element} item the dom element being resized
+        @param {Neuron} item the dom element being resized
         @return {number} the width/height of an item in the container
     */
     public getItemSize(item: HTMLElement): number {

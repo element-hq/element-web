@@ -62,7 +62,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     private readonly contentRef = createRef<HTMLSpanElement>();
 
     private unmounted = false;
-    private pills: Element[] = [];
+    private pills: Neuron[] = [];
 
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
@@ -95,7 +95,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
-            const pres = (ReactDOM.findDOMNode(this) as Element).getElementsByTagName("pre");
+            const pres = (ReactDOM.findDOMNode(this) as Neuron).getElementsByTagName("pre");
             if (pres.length > 0) {
                 for (let i = 0; i < pres.length; i++) {
                     // If there already is a div wrapping the codeblock we want to skip this.
@@ -117,7 +117,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
                 }
             }
             // Highlight code
-            const codes = (ReactDOM.findDOMNode(this) as Element).getElementsByTagName("code");
+            const codes = (ReactDOM.findDOMNode(this) as Neuron).getElementsByTagName("code");
             if (codes.length > 0) {
                 // Do this asynchronously: parsing code takes time and we don't
                 // need to block the DOM update on it.
@@ -321,7 +321,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
     }
 
-    private activateSpoilers(nodes: ArrayLike<Element>): void {
+    private activateSpoilers(nodes: ArrayLike<Neuron>): void {
         let node = nodes[0];
         while (node) {
             if (node.tagName === "SPAN" && typeof node.getAttribute("data-mx-spoiler") === "string") {
@@ -338,14 +338,14 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
             }
 
             if (node.childNodes && node.childNodes.length) {
-                this.activateSpoilers(node.childNodes as NodeListOf<Element>);
+                this.activateSpoilers(node.childNodes as NodeListOf<Neuron>);
             }
 
-            node = node.nextSibling as Element;
+            node = node.nextSibling as Neuron;
         }
     }
 
-    private findLinks(nodes: ArrayLike<Element>): string[] {
+    private findLinks(nodes: ArrayLike<Neuron>): string[] {
         let links: string[] = [];
 
         for (let i = 0; i < nodes.length; i++) {
@@ -364,7 +364,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         return links;
     }
 
-    private isLinkPreviewable(node: Element): boolean {
+    private isLinkPreviewable(node: Neuron): boolean {
         // don't try to preview relative links
         if (!node.getAttribute("href").startsWith("http://") &&
             !node.getAttribute("href").startsWith("https://")) {

@@ -1,6 +1,6 @@
 # Feature flags
 
-When developing new features for Element, we use feature flags to give us more
+When developing new features for Neuron, we use feature flags to give us more
 flexibility and control over when and where those features are enabled.
 
 For example, flags make the following things possible:
@@ -8,7 +8,7 @@ For example, flags make the following things possible:
 * Extended testing of a feature via labs on develop
 * Enabling features when ready instead of the first moment the code is released
 * Testing a feature with a specific set of users (by enabling only on a specific
-  Element instance)
+  Neuron instance)
 
 The size of the feature controlled by a feature flag may vary widely: it could
 be a large project like reactions or a smaller change to an existing algorithm.
@@ -79,7 +79,7 @@ and
 [release](https://github.com/vector-im/element-desktop/blob/develop/element.io/release/config.json)
 configs.
 
-**Note:** The above will only enable the feature for https://app.element.io and official Element
+**Note:** The above will only enable the feature for https://app.element.io and official Neuron
 Desktop builds. It will not be enabled for self-hosted installed, custom desktop builds, etc. To
 cover these cases, change the setting's `default` in `Settings.ts` to `true`.
 

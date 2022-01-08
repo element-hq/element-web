@@ -88,7 +88,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (this.state.verifyRemove) {
             return (
                 <div className="mx_ExistingEmailAddress">
@@ -232,7 +232,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const existingEmailElements = this.props.emails.map((e) => {
             return <ExistingEmailAddress email={e} onRemoved={this.onRemoved} key={e.address} />;
         });

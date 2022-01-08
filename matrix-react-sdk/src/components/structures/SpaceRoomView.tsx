@@ -331,7 +331,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
         </div>;
     }
 
-    let migratedCommunitySection: JSX.Element;
+    let migratedCommunitySection: JSX.Neuron;
     const createContent = space.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent();
     if (createContent[CreateEventField]) {
         migratedCommunitySection = <div className="mx_SpaceRoomView_preview_migratedCommunity">
@@ -483,7 +483,7 @@ const SpaceLanding = ({ space }: { space: Room }) => {
                     const tags = { name: () => <div className="mx_SpaceRoomView_landing_nameRow">
                         <h1>{ name }</h1>
                     </div> };
-                    return _t("Welcome to <name/>", {}, tags) as JSX.Element;
+                    return _t("Welcome to <name/>", {}, tags) as JSX.Neuron;
                 } }
             </RoomName>
         </div>

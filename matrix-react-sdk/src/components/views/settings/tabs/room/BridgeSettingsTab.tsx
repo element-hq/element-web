@@ -58,7 +58,7 @@ export default class BridgeSettingsTab extends React.Component<IProps> {
         const client = MatrixClientPeg.get();
         const room = client.getRoom(this.props.roomId);
 
-        let content: JSX.Element;
+        let content: JSX.Neuron;
         if (bridgeEvents.length > 0) {
             content = <div>
                 <p>{ _t(

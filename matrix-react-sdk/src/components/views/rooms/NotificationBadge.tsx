@@ -42,7 +42,7 @@ interface IProps {
     roomId?: string;
 }
 
-interface IClickableProps extends IProps, React.InputHTMLAttributes<Element> {
+interface IClickableProps extends IProps, React.InputHTMLAttributes<Neuron> {
     showUnsentTooltip?: boolean;
     /**
      * If specified will return an AccessibleButton instead of a div.
@@ -145,7 +145,7 @@ export default class NotificationBadge extends React.PureComponent<XOR<IProps, I
 
         if (onClick) {
             let label: string;
-            let tooltip: JSX.Element;
+            let tooltip: JSX.Neuron;
             if (showUnsentTooltip && this.state.showTooltip && notification.color === NotificationColor.Unsent) {
                 label = _t("Message didn't send. Click for info.");
                 tooltip = <Tooltip className="mx_RoleButton_tooltip" label={label} />;

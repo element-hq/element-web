@@ -25,7 +25,7 @@ import ResizeNotifier from "../../utils/ResizeNotifier";
 interface IProps {
     resizeNotifier: ResizeNotifier;
     collapsedRhs?: boolean;
-    panel?: JSX.Element;
+    panel?: JSX.Neuron;
 }
 
 @replaceableComponent("structures.MainSplit")
@@ -58,7 +58,7 @@ export default class MainSplit extends React.Component<IProps> {
         };
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const bodyView = React.Children.only(this.props.children);
         const panelView = this.props.panel;
 

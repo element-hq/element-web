@@ -286,7 +286,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
         return keys[index <= 0 ? keys.length - 1 : (index - 1) % keys.length];
     }
 
-    private scrollIntoView(node: Element) {
+    private scrollIntoView(node: Neuron) {
         if (node) {
             node.scrollIntoView({
                 block: "nearest",

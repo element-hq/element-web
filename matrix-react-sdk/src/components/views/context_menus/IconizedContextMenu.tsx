@@ -78,7 +78,7 @@ export const IconizedContextMenuCheckbox: React.FC<ICheckboxProps> = ({
     words,
     ...props
 }) => {
-    let marker: JSX.Element;
+    let marker: JSX.Neuron;
     if (words) {
         marker = <span className="mx_IconizedContextMenu_activeText">
             { active ? _t("On") : _t("Off") }

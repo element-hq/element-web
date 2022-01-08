@@ -146,7 +146,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
             );
         }
 
-        let footer: JSX.Element;
+        let footer: JSX.Neuron;
         if (this.state.progressText) {
             footer = <span className="mx_RoomUpgradeWarningDialog_progress">
                 <ProgressBar value={this.state.progress} max={this.state.total} />

@@ -46,7 +46,7 @@ export default class RoomCreate extends React.Component<IProps> {
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
         if (predecessor === undefined) {
             return <div />; // We should never have been instantiated in this case

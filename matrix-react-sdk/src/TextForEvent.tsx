@@ -213,7 +213,7 @@ const onViewJoinRuleSettingsClick = () => {
     });
 };
 
-function textForJoinRulesEvent(ev: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
+function textForJoinRulesEvent(ev: MatrixEvent, allowJSX: boolean): () => string | JSX.Neuron | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     switch (ev.getContent().join_rule) {
         case JoinRule.Public:
@@ -507,7 +507,7 @@ const onPinnedMessagesClick = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
 };
 
-function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string | JSX.Element | null {
+function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string | JSX.Neuron | null {
     if (!SettingsStore.getValue("feature_pinning")) return null;
     const senderName = event.sender ? event.sender.name : event.getSender();
     const roomId = event.getRoomId();
@@ -718,7 +718,7 @@ function textForMjolnirEvent(event: MatrixEvent): () => string | null {
 interface IHandlers {
     [type: string]:
         (ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean) =>
-            (() => string | JSX.Element | null);
+            (() => string | JSX.Neuron | null);
 }
 
 const handlers: IHandlers = {
@@ -772,8 +772,8 @@ export function hasText(ev: MatrixEvent, showHiddenEvents?: boolean): boolean {
  *     to avoid hitting the settings store
  */
 export function textForEvent(ev: MatrixEvent): string;
-export function textForEvent(ev: MatrixEvent, allowJSX: true, showHiddenEvents?: boolean): string | JSX.Element;
-export function textForEvent(ev: MatrixEvent, allowJSX = false, showHiddenEvents?: boolean): string | JSX.Element {
+export function textForEvent(ev: MatrixEvent, allowJSX: true, showHiddenEvents?: boolean): string | JSX.Neuron;
+export function textForEvent(ev: MatrixEvent, allowJSX = false, showHiddenEvents?: boolean): string | JSX.Neuron {
     const handler = (ev.isState() ? stateHandlers : handlers)[ev.getType()];
     return handler?.(ev, allowJSX, showHiddenEvents)?.() || '';
 }

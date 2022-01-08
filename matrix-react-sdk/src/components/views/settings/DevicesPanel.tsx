@@ -248,7 +248,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         );
     }
 
-    private renderDevice = (device: IMyDevice): JSX.Element => {
+    private renderDevice = (device: IMyDevice): JSX.Neuron => {
         const myDeviceId = MatrixClientPeg.get().getDeviceId();
         const myDevice = this.state.devices.find((device) => (device.device_id === myDeviceId));
 
@@ -270,7 +270,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         />;
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const loadError = (
             <div className={classNames(this.props.className, "error")}>
                 { this.state.deviceLoadError }
@@ -310,12 +310,12 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
             }
         }
 
-        const section = (trustIcon: JSX.Element, title: string, deviceList: IMyDevice[]): JSX.Element => {
+        const section = (trustIcon: JSX.Neuron, title: string, deviceList: IMyDevice[]): JSX.Neuron => {
             if (deviceList.length === 0) {
                 return <React.Fragment />;
             }
 
-            let selectButton: JSX.Element;
+            let selectButton: JSX.Neuron;
             if (deviceList.length > 1) {
                 const anySelected = deviceList.some((device) => this.state.selectedDevices.includes(device.device_id));
                 const buttonAction = anySelected ?

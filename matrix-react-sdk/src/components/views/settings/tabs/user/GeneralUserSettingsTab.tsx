@@ -281,7 +281,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         });
     };
 
-    private renderProfileSection(): JSX.Element {
+    private renderProfileSection(): JSX.Neuron {
         return (
             <div className="mx_SettingsTab_section">
                 <ProfileSettings />
@@ -289,7 +289,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderAccountSection(): JSX.Element {
+    private renderAccountSection(): JSX.Neuron {
         let passwordChangeForm = (
             <ChangePassword
                 className="mx_GeneralUserSettingsTab_changePassword"
@@ -351,7 +351,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderLanguageSection(): JSX.Element {
+    private renderLanguageSection(): JSX.Neuron {
         // TODO: Convert to new-styled Field
         return (
             <div className="mx_SettingsTab_section">
@@ -365,7 +365,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderSpellCheckSection(): JSX.Element {
+    private renderSpellCheckSection(): JSX.Neuron {
         return (
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{ _t("Spell check dictionaries") }</span>
@@ -377,7 +377,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderDiscoverySection(): JSX.Element {
+    private renderDiscoverySection(): JSX.Neuron {
         if (this.state.requiredPolicyInfo.hasTerms) {
             const intro = <span className="mx_SettingsTab_subsectionText">
                 { _t(
@@ -420,7 +420,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderManagementSection(): JSX.Element {
+    private renderManagementSection(): JSX.Neuron {
         // TODO: Improve warning text for account deactivation
         return (
             <div className="mx_SettingsTab_section">
@@ -435,7 +435,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    private renderIntegrationManagerSection(): JSX.Element {
+    private renderIntegrationManagerSection(): JSX.Neuron {
         if (!SettingsStore.getValue(UIFeature.Widgets)) return null;
 
         return (
@@ -446,7 +446,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         );
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const plaf = PlatformPeg.get();
         const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck();
 

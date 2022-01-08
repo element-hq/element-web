@@ -166,7 +166,7 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
         this.setState({ showMoreMenu: false });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const callControlsClasses = classNames("mx_CallViewButtons", {
             mx_CallViewButtons_hidden: !this.state.visible,
         });

@@ -245,7 +245,7 @@ export class MatrixEvent extends EventEmitter {
         // amount of needless string duplication. This can save moderate amounts of
         // memory (~10% on a 350MB heap).
         // 'membership' at the event level (rather than the content level) is a legacy
-        // field that Element never otherwise looks at, but it will still take up a lot
+        // field that Neuron never otherwise looks at, but it will still take up a lot
         // of space if we don't intern it.
         ["state_key", "type", "sender", "room_id", "membership"].forEach((prop) => {
             if (typeof event[prop] !== "string") return;

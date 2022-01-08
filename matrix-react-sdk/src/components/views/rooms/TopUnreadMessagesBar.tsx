@@ -27,7 +27,7 @@ interface IProps {
 
 @replaceableComponent("views.rooms.TopUnreadMessagesBar")
 export default class TopUnreadMessagesBar extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <div className="mx_TopUnreadMessagesBar">
                 <AccessibleButton

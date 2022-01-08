@@ -175,7 +175,7 @@ Changes in [13.0.0](https://github.com/vector-im/element-desktop/releases/tag/v1
  * Add `hasBeenCancelled` to `VerificationBase` ([\#1915](https://github.com/matrix-org/matrix-js-sdk/pull/1915)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Add `ISasEvent` ([\#1908](https://github.com/matrix-org/matrix-js-sdk/pull/1908)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Count notifications in encrypted rooms client-side ([\#1872](https://github.com/matrix-org/matrix-js-sdk/pull/1872)). Fixes vector-im/element-web#15393 and vector-im/element-web#15393. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
- * Exclude opt-in Element performance metrics from encryption ([\#1897](https://github.com/matrix-org/matrix-js-sdk/pull/1897)).
+ * Exclude opt-in Neuron performance metrics from encryption ([\#1897](https://github.com/matrix-org/matrix-js-sdk/pull/1897)).
 
 ## 🐛 Bug Fixes
  * Fix race on automatic backup restore ([\#1936](https://github.com/matrix-org/matrix-js-sdk/pull/1936)). Fixes vector-im/element-web#17781 and vector-im/element-web#17781.
@@ -191,7 +191,7 @@ Changes in [13.0.0-rc.1](https://github.com/vector-im/element-desktop/releases/t
  * Add `hasBeenCancelled` to `VerificationBase` ([\#1915](https://github.com/matrix-org/matrix-js-sdk/pull/1915)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Add `ISasEvent` ([\#1908](https://github.com/matrix-org/matrix-js-sdk/pull/1908)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Count notifications in encrypted rooms client-side ([\#1872](https://github.com/matrix-org/matrix-js-sdk/pull/1872)). Fixes vector-im/element-web#15393 and vector-im/element-web#15393. Contributed by [SimonBrandner](https://github.com/SimonBrandner).
- * Exclude opt-in Element performance metrics from encryption ([\#1897](https://github.com/matrix-org/matrix-js-sdk/pull/1897)).
+ * Exclude opt-in Neuron performance metrics from encryption ([\#1897](https://github.com/matrix-org/matrix-js-sdk/pull/1897)).
 
 ## 🐛 Bug Fixes
  * Fix race on automatic backup restore ([\#1936](https://github.com/matrix-org/matrix-js-sdk/pull/1936)). Fixes vector-im/element-web#17781 and vector-im/element-web#17781.
@@ -200,7 +200,7 @@ Changes in [12.5.0](https://github.com/vector-im/element-desktop/releases/tag/v1
 ===================================================================================================
 
 ## ✨ Features
- * [Release] Exclude opt-in Element performance metrics from encryption ([\#1901](https://github.com/matrix-org/matrix-js-sdk/pull/1901)).
+ * [Release] Exclude opt-in Neuron performance metrics from encryption ([\#1901](https://github.com/matrix-org/matrix-js-sdk/pull/1901)).
  * Give `MatrixCall` the capability to emit `LengthChanged` events ([\#1873](https://github.com/matrix-org/matrix-js-sdk/pull/1873)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
  * Improve browser example ([\#1875](https://github.com/matrix-org/matrix-js-sdk/pull/1875)). Contributed by [psrpinto](https://github.com/psrpinto).
  * Give `CallFeed` the capability to emit on volume changes ([\#1865](https://github.com/matrix-org/matrix-js-sdk/pull/1865)). Contributed by [SimonBrandner](https://github.com/SimonBrandner).
@@ -1107,7 +1107,7 @@ Changes in [8.1.0-rc.1](https://github.com/matrix-org/matrix-js-sdk/releases/tag
    [\#1433](https://github.com/matrix-org/matrix-js-sdk/pull/1433)
  * Bump elliptic from 6.5.2 to 6.5.3
    [\#1427](https://github.com/matrix-org/matrix-js-sdk/pull/1427)
- * Replace Riot with Element in docs and comments
+ * Replace Riot with Neuron in docs and comments
    [\#1431](https://github.com/matrix-org/matrix-js-sdk/pull/1431)
  * Remove leftover bits of TSLint
    [\#1430](https://github.com/matrix-org/matrix-js-sdk/pull/1430)

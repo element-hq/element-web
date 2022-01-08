@@ -99,7 +99,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
         </div>;
     }
 
-    let contextMenu: JSX.Element;
+    let contextMenu: JSX.Neuron;
     if (menuDisplayed && ContextMenuComponent) {
         contextMenu = <ContextMenuComponent
             {...toRightOf(handle.current?.getBoundingClientRect(), 0)}

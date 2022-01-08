@@ -85,7 +85,7 @@ export default class UserView extends React.Component<IProps, IState> {
         this.setState({ member, loading: false });
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (this.state.loading) {
             return <Spinner />;
         } else if (this.state.member) {
