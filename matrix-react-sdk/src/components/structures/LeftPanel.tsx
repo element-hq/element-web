@@ -364,7 +364,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 />;
         }
 
-        let rightButton: JSX.Element;
+        let rightButton: JSX.Neuron;
         if (this.state.showBreadcrumbs === BreadcrumbsMode.Labs) {
             rightButton = <RecentlyViewedButton />;
         } else if (this.state.activeSpace === MetaSpace.Home) {

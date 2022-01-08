@@ -50,7 +50,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
         }, () => this.updateCSSWidth(this.state.width));
     }
 
-    private dragFunc = (location: ILocationState, event: React.MouseEvent<Element, MouseEvent>): ILocationState => {
+    private dragFunc = (location: ILocationState, event: React.MouseEvent<Neuron, MouseEvent>): ILocationState => {
         const offset = event.clientX - location.currentX;
         const newWidth = this.state.width + offset;
 

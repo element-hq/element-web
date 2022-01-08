@@ -30,7 +30,7 @@ interface IProps {
  */
 @replaceableComponent("views.rooms.SimpleRoomHeader")
 export default class SimpleRoomHeader extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let icon;
         if (this.props.icon) {
             icon = <img

@@ -58,9 +58,9 @@ interface IResult {
 
 interface IProps {
     title: string;
-    description?: JSX.Element;
+    description?: JSX.Neuron;
     // Extra node inserted after picker input, dropdown and errors
-    extraNode?: JSX.Element;
+    extraNode?: JSX.Neuron;
     value?: string;
     placeholder?: ((validAddressTypes: any) => string) | string;
     roomId?: string;

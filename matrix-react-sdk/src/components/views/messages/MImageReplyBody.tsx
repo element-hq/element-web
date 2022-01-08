@@ -30,7 +30,7 @@ export default class MImageReplyBody extends MImageBody {
         ev.preventDefault();
     };
 
-    public wrapImage(contentUrl: string, children: JSX.Element): JSX.Element {
+    public wrapImage(contentUrl: string, children: JSX.Neuron): JSX.Neuron {
         return children;
     }
 

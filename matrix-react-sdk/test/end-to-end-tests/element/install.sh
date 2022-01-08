@@ -3,7 +3,7 @@ set -e
 ELEMENT_BRANCH=develop
 
 if [ -d $BASE_DIR/element-web ]; then
-    echo "Element is already installed"
+    echo "Neuron is already installed"
     exit
 fi
 

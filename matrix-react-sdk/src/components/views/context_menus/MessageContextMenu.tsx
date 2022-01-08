@@ -283,17 +283,17 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const eventStatus = mxEvent.status;
         const unsentReactionsCount = this.getUnsentReactions().length;
 
-        let openInMapSiteButton: JSX.Element;
-        let endPollButton: JSX.Element;
-        let resendReactionsButton: JSX.Element;
-        let redactButton: JSX.Element;
-        let forwardButton: JSX.Element;
-        let pinButton: JSX.Element;
-        let unhidePreviewButton: JSX.Element;
-        let externalURLButton: JSX.Element;
-        let quoteButton: JSX.Element;
-        let collapseReplyChain: JSX.Element;
-        let redactItemList: JSX.Element;
+        let openInMapSiteButton: JSX.Neuron;
+        let endPollButton: JSX.Neuron;
+        let resendReactionsButton: JSX.Neuron;
+        let redactButton: JSX.Neuron;
+        let forwardButton: JSX.Neuron;
+        let pinButton: JSX.Neuron;
+        let unhidePreviewButton: JSX.Neuron;
+        let externalURLButton: JSX.Neuron;
+        let quoteButton: JSX.Neuron;
+        let collapseReplyChain: JSX.Neuron;
+        let redactItemList: JSX.Neuron;
 
         // status is SENT before remote-echo, null after
         const isSent = !eventStatus || eventStatus === EventStatus.SENT;
@@ -456,7 +456,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let reportEventButton: JSX.Element;
+        let reportEventButton: JSX.Neuron;
         if (mxEvent.getSender() !== me) {
             reportEventButton = (
                 <IconizedContextMenuOption

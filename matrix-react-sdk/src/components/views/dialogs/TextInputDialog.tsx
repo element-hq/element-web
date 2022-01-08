@@ -108,7 +108,7 @@ export default class TextInputDialog extends React.Component<IProps, IState> {
         return result;
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <BaseDialog
                 className="mx_TextInputDialog"

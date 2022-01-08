@@ -297,7 +297,7 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
         }
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         // FIXME: Making these into imports will break tests
         const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         const AccessibleButton = sdk.getComponent('elements.AccessibleButton');

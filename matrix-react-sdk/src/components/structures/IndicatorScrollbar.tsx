@@ -175,7 +175,7 @@ export default class IndicatorScrollbar extends React.Component<IProps, IState> 
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { children, trackHorizontalOverflow, verticalScrollsHorizontally, ...otherProps } = this.props;
 

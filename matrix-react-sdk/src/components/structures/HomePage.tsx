@@ -112,8 +112,8 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         }
 
         introSection = <React.Fragment>
-            <img src={logoUrl} alt={config.brand} />
-            <h1>Welcome to {config.brand}s</h1>
+            <img src={logoUrl} alt={'Neuron'} />
+            <h1>Welcome to {'Neuron'}</h1>
           {/*   <h4>{ _tDom("Own your conversations.") }</h4> */}
         </React.Fragment>;
     }

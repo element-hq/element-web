@@ -48,7 +48,7 @@ const EncryptionInfo: React.FC<IProps> = ({
     inDialog,
     isSelfVerification,
 }: IProps) => {
-    let content: JSX.Element;
+    let content: JSX.Neuron;
     if (waitingForOtherParty && isSelfVerification) {
         content = (
             <div>
@@ -77,7 +77,7 @@ const EncryptionInfo: React.FC<IProps> = ({
         );
     }
 
-    let description: JSX.Element;
+    let description: JSX.Neuron;
     if (isRoomEncrypted) {
         description = (
             <div>

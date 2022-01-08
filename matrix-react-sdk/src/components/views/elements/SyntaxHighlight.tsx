@@ -44,7 +44,7 @@ export default class SyntaxHighlight extends React.Component<IProps> {
         this.componentDidUpdate();
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { className, children } = this.props;
 
         return <pre className={`${className} mx_SyntaxHighlight`} ref={this.ref}>

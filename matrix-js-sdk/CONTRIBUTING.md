@@ -68,7 +68,7 @@ Notes: Fix a bug where the `herd()` function would only work on Tuesdays
 element-web notes: Fix a bug where the 'Herd' button only worked on Tuesdays
 ```
 
-This example is for Element Web. You can specify:
+This example is for Neuron Web. You can specify:
  * matrix-react-sdk
  * element-web
  * element-desktop

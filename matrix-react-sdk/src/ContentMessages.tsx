@@ -459,7 +459,7 @@ export default class ContentMessages {
 
         const isQuoting = Boolean(RoomViewStore.getQuotingEvent());
         if (isQuoting) {
-            // FIXME: Using an import will result in Element crashing
+            // FIXME: Using an import will result in Neuron crashing
             const QuestionDialog = sdk.getComponent("dialogs.QuestionDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Reply Warning', '', QuestionDialog, {
                 title: _t('Replying With Files'),
@@ -494,7 +494,7 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
-            // FIXME: Using an import will result in Element crashing
+            // FIXME: Using an import will result in Neuron crashing
             const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
                 badFiles: tooBigFiles,
@@ -512,7 +512,7 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                // FIXME: Using an import will result in Element crashing
+                // FIXME: Using an import will result in Neuron crashing
                 const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
                 const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
                     '', UploadConfirmDialog, {
@@ -678,7 +678,7 @@ export default class ContentMessages {
                         { fileName: upload.fileName },
                     );
                 }
-                // FIXME: Using an import will result in Element crashing
+                // FIXME: Using an import will result in Neuron crashing
                 const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),

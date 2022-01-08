@@ -1,4 +1,4 @@
-# How to translate Element (Dev Guide)
+# How to translate Neuron (Dev Guide)
 
 ## Requirements
 
@@ -6,7 +6,7 @@
   - Including up-to-date versions of matrix-react-sdk and matrix-js-sdk
 - Latest LTS version of Node.js installed
 - Be able to understand English
-- Be able to understand the language you want to translate Element into
+- Be able to understand the language you want to translate Neuron into
 
 ## Translating strings vs. marking strings for translation
 

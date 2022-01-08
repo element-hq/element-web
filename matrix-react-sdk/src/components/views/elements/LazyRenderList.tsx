@@ -60,7 +60,7 @@ interface IProps<T> {
     // height in pixels of the component returned by `renderItem`
     itemHeight: number;
     // function to turn an element of `items` into a react component
-    renderItem: (item: T) => JSX.Element;
+    renderItem: (item: T) => JSX.Neuron;
     // scrollTop of the viewport (minus the height of any content above this list like other `LazyRenderList`s)
     scrollTop: number;
     // the height of the viewport this content is scrolled in
@@ -123,7 +123,7 @@ export default class LazyRenderList<T = any> extends React.Component<IProps<T>, 
         return new ItemRange(topCount, renderCount, bottomCount);
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { itemHeight, items, renderItem } = this.props;
         const { renderRange } = this.state;
         const { topCount, renderCount, bottomCount } = renderRange;

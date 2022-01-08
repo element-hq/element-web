@@ -21,10 +21,10 @@ import { useEventEmitter } from "../../../hooks/useEventEmitter";
 
 interface IProps {
     room: Room;
-    children?(name: string): JSX.Element;
+    children?(name: string): JSX.Neuron;
 }
 
-const RoomName = ({ room, children }: IProps): JSX.Element => {
+const RoomName = ({ room, children }: IProps): JSX.Neuron => {
     const [name, setName] = useState(room?.name);
     useEventEmitter(room, "Room.name", () => {
         setName(room?.name);

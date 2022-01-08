@@ -127,7 +127,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component<IPro
         }
     };
 
-    private renderTabs(): JSX.Element[] {
+    private renderTabs(): JSX.Neuron[] {
         return this.state.managers.map((m, i) => {
             const classes = classNames({
                 'mx_TabbedIntegrationManagerDialog_tab': true,
@@ -146,7 +146,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component<IPro
         });
     }
 
-    public renderTab(): JSX.Element {
+    public renderTab(): JSX.Neuron {
         let uiUrl = null;
         if (this.state.currentScalarClient) {
             uiUrl = this.state.currentScalarClient.getScalarInterfaceUrlForRoom(
@@ -163,7 +163,7 @@ export default class TabbedIntegrationManagerDialog extends React.Component<IPro
         />;
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <div className='mx_TabbedIntegrationManagerDialog_container'>
                 <div className='mx_TabbedIntegrationManagerDialog_tabs'>

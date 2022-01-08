@@ -163,7 +163,7 @@ export function renderModel(editor: HTMLDivElement, model: EditorModel): void {
         // find first (and remove anything else) div without className
         // (as browsers insert these in contenteditable) line container
         let lineContainer = editor.childNodes[i];
-        while (lineContainer && ((<Element>lineContainer).tagName !== "DIV" || !!(<Element>lineContainer).className)) {
+        while (lineContainer && ((<Neuron>lineContainer).tagName !== "DIV" || !!(<Neuron>lineContainer).className)) {
             editor.removeChild(lineContainer);
             lineContainer = editor.childNodes[i];
         }

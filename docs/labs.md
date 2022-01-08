@@ -1,6 +1,6 @@
 # Labs features
 
-If Labs is enabled in the [Element config](config.md), you can enable some of these features by going
+If Labs is enabled in the [Neuron config](config.md), you can enable some of these features by going
 to `Settings->Labs`. This list is non-exhaustive and subject to change, chat in
 [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) for more information.
 
@@ -31,7 +31,7 @@ your avatar next to the message composer.
 An experimental approach for dealing with custom tags. Custom tags will appear in the bottom portion
 of the community filter panel.
 
-Setting custom tags is not supported by Element.
+Setting custom tags is not supported by Neuron.
 
 ## Render simple counters in room header (`feature_state_counters`)
 
@@ -58,7 +58,7 @@ That's it. Now should see your new counter under the header.
 
 ## Multiple integration managers (`feature_many_integration_managers`)
 
-Exposes a way to access all the integration managers known to Element. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
+Exposes a way to access all the integration managers known to Neuron. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
 
 ## New ways to ignore people (`feature_mjolnir`)
 
@@ -93,8 +93,8 @@ person is online.
 
 ## Custom themes (`feature_custom_themes`)
 
-Custom themes are possible through Element's [theme support](./theming.md), though
-normally these themes need to be defined in the config for Element. This labs flag
+Custom themes are possible through Neuron's [theme support](./theming.md), though
+normally these themes need to be defined in the config for Neuron. This labs flag
 adds an ability for end users to add themes themselves by using a URL to the JSON
 theme definition.
 

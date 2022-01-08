@@ -1,10 +1,10 @@
-# How to translate Element
+# How to translate Neuron
 
 ## Requirements
 
 - Web Browser
 - Be able to understand English
-- Be able to understand the language you want to translate Element into
+- Be able to understand the language you want to translate Neuron into
 
 ## Step 0: Join #element-translations:matrix.org
 
@@ -18,7 +18,7 @@
 2. After registering check if you got an email to verify your account and click the link (if there is none head to step 1.4)
 3. Log into weblate
 4. Head to https://translate.element.io/accounts/profile/ and select the languages you know and maybe another language you know too.
-6. Head to https://translate.element.io/accounts/profile/#subscriptions and select Element Web as Project
+6. Head to https://translate.element.io/accounts/profile/#subscriptions and select Neuron Web as Project
 
 ## How to check if your language already is being translated
 
@@ -51,7 +51,7 @@ The yellow button has to be used if you are unsure about the translation but you
 
 ### What are "%(something)s"?
 
-These things are variables that are expanded when displayed by Element. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
+These things are variables that are expanded when displayed by Neuron. They can be room names, usernames or similar. If you find one, you can move to the right place for your language, but not delete it as the variable will be missing if you do.
 
 A special case is `%(urlStart)s` and `%(urlEnd)s` which are used to mark the beginning of a hyperlink (i.e. `<a href="/somewhere">` and `</a>`.  You must keep these markers surrounding the equivalent string in your language that needs to be hyperlinked.
 

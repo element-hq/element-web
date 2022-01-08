@@ -35,7 +35,7 @@ const PADDING = {
 };
 
 interface IChildrenOptions {
-    onStartMoving: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onStartMoving: (event: React.MouseEvent<Neuron, MouseEvent>) => void;
     onResize: (event: Event) => void;
 }
 

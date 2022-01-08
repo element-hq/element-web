@@ -87,7 +87,7 @@ export default class PersistentApp extends React.Component<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (this.state.persistentWidgetId) {
             const persistentWidgetInRoomId = ActiveWidgetStore.instance.getRoomId(this.state.persistentWidgetId);
 

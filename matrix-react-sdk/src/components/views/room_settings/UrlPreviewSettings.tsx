@@ -43,7 +43,7 @@ export default class UrlPreviewSettings extends React.Component<IProps> {
         dis.fire(Action.ViewUserSettings);
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const roomId = this.props.room.roomId;
         const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
 

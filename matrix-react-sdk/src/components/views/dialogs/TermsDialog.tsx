@@ -87,7 +87,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
         this.props.onFinished(true, Object.keys(this.state.agreedUrls).filter((url) => this.state.agreedUrls[url]));
     };
 
-    private nameForServiceType(serviceType: SERVICE_TYPES, host: string): JSX.Element {
+    private nameForServiceType(serviceType: SERVICE_TYPES, host: string): JSX.Neuron {
         switch (serviceType) {
             case SERVICE_TYPES.IS:
                 return <div>{ _t("Identity server") }<br />({ host })</div>;
@@ -96,7 +96,7 @@ export default class TermsDialog extends React.PureComponent<ITermsDialogProps, 
         }
     }
 
-    private summaryForServiceType(serviceType: SERVICE_TYPES): JSX.Element {
+    private summaryForServiceType(serviceType: SERVICE_TYPES): JSX.Neuron {
         switch (serviceType) {
             case SERVICE_TYPES.IS:
                 return <div>

@@ -629,7 +629,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         return thread;
     }
 
-    private renderThreadPanelSummary(): JSX.Element | null {
+    private renderThreadPanelSummary(): JSX.Neuron | null {
         if (!this.thread) {
             return null;
         }
@@ -642,7 +642,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         </div>;
     }
 
-    private renderThreadLastMessagePreview(): JSX.Element | null {
+    private renderThreadLastMessagePreview(): JSX.Neuron | null {
         if (!this.thread) {
             return null;
         }
@@ -974,7 +974,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
     onPermalinkClicked = e => {
         // This allows the permalink to be opened in a new tab/window or copied as
-        // matrix.to, but also for it to enable routing within Element when clicked.
+        // matrix.to, but also for it to enable routing within Neuron when clicked.
         e.preventDefault();
         dis.dispatch({
             action: Action.ViewRoom,
@@ -1637,7 +1637,7 @@ class E2ePadlock extends React.Component<IE2ePadlockProps, IE2ePadlockState> {
         this.setState({ hover: false });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let tooltip = null;
         if (this.state.hover) {
             tooltip = <Tooltip className="mx_EventTile_e2eIcon_tooltip" label={this.props.title} />;

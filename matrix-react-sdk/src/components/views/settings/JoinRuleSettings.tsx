@@ -213,7 +213,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
                 // Block this action on a room upgrade otherwise it'd make their room unjoinable
                 const targetVersion = preferredRestrictionVersion;
 
-                let warning: JSX.Element;
+                let warning: JSX.Neuron;
                 const userId = cli.getUserId();
                 const unableToUpdateSomeParents = Array.from(SpaceStore.instance.getKnownParents(room.roomId))
                     .some(roomId => !cli.getRoom(roomId)?.currentState.maySendStateEvent(EventType.SpaceChild, userId));

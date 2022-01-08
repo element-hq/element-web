@@ -190,7 +190,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
 
     public render(): React.ReactElement<HTMLDivElement> {
         const themeWatcher = new ThemeWatcher();
-        let systemThemeSection: JSX.Element;
+        let systemThemeSection: JSX.Neuron;
         if (themeWatcher.isSystemThemeSupported()) {
             systemThemeSection = <div>
                 <StyledCheckbox
@@ -202,7 +202,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
             </div>;
         }
 
-        let customThemeForm: JSX.Element;
+        let customThemeForm: JSX.Neuron;
         if (SettingsStore.getValue("feature_custom_themes")) {
             let messageElement = null;
             if (this.state.customThemeMessage.text) {

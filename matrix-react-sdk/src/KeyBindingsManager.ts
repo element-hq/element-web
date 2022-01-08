@@ -113,7 +113,7 @@ export enum NavigationAction {
     ToggleUserMenu = 'ToggleUserMenu',
     /** Toggle the short cut help dialog */
     ToggleShortCutDialog = 'ToggleShortCutDialog',
-    /** Got to the Element home screen */
+    /** Got to the Neuron home screen */
     GoToHome = 'GoToHome',
     /** Select prev room */
     SelectPrevRoom = 'SelectPrevRoom',

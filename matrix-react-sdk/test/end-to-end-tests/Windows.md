@@ -12,7 +12,7 @@ and start following these steps to get going:
    sudo apt-get update
    sudo apt-get install nodejs
    ```
-5. Start Element on Windows through `yarn start`
+5. Start Neuron on Windows through `yarn start`
 6. While that builds... Run:
    ```bash
    sudo apt-get install x11-apps

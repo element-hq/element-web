@@ -1,5 +1,5 @@
 {
-    "Welcome to Element": "Element へようこそ",
+    "Welcome to Neuron": "Neuron へようこそ",
     "Unknown device": "不明な端末",
     "Dismiss": "やめる",
     "powered by Matrix": "powered by Matrix",
@@ -27,8 +27,8 @@
     "Unsupported browser": "サポートされていないブラウザ",
     "Go to element.io": "element.ioへ移動",
     "Failed to start": "起動に失敗しました",
-    "Your Element is misconfigured": "Elementの設定が間違っています",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読込してください。",
+    "Your Neuron is misconfigured": "Elementの設定が間違っています",
+    "Your Neuron configuration contains invalid JSON. Please correct the problem and reload the page.": "Elementの設定ファイルに不正なJSONが含まれています。問題を修正してからページを再読込してください。",
     "Your browser can't run %(brand)s": "このブラウザでは%(brand)sが動きません",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)sはブラウザの高度な機能を使う必要がありますが、このブラウザではその機能がサポートされていないようです。",
     "Powered by Matrix": "Powered by Matrix",

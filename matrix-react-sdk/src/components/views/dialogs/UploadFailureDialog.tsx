@@ -45,7 +45,7 @@ export default class UploadFailureDialog extends React.Component<IProps> {
         this.props.onFinished(true);
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let message;
         let preview;
         let buttons;

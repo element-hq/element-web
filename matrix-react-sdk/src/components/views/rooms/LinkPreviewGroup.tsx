@@ -50,7 +50,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
 
     const showPreviews = expanded ? previews : previews.slice(0, INITIAL_NUM_PREVIEWS);
 
-    let toggleButton: JSX.Element;
+    let toggleButton: JSX.Neuron;
     if (previews.length > INITIAL_NUM_PREVIEWS) {
         toggleButton = <AccessibleButton onClick={toggleExpanded}>
             { expanded

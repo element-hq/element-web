@@ -227,7 +227,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
         onFinished();
     };
 
-    let content: JSX.Element;
+    let content: JSX.Neuron;
     if (results) {
         const [people, rooms, spaces] = results.reduce((result, room: Room) => {
             if (room.isSpaceRoom()) result[2].push(room);
@@ -236,7 +236,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             return result;
         }, [[], [], []] as [Room[], Room[], Room[]]);
 
-        const resultMapper = (room: Room): JSX.Element => (
+        const resultMapper = (room: Room): JSX.Neuron => (
             <Option
                 id={`mx_SpotlightDialog_button_result_${room.roomId}`}
                 key={room.roomId}
@@ -251,7 +251,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             </Option>
         );
 
-        let peopleSection: JSX.Element;
+        let peopleSection: JSX.Neuron;
         if (people.length) {
             peopleSection = <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
                 <h4>{ _t("People") }</h4>
@@ -261,7 +261,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             </div>;
         }
 
-        let roomsSection: JSX.Element;
+        let roomsSection: JSX.Neuron;
         if (rooms.length) {
             roomsSection = <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
                 <h4>{ _t("Rooms") }</h4>
@@ -271,7 +271,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             </div>;
         }
 
-        let spacesSection: JSX.Element;
+        let spacesSection: JSX.Neuron;
         if (spaces.length) {
             spacesSection = <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
                 <h4>{ _t("Spaces you're in") }</h4>
@@ -281,12 +281,12 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             </div>;
         }
 
-        let spaceRoomsSection: JSX.Element;
+        let spaceRoomsSection: JSX.Neuron;
         if (spaceResults.length) {
             spaceRoomsSection = <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
                 <h4>{ _t("Other rooms in %(spaceName)s", { spaceName: activeSpace.name }) }</h4>
                 <div>
-                    { spaceResults.slice(0, SECTION_LIMIT).map((room: IHierarchyRoom): JSX.Element => (
+                    { spaceResults.slice(0, SECTION_LIMIT).map((room: IHierarchyRoom): JSX.Neuron => (
                         <Option
                             id={`mx_SpotlightDialog_button_result_${room.room_id}`}
                             key={room.room_id}
@@ -358,7 +358,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             </div>
         </>;
     } else {
-        let recentSearchesSection: JSX.Element;
+        let recentSearchesSection: JSX.Neuron;
         if (recentSearches.length) {
             recentSearchesSection = (
                 <div className="mx_SpotlightDialog_section mx_SpotlightDialog_recentSearches" role="group">

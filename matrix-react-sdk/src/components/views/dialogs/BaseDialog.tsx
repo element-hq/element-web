@@ -50,7 +50,7 @@ interface IProps extends IDialogProps {
     fixedWidth?: boolean;
 
     // Title for the dialog.
-    title?: JSX.Element | string;
+    title?: JSX.Neuron | string;
 
     // Path to an icon to put in the header
     headerImage?: string;
@@ -65,7 +65,7 @@ interface IProps extends IDialogProps {
     // optional additional class for the title element (basically anything that can be passed to classnames)
     titleClass?: string | string[];
 
-    headerButton?: JSX.Element;
+    headerButton?: JSX.Neuron;
 }
 
 /*
@@ -104,7 +104,7 @@ export default class BaseDialog extends React.Component<IProps> {
         this.props.onFinished(false);
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let cancelButton;
         if (this.props.hasCancel) {
             cancelButton = (

@@ -56,7 +56,7 @@ const LegacyCommunityPreview = ({ groupId }: IProps) => {
         </main>;
     }
 
-    let visibilitySection: JSX.Element;
+    let visibilitySection: JSX.Neuron;
     if (groupSummary.profile.is_public) {
         visibilitySection = <span className="mx_SpaceRoomView_info_public">
             { _t("Public community") }

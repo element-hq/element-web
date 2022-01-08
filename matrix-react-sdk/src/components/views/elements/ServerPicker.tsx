@@ -44,7 +44,7 @@ const onHelpClick = () => {
     Modal.createTrackedDialog('Custom Server Dialog', '', InfoDialog, {
         title: _t("Server Options"),
         description: _t("You can use the custom server options to sign into other Matrix servers by specifying " +
-            "a different homeserver URL. This allows you to use Element with an existing Matrix account on " +
+            "a different homeserver URL. This allows you to use Neuron with an existing Matrix account on " +
             "a different homeserver."),
         button: _t("Dismiss"),
         hasCloseButton: false,

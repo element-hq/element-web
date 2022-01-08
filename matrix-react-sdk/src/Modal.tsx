@@ -122,17 +122,17 @@ export class ModalManager {
     }
 
     public createDialog<T extends any[]>(
-        Element: React.ComponentType,
+        Neuron: React.ComponentType,
         ...rest: ParametersWithoutFirst<ModalManager["createDialogAsync"]>
     ) {
-        return this.createDialogAsync<T>(Promise.resolve(Element), ...rest);
+        return this.createDialogAsync<T>(Promise.resolve(Neuron), ...rest);
     }
 
     public appendDialog<T extends any[]>(
-        Element: React.ComponentType,
+        Neuron: React.ComponentType,
         ...rest: ParametersWithoutFirst<ModalManager["appendDialogAsync"]>
     ) {
-        return this.appendDialogAsync<T>(Promise.resolve(Element), ...rest);
+        return this.appendDialogAsync<T>(Promise.resolve(Neuron), ...rest);
     }
 
     public createTrackedDialogAsync<T extends any[]>(
@@ -337,7 +337,7 @@ export class ModalManager {
         await sleep(0);
 
         if (this.modals.length === 0 && !this.priorityModal && !this.staticModal) {
-            // If there is no modal to render, make all of Element available
+            // If there is no modal to render, make all of Neuron available
             // to screen reader users again
             dis.dispatch({
                 action: 'aria_unhide_main_app',

@@ -172,7 +172,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let currentUploadedFile = null;
         if (this.state.uploadedFile) {
             currentUploadedFile = (

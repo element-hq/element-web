@@ -31,7 +31,7 @@ export default class IntegrationsImpossibleDialog extends React.Component<IProps
         this.props.onFinished();
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const brand = SdkConfig.get().brand;
 
         return (

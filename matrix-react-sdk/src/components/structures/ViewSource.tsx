@@ -57,7 +57,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
     }
 
     // returns the dialog body for viewing the event source
-    private viewSourceContent(): JSX.Element {
+    private viewSourceContent(): JSX.Neuron {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
         const isEncrypted = mxEvent.isEncrypted();
         // @ts-ignore
@@ -106,7 +106,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
     }
 
     // returns the SendCustomEvent component prefilled with the correct details
-    private editSourceContent(): JSX.Element {
+    private editSourceContent(): JSX.Neuron {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
 
         const isStateEvent = mxEvent.isState();
@@ -171,7 +171,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
         return room.currentState.mayClientSendStateEvent(mxEvent.getType(), cli);
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const mxEvent = this.props.mxEvent.replacingEvent() || this.props.mxEvent; // show the replacing event, not the original, if it is an edit
 
         const isEditing = this.state.isEditing;

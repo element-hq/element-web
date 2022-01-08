@@ -32,7 +32,7 @@ const ErrorView: React.FC<IProps> = ({ title, messages }) => {
         <div className="mx_ErrorView_container">
             <div className="mx_HomePage_header">
                 <span className="mx_HomePage_logo">
-                    <img height="42" src="themes/element/img/logos/element-logo.svg" alt="Element" />
+                    <img height="42" src="themes/element/img/logos/element-logo.svg" alt="Neuron" />
                 </span>
                 <h1>{ _t("Failed to start") }</h1>
             </div>

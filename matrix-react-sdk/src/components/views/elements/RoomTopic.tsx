@@ -23,12 +23,12 @@ import { linkifyElement } from "../../../HtmlUtils";
 
 interface IProps {
     room?: Room;
-    children?(topic: string, ref: (element: HTMLElement) => void): JSX.Element;
+    children?(topic: string, ref: (element: HTMLElement) => void): JSX.Neuron;
 }
 
 export const getTopic = room => room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
 
-const RoomTopic = ({ room, children }: IProps): JSX.Element => {
+const RoomTopic = ({ room, children }: IProps): JSX.Neuron => {
     const [topic, setTopic] = useState(getTopic(room));
     useEventEmitter(room.currentState, "RoomState.events", () => {
         setTopic(getTopic(room));

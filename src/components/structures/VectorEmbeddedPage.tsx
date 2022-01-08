@@ -23,7 +23,7 @@ import { _t } from 'matrix-react-sdk/src/languageHandler';
 export default class VectorEmbeddedPage extends EmbeddedPage {
     static replaces = 'EmbeddedPage';
 
-    // we're overriding the base component here, for Element-specific tweaks
+    // we're overriding the base component here, for Neuron-specific tweaks
     translate(s: string) {
         s = sanitizeHtml(_t(s));
         // ugly fix for https://github.com/vector-im/element-web/issues/4243

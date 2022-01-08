@@ -35,7 +35,7 @@ export default class UIStore extends EventEmitter {
     private resizeObserver: ResizeObserver;
 
     private uiElementDimensions = new Map<string, DOMRectReadOnly>();
-    private trackedUiElements = new Map<Element, string>();
+    private trackedUiElements = new Map<Neuron, string>();
 
     public windowWidth: number;
     public windowHeight: number;
@@ -71,13 +71,13 @@ export default class UIStore extends EventEmitter {
         return this.uiElementDimensions.get(name);
     }
 
-    public trackElementDimensions(name: string, element: Element): void {
+    public trackElementDimensions(name: string, element: Neuron): void {
         this.trackedUiElements.set(element, name);
         this.resizeObserver.observe(element);
     }
 
     public stopTrackingElementDimensions(name: string): void {
-        let trackedElement: Element;
+        let trackedElement: Neuron;
         this.trackedUiElements.forEach((trackedElementName, element) => {
             if (trackedElementName === name) {
                 trackedElement = element;

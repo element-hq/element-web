@@ -193,7 +193,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
 
     const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
 
-    let contextMenu: JSX.Element;
+    let contextMenu: JSX.Neuron;
     if (mainMenuDisplayed) {
         let ContextMenuComponent;
         if (activeSpace) {
@@ -211,7 +211,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
             hideHeader={true}
         />;
     } else if (plusMenuDisplayed && activeSpace) {
-        let inviteOption: JSX.Element;
+        let inviteOption: JSX.Neuron;
         if (shouldShowSpaceInvite(activeSpace)) {
             inviteOption = <IconizedContextMenuOption
                 label={_t("Invite")}
@@ -236,7 +236,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
             />;
         }
 
-        let createNewRoomOption: JSX.Element;
+        let createNewRoomOption: JSX.Neuron;
         if (activeSpace?.currentState.maySendStateEvent(EventType.RoomAvatar, cli.getUserId())) {
             createNewRoomOption = <IconizedContextMenuOption
                 iconClassName="mx_RoomListHeader_iconCreateRoom"
@@ -330,7 +330,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
         title = getMetaSpaceName(spaceKey as MetaSpace, allRoomsInHome);
     }
 
-    let pendingRoomJoinSpinner: JSX.Element;
+    let pendingRoomJoinSpinner: JSX.Neuron;
     if (joiningRooms.size) {
         pendingRoomJoinSpinner = <TooltipTarget
             label={_t("Currently joining %(count)s rooms", { count: joiningRooms.size })}
@@ -339,7 +339,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
         </TooltipTarget>;
     }
 
-    let contextMenuButton: JSX.Element = <div className="mx_RoomListHeader_contextLessTitle">{ title }</div>;
+    let contextMenuButton: JSX.Neuron = <div className="mx_RoomListHeader_contextLessTitle">{ title }</div>;
     if (activeSpace || spaceKey === MetaSpace.Home) {
         contextMenuButton = <ContextMenuTooltipButton
             inputRef={mainMenuHandle}

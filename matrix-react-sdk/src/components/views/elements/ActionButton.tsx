@@ -30,7 +30,7 @@ interface IProps {
     label: string;
     iconPath?: string;
     className?: string;
-    children?: JSX.Element;
+    children?: JSX.Neuron;
 }
 
 interface IState {

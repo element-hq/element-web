@@ -152,7 +152,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             oobName = this.props.oobData.name;
         }
 
-        let contextMenu: JSX.Element;
+        let contextMenu: JSX.Neuron;
         if (this.state.contextMenuPosition && this.props.room) {
             contextMenu = (
                 <RoomContextMenu
@@ -206,7 +206,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             />;
         }
 
-        const buttons: JSX.Element[] = [];
+        const buttons: JSX.Neuron[] = [];
 
         if (this.props.inRoom && SettingsStore.getValue("showCallButtonsInComposer")) {
             const voiceCallButton = <AccessibleTooltipButton

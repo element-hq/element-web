@@ -41,7 +41,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
         );
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const title = <span className="mx_KeyBackupFailedDialog_title">
             { _t("Recovery Method Removed") }
         </span>;

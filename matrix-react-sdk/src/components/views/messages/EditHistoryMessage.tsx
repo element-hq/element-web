@@ -52,7 +52,7 @@ interface IState {
 @replaceableComponent("views.messages.EditHistoryMessage")
 export default class EditHistoryMessage extends React.PureComponent<IProps, IState> {
     private content = createRef<HTMLDivElement>();
-    private pills: Element[] = [];
+    private pills: Neuron[] = [];
 
     constructor(props: IProps) {
         super(props);
@@ -110,7 +110,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         this.pillifyLinks();
     }
 
-    private renderActionBar(): JSX.Element {
+    private renderActionBar(): JSX.Neuron {
         // hide the button when already redacted
         let redactButton;
         if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
@@ -134,7 +134,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         );
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { mxEvent } = this.props;
         const content = getReplacedContent(mxEvent);
         let contentContainer;

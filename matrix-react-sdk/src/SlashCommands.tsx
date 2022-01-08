@@ -22,7 +22,7 @@ import { User } from "matrix-js-sdk/src/models/user";
 import { Direction } from 'matrix-js-sdk/src/models/event-timeline';
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
-import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
+import { parseFragment as parseHtml, Neuron as ChildElement } from "parse5";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
@@ -559,7 +559,7 @@ export const Commands = [
                     const parsedUrl = new URL(params[0]);
                     const hostname = parsedUrl.host || parsedUrl.hostname; // takes first non-falsey value
 
-                    // if we're using a Element permalink handler, this will catch it before we get much further.
+                    // if we're using a Neuron permalink handler, this will catch it before we get much further.
                     // see below where we make assumptions about parsing the URL.
                     if (isPermalinkHost(hostname)) {
                         isPermalink = true;

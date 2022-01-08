@@ -301,15 +301,15 @@ export default class MemberList extends React.Component<IProps, IState> {
         return filteredAndSortedMembers;
     }
 
-    private createOverflowTileJoined = (overflowCount: number, totalCount: number): JSX.Element => {
+    private createOverflowTileJoined = (overflowCount: number, totalCount: number): JSX.Neuron => {
         return this.createOverflowTile(overflowCount, totalCount, this.showMoreJoinedMemberList);
     };
 
-    private createOverflowTileInvited = (overflowCount: number, totalCount: number): JSX.Element => {
+    private createOverflowTileInvited = (overflowCount: number, totalCount: number): JSX.Neuron => {
         return this.createOverflowTile(overflowCount, totalCount, this.showMoreInvitedMemberList);
     };
 
-    private createOverflowTile = (overflowCount: number, totalCount: number, onClick: () => void): JSX.Element=> {
+    private createOverflowTile = (overflowCount: number, totalCount: number, onClick: () => void): JSX.Neuron=> {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (
@@ -488,13 +488,13 @@ export default class MemberList extends React.Component<IProps, IState> {
         });
     }
 
-    private getChildrenJoined = (start: number, end: number): Array<JSX.Element> => {
+    private getChildrenJoined = (start: number, end: number): Array<JSX.Neuron> => {
         return this.makeMemberTiles(this.state.filteredJoinedMembers.slice(start, end));
     };
 
     private getChildCountJoined = (): number => this.state.filteredJoinedMembers.length;
 
-    private getChildrenInvited = (start: number, end: number): Array<JSX.Element> => {
+    private getChildrenInvited = (start: number, end: number): Array<JSX.Neuron> => {
         let targets = this.state.filteredInvitedMembers;
         if (end > this.state.filteredInvitedMembers.length) {
             targets = targets.concat(this.getPending3PidInvites());

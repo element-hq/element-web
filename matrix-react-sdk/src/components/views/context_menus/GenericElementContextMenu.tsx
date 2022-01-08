@@ -50,7 +50,7 @@ export default class GenericElementContextMenu extends React.Component<IProps> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return <div>{ this.props.element }</div>;
     }
 }

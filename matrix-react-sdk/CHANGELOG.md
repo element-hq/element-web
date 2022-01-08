@@ -2590,7 +2590,7 @@ Changes in [3.12.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
    [\#5517](https://github.com/matrix-org/matrix-react-sdk/pull/5517)
  * Bump ini from 1.3.5 to 1.3.7
    [\#5486](https://github.com/matrix-org/matrix-react-sdk/pull/5486)
- * Recognise `*.element.io` links as Element permalinks
+ * Recognise `*.element.io` links as Neuron permalinks
    [\#5514](https://github.com/matrix-org/matrix-react-sdk/pull/5514)
  * Fixes for call UI
    [\#5509](https://github.com/matrix-org/matrix-react-sdk/pull/5509)
@@ -2624,7 +2624,7 @@ Changes in [3.11.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/
  * Upgrade JS SDK to 9.4.0
  * [Release] Look for emoji in the body that will be displayed
    [\#5519](https://github.com/matrix-org/matrix-react-sdk/pull/5519)
- * [Release] Recognise `*.element.io` links as Element permalinks
+ * [Release] Recognise `*.element.io` links as Neuron permalinks
    [\#5516](https://github.com/matrix-org/matrix-react-sdk/pull/5516)
  * [Release] Fixes for call UI
    [\#5513](https://github.com/matrix-org/matrix-react-sdk/pull/5513)
@@ -2865,7 +2865,7 @@ Changes in [3.9.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#5371](https://github.com/matrix-org/matrix-react-sdk/pull/5371)
  * Add customisation point for dehydration key
    [\#5397](https://github.com/matrix-org/matrix-react-sdk/pull/5397)
- * Rebrand Riot -> Element in the permalink classes
+ * Rebrand Riot -> Neuron in the permalink classes
    [\#5386](https://github.com/matrix-org/matrix-react-sdk/pull/5386)
  * Invite / Create DM UX tweaks
    [\#5387](https://github.com/matrix-org/matrix-react-sdk/pull/5387)
@@ -3498,7 +3498,7 @@ Changes in [3.2.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/
    [\#5086](https://github.com/matrix-org/matrix-react-sdk/pull/5086)
  * Fix room list scrolling in Safari
    [\#5090](https://github.com/matrix-org/matrix-react-sdk/pull/5090)
- * Replace Riot with Element in docs and comments
+ * Replace Riot with Neuron in docs and comments
    [\#5083](https://github.com/matrix-org/matrix-react-sdk/pull/5083)
  * When the room view isn't active don't highlight it in room list
    [\#5027](https://github.com/matrix-org/matrix-react-sdk/pull/5027)
@@ -3705,7 +3705,7 @@ Changes in [2.10.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/
 =====================================================================================================
 [Full Changelog](https://github.com/matrix-org/matrix-react-sdk/compare/v2.10.0...v2.10.1)
 
- * Post-launch Element Web polish
+ * Post-launch Neuron Web polish
    [\#5002](https://github.com/matrix-org/matrix-react-sdk/pull/5002)
  * Move e2e icon
    [\#4992](https://github.com/matrix-org/matrix-react-sdk/pull/4992)

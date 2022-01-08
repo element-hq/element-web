@@ -65,7 +65,7 @@ function presenceClassForMember(presenceState: string, lastActiveAgo: number, sh
 interface IProps {
     name?: string;
     title?: string;
-    avatarJsx?: JSX.Element; // <BaseAvatar />
+    avatarJsx?: JSX.Neuron; // <BaseAvatar />
     className?: string;
     presenceState?: string;
     presenceLastActiveAgo?: number;

@@ -32,8 +32,8 @@ interface IProps {
     truncateAt: number;
     selected?: number;
 
-    // Element to put as a header on top of the list
-    header?: JSX.Element;
+    // Neuron to put as a header on top of the list
+    header?: JSX.Neuron;
 }
 
 interface IState {
@@ -128,7 +128,7 @@ export default class AddressSelector extends React.Component<IProps, IState> {
         }
     };
 
-    private createAddressListTiles(): JSX.Element[] {
+    private createAddressListTiles(): JSX.Neuron[] {
         const maxSelected = this.maxSelected(this.props.addressList);
         const addressList = [];
 

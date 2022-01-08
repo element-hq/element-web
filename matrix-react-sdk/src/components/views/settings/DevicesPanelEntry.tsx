@@ -116,7 +116,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const device = this.props.device;
 
         let lastSeen = "";
@@ -131,7 +131,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         const myDeviceClass = this.props.isOwnDevice ? " mx_DevicesPanel_myDevice" : '';
 
         let iconClass = '';
-        let verifyButton: JSX.Element;
+        let verifyButton: JSX.Neuron;
         if (this.props.verified !== null) {
             iconClass = this.props.verified ? "mx_E2EIcon_verified" : "mx_E2EIcon_warning";
             if (!this.props.verified && this.props.canBeVerified) {
@@ -141,7 +141,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
             }
         }
 
-        let signOutButton: JSX.Element;
+        let signOutButton: JSX.Neuron;
         if (this.props.isOwnDevice) {
             signOutButton = <AccessibleButton kind="danger_outline" onClick={this.onOwnDeviceSignOut}>
                 { _t("Sign Out") }

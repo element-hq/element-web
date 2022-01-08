@@ -119,7 +119,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         this.loadMoreEdits();
     }
 
-    private renderEdits(): JSX.Element[] {
+    private renderEdits(): JSX.Neuron[] {
         const nodes = [];
         let lastEvent;
         let allEvents = this.state.events;
@@ -146,7 +146,7 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
         return nodes;
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let content;
         if (this.state.error) {
             const { error } = this.state;

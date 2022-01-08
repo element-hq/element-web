@@ -82,7 +82,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
         this.setState({ errored: true });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         if (this.props.loading) {
             return (
                 <div className='mx_IntegrationManager_loading'>

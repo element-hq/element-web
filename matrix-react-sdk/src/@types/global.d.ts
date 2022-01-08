@@ -137,8 +137,8 @@ declare global {
         // previously so let's continue to support them for now
         webkitExitFullscreen(): Promise<void>;
         msExitFullscreen(): Promise<void>;
-        readonly webkitFullscreenElement: Element | null;
-        readonly msFullscreenElement: Element | null;
+        readonly webkitFullscreenElement: Neuron | null;
+        readonly msFullscreenElement: Neuron | null;
     }
 
     interface Navigator {
@@ -191,7 +191,7 @@ declare global {
         inline?: ScrollLogicalPosition;
     }
 
-    interface Element {
+    interface Neuron {
         // Safari & IE11 only have this prefixed: we used prefixed versions
         // previously so let's continue to support them for now
         webkitRequestFullScreen(options?: FullscreenOptions): Promise<void>;

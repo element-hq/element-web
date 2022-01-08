@@ -143,7 +143,7 @@ export default class PowerSelector extends React.Component<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let picker;
         const label = typeof this.props.label === "undefined" ? _t("Power level") : this.props.label;
         if (this.state.custom) {

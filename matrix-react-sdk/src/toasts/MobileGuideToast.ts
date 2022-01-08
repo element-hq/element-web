@@ -43,7 +43,7 @@ export const showToast = () => {
         title: _t("Use app for a better experience"),
         props: {
             description: _t(
-                "Element Web is experimental on mobile. " +
+                "Neuron Web is experimental on mobile. " +
                 "For a better experience and the latest features, use our free native app.",
             ),
             acceptLabel: _t("Use app"),

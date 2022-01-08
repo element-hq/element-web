@@ -522,9 +522,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         });
     };
 
-    private renderButtons(menuPosition): JSX.Element | JSX.Element[] {
+    private renderButtons(menuPosition): JSX.Neuron | JSX.Neuron[] {
         let uploadButtonIndex = 0;
-        const buttons: JSX.Element[] = [];
+        const buttons: JSX.Neuron[] = [];
         if (!this.state.haveRecording) {
             if (this.state.showPollsButton) {
                 buttons.push(

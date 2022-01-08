@@ -93,7 +93,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
         this.setState({ callState: newState });
     };
 
-    private renderCallBackButton(text: string): JSX.Element {
+    private renderCallBackButton(text: string): JSX.Neuron {
         return (
             <AccessibleButton
                 className="mx_CallEvent_content_button mx_CallEvent_content_button_callBack"
@@ -105,7 +105,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
         );
     }
 
-    private renderSilenceIcon(): JSX.Element {
+    private renderSilenceIcon(): JSX.Neuron {
         const silenceClass = classNames({
             "mx_CallEvent_iconButton": true,
             "mx_CallEvent_unSilence": this.state.silenced,
@@ -121,7 +121,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
         );
     }
 
-    private renderContent(state: CallState | CustomCallState): JSX.Element {
+    private renderContent(state: CallState | CustomCallState): JSX.Neuron {
         if (state === CallState.Ringing) {
             let silenceIcon;
             if (!this.state.narrow) {

@@ -88,7 +88,7 @@ const CreateSubspaceDialog: React.FC<IProps> = ({ space, onAddExistingSpaceClick
         }
     };
 
-    let joinRuleMicrocopy: JSX.Element;
+    let joinRuleMicrocopy: JSX.Neuron;
     if (joinRule === JoinRule.Restricted) {
         joinRuleMicrocopy = <p>
             { _t(

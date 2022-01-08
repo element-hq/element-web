@@ -235,7 +235,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
-        let publicPrivateLabel: JSX.Element;
+        let publicPrivateLabel: JSX.Neuron;
         if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
             publicPrivateLabel = <p>
                 { _t(

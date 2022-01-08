@@ -197,7 +197,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { address } = this.props.email;
         const { verifying, bound } = this.state;
 
@@ -246,7 +246,7 @@ interface IProps {
 
 @replaceableComponent("views.settings.discovery.EmailAddresses")
 export default class EmailAddresses extends React.Component<IProps> {
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         let content;
         if (this.props.emails.length > 0) {
             content = this.props.emails.map((e) => {

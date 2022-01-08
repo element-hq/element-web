@@ -9,7 +9,7 @@ handle_error() {
 
 trap 'handle_error' ERR
 
-echo "--- Building Element"
+echo "--- Building Neuron"
 scripts/ci/layered.sh
 cd element-web
 element_web_dir=`pwd`

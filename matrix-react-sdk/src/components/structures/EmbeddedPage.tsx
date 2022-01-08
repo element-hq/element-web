@@ -113,7 +113,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         // HACK: Workaround for the context's MatrixClient not updating.
         const client = this.context || MatrixClientPeg.get();
         const isGuest = client ? client.isGuest() : true;

@@ -130,13 +130,13 @@ export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
         MatrixClientPeg.get().setFallbackICEServerAllowed(allow);
     };
 
-    private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Element> {
+    private renderDeviceOptions(devices: Array<MediaDeviceInfo>, category: MediaDeviceKindEnum): Array<JSX.Neuron> {
         return devices.map((d) => {
             return (<option key={`${category}-${d.deviceId}`} value={d.deviceId}>{ d.label }</option>);
         });
     }
 
-    private renderDropdown(kind: MediaDeviceKindEnum, label: string): JSX.Element {
+    private renderDropdown(kind: MediaDeviceKindEnum, label: string): JSX.Neuron {
         const devices = this.state.mediaDevices[kind].slice(0);
         if (devices.length === 0) return null;
 

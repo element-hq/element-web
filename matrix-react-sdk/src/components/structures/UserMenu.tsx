@@ -73,7 +73,7 @@ const CustomStatusSection = () => {
         'mx_UserMenu_CustomStatusSection_field_hasQuery': value,
     });
 
-    let details: JSX.Element;
+    let details: JSX.Neuron;
     if (value !== setStatus) {
         details = <>
             <p>{ _t("Your status will be shown to people you have a DM with.") }</p>
@@ -414,12 +414,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
-        let customStatusSection: JSX.Element;
+        let customStatusSection: JSX.Neuron;
         if (SettingsStore.getValue("feature_custom_status")) {
             customStatusSection = <CustomStatusSection />;
         }
 
-        let dndButton: JSX.Element;
+        let dndButton: JSX.Neuron;
         if (SettingsStore.getValue("feature_dnd")) {
             dndButton = (
                 <IconizedContextMenuCheckbox
@@ -528,12 +528,12 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
-        let badge: JSX.Element;
+        let badge: JSX.Neuron;
         if (this.state.dndEnabled) {
             badge = <div className="mx_UserMenu_dndBadge" />;
         }
 
-        let name: JSX.Element;
+        let name: JSX.Neuron;
         if (!this.props.isPanelCollapsed) {
             name = <div className="mx_UserMenu_name">
                 { displayName }

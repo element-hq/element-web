@@ -54,7 +54,7 @@ export class IgnoredUser extends React.Component<IIgnoredUserProps> {
         this.props.onUnignored(this.props.userId);
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const id = `mx_SecurityUserSettingsTab_ignoredUser_${this.props.userId}`;
         return (
             <div className='mx_SecurityUserSettingsTab_ignoredUser'>
@@ -222,7 +222,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         this.manageInvites(false);
     };
 
-    private renderIgnoredUsers(): JSX.Element {
+    private renderIgnoredUsers(): JSX.Neuron {
         const { waitingUnignored, ignoredUserIds } = this.state;
 
         const userIds = !ignoredUserIds?.length
@@ -248,7 +248,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    private renderManageInvites(): JSX.Element {
+    private renderManageInvites(): JSX.Neuron {
         const { invitedRoomIds } = this.state;
 
         if (invitedRoomIds.size === 0) {
@@ -269,7 +269,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         );
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const secureBackup = (
             <div className='mx_SettingsTab_section'>
                 <span className="mx_SettingsTab_subheading">{ _t("Secure Backup") }</span>

@@ -81,7 +81,7 @@ export default class DirectorySearchBox extends React.Component<IProps, IState> 
         }
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const searchboxClasses = {
             mx_DirectorySearchBox: true,
         };

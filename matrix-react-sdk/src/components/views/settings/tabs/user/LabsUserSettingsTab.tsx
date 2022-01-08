@@ -39,7 +39,7 @@ export class LabsSettingToggle extends React.Component<ILabsSettingToggleProps> 
         this.forceUpdate();
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const label = SettingsStore.getDisplayName(this.props.featureId);
         const value = SettingsStore.getValue(this.props.featureId);
         const canChange = SettingsStore.canSetValue(this.props.featureId, null, SettingLevel.DEVICE);
@@ -71,7 +71,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
         };
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const features = SettingsStore.getFeatureSettingNames();
         const [labs, betas] = features.reduce((arr, f) => {
             arr[SettingsStore.getBetaInfo(f) ? 1 : 0].push(f);
@@ -87,7 +87,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
 
         let labsSection;
         if (SdkConfig.get()['showLabsSettings']) {
-            const groups = new EnhancedMap<LabGroup, JSX.Element[]>();
+            const groups = new EnhancedMap<LabGroup, JSX.Neuron[]>();
             labs.forEach(f => {
                 groups.getOrCreate(SettingsStore.getLabGroup(f), []).push(
                     <LabsSettingToggle featureId={f} key={f} />,

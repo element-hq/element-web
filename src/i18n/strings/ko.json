@@ -2,7 +2,7 @@
     "Dismiss": "버리기",
     "powered by Matrix": "Matrix의 지원을 받음",
     "Unknown device": "알 수 없는 기기",
-    "Welcome to Element": "Element에 오신 것을 환영합니다",
+    "Welcome to Neuron": "Element에 오신 것을 환영합니다",
     "You need to be using HTTPS to place a screen-sharing call.": "화면 공유 전화를 걸려면 HTTPS를 사용해야 합니다.",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "분산되고, 암호화된 대화 &amp; [matrix]의 지원으로 협력",
     "The message from the parser is: %(message)s": "파서에서 온 메시지: %(message)s",
@@ -32,6 +32,6 @@
     "Switch to space by number": "숫자로 스페이스 전환하기",
     "Open": "열기",
     "Download Completed": "다운로드 완료",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "당신의 Element 설정은 유효하지 않은 JSON을 포함합니다. 이 문제를 해결하고 페이지를 새로고침해주세요.",
-    "Your Element is misconfigured": "당신의 Element가 잘못 설정되었습니다"
+    "Your Neuron configuration contains invalid JSON. Please correct the problem and reload the page.": "당신의 Neuron 설정은 유효하지 않은 JSON을 포함합니다. 이 문제를 해결하고 페이지를 새로고침해주세요.",
+    "Your Neuron is misconfigured": "당신의 Element가 잘못 설정되었습니다"
 }

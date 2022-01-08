@@ -105,7 +105,7 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
                 </React.Fragment>;
             }
 
-            let clearCacheButton: JSX.Element;
+            let clearCacheButton: JSX.Neuron;
             // we only show this button if there is an initialised MatrixClient otherwise we can't clear the cache
             if (MatrixClientPeg.get()) {
                 clearCacheButton = <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>

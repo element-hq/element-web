@@ -26,7 +26,7 @@ interface IProps {
 
 @replaceableComponent("views.elements.crypto.VerificationQRCode")
 export default class VerificationQRCode extends React.PureComponent<IProps> {
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <QRCode
                 data={[{ data: this.props.qrCodeData.getBuffer(), mode: 'byte' }]}

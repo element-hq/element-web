@@ -1,7 +1,7 @@
 # Pull Request Previews
 
 Pull requests to the React SDK layer (and in the future other layers as well)
-automatically set up a preview site with a full deployment of Element with the
+automatically set up a preview site with a full deployment of Neuron with the
 changes from the pull request added in so that anyone can easily test and review
 them. This is especially useful for checking visual and interactive changes.
 

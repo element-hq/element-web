@@ -1,41 +1,41 @@
-Element
+Neuron
 =======
 
-Element (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
+Neuron (formerly known as Vector and Riot) is a Matrix web client built using the [Matrix
 React SDK](https://github.com/matrix-org/matrix-react-sdk).
 
 Supported Environments
 ======================
 
-Element has several tiers of support for different environments:
+Neuron has several tiers of support for different environments:
 
 * Supported
   * Definition: Issues **actively triaged**, regressions **block** the release
   * Last 2 major versions of Chrome, Firefox, Safari, and Edge on desktop OSes
-  * Latest release of official Element Desktop app on desktop OSes
+  * Latest release of official Neuron Desktop app on desktop OSes
   * Desktop OSes means macOS, Windows, and Linux versions for desktop devices
     that are actively supported by the OS vendor and receive security updates
 * Experimental
   * Definition: Issues **accepted**, regressions **do not block** the release
-  * Element as an installed PWA via current stable version of Chrome, Firefox, and Safari
+  * Neuron as an installed PWA via current stable version of Chrome, Firefox, and Safari
   * Mobile web for current stable version of Chrome, Firefox, and Safari on Android, iOS, and iPadOS
 * Not supported
   * Definition: Issues only affecting unsupported environments are **closed**
   * Everything else
 
-For accessing Element on an Android or iOS device, we currently recommend the
+For accessing Neuron on an Android or iOS device, we currently recommend the
 native apps [element-android](https://github.com/vector-im/element-android)
 and [element-ios](https://github.com/vector-im/element-ios).
 
 Getting Started
 ===============
 
-The easiest way to test Element is to just use the hosted copy at <https://app.element.io>.
+The easiest way to test Neuron is to just use the hosted copy at <https://app.element.io>.
 The `develop` branch is continuously deployed to <https://develop.element.io>
 for those who like living dangerously.
 
-To host your own copy of Element, the quickest bet is to use a pre-built
-released version of Element:
+To host your own copy of Neuron, the quickest bet is to use a pre-built
+released version of Neuron:
 
 1. Download the latest version from <https://github.com/vector-im/element-web/releases>
 1. Untar the tarball on your web server
@@ -43,19 +43,19 @@ released version of Element:
 1. Configure the correct caching headers in your webserver (see below)
 1. If desired, copy `config.sample.json` to `config.json` and edit it
    as desired. See the [configuration docs](docs/config.md) for details.
-1. Enter the URL into your browser and log into Element!
+1. Enter the URL into your browser and log into Neuron!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
 at <https://packages.riot.im/element-release-key.asc>.
 
-Note that for the security of your chats will need to serve Element
+Note that for the security of your chats will need to serve Neuron
 over HTTPS. Major browsers also do not allow you to use VoIP/video
 chats over HTTP, as WebRTC is only usable over HTTPS.
 There are some exceptions like when using localhost, which is
 considered a [secure context](https://developer.mozilla.org/docs/Web/Security/Secure_Contexts)
 and thus allowed.
 
-To install Element as a desktop application, see [Running as a desktop
+To install Neuron as a desktop application, see [Running as a desktop
 app](#running-as-a-desktop-app) below.
 
 Important Security Notes
@@ -64,11 +64,11 @@ Important Security Notes
 Separate domains
 ----------------
 
-We do not recommend running Element from the same domain name as your Matrix
+We do not recommend running Neuron from the same domain name as your Matrix
 homeserver.  The reason is the risk of XSS (cross-site-scripting)
-vulnerabilities that could occur if someone caused Element to load and render
+vulnerabilities that could occur if someone caused Neuron to load and render
 malicious user generated content from a Matrix API which then had trusted
-access to Element (or other apps) due to sharing the same domain.
+access to Neuron (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
@@ -78,9 +78,9 @@ Configuration best practices
 ----------------------------
 
 Unless you have special requirements, you will want to add the following to
-your web server configuration when hosting Element Web:
+your web server configuration when hosting Neuron Web:
 
-* The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
+* The `X-Frame-Options: SAMEORIGIN` header, to prevent Neuron Web from being
   framed and protect from [clickjacking][owasp-clickjacking].
 * The `frame-ancestors 'none'` directive to your `Content-Security-Policy`
   header, as the modern replacement for `X-Frame-Options` (though both should be
@@ -116,7 +116,7 @@ instead of adding that last line.
 Building From Source
 ====================
 
-Element is a modular webapp built with modern ES6 and uses a Node.js build system.
+Neuron is a modular webapp built with modern ES6 and uses a Node.js build system.
 Ensure you have the latest LTS version of Node.js installed.
 
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
@@ -139,7 +139,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
    web server.
 
 Note that `yarn dist` is not supported on Windows, so Windows users can run `yarn build`,
-which will build all the necessary files into the `webapp` directory. The version of Element
+which will build all the necessary files into the `webapp` directory. The version of Neuron
 will not appear in Settings without using the dist script. You can then mount the
 `webapp` directory on your web server to actually serve up the app, which is
 entirely static content.
@@ -147,7 +147,7 @@ entirely static content.
 Running as a Desktop app
 ========================
 
-Element can also be run as a desktop app, wrapped in Electron. You can download a
+Neuron can also be run as a desktop app, wrapped in Electron. You can download a
 pre-built version from <https://element.io/get-started> or, if you prefer,
 build it yourself.
 
@@ -216,19 +216,19 @@ See the [Kubernetes example](docs/kubernetes.md) for more details.
 config.json
 ===========
 
-Element supports a variety of settings to configure default servers, behaviour, themes, etc.
+Neuron supports a variety of settings to configure default servers, behaviour, themes, etc.
 See the [configuration docs](docs/config.md) for more details.
 
 Labs Features
 =============
 
-Some features of Element may be enabled by flags in the `Labs` section of the settings.
+Some features of Neuron may be enabled by flags in the `Labs` section of the settings.
 Some of these features are described in [labs.md](https://github.com/vector-im/element-web/blob/develop/docs/labs.md).
 
 Caching requirements
 ====================
 
-Element requires the following URLs not to be cached, when/if you are serving Element from your own webserver:
+Neuron requires the following URLs not to be cached, when/if you are serving Neuron from your own webserver:
 
 ```
 /config.*.json
@@ -238,20 +238,20 @@ Element requires the following URLs not to be cached, when/if you are serving El
 /index.html
 ```
 
-We also recommend that you force browsers to re-validate any cached copy of Element on page load by configuring your
-webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of Element on
+We also recommend that you force browsers to re-validate any cached copy of Neuron on page load by configuring your
+webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of Neuron on
 the next page load after it's been deployed. Note that this is already configured for you in the nginx config of our
 Dockerfile.
 
 Development
 ===========
 
-Before attempting to develop on Element you **must** read the [developer guide
+Before attempting to develop on Neuron you **must** read the [developer guide
 for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
-also defines the design, architecture and style for Element too.
+also defines the design, architecture and style for Neuron too.
 
 Before starting work on a feature, it's best to ensure your plan aligns well
-with our vision for Element. Please chat with the team in
+with our vision for Neuron. Please chat with the team in
 [#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
 start so we can ensure it's something we'd be willing to merge.
 
@@ -259,7 +259,7 @@ You should also familiarise yourself with the ["Here be Dragons" guide
 ](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
 to the tame & not-so-tame dragons (gotchas) which exist in the codebase.
 
-The idea of Element is to be a relatively lightweight "skin" of customisations on
+The idea of Neuron is to be a relatively lightweight "skin" of customisations on
 top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication
 apps using React.
@@ -267,10 +267,10 @@ apps using React.
 After creating a new component you must run `yarn reskindex` to regenerate
 the `component-index.js` for the app (used in future for skinning).
 
-Please note that Element is intended to run correctly without access to the public
+Please note that Neuron is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
-into Element itself.
+into Neuron itself.
 
 CSS hot-reload is available as an opt-in development feature. You can enable it
 by defining a `CSS_HOT_RELOAD` environment variable, in a `.env` file in the root
@@ -279,7 +279,7 @@ of the repository. See `.env.example` for documentation and an example.
 Setting up a dev environment
 ============================
 
-Much of the functionality in Element is actually in the `matrix-react-sdk` and
+Much of the functionality in Neuron is actually in the `matrix-react-sdk` and
 `matrix-js-sdk` modules. It is possible to set these up in a way that makes it
 easy to track the `develop` branches in git and to make local changes without
 having to manually rebuild each time.
@@ -305,7 +305,7 @@ yarn install
 popd
 ```
 
-Finally, build and start Element itself:
+Finally, build and start Neuron itself:
 
 ```bash
 git clone https://github.com/vector-im/element-web.git
@@ -333,7 +333,7 @@ Wait a few seconds for the initial build to finish; you should see something lik
 Configure the app by copying `config.sample.json` to `config.json` and
 modifying it. See the [configuration docs](docs/config.md) for details.
 
-Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
+Open <http://127.0.0.1:8080/> in your browser to see your newly built Neuron.
 
 **Note**: The build script uses inotify by default on Linux to monitor directories
 for changes. If the inotify limits are too low your build will fail silently or with
@@ -364,12 +364,12 @@ ___
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
 
-If you add or remove any components from the Element skin, you will need to rebuild
+If you add or remove any components from the Neuron skin, you will need to rebuild
 the skin's index by running, `yarn reskindex`.
 
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
-You'll need to do this in each new terminal you open before building Element.
+You'll need to do this in each new terminal you open before building Neuron.
 
 Running the tests
 -----------------

@@ -34,7 +34,7 @@ export default class TextWithTooltip extends React.Component<IProps> {
         super(props);
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { class: className, children, tooltip, tooltipClass, tooltipProps, ...props } = this.props;
 
         return (

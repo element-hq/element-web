@@ -76,7 +76,7 @@ let meetApi: any; // JitsiMeetExternalAPI
             document.body.classList.add(`theme-${theme.replace(" ", "_")}`);
         }
 
-        // Set this up as early as possible because Element will be hitting it almost immediately.
+        // Set this up as early as possible because Neuron will be hitting it almost immediately.
         let readyPromise: Promise<[void, void]>;
         if (parentUrl && widgetId) {
             const parentOrigin = new URL(qsParam('parentUrl')).origin;

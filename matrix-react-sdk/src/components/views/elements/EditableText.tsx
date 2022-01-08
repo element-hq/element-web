@@ -202,7 +202,7 @@ export default class EditableText extends React.Component<IProps, IState> {
         this.showPlaceholder(!this.value);
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { className, editable, initialValue, label, labelClassName } = this.props;
         let editableEl;
 

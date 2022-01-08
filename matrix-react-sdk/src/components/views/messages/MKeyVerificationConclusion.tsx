@@ -96,7 +96,7 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
         return true;
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const { mxEvent } = this.props;
         const request = mxEvent.verificationRequest;
 

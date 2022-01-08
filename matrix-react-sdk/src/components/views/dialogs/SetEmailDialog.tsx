@@ -130,7 +130,7 @@ export default class SetEmailDialog extends React.Component<IProps, IState> {
         });
     }
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const emailInput = this.state.emailBusy ? <Spinner /> : <EditableText
             initialValue={this.state.emailAddress}
             className="mx_SetEmailDialog_email_input"

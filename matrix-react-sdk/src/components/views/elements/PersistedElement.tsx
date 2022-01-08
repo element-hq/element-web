@@ -186,7 +186,7 @@ export default class PersistedElement extends React.Component<IProps> {
         });
     }, 100, { trailing: true, leading: true });
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return <div ref={this.collectChildContainer} />;
     }
 }

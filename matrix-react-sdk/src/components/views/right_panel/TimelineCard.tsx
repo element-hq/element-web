@@ -138,13 +138,13 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         }
     };
 
-    private renderTimelineCardHeader = (): JSX.Element => {
+    private renderTimelineCardHeader = (): JSX.Neuron => {
         return <div className="mx_TimelineCard__header">
             <span>{ _t("Chat") }</span>
         </div>;
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         const highlightedEventId = this.state.isInitialEventHighlighted
             ? this.state.initialEventId
             : null;

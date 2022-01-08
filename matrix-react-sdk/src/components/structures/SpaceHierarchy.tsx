@@ -228,8 +228,8 @@ const Tile: React.FC<ITileProps> = ({
         </div>
     </React.Fragment>;
 
-    let childToggle: JSX.Element;
-    let childSection: JSX.Element;
+    let childToggle: JSX.Neuron;
+    let childSection: JSX.Neuron;
     let onKeyDown: KeyboardEventHandler;
     if (children) {
         // the chevron is purposefully a div rather than a button as it should be ignored for a11y
@@ -715,14 +715,14 @@ const SpaceHierarchy = ({
 
     return <RovingTabIndexProvider onKeyDown={onKeyDown} handleHomeEnd handleUpDown>
         { ({ onKeyDownHandler }) => {
-            let content: JSX.Element;
+            let content: JSX.Neuron;
             if (loading && !rooms.length) {
                 content = <Spinner />;
             } else {
                 const hasPermissions = space?.getMyMembership() === "join" &&
                     space.currentState.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
-                let results: JSX.Element;
+                let results: JSX.Neuron;
                 if (filteredRoomSet.size) {
                     results = <>
                         <HierarchyLevel
@@ -743,7 +743,7 @@ const SpaceHierarchy = ({
                     </div>;
                 }
 
-                let loader: JSX.Element;
+                let loader: JSX.Neuron;
                 if (hierarchy.canLoadMore) {
                     loader = <div ref={loaderRef}>
                         <Spinner />

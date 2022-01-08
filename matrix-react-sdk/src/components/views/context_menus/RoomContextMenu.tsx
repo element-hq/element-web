@@ -56,7 +56,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         () => RoomListStore.instance.getTagsForRoom(room),
     );
 
-    let leaveOption: JSX.Element;
+    let leaveOption: JSX.Neuron;
     if (roomTags.includes(DefaultTagID.Archived)) {
         const onForgetRoomClick = (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -97,7 +97,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
 
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
 
-    let inviteOption: JSX.Element;
+    let inviteOption: JSX.Neuron;
     if (room.canInvite(cli.getUserId()) && !isDm) {
         const onInviteClick = (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -117,9 +117,9 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         />;
     }
 
-    let favouriteOption: JSX.Element;
-    let lowPriorityOption: JSX.Element;
-    let notificationOption: JSX.Element;
+    let favouriteOption: JSX.Neuron;
+    let lowPriorityOption: JSX.Neuron;
+    let notificationOption: JSX.Neuron;
     if (room.getMyMembership() === "join") {
         const isFavorite = roomTags.includes(DefaultTagID.Favourite);
         favouriteOption = <IconizedContextMenuCheckbox
@@ -180,8 +180,8 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         </IconizedContextMenuOption>;
     }
 
-    let peopleOption: JSX.Element;
-    let copyLinkOption: JSX.Element;
+    let peopleOption: JSX.Neuron;
+    let copyLinkOption: JSX.Neuron;
     if (!isDm) {
         peopleOption = <IconizedContextMenuOption
             onClick={(ev: ButtonEvent) => {

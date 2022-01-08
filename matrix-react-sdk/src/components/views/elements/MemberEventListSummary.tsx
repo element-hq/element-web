@@ -109,7 +109,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
     private generateSummary(
         eventAggregates: Record<string, string[]>,
         orderedTransitionSequences: string[],
-    ): string | JSX.Element {
+    ): string | JSX.Neuron {
         const summaries = orderedTransitionSequences.map((transitions) => {
             const userNames = eventAggregates[transitions];
             const nameList = this.renderNameList(userNames);
@@ -236,7 +236,7 @@ export default class MemberEventListSummary extends React.Component<IProps> {
         t: TransitionType,
         userCount: number,
         repeats: number,
-    ): string | JSX.Element {
+    ): string | JSX.Neuron {
         // The empty interpolations 'severalUsers' and 'oneUser'
         // are there only to show translators to non-English languages
         // that the verb is conjugated to plural or singular Subject.

@@ -86,12 +86,12 @@ describe('<RoomPreviewBar />', () => {
         return findRenderedDOMComponentWithClass(wrapper, 'mx_RoomPreviewBar') as HTMLDivElement;
     };
 
-    const isSpinnerRendered = (element: Element) => !!element.querySelector('.mx_Spinner');
-    const getMessage = (element: Element) => element.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_message');
-    const getActions = (element: Element) => element.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_actions');
-    const getPrimaryActionButton = (element: Element) =>
+    const isSpinnerRendered = (element: Neuron) => !!element.querySelector('.mx_Spinner');
+    const getMessage = (element: Neuron) => element.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_message');
+    const getActions = (element: Neuron) => element.querySelector<HTMLDivElement>('.mx_RoomPreviewBar_actions');
+    const getPrimaryActionButton = (element: Neuron) =>
         getActions(element).querySelector('.mx_AccessibleButton_kind_primary');
-    const getSecondaryActionButton = (element: Element) =>
+    const getSecondaryActionButton = (element: Neuron) =>
         getActions(element).querySelector('.mx_AccessibleButton_kind_secondary');
 
     beforeEach(() => {

@@ -337,7 +337,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         thumbUrl: string,
         content: IMediaEventContent,
         forcedHeight?: number,
-    ): JSX.Element {
+    ): JSX.Neuron {
         let infoWidth;
         let infoHeight;
 
@@ -490,14 +490,14 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 
     // Overidden by MStickerBody
-    protected wrapImage(contentUrl: string, children: JSX.Element): JSX.Element {
+    protected wrapImage(contentUrl: string, children: JSX.Neuron): JSX.Neuron {
         return <a href={contentUrl} target={this.props.forExport ? "_blank" : undefined} onClick={this.onClick}>
             { children }
         </a>;
     }
 
     // Overidden by MStickerBody
-    protected getPlaceholder(width: number, height: number): JSX.Element {
+    protected getPlaceholder(width: number, height: number): JSX.Neuron {
         const blurhash = this.props.mxEvent.getContent().info?.[BLURHASH_FIELD];
 
         if (blurhash) {
@@ -513,12 +513,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
     }
 
     // Overidden by MStickerBody
-    protected getTooltip(): JSX.Element {
+    protected getTooltip(): JSX.Neuron {
         return null;
     }
 
     // Overidden by MStickerBody
-    protected getFileBody(): string | JSX.Element {
+    protected getFileBody(): string | JSX.Neuron {
         if (this.props.forExport) return null;
         /*
          * In the room timeline or the thread context we don't need the download

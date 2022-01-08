@@ -1960,7 +1960,7 @@
     "Learn more": "Dowiedz się więcej",
     "New? <a>Create account</a>": "Nowy(-a)? <a>Utwórz konto</a>",
     "New here? <a>Create an account</a>": "Nowy(-a)? <a>Utwórz konto</a>",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "Możesz użyć własnych opcji serwera aby zalogować się na inny serwer Matrixa, określając inny adres URL serwera. To pozwala Ci na używanie Elementu z użyciem istniejącego konta Matrixa na innym serwerze.",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Neuron with an existing Matrix account on a different homeserver.": "Możesz użyć własnych opcji serwera aby zalogować się na inny serwer Matrixa, określając inny adres URL serwera. To pozwala Ci na używanie Elementu z użyciem istniejącego konta Matrixa na innym serwerze.",
     "Server Options": "Opcje serwera",
     "<b>Copy it</b> to your personal cloud storage": "<b>Skopiuj go</b> do osobistego dysku w chmurze",
     "Keep a copy of it somewhere secure, like a password manager or even a safe.": "Zachowaj jego kopię w bezpiecznym miejscu, np. w menedżerze haseł, czy nawet w sejfie.",

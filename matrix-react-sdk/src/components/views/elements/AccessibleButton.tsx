@@ -19,7 +19,7 @@ import classnames from 'classnames';
 
 import { Key } from '../../../Keyboard';
 
-export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
+export type ButtonEvent = React.MouseEvent<Neuron> | React.KeyboardEvent<Neuron> | React.FormEvent<Neuron>;
 
 type AccessibleButtonKind = | 'primary'
     | 'primary_outline'
@@ -40,8 +40,8 @@ type AccessibleButtonKind = | 'primary'
  * onClick:  (required) Event handler for button activation. Should be
  *           implemented exactly like a normal onClick handler.
  */
-interface IProps extends React.InputHTMLAttributes<Element> {
-    inputRef?: React.Ref<Element>;
+interface IProps extends React.InputHTMLAttributes<Neuron> {
+    inputRef?: React.Ref<Neuron>;
     element?: keyof ReactHTML;
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
@@ -55,8 +55,8 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     onClick(e?: ButtonEvent): void | Promise<void>;
 }
 
-interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
-    ref?: React.Ref<Element>;
+interface IAccessibleButtonProps extends React.InputHTMLAttributes<Neuron> {
+    ref?: React.Ref<Neuron>;
 }
 
 /**

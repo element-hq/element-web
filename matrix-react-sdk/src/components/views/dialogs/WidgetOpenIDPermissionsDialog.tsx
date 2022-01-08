@@ -72,7 +72,7 @@ export default class WidgetOpenIDPermissionsDialog extends React.PureComponent<I
         this.setState({ rememberSelection: newVal });
     };
 
-    public render(): JSX.Element {
+    public render(): JSX.Neuron {
         return (
             <BaseDialog
                 className='mx_WidgetOpenIDPermissionsDialog'
