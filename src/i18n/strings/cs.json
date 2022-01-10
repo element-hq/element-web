@@ -3509,5 +3509,6 @@
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Čekáme na ověření na vašem dalším zařízení, %(deviceName)s (%(deviceId)s)…",
     "Verify this device by confirming the following number appears on its screen.": "Ověřte toto zařízení tak, že potvrdíte, že se na jeho obrazovce zobrazí následující číslo.",
     "Confirm the emoji below are displayed on both devices, in the same order:": "Potvrďte, že se následující emotikony zobrazují na obou zařízeních ve stejném pořadí:",
-    "Edit setting": "Upravit nastavení"
+    "Edit setting": "Upravit nastavení",
+    "Expand map": "Rozbalit mapu"
 }
