@@ -450,6 +450,15 @@ $left-gutter: 64px;
     pre {
         border: 1px solid transparent;
     }
+
+    // selector wrongly applies to pill avatars but those have explicit width/height passed at a higher specificity
+    &.markdown-body img {
+        // the image will have max-width and max-height applied during sanitization
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: left top;
+    }
 }
 
 .mx_EventTile_clamp {

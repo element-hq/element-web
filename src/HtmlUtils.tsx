@@ -207,8 +207,12 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             return { tagName, attribs: {} };
         }
 
-        const width = Number(attribs.width) || 800;
-        const height = Number(attribs.height) || 600;
+        const width = Math.min(Number(attribs.width) || 800, 800);
+        const height = Math.min(Number(attribs.height) || 600, 600);
+        // specify width/height as max values instead of absolute ones to allow object-fit to do its thing
+        // we only allow our own styles for this tag so overwrite the attribute
+        attribs.style = `max-width: ${width}px; max-height: ${height}px;`;
+
         attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height);
         return { tagName, attribs };
     },
@@ -223,9 +227,12 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         return { tagName, attribs };
     },
     '*': function(tagName: string, attribs: sanitizeHtml.Attributes) {
-        // Delete any style previously assigned, style is an allowedTag for font and span
-        // because attributes are stripped after transforming
-        delete attribs.style;
+        // Delete any style previously assigned, style is an allowedTag for font, span & img,
+        // because attributes are stripped after transforming.
+        // For img this is trusted as it is generated wholly within the img transformation method.
+        if (tagName !== "img") {
+            delete attribs.style;
+        }
 
         // Sanitise and transform data-mx-color and data-mx-bg-color to their CSS
         // equivalents
@@ -249,7 +256,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
         });
 
         if (style) {
-            attribs.style = style;
+            attribs.style = style + (attribs.style || "");
         }
 
         return { tagName, attribs };
@@ -266,12 +273,15 @@ const sanitizeHtmlParams: IExtendedSanitizeOptions = {
         'details', 'summary',
     ],
     allowedAttributes: {
+        // attribute sanitization happens after transformations, so we have to accept `style` for font, span & img
+        // but strip during the transformation.
         // custom ones first:
         font: ['color', 'data-mx-bg-color', 'data-mx-color', 'style'], // custom to matrix
         span: ['data-mx-maths', 'data-mx-bg-color', 'data-mx-color', 'data-mx-spoiler', 'style'], // custom to matrix
         div: ['data-mx-maths'],
         a: ['href', 'name', 'target', 'rel'], // remote target: custom to matrix
-        img: ['src', 'width', 'height', 'alt', 'title'],
+        // img tags also accept width/height, we just map those to max-width & max-height during transformation
+        img: ['src', 'alt', 'title', 'style'],
         ol: ['start'],
         code: ['class'], // We don't actually allow all classes, we filter them in transformTags
     },
