@@ -48,6 +48,7 @@ export async function checkSettingsToggle(session: ElementSession,
 
 interface Tabs {
     securityTabButton: ElementHandle;
+    generalTabButton: ElementHandle;
 }
 
 async function findTabs(session: ElementSession): Promise<Tabs> {
@@ -64,8 +65,9 @@ async function findTabs(session: ElementSession): Promise<Tabs> {
     const tabButtons = await session.queryAll(".mx_RoomSettingsDialog .mx_TabbedView_tabLabel");
     const tabLabels = await Promise.all(tabButtons.map(t => session.innerText(t)));
     const securityTabButton = tabButtons[tabLabels.findIndex(l => l.toLowerCase().includes("security"))];
+    const generalTabButton = tabButtons[tabLabels.findIndex(l => l.toLowerCase().includes("general"))];
 
-    return { securityTabButton };
+    return { securityTabButton, generalTabButton };
 }
 
 interface Settings {
@@ -140,24 +142,7 @@ export async function checkRoomSettings(session: ElementSession, expectedSetting
 export async function changeRoomSettings(session, settings) {
     session.log.startGroup(`changes the room settings`);
 
-    const { securityTabButton } = await findTabs(session);
-    const generalSwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
-    const isDirectory = generalSwitches[0];
-
-    if (typeof settings.directory === "boolean") {
-        session.log.step(`sets directory listing to ${settings.directory}`);
-        await setSettingsToggle(session, isDirectory, settings.directory);
-    }
-
-    if (settings.alias) {
-        session.log.step(`sets alias to ${settings.alias}`);
-        const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details input[type=text]");
-        await session.replaceInputText(aliasField, settings.alias.substring(1, settings.alias.lastIndexOf(":")));
-        const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details .mx_AccessibleButton");
-        await addButton.click();
-        await session.delay(10); // delay to give time for the validator to run and check the alias
-        session.log.done();
-    }
+    const { securityTabButton, generalTabButton } = await findTabs(session);
 
     securityTabButton.click();
     await session.delay(500);
@@ -186,6 +171,27 @@ export async function changeRoomSettings(session, settings) {
         } else {
             throw new Error(`unrecognized room visibility setting: ${settings.visibility}`);
         }
+        await session.delay(100);
+        session.log.done();
+    }
+
+    generalTabButton.click();
+    await session.delay(500);
+    const generalSwitches = await session.queryAll(".mx_RoomSettingsDialog .mx_ToggleSwitch");
+    const isDirectory = generalSwitches[0];
+
+    if (typeof settings.directory === "boolean") {
+        session.log.step(`sets directory listing to ${settings.directory}`);
+        await setSettingsToggle(session, isDirectory, settings.directory);
+    }
+
+    if (settings.alias) {
+        session.log.step(`sets alias to ${settings.alias}`);
+        const aliasField = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details input[type=text]");
+        await session.replaceInputText(aliasField, settings.alias.substring(1, settings.alias.lastIndexOf(":")));
+        const addButton = await session.query(".mx_RoomSettingsDialog .mx_AliasSettings details .mx_AccessibleButton");
+        await addButton.click();
+        await session.delay(10); // delay to give time for the validator to run and check the alias
         session.log.done();
     }
 

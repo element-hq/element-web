@@ -68,9 +68,12 @@ export default class RoomPublishSetting extends React.PureComponent<IProps, ISta
     render() {
         const client = MatrixClientPeg.get();
 
+        const room = client.getRoom(this.props.roomId);
+        const isRoomPublishable = room.getJoinRule() !== "invite";
+
         const enabled = (
-            DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false ||
-            this.props.canSetCanonicalAlias
+            (DirectoryCustomisations.requireCanonicalAliasAccessToPublish?.() === false ||
+            this.props.canSetCanonicalAlias) && (isRoomPublishable || this.state.isRoomPublished)
         );
 
         return (
