@@ -407,6 +407,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
             showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
             wasContextSwitch: RoomViewStore.getWasContextSwitch(),
+            initialEventId: null, // default to clearing this, will get set later in the method if needed
         };
 
         const initialEventId = RoomViewStore.getInitialEventId();
