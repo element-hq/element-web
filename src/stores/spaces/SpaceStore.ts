@@ -83,9 +83,9 @@ const validOrder = (order: string): string | undefined => {
     }
 };
 
-// For sorting space children using a validated `order`, `m.room.create`'s `origin_server_ts`, `room_id`
-export const getChildOrder = (order: string, creationTs: number, roomId: string): Array<Many<ListIteratee<any>>> => {
-    return [validOrder(order) ?? NaN, creationTs, roomId]; // NaN has lodash sort it at the end in asc
+// For sorting space children using a validated `order`, `origin_server_ts`, `room_id`
+export const getChildOrder = (order: string, ts: number, roomId: string): Array<Many<ListIteratee<any>>> => {
+    return [validOrder(order) ?? NaN, ts, roomId]; // NaN has lodash sort it at the end in asc
 };
 
 const getRoomFn: FetchRoomFn = (room: Room) => {
@@ -296,10 +296,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         const room = this.matrixClient?.getRoom(spaceId);
         const childEvents = room?.currentState.getStateEvents(EventType.SpaceChild).filter(ev => ev.getContent()?.via);
         return sortBy(childEvents, ev => {
-            const roomId = ev.getStateKey();
-            const childRoom = this.matrixClient?.getRoom(roomId);
-            const createTs = childRoom?.currentState.getStateEvents(EventType.RoomCreate, "")?.getTs();
-            return getChildOrder(ev.getContent().order, createTs, roomId);
+            return getChildOrder(ev.getContent().order, ev.getTs(), ev.getStateKey());
         }).map(ev => {
             const history = this.matrixClient.getRoomUpgradeHistory(ev.getStateKey(), true);
             return history[history.length - 1];
