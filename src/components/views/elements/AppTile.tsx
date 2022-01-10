@@ -77,6 +77,7 @@ interface IProps {
     // sets the pointer-events property on the iframe
     pointerEvents?: string;
     widgetPageTitle?: string;
+    hideMaximiseButton?: boolean;
 }
 
 interface IState {
@@ -541,7 +542,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         }
         let maxMinButton;
-        if (SettingsStore.getValue("feature_maximised_widgets")) {
+        if (SettingsStore.getValue("feature_maximised_widgets") && !this.props.hideMaximiseButton) {
             const widgetIsMaximised = WidgetLayoutStore.instance.
                 isInContainer(this.props.room, this.props.app, Container.Center);
             maxMinButton = <AccessibleButton
