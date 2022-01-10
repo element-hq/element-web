@@ -190,7 +190,7 @@ export async function fetchInitialEvent(
         const eventData = await client.fetchRoomEvent(roomId, eventId);
         initialEvent = new MatrixEvent(eventData);
     } catch (e) {
-        logger.warn("Could not find initial event: " + initialEvent.threadRootId);
+        logger.warn("Could not find initial event: " + eventId);
         initialEvent = null;
     }
 
