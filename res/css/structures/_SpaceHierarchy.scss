@@ -15,35 +15,6 @@ limitations under the License.
 */
 
 .mx_SpaceRoomView_landing {
-    .mx_Dialog_title {
-        display: flex;
-
-        .mx_BaseAvatar {
-            margin-right: 12px;
-            align-self: center;
-        }
-
-        .mx_BaseAvatar_image {
-            border-radius: 8px;
-        }
-
-        > div {
-            > h1 {
-                font-weight: $font-semi-bold;
-                font-size: $font-18px;
-                line-height: $font-22px;
-                margin: 0;
-            }
-
-            > div {
-                font-weight: 400;
-                color: $secondary-content;
-                font-size: $font-15px;
-                line-height: $font-24px;
-            }
-        }
-    }
-
     .mx_AccessibleButton_kind_link {
         padding: 0;
         font-size: inherit;

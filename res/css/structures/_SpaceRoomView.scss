@@ -254,6 +254,10 @@ $SpaceRoomViewInnerWidth: 428px;
         flex-direction: column;
         min-width: 0;
 
+        > .mx_BaseAvatar {
+            width: 80px;
+        }
+
         > .mx_BaseAvatar_image,
         > .mx_BaseAvatar > .mx_BaseAvatar_image {
             border-radius: 12px;
