@@ -23,4 +23,10 @@ limitations under the License.
             margin-left: 0;
         }
     }
+
+    .mx_Dialog_buttons {
+        display: flex;
+        justify-content: end;
+        gap: 8px;
+    }
 }
