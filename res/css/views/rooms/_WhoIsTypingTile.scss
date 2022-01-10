@@ -43,8 +43,8 @@ limitations under the License.
 .mx_WhoIsTypingTile_remainingAvatarPlaceholder {
     position: relative;
     display: inline-block;
-    color: #acacac;
-    background-color: #ddd;
+    color: $primary-content;
+    background-color: $quinary-content;
     border: 1px solid $background;
     border-radius: 40px;
     width: 24px;
