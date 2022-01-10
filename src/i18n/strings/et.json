@@ -3506,5 +3506,6 @@
     "To proceed, please accept the verification request on your other device.": "Jätkamaks palun võta vastu verifitseerimispalve oma teises seadmes.",
     "Waiting for you to verify on your other device…": "Ootan, et sa verifitseeriksid oma teises seadmes…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Ootan, et sa verifitseerid oma teises seadmes: %(deviceName)s (%(deviceId)s)…",
-    "Expand map": "Kuva kaart laiemana"
+    "Expand map": "Kuva kaart laiemana",
+    "Send reactions": "Reageeri sõnumile"
 }
