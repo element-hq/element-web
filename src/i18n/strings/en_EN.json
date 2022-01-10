@@ -1555,6 +1555,7 @@
     "Upgrade the room": "Upgrade the room",
     "Enable room encryption": "Enable room encryption",
     "Change server ACLs": "Change server ACLs",
+    "Send reactions": "Send reactions",
     "Modify widgets": "Modify widgets",
     "Manage pinned events": "Manage pinned events",
     "Default role": "Default role",
