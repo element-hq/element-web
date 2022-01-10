@@ -33,11 +33,13 @@ interface IState {
 @replaceableComponent("views.location.LocationViewDialog")
 export default class LocationViewDialog extends React.Component<IProps, IState> {
     private coords: GeolocationCoordinates;
+    private map?: maplibregl.Map;
 
     constructor(props: IProps) {
         super(props);
 
         this.coords = parseGeoUri(locationEventGeoUri(this.props.mxEvent));
+        this.map = null;
         this.state = {
             error: undefined,
         };
@@ -48,7 +50,7 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
             return;
         }
 
-        createMap(
+        this.map = createMap(
             this.coords,
             true,
             this.getBodyId(),
@@ -65,6 +67,14 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
         return `mx_MLocationViewDialog_marker_${this.props.mxEvent.getId()}`;
     };
 
+    private onZoomIn = () => {
+        this.map?.zoomIn();
+    };
+
+    private onZoomOut = () => {
+        this.map?.zoomOut();
+    };
+
     render() {
         return (
             <BaseDialog
@@ -77,6 +87,9 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
                     bodyId={this.getBodyId()}
                     markerId={this.getMarkerId()}
                     error={this.state.error}
+                    zoomButtons={true}
+                    onZoomIn={this.onZoomIn}
+                    onZoomOut={this.onZoomOut}
                 />
             </BaseDialog>
         );
