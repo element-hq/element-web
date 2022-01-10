@@ -19,105 +19,38 @@ import maplibregl from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import SdkConfig from '../../../SdkConfig';
-import Field from "../elements/Field";
 import DialogButtons from "../elements/DialogButtons";
-import Dropdown from "../elements/Dropdown";
-import LocationShareType from "./LocationShareType";
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-interface IDropdownProps {
-    value: LocationShareType;
-    label: string;
-    width?: number;
-    onChange(type: LocationShareType): void;
-}
-
-const LocationShareTypeDropdown = ({
-    value,
-    label,
-    width,
-    onChange,
-}: IDropdownProps) => {
-    const options = [
-        <div key={LocationShareType.Custom}>{
-            _t("Share custom location")
-        }</div>,
-        <div key={LocationShareType.OnceOff}>{
-            _t("Share my current location as a once off")
-        }</div>,
-        // <div key={LocationShareType.OneMin}>{
-        //     _t("Share my current location for one minute")
-        // }</div>,
-        // <div key={LocationShareType.FiveMins}>{
-        //     _t("Share my current location for five minutes")
-        // }</div>,
-        // <div key={LocationShareType.ThirtyMins}>{
-        //     _t("Share my current location for thirty minutes")
-        // }</div>,
-        // <div key={LocationShareType.OneHour}>{
-        //     _t("Share my current location for one hour")
-        // }</div>,
-        // <div key={LocationShareType.ThreeHours}>{
-        //     _t("Share my current location for three hours")
-        // }</div>,
-        // <div key={LocationShareType.SixHours}>{
-        //     _t("Share my current location for six hours")
-        // }</div>,
-        // <div key={LocationShareType.OneDay}>{
-        //     _t("Share my current location for one day")
-        // }</div>,
-        // <div key={LocationShareType.Forever}>{
-        //     _t("Share my current location until I disable it")
-        // }</div>,
-    ];
-
-    return <Dropdown
-        id="mx_LocationShareTypeDropdown"
-        className="mx_LocationShareTypeDropdown"
-        onOptionChange={(key: string) => {
-            onChange(LocationShareType[LocationShareType[parseInt(key)]]);
-        }}
-        menuWidth={width}
-        label={label}
-        value={value.toString()}
-    >
-        { options }
-    </Dropdown>;
-};
-
 interface IProps {
-    onChoose(
-        uri: string,
-        ts: number,
-        type: LocationShareType,
-        description: string,
-    ): boolean;
+    onChoose(uri: string, ts: number): boolean;
     onFinished(ev?: SyntheticEvent): void;
 }
 
 interface IState {
-    description: string;
-    type: LocationShareType;
     position?: GeolocationPosition;
-    manualPosition?: GeolocationPosition;
     error: Error;
 }
+
+/*
+ * An older version of this file allowed manually picking a location on
+ * the map to share, instead of sharing your current location.
+ * Since the current designs do not cover this case, it was removed from
+ * the code but you should be able to find it in the git history by
+ * searching for the commit that remove manualPosition from this file.
+ */
 
 @replaceableComponent("views.location.LocationPicker")
 class LocationPicker extends React.Component<IProps, IState> {
     private map: maplibregl.Map;
-    private marker: maplibregl.Marker;
     private geolocate: maplibregl.GeolocateControl;
 
     constructor(props: IProps) {
         super(props);
 
         this.state = {
-            description: _t("My location"),
-            type: LocationShareType.OnceOff,
             position: undefined,
-            manualPosition: undefined,
             error: undefined,
         };
     }
@@ -154,51 +87,11 @@ class LocationPicker extends React.Component<IProps, IState> {
                 this.geolocate.trigger();
             });
 
-            this.map.on('click', (e) => {
-                this.addMarker(e.lngLat);
-                this.storeManualPosition(e.lngLat);
-                this.setState({ type: LocationShareType.Custom });
-            });
-
             this.geolocate.on('geolocate', this.onGeolocate);
         } catch (e) {
             logger.error("Failed to render map", e.error);
             this.setState({ error: e.error });
         }
-    }
-
-    private addMarker(lngLat: maplibregl.LngLat): void {
-        if (this.marker) return;
-        this.marker = new maplibregl.Marker({
-            draggable: true,
-        })
-            .setLngLat(lngLat)
-            .addTo(this.map)
-            .on('dragend', () => {
-                this.storeManualPosition(this.marker.getLngLat());
-            });
-    }
-
-    private removeMarker(): void {
-        if (!this.marker) return;
-        this.marker.remove();
-        this.marker = undefined;
-    }
-
-    private storeManualPosition(lngLat: maplibregl.LngLat): void {
-        const manualPosition: GeolocationPosition = {
-            coords: {
-                longitude: lngLat.lng,
-                latitude: lngLat.lat,
-                altitude: undefined,
-                accuracy: undefined,
-                altitudeAccuracy: undefined,
-                heading: undefined,
-                speed: undefined,
-            },
-            timestamp: Date.now(),
-        };
-        this.setState({ manualPosition });
     }
 
     componentWillUnmount() {
@@ -209,39 +102,14 @@ class LocationPicker extends React.Component<IProps, IState> {
         this.setState({ position });
     };
 
-    private onDescriptionChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ description: ev.target.value });
-    };
-
     private onOk = () => {
-        const position = (this.state.type == LocationShareType.Custom) ?
-            this.state.manualPosition : this.state.position;
+        const position = this.state.position;
 
         this.props.onChoose(
             position ? getGeoUri(position) : undefined,
             position ? position.timestamp : undefined,
-            this.state.type,
-            this.state.description,
         );
         this.props.onFinished();
-    };
-
-    private onTypeChange= (type: LocationShareType) => {
-        if (type == LocationShareType.Custom) {
-            if (!this.state.manualPosition) {
-                this.setState({ manualPosition: this.state.position });
-            }
-            if (this.state.manualPosition) {
-                this.addMarker(new maplibregl.LngLat(
-                    this.state.manualPosition?.coords.longitude,
-                    this.state.manualPosition?.coords.latitude,
-                ));
-            }
-        } else {
-            this.removeMarker();
-        }
-
-        this.setState({ type });
     };
 
     render() {
@@ -256,28 +124,10 @@ class LocationPicker extends React.Component<IProps, IState> {
                 { error }
                 <div className="mx_LocationPicker_footer">
                     <form onSubmit={this.onOk}>
-                        <LocationShareTypeDropdown
-                            value={this.state.type}
-                            label={_t("Type of location share")}
-                            onChange={this.onTypeChange}
-                            width={400}
-                        />
-
-                        <Field
-                            label={_t('Description')}
-                            onChange={this.onDescriptionChange}
-                            value={this.state.description}
-                            width={400}
-                            className="mx_LocationPicker_description"
-                        />
-
                         <DialogButtons primaryButton={_t('Share')}
                             onPrimaryButtonClick={this.onOk}
                             onCancel={this.props.onFinished}
-                            primaryDisabled={
-                                !this.state.position &&
-                                !this.state.manualPosition
-                            } />
+                            primaryDisabled={!this.state.position} />
                     </form>
                 </div>
             </div>
