@@ -1928,7 +1928,7 @@
     "See <b>%(eventType)s</b> events posted to your active room": "Zobacz zdarzenia <b>%(eventType)s</b> opublikowane w Twoim aktywnym pokoju",
     "See <b>%(eventType)s</b> events posted to this room": "Zobacz zdarzenia <b>%(eventType)s</b> opublikowane w tym pokoju",
     "Send <b>%(eventType)s</b> events as you in this room": "Wysyłaj zdarzenia <b>%(eventType)s</b> jako Ty w tym pokoju",
-    "%(senderDisplayName)s set the server ACLs for this room.": "",
+    "%(senderDisplayName)s set the server ACLs for this room.": "%(senderDisplayName)s ustawił ACLe serwera dla pokoju.",
     "Change the avatar of your active room": "Zmień awatar swojego aktywnego pokoju",
     "See when the avatar changes in this room": "Zobacz, gdy awatar tego pokoju zmienia się",
     "Change the avatar of this room": "Zmień awatar tego pokoju",
@@ -2093,5 +2093,7 @@
     "There was an error looking up the phone number": "Podczas wyszukiwania numeru telefonu wystąpił błąd",
     "Unable to look up phone number": "Nie można wyszukać numeru telefonu",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Wysłaliśmy pozostałym, ale osoby poniżej nie mogły zostać zaproszone do <RoomName/>",
-    "%(date)s at %(time)s": "%(date)s o %(time)s"
+    "%(date)s at %(time)s": "%(date)s o %(time)s",
+    "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s zmienił ACLe serwera dla pokoju.",
+    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Dodaje ┬──┬ ノ( ゜-゜ノ) na początku wiadomości tekstowej"
 }
