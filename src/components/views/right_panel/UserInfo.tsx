@@ -94,7 +94,7 @@ const disambiguateDevices = (devices: IDevice[]) => {
     }
     for (const name in names) {
         if (names[name].length > 1) {
-            names[name].forEach((j)=>{
+            names[name].forEach((j) => {
                 devices[j].ambiguous = true;
             });
         }

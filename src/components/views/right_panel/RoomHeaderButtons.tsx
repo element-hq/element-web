@@ -265,7 +265,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         return <>
             {
                 Array.from(rightPanelPhaseButtons.keys()).map((phase) =>
-                    ( this.props.excludedRightPanelPhaseButtons.includes(phase)
+                    (this.props.excludedRightPanelPhaseButtons.includes(phase)
                         ? null
                         : rightPanelPhaseButtons.get(phase)))
             }

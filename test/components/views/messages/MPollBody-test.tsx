@@ -461,7 +461,7 @@ describe("MPollBody", () => {
             txnId?: string,
             callback?: Callback,
         ): Promise<ISendEventResponse> => {
-            receivedEvents.push( { roomId, eventType, content, txnId, callback } );
+            receivedEvents.push({ roomId, eventType, content, txnId, callback });
             return Promise.resolve({ "event_id": "fake_tracked_send_id" });
         };
 
@@ -482,7 +482,7 @@ describe("MPollBody", () => {
             txnId?: string,
             callback?: Callback,
         ): Promise<ISendEventResponse> => {
-            receivedEvents.push( { roomId, eventType, content, txnId, callback } );
+            receivedEvents.push({ roomId, eventType, content, txnId, callback });
             return Promise.resolve({ "event_id": "fake_tracked_send_id" });
         };
 
@@ -506,7 +506,7 @@ describe("MPollBody", () => {
             txnId?: string,
             callback?: Callback,
         ): Promise<ISendEventResponse> => {
-            receivedEvents.push( { roomId, eventType, content, txnId, callback } );
+            receivedEvents.push({ roomId, eventType, content, txnId, callback });
             return Promise.resolve({ "event_id": "fake_tracked_send_id" });
         };
 
@@ -528,7 +528,7 @@ describe("MPollBody", () => {
             txnId?: string,
             callback?: Callback,
         ): Promise<ISendEventResponse> => {
-            receivedEvents.push( { roomId, eventType, content, txnId, callback } );
+            receivedEvents.push({ roomId, eventType, content, txnId, callback });
             return Promise.resolve({ "event_id": "fake_tracked_send_id" });
         };
 
@@ -553,7 +553,7 @@ describe("MPollBody", () => {
             txnId?: string,
             callback?: Callback,
         ): Promise<ISendEventResponse> => {
-            receivedEvents.push( { roomId, eventType, content, txnId, callback } );
+            receivedEvents.push({ roomId, eventType, content, txnId, callback });
             return Promise.resolve({ "event_id": "fake_tracked_send_id" });
         };
 

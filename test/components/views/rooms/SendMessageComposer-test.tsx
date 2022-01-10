@@ -340,10 +340,10 @@ describe('<SendMessageComposer/>', () => {
             const model2 = new EditorModel([], createPartCreator(), createRenderer());
             const model3 = new EditorModel([], createPartCreator(), createRenderer());
             const model4 = new EditorModel([], createPartCreator(), createRenderer());
-            model.update("+😊hello", "insertText", new DocumentOffset( 8, true));
-            model2.update(" +😊", "insertText", new DocumentOffset( 4, true));
-            model3.update("+ 😊😊", "insertText", new DocumentOffset( 6, true));
-            model4.update("+smiley", "insertText", new DocumentOffset( 7, true));
+            model.update("+😊hello", "insertText", new DocumentOffset(8, true));
+            model2.update(" +😊", "insertText", new DocumentOffset(4, true));
+            model3.update("+ 😊😊", "insertText", new DocumentOffset(6, true));
+            model4.update("+smiley", "insertText", new DocumentOffset(7, true));
 
             expect(isQuickReaction(model)).toBeFalsy();
             expect(isQuickReaction(model2)).toBeFalsy();

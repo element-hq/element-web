@@ -21,4 +21,4 @@ if (idx !== -1) {
     const value = process.argv[idx + 1];
     hasAppUrl = !!value;
 }
-process.stdout.write(hasAppUrl ? "1" : "0" );
+process.stdout.write(hasAppUrl ? "1" : "0");

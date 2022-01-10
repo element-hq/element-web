@@ -93,7 +93,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
             return (
                 <div className="mx_ExistingEmailAddress">
                     <span className="mx_ExistingEmailAddress_promptText">
-                        { _t("Remove %(email)s?", { email: this.props.email.address } ) }
+                        { _t("Remove %(email)s?", { email: this.props.email.address }) }
                     </span>
                     <AccessibleButton
                         onClick={this.onActuallyRemove}

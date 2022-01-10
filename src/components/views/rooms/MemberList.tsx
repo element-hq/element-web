@@ -309,7 +309,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         return this.createOverflowTile(overflowCount, totalCount, this.showMoreInvitedMemberList);
     };
 
-    private createOverflowTile = (overflowCount: number, totalCount: number, onClick: () => void): JSX.Element=> {
+    private createOverflowTile = (overflowCount: number, totalCount: number, onClick: () => void): JSX.Element => {
         // For now we'll pretend this is any entity. It should probably be a separate tile.
         const text = _t("and %(count)s others...", { count: overflowCount });
         return (

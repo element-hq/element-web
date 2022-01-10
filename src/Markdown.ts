@@ -212,7 +212,7 @@ export default class Markdown {
         const walker = this.parsed.walker();
 
         let ev;
-        while ( (ev = walker.next()) ) {
+        while (ev = walker.next()) {
             const node = ev.node;
             if (TEXT_NODES.indexOf(node.type) > -1) {
                 // definitely text

@@ -28,7 +28,7 @@ const mockRoom = <Room>{
     currentState: {
         getStateEvents: (_l, _x) => {
             return {
-                getId: ()=>"$layoutEventId",
+                getId: () => "$layoutEventId",
                 getContent: () => null,
             };
         },

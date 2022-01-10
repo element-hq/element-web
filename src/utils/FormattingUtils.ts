@@ -131,7 +131,7 @@ export function formatCommaSeparatedList(items: Array<JSX.Element | string>, ite
         }
 
         if (remaining > 0) {
-            return _t("%(items)s and %(count)s others", { items: joinedItems, count: remaining } );
+            return _t("%(items)s and %(count)s others", { items: joinedItems, count: remaining });
         } else {
             return _t("%(items)s and %(lastItem)s", { items: joinedItems, lastItem });
         }

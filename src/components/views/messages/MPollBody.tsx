@@ -329,7 +329,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         }
         const newEventIds = newEvents.map((mxEvent: MatrixEvent) => mxEvent.getId());
         this.seenEventIds = this.seenEventIds.concat(newEventIds);
-        this.setState( { selected: newSelected } );
+        this.setState({ selected: newSelected });
     }
 
     private totalVotes(collectedVotes: Map<string, number>): number {
@@ -381,7 +381,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                 );
             }
         } else {
-            totalText = _t( "Based on %(count)s votes", { count: totalVotes } );
+            totalText = _t("Based on %(count)s votes", { count: totalVotes });
         }
 
         return <div className="mx_MPollBody">

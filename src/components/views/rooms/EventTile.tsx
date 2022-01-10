@@ -1245,16 +1245,16 @@ export default class EventTile extends React.Component<IProps, IState> {
             <div className="mx_EventTile_keyRequestInfo_tooltip_contents">
                 <p>
                     { this.state.previouslyRequestedKeys ?
-                        _t( 'Your key share request has been sent - please check your other sessions ' +
-                            'for key share requests.') :
-                        _t( 'Key share requests are sent to your other sessions automatically. If you ' +
-                            'rejected or dismissed the key share request on your other sessions, click ' +
-                            'here to request the keys for this session again.')
+                        _t('Your key share request has been sent - please check your other sessions ' +
+                           'for key share requests.') :
+                        _t('Key share requests are sent to your other sessions automatically. If you ' +
+                           'rejected or dismissed the key share request on your other sessions, click ' +
+                           'here to request the keys for this session again.')
                     }
                 </p>
                 <p>
-                    { _t( 'If your other sessions do not have the key for this message you will not ' +
-                            'be able to decrypt them.')
+                    { _t('If your other sessions do not have the key for this message you will not ' +
+                         'be able to decrypt them.')
                     }
                 </p>
             </div>;

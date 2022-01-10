@@ -114,7 +114,7 @@ export class ElementSession {
         };
     }
 
-    public async printElements(label: string, elements: puppeteer.ElementHandle[] ): Promise<void> {
+    public async printElements(label: string, elements: puppeteer.ElementHandle[]): Promise<void> {
         console.log(label, await Promise.all(elements.map(this.getOuterHTML)));
     }
 

@@ -363,7 +363,7 @@ export default class Registration extends React.Component<IProps, IState> {
             return Promise.resolve();
         }
         const matrixClient = MatrixClientPeg.get();
-        return matrixClient.getPushers().then((resp)=>{
+        return matrixClient.getPushers().then((resp) => {
             const pushers = resp.pushers;
             for (let i = 0; i < pushers.length; ++i) {
                 if (pushers[i].kind === 'email') {

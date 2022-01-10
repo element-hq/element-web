@@ -96,10 +96,10 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
         };
     }
 
-    private onAction = ({ action }: ActionPayload)=> {
+    private onAction = ({ action }: ActionPayload) => {
         if (action === "ignore_state_changed") {
             const ignoredUserIds = MatrixClientPeg.get().getIgnoredUsers();
-            const newWaitingUnignored = this.state.waitingUnignored.filter(e=> ignoredUserIds.includes(e));
+            const newWaitingUnignored = this.state.waitingUnignored.filter(e => ignoredUserIds.includes(e));
             this.setState({ ignoredUserIds, waitingUnignored: newWaitingUnignored });
         }
     };

@@ -439,7 +439,7 @@ export default class CountlyAnalytics {
 
     public async disable() {
         if (this.disabled) return;
-        await this.track("Opt-Out" );
+        await this.track("Opt-Out");
         this.endSession();
         window.clearInterval(this.heartbeatIntervalId);
         window.clearTimeout(this.activityIntervalId);

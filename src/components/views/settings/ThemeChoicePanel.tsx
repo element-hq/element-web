@@ -170,7 +170,7 @@ export default class ThemeChoicePanel extends React.Component<IProps, IState> {
                     checked={isHighContrastTheme(this.state.theme)}
                     onChange={(e) => this.highContrastThemeChanged(e.target.checked)}
                 >
-                    { _t( "Use high contrast" ) }
+                    { _t("Use high contrast") }
                 </StyledCheckbox>
             </div>;
         }
