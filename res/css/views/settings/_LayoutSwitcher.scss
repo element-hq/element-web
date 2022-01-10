@@ -45,6 +45,10 @@ limitations under the License.
                 align-items: center;
                 padding: 10px;
                 pointer-events: none;
+
+                .mx_EventTile[data-layout=bubble] .mx_EventTile_line {
+                    padding-right: 11px;
+                }
             }
 
             .mx_StyledRadioButton {
