@@ -1123,7 +1123,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             mx_EventTile_unverified: !isBubbleMessage && this.state.verified === E2EState.Warning,
             mx_EventTile_unknown: !isBubbleMessage && this.state.verified === E2EState.Unknown,
             mx_EventTile_bad: isEncryptionFailure,
-            mx_EventTile_emote: msgtype === 'm.emote',
+            mx_EventTile_emote: msgtype === MsgType.Emote,
             mx_EventTile_noSender: this.props.hideSender,
             mx_EventTile_clamp: this.props.tileShape === TileShape.ThreadPanel,
             mx_EventTile_noBubble: noBubbleEvent,
