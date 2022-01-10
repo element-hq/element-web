@@ -45,6 +45,10 @@ limitations under the License.
         }
     }
 
+    .mx_SSOButton:hover {
+        background-color: $panel-hover;
+    }
+
     .mx_SSOButton_default {
         color: $accent;
         background-color: $button-secondary-bg-color;
