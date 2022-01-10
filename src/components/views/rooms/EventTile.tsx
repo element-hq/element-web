@@ -451,7 +451,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // Check to make sure the sending state is appropriate. A null/undefined send status means
         // that the message is 'sent', so we're just double checking that it's explicitly not sent.
-        if (this.props.eventSendStatus && this.props.eventSendStatus !== 'sent') return false;
+        if (this.props.eventSendStatus && this.props.eventSendStatus !== EventStatus.SENT) return false;
 
         // If anyone has read the event besides us, we don't want to show a sent receipt.
         const receipts = this.props.readReceipts || [];
@@ -468,7 +468,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         // Check the event send status to see if we are pending. Null/undefined status means the
         // message was sent, so check for that and 'sent' explicitly.
-        if (!this.props.eventSendStatus || this.props.eventSendStatus === 'sent') return false;
+        if (!this.props.eventSendStatus || this.props.eventSendStatus === EventStatus.SENT) return false;
 
         // Default to showing - there's no other event properties/behaviours we care about at
         // this point.

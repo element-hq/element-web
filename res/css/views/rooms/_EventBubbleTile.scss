@@ -306,7 +306,7 @@ limitations under the License.
 
     .mx_EventTile_readAvatars {
         position: absolute;
-        right: -110px;
+        right: -78px; // as close to right gutter without clipping as possible
         bottom: 0;
         top: auto;
     }
