@@ -49,6 +49,8 @@ jobs:
           else
             echo "::set-output name=match::false"
           fi
+        env:
+          TEAM: "design"
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
         if: steps.any_matching_reviewers.outputs.match == 'true'
