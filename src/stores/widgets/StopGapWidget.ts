@@ -109,8 +109,8 @@ export class ElementWidget extends Widget {
         }
         let domain = super.rawData['domain'];
         if (domain === undefined) {
-            // v1 widgets default to jitsi.riot.im regardless of user settings
-            domain = "jitsi.riot.im";
+            // v1 widgets default to meet.element.io regardless of user settings
+            domain = "meet.element.io";
         }
 
         let theme = new ThemeWatcher().getEffectiveTheme();
