@@ -100,6 +100,14 @@ limitations under the License.
         padding-right: 48px;
     }
 
+    .mx_CallEvent {
+        background-color: unset;
+
+        border-style: solid;
+        border-width: 1px;
+        border-color: $quinary-content;
+    }
+
     &[data-self=false] {
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
@@ -323,6 +331,10 @@ limitations under the License.
     .mx_MTextBody {
         max-width: 100%;
     }
+
+    .mx_CallEvent_wrapper {
+        justify-content: center;
+    }
 }
 
 .mx_EventTile.mx_EventTile_noBubble[data-layout=bubble] {
@@ -362,7 +374,7 @@ limitations under the License.
         // Align timestamps with those of normal bubble tiles
         right: auto;
         top: -11px;
-        left: -95px;
+        left: -77px;
     }
 }
 
