@@ -483,8 +483,17 @@ $left-gutter: 64px;
         background-color: $codeblock-background-color;
     }
 
-    pre code > * {
-        display: inline;
+    // this selector wrongly applies to code blocks too but we will unset it in the next one
+    code {
+        white-space: pre-wrap; // don't collapse spaces in inline code blocks
+    }
+
+    pre code {
+        white-space: pre; // we want code blocks to be scrollable and not wrap
+
+        > * {
+            display: inline;
+        }
     }
 
     pre {
@@ -497,10 +506,6 @@ $left-gutter: 64px;
         &::-webkit-scrollbar-corner {
             background: transparent;
         }
-    }
-
-    code {
-        white-space: pre-wrap; // don't collapse spaces in inline code blocks
     }
 }
 
