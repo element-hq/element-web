@@ -95,6 +95,11 @@ limitations under the License.
         z-index: 9; // above the avatar
     }
 
+    .mx_MediaBody {
+        // leave space for the timestamp
+        padding-right: 48px;
+    }
+
     &[data-self=false] {
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
@@ -145,6 +150,10 @@ limitations under the License.
         .mx_EventTile_avatar {
             top: -19px; // height of the sender block
             right: -35px;
+        }
+
+        .mx_MediaBody {
+            background: $eventbubble-self-bg;
         }
 
         --backgroundColor: $eventbubble-self-bg;
