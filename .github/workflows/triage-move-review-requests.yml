@@ -39,6 +39,10 @@ jobs:
           else
             echo "::set-output name=match::true"
           fi
+      - id: print_requested_teams_slug
+        run: |
+          echo 'github.event.pull_request.requested_teams.slug = ${{ github.event.pull_request.requested_teams.slug }}'
+          echo 'github.event.pull_request.requested_reviewers = ${{ github.event.pull_request.requested_reviewers }}'
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
         if: >
