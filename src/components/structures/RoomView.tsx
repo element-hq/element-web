@@ -2218,7 +2218,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>
-                            <div className="mx_RoomView_body">
+                            <div className="mx_RoomView_body" data-layout={this.state.layout}>
                                 { mainSplitBody }
                             </div>
                         </MainSplit>

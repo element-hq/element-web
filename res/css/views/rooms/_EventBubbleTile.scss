@@ -14,6 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_RoomView_body[data-layout=bubble] {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .mx_EventTile[data-layout=bubble],
 .mx_EventListSummary[data-layout=bubble] {
     --avatarSize: 32px;
