@@ -43,32 +43,32 @@ async function getThreadTimelineSet(
     room: Room,
     filterType = ThreadFilterType.All,
 ): Promise<EventTimelineSet> {
-    const myUserId = client.getUserId();
-    const filter = new Filter(myUserId);
+    const capabilities = await client.getCapabilities();
+    const serverSupportsThreads = capabilities['io.element.thread']?.enabled;
 
-    const definition: IFilterDefinition = {
-        "room": {
-            "timeline": {
-                [UNSTABLE_FILTER_RELATION_TYPES.name]: [RelationType.Thread],
+    if (serverSupportsThreads) {
+        const myUserId = client.getUserId();
+        const filter = new Filter(myUserId);
+
+        const definition: IFilterDefinition = {
+            "room": {
+                "timeline": {
+                    [UNSTABLE_FILTER_RELATION_TYPES.name]: [RelationType.Thread],
+                },
             },
-        },
-    };
+        };
 
-    if (filterType === ThreadFilterType.My) {
-        definition.room.timeline[UNSTABLE_FILTER_RELATION_SENDERS.name] = [myUserId];
-    }
+        if (filterType === ThreadFilterType.My) {
+            definition.room.timeline[UNSTABLE_FILTER_RELATION_SENDERS.name] = [myUserId];
+        }
 
-    filter.setDefinition(definition);
-
-    let timelineSet;
-
-    try {
+        filter.setDefinition(definition);
         const filterId = await client.getOrCreateFilter(
             `THREAD_PANEL_${room.roomId}_${filterType}`,
             filter,
         );
         filter.filterId = filterId;
-        timelineSet = room.getOrCreateFilteredTimelineSet(
+        const timelineSet = room.getOrCreateFilteredTimelineSet(
             filter,
             { prepopulateTimeline: false },
         );
@@ -78,20 +78,20 @@ async function getThreadTimelineSet(
             timelineSet.getLiveTimeline(),
             { backwards: true, limit: 20 },
         );
-    } catch (e) {
+        return timelineSet;
+    } else {
         // Filter creation fails if HomeServer does not support the new relation
         // filter fields. We fallback to the threads that have been discovered in
         // the main timeline
-        timelineSet = new EventTimelineSet(room, {});
+        const timelineSet = new EventTimelineSet(room, {});
         for (const [, thread] of room.threads) {
             const isOwnEvent = thread.rootEvent.getSender() === client.getUserId();
             if (filterType !== ThreadFilterType.My || isOwnEvent) {
-                timelineSet.getLiveTimeline().addEvent(thread.rootEvent);
+                timelineSet.getLiveTimeline().addEvent(thread.rootEvent, false);
             }
         }
+        return timelineSet;
     }
-
-    return timelineSet;
 }
 
 interface IProps {
