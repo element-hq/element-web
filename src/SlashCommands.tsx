@@ -27,7 +27,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
-import { _t, _td } from './languageHandler';
+import { _t, _td, newTranslatableError } from './languageHandler';
 import Modal from './Modal';
 import MultiInviter from './utils/MultiInviter';
 import { linkifyAndSanitizeHtml } from './HtmlUtils';
@@ -141,13 +141,26 @@ export class Command {
 
     run(roomId: string, threadId: string, args: string) {
         // if it has no runFn then its an ignored/nop command (autocomplete only) e.g `/me`
-        if (!this.runFn) return reject(_t("Command error"));
+        if (!this.runFn) {
+            reject(
+                newTranslatableError(
+                    "Command error: Unable to handle slash command.",
+                ),
+            );
+
+            return;
+        }
 
         const renderingType = threadId
             ? TimelineRenderingType.Thread
             : TimelineRenderingType.Room;
         if (this.renderingTypes && !this.renderingTypes?.includes(renderingType)) {
-            return reject(_t("Command error"));
+            return reject(
+                newTranslatableError(
+                    "Command error: Unable to find rendering type (%(renderingType)s)",
+                    { renderingType },
+                ),
+            );
         }
 
         return this.runFn.bind(this)(roomId, args);
@@ -270,7 +283,9 @@ export const Commands = [
                 const cli = MatrixClientPeg.get();
                 const room = cli.getRoom(roomId);
                 if (!room.currentState.mayClientSendStateEvent("m.room.tombstone", cli)) {
-                    return reject(_t("You do not have the required permissions to use this command."));
+                    return reject(
+                        newTranslatableError("You do not have the required permissions to use this command."),
+                    );
                 }
 
                 const { finished } = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
@@ -297,15 +312,10 @@ export const Commands = [
                 return success((async () => {
                     const unixTimestamp = Date.parse(args);
                     if (!unixTimestamp) {
-                        throw new Error(
-                            // FIXME: Use newTranslatableError here instead
-                            // otherwise the rageshake error messages will be
-                            // translated too
-                            _t(
-                                // eslint-disable-next-line max-len
-                                'We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.',
-                                { inputDate: args },
-                            ),
+                        throw newTranslatableError(
+                            'We were unable to understand the given date (%(inputDate)s). ' +
+                                'Try using the format YYYY-MM-DD.',
+                            { inputDate: args },
                         );
                     }
 
@@ -437,7 +447,11 @@ export const Commands = [
                 return success(cli.setRoomTopic(roomId, args));
             }
             const room = cli.getRoom(roomId);
-            if (!room) return reject(_t("Failed to set topic"));
+            if (!room) {
+                return reject(
+                    newTranslatableError("Failed to get room topic: Unable to find room (%(roomId)s", { roomId }),
+                );
+            }
 
             const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
             const topic = topicEvents && topicEvents.getContent().topic;
@@ -509,10 +523,16 @@ export const Commands = [
                                     useDefaultIdentityServer();
                                     return;
                                 }
-                                throw new Error(_t("Use an identity server to invite by email. Manage in Settings."));
+                                throw newTranslatableError(
+                                    "Use an identity server to invite by email. Manage in Settings.",
+                                );
                             });
                         } else {
-                            return reject(_t("Use an identity server to invite by email. Manage in Settings."));
+                            return reject(
+                                newTranslatableError(
+                                    "Use an identity server to invite by email. Manage in Settings.",
+                                ),
+                            );
                         }
                     }
                     const inviter = new MultiInviter(roomId);
@@ -680,7 +700,14 @@ export const Commands = [
                         }
                         if (targetRoomId) break;
                     }
-                    if (!targetRoomId) return reject(_t('Unrecognised room address:') + ' ' + roomAlias);
+                    if (!targetRoomId) {
+                        return reject(
+                            newTranslatableError(
+                                'Unrecognised room address: %(roomAlias)s',
+                                { roomAlias },
+                            ),
+                        );
+                    }
                 }
             }
 
@@ -819,10 +846,14 @@ export const Commands = [
                     if (!isNaN(powerLevel)) {
                         const cli = MatrixClientPeg.get();
                         const room = cli.getRoom(roomId);
-                        if (!room) return reject(_t("Command failed"));
+                        if (!room) {
+                            return reject(
+                                newTranslatableError("Command failed: Unable to find room (%(roomId)s", { roomId }),
+                            );
+                        }
                         const member = room.getMember(userId);
                         if (!member || getEffectiveMembership(member.membership) === EffectiveMembership.Leave) {
-                            return reject(_t("Could not find user in room"));
+                            return reject(newTranslatableError("Could not find user in room"));
                         }
                         const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
                         return success(cli.setPowerLevel(roomId, userId, powerLevel, powerLevelEvent));
@@ -849,10 +880,16 @@ export const Commands = [
                 if (matches) {
                     const cli = MatrixClientPeg.get();
                     const room = cli.getRoom(roomId);
-                    if (!room) return reject(_t("Command failed"));
+                    if (!room) {
+                        return reject(
+                            newTranslatableError("Command failed: Unable to find room (%(roomId)s", { roomId }),
+                        );
+                    }
 
                     const powerLevelEvent = room.currentState.getStateEvents('m.room.power_levels', '');
-                    if (!powerLevelEvent.getContent().users[args]) return reject(_t("Could not find user in room"));
+                    if (!powerLevelEvent.getContent().users[args]) {
+                        return reject(newTranslatableError("Could not find user in room"));
+                    }
                     return success(cli.setPowerLevel(roomId, args, undefined, powerLevelEvent));
                 }
             }
@@ -877,7 +914,7 @@ export const Commands = [
         isEnabled: () => SettingsStore.getValue(UIFeature.Widgets),
         runFn: function(roomId, widgetUrl) {
             if (!widgetUrl) {
-                return reject(_t("Please supply a widget URL or embed code"));
+                return reject(newTranslatableError("Please supply a widget URL or embed code"));
             }
 
             // Try and parse out a widget URL from iframes
@@ -896,7 +933,7 @@ export const Commands = [
             }
 
             if (!widgetUrl.startsWith("https://") && !widgetUrl.startsWith("http://")) {
-                return reject(_t("Please supply a https:// or http:// widget URL"));
+                return reject(newTranslatableError("Please supply a https:// or http:// widget URL"));
             }
             if (WidgetUtils.canUserModifyWidgets(roomId)) {
                 const userId = MatrixClientPeg.get().getUserId();
@@ -918,7 +955,7 @@ export const Commands = [
 
                 return success(WidgetUtils.setRoomWidget(roomId, widgetId, type, widgetUrl, name, data));
             } else {
-                return reject(_t("You cannot modify widgets in this room."));
+                return reject(newTranslatableError("You cannot modify widgets in this room."));
             }
         },
         category: CommandCategories.admin,
@@ -941,22 +978,25 @@ export const Commands = [
                     return success((async () => {
                         const device = cli.getStoredDevice(userId, deviceId);
                         if (!device) {
-                            throw new Error(_t('Unknown (user, session) pair:') + ` (${userId}, ${deviceId})`);
+                            throw newTranslatableError(
+                                'Unknown (user, session) pair: (%(userId)s, %(deviceId)s)',
+                                { userId, deviceId },
+                            );
                         }
                         const deviceTrust = await cli.checkDeviceTrust(userId, deviceId);
 
                         if (deviceTrust.isVerified()) {
                             if (device.getFingerprint() === fingerprint) {
-                                throw new Error(_t('Session already verified!'));
+                                throw newTranslatableError('Session already verified!');
                             } else {
-                                throw new Error(_t('WARNING: Session already verified, but keys do NOT MATCH!'));
+                                throw newTranslatableError('WARNING: Session already verified, but keys do NOT MATCH!');
                             }
                         }
 
                         if (device.getFingerprint() !== fingerprint) {
                             const fprint = device.getFingerprint();
-                            throw new Error(
-                                _t('WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session' +
+                            throw newTranslatableError(
+                                'WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session' +
                                     ' %(deviceId)s is "%(fprint)s" which does not match the provided key ' +
                                     '"%(fingerprint)s". This could mean your communications are being intercepted!',
                                 {
@@ -964,7 +1004,8 @@ export const Commands = [
                                     userId,
                                     deviceId,
                                     fingerprint,
-                                }));
+                                },
+                            );
                         }
 
                         await cli.setDeviceVerified(userId, deviceId, true);
@@ -1083,7 +1124,7 @@ export const Commands = [
                 if (isPhoneNumber) {
                     const results = await CallHandler.instance.pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
-                        throw new Error("Unable to find Matrix ID for phone number");
+                        throw newTranslatableError("Unable to find Matrix ID for phone number");
                     }
                     userId = results[0].userid;
                 }
@@ -1135,7 +1176,7 @@ export const Commands = [
         runFn: function(roomId, args) {
             const call = CallHandler.instance.getCallForRoom(roomId);
             if (!call) {
-                return reject("No active call in this room");
+                return reject(newTranslatableError("No active call in this room"));
             }
             call.setRemoteOnHold(true);
             return success();
@@ -1149,7 +1190,7 @@ export const Commands = [
         runFn: function(roomId, args) {
             const call = CallHandler.instance.getCallForRoom(roomId);
             if (!call) {
-                return reject("No active call in this room");
+                return reject(newTranslatableError("No active call in this room"));
             }
             call.setRemoteOnHold(false);
             return success();

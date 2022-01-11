@@ -378,6 +378,9 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             let errText;
             if (typeof error === 'string') {
                 errText = error;
+            } else if (error.translatedMessage) {
+                // Check for translatable errors (newTranslatableError)
+                errText = error.translatedMessage;
             } else if (error.message) {
                 errText = error.message;
             } else {

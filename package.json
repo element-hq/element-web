@@ -29,6 +29,9 @@
   "matrix_src_main": "./src/index.ts",
   "matrix_lib_main": "./lib/index.ts",
   "matrix_lib_typings": "./lib/index.d.ts",
+  "matrix_i18n_extra_translation_funcs": [
+    "newTranslatableError"
+  ],
   "scripts": {
     "prepublishOnly": "yarn build",
     "i18n": "matrix-gen-i18n",
