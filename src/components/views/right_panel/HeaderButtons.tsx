@@ -80,7 +80,8 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
         }
     }
 
-    public isPhase(phases: string | string[]) {
+    public isPhase(phases: string | string[]): boolean {
+        if (!RightPanelStore.instance.isOpenForRoom) return false;
         if (Array.isArray(phases)) {
             return phases.includes(this.state.phase);
         } else {
