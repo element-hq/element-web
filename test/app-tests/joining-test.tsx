@@ -77,6 +77,7 @@ describe('joining a room', function() {
             const ROOM_ALIAS = '#alias:localhost';
             const ROOM_ID = '!id:localhost';
 
+            httpBackend.when('GET', '/capabilities').respond(200, { capabilities : {} });
             httpBackend.when('GET', '/pushrules').respond(200, {});
             httpBackend.when('POST', '/filter').respond(200, { filter_id: 'fid' });
 
