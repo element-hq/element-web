@@ -33,3 +33,29 @@ jobs:
           project: Issue triage
           column: Triaged
           repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  remove_Z-Labs_label:
+    name: Remove Z-Labs label when features behind labs flags are removed
+    runs-on: ubuntu-latest
+    if: >
+        !(contains(github.event.issue.labels.*.name, 'A-Maths') || 
+        contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+        contains(github.event.issue.labels.*.name, 'A-Threads') ||
+        contains(github.event.issue.labels.*.name, 'A-Polls') ||
+        contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+        contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
+        contains(github.event.issue.labels.*.name, 'Z-Maximised-Widgets') ||
+        contains(github.event.issue.labels.*.name, 'Z-IA') ||
+        contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+        contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+        contains(github.event.issue.labels.*.name, 'A-Tags'))
+    steps:
+      - uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ['Z-Labs']
+            })
