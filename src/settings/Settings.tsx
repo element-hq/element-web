@@ -215,13 +215,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_maximised_widgets": {
-        isFeature: true,
-        labsGroup: LabGroup.Widgets,
-        displayName: _td("Maximised widgets"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_thread": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

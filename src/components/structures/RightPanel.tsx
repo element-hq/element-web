@@ -260,7 +260,6 @@ export default class RightPanel extends React.Component<IProps, IState> {
                 }
                 break;
             case RightPanelPhases.Timeline:
-                if (!SettingsStore.getValue("feature_maximised_widgets")) break;
                 card = <TimelineCard
                     classNames="mx_ThreadPanel mx_TimelineCard"
                     room={this.props.room}
