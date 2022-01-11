@@ -29,13 +29,14 @@ import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import SettingsStore from "../../../settings/SettingsStore";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { Action } from "../../../dispatcher/actions";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
 import ScalarAuthClient from '../../../ScalarAuthClient';
 import GenericElementContextMenu from "../context_menus/GenericElementContextMenu";
 import { IApp } from "../../../stores/WidgetStore";
+import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
+import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 
 // This should be below the dialog level (4000), but above the rest of the UI (1000-2000).
 // We sit in a context menu, so this should be given to the context menu.
@@ -139,6 +140,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         // Track updates to widget state in account data
         MatrixClientPeg.get().on('accountData', this.updateWidget);
 
+        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         // Initialise widget state from current account data
         this.updateWidget();
     }
@@ -146,7 +148,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     public componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) client.removeListener('accountData', this.updateWidget);
-
+        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         window.removeEventListener('resize', this.onResize);
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
@@ -204,12 +206,15 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             case "stickerpicker_close":
                 this.props.setShowStickers(false);
                 break;
-            case Action.AfterRightPanelPhaseChange:
             case "show_left_panel":
             case "hide_left_panel":
                 this.props.setShowStickers(false);
                 break;
         }
+    };
+
+    private onRightPanelStoreUpdate = () => {
+        this.props.setShowStickers(false);
     };
 
     private defaultStickerpickerContent(): JSX.Element {

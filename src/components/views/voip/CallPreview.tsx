@@ -197,13 +197,16 @@ export default class CallPreview extends React.Component<IProps, IState> {
                     draggable={pipMode}
                     onDoubleClick={this.onDoubleClick}
                 >
-                    { ({ onStartMoving, onResize }) => <CallView
-                        onMouseDownOnHeader={onStartMoving}
-                        call={this.state.primaryCall}
-                        secondaryCall={this.state.secondaryCall}
-                        pipMode={pipMode}
-                        onResize={onResize}
-                    /> }
+                    {
+                        ({ onStartMoving, onResize }) =>
+                            <CallView
+                                onMouseDownOnHeader={onStartMoving}
+                                call={this.state.primaryCall}
+                                secondaryCall={this.state.secondaryCall}
+                                pipMode={pipMode}
+                                onResize={onResize}
+                            />
+                    }
                 </PictureInPictureDragger>
 
             );

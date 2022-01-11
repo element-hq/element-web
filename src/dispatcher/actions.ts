@@ -103,11 +103,6 @@ export enum Action {
     ViewRoomDelta = "view_room_delta",
 
     /**
-     * Trigged after the phase of the right panel is set. Should be used with AfterRightPanelPhaseChangePayload.
-     */
-    AfterRightPanelPhaseChange = "after_right_panel_phase_change",
-
-    /**
      * Opens the modal dial pad
      */
     OpenDialPad = "open_dial_pad",

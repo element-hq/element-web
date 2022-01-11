@@ -25,6 +25,10 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AppTile from "./AppTile";
+import { Container, WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
+import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
+import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
+import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 
 interface IProps {
     // none
@@ -33,6 +37,7 @@ interface IProps {
 interface IState {
     roomId: string;
     persistentWidgetId: string;
+    rightPanelPhase?: RightPanelPhases;
 }
 
 @replaceableComponent("views.elements.PersistentApp")
@@ -45,12 +50,14 @@ export default class PersistentApp extends React.Component<IProps, IState> {
         this.state = {
             roomId: RoomViewStore.getRoomId(),
             persistentWidgetId: ActiveWidgetStore.instance.getPersistentWidgetId(),
+            rightPanelPhase: RightPanelStore.instance.currentCard.phase,
         };
     }
 
     public componentDidMount(): void {
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Update, this.onActiveWidgetStoreUpdate);
+        RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         MatrixClientPeg.get().on("Room.myMembership", this.onMyMembership);
     }
 
@@ -59,6 +66,7 @@ export default class PersistentApp extends React.Component<IProps, IState> {
             this.roomStoreToken.remove();
         }
         ActiveWidgetStore.instance.removeListener(ActiveWidgetStoreEvent.Update, this.onActiveWidgetStoreUpdate);
+        RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener("Room.myMembership", this.onMyMembership);
         }
@@ -68,6 +76,12 @@ export default class PersistentApp extends React.Component<IProps, IState> {
         if (RoomViewStore.getRoomId() === this.state.roomId) return;
         this.setState({
             roomId: RoomViewStore.getRoomId(),
+        });
+    };
+
+    private onRightPanelStoreUpdate = () => {
+        this.setState({
+            rightPanelPhase: RightPanelStore.instance.currentCard.phase,
         });
     };
 
@@ -88,8 +102,9 @@ export default class PersistentApp extends React.Component<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        if (this.state.persistentWidgetId) {
-            const persistentWidgetInRoomId = ActiveWidgetStore.instance.getRoomId(this.state.persistentWidgetId);
+        const wId = this.state.persistentWidgetId;
+        if (wId) {
+            const persistentWidgetInRoomId = ActiveWidgetStore.instance.getRoomId(wId);
 
             const persistentWidgetInRoom = MatrixClientPeg.get().getRoom(persistentWidgetInRoomId);
 
@@ -97,8 +112,24 @@ export default class PersistentApp extends React.Component<IProps, IState> {
             // thus no room is associated anymore.
             if (!persistentWidgetInRoom) return null;
 
-            const myMembership = persistentWidgetInRoom.getMyMembership();
-            if (this.state.roomId !== persistentWidgetInRoomId && myMembership === "join") {
+            const wls = WidgetLayoutStore.instance;
+
+            const userIsPartOfTheRoom = persistentWidgetInRoom.getMyMembership() == "join";
+            const fromAnotherRoom = this.state.roomId !== persistentWidgetInRoomId;
+
+            const notInRightPanel =
+                !(this.state.rightPanelPhase == RightPanelPhases.Widget &&
+                wId == RightPanelStore.instance.currentCard.state?.widgetId);
+            const notInCenterContainer =
+                    !wls.getContainerWidgets(persistentWidgetInRoom, Container.Center).some((app) => app.id == wId);
+            const notInTopContainer =
+                !wls.getContainerWidgets(persistentWidgetInRoom, Container.Top).some(app => app.id == wId);
+            if (
+                // the widget should only be shown as a persistent app (in a floating pip container) if it is not visible on screen
+                // either, because we are viewing a different room OR because it is in none of the possible containers of the room view.
+                (fromAnotherRoom && userIsPartOfTheRoom) ||
+                (notInRightPanel && notInCenterContainer && notInTopContainer && userIsPartOfTheRoom)
+            ) {
                 // get the widget data
                 const appEvent = WidgetUtils.getRoomWidgets(persistentWidgetInRoom).find((ev) => {
                     return ev.getStateKey() === ActiveWidgetStore.instance.getPersistentWidgetId();
