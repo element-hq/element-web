@@ -3439,5 +3439,13 @@
     "Confirm the emoji below are displayed on both devices, in the same order:": "Konfirmasi emoji di bawah yang ditampilkan di kedua perangkat, dalam urutan yang sama:",
     "Edit setting": "Edit pengaturan",
     "Expand map": "Buka peta",
-    "Send reactions": "Kirim reaksi"
+    "Send reactions": "Kirim reaksi",
+    "No active call in this room": "Tidak ada panggilan aktif di ruangan ini",
+    "Unable to find Matrix ID for phone number": "Tidak dapat menemukan ID Matrix untuk nomor telepon",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Pasangan tidak diketahui (pengguna, sesi): (%(userId)s, %(deviceId)s)",
+    "Command failed: Unable to find room (%(roomId)s": "Perintah gagal: Tidak dapat menemukan ruangan (%(roomId)s)",
+    "Unrecognised room address: %(roomAlias)s": "Alamat ruangan tidak dikenal: %(roomAlias)s",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "Gagal untuk mendapatkan topik ruangan: Tidak dapat menemukan ruangan (%(roomId)s)",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "Kesalahan perintah: Tidak dapat menemukan tipe render (%(renderingType)s)",
+    "Command error: Unable to handle slash command.": "Kesalahan perintah: Tidak dapat menangani perintah slash."
 }
