@@ -25,7 +25,8 @@ function clone() {
     if [ -n "$branch" ]
     then
         echo "Trying to use $org/$repo#$branch"
-        git clone git://github.com/$org/$repo.git $repo --branch $branch \
+        # Disable auth prompts: https://serverfault.com/a/665959
+        GIT_TERMINAL_PROMPT=0 git clone https://github.com/$org/$repo.git $repo --branch $branch \
             "${GIT_CLONE_ARGS[@]}"
         return $?
     fi

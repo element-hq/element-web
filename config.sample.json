@@ -47,6 +47,6 @@
         "breadcrumbs": true
     },
     "jitsi": {
-        "preferredDomain": "jitsi.riot.im"
+        "preferredDomain": "meet.element.io"
     }
 }

@@ -103,7 +103,7 @@ For a good example, see https://develop.element.io/config.json.
 1. `jitsi`: Used to change the default conference options. Learn more about the
    Jitsi options at [jitsi.md](./jitsi.md).
     1. `preferredDomain`: The domain name of the preferred Jitsi instance. Defaults
-       to `jitsi.riot.im`. This is used whenever a user clicks on the voice/video
+       to `meet.element.io`. This is used whenever a user clicks on the voice/video
        call buttons - integration managers may use a different domain.
 1. `enable_presence_by_hs_url`: The property key should be the URL of the homeserver
     and its value defines whether to enable/disable the presence status display

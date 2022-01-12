@@ -32,5 +32,7 @@
     "Failed to start": "Αποτυχία έναρξης",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
-    "Missing indexeddb worker script!": "Απουσία indexeddb worker script!"
+    "Missing indexeddb worker script!": "Απουσία indexeddb worker script!",
+    "Use %(brand)s on mobile": "Χρήση %(brand)s σε κινητό",
+    "Switch to space by number": "Εναλλαγή σε space με αριθμό"
 }

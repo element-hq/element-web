@@ -84,7 +84,7 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
                 "breadcrumbs": true
             },
             "jitsi": {
-                "preferredDomain": "jitsi.riot.im"
+                "preferredDomain": "meet.element.io"
             }
         }
 
