@@ -3469,5 +3469,6 @@
     "Unrecognised room address: %(roomAlias)s": "Нерозпізнана адреса кімнати: %(roomAlias)s",
     "Failed to get room topic: Unable to find room (%(roomId)s": "Не вдалося отримати тему кімнати: не вдалося знайти кімнату (%(roomId)s",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Помилка команди: неможливо знайти тип рендерингу (%(renderingType)s)",
-    "Command error: Unable to handle slash command.": "Помилка команди: Неможливо виконати slash-команду."
+    "Command error: Unable to handle slash command.": "Помилка команди: Неможливо виконати slash-команду.",
+    "From a thread": "З треду"
 }
