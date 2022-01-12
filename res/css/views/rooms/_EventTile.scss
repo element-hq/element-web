@@ -841,24 +841,6 @@ $left-gutter: 64px;
     display: flex;
     flex-direction: column;
 
-    .mx_EventTile_senderDetails {
-        display: flex;
-        align-items: center;
-        gap: calc(6px + $selected-message-border-width);
-
-        a {
-            flex: 1;
-            min-width: none;
-            max-width: 100%;
-            display: flex;
-            align-items: center;
-
-            .mx_SenderProfile {
-                flex: 1;
-            }
-        }
-    }
-
     .mx_ThreadView_List {
         flex: 1;
         overflow: scroll;
@@ -869,7 +851,6 @@ $left-gutter: 64px;
     }
 
     .mx_EventTile {
-        width: 100%;
         display: flex;
         flex-direction: column;
         padding-top: 0;
@@ -880,11 +861,7 @@ $left-gutter: 64px;
         }
 
         .mx_MessageTimestamp {
-            left: auto;
-            right: 2px !important;
-            top: 1px !important;
-            font-size: 1rem;
-            text-align: right;
+            font-size: $font-10px;
         }
 
         .mx_ReactionsRow {
@@ -896,16 +873,63 @@ $left-gutter: 64px;
         }
     }
 
-    .mx_EventTile_content,
-    .mx_RedactedBody,
-    .mx_ReplyChain_wrapper {
+    .mx_EventTile[data-layout=bubble] {
         margin-left: 36px;
-        margin-right: 50px;
+        margin-right: 36px;
+
+        &[data-self=true] {
+            align-items: flex-end;
+
+            .mx_EventTile_line.mx_EventTile_mediaLine {
+                margin: 0 -13px 0 0; // align with normal messages
+                padding: 0 !important;
+
+                .mx_MFileBody ~ .mx_MessageTimestamp {
+                    bottom: calc($font-14px + 4px); // above the Decrypt/Download text line
+                }
+            }
+        }
+    }
+
+    .mx_EventTile[data-layout=group] {
+        width: 100%;
 
         .mx_EventTile_content,
         .mx_RedactedBody,
-        .mx_MImageBody {
-            margin: 0;
+        .mx_ReplyChain_wrapper {
+            margin-left: 36px;
+            margin-right: 50px;
+
+            .mx_EventTile_content,
+            .mx_RedactedBody,
+            .mx_MImageBody {
+                margin: 0;
+            }
+        }
+
+        .mx_MessageTimestamp {
+            left: auto;
+            right: 2px !important;
+            top: 1px !important;
+            text-align: right;
+        }
+
+        .mx_EventTile_senderDetails {
+            display: flex;
+            align-items: center;
+            gap: calc(6px + $selected-message-border-width);
+
+            a {
+                flex: 1;
+                min-width: none;
+                max-width: 100%;
+                display: flex;
+                align-items: center;
+
+                .mx_SenderProfile {
+                    flex: 1;
+                }
+            }
         }
     }
 
