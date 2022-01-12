@@ -666,29 +666,31 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     private renderThreadInfo(): React.ReactNode {
-        if (!this.thread) {
-            return null;
+        if (this.props.timelineRenderingType === TimelineRenderingType.Search && this.props.mxEvent.threadRootId) {
+            return (
+                <p className="mx_ThreadSummaryIcon">{ _t("From a thread") }</p>
+            );
+        } else if (this.thread) {
+            return (
+                <CardContext.Consumer>
+                    { context =>
+                        <div
+                            className="mx_ThreadInfo"
+                            onClick={() => {
+                                showThread({ rootEvent: this.props.mxEvent, push: context.isCard });
+                            }}
+                        >
+                            <span className="mx_ThreadInfo_threads-amount">
+                                { _t("%(count)s reply", {
+                                    count: this.thread.length,
+                                }) }
+                            </span>
+                            { this.renderThreadLastMessagePreview() }
+                        </div>
+                    }
+                </CardContext.Consumer>
+            );
         }
-
-        return (
-            <CardContext.Consumer>
-                { context =>
-                    <div
-                        className="mx_ThreadInfo"
-                        onClick={() => {
-                            showThread({ rootEvent: this.props.mxEvent, push: context.isCard });
-                        }}
-                    >
-                        <span className="mx_ThreadInfo_threads-amount">
-                            { _t("%(count)s reply", {
-                                count: this.thread.length,
-                            }) }
-                        </span>
-                        { this.renderThreadLastMessagePreview() }
-                    </div>
-                }
-            </CardContext.Consumer>
-        );
     }
 
     private onRoomReceipt = (ev: MatrixEvent, room: Room): void => {

@@ -1642,6 +1642,7 @@
     "Everyone in this room is verified": "Everyone in this room is verified",
     "Edit message": "Edit message",
     "Mod": "Mod",
+    "From a thread": "From a thread",
     "%(count)s reply|other": "%(count)s replies",
     "%(count)s reply|one": "%(count)s reply",
     "This event could not be displayed": "This event could not be displayed",

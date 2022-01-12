@@ -70,7 +70,8 @@ $left-gutter: 64px;
         background-color: $alert;
     }
 
-    .mx_ThreadInfo {
+    .mx_ThreadInfo,
+    .mx_ThreadSummaryIcon {
         margin-right: 110px;
         margin-left: 64px;
     }
@@ -683,6 +684,28 @@ $left-gutter: 64px;
     }
 }
 
+.mx_ThreadSummaryIcon::before,
+.mx_ThreadInfo::before {
+    content: "";
+    display: inline-block;
+    mask-image: url('$(res)/img/element-icons/thread-summary.svg');
+    mask-position: center;
+    height: 18px;
+    min-width: 18px;
+    background-color: $secondary-content;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+
+.mx_ThreadSummaryIcon {
+    font-size: $font-12px;
+    color: $secondary-content;
+    &::before {
+        vertical-align: middle;
+        margin-left: 8px;
+    }
+}
+
 .mx_ThreadInfo {
     min-width: 267px;
     max-width: min(calc(100% - 64px), 600px);
@@ -710,17 +733,6 @@ $left-gutter: 64px;
         padding-bottom: 7px;
         padding-left: 11px;
         padding-right: 15px;
-    }
-
-    &::before {
-        content: "";
-        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
-        mask-position: center;
-        height: 18px;
-        min-width: 18px;
-        background-color: $secondary-content;
-        mask-repeat: no-repeat;
-        mask-size: contain;
     }
 
     &::after {

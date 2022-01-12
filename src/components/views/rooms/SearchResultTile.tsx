@@ -18,7 +18,7 @@ limitations under the License.
 import React from "react";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 
-import RoomContext from "../../../contexts/RoomContext";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
@@ -75,6 +75,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                         isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
                         enableFlair={enableFlair}
+                        timelineRenderingType={TimelineRenderingType.Search}
                     />,
                 );
             }
