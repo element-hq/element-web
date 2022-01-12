@@ -451,9 +451,8 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
     private get editorStateKey() {
         let key = `mx_cider_state_${this.props.room.roomId}`;
-        const thread = this.props.replyToEvent?.getThread();
-        if (thread) {
-            key += `_${thread.id}`;
+        if (this.props.relation?.rel_type === RelationType.Thread) {
+            key += `_${this.props.relation.event_id}`;
         }
         return key;
     }
