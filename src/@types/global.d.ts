@@ -32,7 +32,7 @@ type ElectronChannel =
     "setBadgeCount" |
     "update-downloaded" |
     "userDownloadCompleted" |
-    "userDownloadOpen";
+    "userDownloadAction";
 
 declare global {
     interface Window {
