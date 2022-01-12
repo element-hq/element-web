@@ -216,6 +216,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
         },
       ],
       "txnToEvent": Object {},
+      "visibilityEvents": Map {},
       Symbol(kCapture): false,
     }
   }
@@ -435,6 +436,7 @@ exports[`PollCreateDialog renders a blank poll 1`] = `
           },
         ],
         "txnToEvent": Object {},
+        "visibilityEvents": Map {},
         Symbol(kCapture): false,
       }
     }
@@ -1335,6 +1337,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
         },
       ],
       "txnToEvent": Object {},
+      "visibilityEvents": Map {},
       Symbol(kCapture): false,
     }
   }
@@ -1554,6 +1557,7 @@ exports[`PollCreateDialog renders a question and some options 1`] = `
           },
         ],
         "txnToEvent": Object {},
+        "visibilityEvents": Map {},
         Symbol(kCapture): false,
       }
     }
