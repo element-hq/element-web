@@ -204,7 +204,7 @@ export function createMap(
         container: bodyId,
         style: styleUrl,
         center: coordinates,
-        zoom: 13,
+        zoom: 15,
         interactive,
     });
 
