@@ -532,8 +532,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             if (SettingsStore.getValue("feature_location_share")) {
                 buttons.push(
                     <LocationButton
+                        sender={this.props.room.getMember(MatrixClientPeg.get().getUserId())}
                         key="location"
-                        room={this.props.room}
                         shareLocation={this.shareLocation}
                         menuPosition={menuPosition}
                         narrowMode={this.state.narrowMode}

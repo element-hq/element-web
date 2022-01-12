@@ -17,13 +17,17 @@ limitations under the License.
 import React, { SyntheticEvent } from 'react';
 import maplibregl from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 
 import SdkConfig from '../../../SdkConfig';
 import DialogButtons from "../elements/DialogButtons";
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import MemberAvatar from '../avatars/MemberAvatar';
+import MatrixClientContext from '../../../contexts/MatrixClientContext';
 
 interface IProps {
+    sender: RoomMember;
     onChoose(uri: string, ts: number): boolean;
     onFinished(ev?: SyntheticEvent): void;
 }
@@ -43,8 +47,11 @@ interface IState {
 
 @replaceableComponent("views.location.LocationPicker")
 class LocationPicker extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
     private map: maplibregl.Map;
     private geolocate: maplibregl.GeolocateControl;
+    private marker: maplibregl.Marker;
 
     constructor(props: IProps) {
         super(props);
@@ -54,6 +61,10 @@ class LocationPicker extends React.Component<IProps, IState> {
             error: undefined,
         };
     }
+
+    private getMarkerId = () => {
+        return "mx_MLocationPicker_marker";
+    };
 
     componentDidMount() {
         const config = SdkConfig.get();
@@ -73,6 +84,14 @@ class LocationPicker extends React.Component<IProps, IState> {
                 trackUserLocation: true,
             });
             this.map.addControl(this.geolocate);
+
+            this.marker = new maplibregl.Marker({
+                element: document.getElementById(this.getMarkerId()),
+                anchor: 'bottom',
+                offset: [0, -1],
+            })
+                .setLngLat(new maplibregl.LngLat(0, 0))
+                .addTo(this.map);
 
             this.map.on('error', (e) => {
                 logger.error(
@@ -100,6 +119,12 @@ class LocationPicker extends React.Component<IProps, IState> {
 
     private onGeolocate = (position: GeolocationPosition) => {
         this.setState({ position });
+        this.marker.setLngLat(
+            new maplibregl.LngLat(
+                position.coords.longitude,
+                position.coords.latitude,
+            ),
+        );
     };
 
     private onOk = () => {
@@ -133,6 +158,22 @@ class LocationPicker extends React.Component<IProps, IState> {
                             primaryDisabled={!this.state.position}
                         />
                     </form>
+                </div>
+                <div className="mx_MLocationBody_marker" id={this.getMarkerId()}>
+                    <div className="mx_MLocationBody_markerBorder">
+                        <MemberAvatar
+                            member={this.props.sender}
+                            width={27}
+                            height={27}
+                            viewUserOnClick={false}
+                        />
+                    </div>
+                    <img
+                        className="mx_MLocationBody_pointer"
+                        src={require("../../../../res/img/location/pointer.svg")}
+                        width="9"
+                        height="5"
+                    />
                 </div>
             </div>
         );
