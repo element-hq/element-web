@@ -34,13 +34,11 @@ import {
     unescapeMessage,
 } from '../../../editor/serialize';
 import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
-import { CommandPartCreator, Part, PartCreator, SerializedPart, Type } from '../../../editor/parts';
+import { CommandPartCreator, Part, PartCreator, SerializedPart } from '../../../editor/parts';
 import ReplyChain from "../elements/ReplyChain";
 import { findEditableEvent } from '../../../utils/EventUtils';
 import SendHistoryManager from "../../../SendHistoryManager";
-import { Command, CommandCategories, getCommand } from '../../../SlashCommands';
-import Modal from '../../../Modal';
-import { _t, _td } from '../../../languageHandler';
+import { CommandCategories } from '../../../SlashCommands';
 import ContentMessages from '../../../ContentMessages';
 import { withMatrixClientHOC, MatrixClientProps } from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
@@ -52,13 +50,12 @@ import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindin
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
-import ErrorDialog from "../dialogs/ErrorDialog";
-import QuestionDialog from "../dialogs/QuestionDialog";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../sendTimePerformanceMetrics";
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 import DocumentPosition from "../../../editor/position";
 import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
+import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
 
 function addReplyToMessageContent(
     content: IContent,
@@ -284,24 +281,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         return true;
     }
 
-    private isSlashCommand(): boolean {
-        const parts = this.model.parts;
-        const firstPart = parts[0];
-        if (firstPart) {
-            if (firstPart.type === Type.Command && firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")) {
-                return true;
-            }
-            // be extra resilient when somehow the AutocompleteWrapperModel or
-            // CommandPartCreator fails to insert a command part, so we don't send
-            // a command as a message
-            if (firstPart.text.startsWith("/") && !firstPart.text.startsWith("//")
-                && (firstPart.type === Type.Plain || firstPart.type === Type.PillCandidate)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private sendQuickReaction(): void {
         const timeline = this.context.liveTimeline;
         const events = timeline.getEvents();
@@ -337,66 +316,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         }
     }
 
-    private getSlashCommand(): [Command, string, string] {
-        const commandText = this.model.parts.reduce((text, part) => {
-            // use mxid to textify user pills in a command
-            if (part.type === "user-pill") {
-                return text + part.resourceId;
-            }
-            return text + part.text;
-        }, "");
-        const { cmd, args } = getCommand(commandText);
-        return [cmd, args, commandText];
-    }
-
-    private async runSlashCommand(cmd: Command, args: string): Promise<void> {
-        const threadId = this.props.relation?.rel_type === RelationType.Thread
-            ? this.props.relation?.event_id
-            : null;
-
-        const result = cmd.run(this.props.room.roomId, threadId, args);
-        let messageContent;
-        let error = result.error;
-        if (result.promise) {
-            try {
-                if (cmd.category === CommandCategories.messages) {
-                    // The command returns a modified message that we need to pass on
-                    messageContent = await result.promise;
-                } else {
-                    await result.promise;
-                }
-            } catch (err) {
-                error = err;
-            }
-        }
-        if (error) {
-            logger.error("Command failure: %s", error);
-            // assume the error is a server error when the command is async
-            const isServerError = !!result.promise;
-            const title = isServerError ? _td("Server error") : _td("Command error");
-
-            let errText;
-            if (typeof error === 'string') {
-                errText = error;
-            } else if (error.translatedMessage) {
-                // Check for translatable errors (newTranslatableError)
-                errText = error.translatedMessage;
-            } else if (error.message) {
-                errText = error.message;
-            } else {
-                errText = _t("Server unavailable, overloaded, or something else went wrong.");
-            }
-
-            Modal.createTrackedDialog(title, '', ErrorDialog, {
-                title: _t(title),
-                description: errText,
-            });
-        } else {
-            logger.log("Command success.");
-            if (messageContent) return messageContent;
-        }
-    }
-
     public async sendMessage(): Promise<void> {
         const model = this.model;
 
@@ -416,50 +335,32 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
 
         const replyToEvent = this.props.replyToEvent;
         let shouldSend = true;
-        let content;
+        let content: IContent;
 
-        if (!containsEmote(model) && this.isSlashCommand()) {
-            const [cmd, args, commandText] = this.getSlashCommand();
+        if (!containsEmote(model) && isSlashCommand(this.model)) {
+            const [cmd, args, commandText] = getSlashCommand(this.model);
             if (cmd) {
+                const threadId = this.props.relation?.rel_type === RelationType.Thread
+                    ? this.props.relation?.event_id
+                    : null;
+
                 if (cmd.category === CommandCategories.messages) {
-                    content = await this.runSlashCommand(cmd, args);
+                    content = await runSlashCommand(cmd, args, this.props.room.roomId, threadId);
+                    if (!content) {
+                        return; // errored
+                    }
+
                     if (replyToEvent) {
-                        addReplyToMessageContent(
-                            content,
-                            replyToEvent,
-                            this.props.permalinkCreator,
-                        );
+                        addReplyToMessageContent(content, replyToEvent, this.props.permalinkCreator);
                     }
                     attachRelation(content, this.props.relation);
                 } else {
-                    this.runSlashCommand(cmd, args);
+                    runSlashCommand(cmd, args, this.props.room.roomId, threadId);
                     shouldSend = false;
                 }
-            } else {
-                // ask the user if their unknown command should be sent as a message
-                const { finished } = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
-                    title: _t("Unknown Command"),
-                    description: <div>
-                        <p>
-                            { _t("Unrecognised command: %(commandText)s", { commandText }) }
-                        </p>
-                        <p>
-                            { _t("You can use <code>/help</code> to list available commands. " +
-                                "Did you mean to send this as a message?", {}, {
-                                code: t => <code>{ t }</code>,
-                            }) }
-                        </p>
-                        <p>
-                            { _t("Hint: Begin your message with <code>//</code> to start it with a slash.", {}, {
-                                code: t => <code>{ t }</code>,
-                            }) }
-                        </p>
-                    </div>,
-                    button: _t('Send as message'),
-                });
-                const [sendAnyway] = await finished;
+            } else if (!await shouldSendAnyway(commandText)) {
                 // if !sendAnyway bail to let the user edit the composer and try again
-                if (!sendAnyway) return;
+                return;
             }
         }
 

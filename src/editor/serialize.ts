@@ -179,7 +179,7 @@ export function textSerialize(model: EditorModel): string {
 }
 
 export function containsEmote(model: EditorModel): boolean {
-    return startsWith(model, "/me ", false);
+    return startsWith(model, "/me ", false) && model.parts[0]?.text?.length > 4;
 }
 
 export function startsWith(model: EditorModel, prefix: string, caseSensitive = true): boolean {

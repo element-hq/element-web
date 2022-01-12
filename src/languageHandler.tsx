@@ -43,7 +43,7 @@ counterpart.setSeparator('|');
 const FALLBACK_LOCALE = 'en';
 counterpart.setFallbackLocale(FALLBACK_LOCALE);
 
-interface ITranslatableError extends Error {
+export interface ITranslatableError extends Error {
     translatedMessage: string;
 }
 
@@ -51,6 +51,7 @@ interface ITranslatableError extends Error {
  * Helper function to create an error which has an English message
  * with a translatedMessage property for use by the consumer.
  * @param {string} message Message to translate.
+ * @param {object} variables Variable substitutions, e.g { foo: 'bar' }
  * @returns {Error} The constructed error.
  */
 export function newTranslatableError(message: string, variables?: IVariables): ITranslatableError {
