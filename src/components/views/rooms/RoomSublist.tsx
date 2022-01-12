@@ -294,7 +294,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === "view_room" && payload.show_room_tile && this.state.rooms) {
+        if (payload.action === Action.ViewRoom && payload.show_room_tile && this.state.rooms) {
             // XXX: we have to do this a tick later because we have incorrect intermediate props during a room change
             // where we lose the room we are changing from temporarily and then it comes back in an update right after.
             setImmediate(() => {

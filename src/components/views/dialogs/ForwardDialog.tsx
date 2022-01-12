@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import classnames from "classnames";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -23,7 +23,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
-import { useSettingValue, useFeatureEnabled } from "../../../hooks/useSettings";
+import { useFeatureEnabled, useSettingValue } from "../../../hooks/useSettings";
 import { UIFeature } from "../../../settings/UIFeature";
 import { Layout } from "../../../settings/enums/Layout";
 import { IDialogProps } from "./IDialogProps";
@@ -45,6 +45,7 @@ import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { roomContextDetailsText } from "../../../Rooms";
+import { Action } from "../../../dispatcher/actions";
 
 const AVATAR_SIZE = 30;
 
@@ -76,7 +77,7 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
 
     const jumpToRoom = () => {
         dis.dispatch({
-            action: "view_room",
+            action: Action.ViewRoom,
             room_id: room.roomId,
         });
         onFinished(true);

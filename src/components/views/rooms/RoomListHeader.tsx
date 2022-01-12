@@ -97,7 +97,7 @@ const PrototypeCommunityContextMenu = (props: ComponentProps<typeof SpaceContext
         const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
         if (chat) {
             dis.dispatch({
-                action: 'view_room',
+                action: Action.ViewRoom,
                 room_id: chat.roomId,
             }, true);
             RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomMemberList }, undefined, chat.roomId);

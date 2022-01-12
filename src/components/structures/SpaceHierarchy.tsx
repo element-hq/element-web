@@ -327,7 +327,7 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
 
     const roomAlias = getDisplayAliasForRoom(room) || undefined;
     dis.dispatch({
-        action: "view_room",
+        action: Action.ViewRoom,
         should_peek: true,
         _type: "room_directory", // instrumentation
         room_alias: roomAlias,

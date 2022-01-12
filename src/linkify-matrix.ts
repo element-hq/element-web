@@ -116,7 +116,10 @@ function onUserClick(event: MouseEvent, userId: string) {
 }
 function onAliasClick(event: MouseEvent, roomAlias: string) {
     event.preventDefault();
-    dis.dispatch({ action: 'view_room', room_alias: roomAlias });
+    dis.dispatch({
+        action: Action.ViewRoom,
+        room_alias: roomAlias,
+    });
 }
 function onGroupClick(event: MouseEvent, groupId: string) {
     event.preventDefault();

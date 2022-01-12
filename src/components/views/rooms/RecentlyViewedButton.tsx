@@ -25,6 +25,7 @@ import RoomAvatar from "../avatars/RoomAvatar";
 import dis from "../../../dispatcher/dispatcher";
 import InteractiveTooltip, { Direction } from "../elements/InteractiveTooltip";
 import { roomContextDetailsText } from "../../../Rooms";
+import { Action } from "../../../dispatcher/actions";
 
 const RecentlyViewedButton = () => {
     const tooltipRef = useRef<InteractiveTooltip>();
@@ -40,7 +41,7 @@ const RecentlyViewedButton = () => {
                     key={crumb.roomId}
                     onClick={() => {
                         dis.dispatch({
-                            action: "view_room",
+                            action: Action.ViewRoom,
                             room_id: crumb.roomId,
                         });
                         tooltipRef.current?.hideTooltip();

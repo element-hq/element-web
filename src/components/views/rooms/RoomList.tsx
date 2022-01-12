@@ -47,12 +47,12 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import {
+    isMetaSpace,
     ISuggestedRoom,
     MetaSpace,
     SpaceKey,
-    UPDATE_SUGGESTED_ROOMS,
     UPDATE_SELECTED_SPACE,
-    isMetaSpace,
+    UPDATE_SUGGESTED_ROOMS,
 } from "../../../stores/spaces";
 import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -215,7 +215,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                     e.stopPropagation();
                     closeMenu();
                     defaultDispatcher.dispatch({
-                        action: "view_room",
+                        action: Action.ViewRoom,
                         room_id: activeSpace.roomId,
                     });
                 }}
@@ -497,7 +497,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     private onExplore = () => {
         if (!isMetaSpace(this.props.activeSpace)) {
             defaultDispatcher.dispatch({
-                action: "view_room",
+                action: Action.ViewRoom,
                 room_id: this.props.activeSpace,
             });
         } else {
@@ -522,7 +522,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             );
             const viewRoom = () => {
                 defaultDispatcher.dispatch({
-                    action: "view_room",
+                    action: Action.ViewRoom,
                     room_alias: room.canonical_alias || room.aliases?.[0],
                     room_id: room.room_id,
                     via_servers: room.viaServers,

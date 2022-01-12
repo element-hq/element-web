@@ -34,6 +34,7 @@ import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { SettingLevel } from "../../src/settings/SettingLevel";
+import { Action } from "../../src/dispatcher/actions";
 
 jest.useFakeTimers();
 
@@ -92,7 +93,7 @@ describe("SpaceStore", () => {
     let rooms = [];
     const mkRoom = (roomId: string) => testUtils.mkRoom(client, roomId, rooms);
     const mkSpace = (spaceId: string, children: string[] = []) => testUtils.mkSpace(client, spaceId, rooms, children);
-    const viewRoom = roomId => defaultDispatcher.dispatch({ action: "view_room", room_id: roomId }, true);
+    const viewRoom = roomId => defaultDispatcher.dispatch({ action: Action.ViewRoom, room_id: roomId }, true);
 
     const run = async () => {
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
@@ -680,7 +681,7 @@ describe("SpaceStore", () => {
             await run();
 
             dispatcherRef = defaultDispatcher.register(payload => {
-                if (payload.action === "view_room" || payload.action === "view_home_page") {
+                if (payload.action === Action.ViewRoom || payload.action === "view_home_page") {
                     currentRoom = payload.room_id || null;
                 }
             });

@@ -36,6 +36,7 @@ import { useDispatcher } from "../../../../../hooks/useDispatcher";
 import { CreateEventField, IGroupSummary } from "../../../dialogs/CreateSpaceFromCommunityDialog";
 import { createSpaceFromCommunity } from "../../../../../utils/space";
 import Spinner from "../../../elements/Spinner";
+import { Action } from "../../../../../dispatcher/actions";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -112,7 +113,7 @@ const CommunityMigrator = ({ onFinished }) => {
                     onClick={() => {
                         if (community.spaceId) {
                             dis.dispatch({
-                                action: "view_room",
+                                action: Action.ViewRoom,
                                 room_id: community.spaceId,
                             });
                             onFinished();

@@ -33,6 +33,7 @@ import { arrayHasDiff } from "../../../utils/arrays";
 import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import dis from "../../../dispatcher/dispatcher";
 import { ROOM_SECURITY_TAB } from "../dialogs/RoomSettingsDialog";
+import { Action } from "../../../dispatcher/actions";
 
 interface IProps {
     room: Room;
@@ -267,7 +268,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
 
                         // switch to the new room in the background
                         dis.dispatch({
-                            action: "view_room",
+                            action: Action.ViewRoom,
                             room_id: roomId,
                         });
 

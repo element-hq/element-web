@@ -834,7 +834,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     };
 
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === "view_room" && payload.room_id === this.props.space.roomId) {
+        if (payload.action === Action.ViewRoom && payload.room_id === this.props.space.roomId) {
             this.setState({ phase: Phase.Landing });
             return;
         }
@@ -862,7 +862,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private goToFirstRoom = async () => {
         if (this.state.firstRoomId) {
             defaultDispatcher.dispatch({
-                action: "view_room",
+                action: Action.ViewRoom,
                 room_id: this.state.firstRoomId,
             });
             return;

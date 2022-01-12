@@ -227,7 +227,7 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
 
             const onSpaceClick = () => {
                 dis.dispatch({
-                    action: "view_room",
+                    action: Action.ViewRoom,
                     room_id: roomId,
                 });
             };

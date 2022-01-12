@@ -157,7 +157,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (space) {
             const roomId = this.getNotificationState(space).getFirstRoomWithNotifications();
             defaultDispatcher.dispatch({
-                action: "view_room",
+                action: Action.ViewRoom,
                 room_id: roomId,
                 context_switch: true,
             });
@@ -174,7 +174,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 });
                 if (unreadRoom) {
                     defaultDispatcher.dispatch({
-                        action: "view_room",
+                        action: Action.ViewRoom,
                         room_id: unreadRoom.roomId,
                         context_switch: true,
                     });
@@ -222,13 +222,13 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 this.isRoomInSpace(space, roomId)
             ) {
                 defaultDispatcher.dispatch({
-                    action: "view_room",
+                    action: Action.ViewRoom,
                     room_id: roomId,
                     context_switch: true,
                 });
             } else if (cliSpace) {
                 defaultDispatcher.dispatch({
-                    action: "view_room",
+                    action: Action.ViewRoom,
                     room_id: space,
                     context_switch: true,
                 });
@@ -1061,7 +1061,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         if (!spacesEnabled || !this.matrixClient) return;
 
         switch (payload.action) {
-            case "view_room": {
+            case Action.ViewRoom: {
                 // Don't auto-switch rooms when reacting to a context-switch or for new rooms being created
                 // as this is not helpful and can create loops of rooms/space switching
                 if (payload.context_switch || payload.justCreatedOpts) break;

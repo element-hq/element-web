@@ -56,7 +56,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { haveTileForEvent } from "../views/rooms/EventTile";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
-import MatrixClientContext, { withMatrixClientHOC, MatrixClientProps } from "../../contexts/MatrixClientContext";
+import MatrixClientContext, { MatrixClientProps, withMatrixClientHOC } from "../../contexts/MatrixClientContext";
 import { E2EStatus, shieldStatusForRoom } from '../../utils/ShieldUtils';
 import { Action } from "../../dispatcher/actions";
 import { IMatrixClientCreds } from "../../MatrixClientPeg";
@@ -1777,7 +1777,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     onHiddenHighlightsClick = () => {
         const oldRoom = this.getOldRoom();
         if (!oldRoom) return;
-        dis.dispatch({ action: "view_room", room_id: oldRoom.roomId });
+        dis.dispatch({
+            action: Action.ViewRoom,
+            room_id: oldRoom.roomId,
+        });
     };
 
     render() {

@@ -251,16 +251,10 @@ class RoomViewStore extends Store<ActionPayload> {
                 }
             }
 
+            // Re-fire the payload with the newly found room_id
             dis.dispatch({
-                action: Action.ViewRoom,
+                ...payload,
                 room_id: roomId,
-                event_id: payload.event_id,
-                highlighted: payload.highlighted,
-                room_alias: payload.room_alias,
-                auto_join: payload.auto_join,
-                oob_data: payload.oob_data,
-                viaServers: payload.via_servers,
-                wasContextSwitch: payload.context_switch,
             });
         }
     }

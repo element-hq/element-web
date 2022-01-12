@@ -197,7 +197,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     }
 
     private onAction = (payload: ActionPayload) => {
-        if (payload.action === "view_room" && payload.room_id === this.props.room.roomId && payload.show_room_tile) {
+        if (payload.action === Action.ViewRoom &&
+            payload.room_id === this.props.room.roomId &&
+            payload.show_room_tile
+        ) {
             setImmediate(() => {
                 this.scrollIntoView();
             });

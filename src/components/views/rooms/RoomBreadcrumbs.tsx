@@ -27,6 +27,7 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { Action } from "../../../dispatcher/actions";
 
 interface IProps {
 }
@@ -78,7 +79,10 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
 
     private viewRoom = (room: Room, index: number) => {
         Analytics.trackEvent("Breadcrumbs", "click_node", String(index));
-        defaultDispatcher.dispatch({ action: "view_room", room_id: room.roomId });
+        defaultDispatcher.dispatch({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+        });
     };
 
     public render(): React.ReactElement {

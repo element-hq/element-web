@@ -221,7 +221,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
         }
 
         defaultDispatcher.dispatch({
-            action: 'view_room',
+            action: Action.ViewRoom,
             room_id: roomId,
         });
         onFinished();

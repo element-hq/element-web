@@ -43,6 +43,7 @@ import { ROOM_NOTIFICATIONS_TAB } from "../dialogs/RoomSettingsDialog";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
+import { Action } from "../../../dispatcher/actions";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -239,7 +240,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
     const ensureViewingRoom = () => {
         if (RoomViewStore.getRoomId() === room.roomId) return;
         dis.dispatch({
-            action: "view_room",
+            action: Action.ViewRoom,
             room_id: room.roomId,
         }, true);
     };
