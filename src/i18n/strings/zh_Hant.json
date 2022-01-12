@@ -3511,5 +3511,13 @@
     "Confirm the emoji below are displayed on both devices, in the same order:": "確認以下的表情符號以相同的順序顯示在兩台裝置上：",
     "Edit setting": "編輯設定",
     "Expand map": "展開地圖",
-    "Send reactions": "傳送回應"
+    "Send reactions": "傳送回應",
+    "No active call in this room": "此聊天室內沒有活躍的通話",
+    "Unable to find Matrix ID for phone number": "找不到電話號碼的 Matrix ID",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "未知（使用者，工作階段）配對：(%(userId)s, %(deviceId)s)",
+    "Command failed: Unable to find room (%(roomId)s": "命令失敗：尋找聊天室失敗 (%(roomId)s)",
+    "Unrecognised room address: %(roomAlias)s": "無法識別的聊天室地址：%(roomAlias)s",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "取得聊天室主題失敗：找不到聊天室 (%(roomId)s)",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "命令錯誤：找不到繪製類型 (%(renderingType)s)",
+    "Command error: Unable to handle slash command.": "命令錯誤：無法處理斜線命令。"
 }
