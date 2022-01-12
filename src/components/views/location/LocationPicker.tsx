@@ -124,10 +124,14 @@ class LocationPicker extends React.Component<IProps, IState> {
                 { error }
                 <div className="mx_LocationPicker_footer">
                     <form onSubmit={this.onOk}>
-                        <DialogButtons primaryButton={_t('Share')}
+                        <DialogButtons
+                            primaryButton={_t('Share location')}
+                            cancelButtonClass="mx_LocationPicker_cancelButton"
+                            primaryIsSubmit={true}
                             onPrimaryButtonClick={this.onOk}
                             onCancel={this.props.onFinished}
-                            primaryDisabled={!this.state.position} />
+                            primaryDisabled={!this.state.position}
+                        />
                     </form>
                 </div>
             </div>
