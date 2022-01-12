@@ -36,7 +36,10 @@ limitations under the License.
     }
 }
 
-.mx_RoomSublist_auxButton:hover,
+.mx_RoomSublist_auxButton:hover{
+    background: transparent !important;
+}
+
 .mx_RoomSublist_menuButton:hover {
     background: $panel-actions;
 }
@@ -49,7 +52,14 @@ limitations under the License.
 }
 
 .mx_RoomSublist_auxButton::before {
-    mask-image: url("$(res)/img/element-icons/roomlist/plus.svg");
+    background-image: url("$(res)/img/element-icons/feedback.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+    top: 0;
+    left: 2px;
+    background-color: transparent;
 }
 
 .mx_RoomSublist_menuButton::before {

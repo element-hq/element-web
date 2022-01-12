@@ -248,7 +248,6 @@ declare global {
                   divId: string,
                   options: {
                       sitekey: string;
-                      size: "invisible";
                       callback: (response: string) => void;
                   },
               ) => string;

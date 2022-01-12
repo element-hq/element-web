@@ -411,7 +411,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                     className="mx_RoomSublist_auxButton"
                     tooltipClassName="mx_RoomSublist_addRoomTooltip"
                     aria-label={_t("Start chat")}
-                    title={_t("Start chat")}
+                    title={''}
                 />
             </div>
         );
