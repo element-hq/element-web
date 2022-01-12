@@ -3510,5 +3510,13 @@
     "Back to thread": "Torna alla conversazione",
     "Room members": "Membri stanza",
     "Back to chat": "Torna alla chat",
-    "Send reactions": ""
+    "Send reactions": "",
+    "No active call in this room": "",
+    "Unable to find Matrix ID for phone number": "",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "",
+    "Command failed: Unable to find room (%(roomId)s": "",
+    "Unrecognised room address: %(roomAlias)s": "",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "",
+    "Command error: Unable to handle slash command.": ""
 }
