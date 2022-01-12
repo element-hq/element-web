@@ -292,6 +292,8 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private sendEdit = async (): Promise<void> => {
+        if (this.state.saveDisabled) return;
+
         const startTime = CountlyAnalytics.getTimestamp();
         const editedEvent = this.props.editState.getEvent();
 
