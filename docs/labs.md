@@ -165,3 +165,19 @@ triggered by the button to the right of the filter field.
 ## Spotlight search (`feature_spotlight`) [In Development]
 
 Switches to a new room search experience.
+
+## Extensible events rendering (`feature_extensible_events`) [In Development]
+
+*Intended for developer use only at the moment.*
+
+Extensible Events are a [new event format](https://github.com/matrix-org/matrix-doc/pull/1767) which
+supports graceful fallback in unknown event types. Instead of rendering nothing or a blank space, events
+can define a series of other events which represent the event's information but in different ways. The
+base of these fallbacks being text.
+
+Turning this flag on indicates that, when possible, the extensible events structure should be parsed on
+supported event types. This should lead to zero perceptual change in the timeline except in cases where
+the sender is using unknown/unrecognised event types.
+
+Sending events with extensible events structure is always enabled - this should not affect any downstream
+client.
