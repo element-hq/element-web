@@ -3514,5 +3514,7 @@
     "Unrecognised room address: %(roomAlias)s": "Adresë e panjohur dhome: %(roomAlias)s",
     "Failed to get room topic: Unable to find room (%(roomId)s": "S’u arrit të merret tema e dhomës: S’arrihet të gjendet dhomë (%(roomId)s",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Gabim urdhri: S’arrihet të gjendet lloj vizatimi (%(renderingType)s)",
-    "From a thread": "Nga një rrjedhë"
+    "From a thread": "Nga një rrjedhë",
+    "Element could not send your location. Please try again later.": "Element-i s’dërgoi dot vendndodhjen tuaj. Ju lutemi, riprovoni më vonë.",
+    "We couldn’t send your location": "S’dërguam dot vendndodhjen tuaj"
 }
