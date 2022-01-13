@@ -184,7 +184,7 @@ export default class PersistedElement extends React.Component<IProps> {
             width: parentRect.width + 'px',
             height: parentRect.height + 'px',
         });
-    }, 100, { trailing: true, leading: true });
+    }, 16, { trailing: true, leading: true });
 
     public render(): JSX.Element {
         return <div ref={this.collectChildContainer} />;

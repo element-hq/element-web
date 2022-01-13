@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 
-import CallPreview from './CallPreview';
+import PipView from './PipView';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
@@ -28,11 +28,11 @@ interface IState {
 
 }
 
-@replaceableComponent("views.voip.CallContainer")
-export default class CallContainer extends React.PureComponent<IProps, IState> {
+@replaceableComponent("views.voip.PiPContainer")
+export default class PiPContainer extends React.PureComponent<IProps, IState> {
     public render() {
-        return <div className="mx_CallContainer">
-            <CallPreview />
+        return <div className="mx_PiPContainer">
+            <PipView />
         </div>;
     }
 }

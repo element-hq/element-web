@@ -135,7 +135,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         // Close the sticker picker when the window resizes
         window.addEventListener('resize', this.onResize);
 
-        this.dispatcherRef = dis.register(this.onWidgetAction);
+        this.dispatcherRef = dis.register(this.onAction);
 
         // Track updates to widget state in account data
         MatrixClientPeg.get().on('accountData', this.updateWidget);
@@ -198,7 +198,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         });
     };
 
-    private onWidgetAction = (payload: ActionPayload): void => {
+    private onAction = (payload: ActionPayload): void => {
         switch (payload.action) {
             case "user_widget_updated":
                 this.forceUpdate();

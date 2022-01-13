@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_CallContainer {
+.mx_PiPContainer {
     position: absolute;
     right: 20px;
     bottom: 72px;
@@ -25,8 +25,4 @@ limitations under the License.
     // sure the cursor hits the iframe for Jitsi which will be at a
     // different level.
     pointer-events: none;
-
-    .mx_AppTile_persistedWrapper div {
-        min-width: 350px;
-    }
 }

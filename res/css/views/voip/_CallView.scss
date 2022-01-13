@@ -20,14 +20,15 @@ limitations under the License.
     background-color: $dark-panel-bg-color;
     padding-left: 8px;
     padding-right: 8px;
-    // XXX: CallContainer sets pointer-events: none - should probably be set back in a better place
+    // XXX: PiPContainer sets pointer-events: none - should probably be set back in a better place
     pointer-events: initial;
 }
 
 .mx_CallView_large {
     padding-bottom: 10px;
     margin: $container-gap-width;
-    margin-right: calc($container-gap-width / 2); // The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser.
+    // The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser.
+    margin-right: calc($container-gap-width / 2);
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
@@ -46,7 +47,7 @@ limitations under the License.
     width: 320px;
     padding-bottom: 8px;
     background-color: $system;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.20);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
 
     .mx_CallView_video_hold,
@@ -170,7 +171,7 @@ limitations under the License.
     background-position: center;
     filter: blur(20px);
     &::after {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         width: 100%;
@@ -194,10 +195,10 @@ limitations under the License.
         display: block;
         margin-left: auto;
         margin-right: auto;
-        content: '';
+        content: "";
         width: 40px;
         height: 40px;
-        background-image: url('$(res)/img/voip/paused.svg');
+        background-image: url("$(res)/img/voip/paused.svg");
         background-position: center;
         background-size: cover;
     }
