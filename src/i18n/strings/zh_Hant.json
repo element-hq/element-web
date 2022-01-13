@@ -3519,5 +3519,6 @@
     "Unrecognised room address: %(roomAlias)s": "無法識別的聊天室地址：%(roomAlias)s",
     "Failed to get room topic: Unable to find room (%(roomId)s": "取得聊天室主題失敗：找不到聊天室 (%(roomId)s)",
     "Command error: Unable to find rendering type (%(renderingType)s)": "命令錯誤：找不到繪製類型 (%(renderingType)s)",
-    "Command error: Unable to handle slash command.": "命令錯誤：無法處理斜線命令。"
+    "Command error: Unable to handle slash command.": "命令錯誤：無法處理斜線命令。",
+    "From a thread": "來自討論串"
 }
