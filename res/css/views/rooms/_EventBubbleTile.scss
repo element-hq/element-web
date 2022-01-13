@@ -188,6 +188,24 @@ limitations under the License.
             z-index: 3; // above media and location share maps
         }
 
+        &.mx_EventTile_mediaLine {
+            .mx_MessageTimestamp {
+                color: #ffffff; // regardless of theme, always visible on the below gradient
+            }
+
+            // linear gradient to make the timestamp more visible
+            .mx_MImageBody::before {
+                content: "";
+                position: absolute;
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
+                z-index: 1;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+
         //noinspection CssReplaceWithShorthandSafely
         .mx_MImageBody .mx_MImageBody_thumbnail {
             // Note: This is intentionally not compressed because the browser gets confused
