@@ -3528,5 +3528,6 @@
     "Timed out trying to fetch your location. Please try again later.": "Pokus o zjištění vaší polohy vypršel. Zkuste to prosím později.",
     "Failed to fetch your location. Please try again later.": "Nepodařilo se zjistit vaši polohu. Zkuste to prosím později.",
     "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Elementu bylo odepřeno oprávnění ke zjištění vaší polohy. Povolte prosím přístup k poloze v nastavení prohlížeče.",
-    "Could not fetch location": "Nepodařilo se zjistit polohu"
+    "Could not fetch location": "Nepodařilo se zjistit polohu",
+    "Automatically send debug logs on decryption errors": "Automaticky odesílat ladící protokoly při chybách dešifrování"
 }
