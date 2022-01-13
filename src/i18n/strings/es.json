@@ -3461,5 +3461,14 @@
     "Based on %(count)s votes|other": "%(count)s votos",
     "Failed to load list of rooms.": "No se ha podido cargar la lista de salas.",
     "Based on %(count)s votes|one": "%(count)s voto",
-    "Recently viewed": "Visto recientemente"
+    "Recently viewed": "Visto recientemente",
+    "Device verified": "Dispositivo verificado",
+    "Verify this device": "Verificar este dispositivo",
+    "Open in OpenStreetMap": "Abrir en OpenStreetMap",
+    "Verify other device": "Verificar otro dispositivo",
+    "Edit setting": "Cambiar ajuste",
+    "Missing domain separator e.g. (:domain.org)": "Falta el separador de dominio, ej.: (:dominio.org)",
+    "Expand map": "Expandir mapa",
+    "Send reactions": "Enviar reacciones",
+    "Dial": "Llamar"
 }

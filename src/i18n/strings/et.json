@@ -3507,5 +3507,15 @@
     "Waiting for you to verify on your other device…": "Ootan, et sa verifitseeriksid oma teises seadmes…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "Ootan, et sa verifitseerid oma teises seadmes: %(deviceName)s (%(deviceId)s)…",
     "Expand map": "Kuva kaart laiemana",
-    "Send reactions": "Reageeri sõnumile"
+    "Send reactions": "Reageeri sõnumile",
+    "From a thread": "Jutulõngast",
+    "No active call in this room": "Jututoas ei ole kõnet pooleli",
+    "Unable to find Matrix ID for phone number": "Sellele telefoninumbrile vastavat Matrix'i kasutajatunnust ei õnnestu leida",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Tundmatu kasutaja ja sessiooni kombinatsioon: (%(userId)s, %(deviceId)s)",
+    "Command failed: Unable to find room (%(roomId)s": "Viga käsu täitmisel: jututuba ei õnnestu leida (%(roomId)s)",
+    "Unrecognised room address: %(roomAlias)s": "Jututoa tundmatu aadress: %(roomAlias)s",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "Jututoa teema laadimine ei õnnestu: jututuba ei õnnestu leida (%(roomId)s)",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "Viga käsu täitmisel: visualiseerimise tüüpi ei leidu (%(renderingType)s)",
+    "Command error: Unable to handle slash command.": "Viga käsu täitmisel: Kaldkriipsuga käsku ei ole võimalik töödelda.",
+    "Widget": "Vidin"
 }
