@@ -3516,5 +3516,11 @@
     "Command error: Unable to find rendering type (%(renderingType)s)": "Gabim urdhri: S’arrihet të gjendet lloj vizatimi (%(renderingType)s)",
     "From a thread": "Nga një rrjedhë",
     "Element could not send your location. Please try again later.": "Element-i s’dërgoi dot vendndodhjen tuaj. Ju lutemi, riprovoni më vonë.",
-    "We couldn’t send your location": "S’dërguam dot vendndodhjen tuaj"
+    "We couldn’t send your location": "S’dërguam dot vendndodhjen tuaj",
+    "Unknown error fetching location. Please try again later.": "Gabim i panjohur në sjelljen e vendndodhjes. Ju lutemi, riprovoni më vonë.",
+    "Timed out trying to fetch your location. Please try again later.": "Mbaroi koha duke provuar të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
+    "Failed to fetch your location. Please try again later.": "S’u arrit të sillet vendndodhja juaj. Ju lutemi, riprovoni më vonë.",
+    "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Element-it iu mohua leja për të sjellë vendndodhjen tuaj. Ju lutemi, lejoni përdorim vendndodhjeje, që nga rregullimet e shfletuesit tuaj.",
+    "Could not fetch location": "S’u pru dot vendndodhja",
+    "Automatically send debug logs on decryption errors": "Dërgo automatikisht regjistra diagnostikimi, gjatë gabimesh shfshehtëzimi"
 }
