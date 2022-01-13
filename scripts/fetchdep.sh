@@ -49,11 +49,18 @@ elif [ -n "$REVIEW_ID" ]; then
     getPRInfo $REVIEW_ID
 fi
 
-# $head will always be in the format "fork:branch", so we split it by ":" into
-# an array. The first element will then be the fork and the second the branch.
-# Based on that we clone
+# for forks, $head will be in the format "fork:branch", so we split it by ":"
+# into an array. On non-forks, this has the effect of splitting into a single
+# element array given ":" shouldn't appear in the head - it'll just be the
+# branch name. Based on the results, we clone.
 BRANCH_ARRAY=(${head//:/ })
-clone ${BRANCH_ARRAY[0]} $defrepo ${BRANCH_ARRAY[1]}
+TRY_ORG=$deforg
+TRY_BRANCH=${BRANCH_ARRAY[0]}
+if [[ "$head" == *":"* ]]; then
+    TRY_ORG=${BRANCH_ARRAY[0]}
+    TRY_BRANCH=${BRANCH_ARRAY[1]}
+fi
+clone ${TRY_ORG} $defrepo ${TRY_BRANCH}
 
 # Try the target branch of the push or PR.
 if [ -n $GITHUB_BASE_REF ]; then

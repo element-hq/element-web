@@ -292,6 +292,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
+    "feature_extensible_events": {
+        isFeature: true,
+        labsGroup: LabGroup.Developer, // developer for now, eventually Messaging and default on
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show extensible event representation of events"),
+        default: false,
+    },
     "feature_polls": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

@@ -6163,6 +6163,11 @@ mathml-tag-names@^2.1.3:
   version "0.0.1"
   resolved "https://github.com/matrix-org/matrix-analytics-events.git#1eab4356548c97722a183912fda1ceabbe8cc7c1"
 
+matrix-events-sdk@^0.0.1-beta.2:
+  version "0.0.1-beta.2"
+  resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.2.tgz#28efdcc3259152c4d53094cedb72b3843e5f772e"
+  integrity sha512-a3VIZeb9IxxxPrvFnUbt4pjP7A6irv7eWLv1GBoq+80m7v5n3QhzT/mmeUGJx2KNt7jLboFau4g1iIU82H3wEg==
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "15.3.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2d9c93876524cb553f616b10fe50d9e7e539075b"
