@@ -6172,6 +6172,7 @@ mathml-tag-names@^2.1.3:
     browser-request "^0.3.3"
     bs58 "^4.0.1"
     content-type "^1.0.4"
+    eslint-plugin-import "^2.25.2"
     loglevel "^1.7.1"
     p-retry "^4.5.0"
     qs "^6.9.6"
@@ -6191,9 +6192,10 @@ matrix-react-test-utils@^0.2.3:
   resolved "https://registry.yarnpkg.com/matrix-react-test-utils/-/matrix-react-test-utils-0.2.3.tgz#27653f9d6bbfddd1856e51860fad1503b039d617"
   integrity sha512-NKZDlMEQzDZDQhBYyKBUtqidRvpkww3n9/GmGICkxtU2D6NetyBIfvm1Lf9o7167KSkPHJUVvDS9dzaS55jUnA==
 
-"matrix-web-i18n@github:matrix-org/matrix-web-i18n":
-  version "1.1.2"
-  resolved "https://codeload.github.com/matrix-org/matrix-web-i18n/tar.gz/dbd35b35a925bd8ac8932134046efaa80767f4b2"
+matrix-web-i18n@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/matrix-web-i18n/-/matrix-web-i18n-1.2.0.tgz#3d6f90fa70f3add05e155787f88728c99cf9c01a"
+  integrity sha512-IQMSGnCX2meajxoSW81bWeniZjWTWaTdarc3A5F8wL5klclqLsfoaiNmTDKyJfd12Ph/0+llJ/itIztDUg9Wdg==
   dependencies:
     "@babel/parser" "^7.13.16"
     "@babel/traverse" "^7.13.17"
