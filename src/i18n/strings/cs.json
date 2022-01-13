@@ -3511,5 +3511,14 @@
     "Confirm the emoji below are displayed on both devices, in the same order:": "Potvrďte, že se následující emotikony zobrazují na obou zařízeních ve stejném pořadí:",
     "Edit setting": "Upravit nastavení",
     "Expand map": "Rozbalit mapu",
-    "Send reactions": "Odesílat reakce"
+    "Send reactions": "Odesílat reakce",
+    "No active call in this room": "V této místnosti není žádný aktivní hovor",
+    "Unable to find Matrix ID for phone number": "Nelze najít Matrix ID pro telefonní číslo",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Neznámý pár (uživatel, relace): (%(userId)s, %(deviceId)s)",
+    "Command failed: Unable to find room (%(roomId)s": "Příkaz se nezdařil: Nelze najít místnost (%(roomId)s",
+    "Unrecognised room address: %(roomAlias)s": "Nerozpoznaná adresa místnosti: %(roomAlias)s",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "Nepodařilo se získat téma místnosti: Nelze najít místnost (%(roomId)s",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "Chyba příkazu: Nelze najít typ vykreslování (%(renderingType)s)",
+    "Command error: Unable to handle slash command.": "Chyba příkazu: Nelze zpracovat příkaz za lomítkem.",
+    "From a thread": "Z vlákna"
 }
