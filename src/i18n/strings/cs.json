@@ -3521,5 +3521,7 @@
     "Command error: Unable to find rendering type (%(renderingType)s)": "Chyba příkazu: Nelze najít typ vykreslování (%(renderingType)s)",
     "Command error: Unable to handle slash command.": "Chyba příkazu: Nelze zpracovat příkaz za lomítkem.",
     "From a thread": "Z vlákna",
-    "Widget": "Widget"
+    "Widget": "Widget",
+    "Element could not send your location. Please try again later.": "Element nemohl odeslat vaši polohu. Zkuste to prosím později.",
+    "We couldn’t send your location": "Nepodařilo se odeslat vaši polohu"
 }
