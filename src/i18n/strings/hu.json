@@ -1767,7 +1767,7 @@
     "Page Down": "Page Down",
     "Esc": "Esc",
     "Enter": "Enter",
-    "Space": "Szóköz",
+    "Space": "Tér",
     "End": "End",
     "Use Single Sign On to continue": "A folytatáshoz használja az egyszeri bejelentkezést (SSO)",
     "Single Sign On": "Egyszeri bejelentkezés",
@@ -3507,5 +3507,13 @@
     "Dial": "Tárcsáz",
     "Back to thread": "Vissza az üzenetszálhoz",
     "Room members": "Szoba tagok",
-    "Back to chat": "Vissza a beszélgetésbe"
+    "Back to chat": "Vissza a beszélgetésbe",
+    "No active call in this room": "Nincs aktív hívás a szobában",
+    "Unable to find Matrix ID for phone number": "Matrix azonosító nem található a telefonszámhoz",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Ismeretlen (felhasználó, eszköz) páros: (%(userId)s, %(deviceId)s)",
+    "Command failed: Unable to find room (%(roomId)s": "Parancs hiba: A szoba nem található (%(roomId)s)",
+    "Unrecognised room address: %(roomAlias)s": "Ismeretlen szoba cím: %(roomAlias)s",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "A szoba téma nem található: A szoba nem található (%(roomId)s)",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "Parancs hiba: Megjelenítési típus nem található (%(renderingType)s)",
+    "Command error: Unable to handle slash command.": "Parancs hiba: A per (slash) parancs támogatott."
 }
