@@ -880,8 +880,6 @@ $left-gutter: 64px;
             order: 999;
             padding-left: 0;
             padding-right: 0;
-            margin-left: 36px;
-            margin-right: 50px;
         }
     }
 
@@ -889,16 +887,20 @@ $left-gutter: 64px;
         margin-left: 36px;
         margin-right: 36px;
 
+        .mx_EventTile_line.mx_EventTile_mediaLine {
+            padding: 0 !important;
+            max-width: 100%;
+
+            .mx_MFileBody {
+                width: 100%;
+            }
+        }
+
         &[data-self=true] {
             align-items: flex-end;
 
             .mx_EventTile_line.mx_EventTile_mediaLine {
                 margin: 0 -13px 0 0; // align with normal messages
-                padding: 0 !important;
-
-                .mx_MFileBody ~ .mx_MessageTimestamp {
-                    bottom: calc($font-14px + 4px); // above the Decrypt/Download text line
-                }
             }
         }
     }
@@ -917,6 +919,11 @@ $left-gutter: 64px;
             .mx_MImageBody {
                 margin: 0;
             }
+        }
+
+        .mx_ReactionsRow {
+            margin-left: 36px;
+            margin-right: 50px;
         }
 
         .mx_MessageTimestamp {
