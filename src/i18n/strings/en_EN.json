@@ -2135,6 +2135,8 @@
     "Can't load this message": "Can't load this message",
     "toggle event": "toggle event",
     "Share location": "Share location",
+    "We couldn’t send your location": "We couldn’t send your location",
+    "Element could not send your location. Please try again later.": "Element could not send your location. Please try again later.",
     "Failed to load group members": "Failed to load group members",
     "Filter community members": "Filter community members",
     "Are you sure you want to remove '%(roomName)s' from %(groupId)s?": "Are you sure you want to remove '%(roomName)s' from %(groupId)s?",

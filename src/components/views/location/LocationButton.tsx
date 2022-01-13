@@ -14,26 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import classNames from 'classnames';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 
 import { _t } from '../../../languageHandler';
 import LocationPicker from './LocationPicker';
 import { CollapsibleButton, ICollapsibleButtonProps } from '../rooms/CollapsibleButton';
 import ContextMenu, { aboveLeftOf, useContextMenu, AboveLeftOf } from "../../structures/ContextMenu";
+import Modal from '../../../Modal';
+import QuestionDialog from '../dialogs/QuestionDialog';
+import MatrixClientContext from '../../../contexts/MatrixClientContext';
 
 interface IProps extends Pick<ICollapsibleButtonProps, "narrowMode"> {
+    roomId: string;
     sender: RoomMember;
-    shareLocation: (uri: string, ts: number) => boolean;
     menuPosition: AboveLeftOf;
     narrowMode: boolean;
 }
 
 export const LocationButton: React.FC<IProps> = (
-    { sender, shareLocation, menuPosition, narrowMode },
+    { roomId, sender, menuPosition, narrowMode },
 ) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
+    const matrixClient = useContext(MatrixClientContext);
 
     let contextMenu: ReactElement;
     if (menuDisplayed) {
@@ -47,7 +54,7 @@ export const LocationButton: React.FC<IProps> = (
         >
             <LocationPicker
                 sender={sender}
-                onChoose={shareLocation}
+                onChoose={shareLocation(matrixClient, roomId, openMenu)}
                 onFinished={closeMenu}
             />
         </ContextMenu>;
@@ -74,6 +81,36 @@ export const LocationButton: React.FC<IProps> = (
         { contextMenu }
     </React.Fragment>;
 };
+
+const shareLocation = (client: MatrixClient, roomId: string, openMenu: () => void) =>
+    (uri: string, ts: number) => {
+        if (!uri) return false;
+        try {
+            const text = textForLocation(uri, ts, null);
+            client.sendMessage(
+                roomId,
+                makeLocationContent(text, uri, ts, null),
+            );
+        } catch (e) {
+            logger.error("We couldn’t send your location", e);
+
+            const analyticsAction = 'We couldn’t send your location';
+            const params = {
+                title: _t("We couldn’t send your location"),
+                description: _t(
+                    "Element could not send your location. Please try again later."),
+                button: _t('Try again'),
+                cancelButton: _t('Cancel'),
+                onFinished: (tryAgain: boolean) => {
+                    if (tryAgain) {
+                        openMenu();
+                    }
+                },
+            };
+            Modal.createTrackedDialog(analyticsAction, '', QuestionDialog, params);
+        }
+        return true;
+    };
 
 export function textForLocation(
     uri: string,
