@@ -293,8 +293,8 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
             onClick={openMenu}
             className="mx_RoomSublist_auxButton"
             tooltipClassName="mx_RoomSublist_addRoomTooltip"
-            aria-label={_td("Add room")}
-            title={_td("Add room")}
+            aria-label={_t("Add room")}
+            title={_t("Add room")}
             isExpanded={menuDisplayed}
             inputRef={handle}
         />
