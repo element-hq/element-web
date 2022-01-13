@@ -25,6 +25,8 @@ import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MemberAvatar from '../avatars/MemberAvatar';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
+import Modal from '../../../Modal';
+import ErrorDialog from '../dialogs/ErrorDialog';
 
 interface IProps {
     sender: RoomMember;
@@ -104,6 +106,20 @@ class LocationPicker extends React.Component<IProps, IState> {
 
             this.map.on('load', () => {
                 this.geolocate.trigger();
+            });
+
+            this.geolocate.on('error', (e: GeolocationPositionError) => {
+                this.props.onFinished();
+                logger.error("Could not fetch location", e);
+                Modal.createTrackedDialog(
+                    'Could not fetch location',
+                    '',
+                    ErrorDialog,
+                    {
+                        title: _t("Could not fetch location"),
+                        description: positionFailureMessage(e.code),
+                    },
+                );
             });
 
             this.geolocate.on('geolocate', this.onGeolocate);
@@ -197,3 +213,21 @@ export function getGeoUri(position: GeolocationPosition): string {
 }
 
 export default LocationPicker;
+
+function positionFailureMessage(code: number): string {
+    switch (code) {
+        case 1: return _t(
+            "Element was denied permission to fetch your location. " +
+            "Please allow location access in your browser settings.",
+        );
+        case 2: return _t(
+            "Failed to fetch your location. Please try again later.",
+        );
+        case 3: return _t(
+            "Timed out trying to fetch your location. Please try again later.",
+        );
+        case 4: return _t(
+            "Unknown error fetching location. Please try again later.",
+        );
+    }
+}
