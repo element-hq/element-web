@@ -3516,5 +3516,6 @@
     "Unrecognised room address: %(roomAlias)s": "Jututoa tundmatu aadress: %(roomAlias)s",
     "Failed to get room topic: Unable to find room (%(roomId)s": "Jututoa teema laadimine ei õnnestu: jututuba ei õnnestu leida (%(roomId)s)",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Viga käsu täitmisel: visualiseerimise tüüpi ei leidu (%(renderingType)s)",
-    "Command error: Unable to handle slash command.": "Viga käsu täitmisel: Kaldkriipsuga käsku ei ole võimalik töödelda."
+    "Command error: Unable to handle slash command.": "Viga käsu täitmisel: Kaldkriipsuga käsku ei ole võimalik töödelda.",
+    "Widget": "Vidin"
 }
