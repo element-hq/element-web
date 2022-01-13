@@ -3520,5 +3520,6 @@
     "Failed to get room topic: Unable to find room (%(roomId)s": "Nepodařilo se získat téma místnosti: Nelze najít místnost (%(roomId)s",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Chyba příkazu: Nelze najít typ vykreslování (%(renderingType)s)",
     "Command error: Unable to handle slash command.": "Chyba příkazu: Nelze zpracovat příkaz za lomítkem.",
-    "From a thread": "Z vlákna"
+    "From a thread": "Z vlákna",
+    "Widget": "Widget"
 }
