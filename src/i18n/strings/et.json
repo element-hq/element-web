@@ -3519,5 +3519,10 @@
     "Command error: Unable to handle slash command.": "Viga käsu täitmisel: Kaldkriipsuga käsku ei ole võimalik töödelda.",
     "Widget": "Vidin",
     "Element could not send your location. Please try again later.": "Element ei saanud sinu asukohta edastada. Palun proovi hiljem uuesti.",
-    "We couldn’t send your location": "Sinu asukoha saatmine ei õnnestunud"
+    "We couldn’t send your location": "Sinu asukoha saatmine ei õnnestunud",
+    "Unknown error fetching location. Please try again later.": "Asukoha tuvastamine ei õnnestunud teadmaata põhjusel. Palun proovi hiljem uuesti.",
+    "Timed out trying to fetch your location. Please try again later.": "Asukoha tuvastamine ei õnnestunud päringu aegumise tõttu. Palun proovi hiljem uuesti.",
+    "Failed to fetch your location. Please try again later.": "Asukoha tuvastamine ei õnnestunud. Palun proovi hiljem uuesti.",
+    "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Element ei saanud asukohta tuvastada. Palun luba vastavad õigused brauseri seadistustes.",
+    "Could not fetch location": "Asukoha tuvastamine ei õnnestunud"
 }
