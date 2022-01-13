@@ -52,6 +52,7 @@ import { RoomScrollStateStore } from "../stores/RoomScrollStateStore";
 import { ConsoleLogger, IndexedDBLogStore } from "../rageshake/rageshake";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import { Skinner } from "../Skinner";
+import AutoRageshakeStore from "../stores/AutoRageshakeStore";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -111,6 +112,7 @@ declare global {
         electron?: Electron;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
+        mxAutoRageshakeStore?: AutoRageshakeStore;
     }
 
     interface DesktopCapturerSource {

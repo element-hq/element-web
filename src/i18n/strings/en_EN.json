@@ -948,6 +948,7 @@
     "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.": "Temporarily show communities instead of Spaces for this session. Support for this will be removed in the near future. This will reload Element.",
     "Developer mode": "Developer mode",
     "Automatically send debug logs on any error": "Automatically send debug logs on any error",
+    "Automatically send debug logs on decryption errors": "Automatically send debug logs on decryption errors",
     "Collecting app version information": "Collecting app version information",
     "Collecting logs": "Collecting logs",
     "Uploading logs": "Uploading logs",

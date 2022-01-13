@@ -129,6 +129,11 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                     name="automaticErrorReporting"
                     level={SettingLevel.DEVICE}
                 />,
+                <SettingsFlag
+                    key="automaticDecryptionErrorReporting"
+                    name="automaticDecryptionErrorReporting"
+                    level={SettingLevel.DEVICE}
+                />,
             );
 
             if (this.state.showHiddenReadReceipts) {

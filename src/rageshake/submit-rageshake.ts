@@ -31,7 +31,8 @@ interface IOpts {
     label?: string;
     userText?: string;
     sendLogs?: boolean;
-    progressCallback?: (string) => void;
+    progressCallback?: (s: string) => void;
+    customFields?: Record<string, string>;
 }
 
 async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
@@ -71,6 +72,12 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
     body.append('user_agent', userAgent);
     body.append('installed_pwa', installedPWA);
     body.append('touch_input', touchInput);
+
+    if (opts.customFields) {
+        for (const key in opts.customFields) {
+            body.append(key, opts.customFields[key]);
+        }
+    }
 
     if (client) {
         body.append('user_id', client.credentials.userId);
@@ -191,9 +198,9 @@ async function collectBugReport(opts: IOpts = {}, gzipLogs = true) {
  *
  * @param {function(string)} opts.progressCallback Callback to call with progress updates
  *
- * @return {Promise} Resolved when the bug report is sent.
+ * @return {Promise<string>} URL returned by the rageshake server
  */
-export default async function sendBugReport(bugReportEndpoint: string, opts: IOpts = {}) {
+export default async function sendBugReport(bugReportEndpoint: string, opts: IOpts = {}): Promise<string> {
     if (!bugReportEndpoint) {
         throw new Error("No bug report endpoint has been set.");
     }
@@ -202,7 +209,7 @@ export default async function sendBugReport(bugReportEndpoint: string, opts: IOp
     const body = await collectBugReport(opts);
 
     progressCallback(_t("Uploading logs"));
-    await submitReport(bugReportEndpoint, body, progressCallback);
+    return await submitReport(bugReportEndpoint, body, progressCallback);
 }
 
 /**
@@ -291,10 +298,11 @@ export async function submitFeedback(
     await submitReport(SdkConfig.get().bug_report_endpoint_url, body, () => {});
 }
 
-function submitReport(endpoint: string, body: FormData, progressCallback: (str: string) => void) {
-    return new Promise<void>((resolve, reject) => {
+function submitReport(endpoint: string, body: FormData, progressCallback: (str: string) => void): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
         const req = new XMLHttpRequest();
         req.open("POST", endpoint);
+        req.responseType = "json";
         req.timeout = 5 * 60 * 1000;
         req.onreadystatechange = function() {
             if (req.readyState === XMLHttpRequest.LOADING) {
@@ -305,7 +313,7 @@ function submitReport(endpoint: string, body: FormData, progressCallback: (str: 
                     reject(new Error(`HTTP ${req.status}`));
                     return;
                 }
-                resolve();
+                resolve(req.response.report_url || "");
             }
         };
         req.send(body);
