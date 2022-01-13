@@ -3524,5 +3524,6 @@
     "Timed out trying to fetch your location. Please try again later.": "Asukoha tuvastamine ei õnnestunud päringu aegumise tõttu. Palun proovi hiljem uuesti.",
     "Failed to fetch your location. Please try again later.": "Asukoha tuvastamine ei õnnestunud. Palun proovi hiljem uuesti.",
     "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Element ei saanud asukohta tuvastada. Palun luba vastavad õigused brauseri seadistustes.",
-    "Could not fetch location": "Asukoha tuvastamine ei õnnestunud"
+    "Could not fetch location": "Asukoha tuvastamine ei õnnestunud",
+    "Automatically send debug logs on decryption errors": "Dekrüptimisvigade puhul saada silumislogid automaatselt arendajatele"
 }
