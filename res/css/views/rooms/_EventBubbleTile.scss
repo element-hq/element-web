@@ -184,7 +184,7 @@ limitations under the License.
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
-        > a, .mx_MessageTimestamp {
+        > a { // timestamp wrapper anchor
             position: absolute;
             padding: 4px 8px;
             bottom: 0;
@@ -406,12 +406,15 @@ limitations under the License.
         margin-left: 9px;
     }
 
-    .mx_EventTile_line > a,
-    .mx_EventTile_line .mx_MessageTimestamp {
-        // Align timestamps with those of normal bubble tiles
+    .mx_EventTile_line > a { // timestamp wrapper anchor
         right: auto;
-        top: -11px;
         left: -77px;
+        bottom: unset;
+        align-self: center;
+
+        .mx_MessageTimestamp {
+            vertical-align: middle;
+        }
     }
 }
 
