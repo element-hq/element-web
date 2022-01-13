@@ -3523,5 +3523,10 @@
     "From a thread": "Z vlákna",
     "Widget": "Widget",
     "Element could not send your location. Please try again later.": "Element nemohl odeslat vaši polohu. Zkuste to prosím později.",
-    "We couldn’t send your location": "Nepodařilo se odeslat vaši polohu"
+    "We couldn’t send your location": "Nepodařilo se odeslat vaši polohu",
+    "Unknown error fetching location. Please try again later.": "Neznámá chyba při zjištění polohy. Zkuste to prosím později.",
+    "Timed out trying to fetch your location. Please try again later.": "Pokus o zjištění vaší polohy vypršel. Zkuste to prosím později.",
+    "Failed to fetch your location. Please try again later.": "Nepodařilo se zjistit vaši polohu. Zkuste to prosím později.",
+    "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Elementu bylo odepřeno oprávnění ke zjištění vaší polohy. Povolte prosím přístup k poloze v nastavení prohlížeče.",
+    "Could not fetch location": "Nepodařilo se zjistit polohu"
 }
