@@ -3479,5 +3479,6 @@
     "Failed to fetch your location. Please try again later.": "Не вдалося отримати ваше місцеперебування. Повторіть спробу пізніше.",
     "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Element не отримав дозволу дізнатися ваше місцеперебування. Увімкніть доступ до місцеперебування в налаштуваннях переглядача.",
     "Could not fetch location": "Не вдалося отримати місцеперебування",
-    "Automatically send debug logs on decryption errors": "Автоматично надсилати журнали зневадження при збоях розшифрування"
+    "Automatically send debug logs on decryption errors": "Автоматично надсилати журнали зневадження при збоях розшифрування",
+    "Show extensible event representation of events": "Показати розгорнене подання подій"
 }
