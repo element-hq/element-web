@@ -3470,5 +3470,8 @@
     "Failed to get room topic: Unable to find room (%(roomId)s": "Не вдалося отримати тему кімнати: не вдалося знайти кімнату (%(roomId)s",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Помилка команди: неможливо знайти тип рендерингу (%(renderingType)s)",
     "Command error: Unable to handle slash command.": "Помилка команди: Неможливо виконати slash-команду.",
-    "From a thread": "З треду"
+    "From a thread": "З треду",
+    "Element could not send your location. Please try again later.": "Element не може надіслати дані про ваше місцеперебування. Спробуйте пізніше.",
+    "We couldn’t send your location": "Ми не можемо надіслати дані про ваше місцеперебування",
+    "Widget": "Віджет"
 }
