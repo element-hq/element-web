@@ -62,7 +62,9 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
         name => SettingsStore.getValue(name, ev.getRoomId());
 
     // Hide redacted events
-    if (ev.isRedacted() && !isEnabled('showRedactions')) return true;
+    // Deleted events with a thread are always shown regardless of user preference
+    // to make sure that a thread can be accessible even if the root message is deleted
+    if (ev.isRedacted() && !isEnabled('showRedactions') && !ev.getThread()) return true;
 
     // Hide replacement events since they update the original tile (if enabled)
     if (ev.isRelation("m.replace")) return true;
