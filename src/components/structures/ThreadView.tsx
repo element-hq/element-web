@@ -165,11 +165,11 @@ export default class ThreadView extends React.Component<IProps, IState> {
         if (thread && this.state.thread !== thread) {
             this.setState({
                 thread,
+            }, () => {
+                thread.emit(ThreadEvent.ViewThread);
+                this.timelinePanelRef.current?.refreshTimeline();
             });
-            thread.emit(ThreadEvent.ViewThread);
         }
-
-        this.timelinePanelRef.current?.refreshTimeline();
     };
 
     private onScroll = (): void => {
