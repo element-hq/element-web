@@ -2130,5 +2130,6 @@
     "%(senderName)s changed their profile picture": "%(senderName)s zmienił(-a) swoje zdjęcie profilowe",
     "%(senderName)s removed their profile picture": "%(senderName)s usunął swoje zdjęcie profilowe",
     "%(senderName)s set a profile picture": "%(senderName)s ustawił(-a) zdjęcie profilowe",
-    "%(senderName)s made no change": "%(senderName)s nie dokonał żadnych zmian"
+    "%(senderName)s made no change": "%(senderName)s nie dokonał żadnych zmian",
+    "%(targetName)s joined the room": "%(targetName)s dołączył do pokoju"
 }
