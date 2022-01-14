@@ -2128,5 +2128,6 @@
     "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s zbanował(-a) %(targetName)s: %(reason)s",
     "%(senderName)s invited %(targetName)s": "%(senderName)s zaprosił(-a) %(targetName)s",
     "%(senderName)s changed their profile picture": "%(senderName)s zmienił swoje zdjęcie profilowe",
-    "%(senderName)s removed their profile picture": "%(senderName)s usunął swoje zdjęcie profilowe"
+    "%(senderName)s removed their profile picture": "%(senderName)s usunął swoje zdjęcie profilowe",
+    "%(senderName)s set a profile picture": "%(senderName)s ustawił zdjęcie profilowe"
 }
