@@ -295,8 +295,8 @@ export default class MemberEventListSummary extends React.Component<IProps> {
                 break;
             case "kicked":
                 res = (userCount > 1)
-                    ? _t("were kicked %(count)s times", { count: repeats })
-                    : _t("was kicked %(count)s times", { count: repeats });
+                    ? _t("were removed %(count)s times", { count: repeats })
+                    : _t("was removed %(count)s times", { count: repeats });
                 break;
             case "changed_name":
                 res = (userCount > 1)

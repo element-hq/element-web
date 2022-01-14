@@ -265,7 +265,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
                 defaultValue: 50,
             },
             "kick": {
-                desc: _t('Kick users'),
+                desc: _t('Remove users'),
                 defaultValue: 50,
             },
             "ban": {

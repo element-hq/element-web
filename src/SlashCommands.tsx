@@ -722,9 +722,10 @@ export const Commands = [
         renderingTypes: [TimelineRenderingType.Room],
     }),
     new Command({
-        command: 'kick',
+        command: 'remove',
+        aliases: ["kick"],
         args: '<user-id> [reason]',
-        description: _td('Kicks user with given id'),
+        description: _td('Removes user with given id from this room'),
         runFn: function(roomId, args) {
             if (args) {
                 const matches = args.match(/^(\S+?)( +(.*))?$/);

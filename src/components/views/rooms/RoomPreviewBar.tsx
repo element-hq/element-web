@@ -359,7 +359,7 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
             }
             case MessageCase.Kicked: {
                 const { memberName, reason } = this.getKickOrBanInfo();
-                title = _t("You were kicked from %(roomName)s by %(memberName)s",
+                title = _t("You were removed from %(roomName)s by %(memberName)s",
                     { memberName, roomName: this.roomName() });
                 subTitle = reason ? _t("Reason: %(reason)s", { reason }) : null;
 

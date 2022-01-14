@@ -516,7 +516,7 @@ describe('MemberEventListSummary', function() {
 
         expect(summaryText).toBe(
             "user_1 was invited, was banned, joined, rejected their invitation, left, " +
-            "had their invitation withdrawn, was unbanned, was kicked, left and was kicked",
+            "had their invitation withdrawn, was unbanned, was removed, left and was removed",
         );
     });
 

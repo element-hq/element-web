@@ -18,7 +18,7 @@ exports[`<RoomPreviewBar /> renders kicked message 1`] = `
   class="mx_RoomPreviewBar_message"
 >
   <h3>
-    You were kicked from RoomPreviewBar-test-room by @kicker:test.com
+    You were removed from RoomPreviewBar-test-room by @kicker:test.com
   </h3>
   <p>
     Reason: test reason

@@ -426,7 +426,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "showJoinLeaves": {
         supportedLevels: LEVELS_ROOM_SETTINGS_WITH_ROOM,
-        displayName: _td('Show join/leave messages (invites/kicks/bans unaffected)'),
+        displayName: _td('Show join/leave messages (invites/removes/bans unaffected)'),
         default: true,
         invertedSettingName: 'hideJoinLeaves',
     },

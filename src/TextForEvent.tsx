@@ -158,12 +158,12 @@ function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents
                     : _t('%(senderName)s withdrew %(targetName)s\'s invitation', { senderName, targetName });
             } else if (prevContent.membership === "join") {
                 return () => reason
-                    ? _t('%(senderName)s kicked %(targetName)s: %(reason)s', {
+                    ? _t('%(senderName)s removed %(targetName)s: %(reason)s', {
                         senderName,
                         targetName,
                         reason,
                     })
-                    : _t('%(senderName)s kicked %(targetName)s', { senderName, targetName });
+                    : _t('%(senderName)s removed %(targetName)s', { senderName, targetName });
             } else {
                 return null;
             }
