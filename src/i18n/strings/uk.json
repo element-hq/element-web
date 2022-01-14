@@ -3498,5 +3498,6 @@
     "Remove, ban, or invite people to this room, and make you leave": "Вилучати, блокувати чи запрошувати людей у цій кімнаті, зокрема вас",
     "%(senderName)s removed %(targetName)s": "%(senderName)s вилучає %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s вилучає %(targetName)s: %(reason)s",
-    "Removes user with given id from this room": "Вилучає користувача з указаним ID з цієї кімнати"
+    "Removes user with given id from this room": "Вилучає користувача з указаним ID з цієї кімнати",
+    "Enable location sharing": "Увімкнути надсилання місцеперебування"
 }
