@@ -385,9 +385,9 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     private onPaste = (ev: ClipboardEvent) => {
         const element = ev.target as HTMLElement;
-        const inputableElement = getInputableElement(element);
+        const inputableElement = getInputableElement(element) || document.activeElement as HTMLElement;
 
-        if (inputableElement) {
+        if (inputableElement?.focus) {
             inputableElement.focus();
         } else {
             // refocusing during a paste event will make the
