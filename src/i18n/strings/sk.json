@@ -2922,5 +2922,19 @@
     "You can turn this off anytime in settings": "Túto funkciu môžete kedykoľvek vypnúť v nastaveniach",
     "Help improve %(analyticsOwner)s": "Pomôžte zlepšiť %(analyticsOwner)s",
     "PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> to help us track down the problem.": "PRO TIP: Ak napíšete príspevok o chybe, odošlite prosím <debugLogsLink>ladiace záznamy</debugLogsLink>, aby ste nám pomohli vystopovať problém.",
-    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Pomôžte nám identifikovať problémy a zlepšiť Element zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor zdieľaný vašimi zariadeniami."
+    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Pomôžte nám identifikovať problémy a zlepšiť Element zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor zdieľaný vašimi zariadeniami.",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Neznámy pár (používateľ, relácia): (%(userId)s, %(deviceId)s)",
+    "Widget": "Widget",
+    "Automatically send debug logs on decryption errors": "Automatické odosielanie záznamov ladenia pri chybe dešifrovania",
+    "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s odstránil používateľa %(targetName)s: %(reason)s",
+    "%(senderName)s removed %(targetName)s": "%(senderName)s odstránil používateľa %(targetName)s",
+    "Remove users": "Odstrániť používateľov",
+    "You were removed from %(roomName)s by %(memberName)s": "Boli ste odstránení z %(roomName)s používateľom %(memberName)s",
+    "Remove from chat": "Odstrániť z konverzácie",
+    "Remove from %(roomName)s": "Odstrániť z %(roomName)s",
+    "Failed to remove user": "Nepodarilo sa odstrániť používateľa",
+    "Remove from room": "Odstrániť z miestnosti",
+    "Enable location sharing": "Povoliť zdieľanie polohy",
+    "Message bubbles": "Správy v bublinách",
+    "GitHub issue": "Správa o probléme na GitHub"
 }
