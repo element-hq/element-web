@@ -2129,5 +2129,6 @@
     "%(senderName)s invited %(targetName)s": "%(senderName)s zaprosił(-a) %(targetName)s",
     "%(senderName)s changed their profile picture": "%(senderName)s zmienił(-a) swoje zdjęcie profilowe",
     "%(senderName)s removed their profile picture": "%(senderName)s usunął swoje zdjęcie profilowe",
-    "%(senderName)s set a profile picture": "%(senderName)s ustawił zdjęcie profilowe"
+    "%(senderName)s set a profile picture": "%(senderName)s ustawił zdjęcie profilowe",
+    "%(senderName)s made no change": "%(senderName)s nie dokonał żadnych zmian"
 }
