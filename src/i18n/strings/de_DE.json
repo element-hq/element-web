@@ -3472,5 +3472,8 @@
     "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s Mitglieder mit dir und %(commaSeparatedMembers)s",
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "Mit dir %(count)s Mitglieder, %(commaSeparatedMembers)s",
     "Including you, %(commaSeparatedMembers)s": "Mit dir, %(commaSeparatedMembers)s",
-    "Command error: Unable to handle slash command.": "Befehlsfehler: Slash-Befehl kann nicht verarbeitet werden."
+    "Command error: Unable to handle slash command.": "Befehlsfehler: Slash-Befehl kann nicht verarbeitet werden.",
+    "Device verified": "Gerät verifiziert",
+    "Expand map": "Karte vergrößern",
+    "Room members": "Raum-Mitglieder"
 }
