@@ -3520,5 +3520,15 @@
     "Failed to get room topic: Unable to find room (%(roomId)s": "取得聊天室主題失敗：找不到聊天室 (%(roomId)s)",
     "Command error: Unable to find rendering type (%(renderingType)s)": "命令錯誤：找不到繪製類型 (%(renderingType)s)",
     "Command error: Unable to handle slash command.": "命令錯誤：無法處理斜線命令。",
-    "From a thread": "來自討論串"
+    "From a thread": "來自討論串",
+    "Unknown error fetching location. Please try again later.": "擷取位置時發生未知錯誤。請稍後再試。",
+    "Timed out trying to fetch your location. Please try again later.": "嘗試擷取您的位置時逾時。請稍後再試。",
+    "Failed to fetch your location. Please try again later.": "擷取您的位置失敗。請稍後再試。",
+    "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Element 擷取您位置的權限被拒絕。請在您的瀏覽器設定中允許位置存取。",
+    "Could not fetch location": "無法擷取位置",
+    "Element could not send your location. Please try again later.": "Element 無法傳送您的位置。請稍後再試。",
+    "We couldn’t send your location": "我們無法傳送您的位置",
+    "Widget": "小工具",
+    "Automatically send debug logs on decryption errors": "自動傳送關於解密錯誤的除錯紀錄檔",
+    "Show extensible event representation of events": "顯示事件的可擴展事件表示"
 }
