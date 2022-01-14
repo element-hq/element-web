@@ -2095,5 +2095,7 @@
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "Wysłaliśmy pozostałym, ale osoby poniżej nie mogły zostać zaproszone do <RoomName/>",
     "%(date)s at %(time)s": "%(date)s o %(time)s",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s zmienił ACLe serwera dla pokoju.",
-    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Dodaje ┬──┬ ノ( ゜-゜ノ) na początku wiadomości tekstowej"
+    "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Dodaje ┬──┬ ノ( ゜-゜ノ) na początku wiadomości tekstowej",
+    "%(targetName)s accepted an invitation": "%(targetName)s zaakceptował zaproszenie",
+    "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s zaakceptował zaproszenie dla %(displayName)s"
 }
