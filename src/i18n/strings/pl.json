@@ -2132,6 +2132,6 @@
     "%(senderName)s set a profile picture": "%(senderName)s ustawił(-a) zdjęcie profilowe",
     "%(senderName)s made no change": "%(senderName)s nie dokonał(-a) żadnych zmian",
     "%(targetName)s joined the room": "%(targetName)s dołączył(-a) do pokoju",
-    "%(targetName)s rejected the invitation": "%(targetName)s odrzucił zaproszenie",
+    "%(targetName)s rejected the invitation": "%(targetName)s odrzucił(-a) zaproszenie",
     "%(targetName)s left the room: %(reason)s": "%(targetName)s opuścił pokój: %(reason)s"
 }
