@@ -2096,8 +2096,8 @@
     "%(date)s at %(time)s": "%(date)s o %(time)s",
     "%(senderDisplayName)s changed the server ACLs for this room.": "%(senderDisplayName)s zmienił ACLe serwera dla pokoju.",
     "Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message": "Dodaje ┬──┬ ノ( ゜-゜ノ) na początku wiadomości tekstowej",
-    "%(targetName)s accepted an invitation": "%(targetName)s zaakceptował zaproszenie",
-    "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s zaakceptował zaproszenie dla %(displayName)s",
+    "%(targetName)s accepted an invitation": "%(targetName)s zaakceptował(-a) zaproszenie",
+    "%(targetName)s accepted the invitation for %(displayName)s": "%(targetName)s zaakceptował(-a) zaproszenie dla %(displayName)s",
     "Takes the call in the current room off hold": "Odwiesza połączenie w obecnym pokoju",
     "No active call in this room": "Brak aktywnych połączeń w tym pokoju",
     "Places the call in the current room on hold": "Zawiesza połączenie w obecnym pokoju",
@@ -2121,5 +2121,10 @@
     "Calls are unsupported": "Rozmowy nie są obsługiwane",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "Przykładowe informacje wysyłane do nas w celu poprawienia %(brand)s zawierają:",
     "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Nasza pełna polityka cookies znajduje się <CookiePolicyLink>tutaj</CookiePolicyLink>.",
-    "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s usunął swoją widoczną nazwę (%(oldDisplayName)s)"
+    "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)s usunął swoją widoczną nazwę (%(oldDisplayName)s)",
+    "%(senderName)s set their display name to %(displayName)s": "%(senderName)s ustawił(-a) widoczną nazwę jako %(displayName)s",
+    "%(oldDisplayName)s changed their display name to %(displayName)s": "%(oldDisplayName)s zmienił(-a) wyświetlaną nazwę na %(displayName)s",
+    "%(senderName)s banned %(targetName)s": "%(senderName)s zbanował(-a) %(targetName)s",
+    "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)s zbanował(-a) %(targetName)s: %(reason)s",
+    "%(senderName)s invited %(targetName)s": "%(senderName)s zaprosił(-a) %(targetName)s"
 }
