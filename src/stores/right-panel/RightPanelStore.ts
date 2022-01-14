@@ -140,6 +140,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // This function behaves as following:
         // Update state: if the same phase is send but with a state
         // Set right panel and erase history: if a "different to the current" phase is send (with or without a state)
+        // If the right panel is set, this function also shows the right panel.
         const redirect = this.getVerificationRedirect(card);
         const targetPhase = redirect?.phase ?? card.phase;
         const cardState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
@@ -153,18 +154,22 @@ export default class RightPanelStore extends ReadyWatchingStore {
             hist[hist.length - 1].state = cardState;
             this.emitAndUpdateSettings();
             return;
-        }
-
-        if (targetPhase !== this.currentCard?.phase) {
+        } else if (targetPhase !== this.currentCard?.phase) {
             // Set right panel and erase history.
+            this.show();
             this.setRightPanelCache({ phase: targetPhase, state: cardState ?? {} }, rId);
+        } else {
+            this.show();
+            this.emitAndUpdateSettings();
         }
     }
 
     public setCards(cards: IRightPanelCard[], allowClose = true, roomId: string = null) {
+        // This function sets the history of the right panel and shows the right panel if not already visible.
         const rId = roomId ?? this.viewedRoomId;
         const history = cards.map(c => ({ phase: c.phase, state: c.state ?? {} }));
         this.byRoom[rId] = { history, isOpen: true };
+        this.show();
         this.emitAndUpdateSettings();
     }
 
@@ -173,6 +178,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         allowClose = true,
         roomId: string = null,
     ) {
+        // This function appends a card to the history and shows the right panel if now already visible.
         const rId = roomId ?? this.viewedRoomId;
         const redirect = this.getVerificationRedirect(card);
         const targetPhase = redirect?.phase ?? card.phase;
@@ -194,7 +200,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
                 isOpen: !allowClose,
             };
         }
-
+        this.show();
         this.emitAndUpdateSettings();
     }
 
@@ -213,6 +219,18 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
         this.byRoom[rId].isOpen = !this.byRoom[rId].isOpen;
         this.emitAndUpdateSettings();
+    }
+
+    public show() {
+        if (!this.isOpenForRoom) {
+            this.togglePanel();
+        }
+    }
+
+    public hide() {
+        if (this.isOpenForRoom) {
+            this.togglePanel();
+        }
     }
 
     // Private
