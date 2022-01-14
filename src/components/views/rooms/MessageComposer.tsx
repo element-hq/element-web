@@ -286,12 +286,16 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             showStickers: false,
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
             showPollsButton: SettingsStore.getValue("feature_polls"),
-            showLocationButton: SettingsStore.getValue("feature_location_share"),
+            showLocationButton: (
+                SettingsStore.getValue("feature_location_share") &&
+                SettingsStore.getValue("MessageComposerInput.showLocationButton")
+            ),
         };
 
         this.instanceId = instanceCount++;
 
         SettingsStore.monitorSetting("MessageComposerInput.showStickersButton", null);
+        SettingsStore.monitorSetting("MessageComposerInput.showLocationButton", null);
         SettingsStore.monitorSetting("feature_polls", null);
         SettingsStore.monitorSetting("feature_location_share", null);
     }
@@ -348,9 +352,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         break;
                     }
 
+                    case "MessageComposerInput.showLocationButton":
                     case "feature_location_share": {
-                        const showLocationButton = SettingsStore.getValue(
-                            "feature_location_share");
+                        const showLocationButton = (
+                            SettingsStore.getValue("feature_location_share") &&
+                            SettingsStore.getValue(
+                                "MessageComposerInput.showLocationButton",
+                            )
+                        );
                         if (this.state.showLocationButton !== showLocationButton) {
                             this.setState({ showLocationButton });
                         }
@@ -525,7 +534,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             buttons.push(
                 <UploadButton key="controls_upload" roomId={this.props.room.roomId} relation={this.props.relation} />,
             );
-            if (SettingsStore.getValue("feature_location_share")) {
+            if (this.state.showLocationButton) {
                 const sender = this.props.room.getMember(
                     MatrixClientPeg.get().getUserId(),
                 );

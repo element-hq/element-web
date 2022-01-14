@@ -407,6 +407,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         controller: new UIFeatureController(UIFeature.Widgets, false),
     },
+    "MessageComposerInput.showLocationButton": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Enable location sharing'),
+        default: true,
+        controller: new UIFeatureController(UIFeature.Widgets, false),
+    },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
