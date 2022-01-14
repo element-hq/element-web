@@ -399,7 +399,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         const room = this.getRoom();
         const partCreator = new CommandPartCreator(room, this.props.mxClient);
 
-        let parts;
+        let parts: Part[];
         let isRestored = false;
         if (editState.hasEditorState()) {
             // if restoring state from a previous editor,

@@ -24,9 +24,9 @@ import { Part, PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
 import { textToHtmlRainbow } from "../utils/colour";
 
-function parseAtRoomMentions(text: string, partCreator: PartCreator) {
+function parseAtRoomMentions(text: string, partCreator: PartCreator): Part[] {
     const ATROOM = "@room";
-    const parts = [];
+    const parts: Part[] = [];
     text.split(ATROOM).forEach((textPart, i, arr) => {
         if (textPart.length) {
             parts.push(partCreator.plain(textPart));
@@ -42,7 +42,7 @@ function parseAtRoomMentions(text: string, partCreator: PartCreator) {
     return parts;
 }
 
-function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
+function parseLink(a: HTMLAnchorElement, partCreator: PartCreator): Part {
     const { href } = a;
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
     const prefix = resourceId ? resourceId[0] : undefined; // First character of ID
@@ -61,13 +61,13 @@ function parseLink(a: HTMLAnchorElement, partCreator: PartCreator) {
     }
 }
 
-function parseImage(img: HTMLImageElement, partCreator: PartCreator) {
+function parseImage(img: HTMLImageElement, partCreator: PartCreator): Part {
     const { src } = img;
     return partCreator.plain(`![${img.alt.replace(/[[\\\]]/g, c => "\\" + c)}](${src})`);
 }
 
-function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
-    const parts = [];
+function parseCodeBlock(n: HTMLElement, partCreator: PartCreator): Part[] {
+    const parts: Part[] = [];
     let language = "";
     if (n.firstChild && n.firstChild.nodeName === "CODE") {
         for (const className of (<HTMLElement>n.firstChild).classList) {
@@ -87,7 +87,7 @@ function parseCodeBlock(n: HTMLElement, partCreator: PartCreator) {
     return parts;
 }
 
-function parseHeader(el: HTMLElement, partCreator: PartCreator) {
+function parseHeader(el: HTMLElement, partCreator: PartCreator): Part {
     const depth = parseInt(el.nodeName.substr(1), 10);
     return partCreator.plain("#".repeat(depth) + " ");
 }
@@ -97,7 +97,12 @@ interface IState {
     listDepth?: number;
 }
 
-function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLElement | undefined, state: IState) {
+function parseElement(
+    n: HTMLElement,
+    partCreator: PartCreator,
+    lastNode: Node | undefined,
+    state: IState,
+): Part | Part[] {
     switch (n.nodeName) {
         case "H1":
         case "H2":
@@ -112,6 +117,14 @@ function parseElement(n: HTMLElement, partCreator: PartCreator, lastNode: HTMLEl
             return parseImage(<HTMLImageElement>n, partCreator);
         case "BR":
             return partCreator.newline();
+        case "HR":
+            // the newline arrangement here is quite specific otherwise it may be misconstrued as marking the previous
+            // text line as a header instead of acting as a horizontal rule.
+            return [
+                partCreator.newline(),
+                partCreator.plain("---"),
+                partCreator.newline(),
+            ];
         case "EM":
             return partCreator.plain(`_${n.textContent}_`);
         case "STRONG":
@@ -222,13 +235,13 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
     // we're only taking text, so that is fine
     const rootNode = new DOMParser().parseFromString(html, "text/html").body;
     const parts: Part[] = [];
-    let lastNode;
+    let lastNode: Node;
     let inQuote = isQuotedMessage;
     const state: IState = {
         listIndex: [],
     };
 
-    function onNodeEnter(n) {
+    function onNodeEnter(n: Node) {
         if (checkIgnored(n)) {
             return false;
         }
@@ -256,7 +269,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
                 newParts.push(partCreator.newline());
             }
         } else if (n.nodeType === Node.ELEMENT_NODE) {
-            const parseResult = parseElement(n, partCreator, lastNode, state);
+            const parseResult = parseElement(n as HTMLElement, partCreator, lastNode, state);
             if (parseResult) {
                 if (Array.isArray(parseResult)) {
                     newParts.push(...parseResult);
@@ -280,7 +293,7 @@ function parseHtmlMessage(html: string, partCreator: PartCreator, isQuotedMessag
         return descend;
     }
 
-    function onNodeLeave(n) {
+    function onNodeLeave(n: Node) {
         if (checkIgnored(n)) {
             return;
         }
