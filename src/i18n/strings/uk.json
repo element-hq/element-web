@@ -3494,7 +3494,7 @@
     "You were removed from %(roomName)s by %(memberName)s": "%(memberName)s вилучає вас із %(roomName)s",
     "Remove users": "Вилучити користувачів",
     "Show join/leave messages (invites/removes/bans unaffected)": "Показувати повідомлення про приєднання/виходи (не стосується запрошень/вилучень/блокувань]",
-    "Remove, ban, or invite people to your active room, and make you leave": "Вилучіть, заблокуйте або запросіть людей до своєї кімнати, щоб вийти",
+    "Remove, ban, or invite people to your active room, and make you leave": "Вилучати, блокувати чи запрошувати людей у вашій активній кімнаті, зокрема вас",
     "Remove, ban, or invite people to this room, and make you leave": "Вилучати, блокувати чи запрошувати людей у цій кімнаті, зокрема вас",
     "%(senderName)s removed %(targetName)s": "%(senderName)s вилучає %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s вилучає %(targetName)s: %(reason)s",
