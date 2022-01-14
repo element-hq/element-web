@@ -111,7 +111,7 @@ const CallViewHeader: React.FC<CallViewHeaderProps> = ({
         >
             <RoomAvatar room={callRoom} height={32} width={32} />
             <div className="mx_CallViewHeader_callInfo">
-                <div className="mx_CallViewHeader_roomName">{ callRoomName }</div>
+                <div className="mx_CallViewHeader_roomName" title={callRoomName}>{ callRoomName }</div>
                 <div className="mx_CallViewHeader_callTypeSmall">
                     { callTypeText }
                     { onHoldCallRoom && <SecondaryCallInfo callRoom={onHoldCallRoom} /> }
