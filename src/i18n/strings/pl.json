@@ -2134,6 +2134,6 @@
     "%(targetName)s joined the room": "%(targetName)s dołączył(-a) do pokoju",
     "%(targetName)s rejected the invitation": "%(targetName)s odrzucił(-a) zaproszenie",
     "%(targetName)s left the room: %(reason)s": "%(targetName)s opuścił(-a) pokój: %(reason)s",
-    "%(targetName)s left the room": "%(targetName)s opuścił pokój",
+    "%(targetName)s left the room": "%(targetName)s opuścił(-a) pokój",
     "%(senderName)s unbanned %(targetName)s": "%(senderName)s odbanował %(targetName)s"
 }
