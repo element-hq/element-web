@@ -2776,7 +2776,7 @@
     "Use another login": "Mit anderem Gerät verifizeren",
     "If you do, please note that none of your messages will be deleted, but the search experience might be degraded for a few moments whilst the index is recreated": "Falls du es wirklich willst: Es werden keine Nachrichten gelöscht. Außerdem wird die Suche, während der Index erstellt wird, etwas langsamer sein",
     "%(count)s members including %(commaSeparatedMembers)s|other": "%(count)s Mitglieder inklusive %(commaSeparatedMembers)s",
-    "Including %(commaSeparatedMembers)s": "Inklusive%(commaSeparatedMembers)s",
+    "Including %(commaSeparatedMembers)s": "Inklusive %(commaSeparatedMembers)s",
     "Consulting with %(transferTarget)s. <a>Transfer to %(transferee)s</a>": "%(transferTarget)s wird angefragt. <a>Übertragung zu %(transferee)s</a>",
     "Play": "Abspielen",
     "Pause": "Pause",
@@ -3471,5 +3471,9 @@
     "This groups your chats with members of this space. Turning this off will hide those chats from your view of %(spaceName)s.": "Direktchats mit Mitgliedern von %(spaceName)s anzeigen. Wenn du diese Option deaktivierst, werden die Chats nicht mehr in diesem Space angezeigt werden.",
     "%(count)s members including you, %(commaSeparatedMembers)s|one": "%(count)s Mitglieder mit dir und %(commaSeparatedMembers)s",
     "%(count)s members including you, %(commaSeparatedMembers)s|other": "Mit dir %(count)s Mitglieder, %(commaSeparatedMembers)s",
-    "Including you, %(commaSeparatedMembers)s": "Mit dir, %(commaSeparatedMembers)s"
+    "Including you, %(commaSeparatedMembers)s": "Mit dir, %(commaSeparatedMembers)s",
+    "Command error: Unable to handle slash command.": "Befehlsfehler: Slash-Befehl kann nicht verarbeitet werden.",
+    "Device verified": "Gerät verifiziert",
+    "Expand map": "Karte vergrößern",
+    "Room members": "Raum-Mitglieder"
 }
