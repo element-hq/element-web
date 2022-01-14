@@ -74,7 +74,7 @@ class LocationPicker extends React.Component<IProps, IState> {
             container: 'mx_LocationPicker_map',
             style: config.map_style_url,
             center: [0, 0],
-            zoom: 15,
+            zoom: 1,
         });
 
         try {
