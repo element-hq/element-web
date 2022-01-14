@@ -3447,5 +3447,16 @@
     "Unrecognised room address: %(roomAlias)s": "Alamat ruangan tidak dikenal: %(roomAlias)s",
     "Failed to get room topic: Unable to find room (%(roomId)s": "Gagal untuk mendapatkan topik ruangan: Tidak dapat menemukan ruangan (%(roomId)s)",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Kesalahan perintah: Tidak dapat menemukan tipe render (%(renderingType)s)",
-    "Command error: Unable to handle slash command.": "Kesalahan perintah: Tidak dapat menangani perintah slash."
+    "Command error: Unable to handle slash command.": "Kesalahan perintah: Tidak dapat menangani perintah slash.",
+    "Element could not send your location. Please try again later.": "Element tidak dapat mengirimkan lokasi Anda. Silakan coba lagi nanti.",
+    "We couldn’t send your location": "Kami tidak dapat mengirimkan lokasi Anda",
+    "Unknown error fetching location. Please try again later.": "Kesalahan yang tidak ketahui terjadi saat mendapatkan lokasi. Silakan coba lagi nanti.",
+    "Timed out trying to fetch your location. Please try again later.": "Waktu habis dalam mendapatkan lokasi Anda. Silakan coba lagi nanti.",
+    "Failed to fetch your location. Please try again later.": "Gagal untuk mendapatkan lokasi Anda. Silakan coba lagi nanti.",
+    "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Izin Element ditolak untuk mendapatkan lokasi Anda. Mohon mengizinkan Element untuk mengakses lokasi di pengaturan browser Anda.",
+    "Could not fetch location": "Tidak dapat mendapatkan lokasi",
+    "From a thread": "Dari sebuah utasan",
+    "Widget": "Widget",
+    "Automatically send debug logs on decryption errors": "Kirim log debug secara otomatis ketika terjadi kesalahan pendekripsian",
+    "Show extensible event representation of events": "Tampilkan representasi peristiwa yang dapat diekstensi dari peristiwa"
 }
