@@ -254,6 +254,7 @@ interface IState {
     showStickers: boolean;
     showStickersButton: boolean;
     showPollsButton: boolean;
+    showLocationButton: boolean;
 }
 
 @replaceableComponent("views.rooms.MessageComposer")
@@ -285,12 +286,14 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             showStickers: false,
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
             showPollsButton: SettingsStore.getValue("feature_polls"),
+            showLocationButton: SettingsStore.getValue("feature_location_share"),
         };
 
         this.instanceId = instanceCount++;
 
         SettingsStore.monitorSetting("MessageComposerInput.showStickersButton", null);
         SettingsStore.monitorSetting("feature_polls", null);
+        SettingsStore.monitorSetting("feature_location_share", null);
     }
 
     componentDidMount() {
@@ -341,6 +344,15 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         const showPollsButton = SettingsStore.getValue("feature_polls");
                         if (this.state.showPollsButton !== showPollsButton) {
                             this.setState({ showPollsButton });
+                        }
+                        break;
+                    }
+
+                    case "feature_location_share": {
+                        const showLocationButton = SettingsStore.getValue(
+                            "feature_location_share");
+                        if (this.state.showLocationButton !== showLocationButton) {
+                            this.setState({ showLocationButton });
                         }
                         break;
                     }
