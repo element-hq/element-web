@@ -29,7 +29,7 @@ jobs:
               repo: context.repo.repo,
               labels: ['Z-Labs']
             })
- 
+
   move_needs_info_issues:
     name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
@@ -70,6 +70,30 @@ jobs:
           contentid: ${{ github.event.issue.node_id }}
         env:
           PROJECT_ID: "PN_kwDOAM0swc0sUA"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  add_product_issues:
+    name: X-Needs-Product to Design project board
+    runs-on: ubuntu-latest
+    if: >
+        contains(github.event.issue.labels.*.name, 'X-Needs-Product')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4AAg6N"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   Delight_issues_to_board:
