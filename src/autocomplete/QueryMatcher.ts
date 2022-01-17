@@ -20,10 +20,11 @@ import { at, uniq } from 'lodash';
 import { removeHiddenChars } from "matrix-js-sdk/src/utils";
 
 import { TimelineRenderingType } from '../contexts/RoomContext';
+import { Leaves } from "../@types/common";
 
 interface IOptions<T extends {}> {
-    keys: Array<string | keyof T>;
-    funcs?: Array<(T) => string | string[]>;
+    keys: Array<Leaves<T>>;
+    funcs?: Array<(o: T) => string | string[]>;
     shouldMatchWordsOnly?: boolean;
     // whether to apply unhomoglyph and strip diacritics to fuzz up the search. Defaults to true
     fuzzy?: boolean;
