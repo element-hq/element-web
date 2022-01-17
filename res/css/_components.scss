@@ -95,7 +95,6 @@
 @import "./views/dialogs/_IncomingSasDialog.scss";
 @import "./views/dialogs/_InviteDialog.scss";
 @import "./views/dialogs/_JoinRuleDropdown.scss";
-@import "./views/dialogs/_KeyboardShortcutsDialog.scss";
 @import "./views/dialogs/_LeaveSpaceDialog.scss";
 @import "./views/dialogs/_LocationViewDialog.scss";
 @import "./views/dialogs/_ManageRestrictedJoinRuleDialog.scss";
@@ -286,6 +285,7 @@
 @import "./views/settings/tabs/user/_AppearanceUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_GeneralUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_HelpUserSettingsTab.scss";
+@import "./views/settings/tabs/user/_KeyboardUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_LabsUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_MjolnirUserSettingsTab.scss";
 @import "./views/settings/tabs/user/_NotificationUserSettingsTab.scss";

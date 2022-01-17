@@ -112,7 +112,7 @@ export enum NavigationAction {
     /** Toggle the user menu */
     ToggleUserMenu = 'ToggleUserMenu',
     /** Toggle the short cut help dialog */
-    ToggleShortCutDialog = 'ToggleShortCutDialog',
+    OpenShortCutDialog = 'OpenShortCutDialog',
     /** Got to the Element home screen */
     GoToHome = 'GoToHome',
     /** Select prev room */

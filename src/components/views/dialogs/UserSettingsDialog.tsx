@@ -36,6 +36,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import { IDialogProps } from "./IDialogProps";
 import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab";
+import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
 
 export enum UserTab {
     General = "USER_GENERAL_TAB",
@@ -43,6 +44,7 @@ export enum UserTab {
     Flair = "USER_FLAIR_TAB",
     Notifications = "USER_NOTIFICATIONS_TAB",
     Preferences = "USER_PREFERENCES_TAB",
+    Keyboard = "USER_KEYBOARD_TAB",
     Sidebar = "USER_SIDEBAR_TAB",
     Voice = "USER_VOICE_TAB",
     Security = "USER_SECURITY_TAB",
@@ -118,6 +120,12 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             _td("Preferences"),
             "mx_UserSettingsDialog_preferencesIcon",
             <PreferencesUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+        ));
+        tabs.push(new Tab(
+            UserTab.Keyboard,
+            _td("Keyboard"),
+            "mx_UserSettingsDialog_keyboardIcon",
+            <KeyboardUserSettingsTab />,
         ));
 
         if (SettingsStore.getValue("feature_spaces_metaspaces")) {

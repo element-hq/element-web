@@ -14,20 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as React from "react";
-import classNames from "classnames";
-
-import Modal from "../Modal";
-import { _t, _td } from "../languageHandler";
+import { _td } from "../languageHandler";
 import { isMac, Key } from "../Keyboard";
-import InfoDialog from "../components/views/dialogs/InfoDialog";
-
-// TS: once languageHandler is TS we can probably inline this into the enum
-_td("Navigation");
-_td("Calls");
-_td("Composer");
-_td("Room List");
-_td("Autocomplete");
 
 export enum Categories {
     NAVIGATION = "Navigation",
@@ -37,13 +25,6 @@ export enum Categories {
     ROOM = "Room",
     AUTOCOMPLETE = "Autocomplete",
 }
-
-// TS: once languageHandler is TS we can probably inline this into the enum
-_td("Alt");
-_td("Alt Gr");
-_td("Shift");
-_td("Super");
-_td("Ctrl");
 
 export enum Modifiers {
     ALT = "Alt", // Option on Mac and displayed as an Icon
@@ -65,12 +46,12 @@ interface IKeybind {
     key: string; // TS: fix this once Key is an enum
 }
 
-interface IShortcut {
+export interface IShortcut {
     keybinds: IKeybind[];
     description: string;
 }
 
-const shortcuts: Record<Categories, IShortcut[]> = {
+export const shortcuts: Record<Categories, IShortcut[]> = {
     [Categories.COMPOSER]: [
         {
             keybinds: [{
@@ -270,7 +251,7 @@ const shortcuts: Record<Categories, IShortcut[]> = {
                 modifiers: [CMD_OR_CTRL],
                 key: Key.SLASH,
             }],
-            description: _td("Toggle this dialog"),
+            description: _td("Open this settings tab"),
         }, {
             keybinds: [{
                 modifiers: [Modifiers.CONTROL, isMac ? Modifiers.SHIFT : Modifiers.ALT],
@@ -295,107 +276,6 @@ const shortcuts: Record<Categories, IShortcut[]> = {
             description: _td("Cancel autocomplete"),
         },
     ],
-};
-
-const categoryOrder = [
-    Categories.COMPOSER,
-    Categories.AUTOCOMPLETE,
-    Categories.ROOM,
-    Categories.ROOM_LIST,
-    Categories.NAVIGATION,
-    Categories.CALLS,
-];
-
-interface IModal {
-    close: () => void;
-    finished: Promise<any[]>;
-}
-
-const modifierIcon: Record<string, string> = {
-    [Modifiers.COMMAND]: "⌘",
-};
-
-if (isMac) {
-    modifierIcon[Modifiers.ALT] = "⌥";
-}
-
-const alternateKeyName: Record<string, string> = {
-    [Key.PAGE_UP]: _td("Page Up"),
-    [Key.PAGE_DOWN]: _td("Page Down"),
-    [Key.ESCAPE]: _td("Esc"),
-    [Key.ENTER]: _td("Enter"),
-    [Key.SPACE]: _td("Space"),
-    [Key.HOME]: _td("Home"),
-    [Key.END]: _td("End"),
-    [DIGITS]: _td("[number]"),
-};
-const keyIcon: Record<string, string> = {
-    [Key.ARROW_UP]: "↑",
-    [Key.ARROW_DOWN]: "↓",
-    [Key.ARROW_LEFT]: "←",
-    [Key.ARROW_RIGHT]: "→",
-};
-
-const Shortcut: React.FC<{
-    shortcut: IShortcut;
-}> = ({ shortcut }) => {
-    const classes = classNames({
-        "mx_KeyboardShortcutsDialog_inline": shortcut.keybinds.every(k => !k.modifiers || k.modifiers.length === 0),
-    });
-
-    return <div className={classes}>
-        <h5>{ _t(shortcut.description) }</h5>
-        { shortcut.keybinds.map(s => {
-            let text = s.key;
-            if (alternateKeyName[s.key]) {
-                text = _t(alternateKeyName[s.key]);
-            } else if (keyIcon[s.key]) {
-                text = keyIcon[s.key];
-            }
-
-            return <div key={s.key}>
-                { s.modifiers?.map(m => {
-                    return <React.Fragment key={m}>
-                        <kbd>{ modifierIcon[m] || _t(m) }</kbd>+
-                    </React.Fragment>;
-                }) }
-                <kbd>{ text }</kbd>
-            </div>;
-        }) }
-    </div>;
-};
-
-let activeModal: IModal = null;
-export const toggleDialog = () => {
-    if (activeModal) {
-        activeModal.close();
-        activeModal = null;
-        return;
-    }
-
-    const sections = categoryOrder.map(category => {
-        const list = shortcuts[category];
-        return <div className="mx_KeyboardShortcutsDialog_category" key={category}>
-            <h3>{ _t(category) }</h3>
-            <div>{ list.map(shortcut => <Shortcut key={shortcut.description} shortcut={shortcut} />) }</div>
-        </div>;
-    });
-
-    activeModal = Modal.createTrackedDialog("Keyboard Shortcuts", "", InfoDialog, {
-        className: "mx_KeyboardShortcutsDialog",
-        title: _t("Keyboard Shortcuts"),
-        description: sections,
-        hasCloseButton: true,
-        onKeyDown: (ev) => {
-            if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey && ev.key === Key.SLASH) { // Ctrl + /
-                ev.stopPropagation();
-                activeModal.close();
-            }
-        },
-        onFinished: () => {
-            activeModal = null;
-        },
-    });
 };
 
 export const registerShortcut = (category: Categories, defn: IShortcut) => {

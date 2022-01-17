@@ -355,14 +355,14 @@ const navigationBindings = (): KeyBinding<NavigationAction>[] => {
             },
         },
         {
-            action: NavigationAction.ToggleShortCutDialog,
+            action: NavigationAction.OpenShortCutDialog,
             keyCombo: {
                 key: Key.SLASH,
                 ctrlOrCmd: true,
             },
         },
         {
-            action: NavigationAction.ToggleShortCutDialog,
+            action: NavigationAction.OpenShortCutDialog,
             keyCombo: {
                 key: Key.SLASH,
                 ctrlOrCmd: true,
