@@ -3549,5 +3549,7 @@
     "Remove, ban, or invite people to your active room, and make you leave": "Odebrat, vykázat nebo pozvat lidi do vaší aktivní místnosti a donutit vás ji opustit",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s odebral(a) %(targetName)s: %(reason)s",
     "%(senderName)s removed %(targetName)s": "%(senderName)s odebral(a) %(targetName)s",
-    "Removes user with given id from this room": "Odstraní uživatele s daným id z této místnosti"
+    "Removes user with given id from this room": "Odstraní uživatele s daným id z této místnosti",
+    "Open this settings tab": "Otevřít tuto kartu nastavení",
+    "Keyboard": "Klávesnice"
 }
