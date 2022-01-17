@@ -3505,5 +3505,13 @@
     "Back to chat": "Terug naar chat",
     "Edit setting": "Instelling bewerken",
     "Expand map": "Map uitvouwen",
-    "Send reactions": "Reacties versturen"
+    "Send reactions": "Reacties versturen",
+    "No active call in this room": "Geen actieve oproep in deze kamer",
+    "Unable to find Matrix ID for phone number": "Kan Matrix-ID voor telefoonnummer niet vinden",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Onbekend paar (persoon, sessie): (%(userId)s, %(deviceId)s)",
+    "Command failed: Unable to find room (%(roomId)s": "Commando mislukt: Kan kamer niet vinden (%(roomId)s",
+    "Unrecognised room address: %(roomAlias)s": "Niet herkend kameradres: %(roomAlias)s",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "Kameronderwerp laden mislukt: Kan kamer niet vinden (%(roomId)s",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "Commandofout: Kan rendering type niet vinden (%(renderingType)s)",
+    "Command error: Unable to handle slash command.": "Commandofout: Kan slash commando niet verwerken."
 }
