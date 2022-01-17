@@ -15,8 +15,11 @@ limitations under the License.
 */
 
 .mx_RoomView_body[data-layout=bubble] {
-    max-width: 1200px;
-    margin: 0 auto;
+    .mx_RoomView_timeline, .mx_RoomView_statusArea, .mx_MessageComposer {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 }
 
 .mx_EventTile[data-layout=bubble],
