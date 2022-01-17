@@ -3542,5 +3542,10 @@
     "Remove, ban, or invite people to this room, and make you leave": "Hiqni, dëboni, ose ftoni persona në këtë dhomë dhe bëni largimin tuaj",
     "%(senderName)s removed %(targetName)s": "%(senderName)s hoqi %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s hoqi %(targetName)s: %(reason)s",
-    "Removes user with given id from this room": "Heq prej kësaj dhome përdoruesin me ID-në e dhënë"
+    "Removes user with given id from this room": "Heq prej kësaj dhome përdoruesin me ID-në e dhënë",
+    "Open this settings tab": "Hap këtë skedë rregullimesh",
+    "Message pending moderation": "Mesazh në pritje të moderimit",
+    "Message pending moderation: %(reason)s": "Mesazh në pritje të moderimit: %(reason)s",
+    "Keyboard": "Tastierë",
+    "Let moderators hide messages pending moderation.": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit."
 }
