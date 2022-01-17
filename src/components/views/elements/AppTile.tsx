@@ -44,6 +44,8 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CallHandler from '../../../CallHandler';
 import { IApp } from "../../../stores/WidgetStore";
 import { WidgetLayoutStore, Container } from "../../../stores/widgets/WidgetLayoutStore";
+import { OwnProfileStore } from '../../../stores/OwnProfileStore';
+import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 
 interface IProps {
     app: IApp;
@@ -87,6 +89,8 @@ interface IState {
     // Assume that widget has permission to load if we are the user who
     // added it to the room, or if explicitly granted by the user
     hasPermissionToLoad: boolean;
+    // Wait for user profile load to display correct name
+    isUserProfileReady: boolean;
     error: Error;
     menuDisplayed: boolean;
     widgetPageTitle: string;
@@ -130,9 +134,21 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         this.state = this.getNewState(props);
+        this.watchUserReady();
 
         this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
     }
+
+    private watchUserReady = () => {
+        if (OwnProfileStore.instance.isProfileInfoFetched) {
+            return;
+        }
+        OwnProfileStore.instance.once(UPDATE_EVENT, this.onUserReady);
+    };
+
+    private onUserReady = (): void => {
+        this.setState({ isUserProfileReady: true });
+    };
 
     // This is a function to make the impact of calling SettingsStore slightly less
     private hasPermissionToLoad = (props: IProps): boolean => {
@@ -160,6 +176,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // Assume that widget has permission to load if we are the user who
             // added it to the room, or if explicitly granted by the user
             hasPermissionToLoad: this.hasPermissionToLoad(newProps),
+            isUserProfileReady: OwnProfileStore.instance.isProfileInfoFetched,
             error: null,
             menuDisplayed: false,
             widgetPageTitle: this.props.widgetPageTitle,
@@ -220,6 +237,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
+        OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 
     private resetWidget(newProps: IProps): void {
@@ -473,7 +491,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     />
                 </div>
             );
-        } else if (this.state.initialising) {
+        } else if (this.state.initialising || !this.state.isUserProfileReady) {
             appTileBody = (
                 <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')} style={appTileBodyStyles}>
                     { loadingElement }

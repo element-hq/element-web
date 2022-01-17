@@ -28,6 +28,7 @@ import { mediaFromMxc } from "../customisations/Media";
 interface IState {
     displayName?: string;
     avatarUrl?: string;
+    fetchedAt?: number;
 }
 
 const KEY_DISPLAY_NAME = "mx_profile_displayname";
@@ -65,6 +66,10 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         } else {
             return this.matrixClient.getUserId();
         }
+    }
+
+    public get isProfileInfoFetched(): boolean {
+        return !!this.state.fetchedAt;
     }
 
     /**
@@ -135,7 +140,12 @@ export class OwnProfileStore extends AsyncStoreWithClient<IState> {
         } else {
             window.localStorage.removeItem(KEY_AVATAR_URL);
         }
-        await this.updateState({ displayName: profileInfo.displayname, avatarUrl: profileInfo.avatar_url });
+
+        await this.updateState({
+            displayName: profileInfo.displayname,
+            avatarUrl: profileInfo.avatar_url,
+            fetchedAt: Date.now(),
+        });
     };
 
     private onStateEvents = throttle(async (ev: MatrixEvent) => {
