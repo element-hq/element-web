@@ -1,5 +1,5 @@
 /*
-Copyright 2016 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2016 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timelin
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import { SyncState } from 'matrix-js-sdk/src/sync';
+import { RoomMember } from 'matrix-js-sdk';
 import { debounce } from 'lodash';
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -276,6 +277,11 @@ class TimelinePanel extends React.Component<IProps, IState> {
         cli.on("Room.timeline", this.onRoomTimeline);
         cli.on("Room.timelineReset", this.onRoomTimelineReset);
         cli.on("Room.redaction", this.onRoomRedaction);
+        if (SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
+            // Make sure that events are re-rendered when their visibility-pending-moderation changes.
+            cli.on("Event.visibilityChange", this.onEventVisibilityChange);
+            cli.on("RoomMember.powerLevel", this.onVisibilityPowerLevelChange);
+        }
         // same event handler as Room.redaction as for both we just do forceUpdate
         cli.on("Room.redactionCancelled", this.onRoomRedaction);
         cli.on("Room.receipt", this.onRoomReceipt);
@@ -352,8 +358,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
             client.removeListener("Room.receipt", this.onRoomReceipt);
             client.removeListener("Room.localEchoUpdated", this.onLocalEchoUpdated);
             client.removeListener("Room.accountData", this.onAccountData);
+            client.removeListener("RoomMember.powerLevel", this.onVisibilityPowerLevelChange);
             client.removeListener("Event.decrypted", this.onEventDecrypted);
             client.removeListener("Event.replaced", this.onEventReplaced);
+            client.removeListener("Event.visibilityChange", this.onEventVisibilityChange);
             client.removeListener("sync", this.onSync);
         }
     }
@@ -616,6 +624,50 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         // we could skip an update if the event isn't in our timeline,
         // but that's probably an early optimisation.
+        this.forceUpdate();
+    };
+
+    // Called whenever the visibility of an event changes, as per
+    // MSC3531. We typically need to re-render the tile.
+    private onEventVisibilityChange = (ev: MatrixEvent): void => {
+        if (this.unmounted) {
+            return;
+        }
+
+        // ignore events for other rooms
+        const roomId = ev.getRoomId();
+        if (roomId !== this.props.timelineSet.room?.roomId) {
+            return;
+        }
+
+        // we could skip an update if the event isn't in our timeline,
+        // but that's probably an early optimisation.
+        const tile = this.messagePanel.current?.getTileForEventId(ev.getId());
+        if (tile) {
+            tile.forceUpdate();
+        }
+    };
+
+    private onVisibilityPowerLevelChange = (ev: MatrixEvent, member: RoomMember): void => {
+        if (this.unmounted) return;
+
+        // ignore events for other rooms
+        if (member.roomId !== this.props.timelineSet.room?.roomId) return;
+
+        // ignore events for other users
+        if (member.userId != MatrixClientPeg.get().credentials?.userId) return;
+
+        // We could skip an update if the power level change didn't cross the
+        // threshold for `VISIBILITY_CHANGE_TYPE`.
+        for (const event of this.state.events) {
+            const tile = this.messagePanel.current?.getTileForEventId(event.getId());
+            if (!tile) {
+                // The event is not visible, nothing to re-render.
+                continue;
+            }
+            tile.forceUpdate();
+        }
+
         this.forceUpdate();
     };
 

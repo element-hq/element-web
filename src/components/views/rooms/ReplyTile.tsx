@@ -109,7 +109,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const msgType = mxEvent.getContent().msgtype;
         const evType = mxEvent.getType() as EventType;
 
-        const { tileHandler, isInfoMessage } = getEventDisplayInfo(mxEvent);
+        const { tileHandler, isInfoMessage, isSeeingThroughMessageHiddenForModeration } = getEventDisplayInfo(mxEvent);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!tileHandler) {
@@ -174,7 +174,9 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                         overrideEventTypes={evOverrides}
                         replacingEventId={mxEvent.replacingEventId()}
                         maxImageHeight={96}
-                        getRelationsForEvent={this.props.getRelationsForEvent} />
+                        getRelationsForEvent={this.props.getRelationsForEvent}
+                        isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
+                    />
                 </a>
             </div>
         );

@@ -124,7 +124,9 @@ a.mx_reply_anchor:hover {
     margin-bottom: 5px;
 }
 
-.mx_RedactedBody {
+.mx_RedactedBody,
+.mx_HiddenBody {
+
     padding-left: unset;
 }
 

@@ -396,6 +396,14 @@ $left-gutter: 64px;
     cursor: pointer;
 }
 
+.mx_EventTile_content .mx_EventTile_pendingModeration {
+    user-select: none;
+    font-size: $font-12px;
+    color: $roomtopic-color;
+    display: inline-block;
+    margin-left: 9px;
+}
+
 .mx_EventTile_e2eIcon {
     position: relative;
     width: 14px;
@@ -909,12 +917,14 @@ $left-gutter: 64px;
         width: 100%;
 
         .mx_EventTile_content,
+        .mx_HiddenBody,
         .mx_RedactedBody,
         .mx_ReplyChain_wrapper {
             margin-left: 36px;
             margin-right: 50px;
 
             .mx_EventTile_content,
+            .mx_HiddenBody,
             .mx_RedactedBody,
             .mx_MImageBody {
                 margin: 0;

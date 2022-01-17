@@ -44,6 +44,14 @@ export interface IBodyProps {
     permalinkCreator: RoomPermalinkCreator;
     mediaEventHelper: MediaEventHelper;
 
+    /*
+    If present and `true`, the message has been marked as hidden pending moderation
+    (see MSC3531) **but** the current user can see the message nevertheless (with
+    a marker), either because they are a moderator or because they are the original
+    author of the message.
+    */
+    isSeeingThroughMessageHiddenForModeration?: boolean;
+
     // helper function to access relations for this event
     getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;
 }

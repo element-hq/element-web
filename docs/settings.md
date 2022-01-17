@@ -25,7 +25,7 @@ that room administrators cannot force account-only settings upon participants.
 ## Settings
 
 Settings are the different options a user may set or experience in the application. These are pre-defined in 
-`src/settings/Settings.ts` under the `SETTINGS` constant, and match the `ISetting` interface as defined there.
+`src/settings/Settings.tsx` under the `SETTINGS` constant, and match the `ISetting` interface as defined there.
 
 Settings that support the config level can be set in the config file under the `settingDefaults` key (note that some 
 settings, like the "theme" setting, are special cased in the config file):

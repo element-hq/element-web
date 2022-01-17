@@ -333,6 +333,12 @@ interface IProps {
     showThreadInfo?: boolean;
 
     timelineRenderingType?: TimelineRenderingType;
+
+    // if specified and `true`, the message his behing
+    // hidden for moderation from other users but is
+    // displayed to the current user either because they're
+    // the author or they are a moderator
+    isSeeingThroughMessageHiddenForModeration?: boolean;
 }
 
 interface IState {
@@ -1038,7 +1044,6 @@ export default class EventTile extends React.Component<IProps, IState> {
     private onActionBarFocusChange = (actionBarFocused: boolean) => {
         this.setState({ actionBarFocused });
     };
-
     // TODO: Types
     private getTile: () => any | null = () => this.tile.current;
 
@@ -1074,13 +1079,15 @@ export default class EventTile extends React.Component<IProps, IState> {
     render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
+        const eventDisplayInfo = getEventDisplayInfo(this.props.mxEvent);
         const {
             tileHandler,
             isBubbleMessage,
             isInfoMessage,
             isLeftAlignedBubbleMessage,
             noBubbleEvent,
-        } = getEventDisplayInfo(this.props.mxEvent);
+            isSeeingThroughMessageHiddenForModeration,
+        } = eventDisplayInfo;
         const { isQuoteExpanded } = this.state;
 
         // This shouldn't happen: the caller should check we support this type
@@ -1371,6 +1378,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             tileShape={this.props.tileShape}
                             editState={this.props.editState}
                             getRelationsForEvent={this.props.getRelationsForEvent}
+                            isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
                         />
                     </div>,
                 ]);
@@ -1413,6 +1421,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             editState={this.props.editState}
                             replacingEventId={this.props.replacingEventId}
                             getRelationsForEvent={this.props.getRelationsForEvent}
+                            isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
                         />
                         { actionBar }
                         { timestamp }
@@ -1486,6 +1495,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             onHeightChanged={this.props.onHeightChanged}
                             editState={this.props.editState}
                             getRelationsForEvent={this.props.getRelationsForEvent}
+                            isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
                         />
                     </div>,
                     <a
@@ -1538,6 +1548,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                                 onHeightChanged={this.props.onHeightChanged}
                                 callEventGrouper={this.props.callEventGrouper}
                                 getRelationsForEvent={this.props.getRelationsForEvent}
+                                isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
                             />
                             { keyRequestInfo }
                             { actionBar }

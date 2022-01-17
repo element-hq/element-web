@@ -45,7 +45,9 @@ limitations under the License.
         color: $primary-content;
     }
 
-    .mx_RedactedBody {
+    .mx_RedactedBody,
+    .mx_HiddenBody {
+
         padding: 4px 0 2px 20px;
 
         &::before {

@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
@@ -114,18 +114,101 @@ export function findEditableEvent({
     }
 }
 
+/**
+ * How we should render a message depending on its moderation state.
+ */
+enum MessageModerationState {
+    /**
+     * The message is visible to all.
+     */
+    VISIBLE_FOR_ALL = "VISIBLE_FOR_ALL",
+    /**
+     * The message is hidden pending moderation and we're not a user who should
+     * see it nevertheless.
+     */
+    HIDDEN_TO_CURRENT_USER = "HIDDEN_TO_CURRENT_USER",
+    /**
+     * The message is hidden pending moderation and we're either the author of
+     * the message or a moderator. In either case, we need to see the message
+     * with a marker.
+     */
+    SEE_THROUGH_FOR_CURRENT_USER = "SEE_THROUGH_FOR_CURRENT_USER",
+}
+
+/**
+ * Determine whether a message should be displayed as hidden pending moderation.
+ *
+ * If MSC3531 is deactivated in settings, all messages are considered visible
+ * to all.
+ */
+export function getMessageModerationState(mxEvent: MatrixEvent): MessageModerationState {
+    if (!SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
+        return MessageModerationState.VISIBLE_FOR_ALL;
+    }
+    const visibility = mxEvent.messageVisibility();
+    if (visibility.visible) {
+        return MessageModerationState.VISIBLE_FOR_ALL;
+    }
+
+    // At this point, we know that the message is marked as hidden
+    // pending moderation. However, if we're the author or a moderator,
+    // we still need to display it.
+
+    const client = MatrixClientPeg.get();
+    if (mxEvent.sender?.userId === client.getUserId()) {
+        // We're the author, show the message.
+        return MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER;
+    }
+
+    const room = client.getRoom(mxEvent.getRoomId());
+    if (EVENT_VISIBILITY_CHANGE_TYPE.name
+        && room.currentState.maySendStateEvent(EVENT_VISIBILITY_CHANGE_TYPE.name, client.getUserId())
+    ) {
+        // We're a moderator (as indicated by prefixed event name), show the message.
+        return MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER;
+    }
+    if (EVENT_VISIBILITY_CHANGE_TYPE.altName
+        && room.currentState.maySendStateEvent(EVENT_VISIBILITY_CHANGE_TYPE.altName, client.getUserId())
+    ) {
+        // We're a moderator (as indicated by unprefixed event name), show the message.
+        return MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER;
+    }
+    // For everybody else, hide the message.
+    return MessageModerationState.HIDDEN_TO_CURRENT_USER;
+}
+
 export function getEventDisplayInfo(mxEvent: MatrixEvent): {
     isInfoMessage: boolean;
     tileHandler: string;
     isBubbleMessage: boolean;
     isLeftAlignedBubbleMessage: boolean;
     noBubbleEvent: boolean;
+    isSeeingThroughMessageHiddenForModeration: boolean;
 } {
     const content = mxEvent.getContent();
     const msgtype = content.msgtype;
     const eventType = mxEvent.getType();
 
-    let tileHandler = getHandlerTile(mxEvent);
+    let isSeeingThroughMessageHiddenForModeration = false;
+    let tileHandler;
+    if (SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
+        switch (getMessageModerationState(mxEvent)) {
+            case MessageModerationState.VISIBLE_FOR_ALL:
+                // Default behavior, nothing to do.
+                break;
+            case MessageModerationState.HIDDEN_TO_CURRENT_USER:
+                // Hide message.
+                tileHandler = "messages.HiddenBody";
+                break;
+            case MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER:
+                // Show message with a marker.
+                isSeeingThroughMessageHiddenForModeration = true;
+                break;
+        }
+    }
+    if (!tileHandler) {
+        tileHandler = getHandlerTile(mxEvent);
+    }
 
     // Info messages are basically information about commands processed on a room
     let isBubbleMessage = (
@@ -168,7 +251,14 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
         isInfoMessage = true;
     }
 
-    return { tileHandler, isInfoMessage, isBubbleMessage, isLeftAlignedBubbleMessage, noBubbleEvent };
+    return {
+        tileHandler,
+        isInfoMessage,
+        isBubbleMessage,
+        isLeftAlignedBubbleMessage,
+        noBubbleEvent,
+        isSeeingThroughMessageHiddenForModeration,
+    };
 }
 
 export function isVoiceMessage(mxEvent: MatrixEvent): boolean {

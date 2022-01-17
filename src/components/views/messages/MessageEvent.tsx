@@ -31,6 +31,7 @@ import { IOperableEventTile } from "../context_menus/MessageContextMenu";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ReactAnyComponent } from "../../../@types/common";
 import { IBodyProps } from "./IBodyProps";
+import MatrixClientContext from '../../../contexts/MatrixClientContext';
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
@@ -40,6 +41,8 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
 
     // helper function to access relations for this event
     getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;
+
+    isSeeingThroughMessageHiddenForModeration?: boolean;
 }
 
 @replaceableComponent("views.messages.MessageEvent")
@@ -47,7 +50,10 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     private body: React.RefObject<React.Component | IOperableEventTile> = createRef();
     private mediaHelper: MediaEventHelper;
 
-    public constructor(props: IProps) {
+    static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
+    public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props);
 
         if (MediaEventHelper.isEligible(this.props.mxEvent)) {
@@ -171,6 +177,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
             permalinkCreator={this.props.permalinkCreator}
             mediaEventHelper={this.mediaHelper}
             getRelationsForEvent={this.props.getRelationsForEvent}
+            isSeeingThroughMessageHiddenForModeration={this.props.isSeeingThroughMessageHiddenForModeration}
         /> : null;
     }
 }
