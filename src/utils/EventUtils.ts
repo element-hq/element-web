@@ -18,8 +18,8 @@ import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
-import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
 import { LOCATION_EVENT_TYPE } from 'matrix-js-sdk/src/@types/location';
+import { M_POLL_START } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
@@ -48,7 +48,7 @@ export function isContentActionable(mxEvent: MatrixEvent): boolean {
             }
         } else if (
             mxEvent.getType() === 'm.sticker' ||
-            POLL_START_EVENT_TYPE.matches(mxEvent.getType())
+            M_POLL_START.matches(mxEvent.getType())
         ) {
             return true;
         }
@@ -228,11 +228,11 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
         eventType !== EventType.RoomMessage &&
         eventType !== EventType.Sticker &&
         eventType !== EventType.RoomCreate &&
-        !POLL_START_EVENT_TYPE.matches(eventType)
+        !M_POLL_START.matches(eventType)
     );
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent = (
-        POLL_START_EVENT_TYPE.matches(eventType) ||
+        M_POLL_START.matches(eventType) ||
         LOCATION_EVENT_TYPE.matches(eventType) ||
         (
             eventType === EventType.RoomMessage &&

@@ -38,6 +38,7 @@ exports[`MPollBody renders a finished poll 1`] = `
       },
       "event_id": "$mypoll",
       "room_id": "#myroom:example.com",
+      "type": "org.matrix.msc3381.poll.start",
     }
   }
 >
@@ -78,6 +79,7 @@ exports[`MPollBody renders a finished poll 1`] = `
         },
         "event_id": "$mypoll",
         "room_id": "#myroom:example.com",
+        "type": "org.matrix.msc3381.poll.start",
       }
     }
   >
@@ -97,9 +99,23 @@ exports[`MPollBody renders a finished poll 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "pizza",
-                "org.matrix.msc1767.text": "Pizza",
+                "renderings": Array [
+                  Object {
+                    "body": "Pizza",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Pizza",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "pizza",
+                    "org.matrix.msc1767.text": "Pizza",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -145,9 +161,23 @@ exports[`MPollBody renders a finished poll 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "poutine",
-                "org.matrix.msc1767.text": "Poutine",
+                "renderings": Array [
+                  Object {
+                    "body": "Poutine",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Poutine",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "poutine",
+                    "org.matrix.msc1767.text": "Poutine",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -193,9 +223,23 @@ exports[`MPollBody renders a finished poll 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "italian",
-                "org.matrix.msc1767.text": "Italian",
+                "renderings": Array [
+                  Object {
+                    "body": "Italian",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Italian",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "italian",
+                    "org.matrix.msc1767.text": "Italian",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={true}
@@ -241,9 +285,23 @@ exports[`MPollBody renders a finished poll 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "wings",
-                "org.matrix.msc1767.text": "Wings",
+                "renderings": Array [
+                  Object {
+                    "body": "Wings",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Wings",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "wings",
+                    "org.matrix.msc1767.text": "Wings",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -331,6 +389,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
       },
       "event_id": "$mypoll",
       "room_id": "#myroom:example.com",
+      "type": "org.matrix.msc3381.poll.start",
     }
   }
 >
@@ -371,6 +430,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
         },
         "event_id": "$mypoll",
         "room_id": "#myroom:example.com",
+        "type": "org.matrix.msc3381.poll.start",
       }
     }
   >
@@ -390,9 +450,23 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "pizza",
-                "org.matrix.msc1767.text": "Pizza",
+                "renderings": Array [
+                  Object {
+                    "body": "Pizza",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Pizza",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "pizza",
+                    "org.matrix.msc1767.text": "Pizza",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={true}
@@ -438,9 +512,23 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "poutine",
-                "org.matrix.msc1767.text": "Poutine",
+                "renderings": Array [
+                  Object {
+                    "body": "Poutine",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Poutine",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "poutine",
+                    "org.matrix.msc1767.text": "Poutine",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -486,9 +574,23 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "italian",
-                "org.matrix.msc1767.text": "Italian",
+                "renderings": Array [
+                  Object {
+                    "body": "Italian",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Italian",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "italian",
+                    "org.matrix.msc1767.text": "Italian",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -534,9 +636,23 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "wings",
-                "org.matrix.msc1767.text": "Wings",
+                "renderings": Array [
+                  Object {
+                    "body": "Wings",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Wings",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "wings",
+                    "org.matrix.msc1767.text": "Wings",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={true}
@@ -624,6 +740,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
       },
       "event_id": "$mypoll",
       "room_id": "#myroom:example.com",
+      "type": "org.matrix.msc3381.poll.start",
     }
   }
 >
@@ -664,6 +781,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
         },
         "event_id": "$mypoll",
         "room_id": "#myroom:example.com",
+        "type": "org.matrix.msc3381.poll.start",
       }
     }
   >
@@ -683,9 +801,23 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "pizza",
-                "org.matrix.msc1767.text": "Pizza",
+                "renderings": Array [
+                  Object {
+                    "body": "Pizza",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Pizza",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "pizza",
+                    "org.matrix.msc1767.text": "Pizza",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -731,9 +863,23 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "poutine",
-                "org.matrix.msc1767.text": "Poutine",
+                "renderings": Array [
+                  Object {
+                    "body": "Poutine",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Poutine",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "poutine",
+                    "org.matrix.msc1767.text": "Poutine",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -779,9 +925,23 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "italian",
-                "org.matrix.msc1767.text": "Italian",
+                "renderings": Array [
+                  Object {
+                    "body": "Italian",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Italian",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "italian",
+                    "org.matrix.msc1767.text": "Italian",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -827,9 +987,23 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
         >
           <EndedPollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "wings",
-                "org.matrix.msc1767.text": "Wings",
+                "renderings": Array [
+                  Object {
+                    "body": "Wings",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Wings",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "wings",
+                    "org.matrix.msc1767.text": "Wings",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -917,6 +1091,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
       },
       "event_id": "$mypoll",
       "room_id": "#myroom:example.com",
+      "type": "org.matrix.msc3381.poll.start",
     }
   }
 >
@@ -957,6 +1132,7 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
         },
         "event_id": "$mypoll",
         "room_id": "#myroom:example.com",
+        "type": "org.matrix.msc3381.poll.start",
       }
     }
   >
@@ -976,9 +1152,23 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "pizza",
-                "org.matrix.msc1767.text": "Pizza",
+                "renderings": Array [
+                  Object {
+                    "body": "Pizza",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Pizza",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "pizza",
+                    "org.matrix.msc1767.text": "Pizza",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1049,9 +1239,23 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "poutine",
-                "org.matrix.msc1767.text": "Poutine",
+                "renderings": Array [
+                  Object {
+                    "body": "Poutine",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Poutine",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "poutine",
+                    "org.matrix.msc1767.text": "Poutine",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1122,9 +1326,23 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "italian",
-                "org.matrix.msc1767.text": "Italian",
+                "renderings": Array [
+                  Object {
+                    "body": "Italian",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Italian",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "italian",
+                    "org.matrix.msc1767.text": "Italian",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1195,9 +1413,23 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "wings",
-                "org.matrix.msc1767.text": "Wings",
+                "renderings": Array [
+                  Object {
+                    "body": "Wings",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Wings",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "wings",
+                    "org.matrix.msc1767.text": "Wings",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1310,6 +1542,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
       },
       "event_id": "$mypoll",
       "room_id": "#myroom:example.com",
+      "type": "org.matrix.msc3381.poll.start",
     }
   }
 >
@@ -1350,6 +1583,7 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
         },
         "event_id": "$mypoll",
         "room_id": "#myroom:example.com",
+        "type": "org.matrix.msc3381.poll.start",
       }
     }
   >
@@ -1369,9 +1603,23 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "pizza",
-                "org.matrix.msc1767.text": "Pizza",
+                "renderings": Array [
+                  Object {
+                    "body": "Pizza",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Pizza",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "pizza",
+                    "org.matrix.msc1767.text": "Pizza",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1444,9 +1692,23 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "poutine",
-                "org.matrix.msc1767.text": "Poutine",
+                "renderings": Array [
+                  Object {
+                    "body": "Poutine",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Poutine",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "poutine",
+                    "org.matrix.msc1767.text": "Poutine",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1519,9 +1781,23 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "italian",
-                "org.matrix.msc1767.text": "Italian",
+                "renderings": Array [
+                  Object {
+                    "body": "Italian",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Italian",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "italian",
+                    "org.matrix.msc1767.text": "Italian",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={true}
@@ -1594,9 +1870,23 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "wings",
-                "org.matrix.msc1767.text": "Wings",
+                "renderings": Array [
+                  Object {
+                    "body": "Wings",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Wings",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "wings",
+                    "org.matrix.msc1767.text": "Wings",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1711,6 +2001,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
       },
       "event_id": "$mypoll",
       "room_id": "#myroom:example.com",
+      "type": "org.matrix.msc3381.poll.start",
     }
   }
 >
@@ -1751,6 +2042,7 @@ exports[`MPollBody renders a poll with no votes 1`] = `
         },
         "event_id": "$mypoll",
         "room_id": "#myroom:example.com",
+        "type": "org.matrix.msc3381.poll.start",
       }
     }
   >
@@ -1770,9 +2062,23 @@ exports[`MPollBody renders a poll with no votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "pizza",
-                "org.matrix.msc1767.text": "Pizza",
+                "renderings": Array [
+                  Object {
+                    "body": "Pizza",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Pizza",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "pizza",
+                    "org.matrix.msc1767.text": "Pizza",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1843,9 +2149,23 @@ exports[`MPollBody renders a poll with no votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "poutine",
-                "org.matrix.msc1767.text": "Poutine",
+                "renderings": Array [
+                  Object {
+                    "body": "Poutine",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Poutine",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "poutine",
+                    "org.matrix.msc1767.text": "Poutine",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1916,9 +2236,23 @@ exports[`MPollBody renders a poll with no votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "italian",
-                "org.matrix.msc1767.text": "Italian",
+                "renderings": Array [
+                  Object {
+                    "body": "Italian",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Italian",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "italian",
+                    "org.matrix.msc1767.text": "Italian",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -1989,9 +2323,23 @@ exports[`MPollBody renders a poll with no votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "wings",
-                "org.matrix.msc1767.text": "Wings",
+                "renderings": Array [
+                  Object {
+                    "body": "Wings",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Wings",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "wings",
+                    "org.matrix.msc1767.text": "Wings",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -2104,6 +2452,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
       },
       "event_id": "$mypoll",
       "room_id": "#myroom:example.com",
+      "type": "org.matrix.msc3381.poll.start",
     }
   }
 >
@@ -2144,6 +2493,7 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
         },
         "event_id": "$mypoll",
         "room_id": "#myroom:example.com",
+        "type": "org.matrix.msc3381.poll.start",
       }
     }
   >
@@ -2163,9 +2513,23 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "pizza",
-                "org.matrix.msc1767.text": "Pizza",
+                "renderings": Array [
+                  Object {
+                    "body": "Pizza",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Pizza",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "pizza",
+                    "org.matrix.msc1767.text": "Pizza",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -2238,9 +2602,23 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "poutine",
-                "org.matrix.msc1767.text": "Poutine",
+                "renderings": Array [
+                  Object {
+                    "body": "Poutine",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Poutine",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "poutine",
+                    "org.matrix.msc1767.text": "Poutine",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -2313,9 +2691,23 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "italian",
-                "org.matrix.msc1767.text": "Italian",
+                "renderings": Array [
+                  Object {
+                    "body": "Italian",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Italian",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "italian",
+                    "org.matrix.msc1767.text": "Italian",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={false}
@@ -2388,9 +2780,23 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
         >
           <LivePollOption
             answer={
-              Object {
+              PollAnswerSubevent {
+                "html": undefined,
                 "id": "wings",
-                "org.matrix.msc1767.text": "Wings",
+                "renderings": Array [
+                  Object {
+                    "body": "Wings",
+                    "mimetype": "text/plain",
+                  },
+                ],
+                "text": "Wings",
+                "wireFormat": Object {
+                  "content": Object {
+                    "id": "wings",
+                    "org.matrix.msc1767.text": "Wings",
+                  },
+                  "type": "org.matrix.sdk.poll.answer",
+                },
               }
             }
             checked={true}

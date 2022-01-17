@@ -19,7 +19,7 @@ import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
-import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
+import { M_POLL_START } from "matrix-events-sdk";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -197,7 +197,7 @@ interface IPollButtonProps extends Pick<ICollapsibleButtonProps, "narrowMode"> {
 class PollButton extends React.PureComponent<IPollButtonProps> {
     private onCreateClick = () => {
         const canSend = this.props.room.currentState.maySendEvent(
-            POLL_START_EVENT_TYPE.name,
+            M_POLL_START.name,
             MatrixClientPeg.get().getUserId(),
         );
         if (!canSend) {

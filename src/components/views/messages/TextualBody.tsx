@@ -18,7 +18,7 @@ import React, { createRef, SyntheticEvent } from 'react';
 import ReactDOM from 'react-dom';
 import highlight from 'highlight.js';
 import { MsgType } from "matrix-js-sdk/src/@types/event";
-import { isEventLike, LegacyMsgType, MessageEvent } from "matrix-events-sdk";
+import { isEventLike, LegacyMsgType, M_MESSAGE, MessageEvent } from "matrix-events-sdk";
 
 import * as HtmlUtils from '../../../HtmlUtils';
 import { formatDate } from '../../../DateUtils';
@@ -542,8 +542,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const stripReply = !mxEvent.replacingEvent() && !!ReplyChain.getParentEventId(mxEvent);
         let body;
         if (SettingsStore.isEnabled("feature_extensible_events")) {
-            const extev = this.props.mxEvent.unstableExtensibleEvent;
-            if (extev && extev instanceof MessageEvent) {
+            const extev = this.props.mxEvent.unstableExtensibleEvent as MessageEvent;
+            if (extev?.isEquivalentTo(M_MESSAGE)) {
                 isEmote = isEventLike(extev.wireFormat, LegacyMsgType.Emote);
                 isNotice = isEventLike(extev.wireFormat, LegacyMsgType.Notice);
                 body = HtmlUtils.bodyToHtml({

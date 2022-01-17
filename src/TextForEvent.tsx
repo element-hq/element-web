@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { removeDirectionOverrideChars } from 'matrix-js-sdk/src/utils';
 import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
-import { EmoteEvent, NoticeEvent, MessageEvent } from "matrix-events-sdk";
+import { M_EMOTE, M_NOTICE, M_MESSAGE, MessageEvent } from "matrix-events-sdk";
 
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
@@ -342,11 +342,11 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
         }
 
         if (SettingsStore.isEnabled("feature_extensible_events")) {
-            const extev = ev.unstableExtensibleEvent;
+            const extev = ev.unstableExtensibleEvent as MessageEvent;
             if (extev) {
-                if (extev instanceof EmoteEvent) {
+                if (extev.isEquivalentTo(M_EMOTE)) {
                     return `* ${senderDisplayName} ${extev.text}`;
-                } else if (extev instanceof NoticeEvent || extev instanceof MessageEvent) {
+                } else if (extev.isEquivalentTo(M_NOTICE) || extev.isEquivalentTo(M_MESSAGE)) {
                     return `${senderDisplayName}: ${extev.text}`;
                 }
             }

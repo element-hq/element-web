@@ -18,8 +18,7 @@ import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Relations } from "matrix-js-sdk/src/models/relations";
-import { IPollEndContent, POLL_END_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
-import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
+import { PollEndEvent } from "matrix-events-sdk";
 
 import { _t } from "../../../languageHandler";
 import { IDialogProps } from "./IDialogProps";
@@ -57,17 +56,10 @@ export default class EndPollDialog extends React.Component<IProps> {
         );
 
         if (endPoll) {
-            const endContent: IPollEndContent = {
-                [POLL_END_EVENT_TYPE.name]: {},
-                "m.relates_to": {
-                    "event_id": this.props.event.getId(),
-                    "rel_type": "m.reference",
-                },
-                [TEXT_NODE_TYPE.name]: message,
-            };
+            const endEvent = PollEndEvent.from(this.props.event.getId(), message).serialize();
 
             this.props.matrixClient.sendEvent(
-                this.props.event.getRoomId(), POLL_END_EVENT_TYPE.name, endContent,
+                this.props.event.getRoomId(), endEvent.type, endEvent.content,
             ).catch((e: any) => {
                 console.error("Failed to submit poll response event:", e);
                 Modal.createTrackedDialog(

@@ -19,8 +19,8 @@ import React, { ReactElement } from 'react';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
-import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
 import { LOCATION_EVENT_TYPE } from 'matrix-js-sdk/src/@types/location';
+import { M_POLL_START } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -140,7 +140,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private canEndPoll(mxEvent: MatrixEvent): boolean {
         return (
-            POLL_START_EVENT_TYPE.matches(mxEvent.getType()) &&
+            M_POLL_START.matches(mxEvent.getType()) &&
             this.state.canRedact &&
             !isPollEnded(mxEvent, MatrixClientPeg.get(), this.props.getRelationsForEvent)
         );

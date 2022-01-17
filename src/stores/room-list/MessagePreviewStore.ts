@@ -17,7 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
+import { M_POLL_START } from "matrix-events-sdk";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -68,7 +68,11 @@ function previews(): Object {
     // TODO: when polls comes out of labs, add this to PREVIEWS
     if (SettingsStore.getValue("feature_polls")) {
         return {
-            [POLL_START_EVENT_TYPE.name]: {
+            [M_POLL_START.name]: {
+                isState: false,
+                previewer: new PollStartEventPreview(),
+            },
+            [M_POLL_START.altName]: {
                 isState: false,
                 previewer: new PollStartEventPreview(),
             },

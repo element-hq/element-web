@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk";
-import { IPollAnswer } from "matrix-js-sdk/src/@types/polls";
+import { POLL_ANSWER, M_TEXT, M_POLL_KIND_DISCLOSED, M_POLL_START } from "matrix-events-sdk";
 
 import { PollStartEventPreview } from "../../../../src/stores/room-list/previews/PollStartEventPreview";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -41,12 +41,12 @@ describe("PollStartEventPreview", () => {
 function newPollStartEvent(
     question: string,
     sender: string,
-    answers?: IPollAnswer[],
+    answers?: POLL_ANSWER[],
 ): MatrixEvent {
     if (!answers) {
         answers = [
-            { "id": "socks", "org.matrix.msc1767.text": "Socks" },
-            { "id": "shoes", "org.matrix.msc1767.text": "Shoes" },
+            { "id": "socks", [M_TEXT.name]: "Socks" },
+            { "id": "shoes", [M_TEXT.name]: "Shoes" },
         ];
     }
 
@@ -55,15 +55,16 @@ function newPollStartEvent(
             "event_id": "$mypoll",
             "room_id": "#myroom:example.com",
             "sender": sender,
+            "type": M_POLL_START.name,
             "content": {
-                "org.matrix.msc3381.poll.start": {
+                [M_POLL_START.name]: {
                     "question": {
-                        "org.matrix.msc1767.text": question,
+                        [M_TEXT.name]: question,
                     },
-                    "kind": "org.matrix.msc3381.poll.disclosed",
+                    "kind": M_POLL_KIND_DISCLOSED.name,
                     "answers": answers,
                 },
-                "org.matrix.msc1767.text": `${question}: answers`,
+                [M_TEXT.name]: `${question}: answers`,
             },
         },
     );

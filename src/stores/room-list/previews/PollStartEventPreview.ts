@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
-import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
+import { InvalidEventError, M_POLL_START_EVENT_CONTENT, PollStartEvent } from "matrix-events-sdk";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
@@ -37,25 +36,31 @@ export class PollStartEventPreview implements IPreview {
         }
 
         // Check we have the information we need, and bail out if not
-        if (!eventContent || !eventContent[POLL_START_EVENT_TYPE.name]) {
+        if (!eventContent) {
             return null;
         }
 
-        let question =
-            eventContent[POLL_START_EVENT_TYPE.name].question[TEXT_NODE_TYPE.name];
-        question = (question || '').trim();
-        question = sanitizeForTranslation(question);
+        try {
+            const poll = new PollStartEvent({
+                type: event.getType(),
+                content: eventContent as M_POLL_START_EVENT_CONTENT,
+            });
 
-        if (
-            isThread ||
-            isSelf(event) ||
-            !shouldPrefixMessagesIn(event.getRoomId(), tagId)
-        ) {
-            return question;
-        } else {
-            return _t("%(senderName)s: %(message)s",
-                { senderName: getSenderName(event), message: question },
-            );
+            let question = poll.question.text.trim();
+            question = sanitizeForTranslation(question);
+
+            if (isThread || isSelf(event) || !shouldPrefixMessagesIn(event.getRoomId(), tagId)) {
+                return question;
+            } else {
+                return _t("%(senderName)s: %(message)s",
+                    { senderName: getSenderName(event), message: question },
+                );
+            }
+        } catch (e) {
+            if (e instanceof InvalidEventError) {
+                return null;
+            }
+            throw e; // re-throw unknown errors
         }
     }
 }

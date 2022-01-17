@@ -24,7 +24,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { logger } from "matrix-js-sdk/src/logger";
 import { NotificationCountType, Room } from 'matrix-js-sdk/src/models/room';
-import { POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
+import { M_POLL_START } from "matrix-events-sdk";
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from '../../../languageHandler';
@@ -78,7 +78,8 @@ import { CardContext } from '../right_panel/BaseCard';
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
     [EventType.Sticker]: 'messages.MessageEvent',
-    [POLL_START_EVENT_TYPE.name]: 'messages.MessageEvent',
+    [M_POLL_START.name]: 'messages.MessageEvent',
+    [M_POLL_START.altName]: 'messages.MessageEvent',
     [EventType.KeyVerificationCancel]: 'messages.MKeyVerificationConclusion',
     [EventType.KeyVerificationDone]: 'messages.MKeyVerificationConclusion',
     [EventType.CallInvite]: 'messages.CallEvent',
@@ -178,7 +179,7 @@ export function getHandlerTile(ev: MatrixEvent): string {
     }
 
     if (
-        POLL_START_EVENT_TYPE.matches(type) &&
+        M_POLL_START.matches(type) &&
         !SettingsStore.getValue("feature_polls")
     ) {
         return undefined;

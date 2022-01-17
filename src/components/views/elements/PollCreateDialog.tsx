@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,8 +16,7 @@ limitations under the License.
 
 import React, { ChangeEvent, createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { makePollContent } from "matrix-js-sdk/src/content-helpers";
-import { POLL_KIND_DISCLOSED, POLL_START_EVENT_TYPE } from "matrix-js-sdk/src/@types/polls";
+import { M_POLL_KIND_DISCLOSED, PollStartEvent } from "matrix-events-sdk";
 
 import ScrollableBaseModal, { IScrollableBaseState } from "../dialogs/ScrollableBaseModal";
 import { IDialogProps } from "../dialogs/IDialogProps";
@@ -99,13 +98,12 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
 
     protected submit(): void {
         this.setState({ busy: true, canSubmit: false });
-        this.matrixClient.sendEvent(
-            this.props.room.roomId,
-            POLL_START_EVENT_TYPE.name,
-            makePollContent(
-                this.state.question, this.state.options, POLL_KIND_DISCLOSED.name,
-            ),
-        ).then(
+        const pollEvent = PollStartEvent.from(
+            this.state.question.trim(),
+            this.state.options.map(a => a.trim()).filter(a => !!a),
+            M_POLL_KIND_DISCLOSED,
+        ).serialize();
+        this.matrixClient.sendEvent(this.props.room.roomId, pollEvent.type, pollEvent.content).then(
             () => this.props.onFinished(true),
         ).catch(e => {
             console.error("Failed to post poll:", e);
