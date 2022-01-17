@@ -41,7 +41,7 @@ export class ThreadsRoomNotificationState extends NotificationState implements I
 
     public destroy(): void {
         super.destroy();
-        this.room.on(ThreadEvent.New, this.onNewThread);
+        this.room.off(ThreadEvent.New, this.onNewThread);
         for (const [, notificationState] of this.threadsState) {
             notificationState.off(NotificationStateEvents.Update, this.onThreadUpdate);
         }
