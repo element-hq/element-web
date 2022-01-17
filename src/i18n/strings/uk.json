@@ -3501,5 +3501,8 @@
     "Removes user with given id from this room": "Вилучає користувача з указаним ID з цієї кімнати",
     "Enable location sharing": "Увімкнути надсилання місцеперебування",
     "Open this settings tab": "Відкрити цю вкладку налаштувань",
-    "Keyboard": "Клавіатура"
+    "Keyboard": "Клавіатура",
+    "Message pending moderation": "Повідомлення очікує модерування",
+    "Message pending moderation: %(reason)s": "Повідомлення очікує модерування: %(reason)s",
+    "Let moderators hide messages pending moderation.": "Дозволити модераторам ховати повідомлення у черзі модерування."
 }
