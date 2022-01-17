@@ -19,13 +19,14 @@ limitations under the License.
 import { ListRule, RECOMMENDATION_BAN, recommendationToStable } from "./ListRule";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 
-export const RULE_USER = "m.room.rule.user";
-export const RULE_ROOM = "m.room.rule.room";
-export const RULE_SERVER = "m.room.rule.server";
+export const RULE_USER = "m.policy.rule.user";
+export const RULE_ROOM = "m.policy.rule.room";
+export const RULE_SERVER = "m.policy.rule.server";
 
-export const USER_RULE_TYPES = [RULE_USER, "org.matrix.mjolnir.rule.user"];
-export const ROOM_RULE_TYPES = [RULE_ROOM, "org.matrix.mjolnir.rule.room"];
-export const SERVER_RULE_TYPES = [RULE_SERVER, "org.matrix.mjolnir.rule.server"];
+// m.room.* events are legacy from when MSC2313 changed to m.policy.* last minute.
+export const USER_RULE_TYPES = [RULE_USER, "m.room.rule.user", "org.matrix.mjolnir.rule.user"];
+export const ROOM_RULE_TYPES = [RULE_ROOM, "m.room.rule.room", "org.matrix.mjolnir.rule.room"];
+export const SERVER_RULE_TYPES = [RULE_SERVER, "m.room.rule.server", "org.matrix.mjolnir.rule.server"];
 export const ALL_RULE_TYPES = [...USER_RULE_TYPES, ...ROOM_RULE_TYPES, ...SERVER_RULE_TYPES];
 
 export function ruleTypeToStable(rule: string, unstable = true): string {
