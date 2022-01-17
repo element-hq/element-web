@@ -3499,5 +3499,7 @@
     "%(senderName)s removed %(targetName)s": "%(senderName)s вилучає %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s вилучає %(targetName)s: %(reason)s",
     "Removes user with given id from this room": "Вилучає користувача з указаним ID з цієї кімнати",
-    "Enable location sharing": "Увімкнути надсилання місцеперебування"
+    "Enable location sharing": "Увімкнути надсилання місцеперебування",
+    "Open this settings tab": "Відкрити цю вкладку налаштувань",
+    "Keyboard": "Клавіатура"
 }
