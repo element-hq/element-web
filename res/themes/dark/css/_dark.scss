@@ -182,6 +182,13 @@ $call-view-button-off-background: $primary-content;
 $video-feed-secondary-background: $system;
 // ********************
 
+// Location sharing
+// ********************
+.maplibregl-ctrl-attrib-button {
+    color: $background;
+}
+// ********************
+
 // One-off colors
 // ********************
 $progressbar-bg-color: $system;
