@@ -6177,7 +6177,6 @@ matrix-events-sdk@^0.0.1-beta.2:
     browser-request "^0.3.3"
     bs58 "^4.0.1"
     content-type "^1.0.4"
-    eslint-plugin-import "^2.25.2"
     loglevel "^1.7.1"
     p-retry "^4.5.0"
     qs "^6.9.6"
