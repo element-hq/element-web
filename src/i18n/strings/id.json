@@ -3477,5 +3477,10 @@
     "Enable location sharing": "Aktifkan pembagian lokasi",
     "Remove, ban, or invite people to your active room, and make you leave": "Keluarkan, cekal, atau undang orang-orang ke ruangan aktif Anda, dan keluarkan Anda sendiri",
     "Remove, ban, or invite people to this room, and make you leave": "Keluarkan, cekal, atau undang orang-orang ke ruangan ini, dan keluarkan Anda sendiri",
-    "Removes user with given id from this room": "Mengeluarkan pengguna dengan id yang dicantumkan dari ruangan ini"
+    "Removes user with given id from this room": "Mengeluarkan pengguna dengan id yang dicantumkan dari ruangan ini",
+    "Let moderators hide messages pending moderation.": "Memperbolehkan moderator untuk menyembunyikan pesan yang akan dimoderasikan.",
+    "Message pending moderation: %(reason)s": "Pesan akan dimoderasikan: %(reason)s",
+    "Open this settings tab": "Buka tab pengaturan ini",
+    "Message pending moderation": "Pesan akan dimoderasikan",
+    "Keyboard": "Keyboard"
 }
