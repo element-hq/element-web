@@ -116,7 +116,7 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
               mountPath: /app/config.json
               subPath: config.json
             ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: element
               protocol: TCP
             readinessProbe:
@@ -152,7 +152,7 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
         - name: default
           protocol: TCP
           port: 80
-          targetPort: 80
+          targetPort: 8080
 
     ---
 
