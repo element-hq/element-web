@@ -3544,5 +3544,11 @@
     "Remove, ban, or invite people to your active room, and make you leave": "Aktiivsest jututoast inimeste eemaldamine, väljamüksamine, keelamine või tuppa kutsumine",
     "%(senderName)s removed %(targetName)s": "%(senderName)s eemaldas kasutaja %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s eemaldas kasutaja %(targetName)s: %(reason)s",
-    "Removes user with given id from this room": "Järgnevaga eemaldad antud kasutajatunnusega osaleja sellest jututoast"
+    "Removes user with given id from this room": "Järgnevaga eemaldad antud kasutajatunnusega osaleja sellest jututoast",
+    "Open this settings tab": "Ava see seadistuste vaates",
+    "Space home": "Kogukonnakeskuse avaleht",
+    "Message pending moderation": "Sõnum on modereerimise ootel",
+    "Message pending moderation: %(reason)s": "Sõnum on modereerimise ootel: %(reason)s",
+    "Keyboard": "Klaviatuur",
+    "Let moderators hide messages pending moderation.": "Luba modereerimist ootavate sõnumite peitmist."
 }
