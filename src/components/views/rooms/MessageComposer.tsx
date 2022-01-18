@@ -286,10 +286,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             showStickers: false,
             showStickersButton: SettingsStore.getValue("MessageComposerInput.showStickersButton"),
             showPollsButton: SettingsStore.getValue("feature_polls"),
-            showLocationButton: (
-                SettingsStore.getValue("feature_location_share") &&
-                SettingsStore.getValue("MessageComposerInput.showLocationButton")
-            ),
+            showLocationButton: SettingsStore.getValue("MessageComposerInput.showLocationButton"),
         };
 
         this.instanceId = instanceCount++;
@@ -354,12 +351,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
                     case "MessageComposerInput.showLocationButton":
                     case "feature_location_share": {
-                        const showLocationButton = (
-                            SettingsStore.getValue("feature_location_share") &&
-                            SettingsStore.getValue(
-                                "MessageComposerInput.showLocationButton",
-                            )
-                        );
+                        const showLocationButton = SettingsStore.getValue(
+                            "MessageComposerInput.showLocationButton");
+
                         if (this.state.showLocationButton !== showLocationButton) {
                             this.setState({ showLocationButton });
                         }

@@ -418,7 +418,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Enable location sharing'),
         default: true,
-        controller: new UIFeatureController(UIFeature.Widgets, false),
+        controller: new IncompatibleController("feature_location_share", false, false),
     },
     // TODO: Wire up appropriately to UI (FTUE notifications)
     "Notifications.alwaysShowBadgeCounts": {
