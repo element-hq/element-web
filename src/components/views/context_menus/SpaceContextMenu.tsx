@@ -128,7 +128,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
     const canAddRooms = space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
 
-    let newRoomSection;
+    let newRoomSection: JSX.Element;
     if (space.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
         const onNewRoomClick = (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -194,6 +194,11 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
             { space.name }
         </div> }
         <IconizedContextMenuOptionList first>
+            <IconizedContextMenuOption
+                iconClassName="mx_SpacePanel_iconHome"
+                label={_t("Space home")}
+                onClick={onExploreRoomsClick}
+            />
             { inviteOption }
             <IconizedContextMenuOption
                 iconClassName="mx_SpacePanel_iconExplore"

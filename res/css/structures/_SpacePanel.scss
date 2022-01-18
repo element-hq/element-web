@@ -372,6 +372,10 @@ $activeBorderColor: $primary-content;
         line-height: $font-18px;
     }
 
+    .mx_SpacePanel_iconHome::before {
+        mask-image: url('$(res)/img/element-icons/home.svg');
+    }
+
     .mx_SpacePanel_iconInvite::before {
         mask-image: url('$(res)/img/element-icons/room/invite.svg');
     }
@@ -393,7 +397,7 @@ $activeBorderColor: $primary-content;
     }
 
     .mx_SpacePanel_iconExplore::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/search.svg');
+        mask-image: url('$(res)/img/element-icons/roomlist/hash-search.svg');
     }
 
     .mx_SpacePanel_iconPreferences::before {
