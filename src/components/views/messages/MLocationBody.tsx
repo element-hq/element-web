@@ -38,11 +38,18 @@ interface IState {
 @replaceableComponent("views.messages.MLocationBody")
 export default class MLocationBody extends React.Component<IBodyProps, IState> {
     private coords: GeolocationCoordinates;
+    private bodyId: string;
+    private markerId: string;
 
     constructor(props: IBodyProps) {
         super(props);
 
+        const randomString = Math.random().toString(16).slice(2, 10);
+        const idSuffix = `${props.mxEvent.getId()}_${randomString}`;
+        this.bodyId = `mx_MLocationBody_${idSuffix}`;
+        this.markerId = `mx_MLocationBody_marker_${idSuffix}`;
         this.coords = parseGeoUri(locationEventGeoUri(this.props.mxEvent));
+
         this.state = {
             error: undefined,
         };
@@ -56,19 +63,11 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         createMap(
             this.coords,
             false,
-            this.getBodyId(),
-            this.getMarkerId(),
+            this.bodyId,
+            this.markerId,
             (e: Error) => this.setState({ error: e }),
         );
     }
-
-    private getBodyId = () => {
-        return `mx_MLocationBody_${this.props.mxEvent.getId()}`;
-    };
-
-    private getMarkerId = () => {
-        return `mx_MLocationBody_marker_${this.props.mxEvent.getId()}`;
-    };
 
     private onClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -93,8 +92,8 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     render(): React.ReactElement<HTMLDivElement> {
         return <LocationBodyContent
             mxEvent={this.props.mxEvent}
-            bodyId={this.getBodyId()}
-            markerId={this.getMarkerId()}
+            bodyId={this.bodyId}
+            markerId={this.markerId}
             error={this.state.error}
             tooltip={_t("Expand map")}
             onClick={this.onClick}
