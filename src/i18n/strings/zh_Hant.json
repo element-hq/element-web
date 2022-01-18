@@ -3549,5 +3549,10 @@
     "Remove, ban, or invite people to this room, and make you leave": "移除、封鎖或邀請他人進入此聊天室，然後讓您離開",
     "%(senderName)s removed %(targetName)s": "%(senderName)s 已移除 %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s 已移除 %(targetName)s：%(reason)s",
-    "Removes user with given id from this room": "從此聊天室中移除有指定 ID 的使用者"
+    "Removes user with given id from this room": "從此聊天室中移除有指定 ID 的使用者",
+    "Open this settings tab": "開啟此設定分頁",
+    "Message pending moderation": "待審核的訊息",
+    "Message pending moderation: %(reason)s": "待審核的訊息：%(reason)s",
+    "Keyboard": "鍵盤",
+    "Let moderators hide messages pending moderation.": "讓管理員隱藏待審核的訊息。"
 }
