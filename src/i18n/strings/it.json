@@ -3550,5 +3550,8 @@
     "Remove, ban, or invite people to this room, and make you leave": "Buttare fuori, bandire o invitare persone in questa stanza e farti uscire",
     "%(senderName)s removed %(targetName)s": "%(senderName)s ha rimosso %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s ha rimosso %(targetName)s: %(reason)s",
-    "Removes user with given id from this room": "Rimuove l'utente con il dato ID da questa stanza"
+    "Removes user with given id from this room": "Rimuove l'utente con il dato ID da questa stanza",
+    "Message pending moderation": "Messaggio in attesa di moderazione",
+    "Message pending moderation: %(reason)s": "Messaggio in attesa di moderazione: %(reason)s",
+    "Let moderators hide messages pending moderation.": "Lascia che i moderatori nascondano i messaggi in attesa di moderazione."
 }
