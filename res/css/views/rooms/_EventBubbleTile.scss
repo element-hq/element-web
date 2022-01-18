@@ -126,12 +126,14 @@ limitations under the License.
                 border-bottom-right-radius: var(--cornerRadius);
             }
         }
+
         .mx_EventTile_avatar {
             left: -34px;
         }
 
         --backgroundColor: $eventbubble-others-bg;
     }
+
     &[data-self=true] {
         .mx_EventTile_line {
             float: right;
@@ -142,6 +144,11 @@ limitations under the License.
             .mx_MLocationBody_map {
                 border-bottom-left-radius: var(--cornerRadius);
             }
+        }
+
+        .mx_EventTile_sticker {
+            // align timestamp with those inside bubbles
+            margin-right: 32px;
         }
 
         .mx_ThreadInfo {
@@ -195,7 +202,8 @@ limitations under the License.
             z-index: 3; // above media and location share maps
         }
 
-        &.mx_EventTile_mediaLine {
+        // we put the timestamps for media (other than stickers) atop the media along with a gradient to aid visibility
+        &.mx_EventTile_mediaLine:not(.mx_EventTile_sticker) {
             .mx_MessageTimestamp {
                 color: #ffffff; // regardless of theme, always visible on the below gradient
             }
@@ -211,6 +219,18 @@ limitations under the License.
                 left: 0;
                 right: 0;
                 pointer-events: none;
+            }
+        }
+
+        &.mx_EventTile_sticker {
+            > a {
+                // position timestamps for stickers to the right of the un-bubbled sticker
+                right: unset;
+                left: 100%;
+            }
+
+            .mx_MStickerBody_wrapper {
+                padding: 0;
             }
         }
 

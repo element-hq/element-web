@@ -1106,9 +1106,9 @@ export default class EventTile extends React.Component<IProps, IState> {
         const EventTileType = sdk.getComponent(tileHandler);
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
 
-        const lineClasses = classNames({
-            mx_EventTile_line: true,
+        const lineClasses = classNames("mx_EventTile_line", {
             mx_EventTile_mediaLine: isProbablyMedia,
+            mx_EventTile_sticker: this.props.mxEvent.getType() === EventType.Sticker,
         });
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
