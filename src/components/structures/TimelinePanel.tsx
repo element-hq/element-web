@@ -63,7 +63,7 @@ const DEBUG = false;
 let debuglog = function(...s: any[]) {};
 if (DEBUG) {
     // using bind means that we get to keep useful line numbers in the console
-    debuglog = logger.log.bind(console);
+    debuglog = logger.log.bind(console, "TimelinePanel debuglog:");
 }
 
 interface IProps {
@@ -240,7 +240,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     constructor(props, context) {
         super(props, context);
 
-        debuglog("TimelinePanel: mounting");
+        debuglog("mounting");
 
         // XXX: we could track RM per TimelineSet rather than per Room.
         // but for now we just do it per room for simplicity.
@@ -369,7 +369,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private onMessageListUnfillRequest = (backwards: boolean, scrollToken: string): void => {
         // If backwards, unpaginate from the back (i.e. the start of the timeline)
         const dir = backwards ? EventTimeline.BACKWARDS : EventTimeline.FORWARDS;
-        debuglog("TimelinePanel: unpaginating events in direction", dir);
+        debuglog("unpaginating events in direction", dir);
 
         // All tiles are inserted by MessagePanel to have a scrollToken === eventId, and
         // this particular event should be the first or last to be unpaginated.
@@ -384,7 +384,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const count = backwards ? marker + 1 : this.state.events.length - marker;
 
         if (count > 0) {
-            debuglog("TimelinePanel: Unpaginating", count, "in direction", dir);
+            debuglog("Unpaginating", count, "in direction", dir);
             this.timelineWindow.unpaginate(count, backwards);
 
             const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
@@ -425,28 +425,28 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const paginatingKey = backwards ? 'backPaginating' : 'forwardPaginating';
 
         if (!this.state[canPaginateKey]) {
-            debuglog("TimelinePanel: have given up", dir, "paginating this timeline");
+            debuglog("have given up", dir, "paginating this timeline");
             return Promise.resolve(false);
         }
 
         if (!this.timelineWindow.canPaginate(dir)) {
-            debuglog("TimelinePanel: can't", dir, "paginate any further");
+            debuglog("can't", dir, "paginate any further");
             this.setState<null>({ [canPaginateKey]: false });
             return Promise.resolve(false);
         }
 
         if (backwards && this.state.firstVisibleEventIndex !== 0) {
-            debuglog("TimelinePanel: won't", dir, "paginate past first visible event");
+            debuglog("won't", dir, "paginate past first visible event");
             return Promise.resolve(false);
         }
 
-        debuglog("TimelinePanel: Initiating paginate; backwards:"+backwards);
+        debuglog("Initiating paginate; backwards:"+backwards);
         this.setState<null>({ [paginatingKey]: true });
 
         return this.onPaginationRequest(this.timelineWindow, dir, PAGINATE_SIZE).then((r) => {
             if (this.unmounted) { return; }
 
-            debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
+            debuglog("paginate complete backwards:"+backwards+"; success:"+r);
 
             const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
             const newState: Partial<IState> = {
@@ -463,7 +463,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             const canPaginateOtherWayKey = backwards ? 'canForwardPaginate' : 'canBackPaginate';
             if (!this.state[canPaginateOtherWayKey] &&
                     this.timelineWindow.canPaginate(otherDirection)) {
-                debuglog('TimelinePanel: can now', otherDirection, 'paginate again');
+                debuglog('can now', otherDirection, 'paginate again');
                 newState[canPaginateOtherWayKey] = true;
             }
 
@@ -833,7 +833,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             const roomId = this.props.timelineSet.room.roomId;
             const hiddenRR = SettingsStore.getValue("feature_hidden_read_receipts", roomId);
 
-            debuglog('TimelinePanel: Sending Read Markers for ',
+            debuglog('Sending Read Markers for ',
                 this.props.timelineSet.room.roomId,
                 'rm', this.state.readMarkerEventId,
                 lastReadEvent ? 'rr ' + lastReadEvent.getId() : '',

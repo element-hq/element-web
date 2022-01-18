@@ -215,13 +215,23 @@ limitations under the License.
         }
 
         //noinspection CssReplaceWithShorthandSafely
-        .mx_MImageBody .mx_MImageBody_thumbnail {
-            // Note: This is intentionally not compressed because the browser gets confused
-            // when it is all combined. We're effectively unsetting the border radius then
-            // setting the two corners we care about manually.
-            border-radius: unset;
-            border-top-left-radius: var(--cornerRadius);
-            border-top-right-radius: var(--cornerRadius);
+        .mx_MImageBody {
+            width: 100%;
+            height: 100%;
+
+            //noinspection CssReplaceWithShorthandSafely
+            .mx_MImageBody_thumbnail {
+                // Note: This is intentionally not compressed because the browser gets confused
+                // when it is all combined. We're effectively unsetting the border radius then
+                // setting the two corners we care about manually.
+                border-radius: unset;
+                border-top-left-radius: var(--cornerRadius);
+                border-top-right-radius: var(--cornerRadius);
+
+                &.mx_MImageBody_thumbnail--blurhash {
+                    position: unset;
+                }
+            }
         }
 
         .mx_EventTile_e2eIcon {
@@ -434,7 +444,6 @@ limitations under the License.
         }
         &[aria-expanded=true] {
             text-align: right;
-            margin-right: 100px;
         }
     }
 
@@ -457,11 +466,26 @@ limitations under the License.
     padding: 0 49px;
 }
 
+// ideally we'd use display=contents here for the layout to all work regardless of the *ELS but
+// that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse.
 .mx_EventListSummary[data-expanded=true][data-layout=bubble] {
-    display: contents;
+    margin: 0;
 
     .mx_EventTile {
         padding: 2px 0;
+        margin-right: 0;
+
+        .mx_MessageActionBar {
+            right: 127px; // align with that of right-column bubbles
+        }
+
+        .mx_EventTile_readAvatars {
+            right: -18px; // match alignment to RRs of chat bubbles
+        }
+
+        &::before {
+            right: 0; // match alignment of the hover background to that of chat bubbles
+        }
     }
 }
 

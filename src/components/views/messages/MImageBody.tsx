@@ -338,8 +338,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         content: IMediaEventContent,
         forcedHeight?: number,
     ): JSX.Element {
-        let infoWidth;
-        let infoHeight;
+        let infoWidth: number;
+        let infoHeight: number;
 
         if (content && content.info && content.info.w && content.info.h) {
             infoWidth = content.info.w;
@@ -382,8 +382,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         const suggestedAndPossibleHeight = Math.min(suggestedImageSize(imageSize, isPortrait).h, infoHeight);
         const aspectRatio = infoWidth / infoHeight;
 
-        let maxWidth;
-        let maxHeight;
+        let maxWidth: number;
+        let maxHeight: number;
         const maxHeightConstraint = forcedHeight || this.props.maxImageHeight || suggestedAndPossibleHeight;
         if (maxHeightConstraint * aspectRatio < suggestedAndPossibleWidth || imageSize === ImageSize.Large) {
             // The width is dictated by the maximum height that was defined by the props or the function param `forcedHeight`
@@ -451,7 +451,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         // This has incredibly broken types.
         const C = CSSTransition as any;
         const thumbnail = (
-            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight: maxHeight, maxWidth: maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}>
+            <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight, maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}>
                 <SwitchTransition mode="out-in">
                     <C
                         classNames="mx_rtg--fade"
@@ -464,8 +464,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                                 className={classes}
                                 style={{
                                     // Constrain width here so that spinner appears central to the loaded thumbnail
-                                    maxWidth: `min(100%, ${infoWidth}px)`,
-                                    maxHeight: maxHeight,
+                                    maxWidth,
+                                    maxHeight,
                                     aspectRatio: `${infoWidth}/${infoHeight}`,
                                 }}
                             >
