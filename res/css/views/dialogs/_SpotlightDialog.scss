@@ -154,10 +154,10 @@ limitations under the License.
 
                 &:hover, &[aria-selected=true] {
                     background-color: $system;
+                }
 
-                    .mx_SpotlightDialog_enterPrompt {
-                        display: inline-block;
-                    }
+                &[aria-selected=true] .mx_SpotlightDialog_enterPrompt {
+                    display: inline-block;
                 }
             }
         }
