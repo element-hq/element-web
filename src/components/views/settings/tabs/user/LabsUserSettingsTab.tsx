@@ -61,7 +61,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
             this.setState({ showHiddenReadReceipts });
         });
 
-        MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2716").then((showJumpToDate) => {
+        MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc3030").then((showJumpToDate) => {
             this.setState({ showJumpToDate });
         });
 
