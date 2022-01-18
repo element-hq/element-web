@@ -1484,7 +1484,7 @@
     "Contact your <a>server admin</a>.": "Võta ühendust <a>oma serveri haldajaga</a>.",
     "Warning": "Hoiatus",
     "Ok": "Sobib",
-    "Message Pinning": "Sõnumite klammerdamine",
+    "Message Pinning": "Sõnumite esiletõstmine",
     "IRC display name width": "IRC kuvatava nime laius",
     "Enable experimental, compact IRC style layout": "Võta kasutusele katseline, IRC-stiilis kompaktne sõnumite paigutus",
     "My Ban List": "Minu poolt seatud ligipääsukeeldude loend",
