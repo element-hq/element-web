@@ -3553,5 +3553,9 @@
     "Removes user with given id from this room": "Rimuove l'utente con il dato ID da questa stanza",
     "Message pending moderation": "Messaggio in attesa di moderazione",
     "Message pending moderation: %(reason)s": "Messaggio in attesa di moderazione: %(reason)s",
-    "Let moderators hide messages pending moderation.": "Lascia che i moderatori nascondano i messaggi in attesa di moderazione."
+    "Let moderators hide messages pending moderation.": "Lascia che i moderatori nascondano i messaggi in attesa di moderazione.",
+    "Space home": "Pagina iniziale dello spazio",
+    "%(senderName)s has ended a poll": "%(senderName)s ha terminato un sondaggio",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s ha iniziato un sondaggio - %(pollQuestion)s",
+    "%(senderName)s has shared their location": "%(senderName)s ha condiviso la sua posizione"
 }
