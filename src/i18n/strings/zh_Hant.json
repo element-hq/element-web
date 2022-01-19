@@ -3554,5 +3554,9 @@
     "Message pending moderation": "待審核的訊息",
     "Message pending moderation: %(reason)s": "待審核的訊息：%(reason)s",
     "Keyboard": "鍵盤",
-    "Let moderators hide messages pending moderation.": "讓管理員隱藏待審核的訊息。"
+    "Let moderators hide messages pending moderation.": "讓管理員隱藏待審核的訊息。",
+    "Space home": "空間首頁",
+    "%(senderName)s has ended a poll": "%(senderName)s 結束了投票",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s 啟動投票 - %(pollQuestion)s",
+    "%(senderName)s has shared their location": "%(senderName)s 已分享了他們的位置"
 }
