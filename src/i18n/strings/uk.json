@@ -3505,5 +3505,8 @@
     "Message pending moderation": "Повідомлення очікує модерування",
     "Message pending moderation: %(reason)s": "Повідомлення очікує модерування: %(reason)s",
     "Let moderators hide messages pending moderation.": "Дозволити модераторам ховати повідомлення у черзі модерування.",
-    "Space home": "Домівка простору"
+    "Space home": "Домівка простору",
+    "%(senderName)s has ended a poll": "%(senderName)s завершує опитування",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s починає опитування - %(pollQuestion)s",
+    "%(senderName)s has shared their location": "%(senderName)s поширює своє місцеперебування"
 }
