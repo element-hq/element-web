@@ -40,4 +40,16 @@ limitations under the License.
         bottom: -3px;
         left: 12px;
     }
+
+    .mx_MLocationBody_markerContents {
+        background-color: $location-marker-color;
+        margin: 4px;
+        width: 24px;
+        height: 24px;
+        padding-top: 8px;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        mask-image: url('$(res)/img/element-icons/location.svg');
+    }
 }

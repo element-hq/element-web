@@ -15,11 +15,21 @@ limitations under the License.
 */
 
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
-import { LOCATION_EVENT_TYPE } from "matrix-js-sdk/src/@types/location";
+import {
+    ASSET_NODE_TYPE,
+    ILocationContent,
+    LOCATION_EVENT_TYPE,
+    TIMESTAMP_NODE_TYPE,
+} from "matrix-js-sdk/src/@types/location";
+import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import sdk from "../../../skinned-sdk";
-import { createMapSiteLink, parseGeoUri } from "../../../../src/components/views/messages/MLocationBody";
+import {
+    createMapSiteLink,
+    isSelfLocation,
+    parseGeoUri,
+} from "../../../../src/components/views/messages/MLocationBody";
 
 sdk.getComponent("views.messages.MLocationBody");
 
@@ -187,6 +197,46 @@ describe("MLocationBody", () => {
                 "?mlat=51.5076&mlon=-0.1276" +
                 "#map=16/51.5076/-0.1276",
             );
+        });
+    });
+
+    describe("isSelfLocation", () => {
+        it("Returns true for a full m.asset event", () => {
+            const content = makeLocationContent("", "", 0);
+            expect(isSelfLocation(content)).toBe(true);
+        });
+
+        it("Returns true for a missing m.asset", () => {
+            const content = {
+                body: "",
+                msgtype: "m.location",
+                geo_uri: "",
+                [LOCATION_EVENT_TYPE.name]: { uri: "" },
+                [TEXT_NODE_TYPE.name]: "",
+                [TIMESTAMP_NODE_TYPE.name]: 0,
+                // Note: no m.asset!
+            };
+            expect(isSelfLocation(content as ILocationContent)).toBe(true);
+        });
+
+        it("Returns true for a missing m.asset type", () => {
+            const content = {
+                body: "",
+                msgtype: "m.location",
+                geo_uri: "",
+                [LOCATION_EVENT_TYPE.name]: { uri: "" },
+                [TEXT_NODE_TYPE.name]: "",
+                [TIMESTAMP_NODE_TYPE.name]: 0,
+                [ASSET_NODE_TYPE.name]: {
+                    // Note: no type!
+                },
+            };
+            expect(isSelfLocation(content as ILocationContent)).toBe(true);
+        });
+
+        it("Returns false for an unknown asset type", () => {
+            const content = makeLocationContent("", "", 0, "", "org.example.unknown");
+            expect(isSelfLocation(content)).toBe(false);
         });
     });
 });

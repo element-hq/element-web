@@ -17,8 +17,13 @@ limitations under the License.
 import React from 'react';
 import maplibregl from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
-import { LOCATION_EVENT_TYPE } from 'matrix-js-sdk/src/@types/location';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import {
+    ASSET_NODE_TYPE,
+    ASSET_TYPE_SELF,
+    ILocationContent,
+    LOCATION_EVENT_TYPE,
+} from 'matrix-js-sdk/src/@types/location';
 
 import SdkConfig from '../../../SdkConfig';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -101,6 +106,12 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     }
 }
 
+export function isSelfLocation(locationContent: ILocationContent): boolean {
+    const asset = ASSET_NODE_TYPE.findIn(locationContent) as { type: string };
+    const assetType = asset?.type ?? ASSET_TYPE_SELF;
+    return assetType == ASSET_TYPE_SELF;
+}
+
 interface ILocationBodyContentProps {
     mxEvent: MatrixEvent;
     bodyId: string;
@@ -120,6 +131,17 @@ export function LocationBodyContent(props: ILocationBodyContentProps):
         onClick={props.onClick}
         className="mx_MLocationBody_map"
     />;
+
+    const markerContents = (
+        isSelfLocation(props.mxEvent.getContent())
+            ? <MemberAvatar
+                member={props.mxEvent.sender}
+                width={27}
+                height={27}
+                viewUserOnClick={false}
+            />
+            : <div className="mx_MLocationBody_markerContents" />
+    );
 
     return <div className="mx_MLocationBody">
         {
@@ -142,12 +164,7 @@ export function LocationBodyContent(props: ILocationBodyContentProps):
         }
         <div className="mx_MLocationBody_marker" id={props.markerId}>
             <div className="mx_MLocationBody_markerBorder">
-                <MemberAvatar
-                    member={props.mxEvent.sender}
-                    width={27}
-                    height={27}
-                    viewUserOnClick={false}
-                />
+                { markerContents }
             </div>
             <img
                 className="mx_MLocationBody_pointer"
