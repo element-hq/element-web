@@ -127,6 +127,14 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/collapse-message.svg');
 }
 
+.mx_MessageActionBar_viewInRoom::after {
+    mask-image: url('$(res)/img/element-icons/view-in-room.svg');
+}
+
+.mx_MessageActionBar_copyLinkToThread::after {
+    mask-image: url('$(res)/img/element-icons/link.svg');
+}
+
 .mx_MessageActionBar_downloadButton.mx_MessageActionBar_downloadSpinnerButton::after {
     background-color: transparent; // hide the download icon mask
 }
