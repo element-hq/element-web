@@ -57,22 +57,32 @@ import DocumentPosition from "../../../editor/position";
 import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
 
+interface IAddReplyOpts {
+    permalinkCreator?: RoomPermalinkCreator;
+    includeLegacyFallback?: boolean;
+    renderIn?: string[];
+}
+
 function addReplyToMessageContent(
     content: IContent,
     replyToEvent: MatrixEvent,
-    permalinkCreator: RoomPermalinkCreator,
+    opts: IAddReplyOpts = {
+        includeLegacyFallback: true,
+    },
 ): void {
-    const replyContent = ReplyChain.makeReplyMixIn(replyToEvent);
+    const replyContent = ReplyChain.makeReplyMixIn(replyToEvent, opts.renderIn);
     Object.assign(content, replyContent);
 
-    // Part of Replies fallback support - prepend the text we're sending
-    // with the text we're replying to
-    const nestedReply = ReplyChain.getNestedReplyText(replyToEvent, permalinkCreator);
-    if (nestedReply) {
-        if (content.formatted_body) {
-            content.formatted_body = nestedReply.html + content.formatted_body;
+    if (opts.includeLegacyFallback) {
+        // Part of Replies fallback support - prepend the text we're sending
+        // with the text we're replying to
+        const nestedReply = ReplyChain.getNestedReplyText(replyToEvent, opts.permalinkCreator);
+        if (nestedReply) {
+            if (content.formatted_body) {
+                content.formatted_body = nestedReply.html + content.formatted_body;
+            }
+            content.body = nestedReply.body + content.body;
         }
-        content.body = nestedReply.body + content.body;
     }
 }
 
@@ -94,6 +104,7 @@ export function createMessageContent(
     replyToEvent: MatrixEvent,
     relation: IEventRelation,
     permalinkCreator: RoomPermalinkCreator,
+    includeReplyLegacyFallback = true,
 ): IContent {
     const isEmote = containsEmote(model);
     if (isEmote) {
@@ -116,7 +127,11 @@ export function createMessageContent(
     }
 
     if (replyToEvent) {
-        addReplyToMessageContent(content, replyToEvent, permalinkCreator);
+        addReplyToMessageContent(content, replyToEvent, {
+            permalinkCreator,
+            includeLegacyFallback: true,
+            renderIn: ReplyChain.getRenderInMixin(relation),
+        });
     }
 
     if (relation) {
@@ -155,6 +170,7 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     replyToEvent?: MatrixEvent;
     disabled?: boolean;
     onChange?(model: EditorModel): void;
+    includeReplyLegacyFallback?: boolean;
 }
 
 @replaceableComponent("views.rooms.SendMessageComposer")
@@ -168,6 +184,10 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
     private currentlyComposedEditorState: SerializedPart[] = null;
     private dispatcherRef: string;
     private sendHistoryManager: SendHistoryManager;
+
+    static defaultProps = {
+        includeReplyLegacyFallback: true,
+    };
 
     constructor(props: ISendMessageComposerProps, context: React.ContextType<typeof RoomContext>) {
         super(props);
@@ -350,10 +370,14 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         return; // errored
                     }
 
-                    if (replyToEvent) {
-                        addReplyToMessageContent(content, replyToEvent, this.props.permalinkCreator);
-                    }
                     attachRelation(content, this.props.relation);
+                    if (replyToEvent) {
+                        addReplyToMessageContent(content, replyToEvent, {
+                            permalinkCreator: this.props.permalinkCreator,
+                            includeLegacyFallback: true,
+                            renderIn: ReplyChain.getRenderInMixin(this.props.relation),
+                        });
+                    }
                 } else {
                     runSlashCommand(cmd, args, this.props.room.roomId, threadId);
                     shouldSend = false;
@@ -378,6 +402,7 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     replyToEvent,
                     this.props.relation,
                     this.props.permalinkCreator,
+                    this.props.includeReplyLegacyFallback,
                 );
             }
             // don't bother sending an empty message

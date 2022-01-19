@@ -55,6 +55,7 @@ interface IProps {
 }
 interface IState {
     thread?: Thread;
+    lastThreadReply?: MatrixEvent;
     layout: Layout;
     editState?: EditorStateTransfer;
     replyToEvent?: MatrixEvent;
@@ -142,14 +143,14 @@ export default class ThreadView extends React.Component<IProps, IState> {
         if (!thread) {
             thread = this.props.room.createThread([mxEv]);
         }
-        thread.on(ThreadEvent.Update, this.updateThread);
+        thread.on(ThreadEvent.Update, this.updateLastThreadReply);
         thread.once(ThreadEvent.Ready, this.updateThread);
         this.updateThread(thread);
     };
 
     private teardownThread = () => {
         if (this.state.thread) {
-            this.state.thread.removeListener(ThreadEvent.Update, this.updateThread);
+            this.state.thread.removeListener(ThreadEvent.Update, this.updateLastThreadReply);
             this.state.thread.removeListener(ThreadEvent.Ready, this.updateThread);
         }
     };
@@ -165,9 +166,18 @@ export default class ThreadView extends React.Component<IProps, IState> {
         if (thread && this.state.thread !== thread) {
             this.setState({
                 thread,
+                lastThreadReply: thread.lastReply,
             }, () => {
                 thread.emit(ThreadEvent.ViewThread);
                 this.timelinePanelRef.current?.refreshTimeline();
+            });
+        }
+    };
+
+    private updateLastThreadReply = () => {
+        if (this.state.thread) {
+            this.setState({
+                lastThreadReply: this.state.thread.lastReply,
             });
         }
     };
@@ -199,8 +209,11 @@ export default class ThreadView extends React.Component<IProps, IState> {
             : null;
 
         const threadRelation: IEventRelation = {
-            rel_type: RelationType.Thread,
-            event_id: this.state.thread?.id,
+            "rel_type": RelationType.Thread,
+            "event_id": this.state.thread?.id,
+            "m.in_reply_to": {
+                "event_id": this.state.lastThreadReply?.getId(),
+            },
         };
 
         const messagePanelClassNames = classNames(

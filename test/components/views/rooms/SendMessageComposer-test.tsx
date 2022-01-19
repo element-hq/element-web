@@ -302,6 +302,7 @@ describe('<SendMessageComposer/>', () => {
                             rel_type: RelationType.Thread,
                             event_id: "myFakeThreadId",
                         }}
+                        includeReplyLegacyFallback={false}
                     />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>);
