@@ -3,7 +3,7 @@ import './skinned-sdk';
 import { MatrixEvent } from "matrix-js-sdk";
 import renderer from 'react-test-renderer';
 
-import { textForEvent } from "../src/TextForEvent";
+import { getSenderName, textForEvent } from "../src/TextForEvent";
 import SettingsStore from "../src/settings/SettingsStore";
 import { SettingLevel } from "../src/settings/SettingLevel";
 
@@ -54,6 +54,18 @@ function renderComponent(component): string {
 }
 
 describe('TextForEvent', () => {
+    describe("getSenderName()", () => {
+        it("Prefers sender.name", () => {
+            expect(getSenderName({ sender: { name: "Alice" } } as MatrixEvent)).toBe("Alice");
+        });
+        it("Handles missing sender", () => {
+            expect(getSenderName({ getSender: () => "Alice" } as MatrixEvent)).toBe("Alice");
+        });
+        it("Handles missing sender and get sender", () => {
+            expect(getSenderName({ getSender: () => undefined } as MatrixEvent)).toBe("Someone");
+        });
+    });
+
     describe("TextForPinnedEvent", () => {
         SettingsStore.setValue("feature_pinning", null, SettingLevel.DEVICE, true);
 
