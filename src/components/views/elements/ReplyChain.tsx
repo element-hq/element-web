@@ -101,8 +101,6 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         if (!ev || ev.isRedacted()) return;
         if (ev.replyEventId) {
             return ev.replyEventId;
-        } else if (!SettingsStore.getValue("feature_thread") && ev.isThreadRelation) {
-            return ev.threadRootId;
         }
     }
 

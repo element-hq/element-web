@@ -212,7 +212,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
             "rel_type": RelationType.Thread,
             "event_id": this.state.thread?.id,
             "m.in_reply_to": {
-                "event_id": this.state.lastThreadReply?.getId(),
+                "event_id": this.state.lastThreadReply?.getId() ?? this.state.thread?.id,
             },
         };
 
