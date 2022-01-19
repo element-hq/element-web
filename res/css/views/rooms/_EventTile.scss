@@ -911,6 +911,12 @@ $left-gutter: 64px;
                 margin: 0 -13px 0 0; // align with normal messages
             }
         }
+
+        &[data-self=false] {
+            .mx_MessageActionBar {
+                right: -60px; // smaller overlap, otherwise it'll overflow on the right
+            }
+        }
     }
 
     .mx_EventTile[data-layout=group] {

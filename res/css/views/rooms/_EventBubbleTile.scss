@@ -131,6 +131,10 @@ limitations under the License.
             left: -34px;
         }
 
+        .mx_MessageActionBar {
+            right: -100px; // to make sure it doesn't overflow to the left or cover sender profile
+        }
+
         --backgroundColor: $eventbubble-others-bg;
     }
 
@@ -194,7 +198,10 @@ limitations under the License.
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
-        > a { // timestamp wrapper anchor
+        // the selector here is quite weird because timestamps can appear linked & unlinked and in different places
+        // in the DOM depending on the specific rendering context
+        > a, // timestamp wrapper anchor
+        .mx_MessageActionBar + .mx_MessageTimestamp {
             position: absolute;
             padding: 4px 8px;
             bottom: 0;
@@ -223,7 +230,8 @@ limitations under the License.
         }
 
         &.mx_EventTile_sticker {
-            > a {
+            > a, // timestamp wrapper anchor
+            .mx_MessageActionBar + .mx_MessageTimestamp {
                 // position timestamps for stickers to the right of the un-bubbled sticker
                 right: unset;
                 left: 100%;
@@ -338,7 +346,8 @@ limitations under the License.
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
-                > a {
+                > a, // timestamp wrapper anchor
+                .mx_MessageActionBar + .mx_MessageTimestamp {
                     display: none !important;
                 }
             }
@@ -439,14 +448,17 @@ limitations under the License.
         margin-left: 9px;
     }
 
-    .mx_EventTile_line > a { // timestamp wrapper anchor
-        right: auto;
-        left: -77px;
-        bottom: unset;
-        align-self: center;
+    .mx_EventTile_line {
+        > a, // timestamp wrapper anchor
+        .mx_MessageActionBar + .mx_MessageTimestamp {
+            right: auto;
+            left: -77px;
+            bottom: unset;
+            align-self: center;
 
-        .mx_MessageTimestamp {
-            vertical-align: middle;
+            .mx_MessageTimestamp, &.mx_MessageTimestamp {
+                vertical-align: middle;
+            }
         }
     }
 }
