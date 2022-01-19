@@ -3,7 +3,7 @@
 exports[`<TooltipTarget /> displays tooltip on mouseover 1`] = `
 <div
   class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
-  style="right: 1008px; top: -26px; display: block;"
+  style="right: 1024px; top: -26px; display: block;"
 >
   <div
     class="mx_Tooltip_chevron"

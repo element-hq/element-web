@@ -117,8 +117,8 @@ export default class Tooltip extends React.Component<ITooltipProps> {
         );
         const baseTop = (parentBox.top - 2 + this.props.yOffset) + window.pageYOffset;
         const top = baseTop + offset;
-        const right = width - parentBox.right - window.pageXOffset - 16;
-        const left = parentBox.right + window.pageXOffset + 6;
+        const right = width - parentBox.left - window.pageXOffset;
+        const left = parentBox.right + window.pageXOffset;
         const horizontalCenter = (
             parentBox.left - window.pageXOffset + (parentWidth / 2)
         );
