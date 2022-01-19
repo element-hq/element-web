@@ -425,6 +425,8 @@ describe('loading:', function() {
 
     describe('Guest auto-registration:', function() {
         it('shows a welcome page by default', function() {
+            httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
+
             loadApp();
 
             return sleep(1).then(() => {
@@ -455,6 +457,8 @@ describe('loading:', function() {
         });
 
         it('uses the default homeserver to register with', function() {
+            httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
+
             loadApp();
 
             return sleep(1).then(() => {
@@ -489,6 +493,8 @@ describe('loading:', function() {
         });
 
         it('shows a room view if we followed a room link', function() {
+            httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
+
             loadApp({
                 uriFragment: "#/room/!room:id",
             });
@@ -520,6 +526,8 @@ describe('loading:', function() {
 
         describe('Login as user', function() {
             beforeEach(function() {
+                httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
+
                 // first we have to load the homepage
                 loadApp();
 
