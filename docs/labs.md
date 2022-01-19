@@ -130,15 +130,6 @@ Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-
 
 Adds a "Message layout" section under `Settings -> Appearance`, where the user can select their preferred message layout (e.g. IRC or Modern). Additionally, adds a new "Message bubbles" layout.
 
-## Polls (`feature_polls`) [In Development]
-
-Polls are a way to gauge interest from your community about a certain topic with a simple voting mechanic
-within the message timeline. Note that this feature is currently under active development and therefore is
-entirely incomplete and may not work at all - it is not recommended for general use at this time.
-
-Bug reports, feature requests, etc are not currently accepted for this feature flag. A later stage of
-development will provide opportunities for feedback.
-
 ## Metaspaces (`feature_spaces_metaspaces`) [In Development]
 
 Metaspaces are automatically populated spaces you can enable in your Space panel.
