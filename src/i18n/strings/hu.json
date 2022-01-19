@@ -3551,5 +3551,8 @@
     "Remove, ban, or invite people to this room, and make you leave": "Eltávolítani, kitiltani vagy meghívni embereket ebbe a szobába és, hogy ön elhagyja a szobát",
     "%(senderName)s removed %(targetName)s": "%(senderName)s eltávolította őt: %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s eltávolította őt: %(targetName)s. Ok: %(reason)s",
-    "Removes user with given id from this room": "Megadott azonosítóval rendelkező felhasználót távolít el a szobából"
+    "Removes user with given id from this room": "Megadott azonosítóval rendelkező felhasználót távolít el a szobából",
+    "%(senderName)s has ended a poll": "%(senderName)s lezárta a szavazást",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s szavazást indított - %(pollQuestion)s",
+    "%(senderName)s has shared their location": "%(senderName)s megosztotta a földrajzi helyzetét"
 }
