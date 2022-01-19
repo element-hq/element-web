@@ -73,7 +73,7 @@ const SpacePreferencesDialog: React.FC<IProps> = ({ space, initialTabId, onFinis
         new Tab(
             SpacePreferenceTab.Appearance,
             _td("Appearance"),
-            "mx_RoomSettingsDialog_notificationsIcon",
+            "mx_SpacePreferencesDialog_appearanceIcon",
             <SpacePreferencesAppearanceTab space={space} />,
         ),
     ];

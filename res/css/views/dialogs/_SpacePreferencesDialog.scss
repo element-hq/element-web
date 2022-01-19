@@ -44,3 +44,7 @@ limitations under the License.
         }
     }
 }
+
+.mx_SpacePreferencesDialog_appearanceIcon::before {
+    mask-image: url('$(res)/img/element-icons/settings/appearance.svg');
+}
