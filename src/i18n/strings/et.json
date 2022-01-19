@@ -3550,5 +3550,8 @@
     "Message pending moderation": "Sõnum on modereerimise ootel",
     "Message pending moderation: %(reason)s": "Sõnum on modereerimise ootel: %(reason)s",
     "Keyboard": "Klaviatuur",
-    "Let moderators hide messages pending moderation.": "Luba modereerimist ootavate sõnumite peitmist."
+    "Let moderators hide messages pending moderation.": "Luba modereerimist ootavate sõnumite peitmist.",
+    "%(senderName)s has ended a poll": "%(senderName)s lõpetas küsitluse",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s algatas küsitluse - %(pollQuestion)s",
+    "%(senderName)s has shared their location": "%(senderName)s jagas oma asukohta"
 }
