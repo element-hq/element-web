@@ -1473,11 +1473,11 @@ export default class EventTile extends React.Component<IProps, IState> {
                     }, <>
                         { sender }
                         { avatar }
+                        { timestamp }
                         <div
                             className={lineClasses}
                             key="mx_EventTile_line"
                         >
-                            { linkedTimestamp }
                             { this.renderE2EPadlock() }
                             <div className="mx_EventTile_body">
                                 { MessagePreviewStore.instance.generatePreviewForEvent(this.props.mxEvent) }

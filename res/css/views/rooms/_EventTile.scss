@@ -803,6 +803,10 @@ $left-gutter: 64px;
     margin: var(--topOffset) 16px var(--topOffset) 0;
     border-radius: 8px;
 
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+
     &:hover {
         background-color: $system;
     }
@@ -848,16 +852,42 @@ $left-gutter: 64px;
 
     .mx_SenderProfile {
         margin-left: var(--leftOffset) !important;
+        flex: 1;
+        margin-right: 12px;
+
+        display: inline-flex;
+        // not a fan of the magic number here, but I just tweaked
+        // the hardcoded value of the current implementation
+        max-width: calc(100% - 96px);
+    }
+
+    .mx_SenderProfile_displayName,
+    .mx_SenderProfile_mxid {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mx_SenderProfile_displayName {
+        flex: none;
+        max-width: 100%;
+    }
+
+    .mx_SenderProfile_mxid {
+        flex: 1;
     }
 
     .mx_EventTile_line {
+        width: 100%;
+        box-sizing: border-box;
         padding-left: var(--leftOffset) !important;
         padding-bottom: 0;
     }
+
     .mx_MessageTimestamp {
-        right: 0;
-        left: auto !important;
-        top: -23px;
+        position: initial !important;
+        max-width: 80px;
+        width: auto !important;
     }
 }
 
