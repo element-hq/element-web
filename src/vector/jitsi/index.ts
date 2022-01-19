@@ -218,7 +218,6 @@ function joinConference() { // event handler bound in HTML
 
     switchVisibleContainers();
 
-
     logger.warn(
         "[Jitsi Widget] The next few errors about failing to parse URL parameters are fine if " +
         "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
@@ -247,14 +246,15 @@ function joinConference() { // event handler bound in HTML
     if (userId) meetApi.executeCommand("email", userId);
     if (roomName) meetApi.executeCommand("subject", roomName);
 
-    // fires once when active user joins the conference
-    meetApi.on("videoConferenceJoined", (event) => {
+    // fires once when user joins the conference
+    // (regardless of video on or off)
+    meetApi.on("videoConferenceJoined", () => {
         if (widgetApi) {
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
             widgetApi.setAlwaysOnScreen(true);
         }
-    })
+    });
 
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
