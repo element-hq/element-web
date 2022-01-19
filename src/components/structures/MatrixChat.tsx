@@ -20,7 +20,6 @@ import { ISyncStateData, SyncState } from 'matrix-js-sdk/src/sync';
 import { MatrixError } from 'matrix-js-sdk/src/http-api';
 import { InvalidStoreError } from "matrix-js-sdk/src/errors";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Error as ErrorEvent } from "matrix-analytics-events/types/typescript/Error";
 import { Screen as ScreenEvent } from "matrix-analytics-events/types/typescript/Screen";
 import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -1624,29 +1623,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }, null, true);
         });
 
-        const dft = new DecryptionFailureTracker((total, errorCode) => {
-            Analytics.trackEvent('E2E', 'Decryption failure', errorCode, String(total));
-            CountlyAnalytics.instance.track("decryption_failure", { errorCode }, null, { sum: total });
-            for (let i = 0; i < total; i++) {
-                PosthogAnalytics.instance.trackEvent<ErrorEvent>({
-                    eventName: "Error",
-                    domain: "E2EE",
-                    name: errorCode,
-                });
-            }
-        }, (errorCode) => {
-            // Map JS-SDK error codes to tracker codes for aggregation
-            switch (errorCode) {
-                case 'MEGOLM_UNKNOWN_INBOUND_SESSION_ID':
-                    return 'OlmKeysNotSentError';
-                case 'OLM_UNKNOWN_MESSAGE_INDEX':
-                    return 'OlmIndexError';
-                case undefined:
-                    return 'OlmUnspecifiedError';
-                default:
-                    return 'UnknownError';
-            }
-        });
+        const dft = DecryptionFailureTracker.instance;
 
         // Shelved for later date when we have time to think about persisting history of
         // tracked events across sessions.

@@ -74,6 +74,7 @@ import { NotificationColor } from '../../../stores/notifications/NotificationCol
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import { CardContext } from '../right_panel/BaseCard';
 import { copyPlaintext } from '../../../utils/strings';
+import { DecryptionFailureTracker } from '../../../DecryptionFailureTracker';
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -501,6 +502,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             client.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
             client.on("userTrustStatusChanged", this.onUserVerificationChanged);
             this.props.mxEvent.on("Event.decrypted", this.onDecrypted);
+            DecryptionFailureTracker.instance.addVisibleEvent(this.props.mxEvent);
             if (this.props.showReactions) {
                 this.props.mxEvent.on("Event.relationsCreated", this.onReactionsCreated);
             }
