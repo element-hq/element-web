@@ -3501,5 +3501,6 @@
     "Unrecognised room address: %(roomAlias)s": "Nicht erkannte Raumadresse: %(roomAlias)s",
     "Failed to get room topic: Unable to find room (%(roomId)s": "Thema des Raums konnte nicht ermittelt werden: Raum kann nicht gefunden werden (%(roomId)s",
     "Command error: Unable to find rendering type (%(renderingType)s)": "Befehlsfehler: Rendering-Typ kann nicht gefunden werden (%(renderingType)s)",
-    "%(senderName)s has shared their location": "%(senderName)s hat seine Position geteilt"
+    "%(senderName)s has shared their location": "%(senderName)s hat seine Position geteilt",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s hat eine Umfrage gestartet - %(pollQuestion)s"
 }
