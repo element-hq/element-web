@@ -3519,5 +3519,8 @@
     "Remove from %(roomName)s": "Aus %(roomName)s entfernen",
     "Remove from chat": "Aus Chat entfernen",
     "You were removed from %(roomName)s by %(memberName)s": "%(memberName)s hat dich aus %(roomName)s entfernt",
-    "From a thread": "Aus einem Thread"
+    "From a thread": "Aus einem Thread",
+    "Remove users": "Benutzer entfernen",
+    "Send reactions": "Reaktionen senden",
+    "Keyboard": "Tastatur"
 }
