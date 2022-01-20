@@ -3545,5 +3545,8 @@
     "was removed %(count)s times|other": "wurde %(count)s mal entfernt",
     "was removed %(count)s times|one": "wurde entfernt",
     "were removed %(count)s times|one": "wurde entfernt",
-    "were removed %(count)s times|other": "wurden %(count)s mal entfernt"
+    "were removed %(count)s times|other": "wurden %(count)s mal entfernt",
+    "Let moderators hide messages pending moderation.": "Erlaube Moderatoren Nachrichten auszublenden, die noch nicht moderiert wurden.",
+    "Message pending moderation: %(reason)s": "Nachricht erwartet Moderation: %(reason)s",
+    "Message pending moderation": "Nachricht erwartet Moderation"
 }
