@@ -233,6 +233,11 @@ $left-gutter: 64px;
         overflow-y: hidden;
     }
 
+    .mx_EventTile_Emoji {
+        font-size: 1.8rem;
+        vertical-align: bottom;
+    }
+
     &.mx_EventTile_selected .mx_EventTile_line,
     &:hover .mx_EventTile_line {
         border-top-left-radius: 4px;

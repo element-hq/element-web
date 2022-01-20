@@ -402,6 +402,46 @@ export interface IOptsReturnString extends IOpts {
     returnString: true;
 }
 
+/**
+ * Wraps emojis in <span> to style them separately from the rest of message. Consecutive emojis (and modifiers) are wrapped
+ * in the same <span>.
+ * @param {string} message the text to format
+ * @param {boolean} isHtmlMessage whether the message contains HTML
+ * @returns if isHtmlMessage is true, returns an array of strings, otherwise return an array of React Elements for emojis
+ * and plain text for everything else
+ */
+function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | string)[] {
+    const emojiToSpan = isHtmlMessage ? (emoji: string) => `<span class='mx_EventTile_Emoji'>${emoji}</span>` :
+        (emoji: string, key: number) => <span key={key} className='mx_EventTile_Emoji'>{ emoji }</span>;
+    const result: (JSX.Element | string)[] = [];
+    let text = '';
+    let emojis = '';
+    let key = 0;
+    for (const char of message) {
+        if (mightContainEmoji(char) || ZWJ_REGEX.test(char) || char === '\ufe0f') {
+            if (text) {
+                result.push(text);
+                text = '';
+            }
+            emojis += char;
+        } else {
+            if (emojis) {
+                result.push(emojiToSpan(emojis, key));
+                key++;
+                emojis = '';
+            }
+            text += char;
+        }
+    }
+    if (text) {
+        result.push(text);
+    }
+    if (emojis) {
+        result.push(emojiToSpan(emojis, key));
+    }
+    return result;
+}
+
 /* turn a matrix event body into html
  *
  * content: 'content' of the MatrixEvent
@@ -488,6 +528,9 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
                 });
                 safeBody = phtml.html();
             }
+            if (bodyHasEmoji) {
+                safeBody = formatEmojis(safeBody, true).join('');
+            }
         }
     } finally {
         delete sanitizeParams.textFilter;
@@ -530,6 +573,11 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
         'markdown-body': isHtmlMessage && !emojiBody,
     });
 
+    let emojiBodyElements: JSX.Element[];
+    if (!isDisplayedWithHtml && bodyHasEmoji && !emojiBody) {
+        emojiBodyElements = formatEmojis(strippedBody, false) as JSX.Element[];
+    }
+
     return isDisplayedWithHtml ?
         <span
             key="body"
@@ -537,7 +585,9 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
             className={className}
             dangerouslySetInnerHTML={{ __html: safeBody }}
             dir="auto"
-        /> : <span key="body" ref={opts.ref} className={className} dir="auto">{ strippedBody }</span>;
+        /> : <span key="body" ref={opts.ref} className={className} dir="auto">
+            { emojiBodyElements || strippedBody }
+        </span>;
 }
 
 /**
