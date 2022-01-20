@@ -1,6 +1,6 @@
 import './skinned-sdk';
 
-import { MatrixEvent } from "matrix-js-sdk";
+import { EventType, MatrixEvent } from "matrix-js-sdk";
 import renderer from 'react-test-renderer';
 
 import { getSenderName, textForEvent } from "../src/TextForEvent";
@@ -137,6 +137,198 @@ describe('TextForEvent', () => {
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
             expect(renderComponent(component)).toBe(expectedText);
+        });
+    });
+
+    describe("textForPowerEvent()", () => {
+        const userA = {
+            id: '@a',
+            name: 'Alice',
+        };
+        const userB = {
+            id: '@b',
+            name: 'Bob',
+        };
+        const userC = {
+            id: '@c',
+            name: 'Carl',
+        };
+        interface PowerEventProps {
+            usersDefault?: number;
+            prevDefault?: number;
+            users: Record<string, number>;
+            prevUsers: Record<string, number>;
+        }
+        const mockPowerEvent = ({
+            usersDefault, prevDefault, users, prevUsers,
+        }: PowerEventProps): MatrixEvent => new MatrixEvent({
+            type: EventType.RoomPowerLevels,
+            sender: userA.id,
+            state_key: "",
+            content: {
+                users_default: usersDefault,
+                users,
+            },
+            prev_content: {
+                users: prevUsers,
+                users_default: prevDefault,
+            },
+        });
+
+        it("returns empty string when no users have changed power level", () => {
+            const event = mockPowerEvent({
+                users: {
+                    [userA.id]: 100,
+                },
+                prevUsers: {
+                    [userA.id]: 100,
+                },
+            });
+            expect(textForEvent(event)).toBeFalsy();
+        });
+
+        it("returns empty string when users power levels have been changed by default settings", () => {
+            const event = mockPowerEvent({
+                usersDefault: 100,
+                prevDefault: 50,
+                users: {
+                    [userA.id]: 100,
+                },
+                prevUsers: {
+                    [userA.id]: 50,
+                },
+            });
+            expect(textForEvent(event)).toBeFalsy();
+        });
+
+        it("returns correct message for a single user with changed power level", () => {
+            const event = mockPowerEvent({
+                users: {
+                    [userB.id]: 100,
+                },
+                prevUsers: {
+                    [userB.id]: 50,
+                },
+            });
+            const expectedText = "@a changed the power level of @b from Moderator to Admin.";
+            expect(textForEvent(event)).toEqual(expectedText);
+        });
+
+        it("returns correct message for a single user with power level changed to the default", () => {
+            const event = mockPowerEvent({
+                usersDefault: 20,
+                prevDefault: 101,
+                users: {
+                    [userB.id]: 20,
+                },
+                prevUsers: {
+                    [userB.id]: 50,
+                },
+            });
+            const expectedText = "@a changed the power level of @b from Moderator to Default.";
+            expect(textForEvent(event)).toEqual(expectedText);
+        });
+
+        it("returns correct message for a single user with power level changed to a custom level", () => {
+            const event = mockPowerEvent({
+                users: {
+                    [userB.id]: -1,
+                },
+                prevUsers: {
+                    [userB.id]: 50,
+                },
+            });
+            const expectedText = "@a changed the power level of @b from Moderator to Custom (-1).";
+            expect(textForEvent(event)).toEqual(expectedText);
+        });
+
+        it("returns correct message for a multiple power level changes", () => {
+            const event = mockPowerEvent({
+                users: {
+                    [userB.id]: 100,
+                    [userC.id]: 50,
+                },
+                prevUsers: {
+                    [userB.id]: 50,
+                    [userC.id]: 101,
+                },
+            });
+            const expectedText =
+                "@a changed the power level of @b from Moderator to Admin, @c from Custom (101) to Moderator.";
+            expect(textForEvent(event)).toEqual(expectedText);
+        });
+    });
+
+    describe("textForCanonicalAliasEvent()", () => {
+        const userA = {
+            id: '@a',
+            name: 'Alice',
+        };
+
+        interface AliasEventProps {
+            alias?: string; prevAlias?: string; altAliases?: string[]; prevAltAliases?: string[];
+        }
+        const mockEvent = ({
+            alias, prevAlias, altAliases, prevAltAliases,
+        }: AliasEventProps): MatrixEvent => new MatrixEvent({
+            type: EventType.RoomCanonicalAlias,
+            sender: userA.id,
+            state_key: "",
+            content: {
+                alias, alt_aliases: altAliases,
+            },
+            prev_content: {
+                alias: prevAlias, alt_aliases: prevAltAliases,
+            },
+        });
+
+        type TestCase = [string, AliasEventProps & { result: string }];
+        const testCases: TestCase[] = [
+            ["room alias didn't change", {
+                result: '@a changed the addresses for this room.',
+            }],
+            ["room alias changed", {
+                alias: 'banana',
+                prevAlias: 'apple',
+                result: '@a set the main address for this room to banana.',
+            }],
+            ["room alias was added", {
+                alias: 'banana',
+                result: '@a set the main address for this room to banana.',
+            }],
+            ["room alias was removed", {
+                prevAlias: 'apple',
+                result: '@a removed the main address for this room.',
+            }],
+            ["added an alt alias", {
+                altAliases: ['canteloupe'],
+                result: '@a added alternative address canteloupe for this room.',
+            }],
+            ["added multiple alt aliases", {
+                altAliases: ['canteloupe', 'date'],
+                result: '@a added the alternative addresses canteloupe, date for this room.',
+            }],
+            ["removed an alt alias", {
+                altAliases: ['canteloupe'],
+                prevAltAliases: ['canteloupe', 'date'],
+                result: '@a removed alternative address date for this room.',
+            }],
+            ["added and removed an alt aliases", {
+                altAliases: ['canteloupe', 'elderberry'],
+                prevAltAliases: ['canteloupe', 'date'],
+                result: '@a changed the alternative addresses for this room.',
+            }],
+            ["changed alias and added alt alias", {
+                alias: 'banana',
+                prevAlias: 'apple',
+                altAliases: ['canteloupe'],
+                result: '@a changed the main and alternative addresses for this room.',
+            }],
+        ];
+
+        it.each(testCases)('returns correct message when %s', (_d, { result, ...eventProps }) => {
+            const event = mockEvent(eventProps);
+            expect(textForEvent(event)).toEqual(result);
         });
     });
 });
