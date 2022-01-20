@@ -3558,5 +3558,9 @@
     "Space home": "Úvod prostoru",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s zahájil(a) hlasování - %(pollQuestion)s",
     "%(senderName)s has ended a poll": "%(senderName)s ukončil(a) hlasování",
-    "%(senderName)s has shared their location": "%(senderName)s sdílí svou polohu"
+    "%(senderName)s has shared their location": "%(senderName)s sdílí svou polohu",
+    "You can't see earlier messages": "Dřívější zprávy nelze zobrazit",
+    "Encrypted messages before this point are unavailable.": "Šifrované zprávy před tímto bodem nejsou k dispozici.",
+    "You don't have permission to view messages from before you joined.": "Nemáte oprávnění zobrazovat zprávy z doby, než jste se připojili.",
+    "You don't have permission to view messages from before you were invited.": "Nemáte oprávnění zobrazovat zprávy z doby před pozváním."
 }
