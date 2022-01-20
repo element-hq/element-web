@@ -125,13 +125,9 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                 BodyType = UnknownBody;
             }
 
+            // TODO: this can be done in eventTypes when Polls stabilise
             if (M_POLL_START.matches(type)) {
-                // TODO: this can all disappear when Polls comes out of labs -
-                // instead, add something like this into this.evTypes:
-                // [EventType.Poll]: "messages.MPollBody"
-                if (SettingsStore.getValue("feature_polls")) {
-                    BodyType = sdk.getComponent('messages.MPollBody');
-                }
+                BodyType = sdk.getComponent('messages.MPollBody');
             }
 
             if (

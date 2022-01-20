@@ -31,7 +31,6 @@ import { CallHangupEvent } from "./previews/CallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
-import SettingsStore from "../../settings/SettingsStore";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
@@ -62,26 +61,15 @@ const PREVIEWS = {
         isState: false,
         previewer: new ReactionEventPreview(),
     },
+    [M_POLL_START.name]: {
+        isState: false,
+        previewer: new PollStartEventPreview(),
+    },
+    [M_POLL_START.altName]: {
+        isState: false,
+        previewer: new PollStartEventPreview(),
+    },
 };
-
-function previews(): Object {
-    // TODO: when polls comes out of labs, add this to PREVIEWS
-    if (SettingsStore.getValue("feature_polls")) {
-        return {
-            [M_POLL_START.name]: {
-                isState: false,
-                previewer: new PollStartEventPreview(),
-            },
-            [M_POLL_START.altName]: {
-                isState: false,
-                previewer: new PollStartEventPreview(),
-            },
-            ...PREVIEWS,
-        };
-    } else {
-        return PREVIEWS;
-    }
-}
 
 // The maximum number of events we're willing to look back on to get a preview.
 const MAX_EVENTS_BACKWARDS = 50;
@@ -133,7 +121,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
     }
 
     public generatePreviewForEvent(event: MatrixEvent): string {
-        const previewDef = previews()[event.getType()];
+        const previewDef = PREVIEWS[event.getType()];
         // TODO: Handle case where we don't have
         if (!previewDef) return '';
         const previewText = previewDef.previewer.getTextFor(event, null, true);
@@ -165,7 +153,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
             await this.matrixClient.decryptEventIfNeeded(event);
 
-            const previewDef = previews()[event.getType()];
+            const previewDef = PREVIEWS[event.getType()];
             if (!previewDef) continue;
             if (previewDef.isState && isNullOrUndefined(event.getStateKey())) continue;
 

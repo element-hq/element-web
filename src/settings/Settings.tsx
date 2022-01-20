@@ -306,13 +306,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show extensible event representation of events"),
         default: false,
     },
-    "feature_polls": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Polls (under active development)"),
-        default: false,
-    },
     "feature_location_share": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

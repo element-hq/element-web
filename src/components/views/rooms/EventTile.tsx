@@ -179,13 +179,6 @@ export function getHandlerTile(ev: MatrixEvent): string {
         }
     }
 
-    if (
-        M_POLL_START.matches(type) &&
-        !SettingsStore.getValue("feature_polls")
-    ) {
-        return undefined;
-    }
-
     if (ev.isState()) {
         if (stateEventSingular.has(type) && ev.getStateKey() !== "") return undefined;
         return stateEventTileTypes[type];
