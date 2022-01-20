@@ -3548,5 +3548,6 @@
     "were removed %(count)s times|other": "wurden %(count)s mal entfernt",
     "Let moderators hide messages pending moderation.": "Erlaube Moderatoren Nachrichten auszublenden, die noch nicht moderiert wurden.",
     "Message pending moderation: %(reason)s": "Nachricht erwartet Moderation: %(reason)s",
-    "Message pending moderation": "Nachricht erwartet Moderation"
+    "Message pending moderation": "Nachricht erwartet Moderation",
+    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Helfe uns, Probleme zu erkennen und Element zu verbessern, indem du anonyme Nutzungsdaten weitergibst. Um zu verstehen, wie Menschen mehrere Geräte nutzen, generieren wir eine zufällige Kennung, die von deinen Geräten geteilt wird."
 }
