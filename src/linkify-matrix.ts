@@ -15,13 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as linkifyjs from 'linkifyjs';
-import linkifyElement from 'linkify-element';
-import linkifyString from 'linkify-string';
+import * as linkifyjs from '@matrix-org/linkifyjs';
+import linkifyElement from '@matrix-org/linkify-element';
+import linkifyString from '@matrix-org/linkify-string';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import { registerPlugin } from 'linkifyjs';
+import { registerCustomProtocol, registerPlugin } from '@matrix-org/linkifyjs';
 
-import { baseUrl } from "./utils/permalinks/SpecPermalinkConstructor";
+//linkifyjs/src/core/fsm
+import { baseUrl } from "./utils/permalinks/MatrixToPermalinkConstructor";
 import {
     parsePermalink,
     tryTransformEntityToPermalink,
@@ -31,7 +32,7 @@ import dis from './dispatcher/dispatcher';
 import { Action } from './dispatcher/actions';
 import { ViewUserPayload } from './dispatcher/payloads/ViewUserPayload';
 
-enum Type {
+export enum Type {
     URL = "url",
     UserId = "userid",
     RoomAlias = "roomalias",
@@ -53,41 +54,29 @@ function matrixOpaqueIdLinkifyParser({
     name: Type;
 }) {
     const {
-        DOMAIN,
         DOT,
-        // A generic catchall text token
-        TEXT,
+        // IPV4 necessity
         NUM,
         TLD,
         COLON,
         SYM,
+        HYPHEN,
         UNDERSCORE,
         // because 'localhost' is tokenised to the localhost token,
         // usernames @localhost:foo.com are otherwise not matched!
         LOCALHOST,
+        domain,
     } = scanner.tokens;
 
     const S_START = parser.start;
     const matrixSymbol = utils.createTokenClass(name, { isLink: true });
 
-    const localpartTokens = [
-        DOMAIN,
-        // IPV4 necessity
-        NUM,
-        TLD,
-
-        // because 'localhost' is tokenised to the localhost token,
-        // usernames @localhost:foo.com are otherwise not matched!
-        LOCALHOST,
-        SYM,
-        UNDERSCORE,
-        TEXT,
-    ];
-    const domainpartTokens = [DOMAIN, NUM, TLD, LOCALHOST];
+    const localpartTokens = [domain, TLD, LOCALHOST, SYM, UNDERSCORE, HYPHEN];
+    const domainpartTokens = [domain, TLD, LOCALHOST, HYPHEN];
 
     const INITIAL_STATE = S_START.tt(token);
 
-    const LOCALPART_STATE = INITIAL_STATE.tt(DOMAIN);
+    const LOCALPART_STATE = INITIAL_STATE.tt(domain);
     for (const token of localpartTokens) {
         INITIAL_STATE.tt(token, LOCALPART_STATE);
         LOCALPART_STATE.tt(token, LOCALPART_STATE);
@@ -98,7 +87,7 @@ function matrixOpaqueIdLinkifyParser({
     }
 
     const DOMAINPART_STATE_DOT = LOCALPART_STATE.tt(COLON);
-    const DOMAINPART_STATE = DOMAINPART_STATE_DOT.tt(DOMAIN);
+    const DOMAINPART_STATE = DOMAINPART_STATE_DOT.tt(domain);
     DOMAINPART_STATE.tt(DOT, DOMAINPART_STATE_DOT);
     for (const token of domainpartTokens) {
         DOMAINPART_STATE.tt(token, DOMAINPART_STATE);
@@ -117,6 +106,7 @@ function matrixOpaqueIdLinkifyParser({
 }
 
 function onUserClick(event: MouseEvent, userId: string) {
+    event.preventDefault();
     const member = new RoomMember(null, userId);
     if (!member) { return; }
     dis.dispatch<ViewUserPayload>({
@@ -124,6 +114,7 @@ function onUserClick(event: MouseEvent, userId: string) {
         member: member,
     });
 }
+
 function onAliasClick(event: MouseEvent, roomAlias: string) {
     event.preventDefault();
     dis.dispatch({
@@ -131,6 +122,7 @@ function onAliasClick(event: MouseEvent, roomAlias: string) {
         room_alias: roomAlias,
     });
 }
+
 function onGroupClick(event: MouseEvent, groupId: string) {
     event.preventDefault();
     dis.dispatch({ action: 'view_group', group_id: groupId });
@@ -168,6 +160,19 @@ export const options = {
                                 onUserClick(e, permalink.userId);
                             },
                         };
+                    } else {
+                        // for events, rooms etc. (anything other then users)
+                        const localHref = tryTransformPermalinkToLocalHref(href);
+                        if (localHref !== href) {
+                            // it could be converted to a localHref -> therefore handle locally
+                            return {
+                            // @ts-ignore see https://linkify.js.org/docs/options.html
+                                click: function(e) {
+                                    e.preventDefault();
+                                    window.location.hash = localHref;
+                                },
+                            };
+                        }
                     }
                 } catch (e) {
                     // OK fine, it's not actually a permalink
@@ -178,21 +183,24 @@ export const options = {
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
                     click: function(e) {
-                        onUserClick(e, href);
+                        const userId = parsePermalink(href).userId;
+                        onUserClick(e, userId);
                     },
                 };
             case Type.RoomAlias:
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
                     click: function(e) {
-                        onAliasClick(e, href);
+                        const alias = parsePermalink(href).roomIdOrAlias;
+                        onAliasClick(e, alias);
                     },
                 };
             case Type.GroupId:
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
                     click: function(e) {
-                        onGroupClick(e, href);
+                        const groupId = parsePermalink(href).groupId;
+                        onGroupClick(e, groupId);
                     },
                 };
         }
@@ -219,7 +227,9 @@ export const options = {
         if (type === Type.URL) {
             try {
                 const transformed = tryTransformPermalinkToLocalHref(href);
-                if (transformed !== href || decodeURIComponent(href).match(ELEMENT_URL_PATTERN)) {
+                if (transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
+                    decodeURIComponent(href).match(ELEMENT_URL_PATTERN) // for https:vector|riot...
+                ) {
                     return null;
                 } else {
                     return '_blank';
@@ -265,6 +275,8 @@ registerPlugin(Type.UserId, ({ scanner, parser, utils }) => {
         name: Type.UserId,
     });
 });
+
+registerCustomProtocol("matrix", true);
 
 export const linkify = linkifyjs;
 export const _linkifyElement = linkifyElement;

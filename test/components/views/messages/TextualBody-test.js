@@ -245,7 +245,7 @@ describe("<TextualBody />", () => {
             const content = wrapper.find(".mx_EventTile_body");
             expect(content.html()).toBe(
                 '<span class="mx_EventTile_body markdown-body" dir="auto">' +
-                'An <a href="#/room/!ZxbRYPQXDXKGmDnJNg:example.com/' +
+                'An <a href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com/' +
                 '$16085560162aNpaH:example.com?via=example.com" ' +
                 'rel="noreferrer noopener">event link</a> with text</span>',
             );
@@ -274,7 +274,8 @@ describe("<TextualBody />", () => {
             const content = wrapper.find(".mx_EventTile_body");
             expect(content.html()).toBe(
                 '<span class="mx_EventTile_body markdown-body" dir="auto">' +
-                'A <span><a class="mx_Pill mx_RoomPill" href="#/room/!ZxbRYPQXDXKGmDnJNg:example.com' +
+                'A <span><a class="mx_Pill mx_RoomPill" ' +
+                'href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com' +
                 '?via=example.com&amp;via=bob.com"' +
                 '><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
                 'src="mxc://avatar.url/room.png" ' +

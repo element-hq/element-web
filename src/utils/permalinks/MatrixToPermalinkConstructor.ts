@@ -22,7 +22,7 @@ export const baseUrl = `https://${host}`;
 /**
  * Generates matrix.to permalinks
  */
-export default class SpecPermalinkConstructor extends PermalinkConstructor {
+export default class MatrixToPermalinkConstructor extends PermalinkConstructor {
     constructor() {
         super();
     }

@@ -23,11 +23,12 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-import SpecPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./SpecPermalinkConstructor";
+import MatrixToPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./MatrixToPermalinkConstructor";
 import PermalinkConstructor, { PermalinkParts } from "./PermalinkConstructor";
 import ElementPermalinkConstructor from "./ElementPermalinkConstructor";
 import SdkConfig from "../../SdkConfig";
 import { ELEMENT_URL_PATTERN } from "../../linkify-matrix";
+import MatrixSchemePermalinkConstructor from "./MatrixSchemePermalinkConstructor";
 
 // The maximum number of servers to pick when working out which servers
 // to add to permalinks. The servers are appended as ?via=example.org
@@ -312,14 +313,14 @@ export function makeGroupPermalink(groupId: string): string {
 export function isPermalinkHost(host: string): boolean {
     // Always check if the permalink is a spec permalink (callers are likely to call
     // parsePermalink after this function).
-    if (new SpecPermalinkConstructor().isPermalinkHost(host)) return true;
+    if (new MatrixToPermalinkConstructor().isPermalinkHost(host)) return true;
     return getPermalinkConstructor().isPermalinkHost(host);
 }
 
 /**
  * Transforms an entity (permalink, room alias, user ID, etc) into a local URL
- * if possible. If the given entity is not found to be valid enough to be converted
- * then a null value will be returned.
+ * if possible. If it is already a permalink (matrix.to) it gets returned
+ * unchanged.
  * @param {string} entity The entity to transform.
  * @returns {string|null} The transformed permalink or null if unable.
  */
@@ -327,12 +328,31 @@ export function tryTransformEntityToPermalink(entity: string): string {
     if (!entity) return null;
 
     // Check to see if it is a bare entity for starters
-    if (entity[0] === '#' || entity[0] === '!') return makeRoomPermalink(entity);
+    {if (entity[0] === '#' || entity[0] === '!') return makeRoomPermalink(entity);}
     if (entity[0] === '@') return makeUserPermalink(entity);
     if (entity[0] === '+') return makeGroupPermalink(entity);
 
-    // Then try and merge it into a permalink
-    return tryTransformPermalinkToLocalHref(entity);
+    if (entity.slice(0, 7) === "matrix:") {
+        try {
+            const permalinkParts = parsePermalink(entity);
+            if (permalinkParts) {
+                if (permalinkParts.roomIdOrAlias) {
+                    const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
+                    let pl = matrixtoBaseUrl+`/#/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
+                    if (permalinkParts.viaServers.length > 0) {
+                        pl += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
+                    }
+                    return pl;
+                } else if (permalinkParts.groupId) {
+                    return matrixtoBaseUrl + `/#/${permalinkParts.groupId}`;
+                } else if (permalinkParts.userId) {
+                    return matrixtoBaseUrl + `/#/${permalinkParts.userId}`;
+                }
+            }
+        } catch {}
+    }
+
+    return entity;
 }
 
 /**
@@ -342,7 +362,7 @@ export function tryTransformEntityToPermalink(entity: string): string {
  * @returns {string} The transformed permalink or original URL if unable.
  */
 export function tryTransformPermalinkToLocalHref(permalink: string): string {
-    if (!permalink.startsWith("http:") && !permalink.startsWith("https:")) {
+    if (!permalink.startsWith("http:") && !permalink.startsWith("https:") && !permalink.startsWith("matrix:")) {
         return permalink;
     }
 
@@ -364,7 +384,7 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
                 const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
                 permalink = `#/room/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
                 if (permalinkParts.viaServers.length > 0) {
-                    permalink += new SpecPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
+                    permalink += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
                 }
             } else if (permalinkParts.groupId) {
                 permalink = `#/group/${permalinkParts.groupId}`;
@@ -411,35 +431,20 @@ function getPermalinkConstructor(): PermalinkConstructor {
         return new ElementPermalinkConstructor(elementPrefix);
     }
 
-    return new SpecPermalinkConstructor();
+    return new MatrixToPermalinkConstructor();
 }
 
 export function parsePermalink(fullUrl: string): PermalinkParts {
     const elementPrefix = SdkConfig.get()['permalinkPrefix'];
     if (decodeURIComponent(fullUrl).startsWith(matrixtoBaseUrl)) {
-        return new SpecPermalinkConstructor().parsePermalink(decodeURIComponent(fullUrl));
+        return new MatrixToPermalinkConstructor().parsePermalink(decodeURIComponent(fullUrl));
+    } else if (fullUrl.startsWith("matrix:")) {
+        return new MatrixSchemePermalinkConstructor().parsePermalink(fullUrl);
     } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {
         return new ElementPermalinkConstructor(elementPrefix).parsePermalink(fullUrl);
     }
 
     return null; // not a permalink we can handle
-}
-
-/**
- * Parses an app local link (`#/(user|room|group)/identifer`) to a Matrix entity
- * (room, user, group). Such links are produced by `HtmlUtils` when encountering
- * links, which calls `tryTransformPermalinkToLocalHref` in this module.
- * @param {string} localLink The app local link
- * @returns {PermalinkParts}
- */
-export function parseAppLocalLink(localLink: string): PermalinkParts {
-    try {
-        const segments = localLink.replace("#/", "");
-        return ElementPermalinkConstructor.parseAppRoute(segments);
-    } catch (e) {
-        // Ignore failures
-    }
-    return null;
 }
 
 function getServerName(userId: string): string {

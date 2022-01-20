@@ -22,7 +22,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
 import Pill from "../components/views/elements/Pill";
-import { parseAppLocalLink } from "./permalinks/Permalinks";
+import { parsePermalink } from "./permalinks/Permalinks";
 
 /**
  * Recurses depth-first through a DOM tree, converting matrix.to links
@@ -46,7 +46,7 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
 
         if (node.tagName === "A" && node.getAttribute("href")) {
             const href = node.getAttribute("href");
-            const parts = parseAppLocalLink(href);
+            const parts = parsePermalink(href);
             // If the link is a (localised) matrix.to link, replace it with a pill
             // We don't want to pill event permalinks, so those are ignored.
             if (parts && !parts.eventId) {

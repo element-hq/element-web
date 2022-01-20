@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { linkify } from '../src/linkify-matrix';
+import { linkify, Type } from '../src/linkify-matrix';
 
 describe('linkify-matrix', () => {
     const linkTypesByInitialCharacter = {
@@ -177,6 +177,18 @@ describe('linkify-matrix', () => {
                 isLink: true,
             }]));
         });
+        it('accept hyphens in name ' + char + 'foo-bar:server.com', () => {
+            const test = '' + char + 'foo-bar:server.com';
+            const found = linkify.find(test);
+            expect(found).toEqual(([{
+                href: char + "foo-bar:server.com",
+                type,
+                value: char + "foo-bar:server.com",
+                start: 0,
+                end: test.length,
+                isLink: true,
+            }]));
+        });
         it('ignores trailing `:`', () => {
             const test = '' + char + 'foo:bar.com:';
             const found = linkify.find(test);
@@ -263,5 +275,31 @@ describe('linkify-matrix', () => {
 
     describe('userid plugin', () => {
         genTests('@');
+    });
+
+    describe('matrix uri', () => {
+        const AcceptedMatrixUris = [
+            'matrix:u/foo_bar:server.uk',
+            'matrix:r/foo-bar:server.uk',
+            'matrix:roomid/somewhere:example.org?via=elsewhere.ca',
+            'matrix:r/somewhere:example.org',
+            'matrix:r/somewhere:example.org/e/event',
+            'matrix:roomid/somewhere:example.org/e/event?via=elsewhere.ca',
+            'matrix:u/alice:example.org?action=chat',
+        ];
+        for (const matrixUri of AcceptedMatrixUris) {
+            it('accepts ' + matrixUri, () => {
+                const test = matrixUri;
+                const found = linkify.find(test);
+                expect(found).toEqual(([{
+                    href: matrixUri,
+                    type: Type.URL,
+                    value: matrixUri,
+                    end: matrixUri.length,
+                    start: 0,
+                    isLink: true,
+                }]));
+            });
+        }
     });
 });

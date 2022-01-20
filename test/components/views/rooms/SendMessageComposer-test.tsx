@@ -33,7 +33,7 @@ import { createPartCreator, createRenderer } from "../../../editor/mock";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../test-utils";
 import BasicMessageComposer from "../../../../src/components/views/rooms/BasicMessageComposer";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import SpecPermalinkConstructor from "../../../../src/utils/permalinks/SpecPermalinkConstructor";
+import MatrixToPermalinkConstructor from "../../../../src/utils/permalinks/MatrixToPermalinkConstructor";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import DocumentOffset from '../../../../src/editor/offset';
 import { Layout } from '../../../../src/settings/enums/Layout';
@@ -166,7 +166,7 @@ describe('<SendMessageComposer/>', () => {
                     <SendMessageComposer
                         room={mockRoom as any}
                         placeholder="placeholder string"
-                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        permalinkCreator={new MatrixToPermalinkConstructor() as any}
                     />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>);
@@ -188,7 +188,7 @@ describe('<SendMessageComposer/>', () => {
                     <SendMessageComposer
                         room={mockRoom as any}
                         placeholder=""
-                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        permalinkCreator={new MatrixToPermalinkConstructor() as any}
                         replyToEvent={mockEvent}
                     />
                 </RoomContext.Provider>
@@ -234,7 +234,7 @@ describe('<SendMessageComposer/>', () => {
                     <SendMessageComposer
                         room={mockRoom as any}
                         placeholder=""
-                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        permalinkCreator={new MatrixToPermalinkConstructor() as any}
                     />
                 </RoomContext.Provider>
             </MatrixClientContext.Provider>);
@@ -263,7 +263,7 @@ describe('<SendMessageComposer/>', () => {
                     <SendMessageComposer
                         room={mockRoom as any}
                         placeholder="placeholder"
-                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        permalinkCreator={new MatrixToPermalinkConstructor() as any}
                         replyToEvent={mockEvent}
                     />
                 </RoomContext.Provider>
@@ -297,7 +297,7 @@ describe('<SendMessageComposer/>', () => {
                     <SendMessageComposer
                         room={mockRoom as any}
                         placeholder=""
-                        permalinkCreator={new SpecPermalinkConstructor() as any}
+                        permalinkCreator={new MatrixToPermalinkConstructor() as any}
                         relation={{
                             rel_type: RelationType.Thread,
                             event_id: "myFakeThreadId",

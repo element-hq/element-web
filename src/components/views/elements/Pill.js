@@ -24,7 +24,7 @@ import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import FlairStore from "../../../stores/FlairStore";
-import { getPrimaryPermalinkEntity, parseAppLocalLink } from "../../../utils/permalinks/Permalinks";
+import { getPrimaryPermalinkEntity, parsePermalink } from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import { mediaFromMxc } from "../../../customisations/Media";
@@ -85,7 +85,7 @@ class Pill extends React.Component {
 
         if (nextProps.url) {
             if (nextProps.inMessage) {
-                const parts = parseAppLocalLink(nextProps.url);
+                const parts = parsePermalink(nextProps.url);
                 resourceId = parts.primaryEntityId; // The room/user ID
                 prefix = parts.sigil; // The first character of prefix
             } else {

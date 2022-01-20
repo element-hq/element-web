@@ -1384,6 +1384,21 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
+"@matrix-org/linkify-element@^4.0.0-rc.5":
+  version "4.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@matrix-org/linkify-element/-/linkify-element-4.0.0-rc.5.tgz#0c27e81272638674ba4162fec2fd131b2c36c163"
+  integrity sha512-6sdJ5x9EZpUNVZqc2Dig8Q4hySdL2fdE/ivehk4L3y3rV7tMD0fRs5rXQQ4wcgCMhGAAGbscbNiS8pyZIy9Hlg==
+
+"@matrix-org/linkify-string@^4.0.0-rc.5":
+  version "4.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@matrix-org/linkify-string/-/linkify-string-4.0.0-rc.5.tgz#139ba23c70a4f5b531656365a6109c122177b132"
+  integrity sha512-WFyu6+kVEPJsDwZwgCSrtUDeIMDdWIFzRRq5z+MLYHiO3J8G19jvRjRnNm4dwjDUqROWhvWS9b8JG7rbuwjkLQ==
+
+"@matrix-org/linkifyjs@^4.0.0-rc.5":
+  version "4.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@matrix-org/linkifyjs/-/linkifyjs-4.0.0-rc.5.tgz#3a2885754a8de51164a30e6e09909173e348d6bb"
+  integrity sha512-HGmEZuUzCOzdsUFM5dQK2R2KhBFnxRfye5CYJhM2EpRTO4t5aTcR6Ey09HuJ/DZevQ9GTFUjkuKAKurQhnAfOA==
+
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz":
   version "3.2.8"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz#8d53636d045e1776e2a2ec6613e57330dd9ce856"
@@ -1814,13 +1829,6 @@
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
-
-"@types/linkifyjs@^2.1.3":
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/@types/linkifyjs/-/linkifyjs-2.1.4.tgz#6b14e35d8d211f2666f602dcabcdc6859617516f"
-  integrity sha512-UuF0hyWNnLTT4xNJdrQx6OWYMNlPRBtt3fKCaROIx48boQyXkQ4YDDwTEQNi9mlsRX0Hpc6AnFKkDZ6IXkxD4g==
-  dependencies:
-    "@types/react" "*"
 
 "@types/lodash@^4.14.168":
   version "4.14.178"
@@ -5967,21 +5975,6 @@ lines-and-columns@^1.1.6:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
-
-linkify-element@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-3.0.4.tgz#3566a3b48d4c211a684f42a23a9964bf53f3a31a"
-  integrity sha512-xrj2Upv4/XUxvvczoDwojEnzKnfJCHlorAxYmdFPSGNwLz2sXYkYyB7Lw1flkGS7L0yS0dq/HwOotG0Kpaiaxw==
-
-linkify-string@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-3.0.4.tgz#6abf1a5e436e800c729274ae08f5703484647f84"
-  integrity sha512-OnNqqRjlYXaXipIAbBC8sDXsSumI1ftatzFg141Pw9HEXWjTVLFcMZoKbFupshqWRavtNJ6QHLa+u6AlxxgeRw==
-
-linkifyjs@^3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-3.0.5.tgz#99e51a3a0c0e232fcb63ebb89eea3ff923378f34"
-  integrity sha512-1Y9XQH65eQKA9p2xtk+zxvnTeQBG7rdAXSkUG97DmuI/Xhji9uaUzaWxRj6rf9YC0v8KKHkxav7tnLX82Sz5Fg==
 
 loader-utils@^2.0.0:
   version "2.0.2"
