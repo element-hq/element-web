@@ -63,7 +63,8 @@ $left-gutter: 64px;
         height: 8px;
         border-radius: 50%;
         right: -16px;
-        top: 7px;
+        top: 6px;
+        left: auto;
     }
 
     &[data-shape=thread_list][data-notification=total]::before {
