@@ -454,7 +454,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         // hosted on the same origin as the client will get the same access as if you clicked
         // a link to it.
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox " +
-            "allow-same-origin allow-scripts allow-presentation";
+            "allow-same-origin allow-scripts allow-presentation allow-downloads";
 
         // Additional iframe feature pemissions
         // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
