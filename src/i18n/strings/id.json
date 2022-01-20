@@ -3486,5 +3486,9 @@
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s telah memulai sebuah poll — %(pollQuestion)s",
     "Space home": "Beranda space",
     "%(senderName)s has ended a poll": "%(senderName)s telah mengakhiri sebuah poll",
-    "%(senderName)s has shared their location": "%(senderName)s telah membagikan lokasinya"
+    "%(senderName)s has shared their location": "%(senderName)s telah membagikan lokasinya",
+    "You can't see earlier messages": "Anda tidak dapat melihat pesan-pesan awal",
+    "Encrypted messages before this point are unavailable.": "Pesan-pesan terenkripsi sebelum titik ini tidak tersedia.",
+    "You don't have permission to view messages from before you joined.": "Anda tidak memiliki izin untuk melihat pesan-pesan sebelum Anda bergabung.",
+    "You don't have permission to view messages from before you were invited.": "Anda tidak memiliki izin untuk melihat pesan-pesan sebelum Anda diundang."
 }
