@@ -3557,5 +3557,9 @@
     "Space home": "Pagina iniziale dello spazio",
     "%(senderName)s has ended a poll": "%(senderName)s ha terminato un sondaggio",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s ha iniziato un sondaggio - %(pollQuestion)s",
-    "%(senderName)s has shared their location": "%(senderName)s ha condiviso la sua posizione"
+    "%(senderName)s has shared their location": "%(senderName)s ha condiviso la sua posizione",
+    "You can't see earlier messages": "Non puoi vedere i messaggi precedenti",
+    "Encrypted messages before this point are unavailable.": "I messaggi cifrati prima di questo punto non sono disponibili.",
+    "You don't have permission to view messages from before you joined.": "Non hai l'autorizzazione per vedere i messaggi precedenti alla tua entrata.",
+    "You don't have permission to view messages from before you were invited.": "Non hai l'autorizzazione per vedere i messaggi precedenti al tuo invito."
 }
