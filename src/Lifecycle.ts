@@ -516,7 +516,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+export async function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
     const oldUserId = MatrixClientPeg.get().getUserId();
     const oldDeviceId = MatrixClientPeg.get().getDeviceId();
 
@@ -527,6 +527,11 @@ export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixC
     const overwrite = credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId;
     if (overwrite) {
         logger.warn("Clearing all data: Old session belongs to a different user/session");
+    }
+
+    if (!credentials.pickleKey) {
+        logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
+        credentials.pickleKey = await PlatformPeg.get().getPickleKey(credentials.userId, credentials.deviceId);
     }
 
     return doSetLoggedIn(credentials, overwrite);
