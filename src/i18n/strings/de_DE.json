@@ -3549,5 +3549,11 @@
     "Let moderators hide messages pending moderation.": "Erlaube Moderatoren, noch nicht moderierte Nachrichten auszublenden.",
     "Message pending moderation: %(reason)s": "Nachricht erwartet Moderation: %(reason)s",
     "Message pending moderation": "Nachricht erwartet Moderation",
-    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Helfe uns, Probleme zu erkennen und Element zu verbessern, indem du anonyme Nutzungsdaten weitergibst. Um zu verstehen, wie Menschen mehrere Geräte nutzen, generieren wir eine zufällige Kennung, die von deinen Geräten geteilt wird."
+    "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Hilf uns, Probleme zu erkennen und Element zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie unsere Nutzer mehrere Geräte nutzen, generieren wir eine zufällige Kennung, die von deinen Geräten geteilt wird.",
+    "toggle event": "Event umschalten",
+    "This address had invalid server or is already in use": "Diese Adresse hat einen ungültigen Server oder wird bereits verwendet",
+    "You can't see earlier messages": "Du kannst keine älteren Nachrichten lesen",
+    "Encrypted messages before this point are unavailable.": "Vor diesem Zeitpunkt sind keine verschlüsselten Nachrichten verfügbar.",
+    "You don't have permission to view messages from before you joined.": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du beigetreten bist.",
+    "You don't have permission to view messages from before you were invited.": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du eingeladen wurdest."
 }
