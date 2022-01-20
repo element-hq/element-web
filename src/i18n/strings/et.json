@@ -3553,5 +3553,9 @@
     "Let moderators hide messages pending moderation.": "Luba modereerimist ootavate sõnumite peitmist.",
     "%(senderName)s has ended a poll": "%(senderName)s lõpetas küsitluse",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s algatas küsitluse - %(pollQuestion)s",
-    "%(senderName)s has shared their location": "%(senderName)s jagas oma asukohta"
+    "%(senderName)s has shared their location": "%(senderName)s jagas oma asukohta",
+    "You can't see earlier messages": "Sa ei saa näha varasemaid sõnumeid",
+    "Encrypted messages before this point are unavailable.": "Enne seda ajahetke saadetud krüptitud sõnumid pole saadaval.",
+    "You don't have permission to view messages from before you joined.": "Sul pole õigusi vaadata enne liitumist saadetud sõnumeid.",
+    "You don't have permission to view messages from before you were invited.": "Sul pole õigusi vaadata enne kutse saatmist saadetud sõnumeid."
 }
