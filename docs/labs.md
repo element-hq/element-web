@@ -144,9 +144,9 @@ demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-d
 and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
 been designed, and it will not exit labs until it has**.
 
-For this to work, you must specify a valid maptiler.com API key in
-`"map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=YOUR_KEY_GOES_HERE"`
-in your config.json, or find an alternative map tile server.
+For this to work, you must specify the URL of a valid map tile server style file in
+the `map_style_url` setting in config.json.
+For example: "https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE"`
 
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
