@@ -60,5 +60,5 @@
     "features": {
         "feature_spaces_metaspaces": true
     },
-    "map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=JCdnMQY3oGklTYYLIvtI"
+    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }
