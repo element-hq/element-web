@@ -307,7 +307,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     getShowLocationIfEnabled(): string[] {
         // TODO: when location sharing is out of labs, this can be deleted and
         //       we can just add this to COMPOSER_SETTINGS
-        if (SettingsStore.getValue("feature_location_share")) {
+        if (!window.electron && SettingsStore.getValue("feature_location_share")) {
             return ['MessageComposerInput.showLocationButton'];
         } else {
             return [];
