@@ -98,9 +98,7 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
     let icon;
     if (sendState === SendState.CanSend) {
         className = "mx_ForwardList_canSend";
-        if (room.maySendMessage()) {
-            title = _t("Send");
-        } else {
+        if (!room.maySendMessage()) {
             disabled = true;
             title = _t("You don't have permission to do this");
         }
