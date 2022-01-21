@@ -1928,7 +1928,7 @@
     "Failed to perform homeserver discovery": "No se ha podido realizar el descubrimiento del servidor base",
     "Syncing...": "Sincronizando…",
     "Signing In...": "Iniciando sesión…",
-    "If you've joined lots of rooms, this might take a while": "Si te has unido a muchas salas, esto puede llevar un tiempo",
+    "If you've joined lots of rooms, this might take a while": "Si te has unido a muchas salas, esto puede tardar un poco",
     "Create account": "Crear una cuenta",
     "Unable to query for supported registration methods.": "No se pueden consultar los métodos de registro admitidos.",
     "Registration has been disabled on this homeserver.": "Se han desactivado los registros en este servidor base.",
