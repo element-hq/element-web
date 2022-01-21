@@ -125,3 +125,7 @@ $roomtopic-color: $secondary-content;
         }
     }
 }
+
+.mx_Dialog_buttons button.mx_LocationPicker_cancelButton::before {
+    background-color: $background !important;
+}
