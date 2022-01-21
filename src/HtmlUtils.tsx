@@ -22,6 +22,7 @@ import sanitizeHtml from 'sanitize-html';
 import cheerio from 'cheerio';
 import classNames from 'classnames';
 import EMOJIBASE_REGEX from 'emojibase-regex';
+import { split } from 'lodash';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
@@ -402,6 +403,11 @@ export interface IOptsReturnString extends IOpts {
     returnString: true;
 }
 
+const emojiToHtmlSpan = (emoji: string) =>
+    `<span class='mx_EventTile_Emoji' title='${unicodeToShortcode(emoji)}'>${emoji}</span>`;
+const emojiToJsxSpan = (emoji: string, key: number) =>
+    <span key={key} className='mx_EventTile_Emoji' title={unicodeToShortcode(emoji)}>{ emoji }</span>;
+
 /**
  * Wraps emojis in <span> to style them separately from the rest of message. Consecutive emojis (and modifiers) are wrapped
  * in the same <span>.
@@ -411,33 +417,26 @@ export interface IOptsReturnString extends IOpts {
  * and plain text for everything else
  */
 function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | string)[] {
-    const emojiToSpan = isHtmlMessage ? (emoji: string) => `<span class='mx_EventTile_Emoji'>${emoji}</span>` :
-        (emoji: string, key: number) => <span key={key} className='mx_EventTile_Emoji'>{ emoji }</span>;
+    const emojiToSpan = isHtmlMessage ? emojiToHtmlSpan : emojiToJsxSpan;
     const result: (JSX.Element | string)[] = [];
     let text = '';
-    let emojis = '';
     let key = 0;
-    for (const char of message) {
-        if (mightContainEmoji(char) || ZWJ_REGEX.test(char) || char === '\ufe0f') {
+
+    // We use lodash's grapheme splitter to avoid breaking apart compound emojis
+    for (const char of split(message, '')) {
+        if (mightContainEmoji(char)) {
             if (text) {
                 result.push(text);
                 text = '';
             }
-            emojis += char;
+            result.push(emojiToSpan(char, key));
+            key++;
         } else {
-            if (emojis) {
-                result.push(emojiToSpan(emojis, key));
-                key++;
-                emojis = '';
-            }
             text += char;
         }
     }
     if (text) {
         result.push(text);
-    }
-    if (emojis) {
-        result.push(emojiToSpan(emojis, key));
     }
     return result;
 }
@@ -574,7 +573,7 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
     });
 
     let emojiBodyElements: JSX.Element[];
-    if (!isDisplayedWithHtml && bodyHasEmoji && !emojiBody) {
+    if (!isDisplayedWithHtml && bodyHasEmoji) {
         emojiBodyElements = formatEmojis(strippedBody, false) as JSX.Element[];
     }
 
