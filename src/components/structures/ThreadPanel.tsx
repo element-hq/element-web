@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
@@ -25,6 +25,7 @@ import {
     UNSTABLE_FILTER_RELATION_SENDERS,
     UNSTABLE_FILTER_RELATION_TYPES,
 } from 'matrix-js-sdk/src/filter';
+import { ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import ResizeNotifier from '../../utils/ResizeNotifier';
@@ -37,6 +38,7 @@ import TimelinePanel from './TimelinePanel';
 import { Layout } from '../../settings/enums/Layout';
 import { TileShape } from '../views/rooms/EventTile';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
+import { useEventEmitter } from '../../hooks/useEventEmitter';
 
 async function getThreadTimelineSet(
     client: MatrixClient,
@@ -84,12 +86,18 @@ async function getThreadTimelineSet(
         // filter fields. We fallback to the threads that have been discovered in
         // the main timeline
         const timelineSet = new EventTimelineSet(room, {});
-        for (const [, thread] of room.threads) {
-            const isOwnEvent = thread.rootEvent.getSender() === client.getUserId();
-            if (filterType !== ThreadFilterType.My || isOwnEvent) {
-                timelineSet.getLiveTimeline().addEvent(thread.rootEvent, false);
-            }
-        }
+
+        Array.from(room.threads)
+            .sort(([, threadA], [, threadB]) => threadA.lastReply.getTs() - threadB.lastReply.getTs())
+            .forEach(([, thread]) => {
+                const isOwnEvent = thread.rootEvent.getSender() === client.getUserId();
+                if (filterType !== ThreadFilterType.My || isOwnEvent) {
+                    timelineSet.getLiveTimeline().addEvent(thread.rootEvent, false);
+                }
+            });
+
+        // for (const [, thread] of room.threads) {
+        // }
         return timelineSet;
     }
 }
@@ -210,18 +218,18 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     const ref = useRef<TimelinePanel>();
 
     const [timelineSet, setTimelineSet] = useState<EventTimelineSet | null>(null);
-    const timelineSetPromise = useMemo(
-        async () => {
-            const timelineSet = getThreadTimelineSet(mxClient, room, filterOption);
-            return timelineSet;
-        },
-        [mxClient, room, filterOption],
-    );
     useEffect(() => {
-        timelineSetPromise
+        getThreadTimelineSet(mxClient, room, filterOption)
             .then(timelineSet => { setTimelineSet(timelineSet); })
             .catch(() => setTimelineSet(null));
-    }, [timelineSetPromise]);
+    }, [mxClient, room, filterOption]);
+
+    useEffect(() => {
+        if (timelineSet) ref.current.refreshTimeline();
+    }, [timelineSet, ref]);
+    useEventEmitter(room, ThreadEvent.Update, () => {
+        if (timelineSet) ref.current.refreshTimeline();
+    });
 
     return (
         <RoomContext.Provider value={{
