@@ -3494,7 +3494,7 @@
     "%(senderName)s removed %(targetName)s": "%(senderName)s hat %(targetName)s entfernt",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s hat %(targetName)s entfernt: %(reason)s",
     "No active call in this room": "Kein aktiver Anruf in diesem Raum",
-    "Unable to find Matrix ID for phone number": "Die Matrix-ID für Telefonnummer kann nicht gefunden werden",
+    "Unable to find Matrix ID for phone number": "Diese Telefonnummer besitzt keine zugeordnete Matrix-ID",
     "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Unbekanntes Paar (Nutzer, Sitzung): (%(userId)s, %(deviceId)s)",
     "Command failed: Unable to find room (%(roomId)s": "Befehl fehlgeschlagen: Raum kann nicht gefunden werden (%(roomId)s",
     "Removes user with given id from this room": "Entfernt den Benutzer mit der angegebenen ID aus diesem Raum",
@@ -3555,5 +3555,6 @@
     "You can't see earlier messages": "Du kannst keine älteren Nachrichten lesen",
     "Encrypted messages before this point are unavailable.": "Vor diesem Zeitpunkt sind keine verschlüsselten Nachrichten verfügbar.",
     "You don't have permission to view messages from before you joined.": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du beigetreten bist.",
-    "You don't have permission to view messages from before you were invited.": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du eingeladen wurdest."
+    "You don't have permission to view messages from before you were invited.": "Du kannst keine Nachrichten lesen, die gesendet wurden, bevor du eingeladen wurdest.",
+    "Searching rooms and chats you're in and %(spaceName)s": "Duchsuche alle deine Chats und %(spaceName)s"
 }
