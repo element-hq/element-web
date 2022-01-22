@@ -3547,5 +3547,9 @@
     "Message pending moderation": "Mesazh në pritje të moderimit",
     "Message pending moderation: %(reason)s": "Mesazh në pritje të moderimit: %(reason)s",
     "Keyboard": "Tastierë",
-    "Let moderators hide messages pending moderation.": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit."
+    "Let moderators hide messages pending moderation.": "Lejoni moderatorët të fshehin mesazhe në pritje të moderimit.",
+    "Space home": "Shtëpia e hapësirës",
+    "%(senderName)s has ended a poll": "%(senderName)s e përfundoi anketimin",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s nisi një anketim - %(pollQuestion)s",
+    "%(senderName)s has shared their location": "%(senderName)s tregoi vendndodhjen e vet"
 }
