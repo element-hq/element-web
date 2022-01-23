@@ -3554,5 +3554,9 @@
     "Removes user with given id from this room": "Megadott azonosítóval rendelkező felhasználót távolít el a szobából",
     "%(senderName)s has ended a poll": "%(senderName)s lezárta a szavazást",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s szavazást indított - %(pollQuestion)s",
-    "%(senderName)s has shared their location": "%(senderName)s megosztotta a földrajzi helyzetét"
+    "%(senderName)s has shared their location": "%(senderName)s megosztotta a földrajzi helyzetét",
+    "You can't see earlier messages": "Régebbi üzeneteket nem tekinthet meg",
+    "Encrypted messages before this point are unavailable.": "Ez előtti titkosított üzenetek elérhetetlenek.",
+    "You don't have permission to view messages from before you joined.": "A belépés előtti üzenetek megtekintéséhez nincs engedélye.",
+    "You don't have permission to view messages from before you were invited.": "A meghívás előtti üzenetek megtekintéséhez nincs engedélye."
 }
