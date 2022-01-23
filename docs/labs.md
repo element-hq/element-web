@@ -130,15 +130,6 @@ Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-
 
 Adds a "Message layout" section under `Settings -> Appearance`, where the user can select their preferred message layout (e.g. IRC or Modern). Additionally, adds a new "Message bubbles" layout.
 
-## Polls (`feature_polls`) [In Development]
-
-Polls are a way to gauge interest from your community about a certain topic with a simple voting mechanic
-within the message timeline. Note that this feature is currently under active development and therefore is
-entirely incomplete and may not work at all - it is not recommended for general use at this time.
-
-Bug reports, feature requests, etc are not currently accepted for this feature flag. A later stage of
-development will provide opportunities for feedback.
-
 ## Metaspaces (`feature_spaces_metaspaces`) [In Development]
 
 Metaspaces are automatically populated spaces you can enable in your Space panel.
@@ -153,9 +144,9 @@ demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-d
 and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
 been designed, and it will not exit labs until it has**.
 
-For this to work, you must specify a valid maptiler.com API key in
-`"map_style_url": "https://api.maptiler.com/maps/basic/style.json?key=YOUR_KEY_GOES_HERE"`
-in your config.json, or find an alternative map tile server.
+For this to work, you must specify the URL of a valid map tile server style file in
+the `map_style_url` setting in config.json.
+For example: "https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE"`
 
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
@@ -165,3 +156,19 @@ triggered by the button to the right of the filter field.
 ## Spotlight search (`feature_spotlight`) [In Development]
 
 Switches to a new room search experience.
+
+## Extensible events rendering (`feature_extensible_events`) [In Development]
+
+*Intended for developer use only at the moment.*
+
+Extensible Events are a [new event format](https://github.com/matrix-org/matrix-doc/pull/1767) which
+supports graceful fallback in unknown event types. Instead of rendering nothing or a blank space, events
+can define a series of other events which represent the event's information but in different ways. The
+base of these fallbacks being text.
+
+Turning this flag on indicates that, when possible, the extensible events structure should be parsed on
+supported event types. This should lead to zero perceptual change in the timeline except in cases where
+the sender is using unknown/unrecognised event types.
+
+Sending events with extensible events structure is always enabled - this should not affect any downstream
+client.

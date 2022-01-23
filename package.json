@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.9.8",
+  "version": "1.9.9",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -46,7 +46,7 @@
     "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,element-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js\"",
     "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n reskindex,reskindex-react,res,element-js \"yarn reskindex:watch\" \"yarn reskindex:watch-react\" \"yarn start:res\" \"yarn start:js --https\"",
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
-    "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --progress --mode development --disable-host-check --hot",
+    "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --mode development --disable-host-check --hot",
     "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
     "lint:js": "eslint --max-warnings 0 src",
     "lint:js-fix": "eslint --fix src",
@@ -126,7 +126,7 @@
     "loader-utils": "^1.4.0",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.3",
-    "matrix-web-i18n": "github:matrix-org/matrix-web-i18n",
+    "matrix-web-i18n": "^1.2.0",
     "mini-css-extract-plugin": "^0.12.0",
     "minimist": "^1.2.5",
     "mkdirp": "^1.0.4",
