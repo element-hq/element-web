@@ -3531,5 +3531,9 @@
     "Next room or DM": "Наступна кімната або особисте повідомлення",
     "Previous unread room or DM": "Попередня непрочитана кімната або особисте повідомлення",
     "Next unread room or DM": "Наступна непрочитана кімната або особисте повідомлення",
-    "Call": "Виклик"
+    "Call": "Виклик",
+    "Group all your rooms that aren't part of a space in one place.": "Групуйте всі свої кімнати, не приєднані до простору, в одному місці.",
+    "Group all your people in one place.": "Групуйте всіх своїх людей в одному місці.",
+    "Group all your favourite rooms and people in one place.": "Групуйте всі свої улюблені кімнати та людей в одному місці.",
+    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Простори — це спосіб групування кімнат і людей. Окрім просторів, до яких ви приєдналися, ви також можете використовувати деякі вбудовані."
 }
