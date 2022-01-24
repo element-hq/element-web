@@ -3581,5 +3581,10 @@
     "Jump to start of the composer": "Přejít na začátek editoru",
     "Navigate to previous message to edit": "Přejít na předchozí zprávu, kterou chcete upravit",
     "Internal room ID": "Interní ID místnosti",
-    "Call": "Hovor"
+    "Call": "Hovor",
+    "Group all your rooms that aren't part of a space in one place.": "Seskupte všechny místnosti, které nejsou součástí prostoru, na jednom místě.",
+    "Group all your people in one place.": "Seskupte všechny své kontakty na jednom místě.",
+    "Group all your favourite rooms and people in one place.": "Seskupte všechny své oblíbené místnosti a osoby na jednom místě.",
+    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Prostory jsou způsob seskupování místností a osob. Vedle prostorů, ve kterých se nacházíte, můžete použít i některé předpřipravené.",
+    "Right panel stays open (defaults to room member list)": "Pravý panel zůstane otevřený (ve výchozím nastavení se seznamem členů místnosti)"
 }
