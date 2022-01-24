@@ -1,5 +1,6 @@
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,8 +17,14 @@ limitations under the License.
 
 import { _td } from "../languageHandler";
 import { isMac, Key } from "../Keyboard";
+import { ISetting } from "../settings/Settings";
 
-export enum Categories {
+export interface ICategory {
+    categoryLabel: string;
+    settingNames: string[];
+}
+
+export enum CategoryName {
     NAVIGATION = "Navigation",
     CALLS = "Calls",
     COMPOSER = "Composer",
@@ -26,258 +33,378 @@ export enum Categories {
     AUTOCOMPLETE = "Autocomplete",
 }
 
-export enum Modifiers {
-    ALT = "Alt", // Option on Mac and displayed as an Icon
-    ALT_GR = "Alt Gr",
-    SHIFT = "Shift",
-    SUPER = "Super", // should this be "Windows"?
-    // Instead of using below, consider CMD_OR_CTRL
-    COMMAND = "Command", // This gets displayed as an Icon
-    CONTROL = "Ctrl",
-}
-
-// Meta-modifier: isMac ? CMD : CONTROL
-export const CMD_OR_CTRL = isMac ? Modifiers.COMMAND : Modifiers.CONTROL;
 // Meta-key representing the digits [0-9] often found at the top of standard keyboard layouts
 export const DIGITS = "digits";
 
-interface IKeybind {
-    modifiers?: Modifiers[];
-    key: string; // TS: fix this once Key is an enum
+export const ALTERNATE_KEY_NAME: Record<string, string> = {
+    [Key.PAGE_UP]: _td("Page Up"),
+    [Key.PAGE_DOWN]: _td("Page Down"),
+    [Key.ESCAPE]: _td("Esc"),
+    [Key.ENTER]: _td("Enter"),
+    [Key.SPACE]: _td("Space"),
+    [Key.HOME]: _td("Home"),
+    [Key.END]: _td("End"),
+    [Key.ALT]: _td("Alt"),
+    [Key.CONTROL]: _td("Ctrl"),
+    [Key.SHIFT]: _td("Shift"),
+    [DIGITS]: _td("[number]"),
+};
+export const KEY_ICON: Record<string, string> = {
+    [Key.ARROW_UP]: "↑",
+    [Key.ARROW_DOWN]: "↓",
+    [Key.ARROW_LEFT]: "←",
+    [Key.ARROW_RIGHT]: "→",
+};
+if (isMac) {
+    KEY_ICON[Key.META] = "⌘";
+    KEY_ICON[Key.SHIFT] = "⌥";
 }
 
-export interface IShortcut {
-    keybinds: IKeybind[];
-    description: string;
-}
-
-export const shortcuts: Record<Categories, IShortcut[]> = {
-    [Categories.COMPOSER]: [
-        {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.B,
-            }],
-            description: _td("Toggle Bold"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.I,
-            }],
-            description: _td("Toggle Italics"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.GREATER_THAN,
-            }],
-            description: _td("Toggle Quote"),
-        }, {
-            keybinds: [{
-                modifiers: [Modifiers.SHIFT],
-                key: Key.ENTER,
-            }],
-            description: _td("New line"),
-        }, {
-            keybinds: [{
-                key: Key.ARROW_UP,
-            }, {
-                key: Key.ARROW_DOWN,
-            }],
-            description: _td("Navigate recent messages to edit"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.HOME,
-            }, {
-                modifiers: [CMD_OR_CTRL],
-                key: Key.END,
-            }],
-            description: _td("Jump to start/end of the composer"),
-        }, {
-            keybinds: [{
-                modifiers: [Modifiers.CONTROL, Modifiers.ALT],
-                key: Key.ARROW_UP,
-            }, {
-                modifiers: [Modifiers.CONTROL, Modifiers.ALT],
-                key: Key.ARROW_DOWN,
-            }],
-            description: _td("Navigate composer history"),
-        }, {
-            keybinds: [{
-                key: Key.ESCAPE,
-            }],
-            description: _td("Cancel replying to a message"),
-        },
-    ],
-
-    [Categories.CALLS]: [
-        {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.D,
-            }],
-            description: _td("Toggle microphone mute"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.E,
-            }],
-            description: _td("Toggle video on/off"),
-        },
-    ],
-
-    [Categories.ROOM]: [
-        {
-            keybinds: [{
-                key: Key.PAGE_UP,
-            }, {
-                key: Key.PAGE_DOWN,
-            }],
-            description: _td("Scroll up/down in the timeline"),
-        }, {
-            keybinds: [{
-                key: Key.ESCAPE,
-            }],
-            description: _td("Dismiss read marker and jump to bottom"),
-        }, {
-            keybinds: [{
-                modifiers: [Modifiers.SHIFT],
-                key: Key.PAGE_UP,
-            }],
-            description: _td("Jump to oldest unread message"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL, Modifiers.SHIFT],
-                key: Key.U,
-            }],
-            description: _td("Upload a file"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.F,
-            }],
-            description: _td("Search (must be enabled)"),
-        },
-    ],
-
-    [Categories.ROOM_LIST]: [
-        {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.K,
-            }],
-            description: _td("Jump to room search"),
-        }, {
-            keybinds: [{
-                key: Key.ARROW_UP,
-            }, {
-                key: Key.ARROW_DOWN,
-            }],
-            description: _td("Navigate up/down in the room list"),
-        }, {
-            keybinds: [{
-                key: Key.ENTER,
-            }],
-            description: _td("Select room from the room list"),
-        }, {
-            keybinds: [{
-                key: Key.ARROW_LEFT,
-            }],
-            description: _td("Collapse room list section"),
-        }, {
-            keybinds: [{
-                key: Key.ARROW_RIGHT,
-            }],
-            description: _td("Expand room list section"),
-        }, {
-            keybinds: [{
-                key: Key.ESCAPE,
-            }],
-            description: _td("Clear room list filter field"),
-        },
-    ],
-
-    [Categories.NAVIGATION]: [
-        {
-            keybinds: [{
-                modifiers: [Modifiers.ALT, Modifiers.SHIFT],
-                key: Key.ARROW_UP,
-            }, {
-                modifiers: [Modifiers.ALT, Modifiers.SHIFT],
-                key: Key.ARROW_DOWN,
-            }],
-            description: _td("Previous/next unread room or DM"),
-        }, {
-            keybinds: [{
-                modifiers: [Modifiers.ALT],
-                key: Key.ARROW_UP,
-            }, {
-                modifiers: [Modifiers.ALT],
-                key: Key.ARROW_DOWN,
-            }],
-            description: _td("Previous/next room or DM"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.BACKTICK,
-            }],
-            description: _td("Toggle the top left menu"),
-        }, {
-            keybinds: [{
-                key: Key.ESCAPE,
-            }],
-            description: _td("Close dialog or context menu"),
-        }, {
-            keybinds: [{
-                key: Key.ENTER,
-            }, {
-                key: Key.SPACE,
-            }],
-            description: _td("Activate selected button"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL, Modifiers.SHIFT],
-                key: Key.D,
-            }],
-            description: _td("Toggle space panel"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.PERIOD,
-            }],
-            description: _td("Toggle right panel"),
-        }, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
-                key: Key.SLASH,
-            }],
-            description: _td("Open this settings tab"),
-        }, {
-            keybinds: [{
-                modifiers: [Modifiers.CONTROL, isMac ? Modifiers.SHIFT : Modifiers.ALT],
-                key: Key.H,
-            }],
-            description: _td("Go to Home View"),
-        },
-    ],
-
-    [Categories.AUTOCOMPLETE]: [
-        {
-            keybinds: [{
-                key: Key.ARROW_UP,
-            }, {
-                key: Key.ARROW_DOWN,
-            }],
-            description: _td("Move autocomplete selection up/down"),
-        }, {
-            keybinds: [{
-                key: Key.ESCAPE,
-            }],
-            description: _td("Cancel autocomplete"),
-        },
-    ],
+export const CATEGORIES: Record<CategoryName, ICategory> = {
+    [CategoryName.COMPOSER]: {
+        categoryLabel: _td("Composer"),
+        settingNames: [
+            "KeyBinding.toggleBoldInComposer",
+            "KeyBinding.toggleItalicsInComposer",
+            "KeyBinding.toggleQuoteInComposer",
+            "KeyBinding.newLineInComposer",
+            "KeyBinding.cancelReplyInComposer",
+            "KeyBinding.editNextMessage",
+            "KeyBinding.editPreviousMessage",
+            "KeyBinding.jumpToStartInComposer",
+            "KeyBinding.jumpToEndInComposer",
+            "KeyBinding.nextMessageInComposerHistory",
+            "KeyBinding.previousMessageInComposerHistory",
+        ],
+    }, [CategoryName.CALLS]: {
+        categoryLabel: _td("Calls"),
+        settingNames: [
+            "KeyBinding.toggleMicInCall",
+            "KeyBinding.toggleWebcamInCall",
+        ],
+    }, [CategoryName.ROOM]: {
+        categoryLabel: _td("Room"),
+        settingNames: [
+            "KeyBinding.dismissReadMarkerAndJumpToBottom",
+            "KeyBinding.jumpToOldestUnreadMessage",
+            "KeyBinding.uploadFileToRoom",
+            "KeyBinding.searchInRoom",
+            "KeyBinding.scrollUpInTimeline",
+            "KeyBinding.scrollDownInTimeline",
+        ],
+    }, [CategoryName.ROOM_LIST]: {
+        categoryLabel: _td("Room List"),
+        settingNames: [
+            "KeyBinding.filterRooms",
+            "KeyBinding.selectRoomInRoomList",
+            "KeyBinding.collapseSectionInRoomList",
+            "KeyBinding.expandSectionInRoomList",
+            "KeyBinding.clearRoomFilter",
+            "KeyBinding.upperRoom",
+            "KeyBinding.downerRoom",
+        ],
+    }, [CategoryName.NAVIGATION]: {
+        categoryLabel: _td("Navigation"),
+        settingNames: [
+            "KeyBinding.toggleTopLeftMenu",
+            "KeyBinding.closeDialogOrContextMenu",
+            "KeyBinding.activateSelectedButton",
+            "KeyBinding.toggleRightPanel",
+            "KeyBinding.showKeyBindingsSettings",
+            "KeyBinding.goToHomeView",
+            "KeyBinding.nextUnreadRoom",
+            "KeyBinding.previousUnreadRoom",
+            "KeyBinding.nextRoom",
+            "KeyBinding.previousRoom",
+            "KeyBinding.toggleSpacePanel",
+        ],
+    }, [CategoryName.AUTOCOMPLETE]: {
+        categoryLabel: _td("Autocomplete"),
+        settingNames: [
+            "KeyBinding.cancelAutoComplete",
+            "KeyBinding.nextOptionInAutoComplete",
+            "KeyBinding.previousOptionInAutoComplete",
+        ],
+    },
 };
 
-export const registerShortcut = (category: Categories, defn: IShortcut) => {
-    shortcuts[category].push(defn);
+// This is very intentionally modelled after SETTINGS as it will make it easier
+// to implement customizable keyboard shortcuts
+// TODO: TravisR will fix this nightmare when the new version of the SettingsStore becomes a thing
+export const KEYBOARD_SHORTCUTS: { [setting: string]: ISetting } = {
+    "KeyBinding.toggleBoldInComposer": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.B,
+        },
+        displayName: _td("Toggle Bold"),
+    },
+    "KeyBinding.toggleItalicsInComposer": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.I,
+        },
+        displayName: _td("Toggle Italics"),
+    },
+    "KeyBinding.toggleQuoteInComposer": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.GREATER_THAN,
+        },
+        displayName: _td("Toggle Quote"),
+    },
+    "KeyBinding.newLineInComposer": {
+        default: {
+            shiftKey: true,
+            key: Key.ENTER,
+        },
+        displayName: _td("New line"),
+    },
+    "KeyBinding.cancelReplyInComposer": {
+        default: {
+            key: Key.ESCAPE,
+        },
+        displayName: _td("Cancel replying to a message"),
+    },
+    "KeyBinding.editNextMessage": {
+        default: {
+            key: Key.ARROW_UP,
+        },
+        displayName: _td("Navigate to next message to edit"),
+    },
+    "KeyBinding.editPreviousMessage": {
+        default: {
+            key: Key.ARROW_DOWN,
+        },
+        displayName: _td("Navigate to previous message to edit"),
+    },
+    "KeyBinding.jumpToStartInComposer": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.HOME,
+        },
+        displayName: _td("Jump to start of the composer"),
+    },
+    "KeyBinding.jumpToEndInComposer": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.END,
+        },
+        displayName: _td("Jump to end of the composer"),
+    },
+    "KeyBinding.nextMessageInComposerHistory": {
+        default: {
+            altKey: true,
+            ctrlKey: true,
+            key: Key.ARROW_UP,
+        },
+        displayName: _td("Navigate to next message in composer history"),
+    },
+    "KeyBinding.previousMessageInComposerHistory": {
+        default: {
+            altKey: true,
+            ctrlKey: true,
+            key: Key.ARROW_DOWN,
+        },
+        displayName: _td("Navigate to previous message in composer history"),
+    },
+    "KeyBinding.toggleMicInCall": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.D,
+        },
+        displayName: _td("Toggle microphone mute"),
+    },
+    "KeyBinding.toggleWebcamInCall": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.E,
+        },
+        displayName: _td("Toggle webcam on/off"),
+    },
+    "KeyBinding.dismissReadMarkerAndJumpToBottom": {
+        default: {
+            key: Key.ESCAPE,
+        },
+        displayName: _td("Dismiss read marker and jump to bottom"),
+    },
+    "KeyBinding.jumpToOldestUnreadMessage": {
+        default: {
+            shiftKey: true,
+            key: Key.PAGE_UP,
+        },
+        displayName: _td("Jump to oldest unread message"),
+    },
+    "KeyBinding.uploadFileToRoom": {
+        default: {
+            ctrlOrCmdKey: true,
+            shiftKey: true,
+            key: Key.U,
+        },
+        displayName: _td("Upload a file"),
+    },
+    "KeyBinding.searchInRoom": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.F,
+        },
+        displayName: _td("Search (must be enabled)"),
+    },
+    "KeyBinding.scrollUpInTimeline": {
+        default: {
+            key: Key.PAGE_UP,
+        },
+        displayName: _td("Scroll up in the timeline"),
+    },
+    "KeyBinding.scrollDownInTimeline": {
+        default: {
+            key: Key.PAGE_DOWN,
+        },
+        displayName: _td("Scroll down in the timeline"),
+    },
+    "KeyBinding.filterRooms": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.K,
+        },
+        displayName: _td("Jump to room search"),
+    },
+    "KeyBinding.selectRoomInRoomList": {
+        default: {
+            key: Key.ENTER,
+        },
+        displayName: _td("Select room from the room list"),
+    },
+    "KeyBinding.collapseSectionInRoomList": {
+        default: {
+            key: Key.ARROW_LEFT,
+        },
+        displayName: _td("Collapse room list section"),
+    },
+    "KeyBinding.expandSectionInRoomList": {
+        default: {
+            key: Key.ARROW_RIGHT,
+        },
+        displayName: _td("Expand room list section"),
+    },
+    "KeyBinding.clearRoomFilter": {
+        default: {
+            key: Key.ESCAPE,
+        },
+        displayName: _td("Clear room list filter field"),
+    },
+    "KeyBinding.upperRoom": {
+        default: {
+            key: Key.ARROW_UP,
+        },
+        displayName: _td("Navigate up in the room list"),
+    },
+    "KeyBinding.downerRoom": {
+        default: {
+            key: Key.ARROW_DOWN,
+        },
+        displayName: _td("Navigate down in the room list"),
+    },
+    "KeyBinding.toggleTopLeftMenu": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.BACKTICK,
+        },
+        displayName: _td("Toggle the top left menu"),
+    },
+    "KeyBinding.closeDialogOrContextMenu": {
+        default: {
+            key: Key.ESCAPE,
+        },
+        displayName: _td("Close dialog or context menu"),
+    },
+    "KeyBinding.activateSelectedButton": {
+        default: {
+            key: Key.ENTER,
+        },
+        displayName: _td("Activate selected button"),
+    },
+    "KeyBinding.toggleRightPanel": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.PERIOD,
+        },
+        displayName: _td("Toggle right panel"),
+    },
+    "KeyBinding.showKeyBindingsSettings": {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.SLASH,
+        },
+        displayName: _td("Open this settings tab"),
+    },
+    "KeyBinding.goToHomeView": {
+        default: {
+            ctrlOrCmdKey: true,
+            altKey: true,
+            key: Key.H,
+        },
+        displayName: _td("Go to Home View"),
+    },
+    "KeyBinding.nextUnreadRoom": {
+        default: {
+            shiftKey: true,
+            altKey: true,
+            key: Key.ARROW_UP,
+        },
+        displayName: _td("Next unread room or DM"),
+    },
+    "KeyBinding.previousUnreadRoom": {
+        default: {
+            shiftKey: true,
+            altKey: true,
+            key: Key.ARROW_DOWN,
+        },
+        displayName: _td("Previous unread room or DM"),
+    },
+    "KeyBinding.nextRoom": {
+        default: {
+            altKey: true,
+            key: Key.ARROW_UP,
+        },
+        displayName: _td("Next room or DM"),
+    },
+    "KeyBinding.previousRoom": {
+        default: {
+            altKey: true,
+            key: Key.ARROW_DOWN,
+        },
+        displayName: _td("Previous room or DM"),
+    },
+    "KeyBinding.cancelAutoComplete": {
+        default: {
+            key: Key.ESCAPE,
+        },
+        displayName: _td("Cancel autocomplete"),
+    },
+    "KeyBinding.nextOptionInAutoComplete": {
+        default: {
+            key: Key.ARROW_UP,
+        },
+        displayName: _td("Next autocomplete suggestion"),
+    },
+    "KeyBinding.previousOptionInAutoComplete": {
+        default: {
+            key: Key.ARROW_DOWN,
+        },
+        displayName: _td("Previous autocomplete suggestion"),
+    },
+    "KeyBinding.toggleSpacePanel": {
+        default: {
+            ctrlOrCmdKey: true,
+            shiftKey: true,
+            key: Key.D,
+        },
+        displayName: _td("Toggle space panel"),
+    },
+};
+
+export const registerShortcut = (shortcutName: string, categoryName: CategoryName, shortcut: ISetting): void => {
+    KEYBOARD_SHORTCUTS[shortcutName] = shortcut;
+    CATEGORIES[categoryName].settingNames.push(shortcutName);
 };

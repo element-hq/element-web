@@ -16,30 +16,10 @@ limitations under the License.
 */
 
 .mx_KeyboardUserSettingsTab .mx_SettingsTab_section {
-    display: flex;
-    flex-wrap: wrap;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    flex-direction: column;
-    margin-bottom: -50px;
-    max-height: 1100px; // XXX: this may need adjusting when adding new shortcuts
-
-    .mx_KeyboardShortcutsDialog_category {
-        width: 33.3333%; // 3 columns
-        margin: 0 0 40px;
-
-        & > div {
-            padding-left: 5px;
-        }
-    }
-
-    h3 {
-        margin: 0 0 10px;
-    }
-
-    h5 {
-        margin: 15px 0 5px;
-        font-weight: normal;
+    .mx_KeyboardShortcut_shortcutRow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     kbd {
@@ -58,9 +38,5 @@ limitations under the License.
         & + kbd {
             margin-left: 5px;
         }
-    }
-
-    .mx_KeyboardShortcutsDialog_inline div {
-        display: inline;
     }
 }

@@ -1,0 +1,269 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`KeyboardUserSettingsTab doesn't render + if last 1`] = `
+<KeyboardKey
+  last={true}
+  name="a"
+>
+  <kbd>
+     
+    a
+     
+  </kbd>
+</KeyboardKey>
+`;
+
+exports[`KeyboardUserSettingsTab doesn't render same modifier twice 1`] = `
+<KeyboardShortcut
+  name="keybind1"
+>
+  <div>
+    <KeyboardKey
+      key="ctrlOrCmdKey"
+      name="Control"
+    >
+      <kbd>
+         
+        missing translation: en|Ctrl
+         
+      </kbd>
+      +
+    </KeyboardKey>
+    <KeyboardKey
+      last={true}
+      name="a"
+    >
+      <kbd>
+         
+        a
+         
+      </kbd>
+    </KeyboardKey>
+  </div>
+</KeyboardShortcut>
+`;
+
+exports[`KeyboardUserSettingsTab doesn't render same modifier twice 2`] = `
+<KeyboardShortcut
+  name="keybind1"
+>
+  <div>
+    <KeyboardKey
+      key="ctrlOrCmdKey"
+      name="Control"
+    >
+      <kbd>
+         
+        missing translation: en|Ctrl
+         
+      </kbd>
+      +
+    </KeyboardKey>
+    <KeyboardKey
+      last={true}
+      name="a"
+    >
+      <kbd>
+         
+        a
+         
+      </kbd>
+    </KeyboardKey>
+  </div>
+</KeyboardShortcut>
+`;
+
+exports[`KeyboardUserSettingsTab renders alternative key name 1`] = `
+<KeyboardKey
+  name="PageDown"
+>
+  <kbd>
+     
+    missing translation: en|Page Down
+     
+  </kbd>
+  +
+</KeyboardKey>
+`;
+
+exports[`KeyboardUserSettingsTab renders key icon 1`] = `
+<KeyboardKey
+  name="ArrowDown"
+>
+  <kbd>
+     
+    ↓
+     
+  </kbd>
+  +
+</KeyboardKey>
+`;
+
+exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
+<KeyboardUserSettingsTab>
+  <div
+    className="mx_SettingsTab mx_KeyboardUserSettingsTab"
+  >
+    <div
+      className="mx_SettingsTab_heading"
+    >
+      missing translation: en|Keyboard
+    </div>
+    <KeyboardShortcutSection
+      category={
+        Object {
+          "categoryLabel": "Composer",
+          "settingNames": Array [
+            "keybind1",
+            "keybind2",
+          ],
+        }
+      }
+      categoryName="Composer"
+      key="Composer"
+    >
+      <div
+        className="mx_SettingsTab_section"
+        key="Composer"
+      >
+        <div
+          className="mx_SettingsTab_subheading"
+        >
+          missing translation: en|Composer
+        </div>
+        <div>
+           
+          <KeyboardShortcutRow
+            key="keybind1"
+            name="keybind1"
+          >
+            <div
+              className="mx_KeyboardShortcut_shortcutRow"
+            >
+              Cancel replying to a message
+              <KeyboardShortcut
+                name="keybind1"
+              >
+                <div>
+                  <KeyboardKey
+                    key="ctrlKey"
+                    name="Control"
+                  >
+                    <kbd>
+                       
+                      missing translation: en|Ctrl
+                       
+                    </kbd>
+                    +
+                  </KeyboardKey>
+                  <KeyboardKey
+                    last={true}
+                    name="a"
+                  >
+                    <kbd>
+                       
+                      a
+                       
+                    </kbd>
+                  </KeyboardKey>
+                </div>
+              </KeyboardShortcut>
+            </div>
+          </KeyboardShortcutRow>
+          <KeyboardShortcutRow
+            key="keybind2"
+            name="keybind2"
+          >
+            <div
+              className="mx_KeyboardShortcut_shortcutRow"
+            >
+              Toggle Bold
+              <KeyboardShortcut
+                name="keybind2"
+              >
+                <div>
+                  <KeyboardKey
+                    key="ctrlKey"
+                    name="Control"
+                  >
+                    <kbd>
+                       
+                      missing translation: en|Ctrl
+                       
+                    </kbd>
+                    +
+                  </KeyboardKey>
+                  <KeyboardKey
+                    last={true}
+                    name="b"
+                  >
+                    <kbd>
+                       
+                      b
+                       
+                    </kbd>
+                  </KeyboardKey>
+                </div>
+              </KeyboardShortcut>
+            </div>
+          </KeyboardShortcutRow>
+           
+        </div>
+      </div>
+    </KeyboardShortcutSection>
+    <KeyboardShortcutSection
+      category={
+        Object {
+          "categoryLabel": "Navigation",
+          "settingNames": Array [
+            "keybind3",
+          ],
+        }
+      }
+      categoryName="Navigation"
+      key="Navigation"
+    >
+      <div
+        className="mx_SettingsTab_section"
+        key="Navigation"
+      >
+        <div
+          className="mx_SettingsTab_subheading"
+        >
+          missing translation: en|Navigation
+        </div>
+        <div>
+           
+          <KeyboardShortcutRow
+            key="keybind3"
+            name="keybind3"
+          >
+            <div
+              className="mx_KeyboardShortcut_shortcutRow"
+            >
+              Select room from the room list
+              <KeyboardShortcut
+                name="keybind3"
+              >
+                <div>
+                  <KeyboardKey
+                    last={true}
+                    name="Enter"
+                  >
+                    <kbd>
+                       
+                      missing translation: en|Enter
+                       
+                    </kbd>
+                  </KeyboardKey>
+                </div>
+              </KeyboardShortcut>
+            </div>
+          </KeyboardShortcutRow>
+           
+        </div>
+      </div>
+    </KeyboardShortcutSection>
+  </div>
+</KeyboardUserSettingsTab>
+`;
