@@ -199,7 +199,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
                 // this returns the amount of added/removed characters during the replace
                 // so the caret position can be adjusted.
-                return range.replace([partCreator.plain(data.unicode)]);
+                return range.replace([partCreator.emoji(data.unicode)]);
             }
         }
     }
@@ -831,7 +831,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const caret = this.getCaret();
         const position = model.positionForOffset(caret.offset, caret.atNodeEnd);
         model.transform(() => {
-            const addedLen = model.insert([partCreator.plain(text)], position);
+            const addedLen = model.insert(partCreator.plainWithEmoji(text), position);
             return model.positionForOffset(caret.offset + addedLen, true);
         });
     }

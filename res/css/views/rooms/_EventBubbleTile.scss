@@ -88,6 +88,8 @@ limitations under the License.
     .mx_EventTile_line {
         width: fit-content;
         max-width: 70%;
+        // fixed line height to prevent emoji from being taller than text
+        line-height: $font-18px;
     }
 
     > .mx_SenderProfile {

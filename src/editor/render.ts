@@ -20,11 +20,11 @@ import EditorModel from "./model";
 
 export function needsCaretNodeBefore(part: Part, prevPart: Part): boolean {
     const isFirst = !prevPart || prevPart.type === Type.Newline;
-    return !part.canEdit && (isFirst || !prevPart.canEdit);
+    return !part.acceptsCaret && (isFirst || !prevPart.acceptsCaret);
 }
 
 export function needsCaretNodeAfter(part: Part, isLastOfLine: boolean): boolean {
-    return !part.canEdit && isLastOfLine;
+    return !part.acceptsCaret && isLastOfLine;
 }
 
 function insertAfter(node: HTMLElement, nodeToInsert: HTMLElement): void {

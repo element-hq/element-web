@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { split } from "lodash";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -24,12 +25,13 @@ import AutocompleteWrapperModel, {
     UpdateCallback,
     UpdateQuery,
 } from "./autocomplete";
+import { mightContainEmoji, unicodeToShortcode } from "../HtmlUtils";
 import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
 
 interface ISerializedPart {
-    type: Type.Plain | Type.Newline | Type.Command | Type.PillCandidate;
+    type: Type.Plain | Type.Newline | Type.Emoji | Type.Command | Type.PillCandidate;
     text: string;
 }
 
@@ -44,6 +46,7 @@ export type SerializedPart = ISerializedPart | ISerializedPillPart;
 export enum Type {
     Plain = "plain",
     Newline = "newline",
+    Emoji = "emoji",
     Command = "command",
     UserPill = "user-pill",
     RoomPill = "room-pill",
@@ -53,8 +56,9 @@ export enum Type {
 
 interface IBasePart {
     text: string;
-    type: Type.Plain | Type.Newline;
+    type: Type.Plain | Type.Newline | Type.Emoji;
     canEdit: boolean;
+    acceptsCaret: boolean;
 
     createAutoComplete(updateCallback: UpdateCallback): void;
 
@@ -165,6 +169,10 @@ abstract class BasePart {
         return true;
     }
 
+    public get acceptsCaret(): boolean {
+        return this.canEdit;
+    }
+
     public toString(): string {
         return `${this.type}(${this.text})`;
     }
@@ -183,7 +191,7 @@ abstract class BasePart {
 
 abstract class PlainBasePart extends BasePart {
     protected acceptsInsertion(chr: string, offset: number, inputType: string): boolean {
-        if (chr === "\n") {
+        if (chr === "\n" || mightContainEmoji(chr)) {
             return false;
         }
         // when not pasting or dropping text, reject characters that should start a pill candidate
@@ -351,6 +359,48 @@ class NewlinePart extends BasePart implements IBasePart {
     }
 }
 
+class EmojiPart extends BasePart implements IBasePart {
+    protected acceptsInsertion(chr: string, offset: number): boolean {
+        return false;
+    }
+
+    protected acceptsRemoval(position: number, chr: string): boolean {
+        return false;
+    }
+
+    public toDOMNode(): Node {
+        const span = document.createElement("span");
+        span.className = "mx_Emoji";
+        span.setAttribute("title", unicodeToShortcode(this.text));
+        span.appendChild(document.createTextNode(this.text));
+        return span;
+    }
+
+    public updateDOMNode(node: HTMLElement): void {
+        const textNode = node.childNodes[0];
+        if (textNode.textContent !== this.text) {
+            node.setAttribute("title", unicodeToShortcode(this.text));
+            textNode.textContent = this.text;
+        }
+    }
+
+    public canUpdateDOMNode(node: HTMLElement): boolean {
+        return node.className === "mx_Emoji";
+    }
+
+    public get type(): IBasePart["type"] {
+        return Type.Emoji;
+    }
+
+    public get canEdit(): boolean {
+        return false;
+    }
+
+    public get acceptsCaret(): boolean {
+        return true;
+    }
+}
+
 class RoomPillPart extends PillPart {
     constructor(resourceId: string, label: string, private room: Room) {
         super(resourceId, label);
@@ -503,6 +553,9 @@ export class PartCreator {
             case "\n":
                 return new NewlinePart();
             default:
+                if (mightContainEmoji(input[0])) {
+                    return new EmojiPart();
+                }
                 return new PlainPart();
         }
     }
@@ -517,6 +570,8 @@ export class PartCreator {
                 return this.plain(part.text);
             case Type.Newline:
                 return this.newline();
+            case Type.Emoji:
+                return this.emoji(part.text);
             case Type.AtRoomPill:
                 return this.atRoomPill(part.text);
             case Type.PillCandidate:
@@ -534,6 +589,10 @@ export class PartCreator {
 
     public newline(): NewlinePart {
         return new NewlinePart("\n");
+    }
+
+    public emoji(text: string): EmojiPart {
+        return new EmojiPart(text);
     }
 
     public pillCandidate(text: string): PillCandidatePart {
@@ -560,6 +619,28 @@ export class PartCreator {
     public userPill(displayName: string, userId: string): UserPillPart {
         const member = this.room.getMember(userId);
         return new UserPillPart(userId, displayName, member);
+    }
+
+    public plainWithEmoji(text: string): (PlainPart | EmojiPart)[] {
+        const parts = [];
+        let plainText = "";
+
+        // We use lodash's grapheme splitter to avoid breaking apart compound emojis
+        for (const char of split(text, "")) {
+            if (mightContainEmoji(char)) {
+                if (plainText) {
+                    parts.push(this.plain(plainText));
+                    plainText = "";
+                }
+                parts.push(this.emoji(char));
+            } else {
+                plainText += char;
+            }
+        }
+        if (plainText) {
+            parts.push(this.plain(plainText));
+        }
+        return parts;
     }
 
     public createMentionParts(

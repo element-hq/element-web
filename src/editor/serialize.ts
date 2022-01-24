@@ -31,6 +31,7 @@ export function mdSerialize(model: EditorModel): string {
             case Type.Newline:
                 return html + "\n";
             case Type.Plain:
+            case Type.Emoji:
             case Type.Command:
             case Type.PillCandidate:
             case Type.AtRoomPill:
@@ -164,6 +165,7 @@ export function textSerialize(model: EditorModel): string {
             case Type.Newline:
                 return text + "\n";
             case Type.Plain:
+            case Type.Emoji:
             case Type.Command:
             case Type.PillCandidate:
             case Type.AtRoomPill:

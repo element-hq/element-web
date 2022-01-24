@@ -111,7 +111,7 @@ export default class AutocompleteWrapperModel {
                 return [(this.partCreator as CommandPartCreator).command(text)];
             default:
                 // used for emoji and other plain text completion replacement
-                return [this.partCreator.plain(text)];
+                return this.partCreator.plainWithEmoji(text);
         }
     }
 }

@@ -233,11 +233,6 @@ $left-gutter: 64px;
         overflow-y: hidden;
     }
 
-    .mx_EventTile_Emoji {
-        font-size: 1.8rem;
-        vertical-align: bottom;
-    }
-
     &.mx_EventTile_selected .mx_EventTile_line,
     &:hover .mx_EventTile_line {
         border-top-left-radius: 4px;
@@ -391,7 +386,7 @@ $left-gutter: 64px;
     position: absolute;
 }
 
-.mx_EventTile_bigEmoji .mx_EventTile_Emoji {
+.mx_EventTile_bigEmoji .mx_Emoji {
     font-size: 48px !important;
     line-height: 57px;
 }

@@ -29,7 +29,7 @@ function parseAtRoomMentions(text: string, partCreator: PartCreator): Part[] {
     const parts: Part[] = [];
     text.split(ATROOM).forEach((textPart, i, arr) => {
         if (textPart.length) {
-            parts.push(partCreator.plain(textPart));
+            parts.push(...partCreator.plainWithEmoji(textPart));
         }
         // it's safe to never append @room after the last textPart
         // as split will report an empty string at the end if
@@ -42,28 +42,28 @@ function parseAtRoomMentions(text: string, partCreator: PartCreator): Part[] {
     return parts;
 }
 
-function parseLink(a: HTMLAnchorElement, partCreator: PartCreator): Part {
+function parseLink(a: HTMLAnchorElement, partCreator: PartCreator): Part[] {
     const { href } = a;
     const resourceId = getPrimaryPermalinkEntity(href); // The room/user ID
     const prefix = resourceId ? resourceId[0] : undefined; // First character of ID
     switch (prefix) {
         case "@":
-            return partCreator.userPill(a.textContent, resourceId);
+            return [partCreator.userPill(a.textContent, resourceId)];
         case "#":
-            return partCreator.roomPill(resourceId);
+            return [partCreator.roomPill(resourceId)];
         default: {
             if (href === a.textContent) {
-                return partCreator.plain(a.textContent);
+                return partCreator.plainWithEmoji(a.textContent);
             } else {
-                return partCreator.plain(`[${a.textContent.replace(/[[\\\]]/g, c => "\\" + c)}](${href})`);
+                return partCreator.plainWithEmoji(`[${a.textContent.replace(/[[\\\]]/g, c => "\\" + c)}](${href})`);
             }
         }
     }
 }
 
-function parseImage(img: HTMLImageElement, partCreator: PartCreator): Part {
+function parseImage(img: HTMLImageElement, partCreator: PartCreator): Part[] {
     const { src } = img;
-    return partCreator.plain(`![${img.alt.replace(/[[\\\]]/g, c => "\\" + c)}](${src})`);
+    return partCreator.plainWithEmoji(`![${img.alt.replace(/[[\\\]]/g, c => "\\" + c)}](${src})`);
 }
 
 function parseCodeBlock(n: HTMLElement, partCreator: PartCreator): Part[] {
@@ -79,7 +79,7 @@ function parseCodeBlock(n: HTMLElement, partCreator: PartCreator): Part[] {
     }
     const preLines = ("```" + language + "\n" + n.textContent + "```").split("\n");
     preLines.forEach((l, i) => {
-        parts.push(partCreator.plain(l));
+        parts.push(...partCreator.plainWithEmoji(l));
         if (i < preLines.length - 1) {
             parts.push(partCreator.newline());
         }
@@ -126,21 +126,21 @@ function parseElement(
                 partCreator.newline(),
             ];
         case "EM":
-            return partCreator.plain(`_${n.textContent}_`);
+            return partCreator.plainWithEmoji(`_${n.textContent}_`);
         case "STRONG":
-            return partCreator.plain(`**${n.textContent}**`);
+            return partCreator.plainWithEmoji(`**${n.textContent}**`);
         case "PRE":
             return parseCodeBlock(n, partCreator);
         case "CODE":
-            return partCreator.plain(`\`${n.textContent}\``);
+            return partCreator.plainWithEmoji(`\`${n.textContent}\``);
         case "DEL":
-            return partCreator.plain(`<del>${n.textContent}</del>`);
+            return partCreator.plainWithEmoji(`<del>${n.textContent}</del>`);
         case "SUB":
-            return partCreator.plain(`<sub>${n.textContent}</sub>`);
+            return partCreator.plainWithEmoji(`<sub>${n.textContent}</sub>`);
         case "SUP":
-            return partCreator.plain(`<sup>${n.textContent}</sup>`);
+            return partCreator.plainWithEmoji(`<sup>${n.textContent}</sup>`);
         case "U":
-            return partCreator.plain(`<u>${n.textContent}</u>`);
+            return partCreator.plainWithEmoji(`<u>${n.textContent}</u>`);
         case "LI": {
             const BASE_INDENT = 4;
             const depth = state.listDepth - 1;
@@ -171,9 +171,9 @@ function parseElement(
                     ((SdkConfig.get()['latex_maths_delims'] || {})['inline'] || {})['right'] || "\\)" :
                     ((SdkConfig.get()['latex_maths_delims'] || {})['display'] || {})['right'] || "\\]";
                 const tex = n.getAttribute("data-mx-maths");
-                return partCreator.plain(delimLeft + tex + delimRight);
+                return partCreator.plainWithEmoji(delimLeft + tex + delimRight);
             } else if (!checkDescendInto(n)) {
-                return partCreator.plain(n.textContent);
+                return partCreator.plainWithEmoji(n.textContent);
             }
             break;
         }
@@ -186,7 +186,7 @@ function parseElement(
         default:
             // don't textify block nodes we'll descend into
             if (!checkDescendInto(n)) {
-                return partCreator.plain(n.textContent);
+                return partCreator.plainWithEmoji(n.textContent);
             }
     }
 }
