@@ -3558,5 +3558,17 @@
     "You can't see earlier messages": "Régebbi üzeneteket nem tekinthet meg",
     "Encrypted messages before this point are unavailable.": "Ez előtti titkosított üzenetek elérhetetlenek.",
     "You don't have permission to view messages from before you joined.": "A belépés előtti üzenetek megtekintéséhez nincs engedélye.",
-    "You don't have permission to view messages from before you were invited.": "A meghívás előtti üzenetek megtekintéséhez nincs engedélye."
+    "You don't have permission to view messages from before you were invited.": "A meghívás előtti üzenetek megtekintéséhez nincs engedélye.",
+    "Navigate down in the room list": "A szoba listában navigálás lefelé",
+    "Navigate up in the room list": "A szoba listában navigálás felfelé",
+    "Scroll down in the timeline": "Az idővonalon görgetés le",
+    "Scroll up in the timeline": "Az idővonalon görgetés fel",
+    "Toggle webcam on/off": "Webkamera ki-,bekapcsolása",
+    "Jump to end of the composer": "Az üzenet végére ugrás a szerkesztőben",
+    "Jump to start of the composer": "Az üzenet elejére ugrás a szerkesztőben",
+    "Internal room ID": "Belső szoba azonosító",
+    "Group all your people in one place.": "Csoportosítsa az összes ismerősét egy helyre.",
+    "Group all your favourite rooms and people in one place.": "Csoportosítsa az összes kedvenc szobáját és ismerősét egy helyre.",
+    "Call": "Hívás",
+    "Right panel stays open (defaults to room member list)": "Jobb oldali panel nyitva marad (szoba tagság az alapértelmezett)"
 }
