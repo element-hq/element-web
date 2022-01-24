@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -45,18 +45,17 @@ const SidebarUserSettingsTab = () => {
             <div className="mx_SettingsTab_heading">{ _t("Sidebar") }</div>
 
             <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
-                <div className="mx_SettingsTab_subsectionText">{ _t("Spaces are ways to group rooms and people.") }</div>
-
                 <div className="mx_SidebarUserSettingsTab_subheading">{ _t("Spaces to show") }</div>
                 <div className="mx_SettingsTab_subsectionText">
-                    { _t("Along with the spaces you're in, you can use some pre-built ones too.") }
+                    { _t("Spaces are ways to group rooms and people. " +
+                        "Alongside the spaces you're in, you can use some pre-built ones too.") }
                 </div>
 
                 <StyledCheckbox
                     checked={!!homeEnabled}
                     onChange={onMetaSpaceChangeFactory(MetaSpace.Home)}
                     className="mx_SidebarUserSettingsTab_homeCheckbox"
+                    disabled={homeEnabled}
                 >
                     { _t("Home") }
                 </StyledCheckbox>
@@ -91,7 +90,7 @@ const SidebarUserSettingsTab = () => {
                     { _t("Favourites") }
                 </StyledCheckbox>
                 <div className="mx_SidebarUserSettingsTab_checkboxMicrocopy">
-                    { _t("Automatically group all your favourite rooms and people together in one place.") }
+                    { _t("Group all your favourite rooms and people in one place.") }
                 </div>
 
                 <StyledCheckbox
@@ -102,7 +101,7 @@ const SidebarUserSettingsTab = () => {
                     { _t("People") }
                 </StyledCheckbox>
                 <div className="mx_SidebarUserSettingsTab_checkboxMicrocopy">
-                    { _t("Automatically group all your people together in one place.") }
+                    { _t("Group all your people in one place.") }
                 </div>
 
                 <StyledCheckbox
@@ -113,7 +112,7 @@ const SidebarUserSettingsTab = () => {
                     { _t("Rooms outside of a space") }
                 </StyledCheckbox>
                 <div className="mx_SidebarUserSettingsTab_checkboxMicrocopy">
-                    { _t("Automatically group all your rooms that aren't part of a space in one place.") }
+                    { _t("Group all your rooms that aren't part of a space in one place.") }
                 </div>
             </div>
         </div>
