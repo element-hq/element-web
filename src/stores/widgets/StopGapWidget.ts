@@ -255,8 +255,11 @@ export class StopGapWidget extends EventEmitter {
             });
         }
     };
-
-    public start(iframe: HTMLIFrameElement) {
+    /**
+     * This starts the messaging for the widget if it is not in the state `started` yet.
+     * @param iframe the iframe the widget should use
+     */
+    public startMessaging(iframe: HTMLIFrameElement): any {
         if (this.started) return;
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
         const driver = new StopGapWidgetDriver(allowedCapabilities, this.mockWidget, this.kind, this.roomId);
@@ -407,7 +410,12 @@ export class StopGapWidget extends EventEmitter {
         }
     }
 
-    public stop(opts = { forceDestroy: false }) {
+    /**
+     * Stops the widget messaging for if it is started. Skips stopping if it is an active
+     * widget.
+     * @param opts
+     */
+    public stopMessaging(opts = { forceDestroy: false }) {
         if (!opts?.forceDestroy && ActiveWidgetStore.instance.getPersistentWidgetId() === this.mockWidget.id) {
             logger.log("Skipping destroy - persistent widget");
             return;

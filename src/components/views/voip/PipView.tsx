@@ -30,7 +30,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import PictureInPictureDragger from './PictureInPictureDragger';
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
-import { Container, WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
+import { WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
 import CallViewHeader from './CallView/CallViewHeader';
 import ActiveWidgetStore, { ActiveWidgetStoreEvent } from '../../../stores/ActiveWidgetStore';
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
@@ -242,9 +242,7 @@ export default class PipView extends React.Component<IProps, IState> {
 
         let userIsPartOfTheRoom = false;
         let fromAnotherRoom = false;
-        let notInRightPanel = false;
-        let notInCenterContainer = false;
-        let notInTopContainer = false;
+        let notVisible = false;
         if (wId) {
             const persistentWidgetInRoomId = ActiveWidgetStore.instance.getRoomId(wId);
             const persistentWidgetInRoom = MatrixClientPeg.get().getRoom(persistentWidgetInRoomId);
@@ -254,24 +252,16 @@ export default class PipView extends React.Component<IProps, IState> {
             if (!persistentWidgetInRoom) return null;
 
             const wls = WidgetLayoutStore.instance;
-
+            notVisible = !wls.isVisibleOnScreen(persistentWidgetInRoom, wId);
             userIsPartOfTheRoom = persistentWidgetInRoom.getMyMembership() == "join";
             fromAnotherRoom = this.state.viewedRoomId !== persistentWidgetInRoomId;
-
-            notInRightPanel =
-                !(RightPanelStore.instance.currentCard.phase == RightPanelPhases.Widget &&
-                    wId == RightPanelStore.instance.currentCard.state?.widgetId);
-            notInCenterContainer =
-                !wls.getContainerWidgets(persistentWidgetInRoom, Container.Center).some((app) => app.id == wId);
-            notInTopContainer =
-                !wls.getContainerWidgets(persistentWidgetInRoom, Container.Top).some(app => app.id == wId);
         }
 
         // The widget should only be shown as a persistent app (in a floating pip container) if it is not visible on screen
         // either, because we are viewing a different room OR because it is in none of the possible containers of the room view.
         const showWidgetInPip =
             (fromAnotherRoom && userIsPartOfTheRoom) ||
-            (notInRightPanel && notInCenterContainer && notInTopContainer && userIsPartOfTheRoom);
+            (notVisible && userIsPartOfTheRoom);
 
         this.setState({ showWidgetInPip });
     }

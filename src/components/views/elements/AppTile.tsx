@@ -23,6 +23,7 @@ import classNames from 'classnames';
 import { MatrixCapabilities } from "matrix-widget-api";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
+import { EventSubscription } from 'fbemitter';
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import AccessibleButton from './AccessibleButton';
@@ -46,6 +47,7 @@ import { IApp } from "../../../stores/WidgetStore";
 import { WidgetLayoutStore, Container } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from '../../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
+import RoomViewStore from '../../../stores/RoomViewStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 
 interface IProps {
@@ -117,6 +119,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private persistKey: string;
     private sgWidget: StopGapWidget;
     private dispatcherRef: string;
+    private roomStoreToken: EventSubscription;
 
     constructor(props: IProps) {
         super(props);
@@ -135,9 +138,6 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         this.state = this.getNewState(props);
-        this.watchUserReady();
-
-        this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
     }
 
     private watchUserReady = () => {
@@ -161,6 +161,29 @@ export default class AppTile extends React.Component<IProps, IState> {
             return props.userId === props.creatorUserId;
         }
         return !!currentlyAllowedWidgets[props.app.eventId];
+    };
+
+    private onWidgetLayoutChange = () => {
+        const room = MatrixClientPeg.get().getRoom(this.props.room.roomId);
+        const app = this.props.app;
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(app.id);
+        const isVisibleOnScreen = WidgetLayoutStore.instance.isVisibleOnScreen(room, app.id);
+        if (!isVisibleOnScreen && !isActiveWidget) {
+            ActiveWidgetStore.instance.destroyPersistentWidget(app.id);
+            PersistedElement.destroyElement(this.persistKey);
+            this.sgWidget?.stopMessaging();
+        }
+    };
+
+    private onRoomViewStoreUpdate = () => {
+        if (this.props.room.roomId == RoomViewStore.getRoomId()) return;
+        const app = this.props.app;
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(app.id);
+        if (!isActiveWidget) {
+            ActiveWidgetStore.instance.destroyPersistentWidget(app.id);
+            PersistedElement.destroyElement(this.persistKey);
+            this.sgWidget?.stopMessaging();
+        }
     };
 
     /**
@@ -195,7 +218,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             // Force the widget to be non-persistent (able to be deleted/forgotten)
             ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
             PersistedElement.destroyElement(this.persistKey);
-            if (this.sgWidget) this.sgWidget.stop();
+            this.sgWidget?.stopMessaging();
         }
 
         this.setState({ hasPermissionToLoad });
@@ -218,7 +241,11 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.sgWidget && this.state.hasPermissionToLoad) {
             this.startWidget();
         }
+        this.watchUserReady();
 
+        WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.onWidgetLayoutChange);
+        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
         // Widget action listeners
         this.dispatcherRef = dis.register(this.onAction);
     }
@@ -227,24 +254,14 @@ export default class AppTile extends React.Component<IProps, IState> {
         // Widget action listeners
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
-        // if it's not remaining on screen, get rid of the PersistedElement container
-        if (!ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id)) {
-            ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
-            PersistedElement.destroyElement(this.persistKey);
-        }
-
-        if (this.sgWidget) {
-            this.sgWidget.stop();
-        }
-
+        WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.onWidgetLayoutChange);
+        this.roomStoreToken?.remove();
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 
     private resetWidget(newProps: IProps): void {
-        if (this.sgWidget) {
-            this.sgWidget.stop();
-        }
+        this.sgWidget?.stopMessaging();
         try {
             this.sgWidget = new StopGapWidget(newProps);
             this.sgWidget.on("preparing", this.onWidgetPreparing);
@@ -266,9 +283,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.iframe = ref;
         if (ref) {
             try {
-                if (this.sgWidget) {
-                    this.sgWidget.start(ref);
-                }
+                this.sgWidget?.startMessaging(ref);
             } catch (e) {
                 logger.error("Failed to start widget", e);
             }
@@ -321,7 +336,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         PersistedElement.destroyElement(this.persistKey);
         ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
 
-        if (this.sgWidget) this.sgWidget.stop({ forceDestroy: true });
+        this.sgWidget?.stopMessaging({ forceDestroy: true });
     }
 
     private onWidgetPreparing = (): void => {
@@ -532,7 +547,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     // Also wrap the PersistedElement in a div to fix the height, otherwise
                     // AppTile's border is in the wrong place
 
-                    // For persistent apps in PiP we want the zIndex to be higher then for other persistent apps (100)
+                    // For persisted apps in PiP we want the zIndex to be higher then for other persisted apps (100)
                     // otherwise there are issues that the PiP view is drawn UNDER another widget (Persistent app) when dragged around.
                     const zIndexAboveOtherPersistentElements = 101;
 
@@ -569,6 +584,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 />
             );
         }
+
         let maxMinButton;
         if (!this.props.hideMaximiseButton) {
             const widgetIsMaximised = WidgetLayoutStore.instance.

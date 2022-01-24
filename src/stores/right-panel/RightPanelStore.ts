@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { EventSubscription } from 'fbemitter';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import defaultDispatcher from '../../dispatcher/dispatcher';
@@ -21,7 +22,6 @@ import { pendingVerificationRequestForUser } from '../../verification';
 import SettingsStore from "../../settings/SettingsStore";
 import { RightPanelPhases } from "./RightPanelStorePhases";
 import { ActionPayload } from "../../dispatcher/payloads";
-import { Action } from '../../dispatcher/actions';
 import { SettingLevel } from "../../settings/SettingLevel";
 import { UPDATE_EVENT } from '../AsyncStore';
 import { ReadyWatchingStore } from '../ReadyWatchingStore';
@@ -32,19 +32,13 @@ import {
     IRightPanelForRoom,
 } from './RightPanelStoreIPanelState';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
-// import RoomViewStore from '../RoomViewStore';
+import RoomViewStore from '../RoomViewStore';
 
 const GROUP_PHASES = [
     RightPanelPhases.GroupMemberList,
     RightPanelPhases.GroupRoomList,
     RightPanelPhases.GroupRoomInfo,
     RightPanelPhases.GroupMemberInfo,
-];
-
-const MEMBER_INFO_PHASES = [
-    RightPanelPhases.RoomMemberInfo,
-    RightPanelPhases.Room3pidMemberInfo,
-    RightPanelPhases.EncryptionPanel,
 ];
 
 /**
@@ -68,6 +62,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
         [roomId: string]: IRightPanelForRoom;
     } = {};
 
+    private roomStoreToken: EventSubscription;
+
     private constructor() {
         super(defaultDispatcher);
         this.dispatcherRefRightPanelStore = defaultDispatcher.register(this.onDispatch);
@@ -75,9 +71,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     protected async onReady(): Promise<any> {
         this.isReady = true;
-        // TODO RightPanelStore (will be addressed when dropping groups): This should be used instead of the onDispatch callback when groups are removed.
-        // RoomViewStore.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         MatrixClientPeg.get().on("crypto.verification.request", this.onVerificationRequestUpdate);
+        this.viewedRoomId = RoomViewStore.getRoomId();
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();
     }
@@ -91,8 +87,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     protected async onNotReady(): Promise<any> {
         this.isReady = false;
         MatrixClientPeg.get().off("crypto.verification.request", this.onVerificationRequestUpdate);
-        // TODO RightPanelStore (will be addressed when dropping groups): User this instead of the dispatcher.
-        // RoomViewStore.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        this.roomStoreToken.remove();
     }
 
     // Getters
@@ -373,45 +368,43 @@ export default class RightPanelStore extends ReadyWatchingStore {
     };
 
     onRoomViewStoreUpdate = () => {
-        // TODO: use this function instead of the onDispatch (the whole onDispatch can get removed!) as soon groups are removed
-        // this.viewedRoomId = RoomViewStore.getRoomId();
-        // this.isViewingRoom = true; // Is viewing room will of course be removed when removing groups
-        // // load values from byRoomCache with the viewedRoomId.
-        // this.loadCacheFromSettings();
+        // TODO: only use this function instead of the onDispatch (the whole onDispatch can get removed!) as soon groups are removed
+        this.viewedRoomId = RoomViewStore.getRoomId();
+        this.isViewingRoom = true; // Is viewing room will of course be removed when removing groups
+        // load values from byRoomCache with the viewedRoomId.
+        this.loadCacheFromSettings();
+        this.emitAndUpdateSettings();
     };
 
     onDispatch = (payload: ActionPayload) => {
         switch (payload.action) {
-            case 'view_group':
-            case Action.ViewRoom: {
+            case 'view_group': {
                 if (payload.room_id === this.viewedRoomId) break; // skip this transition, probably a permalink
 
                 // Put group in the same/similar view to what was open from the previously viewed room
                 // Is contradictory to the new "per room" philosophy but it is the legacy behavior for groups.
-                if ((this.isViewingRoom ? Action.ViewRoom : "view_group") != payload.action) {
-                    if (payload.action == Action.ViewRoom && MEMBER_INFO_PHASES.includes(this.currentCard?.phase)) {
-                        // switch from group to room
-                        this.setRightPanelCache({ phase: RightPanelPhases.RoomMemberList, state: {} });
-                    } else if (
-                        payload.action == "view_group" &&
-                        this.currentCard?.phase === RightPanelPhases.GroupMemberInfo
-                    ) {
-                        // switch from room to group
-                        this.setRightPanelCache({ phase: RightPanelPhases.GroupMemberList, state: {} });
-                    }
+
+                if (
+                    this.currentCard?.phase === RightPanelPhases.GroupMemberInfo
+                ) {
+                    // switch from room to group
+                    this.setRightPanelCache({ phase: RightPanelPhases.GroupMemberList, state: {} });
                 }
 
                 // Update the current room here, so that all the other functions dont need to be room dependant.
                 // The right panel store always will return the state for the current room.
                 this.viewedRoomId = payload.room_id;
-                this.isViewingRoom = payload.action == Action.ViewRoom;
+                this.isViewingRoom = false;
                 // load values from byRoomCache with the viewedRoomId.
                 if (this.isReady) {
                     // we need the client to be ready to get the events form the ids of the settings
                     // the loading will be done in the onReady function (to catch up with the changes done here before it was ready)
                     // all the logic in this case is not necessary anymore as soon as groups are dropped and we use: onRoomViewStoreUpdate
                     this.loadCacheFromSettings();
-                    this.emitAndUpdateSettings();
+
+                    // DO NOT EMIT. Emitting breaks iframe refs by triggering a render
+                    // for the room view and calling the iframe ref changed function
+                    // this.emitAndUpdateSettings();
                 }
                 break;
             }
