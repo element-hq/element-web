@@ -378,27 +378,25 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
         let permalink: string | null = null;
         let permalinkButton: ReactElement | null = null;
-        if (canShare(mxEvent)) {
-            if (this.props.permalinkCreator) {
-                permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
-            }
-            permalinkButton = (
-                <IconizedContextMenuOption
-                    iconClassName="mx_MessageContextMenu_iconPermalink"
-                    onClick={this.onPermalinkClick}
-                    label={_t('Share')}
-                    element="a"
-                    {
-                        // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
-                        ...{
-                            href: permalink,
-                            target: "_blank",
-                            rel: "noreferrer noopener",
-                        }
-                    }
-                />
-            );
+        if (this.props.permalinkCreator) {
+            permalink = this.props.permalinkCreator.forEvent(this.props.mxEvent.getId());
         }
+        permalinkButton = (
+            <IconizedContextMenuOption
+                iconClassName="mx_MessageContextMenu_iconPermalink"
+                onClick={this.onPermalinkClick}
+                label={_t('Share')}
+                element="a"
+                {
+                    // XXX: Typescript signature for AccessibleButton doesn't work properly for non-inputs like `a`
+                    ...{
+                        href: permalink,
+                        target: "_blank",
+                        rel: "noreferrer noopener",
+                    }
+                }
+            />
+        );
 
         if (this.canEndPoll(mxEvent)) {
             endPollButton = (
@@ -516,10 +514,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 }
 
 function canForward(event: MatrixEvent): boolean {
-    return !isLocationEvent(event);
-}
-
-function canShare(event: MatrixEvent): boolean {
     return !isLocationEvent(event);
 }
 
