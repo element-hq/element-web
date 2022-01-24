@@ -3,6 +3,7 @@ Copyright 2016 Aviral Dasgupta
 Copyright 2016 OpenMarket Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 Copyright 2018 - 2021 New Vector Ltd
+Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,10 +35,8 @@ import Modal from "matrix-react-sdk/src/Modal";
 import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
 import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
 import {
-    Categories,
-    CMD_OR_CTRL,
+    CategoryName,
     DIGITS,
-    Modifiers,
     registerShortcut,
 } from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
 import { isOnlyCtrlOrCmdKeyEvent, Key } from "matrix-react-sdk/src/Keyboard";
@@ -287,43 +286,50 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         // register OS-specific shortcuts
-        registerShortcut(Categories.NAVIGATION, {
-            keybinds: [{
-                modifiers: [CMD_OR_CTRL],
+        registerShortcut("KeyBinding.switchToSpaceByNumber", CategoryName.NAVIGATION, {
+            default: {
+                ctrlOrCmdKey: true,
                 key: DIGITS,
-            }],
-            description: _td("Switch to space by number"),
+            },
+            displayName: _td("Switch to space by number"),
         });
 
         if (isMac) {
-            registerShortcut(Categories.NAVIGATION, {
-                keybinds: [{
-                    modifiers: [Modifiers.COMMAND],
+            registerShortcut("KeyBinding.openUserSettings", CategoryName.NAVIGATION, {
+                default: {
+                    commandKey: true,
                     key: Key.COMMA,
-                }],
-                description: _td("Open user settings"),
+                },
+                displayName: _td("Open user settings"),
             });
-
-            registerShortcut(Categories.NAVIGATION, {
-                keybinds: [{
-                    modifiers: [Modifiers.COMMAND],
+            registerShortcut("KeyBinding.previousVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+                default: {
+                    commandKey: true,
                     key: Key.SQUARE_BRACKET_LEFT,
-                }, {
-                    modifiers: [Modifiers.COMMAND],
+                },
+                displayName: _td("Previous recently visited room or community"),
+            });
+            registerShortcut("KeyBinding.nextVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+                default: {
+                    commandKey: true,
                     key: Key.SQUARE_BRACKET_RIGHT,
-                }],
-                description: _td("Previous/next recently visited room or community"),
+                },
+                displayName: _td("Next recently visited room or community"),
             });
         } else {
-            registerShortcut(Categories.NAVIGATION, {
-                keybinds: [{
-                    modifiers: [Modifiers.ALT],
+            registerShortcut("KeyBinding.previousVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+                default: {
+                    altKey: true,
                     key: Key.ARROW_LEFT,
-                }, {
-                    modifiers: [Modifiers.ALT],
+                },
+                displayName: _td("Previous recently visited room or community"),
+            });
+            registerShortcut("KeyBinding.nextVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+                default: {
+                    altKey: true,
                     key: Key.ARROW_RIGHT,
-                }],
-                description: _td("Previous/next recently visited room or community"),
+                },
+                displayName: _td("Next recently visited room or community"),
             });
         }
 
