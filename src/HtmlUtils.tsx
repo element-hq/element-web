@@ -209,11 +209,19 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             return { tagName, attribs: {} };
         }
 
-        const width = Math.min(Number(attribs.width) || 800, 800);
-        const height = Math.min(Number(attribs.height) || 600, 600);
+        const requestedWidth = Number(attribs.width);
+        const requestedHeight = Number(attribs.height);
+        const width = Math.min(requestedWidth || 800, 800);
+        const height = Math.min(requestedHeight || 600, 600);
         // specify width/height as max values instead of absolute ones to allow object-fit to do its thing
         // we only allow our own styles for this tag so overwrite the attribute
         attribs.style = `max-width: ${width}px; max-height: ${height}px;`;
+        if (requestedWidth) {
+            attribs.style += "width: 100%;";
+        }
+        if (requestedHeight) {
+            attribs.style += "height: 100%;";
+        }
 
         attribs.src = mediaFromMxc(src).getThumbnailOfSourceHttp(width, height);
         return { tagName, attribs };
