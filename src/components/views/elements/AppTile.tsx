@@ -46,6 +46,7 @@ import { IApp } from "../../../stores/WidgetStore";
 import { WidgetLayoutStore, Container } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from '../../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
+import WidgetUtils from '../../../utils/WidgetUtils';
 
 interface IProps {
     app: IApp;
@@ -471,6 +472,9 @@ export default class AppTile extends React.Component<IProps, IState> {
                 <Spinner message={_t("Loading...")} />
             </div>
         );
+
+        const widgetTitle = WidgetUtils.getWidgetName(this.props.app);
+
         if (this.sgWidget === null) {
             appTileBody = (
                 <div className={appTileBodyClass} style={appTileBodyStyles}>
@@ -509,6 +513,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                     <div className={appTileBodyClass + (this.state.loading ? 'mx_AppLoading' : '')} style={appTileBodyStyles}>
                         { this.state.loading && loadingElement }
                         <iframe
+                            title={widgetTitle}
                             allow={iframeFeatures}
                             ref={this.iframeRefChange}
                             src={this.sgWidget.embedUrl}

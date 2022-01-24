@@ -101,6 +101,6 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
             );
         }
 
-        return <iframe src={this.props.url} onError={this.onError} />;
+        return <iframe title={_t("Integration manager")} src={this.props.url} onError={this.onError} />;
     }
 }

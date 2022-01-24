@@ -272,6 +272,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
                             be suitable to just remove this bit of code.
                          */ }
                         <iframe
+                            aria-hidden
+                            title={presentableTextForFile(this.content, _t("Attachment"), true, true)}
                             src={url}
                             onLoad={() => this.downloadFile(this.fileName, this.linkText)}
                             ref={this.iframe}

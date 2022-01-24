@@ -281,6 +281,12 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                             }
                             { !this.state.error &&
                                 <iframe
+                                    title={_t(
+                                        "Upgrade to %(hostSignupBrand)s",
+                                        {
+                                            hostSignupBrand: this.config.brand,
+                                        },
+                                    )}
                                     src={this.config.url}
                                     ref={this.iframeRef}
                                     sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
