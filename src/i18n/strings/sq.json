@@ -3554,5 +3554,6 @@
     "%(senderName)s has shared their location": "%(senderName)s tregoi vendndodhjen e vet",
     "You don't have permission to view messages from before you joined.": "S’keni leje të shihni mesazhe nga koha para se të merrnit pjesë.",
     "You don't have permission to view messages from before you were invited.": "S’keni leje të shihni mesazhe nga koha para se t’ju ftonin.",
-    "Internal room ID": "ID e brendshme dhome"
+    "Internal room ID": "ID e brendshme dhome",
+    "Encrypted messages before this point are unavailable.": "S’mund të kihen më mesazhe të fshehtëzuar para kësaj pike."
 }
