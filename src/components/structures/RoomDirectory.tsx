@@ -611,21 +611,14 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                 className="mx_RoomDirectory_roomDescription"
             >
-                <div
-                    className="mx_RoomDirectory_name"
-                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                >
+                <div className="mx_RoomDirectory_name">
                     { name }
                 </div>&nbsp;
                 <div
                     className="mx_RoomDirectory_topic"
-                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
                     dangerouslySetInnerHTML={{ __html: topic }}
                 />
-                <div
-                    className="mx_RoomDirectory_alias"
-                    onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                >
+                <div className="mx_RoomDirectory_alias">
                     { getDisplayAliasForRoom(room) }
                 </div>
             </div>
@@ -637,7 +630,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             </div>
             <div
                 onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                // cancel onMouseDown otherwise shift-clicking highlights text
                 className="mx_RoomDirectory_preview"
             >
                 { previewButton }
