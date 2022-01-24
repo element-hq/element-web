@@ -44,6 +44,12 @@ limitations under the License.
         outline: none;
         overflow-x: hidden;
 
+        // Force caret nodes to be selected in full so that they can be
+        // navigated through in a single keypress
+        .caretNode {
+            user-select: all;
+        }
+
         &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
             span.mx_UserPill, span.mx_RoomPill {
                 position: relative;
