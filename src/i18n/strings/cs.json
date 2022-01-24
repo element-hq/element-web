@@ -3108,7 +3108,7 @@
     "Rooms and spaces": "Místnosti a prostory",
     "Results": "Výsledky",
     "Enable encryption in settings.": "Povolte šifrování v nastavení.",
-    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Vaše soukromé zprávy jsou obvykle šifrované, ale tato místnost není. Obvykle je to způsobeno nepodporovaným zařízením nebo použitou metodou, například e-mailovými pozvánkami.",
+    "Your private messages are normally encrypted, but this room isn't. Usually this is due to an unsupported device or method being used, like email invites.": "Vaše soukromé zprávy jsou obvykle šifrované, ale tato místnost není. To je zpravidla způsobeno nepodporovaným zařízením nebo použitou metodou, například e-mailovými pozvánkami.",
     "To avoid these issues, create a <a>new public room</a> for the conversation you plan to have.": "Abyste se těmto problémům vyhnuli, vytvořte pro plánovanou konverzaci <a>novou veřejnou místnost</a>.",
     "<b>It's not recommended to make encrypted rooms public.</b> It will mean anyone can find and join the room, so anyone can read messages. You'll get none of the benefits of encryption. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nedoporučujeme šifrované místnosti zveřejňovat.</b> Znamená to, že místnost může kdokoli najít a připojit se k ní, takže si kdokoli může přečíst zprávy. Nezískáte tak žádnou z výhod šifrování. Šifrování zpráv ve veřejné místnosti zpomalí příjem a odesílání zpráv.",
     "Are you sure you want to make this encrypted room public?": "Jste si jisti, že chcete tuto šifrovanou místnost zveřejnit?",
