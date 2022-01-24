@@ -20,7 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
 import { IDestroyable } from "../../../utils/IDestroyable";
 import SpaceStore from "../../spaces/SpaceStore";
-import { MetaSpace, SpaceKey } from "../../spaces";
+import { isMetaSpace, MetaSpace, SpaceKey } from "../../spaces";
 import { setHasDiff } from "../../../utils/sets";
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -44,7 +44,7 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
         return SpaceStore.instance.isRoomInSpace(this.space, room.roomId);
     }
 
-    private onStoreUpdate = async (): Promise<void> => {
+    private onStoreUpdate = async (forceUpdate = false): Promise<void> => {
         const beforeRoomIds = this.roomIds;
         // clone the set as it may be mutated by the space store internally
         this.roomIds = new Set(SpaceStore.instance.getSpaceFilteredRoomIds(this.space));
@@ -54,10 +54,11 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
         this.userIds = new Set(SpaceStore.instance.getSpaceFilteredUserIds(this.space));
 
         const beforeShowPeopleInSpace = this.showPeopleInSpace;
-        this.showPeopleInSpace = this.space[0] !== "!" ||
+        this.showPeopleInSpace = isMetaSpace(this.space[0]) ||
             SettingsStore.getValue("Spaces.showPeopleInSpace", this.space);
 
-        if (beforeShowPeopleInSpace !== this.showPeopleInSpace ||
+        if (forceUpdate ||
+            beforeShowPeopleInSpace !== this.showPeopleInSpace ||
             setHasDiff(beforeRoomIds, this.roomIds) ||
             setHasDiff(beforeUserIds, this.userIds)
         ) {
@@ -73,7 +74,7 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
     public updateSpace(space: SpaceKey) {
         SpaceStore.instance.off(this.space, this.onStoreUpdate);
         SpaceStore.instance.on(this.space = space, this.onStoreUpdate);
-        this.onStoreUpdate(); // initial update from the change to the space
+        this.onStoreUpdate(true); // initial update from the change to the space
     }
 
     public destroy(): void {
