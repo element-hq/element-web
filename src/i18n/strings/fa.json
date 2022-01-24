@@ -2855,5 +2855,10 @@
     "You cannot place calls in this browser.": "شما نمیتوانید در این مرورگر تماس برقرار کنید.",
     "Calls are unsupported": "تماس ها پشتیبانی نمی شوند",
     "Some examples of the information being sent to us to help make %(brand)s better includes:": "چند مثال از اطلاعاتی که برای ما ارسال میشه تا کمک کنه %(brand)s بهتری بسازیم شامل :",
-    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "خط مشی کامل ما در مورد کوکی <CookiePolicyLink> اینجا </CookiePolicyLink> قابل مشاهده است."
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "خط مشی کامل ما در مورد کوکی <CookiePolicyLink> اینجا </CookiePolicyLink> قابل مشاهده است.",
+    "No active call in this room": "تماس فعالی در این اتفاق وجود ندارد",
+    "Unable to find Matrix ID for phone number": "ناتوانی در ییافتن شناسه ماتریکس برای شماره تلفن",
+    "Removes user with given id from this room": "کاربر دارای شناسه ارائه شده از این اتاق حذف می‌شود",
+    "Unrecognised room address: %(roomAlias)s": "نشانی اتاق غیرقابل شناسایی:",
+    "Command error: Unable to handle slash command.": "خطای دستور: ناتوانی در اجرای دستور اسلش."
 }
