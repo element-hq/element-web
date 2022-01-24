@@ -2266,5 +2266,7 @@
     "%(senderName)s removed %(targetName)s": "%(senderName)s usunął %(targetName)s",
     "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s usunął %(targetName)s: %(reason)s",
     "%(senderName)s withdrew %(targetName)s's invitation": "%(senderName)s cofnął zaproszenie %(targetName)s",
-    "%(senderName)s withdrew %(targetName)s's invitation: %(reason)s": "%(senderName)s cofnął zaproszenie %(targetName)s: %(reason)s"
+    "%(senderName)s withdrew %(targetName)s's invitation: %(reason)s": "%(senderName)s cofnął zaproszenie %(targetName)s: %(reason)s",
+    "%(senderName)s has ended a poll": "%(senderName)s zakończył ankietę",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s utworzył ankietę - %(pollQuestion)s"
 }
