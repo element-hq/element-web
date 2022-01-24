@@ -34,5 +34,7 @@
     "Your Element is misconfigured": "Element jest nieprawidłowo skonfigurowany",
     "Powered by Matrix": "Zasilane przez Matrix",
     "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie",
-    "Switch to space by number": "Przełącz na przestrzeń według numeru"
+    "Switch to space by number": "Przełącz na przestrzeń według numeru",
+    "Next recently visited room or community": "Następne ostatnio odwiedzone pokoje i społeczności",
+    "Previous recently visited room or community": "Ostatnio odwiedzone pokoje i społeczności"
 }
