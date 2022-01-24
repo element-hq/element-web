@@ -3536,7 +3536,7 @@
     "Manage pinned events": "",
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "",
     "Along with the spaces you're in, you can use some pre-built ones too.": "",
-    "Waiting for you to verify on your other device…": "",
+    "Waiting for you to verify on your other device…": "Esperando a que verifiques en tu otro dispositivo…",
     "Waiting for you to verify on your other device, %(deviceName)s (%(deviceId)s)…": "",
     "From a thread": "Desde un hilo",
     "Back to thread": "Volver al hilo",
@@ -3548,5 +3548,7 @@
     "Keyboard": "Teclado",
     "%(senderName)s has ended a poll": "%(senderName)s ha terminado una encuesta",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s ha empezado una encuesta – %(pollQuestion)s",
-    "%(senderName)s has shared their location": "%(senderName)s ha compartido su ubicación"
+    "%(senderName)s has shared their location": "%(senderName)s ha compartido su ubicación",
+    "Show extensible event representation of events": "Mostrar una representación extensible de los eventos",
+    "Let moderators hide messages pending moderation.": "Permitir a los moderadores ocultar mensajes a la espera de revisión."
 }
