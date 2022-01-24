@@ -2272,5 +2272,6 @@
     "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Dodaj użytkowników i serwery tutaj które chcesz ignorować. Użyj znaku gwiazdki (*) żeby %(brand)s zgadzał się z każdym znakiem. Na przykład, <code>@bot:*</code> może ignorować wszystkich użytkowników którzy mają nazwę 'bot' na każdym serwerze.",
     "Lock": "Zamek",
     "Don't send read receipts": "Nie wysyłaj potwierdzeń przeczytania",
-    "%(senderName)s has shared their location": "%(senderName)s udostępnił swoją lokalizację"
+    "%(senderName)s has shared their location": "%(senderName)s udostępnił swoją lokalizację",
+    "Location sharing (under active development)": "Udostępnianie lokalizacji (wczesny dostęp)"
 }
