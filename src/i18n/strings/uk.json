@@ -3524,5 +3524,11 @@
     "Encrypted messages before this point are unavailable.": "Зашифровані повідомлення до цієї точки недоступні.",
     "You don't have permission to view messages from before you joined.": "Ви не маєте дозволу на перегляд повідомлень, давніших за ваше приєднання.",
     "You don't have permission to view messages from before you were invited.": "Ви не маєте дозволу на перегляд повідомлень, давніших за ваше запрошення.",
-    "Internal room ID": "Внутрішній ID кімнати"
+    "Internal room ID": "Внутрішній ID кімнати",
+    "Previous autocomplete suggestion": "Попередня пропозиція автодоповнення",
+    "Next autocomplete suggestion": "Наступна пропозиція автодоповнення",
+    "Previous room or DM": "Попередня кімната або особисте повідомлення",
+    "Next room or DM": "Наступна кімната або особисте повідомлення",
+    "Previous unread room or DM": "Попередня непрочитана кімната або особисте повідомлення",
+    "Next unread room or DM": "Наступна непрочитана кімната або особисте повідомлення"
 }
