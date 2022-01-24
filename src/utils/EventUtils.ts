@@ -213,7 +213,7 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
     // Info messages are basically information about commands processed on a room
     let isBubbleMessage = (
         eventType.startsWith("m.key.verification") ||
-        (eventType === EventType.RoomMessage && msgtype && msgtype.startsWith("m.key.verification")) ||
+        (eventType === EventType.RoomMessage && msgtype?.startsWith("m.key.verification")) ||
         (eventType === EventType.RoomCreate) ||
         (eventType === EventType.RoomEncryption) ||
         (tileHandler === "messages.MJitsiWidgetEvent")
@@ -232,6 +232,7 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
     );
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent = (
+        (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
         M_POLL_START.matches(eventType) ||
         LOCATION_EVENT_TYPE.matches(eventType) ||
         (

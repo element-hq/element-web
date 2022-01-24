@@ -1122,6 +1122,10 @@ export default class EventTile extends React.Component<IProps, IState> {
         const lineClasses = classNames("mx_EventTile_line", {
             mx_EventTile_mediaLine: isProbablyMedia,
             mx_EventTile_sticker: this.props.mxEvent.getType() === EventType.Sticker,
+            mx_EventTile_emote: (
+                this.props.mxEvent.getType() === EventType.RoomMessage &&
+                this.props.mxEvent.getContent().msgtype === MsgType.Emote
+            ),
         });
 
         const isSending = (['sending', 'queued', 'encrypting'].indexOf(this.props.eventSendStatus) !== -1);
