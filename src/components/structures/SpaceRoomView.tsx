@@ -471,7 +471,7 @@ const SpaceLanding = ({ space }: { space: Room }) => {
     }
 
     const onMembersClick = () => {
-        RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomMemberList, state: { spaceId: space.roomId } });
+        RightPanelStore.instance.setCard({ phase: RightPanelPhases.SpaceMemberList });
     };
 
     return <div className="mx_SpaceRoomView_landing">
