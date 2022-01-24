@@ -303,7 +303,6 @@ export default class PipView extends React.Component<IProps, IState> {
             pipContent = ({ onStartMoving, _onResize }) =>
                 <div className={pipViewClasses}>
                     <CallViewHeader
-                        type={undefined}
                         onPipMouseDown={(event) => { onStartMoving(event); this.onStartMoving.bind(this)(); }}
                         pipMode={pipMode}
                         callRooms={[roomForWidget]}

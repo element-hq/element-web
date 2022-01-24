@@ -21,10 +21,13 @@ limitations under the License.
     align-items: center;
     justify-content: left;
     flex-shrink: 0;
-    cursor: pointer;
+
+    &.mx_CallViewHeader_pip {
+        cursor: pointer;
+    }
 }
 
-.mx_CallViewHeader_callType {
+.mx_CallViewHeader_text {
     font-size: 1.2rem;
     font-weight: bold;
     vertical-align: middle;
@@ -93,18 +96,7 @@ limitations under the License.
     margin-left: 4px;
 }
 
-.mx_CallViewHeader_callTypeSmall {
-    font-size: 12px;
-    color: $secondary-content;
-    line-height: initial;
-    height: 15px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 240px;
-}
-
-.mx_CallViewHeader_callTypeIcon {
+.mx_CallViewHeader_icon {
     display: inline-block;
     margin-right: 6px;
     height: 16px;
@@ -122,13 +114,6 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-size: contain;
         mask-position: center;
-    }
-
-    &.mx_CallViewHeader_callTypeIcon_voice::before {
         mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
-    }
-
-    &.mx_CallViewHeader_callTypeIcon_video::before {
-        mask-image: url('$(res)/img/element-icons/call/video-call.svg');
     }
 }

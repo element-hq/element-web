@@ -14,25 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { CallType } from 'matrix-js-sdk/src/webrtc/call';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import React from 'react';
-import classNames from 'classnames';
 
-import { _t, _td } from '../../../../languageHandler';
+import { _t } from '../../../../languageHandler';
 import RoomAvatar from '../../avatars/RoomAvatar';
 import dis from '../../../../dispatcher/dispatcher';
 import { Action } from '../../../../dispatcher/actions';
 import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
 
-const callTypeTranslationByType: Record<CallType, string> = {
-    [CallType.Video]: _td("Video Call"),
-    [CallType.Voice]: _td("Voice Call"),
-};
-
 interface CallViewHeaderProps {
     pipMode: boolean;
-    type?: CallType;
     callRooms?: Room[];
     onPipMouseDown: (event: React.MouseEvent<Element, MouseEvent>) => void;
 }
@@ -51,10 +43,10 @@ const onExpandClick = (roomId: string) => {
     });
 };
 
-type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode' | 'type'> & {
+type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode'> & {
     roomId: string;
 };
-const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, type, roomId }) => {
+const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, roomId }) => {
     return <div className="mx_CallViewHeader_controls">
         { !pipMode && <AccessibleTooltipButton
             className="mx_CallViewHeader_button mx_CallViewHeader_button_fullscreen"
@@ -77,47 +69,33 @@ const SecondaryCallInfo: React.FC<{ callRoom: Room }> = ({ callRoom }) => {
     </span>;
 };
 
-const CallTypeIcon: React.FC<{ type: CallType }> = ({ type }) => {
-    const classes = classNames({
-        'mx_CallViewHeader_callTypeIcon': true,
-        'mx_CallViewHeader_callTypeIcon_video': type === CallType.Video,
-        'mx_CallViewHeader_callTypeIcon_voice': type === CallType.Voice,
-    });
-    return <div className={classes} />;
-};
-
 const CallViewHeader: React.FC<CallViewHeaderProps> = ({
-    type,
     pipMode = false,
     callRooms = [],
     onPipMouseDown,
 }) => {
     const [callRoom, onHoldCallRoom] = callRooms;
-    const callTypeText = type ? _t(callTypeTranslationByType[type]) : _t("Widget");
-    const callRoomName = callRoom?.name;
-    const roomId = callRoom?.roomId;
+    const callRoomName = callRoom.name;
+    const { roomId } = callRoom;
 
     if (!pipMode) {
         return <div className="mx_CallViewHeader">
-            <CallTypeIcon type={type} />
-            <span className="mx_CallViewHeader_callType">{ callTypeText }</span>
-            <CallViewHeaderControls roomId={roomId} pipMode={pipMode} type={type} />
+            <div className="mx_CallViewHeader_icon" />
+            <span className="mx_CallViewHeader_text">{ _t("Call") }</span>
+            <CallViewHeaderControls roomId={roomId} pipMode={pipMode} />
         </div>;
     }
     return (
         <div
-            className="mx_CallViewHeader"
+            className="mx_CallViewHeader mx_CallViewHeader_pip"
             onMouseDown={onPipMouseDown}
         >
             <RoomAvatar room={callRoom} height={32} width={32} />
             <div className="mx_CallViewHeader_callInfo">
-                <div className="mx_CallViewHeader_roomName" title={callRoomName}>{ callRoomName }</div>
-                <div className="mx_CallViewHeader_callTypeSmall">
-                    { callTypeText }
-                    { onHoldCallRoom && <SecondaryCallInfo callRoom={onHoldCallRoom} /> }
-                </div>
+                <div className="mx_CallViewHeader_roomName">{ callRoomName }</div>
+                { onHoldCallRoom && <SecondaryCallInfo callRoom={onHoldCallRoom} /> }
             </div>
-            <CallViewHeaderControls roomId={roomId} pipMode={pipMode} type={type} />
+            <CallViewHeaderControls roomId={roomId} pipMode={pipMode} />
         </div>
     );
 };

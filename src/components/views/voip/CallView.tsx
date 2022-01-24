@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React, { createRef, CSSProperties } from 'react';
-import { CallEvent, CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
+import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import { CallFeed } from 'matrix-js-sdk/src/webrtc/callFeed';
 import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventTypes';
@@ -339,35 +339,38 @@ export default class CallView extends React.Component<IProps, IState> {
     };
 
     private renderCallControls(): JSX.Element {
-        // We don't support call upgrades (yet) so hide the video mute button in voice calls
-        const vidMuteButtonShown = this.props.call.type === CallType.Video;
+        const { call, pipMode } = this.props;
+        const { primaryFeed, callState, micMuted, vidMuted, screensharing, sidebarShown } = this.state;
+
+        // If SDPStreamMetadata isn't supported don't show video mute button in voice calls
+        const vidMuteButtonShown = call.opponentSupportsSDPStreamMetadata() || call.hasLocalUserMediaVideoTrack;
         // Screensharing is possible, if we can send a second stream and
         // identify it using SDPStreamMetadata or if we can replace the already
         // existing usermedia track by a screensharing track. We also need to be
         // connected to know the state of the other side
         const screensharingButtonShown = (
-            (this.props.call.opponentSupportsSDPStreamMetadata() || this.props.call.type === CallType.Video) &&
-            this.props.call.state === CallState.Connected
+            (call.opponentSupportsSDPStreamMetadata() || call.hasLocalUserMediaVideoTrack) &&
+            call.state === CallState.Connected
         );
         // To show the sidebar we need secondary feeds, if we don't have them,
         // we can hide this button. If we are in PiP, sidebar is also hidden, so
         // we can hide the button too
         const sidebarButtonShown = (
-            this.state.primaryFeed?.purpose === SDPStreamMetadataPurpose.Screenshare ||
-            this.props.call.isScreensharing()
+            primaryFeed?.purpose === SDPStreamMetadataPurpose.Screenshare ||
+            call.isScreensharing()
         );
         // The dial pad & 'more' button actions are only relevant in a connected call
-        const contextMenuButtonShown = this.state.callState === CallState.Connected;
+        const contextMenuButtonShown = callState === CallState.Connected;
         const dialpadButtonShown = (
-            this.state.callState === CallState.Connected &&
-            this.props.call.opponentSupportsDTMF()
+            callState === CallState.Connected &&
+            call.opponentSupportsDTMF()
         );
 
         return (
             <CallViewButtons
                 ref={this.buttonsRef}
-                call={this.props.call}
-                pipMode={this.props.pipMode}
+                call={call}
+                pipMode={pipMode}
                 handlers={{
                     onToggleSidebarClick: this.onToggleSidebar,
                     onScreenshareClick: this.onScreenshareClick,
@@ -376,10 +379,10 @@ export default class CallView extends React.Component<IProps, IState> {
                     onVidMuteClick: this.onVidMuteClick,
                 }}
                 buttonsState={{
-                    micMuted: this.state.micMuted,
-                    vidMuted: this.state.vidMuted,
-                    sidebarShown: this.state.sidebarShown,
-                    screensharing: this.state.screensharing,
+                    micMuted: micMuted,
+                    vidMuted: vidMuted,
+                    sidebarShown: sidebarShown,
+                    screensharing: screensharing,
                 }}
                 buttonsVisibility={{
                     vidMute: vidMuteButtonShown,
@@ -406,7 +409,7 @@ export default class CallView extends React.Component<IProps, IState> {
         const someoneIsScreensharing = this.props.call.getFeeds().some((feed) => {
             return feed.purpose === SDPStreamMetadataPurpose.Screenshare;
         });
-        const isVideoCall = this.props.call.type === CallType.Video;
+        const call = this.props.call;
 
         let contentView: React.ReactNode;
         let holdTransferContent;
@@ -461,7 +464,7 @@ export default class CallView extends React.Component<IProps, IState> {
             !isOnHold &&
             !transfereeCall &&
             sidebarShown &&
-            (isVideoCall || someoneIsScreensharing)
+            (call.hasLocalUserMediaVideoTrack || someoneIsScreensharing)
         ) {
             sidebar = (
                 <CallViewSidebar
@@ -474,7 +477,7 @@ export default class CallView extends React.Component<IProps, IState> {
 
         // This is a bit messy. I can't see a reason to have two onHold/transfer screens
         if (isOnHold || transfereeCall) {
-            if (isVideoCall) {
+            if (call.hasLocalUserMediaVideoTrack || call.hasRemoteUserMediaVideoTrack) {
                 const containerClasses = classNames({
                     mx_CallView_content: true,
                     mx_CallView_video: true,
@@ -569,7 +572,7 @@ export default class CallView extends React.Component<IProps, IState> {
                 let text = isScreensharing
                     ? _t("You are presenting")
                     : _t('%(sharerName)s is presenting', { sharerName });
-                if (!this.state.sidebarShown && isVideoCall) {
+                if (!this.state.sidebarShown) {
                     text += " • " + (this.props.call.isLocalVideoMuted()
                         ? _t("Your camera is turned off")
                         : _t("Your camera is still enabled"));
@@ -613,7 +616,6 @@ export default class CallView extends React.Component<IProps, IState> {
             <CallViewHeader
                 onPipMouseDown={this.props.onMouseDownOnHeader}
                 pipMode={this.props.pipMode}
-                type={this.props.call.type}
                 callRooms={[callRoom, secCallRoom]}
             />
             { contentView }
