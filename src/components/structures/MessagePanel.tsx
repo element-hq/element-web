@@ -289,6 +289,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if (prevProps.layout !== this.props.layout) {
+            this.calculateRoomMembersCount();
+        }
+
         if (prevProps.readMarkerVisible && this.props.readMarkerEventId !== prevProps.readMarkerEventId) {
             const ghostReadMarkers = this.state.ghostReadMarkers;
             ghostReadMarkers.push(prevProps.readMarkerEventId);
