@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,35 +27,4 @@ limitations under the License.
 .mx_HelpUserSettingsTab code {
     word-break: break-all;
     user-select: all;
-}
-
-.mx_HelpUserSettingsTab_copy {
-    display: flex;
-    border-radius: 5px;
-    border: solid 1px $light-fg-color;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding: 10px;
-    width: max-content;
-    max-width: 100%;
-
-    .mx_HelpUserSettingsTab_copyButton {
-        flex-shrink: 0;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        margin-left: 20px;
-        display: block;
-
-        &::before {
-            content: "";
-
-            mask-image: url($copy-button-url);
-            background-color: $message-action-bar-fg-color;
-            width: 20px;
-            height: 20px;
-            display: block;
-            background-repeat: no-repeat;
-        }
-    }
 }

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from '../../../../../dispatcher/actions';
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
+import CopyableText from "../../../elements/CopyableText";
 
 interface IProps {
     roomId: string;
@@ -149,8 +150,10 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                         { room?.isSpaceRoom() ? _t("Space information") : _t("Room information") }
                     </span>
                     <div>
-                        <span>{ _t("Internal room ID:") }</span>&nbsp;
-                        { this.props.roomId }
+                        <span>{ _t("Internal room ID") }</span>
+                        <CopyableText getTextToCopy={() => this.props.roomId}>
+                            { this.props.roomId }
+                        </CopyableText>
                     </div>
                     { unfederatableSection }
                 </div>
