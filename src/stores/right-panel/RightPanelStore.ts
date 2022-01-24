@@ -368,6 +368,21 @@ export default class RightPanelStore extends ReadyWatchingStore {
         this.isViewingRoom = true; // Is viewing room will of course be removed when removing groups
         // load values from byRoomCache with the viewedRoomId.
         this.loadCacheFromSettings();
+        // If the right panel stays open mode is used, and the panel was either
+        // closed or never shown for that room, then force it open and display
+        // the room member list.
+        if (
+            SettingsStore.getValue("feature_right_panel_default_open") &&
+            !this.byRoom[this.viewedRoomId]?.isOpen
+        ) {
+            this.byRoom[this.viewedRoomId] = {
+                isOpen: true,
+                history: [
+                    { phase: RightPanelPhases.RoomSummary },
+                    { phase: RightPanelPhases.RoomMemberList },
+                ],
+            };
+        }
         this.emitAndUpdateSettings();
     };
 
