@@ -3508,5 +3508,21 @@
     "Space home": "Домівка простору",
     "%(senderName)s has ended a poll": "%(senderName)s завершує опитування",
     "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s починає опитування - %(pollQuestion)s",
-    "%(senderName)s has shared their location": "%(senderName)s поширює своє місцеперебування"
+    "%(senderName)s has shared their location": "%(senderName)s поширює своє місцеперебування",
+    "Navigate down in the room list": "Перейти вниз списку кімнат",
+    "Navigate up in the room list": "Перейти вгору списку кімнат",
+    "Scroll down in the timeline": "Гортати стрічку вниз",
+    "Scroll up in the timeline": "Гортати стрічку вгору",
+    "Toggle webcam on/off": "Увімкнути/вимкнути вебкамеру",
+    "Navigate to previous message in composer history": "Перейти до попереднього повідомлення в історії редактора",
+    "Navigate to next message in composer history": "Перейти до наступного повідомлення в історії редактора",
+    "Jump to end of the composer": "Перейти в кінець редактора",
+    "Jump to start of the composer": "Перейти на початок редактора",
+    "Navigate to previous message to edit": "Перейти до попереднього повідомлення для редагування",
+    "Navigate to next message to edit": "Перейти до наступного повідомлення для редагування",
+    "You can't see earlier messages": "Ви не можете переглядати давніші повідомлення",
+    "Encrypted messages before this point are unavailable.": "Зашифровані повідомлення до цієї точки недоступні.",
+    "You don't have permission to view messages from before you joined.": "Ви не маєте дозволу на перегляд повідомлень, давніших за ваше приєднання.",
+    "You don't have permission to view messages from before you were invited.": "Ви не маєте дозволу на перегляд повідомлень, давніших за ваше запрошення.",
+    "Internal room ID": "Внутрішній ID кімнати"
 }
