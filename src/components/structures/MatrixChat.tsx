@@ -1354,7 +1354,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         StorageManager.tryPersistStorage();
 
-        if (PosthogAnalytics.instance.isEnabled()) {
+        if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
         } else if (Analytics.canEnable() || CountlyAnalytics.instance.canEnable()) {
             if (SettingsStore.getValue("showCookieBar") &&
