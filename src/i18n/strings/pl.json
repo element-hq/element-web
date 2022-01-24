@@ -2268,5 +2268,9 @@
     "%(senderName)s withdrew %(targetName)s's invitation": "%(senderName)s cofnął zaproszenie %(targetName)s",
     "%(senderName)s withdrew %(targetName)s's invitation: %(reason)s": "%(senderName)s cofnął zaproszenie %(targetName)s: %(reason)s",
     "%(senderName)s has ended a poll": "%(senderName)s zakończył ankietę",
-    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s utworzył ankietę - %(pollQuestion)s"
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s utworzył ankietę - %(pollQuestion)s",
+    "Add users and servers you want to ignore here. Use asterisks to have %(brand)s match any characters. For example, <code>@bot:*</code> would ignore all users that have the name 'bot' on any server.": "Dodaj użytkowników i serwery tutaj które chcesz ignorować. Użyj znaku gwiazdki (*) żeby %(brand)s zgadzał się z każdym znakiem. Na przykład, <code>@bot:*</code> może ignorować wszystkich użytkowników którzy mają nazwę 'bot' na każdym serwerze.",
+    "Lock": "Zamek",
+    "Don't send read receipts": "Nie wysyłaj potwierdzeń przeczytania",
+    "%(senderName)s has shared their location": "%(senderName)s udostępnił swoją lokalizację"
 }
