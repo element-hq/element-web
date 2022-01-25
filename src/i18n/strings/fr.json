@@ -3561,5 +3561,11 @@
     "You can't see earlier messages": "Vous ne pouvez pas voir les messages plus anciens",
     "Encrypted messages before this point are unavailable.": "Les messages chiffrés avant ce point sont inaccessibles.",
     "You don't have permission to view messages from before you joined.": "Vous n’avez pas l’autorisation de voir les messages antérieurs à votre arrivée.",
-    "You don't have permission to view messages from before you were invited.": "Vous n’avez pas l’autorisation de voir les messages antérieurs à votre invitation."
+    "You don't have permission to view messages from before you were invited.": "Vous n’avez pas l’autorisation de voir les messages antérieurs à votre invitation.",
+    "Group all your people in one place.": "Regrouper toutes vos connaissances au même endroit.",
+    "Group all your favourite rooms and people in one place.": "Regroupez tous vos salons et personnes préférés au même endroit.",
+    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Les espaces permettent de regrouper des salons et des personnes. En plus de ceux auxquels vous participez, vous pouvez également utiliser des espaces prédéfinis.",
+    "IRC (Experimental)": "IRC (Expérimental)",
+    "Call": "Appel",
+    "Right panel stays open (defaults to room member list)": "Le panneau de droite reste ouvert (avec par défaut la liste des membres du salon)"
 }
