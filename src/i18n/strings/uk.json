@@ -3536,5 +3536,6 @@
     "Group all your people in one place.": "Групуйте всіх своїх людей в одному місці.",
     "Group all your favourite rooms and people in one place.": "Групуйте всі свої улюблені кімнати та людей в одному місці.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Простори — це спосіб групування кімнат і людей. Окрім просторів, до яких ви приєдналися, ви також можете використовувати деякі вбудовані.",
-    "Right panel stays open (defaults to room member list)": "Права панель залишається відкритою (типово для списку учасників кімнат)"
+    "Right panel stays open (defaults to room member list)": "Права панель залишається відкритою (типово для списку учасників кімнат)",
+    "IRC (Experimental)": "IRC (Експериментально)"
 }
