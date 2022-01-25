@@ -245,7 +245,7 @@ export const options = {
 // Run the plugins
 registerPlugin(Type.RoomAlias, ({ scanner, parser, utils }) => {
     const token = scanner.tokens.POUND as '#';
-    return matrixOpaqueIdLinkifyParser({
+    matrixOpaqueIdLinkifyParser({
         scanner,
         parser,
         utils,
@@ -256,7 +256,7 @@ registerPlugin(Type.RoomAlias, ({ scanner, parser, utils }) => {
 
 registerPlugin(Type.GroupId, ({ scanner, parser, utils }) => {
     const token = scanner.tokens.PLUS as '+';
-    return matrixOpaqueIdLinkifyParser({
+    matrixOpaqueIdLinkifyParser({
         scanner,
         parser,
         utils,
@@ -267,7 +267,7 @@ registerPlugin(Type.GroupId, ({ scanner, parser, utils }) => {
 
 registerPlugin(Type.UserId, ({ scanner, parser, utils }) => {
     const token = scanner.tokens.AT as '@';
-    return matrixOpaqueIdLinkifyParser({
+    matrixOpaqueIdLinkifyParser({
         scanner,
         parser,
         utils,

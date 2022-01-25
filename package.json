@@ -60,7 +60,7 @@
     "@babel/runtime": "^7.12.5",
     "@matrix-org/linkify-element": "^4.0.0-rc.5",
     "@matrix-org/linkify-string": "^4.0.0-rc.5",
-    "@matrix-org/linkifyjs": "^4.0.0-rc.5",
+    "@matrix-org/linkifyjs": "^4.0.0-rc.6",
     "@sentry/browser": "^6.11.0",
     "@sentry/tracing": "^6.11.0",
     "@types/geojson": "^7946.0.8",
