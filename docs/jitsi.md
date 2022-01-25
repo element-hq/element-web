@@ -16,6 +16,10 @@ provide their own approaches for adding Jitsi widgets.
 
 ## Configuring Element to use your self-hosted Jitsi server
 
+You can host your own Jitsi server to use with Element. It's usually advisable to use a recent
+version of Jitsi. In particular, versions older than around 6826 will cause problems with
+Element 1.9.10 or newer.
+
 Element will use the Jitsi server that is embedded in the widget, even if it is not the
 one you configured. This is because conference calls must be held on a single Jitsi
 server and cannot be split over multiple servers.
@@ -30,8 +34,8 @@ to your [config](./config.md) the following:
 }
 ```
 
-The default is `meet.element.io` (a free service offered by Element), and the demo site for
-Jitsi uses `meet.jit.si` (also free).
+Element's default is `meet.element.io` (a free service offered by Element). `meet.jit.si`
+is an instance hosted by Jitsi themselves and is also free to use.
 
 Once you've applied the config change, refresh Element and press the call button. This
 should start a new conference on your Jitsi server.
