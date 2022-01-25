@@ -124,12 +124,13 @@ const useSpaceResults = (space?: Room, query?: string): [IHierarchyRoom[], boole
     const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
 
     const resetHierarchy = useCallback(() => {
-        const hierarchy = new RoomHierarchy(space, 50);
-        setHierarchy(hierarchy);
+        setHierarchy(space ? new RoomHierarchy(space, 50) : null);
     }, [space]);
     useEffect(resetHierarchy, [resetHierarchy]);
 
     useEffect(() => {
+        if (!space || !hierarchy) return; // nothing to load
+
         let unmounted = false;
 
         (async () => {
@@ -361,7 +362,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
         let recentSearchesSection: JSX.Element;
         if (recentSearches.length) {
             recentSearchesSection = (
-                <div className="mx_SpotlightDialog_section mx_SpotlightDialog_recentSearches" role="group">
+                <div
+                    className="mx_SpotlightDialog_section mx_SpotlightDialog_recentSearches"
+                    role="group"
+                    // Firefox sometimes makes this element focusable due to overflow,
+                    // so force it out of tab order by default.
+                    tabIndex={-1}
+                >
                     <h4>
                         { _t("Recent searches") }
                         <AccessibleButton kind="link" onClick={clearRecentSearches}>
@@ -403,7 +410,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                                     viewRoom(room.roomId);
                                 }}
                             >
-                                <DecoratedRoomAvatar room={room} avatarSize={32} />
+                                <DecoratedRoomAvatar room={room} avatarSize={32} tooltipProps={{ tabIndex: -1 }} />
                                 { room.name }
                             </TooltipOption>
                         ))
