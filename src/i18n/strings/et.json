@@ -3569,5 +3569,18 @@
     "Navigate to next message to edit": "Muutmiseks liigu järgmise sõnumi juurde",
     "Internal room ID": "Jututoa sisemine tunnus",
     "Group all your rooms that aren't part of a space in one place.": "Koonda ühte kohta kõik oma jututoad, mis ei kuulu mõnda kogukonda.",
-    "Right panel stays open (defaults to room member list)": "Parempoolne paan jääb avatuks (vaikimisi on seal jututoas osalejate loend)"
+    "Right panel stays open (defaults to room member list)": "Parempoolne paan jääb avatuks (vaikimisi on seal jututoas osalejate loend)",
+    "Previous autocomplete suggestion": "Eelmine sisestussoovitus",
+    "Next autocomplete suggestion": "Järgmine sisestussoovitus",
+    "Previous room or DM": "Eelmine otsevestlus või jututuba",
+    "Next room or DM": "Järgmine otsevestlus või jututuba",
+    "Previous unread room or DM": "Eelmine lugemata otsevestlus või jututuba",
+    "Next unread room or DM": "Järgmine lugemata otsevestlus või jututuba",
+    "Navigate to previous message in composer history": "Mine muutmisvaate ajaloos eelmise sõnumi juurde",
+    "Navigate to next message in composer history": "Mine muutmisvaate ajaloos järgmise sõnumi juurde",
+    "Unable to check if username has been taken. Try again later.": "Kasutajanime saadavust ei õnnestu kontrollida. Palun proovi hiljem uuesti.",
+    "Group all your people in one place.": "Koonda oma olulised sõbrad ühte kohta.",
+    "Group all your favourite rooms and people in one place.": "Koonda oma olulised sõbrad ning lemmikjututoad ühte kohta.",
+    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Kogukonnakeskused on kasutajate ja jututubade koondamise viis. Lisaks kogukonnakeskustele, mille liiga sa oled, võid sa kasutada ka eelseadistatud kogukonnakeskusi.",
+    "IRC (Experimental)": "IRC (katseline)"
 }
