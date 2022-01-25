@@ -2939,6 +2939,7 @@
     "Other users can invite you to rooms using your contact details": "Other users can invite you to rooms using your contact details",
     "Enter phone number (required on this homeserver)": "Enter phone number (required on this homeserver)",
     "Use lowercase letters, numbers, dashes and underscores only": "Use lowercase letters, numbers, dashes and underscores only",
+    "Unable to check if username has been taken. Try again later.": "Unable to check if username has been taken. Try again later.",
     "Someone already has that username. Try another or if it is you, sign in below.": "Someone already has that username. Try another or if it is you, sign in below.",
     "Phone (optional)": "Phone (optional)",
     "Register": "Register",

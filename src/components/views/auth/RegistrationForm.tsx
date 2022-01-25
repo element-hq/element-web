@@ -44,6 +44,13 @@ enum RegistrationField {
     PasswordConfirm = "field_password_confirm",
 }
 
+enum UsernameAvailableStatus {
+    Unknown,
+    Available,
+    Unavailable,
+    Error,
+}
+
 export const PASSWORD_MIN_SCORE = 3; // safely unguessable: moderate protection from offline slow-hash scenario.
 
 interface IProps {
@@ -348,13 +355,25 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
         return result;
     };
 
-    private validateUsernameRules = withValidation({
+    private validateUsernameRules = withValidation<this, UsernameAvailableStatus>({
         description: (_, results) => {
             // omit the description if the only failing result is the `available` one as it makes no sense for it.
             if (results.every(({ key, valid }) => key === "available" || valid)) return;
             return _t("Use lowercase letters, numbers, dashes and underscores only");
         },
         hideDescriptionIfValid: true,
+        async deriveData(this: RegistrationForm, { value }) {
+            if (!value) {
+                return UsernameAvailableStatus.Unknown;
+            }
+
+            try {
+                const available = await this.props.matrixClient.isUsernameAvailable(value);
+                return available ? UsernameAvailableStatus.Available : UsernameAvailableStatus.Unavailable;
+            } catch (err) {
+                return UsernameAvailableStatus.Error;
+            }
+        },
         rules: [
             {
                 key: "required",
@@ -369,19 +388,16 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             {
                 key: "available",
                 final: true,
-                test: async ({ value }) => {
+                test: async ({ value }, usernameAvailable) => {
                     if (!value) {
                         return true;
                     }
 
-                    try {
-                        await this.props.matrixClient.isUsernameAvailable(value);
-                        return true;
-                    } catch (err) {
-                        return false;
-                    }
+                    return usernameAvailable === UsernameAvailableStatus.Available;
                 },
-                invalid: () => _t("Someone already has that username. Try another or if it is you, sign in below."),
+                invalid: (usernameAvailable) => usernameAvailable === UsernameAvailableStatus.Error
+                    ? _t("Unable to check if username has been taken. Try again later.")
+                    : _t("Someone already has that username. Try another or if it is you, sign in below."),
             },
         ],
     });
