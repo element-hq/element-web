@@ -126,10 +126,6 @@ and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
 
-## New layout switcher (with message bubbles) (`feature_new_layout_switcher`)
-
-Adds a "Message layout" section under `Settings -> Appearance`, where the user can select their preferred message layout (e.g. IRC or Modern). Additionally, adds a new "Message bubbles" layout.
-
 ## Metaspaces (`feature_spaces_metaspaces`) [In Development]
 
 Metaspaces are automatically populated spaces you can enable in your Space panel.
