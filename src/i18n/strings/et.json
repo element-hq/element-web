@@ -3557,5 +3557,17 @@
     "You can't see earlier messages": "Sa ei saa näha varasemaid sõnumeid",
     "Encrypted messages before this point are unavailable.": "Enne seda ajahetke saadetud krüptitud sõnumid pole saadaval.",
     "You don't have permission to view messages from before you joined.": "Sul pole õigusi vaadata enne liitumist saadetud sõnumeid.",
-    "You don't have permission to view messages from before you were invited.": "Sul pole õigusi vaadata enne kutse saatmist saadetud sõnumeid."
+    "You don't have permission to view messages from before you were invited.": "Sul pole õigusi vaadata enne kutse saatmist saadetud sõnumeid.",
+    "Navigate down in the room list": "Suundu jututubade loendis alla",
+    "Navigate up in the room list": "Suundu jututubade loendis üles",
+    "Scroll down in the timeline": "Liigu ajajoonel alla",
+    "Scroll up in the timeline": "Liigu ajajoonel üles",
+    "Toggle webcam on/off": "Lülita veebikaamera sisse/välja",
+    "Jump to end of the composer": "Hüppa sõnumite kirjutamise vaate lõppu",
+    "Jump to start of the composer": "Hüppa sõnumite kirjutamise vaate algusesse",
+    "Navigate to previous message to edit": "Muutmiseks liigu eelmise sõnumi juurde",
+    "Navigate to next message to edit": "Muutmiseks liigu järgmise sõnumi juurde",
+    "Internal room ID": "Jututoa sisemine tunnus",
+    "Group all your rooms that aren't part of a space in one place.": "Koonda ühte kohta kõik oma jututoad, mis ei kuulu mõnda kogukonda.",
+    "Right panel stays open (defaults to room member list)": "Parempoolne paan jääb avatuks (vaikimisi on seal jututoas osalejate loend)"
 }
