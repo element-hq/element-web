@@ -34,9 +34,9 @@ import InviteReason from "../elements/InviteReason";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
-import { UIFeature } from "../../../settings/UIFeature";
-import SettingsStore from "../../../settings/SettingsStore";
 import RoomAvatar from "../avatars/RoomAvatar";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIFeature } from "../../../settings/UIFeature";
 
 const MemberEventHtmlReasonField = "io.element.html_reason";
 

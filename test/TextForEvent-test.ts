@@ -5,7 +5,14 @@ import renderer from 'react-test-renderer';
 
 import { getSenderName, textForEvent } from "../src/TextForEvent";
 import SettingsStore from "../src/settings/SettingsStore";
-import { SettingLevel } from "../src/settings/SettingLevel";
+import { createTestClient } from './test-utils';
+import { MatrixClientPeg } from '../src/MatrixClientPeg';
+import UserIdentifierCustomisations from '../src/customisations/UserIdentifier';
+
+jest.mock("../src/settings/SettingsStore");
+jest.mock('../src/customisations/UserIdentifier', () => ({
+    getDisplayUserIdentifier: jest.fn().mockImplementation(userId => userId),
+}));
 
 function mockPinnedEvent(
     pinnedMessageIds?: string[],
@@ -67,7 +74,10 @@ describe('TextForEvent', () => {
     });
 
     describe("TextForPinnedEvent", () => {
-        SettingsStore.setValue("feature_pinning", null, SettingLevel.DEVICE, true);
+        beforeAll(() => {
+            // enable feature_pinning setting
+            (SettingsStore.getValue as jest.Mock).mockImplementation(feature => feature === 'feature_pinning');
+        });
 
         it("mentions message when a single message was pinned, with no previously pinned messages", () => {
             const event = mockPinnedEvent(['message-1']);
@@ -141,6 +151,11 @@ describe('TextForEvent', () => {
     });
 
     describe("textForPowerEvent()", () => {
+        let mockClient;
+        const mockRoom = {
+            getMember: jest.fn(),
+        };
+
         const userA = {
             id: '@a',
             name: 'Alice',
@@ -175,7 +190,23 @@ describe('TextForEvent', () => {
             },
         });
 
-        it("returns empty string when no users have changed power level", () => {
+        beforeAll(() => {
+            mockClient = createTestClient();
+            MatrixClientPeg.get = () => mockClient;
+            mockClient.getRoom.mockClear().mockReturnValue(mockRoom);
+            mockRoom.getMember.mockClear().mockImplementation(
+                userId => [userA, userB, userC].find(u => u.id === userId),
+            );
+            (SettingsStore.getValue as jest.Mock).mockReturnValue(true);
+        });
+
+        beforeEach(() => {
+            (UserIdentifierCustomisations.getDisplayUserIdentifier as jest.Mock)
+                .mockClear()
+                .mockImplementation(userId => userId);
+        });
+
+        it("returns falsy when no users have changed power level", () => {
             const event = mockPowerEvent({
                 users: {
                     [userA.id]: 100,
@@ -187,7 +218,7 @@ describe('TextForEvent', () => {
             expect(textForEvent(event)).toBeFalsy();
         });
 
-        it("returns empty string when users power levels have been changed by default settings", () => {
+        it("returns false when users power levels have been changed by default settings", () => {
             const event = mockPowerEvent({
                 usersDefault: 100,
                 prevDefault: 50,
@@ -256,6 +287,24 @@ describe('TextForEvent', () => {
             const expectedText =
                 "@a changed the power level of @b from Moderator to Admin, @c from Custom (101) to Moderator.";
             expect(textForEvent(event)).toEqual(expectedText);
+        });
+
+        it("uses userIdentifier customisation", () => {
+            (UserIdentifierCustomisations.getDisplayUserIdentifier as jest.Mock)
+                .mockImplementation(userId => 'customised ' + userId);
+            const event = mockPowerEvent({
+                users: {
+                    [userB.id]: 100,
+                },
+                prevUsers: {
+                    [userB.id]: 50,
+                },
+            });
+            // uses customised user id
+            const expectedText = "@a changed the power level of customised @b from Moderator to Admin.";
+            expect(textForEvent(event)).toEqual(expectedText);
+            expect(UserIdentifierCustomisations.getDisplayUserIdentifier)
+                .toHaveBeenCalledWith(userB.id, { roomId: event.getRoomId() });
         });
     });
 

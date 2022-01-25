@@ -29,6 +29,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from '../elements/AccessibleButton';
 import AvatarSetting from './AvatarSetting';
 import ExternalLink from '../elements/ExternalLink';
+import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 
 interface IState {
     userId?: string;
@@ -162,7 +163,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
         const hostingSignupLink = getHostingLink('user-settings');
         let hostingSignup = null;
         if (hostingSignupLink) {
-            hostingSignup = <span className="mx_ProfileSettings_hostingSignup">
+            hostingSignup = <span>
                 { _t(
                     "<a>Upgrade</a> to your own domain", {},
                     {
@@ -173,6 +174,10 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                 ) }
             </span>;
         }
+
+        const userIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(
+            this.state.userId, { withDisplayName: true },
+        );
 
         return (
             <form
@@ -199,7 +204,9 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                             onChange={this.onDisplayNameChanged}
                         />
                         <p>
-                            { this.state.userId }
+                            { userIdentifier && <span className="mx_ProfileSettings_userId">
+                                { userIdentifier }
+                            </span> }
                             { hostingSignup }
                         </p>
                     </div>

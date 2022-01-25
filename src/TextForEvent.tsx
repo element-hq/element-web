@@ -44,6 +44,7 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { ROOM_SECURITY_TAB } from "./components/views/dialogs/RoomSettingsDialog";
 import AccessibleButton from './components/views/elements/AccessibleButton';
 import RightPanelStore from './stores/right-panel/RightPanelStore';
+import UserIdentifierCustomisations from './customisations/UserIdentifier';
 
 export function getSenderName(event: MatrixEvent): string {
     return event.sender?.name ?? event.getSender() ?? _t("Someone");
@@ -499,6 +500,7 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
             if (users.indexOf(userId) === -1) users.push(userId);
         },
     );
+
     const diffs = [];
     users.forEach((userId) => {
         // Previous power level
@@ -513,18 +515,20 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
         }
         if (from === previousUserDefault && to === currentUserDefault) { return; }
         if (to !== from) {
-            diffs.push({ userId, from, to });
+            const name = UserIdentifierCustomisations.getDisplayUserIdentifier(userId, { roomId: event.getRoomId() });
+            diffs.push({ userId, name, from, to });
         }
     });
     if (!diffs.length) {
         return null;
     }
+
     // XXX: This is also surely broken for i18n
     return () => _t('%(senderName)s changed the power level of %(powerLevelDiffText)s.', {
         senderName,
         powerLevelDiffText: diffs.map(diff =>
             _t('%(userId)s from %(fromPowerLevel)s to %(toPowerLevel)s', {
-                userId: diff.userId,
+                userId: diff.name,
                 fromPowerLevel: Roles.textualPowerLevel(diff.from, previousUserDefault),
                 toPowerLevel: Roles.textualPowerLevel(diff.to, currentUserDefault),
             }),

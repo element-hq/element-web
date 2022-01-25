@@ -67,6 +67,7 @@ const ConfirmSpaceUserActionDialog: React.FC<IProps> = ({
                 onFinished(success, reason, roomsToLeave);
             }}
             className="mx_ConfirmSpaceUserActionDialog"
+            roomId={space.roomId}
         >
             { warning }
             <SpaceChildrenPicker

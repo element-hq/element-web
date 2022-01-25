@@ -28,6 +28,7 @@ import BaseAvatar from '../avatars/BaseAvatar';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Field from '../elements/Field';
+import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 
 interface IProps {
     // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
@@ -46,6 +47,7 @@ interface IProps {
     danger?: boolean;
     children?: ReactNode;
     className?: string;
+    roomId?: string;
     onFinished: (success: boolean, reason?: string) => void;
 }
 
@@ -126,6 +128,10 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
             avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;
         }
 
+        const displayUserIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(
+            userId, { roomId: this.props.roomId, withDisplayName: true },
+        );
+
         return (
             <BaseDialog
                 className={classNames("mx_ConfirmUserActionDialog", this.props.className)}
@@ -139,7 +145,7 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
                             { avatar }
                         </div>
                         <div className="mx_ConfirmUserActionDialog_name">{ name }</div>
-                        <div className="mx_ConfirmUserActionDialog_userId">{ userId }</div>
+                        <div className="mx_ConfirmUserActionDialog_userId">{ displayUserIdentifier }</div>
                     </div>
 
                     { reasonBox }
