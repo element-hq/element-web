@@ -105,6 +105,11 @@ For a good example, see https://develop.element.io/config.json.
     1. `preferredDomain`: The domain name of the preferred Jitsi instance. Defaults
        to `meet.element.io`. This is used whenever a user clicks on the voice/video
        call buttons - integration managers may use a different domain.
+  This setting is ignored if your homeserver provides
+  `/.well-known/matrix/client` in its well-known location, and the JSON file
+  at that location has a key `m.vector.riot.jitsi`. In this case, the
+  configuration found in the well-known location is used instead.
+
 1. `enable_presence_by_hs_url`: The property key should be the URL of the homeserver
     and its value defines whether to enable/disable the presence status display
     from that homeserver. If no options are configured, presence is shown for all
@@ -154,6 +159,13 @@ For a good example, see https://develop.element.io/config.json.
    2. `environment`: (optional) The [Environment](https://docs.sentry.io/product/sentry-basics/environments/) to pass to sentry
 1. `map_style_url`: Map tile server style URL for location sharing. e.g.
    'https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE'
+  This setting is ignored if your homeserver provides
+  `/.well-known/matrix/client` in its well-known location, and the JSON file
+  at that location has a key `m.tile_server` (or the unstable version
+  `org.matrix.msc3488.tile_server`). In this case, the configuration found in
+  the well-known location is used instead.
+  Defaults to the tile server provided by matrix.org if missing from both
+  .well-known and this file.
 1. `analyticsOwner`: The entity that analytics data is being sent to. Used in copy
    when explaining to the user where data is being sent. If not set, defaults to `brand`.
 
