@@ -88,7 +88,7 @@ export default class LayoutSwitcher extends React.Component<IProps, IState> {
                             checked={this.state.layout === Layout.IRC}
                             onChange={this.onLayoutChange}
                         >
-                            { _t("IRC") }
+                            { _t("IRC (Experimental)") }
                         </StyledRadioButton>
                     </label>
                     <label className={groupClasses}>

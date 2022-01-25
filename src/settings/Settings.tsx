@@ -39,7 +39,6 @@ import { OrderedMultiController } from "./controllers/OrderedMultiController";
 import { Layout } from "./enums/Layout";
 import ReducedMotionController from './controllers/ReducedMotionController';
 import IncompatibleController from "./controllers/IncompatibleController";
-import NewLayoutSwitcherController from './controllers/NewLayoutSwitcherController';
 import { ImageSize } from "./enums/ImageSize";
 import { MetaSpace } from "../stores/spaces";
 
@@ -332,14 +331,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show info about bridges in room settings"),
         default: false,
-    },
-    "feature_new_layout_switcher": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("New layout switcher (with message bubbles)"),
-        default: false,
-        controller: new NewLayoutSwitcherController(),
     },
     "feature_spaces_metaspaces": {
         isFeature: true,

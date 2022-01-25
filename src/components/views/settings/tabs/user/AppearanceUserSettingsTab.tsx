@@ -21,7 +21,6 @@ import { _t } from "../../../../../languageHandler";
 import SdkConfig from "../../../../../SdkConfig";
 import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 import SettingsStore from "../../../../../settings/SettingsStore";
-import StyledCheckbox from '../../../elements/StyledCheckbox';
 import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
@@ -89,16 +88,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         this.setState({ layout: layout });
     };
 
-    private onIRCLayoutChange = (enabled: boolean) => {
-        if (enabled) {
-            this.setState({ layout: Layout.IRC });
-            SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
-        } else {
-            this.setState({ layout: Layout.Group });
-            SettingsStore.setValue("layout", null, SettingLevel.DEVICE, Layout.Group);
-        }
-    };
-
     private renderAdvancedSection() {
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
 
@@ -119,15 +108,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
             );
             advanced = <>
                 <SettingsFlag name="useCompactLayout" level={SettingLevel.DEVICE} useCheckbox={true} />
-
-                { !SettingsStore.getValue("feature_new_layout_switcher") ?
-                    <StyledCheckbox
-                        checked={this.state.layout == Layout.IRC}
-                        onChange={(ev) => this.onIRCLayoutChange(ev.target.checked)}
-                    >
-                        { _t("Enable experimental, compact IRC style layout") }
-                    </StyledCheckbox> : null
-                }
 
                 <SettingsFlag
                     name="useSystemFont"
@@ -161,19 +141,6 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
     render() {
         const brand = SdkConfig.get().brand;
 
-        let layoutSection;
-        if (SettingsStore.getValue("feature_new_layout_switcher")) {
-            layoutSection = (
-                <LayoutSwitcher
-                    userId={this.state.userId}
-                    displayName={this.state.displayName}
-                    avatarUrl={this.state.avatarUrl}
-                    messagePreviewText={this.MESSAGE_PREVIEW_TEXT}
-                    onLayoutChanged={this.onLayoutChanged}
-                />
-            );
-        }
-
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Customise your appearance") }</div>
@@ -181,7 +148,13 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
                     { _t("Appearance Settings only affect this %(brand)s session.", { brand }) }
                 </div>
                 <ThemeChoicePanel />
-                { layoutSection }
+                <LayoutSwitcher
+                    userId={this.state.userId}
+                    displayName={this.state.displayName}
+                    avatarUrl={this.state.avatarUrl}
+                    messagePreviewText={this.MESSAGE_PREVIEW_TEXT}
+                    onLayoutChanged={this.onLayoutChanged}
+                />
                 <FontScalingPanel />
                 { this.renderAdvancedSection() }
                 <ImageSizePanel />
