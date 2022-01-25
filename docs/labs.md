@@ -126,10 +126,6 @@ and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
 
-## New layout switcher (with message bubbles) (`feature_new_layout_switcher`)
-
-Adds a "Message layout" section under `Settings -> Appearance`, where the user can select their preferred message layout (e.g. IRC or Modern). Additionally, adds a new "Message bubbles" layout.
-
 ## Location sharing (`feature_location_share`) [In Development]
 
 Allows users to send and display location data using [maplibre](https://maplibre.org).
@@ -167,3 +163,12 @@ the sender is using unknown/unrecognised event types.
 
 Sending events with extensible events structure is always enabled - this should not affect any downstream
 client.
+
+## Right panel stays open (`feature_right_panel_default_open`)
+
+This is an experimental default open right panel mode as a quick fix for those
+who prefer to have the right panel open consistently across rooms.
+
+If no right panel state is known for the room or it was closed on the last room
+visit, it will default to the room member list. Otherwise, the saved card last
+used in that room is shown.
