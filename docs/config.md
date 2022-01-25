@@ -164,8 +164,6 @@ For a good example, see https://develop.element.io/config.json.
   at that location has a key `m.tile_server` (or the unstable version
   `org.matrix.msc3488.tile_server`). In this case, the configuration found in
   the well-known location is used instead.
-  Defaults to the tile server provided by matrix.org if missing from both
-  .well-known and this file.
 1. `analyticsOwner`: The entity that analytics data is being sent to. Used in copy
    when explaining to the user where data is being sent. If not set, defaults to `brand`.
 
