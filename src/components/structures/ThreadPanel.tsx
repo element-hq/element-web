@@ -88,7 +88,7 @@ async function getThreadTimelineSet(
         const timelineSet = new EventTimelineSet(room, {});
 
         Array.from(room.threads)
-            .sort(([, threadA], [, threadB]) => threadA.lastReply.getTs() - threadB.lastReply.getTs())
+            .sort(([, threadA], [, threadB]) => threadA.lastReply().getTs() - threadB.lastReply().getTs())
             .forEach(([, thread]) => {
                 const isOwnEvent = thread.rootEvent.getSender() === client.getUserId();
                 if (filterType !== ThreadFilterType.My || isOwnEvent) {

@@ -402,7 +402,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 
             thread,
             threadReplyCount: thread?.length,
-            threadLastReply: thread?.lastReply,
+            threadLastReply: thread?.lastReply(),
         };
 
         // don't do RR animations until we are mounted
@@ -556,7 +556,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         }
 
         this.setState({
-            threadLastReply: thread?.lastReply,
+            threadLastReply: thread?.lastReply(),
             threadReplyCount: thread?.length,
             thread,
         });
@@ -1271,7 +1271,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         // Thread panel shows the timestamp of the last reply in that thread
         const ts = this.props.tileShape !== TileShape.ThreadPanel
             ? this.props.mxEvent.getTs()
-            : thread?.lastReply.getTs();
+            : thread?.lastReply().getTs();
 
         const timestamp = showTimestamp && ts ?
             <MessageTimestamp

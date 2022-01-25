@@ -166,7 +166,9 @@ export default class ThreadView extends React.Component<IProps, IState> {
         if (thread && this.state.thread !== thread) {
             this.setState({
                 thread,
-                lastThreadReply: thread.lastReply,
+                lastThreadReply: thread.lastReply((ev: MatrixEvent) => {
+                    return !ev.status;
+                }),
             }, () => {
                 thread.emit(ThreadEvent.ViewThread);
                 this.timelinePanelRef.current?.refreshTimeline();
@@ -177,7 +179,9 @@ export default class ThreadView extends React.Component<IProps, IState> {
     private updateLastThreadReply = () => {
         if (this.state.thread) {
             this.setState({
-                lastThreadReply: this.state.thread.lastReply,
+                lastThreadReply: this.state.thread.lastReply((ev: MatrixEvent) => {
+                    return !ev.status;
+                }),
             });
         }
     };
