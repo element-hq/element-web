@@ -3580,5 +3580,10 @@
     "Navigate to previous message to edit": "Vai al precedente messaggio da modificare",
     "Navigate to next message to edit": "Vai al prossimo messaggio da modificare",
     "Internal room ID": "ID interno stanza",
-    "Call": "Chiama"
+    "Call": "Chiama",
+    "Group all your rooms that aren't part of a space in one place.": "Raggruppa tutte le tue stanze che non fanno parte di uno spazio in un unico posto.",
+    "Group all your people in one place.": "Raggruppa tutte le tue persone in un unico posto.",
+    "Group all your favourite rooms and people in one place.": "Raggruppa tutte le tue stanze e persone preferite in un unico posto.",
+    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Gli spazi sono modi per raggruppare stanze e persone. Oltre agli spazi in cui sei, puoi usarne anche altri di preimpostati.",
+    "Right panel stays open (defaults to room member list)": "Il pannello destro resta aperto (predefinito: lista membri)"
 }
