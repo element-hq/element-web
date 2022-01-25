@@ -520,7 +520,7 @@
     "Folder": "Mappe",
     "We couldn't log you in": "Vi kunne ikke logge dig ind",
     "Try again": "Prøv igen",
-    "Already in call": "",
+    "Already in call": "Allerede i et opkald",
     "You're already in a call with this person.": "Du har allerede i et opkald med denne person.",
     "Chile": "Chile",
     "Call failed because webcam or microphone could not be accessed. Check that:": "Opkald fejlede på grund af kamera og mikrofon ikke kunne nås. Tjek dette:",
@@ -559,5 +559,13 @@
     "Croatia": "Kroatien",
     "Answered Elsewhere": "Svaret andet sted",
     "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Hele vores cookie politik kan findes <CookiePolicyLink>her</CookiePolicyLink>.",
-    "You've reached the maximum number of simultaneous calls.": "Du er nået til det maskimale antal igang værende opkald på en gang"
+    "You've reached the maximum number of simultaneous calls.": "Du er nået til det maskimale antal igang værende opkald på en gang",
+    "You cannot place calls without a connection to the server.": "Du kan ikke lave et opkald uden en forbindelse til serveren.",
+    "Connectivity to the server has been lost": "Forbindelsen til serveren er tabt",
+    "You cannot place calls in this browser.": "Du kan ikke lave opkald i denne browser.",
+    "Calls are unsupported": "Opkald er ikke understøttet",
+    "The call was answered on another device.": "Opkaldet var svaret på en anden enhed.",
+    "The user you called is busy.": "Brugeren du ringede til er optaget.",
+    "User Busy": "Bruger optaget",
+    "Some examples of the information being sent to us to help make %(brand)s better includes:": "Nogle eksempler på information som bliver sendt til os for at gøre %(brand)s bedre indeholder:"
 }
