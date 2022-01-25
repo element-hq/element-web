@@ -3579,5 +3579,6 @@
     "Group all your favourite rooms and people in one place.": "Gruponi në një vend krejt dhomat tuaja të parapëlqyera dhe personat e parapëlqyer.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Hapësirat janë mënyra për të grupuar dhoma dhe njerëz. Tok me hapësirat ku gjendeni, mundeni të përdorni edhe disa të krijuara paraprakisht.",
     "IRC (Experimental)": "IRC (Eksperimentale)",
-    "Right panel stays open (defaults to room member list)": "Paneli djathtas mbetet hapur (si parazgjedhje, shfaq listën e anëtarëve të dhomës)"
+    "Right panel stays open (defaults to room member list)": "Paneli djathtas mbetet hapur (si parazgjedhje, shfaq listën e anëtarëve të dhomës)",
+    "Unable to check if username has been taken. Try again later.": "S’arrihet të kontrollohet nëse emri i përdoruesit është zënë. Riprovoni më vonë."
 }
