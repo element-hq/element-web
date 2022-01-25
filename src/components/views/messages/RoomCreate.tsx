@@ -29,6 +29,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 interface IProps {
     /* the MatrixEvent to show */
     mxEvent: MatrixEvent;
+    timestamp?: JSX.Element;
 }
 
 @replaceableComponent("views.messages.RoomCreate")
@@ -65,6 +66,7 @@ export default class RoomCreate extends React.Component<IProps> {
             className="mx_CreateEvent"
             title={_t("This room is a continuation of another conversation.")}
             subtitle={link}
+            timestamp={this.props.timestamp}
         />;
     }
 }

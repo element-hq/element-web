@@ -27,11 +27,12 @@ import { objectHasDiff } from "../../../utils/objects";
 
 interface IProps {
     mxEvent: MatrixEvent;
+    timestamp?: JSX.Element;
 }
 
 const ALGORITHM = "m.megolm.v1.aes-sha2";
 
-const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) => {
+const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent, timestamp }, ref) => {
     const cli = useContext(MatrixClientContext);
     const roomId = mxEvent.getRoomId();
     const isRoomEncrypted = MatrixClientPeg.get().isRoomEncrypted(roomId);
@@ -60,6 +61,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) =>
             className="mx_cryptoEvent mx_cryptoEvent_icon"
             title={_t("Encryption enabled")}
             subtitle={subtitle}
+            timestamp={timestamp}
         />;
     }
 
@@ -68,6 +70,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) =>
             className="mx_cryptoEvent mx_cryptoEvent_icon"
             title={_t("Encryption enabled")}
             subtitle={_t("Ignored attempt to disable encryption")}
+            timestamp={timestamp}
         />;
     }
 
@@ -76,6 +79,7 @@ const EncryptionEvent = forwardRef<HTMLDivElement, IProps>(({ mxEvent }, ref) =>
         title={_t("Encryption not enabled")}
         subtitle={_t("The encryption used by this room isn't supported.")}
         ref={ref}
+        timestamp={timestamp}
     />;
 });
 

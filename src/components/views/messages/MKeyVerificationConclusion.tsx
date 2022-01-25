@@ -29,6 +29,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 interface IProps {
     /* the MatrixEvent to show */
     mxEvent: MatrixEvent;
+    timestamp?: JSX.Element;
 }
 
 @replaceableComponent("views.messages.MKeyVerificationConclusion")
@@ -133,6 +134,7 @@ export default class MKeyVerificationConclusion extends React.Component<IProps> 
                 className={classes}
                 title={title}
                 subtitle={userLabelForEventRoom(request.otherUserId, mxEvent.getRoomId())}
+                timestamp={this.props.timestamp}
             />;
         }
 

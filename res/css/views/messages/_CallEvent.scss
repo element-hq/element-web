@@ -183,6 +183,10 @@ limitations under the License.
             }
         }
 
+        .mx_MessageTimestamp {
+            margin-left: 16px;
+        }
+
         &.mx_CallEvent_narrow {
             height: unset;
             width: 290px;

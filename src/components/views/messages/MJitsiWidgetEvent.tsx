@@ -26,6 +26,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     mxEvent: MatrixEvent;
+    timestamp?: JSX.Element;
 }
 
 @replaceableComponent("views.messages.MJitsiWidgetEvent")
@@ -54,6 +55,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
             return <EventTileBubble
                 className="mx_MJitsiWidgetEvent"
                 title={_t('Video conference ended by %(senderName)s', { senderName })}
+                timestamp={this.props.timestamp}
             />;
         } else if (prevUrl) {
             // modified
@@ -61,6 +63,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
                 className="mx_MJitsiWidgetEvent"
                 title={_t('Video conference updated by %(senderName)s', { senderName })}
                 subtitle={joinCopy}
+                timestamp={this.props.timestamp}
             />;
         } else {
             // assume added
@@ -68,6 +71,7 @@ export default class MJitsiWidgetEvent extends React.PureComponent<IProps> {
                 className="mx_MJitsiWidgetEvent"
                 title={_t("Video conference started by %(senderName)s", { senderName })}
                 subtitle={joinCopy}
+                timestamp={this.props.timestamp}
             />;
         }
     }

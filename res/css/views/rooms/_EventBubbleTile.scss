@@ -451,6 +451,14 @@ limitations under the License.
 }
 
 .mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
+.mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble] {
+    .mx_EventTile_line > a {
+        // hide this timestamp as the tile will render its own
+        display: none;
+    }
+}
+
+.mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
 .mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble],
 .mx_EventTile.mx_EventTile_info[data-layout=bubble],
 .mx_EventListSummary[data-layout=bubble][data-expanded=false] {

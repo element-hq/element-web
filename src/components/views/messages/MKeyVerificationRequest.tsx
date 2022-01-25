@@ -30,6 +30,7 @@ import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
 
 interface IProps {
     mxEvent: MatrixEvent;
+    timestamp?: JSX.Element;
 }
 
 @replaceableComponent("views.messages.MKeyVerificationRequest")
@@ -168,6 +169,7 @@ export default class MKeyVerificationRequest extends React.Component<IProps> {
                 className="mx_cryptoEvent mx_cryptoEvent_icon"
                 title={title}
                 subtitle={subtitle}
+                timestamp={this.props.timestamp}
             >
                 { stateNode }
             </EventTileBubble>;
