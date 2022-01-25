@@ -176,8 +176,9 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             attribs.target = '_blank'; // by default
 
             const transformed = tryTransformPermalinkToLocalHref(attribs.href); // only used to check if it is a link that can be handled locally
-            if (transformed !== attribs.href || // it could be converted so handle locally symbols e.g. @user:server.tdl, matrix: and matrix.to
-                attribs.href.match(ELEMENT_URL_PATTERN) // for https:vector|riot...
+            if (
+                transformed !== attribs.href || // it could be converted so handle locally symbols e.g. @user:server.tdl, matrix: and matrix.to
+                attribs.href.match(ELEMENT_URL_PATTERN) // for https links to Element domains
             ) {
                 delete attribs.target;
             }

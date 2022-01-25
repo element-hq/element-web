@@ -328,7 +328,7 @@ export function tryTransformEntityToPermalink(entity: string): string {
     if (!entity) return null;
 
     // Check to see if it is a bare entity for starters
-    {if (entity[0] === '#' || entity[0] === '!') return makeRoomPermalink(entity);}
+    if (entity[0] === '#' || entity[0] === '!') return makeRoomPermalink(entity);
     if (entity[0] === '@') return makeUserPermalink(entity);
     if (entity[0] === '+') return makeGroupPermalink(entity);
 

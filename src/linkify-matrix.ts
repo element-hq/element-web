@@ -21,7 +21,6 @@ import linkifyString from '@matrix-org/linkify-string';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { registerCustomProtocol, registerPlugin } from '@matrix-org/linkifyjs';
 
-//linkifyjs/src/core/fsm
 import { baseUrl } from "./utils/permalinks/MatrixToPermalinkConstructor";
 import {
     parsePermalink,
@@ -227,8 +226,9 @@ export const options = {
         if (type === Type.URL) {
             try {
                 const transformed = tryTransformPermalinkToLocalHref(href);
-                if (transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
-                    decodeURIComponent(href).match(ELEMENT_URL_PATTERN) // for https:vector|riot...
+                if (
+                    transformed !== href || // if it could be converted to handle locally for matrix symbols e.g. @user:server.tdl and matrix.to
+                    decodeURIComponent(href).match(ELEMENT_URL_PATTERN) // for https links to Element domains
                 ) {
                     return null;
                 } else {

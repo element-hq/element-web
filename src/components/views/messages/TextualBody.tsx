@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, SyntheticEvent } from 'react';
+import React, { createRef, SyntheticEvent, MouseEvent } from 'react';
 import ReactDOM from 'react-dom';
 import highlight from 'highlight.js';
 import { MsgType } from "matrix-js-sdk/src/@types/event";
@@ -31,7 +31,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import ReplyChain from "../elements/ReplyChain";
 import { pillifyLinks, unmountPills } from '../../../utils/pillify';
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
-import { isPermalinkHost } from "../../../utils/permalinks/Permalinks";
+import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../../utils/strings";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -47,6 +47,7 @@ import LinkPreviewGroup from '../rooms/LinkPreviewGroup';
 import { IBodyProps } from "./IBodyProps";
 import RoomContext from "../../../contexts/RoomContext";
 import AccessibleButton from '../elements/AccessibleButton';
+import { options as linkifyOpts } from "../../../linkify-matrix";
 
 const MAX_HIGHLIGHT_LENGTH = 4096;
 
@@ -418,6 +419,23 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         });
     };
 
+    /**
+     * This acts as a fallback in-app navigation handler for any body links that
+     * were ignored as part of linkification because they were already links
+     * to start with (e.g. pills, links in the content).
+     */
+    private onBodyLinkClick = (e: MouseEvent): void => {
+        const target = e.target as Element;
+        if (target.nodeName !== "A" || target.classList.contains(linkifyOpts.className)) return;
+        const { href } = target as HTMLLinkElement;
+        const localHref = tryTransformPermalinkToLocalHref(href);
+        if (localHref !== href) {
+            // it could be converted to a localHref -> therefore handle locally
+            e.preventDefault();
+            window.location.hash = localHref;
+        }
+    };
+
     public getEventTileOps = () => ({
         isWidgetHidden: () => {
             return this.state.widgetHidden;
@@ -606,7 +624,9 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         if (isEmote) {
             return (
-                <div className="mx_MEmoteBody mx_EventTile_content">
+                <div className="mx_MEmoteBody mx_EventTile_content"
+                    onClick={this.onBodyLinkClick}
+                >
                     *&nbsp;
                     <span
                         className="mx_MEmoteBody_sender"
@@ -622,14 +642,18 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         }
         if (isNotice) {
             return (
-                <div className="mx_MNoticeBody mx_EventTile_content">
+                <div className="mx_MNoticeBody mx_EventTile_content"
+                    onClick={this.onBodyLinkClick}
+                >
                     { body }
                     { widgets }
                 </div>
             );
         }
         return (
-            <div className="mx_MTextBody mx_EventTile_content">
+            <div className="mx_MTextBody mx_EventTile_content"
+                onClick={this.onBodyLinkClick}
+            >
                 { body }
                 { widgets }
             </div>
