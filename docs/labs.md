@@ -126,11 +126,6 @@ and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
 
-## Metaspaces (`feature_spaces_metaspaces`) [In Development]
-
-Metaspaces are automatically populated spaces you can enable in your Space panel.
-By default, you'll have Home or All rooms, but you can opt in to a People, Favourites, and Other Rooms metaspace too.
-
 ## Location sharing (`feature_location_share`) [In Development]
 
 Allows users to send and display location data using [maplibre](https://maplibre.org).
