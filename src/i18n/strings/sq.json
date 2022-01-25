@@ -3573,5 +3573,11 @@
     "Jump to start of the composer": "Hidhu te fillimi i hartuesit",
     "Navigate to previous message to edit": "Kaloni te mesazhi i mëparshëm për ta përpunuar",
     "Navigate to next message to edit": "Kaloni te mesazhi pasues për ta përpunuar",
-    "You can't see earlier messages": "S’mund të shihni mesazhe më të hershëm"
+    "You can't see earlier messages": "S’mund të shihni mesazhe më të hershëm",
+    "Group all your rooms that aren't part of a space in one place.": "Gruponi në një vend krejt dhomat tuaja që s’janë pjesë e një hapësire.",
+    "Group all your people in one place.": "Gruponi krejt personat tuaj në një vend.",
+    "Group all your favourite rooms and people in one place.": "Gruponi në një vend krejt dhomat tuaja të parapëlqyera dhe personat e parapëlqyer.",
+    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Hapësirat janë mënyra për të grupuar dhoma dhe njerëz. Tok me hapësirat ku gjendeni, mundeni të përdorni edhe disa të krijuara paraprakisht.",
+    "IRC (Experimental)": "IRC (Eksperimentale)",
+    "Right panel stays open (defaults to room member list)": "Paneli djathtas mbetet hapur (si parazgjedhje, shfaq listën e anëtarëve të dhomës)"
 }
