@@ -361,7 +361,7 @@ class NewlinePart extends BasePart implements IBasePart {
 
 class EmojiPart extends BasePart implements IBasePart {
     protected acceptsInsertion(chr: string, offset: number): boolean {
-        return false;
+        return mightContainEmoji(chr);
     }
 
     protected acceptsRemoval(position: number, chr: string): boolean {
