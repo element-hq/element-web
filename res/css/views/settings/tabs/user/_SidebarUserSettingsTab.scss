@@ -15,6 +15,10 @@ limitations under the License.
 */
 
 .mx_SidebarUserSettingsTab {
+    .mx_SettingsTab_section {
+        margin-top: 10px;
+    }
+
     .mx_SidebarUserSettingsTab_subheading {
         font-size: $font-15px;
         line-height: $font-24px;

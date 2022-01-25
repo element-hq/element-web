@@ -17,7 +17,6 @@ limitations under the License.
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import "./enable-metaspaces-labs";
 import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore from "../../src/stores/spaces/SpaceStore";
 import {

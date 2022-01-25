@@ -303,7 +303,6 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({ children, isPanelCo
 });
 
 const SpacePanel = () => {
-    const metaSpacesEnabled = useSettingValue("feature_spaces_metaspaces");
     const [isPanelCollapsed, setPanelCollapsed] = useState(true);
     const ref = useRef<HTMLUListElement>();
     useLayoutEffect(() => {
@@ -366,7 +365,7 @@ const SpacePanel = () => {
                             ) }
                         </Droppable>
 
-                        { metaSpacesEnabled && <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} /> }
+                        <QuickSettingsButton isPanelCollapsed={isPanelCollapsed} />
                     </ul>
                 ) }
             </RovingTabIndexProvider>
