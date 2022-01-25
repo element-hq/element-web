@@ -557,5 +557,6 @@
     "No other application is using the webcam": "Ingen anden application bruger kameraet",
     "A microphone and webcam are plugged in and set up correctly": "En mikrofon og kamera er tilsluttet og sat op rigtigt",
     "Croatia": "Kroatien",
-    "Answered Elsewhere": "Svaret andet sted"
+    "Answered Elsewhere": "Svaret andet sted",
+    "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.": "Hele vores cookie politik kan findes <CookiePolicyLink>her</CookiePolicyLink>."
 }
