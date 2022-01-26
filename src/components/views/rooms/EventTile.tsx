@@ -383,8 +383,8 @@ export default class EventTile extends React.Component<IProps, IState> {
     constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const thread = room.threads?.get(this.props.mxEvent.getId());
+        this.context = context;
+        const thread = this.thread;
 
         this.state = {
             // Whether the action bar is focused.
@@ -630,7 +630,7 @@ export default class EventTile extends React.Component<IProps, IState> {
          * We currently have no reliable way to discover than an event is a thread
          * when we are at the sync stage
          */
-        const room = this.context.getRoom(this.props.mxEvent.getRoomId());
+        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const thread = room?.threads.get(this.props.mxEvent.getId());
 
         if (!thread || thread.length === 0) {
