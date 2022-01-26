@@ -1365,6 +1365,21 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
+"@matrix-org/linkify-element@^4.0.0-rc.5":
+  version "4.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@matrix-org/linkify-element/-/linkify-element-4.0.0-rc.5.tgz#0c27e81272638674ba4162fec2fd131b2c36c163"
+  integrity sha512-6sdJ5x9EZpUNVZqc2Dig8Q4hySdL2fdE/ivehk4L3y3rV7tMD0fRs5rXQQ4wcgCMhGAAGbscbNiS8pyZIy9Hlg==
+
+"@matrix-org/linkify-string@^4.0.0-rc.5":
+  version "4.0.0-rc.5"
+  resolved "https://registry.yarnpkg.com/@matrix-org/linkify-string/-/linkify-string-4.0.0-rc.5.tgz#139ba23c70a4f5b531656365a6109c122177b132"
+  integrity sha512-WFyu6+kVEPJsDwZwgCSrtUDeIMDdWIFzRRq5z+MLYHiO3J8G19jvRjRnNm4dwjDUqROWhvWS9b8JG7rbuwjkLQ==
+
+"@matrix-org/linkifyjs@^4.0.0-rc.6":
+  version "4.0.0-rc.6"
+  resolved "https://registry.yarnpkg.com/@matrix-org/linkifyjs/-/linkifyjs-4.0.0-rc.6.tgz#62bce99272e0b2a78896b01651d8b26602247f32"
+  integrity sha512-RoBejrxlv8jJjaZ9itTx0+JW8ECNEvj7iJzbD1rGhToLZjRZ5qXexWIa3+Vu4qmm+Yic+ETPCSH7odYWSYj/fA==
+
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz":
   version "3.2.8"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz#8d53636d045e1776e2a2ec6613e57330dd9ce856"
@@ -7807,11 +7822,6 @@ linkify-it@^2.0.0:
   dependencies:
     uc.micro "^1.0.1"
 
-linkifyjs@^2.1.9:
-  version "2.1.9"
-  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-2.1.9.tgz#af06e45a2866ff06c4766582590d098a4d584702"
-  integrity sha512-74ivurkK6WHvHFozVaGtQWV38FzBwSTGNmJolEgFp7QgR2bl6ArUWlvT4GcHKbPe1z3nWYi+VUdDZk16zDOVug==
-
 loader-runner@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/loader-runner/-/loader-runner-2.4.0.tgz#ed47066bfe534d7e84c4c7b9998c2a75607d9357"
@@ -8037,9 +8047,9 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-analytics-events@https://github.com/matrix-org/matrix-analytics-events.git#1eab4356548c97722a183912fda1ceabbe8cc7c1":
+"matrix-analytics-events@github:matrix-org/matrix-analytics-events#1eab4356548c97722a183912fda1ceabbe8cc7c1":
   version "0.0.1"
-  resolved "https://github.com/matrix-org/matrix-analytics-events.git#1eab4356548c97722a183912fda1ceabbe8cc7c1"
+  resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/1eab4356548c97722a183912fda1ceabbe8cc7c1"
 
 matrix-events-sdk@^0.0.1-beta.6:
   version "0.0.1-beta.6"
@@ -8063,22 +8073,6 @@ matrix-js-sdk@15.5.0-rc.1:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "15.4.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0a8b82570252cfd2e70aa2afa4a495a1ace6f811"
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "^0.0.1-beta.6"
-    p-retry "^4.5.0"
-    qs "^6.9.6"
-    request "^2.88.2"
-    unhomoglyph "^1.0.6"
-
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
@@ -8087,11 +8081,15 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.38.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/8ced6e6117b734a154db7f64b1a63c4f07bf56b1"
+matrix-react-sdk@3.39.0-rc.1:
+  version "3.39.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.39.0-rc.1.tgz#b67aab73c0e3030ccf8d3981c40a636b02075215"
+  integrity sha512-I0YhDG+Yk1hHWDW+9XIwEfUOo3emmJHCy94O6ExgE/H6uNqrv3XNTQcaxTNr3qFc4PK8IcG7kPlJhPURt7it5g==
   dependencies:
     "@babel/runtime" "^7.12.5"
+    "@matrix-org/linkify-element" "^4.0.0-rc.5"
+    "@matrix-org/linkify-string" "^4.0.0-rc.5"
+    "@matrix-org/linkifyjs" "^4.0.0-rc.6"
     "@sentry/browser" "^6.11.0"
     "@sentry/tracing" "^6.11.0"
     "@types/geojson" "^7946.0.8"
@@ -8119,12 +8117,11 @@ matrix-mock-request@^1.2.3:
     is-ip "^3.1.0"
     jszip "^3.7.0"
     katex "^0.12.0"
-    linkifyjs "^2.1.9"
     lodash "^4.17.20"
     maplibre-gl "^1.15.2"
-    matrix-analytics-events "https://github.com/matrix-org/matrix-analytics-events.git#1eab4356548c97722a183912fda1ceabbe8cc7c1"
+    matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#1eab4356548c97722a183912fda1ceabbe8cc7c1"
     matrix-events-sdk "^0.0.1-beta.6"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "15.5.0-rc.1"
     matrix-widget-api "^0.1.0-beta.18"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
