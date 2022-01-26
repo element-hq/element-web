@@ -75,8 +75,7 @@ const CallViewHeader: React.FC<CallViewHeaderProps> = ({
     onPipMouseDown,
 }) => {
     const [callRoom, onHoldCallRoom] = callRooms;
-    const callRoomName = callRoom.name;
-    const { roomId } = callRoom;
+    const { roomId, name: callRoomName } = callRoom;
 
     if (!pipMode) {
         return <div className="mx_CallViewHeader">
