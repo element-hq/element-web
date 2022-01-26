@@ -1,3 +1,9 @@
+Changes in [3.39.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.39.0-rc.2) (2022-01-26)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix crash in settings / appearance
+
 Changes in [3.39.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.39.0-rc.1) (2022-01-26)
 ===============================================================================================================
 
