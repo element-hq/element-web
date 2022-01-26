@@ -172,3 +172,14 @@ who prefer to have the right panel open consistently across rooms.
 If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
+
+## Threaded Messaging (`feature_thread`)
+
+Threading allows users to branch out a new conversation from the main timeline of a room. This is particularly useful in high traffic rooms where multiple conversations can happen in parallel or when a single discussion might stretch over a very long period of time.
+
+When a thread head is aggregated (as in MSC2675), it returns a summary of the thread: the latest message, a list of participants and the total count of messages. I.e. in places which include bundled relations (per MSC2675).
+
+A thread will be displayed as a chain of replies on clients unaware of threads.
+Thread-ready clients would recieve the latest event in the thread unless a user is explicitly replying to another event.
+
+Clients can synthesize read receipts but it is possible that some notifications get lost on a fresh start.
