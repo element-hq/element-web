@@ -304,13 +304,12 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             key="cancel"
         />;
 
-        const threadTooltipButton = <CardContext.Consumer>
+        const threadTooltipButton = <CardContext.Consumer key="thread">
             { context =>
                 <RovingAccessibleTooltipButton
                     className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
                     title={_t("Reply in thread")}
                     onClick={this.onThreadClick.bind(null, context.isCard)}
-                    key="thread"
                 />
             }
         </CardContext.Consumer>;
@@ -339,17 +338,17 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 // The only catch is we do the reply button first so that we can make sure the react
                 // button is the very first button without having to do length checks for `splice()`.
                 if (this.context.canReply) {
-                    toolbarOpts.splice(0, 0, <>
+                    if (this.showReplyInThreadAction) {
+                        toolbarOpts.splice(0, 0, threadTooltipButton);
+                    }
+                    toolbarOpts.splice(0, 0, (
                         <RovingAccessibleTooltipButton
                             className="mx_MessageActionBar_maskButton mx_MessageActionBar_replyButton"
                             title={_t("Reply")}
                             onClick={this.onReplyClick}
                             key="reply"
                         />
-                        { (this.showReplyInThreadAction) && (
-                            threadTooltipButton
-                        ) }
-                    </>);
+                    ));
                 }
                 if (this.context.canReact) {
                     toolbarOpts.splice(0, 0, <ReactButton
@@ -368,12 +367,10 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                         key="download"
                     />);
                 }
-            }
-            // Show thread icon even for deleted messages, but only within main timeline
-            if (this.context.timelineRenderingType === TimelineRenderingType.Room &&
-                SettingsStore.getValue("feature_thread") &&
-                this.props.mxEvent.getThread() &&
-                !isContentActionable(this.props.mxEvent)
+            } else if (SettingsStore.getValue("feature_thread") &&
+                // Show thread icon even for deleted messages, but only within main timeline
+                this.context.timelineRenderingType === TimelineRenderingType.Room &&
+                this.props.mxEvent.getThread()
             ) {
                 toolbarOpts.unshift(threadTooltipButton);
             }
