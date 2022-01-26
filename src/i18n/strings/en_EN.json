@@ -3047,6 +3047,8 @@
     "%(creator)s created and configured the room.": "%(creator)s created and configured the room.",
     "%(count)s messages deleted.|other": "%(count)s messages deleted.",
     "%(count)s messages deleted.|one": "%(count)s message deleted.",
+    "%(count)s hidden messages.|other": "%(count)s hidden messages.",
+    "%(count)s hidden messages.|one": "%(count)s hidden message.",
     "Your Communities": "Your Communities",
     "Did you know: you can use communities to filter your %(brand)s experience!": "Did you know: you can use communities to filter your %(brand)s experience!",
     "You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.": "You can click on an avatar in the filter panel at any time to see only the rooms and people associated with that community.",
