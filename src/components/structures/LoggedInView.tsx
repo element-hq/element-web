@@ -29,6 +29,7 @@ import { fixupColorFonts } from '../../utils/FontManager';
 import dis from '../../dispatcher/dispatcher';
 import { IMatrixClientCreds } from '../../MatrixClientPeg';
 import SettingsStore from "../../settings/SettingsStore";
+import { SettingLevel } from "../../settings/SettingLevel";
 import ResizeHandle from '../views/elements/ResizeHandle';
 import { CollapseDistributor, Resizer } from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -47,7 +48,7 @@ import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
-import { getKeyBindingsManager, NavigationAction, RoomAction } from '../../KeyBindingsManager';
+import { getKeyBindingsManager, NavigationAction, RoomAction, LabsAction } from '../../KeyBindingsManager';
 import { IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
 import { replaceableComponent } from "../../utils/replaceableComponent";
@@ -537,6 +538,33 @@ class LoggedInView extends React.Component<IProps, IState> {
                 // if we do not have a handler for it, pass it to the platform which might
                 handled = PlatformPeg.get().onKeyDown(ev);
         }
+
+        // Handle labs actions here, as they apply within the same scope
+        if (!handled) {
+            const labsAction = getKeyBindingsManager().getLabsAction(ev);
+            switch (labsAction) {
+                case LabsAction.ToggleHiddenEventVisibility: {
+                    const hiddenEventVisibility = SettingsStore.getValueAt(
+                        SettingLevel.DEVICE,
+                        'showHiddenEventsInTimeline',
+                        undefined,
+                        false,
+                    );
+                    SettingsStore.setValue(
+                        'showHiddenEventsInTimeline',
+                        undefined,
+                        SettingLevel.DEVICE,
+                        !hiddenEventVisibility,
+                    );
+                    handled = true;
+                    break;
+                }
+                default:
+                    // if we do not have a handler for it, pass it to the platform which might
+                    handled = PlatformPeg.get().onKeyDown(ev);
+            }
+        }
+
         if (handled) {
             ev.stopPropagation();
             ev.preventDefault();

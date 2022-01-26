@@ -125,6 +125,12 @@ export enum NavigationAction {
     SelectNextUnreadRoom = 'SelectNextUnreadRoom',
 }
 
+/** Actions only available when labs are enabled */
+export enum LabsAction {
+    /** Toggle visibility of hidden events */
+    ToggleHiddenEventVisibility = 'ToggleHiddenEventVisibility',
+}
+
 /**
  * Represent a key combination.
  *
@@ -213,6 +219,7 @@ export interface IKeyBindingsProvider {
     getRoomListBindings: KeyBindingGetter<RoomListAction>;
     getRoomBindings: KeyBindingGetter<RoomAction>;
     getNavigationBindings: KeyBindingGetter<NavigationAction>;
+    getLabsBindings: KeyBindingGetter<LabsAction>;
 }
 
 export class KeyBindingsManager {
@@ -263,6 +270,10 @@ export class KeyBindingsManager {
 
     getNavigationAction(ev: KeyboardEvent | React.KeyboardEvent): NavigationAction | undefined {
         return this.getAction(this.bindingsProviders.map(it => it.getNavigationBindings), ev);
+    }
+
+    getLabsAction(ev: KeyboardEvent | React.KeyboardEvent): LabsAction | undefined {
+        return this.getAction(this.bindingsProviders.map(it => it.getLabsBindings), ev);
     }
 }
 

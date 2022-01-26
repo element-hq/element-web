@@ -3413,5 +3413,6 @@
     "Cancel autocomplete": "Cancel autocomplete",
     "Next autocomplete suggestion": "Next autocomplete suggestion",
     "Previous autocomplete suggestion": "Previous autocomplete suggestion",
-    "Toggle space panel": "Toggle space panel"
+    "Toggle space panel": "Toggle space panel",
+    "Toggle hidden event visibility": "Toggle hidden event visibility"
 }

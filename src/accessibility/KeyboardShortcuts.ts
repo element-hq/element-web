@@ -31,6 +31,7 @@ export enum CategoryName {
     ROOM_LIST = "Room List",
     ROOM = "Room",
     AUTOCOMPLETE = "Autocomplete",
+    LABS = "Labs",
 }
 
 // Meta-key representing the digits [0-9] often found at the top of standard keyboard layouts
@@ -124,6 +125,11 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             "KeyBinding.cancelAutoComplete",
             "KeyBinding.nextOptionInAutoComplete",
             "KeyBinding.previousOptionInAutoComplete",
+        ],
+    }, [CategoryName.LABS]: {
+        categoryLabel: _td("Labs"),
+        settingNames: [
+            "KeyBinding.toggleHiddenEventVisibility",
         ],
     },
 };
@@ -402,6 +408,14 @@ export const KEYBOARD_SHORTCUTS: { [setting: string]: ISetting } = {
             key: Key.D,
         },
         displayName: _td("Toggle space panel"),
+    },
+    "KeyBinding.toggleHiddenEventVisibility": {
+        default: {
+            ctrlOrCmdKey: true,
+            shiftKey: true,
+            key: Key.H,
+        },
+        displayName: _td("Toggle hidden event visibility"),
     },
 };
 
