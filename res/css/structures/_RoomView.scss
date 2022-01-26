@@ -209,6 +209,10 @@ limitations under the License.
 .mx_RoomView_searchResultsPanel {
     .mx_RoomView_messageListWrapper {
         justify-content: flex-start;
+
+        > .mx_RoomView_MessageList > li > ol {
+            list-style-type: none;
+        }
     }
 
     a {

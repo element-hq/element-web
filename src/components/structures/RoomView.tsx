@@ -1783,6 +1783,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
+    private get messagePanelClassNames(): string {
+        return classNames("mx_RoomView_messagePanel", {
+            mx_IRCLayout: this.state.layout === Layout.IRC,
+            mx_GroupLayout: this.state.layout === Layout.Group,
+        });
+    }
+
     render() {
         if (!this.state.room) {
             const loading = !this.state.matrixClientIsReady || this.state.roomLoading || this.state.peekLoading;
@@ -2068,7 +2075,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 searchResultsPanel = (
                     <ScrollPanel
                         ref={this.searchResultsPanel}
-                        className="mx_RoomView_messagePanel mx_RoomView_searchResultsPanel mx_GroupLayout"
+                        className={"mx_RoomView_searchResultsPanel " + this.messagePanelClassNames}
                         onFillRequest={this.onSearchResultsFillRequest}
                         resizeNotifier={this.props.resizeNotifier}
                     >
@@ -2084,13 +2091,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (this.state.isInitialEventHighlighted) {
             highlightedEventId = this.state.initialEventId;
         }
-
-        const messagePanelClassNames = classNames(
-            "mx_RoomView_messagePanel",
-            {
-                "mx_IRCLayout": this.state.layout == Layout.IRC,
-                "mx_GroupLayout": this.state.layout == Layout.Group,
-            });
 
         // console.info("ShowUrlPreview for %s is %s", this.state.room.roomId, this.state.showUrlPreview);
         const messagePanel = (
@@ -2109,7 +2109,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 onUserScroll={this.onUserScroll}
                 onReadMarkerUpdated={this.updateTopUnreadMessagesBar}
                 showUrlPreview={this.state.showUrlPreview}
-                className={messagePanelClassNames}
+                className={this.messagePanelClassNames}
                 membersLoaded={this.state.membersLoaded}
                 permalinkCreator={this.getPermalinkCreatorForRoom(this.state.room)}
                 resizeNotifier={this.props.resizeNotifier}

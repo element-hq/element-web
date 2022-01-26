@@ -55,7 +55,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import SenderProfile from '../messages/SenderProfile';
 import MessageTimestamp from '../messages/MessageTimestamp';
 import TooltipButton from '../elements/TooltipButton';
-import ReadReceiptMarker from "./ReadReceiptMarker";
+import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventUtils';
@@ -262,8 +262,7 @@ interface IProps {
     // opaque readreceipt info for each userId; used by ReadReceiptMarker
     // to manage its animations. Should be an empty object when the room
     // first loads
-    // TODO: Proper typing for RR info
-    readReceiptMap?: any;
+    readReceiptMap?: { [userId: string]: IReadReceiptInfo };
 
     // A function which is used to check if the parent panel is being
     // unmounted, to avoid unnecessary work. Should return true if we
@@ -929,7 +928,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             left = (hidden ? MAX_READ_AVATARS - 1 : i) * -receiptOffset;
 
             const userId = receipt.userId;
-            let readReceiptInfo;
+            let readReceiptInfo: IReadReceiptInfo;
 
             if (this.props.readReceiptMap) {
                 readReceiptInfo = this.props.readReceiptMap[userId];
