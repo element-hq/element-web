@@ -3586,5 +3586,7 @@
     "Group all your favourite rooms and people in one place.": "將所有您最喜愛的聊天室與夥伴集中在同一個地方。",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "空間是將聊天室與夥伴們分組的方式。除了您所在的空間之外，您也可以使用一些預先建立好的。",
     "Call": "通話",
-    "Right panel stays open (defaults to room member list)": "右側面板維持開啟狀態（預設為聊天室成員清單）"
+    "Right panel stays open (defaults to room member list)": "右側面板維持開啟狀態（預設為聊天室成員清單）",
+    "Unable to check if username has been taken. Try again later.": "無法檢查使用者名稱是否已被使用。請稍後再試。",
+    "IRC (Experimental)": "IRC（實驗性）"
 }
