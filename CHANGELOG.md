@@ -1,3 +1,9 @@
+Changes in [1.9.10-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.9.10-rc.2) (2022-01-26)
+=========================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix crash in settings / appearance
+
 Changes in [1.9.10-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.9.10-rc.1) (2022-01-26)
 =========================================================================================================
 
