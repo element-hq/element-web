@@ -69,6 +69,7 @@ import LegacyCommunityPreview from "./LegacyCommunityPreview";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RightPanelStore from '../../stores/right-panel/RightPanelStore';
+import { TimelineRenderingType } from "../../contexts/RoomContext";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -386,15 +387,20 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     private onPaste = (ev: ClipboardEvent) => {
         const element = ev.target as HTMLElement;
-        const inputableElement = getInputableElement(element) || document.activeElement as HTMLElement;
+        const inputableElement = getInputableElement(element);
+        if (inputableElement === document.activeElement) return; // nothing to do
 
         if (inputableElement?.focus) {
             inputableElement.focus();
         } else {
+            const inThread = !!document.activeElement.closest(".mx_ThreadView");
             // refocusing during a paste event will make the
             // paste end up in the newly focused element,
             // so dispatch synchronously before paste happens
-            dis.fire(Action.FocusSendMessageComposer, true);
+            dis.dispatch({
+                action: Action.FocusSendMessageComposer,
+                context: inThread ? TimelineRenderingType.Thread : TimelineRenderingType.Room,
+            }, true);
         }
     };
 
@@ -552,8 +558,12 @@ class LoggedInView extends React.Component<IProps, IState> {
             // If the user is entering a printable character outside of an input field
             // redirect it to the composer for them.
             if (!isClickShortcut && isPrintable && !getInputableElement(ev.target as HTMLElement)) {
+                const inThread = !!document.activeElement.closest(".mx_ThreadView");
                 // synchronous dispatch so we focus before key generates input
-                dis.fire(Action.FocusSendMessageComposer, true);
+                dis.dispatch({
+                    action: Action.FocusSendMessageComposer,
+                    context: inThread ? TimelineRenderingType.Thread : TimelineRenderingType.Room,
+                }, true);
                 ev.stopPropagation();
                 // we should *not* preventDefault() here as that would prevent typing in the now-focused composer
             }

@@ -160,7 +160,11 @@ class UploadButton extends React.Component<IUploadButtonProps> {
         }
 
         ContentMessages.sharedInstance().sendContentListToRoom(
-            tfiles, this.props.roomId, this.props.relation, MatrixClientPeg.get(),
+            tfiles,
+            this.props.roomId,
+            this.props.relation,
+            MatrixClientPeg.get(),
+            this.context.timelineRenderingType,
         );
 
         // This is the onChange handler for a file form control, but we're
