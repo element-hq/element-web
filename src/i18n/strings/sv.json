@@ -3375,5 +3375,19 @@
     "Fetched %(count)s events so far|other": "Hämtade %(count)s händelser än så länge",
     "Fetched %(count)s events out of %(total)s|one": "Hämtade %(count)s händelse av %(total)s",
     "Fetched %(count)s events out of %(total)s|other": "Hämtade %(count)s händelser av %(total)s",
-    "Generating a ZIP": "Genererar en ZIP"
+    "Generating a ZIP": "Genererar en ZIP",
+    "%(senderName)s has ended a poll": "%(senderName)s har avslutat en omröstning",
+    "%(senderName)s has started a poll - %(pollQuestion)s": "%(senderName)s har startat en omröstning - %(pollQuestion)s",
+    "%(senderName)s has shared their location": "%(senderName)s har delat sin plats",
+    "%(senderName)s removed %(targetName)s": "%(senderName)s tog bort %(targetName)s",
+    "%(senderName)s removed %(targetName)s: %(reason)s": "%(senderName)s tog bort %(targetName)s: %(reason)s",
+    "No active call in this room": "Inget aktivt samtal i det här rummet",
+    "Unable to find Matrix ID for phone number": "Kunde inte hitta Matrix-ID för telefonnumret",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "Okänt (användare, session)-par: (%(userId)s, %(deviceId)s)",
+    "Command failed: Unable to find room (%(roomId)s": "Kommandot misslyckades: Kunde inte hitta rummet (%(roomId)s",
+    "Removes user with given id from this room": "Tar bort användaren med det givna ID:t från det här rummet",
+    "Unrecognised room address: %(roomAlias)s": "Okänd rumsadress: %(roomAlias)s",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "Misslyckades att hitta rumsämne: Kunde inte hitta rummet (%(roomId)s)",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "Kommandofel: Kunde inte hitta renderingstyp (%(renderingType)s)",
+    "Command error: Unable to handle slash command.": "Kommandofel: Kunde inte hantera snedstreckskommando."
 }
