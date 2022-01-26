@@ -98,19 +98,19 @@ describe("SpaceStore", () => {
         client.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
         client.getRoomUpgradeHistory.mockImplementation(roomId => [rooms.find(room => room.roomId === roomId)]);
         await testUtils.setupAsyncStoreWithClient(store, client);
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
     };
 
     const setShowAllRooms = async (value: boolean) => {
         if (store.allRoomsInHome === value) return;
         const emitProm = testUtils.emitPromise(store, UPDATE_HOME_BEHAVIOUR);
         await SettingsStore.setValue("Spaces.allRoomsInHome", null, SettingLevel.DEVICE, value);
-        jest.runAllTimers(); // run async dispatch
+        jest.runOnlyPendingTimers(); // run async dispatch
         await emitProm;
     };
 
     beforeEach(async () => {
-        jest.runAllTimers(); // run async dispatch
+        jest.runOnlyPendingTimers(); // run async dispatch
         client.getVisibleRooms.mockReturnValue(rooms = []);
 
         await SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.DEVICE, {
@@ -692,7 +692,7 @@ describe("SpaceStore", () => {
         });
 
         const getCurrentRoom = () => {
-            jest.runAllTimers();
+            jest.runOnlyPendingTimers();
             return currentRoom;
         };
 
@@ -885,14 +885,14 @@ describe("SpaceStore", () => {
         const rootSpace = mkSpace(space1, [room1, room2, space2]);
         rootSpace.getMyMembership.mockReturnValue("invite");
         client.emit("Room", rootSpace);
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([]);
 
         // accept invite to space
         rootSpace.getMyMembership.mockReturnValue("join");
         client.emit("Room.myMembership", rootSpace, "join", "invite");
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
 
@@ -901,7 +901,7 @@ describe("SpaceStore", () => {
         const rootSpaceRoom1 = mkRoom(room1);
         rootSpaceRoom1.getMyMembership.mockReturnValue("join");
         client.emit("Room", rootSpaceRoom1);
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.isRoomInSpace(space1, room1)).toBeTruthy();
@@ -915,7 +915,7 @@ describe("SpaceStore", () => {
         const rootSpaceRoom2 = mkRoom(room2);
         rootSpaceRoom2.getMyMembership.mockReturnValue("invite");
         client.emit("Room", rootSpaceRoom2);
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.isRoomInSpace(space1, room2)).toBeTruthy();
@@ -952,12 +952,12 @@ describe("SpaceStore", () => {
             user: dm1Partner.userId,
             room: space1,
         }));
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.getSpaceFilteredUserIds(space1).has(dm1Partner.userId)).toBeTruthy();
         const dm1Room = mkRoom(dm1);
         dm1Room.getMyMembership.mockReturnValue("join");
         client.emit("Room", dm1Room);
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces).toStrictEqual([rootSpace]);
         expect(SpaceStore.instance.isRoomInSpace(space1, dm1)).toBeTruthy();
@@ -971,7 +971,7 @@ describe("SpaceStore", () => {
         subspace.getMyMembership.mockReturnValue("join");
         const prom = testUtils.emitPromise(SpaceStore.instance, space1);
         client.emit("Room", subspace);
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces.map(r => r.roomId)).toStrictEqual([rootSpace.roomId]);
         await prom;
