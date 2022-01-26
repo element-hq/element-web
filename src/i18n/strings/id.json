@@ -3508,5 +3508,13 @@
     "Jump to start of the composer": "Pergi ke awalan komposer",
     "Navigate to previous message to edit": "Pergi ke pesan sebelumnya untuk diedit",
     "Navigate to next message to edit": "Pergi ke pesan berikutnya untuk diedit",
-    "Internal room ID": "ID ruangan internal"
+    "Internal room ID": "ID ruangan internal",
+    "Group all your people in one place.": "Kelompokkan semua orang di satu tempat.",
+    "Group all your rooms that aren't part of a space in one place.": "Kelompokkan semua ruangan yang tidak ada di sebuah space di satu tempat.",
+    "Unable to check if username has been taken. Try again later.": "Tidak dapat memeriksa jika nama pengguna telah dipakai. Coba lagi nanti.",
+    "Group all your favourite rooms and people in one place.": "Kelompokkan semua ruangan dan orang favorit Anda di satu tempat.",
+    "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Space adalah cara untuk mengelompokkan ruangan dan orang. Di sampingnya space yang Anda berada, Anda dapat menggunakan space yang sudah dibuat.",
+    "IRC (Experimental)": "IRC (Eksperimental)",
+    "Call": "Panggil",
+    "Right panel stays open (defaults to room member list)": "Panel kanan tetap terbuka (menampilkan daftar anggota ruangan secara default)"
 }
