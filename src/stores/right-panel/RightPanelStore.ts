@@ -52,9 +52,8 @@ const GROUP_PHASES = [
 */
 export default class RightPanelStore extends ReadyWatchingStore {
     private static internalInstance: RightPanelStore;
+    private readonly dispatcherRefRightPanelStore: string;
     private viewedRoomId: string;
-    private isViewingRoom?: boolean;
-    private dispatcherRefRightPanelStore: string;
     private isReady = false;
 
     private global?: IRightPanelForRoom = null;
@@ -228,9 +227,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
     }
 
-    // Private
     private loadCacheFromSettings() {
-        const room = this.mxClient?.getRoom(this.viewedRoomId);
+        const room = this.viewedRoomId && this.mxClient?.getRoom(this.viewedRoomId);
         if (!!room) {
             this.global = this.global ??
                 convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room);
@@ -362,10 +360,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
     };
 
-    onRoomViewStoreUpdate = () => {
+    private onRoomViewStoreUpdate = () => {
         // TODO: only use this function instead of the onDispatch (the whole onDispatch can get removed!) as soon groups are removed
         this.viewedRoomId = RoomViewStore.getRoomId();
-        this.isViewingRoom = true; // Is viewing room will of course be removed when removing groups
         // load values from byRoomCache with the viewedRoomId.
         this.loadCacheFromSettings();
         // If the right panel stays open mode is used, and the panel was either
@@ -386,11 +383,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
         this.emitAndUpdateSettings();
     };
 
-    onDispatch = (payload: ActionPayload) => {
+    private get isViewingRoom(): boolean {
+        return !!this.viewedRoomId;
+    }
+
+    private onDispatch = (payload: ActionPayload) => {
         switch (payload.action) {
             case 'view_group': {
-                if (payload.room_id === this.viewedRoomId) break; // skip this transition, probably a permalink
-
                 // Put group in the same/similar view to what was open from the previously viewed room
                 // Is contradictory to the new "per room" philosophy but it is the legacy behavior for groups.
 
@@ -401,10 +400,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
                     this.setRightPanelCache({ phase: RightPanelPhases.GroupMemberList, state: {} });
                 }
 
-                // Update the current room here, so that all the other functions dont need to be room dependant.
                 // The right panel store always will return the state for the current room.
-                this.viewedRoomId = payload.room_id;
-                this.isViewingRoom = false;
+                this.viewedRoomId = null; // a group is not a room
                 // load values from byRoomCache with the viewedRoomId.
                 if (this.isReady) {
                     // we need the client to be ready to get the events form the ids of the settings
