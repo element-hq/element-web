@@ -485,8 +485,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         // Checking if the message has a "parentEventId" as we do not
         // want to hide the root event of the thread
-        if (mxEv.isThreadRelation && this.props.hideThreadedMessages
-                && SettingsStore.getValue("feature_thread")) {
+        if (mxEv.isThreadRelation &&
+            !mxEv.isThreadRoot &&
+            this.props.hideThreadedMessages &&
+            SettingsStore.getValue("feature_thread")
+        ) {
             return false;
         }
 
