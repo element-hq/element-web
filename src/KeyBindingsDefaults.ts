@@ -373,7 +373,7 @@ const navigationBindings = (): KeyBinding<NavigationAction>[] => {
             action: NavigationAction.GoToHome,
             keyCombo: {
                 key: Key.H,
-                ctrlKey: true,
+                ctrlOrCmd: true,
                 altKey: !isMac,
                 shiftKey: isMac,
             },

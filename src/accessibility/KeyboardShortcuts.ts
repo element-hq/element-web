@@ -341,7 +341,8 @@ export const KEYBOARD_SHORTCUTS: { [setting: string]: ISetting } = {
     "KeyBinding.goToHomeView": {
         default: {
             ctrlOrCmdKey: true,
-            altKey: true,
+            altKey: !isMac,
+            shiftKey: isMac,
             key: Key.H,
         },
         displayName: _td("Go to Home View"),
