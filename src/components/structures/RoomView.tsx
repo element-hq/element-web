@@ -934,10 +934,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
     };
 
-    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: boolean, removed, data) => {
+    private onRoomTimeline = (ev: MatrixEvent, room: Room | null, toStartOfTimeline: boolean, removed, data) => {
         if (this.unmounted) return;
 
-        // ignore events for other rooms
+        // ignore events for other rooms or the notification timeline set
         if (!room || room.roomId !== this.state.room?.roomId) return;
 
         // ignore events from filtered timelines

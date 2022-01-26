@@ -19,7 +19,7 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { Direction, EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
+import { EventTimelineSet, IRoomTimelineData } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { RoomState } from 'matrix-js-sdk/src/models/room-state';
 import { TimelineIndex, TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 import { sleep } from "matrix-js-sdk/src/utils";
@@ -187,17 +187,17 @@ export default class EventIndex extends EventEmitter {
      */
     private onRoomTimeline = async (
         ev: MatrixEvent,
-        room: Room,
+        room: Room | null,
         toStartOfTimeline: boolean,
         removed: boolean,
-        data: {
-            liveEvent: boolean;
-        },
+        data: IRoomTimelineData,
     ) => {
+        if (!room) return; // notification timeline, we'll get this event again with a room specific timeline
+
         const client = MatrixClientPeg.get();
 
         // We only index encrypted rooms locally.
-        if (!client.isRoomEncrypted(room.roomId)) return;
+        if (!client.isRoomEncrypted(ev.getRoomId())) return;
 
         if (ev.isRedaction()) {
             return this.redactEvent(ev);

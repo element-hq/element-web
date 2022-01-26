@@ -23,7 +23,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { RoomState } from "matrix-js-sdk/src/models/room-state";
-import { EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
+import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import QueryMatcher from './QueryMatcher';
@@ -41,11 +41,6 @@ const USER_REGEX = /\B@\S*/g;
 // used when you hit 'tab' - we allow some separator chars at the beginning
 // to allow you to tab-complete /mat into /(matthew)
 const FORCED_USER_REGEX = /[^/,:; \t\n]\S*/g;
-
-interface IRoomTimelineData {
-    timeline: EventTimeline;
-    liveEvent?: boolean;
-}
 
 export default class UserProvider extends AutocompleteProvider {
     matcher: QueryMatcher<RoomMember>;
@@ -78,12 +73,12 @@ export default class UserProvider extends AutocompleteProvider {
 
     private onRoomTimeline = (
         ev: MatrixEvent,
-        room: Room,
+        room: Room | null,
         toStartOfTimeline: boolean,
         removed: boolean,
         data: IRoomTimelineData,
     ) => {
-        if (!room) return;
+        if (!room) return; // notification timeline, we'll get this event again with a room specific timeline
         if (removed) return;
         if (room.roomId !== this.room.roomId) return;
 

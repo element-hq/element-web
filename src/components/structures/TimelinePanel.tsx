@@ -18,12 +18,12 @@ import React, { createRef, ReactNode, SyntheticEvent } from 'react';
 import ReactDOM from "react-dom";
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction, EventTimeline } from "matrix-js-sdk/src/models/event-timeline";
 import { TimelineWindow } from "matrix-js-sdk/src/timeline-window";
 import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import { SyncState } from 'matrix-js-sdk/src/sync';
-import { RoomMember } from 'matrix-js-sdk';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { debounce } from 'lodash';
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -526,13 +526,10 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private onRoomTimeline = (
         ev: MatrixEvent,
-        room: Room,
+        room: Room | null,
         toStartOfTimeline: boolean,
         removed: boolean,
-        data: {
-            timeline: EventTimeline;
-            liveEvent?: boolean;
-        },
+        data: IRoomTimelineData,
     ): void => {
         // ignore events for other timeline sets
         if (data.timeline.getTimelineSet() !== this.props.timelineSet) return;

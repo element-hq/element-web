@@ -19,6 +19,8 @@ import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { User } from "matrix-js-sdk/src/models/user";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType } from "matrix-js-sdk/src/@types/event";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import RoomAvatar from "./RoomAvatar";
 import NotificationBadge from '../rooms/NotificationBadge';
@@ -92,9 +94,9 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
     }
 
     private get isPublicRoom(): boolean {
-        const joinRules = this.props.room.currentState.getStateEvents("m.room.join_rules", "");
+        const joinRules = this.props.room.currentState.getStateEvents(EventType.RoomJoinRules, "");
         const joinRule = joinRules && joinRules.getContent().join_rule;
-        return joinRule === 'public';
+        return joinRule === JoinRule.Public;
     }
 
     private get dmUser(): User {
@@ -114,14 +116,11 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         }
     }
 
-    private onRoomTimeline = (ev: MatrixEvent, room: Room) => {
+    private onRoomTimeline = (ev: MatrixEvent, room: Room | null) => {
         if (this.isUnmounted) return;
+        if (this.props.room.roomId !== room?.roomId) return;
 
-        // apparently these can happen?
-        if (!room) return;
-        if (this.props.room.roomId !== room.roomId) return;
-
-        if (ev.getType() === 'm.room.join_rules' || ev.getType() === 'm.room.member') {
+        if (ev.getType() === EventType.RoomJoinRules || ev.getType() === EventType.RoomMember) {
             const newIcon = this.calculateIcon();
             if (newIcon !== this.state.icon) {
                 this.setState({ icon: newIcon });

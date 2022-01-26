@@ -91,8 +91,8 @@ export default class WhoIsTypingTile extends React.Component<IProps, IState> {
         return WhoIsTypingTile.isVisible(this.state);
     };
 
-    private onRoomTimeline = (event: MatrixEvent, room: Room): void => {
-        if (room?.roomId === this.props.room?.roomId) {
+    private onRoomTimeline = (event: MatrixEvent, room: Room | null): void => {
+        if (room?.roomId === this.props.room.roomId) {
             const userId = event.getSender();
             // remove user from usersTyping
             const usersTyping = this.state.usersTyping.filter((m) => m.userId !== userId);

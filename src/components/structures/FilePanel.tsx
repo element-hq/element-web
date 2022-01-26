@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { Filter } from 'matrix-js-sdk/src/filter';
-import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
+import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction } from "matrix-js-sdk/src/models/event-timeline";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from 'matrix-js-sdk/src/models/room';
@@ -62,7 +62,13 @@ class FilePanel extends React.Component<IProps, IState> {
         timelineSet: null,
     };
 
-    private onRoomTimeline = (ev: MatrixEvent, room: Room, toStartOfTimeline: true, removed: true, data: any): void => {
+    private onRoomTimeline = (
+        ev: MatrixEvent,
+        room: Room | null,
+        toStartOfTimeline: boolean,
+        removed: boolean,
+        data: IRoomTimelineData,
+    ): void => {
         if (room?.roomId !== this.props?.roomId) return;
         if (toStartOfTimeline || !data || !data.liveEvent || ev.isRedacted()) return;
 
