@@ -822,13 +822,12 @@ export default class CallHandler extends EventEmitter {
         // We leave the check for whether there's already a call in this room until later,
         // otherwise it can race.
 
-        const joinedMemberCount = room.getJoinedMemberCount();
-        const invitedAndJoinedMemberCount = room.getInvitedAndJoinedMemberCount();
-        if (joinedMemberCount <= 1) {
+        const members = room.getJoinedMembers();
+        if (members.length <= 1) {
             Modal.createTrackedDialog('Call Handler', 'Cannot place call with self', ErrorDialog, {
                 description: _t('You cannot place a call with yourself.'),
             });
-        } else if (invitedAndJoinedMemberCount === 2) {
+        } else if (members.length === 2) {
             logger.info(`Place ${type} call in ${roomId}`);
 
             this.placeMatrixCall(roomId, type, transferee);

@@ -54,8 +54,6 @@ function mkStubDM(roomId, userId) {
             getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
         },
     ]);
-    room.getJoinedMemberCount = jest.fn().mockReturnValue(room.getJoinedMembers().length);
-    room.getInvitedAndJoinedMemberCount = jest.fn().mockReturnValue(room.getJoinedMembers().length);
     room.currentState.getMembers = room.getJoinedMembers;
 
     return room;
