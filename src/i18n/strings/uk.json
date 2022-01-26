@@ -3539,5 +3539,7 @@
     "Right panel stays open (defaults to room member list)": "Права панель залишається відкритою (типово для списку учасників кімнат)",
     "IRC (Experimental)": "IRC (Експериментально)",
     "Unable to check if username has been taken. Try again later.": "Неможливо перевірити, чи зайняте ім'я користувача. Спробуйте ще раз пізніше.",
-    "Toggle hidden event visibility": "Показати/сховати подію"
+    "Toggle hidden event visibility": "Показати/сховати подію",
+    "%(count)s hidden messages.|one": "%(count)s сховане повідомлення.",
+    "%(count)s hidden messages.|other": "%(count)s схованих повідомлень."
 }
