@@ -3516,5 +3516,6 @@
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Space adalah cara untuk mengelompokkan ruangan dan orang. Di sampingnya space yang Anda berada, Anda dapat menggunakan space yang sudah dibuat.",
     "IRC (Experimental)": "IRC (Eksperimental)",
     "Call": "Panggil",
-    "Right panel stays open (defaults to room member list)": "Panel kanan tetap terbuka (menampilkan daftar anggota ruangan secara default)"
+    "Right panel stays open (defaults to room member list)": "Panel kanan tetap terbuka (menampilkan daftar anggota ruangan secara default)",
+    "Toggle hidden event visibility": "Alih visibilitas peristiwa tersembunyi"
 }
