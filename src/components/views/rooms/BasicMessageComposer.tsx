@@ -50,6 +50,8 @@ import DocumentPosition from "../../../editor/position";
 import { ICompletion } from "../../../autocomplete/Autocompleter";
 import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ALTERNATE_KEY_NAME } from '../../../accessibility/KeyboardShortcuts';
+import { _t } from "../../../languageHandler";
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s|:^$');
@@ -66,7 +68,7 @@ const SURROUND_WITH_DOUBLE_CHARACTERS = new Map([
 ]);
 
 function ctrlShortcutLabel(key: string): string {
-    return (IS_MAC ? "⌘" : "Ctrl") + "+" + key;
+    return (IS_MAC ? "⌘" : _t(ALTERNATE_KEY_NAME[Key.CONTROL])) + "+" + key;
 }
 
 function cloneSelection(selection: Selection): Partial<Selection> {

@@ -62,12 +62,13 @@ import QuickSettingsButton from "./QuickSettingsButton";
 import { useSettingValue } from "../../../hooks/useSettings";
 import UserMenu from "../../structures/UserMenu";
 import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
-import { isMac } from "../../../Keyboard";
+import { isMac, Key } from "../../../Keyboard";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -340,7 +341,11 @@ const SpacePanel = () => {
                                         { isPanelCollapsed ? _t("Expand") : _t("Collapse") }
                                     </div>
                                     <div className="mx_Tooltip_sub">
-                                        { isMac ? "⌘ + ⇧ + D" : "Ctrl + Shift + D" }
+                                        { isMac
+                                            ? "⌘ + ⇧ + D"
+                                            : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " + " +
+                                              _t(ALTERNATE_KEY_NAME[Key.SHIFT]) + " + D"
+                                        }
                                     </div>
                                 </div>}
                             />

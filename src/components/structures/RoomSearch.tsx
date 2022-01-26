@@ -29,10 +29,11 @@ import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager"
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import { isMac } from "../../Keyboard";
+import { isMac, Key } from "../../Keyboard";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import SpotlightDialog from "../views/dialogs/SpotlightDialog";
+import { ALTERNATE_KEY_NAME } from "../../accessibility/KeyboardShortcuts";
 
 interface IProps {
     isMinimized: boolean;
@@ -204,7 +205,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             />
         );
         let shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt" onClick={this.focus}>
-            { isMac ? "⌘ K" : "Ctrl K" }
+            { isMac ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K" }
         </div>;
 
         if (this.props.isMinimized) {
