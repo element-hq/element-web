@@ -3585,5 +3585,9 @@
     "IRC (Experimental)": "IRC (katseline)",
     "Toggle hidden event visibility": "Lülita peidetud sündmuste näitamine sisse/välja",
     "%(count)s hidden messages.|one": "%(count)s peidetud sõnum.",
-    "%(count)s hidden messages.|other": "%(count)s peidetud sõnumit."
+    "%(count)s hidden messages.|other": "%(count)s peidetud sõnumit.",
+    "Redo edit": "Korda muudatust",
+    "Undo edit": "Võta muudatus tagasi",
+    "Jump to last message": "Mine viimase sõnumi juurde",
+    "Jump to first message": "Mine esimese sõnumi juurde"
 }
