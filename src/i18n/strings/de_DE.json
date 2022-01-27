@@ -3586,5 +3586,9 @@
     "Redo edit": "Änderung wiederherstellen",
     "Undo edit": "Änderung rückgängig machen",
     "Jump to last message": "Zur letzten Nachricht springen",
-    "Jump to first message": "Zur ersten Nachricht springen"
+    "Jump to first message": "Zur ersten Nachricht springen",
+    "Force complete": "Vervollständigung erzwingen",
+    "Toggle hidden event visibility": "Sichtbarkeit versteckter Events umschalten",
+    "%(count)s hidden messages.|one": "%(count)s ausgeblendete Nachricht.",
+    "%(count)s hidden messages.|other": "%(count)s ausgeblendete Nachrichten."
 }
