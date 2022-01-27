@@ -3594,5 +3594,7 @@
     "%(count)s hidden messages.|other": "%(count)s skrytých zpráv.",
     "Undo edit": "Zrušit úpravy",
     "Jump to last message": "Přejít na poslední zprávu",
-    "Jump to first message": "Přejít na první zprávu"
+    "Jump to first message": "Přejít na první zprávu",
+    "Redo edit": "Obnovit úpravy",
+    "Force complete": "Vynucené dokončování"
 }
