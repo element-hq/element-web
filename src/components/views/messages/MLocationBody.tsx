@@ -24,6 +24,7 @@ import {
     ILocationContent,
     LOCATION_EVENT_TYPE,
 } from 'matrix-js-sdk/src/@types/location';
+import { IClientWellKnown } from 'matrix-js-sdk/src/client';
 
 import SdkConfig from '../../../SdkConfig';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -35,6 +36,8 @@ import LocationViewDialog from '../location/LocationViewDialog';
 import TooltipTarget from '../elements/TooltipTarget';
 import { Alignment } from '../elements/Tooltip';
 import AccessibleButton from '../elements/AccessibleButton';
+import { getTileServerWellKnown, tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
+import MatrixClientContext from '../../../contexts/MatrixClientContext';
 
 interface IState {
     error: Error;
@@ -42,9 +45,12 @@ interface IState {
 
 @replaceableComponent("views.messages.MLocationBody")
 export default class MLocationBody extends React.Component<IBodyProps, IState> {
+    public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
     private coords: GeolocationCoordinates;
     private bodyId: string;
     private markerId: string;
+    private map?: maplibregl.Map = null;
 
     constructor(props: IBodyProps) {
         super(props);
@@ -65,7 +71,9 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
             return;
         }
 
-        createMap(
+        this.context.on("WellKnown.client", this.updateStyleUrl);
+
+        this.map = createMap(
             this.coords,
             false,
             this.bodyId,
@@ -73,6 +81,17 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
             (e: Error) => this.setState({ error: e }),
         );
     }
+
+    componentWillUnmount() {
+        this.context.off("WellKnown.client", this.updateStyleUrl);
+    }
+
+    private updateStyleUrl = (clientWellKnown: IClientWellKnown) => {
+        const style = tileServerFromWellKnown(clientWellKnown)?.["map_style_url"];
+        if (style) {
+            this.map?.setStyle(style);
+        }
+    };
 
     private onClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -87,7 +106,10 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
             'Location View',
             '',
             LocationViewDialog,
-            { mxEvent: this.props.mxEvent },
+            {
+                matrixClient: this.context,
+                mxEvent: this.props.mxEvent,
+            },
             "mx_LocationViewDialog_wrapper",
             false, // isPriority
             true, // isStatic
@@ -206,6 +228,27 @@ function ZoomButtons(props: IZoomButtonsProps): React.ReactElement<HTMLDivElemen
     </div>;
 }
 
+/**
+ * Look up what map tile server style URL was provided in the homeserver's
+ * .well-known location, or, failing that, in our local config, or, failing
+ * that, defaults to the same tile server listed by matrix.org.
+ */
+export function findMapStyleUrl(): string {
+    const mapStyleUrl = (
+        getTileServerWellKnown()?.map_style_url ??
+        SdkConfig.get().map_style_url
+    );
+
+    if (!mapStyleUrl) {
+        throw new Error(
+            "'map_style_url' missing from homeserver .well-known area, and " +
+            "missing from from config.json.",
+        );
+    }
+
+    return mapStyleUrl;
+}
+
 export function createMap(
     coords: GeolocationCoordinates,
     interactive: boolean,
@@ -213,35 +256,40 @@ export function createMap(
     markerId: string,
     onError: (error: Error) => void,
 ): maplibregl.Map {
-    const styleUrl = SdkConfig.get().map_style_url;
-    const coordinates = new maplibregl.LngLat(coords.longitude, coords.latitude);
+    try {
+        const styleUrl = findMapStyleUrl();
+        const coordinates = new maplibregl.LngLat(coords.longitude, coords.latitude);
 
-    const map = new maplibregl.Map({
-        container: bodyId,
-        style: styleUrl,
-        center: coordinates,
-        zoom: 15,
-        interactive,
-    });
+        const map = new maplibregl.Map({
+            container: bodyId,
+            style: styleUrl,
+            center: coordinates,
+            zoom: 15,
+            interactive,
+        });
 
-    new maplibregl.Marker({
-        element: document.getElementById(markerId),
-        anchor: 'bottom',
-        offset: [0, -1],
-    })
-        .setLngLat(coordinates)
-        .addTo(map);
+        new maplibregl.Marker({
+            element: document.getElementById(markerId),
+            anchor: 'bottom',
+            offset: [0, -1],
+        })
+            .setLngLat(coordinates)
+            .addTo(map);
 
-    map.on('error', (e) => {
-        logger.error(
-            "Failed to load map: check map_style_url in config.json has a "
-            + "valid URL and API key",
-            e.error,
-        );
-        onError(e.error);
-    });
+        map.on('error', (e) => {
+            logger.error(
+                "Failed to load map: check map_style_url in config.json has a "
+                + "valid URL and API key",
+                e.error,
+            );
+            onError(e.error);
+        });
 
-    return map;
+        return map;
+    } catch (e) {
+        logger.error("Failed to render map", e);
+        onError(e);
+    }
 }
 
 /**

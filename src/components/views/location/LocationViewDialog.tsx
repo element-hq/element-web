@@ -16,13 +16,16 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { IClientWellKnown, MatrixClient } from 'matrix-js-sdk/src/client';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "../dialogs/BaseDialog";
 import { IDialogProps } from "../dialogs/IDialogProps";
 import { createMap, LocationBodyContent, locationEventGeoUri, parseGeoUri } from '../messages/MLocationBody';
+import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
 
 interface IProps extends IDialogProps {
+    matrixClient: MatrixClient;
     mxEvent: MatrixEvent;
 }
 
@@ -50,6 +53,8 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
             return;
         }
 
+        this.props.matrixClient.on("WellKnown.client", this.updateStyleUrl);
+
         this.map = createMap(
             this.coords,
             true,
@@ -58,6 +63,17 @@ export default class LocationViewDialog extends React.Component<IProps, IState> 
             (e: Error) => this.setState({ error: e }),
         );
     }
+
+    componentWillUnmount() {
+        this.props.matrixClient.off("WellKnown.client", this.updateStyleUrl);
+    }
+
+    private updateStyleUrl = (clientWellKnown: IClientWellKnown) => {
+        const style = tileServerFromWellKnown(clientWellKnown)?.["map_style_url"];
+        if (style) {
+            this.map?.setStyle(style);
+        }
+    };
 
     private getBodyId = () => {
         return `mx_LocationViewDialog_${this.props.mxEvent.getId()}`;

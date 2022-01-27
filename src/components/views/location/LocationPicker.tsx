@@ -18,8 +18,8 @@ import React, { SyntheticEvent } from 'react';
 import maplibregl from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { IClientWellKnown } from 'matrix-js-sdk/src/client';
 
-import SdkConfig from '../../../SdkConfig';
 import DialogButtons from "../elements/DialogButtons";
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -27,6 +27,8 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import Modal from '../../../Modal';
 import ErrorDialog from '../dialogs/ErrorDialog';
+import { findMapStyleUrl } from '../messages/MLocationBody';
+import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
 
 interface IProps {
     sender: RoomMember;
@@ -51,9 +53,9 @@ interface IState {
 class LocationPicker extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
-    private map: maplibregl.Map;
-    private geolocate: maplibregl.GeolocateControl;
-    private marker: maplibregl.Marker;
+    private map?: maplibregl.Map = null;
+    private geolocate?: maplibregl.GeolocateControl = null;
+    private marker?: maplibregl.Marker = null;
 
     constructor(props: IProps) {
         super(props);
@@ -69,15 +71,16 @@ class LocationPicker extends React.Component<IProps, IState> {
     };
 
     componentDidMount() {
-        const config = SdkConfig.get();
-        this.map = new maplibregl.Map({
-            container: 'mx_LocationPicker_map',
-            style: config.map_style_url,
-            center: [0, 0],
-            zoom: 1,
-        });
+        this.context.on("WellKnown.client", this.updateStyleUrl);
 
         try {
+            this.map = new maplibregl.Map({
+                container: 'mx_LocationPicker_map',
+                style: findMapStyleUrl(),
+                center: [0, 0],
+                zoom: 1,
+            });
+
             // Add geolocate control to the map.
             this.geolocate = new maplibregl.GeolocateControl({
                 positionOptions: {
@@ -124,18 +127,26 @@ class LocationPicker extends React.Component<IProps, IState> {
 
             this.geolocate.on('geolocate', this.onGeolocate);
         } catch (e) {
-            logger.error("Failed to render map", e.error);
-            this.setState({ error: e.error });
+            logger.error("Failed to render map", e);
+            this.setState({ error: e });
         }
     }
 
     componentWillUnmount() {
         this.geolocate?.off('geolocate', this.onGeolocate);
+        this.context.off("WellKnown.client", this.updateStyleUrl);
     }
+
+    private updateStyleUrl = (clientWellKnown: IClientWellKnown) => {
+        const style = tileServerFromWellKnown(clientWellKnown)?.["map_style_url"];
+        if (style) {
+            this.map?.setStyle(style);
+        }
+    };
 
     private onGeolocate = (position: GeolocationPosition) => {
         this.setState({ position });
-        this.marker.setLngLat(
+        this.marker?.setLngLat(
             new maplibregl.LngLat(
                 position.coords.longitude,
                 position.coords.latitude,
