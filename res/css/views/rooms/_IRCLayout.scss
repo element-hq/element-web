@@ -25,7 +25,6 @@ $irc-line-height: $font-18px;
     line-height: $irc-line-height !important;
 
     .mx_EventTile {
-
         // timestamps are links which shouldn't be underlined
         > a {
             text-decoration: none;
@@ -111,6 +110,8 @@ $irc-line-height: $font-18px;
             .mx_TextualEvent,
             .mx_MTextBody {
                 display: inline-block;
+                // add a 1px padding top and bottom because our larger emoji font otherwise gets cropped by anti-zalgo
+                padding: 1px 0;
             }
         }
 

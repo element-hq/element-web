@@ -279,9 +279,15 @@ limitations under the License.
     }
 
     &:not(.mx_EventTile_noBubble) .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
-        padding: var(--gutterSize);
+        // make the top and bottom padding 1px smaller so that we can pad .mx_EventTile_content by 1px
+        // to avoid anti-zalgo cutting off our larger than text emojis.
+        padding: calc(var(--gutterSize) - 1px);
         padding-right: 60px; // space for the timestamp
         background: var(--backgroundColor);
+
+        .mx_EventTile_content {
+            padding: 1px;
+        }
     }
 
     &.mx_EventTile_continuation[data-self=false] .mx_EventTile_line {
