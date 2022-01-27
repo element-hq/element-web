@@ -3541,5 +3541,10 @@
     "Unable to check if username has been taken. Try again later.": "Неможливо перевірити, чи зайняте ім'я користувача. Спробуйте ще раз пізніше.",
     "Toggle hidden event visibility": "Показати/сховати подію",
     "%(count)s hidden messages.|one": "%(count)s сховане повідомлення.",
-    "%(count)s hidden messages.|other": "%(count)s схованих повідомлень."
+    "%(count)s hidden messages.|other": "%(count)s схованих повідомлень.",
+    "Redo edit": "Повторити зміни",
+    "Force complete": "Примусово завершити",
+    "Undo edit": "Скасувати зміни",
+    "Jump to last message": "Перейти до останнього повідомлення",
+    "Jump to first message": "Перейти до першого повідомлення"
 }
