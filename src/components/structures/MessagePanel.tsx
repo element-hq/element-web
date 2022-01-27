@@ -183,6 +183,8 @@ interface IProps {
 
     hideThreadedMessages?: boolean;
     disableGrouping?: boolean;
+
+    callEventGroupers: Map<string, CallEventGrouper>;
 }
 
 interface IState {
@@ -253,9 +255,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     private readonly showTypingNotificationsWatcherRef: string;
     private eventTiles: Record<string, EventTile> = {};
-
-    // A map of <callId, CallEventGrouper>
-    private callEventGroupers = new Map<string, CallEventGrouper>();
 
     constructor(props, context) {
         super(props, context);
@@ -650,20 +649,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             const last = (mxEv === lastShownEvent);
             const { nextEvent, nextTile } = this.getNextEventInfo(this.props.events, i);
 
-            if (
-                mxEv.getType().indexOf("m.call.") === 0 ||
-                mxEv.getType().indexOf("org.matrix.call.") === 0
-            ) {
-                const callId = mxEv.getContent().call_id;
-                if (this.callEventGroupers.has(callId)) {
-                    this.callEventGroupers.get(callId).add(mxEv);
-                } else {
-                    const callEventGrouper = new CallEventGrouper();
-                    callEventGrouper.add(mxEv);
-                    this.callEventGroupers.set(callId, callEventGrouper);
-                }
-            }
-
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
                     grouper.add(mxEv, this.showHiddenEvents);
@@ -784,7 +769,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // it's successful: we received it.
         isLastSuccessful = isLastSuccessful && mxEv.getSender() === MatrixClientPeg.get().getUserId();
 
-        const callEventGrouper = this.callEventGroupers.get(mxEv.getContent().call_id);
+        const callEventGrouper = this.props.callEventGroupers.get(mxEv.getContent().call_id);
         // use txnId as key if available so that we don't remount during sending
         ret.push(
             <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv}>

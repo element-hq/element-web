@@ -41,9 +41,8 @@ const room = new Matrix.Room("!roomId:server_name");
 
 // wrap MessagePanel with a component which provides the MatrixClient in the context.
 class WrappedMessagePanel extends React.Component {
-    state = {
-        resizeNotifier: new EventEmitter(),
-    };
+    resizeNotifier = new EventEmitter();
+    callEventGroupers = new Map();
 
     render() {
         const roomContext = {
@@ -60,7 +59,12 @@ class WrappedMessagePanel extends React.Component {
 
         return <MatrixClientContext.Provider value={client}>
             <RoomContext.Provider value={roomContext}>
-                <MessagePanel room={room} {...this.props} resizeNotifier={this.state.resizeNotifier} />
+                <MessagePanel
+                    room={room}
+                    {...this.props}
+                    resizeNotifier={this.resizeNotifier}
+                    callEventGroupers={this.callEventGroupers}
+                />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>;
     }

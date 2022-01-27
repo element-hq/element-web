@@ -170,6 +170,7 @@ export default class CallEventGrouper extends EventEmitter {
     };
 
     public add(event: MatrixEvent) {
+        if (this.events.has(event)) return; // nothing to do
         this.events.add(event);
         this.setCall();
     }
