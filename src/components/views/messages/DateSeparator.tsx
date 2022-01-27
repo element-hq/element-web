@@ -16,12 +16,26 @@ limitations under the License.
 */
 
 import React from 'react';
+import { Direction } from 'matrix-js-sdk/src/models/event-timeline';
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { formatFullDateNoTime } from '../../../DateUtils';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import dis from '../../../dispatcher/dispatcher';
+import { Action } from '../../../dispatcher/actions';
 import SettingsStore from '../../../settings/SettingsStore';
 import { UIFeature } from '../../../settings/UIFeature';
+import Modal from '../../../Modal';
+import ErrorDialog from '../dialogs/ErrorDialog';
+import { contextMenuBelow } from '../rooms/RoomTile';
+import { ContextMenuTooltipButton } from "../../structures/ContextMenu";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
+import JumpToDatePicker from './JumpToDatePicker';
 
 function getDaysArray(): string[] {
     return [
@@ -36,13 +50,59 @@ function getDaysArray(): string[] {
 }
 
 interface IProps {
+    roomId: string;
     ts: number;
     forExport?: boolean;
 }
 
+interface IState {
+    contextMenuPosition?: DOMRect;
+    jumpToDateEnabled: boolean;
+}
+
 @replaceableComponent("views.messages.DateSeparator")
-export default class DateSeparator extends React.Component<IProps> {
-    private getLabel() {
+export default class DateSeparator extends React.Component<IProps, IState> {
+    private settingWatcherRef = null;
+
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            jumpToDateEnabled: SettingsStore.getValue("feature_jump_to_date"),
+        };
+
+        // We're using a watcher so the date headers in the timeline are updated
+        // when the lab setting is toggled.
+        this.settingWatcherRef = SettingsStore.watchSetting(
+            "feature_jump_to_date",
+            null,
+            (settingName, roomId, level, newValAtLevel, newVal) => {
+                this.setState({ jumpToDateEnabled: newVal });
+            },
+        );
+    }
+
+    componentWillUnmount() {
+        SettingsStore.unwatchSetting(this.settingWatcherRef);
+    }
+
+    private onContextMenuOpenClick = (e: React.MouseEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+        const target = e.target as HTMLButtonElement;
+        this.setState({ contextMenuPosition: target.getBoundingClientRect() });
+    };
+
+    private onContextMenuCloseClick = (): void => {
+        this.closeMenu();
+    };
+
+    private closeMenu = (): void => {
+        this.setState({
+            contextMenuPosition: null,
+        });
+    };
+
+    private getLabel(): string {
         const date = new Date(this.props.ts);
         const disableRelativeTimestamps = !SettingsStore.getValue(UIFeature.TimelineEnableRelativeDates);
 
@@ -65,13 +125,127 @@ export default class DateSeparator extends React.Component<IProps> {
         }
     }
 
+    private pickDate = async (inputTimestamp): Promise<void> => {
+        const unixTimestamp = new Date(inputTimestamp).getTime();
+
+        const cli = MatrixClientPeg.get();
+        try {
+            const roomId = this.props.roomId;
+            const { event_id: eventId, origin_server_ts: originServerTs } = await cli.timestampToEvent(
+                roomId,
+                unixTimestamp,
+                Direction.Forward,
+            );
+            logger.log(
+                `/timestamp_to_event: ` +
+                `found ${eventId} (${originServerTs}) for timestamp=${unixTimestamp} (looking forward)`,
+            );
+
+            dis.dispatch({
+                action: Action.ViewRoom,
+                event_id: eventId,
+                highlighted: true,
+                room_id: roomId,
+            });
+        } catch (e) {
+            const code = e.errcode || e.statusCode;
+            // only show the dialog if failing for something other than a network error
+            // (e.g. no errcode or statusCode) as in that case the redactions end up in the
+            // detached queue and we show the room status bar to allow retry
+            if (typeof code !== "undefined") {
+                // display error message stating you couldn't delete this.
+                Modal.createTrackedDialog('Unable to find event at that date', '', ErrorDialog, {
+                    title: _t('Error'),
+                    description: _t('Unable to find event at that date. (%(code)s)', { code }),
+                });
+            }
+        }
+    };
+
+    private onLastWeekClicked = (): void => {
+        const date = new Date();
+        date.setDate(date.getDate() - 7);
+        this.pickDate(date);
+        this.closeMenu();
+    };
+
+    private onLastMonthClicked = (): void => {
+        const date = new Date();
+        // Month numbers are 0 - 11 and `setMonth` handles the negative rollover
+        date.setMonth(date.getMonth() - 1, 1);
+        this.pickDate(date);
+        this.closeMenu();
+    };
+
+    private onTheBeginningClicked = (): void => {
+        const date = new Date(0);
+        this.pickDate(date);
+        this.closeMenu();
+    };
+
+    private onDatePicked = (dateString): void => {
+        this.pickDate(dateString);
+        this.closeMenu();
+    };
+
+    private renderJumpToDateMenu(): React.ReactElement {
+        let contextMenu: JSX.Element;
+        if (this.state.contextMenuPosition) {
+            contextMenu = <IconizedContextMenu
+                {...contextMenuBelow(this.state.contextMenuPosition)}
+                compact
+                onFinished={this.onContextMenuCloseClick}
+            >
+                <IconizedContextMenuOptionList first>
+                    <IconizedContextMenuOption
+                        label={_t("Last week")}
+                        onClick={this.onLastWeekClicked}
+                    />
+                    <IconizedContextMenuOption
+                        label={_t("Last month")}
+                        onClick={this.onLastMonthClicked}
+                    />
+                    <IconizedContextMenuOption
+                        label={_t("The beginning of the room")}
+                        onClick={this.onTheBeginningClicked}
+                    />
+                </IconizedContextMenuOptionList>
+
+                <IconizedContextMenuOptionList>
+                    <JumpToDatePicker ts={this.props.ts} onDatePicked={this.onDatePicked} />
+                </IconizedContextMenuOptionList>
+            </IconizedContextMenu>;
+        }
+
+        return (
+            <ContextMenuTooltipButton
+                className="mx_DateSeparator_jumpToDateMenu"
+                onClick={this.onContextMenuOpenClick}
+                isExpanded={!!this.state.contextMenuPosition}
+                title={_t("Jump to date")}
+            >
+                <div aria-hidden="true">{ this.getLabel() }</div>
+                <div className="mx_DateSeparator_chevron" />
+                { contextMenu }
+            </ContextMenuTooltipButton>
+        );
+    }
+
     render() {
         const label = this.getLabel();
+
+        let dateHeaderContent;
+        if (this.state.jumpToDateEnabled) {
+            dateHeaderContent = this.renderJumpToDateMenu();
+        } else {
+            dateHeaderContent = <div aria-hidden="true">{ label }</div>;
+        }
+
         // ARIA treats <hr/>s as separators, here we abuse them slightly so manually treat this entire thing as one
         // tab-index=-1 to allow it to be focusable but do not add tab stop for it, primarily for screen readers
         return <h2 className="mx_DateSeparator" role="separator" tabIndex={-1} aria-label={label}>
             <hr role="none" />
-            <div aria-hidden="true">{ label }</div>
+            { dateHeaderContent }
             <hr role="none" />
         </h2>;
     }

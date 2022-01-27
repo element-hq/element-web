@@ -248,7 +248,11 @@ export default class HTMLExporter extends Exporter {
 
     protected getDateSeparator(event: MatrixEvent) {
         const ts = event.getTs();
-        const dateSeparator = <li key={ts}><DateSeparator forExport={true} key={ts} ts={ts} /></li>;
+        const dateSeparator = (
+            <li key={ts}>
+                <DateSeparator forExport={true} key={ts} roomId={event.getRoomId()} ts={ts} />
+            </li>
+        );
         return renderToStaticMarkup(dateSeparator);
     }
 

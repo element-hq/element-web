@@ -721,8 +721,12 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         // do we need a date separator since the last event?
         const wantsDateSeparator = this.wantsDateSeparator(prevEvent, eventDate);
-        if (wantsDateSeparator && !isGrouped) {
-            const dateSeparator = <li key={ts1}><DateSeparator key={ts1} ts={ts1} /></li>;
+        if (wantsDateSeparator && !isGrouped && this.props.room) {
+            const dateSeparator = (
+                <li key={ts1}>
+                    <DateSeparator key={ts1} roomId={this.props.room.roomId} ts={ts1} />
+                </li>
+            );
             ret.push(dateSeparator);
         }
 
@@ -1118,7 +1122,7 @@ class CreationGrouper extends BaseGrouper {
         if (panel.wantsDateSeparator(this.prevEvent, createEvent.getDate())) {
             const ts = createEvent.getTs();
             ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} roomId={createEvent.getRoomId()} ts={ts} /></li>,
             );
         }
 
@@ -1231,7 +1235,7 @@ class RedactionGrouper extends BaseGrouper {
         if (panel.wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
             const ts = this.events[0].getTs();
             ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} roomId={this.events[0].getRoomId()} ts={ts} /></li>,
             );
         }
 
@@ -1327,7 +1331,7 @@ class MemberGrouper extends BaseGrouper {
         if (panel.wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
             const ts = this.events[0].getTs();
             ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} roomId={this.events[0].getRoomId()} ts={ts} /></li>,
             );
         }
 
@@ -1429,7 +1433,7 @@ class HiddenEventGrouper extends BaseGrouper {
         if (panel.wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
             const ts = this.events[0].getTs();
             ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} ts={ts} /></li>,
+                <li key={ts+'~'}><DateSeparator key={ts+'~'} roomId={this.events[0].getRoomId()} ts={ts} /></li>,
             );
         }
 

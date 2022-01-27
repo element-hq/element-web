@@ -33,3 +33,18 @@ limitations under the License.
     margin: 0 25px;
     flex: 0 0 auto;
 }
+
+.mx_DateSeparator_jumpToDateMenu {
+    display: flex;
+}
+
+.mx_DateSeparator_chevron {
+    align-self: center;
+    width: 16px;
+    height: 16px;
+    mask-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
+    background-color: $tertiary-content;
+}

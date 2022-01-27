@@ -50,21 +50,21 @@ limitations under the License.
         }
 
         // round the top corners of the top button for the hover effect to be bounded
-        &:first-child .mx_AccessibleButton:first-child {
+        &:first-child .mx_AccessibleButton:not(.mx_AccessibleButton_hasKind):first-child {
             border-radius: 8px 8px 0 0; // radius matches .mx_ContextualMenu
         }
 
         // round the bottom corners of the bottom button for the hover effect to be bounded
-        &:last-child .mx_AccessibleButton:last-child {
+        &:last-child .mx_AccessibleButton:not(.mx_AccessibleButton_hasKind):last-child {
             border-radius: 0 0 8px 8px; // radius matches .mx_ContextualMenu
         }
 
         // round all corners of the only button for the hover effect to be bounded
-        &:first-child:last-child .mx_AccessibleButton:first-child:last-child {
+        &:first-child:last-child .mx_AccessibleButton:not(.mx_AccessibleButton_hasKind):first-child:last-child {
             border-radius: 8px; // radius matches .mx_ContextualMenu
         }
 
-        .mx_AccessibleButton {
+        .mx_AccessibleButton:not(.mx_AccessibleButton_hasKind) {
             // pad the inside of the button so that the hover background is padded too
             padding-top: 12px;
             padding-bottom: 12px;
@@ -130,7 +130,7 @@ limitations under the License.
     }
 
     .mx_IconizedContextMenu_optionList_red {
-        .mx_AccessibleButton {
+        .mx_AccessibleButton:not(.mx_AccessibleButton_hasKind) {
             color: $alert !important;
         }
 
@@ -148,7 +148,7 @@ limitations under the License.
     }
 
     .mx_IconizedContextMenu_active {
-        &.mx_AccessibleButton, .mx_AccessibleButton {
+        &.mx_AccessibleButton:not(.mx_AccessibleButton_hasKind), .mx_AccessibleButton:not(.mx_AccessibleButton_hasKind) {
             color: $accent !important;
         }
 
