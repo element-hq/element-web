@@ -138,7 +138,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                 },
                 invalid: () => {
                     const min = 1;
-                    const max = 10 ** 8;
+                    const max = 2000;
                     return _t("Enter a number between %(min)s and %(max)s", {
                         min,
                         max,
@@ -239,6 +239,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     if (exportType === ExportType.LastNMessages) {
         messageCount = (
             <Field
+                id="message-count"
                 element="input"
                 type="number"
                 value={numberOfMessages.toString()}
@@ -335,6 +336,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     </span>
 
                     <Field
+                        id="export-type"
                         element="select"
                         value={exportType}
                         onChange={(e) => {
@@ -350,6 +352,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     </span>
 
                     <Field
+                        id="size-limit"
                         type="number"
                         autoComplete="off"
                         onValidate={onValidateSize}
@@ -361,6 +364,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     />
 
                     <StyledCheckbox
+                        id="include-attachments"
                         checked={includeAttachments}
                         onChange={(e) =>
                             setAttachments(
@@ -372,7 +376,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     </StyledCheckbox>
                 </div>
                 { isExporting ? (
-                    <div className="mx_ExportDialog_progress">
+                    <div data-test-id='export-progress' className="mx_ExportDialog_progress">
                         <Spinner w={24} h={24} />
                         <p>
                             { exportProgressText }

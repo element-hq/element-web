@@ -28,6 +28,7 @@ export enum CheckboxStyle {
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
     inputRef?: React.RefObject<HTMLInputElement>;
     kind?: CheckboxStyle;
+    id?: string;
 }
 
 interface IState {
@@ -44,7 +45,7 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
     constructor(props: IProps) {
         super(props);
         // 56^10 so unlikely chance of collision.
-        this.id = "checkbox_" + randomString(10);
+        this.id = this.props.id || "checkbox_" + randomString(10);
     }
 
     public render() {
