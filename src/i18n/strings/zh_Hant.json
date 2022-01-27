@@ -3588,5 +3588,8 @@
     "Call": "通話",
     "Right panel stays open (defaults to room member list)": "右側面板維持開啟狀態（預設為聊天室成員清單）",
     "Unable to check if username has been taken. Try again later.": "無法檢查使用者名稱是否已被使用。請稍後再試。",
-    "IRC (Experimental)": "IRC（實驗性）"
+    "IRC (Experimental)": "IRC（實驗性）",
+    "Toggle hidden event visibility": "切換隱藏事件的能見度",
+    "%(count)s hidden messages.|one": "%(count)s 個隱藏的訊息。",
+    "%(count)s hidden messages.|other": "%(count)s 個隱藏的訊息。"
 }
