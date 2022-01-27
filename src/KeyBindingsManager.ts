@@ -20,116 +20,120 @@ import { isMac } from './Keyboard';
 /** Actions for the chat message composer component */
 export enum MessageComposerAction {
     /** Send a message */
-    Send = 'Send',
+    Send = 'KeyBinding.sendMessageInComposer',
     /** Go backwards through the send history and use the message in composer view */
-    SelectPrevSendHistory = 'SelectPrevSendHistory',
+    SelectPrevSendHistory = 'KeyBinding.previousMessageInComposerHistory',
     /** Go forwards through the send history */
-    SelectNextSendHistory = 'SelectNextSendHistory',
+    SelectNextSendHistory = 'KeyBinding.nextMessageInComposerHistory',
     /** Start editing the user's last sent message */
-    EditPrevMessage = 'EditPrevMessage',
+    EditPrevMessage = 'KeyBinding.editPreviousMessage',
     /** Start editing the user's next sent message */
-    EditNextMessage = 'EditNextMessage',
+    EditNextMessage = 'KeyBinding.editNextMessage',
     /** Cancel editing a message or cancel replying to a message */
-    CancelEditing = 'CancelEditing',
+    CancelEditing = 'KeyBinding.cancelReplyInComposer',
 
     /** Set bold format the current selection */
-    FormatBold = 'FormatBold',
+    FormatBold = 'KeyBinding.toggleBoldInComposer',
     /** Set italics format the current selection */
-    FormatItalics = 'FormatItalics',
+    FormatItalics = 'KeyBinding.toggleItalicsInComposer',
     /** Format the current selection as quote */
-    FormatQuote = 'FormatQuote',
+    FormatQuote = 'KeyBinding.toggleQuoteInComposer',
     /** Undo the last editing */
-    EditUndo = 'EditUndo',
+    EditUndo = 'KeyBinding.editUndoInComposer',
     /** Redo editing */
-    EditRedo = 'EditRedo',
+    EditRedo = 'KeyBinding.editRedoInComposer',
     /** Insert new line */
-    NewLine = 'NewLine',
+    NewLine = 'KeyBinding.newLineInComposer',
     /** Move the cursor to the start of the message */
-    MoveCursorToStart = 'MoveCursorToStart',
+    MoveCursorToStart = 'KeyBinding.jumpToStartInComposer',
     /** Move the cursor to the end of the message */
-    MoveCursorToEnd = 'MoveCursorToEnd',
+    MoveCursorToEnd = 'KeyBinding.jumpToEndInComposer',
 }
 
 /** Actions for text editing autocompletion */
 export enum AutocompleteAction {
     /** Accepts chosen autocomplete selection */
-    Complete = 'Complete',
+    Complete = 'KeyBinding.completeAutocomplete',
     /** Accepts chosen autocomplete selection or,
      * if the autocompletion window is not shown, open the window and select the first selection */
-    ForceComplete = 'ForceComplete',
+    ForceComplete = 'KeyBinding.forceCompleteAutocomplete',
     /** Move to the previous autocomplete selection */
-    PrevSelection = 'PrevSelection',
+    PrevSelection = 'KeyBinding.previousOptionInAutoComplete',
     /** Move to the next autocomplete selection */
-    NextSelection = 'NextSelection',
+    NextSelection = 'KeyBinding.nextOptionInAutoComplete',
     /** Close the autocompletion window */
-    Cancel = 'Cancel',
+    Cancel = 'KeyBinding.cancelAutoComplete',
 }
 
 /** Actions for the room list sidebar */
 export enum RoomListAction {
     /** Clear room list filter field */
-    ClearSearch = 'ClearSearch',
+    ClearSearch = 'KeyBinding.clearRoomFilter',
     /** Navigate up/down in the room list */
-    PrevRoom = 'PrevRoom',
+    PrevRoom = 'KeyBinding.downerRoom',
     /** Navigate down in the room list */
-    NextRoom = 'NextRoom',
+    NextRoom = 'KeyBinding.upperRoom',
     /** Select room from the room list */
-    SelectRoom = 'SelectRoom',
+    SelectRoom = 'KeyBinding.selectRoomInRoomList',
     /** Collapse room list section */
-    CollapseSection = 'CollapseSection',
+    CollapseSection = 'KeyBinding.collapseSectionInRoomList',
     /** Expand room list section, if already expanded, jump to first room in the selection */
-    ExpandSection = 'ExpandSection',
+    ExpandSection = 'KeyBinding.expandSectionInRoomList',
 }
 
 /** Actions for the current room view */
 export enum RoomAction {
     /** Scroll up in the timeline */
-    ScrollUp = 'ScrollUp',
+    ScrollUp = 'KeyBinding.scrollUpInTimeline',
     /** Scroll down in the timeline */
-    RoomScrollDown = 'RoomScrollDown',
+    RoomScrollDown = 'KeyBinding.scrollDownInTimeline',
     /** Dismiss read marker and jump to bottom */
-    DismissReadMarker = 'DismissReadMarker',
+    DismissReadMarker = 'KeyBinding.dismissReadMarkerAndJumpToBottom',
     /** Jump to oldest unread message */
-    JumpToOldestUnread = 'JumpToOldestUnread',
+    JumpToOldestUnread = 'KeyBinding.jumpToOldestUnreadMessage',
     /** Upload a file */
-    UploadFile = 'UploadFile',
+    UploadFile = 'KeyBinding.uploadFileToRoom',
     /** Focus search message in a room (must be enabled) */
-    FocusSearch = 'FocusSearch',
+    FocusSearch = 'KeyBinding.searchInRoom',
     /** Jump to the first (downloaded) message in the room */
-    JumpToFirstMessage = 'JumpToFirstMessage',
+    JumpToFirstMessage = 'KeyBinding.jumpToFirstMessageInTimeline',
     /** Jump to the latest message in the room */
-    JumpToLatestMessage = 'JumpToLatestMessage',
+    JumpToLatestMessage = 'KeyBinding.jumpToLastMessageInTimeline',
 }
 
 /** Actions for navigating do various menus, dialogs or screens */
 export enum NavigationAction {
     /** Jump to room search (search for a room) */
-    FocusRoomSearch = 'FocusRoomSearch',
+    FocusRoomSearch = 'KeyBinding.filterRooms',
     /** Toggle the space panel */
-    ToggleSpacePanel = 'ToggleSpacePanel',
+    ToggleSpacePanel = 'KeyBinding.toggleSpacePanel',
     /** Toggle the room side panel */
-    ToggleRoomSidePanel = 'ToggleRoomSidePanel',
+    ToggleRoomSidePanel = 'KeyBinding.toggleRightPanel',
     /** Toggle the user menu */
-    ToggleUserMenu = 'ToggleUserMenu',
+    ToggleUserMenu = 'KeyBinding.toggleTopLeftMenu',
     /** Toggle the short cut help dialog */
-    OpenShortCutDialog = 'OpenShortCutDialog',
+    OpenShortCutDialog = 'KeyBinding.showKeyBindingsSettings',
     /** Got to the Element home screen */
-    GoToHome = 'GoToHome',
+    GoToHome = 'KeyBinding.goToHomeView',
     /** Select prev room */
-    SelectPrevRoom = 'SelectPrevRoom',
+    SelectPrevRoom = 'KeyBinding.previousRoom',
     /** Select next room */
-    SelectNextRoom = 'SelectNextRoom',
+    SelectNextRoom = 'KeyBinding.nextRoom',
     /** Select prev room with unread messages */
-    SelectPrevUnreadRoom = 'SelectPrevUnreadRoom',
+    SelectPrevUnreadRoom = 'KeyBinding.previousUnreadRoom',
     /** Select next room with unread messages */
-    SelectNextUnreadRoom = 'SelectNextUnreadRoom',
+    SelectNextUnreadRoom = 'KeyBinding.nextUnreadRoom',
 }
 
 /** Actions only available when labs are enabled */
 export enum LabsAction {
     /** Toggle visibility of hidden events */
-    ToggleHiddenEventVisibility = 'ToggleHiddenEventVisibility',
+    ToggleHiddenEventVisibility = 'KeyBinding.toggleHiddenEventVisibility',
 }
+
+export type KeyBindingAction = (
+    MessageComposerAction | AutocompleteAction | RoomListAction | RoomAction | NavigationAction | LabsAction
+);
 
 /**
  * Represent a key combination.

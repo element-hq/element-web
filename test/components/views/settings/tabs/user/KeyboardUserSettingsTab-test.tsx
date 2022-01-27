@@ -60,7 +60,7 @@ describe("KeyboardUserSettingsTab", () => {
 
     it("doesn't render same modifier twice", async () => {
         mockKeyboardShortcuts({
-            "KEYBOARD_SHORTCUTS": {
+            "getKeyboardShortcuts": () => ({
                 "keybind1": {
                     default: {
                         key: Key.A,
@@ -69,14 +69,14 @@ describe("KeyboardUserSettingsTab", () => {
                     },
                     displayName: "Cancel replying to a message",
                 },
-            },
+            }),
         });
         const body1 = await renderKeyboardUserSettingsTab("KeyboardShortcut", { name: "keybind1" });
         expect(body1).toMatchSnapshot();
         jest.resetModules();
 
         mockKeyboardShortcuts({
-            "KEYBOARD_SHORTCUTS": {
+            "getKeyboardShortcuts": () => ({
                 "keybind1": {
                     default: {
                         key: Key.A,
@@ -85,7 +85,7 @@ describe("KeyboardUserSettingsTab", () => {
                     },
                     displayName: "Cancel replying to a message",
                 },
-            },
+            }),
         });
         const body2 = await renderKeyboardUserSettingsTab("KeyboardShortcut", { name: "keybind1" });
         expect(body2).toMatchSnapshot();
@@ -94,7 +94,7 @@ describe("KeyboardUserSettingsTab", () => {
 
     it("renders list of keyboard shortcuts", async () => {
         mockKeyboardShortcuts({
-            "KEYBOARD_SHORTCUTS": {
+            "getKeyboardShortcuts": () => ({
                 "keybind1": {
                     default: {
                         key: Key.A,
@@ -115,7 +115,7 @@ describe("KeyboardUserSettingsTab", () => {
                     },
                     displayName: "Select room from the room list",
                 },
-            },
+            }),
             "CATEGORIES": {
                 "Composer": {
                     settingNames: ["keybind1", "keybind2"],

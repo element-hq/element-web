@@ -17,7 +17,7 @@ limitations under the License.
 import {
     CATEGORIES,
     CategoryName,
-    KEYBOARD_SHORTCUTS,
+    getKeyboardShortcuts,
     registerShortcut,
 } from "../../src/accessibility/KeyboardShortcuts";
 import { Key } from "../../src/Keyboard";
@@ -38,7 +38,7 @@ describe("KeyboardShortcuts", () => {
 
             registerShortcut(shortcutName, shortcutCategory, shortcut);
 
-            expect(KEYBOARD_SHORTCUTS[shortcutName]).toBe(shortcut);
+            expect(getKeyboardShortcuts()[shortcutName]).toBe(shortcut);
             expect(CATEGORIES[shortcutCategory].settingNames.includes(shortcutName)).toBeTruthy();
         });
     });

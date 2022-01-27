@@ -3379,7 +3379,6 @@
     "Toggle Bold": "Toggle Bold",
     "Toggle Italics": "Toggle Italics",
     "Toggle Quote": "Toggle Quote",
-    "New line": "New line",
     "Cancel replying to a message": "Cancel replying to a message",
     "Navigate to next message to edit": "Navigate to next message to edit",
     "Navigate to previous message to edit": "Navigate to previous message to edit",
@@ -3416,5 +3415,11 @@
     "Next autocomplete suggestion": "Next autocomplete suggestion",
     "Previous autocomplete suggestion": "Previous autocomplete suggestion",
     "Toggle space panel": "Toggle space panel",
-    "Toggle hidden event visibility": "Toggle hidden event visibility"
+    "Toggle hidden event visibility": "Toggle hidden event visibility",
+    "Jump to first message": "Jump to first message",
+    "Jump to last message": "Jump to last message",
+    "Undo edit": "Undo edit",
+    "Force complete": "Force complete",
+    "New line": "New line",
+    "Redo edit": "Redo edit"
 }

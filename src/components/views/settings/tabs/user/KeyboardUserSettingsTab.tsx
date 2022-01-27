@@ -18,7 +18,7 @@ limitations under the License.
 import React from "react";
 
 import {
-    KEYBOARD_SHORTCUTS,
+    getKeyboardShortcuts,
     ALTERNATE_KEY_NAME,
     KEY_ICON,
     ICategory,
@@ -28,6 +28,15 @@ import {
 import SdkConfig from "../../../../../SdkConfig";
 import { isMac, Key } from "../../../../../Keyboard";
 import { _t } from "../../../../../languageHandler";
+
+// TODO: This should return KeyCombo but it has ctrlOrCmd instead of ctrlOrCmdKey
+const getKeyboardShortcutValue = (name: string) => {
+    return getKeyboardShortcuts()[name]?.default;
+};
+
+const getKeyboardShortcutDisplayName = (name: string): string => {
+    return getKeyboardShortcuts()[name]?.displayName as string;
+};
 
 interface IKeyboardKeyProps {
     name: string;
@@ -49,7 +58,7 @@ interface IKeyboardShortcutProps {
 }
 
 export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ name }) => {
-    const value = KEYBOARD_SHORTCUTS[name]?.default;
+    const value = getKeyboardShortcutValue(name);
     if (!value) return null;
 
     const modifiersElement = [];
@@ -83,7 +92,7 @@ const visibleCategories = Object.entries(CATEGORIES).filter(([categoryName]) =>
 
 const KeyboardShortcutRow: React.FC<IKeyboardShortcutRowProps> = ({ name }) => {
     return <div className="mx_KeyboardShortcut_shortcutRow">
-        { KEYBOARD_SHORTCUTS[name].displayName }
+        { getKeyboardShortcutDisplayName(name) }
         <KeyboardShortcut name={name} />
     </div>;
 };
