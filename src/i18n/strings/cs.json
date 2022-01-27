@@ -3591,5 +3591,8 @@
     "Unable to check if username has been taken. Try again later.": "Nelze zkontrolovat, zda je uživatelské jméno obsazeno. Zkuste to později.",
     "Toggle hidden event visibility": "Přepnout viditelnost skryté události",
     "%(count)s hidden messages.|one": "%(count)s skrytá zpráva.",
-    "%(count)s hidden messages.|other": "%(count)s skrytých zpráv."
+    "%(count)s hidden messages.|other": "%(count)s skrytých zpráv.",
+    "Undo edit": "Zrušit úpravy",
+    "Jump to last message": "Přejít na poslední zprávu",
+    "Jump to first message": "Přejít na první zprávu"
 }
