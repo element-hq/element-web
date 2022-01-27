@@ -3582,5 +3582,8 @@
     "Group all your people in one place.": "Koonda oma olulised sõbrad ühte kohta.",
     "Group all your favourite rooms and people in one place.": "Koonda oma olulised sõbrad ning lemmikjututoad ühte kohta.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Kogukonnakeskused on kasutajate ja jututubade koondamise viis. Lisaks kogukonnakeskustele, mille liiga sa oled, võid sa kasutada ka eelseadistatud kogukonnakeskusi.",
-    "IRC (Experimental)": "IRC (katseline)"
+    "IRC (Experimental)": "IRC (katseline)",
+    "Toggle hidden event visibility": "Lülita peidetud sündmuste näitamine sisse/välja",
+    "%(count)s hidden messages.|one": "%(count)s peidetud sõnum.",
+    "%(count)s hidden messages.|other": "%(count)s peidetud sõnumit."
 }
