@@ -39,7 +39,7 @@ import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { StopGapWidget } from "../../../stores/widgets/StopGapWidget";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
-import RoomWidgetContextMenu from "../context_menus/WidgetContextMenu";
+import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CallHandler from '../../../CallHandler';
@@ -573,7 +573,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         let contextMenu;
         if (this.state.menuDisplayed) {
             contextMenu = (
-                <RoomWidgetContextMenu
+                <WidgetContextMenu
                     {...aboveLeftOf(this.contextMenuButton.current.getBoundingClientRect(), null)}
                     app={this.props.app}
                     onFinished={this.closeContextMenu}
