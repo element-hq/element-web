@@ -731,6 +731,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // but possibly the event tile itself should just update when this
         // happens to save us re-rendering the whole timeline.
         if (ev.getRoomId() === this.props.timelineSet.room.roomId) {
+            this.buildCallEventGroupers(this.state.events);
             this.forceUpdate();
         }
     };
@@ -1231,6 +1232,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             onLoaded();
         } else {
             const prom = this.timelineWindow.load(eventId, INITIAL_SIZE);
+            this.buildCallEventGroupers();
             this.setState({
                 events: [],
                 liveEvents: [],
@@ -1238,7 +1240,6 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 canForwardPaginate: false,
                 timelineLoading: true,
             });
-            this.buildCallEventGroupers();
             prom.then(onLoaded, onError);
         }
     }
