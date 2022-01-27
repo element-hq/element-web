@@ -26,9 +26,11 @@ import BugReportDialog from '../dialogs/BugReportDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 import SettingsStore from "../../../settings/SettingsStore";
 import ViewSource from "../../structures/ViewSource";
+import { Layout } from '../../../settings/enums/Layout';
 
 interface IProps {
     mxEvent: MatrixEvent;
+    layout: Layout;
 }
 
 interface IState {
@@ -88,7 +90,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
                 </AccessibleButton>;
             }
 
-            return (<div className={classNames(classes)}>
+            return (<li className={classNames(classes)} data-layout={this.props.layout}>
                 <div className="mx_EventTile_line">
                     <span>
                         { _t("Can't load this message") }
@@ -97,7 +99,7 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
                         { viewSourceButton }
                     </span>
                 </div>
-            </div>);
+            </li>);
         }
 
         return this.props.children;

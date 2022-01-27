@@ -36,6 +36,7 @@ limitations under the License.
     margin-top: var(--gutterSize);
     margin-left: 49px;
     font-size: $font-14px;
+    flex-shrink: 0;
 
     .mx_ThreadInfo {
         clear: both;
@@ -585,4 +586,8 @@ limitations under the License.
             background: transparent;
         }
     }
+}
+
+.mx_EventTile_tileError[data-layout=bubble] .mx_EventTile_line {
+    flex-direction: column; // restore the centering
 }

@@ -772,7 +772,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const callEventGrouper = this.props.callEventGroupers.get(mxEv.getContent().call_id);
         // use txnId as key if available so that we don't remount during sending
         ret.push(
-            <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv}>
+            <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv} layout={this.props.layout}>
                 <EventTile
                     as="li"
                     ref={this.collectEventTile.bind(this, eventId)}
