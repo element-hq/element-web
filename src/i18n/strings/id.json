@@ -3519,5 +3519,10 @@
     "Right panel stays open (defaults to room member list)": "Panel kanan tetap terbuka (menampilkan daftar anggota ruangan secara default)",
     "Toggle hidden event visibility": "Alih visibilitas peristiwa tersembunyi",
     "%(count)s hidden messages.|one": "%(count)s pesan tersembunyi.",
-    "%(count)s hidden messages.|other": "%(count)s pesan tersembunyi."
+    "%(count)s hidden messages.|other": "%(count)s pesan tersembunyi.",
+    "Redo edit": "Ulangi editan",
+    "Force complete": "Selesaikan dengan paksa",
+    "Undo edit": "Urungkan editan",
+    "Jump to last message": "Pergi ke pesan terakhir",
+    "Jump to first message": "Pergi ke pesan pertama"
 }
