@@ -245,7 +245,7 @@ Currently, the following UI feature flags are supported:
    ```
       {
          range: 'Beginning' | 'Timeline' | 'LastNMessages',
-         sizeMb: number,
+         sizeMb: number, // max 100gb
          format: 'Html' | 'PlainText' | 'Json',
          numberOfMessages: number,
          includeAttachments: boolean,
