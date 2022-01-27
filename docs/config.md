@@ -93,7 +93,7 @@ For a good example, see https://develop.element.io/config.json.
    Defaults to `GB` if the given code is unknown or not provided.
 1. `settingDefaults`:  Defaults for settings that support the `config` level,
    as an object mapping setting name to value (note that the "theme" setting
-   is special cased to the `default_theme` in the config file).
+   is special cased to the `default_theme` in the config file). See [Settings section](#settings)
 1. `disable_custom_urls`: disallow the user to change the
    default homeserver when signing up or logging in.
 1. `permalinkPrefix`: Used to change the URL that Element generates permalinks with.
@@ -200,8 +200,80 @@ Desktop app configuration
 
 See https://github.com/vector-im/element-desktop#user-specified-configjson
 
-UI Features
-===========
+# Settings
+
+Defaults for settings that support the `config` level,
+as an object mapping setting name to value
+
+*Note* that the "theme" setting is special cased to the `default_theme` in the config file).
+
+## Supported settings
+
+* `alwaysShowTimestamps`: boolean
+* `analyticsOptIn`: boolean
+* `autocompleteDelay`: number
+* `automaticErrorReporting`: boolean
+* `autoplayGifs`: boolean
+* `autoplayVideo`: boolean
+* `baseFontSize`: number
+* `breadcrumbs`: boolean
+* `ctrlFForSearch`: boolean
+* `custom_themes`
+* `developerMode`: boolean
+* `enableSyntaxHighlightLanguageDetection`: boolean
+* `enableWidgetScreenshots`: boolean
+* `expandCodeByDefault`: boolean
+* `forceRoomExportParameters` - Override room export parameters. Accepts an object: 
+   ```
+      {
+         range: 'Beginning' | 'Timeline' | 'LastNMessages',
+         sizeMb: number, // max 100gb
+         format: 'Html' | 'PlainText' | 'Json',
+         numberOfMessages: number,
+         includeAttachments: boolean,
+      }
+   ```
+* `Images.size`: 'normal' | 'large'
+* `language`: ISO language code
+* `layout`: 'irc' | 'group' | 'bubble'
+* `lowBandwidth`: boolean
+* `MessageComposerInput.autoReplaceEmoji`: boolean
+* `MessageComposerInput.ctrlEnterToSend`: boolean
+* `MessageComposerInput.isRichTextEnabled`: boolean
+* `MessageComposerInput.showFormatting`: boolean
+* `MessageComposerInput.showLocationButton`: boolean
+* `MessageComposerInput.showStickersButton`: boolean
+* `MessageComposerInput.suggestEmoji`: boolean
+* `MessageComposerInput.surroundWith`: boolean
+* `Pill.shouldShowPillAvatar`: boolean
+* `promptBeforeInviteUnknownUsers`: boolean
+* `readMarkerInViewThresholdMs`: number
+* `readMarkerOutOfViewThresholdMs`: number
+* `RoomList.backgroundImage`
+* `scrollToBottomOnMessageSent`: boolean
+* `showAvatarChanges`: boolean
+* `showCallButtonsInComposer`: boolean
+* `showChatEffects`: boolean
+* `showCodeLineNumbers`: boolean
+* `showCookieBar`: boolean
+* `showDeveloperTools`: boolean
+* `showDisplaynameChanges`: boolean
+* `showImages`: boolean
+* `showJoinLeaves`: boolean
+* `showReadReceipts`: boolean
+* `showRedactions`: boolean
+* `showTwelveHourTimestamps`: boolean
+* `showTypingNotifications`: boolean
+* `Spaces.allRoomsInHome`: boolean
+* `TagPanel.enableTagPanel`: boolean
+* `TextualBody.enableBigEmoji`: boolean
+* `urlPreviewsEnabled`: boolean
+* `useCustomFontSize`: number
+* `VideoView.flipVideoHorizontally`: boolean
+* `webRtcAllowPeerToPeer`: boolean
+* `Widgets.leftPanel`
+
+## UI Features
 
 Parts of the UI can be disabled using UI features. These are settings which appear
 under `settingDefaults` and can only be `true` (default) or `false`. When `false`,
@@ -241,13 +313,3 @@ Currently, the following UI feature flags are supported:
 * `UIFeature.roomHistorySettings` - Whether or not the room history settings are shown to the user.
   This should only be used if the room history visibility options are managed by the server.
 * `UIFeature.TimelineEnableRelativeDates` - Display relative date separators (eg: 'Today', 'Yesterday') in the timeline for recent messages. When false day dates will be used.
-* `UIFeature.ForceRoomExportParameters` - Override room export parameters. Accepts an object: 
-   ```
-      {
-         range: 'Beginning' | 'Timeline' | 'LastNMessages',
-         sizeMb: number, // max 100gb
-         format: 'Html' | 'PlainText' | 'Json',
-         numberOfMessages: number,
-         includeAttachments: boolean,
-      }
-   ```
