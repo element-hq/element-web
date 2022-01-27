@@ -34,5 +34,7 @@
     "Your browser can't run %(brand)s": "Dein Browser kann %(brand)s nicht ausführen",
     "Powered by Matrix": "Betrieben mit Matrix",
     "Use %(brand)s on mobile": "Verwende %(brand)s am Handy",
-    "Switch to space by number": "Zum n-ten Space wechseln"
+    "Switch to space by number": "Zum n-ten Space wechseln",
+    "Next recently visited room or community": "Nächster kürzlich besuchter Raum",
+    "Previous recently visited room or community": "Vorheriger kürzlich besuchter Raum"
 }
