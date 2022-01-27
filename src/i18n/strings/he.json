@@ -2566,7 +2566,7 @@
     "Identity server is": "שרת ההזדהות הינו",
     "Integration managers receive configuration data, and can modify widgets, send room invites, and set power levels on your behalf.": "מנהלי שילוב מקבלים נתוני תצורה ויכולים לשנות ווידג'טים, לשלוח הזמנות לחדר ולהגדיר רמות הספק מטעמכם.",
     "Use an integration manager to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב לניהול בוטים, ווידג'טים וחבילות מדבקות.",
-    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב <b> (%(serverName)s) </b> לניהול בוטים, ווידג'טים וחבילות מדבקות.",
+    "Use an integration manager <b>(%(serverName)s)</b> to manage bots, widgets, and sticker packs.": "השתמש במנהל שילוב <b> (%(serverName)s) </b> כדי לנהל בוטים, ווידג'טים וחבילות מדבקות.",
     "Identity server": "שרת הזדהות",
     "Identity server (%(server)s)": "שרת הזדהות (%(server)s)",
     "Could not connect to identity server": "לא ניתן להתחבר אל שרת הזיהוי",
