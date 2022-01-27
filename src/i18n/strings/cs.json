@@ -3588,5 +3588,8 @@
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Prostory jsou způsob seskupování místností a osob. Vedle prostorů, ve kterých se nacházíte, můžete použít i některé předpřipravené.",
     "Right panel stays open (defaults to room member list)": "Pravý panel zůstane otevřený (ve výchozím nastavení se seznamem členů místnosti)",
     "IRC (Experimental)": "IRC (experimentální)",
-    "Unable to check if username has been taken. Try again later.": "Nelze zkontrolovat, zda je uživatelské jméno obsazeno. Zkuste to později."
+    "Unable to check if username has been taken. Try again later.": "Nelze zkontrolovat, zda je uživatelské jméno obsazeno. Zkuste to později.",
+    "Toggle hidden event visibility": "Přepnout viditelnost skryté události",
+    "%(count)s hidden messages.|one": "%(count)s skrytá zpráva.",
+    "%(count)s hidden messages.|other": "%(count)s skrytých zpráv."
 }
