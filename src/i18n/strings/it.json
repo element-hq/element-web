@@ -3587,5 +3587,8 @@
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Gli spazi sono modi per raggruppare stanze e persone. Oltre agli spazi in cui sei, puoi usarne anche altri di preimpostati.",
     "Right panel stays open (defaults to room member list)": "Il pannello destro resta aperto (predefinito: lista membri)",
     "Unable to check if username has been taken. Try again later.": "Impossibile controllare se il nome utente è già in uso. Riprova più tardi.",
-    "IRC (Experimental)": "IRC (Sperimentale)"
+    "IRC (Experimental)": "IRC (Sperimentale)",
+    "Toggle hidden event visibility": "Cambia visibilità evento nascosto",
+    "%(count)s hidden messages.|one": "%(count)s messaggio nascosto.",
+    "%(count)s hidden messages.|other": "%(count)s messaggi nascosti."
 }
