@@ -21,6 +21,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useState,
 } from "react";
@@ -182,6 +183,16 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             return r.getCanonicalAlias()?.includes(lcQuery) || r.normalizedName.includes(normalizedQuery);
         });
     }, [cli, query]);
+
+    // Reset the selection back to the first item whenever the query changes
+    useLayoutEffect(() => {
+        rovingContext.dispatch({
+            type: Type.SetFocus,
+            payload: {
+                ref: rovingContext.state.refs[0],
+            },
+        });
+    }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const activeSpace = SpaceStore.instance.activeSpaceRoom;
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace, query);
