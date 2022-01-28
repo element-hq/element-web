@@ -3546,5 +3546,12 @@
     "Force complete": "Примусово завершити",
     "Undo edit": "Скасувати зміни",
     "Jump to last message": "Перейти до останнього повідомлення",
-    "Jump to first message": "Перейти до першого повідомлення"
+    "Jump to first message": "Перейти до першого повідомлення",
+    "Pick a date to jump to": "Виберіть до якої дати перейти",
+    "Jump to date": "Перейти до дати",
+    "The beginning of the room": "Початок кімнати",
+    "Last month": "Останній місяць",
+    "Last week": "Останній тиждень",
+    "Unable to find event at that date. (%(code)s)": "Не вдалося знайти подію на цю дату. (%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Перейти до дати (додає /jumptodate і переходить до заголовків дати)"
 }
