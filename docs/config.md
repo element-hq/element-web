@@ -166,6 +166,8 @@ For a good example, see https://develop.element.io/config.json.
   the well-known location is used instead.
 1. `analyticsOwner`: The entity that analytics data is being sent to. Used in copy
    when explaining to the user where data is being sent. If not set, defaults to `brand`.
+1. `defaultDeviceDisplayName`: The default device display name to use for new logins
+   and registrations. If not set then a calculated version will be used.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element
