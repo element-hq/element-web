@@ -48,9 +48,9 @@ const PERSISTED_ELEMENT_KEY = "stickerPicker";
 interface IProps {
     room: Room;
     threadId?: string | null;
-    showStickers: boolean;
+    isStickerPickerOpen: boolean;
     menuPosition?: any;
-    setShowStickers: (showStickers: boolean) => void;
+    setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
 }
 
 interface IState {
@@ -113,7 +113,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             if (scalarClient) {
                 scalarClient.disableWidgetAssets(WidgetType.STICKERPICKER, this.state.widgetId).then(() => {
                     logger.log('Assets disabled');
-                }).catch((err) => {
+                }).catch(() => {
                     logger.error('Failed to disable assets');
                 });
             } else {
@@ -123,7 +123,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
             logger.warn('No widget ID specified, not disabling assets');
         }
 
-        this.props.setShowStickers(false);
+        this.props.setStickerPickerOpen(false);
         WidgetUtils.removeStickerpickerWidgets().then(() => {
             this.forceUpdate();
         }).catch((e) => {
@@ -155,8 +155,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         }
     }
 
-    public componentDidUpdate(prevProps: IProps, prevState: IState): void {
-        this.sendVisibilityToWidget(this.props.showStickers);
+    public componentDidUpdate(): void {
+        this.sendVisibilityToWidget(this.props.isStickerPickerOpen);
     }
 
     private imError(errorMsg: string, e: Error): void {
@@ -164,7 +164,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         this.setState({
             imError: _t(errorMsg),
         });
-        this.props.setShowStickers(false);
+        this.props.setStickerPickerOpen(false);
     }
 
     private updateWidget = (): void => {
@@ -204,17 +204,17 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
                 this.forceUpdate();
                 break;
             case "stickerpicker_close":
-                this.props.setShowStickers(false);
+                this.props.setStickerPickerOpen(false);
                 break;
             case "show_left_panel":
             case "hide_left_panel":
-                this.props.setShowStickers(false);
+                this.props.setStickerPickerOpen(false);
                 break;
         }
     };
 
     private onRightPanelStoreUpdate = () => {
-        this.props.setShowStickers(false);
+        this.props.setStickerPickerOpen(false);
     };
 
     private defaultStickerpickerContent(): JSX.Element {
@@ -355,7 +355,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
 
         const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
 
-        this.props.setShowStickers(true);
+        this.props.setStickerPickerOpen(true);
         this.setState({
             stickerpickerX: x,
             stickerpickerY: y,
@@ -367,8 +367,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
      * Called when the window is resized
      */
     private onResize = (): void => {
-        if (this.props.showStickers) {
-            this.props.setShowStickers(false);
+        if (this.props.isStickerPickerOpen) {
+            this.props.setStickerPickerOpen(false);
         }
     };
 
@@ -376,8 +376,8 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
      * The stickers picker was hidden
      */
     private onFinished = (): void => {
-        if (this.props.showStickers) {
-            this.props.setShowStickers(false);
+        if (this.props.isStickerPickerOpen) {
+            this.props.setStickerPickerOpen(false);
         }
     };
 
@@ -402,7 +402,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        if (!this.props.showStickers) return null;
+        if (!this.props.isStickerPickerOpen) return null;
 
         return <ContextMenu
             chevronOffset={this.state.stickerpickerChevronOffset}
