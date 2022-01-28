@@ -761,30 +761,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         }
 
         try {
-            const result = await inviteMultipleToRoom(this.props.roomId, targetIds);
+            const result = await inviteMultipleToRoom(this.props.roomId, targetIds, true);
             CountlyAnalytics.instance.trackSendInvite(startTime, this.props.roomId, targetIds.length);
             if (!this.shouldAbortAfterInviteError(result, room)) { // handles setting error message too
                 this.props.onFinished();
-            }
-
-            if (cli.isRoomEncrypted(this.props.roomId)) {
-                const visibilityEvent = room.currentState.getStateEvents(
-                    "m.room.history_visibility", "",
-                );
-                const visibility = visibilityEvent && visibilityEvent.getContent() &&
-                    visibilityEvent.getContent().history_visibility;
-                if (visibility == "world_readable" || visibility == "shared") {
-                    const invitedUsers = [];
-                    for (const [addr, state] of Object.entries(result.states)) {
-                        if (state === "invited" && getAddressType(addr) === "mx-user-id") {
-                            invitedUsers.push(addr);
-                        }
-                    }
-                    logger.log("Sharing history with", invitedUsers);
-                    cli.sendSharedHistoryKeys(
-                        this.props.roomId, invitedUsers,
-                    );
-                }
             }
         } catch (err) {
             logger.error(err);

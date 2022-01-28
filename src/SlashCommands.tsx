@@ -35,7 +35,7 @@ import { linkifyAndSanitizeHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
 import { textToHtmlRainbow } from "./utils/colour";
-import { getAddressType } from './UserAddress';
+import { AddressType, getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
 import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
@@ -500,7 +500,7 @@ export const Commands = [
                     // meaningful.
                     let prom = Promise.resolve();
                     if (
-                        getAddressType(address) === 'email' &&
+                        getAddressType(address) === AddressType.Email &&
                         !MatrixClientPeg.get().getIdentityServerUrl()
                     ) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
@@ -541,7 +541,7 @@ export const Commands = [
                     }
                     const inviter = new MultiInviter(roomId);
                     return success(prom.then(() => {
-                        return inviter.invite([address], reason);
+                        return inviter.invite([address], reason, true);
                     }).then(() => {
                         if (inviter.getCompletionState(address) !== "invited") {
                             throw new Error(inviter.getErrorText(address));

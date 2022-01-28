@@ -117,7 +117,7 @@ export async function upgradeRoom(
 
     if (toInvite.length > 0) {
         // Errors are handled internally to this function
-        await inviteUsersToRoom(newRoomId, toInvite, () => {
+        await inviteUsersToRoom(newRoomId, toInvite, false, () => {
             progress.inviteUsersProgress++;
             progressCallback?.(progress);
         });
