@@ -55,9 +55,6 @@ interface IProps {
 
 interface IState {
     imError: string;
-    stickerpickerX: number;
-    stickerpickerY: number;
-    stickerpickerChevronOffset?: number;
     stickerpickerWidget: IWidgetEvent;
     widgetId: string;
 }
@@ -83,8 +80,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         super(props);
         this.state = {
             imError: null,
-            stickerpickerX: null,
-            stickerpickerY: null,
             stickerpickerWidget: null,
             widgetId: null,
         };
@@ -322,47 +317,6 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         return stickersContent;
     }
 
-    // Dev note: this isn't jsdoc because it's angry.
-    /*
-     * Show the sticker picker overlay
-     * If no stickerpacks have been added, show a link to the integration manager add sticker packs page.
-     */
-    private onShowStickersClick = (e: React.MouseEvent<HTMLElement>): void => {
-        if (!SettingsStore.getValue("integrationProvisioning")) {
-            // Intercept this case and spawn a warning.
-            return IntegrationManagers.sharedInstance().showDisabledDialog();
-        }
-
-        // XXX: Simplify by using a context menu that is positioned relative to the sticker picker button
-
-        const buttonRect = e.currentTarget.getBoundingClientRect();
-
-        // The window X and Y offsets are to adjust position when zoomed in to page
-        let x = buttonRect.right + window.pageXOffset - 41;
-
-        // Amount of horizontal space between the right of menu and the right of the viewport
-        //  (10 = amount needed to make chevron centrally aligned)
-        const rightPad = 10;
-
-        // When the sticker picker would be displayed off of the viewport, adjust x
-        //  (302 = width of context menu, including borders)
-        x = Math.min(x, document.body.clientWidth - (302 + rightPad));
-
-        // Offset the chevron location, which is relative to the left of the context menu
-        //  (10 = offset when context menu would not be displayed off viewport)
-        //  (2 = context menu borders)
-        const stickerpickerChevronOffset = Math.max(10, 2 + window.pageXOffset + buttonRect.left - x);
-
-        const y = (buttonRect.top + (buttonRect.height / 2) + window.pageYOffset) - 19;
-
-        this.props.setStickerPickerOpen(true);
-        this.setState({
-            stickerpickerX: x,
-            stickerpickerY: y,
-            stickerpickerChevronOffset,
-        });
-    };
-
     /**
      * Called when the window is resized
      */
@@ -405,10 +359,7 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
         if (!this.props.isStickerPickerOpen) return null;
 
         return <ContextMenu
-            chevronOffset={this.state.stickerpickerChevronOffset}
             chevronFace={ChevronFace.Bottom}
-            left={this.state.stickerpickerX}
-            top={this.state.stickerpickerY}
             menuWidth={this.popoverWidth}
             menuHeight={this.popoverHeight}
             onFinished={this.onFinished}
