@@ -3590,5 +3590,17 @@
     "IRC (Experimental)": "IRC (Sperimentale)",
     "Toggle hidden event visibility": "Cambia visibilità evento nascosto",
     "%(count)s hidden messages.|one": "%(count)s messaggio nascosto.",
-    "%(count)s hidden messages.|other": "%(count)s messaggi nascosti."
+    "%(count)s hidden messages.|other": "%(count)s messaggi nascosti.",
+    "Redo edit": "Ripeti modifica",
+    "Force complete": "Forza completamento",
+    "Undo edit": "Annulla modifica",
+    "Jump to last message": "Salta all'ultimo messaggio",
+    "Jump to first message": "Salta al primo messaggio",
+    "Pick a date to jump to": "Scegli una data in cui saltare",
+    "Jump to date": "Salta alla data",
+    "The beginning of the room": "L'inizio della stanza",
+    "Last month": "Ultimo mese",
+    "Last week": "Ultima settimana",
+    "Unable to find event at that date. (%(code)s)": "Impossibile trovare un evento in quella data. (%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Salta alla data (aggiunge /jumptodate e le intestazioni di salto data)"
 }
