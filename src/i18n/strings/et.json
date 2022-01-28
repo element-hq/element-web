@@ -3589,5 +3589,12 @@
     "Redo edit": "Korda muudatust",
     "Undo edit": "Võta muudatus tagasi",
     "Jump to last message": "Mine viimase sõnumi juurde",
-    "Jump to first message": "Mine esimese sõnumi juurde"
+    "Jump to first message": "Mine esimese sõnumi juurde",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Võimalda kuupäeva valida (lisab /jumptodate käsu ja kuupäeva valimisega seotud päisekirjed)",
+    "Pick a date to jump to": "Vali kuupäev, mida soovid vaadata",
+    "Jump to date": "Vaata kuupäeva",
+    "The beginning of the room": "Jututoa algus",
+    "Last month": "Eelmine kuu",
+    "Last week": "Eelmine nädal",
+    "Unable to find event at that date. (%(code)s)": "Sellel kuupäeval ei leidu sõnumeid. (%(code)s)"
 }
