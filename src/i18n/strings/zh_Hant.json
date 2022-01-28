@@ -3591,5 +3591,17 @@
     "IRC (Experimental)": "IRC（實驗性）",
     "Toggle hidden event visibility": "切換隱藏事件的能見度",
     "%(count)s hidden messages.|one": "%(count)s 個隱藏的訊息。",
-    "%(count)s hidden messages.|other": "%(count)s 個隱藏的訊息。"
+    "%(count)s hidden messages.|other": "%(count)s 個隱藏的訊息。",
+    "Redo edit": "重做編輯",
+    "Force complete": "強制完成",
+    "Undo edit": "復原編輯",
+    "Jump to last message": "跳至最後一則訊息",
+    "Jump to first message": "跳至第一則訊息",
+    "Pick a date to jump to": "挑選要跳至的日期",
+    "Jump to date": "跳至日期",
+    "The beginning of the room": "聊天室開頭",
+    "Last month": "上個月",
+    "Last week": "上週",
+    "Unable to find event at that date. (%(code)s)": "找不到該日期的活動。(%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "跳至日期（新增 /jumptodate 並跳至日期標頭）"
 }
