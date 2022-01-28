@@ -3524,5 +3524,12 @@
     "Force complete": "Selesaikan dengan paksa",
     "Undo edit": "Urungkan editan",
     "Jump to last message": "Pergi ke pesan terakhir",
-    "Jump to first message": "Pergi ke pesan pertama"
+    "Jump to first message": "Pergi ke pesan pertama",
+    "Pick a date to jump to": "Pilih sebuah tanggal untuk pergi ke tanggalnya",
+    "Jump to date": "Pergi ke tanggal",
+    "The beginning of the room": "Awalan ruangan",
+    "Last month": "Bulan kemarin",
+    "Last week": "Minggu kemarin",
+    "Unable to find event at that date. (%(code)s)": "Tidak dapat menemukan peristiwa pada tanggal itu. (%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Pergi ke tanggal (menambahkan /jumptodate dan pergi ke tajukan tanggal)"
 }
