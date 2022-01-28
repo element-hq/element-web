@@ -3596,5 +3596,12 @@
     "Jump to last message": "Přejít na poslední zprávu",
     "Jump to first message": "Přejít na první zprávu",
     "Redo edit": "Obnovit úpravy",
-    "Force complete": "Vynucené dokončování"
+    "Force complete": "Vynucené dokončování",
+    "Pick a date to jump to": "Vyberte datum, na které chcete přejít",
+    "Jump to date": "Přejít na datum",
+    "The beginning of the room": "Začátek místnosti",
+    "Last month": "Minulý měsíc",
+    "Last week": "Minulý týden",
+    "Unable to find event at that date. (%(code)s)": "Nepodařilo se najít událost k uvedenému datu. (%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Přejít na datum (přidá /jumptodate a umožní přejít na záhlaví data)"
 }
