@@ -243,7 +243,11 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
         this.watchUserReady();
 
-        WidgetLayoutStore.instance.on(WidgetLayoutStore.emissionForRoom(this.props.room), this.onWidgetLayoutChange);
+        if (this.props.room) {
+            const emitEvent = WidgetLayoutStore.emissionForRoom(this.props.room);
+            WidgetLayoutStore.instance.on(emitEvent, this.onWidgetLayoutChange);
+        }
+
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
         // Widget action listeners
@@ -254,7 +258,11 @@ export default class AppTile extends React.Component<IProps, IState> {
         // Widget action listeners
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
-        WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(this.props.room), this.onWidgetLayoutChange);
+        if (this.props.room) {
+            const emitEvent = WidgetLayoutStore.emissionForRoom(this.props.room);
+            WidgetLayoutStore.instance.off(emitEvent, this.onWidgetLayoutChange);
+        }
+
         this.roomStoreToken?.remove();
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
