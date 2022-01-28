@@ -3583,5 +3583,16 @@
     "Unable to check if username has been taken. Try again later.": "S’arrihet të kontrollohet nëse emri i përdoruesit është zënë. Riprovoni më vonë.",
     "Toggle hidden event visibility": "Ndryshoni dukshmëri akti të fshehur",
     "%(count)s hidden messages.|one": "%(count)s mesazh i fshehur.",
-    "%(count)s hidden messages.|other": "%(count)s mesazhe të fshehur."
+    "%(count)s hidden messages.|other": "%(count)s mesazhe të fshehur.",
+    "Redo edit": "Ribëje përpunimin",
+    "Undo edit": "Zhbëje përpunimin",
+    "Jump to last message": "Kalo te mesazhi i fundit",
+    "Jump to first message": "Kalo te mesazhi i parë",
+    "Pick a date to jump to": "Zgjidhni një datë ku të kalohet",
+    "Jump to date": "Kalo te datë",
+    "The beginning of the room": "Fillimi i dhomës",
+    "Last month": "Muajin e kaluar",
+    "Last week": "Javën e kaluar",
+    "Unable to find event at that date. (%(code)s)": "S’arrihet të gjendet veprimtari më atë datë. (%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Kalo te datë (shton /jumptodate dhe kalon te krye date)"
 }
