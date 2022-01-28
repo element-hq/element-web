@@ -125,7 +125,7 @@ class UploadButton extends React.Component<IUploadButtonProps> {
     private uploadInput = React.createRef<HTMLInputElement>();
     private dispatcherRef: string;
 
-    constructor(props) {
+    constructor(props: IUploadButtonProps) {
         super(props);
 
         this.dispatcherRef = dis.register(this.onAction);
@@ -275,7 +275,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         compact: false,
     };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         VoiceRecordingStore.instance.on(UPDATE_EVENT, this.onVoiceStoreUpdate);
 
@@ -499,10 +499,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
     };
 
-    private shouldShowStickerPicker = (): boolean => {
-        return this.state.showStickersButton && !this.state.haveRecording;
-    };
-
     private showStickers = (showStickers: boolean) => {
         this.setState({ showStickers });
     };
@@ -513,41 +509,43 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         });
     };
 
-    private renderButtons(menuPosition): JSX.Element | JSX.Element[] {
+    private renderButtons(menuPosition: AboveLeftOf): JSX.Element | JSX.Element[] {
+        if (this.state.haveRecording) {
+            return [];
+        }
+
         let uploadButtonIndex = 0;
         const buttons: JSX.Element[] = [];
-        if (!this.state.haveRecording) {
+        buttons.push(
+            <PollButton
+                key="polls"
+                room={this.props.room}
+                narrowMode={this.state.narrowMode}
+            />,
+        );
+        uploadButtonIndex = buttons.length;
+        buttons.push(
+            <UploadButton key="controls_upload" roomId={this.props.room.roomId} relation={this.props.relation} />,
+        );
+        if (this.state.showLocationButton) {
+            const sender = this.props.room.getMember(
+                MatrixClientPeg.get().getUserId(),
+            );
             buttons.push(
-                <PollButton
-                    key="polls"
-                    room={this.props.room}
+                <LocationButton
+                    key="location"
+                    roomId={this.props.room.roomId}
+                    sender={sender}
+                    menuPosition={menuPosition}
                     narrowMode={this.state.narrowMode}
                 />,
             );
-            uploadButtonIndex = buttons.length;
-            buttons.push(
-                <UploadButton key="controls_upload" roomId={this.props.room.roomId} relation={this.props.relation} />,
-            );
-            if (this.state.showLocationButton) {
-                const sender = this.props.room.getMember(
-                    MatrixClientPeg.get().getUserId(),
-                );
-                buttons.push(
-                    <LocationButton
-                        key="location"
-                        roomId={this.props.room.roomId}
-                        sender={sender}
-                        menuPosition={menuPosition}
-                        narrowMode={this.state.narrowMode}
-                    />,
-                );
-            }
-            buttons.push(
-                <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} narrowMode={this.state.narrowMode} />,
-            );
         }
-        if (this.shouldShowStickerPicker()) {
-            let title;
+        buttons.push(
+            <EmojiButton key="emoji_button" addEmoji={this.addEmoji} menuPosition={menuPosition} narrowMode={this.state.narrowMode} />,
+        );
+        if (this.state.showStickersButton) {
+            let title: string;
             if (!this.state.narrowMode) {
                 title = this.state.showStickers ? _t("Hide Stickers") : _t("Show Stickers");
             }
@@ -565,7 +563,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         }
 
         // XXX: the recording UI does not work well in narrow mode, so we hide this button for now
-        if (!this.state.haveRecording && !this.state.narrowMode) {
+        if (!this.state.narrowMode) {
             buttons.push(
                 <CollapsibleButton
                     key="voice_message_send"
