@@ -302,34 +302,34 @@ export default class ElectronPlatform extends VectorBasePlatform {
                 },
                 displayName: _td("Open user settings"),
             });
-            registerShortcut("KeyBinding.previousVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+            registerShortcut("KeyBinding.previousVisitedRoomOrSpace", CategoryName.NAVIGATION, {
                 default: {
                     commandKey: true,
                     key: Key.SQUARE_BRACKET_LEFT,
                 },
-                displayName: _td("Previous recently visited room or community"),
+                displayName: _td("Previous recently visited room or space"),
             });
-            registerShortcut("KeyBinding.nextVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+            registerShortcut("KeyBinding.nextVisitedRoomOrSpace", CategoryName.NAVIGATION, {
                 default: {
                     commandKey: true,
                     key: Key.SQUARE_BRACKET_RIGHT,
                 },
-                displayName: _td("Next recently visited room or community"),
+                displayName: _td("Next recently visited room or space"),
             });
         } else {
-            registerShortcut("KeyBinding.previousVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+            registerShortcut("KeyBinding.previousVisitedRoomOrSpace", CategoryName.NAVIGATION, {
                 default: {
                     altKey: true,
                     key: Key.ARROW_LEFT,
                 },
-                displayName: _td("Previous recently visited room or community"),
+                displayName: _td("Previous recently visited room or space"),
             });
-            registerShortcut("KeyBinding.nextVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
+            registerShortcut("KeyBinding.nextVisitedRoomOrSpace", CategoryName.NAVIGATION, {
                 default: {
                     altKey: true,
                     key: Key.ARROW_RIGHT,
                 },
-                displayName: _td("Next recently visited room or community"),
+                displayName: _td("Next recently visited room or space"),
             });
         }
 
