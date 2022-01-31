@@ -3085,5 +3085,13 @@
     "Last month": "Minulý mesiac",
     "The beginning of the room": "Začiatok miestnosti",
     "Jump to date": "Prejsť na dátum",
-    "Pick a date to jump to": "Vyberte dátum, na ktorý chcete prejsť"
+    "Pick a date to jump to": "Vyberte dátum, na ktorý chcete prejsť",
+    "were removed %(count)s times|one": "bol odstránený",
+    "was removed %(count)s times|other": "bol odstránený %(count)s krát",
+    "Message pending moderation: %(reason)s": "Správa čaká na moderáciu: %(reason)s",
+    "Space home": "Domov priestoru",
+    "Navigate to next message in composer history": "Prejsť na ďalšiu správu v histórii editora",
+    "Navigate to previous message in composer history": "Prejsť na predchádzajúcu správu v histórii editora",
+    "Missing session data": "Chýbajú údaje relácie",
+    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Ak existujú ďalšie súvislosti, ktoré by pomohli pri analýze problému, napríklad čo ste v tom čase robili, ID miestnosti, ID používateľa atď., uveďte ich tu."
 }
