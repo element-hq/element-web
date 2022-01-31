@@ -66,8 +66,9 @@ body:
     id: homeserver
     attributes:
       label: Homeserver
-      description: Which server is your account registered on?
-      placeholder: e.g. matrix.org
+      description: |
+        Which server is your account registered on? If it is a local or non-public homeserver, please tell us what is the homeserver implementation (ex: Synapse/Dendrite/etc.) and the version.
+      placeholder: e.g. matrix.org or Synapse 1.50.0rc1
     validations:
       required: false
   - type: dropdown

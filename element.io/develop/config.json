@@ -12,6 +12,7 @@
     ],
     "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
+    "uisi_autorageshake_app": "element-auto-uisi",
     "showLabsSettings": true,
     "piwik": {
         "url": "https://piwik.riot.im/",
@@ -57,8 +58,6 @@
         "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
         "apiHost": "https://posthog.hss.element.io"
     },
-    "features": {
-        "feature_spaces_metaspaces": true
-    },
+    "features": {},
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }
