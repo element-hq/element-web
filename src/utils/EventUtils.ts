@@ -177,7 +177,7 @@ export function getMessageModerationState(mxEvent: MatrixEvent): MessageModerati
     return MessageModerationState.HIDDEN_TO_CURRENT_USER;
 }
 
-export function getEventDisplayInfo(mxEvent: MatrixEvent): {
+export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): {
     isInfoMessage: boolean;
     tileHandler: string;
     isBubbleMessage: boolean;
@@ -245,7 +245,7 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent): {
     // source tile when there's no regular tile for an event and also for
     // replace relations (which otherwise would display as a confusing
     // duplicate of the thing they are replacing).
-    if (SettingsStore.getValue("showHiddenEventsInTimeline") && !haveTileForEvent(mxEvent)) {
+    if ((hideEvent || !haveTileForEvent(mxEvent)) && SettingsStore.getValue("showHiddenEventsInTimeline")) {
         tileHandler = "messages.ViewSourceEvent";
         isBubbleMessage = false;
         // Reuse info message avatar and sender profile styling

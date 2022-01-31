@@ -24,6 +24,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { logger } from "matrix-js-sdk/src/logger";
 import { NotificationCountType, Room } from 'matrix-js-sdk/src/models/room';
+import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { M_POLL_START } from "matrix-events-sdk";
 
 import ReplyChain from "../elements/ReplyChain";
@@ -1097,10 +1098,21 @@ export default class EventTile extends React.Component<IProps, IState> {
         });
     };
 
+    /**
+     * In some cases we can't use shouldHideEvent() since whether or not we hide
+     * an event depends on other things that the event itself
+     * @returns {boolean} true if event should be hidden
+     */
+    private shouldHideEvent(): boolean {
+        // If the call was replaced we don't render anything since we render the other call
+        if (this.props.callEventGrouper?.hangupReason === CallErrorCode.Replaced) return true;
+
+        return false;
+    }
+
     render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
-        const eventDisplayInfo = getEventDisplayInfo(this.props.mxEvent);
         const {
             tileHandler,
             isBubbleMessage,
@@ -1108,7 +1120,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             isLeftAlignedBubbleMessage,
             noBubbleEvent,
             isSeeingThroughMessageHiddenForModeration,
-        } = eventDisplayInfo;
+        } = getEventDisplayInfo(this.props.mxEvent, this.shouldHideEvent());
         const { isQuoteExpanded } = this.state;
 
         // This shouldn't happen: the caller should check we support this type

@@ -64,7 +64,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
         this.props.callEventGrouper.addListener(CallEventGrouperEvent.LengthChanged, this.onLengthChanged);
 
         this.resizeObserver = new ResizeObserver(this.resizeObserverCallback);
-        this.resizeObserver.observe(this.wrapperElement.current);
+        this.wrapperElement.current && this.resizeObserver.observe(this.wrapperElement.current);
     }
 
     componentWillUnmount() {
@@ -258,7 +258,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
         );
     }
 
-    render() {
+    public render(): JSX.Element {
         const event = this.props.mxEvent;
         const sender = event.sender ? event.sender.name : event.getSender();
         const isVoice = this.props.callEventGrouper.isVoice;
