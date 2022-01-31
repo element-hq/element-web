@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, Dispatch, SetStateAction } from "react";
 import { Room } from "matrix-js-sdk/src";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -39,18 +39,70 @@ import { useStateCallback } from "../../../hooks/useStateCallback";
 import Exporter from "../../../utils/exportUtils/Exporter";
 import Spinner from "../elements/Spinner";
 import InfoDialog from "./InfoDialog";
+import ChatExport from "../../../customisations/ChatExport";
+import { validateNumberInRange } from "../../../utils/validate";
 
 interface IProps extends IDialogProps {
     room: Room;
 }
 
+interface ExportConfig {
+    exportFormat: ExportFormat;
+    exportType: ExportType;
+    numberOfMessages: number;
+    sizeLimit: number;
+    includeAttachments: boolean;
+    setExportFormat?: Dispatch<SetStateAction<ExportFormat>>;
+    setExportType?: Dispatch<SetStateAction<ExportType>>;
+    setAttachments?: Dispatch<SetStateAction<boolean>>;
+    setNumberOfMessages?: Dispatch<SetStateAction<number>>;
+    setSizeLimit?: Dispatch<SetStateAction<number>>;
+}
+
+/**
+ * Set up form state using "forceRoomExportParameters" or defaults
+ * Form fields configured in ForceRoomExportParameters are not allowed to be edited
+ * Only return change handlers for editable values
+ */
+const useExportFormState = (): ExportConfig => {
+    const config = ChatExport.getForceChatExportParameters();
+
+    const [exportFormat, setExportFormat] = useState(config.format ?? ExportFormat.Html);
+    const [exportType, setExportType] = useState(config.range ?? ExportType.Timeline);
+    const [includeAttachments, setAttachments] =
+        useState(config.includeAttachments ?? false);
+    const [numberOfMessages, setNumberOfMessages] = useState<number>(config.numberOfMessages ?? 100);
+    const [sizeLimit, setSizeLimit] = useState<number | null>(config.sizeMb ?? 8);
+
+    return {
+        exportFormat,
+        exportType,
+        includeAttachments,
+        numberOfMessages,
+        sizeLimit,
+        setExportFormat: !config.format ? setExportFormat : undefined,
+        setExportType: !config.range ? setExportType : undefined,
+        setNumberOfMessages: !config.numberOfMessages ? setNumberOfMessages : undefined,
+        setSizeLimit: !config.sizeMb ? setSizeLimit : undefined,
+        setAttachments: config.includeAttachments === undefined ? setAttachments : undefined,
+    };
+};
+
 const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
-    const [exportFormat, setExportFormat] = useState(ExportFormat.Html);
-    const [exportType, setExportType] = useState(ExportType.Timeline);
-    const [includeAttachments, setAttachments] = useState(false);
+    const {
+        exportFormat,
+        exportType,
+        includeAttachments,
+        numberOfMessages,
+        sizeLimit,
+        setExportFormat,
+        setExportType,
+        setNumberOfMessages,
+        setSizeLimit,
+        setAttachments,
+    } = useExportFormState();
+
     const [isExporting, setExporting] = useState(false);
-    const [numberOfMessages, setNumberOfMessages] = useState<number>(100);
-    const [sizeLimit, setSizeLimit] = useState<number | null>(8);
     const sizeLimitRef = useRef<Field>();
     const messageCountRef = useRef<Field>();
     const [exportProgressText, setExportProgressText] = useState(_t("Processing..."));
@@ -110,9 +162,10 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     };
 
     const onExportClick = async () => {
-        const isValidSize = await sizeLimitRef.current.validate({
+        const isValidSize = !setSizeLimit || (await sizeLimitRef.current.validate({
             focused: false,
-        });
+        }));
+
         if (!isValidSize) {
             sizeLimitRef.current.validate({ focused: true });
             return;
@@ -147,10 +200,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             }, {
                 key: "number",
                 test: ({ value }) => {
-                    const parsedSize = parseFloat(value);
-                    const min = 1;
-                    const max = 2000;
-                    return !(isNaN(parsedSize) || min > parsedSize || parsedSize > max);
+                    const parsedSize = parseInt(value as string, 10);
+                    return validateNumberInRange(1, 2000)(parsedSize);
                 },
                 invalid: () => {
                     const min = 1;
@@ -187,11 +238,8 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
             }, {
                 key: "number",
                 test: ({ value }) => {
-                    const parsedSize = parseFloat(value);
-                    const min = 1;
-                    const max = 10 ** 8;
-                    if (isNaN(parsedSize)) return false;
-                    return !(min > parsedSize || parsedSize > max);
+                    const parsedSize = parseInt(value as string, 10);
+                    return validateNumberInRange(1, 10 ** 8)(parsedSize);
                 },
                 invalid: () => {
                     const min = 1;
@@ -236,7 +284,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
     });
 
     let messageCount = null;
-    if (exportType === ExportType.LastNMessages) {
+    if (exportType === ExportType.LastNMessages && setNumberOfMessages) {
         messageCount = (
             <Field
                 id="message-count"
@@ -319,61 +367,74 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     ) }
                 </p> : null }
 
-                <span className="mx_ExportDialog_subheading">
-                    { _t("Format") }
-                </span>
-
                 <div className="mx_ExportDialog_options">
-                    <StyledRadioGroup
-                        name="exportFormat"
-                        value={exportFormat}
-                        onChange={(key) => setExportFormat(ExportFormat[key])}
-                        definitions={exportFormatOptions}
-                    />
+                    { !!setExportFormat && <>
+                        <span className="mx_ExportDialog_subheading">
+                            { _t("Format") }
+                        </span>
 
-                    <span className="mx_ExportDialog_subheading">
-                        { _t("Messages") }
-                    </span>
+                        <StyledRadioGroup
+                            name="exportFormat"
+                            value={exportFormat}
+                            onChange={(key) => setExportFormat(ExportFormat[key])}
+                            definitions={exportFormatOptions}
+                        />
+                    </> }
 
-                    <Field
-                        id="export-type"
-                        element="select"
-                        value={exportType}
-                        onChange={(e) => {
-                            setExportType(ExportType[e.target.value]);
-                        }}
-                    >
-                        { exportTypeOptions }
-                    </Field>
-                    { messageCount }
+                    {
+                        !!setExportType && <>
 
-                    <span className="mx_ExportDialog_subheading">
-                        { _t("Size Limit") }
-                    </span>
+                            <span className="mx_ExportDialog_subheading">
+                                { _t("Messages") }
+                            </span>
 
-                    <Field
-                        id="size-limit"
-                        type="number"
-                        autoComplete="off"
-                        onValidate={onValidateSize}
-                        element="input"
-                        ref={sizeLimitRef}
-                        value={sizeLimit.toString()}
-                        postfixComponent={sizePostFix}
-                        onChange={(e) => setSizeLimit(parseInt(e.target.value))}
-                    />
+                            <Field
+                                id="export-type"
+                                element="select"
+                                value={exportType}
+                                onChange={(e) => {
+                                    setExportType(ExportType[e.target.value]);
+                                }}
+                            >
+                                { exportTypeOptions }
+                            </Field>
+                            { messageCount }
+                        </>
+                    }
 
-                    <StyledCheckbox
-                        id="include-attachments"
-                        checked={includeAttachments}
-                        onChange={(e) =>
-                            setAttachments(
-                                (e.target as HTMLInputElement).checked,
-                            )
-                        }
-                    >
-                        { _t("Include Attachments") }
-                    </StyledCheckbox>
+                    { setSizeLimit && <>
+                        <span className="mx_ExportDialog_subheading">
+                            { _t("Size Limit") }
+                        </span>
+
+                        <Field
+                            id="size-limit"
+                            type="number"
+                            autoComplete="off"
+                            onValidate={onValidateSize}
+                            element="input"
+                            ref={sizeLimitRef}
+                            value={sizeLimit.toString()}
+                            postfixComponent={sizePostFix}
+                            onChange={(e) => setSizeLimit(parseInt(e.target.value))}
+                        />
+                    </> }
+
+                    { setAttachments && <>
+                        <StyledCheckbox
+                            className="mx_ExportDialog_attachments-checkbox"
+                            id="include-attachments"
+                            checked={includeAttachments}
+                            onChange={(e) =>
+                                setAttachments(
+                                    (e.target as HTMLInputElement).checked,
+                                )
+                            }
+                        >
+                            { _t("Include Attachments") }
+                        </StyledCheckbox>
+                    </> }
+
                 </div>
                 { isExporting ? (
                     <div data-test-id='export-progress' className="mx_ExportDialog_progress">
