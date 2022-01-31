@@ -386,9 +386,13 @@ $left-gutter: 64px;
     position: absolute;
 }
 
-.mx_EventTile_bigEmoji .mx_Emoji {
-    font-size: 48px !important;
+.mx_EventTile_bigEmoji {
+    font-size: 48px;
     line-height: 57px;
+
+    .mx_Emoji {
+        font-size: inherit !important;
+    }
 }
 
 .mx_EventTile_content .mx_EventTile_edited {
