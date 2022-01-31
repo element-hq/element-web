@@ -21,6 +21,19 @@ Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
 and select "Pin".
 
+## Jump to date (`feature_jump_to_date`)
+
+Note: This labs feature is only visible when your homeserver has MSC3030 enabled
+(in Synapse, add `experimental_features` -> `msc3030_enabled` to your
+`homeserver.yaml`) which means `GET /_matrix/client/versions` responds with
+`org.matrix.msc3030` under the `unstable_features` key.
+
+Adds a dropdown menu to the date separator headers in the timeline which allows
+you to jump to last week, last month, the beginning of the room, or choose a
+date from the calendar.
+
+Also adds the `/jumptodate 2022-01-31` slash command.
+
 ## Custom status (`feature_custom_status`)
 
 An experimental approach for supporting custom status messages across DMs. To set a status, click on
