@@ -31,6 +31,7 @@ Note: This labs feature is only visible when your homeserver has MSC3030 enabled
 Adds a dropdown menu to the date separator headers in the timeline which allows
 you to jump to last week, last month, the beginning of the room, or choose a
 date from the calendar.
+
 Also adds the `/jumptodate 2022-01-31` slash command.
 
 ## Custom status (`feature_custom_status`)
