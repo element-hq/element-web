@@ -185,6 +185,10 @@ export function getHandlerTile(ev: MatrixEvent): string {
         return stateEventTileTypes[type];
     }
 
+    if (ev.isRedacted()) {
+        return "messages.MessageEvent";
+    }
+
     return eventTileTypes[type];
 }
 
@@ -762,7 +766,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     };
 
     private async verifyEvent(mxEvent: MatrixEvent): Promise<void> {
-        if (!mxEvent.isEncrypted()) {
+        if (!mxEvent.isEncrypted() || mxEvent.isRedacted()) {
             return;
         }
 
@@ -1020,8 +1024,8 @@ export default class EventTile extends React.Component<IProps, IState> {
             return <E2ePadlockUndecryptable />;
         }
 
-        // event is encrypted, display padlock corresponding to whether or not it is verified
-        if (ev.isEncrypted()) {
+        // event is encrypted and not redacted, display padlock corresponding to whether or not it is verified
+        if (ev.isEncrypted() && !ev.isRedacted()) {
             if (this.state.verified === E2EState.Normal) {
                 return; // no icon if we've not even cross-signed the user
             } else if (this.state.verified === E2EState.Verified) {
@@ -1045,6 +1049,9 @@ export default class EventTile extends React.Component<IProps, IState> {
                 return;
             }
             if (ev.isState()) {
+                return; // we expect this to be unencrypted
+            }
+            if (ev.isRedacted()) {
                 return; // we expect this to be unencrypted
             }
             // if the event is not encrypted, but it's an e2e room, show the open padlock
@@ -1611,8 +1618,8 @@ function isMessageEvent(ev: MatrixEvent): boolean {
 }
 
 export function haveTileForEvent(e: MatrixEvent, showHiddenEvents?: boolean): boolean {
-    // Only messages have a tile (black-rectangle) if redacted
-    if (e.isRedacted() && !isMessageEvent(e)) return false;
+    // Only show "Message deleted" tile for message or encrypted events
+    if (e.isRedacted() && !e.isEncrypted() && !isMessageEvent(e)) return false;
 
     // No tile for replacement events since they update the original tile
     if (e.isRelation("m.replace")) return false;
