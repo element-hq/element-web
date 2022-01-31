@@ -945,7 +945,7 @@ export const Commands = [
                 const nowMs = (new Date()).getTime();
                 const widgetId = encodeURIComponent(`${roomId}_${userId}_${nowMs}`);
                 let type = WidgetType.CUSTOM;
-                let name = "Custom Widget";
+                let name = "Custom";
                 let data = {};
 
                 // Make the widget a Jitsi widget if it looks like a Jitsi widget
@@ -953,7 +953,7 @@ export const Commands = [
                 if (jitsiData) {
                     logger.log("Making /addwidget widget a Jitsi conference");
                     type = WidgetType.JITSI;
-                    name = "Jitsi Conference";
+                    name = "Jitsi";
                     data = jitsiData;
                     widgetUrl = WidgetUtils.getLocalJitsiWrapperUrl();
                 }
