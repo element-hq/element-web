@@ -79,7 +79,7 @@ import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { RoomNotificationStateStore } from "../../stores/notifications/RoomNotificationStateStore";
 import { Container, WidgetLayoutStore } from "../../stores/widgets/WidgetLayoutStore";
-import { getKeyBindingsManager, RoomAction } from '../../KeyBindingsManager';
+import { getKeyBindingsManager } from '../../KeyBindingsManager';
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
@@ -100,6 +100,7 @@ import { ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import AppsDrawer from '../views/rooms/AppsDrawer';
 import { RightPanelPhases } from '../../stores/right-panel/RightPanelStorePhases';
 import { ActionPayload } from "../../dispatcher/payloads";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -797,16 +798,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const action = getKeyBindingsManager().getRoomAction(ev);
         switch (action) {
-            case RoomAction.DismissReadMarker:
+            case KeyBindingAction.DismissReadMarker:
                 this.messagePanel.forgetReadMarker();
                 this.jumpToLiveTimeline();
                 handled = true;
                 break;
-            case RoomAction.JumpToOldestUnread:
+            case KeyBindingAction.JumpToOldestUnread:
                 this.jumpToReadMarker();
                 handled = true;
                 break;
-            case RoomAction.UploadFile:
+            case KeyBindingAction.UploadFile:
                 dis.dispatch({ action: "upload_file" }, true);
                 handled = true;
                 break;

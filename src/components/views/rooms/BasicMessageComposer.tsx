@@ -48,9 +48,9 @@ import { IDiff } from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from "../../../editor/position";
 import { ICompletion } from "../../../autocomplete/Autocompleter";
-import { AutocompleteAction, getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
+import { getKeyBindingsManager } from '../../../KeyBindingsManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { ALTERNATE_KEY_NAME } from '../../../accessibility/KeyboardShortcuts';
+import { ALTERNATE_KEY_NAME, KeyBindingAction } from '../../../accessibility/KeyboardShortcuts';
 import { _t } from "../../../languageHandler";
 
 // matches emoticons which follow the start of a line or whitespace
@@ -483,29 +483,29 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         if (model.autoComplete?.hasCompletions()) {
             const autoComplete = model.autoComplete;
             switch (autocompleteAction) {
-                case AutocompleteAction.ForceComplete:
-                case AutocompleteAction.Complete:
+                case KeyBindingAction.ForceCompleteAutocomplete:
+                case KeyBindingAction.CompleteAutocomplete:
                     this.historyManager.ensureLastChangesPushed(this.props.model);
                     this.modifiedFlag = true;
                     autoComplete.confirmCompletion();
                     handled = true;
                     break;
-                case AutocompleteAction.PrevSelection:
+                case KeyBindingAction.PrevSelectionInAutocomplete:
                     autoComplete.selectPreviousSelection();
                     handled = true;
                     break;
-                case AutocompleteAction.NextSelection:
+                case KeyBindingAction.NextSelectionInAutocomplete:
                     autoComplete.selectNextSelection();
                     handled = true;
                     break;
-                case AutocompleteAction.Cancel:
+                case KeyBindingAction.CancelAutocomplete:
                     autoComplete.onEscape(event);
                     handled = true;
                     break;
                 default:
                     return; // don't preventDefault on anything else
             }
-        } else if (autocompleteAction === AutocompleteAction.ForceComplete && !this.state.showVisualBell) {
+        } else if (autocompleteAction === KeyBindingAction.ForceCompleteAutocomplete && !this.state.showVisualBell) {
             // there is no current autocomplete window, try to open it
             this.tabCompleteName();
             handled = true;
@@ -521,19 +521,19 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
-            case MessageComposerAction.FormatBold:
+            case KeyBindingAction.FormatBold:
                 this.onFormatAction(Formatting.Bold);
                 handled = true;
                 break;
-            case MessageComposerAction.FormatItalics:
+            case KeyBindingAction.FormatItalics:
                 this.onFormatAction(Formatting.Italics);
                 handled = true;
                 break;
-            case MessageComposerAction.FormatQuote:
+            case KeyBindingAction.FormatQuote:
                 this.onFormatAction(Formatting.Quote);
                 handled = true;
                 break;
-            case MessageComposerAction.EditRedo:
+            case KeyBindingAction.EditRedo:
                 if (this.historyManager.canRedo()) {
                     const { parts, caret } = this.historyManager.redo();
                     // pass matching inputType so historyManager doesn't push echo
@@ -542,7 +542,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 }
                 handled = true;
                 break;
-            case MessageComposerAction.EditUndo:
+            case KeyBindingAction.EditUndo:
                 if (this.historyManager.canUndo()) {
                     const { parts, caret } = this.historyManager.undo(this.props.model);
                     // pass matching inputType so historyManager doesn't push echo
@@ -551,18 +551,18 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 }
                 handled = true;
                 break;
-            case MessageComposerAction.NewLine:
+            case KeyBindingAction.NewLine:
                 this.insertText("\n");
                 handled = true;
                 break;
-            case MessageComposerAction.MoveCursorToStart:
+            case KeyBindingAction.MoveCursorToStart:
                 setSelection(this.editorRef.current, model, {
                     index: 0,
                     offset: 0,
                 });
                 handled = true;
                 break;
-            case MessageComposerAction.MoveCursorToEnd:
+            case KeyBindingAction.MoveCursorToEnd:
                 setSelection(this.editorRef.current, model, {
                     index: model.parts.length - 1,
                     offset: model.parts[model.parts.length - 1].text.length,

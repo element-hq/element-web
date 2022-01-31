@@ -37,11 +37,12 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
-import { getKeyBindingsManager, RoomListAction } from "../../../KeyBindingsManager";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButton>, "title" | "onClick"> {
     space?: Room;
@@ -234,7 +235,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         const action = getKeyBindingsManager().getRoomListAction(ev);
         const hasChildren = this.state.childSpaces?.length;
         switch (action) {
-            case RoomListAction.CollapseSection:
+            case KeyBindingAction.CollapseRoomListSection:
                 if (hasChildren && !this.isCollapsed) {
                     this.toggleCollapse(ev);
                 } else {
@@ -244,7 +245,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 }
                 break;
 
-            case RoomListAction.ExpandSection:
+            case KeyBindingAction.ExpandRoomListSection:
                 if (hasChildren) {
                     if (this.isCollapsed) {
                         this.toggleCollapse(ev);

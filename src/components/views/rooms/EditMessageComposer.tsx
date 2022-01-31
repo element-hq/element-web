@@ -34,7 +34,7 @@ import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandCategories } from '../../../SlashCommands';
 import { Action } from "../../../dispatcher/actions";
 import CountlyAnalytics from "../../../CountlyAnalytics";
-import { getKeyBindingsManager, MessageComposerAction } from '../../../KeyBindingsManager';
+import { getKeyBindingsManager } from '../../../KeyBindingsManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SendHistoryManager from '../../../SendHistoryManager';
 import { ActionPayload } from "../../../dispatcher/payloads";
@@ -45,6 +45,7 @@ import { withMatrixClientHOC, MatrixClientProps } from '../../../contexts/Matrix
 import RoomContext from '../../../contexts/RoomContext';
 import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -156,16 +157,16 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         }
         const action = getKeyBindingsManager().getMessageComposerAction(event);
         switch (action) {
-            case MessageComposerAction.Send:
+            case KeyBindingAction.SendMessage:
                 this.sendEdit();
                 event.stopPropagation();
                 event.preventDefault();
                 break;
-            case MessageComposerAction.CancelEditing:
+            case KeyBindingAction.CancelReplyOrEdit:
                 event.stopPropagation();
                 this.cancelEdit();
                 break;
-            case MessageComposerAction.EditPrevMessage: {
+            case KeyBindingAction.EditPrevMessage: {
                 if (this.editorRef.current?.isModified() || !this.editorRef.current?.isCaretAtStart()) {
                     return;
                 }
@@ -184,7 +185,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 }
                 break;
             }
-            case MessageComposerAction.EditNextMessage: {
+            case KeyBindingAction.EditNextMessage: {
                 if (this.editorRef.current?.isModified() || !this.editorRef.current?.isCaretAtEnd()) {
                     return;
                 }

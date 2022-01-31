@@ -20,8 +20,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { replaceableComponent } from "../../utils/replaceableComponent";
-import { getKeyBindingsManager, RoomAction } from "../../KeyBindingsManager";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import ResizeNotifier from "../../utils/ResizeNotifier";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
 const DEBUG_SCROLL = false;
 
@@ -592,19 +593,19 @@ export default class ScrollPanel extends React.Component<IProps> {
         let isScrolling = false;
         const roomAction = getKeyBindingsManager().getRoomAction(ev);
         switch (roomAction) {
-            case RoomAction.ScrollUp:
+            case KeyBindingAction.ScrollUp:
                 this.scrollRelative(-1);
                 isScrolling = true;
                 break;
-            case RoomAction.RoomScrollDown:
+            case KeyBindingAction.ScrollDown:
                 this.scrollRelative(1);
                 isScrolling = true;
                 break;
-            case RoomAction.JumpToFirstMessage:
+            case KeyBindingAction.JumpToFirstMessage:
                 this.scrollToTop();
                 isScrolling = true;
                 break;
-            case RoomAction.JumpToLatestMessage:
+            case KeyBindingAction.JumpToLatestMessage:
                 this.scrollToBottom();
                 isScrolling = true;
                 break;

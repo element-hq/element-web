@@ -25,7 +25,7 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
-import { getKeyBindingsManager, RoomListAction } from "../../KeyBindingsManager";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
@@ -33,7 +33,7 @@ import { isMac, Key } from "../../Keyboard";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import SpotlightDialog from "../views/dialogs/SpotlightDialog";
-import { ALTERNATE_KEY_NAME } from "../../accessibility/KeyboardShortcuts";
+import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
 interface IProps {
     isMinimized: boolean;
@@ -141,11 +141,11 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private onKeyDown = (ev: React.KeyboardEvent) => {
         const action = getKeyBindingsManager().getRoomListAction(ev);
         switch (action) {
-            case RoomListAction.ClearSearch:
+            case KeyBindingAction.ClearRoomFilter:
                 this.clearInput();
                 defaultDispatcher.fire(Action.FocusSendMessageComposer);
                 break;
-            case RoomListAction.SelectRoom: {
+            case KeyBindingAction.SelectRoomInRoomList: {
                 const shouldClear = this.props.onSelectRoom();
                 if (shouldClear) {
                     // wrap in set immediate to delay it so that we don't clear the filter & then change room

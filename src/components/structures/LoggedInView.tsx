@@ -48,7 +48,7 @@ import { IOOBData, IThreepidInvite } from "../../stores/ThreepidInviteStore";
 import Modal from "../../Modal";
 import { ICollapseConfig } from "../../resizer/distributors/collapse";
 import HostSignupContainer from '../views/host_signup/HostSignupContainer';
-import { getKeyBindingsManager, NavigationAction, RoomAction, LabsAction } from '../../KeyBindingsManager';
+import { getKeyBindingsManager } from '../../KeyBindingsManager';
 import { IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
 import { replaceableComponent } from "../../utils/replaceableComponent";
@@ -71,6 +71,7 @@ import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RightPanelStore from '../../stores/right-panel/RightPanelStore';
 import { TimelineRenderingType } from "../../contexts/RoomContext";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -447,15 +448,15 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         const roomAction = getKeyBindingsManager().getRoomAction(ev);
         switch (roomAction) {
-            case RoomAction.ScrollUp:
-            case RoomAction.RoomScrollDown:
-            case RoomAction.JumpToFirstMessage:
-            case RoomAction.JumpToLatestMessage:
+            case KeyBindingAction.ScrollUp:
+            case KeyBindingAction.ScrollDown:
+            case KeyBindingAction.JumpToFirstMessage:
+            case KeyBindingAction.JumpToLatestMessage:
                 // pass the event down to the scroll panel
                 this.onScrollKeyPressed(ev);
                 handled = true;
                 break;
-            case RoomAction.FocusSearch:
+            case KeyBindingAction.SearchInRoom:
                 dis.dispatch({
                     action: 'focus_search',
                 });
@@ -470,41 +471,41 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         const navAction = getKeyBindingsManager().getNavigationAction(ev);
         switch (navAction) {
-            case NavigationAction.FocusRoomSearch:
+            case KeyBindingAction.FilterRooms:
                 dis.dispatch({
                     action: 'focus_room_filter',
                 });
                 handled = true;
                 break;
-            case NavigationAction.ToggleUserMenu:
+            case KeyBindingAction.ToggleUserMenu:
                 dis.fire(Action.ToggleUserMenu);
                 handled = true;
                 break;
-            case NavigationAction.OpenShortCutDialog:
+            case KeyBindingAction.ShowKeyboardSettings:
                 dis.dispatch<OpenToTabPayload>({
                     action: Action.ViewUserSettings,
                     initialTabId: UserTab.Keyboard,
                 });
                 handled = true;
                 break;
-            case NavigationAction.GoToHome:
+            case KeyBindingAction.GoToHome:
                 dis.dispatch({
                     action: 'view_home_page',
                 });
                 Modal.closeCurrentModal("homeKeyboardShortcut");
                 handled = true;
                 break;
-            case NavigationAction.ToggleSpacePanel:
+            case KeyBindingAction.ToggleSpacePanel:
                 dis.fire(Action.ToggleSpacePanel);
                 handled = true;
                 break;
-            case NavigationAction.ToggleRoomSidePanel:
+            case KeyBindingAction.ToggleRoomSidePanel:
                 if (this.props.page_type === "room_view" || this.props.page_type === "group_view") {
                     RightPanelStore.instance.togglePanel();
                     handled = true;
                 }
                 break;
-            case NavigationAction.SelectPrevRoom:
+            case KeyBindingAction.SelectPrevRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: -1,
@@ -512,7 +513,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 });
                 handled = true;
                 break;
-            case NavigationAction.SelectNextRoom:
+            case KeyBindingAction.SelectNextRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: 1,
@@ -520,14 +521,14 @@ class LoggedInView extends React.Component<IProps, IState> {
                 });
                 handled = true;
                 break;
-            case NavigationAction.SelectPrevUnreadRoom:
+            case KeyBindingAction.SelectPrevUnreadRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: -1,
                     unread: true,
                 });
                 break;
-            case NavigationAction.SelectNextUnreadRoom:
+            case KeyBindingAction.SelectNextUnreadRoom:
                 dis.dispatch<ViewRoomDeltaPayload>({
                     action: Action.ViewRoomDelta,
                     delta: 1,
@@ -543,7 +544,7 @@ class LoggedInView extends React.Component<IProps, IState> {
         if (!handled) {
             const labsAction = getKeyBindingsManager().getLabsAction(ev);
             switch (labsAction) {
-                case LabsAction.ToggleHiddenEventVisibility: {
+                case KeyBindingAction.ToggleHiddenEventVisibility: {
                     const hiddenEventVisibility = SettingsStore.getValueAt(
                         SettingLevel.DEVICE,
                         'showHiddenEventsInTimeline',

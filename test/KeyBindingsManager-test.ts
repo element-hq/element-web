@@ -123,7 +123,7 @@ describe('KeyBindingsManager', () => {
     it('should match ctrlOrMeta key combo', () => {
         const combo: KeyCombo = {
             key: 'k',
-            ctrlOrCmd: true,
+            ctrlOrCmdKey: true,
         };
         // PC:
         expect(isKeyComboMatch(mockKeyEvent('k', { ctrlKey: true }), combo, false)).toBe(true);
@@ -138,7 +138,7 @@ describe('KeyBindingsManager', () => {
     it('should match advanced ctrlOrMeta key combo', () => {
         const combo: KeyCombo = {
             key: 'k',
-            ctrlOrCmd: true,
+            ctrlOrCmdKey: true,
             altKey: true,
         };
         // PC:

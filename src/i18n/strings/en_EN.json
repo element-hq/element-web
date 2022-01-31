@@ -3397,7 +3397,6 @@
     "Dismiss read marker and jump to bottom": "Dismiss read marker and jump to bottom",
     "Jump to oldest unread message": "Jump to oldest unread message",
     "Upload a file": "Upload a file",
-    "Search (must be enabled)": "Search (must be enabled)",
     "Scroll up in the timeline": "Scroll up in the timeline",
     "Scroll down in the timeline": "Scroll down in the timeline",
     "Jump to room search": "Jump to room search",
@@ -3408,8 +3407,6 @@
     "Navigate up in the room list": "Navigate up in the room list",
     "Navigate down in the room list": "Navigate down in the room list",
     "Toggle the top left menu": "Toggle the top left menu",
-    "Close dialog or context menu": "Close dialog or context menu",
-    "Activate selected button": "Activate selected button",
     "Toggle right panel": "Toggle right panel",
     "Open this settings tab": "Open this settings tab",
     "Go to Home View": "Go to Home View",
@@ -3425,7 +3422,10 @@
     "Jump to first message": "Jump to first message",
     "Jump to last message": "Jump to last message",
     "Undo edit": "Undo edit",
-    "Force complete": "Force complete",
     "New line": "New line",
+    "Force complete": "Force complete",
+    "Search (must be enabled)": "Search (must be enabled)",
+    "Close dialog or context menu": "Close dialog or context menu",
+    "Activate selected button": "Activate selected button",
     "Redo edit": "Redo edit"
 }
