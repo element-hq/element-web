@@ -92,7 +92,7 @@
     "maplibre-gl": "^1.15.2",
     "matrix-analytics-events": "github:matrix-org/matrix-analytics-events.git#1eab4356548c97722a183912fda1ceabbe8cc7c1",
     "matrix-events-sdk": "^0.0.1-beta.6",
-    "matrix-js-sdk": "15.5.0-rc.1",
+    "matrix-js-sdk": "15.5.0",
     "matrix-widget-api": "^0.1.0-beta.18",
     "minimist": "^1.2.5",
     "opus-recorder": "^8.0.3",
