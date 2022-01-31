@@ -3412,8 +3412,8 @@
     "The poll has ended. Top answer: %(topAnswer)s": "Le sondage est terminé. Meilleure réponse : %(topAnswer)s",
     "The poll has ended. No votes were cast.": "Le sondage est terminé. Aucun vote n’a été exprimé.",
     "You can turn this off anytime in settings": "Vous pouvez désactiver ceci à n’importe quel moment dans les paramètres",
-    "We <Bold>don't</Bold> share information with third parties": "Nous <Bold>ne</Bold> partageons <Bold>pas</Bold> d’information avec des tierces parties",
-    "We <Bold>don't</Bold> record or profile any account data": "Nous <Bold>n’</Bold>enregistrons ou ne profilons <Bold>aucune</Bold> donnée du compte",
+    "We <Bold>don't</Bold> share information with third parties": "Nous ne partageons <Bold>aucune</Bold> information avec des tiers",
+    "We <Bold>don't</Bold> record or profile any account data": "Nous n’enregistrons ou ne profilons <Bold>aucune</Bold> donnée du compte",
     "Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we'll generate a random identifier, shared by your devices.": "Aider nous à identifier les problèmes pour améliorer Element en partageant des données d’usage anonymisées. Pour comprendre comment les gens utilisent plusieurs appareils, nous générerons un identifiant aléatoire, partagé entre vos appareils.",
     "You can read all our terms <PrivacyPolicyUrl>here</PrivacyPolicyUrl>": "Vous pouvez lire toutes nos conditions <PrivacyPolicyUrl>ici</PrivacyPolicyUrl>",
     "Type of location share": "Type de partage de position",
@@ -3587,5 +3587,13 @@
     "Jump to start of the composer": "Revenir au début du compositeur",
     "Navigate to previous message to edit": "Allez vers le précédent message à éditer",
     "Navigate to next message to edit": "Aller vers le prochain message à éditer",
-    "Unable to check if username has been taken. Try again later.": "Impossible de vérifier si le nom d’utilisateur est déjà utilisé. Veuillez réessayer plus tard."
+    "Unable to check if username has been taken. Try again later.": "Impossible de vérifier si le nom d’utilisateur est déjà utilisé. Veuillez réessayer plus tard.",
+    "Force complete": "Terminer de force",
+    "Redo edit": "Restaurer la modification",
+    "Undo edit": "Annuler la modification",
+    "Jump to last message": "Aller au dernier message",
+    "Jump to first message": "Aller au premier message",
+    "Toggle hidden event visibility": "Changer la visibilité de l'événement caché",
+    "%(count)s hidden messages.|one": "%(count)s message caché.",
+    "%(count)s hidden messages.|other": "%(count)s messages cachés."
 }
