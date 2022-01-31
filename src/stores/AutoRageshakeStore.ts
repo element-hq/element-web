@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src";
+import { sleep } from "matrix-js-sdk/src/utils";
+import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 
 import SdkConfig from '../SdkConfig';
 import sendBugReport from '../rageshake/submit-rageshake';
@@ -23,14 +25,17 @@ import { AsyncStoreWithClient } from './AsyncStoreWithClient';
 import { ActionPayload } from '../dispatcher/payloads';
 import SettingsStore from "../settings/SettingsStore";
 
-// Minimum interval of 5 minutes between reports, especially important when we're doing an initial sync with a lot of decryption errors
-const RAGESHAKE_INTERVAL = 5*60*1000;
+// Minimum interval of 1 minute between reports
+const RAGESHAKE_INTERVAL = 60000;
+// Before rageshaking, wait 5 seconds and see if the message has successfully decrypted
+const GRACE_PERIOD = 5000;
 // Event type for to-device messages requesting sender auto-rageshakes
 const AUTO_RS_REQUEST = "im.vector.auto_rs_request";
 
 interface IState {
     reportedSessionIds: Set<string>;
     lastRageshakeTime: number;
+    initialSyncCompleted: boolean;
 }
 
 /**
@@ -45,9 +50,11 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         super(defaultDispatcher, {
             reportedSessionIds: new Set<string>(),
             lastRageshakeTime: 0,
+            initialSyncCompleted: false,
         });
         this.onDecryptionAttempt = this.onDecryptionAttempt.bind(this);
         this.onDeviceMessage = this.onDeviceMessage.bind(this);
+        this.onSyncStateChange = this.onSyncStateChange.bind(this);
     }
 
     public static get instance(): AutoRageshakeStore {
@@ -64,6 +71,7 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
         if (this.matrixClient) {
             this.matrixClient.on('Event.decrypted', this.onDecryptionAttempt);
             this.matrixClient.on('toDeviceEvent', this.onDeviceMessage);
+            this.matrixClient.on('sync', this.onSyncStateChange);
         }
     }
 
@@ -75,9 +83,14 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
     }
 
     private async onDecryptionAttempt(ev: MatrixEvent): Promise<void> {
+        if (!this.state.initialSyncCompleted) { return; }
+
         const wireContent = ev.getWireContent();
         const sessionId = wireContent.session_id;
         if (ev.isDecryptionFailure() && !this.state.reportedSessionIds.has(sessionId)) {
+            await sleep(GRACE_PERIOD);
+            if (!ev.isDecryptionFailure()) { return; }
+
             const newReportedSessionIds = new Set(this.state.reportedSessionIds);
             await this.updateState({ reportedSessionIds: newReportedSessionIds.add(sessionId) });
 
@@ -111,6 +124,12 @@ export default class AutoRageshakeStore extends AsyncStoreWithClient<IState> {
                 AUTO_RS_REQUEST,
                 { [messageContent.user_id]: { [messageContent.device_id]: messageContent } },
             );
+        }
+    }
+
+    private async onSyncStateChange(_state: SyncState, _prevState: SyncState, data: ISyncStateData) {
+        if (!this.state.initialSyncCompleted) {
+            await this.updateState({ initialSyncCompleted: !!data.nextSyncToken });
         }
     }
 
