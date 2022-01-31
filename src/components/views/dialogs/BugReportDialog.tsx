@@ -96,7 +96,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             userText,
             sendLogs: true,
             progressCallback: this.sendProgressCallback,
-            labels: [this.props.label],
+            labels: this.props.label ? [this.props.label] : [],
         }).then(() => {
             if (!this.unmounted) {
                 this.props.onFinished(false);
@@ -128,7 +128,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
             await downloadBugReport({
                 sendLogs: true,
                 progressCallback: this.downloadProgressCallback,
-                labels: [this.props.label],
+                labels: this.props.label ? [this.props.label] : [],
             });
 
             this.setState({
