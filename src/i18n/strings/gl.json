@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza características avanzadas do navegador que non están dispoñibles no teu navegador.",
     "Powered by Matrix": "Funciona grazas a Matrix",
     "Use %(brand)s on mobile": "Utiliza %(brand)s no móbil",
-    "Switch to space by number": "Cambiar a espazo polo número"
+    "Switch to space by number": "Cambiar a espazo polo número",
+    "Next recently visited room or community": "Seguinte sala ou comunidade visitada recentemente",
+    "Previous recently visited room or community": "Sala ou Comunidade visitada recentemente"
 }
