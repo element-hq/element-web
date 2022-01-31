@@ -330,7 +330,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private setStickerPickerOpen = (isStickerPickerOpen: boolean) => {
-        this.setState({ isStickerPickerOpen });
+        this.setState({
+            isStickerPickerOpen,
+            isMenuOpen: false,
+        });
     };
 
     private toggleButtonMenu = (): void => {
@@ -453,7 +456,12 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             menuPosition={menuPosition}
                             narrowMode={this.state.narrowMode}
                             relation={this.props.relation}
-                            onRecordStartEndClick={() => this.voiceRecordingButton.current?.onRecordStartEndClick()}
+                            onRecordStartEndClick={() => {
+                                this.voiceRecordingButton.current?.onRecordStartEndClick();
+                                if (this.state.narrowMode) {
+                                    this.toggleButtonMenu();
+                                }
+                            }}
                             setStickerPickerOpen={this.setStickerPickerOpen}
                             showLocationButton={this.state.showLocationButton}
                             showStickersButton={this.state.showStickersButton}

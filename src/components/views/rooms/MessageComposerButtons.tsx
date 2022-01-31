@@ -17,14 +17,14 @@ limitations under the License.
 import classNames from 'classnames';
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
 import { M_POLL_START } from "matrix-events-sdk";
-import React, { ReactElement, useContext } from 'react';
+import React, { createContext, ReactElement, useContext } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { CollapsibleButton, ICollapsibleButtonProps } from './CollapsibleButton';
-import ContextMenu, { aboveLeftOf, AboveLeftOf, MenuItem, useContextMenu } from '../../structures/ContextMenu';
+import { CollapsibleButton } from './CollapsibleButton';
+import ContextMenu, { aboveLeftOf, AboveLeftOf, useContextMenu } from '../../structures/ContextMenu';
 import dis from '../../../dispatcher/dispatcher';
 import EmojiPicker from '../emojipicker/EmojiPicker';
 import ErrorDialog from "../dialogs/ErrorDialog";
@@ -51,6 +51,9 @@ interface IProps {
     showStickersButton: boolean;
     toggleButtonMenu: () => void;
 }
+
+type OverflowMenuCloser = () => void;
+export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null);
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient: MatrixClient = useContext(MatrixClientContext);
@@ -107,7 +110,6 @@ function narrowMode(
             className={moreOptionsClasses}
             onClick={props.toggleButtonMenu}
             title={_t("More options")}
-            tooltip={false}
         />
         { props.isMenuOpen && (
             <ContextMenu
@@ -115,15 +117,9 @@ function narrowMode(
                 {...props.menuPosition}
                 wrapperClassName="mx_MessageComposer_Menu"
             >
-                { moreButtons.map((button, index) => (
-                    <MenuItem
-                        className="mx_CallContextMenu_item"
-                        key={index}
-                        onClick={props.toggleButtonMenu}
-                    >
-                        { button }
-                    </MenuItem>
-                )) }
+                <OverflowMenuContext.Provider value={props.toggleButtonMenu}>
+                    { moreButtons }
+                </OverflowMenuContext.Provider>
             </ContextMenu>
         ) }
     </>;
@@ -134,18 +130,16 @@ function emojiButton(props: IProps): ReactElement {
         key="emoji_button"
         addEmoji={props.addEmoji}
         menuPosition={props.menuPosition}
-        narrowMode={props.narrowMode}
     />;
 }
 
-interface IEmojiButtonProps extends Pick<ICollapsibleButtonProps, "narrowMode"> {
+interface IEmojiButtonProps {
     addEmoji: (unicode: string) => boolean;
     menuPosition: AboveLeftOf;
 }
 
-const EmojiButton: React.FC<IEmojiButtonProps> = (
-    { addEmoji, menuPosition, narrowMode },
-) => {
+const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition }) => {
+    const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
     let contextMenu: React.ReactElement | null = null;
@@ -156,7 +150,10 @@ const EmojiButton: React.FC<IEmojiButtonProps> = (
 
         contextMenu = <ContextMenu
             {...position}
-            onFinished={closeMenu}
+            onFinished={() => {
+                closeMenu();
+                overflowMenuCloser?.();
+            }}
             managed={false}
         >
             <EmojiPicker onChoose={addEmoji} showQuickReactions={true} />
@@ -177,7 +174,6 @@ const EmojiButton: React.FC<IEmojiButtonProps> = (
         <CollapsibleButton
             className={className}
             onClick={openMenu}
-            narrowMode={narrowMode}
             title={_t("Add emoji")}
         />
 
@@ -274,19 +270,18 @@ class UploadButton extends React.Component<IUploadButtonProps> {
 function showStickersButton(props: IProps): ReactElement {
     return (
         props.showStickersButton
-            ? <AccessibleTooltipButton
+            ? <CollapsibleButton
                 id='stickersButton'
                 key="controls_stickers"
                 className="mx_MessageComposer_button mx_MessageComposer_stickers"
                 onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
                 title={
                     props.narrowMode
-                        ? null
+                        ? _t("Send a sticker")
                         : props.isStickerPickerOpen
                             ? _t("Hide Stickers")
                             : _t("Show Stickers")
                 }
-                label={props.narrowMode ? _t("Send a sticker") : null}
             />
             : null
     );
@@ -302,25 +297,23 @@ function voiceRecordingButton(props: IProps): ReactElement {
                 className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
                 onClick={props.onRecordStartEndClick}
                 title={_t("Send voice message")}
-                narrowMode={props.narrowMode}
             />
     );
 }
 
 function pollButton(props: IProps, room: Room): ReactElement {
-    return <PollButton
-        key="polls"
-        room={room}
-        narrowMode={props.narrowMode}
-    />;
+    return <PollButton key="polls" room={room} />;
 }
 
-interface IPollButtonProps extends Pick<ICollapsibleButtonProps, "narrowMode"> {
+interface IPollButtonProps {
     room: Room;
 }
 
 class PollButton extends React.PureComponent<IPollButtonProps> {
+    static contextType = OverflowMenuContext;
+
     private onCreateClick = () => {
+        this.context?.(); // close overflow menu
         const canSend = this.props.room.currentState.maySendEvent(
             M_POLL_START.name,
             MatrixClientPeg.get().getUserId(),
@@ -357,7 +350,6 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
             <CollapsibleButton
                 className="mx_MessageComposer_button mx_MessageComposer_poll"
                 onClick={this.onCreateClick}
-                narrowMode={this.props.narrowMode}
                 title={_t("Create poll")}
             />
         );
@@ -377,7 +369,6 @@ function showLocationButton(
                 roomId={roomId}
                 sender={room.getMember(matrixClient.getUserId())}
                 menuPosition={props.menuPosition}
-                narrowMode={props.narrowMode}
             />
             : null
     );

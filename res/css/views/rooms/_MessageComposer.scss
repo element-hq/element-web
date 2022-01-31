@@ -192,11 +192,14 @@ limitations under the License.
     line-height: var(--size);
     width: auto;
     padding-left: var(--size);
-    border-radius: 100%;
-    margin-right: 6px;
 
-    &:last-child {
-        margin-right: auto;
+    &:not(.mx_CallContextMenu_item) {
+        border-radius: 50%;
+        margin-right: 6px;
+
+        &:last-child {
+            margin-right: auto;
+        }
     }
 
     &::before {
@@ -407,6 +410,7 @@ limitations under the License.
     align-items: center;
     max-width: unset;
     width: 100%;
+    margin: 7px 7px 7px 16px; // space out the buttons
 }
 
 .mx_MessageComposer_Menu .mx_ContextualMenu {

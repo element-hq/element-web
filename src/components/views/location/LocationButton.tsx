@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, SyntheticEvent, useContext } from 'react';
 import classNames from 'classnames';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { logger } from "matrix-js-sdk/src/logger";
@@ -23,24 +23,28 @@ import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 
 import { _t } from '../../../languageHandler';
 import LocationPicker from './LocationPicker';
-import { CollapsibleButton, ICollapsibleButtonProps } from '../rooms/CollapsibleButton';
+import { CollapsibleButton } from '../rooms/CollapsibleButton';
 import ContextMenu, { aboveLeftOf, useContextMenu, AboveLeftOf } from "../../structures/ContextMenu";
 import Modal from '../../../Modal';
 import QuestionDialog from '../dialogs/QuestionDialog';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
+import { OverflowMenuContext } from "../rooms/MessageComposerButtons";
 
-interface IProps extends Pick<ICollapsibleButtonProps, "narrowMode"> {
+interface IProps {
     roomId: string;
     sender: RoomMember;
     menuPosition: AboveLeftOf;
-    narrowMode: boolean;
 }
 
-export const LocationButton: React.FC<IProps> = (
-    { roomId, sender, menuPosition, narrowMode },
-) => {
+export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition }) => {
+    const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
     const matrixClient = useContext(MatrixClientContext);
+
+    const _onFinished = (ev?: SyntheticEvent) => {
+        closeMenu(ev);
+        overflowMenuCloser?.();
+    };
 
     let contextMenu: ReactElement;
     if (menuDisplayed) {
@@ -49,13 +53,13 @@ export const LocationButton: React.FC<IProps> = (
 
         contextMenu = <ContextMenu
             {...position}
-            onFinished={closeMenu}
+            onFinished={_onFinished}
             managed={false}
         >
             <LocationPicker
                 sender={sender}
                 onChoose={shareLocation(matrixClient, roomId, openMenu)}
-                onFinished={closeMenu}
+                onFinished={_onFinished}
             />
         </ContextMenu>;
     }
@@ -74,7 +78,6 @@ export const LocationButton: React.FC<IProps> = (
         <CollapsibleButton
             className={className}
             onClick={openMenu}
-            narrowMode={narrowMode}
             title={_t("Share location")}
         />
 

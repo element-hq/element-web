@@ -14,23 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, useContext } from 'react';
+import classNames from 'classnames';
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { MenuItem } from "../../structures/ContextMenu";
+import { OverflowMenuContext } from './MessageComposerButtons';
 
-export interface ICollapsibleButtonProps
-    extends ComponentProps<typeof AccessibleTooltipButton>
-{
-    narrowMode: boolean;
+interface ICollapsibleButtonProps extends ComponentProps<typeof MenuItem> {
     title: string;
 }
 
-export const CollapsibleButton = ({ narrowMode, title, ...props }: ICollapsibleButtonProps) => {
-    return <AccessibleTooltipButton
-        {...props}
-        title={narrowMode ? undefined : title}
-        label={narrowMode ? title : undefined}
-    />;
+export const CollapsibleButton = ({ title, className, ...props }: ICollapsibleButtonProps) => {
+    const inOverflowMenu = !!useContext(OverflowMenuContext);
+    if (inOverflowMenu) {
+        return <MenuItem
+            {...props}
+            className={classNames("mx_CallContextMenu_item", className)}
+        >
+            { title }
+        </MenuItem>;
+    }
+
+    return <AccessibleTooltipButton {...props} title={title} className={className} />;
 };
 
 export default CollapsibleButton;

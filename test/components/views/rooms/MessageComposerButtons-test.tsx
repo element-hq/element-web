@@ -77,6 +77,7 @@ describe("MessageComposerButtons", () => {
                 narrowMode={true}
                 showLocationButton={true}
                 showStickersButton={true}
+                toggleButtonMenu={() => {}}
             />,
         );
 
@@ -159,28 +160,28 @@ function createRoomState(room: Room): IRoomState {
 
 function buttonLabels(buttons: ReactWrapper): any[] {
     // Note: Depends on the fact that the mini buttons use aria-label
-    // and the labels under More options use label
+    // and the labels under More options use textContent
     const mainButtons = (
         buttons
-            .find('div')
-            .map((button: ReactWrapper) => button.prop("aria-label"))
+            .find('div.mx_MessageComposer_button[aria-label]')
+            .map((button: ReactWrapper) => button.prop("aria-label") as string)
             .filter(x => x)
     );
 
-    let extraButtons = (
+    const extraButtons = (
         buttons
-            .find('div')
-            .map((button: ReactWrapper) => button.prop("label"))
+            .find('.mx_MessageComposer_Menu div.mx_AccessibleButton[role="menuitem"]')
+            .map((button: ReactWrapper) => button.text())
             .filter(x => x)
     );
-    if (extraButtons.length === 0) {
-        extraButtons = [];
-    } else {
-        extraButtons = [extraButtons];
+
+    const list: any[] = [
+        ...mainButtons,
+    ];
+
+    if (extraButtons.length > 0) {
+        list.push(extraButtons);
     }
 
-    return [
-        ...mainButtons,
-        ...extraButtons,
-    ];
+    return list;
 }
