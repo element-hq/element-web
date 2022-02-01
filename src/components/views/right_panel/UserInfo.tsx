@@ -1518,7 +1518,7 @@ export type Member = User | RoomMember | GroupMember;
 const UserInfoHeader: React.FC<{
     member: Member;
     e2eStatus: E2EStatus;
-    roomId: string;
+    roomId?: string;
 }> = ({ member, e2eStatus, roomId }) => {
     const cli = useContext(MatrixClientContext);
     const statusMessage = useUserStatusMessage(member);
@@ -1710,7 +1710,7 @@ const UserInfo: React.FC<IProps> = ({
 
     const header = <React.Fragment>
         { scopeHeader }
-        <UserInfoHeader member={member} e2eStatus={e2eStatus} roomId={room.roomId} />
+        <UserInfoHeader member={member} e2eStatus={e2eStatus} roomId={room?.roomId} />
     </React.Fragment>;
     return <BaseCard
         className={classes.join(" ")}
