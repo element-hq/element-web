@@ -62,9 +62,9 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
         onError,
     );
 
-    const { join_rule: joinRule } = content;
+    const { join_rule: joinRule = JoinRule.Invite } = content || {};
     const restrictedAllowRoomIds = joinRule === JoinRule.Restricted
-        ? content.allow.filter(o => o.type === RestrictedAllowType.RoomMembership).map(o => o.room_id)
+        ? content.allow?.filter(o => o.type === RestrictedAllowType.RoomMembership).map(o => o.room_id)
         : undefined;
 
     const editRestrictedRoomIds = async (): Promise<string[] | undefined> => {
