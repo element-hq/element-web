@@ -179,7 +179,8 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.props.room.roomId == RoomViewStore.getRoomId()) return;
         const app = this.props.app;
         const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(app.id);
-        if (!isActiveWidget) {
+        // Stop the widget if it's not the active (persistent) widget and it's not a user widget
+        if (!isActiveWidget && !this.props.userWidget) {
             ActiveWidgetStore.instance.destroyPersistentWidget(app.id);
             PersistedElement.destroyElement(this.persistKey);
             this.sgWidget?.stopMessaging();
