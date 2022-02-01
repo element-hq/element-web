@@ -19,6 +19,8 @@ then
     exit 0
 fi
 
+# These steps correspond with README section "Setting up a dev environment"
+
 echo "Linking js-sdk"
 git clone --depth 1 --branch $JS_SDK_BRANCH $JS_SDK_REPO js-sdk
 cd js-sdk

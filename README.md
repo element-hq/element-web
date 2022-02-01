@@ -303,7 +303,7 @@ pushd matrix-react-sdk
 yarn link
 yarn link matrix-js-sdk
 yarn install
-yarn build
+yarn reskindex
 popd
 ```
 
@@ -380,7 +380,6 @@ There are a number of application-level tests in the `tests` directory; these
 are designed to run with Jest and JSDOM. To run them
 
 ```
-yarn build
 yarn test
 ```
 
