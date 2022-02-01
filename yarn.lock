@@ -6225,7 +6225,7 @@ matrix-events-sdk@^0.0.1-beta.6:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "15.5.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cf8d2bf6efc5c6cebd87926c1c8041363c0ff350"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/9c242a9ce6d9039574b4032f7f5c1964b3db8d94"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
