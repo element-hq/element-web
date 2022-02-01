@@ -193,7 +193,6 @@ export default class DateSeparator extends React.Component<IProps, IState> {
         if (this.state.contextMenuPosition) {
             contextMenu = <IconizedContextMenu
                 {...contextMenuBelow(this.state.contextMenuPosition)}
-                compact
                 onFinished={this.onContextMenuCloseClick}
             >
                 <IconizedContextMenuOptionList first>
