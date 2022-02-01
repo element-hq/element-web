@@ -8081,10 +8081,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.39.0:
-  version "3.39.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.39.0.tgz#038bf1a096bacd95fc29d860106adbb8945c2c9a"
-  integrity sha512-h7jYJ26ntCNsXFTUIM2Wph9dpN7cudPsxFx+qhrFTGCM3uT5Iriu4ykJkjRkJYiuH4ptiwLDxb0mpLeJU6EOAw==
+matrix-react-sdk@3.39.1:
+  version "3.39.1"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.39.1.tgz#62844aeeb0135b459eef2dff679b85947b4090d1"
+  integrity sha512-OElpgQ/VpAF8zdIxYYe6T2/QQGQJGD247gUWK1psFeFYMv9Yr7cudu/Fwfd5pSpuuhKnHTP+BfEj+LLtxdBWog==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/linkify-element" "^4.0.0-rc.5"
