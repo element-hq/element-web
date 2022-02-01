@@ -3553,5 +3553,6 @@
     "Last month": "Останній місяць",
     "Last week": "Останній тиждень",
     "Unable to find event at that date. (%(code)s)": "Не вдалося знайти подію на цю дату. (%(code)s)",
-    "Jump to date (adds /jumptodate and jump to date headers)": "Перейти до дати (додає /jumptodate і переходить до заголовків дати)"
+    "Jump to date (adds /jumptodate and jump to date headers)": "Перейти до дати (додає /jumptodate і переходить до заголовків дати)",
+    "This address does not point at this room": "Ця адреса не вказує на цю кімнату"
 }
