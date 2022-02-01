@@ -3486,5 +3486,7 @@
     "Removes user with given id from this room": "Elimina desta sala á usuaria co ID dado",
     "Unrecognised room address: %(roomAlias)s": "Enderezo da sala non recoñecido: %(roomAlias)s",
     "Failed to get room topic: Unable to find room (%(roomId)s": "Non se obtivo o asunto da sala: Non se atopou a sala (%(roomId)s)",
-    "Command error: Unable to find rendering type (%(renderingType)s)": "Erro no comando: non se puido atopa o tipo de renderizado (%(renderingType)s)"
+    "Command error: Unable to find rendering type (%(renderingType)s)": "Erro no comando: non se puido atopa o tipo de renderizado (%(renderingType)s)",
+    "Creating output...": "Creando a saída...",
+    "Fetching events...": "Obtendo eventos..."
 }
