@@ -84,6 +84,8 @@ limitations under the License.
             width: 16px;
             left: 0;
             background-image: url("$(res)/img/element-icons/warning-badge.svg");
+            background-size: cover;
+            background-repeat: no-repeat;
         }
     }
 
