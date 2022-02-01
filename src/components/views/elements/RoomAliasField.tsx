@@ -28,6 +28,8 @@ interface IProps {
     label?: string;
     placeholder?: string;
     disabled?: boolean;
+    // if roomId is passed then the entered alias is checked to point to this roomId, else must be unassigned
+    roomId?: string;
     onKeyDown?: KeyboardEventHandler;
     onChange?(value: string): void;
 }
@@ -165,7 +167,24 @@ export default class RoomAliasField extends React.PureComponent<IProps, IState> 
                 key: "required",
                 test: async ({ value, allowEmpty }) => allowEmpty || !!value,
                 invalid: () => _t("Please provide an address"),
-            }, {
+            }, this.props.roomId ? {
+                key: "matches",
+                final: true,
+                test: async ({ value }) => {
+                    if (!value) {
+                        return true;
+                    }
+                    const client = this.context;
+                    try {
+                        const result = await client.getRoomIdForAlias(this.asFullAlias(value));
+                        return result.room_id === this.props.roomId;
+                    } catch (err) {
+                        console.log(err);
+                        return false;
+                    }
+                },
+                invalid: () => _t("This address does not point at this room"),
+            } : {
                 key: "taken",
                 final: true,
                 test: async ({ value }) => {

@@ -2310,6 +2310,7 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "Missing room name or separator e.g. (my-room:domain.org)",
     "Some characters not allowed": "Some characters not allowed",
     "Please provide an address": "Please provide an address",
+    "This address does not point at this room": "This address does not point at this room",
     "This address is available to use": "This address is available to use",
     "This address is already in use": "This address is already in use",
     "This address had invalid server or is already in use": "This address had invalid server or is already in use",
