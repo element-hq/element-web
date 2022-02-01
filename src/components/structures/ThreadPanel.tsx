@@ -25,7 +25,7 @@ import {
     UNSTABLE_FILTER_RELATION_SENDERS,
     UNSTABLE_FILTER_RELATION_TYPES,
 } from 'matrix-js-sdk/src/filter';
-import { ThreadEvent } from 'matrix-js-sdk/src/models/thread';
+import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import ResizeNotifier from '../../utils/ResizeNotifier';
@@ -229,6 +229,35 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     }, [timelineSet, ref]);
     useEventEmitter(room, ThreadEvent.Update, () => {
         if (timelineSet) ref.current.refreshTimeline();
+    });
+
+    useEventEmitter(room, ThreadEvent.New, async (thread: Thread) => {
+        if (timelineSet) {
+            const capabilities = await mxClient.getCapabilities();
+            const serverSupportsThreads = capabilities['io.element.thread']?.enabled;
+
+            const discoveredScrollingBack = room.lastThread.rootEvent.localTimestamp < thread.rootEvent.localTimestamp;
+
+            // When the server support threads we're only interested in adding
+            // the newly created threads to the list.
+            // The ones discovered when scrolling back should be discarded as
+            // they will be discovered by the `/messages` filter
+            if (serverSupportsThreads) {
+                if (!discoveredScrollingBack) {
+                    timelineSet.addEventToTimeline(
+                        thread.rootEvent,
+                        timelineSet.getLiveTimeline(),
+                        false,
+                    );
+                }
+            } else {
+                timelineSet.addEventToTimeline(
+                    thread.rootEvent,
+                    timelineSet.getLiveTimeline(),
+                    !discoveredScrollingBack,
+                );
+            }
+        }
     });
 
     return (
