@@ -472,17 +472,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     public trackScreenChange(durationMs: number): void {
-        const notLoggedInMap = {};
+        const notLoggedInMap: Partial<Record<Views, ScreenEvent["screenName"]>> = {};
         notLoggedInMap[Views.LOADING] = "WebLoading";
-        notLoggedInMap[Views.WELCOME] = "WebWelcome";
-        notLoggedInMap[Views.LOGIN] = "WebLogin";
-        notLoggedInMap[Views.REGISTER] = "WebRegister";
-        notLoggedInMap[Views.FORGOT_PASSWORD] = "WebForgotPassword";
+        notLoggedInMap[Views.WELCOME] = "Welcome";
+        notLoggedInMap[Views.LOGIN] = "Login";
+        notLoggedInMap[Views.REGISTER] = "Register";
+        notLoggedInMap[Views.FORGOT_PASSWORD] = "ForgotPassword";
         notLoggedInMap[Views.COMPLETE_SECURITY] = "WebCompleteSecurity";
         notLoggedInMap[Views.E2E_SETUP] = "WebE2ESetup";
         notLoggedInMap[Views.SOFT_LOGOUT] = "WebSoftLogout";
 
-        const loggedInPageTypeMap = {};
+        const loggedInPageTypeMap: Partial<Record<PageType, ScreenEvent["screenName"]>> = {};
         loggedInPageTypeMap[PageType.HomePage] = "Home";
         loggedInPageTypeMap[PageType.RoomView] = "Room";
         loggedInPageTypeMap[PageType.RoomDirectory] = "RoomDirectory";
@@ -495,7 +495,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             notLoggedInMap[this.state.view];
 
         return PosthogAnalytics.instance.trackEvent<ScreenEvent>({
-            eventName: "Screen",
+            eventName: "$screen",
             screenName,
             durationMs,
         });

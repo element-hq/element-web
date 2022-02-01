@@ -90,7 +90,7 @@
     "katex": "^0.12.0",
     "lodash": "^4.17.20",
     "maplibre-gl": "^1.15.2",
-    "matrix-analytics-events": "github:matrix-org/matrix-analytics-events.git#1eab4356548c97722a183912fda1ceabbe8cc7c1",
+    "matrix-analytics-events": "github:matrix-org/matrix-analytics-events.git#dfa6feaa12bcfc8e99b05a148e12fff7f9d62f08",
     "matrix-events-sdk": "^0.0.1-beta.6",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-widget-api": "^0.1.0-beta.18",
