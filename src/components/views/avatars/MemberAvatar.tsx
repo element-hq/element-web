@@ -93,6 +93,7 @@ export default class MemberAvatar extends React.Component<IProps, IState> {
             };
         } else {
             logger.error("MemberAvatar called somehow with null member or fallbackUserId");
+            return {} as IState; // prevent an explosion
         }
     }
 
