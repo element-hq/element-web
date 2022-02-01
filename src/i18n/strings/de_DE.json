@@ -3590,5 +3590,16 @@
     "Force complete": "Vervollständigung erzwingen",
     "Toggle hidden event visibility": "Sichtbarkeit versteckter Events umschalten",
     "%(count)s hidden messages.|one": "%(count)s ausgeblendete Nachricht.",
-    "%(count)s hidden messages.|other": "%(count)s ausgeblendete Nachrichten."
+    "%(count)s hidden messages.|other": "%(count)s ausgeblendete Nachrichten.",
+    "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Falls du weißt, was du machst: Element ist Open Source! Checke unser GitHub aus (https://github.com/vector-im/element-web/) und hilf mit!",
+    "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Wenn dir jemand gesagt hat, dass du hier etwas einfügen sollst, ist die Wahrscheinlichkeit sehr groß, dass du von der Person betrogen wirst!",
+    "Wait!": "Halt Stopp!",
+    "This address does not point at this room": "Diese Adresse verweist nicht auf diesen Raum",
+    "Pick a date to jump to": "Wähle eine Datum aus",
+    "Jump to date": "Zu Datum springen",
+    "The beginning of the room": "Der Anfang des Raums",
+    "Last month": "Letzter Monat",
+    "Last week": "Letzte Woche",
+    "Unable to find event at that date. (%(code)s)": "An diesem Datum gab es kein Event. (%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Zu Datum springen ( /jumptodate bzw. Zu Datum springen im Header)"
 }
