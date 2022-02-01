@@ -3595,5 +3595,12 @@
     "Jump to first message": "Aller au premier message",
     "Toggle hidden event visibility": "Changer la visibilité de l'événement caché",
     "%(count)s hidden messages.|one": "%(count)s message caché.",
-    "%(count)s hidden messages.|other": "%(count)s messages cachés."
+    "%(count)s hidden messages.|other": "%(count)s messages cachés.",
+    "Pick a date to jump to": "Choisissez vers quelle date aller",
+    "Jump to date": "Aller à la date",
+    "The beginning of the room": "Le début de ce salon",
+    "Last month": "Le mois dernier",
+    "Last week": "La semaine dernière",
+    "Unable to find event at that date. (%(code)s)": "Impossible de trouver un événement à cette date. (%(code)s)",
+    "Jump to date (adds /jumptodate and jump to date headers)": "Aller à la date (ajoute /jumptodate et va sur les en-têtes de date)"
 }
