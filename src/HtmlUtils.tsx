@@ -90,7 +90,7 @@ const MEDIA_API_MXC_REGEX = /\/_matrix\/media\/r0\/(?:download|thumbnail)\/(.+?)
  * positives, but useful for fast-path testing strings to see if they
  * need emojification.
  */
-export function mightContainEmoji(str: string): boolean {
+function mightContainEmoji(str: string): boolean {
     return SURROGATE_PAIR_PATTERN.test(str) || SYMBOL_PATTERN.test(str);
 }
 
@@ -432,7 +432,7 @@ function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | s
 
     // We use lodash's grapheme splitter to avoid breaking apart compound emojis
     for (const char of split(message, '')) {
-        if (mightContainEmoji(char)) {
+        if (EMOJIBASE_REGEX.test(char)) {
             if (text) {
                 result.push(text);
                 text = '';

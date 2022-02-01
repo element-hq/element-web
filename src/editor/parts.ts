@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import { split } from "lodash";
+import EMOJIBASE_REGEX from "emojibase-regex";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -25,7 +26,7 @@ import AutocompleteWrapperModel, {
     UpdateCallback,
     UpdateQuery,
 } from "./autocomplete";
-import { mightContainEmoji, unicodeToShortcode } from "../HtmlUtils";
+import { unicodeToShortcode } from "../HtmlUtils";
 import * as Avatar from "../Avatar";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { Action } from "../dispatcher/actions";
@@ -191,7 +192,7 @@ abstract class BasePart {
 
 abstract class PlainBasePart extends BasePart {
     protected acceptsInsertion(chr: string, offset: number, inputType: string): boolean {
-        if (chr === "\n" || mightContainEmoji(chr)) {
+        if (chr === "\n" || EMOJIBASE_REGEX.test(chr)) {
             return false;
         }
         // when not pasting or dropping text, reject characters that should start a pill candidate
@@ -361,7 +362,7 @@ class NewlinePart extends BasePart implements IBasePart {
 
 class EmojiPart extends BasePart implements IBasePart {
     protected acceptsInsertion(chr: string, offset: number): boolean {
-        return mightContainEmoji(chr);
+        return EMOJIBASE_REGEX.test(chr);
     }
 
     protected acceptsRemoval(position: number, chr: string): boolean {
@@ -553,7 +554,7 @@ export class PartCreator {
             case "\n":
                 return new NewlinePart();
             default:
-                if (mightContainEmoji(input[0])) {
+                if (EMOJIBASE_REGEX.test(input[0])) {
                     return new EmojiPart();
                 }
                 return new PlainPart();
@@ -627,7 +628,7 @@ export class PartCreator {
 
         // We use lodash's grapheme splitter to avoid breaking apart compound emojis
         for (const char of split(text, "")) {
-            if (mightContainEmoji(char)) {
+            if (EMOJIBASE_REGEX.test(char)) {
                 if (plainText) {
                     parts.push(this.plain(plainText));
                     plainText = "";
