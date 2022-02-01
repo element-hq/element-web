@@ -1,3 +1,11 @@
+Changes in [3.39.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.39.1) (2022-02-01)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix the sticker picker ([\#7692](https://github.com/matrix-org/matrix-react-sdk/pull/7692)). Fixes vector-im/element-web#20797. 
+ * Ensure UserInfo can be rendered without a room ([\#7687](https://github.com/matrix-org/matrix-react-sdk/pull/7687)). Fixes vector-im/element-web#20830.
+ * Fix publishing address wrongly demanding the alias be available ([\#7690](https://github.com/matrix-org/matrix-react-sdk/pull/7690)). Fixes vector-im/element-web#12013 and vector-im/element-web#20833.
+
 Changes in [3.39.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.39.0) (2022-01-31)
 =====================================================================================================
 
