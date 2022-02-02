@@ -27,18 +27,19 @@ limitations under the License.
 
     .mx_DecoratedRoomAvatar_icon {
         position: absolute;
-        bottom: -2px;
-        right: -2px;
-        margin: 4px;
-        width: 8px;
-        height: 8px;
+        // the following percentage based sizings are to match the scalable svg mask for the cutout
+        bottom: -6.25%;
+        right: -6.25%;
+        margin: 12.5%;
+        width: 25%;
+        height: 25%;
         border-radius: 50%;
     }
 
     .mx_DecoratedRoomAvatar_icon::before {
         content: '';
-        width: 8px;
-        height: 8px;
+        width: 100%;
+        height: 100%;
         right: 0;
         position: absolute;
         border-radius: 8px;
