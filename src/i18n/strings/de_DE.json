@@ -3601,5 +3601,9 @@
     "Last month": "Letzter Monat",
     "Last week": "Letzte Woche",
     "Unable to find event at that date. (%(code)s)": "An diesem Datum gab es kein Event. (%(code)s)",
-    "Jump to date (adds /jumptodate and jump to date headers)": "Zu Datum springen ( /jumptodate bzw. Zu Datum springen im Header)"
+    "Jump to date (adds /jumptodate and jump to date headers)": "Zu Datum springen ( /jumptodate bzw. Zu Datum springen im Header)",
+    "Location": "Standort",
+    "Poll": "Abstimmung",
+    "Voice Message": "Sprachnachricht",
+    "Hide stickers": "Sticker ausblenden"
 }
