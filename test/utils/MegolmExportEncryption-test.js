@@ -117,10 +117,9 @@ cissyYBxjsfsAn
         });
 
         // TODO find a subtlecrypto shim which doesn't break this test
-        it.skip('should decrypt a range of inputs', function(done) {
+        it.skip('should decrypt a range of inputs', function() {
             function next(i) {
                 if (i >= TEST_VECTORS.length) {
-                    done();
                     return;
                 }
 
@@ -132,12 +131,12 @@ cissyYBxjsfsAn
                     return next(i+1);
                 });
             }
-            return next(0).catch(done);
+            return next(0);
         });
     });
 
     describe('encrypt', function() {
-        it('should round-trip', function(done) {
+        it('should round-trip', function() {
             const input =
                   'words words many words in plain text here'.repeat(100);
 
@@ -151,8 +150,7 @@ cissyYBxjsfsAn
                 );
             }).then((plaintext) => {
                 expect(plaintext).toEqual(input);
-                done();
-            }).catch(done);
+            });
         });
     });
 });

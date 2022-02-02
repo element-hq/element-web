@@ -53,21 +53,19 @@ describe("canEncryptToAllUsers", () => {
         "@badUser:localhost": {},
     };
 
-    it("returns true if all devices have crypto", async (done) => {
+    it("returns true if all devices have crypto", async () => {
         const client = {
             downloadKeys: async function(userIds) { return trueUser; },
         };
         const response = await canEncryptToAllUsers(client, ["@goodUser:localhost"]);
         expect(response).toBe(true);
-        done();
     });
 
-    it("returns false if not all users have crypto", async (done) => {
+    it("returns false if not all users have crypto", async () => {
         const client = {
             downloadKeys: async function(userIds) { return { ...trueUser, ...falseUser }; },
         };
         const response = await canEncryptToAllUsers(client, ["@goodUser:localhost", "@badUser:localhost"]);
         expect(response).toBe(false);
-        done();
     });
 });

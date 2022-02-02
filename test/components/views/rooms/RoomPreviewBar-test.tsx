@@ -35,7 +35,7 @@ jest.mock('../../../../src/IdentityAuthClient', () => {
     });
 });
 
-jest.useFakeTimers();
+jest.useRealTimers();
 
 const createRoom = (roomId: string, userId: string): Room => {
     const newRoom = new Room(

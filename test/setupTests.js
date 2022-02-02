@@ -9,6 +9,10 @@ languageHandler.setMissingEntryGenerator(key => key.split("|", 2)[1]);
 
 require('jest-fetch-mock').enableMocks();
 
+// jest 27 removes setImmediate from jsdom
+// polyfill until setImmediate use in client can be removed
+global.setImmediate = callback => setTimeout(callback, 0);
+
 // polyfilling TextEncoder as it is not available on JSDOM
 // view https://github.com/facebook/jest/issues/9983
 global.TextEncoder = TextEncoder;
