@@ -30,6 +30,7 @@ import Spinner from "./Spinner";
 
 interface IProps extends IDialogProps {
     room: Room;
+    threadId?: string;
 }
 
 interface IState extends IScrollableBaseState {
@@ -103,7 +104,12 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
             this.state.options.map(a => a.trim()).filter(a => !!a),
             M_POLL_KIND_DISCLOSED,
         ).serialize();
-        this.matrixClient.sendEvent(this.props.room.roomId, pollEvent.type, pollEvent.content).then(
+        this.matrixClient.sendEvent(
+            this.props.room.roomId,
+            this.props.threadId,
+            pollEvent.type,
+            pollEvent.content,
+        ).then(
             () => this.props.onFinished(true),
         ).catch(e => {
             console.error("Failed to post poll:", e);

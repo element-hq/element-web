@@ -20,6 +20,7 @@ import { M_POLL_START } from "matrix-events-sdk";
 import React, { createContext, ReactElement, useContext } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -73,7 +74,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
             uploadButton(props, roomId),
             showStickersButton(props),
             voiceRecordingButton(props),
-            pollButton(room),
+            pollButton(room, props.relation),
             showLocationButton(props, room, roomId, matrixClient),
         ];
     } else {
@@ -84,7 +85,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
         moreButtons = [
             showStickersButton(props),
             voiceRecordingButton(props),
-            pollButton(room),
+            pollButton(room, props.relation),
             showLocationButton(props, room, roomId, matrixClient),
         ];
     }
@@ -288,12 +289,13 @@ function voiceRecordingButton(props: IProps): ReactElement {
     );
 }
 
-function pollButton(room: Room): ReactElement {
-    return <PollButton key="polls" room={room} />;
+function pollButton(room: Room, relation?: IEventRelation): ReactElement {
+    return <PollButton key="polls" room={room} relation={relation} />;
 }
 
 interface IPollButtonProps {
     room: Room;
+    relation?: IEventRelation;
 }
 
 class PollButton extends React.PureComponent<IPollButtonProps> {
@@ -319,12 +321,17 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
                 },
             );
         } else {
+            const threadId = this.props.relation.rel_type === RelationType.Thread
+                ? this.props.relation.event_id
+                : null;
+
             Modal.createTrackedDialog(
                 'Polls',
                 'create',
                 PollCreateDialog,
                 {
                     room: this.props.room,
+                    threadId,
                 },
                 'mx_CompoundDialog',
                 false, // isPriorityModal
