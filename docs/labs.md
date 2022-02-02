@@ -139,19 +139,6 @@ and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
 
-## Location sharing (`feature_location_share`) [In Development]
-
-Allows users to send and display location data using [maplibre](https://maplibre.org).
-
-The current implementation is a quick in-progress development spike to
-demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-doc/pull/3488)
-and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
-been designed, and it will not exit labs until it has**.
-
-For this to work, you must specify the URL of a valid map tile server style file in
-the `map_style_url` setting in config.json.
-For example: "https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE"`
-
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
 Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
