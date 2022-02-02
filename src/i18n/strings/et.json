@@ -3600,5 +3600,9 @@
     "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Kui sa tead, mida ja kuidas teed, siis osale meie arenduses - Element on avatud lähtekoodiga tarkvara, mille leiad GitHub'ist (https://github.com/vector-im/element-web/)!",
     "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Kui keegi palus sul siia midagi kopeerida või asetada, siis suure tõenäosusega on tegemist pettusekatsega!",
     "Wait!": "Palun oota!",
-    "This address does not point at this room": "Antud aadress ei viita sellele jututoale"
+    "This address does not point at this room": "Antud aadress ei viita sellele jututoale",
+    "Location": "Asukoht",
+    "Poll": "Küsitlus",
+    "Voice Message": "Häälsõnum",
+    "Hide stickers": "Peida kleepsud"
 }
