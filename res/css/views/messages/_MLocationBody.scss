@@ -53,3 +53,9 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/location.svg');
     }
 }
+
+/* In the timeline, we fit the width of the container */
+.mx_EventTile_line .mx_MLocationBody .mx_MLocationBody_map {
+    width: 100%;
+    max-width: 450px;
+}
