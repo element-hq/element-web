@@ -58,11 +58,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
-import { compare, copyPlaintext, selectText } from '../../../utils/strings';
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import * as ContextMenu from "../../structures/ContextMenu";
-import { toRightOf } from "../../structures/ContextMenu";
-import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
+import { compare, selectText } from '../../../utils/strings';
 import Field from '../elements/Field';
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
 import Dialpad from '../voip/DialPad';
@@ -73,6 +69,7 @@ import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import CallHandler from "../../../CallHandler";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
+import CopyableText from "../elements/CopyableText";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -1310,20 +1307,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         selectText(e.target);
     }
 
-    private onCopyClick = async e => {
-        e.preventDefault();
-        const target = e.target; // copy target before we go async and React throws it away
-
-        const successful = await copyPlaintext(makeUserPermalink(MatrixClientPeg.get().getUserId()));
-        const buttonRect = target.getBoundingClientRect();
-        const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
-            ...toRightOf(buttonRect, 2),
-            message: successful ? _t("Copied!") : _t("Failed to copy"),
-        });
-        // Drop a reference to this close handler for componentWillUnmount
-        this.closeCopiedTooltip = target.onmouseleave = close;
-    };
-
     render() {
         let spinner = null;
         if (this.state.busy) {
@@ -1409,18 +1392,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             const link = makeUserPermalink(MatrixClientPeg.get().getUserId());
             footer = <div className="mx_InviteDialog_footer">
                 <h3>{ _t("Or send invite link") }</h3>
-                <div className="mx_InviteDialog_footer_link">
+                <CopyableText getTextToCopy={() => makeUserPermalink(MatrixClientPeg.get().getUserId())}>
                     <a href={link} onClick={this.onLinkClick}>
                         { link }
                     </a>
-                    <AccessibleTooltipButton
-                        title={_t("Copy")}
-                        onClick={this.onCopyClick}
-                        className="mx_InviteDialog_footer_link_copy"
-                    >
-                        <div />
-                    </AccessibleTooltipButton>
-                </div>
+                </CopyableText>
             </div>;
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);

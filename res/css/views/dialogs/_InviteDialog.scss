@@ -130,34 +130,14 @@ limitations under the License.
         text-transform: uppercase;
     }
 
-    .mx_InviteDialog_footer_link {
-        display: flex;
-        justify-content: space-between;
-        border-radius: 4px;
-        border: solid 1px $light-fg-color;
-        padding: 8px;
+    .mx_CopyableText {
+        width: unset; // full width
 
         > a {
             text-decoration: none;
             flex-shrink: 1;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-    }
-
-    .mx_InviteDialog_footer_link_copy {
-        flex-shrink: 0;
-        cursor: pointer;
-        margin-left: 20px;
-        display: inherit;
-
-        > div {
-            mask-image: url($copy-button-url);
-            background-color: $message-action-bar-fg-color;
-            margin-left: 5px;
-            width: 20px;
-            height: 20px;
-            background-repeat: no-repeat;
         }
     }
 }

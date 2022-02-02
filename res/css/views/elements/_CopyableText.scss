@@ -17,6 +17,7 @@ limitations under the License.
 
 .mx_CopyableText {
     display: flex;
+    justify-content: space-between;
     border-radius: 5px;
     border: solid 1px $light-fg-color;
     margin-bottom: 10px;

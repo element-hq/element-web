@@ -20,44 +20,20 @@ limitations under the License.
     border-color: $light-fg-color;
 }
 
-.mx_ShareDialog_content {
+.mx_ShareDialog .mx_ShareDialog_content {
     margin: 10px 0;
-}
 
-.mx_ShareDialog_matrixto {
-    display: flex;
-    justify-content: space-between;
-    border-radius: 5px;
-    border: solid 1px $light-fg-color;
-    margin-bottom: 10px;
-    margin-top: 30px;
-    padding: 10px;
-}
+    .mx_CopyableText {
+        width: unset; // full width
 
-.mx_ShareDialog_matrixto a {
-    text-decoration: none;
-}
-
-.mx_ShareDialog_matrixto_link {
-    flex-shrink: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.mx_ShareDialog_matrixto_copy {
-    flex-shrink: 0;
-    cursor: pointer;
-    margin-left: 20px;
-    display: inherit;
-}
-.mx_ShareDialog_matrixto_copy::after {
-    content: "";
-    mask-image: url($copy-button-url);
-    background-color: $message-action-bar-fg-color;
-    margin-left: 5px;
-    width: 20px;
-    height: 20px;
-    background-repeat: no-repeat;
+        > a {
+            text-decoration: none;
+            flex-shrink: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
 }
 
 .mx_ShareDialog_split {

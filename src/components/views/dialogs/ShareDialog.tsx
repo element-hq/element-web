@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { Room } from "matrix-js-sdk/src/models/room";
 import { User } from "matrix-js-sdk/src/models/user";
 import { Group } from "matrix-js-sdk/src/models/group";
@@ -26,17 +25,14 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from '../../../languageHandler';
 import QRCode from "../elements/QRCode";
 import { RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
-import * as ContextMenu from "../../structures/ContextMenu";
-import { toRightOf } from "../../structures/ContextMenu";
-import { copyPlaintext, selectText } from "../../../utils/strings";
+import { selectText } from "../../../utils/strings";
 import StyledCheckbox from '../elements/StyledCheckbox';
-import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { IDialogProps } from "./IDialogProps";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
-import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
+import CopyableText from "../elements/CopyableText";
 
 const socials = [
     {
@@ -78,24 +74,10 @@ interface IState {
 
 @replaceableComponent("views.dialogs.ShareDialog")
 export default class ShareDialog extends React.PureComponent<IProps, IState> {
-    static propTypes = {
-        onFinished: PropTypes.func.isRequired,
-        target: PropTypes.oneOfType([
-            PropTypes.instanceOf(Room),
-            PropTypes.instanceOf(User),
-            PropTypes.instanceOf(Group),
-            PropTypes.instanceOf(RoomMember),
-            PropTypes.instanceOf(MatrixEvent),
-        ]).isRequired,
-    };
-
     protected closeCopiedTooltip: () => void;
 
     constructor(props) {
         super(props);
-
-        this.onCopyClick = this.onCopyClick.bind(this);
-        this.onLinkSpecificEventCheckboxClick = this.onLinkSpecificEventCheckboxClick.bind(this);
 
         let permalinkCreator: RoomPermalinkCreator = null;
         if (props.target instanceof Room) {
@@ -115,25 +97,11 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         selectText(e.target);
     }
 
-    async onCopyClick(e) {
-        e.preventDefault();
-        const target = e.target; // copy target before we go async and React throws it away
-
-        const successful = await copyPlaintext(this.getUrl());
-        const buttonRect = target.getBoundingClientRect();
-        const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
-            ...toRightOf(buttonRect, 2),
-            message: successful ? _t('Copied!') : _t('Failed to copy'),
-        });
-        // Drop a reference to this close handler for componentWillUnmount
-        this.closeCopiedTooltip = target.onmouseleave = close;
-    }
-
-    onLinkSpecificEventCheckboxClick() {
+    private onLinkSpecificEventCheckboxClick = () => {
         this.setState({
             linkSpecificEvent: !this.state.linkSpecificEvent,
         });
-    }
+    };
 
     componentWillUnmount() {
         // if the Copied tooltip is open then get rid of it, there are ways to close the modal which wouldn't close
@@ -141,7 +109,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
         if (this.closeCopiedTooltip) this.closeCopiedTooltip();
     }
 
-    getUrl() {
+    private getUrl() {
         let matrixToUrl;
 
         if (this.props.target instanceof Room) {
@@ -238,21 +206,11 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             onFinished={this.props.onFinished}
         >
             <div className="mx_ShareDialog_content">
-                <div className="mx_ShareDialog_matrixto">
-                    <a
-                        title={_t('Link to room')}
-                        href={matrixToUrl}
-                        onClick={ShareDialog.onLinkClick}
-                        className="mx_ShareDialog_matrixto_link"
-                    >
+                <CopyableText getTextToCopy={() => matrixToUrl}>
+                    <a title={_t('Link to room')} href={matrixToUrl} onClick={ShareDialog.onLinkClick}>
                         { matrixToUrl }
                     </a>
-                    <AccessibleTooltipButton
-                        title={_t("Copy")}
-                        onClick={this.onCopyClick}
-                        className="mx_ShareDialog_matrixto_copy"
-                    />
-                </div>
+                </CopyableText>
                 { checkbox }
                 { qrSocialSection }
             </div>
