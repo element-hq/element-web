@@ -343,10 +343,7 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
     const content = ev.getContent();
     const msgtype = content.msgtype;
 
-    if (
-        (LOCATION_EVENT_TYPE.matches(type) || LOCATION_EVENT_TYPE.matches(msgtype)) &&
-        SettingsStore.getValue("feature_location_share")
-    ) {
+    if (LOCATION_EVENT_TYPE.matches(type) || LOCATION_EVENT_TYPE.matches(msgtype)) {
         return textForLocationEvent(ev);
     }
 
