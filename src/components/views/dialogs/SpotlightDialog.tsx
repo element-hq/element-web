@@ -21,7 +21,6 @@ import React, {
     useCallback,
     useContext,
     useEffect,
-    useLayoutEffect,
     useMemo,
     useState,
 } from "react";
@@ -184,37 +183,26 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
         });
     }, [cli, query]);
 
-    // Reset the selection back to the first item whenever the query changes
-    useLayoutEffect(() => {
-        rovingContext.dispatch({
-            type: Type.SetFocus,
-            payload: {
-                ref: rovingContext.state.refs[0],
-            },
-        });
-    }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
-
     const activeSpace = SpaceStore.instance.activeSpaceRoom;
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace, query);
 
     const setQuery = (e: ChangeEvent<HTMLInputElement>): void => {
         const newQuery = e.currentTarget.value;
         _setQuery(newQuery);
-        if (!query !== !newQuery) {
-            setImmediate(() => {
-                // reset the activeRef when we start/stop querying as the view changes
-                const ref = rovingContext.state.refs[0];
-                if (ref) {
-                    rovingContext.dispatch({
-                        type: Type.SetFocus,
-                        payload: { ref },
-                    });
-                    ref.current?.scrollIntoView({
-                        block: "nearest",
-                    });
-                }
-            });
-        }
+
+        setImmediate(() => {
+            // reset the activeRef when we change query for best usability
+            const ref = rovingContext.state.refs[0];
+            if (ref) {
+                rovingContext.dispatch({
+                    type: Type.SetFocus,
+                    payload: { ref },
+                });
+                ref.current?.scrollIntoView({
+                    block: "nearest",
+                });
+            }
+        });
     };
 
     const viewRoom = (roomId: string, persist = false) => {
