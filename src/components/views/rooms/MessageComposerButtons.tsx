@@ -59,53 +59,47 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient: MatrixClient = useContext(MatrixClientContext);
     const { room, roomId } = useContext(RoomContext);
 
-    return (
-        props.haveRecording
-            ? null
-            : props.narrowMode
-                ? narrowMode(props, room, roomId, matrixClient)
-                : wideMode(props, room, roomId, matrixClient)
-    );
-};
+    if (props.haveRecording) {
+        return null;
+    }
 
-function wideMode(
-    props: IProps,
-    room: Room,
-    roomId: string,
-    matrixClient: MatrixClient,
-): ReactElement {
-    return <>
-        { pollButton(props, room) }
-        { uploadButton(props, roomId) }
-        { showLocationButton(props, room, roomId, matrixClient) }
-        { emojiButton(props) }
-        { showStickersButton(props) }
-        { voiceRecordingButton(props) }
-    </>;
-}
+    let mainButtons: ReactElement[];
+    let moreButtons: ReactElement[];
+    if (props.narrowMode) {
+        mainButtons = [
+            emojiButton(props),
+        ];
+        moreButtons = [
+            uploadButton(props, roomId),
+            showStickersButton(props),
+            voiceRecordingButton(props),
+            pollButton(room),
+            showLocationButton(props, room, roomId, matrixClient),
+        ];
+    } else {
+        mainButtons = [
+            emojiButton(props),
+            uploadButton(props, roomId),
+        ];
+        moreButtons = [
+            showStickersButton(props),
+            voiceRecordingButton(props),
+            pollButton(room),
+            showLocationButton(props, room, roomId, matrixClient),
+        ];
+    }
 
-function narrowMode(
-    props: IProps,
-    room: Room,
-    roomId: string,
-    matrixClient: MatrixClient,
-): ReactElement {
+    mainButtons = mainButtons.filter((x: ReactElement) => x);
+    moreButtons = moreButtons.filter((x: ReactElement) => x);
+
     const moreOptionsClasses = classNames({
         mx_MessageComposer_button: true,
         mx_MessageComposer_buttonMenu: true,
         mx_MessageComposer_closeButtonMenu: props.isMenuOpen,
     });
 
-    const moreButtons = [
-        pollButton(props, room),
-        showLocationButton(props, room, roomId, matrixClient),
-        emojiButton(props),
-        showStickersButton(props),
-        voiceRecordingButton(props),
-    ].filter(x => x);
-
     return <>
-        { uploadButton(props, roomId) }
+        { mainButtons }
         <AccessibleTooltipButton
             className={moreOptionsClasses}
             onClick={props.toggleButtonMenu}
@@ -123,7 +117,7 @@ function narrowMode(
             </ContextMenu>
         ) }
     </>;
-}
+};
 
 function emojiButton(props: IProps): ReactElement {
     return <EmojiButton
@@ -174,7 +168,7 @@ const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition }) =>
         <CollapsibleButton
             className={className}
             onClick={openMenu}
-            title={_t("Add emoji")}
+            title={_t("Emoji")}
         />
 
         { contextMenu }
@@ -219,7 +213,7 @@ class UploadButton extends React.Component<IUploadButtonProps> {
             dis.dispatch({ action: 'require_registration' });
             return;
         }
-        this.uploadInput.current.click();
+        this.uploadInput.current?.click();
     };
 
     private onUploadFileInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -249,21 +243,20 @@ class UploadButton extends React.Component<IUploadButtonProps> {
 
     render() {
         const uploadInputStyle = { display: 'none' };
-        return (
-            <AccessibleTooltipButton
+        return <>
+            <CollapsibleButton
                 className="mx_MessageComposer_button mx_MessageComposer_upload"
                 onClick={this.onUploadClick}
-                title={_t('Upload file')}
-            >
-                <input
-                    ref={this.uploadInput}
-                    type="file"
-                    style={uploadInputStyle}
-                    multiple
-                    onChange={this.onUploadFileInputChange}
-                />
-            </AccessibleTooltipButton>
-        );
+                title={_t('Attachment')}
+            />
+            <input
+                ref={this.uploadInput}
+                type="file"
+                style={uploadInputStyle}
+                multiple
+                onChange={this.onUploadFileInputChange}
+            />
+        </>;
     }
 }
 
@@ -275,13 +268,7 @@ function showStickersButton(props: IProps): ReactElement {
                 key="controls_stickers"
                 className="mx_MessageComposer_button mx_MessageComposer_stickers"
                 onClick={() => props.setStickerPickerOpen(!props.isStickerPickerOpen)}
-                title={
-                    props.narrowMode
-                        ? _t("Send a sticker")
-                        : props.isStickerPickerOpen
-                            ? _t("Hide Stickers")
-                            : _t("Show Stickers")
-                }
+                title={props.isStickerPickerOpen ? _t("Hide stickers") : _t("Sticker")}
             />
             : null
     );
@@ -296,12 +283,12 @@ function voiceRecordingButton(props: IProps): ReactElement {
                 key="voice_message_send"
                 className="mx_MessageComposer_button mx_MessageComposer_voiceMessage"
                 onClick={props.onRecordStartEndClick}
-                title={_t("Send voice message")}
+                title={_t("Voice Message")}
             />
     );
 }
 
-function pollButton(props: IProps, room: Room): ReactElement {
+function pollButton(room: Room): ReactElement {
     return <PollButton key="polls" room={room} />;
 }
 
@@ -311,6 +298,7 @@ interface IPollButtonProps {
 
 class PollButton extends React.PureComponent<IPollButtonProps> {
     static contextType = OverflowMenuContext;
+    public context!: React.ContextType<typeof OverflowMenuContext>;
 
     private onCreateClick = () => {
         this.context?.(); // close overflow menu
@@ -350,7 +338,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
             <CollapsibleButton
                 className="mx_MessageComposer_button mx_MessageComposer_poll"
                 onClick={this.onCreateClick}
-                title={_t("Create poll")}
+                title={_t("Poll")}
             />
         );
     }

@@ -34,23 +34,45 @@ const MessageComposerButtons = TestUtils.wrapInMatrixClientContext(
 );
 
 describe("MessageComposerButtons", () => {
-    it("Renders all buttons in wide mode", () => {
+    it("Renders emoji and upload buttons in wide mode", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
                 isMenuOpen={false}
                 narrowMode={false}
                 showLocationButton={true}
                 showStickersButton={true}
+                toggleButtonMenu={() => {}}
             />,
         );
 
         expect(buttonLabels(buttons)).toEqual([
-            "Create poll",
-            "Upload file",
-            "Share location",
-            "Add emoji",
-            "Show Stickers",
-            "Send voice message",
+            "Emoji",
+            "Attachment",
+            "More options",
+        ]);
+    });
+
+    it("Renders other buttons in menu in wide mode", () => {
+        const buttons = wrapAndRender(
+            <MessageComposerButtons
+                isMenuOpen={true}
+                narrowMode={false}
+                showLocationButton={true}
+                showStickersButton={true}
+                toggleButtonMenu={() => {}}
+            />,
+        );
+
+        expect(buttonLabels(buttons)).toEqual([
+            "Emoji",
+            "Attachment",
+            "More options",
+            [
+                "Sticker",
+                "Voice Message",
+                "Poll",
+                "Location",
+            ],
         ]);
     });
 
@@ -61,11 +83,12 @@ describe("MessageComposerButtons", () => {
                 narrowMode={true}
                 showLocationButton={true}
                 showStickersButton={true}
+                toggleButtonMenu={() => {}}
             />,
         );
 
         expect(buttonLabels(buttons)).toEqual([
-            "Upload file",
+            "Emoji",
             "More options",
         ]);
     });
@@ -82,13 +105,13 @@ describe("MessageComposerButtons", () => {
         );
 
         expect(buttonLabels(buttons)).toEqual([
-            "Upload file",
+            "Emoji",
             "More options",
             [
-                "Create poll",
-                "Share location",
-                "Add emoji",
-                "Send a sticker",
+                "Attachment",
+                "Sticker",
+                "Poll",
+                "Location",
             ],
         ]);
     });

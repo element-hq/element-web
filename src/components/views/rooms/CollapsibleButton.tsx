@@ -25,7 +25,7 @@ interface ICollapsibleButtonProps extends ComponentProps<typeof MenuItem> {
     title: string;
 }
 
-export const CollapsibleButton = ({ title, className, ...props }: ICollapsibleButtonProps) => {
+export const CollapsibleButton = ({ title, children, className, ...props }: ICollapsibleButtonProps) => {
     const inOverflowMenu = !!useContext(OverflowMenuContext);
     if (inOverflowMenu) {
         return <MenuItem
@@ -33,10 +33,17 @@ export const CollapsibleButton = ({ title, className, ...props }: ICollapsibleBu
             className={classNames("mx_CallContextMenu_item", className)}
         >
             { title }
+            { children }
         </MenuItem>;
     }
 
-    return <AccessibleTooltipButton {...props} title={title} className={className} />;
+    return <AccessibleTooltipButton
+        {...props}
+        title={title}
+        className={className}
+    >
+        { children }
+    </AccessibleTooltipButton>;
 };
 
 export default CollapsibleButton;
