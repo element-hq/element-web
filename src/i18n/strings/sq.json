@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s përdor veçori të thelluara të shfletuesit, të cilat shfletuesi juaj i tanishëm s’i mbulon.",
     "Powered by Matrix": "Bazuar në Matrix",
     "Use %(brand)s on mobile": "Përdor %(brand)s në celular",
-    "Switch to space by number": "Kalo te hapësira me numrin"
+    "Switch to space by number": "Kalo te hapësira me numrin",
+    "Next recently visited room or community": "Dhomë ose bashkësi e vizituar më parë pasuese",
+    "Previous recently visited room or community": "Dhomë ose bashkësi e vizituar më parë e mëparshme"
 }
