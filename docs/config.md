@@ -63,6 +63,20 @@ For a good example, see https://develop.element.io/config.json.
    https://github.com/matrix-org/rageshake server). Bug reports are sent when a user clicks
    "Send Logs" within the application. Bug reports can be disabled/hidden by leaving the
    `bug_report_endpoint_url` out of your config file.
+1. `uisi_autorageshake_app`: If users enable the Labs flag
+   "Automatically send debug logs on decryption errors", rageshakes
+   submitted by that feature can be given a custom app name so that
+   the rageshake server can file them in a separate issue tracker.  If
+   this field is absent from the config, the app name for decryption
+   error rageshakes will be `"element-web"` just like for
+   manually-submitted rageshakes.
+
+   If `bug_report_endpoint_url` is set to Element's rageshake server,
+   then this field should be set to `"element-auto-uisi"` as in
+   `config.sample.json`. If `bug_report_endpoint_url` is left out,
+   this field has no effect and can be left out as well.  If you are
+   using your own rageshake server, set this field in accordance with
+   your rageshake server configuration.
 1. `roomDirectory`: config for the public room directory. This section is optional.
 1. `roomDirectory.servers`: List of other homeservers' directories to include in the drop
    down list. Optional.
