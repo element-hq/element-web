@@ -40,6 +40,8 @@ import RoomViewStore from "./stores/RoomViewStore";
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import CallHandler from "./CallHandler";
+import VoipUserMapper from "./VoipUserMapper";
 
 /*
  * Dispatches:
@@ -386,7 +388,16 @@ export const Notifier = {
     },
 
     _evaluateEvent: function(ev: MatrixEvent) {
-        const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+        let roomId = ev.getRoomId();
+        if (CallHandler.instance.getSupportsVirtualRooms()) {
+            // Attempt to translate a virtual room to a native one
+            const nativeRoomId = VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(roomId);
+            if (nativeRoomId) {
+                roomId = nativeRoomId;
+            }
+        }
+        const room = MatrixClientPeg.get().getRoom(roomId);
+
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions?.notify) {
             if (RoomViewStore.getRoomId() === room.roomId &&
