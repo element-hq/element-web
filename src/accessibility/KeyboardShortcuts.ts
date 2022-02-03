@@ -510,7 +510,7 @@ const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
         },
         displayName: _td("Jump to first message"),
     },
-    [KeyBindingAction.JumpToOldestUnread]: {
+    [KeyBindingAction.JumpToLatestMessage]: {
         default: {
             key: Key.END,
             ctrlKey: true,
