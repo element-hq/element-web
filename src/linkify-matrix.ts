@@ -132,9 +132,9 @@ const escapeRegExp = function(string): string {
 };
 
 // Recognise URLs from both our local and official Element deployments.
-// Anyone else really should be using matrix.to.
+// Anyone else really should be using matrix.to. vector:// allowed to support Element Desktop relative links.
 export const ELEMENT_URL_PATTERN =
-    "^(?:https?://)?(?:" +
+    "^(?:vector://|https?://)?(?:" +
         escapeRegExp(window.location.host + window.location.pathname) + "|" +
         "(?:www\\.)?(?:riot|vector)\\.im/(?:app|beta|staging|develop)/|" +
         "(?:app|beta|staging|develop)\\.element\\.io/" +

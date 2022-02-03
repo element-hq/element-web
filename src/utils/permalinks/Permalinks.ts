@@ -362,7 +362,11 @@ export function tryTransformEntityToPermalink(entity: string): string {
  * @returns {string} The transformed permalink or original URL if unable.
  */
 export function tryTransformPermalinkToLocalHref(permalink: string): string {
-    if (!permalink.startsWith("http:") && !permalink.startsWith("https:") && !permalink.startsWith("matrix:")) {
+    if (!permalink.startsWith("http:") &&
+        !permalink.startsWith("https:") &&
+        !permalink.startsWith("matrix:") &&
+        !permalink.startsWith("vector:") // Element Desktop
+    ) {
         return permalink;
     }
 
