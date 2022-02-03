@@ -321,7 +321,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
                 },
             );
         } else {
-            const threadId = this.props.relation.rel_type === RelationType.Thread
+            const threadId = this.props.relation?.rel_type === RelationType.Thread
                 ? this.props.relation.event_id
                 : null;
 
