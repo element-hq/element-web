@@ -42,7 +42,7 @@ describe("PollCreateDialog", () => {
         const dialog = mount(
             <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
         );
-        expect(dialog).toMatchSnapshot();
+        expect(dialog.html()).toMatchSnapshot();
     });
 
     it("renders a question and some options", () => {
@@ -61,7 +61,7 @@ describe("PollCreateDialog", () => {
         changeValue(dialog, "Option 2", "The question is meaningless");
         dialog.find("div.mx_PollCreateDialog_addOption").simulate("click");
         changeValue(dialog, "Option 3", "Mu");
-        expect(dialog).toMatchSnapshot();
+        expect(dialog.html()).toMatchSnapshot();
     });
 
     it("doesn't allow submitting until there are options", () => {
