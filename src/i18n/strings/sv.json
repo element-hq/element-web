@@ -3409,5 +3409,22 @@
     "Room members": "Rumsmedlemmar",
     "Back to chat": "Tillbaka till chatt",
     "Remove, ban, or invite people to your active room, and make you leave": "Ta bort, banna eller bjuda in personer till ditt aktiva rum, och tvinga dig att lämna",
-    "Remove, ban, or invite people to this room, and make you leave": "Ta bort, banna eller bjuda in personer till det här rummet, och tvinga dig att lämna"
+    "Remove, ban, or invite people to this room, and make you leave": "Ta bort, banna eller bjuda in personer till det här rummet, och tvinga dig att lämna",
+    "From a thread": "Från en tråd",
+    "Remove users": "Ta bort användare",
+    "Manage pinned events": "Hantera fästa händelser",
+    "Send reactions": "Skicka reaktioner",
+    "Manage rooms in this space": "Hantera rum i det här utrymmet",
+    "You won't get any notifications": "Du får inga aviseringar",
+    "Get notified only with mentions and keywords as set up in your <a>settings</a>": "Bli endast aviserad om omnämnanden och nyckelord i enlighet med dina <a>inställningar</a>",
+    "@mentions & keywords": "@omnämnanden och nyckelord",
+    "Get notifications as set up in your <a>settings</a>": "Få aviseringar i enlighet med dina <a>inställningar</a>",
+    "Get notified for every message": "Bli aviserad för varje meddelande",
+    "Internal room ID": "Internt rums-ID",
+    "Group all your rooms that aren't part of a space in one place.": "Gruppera alla dina rum som inte är en del av ett utrymme på ett ställe.",
+    "Rooms outside of a space": "Rum utanför ett utrymme",
+    "Group all your people in one place.": "Gruppera alla dina personer på ett ställe.",
+    "Group all your favourite rooms and people in one place.": "Gruppera alla dina favoritrum och -personer på ett ställe.",
+    "Show all your rooms in Home, even if they're in a space.": "Visa alla dina rum i Hem, även om de är i ett utrymme.",
+    "Home is useful for getting an overview of everything.": "Hem är användbar för att få en översikt över allt."
 }
