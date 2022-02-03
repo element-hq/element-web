@@ -3495,7 +3495,7 @@
     "Missing room name or separator e.g. (my-room:domain.org)": "Nom de salon ou séparateur manquant, par exemple (mon-salon:domain.org)",
     "Missing domain separator e.g. (:domain.org)": "Séparateur de domaine manquant, par exemple (:domain.org)",
     "Backspace": "Retour arrière",
-    "toggle event": "(dés)activer l’évènement",
+    "toggle event": "Afficher/masquer l’évènement",
     "Expand map": "Étendre la carte",
     "You cancelled verification on your other device.": "Vous avez annulé la vérification dans votre autre appareil.",
     "Almost there! Is your other device showing the same shield?": "On y est presque ! Votre autre appareil affiche-t-il le même bouclier ?",
@@ -3602,5 +3602,13 @@
     "Last month": "Le mois dernier",
     "Last week": "La semaine dernière",
     "Unable to find event at that date. (%(code)s)": "Impossible de trouver un événement à cette date. (%(code)s)",
-    "Jump to date (adds /jumptodate and jump to date headers)": "Aller à la date (ajoute /jumptodate et va sur les en-têtes de date)"
+    "Jump to date (adds /jumptodate and jump to date headers)": "Aller à la date (ajoute /jumptodate et va sur les en-têtes de date)",
+    "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Si vous savez ce que vous faites, Element est un logiciel libre, n'hésitez pas à consulter notre GitHub (https://github.com/vector-im/element-web/) et à contribuer !",
+    "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Si quelqu'un vous a dit de copier/coller quelque chose ici, il y a de fortes chances que vous soyez victime d'une escroquerie !",
+    "Wait!": "Attendez !",
+    "This address does not point at this room": "Cette adresse ne pointe pas vers ce salon",
+    "Location": "Position",
+    "Poll": "Sondage",
+    "Voice Message": "Message vocal",
+    "Hide stickers": "Cacher les autocollants"
 }
