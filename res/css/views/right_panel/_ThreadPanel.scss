@@ -302,7 +302,7 @@ limitations under the License.
         &::after {
             content: "";
             border: inherit;
-            border-bottom-color: $background;
+            border-bottom-color: $menu-bg-color;
             position: absolute;
             top: 1px;
             left: -8px;
