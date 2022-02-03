@@ -7,7 +7,7 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentrale en versleutelde chat &amp; samenwerken dankzij [matrix]",
     "Sign In": "Inloggen",
     "Create Account": "Registreren",
-    "Explore rooms": "Ontdek kamers",
+    "Explore rooms": "Kamers verkennen",
     "Unexpected error preparing the app. See console for details.": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratiefout: kan slechts één van default_server_config, default_server_name, of default_hs_url opgeven.",
     "Invalid configuration: no default server specified.": "Configuratie ongeldig: geen standaardserver opgegeven.",
@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s gebruikt geavanceerde functies die niet ondersteund worden in uw huidige browser.",
     "Powered by Matrix": "Mogelijk gemaakt door Matrix",
     "Use %(brand)s on mobile": "Gebruik %(brand)s op uw mobiel",
-    "Switch to space by number": "Wissel naar Space met nummer"
+    "Switch to space by number": "Wissel naar Space met nummer",
+    "Next recently visited room or community": "Volgende recent bezochte kamer of community",
+    "Previous recently visited room or community": "Vorige recent bezochte kamer of community"
 }
