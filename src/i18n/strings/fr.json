@@ -3593,7 +3593,7 @@
     "Undo edit": "Annuler la modification",
     "Jump to last message": "Aller au dernier message",
     "Jump to first message": "Aller au premier message",
-    "Toggle hidden event visibility": "Changer la visibilité de l'événement caché",
+    "Toggle hidden event visibility": "Changer la visibilité de l’évènement caché",
     "%(count)s hidden messages.|one": "%(count)s message caché.",
     "%(count)s hidden messages.|other": "%(count)s messages cachés.",
     "Pick a date to jump to": "Choisissez vers quelle date aller",
