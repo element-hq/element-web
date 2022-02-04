@@ -2073,7 +2073,7 @@
     "A-Z": "A-Z",
     "Syncing...": "Synchronizácia...",
     "End": "End",
-    "Space": "Medzerník",
+    "Space": "Priestor",
     "Enter": "Enter",
     "Esc": "Esc",
     "Ctrl": "Ctrl",
@@ -3093,5 +3093,9 @@
     "Navigate to next message in composer history": "Prejsť na ďalšiu správu v histórii editora",
     "Navigate to previous message in composer history": "Prejsť na predchádzajúcu správu v histórii editora",
     "Missing session data": "Chýbajú údaje relácie",
-    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Ak existujú ďalšie súvislosti, ktoré by pomohli pri analýze problému, napríklad čo ste v tom čase robili, ID miestnosti, ID používateľa atď., uveďte ich tu."
+    "If there is additional context that would help in analysing the issue, such as what you were doing at the time, room IDs, user IDs, etc., please include those things here.": "Ak existujú ďalšie súvislosti, ktoré by pomohli pri analýze problému, napríklad čo ste v tom čase robili, ID miestnosti, ID používateľa atď., uveďte ich tu.",
+    "Make sure the right people have access. You can invite more later.": "Uistite sa, že majú prístup správni ľudia. Neskôr môžete pozvať ďalších.",
+    "Make sure the right people have access to %(name)s": "Uistite sa, že k %(name)s majú prístup správni ľudia",
+    "Only people invited will be able to find and join this space.": "Tento priestor budú môcť nájsť a pripojiť sa k nemu len pozvaní ľudia.",
+    "Want to add an existing space instead?": "Chcete radšej pridať už existujúci priestor?"
 }
