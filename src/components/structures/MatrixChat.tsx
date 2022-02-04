@@ -527,7 +527,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             "and contribute!",
         );
 
-        console.log(
+        global.mx_rage_logger.bypassRageshake(
+            "log",
             `%c${waitText}\n%c${scamText}\n%c${devText}`,
             `font-size:${largeFontSize}; color:blue;`,
             `font-size:${normalFontSize}; color:red;`,

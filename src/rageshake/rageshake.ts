@@ -45,9 +45,13 @@ const FLUSH_RATE_MS = 30 * 1000;
 // the length of log data we keep in indexeddb (and include in the reports)
 const MAX_LOG_SIZE = 1024 * 1024 * 5; // 5 MB
 
+type LogFunction = (...args: (Error | DOMException | object | string)[]) => void;
+type LogFunctionName = "log" | "info" | "warn" | "error";
+
 // A class which monkey-patches the global console and stores log lines.
 export class ConsoleLogger {
     private logs = "";
+    private originalFunctions: {[key in LogFunctionName]?: LogFunction} = {};
 
     public monkeyPatch(consoleObj: Console): void {
         // Monkey-patch console logging
@@ -60,11 +64,19 @@ export class ConsoleLogger {
         Object.keys(consoleFunctionsToLevels).forEach((fnName) => {
             const level = consoleFunctionsToLevels[fnName];
             const originalFn = consoleObj[fnName].bind(consoleObj);
+            this.originalFunctions[fnName] = originalFn;
             consoleObj[fnName] = (...args) => {
                 this.log(level, ...args);
                 originalFn(...args);
             };
         });
+    }
+
+    public bypassRageshake(
+        fnName: LogFunctionName,
+        ...args: (Error | DOMException | object | string)[]
+    ): void {
+        this.originalFunctions[fnName](...args);
     }
 
     private log(level: string, ...args: (Error | DOMException | object | string)[]): void {
