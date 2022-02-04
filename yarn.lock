@@ -1430,21 +1430,6 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/linkify-element@^4.0.0-rc.5":
-  version "4.0.0-rc.5"
-  resolved "https://registry.yarnpkg.com/@matrix-org/linkify-element/-/linkify-element-4.0.0-rc.5.tgz#0c27e81272638674ba4162fec2fd131b2c36c163"
-  integrity sha512-6sdJ5x9EZpUNVZqc2Dig8Q4hySdL2fdE/ivehk4L3y3rV7tMD0fRs5rXQQ4wcgCMhGAAGbscbNiS8pyZIy9Hlg==
-
-"@matrix-org/linkify-string@^4.0.0-rc.5":
-  version "4.0.0-rc.5"
-  resolved "https://registry.yarnpkg.com/@matrix-org/linkify-string/-/linkify-string-4.0.0-rc.5.tgz#139ba23c70a4f5b531656365a6109c122177b132"
-  integrity sha512-WFyu6+kVEPJsDwZwgCSrtUDeIMDdWIFzRRq5z+MLYHiO3J8G19jvRjRnNm4dwjDUqROWhvWS9b8JG7rbuwjkLQ==
-
-"@matrix-org/linkifyjs@^4.0.0-rc.6":
-  version "4.0.0-rc.6"
-  resolved "https://registry.yarnpkg.com/@matrix-org/linkifyjs/-/linkifyjs-4.0.0-rc.6.tgz#62bce99272e0b2a78896b01651d8b26602247f32"
-  integrity sha512-RoBejrxlv8jJjaZ9itTx0+JW8ECNEvj7iJzbD1rGhToLZjRZ5qXexWIa3+Vu4qmm+Yic+ETPCSH7odYWSYj/fA==
-
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz":
   version "3.2.8"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz#8d53636d045e1776e2a2ec6613e57330dd9ce856"
@@ -6073,6 +6058,21 @@ lines-and-columns@^1.1.6:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
+
+linkify-element@^4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.0.0-beta.4.tgz#31bb5dff7430c4debc34030466bd8f3e297793a7"
+  integrity sha512-dsu5qxk6MhQHxXUlPjul33JknQPx7Iv/N8zisH4JtV31qVk0qZg/5gn10Hr76GlMuixcdcxVvGHNfVcvbut13w==
+
+linkify-string@^4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.0.0-beta.4.tgz#0982509bc6ce81c554bff8d7121057193b84ea32"
+  integrity sha512-1U90tclSloCMAhbcuu4S+BN7ZisZkFB6ggKS1ofdYy1bmtgxdXGDppVUV+qRp5rcAudla7K0LBgOiwCQ0WzrYQ==
+
+linkifyjs@^4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.0.0-beta.4.tgz#8a03e7a999ed0b578a14d690585a32706525c45e"
+  integrity sha512-j8IUYMqyTT0aDrrkA5kf4hn6QurSKjGiQbqjNr4qc8dwEXIniCGp0JrdXmsGcTOEyhKG03GyRnJjp3NDTBBPDQ==
 
 loader-utils@^2.0.0:
   version "2.0.2"
