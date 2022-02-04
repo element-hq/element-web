@@ -3599,5 +3599,13 @@
     "Unable to find event at that date. (%(code)s)": "Az esemény az adott időpontból nem található. (%(code)s)",
     "Group all your rooms that aren't part of a space in one place.": "Téren kívüli szobák csoportosítása egy helyre.",
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Tér használható szobák és emberek csoportosítására. Azokon kívül amikben benne van használhat előre definiáltakat is.",
-    "Jump to date (adds /jumptodate and jump to date headers)": "Időpontra ugrás („/jumptodate”-et és ugrás időpontra fejlécet ad hozzá)"
+    "Jump to date (adds /jumptodate and jump to date headers)": "Időpontra ugrás („/jumptodate”-et és ugrás időpontra fejlécet ad hozzá)",
+    "If you know what you're doing, Element is open-source, be sure to check out our GitHub (https://github.com/vector-im/element-web/) and contribute!": "Ha tudja mit csinál, Element egy nyílt forráskódú szoftver, nézze meg a GitHubon (https://github.com/vector-im/element-web/) és segítsen!",
+    "If someone told you to copy/paste something here, there is a high likelihood you're being scammed!": "Ha valaki azt kéri hogy másoljon/illesszen be itt valamit, nagy esély van rá hogy valaki becsapja!",
+    "Wait!": "Várjon!",
+    "This address does not point at this room": "Ez a cím nem erre a szobára mutat",
+    "Location": "Földrajzi helyzet",
+    "Poll": "Szavazás",
+    "Voice Message": "Hang üzenet",
+    "Hide stickers": "Matricák elrejtése"
 }
