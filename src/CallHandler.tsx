@@ -643,6 +643,16 @@ export default class CallHandler extends EventEmitter {
                 `bytes received: ${pair.bytesReceived}, bytes sent: ${pair.bytesSent}, `,
             );
         }
+
+        logger.debug("Outbound RTP:");
+        for (const s of stats.filter(item => item.type === 'outbound-rtp')) {
+            logger.debug(s);
+        }
+
+        logger.debug("Inbound RTP:");
+        for (const s of stats.filter(item => item.type === 'inbound-rtp')) {
+            logger.debug(s);
+        }
     }
 
     private setCallState(call: MatrixCall, status: CallState): void {
