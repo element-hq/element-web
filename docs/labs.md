@@ -21,6 +21,19 @@ Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
 and select "Pin".
 
+## Jump to date (`feature_jump_to_date`)
+
+Note: This labs feature is only visible when your homeserver has MSC3030 enabled
+(in Synapse, add `experimental_features` -> `msc3030_enabled` to your
+`homeserver.yaml`) which means `GET /_matrix/client/versions` responds with
+`org.matrix.msc3030` under the `unstable_features` key.
+
+Adds a dropdown menu to the date separator headers in the timeline which allows
+you to jump to last week, last month, the beginning of the room, or choose a
+date from the calendar.
+
+Also adds the `/jumptodate 2022-01-31` slash command.
+
 ## Custom status (`feature_custom_status`)
 
 An experimental approach for supporting custom status messages across DMs. To set a status, click on
@@ -125,19 +138,6 @@ and notification noises are suppressed. Not perfect, but can help reduce noise.
 ## Hidden read receipts (`feature_hidden_read_receipts`)
 
 Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
-
-## Location sharing (`feature_location_share`) [In Development]
-
-Allows users to send and display location data using [maplibre](https://maplibre.org).
-
-The current implementation is a quick in-progress development spike to
-demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-doc/pull/3488)
-and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
-been designed, and it will not exit labs until it has**.
-
-For this to work, you must specify the URL of a valid map tile server style file in
-the `map_style_url` setting in config.json.
-For example: "https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE"`
 
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
