@@ -3226,7 +3226,7 @@
     "Sending invites... (%(progress)s out of %(count)s)|other": "Отправка приглашений... (%(progress)s из %(count)s)",
     "Loading new room": "Загрузка новой комнаты",
     "Upgrading room": "Обновление комнаты",
-    "Threaded messaging": "Сообщение в ветке",
+    "Threaded messaging": "Ветки сообщений",
     "Ban from %(roomName)s": "Заблокировать в %(roomName)s",
     "Unban from %(roomName)s": "Разблокировать в %(roomName)s",
     "Show:": "Показать:",
@@ -3257,5 +3257,7 @@
     "Insert link": "Вставить ссылку",
     "Developer mode": "Режим разработчика",
     "%(senderDisplayName)s changed who can join this room.": "%(senderDisplayName)s изменил(а), кто может присоединиться к этой комнате.",
-    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s изменил(а), кто может присоединиться к этой комнате. <a>Просмотр настроек</a>."
+    "%(senderDisplayName)s changed who can join this room. <a>View settings</a>.": "%(senderDisplayName)s изменил(а), кто может присоединиться к этой комнате. <a>Просмотр настроек</a>.",
+    "Back to thread": "Назад в ветку",
+    "Do not disturb": "Не беспокоить"
 }
