@@ -428,7 +428,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                         permalinkCreator={this.props.permalinkCreator} />
                     <div className="mx_MessageComposer_row">
                         { controls }
-                        <MessageComposerButtons
+                        { this.state.canSendMessages && <MessageComposerButtons
                             addEmoji={this.addEmoji}
                             haveRecording={this.state.haveRecording}
                             isMenuOpen={this.state.isMenuOpen}
@@ -446,7 +446,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             showLocationButton={!window.electron}
                             showStickersButton={this.state.showStickersButton}
                             toggleButtonMenu={this.toggleButtonMenu}
-                        />
+                        /> }
                         { showSendButton && (
                             <SendButton
                                 key="controls_send"
