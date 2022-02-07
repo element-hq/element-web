@@ -34,7 +34,6 @@ import { IDialogProps } from "./IDialogProps";
 import { _t } from "../../../languageHandler";
 import BaseDialog from "./BaseDialog";
 import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
-import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import {
     findSiblingElement,
@@ -63,6 +62,8 @@ import RoomViewStore from "../../../stores/RoomViewStore";
 import { showStartChatInviteDialog } from "../../../RoomInvite";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
+import NotificationBadge from "../rooms/NotificationBadge";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -244,8 +245,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                     viewRoom(room.roomId, true);
                 }}
             >
-                <RoomAvatar room={room} width={20} height={20} />
+                <DecoratedRoomAvatar room={room} avatarSize={20} />
                 { room.name }
+                <NotificationBadge notification={RoomNotificationStateStore.instance.getRoomState(room)} />
                 <ResultDetails room={room} />
                 <div className="mx_SpotlightDialog_enterPrompt">↵</div>
             </Option>
@@ -383,8 +385,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                                     viewRoom(room.roomId, true);
                                 }}
                             >
-                                <RoomAvatar room={room} width={20} height={20} />
+                                <DecoratedRoomAvatar room={room} avatarSize={20} />
                                 { room.name }
+                                <NotificationBadge notification={RoomNotificationStateStore.instance.getRoomState(room)} />
                                 <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                             </Option>
                         )) }

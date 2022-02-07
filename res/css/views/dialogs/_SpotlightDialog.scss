@@ -146,10 +146,12 @@ limitations under the License.
                 text-overflow: ellipsis;
                 overflow: hidden;
 
-                .mx_BaseAvatar {
+                .mx_DecoratedRoomAvatar {
                     margin-right: 8px;
-                    display: inline-block;
-                    height: 20px;
+                }
+
+                .mx_NotificationBadge {
+                    margin-left: 8px;
                 }
 
                 &:hover, &[aria-selected=true] {
