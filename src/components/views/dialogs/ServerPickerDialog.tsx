@@ -219,6 +219,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
                         value={this.state.otherHomeserver}
                         validateOnChange={false}
                         validateOnFocus={false}
+                        autoFocus={true}
                         id="mx_homeserverInput"
                     />
                 </StyledRadioButton>
