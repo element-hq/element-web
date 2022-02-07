@@ -27,7 +27,6 @@ export async function toastScenarios(alice: ElementSession, bob: ElementSession)
 
     alice.log.step(`accepts analytics toast`);
     await acceptToast(alice, "Help improve Element");
-    await rejectToast(alice, "Testing small changes");
     alice.log.done();
 
     alice.log.step(`checks no remaining toasts`);
@@ -42,7 +41,6 @@ export async function toastScenarios(alice: ElementSession, bob: ElementSession)
 
     bob.log.step(`reject analytics toast`);
     await rejectToast(bob, "Help improve Element");
-    await rejectToast(bob, "Testing small changes");
     bob.log.done();
 
     bob.log.step(`checks no remaining toasts`);
