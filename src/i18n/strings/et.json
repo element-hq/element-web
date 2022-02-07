@@ -3605,5 +3605,6 @@
     "Poll": "Küsitlus",
     "Voice Message": "Häälsõnum",
     "Hide stickers": "Peida kleepsud",
-    "You do not have permissions to add spaces to this space": "Sul pole õigusi siia kogukonda teiste kogukondade lisamiseks"
+    "You do not have permissions to add spaces to this space": "Sul pole õigusi siia kogukonda teiste kogukondade lisamiseks",
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Vasta jätkuvas jutulõngas või uue jutulõnga loomiseks kasuta „Vasta jutulõngas“ valikut, mida kuvatakse hiire liigutamisel sõnumi kohal."
 }
