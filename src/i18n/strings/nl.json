@@ -3601,5 +3601,9 @@
     "Spaces are ways to group rooms and people. Alongside the spaces you're in, you can use some pre-built ones too.": "Spaces zijn manieren om kamers en mensen te groeperen. Naast de spaces waarin u zich bevindt, kunt u ook enkele kant-en-klare spaces gebruiken.",
     "IRC (Experimental)": "IRC (Experimenteel)",
     "Jump to date (adds /jumptodate and jump to date headers)": "Ga naar datum (voegt /jumptodate en spring naar datum headers toe)",
-    "Right panel stays open (defaults to room member list)": "Rechter paneel blijft open (standaard in lijst met gespreksleden)"
+    "Right panel stays open (defaults to room member list)": "Rechter paneel blijft open (standaard in lijst met gespreksleden)",
+    "Location": "Locatie",
+    "Poll": "Poll",
+    "Voice Message": "Spraakbericht",
+    "Hide stickers": "Verberg stickers"
 }
