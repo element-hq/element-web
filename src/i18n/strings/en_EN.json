@@ -1781,6 +1781,7 @@
     "%(count)s results|one": "%(count)s result",
     "Invite": "Invite",
     "Add space": "Add space",
+    "You do not have permissions to add spaces to this space": "You do not have permissions to add spaces to this space",
     "Join public room": "Join public room",
     "Currently joining %(count)s rooms|other": "Currently joining %(count)s rooms",
     "Currently joining %(count)s rooms|one": "Currently joining %(count)s room",
