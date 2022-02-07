@@ -517,7 +517,7 @@
     "Failed to set direct chat tag": "Nepodařilo se nastavit štítek přímé konverzace",
     "Today": "Dnes",
     "Friday": "Pátek",
-    "Update": "Aktualizace",
+    "Update": "Aktualizovat",
     "What's New": "Co je nového",
     "On": "Zapnout",
     "Changelog": "Seznam změn",
@@ -3611,5 +3611,6 @@
     "Location": "Poloha",
     "Poll": "Hlasování",
     "Voice Message": "Hlasová zpráva",
-    "Hide stickers": "Skrýt nálepky"
+    "Hide stickers": "Skrýt nálepky",
+    "You do not have permissions to add spaces to this space": "Nemáte oprávnění přidávat prostory do tohoto prostoru"
 }
