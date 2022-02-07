@@ -3562,5 +3562,6 @@
     "Poll": "Опитування",
     "Voice Message": "Голосове повідомлення",
     "Hide stickers": "Сховати наліпки",
-    "You do not have permissions to add spaces to this space": "У вас нема дозволу додавати простори до цього простору"
+    "You do not have permissions to add spaces to this space": "У вас нема дозволу додавати простори до цього простору",
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Дайте відповідь у наявний тред — або створіть новий, навівши курсор на повідомлення й натиснувши «Відповісти у тред»."
 }
