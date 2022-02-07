@@ -106,6 +106,13 @@ limitations under the License.
         padding-right: 16px;
     }
 
+    &.mx_ThreadView .mx_AutoHideScrollbar {
+        /* the scrollbar is 8px wide, and we want a 12px gap with the side of the
+        panel. Hence the magic number, 8+4=12 */
+        width: calc(100% - 4px);
+        padding-right: 4px;
+    }
+
     .mx_RoomView_MessageList {
         padding-left: 12px;
         padding-right: 0;
@@ -182,6 +189,7 @@ limitations under the License.
 
     .mx_MessageTimestamp {
         font-size: $font-12px;
+        color: $secondary-content;
     }
 }
 

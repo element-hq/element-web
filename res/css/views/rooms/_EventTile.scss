@@ -793,7 +793,7 @@ $left-gutter: 64px;
 .mx_ThreadInfo_threads-amount {
     font-weight: 600;
     position: relative;
-    padding: 0 8px;
+    padding: 0 12px 0 8px;
     white-space: nowrap;
 }
 
@@ -962,7 +962,7 @@ $left-gutter: 64px;
         .mx_RedactedBody,
         .mx_ReplyChain_wrapper {
             margin-left: 36px;
-            margin-right: 50px;
+            margin-right: 8px;
 
             .mx_EventTile_content,
             .mx_HiddenBody,
@@ -974,14 +974,12 @@ $left-gutter: 64px;
 
         .mx_ReactionsRow {
             margin-left: 36px;
-            margin-right: 50px;
+            margin-right: 8px;
         }
 
         .mx_MessageTimestamp {
-            left: auto;
-            right: 2px !important;
-            top: 1px !important;
-            text-align: right;
+            top: 2px !important;
+            width: auto;
         }
 
         .mx_EventTile_senderDetails {

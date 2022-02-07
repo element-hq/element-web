@@ -59,9 +59,10 @@ exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option
       Object {
         "current": <div
           aria-checked="true"
-          class="mx_AccessibleButton mx_ThreadPanel_Header_FilterOptionItem"
+          class="mx_AccessibleButton mx_ThreadPanel_Header_FilterOptionItem focus-visible"
+          data-focus-visible-added=""
           role="menuitemradio"
-          tabindex="-1"
+          tabindex="0"
         >
           <span>
             All threads
@@ -75,7 +76,7 @@ exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option
     onClick={[Function]}
     onFocus={[Function]}
     role="menuitemradio"
-    tabIndex={-1}
+    tabIndex={0}
   >
     <div
       aria-checked={true}
@@ -85,7 +86,7 @@ exports[`ThreadPanel Header expect that ThreadPanelHeader has the correct option
       onKeyDown={[Function]}
       onKeyUp={[Function]}
       role="menuitemradio"
-      tabIndex={-1}
+      tabIndex={0}
     >
       <span>
         All threads
