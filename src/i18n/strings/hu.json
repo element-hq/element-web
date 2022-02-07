@@ -3608,5 +3608,6 @@
     "Poll": "Szavazás",
     "Voice Message": "Hang üzenet",
     "Hide stickers": "Matricák elrejtése",
-    "You do not have permissions to add spaces to this space": "Nincs jogosultsága, hogy tereket adjon hozzá ehhez a térhez"
+    "You do not have permissions to add spaces to this space": "Nincs jogosultsága, hogy tereket adjon hozzá ehhez a térhez",
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Válasz egy meglévő üzenetszálra vagy „Válasz üzenetszálban” a menüből az üzenet fölött egy új üzenetszál indításhoz."
 }
