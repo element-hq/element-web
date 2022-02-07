@@ -236,7 +236,6 @@ export default class PipView extends React.Component<IProps, IState> {
 
     // Accepts a persistentWidgetId to be able to skip awaiting the setState for persistentWidgetId
     public updateShowWidgetInPip(persistentWidgetId = this.state.persistentWidgetId) {
-        let userIsPartOfTheRoom = false;
         let fromAnotherRoom = false;
         let notVisible = false;
         if (persistentWidgetId) {
@@ -248,16 +247,13 @@ export default class PipView extends React.Component<IProps, IState> {
             if (persistentWidgetInRoom) {
                 const wls = WidgetLayoutStore.instance;
                 notVisible = !wls.isVisibleOnScreen(persistentWidgetInRoom, persistentWidgetId);
-                userIsPartOfTheRoom = persistentWidgetInRoom.getMyMembership() == "join";
                 fromAnotherRoom = this.state.viewedRoomId !== persistentWidgetInRoomId;
             }
         }
 
         // The widget should only be shown as a persistent app (in a floating pip container) if it is not visible on screen
         // either, because we are viewing a different room OR because it is in none of the possible containers of the room view.
-        const showWidgetInPip =
-            (fromAnotherRoom && userIsPartOfTheRoom) ||
-            (notVisible && userIsPartOfTheRoom);
+        const showWidgetInPip = fromAnotherRoom || notVisible;
 
         this.setState({ showWidgetInPip, persistentWidgetId });
     }

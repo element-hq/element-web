@@ -18,14 +18,13 @@ limitations under the License.
 */
 
 import url from 'url';
-import React, { createRef } from 'react';
+import React, { ContextType, createRef } from 'react';
 import classNames from 'classnames';
 import { MatrixCapabilities } from "matrix-widget-api";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventSubscription } from 'fbemitter';
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
 import AppPermission from './AppPermission';
@@ -49,12 +48,14 @@ import { OwnProfileStore } from '../../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 import RoomViewStore from '../../../stores/RoomViewStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { ActionPayload } from "../../../dispatcher/payloads";
 
 interface IProps {
     app: IApp;
     // If room is not specified then it is an account level widget
     // which bypasses permission prompts as it was added explicitly by that user
-    room: Room;
+    room?: Room;
     threadId?: string | null;
     // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
@@ -102,6 +103,9 @@ interface IState {
 
 @replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component<IProps, IState> {
+    public static contextType = MatrixClientContext;
+    context: ContextType<typeof MatrixClientContext>;
+
     public static defaultProps: Partial<IProps> = {
         waitForIframeLoad: true,
         showMenubar: true,
@@ -128,10 +132,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.persistKey = getPersistKey(this.props.app.id);
         try {
             this.sgWidget = new StopGapWidget(this.props);
-            this.sgWidget.on("preparing", this.onWidgetPreparing);
-            this.sgWidget.on("ready", this.onWidgetReady);
-            // emits when the capabilites have been setup or changed
-            this.sgWidget.on("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
+            this.setupSgListeners();
         } catch (e) {
             logger.log("Failed to construct widget", e);
             this.sgWidget = null;
@@ -164,26 +165,42 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private onWidgetLayoutChange = () => {
-        const room = MatrixClientPeg.get().getRoom(this.props.room.roomId);
-        const app = this.props.app;
-        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(app.id);
-        const isVisibleOnScreen = WidgetLayoutStore.instance.isVisibleOnScreen(room, app.id);
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
+        const isVisibleOnScreen = WidgetLayoutStore.instance.isVisibleOnScreen(this.props.room, this.props.app.id);
         if (!isVisibleOnScreen && !isActiveWidget) {
-            ActiveWidgetStore.instance.destroyPersistentWidget(app.id);
-            PersistedElement.destroyElement(this.persistKey);
-            this.sgWidget?.stopMessaging();
+            this.endWidgetActions();
         }
     };
 
     private onRoomViewStoreUpdate = () => {
         if (this.props.room.roomId == RoomViewStore.getRoomId()) return;
-        const app = this.props.app;
-        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(app.id);
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
         // Stop the widget if it's not the active (persistent) widget and it's not a user widget
         if (!isActiveWidget && !this.props.userWidget) {
-            ActiveWidgetStore.instance.destroyPersistentWidget(app.id);
-            PersistedElement.destroyElement(this.persistKey);
-            this.sgWidget?.stopMessaging();
+            this.endWidgetActions();
+        }
+    };
+
+    private onUserLeftRoom() {
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
+        if (isActiveWidget) {
+            // We just left the room that the active widget was from.
+            if (RoomViewStore.getRoomId() !== this.props.room.roomId) {
+                // If we are not actively looking at the room then destroy this widget entirely.
+                this.endWidgetActions();
+            } else if (WidgetType.JITSI.matches(this.props.app.type)) {
+                // If this was a Jitsi then reload to end call.
+                this.reload();
+            } else {
+                // Otherwise just cancel its persistence.
+                ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
+            }
+        }
+    }
+
+    private onMyMembership = (room: Room, membership: string): void => {
+        if (membership === "leave" && room.roomId === this.props.room.roomId) {
+            this.onUserLeftRoom();
         }
     };
 
@@ -247,6 +264,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.props.room) {
             const emitEvent = WidgetLayoutStore.emissionForRoom(this.props.room);
             WidgetLayoutStore.instance.on(emitEvent, this.onWidgetLayoutChange);
+            this.context.on("Room.myMembership", this.onMyMembership);
         }
 
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
@@ -262,6 +280,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.props.room) {
             const emitEvent = WidgetLayoutStore.emissionForRoom(this.props.room);
             WidgetLayoutStore.instance.off(emitEvent, this.onWidgetLayoutChange);
+            this.context.off("Room.myMembership", this.onMyMembership);
         }
 
         this.roomStoreToken?.remove();
@@ -269,12 +288,27 @@ export default class AppTile extends React.Component<IProps, IState> {
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
 
+    private setupSgListeners() {
+        this.sgWidget.on("preparing", this.onWidgetPreparing);
+        this.sgWidget.on("ready", this.onWidgetReady);
+        // emits when the capabilites have been setup or changed
+        this.sgWidget.on("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
+    }
+
+    private stopSgListeners() {
+        if (!this.sgWidget) return;
+        this.sgWidget.off("preparing", this.onWidgetPreparing);
+        this.sgWidget.off("ready", this.onWidgetReady);
+        this.sgWidget.off("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
+    }
+
     private resetWidget(newProps: IProps): void {
         this.sgWidget?.stopMessaging();
+        this.stopSgListeners();
+
         try {
             this.sgWidget = new StopGapWidget(newProps);
-            this.sgWidget.on("preparing", this.onWidgetPreparing);
-            this.sgWidget.on("ready", this.onWidgetReady);
+            this.setupSgListeners();
             this.startWidget();
         } catch (e) {
             logger.error("Failed to construct widget", e);
@@ -288,14 +322,18 @@ export default class AppTile extends React.Component<IProps, IState> {
         });
     }
 
+    private startMessaging() {
+        try {
+            this.sgWidget?.startMessaging(this.iframe);
+        } catch (e) {
+            logger.error("Failed to start widget", e);
+        }
+    }
+
     private iframeRefChange = (ref: HTMLIFrameElement): void => {
         this.iframe = ref;
         if (ref) {
-            try {
-                this.sgWidget?.startMessaging(ref);
-            } catch (e) {
-                logger.error("Failed to start widget", e);
-            }
+            this.startMessaging();
         } else {
             this.resetWidget(this.props);
         }
@@ -364,24 +402,31 @@ export default class AppTile extends React.Component<IProps, IState> {
         });
     };
 
-    private onAction = (payload): void => {
-        if (payload.widgetId === this.props.app.id) {
-            switch (payload.action) {
-                case 'm.sticker':
-                    if (this.sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)) {
-                        dis.dispatch({
-                            action: 'post_sticker_message',
-                            data: {
-                                ...payload.data,
-                                threadId: this.props.threadId,
-                            },
-                        });
-                        dis.dispatch({ action: 'stickerpicker_close' });
-                    } else {
-                        logger.warn('Ignoring sticker message. Invalid capability');
-                    }
-                    break;
-            }
+    private onAction = (payload: ActionPayload): void => {
+        switch (payload.action) {
+            case 'm.sticker':
+                if (payload.widgetId === this.props.app.id &&
+                    this.sgWidget.widgetApi.hasCapability(MatrixCapabilities.StickerSending)
+                ) {
+                    dis.dispatch({
+                        action: 'post_sticker_message',
+                        data: {
+                            ...payload.data,
+                            threadId: this.props.threadId,
+                        },
+                    });
+                    dis.dispatch({ action: 'stickerpicker_close' });
+                } else {
+                    logger.warn('Ignoring sticker message. Invalid capability');
+                }
+                break;
+
+            case "after_leave_room":
+                if (payload.room_id === this.props.room?.roomId) {
+                    // call this before we get it echoed down /sync, so it doesn't hang around as long and look jarring
+                    this.onUserLeftRoom();
+                }
+                break;
         }
     };
 
@@ -436,17 +481,25 @@ export default class AppTile extends React.Component<IProps, IState> {
         );
     }
 
+    private reload() {
+        this.endWidgetActions().then(() => {
+            // reset messaging
+            this.resetWidget(this.props);
+            this.startMessaging();
+
+            if (this.iframe) {
+                // Reload iframe
+                this.iframe.src = this.sgWidget.embedUrl;
+            }
+        });
+    }
+
     // TODO replace with full screen interactions
     private onPopoutWidgetClick = (): void => {
         // Ensure Jitsi conferences are closed on pop-out, to not confuse the user to join them
         // twice from the same computer, which Jitsi can have problems with (audio echo/gain-loop).
         if (WidgetType.JITSI.matches(this.props.app.type)) {
-            this.endWidgetActions().then(() => {
-                if (this.iframe) {
-                    // Reload iframe
-                    this.iframe.src = this.sgWidget.embedUrl;
-                }
-            });
+            this.reload();
         }
         // Using Object.assign workaround as the following opens in a new window instead of a new tab.
         // window.open(this._getPopoutUrl(), '_blank', 'noopener=yes');
@@ -507,7 +560,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         } else if (!this.state.hasPermissionToLoad) {
             // only possible for room widgets, can assert this.props.room here
-            const isEncrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.room.roomId);
+            const isEncrypted = this.context.isRoomEncrypted(this.props.room.roomId);
             appTileBody = (
                 <div className={appTileBodyClass} style={appTileBodyStyles}>
                     <AppPermission
