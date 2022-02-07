@@ -401,7 +401,7 @@
     "Sent messages will be stored until your connection has returned.": "Skickade meddelanden kommer att lagras tills anslutningen är tillbaka.",
     "Room": "Rum",
     "Clear filter": "Rensa filter",
-    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Försökte ladda en viss punkt i det här rummets tidslinje, men du har inte behörighet att visa det aktuella meddelandet.",
+    "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Försökte ladda en viss punkt i det här rummets tidslinje, men du är inte behörig att visa det aktuella meddelandet.",
     "Tried to load a specific point in this room's timeline, but was unable to find it.": "Försökte ladda en specifik punkt i det här rummets tidslinje, men kunde inte hitta den.",
     "Success": "Framgång",
     "Unable to remove contact information": "Kunde inte ta bort kontaktuppgifter",
