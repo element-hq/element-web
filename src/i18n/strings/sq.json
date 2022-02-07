@@ -3604,5 +3604,6 @@
     "Poll": "Pyetësor",
     "Voice Message": "Mesazh Zanor",
     "Hide stickers": "Fshihi ngjitësit",
-    "You do not have permissions to add spaces to this space": "S’keni leje të shtoni hapësira te kjo hapësirë"
+    "You do not have permissions to add spaces to this space": "S’keni leje të shtoni hapësira te kjo hapësirë",
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Përgjigjuni te një rrjedhë e pranishme, ose përdorni “Përgjigjuni në rrjedhë”, teksa kaloni kursorin sipër një mesazhi, që të filloni një të re."
 }
