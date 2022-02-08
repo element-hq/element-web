@@ -3610,5 +3610,7 @@
     "Location": "Posizione",
     "Poll": "Sondaggio",
     "Voice Message": "Messaggio vocale",
-    "Hide stickers": "Nascondi gli adesivi"
+    "Hide stickers": "Nascondi gli adesivi",
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Rispondi ad una conversazione in corso o usa \"Rispondi nella conversazione\" passando sopra ad un messaggio per iniziarne una nuova.",
+    "You do not have permissions to add spaces to this space": "Non hai i permessi per aggiungere spazi in questo spazio"
 }
