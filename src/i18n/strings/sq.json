@@ -3622,5 +3622,6 @@
     "This feature is a work in progress, we'd love to hear your feedback.": "Kjo veçori është një punë në ecuri e sipër, do të donim të dëgjonin përshtypjet tuaja.",
     "A new, quick way to search spaces and rooms you're in.": "Një mënyrë e re, e shpejtë, për kërkim në hapësira dhe dhoma ku gjendeni.",
     "The new search": "Kërkimi i ri",
-    "New search experience": "Mënyrë e re kërkim"
+    "New search experience": "Mënyrë e re kërkim",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s dhe %(space2Name)s"
 }
