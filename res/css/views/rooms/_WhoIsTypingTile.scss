@@ -23,7 +23,7 @@ limitations under the License.
 
 /* position the indicator in the same place horizontally as .mx_EventTile_avatar. */
 .mx_WhoIsTypingTile_avatars {
-    flex: 0 0 83px; // 18 + 65
+    flex: 0 0 82px; // 18 (padding on message list) + 64 (padding on event lines)
     text-align: center;
 }
 

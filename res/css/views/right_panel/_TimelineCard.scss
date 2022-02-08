@@ -28,21 +28,32 @@ limitations under the License.
 
     .mx_BaseCard_header {
         margin: 5px 0 9px 0;
+
         .mx_BaseCard_close {
             margin: 8px;
             right: 0;
         }
     }
+
     .mx_AutoHideScrollbar {
         padding-right: 10px;
         width: calc(100% - 10px);
     }
 
-    // Style to optimize the layout for the right panel area
+    .mx_NewRoomIntro {
+        margin-left: 36px;
+    }
+
     .mx_EventTile_content {
         margin-right: 0;
     }
+
     .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_line {
+        padding-left: 36px;
+        padding-right: 36px;
+    }
+
+    .mx_EventTile:not([data-layout="bubble"]) .mx_ReactionsRow {
         padding-left: 36px;
         padding-right: 36px;
     }
@@ -50,9 +61,10 @@ limitations under the License.
     .mx_GroupLayout .mx_EventTile > .mx_SenderProfile {
         margin-left: 36px;
     }
+
     .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_avatar {
         top: 12px;
-        left: 0px;
+        left: -3px;
     }
 
     .mx_CallEvent_wrapper {
@@ -62,6 +74,7 @@ limitations under the License.
             margin: 4px;
         }
     }
+
     .mx_EventTile:not([data-layout="bubble"]) .mx_MessageTimestamp {
         right: -4px;
         left: auto;
@@ -70,18 +83,32 @@ limitations under the License.
     .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_msgOption {
         margin-right: 2px;
     }
+
+    .mx_EventListSummary:not([data-layout=bubble]) .mx_EventTile_line {
+        padding-left: 36px;
+    }
+
     .mx_GroupLayout .mx_EventTile .mx_EventTile_line {
         padding-bottom: 8px;
     }
+
     .mx_EventTile_readAvatars {
         top: -10px;
     }
 
-    // mx_EventTile_info
     .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_line {
         padding-left: 36px;
     }
+
     .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_avatar {
         left: 18px;
+    }
+
+    .mx_WhoIsTypingTile {
+        margin-left: -12px; // undo padding on the message list
+    }
+
+    .mx_WhoIsTypingTile_avatars {
+        flex-basis: 48px; // 12 (padding on message list) + 36 (padding on event lines)
     }
 }
