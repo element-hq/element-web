@@ -106,6 +106,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             setPhase(request.phase);
         }
     }, [onClose, request]);
+
     useEventEmitter(request, "change", changeHandler);
 
     const onStartVerification = useCallback(async () => {
@@ -131,6 +132,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
     const isSelfVerification = request ?
         request.isSelfVerification :
         member.userId === MatrixClientPeg.get().getUserId();
+
     if (!request || requested) {
         const initiatedByMe = (!request && isRequesting) || (request && request.initiatedByMe);
         return (

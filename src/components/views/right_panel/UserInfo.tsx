@@ -1096,6 +1096,7 @@ function useRoomPermissions(cli: MatrixClient, room: Room, user: RoomMember): IR
             modifyLevelMax,
         });
     }, [cli, user, room]);
+
     useEventEmitter(cli, "RoomState.members", updateRoomPermissions);
     useEffect(() => {
         updateRoomPermissions();
@@ -1702,16 +1703,16 @@ const UserInfo: React.FC<IProps> = ({
 
     let scopeHeader;
     if (SpaceStore.spacesEnabled && room?.isSpaceRoom()) {
-        scopeHeader = <div className="mx_RightPanel_scopeHeader">
+        scopeHeader = <div data-test-id='space-header' className="mx_RightPanel_scopeHeader">
             <RoomAvatar room={room} height={32} width={32} />
             <RoomName room={room} />
         </div>;
     }
 
-    const header = <React.Fragment>
+    const header = <>
         { scopeHeader }
         <UserInfoHeader member={member} e2eStatus={e2eStatus} roomId={room?.roomId} />
-    </React.Fragment>;
+    </>;
     return <BaseCard
         className={classes.join(" ")}
         header={header}

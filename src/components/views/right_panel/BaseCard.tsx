@@ -69,6 +69,7 @@ const BaseCard: React.FC<IProps> = ({
     let closeButton;
     if (onClose) {
         closeButton = <AccessibleButton
+            data-test-id='base-card-close-button'
             className="mx_BaseCard_close"
             onClick={onClose}
             title={closeLabel || _t("Close")}
