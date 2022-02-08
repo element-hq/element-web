@@ -3579,5 +3579,6 @@
     "This is a beta feature": "Це бета-можливість",
     "Results not as expected? Please <a>give feedback</a>.": "Не те, що шукаєте? Просимо <a>надіслати відгук</a>.",
     "Use <arrows/> to scroll": "Використовуйте <arrows/>, щоб прокручувати",
-    "Feedback sent! Thanks, we appreciate it!": "Відгук надісланий! Дякуємо, візьмемо до уваги!"
+    "Feedback sent! Thanks, we appreciate it!": "Відгук надісланий! Дякуємо, візьмемо до уваги!",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s і %(space2Name)s"
 }
