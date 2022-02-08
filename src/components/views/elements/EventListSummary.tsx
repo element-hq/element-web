@@ -18,6 +18,7 @@ import React, { ReactNode, useEffect } from "react";
 import { uniqBy } from "lodash";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import MemberAvatar from '../avatars/MemberAvatar';
 import { _t } from '../../../languageHandler';
@@ -81,7 +82,14 @@ const EventListSummary: React.FC<IProps> = ({
             { children }
         </React.Fragment>;
     } else {
-        const uniqueMembers = uniqBy(summaryMembers, member => member.getMxcAvatarUrl());
+        const uniqueMembers = uniqBy(summaryMembers.filter(member => {
+            if (!member?.getMxcAvatarUrl) {
+                logger.error("EventListSummary given null summaryMember, termites may be afoot eating event senders",
+                    summaryMembers);
+                return false;
+            }
+            return true;
+        }), member => member.getMxcAvatarUrl());
         const avatars = uniqueMembers.map((m) => <MemberAvatar key={m.userId} member={m} width={14} height={14} />);
         body = (
             <div className="mx_EventTile_line">
