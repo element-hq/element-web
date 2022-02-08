@@ -96,7 +96,10 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private onSpotlightChange = () => {
         const spotlightBetaEnabled = SettingsStore.getValue("feature_spotlight");
         if (this.state.spotlightBetaEnabled !== spotlightBetaEnabled) {
-            this.setState({ spotlightBetaEnabled });
+            this.setState({
+                spotlightBetaEnabled,
+                query: "",
+            });
         }
         // in case the user was in settings at the 5-minute mark, dismiss the toast
         ToastStore.sharedInstance().dismissToast("BETA_SPOTLIGHT_TOAST");
