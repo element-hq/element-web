@@ -3611,5 +3611,7 @@
     "Location": "位置",
     "Poll": "投票",
     "Voice Message": "語音訊息",
-    "Hide stickers": "隱藏貼圖"
+    "Hide stickers": "隱藏貼圖",
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "將滑鼠游標停留在訊息上時，回覆正在進行的討論串或使用「在討論串中回覆」以開始新的討論串。",
+    "You do not have permissions to add spaces to this space": "您無權向此空間新增空間"
 }
