@@ -24,10 +24,11 @@ import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import Analytics from "../../../Analytics";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
+import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Action } from "../../../dispatcher/actions";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 interface IProps {
 }
@@ -42,6 +43,31 @@ interface IState {
     doAnimation: boolean;
     skipFirst: boolean;
 }
+
+const RoomBreadcrumbTile = ({ room, onClick }: { room: Room, onClick: () => void }) => {
+    const [onFocus, isActive, ref] = useRovingTabIndex();
+
+    return (
+        <AccessibleTooltipButton
+            className="mx_RoomBreadcrumbs_crumb"
+            onClick={onClick}
+            aria-label={_t("Room %(name)s", { name: room.name })}
+            title={room.name}
+            tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
+            onFocus={onFocus}
+            inputRef={ref}
+            tabIndex={isActive ? 0 : -1}
+        >
+            <DecoratedRoomAvatar
+                room={room}
+                avatarSize={32}
+                displayBadge={true}
+                forceCount={true}
+                tooltipProps={{ tabIndex: isActive ? 0 : -1 }}
+            />
+        </AccessibleTooltipButton>
+    );
+};
 
 @replaceableComponent("views.rooms.RoomBreadcrumbs")
 export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState> {
@@ -87,23 +113,7 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
 
     public render(): React.ReactElement {
         const tiles = BreadcrumbsStore.instance.rooms.map((r, i) => {
-            return (
-                <RovingAccessibleTooltipButton
-                    className="mx_RoomBreadcrumbs_crumb"
-                    key={r.roomId}
-                    onClick={() => this.viewRoom(r, i)}
-                    aria-label={_t("Room %(name)s", { name: r.name })}
-                    title={r.name}
-                    tooltipClassName="mx_RoomBreadcrumbs_Tooltip"
-                >
-                    <DecoratedRoomAvatar
-                        room={r}
-                        avatarSize={32}
-                        displayBadge={true}
-                        forceCount={true}
-                    />
-                </RovingAccessibleTooltipButton>
-            );
+            return <RoomBreadcrumbTile key={r.roomId} room={r} onClick={() => this.viewRoom(r, i)} />;
         });
 
         if (tiles.length > 0) {

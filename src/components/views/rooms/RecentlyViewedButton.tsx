@@ -21,11 +21,11 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { MenuItem } from "../../structures/ContextMenu";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { _t } from "../../../languageHandler";
-import RoomAvatar from "../avatars/RoomAvatar";
 import dis from "../../../dispatcher/dispatcher";
 import InteractiveTooltip, { Direction } from "../elements/InteractiveTooltip";
 import { roomContextDetailsText } from "../../../Rooms";
 import { Action } from "../../../dispatcher/actions";
+import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 
 const RecentlyViewedButton = () => {
     const tooltipRef = useRef<InteractiveTooltip>();
@@ -47,7 +47,7 @@ const RecentlyViewedButton = () => {
                         tooltipRef.current?.hideTooltip();
                     }}
                 >
-                    <RoomAvatar room={crumb} width={24} height={24} />
+                    <DecoratedRoomAvatar room={crumb} avatarSize={24} tooltipProps={{ tabIndex: -1 }} />
                     <span className="mx_RecentlyViewedButton_entry_label">
                         <div>{ crumb.name }</div>
                         { contextDetails && <div className="mx_RecentlyViewedButton_entry_spaces">
