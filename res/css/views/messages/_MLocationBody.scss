@@ -59,3 +59,12 @@ limitations under the License.
     width: 100%;
     max-width: 450px;
 }
+
+.mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MLocationBody {
+    max-width: 100%;
+
+    .mx_MLocationBody_map {
+        max-width: 100%;
+        width: 450px;
+    }
+}
