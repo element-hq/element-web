@@ -16,7 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import { EventSubscription } from "fbemitter";
-import { EventTimelineSet, IEventRelation, MatrixEvent, Room } from 'matrix-js-sdk/src';
+import { IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
+import { NotificationCountType, Room } from 'matrix-js-sdk/src/models/room';
 import { Thread } from 'matrix-js-sdk/src/models/thread';
 import classNames from 'classnames';
 
@@ -38,6 +40,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import ContentMessages from '../../../ContentMessages';
 import UploadBar from '../../structures/UploadBar';
 import SettingsStore from '../../../settings/SettingsStore';
+import JumpToBottomButton from '../rooms/JumpToBottomButton';
 
 interface IProps {
     room: Room;
@@ -58,6 +61,7 @@ interface IState {
     initialEventId?: string;
     isInitialEventHighlighted?: boolean;
     layout: Layout;
+    atEndOfLiveTimeline: boolean;
 
     // settings:
     showReadReceipts?: boolean;
@@ -78,6 +82,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         this.state = {
             showReadReceipts: SettingsStore.getValue("showReadReceipts", props.room.roomId),
             layout: SettingsStore.getValue("layout"),
+            atEndOfLiveTimeline: true,
         };
         this.readReceiptsSettingWatcher = null;
     }
@@ -137,7 +142,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         }
     };
 
-    private onScroll = (): void => {
+    private onUserScroll = (): void => {
         if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
             dis.dispatch({
                 action: Action.ViewRoom,
@@ -146,6 +151,36 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                 highlighted: false,
                 replyingToEvent: this.state.replyToEvent,
             });
+        }
+    };
+
+    private onScroll = (): void => {
+        const timelinePanel = this.timelinePanelRef.current;
+        if (!timelinePanel) return;
+        if (timelinePanel.isAtEndOfLiveTimeline()) {
+            this.setState({
+                atEndOfLiveTimeline: true,
+            });
+        } else {
+            this.setState({
+                atEndOfLiveTimeline: false,
+            });
+        }
+    };
+
+    private jumpToLiveTimeline = () => {
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            // If we were viewing a highlighted event, firing view_room without
+            // an event will take care of both clearing the URL fragment and
+            // jumping to the bottom
+            dis.dispatch({
+                action: Action.ViewRoom,
+                room_id: this.props.room.roomId,
+            });
+        } else {
+            // Otherwise we have to jump manually
+            this.timelinePanelRef.current?.jumpToLiveTimeline();
+            dis.fire(Action.FocusSendMessageComposer);
         }
     };
 
@@ -165,6 +200,14 @@ export default class TimelineCard extends React.Component<IProps, IState> {
             "mx_GroupLayout": this.state.layout === Layout.Group,
         });
 
+        let jumpToBottom;
+        if (!this.state.atEndOfLiveTimeline) {
+            jumpToBottom = (<JumpToBottomButton
+                highlight={this.props.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
+                onScrollToBottomClick={this.jumpToLiveTimeline}
+            />);
+        }
+
         return (
             <RoomContext.Provider value={{
                 ...this.context,
@@ -177,28 +220,32 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                     withoutScrollContainer={true}
                     header={this.renderTimelineCardHeader()}
                 >
-                    <TimelinePanel
-                        ref={this.timelinePanelRef}
-                        showReadReceipts={this.state.showReadReceipts}
-                        manageReadReceipts={true}
-                        manageReadMarkers={false} // No RM support in the TimelineCard
-                        sendReadReceiptOnLoad={true}
-                        timelineSet={this.props.timelineSet}
-                        showUrlPreview={true}
-                        // The right panel timeline (and therefore threads) don't support IRC layout at this time
-                        layout={this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group}
-                        hideThreadedMessages={false}
-                        hidden={false}
-                        showReactions={true}
-                        className={messagePanelClassNames}
-                        permalinkCreator={this.props.permalinkCreator}
-                        membersLoaded={true}
-                        editState={this.state.editState}
-                        eventId={this.state.initialEventId}
-                        resizeNotifier={this.props.resizeNotifier}
-                        highlightedEventId={highlightedEventId}
-                        onUserScroll={this.onScroll}
-                    />
+                    <div className="mx_TimelineCard_timeline">
+                        { jumpToBottom }
+                        <TimelinePanel
+                            ref={this.timelinePanelRef}
+                            showReadReceipts={this.state.showReadReceipts}
+                            manageReadReceipts={true}
+                            manageReadMarkers={false} // No RM support in the TimelineCard
+                            sendReadReceiptOnLoad={true}
+                            timelineSet={this.props.timelineSet}
+                            showUrlPreview={true}
+                            // The right panel timeline (and therefore threads) don't support IRC layout at this time
+                            layout={this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group}
+                            hideThreadedMessages={false}
+                            hidden={false}
+                            showReactions={true}
+                            className={messagePanelClassNames}
+                            permalinkCreator={this.props.permalinkCreator}
+                            membersLoaded={true}
+                            editState={this.state.editState}
+                            eventId={this.state.initialEventId}
+                            resizeNotifier={this.props.resizeNotifier}
+                            highlightedEventId={highlightedEventId}
+                            onScroll={this.onScroll}
+                            onUserScroll={this.onUserScroll}
+                        />
+                    </div>
 
                     { ContentMessages.sharedInstance().getCurrentUploads(this.props.composerRelation).length > 0 && (
                         <UploadBar room={this.props.room} relation={this.props.composerRelation} />

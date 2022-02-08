@@ -21,7 +21,7 @@ import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
-    numUnreadMessages: number;
+    numUnreadMessages?: number;
     highlight: boolean;
     onScrollToBottomClick: (e: React.MouseEvent) => void;
 }

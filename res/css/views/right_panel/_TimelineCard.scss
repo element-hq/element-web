@@ -112,3 +112,8 @@ limitations under the License.
         flex-basis: 48px; // 12 (padding on message list) + 36 (padding on event lines)
     }
 }
+
+.mx_TimelineCard_timeline {
+    overflow: hidden;
+    position: relative; // offset parent for jump to bottom button
+}
