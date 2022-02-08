@@ -163,10 +163,7 @@ const SpaceInfo = ({ space }: { space: Room }) => {
                     kind="link"
                     className="mx_SpaceRoomView_info_memberCount"
                     onClick={() => {
-                        RightPanelStore.instance.setCard({
-                            phase: RightPanelPhases.RoomMemberList,
-                            state: { spaceId: space.roomId },
-                        });
+                        RightPanelStore.instance.setCard({ phase: RightPanelPhases.SpaceMemberList });
                     }}
                 >
                     { _t("%(count)s members", { count }) }
