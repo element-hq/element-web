@@ -61,6 +61,6 @@ export default class LiveRecordingClock extends React.PureComponent<IProps, ISta
     }
 
     public render() {
-        return <Clock seconds={this.state.seconds} />;
+        return <Clock seconds={this.state.seconds} aria-live="off" />;
     }
 }

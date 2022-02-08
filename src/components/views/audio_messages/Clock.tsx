@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { HTMLProps } from "react";
 
 import { formatSeconds } from "../../../DateUtils";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-export interface IProps {
+export interface IProps extends Pick<HTMLProps<HTMLSpanElement>, "aria-live"> {
     seconds: number;
 }
 
@@ -40,6 +40,8 @@ export default class Clock extends React.Component<IProps> {
     }
 
     public render() {
-        return <span className='mx_Clock'>{ formatSeconds(this.props.seconds) }</span>;
+        return <span aria-live={this.props["aria-live"]} className='mx_Clock'>
+            { formatSeconds(this.props.seconds) }
+        </span>;
     }
 }

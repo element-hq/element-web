@@ -227,7 +227,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
         if (state === CallState.Connected) {
             return (
                 <div className="mx_CallEvent_content">
-                    <Clock seconds={this.state.length} />
+                    <Clock seconds={this.state.length} aria-live="off" />
                     { this.props.timestamp }
                 </div>
             );
