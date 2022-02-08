@@ -399,6 +399,7 @@
     "Failed to invite users to the room:": "Failed to invite users to the room:",
     "We sent the others, but the below people couldn't be invited to <RoomName/>": "We sent the others, but the below people couldn't be invited to <RoomName/>",
     "Some invites couldn't be sent": "Some invites couldn't be sent",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s and %(space2Name)s",
     "%(spaceName)s and %(count)s others|other": "%(spaceName)s and %(count)s others",
     "%(spaceName)s and %(count)s others|zero": "%(spaceName)s",
     "%(spaceName)s and %(count)s others|one": "%(spaceName)s and %(count)s other",

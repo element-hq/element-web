@@ -161,10 +161,16 @@ function guessDMRoomTargetId(room: Room, myUserId: string): string {
 export function spaceContextDetailsText(space: Room): string {
     if (!space.isSpaceRoom()) return undefined;
 
-    const [parent, ...otherParents] = SpaceStore.instance.getKnownParents(space.roomId);
-    if (parent) {
+    const [parent, secondParent, ...otherParents] = SpaceStore.instance.getKnownParents(space.roomId);
+    if (secondParent && !otherParents?.length) {
+        // exactly 2 edge case for improved i18n
+        return _t("%(space1Name)s and %(space2Name)s", {
+            space1Name: space.client.getRoom(parent)?.name,
+            space2Name: space.client.getRoom(secondParent)?.name,
+        });
+    } else if (parent) {
         return _t("%(spaceName)s and %(count)s others", {
-            spaceName: space.client.getRoom(parent).name,
+            spaceName: space.client.getRoom(parent)?.name,
             count: otherParents.length,
         });
     }
@@ -180,10 +186,16 @@ export function roomContextDetailsText(room: Room): string {
         return dmPartner;
     }
 
-    const [parent, ...otherParents] = SpaceStore.instance.getKnownParents(room.roomId);
-    if (parent) {
+    const [parent, secondParent, ...otherParents] = SpaceStore.instance.getKnownParents(room.roomId);
+    if (secondParent && !otherParents?.length) {
+        // exactly 2 edge case for improved i18n
+        return _t("%(space1Name)s and %(space2Name)s", {
+            space1Name: room.client.getRoom(parent)?.name,
+            space2Name: room.client.getRoom(secondParent)?.name,
+        });
+    } else if (parent) {
         return _t("%(spaceName)s and %(count)s others", {
-            spaceName: room.client.getRoom(parent).name,
+            spaceName: room.client.getRoom(parent)?.name,
             count: otherParents.length,
         });
     }
