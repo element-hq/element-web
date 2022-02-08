@@ -52,8 +52,8 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
 
         Modal.createTrackedDialog("Feedback Sent", rageshakeLabel, InfoDialog, {
             title,
-            description: _t("Thank you for your feedback, we really appreciate it."),
-            button: _t("Done"),
+            description: _t("Feedback sent! Thanks, we appreciate it!"),
+            button: _t("Close"),
             hasCloseButton: false,
             fixedWidth: false,
         });
@@ -68,7 +68,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
                 { subheading }
                 &nbsp;
                 { _t("Your platform and username will be noted to help us use your feedback as much as we can.") }
-
+                &nbsp;
                 { children }
             </div>
 

@@ -34,6 +34,7 @@ import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import SpotlightDialog from "../views/dialogs/SpotlightDialog";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
+import ToastStore from "../../stores/ToastStore";
 
 interface IProps {
     isMinimized: boolean;
@@ -46,11 +47,13 @@ interface IProps {
 interface IState {
     query: string;
     focused: boolean;
+    spotlightBetaEnabled: boolean;
 }
 
 @replaceableComponent("structures.RoomSearch")
 export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private readonly dispatcherRef: string;
+    private readonly betaRef: string;
     private inputRef: React.RefObject<HTMLInputElement> = createRef();
     private searchFilter: NameFilterCondition = new NameFilterCondition();
 
@@ -60,11 +63,13 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         this.state = {
             query: "",
             focused: false,
+            spotlightBetaEnabled: SettingsStore.getValue("feature_spotlight"),
         };
 
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         // clear filter when changing spaces, in future we may wish to maintain a filter per-space
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.clearInput);
+        this.betaRef = SettingsStore.watchSetting("feature_spotlight", null, this.onSpotlightChange);
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>): void {
@@ -85,7 +90,17 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     public componentWillUnmount() {
         defaultDispatcher.unregister(this.dispatcherRef);
         SpaceStore.instance.off(UPDATE_SELECTED_SPACE, this.clearInput);
+        SettingsStore.unwatchSetting(this.betaRef);
     }
+
+    private onSpotlightChange = () => {
+        const spotlightBetaEnabled = SettingsStore.getValue("feature_spotlight");
+        if (this.state.spotlightBetaEnabled !== spotlightBetaEnabled) {
+            this.setState({ spotlightBetaEnabled });
+        }
+        // in case the user was in settings at the 5-minute mark, dismiss the toast
+        ToastStore.sharedInstance().dismissToast("BETA_SPOTLIGHT_TOAST");
+    };
 
     private openSpotlight() {
         Modal.createTrackedDialog("Spotlight", "", SpotlightDialog, {}, "mx_SpotlightDialog_wrapper", false, true);
@@ -95,11 +110,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         if (payload.action === Action.ViewRoom && payload.clear_search) {
             this.clearInput();
         } else if (payload.action === 'focus_room_filter') {
-            if (SettingsStore.getValue("feature_spotlight")) {
-                this.openSpotlight();
-            } else {
-                this.inputRef.current?.focus();
-            }
+            this.focus();
         }
     };
 
@@ -110,10 +121,10 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private openSearch = () => {
-        if (SettingsStore.getValue("feature_spotlight")) {
+        if (this.state.spotlightBetaEnabled) {
             this.openSpotlight();
         } else {
-            defaultDispatcher.dispatch({ action: "show_left_panel" });
+            // dispatched as it needs handling by MatrixChat too
             defaultDispatcher.dispatch({ action: "focus_room_filter" });
         }
     };
@@ -124,14 +135,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private onFocus = (ev: React.FocusEvent<HTMLInputElement>) => {
-        if (SettingsStore.getValue("feature_spotlight")) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            this.openSpotlight();
-        } else {
-            this.setState({ focused: true });
-            ev.target.select();
-        }
+        this.setState({ focused: true });
+        ev.target.select();
     };
 
     private onBlur = (ev: React.FocusEvent<HTMLInputElement>) => {
@@ -159,7 +164,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     public focus = (): void => {
-        if (SettingsStore.getValue("feature_spotlight")) {
+        if (this.state.spotlightBetaEnabled) {
             this.openSpotlight();
         } else {
             this.inputRef.current?.focus();
@@ -172,6 +177,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             'mx_RoomSearch_hasQuery': this.state.query,
             'mx_RoomSearch_focused': this.state.focused,
             'mx_RoomSearch_minimized': this.props.isMinimized,
+            'mx_RoomSearch_spotlightTrigger': this.state.spotlightBetaEnabled,
         });
 
         const inputClasses = classNames({
@@ -180,8 +186,9 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         });
 
         let icon = (
-            <div className="mx_RoomSearch_icon" onClick={this.focus} />
+            <div className="mx_RoomSearch_icon" />
         );
+
         let input = (
             <input
                 type="text"
@@ -192,10 +199,11 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 onBlur={this.onBlur}
                 onChange={this.onChange}
                 onKeyDown={this.onKeyDown}
-                placeholder={SettingsStore.getValue("feature_spotlight") ? _t("Search") : _t("Filter")}
+                placeholder={_t("Filter")}
                 autoComplete="off"
             />
         );
+
         let clearButton = (
             <AccessibleButton
                 tabIndex={-1}
@@ -204,7 +212,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 onClick={this.clearInput}
             />
         );
-        let shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt" onClick={this.focus}>
+
+        let shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt">
             { isMac ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K" }
         </div>;
 
@@ -221,8 +230,18 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             shortcutPrompt = null;
         }
 
+        if (this.state.spotlightBetaEnabled) {
+            return <AccessibleButton onClick={this.openSpotlight} className={classes}>
+                { icon }
+                { input && <div className="mx_RoomSearch_spotlightTriggerText">
+                    { _t("Search") }
+                </div> }
+                { shortcutPrompt }
+            </AccessibleButton>;
+        }
+
         return (
-            <div className={classes}>
+            <div className={classes} onClick={this.focus}>
                 { icon }
                 { input }
                 { shortcutPrompt }

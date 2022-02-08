@@ -95,7 +95,7 @@ const getRoomFn: FetchRoomFn = (room: Room) => {
 export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     // The spaces representing the roots of the various tree-like hierarchies
     private rootSpaces: Room[] = [];
-    // Map from room ID to set of spaces which list it as a child
+    // Map from room/space ID to set of spaces which list it as a child
     private parentMap = new EnhancedMap<string, Set<string>>();
     // Map from SpaceKey to SpaceNotificationState instance representing that space
     private notificationStateMap = new Map<SpaceKey, SpaceNotificationState>();
