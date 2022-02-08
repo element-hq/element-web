@@ -3605,5 +3605,6 @@
     "Location": "Standort",
     "Poll": "Abstimmung",
     "Voice Message": "Sprachnachricht",
-    "Hide stickers": "Sticker ausblenden"
+    "Hide stickers": "Sticker ausblenden",
+    "You do not have permissions to add spaces to this space": "Du hast keine Berechtigung, um Spaces zu diesem Space hinzuzufügen"
 }
