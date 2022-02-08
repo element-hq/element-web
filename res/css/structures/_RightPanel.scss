@@ -139,6 +139,11 @@ $pulse-color: $alert;
     animation: mx_RightPanel_indicator_pulse 2s infinite;
     animation-iteration-count: 1;
 
+    &.mx_Indicator_red {
+        background: rgba($alert, 1);
+        box-shadow: rgba($alert, 1);
+    }
+
     &.mx_Indicator_gray {
         background: rgba($roomtile-default-badge-bg-color, 1);
         box-shadow: rgba($roomtile-default-badge-bg-color, 1);
