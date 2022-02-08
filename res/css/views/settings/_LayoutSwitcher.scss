@@ -30,6 +30,7 @@ limitations under the License.
             flex-direction: column;
 
             width: 300px;
+            min-width: 0;
 
             border: 1px solid $appearance-tab-border-color;
             border-radius: 10px;
@@ -81,6 +82,7 @@ limitations under the License.
             margin: 0;
             &[data-layout=bubble] {
                 margin-right: 40px;
+                flex-shrink: 1;
             }
             &[data-layout=irc] {
                 > a {
