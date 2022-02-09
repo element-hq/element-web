@@ -1,3 +1,11 @@
+Changes in [1.10.2-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.10.2-rc.2) (2022-02-09)
+=========================================================================================================
+
+## 🐛 Bug Fixes
+ * [Release] Fix add existing space not showing any spaces ([\#7756](https://github.com/matrix-org/matrix-react-sdk/pull/7756)).
+ * [Release] Inhibit Room List keyboard pass-thru when the search beta is enabled ([\#7754](https://github.com/matrix-org/matrix-react-sdk/pull/7754)).
+ * [Release] Fix space member list not opening ([\#7755](https://github.com/matrix-org/matrix-react-sdk/pull/7755)).
+
 Changes in [1.10.2-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.10.2-rc.1) (2022-02-08)
 =========================================================================================================
 
