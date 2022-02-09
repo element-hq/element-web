@@ -3623,5 +3623,15 @@
     "A new, quick way to search spaces and rooms you're in.": "Uus ja tõhus viis otsida jututubadest ja kogukondadest, mille liige sa oled.",
     "The new search": "Uus otsingulahendus",
     "New search experience": "Uuenenud otsingulahendus",
-    "%(space1Name)s and %(space2Name)s": "%(space1Name)s ja %(space2Name)s"
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s ja %(space2Name)s",
+    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s saatis ühe peidetud sõnumi",
+    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s saatis ühe peidetud sõnumi",
+    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s saatis %(count)s peidetud sõnumit",
+    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s saatsid %(count)s peidetud sõnumit",
+    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s kustutas sõnumi",
+    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s kustutas %(count)s sõnumit",
+    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s kustutas sõnumi",
+    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s kustutasid %(count)s sõnumit",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)s muutis selle jututoa <a>klammerdatud sõnumeid</a>.",
+    "Maximise": "Suurenda maksimaalseks"
 }
