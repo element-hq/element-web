@@ -40,6 +40,8 @@ limitations under the License.
 // the frequency with which we flush to indexeddb
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { getCircularReplacer } from "../utils/JSON";
+
 const FLUSH_RATE_MS = 30 * 1000;
 
 // the length of log data we keep in indexeddb (and include in the reports)
@@ -90,21 +92,7 @@ export class ConsoleLogger {
             } else if (arg instanceof Error) {
                 return arg.message + (arg.stack ? `\n${arg.stack}` : '');
             } else if (typeof (arg) === 'object') {
-                try {
-                    return JSON.stringify(arg);
-                } catch (e) {
-                    // In development, it can be useful to log complex cyclic
-                    // objects to the console for inspection. This is fine for
-                    // the console, but default `stringify` can't handle that.
-                    // We workaround this by using a special replacer function
-                    // to only log values of the root object and avoid cycles.
-                    return JSON.stringify(arg, (key, value) => {
-                        if (key && typeof value === "object") {
-                            return "<object>";
-                        }
-                        return value;
-                    });
-                }
+                return JSON.stringify(arg, getCircularReplacer());
             } else {
                 return arg;
             }

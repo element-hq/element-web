@@ -501,7 +501,7 @@ class RoomStateExplorer extends React.PureComponent<IExplorerProps, IRoomStateEx
 
             return <div className="mx_ViewSource">
                 <div className="mx_Dialog_content">
-                    <SyntaxHighlight className="json">
+                    <SyntaxHighlight language="json">
                         { JSON.stringify(this.state.event.event, null, 2) }
                     </SyntaxHighlight>
                 </div>
@@ -634,7 +634,7 @@ class AccountDataExplorer extends React.PureComponent<IExplorerProps, IAccountDa
 
             return <div className="mx_ViewSource">
                 <div className="mx_DevTools_content">
-                    <SyntaxHighlight className="json">
+                    <SyntaxHighlight language="json">
                         { JSON.stringify(this.state.event.event, null, 2) }
                     </SyntaxHighlight>
                 </div>

@@ -15,41 +15,26 @@ limitations under the License.
 */
 
 import React from 'react';
-import highlight from 'highlight.js';
+import hljs from 'highlight.js';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
-    className?: string;
-    children?: React.ReactNode;
+    language?: string;
+    children: string;
 }
 
 @replaceableComponent("views.elements.SyntaxHighlight")
-export default class SyntaxHighlight extends React.Component<IProps> {
-    private el: HTMLPreElement = null;
-
-    constructor(props: IProps) {
-        super(props);
-    }
-
-    // componentDidUpdate used here for reusability
-    public componentDidUpdate(): void {
-        if (this.el) highlight.highlightElement(this.el);
-    }
-
-    // call componentDidUpdate because _ref is fired on initial render
-    // which does not fire componentDidUpdate
-    private ref = (el: HTMLPreElement): void => {
-        this.el = el;
-        this.componentDidUpdate();
-    };
-
+export default class SyntaxHighlight extends React.PureComponent<IProps> {
     public render(): JSX.Element {
-        const { className, children } = this.props;
+        const { children: content, language } = this.props;
+        const highlighted = language ? hljs.highlight(language, content) : hljs.highlightAuto(content);
 
-        return <pre className={`${className} mx_SyntaxHighlight`} ref={this.ref}>
-            <code>{ children }</code>
-        </pre>;
+        return (
+            <pre className={`mx_SyntaxHighlight hljs language-${highlighted.language}`}>
+                <code dangerouslySetInnerHTML={{ __html: highlighted.value }} />
+            </pre>
+        );
     }
 }
 

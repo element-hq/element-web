@@ -71,13 +71,13 @@ export default class ViewSource extends React.Component<IProps, IState> {
                         <summary>
                             <span className="mx_ViewSource_heading">{ _t("Decrypted event source") }</span>
                         </summary>
-                        <SyntaxHighlight className="json">{ JSON.stringify(decryptedEventSource, null, 2) }</SyntaxHighlight>
+                        <SyntaxHighlight language="json">{ JSON.stringify(decryptedEventSource, null, 2) }</SyntaxHighlight>
                     </details>
                     <details className="mx_ViewSource_details">
                         <summary>
                             <span className="mx_ViewSource_heading">{ _t("Original event source") }</span>
                         </summary>
-                        <SyntaxHighlight className="json">{ JSON.stringify(originalEventSource, null, 2) }</SyntaxHighlight>
+                        <SyntaxHighlight language="json">{ JSON.stringify(originalEventSource, null, 2) }</SyntaxHighlight>
                     </details>
                 </>
             );
@@ -85,7 +85,7 @@ export default class ViewSource extends React.Component<IProps, IState> {
             return (
                 <>
                     <div className="mx_ViewSource_heading">{ _t("Original event source") }</div>
-                    <SyntaxHighlight className="json">{ JSON.stringify(originalEventSource, null, 2) }</SyntaxHighlight>
+                    <SyntaxHighlight language="json">{ JSON.stringify(originalEventSource, null, 2) }</SyntaxHighlight>
                 </>
             );
         }
