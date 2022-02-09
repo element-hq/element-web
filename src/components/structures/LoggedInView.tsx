@@ -630,10 +630,6 @@ class LoggedInView extends React.Component<IProps, IState> {
                 pageElement = <MyGroups />;
                 break;
 
-            case PageTypes.RoomDirectory:
-                // handled by MatrixChat for now
-                break;
-
             case PageTypes.HomePage:
                 pageElement = <HomePage justRegistered={this.props.justRegistered} />;
                 break;

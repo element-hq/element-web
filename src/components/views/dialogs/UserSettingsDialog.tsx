@@ -94,12 +94,14 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             _td("General"),
             "mx_UserSettingsDialog_settingsIcon",
             <GeneralUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+            "WebUserSettingsGeneral",
         ));
         tabs.push(new Tab(
             UserTab.Appearance,
             _td("Appearance"),
             "mx_UserSettingsDialog_appearanceIcon",
             <AppearanceUserSettingsTab />,
+            "WebUserSettingsAppearance",
         ));
         if (SettingsStore.getValue(UIFeature.Flair)) {
             tabs.push(new Tab(
@@ -107,6 +109,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 _td("Flair"),
                 "mx_UserSettingsDialog_flairIcon",
                 <FlairUserSettingsTab />,
+                "WebUserSettingFlair",
             ));
         }
         tabs.push(new Tab(
@@ -114,24 +117,28 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             _td("Notifications"),
             "mx_UserSettingsDialog_bellIcon",
             <NotificationUserSettingsTab />,
+            "WebUserSettingsNotifications",
         ));
         tabs.push(new Tab(
             UserTab.Preferences,
             _td("Preferences"),
             "mx_UserSettingsDialog_preferencesIcon",
             <PreferencesUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+            "WebUserSettingsPreferences",
         ));
         tabs.push(new Tab(
             UserTab.Keyboard,
             _td("Keyboard"),
             "mx_UserSettingsDialog_keyboardIcon",
             <KeyboardUserSettingsTab />,
+            "WebUserSettingsKeyboard",
         ));
         tabs.push(new Tab(
             UserTab.Sidebar,
             _td("Sidebar"),
             "mx_UserSettingsDialog_sidebarIcon",
             <SidebarUserSettingsTab />,
+            "WebUserSettingsSidebar",
         ));
 
         if (SettingsStore.getValue(UIFeature.Voip)) {
@@ -140,6 +147,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 _td("Voice & Video"),
                 "mx_UserSettingsDialog_voiceIcon",
                 <VoiceUserSettingsTab />,
+                "WebUserSettingsVoiceVideo",
             ));
         }
 
@@ -148,6 +156,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             _td("Security & Privacy"),
             "mx_UserSettingsDialog_securityIcon",
             <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
+            "WebUserSettingsSecurityPrivacy",
         ));
         // Show the Labs tab if enabled or if there are any active betas
         if (SdkConfig.get()['showLabsSettings']
@@ -158,6 +167,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 _td("Labs"),
                 "mx_UserSettingsDialog_labsIcon",
                 <LabsUserSettingsTab />,
+                "WebUserSettingsLabs",
             ));
         }
         if (this.state.mjolnirEnabled) {
@@ -166,6 +176,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 _td("Ignored users"),
                 "mx_UserSettingsDialog_mjolnirIcon",
                 <MjolnirUserSettingsTab />,
+                "WebUserSettingMjolnir",
             ));
         }
         tabs.push(new Tab(
@@ -173,6 +184,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             _td("Help & About"),
             "mx_UserSettingsDialog_helpIcon",
             <HelpUserSettingsTab closeSettingsFn={() => this.props.onFinished(true)} />,
+            "WebUserSettingsHelpAbout",
         ));
 
         return tabs;

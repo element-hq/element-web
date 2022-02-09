@@ -10,6 +10,7 @@ Array [
     onFinished={[MockFunction]}
     title="Export Chat"
   >
+    <PosthogScreenTracker />
     <ForwardRef(FocusLockUICombination)
       className="mx_ExportDialog false mx_Dialog_fixedWidth"
       lockProps={

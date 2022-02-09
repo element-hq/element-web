@@ -29,6 +29,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Heading from '../typography/Heading';
 import { IDialogProps } from "./IDialogProps";
+import { PosthogScreenTracker, ScreenName } from "../../../PosthogTrackers";
 
 interface IProps extends IDialogProps {
     // Whether the dialog should have a 'close' button that will
@@ -66,6 +67,9 @@ interface IProps extends IDialogProps {
     titleClass?: string | string[];
 
     headerButton?: JSX.Element;
+
+    // optional Posthog ScreenName to supply during the lifetime of this dialog
+    screenName?: ScreenName;
 }
 
 /*
@@ -119,6 +123,7 @@ export default class BaseDialog extends React.Component<IProps> {
 
         return (
             <MatrixClientContext.Provider value={this.matrixClient}>
+                <PosthogScreenTracker screenName={this.props.screenName} />
                 <FocusLock
                     returnFocus={true}
                     lockProps={{

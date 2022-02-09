@@ -70,6 +70,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import CallHandler from "../../../CallHandler";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import CopyableText from "../elements/CopyableText";
+import { ScreenName } from '../../../PosthogTrackers';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -1307,6 +1308,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         selectText(e.target);
     }
 
+    private get screenName(): ScreenName {
+        switch (this.props.kind) {
+            case KIND_DM:
+                return "StartChat";
+        }
+    }
+
     render() {
         let spinner = null;
         if (this.state.busy) {
@@ -1584,6 +1592,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 hasCancel={true}
                 onFinished={this.props.onFinished}
                 title={title}
+                screenName={this.screenName}
             >
                 <div className='mx_InviteDialog_content'>
                     { dialogContent }

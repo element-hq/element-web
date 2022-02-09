@@ -154,6 +154,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
                     <TabbedView
                         tabs={this.getTabs()}
                         initialTabId={this.props.initialTabId}
+                        screenName="RoomSettings"
                     />
                 </div>
             </BaseDialog>
