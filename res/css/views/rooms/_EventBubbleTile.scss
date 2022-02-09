@@ -23,7 +23,7 @@ limitations under the License.
 }
 
 .mx_EventTile[data-layout=bubble],
-.mx_EventListSummary[data-layout=bubble] {
+.mx_GenericEventListSummary[data-layout=bubble] {
     --avatarSize: 32px;
     --gutterSize: 11px;
     --cornerRadius: 12px;
@@ -477,7 +477,7 @@ limitations under the License.
 .mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
 .mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble],
 .mx_EventTile.mx_EventTile_info[data-layout=bubble],
-.mx_EventListSummary[data-layout=bubble][data-expanded=false] {
+.mx_GenericEventListSummary[data-layout=bubble][data-expanded=false] {
     --backgroundColor: transparent;
     --gutterSize: 0;
 
@@ -518,11 +518,11 @@ limitations under the License.
     }
 }
 
-.mx_EventListSummary[data-layout=bubble] {
+.mx_GenericEventListSummary[data-layout=bubble] {
     --maxWidth: 70%;
     margin-left: calc(var(--avatarSize) + var(--gutterSize));
 
-    .mx_EventListSummary_toggle {
+    .mx_GenericEventListSummary_toggle {
         margin: 0 55px 0 5px;
         float: none;
 
@@ -534,11 +534,11 @@ limitations under the License.
         }
     }
 
-    .mx_EventListSummary_line {
+    .mx_GenericEventListSummary_line {
         display: none;
     }
 
-    .mx_EventListSummary_avatars {
+    .mx_GenericEventListSummary_avatars {
         padding-top: 0;
     }
 
@@ -548,14 +548,14 @@ limitations under the License.
     }
 }
 
-.mx_EventListSummary[data-expanded=false][data-layout=bubble] {
+.mx_GenericEventListSummary[data-expanded=false][data-layout=bubble] {
     // Align with left edge of bubble tiles
     padding: 0 49px;
 }
 
 // ideally we'd use display=contents here for the layout to all work regardless of the *ELS but
 // that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse.
-.mx_EventListSummary[data-expanded=true][data-layout=bubble] {
+.mx_GenericEventListSummary[data-expanded=true][data-layout=bubble] {
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -579,12 +579,12 @@ limitations under the License.
 }
 
 // increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button
-.mx_EventListSummary[data-layout=bubble][data-expanded=false] + .mx_EventTile[data-layout=bubble][data-self=true] {
+.mx_GenericEventListSummary[data-layout=bubble][data-expanded=false] + .mx_EventTile[data-layout=bubble][data-self=true] {
     margin-top: 20px;
 }
 
 /* events that do not require bubble layout */
-.mx_EventListSummary[data-layout=bubble],
+.mx_GenericEventListSummary[data-layout=bubble],
 .mx_EventTile.mx_EventTile_bad[data-layout=bubble] {
     .mx_EventTile_line {
         background: transparent;

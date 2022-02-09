@@ -139,12 +139,12 @@ $irc-line-height: $font-18px;
         margin: 0;
     }
 
-    .mx_EventListSummary {
+    .mx_GenericEventListSummary {
         > .mx_EventTile_line {
             padding-left: calc(var(--name-width) + $icon-width + $timestamp-width + 3 * $right-padding); // 15 px of padding
         }
 
-        .mx_EventListSummary_avatars {
+        .mx_GenericEventListSummary_avatars {
             padding: 0;
             margin: 0 9px 0 0;
         }

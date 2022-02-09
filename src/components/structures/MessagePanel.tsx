@@ -20,7 +20,6 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Relations } from "matrix-js-sdk/src/models/relations";
-import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { logger } from 'matrix-js-sdk/src/logger';
 
 import shouldHideEvent from '../../shouldHideEvent';
@@ -41,8 +40,8 @@ import defaultDispatcher from '../../dispatcher/dispatcher';
 import CallEventGrouper from "./CallEventGrouper";
 import WhoIsTypingTile from '../views/rooms/WhoIsTypingTile';
 import ScrollPanel, { IScrollState } from "./ScrollPanel";
+import GenericEventListSummary from '../views/elements/GenericEventListSummary';
 import EventListSummary from '../views/elements/EventListSummary';
-import MemberEventListSummary from '../views/elements/MemberEventListSummary';
 import DateSeparator from '../views/messages/DateSeparator';
 import ErrorBoundary from '../views/elements/ErrorBoundary';
 import ResizeNotifier from "../../utils/ResizeNotifier";
@@ -651,7 +650,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
             if (grouper) {
                 if (grouper.shouldGroup(mxEv)) {
-                    grouper.add(mxEv, this.showHiddenEvents);
+                    grouper.add(mxEv);
                     continue;
                 } else {
                     // not part of group, so get the group tiles, close the
@@ -1047,7 +1046,7 @@ abstract class BaseGrouper {
     }
 
     public abstract shouldGroup(ev: MatrixEvent): boolean;
-    public abstract add(ev: MatrixEvent, showHiddenEvents?: boolean): void;
+    public abstract add(ev: MatrixEvent): void;
     public abstract getTiles(): ReactNode[];
     public abstract getNewPrevEvent(): MatrixEvent;
 }
@@ -1064,7 +1063,7 @@ abstract class BaseGrouper {
  *   when determining things such as whether a date separator is necessary
  */
 
-// Wrap initial room creation events into an EventListSummary
+// Wrap initial room creation events into a GenericEventListSummary
 // Grouping only events sent by the same user that sent the `m.room.create` and only until
 // the first non-state event or membership event which is not regarding the sender of the `m.room.create` event
 class CreationGrouper extends BaseGrouper {
@@ -1140,7 +1139,7 @@ class CreationGrouper extends BaseGrouper {
 
         const eventTiles = this.events.map((e) => {
             // In order to prevent DateSeparators from appearing in the expanded form
-            // of EventListSummary, render each member event as if the previous
+            // of GenericEventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
             return panel.getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
@@ -1160,7 +1159,7 @@ class CreationGrouper extends BaseGrouper {
         ret.push(<NewRoomIntro key="newroomintro" />);
 
         ret.push(
-            <EventListSummary
+            <GenericEventListSummary
                 key="roomcreationsummary"
                 events={this.events}
                 onToggle={panel.onHeightChanged} // Update scroll state
@@ -1169,7 +1168,7 @@ class CreationGrouper extends BaseGrouper {
                 layout={this.layout}
             >
                 { eventTiles }
-            </EventListSummary>,
+            </GenericEventListSummary>,
         );
 
         if (this.readMarker) {
@@ -1184,107 +1183,24 @@ class CreationGrouper extends BaseGrouper {
     }
 }
 
-class RedactionGrouper extends BaseGrouper {
+// Wrap consecutive grouped events in a ListSummary
+class MainGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
-        return panel.shouldShowEvent(ev) && ev.isRedacted();
-    };
+        if (!panel.shouldShowEvent(ev)) return false;
 
-    constructor(
-        panel: MessagePanel,
-        ev: MatrixEvent,
-        prevEvent: MatrixEvent,
-        lastShownEvent: MatrixEvent,
-        layout: Layout,
-        nextEvent: MatrixEvent,
-        nextEventTile: MatrixEvent,
-    ) {
-        super(panel, ev, prevEvent, lastShownEvent, layout, nextEvent, nextEventTile);
-        this.events = [ev];
-    }
-
-    public shouldGroup(ev: MatrixEvent): boolean {
-        // absorb hidden events so that they do not break up streams of messages & redaction events being grouped
-        if (!this.panel.shouldShowEvent(ev)) {
+        if (groupedEvents.includes(ev.getType() as EventType)) {
             return true;
         }
-        if (this.panel.wantsDateSeparator(this.events[0], ev.getDate())) {
-            return false;
-        }
-        return ev.isRedacted();
-    }
 
-    public add(ev: MatrixEvent): void {
-        this.readMarker = this.readMarker || this.panel.readMarkerForEvent(
-            ev.getId(),
-            ev === this.lastShownEvent,
-        );
-        if (!this.panel.shouldShowEvent(ev)) {
-            return;
-        }
-        this.events.push(ev);
-    }
-
-    public getTiles(): ReactNode[] {
-        if (!this.events || !this.events.length) return [];
-
-        const isGrouped = true;
-        const panel = this.panel;
-        const ret = [];
-        const lastShownEvent = this.lastShownEvent;
-
-        if (panel.wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
-            const ts = this.events[0].getTs();
-            ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} roomId={this.events[0].getRoomId()} ts={ts} /></li>,
-            );
+        if (ev.isRedacted()) {
+            return true;
         }
 
-        const key = "redactioneventlistsummary-" + (
-            this.prevEvent ? this.events[0].getId() : "initial"
-        );
-
-        const senders = new Set<RoomMember>();
-        let eventTiles = this.events.map((e, i) => {
-            senders.add(e.sender);
-            const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
-            return panel.getTilesForEvent(
-                prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
-        }).reduce((a, b) => a.concat(b), []);
-
-        if (eventTiles.length === 0) {
-            eventTiles = null;
+        if (panel.showHiddenEvents && !panel.shouldShowEvent(ev, true)) {
+            return true;
         }
 
-        ret.push(
-            <EventListSummary
-                key={key}
-                threshold={2}
-                events={this.events}
-                onToggle={panel.onHeightChanged} // Update scroll state
-                summaryMembers={Array.from(senders)}
-                summaryText={_t("%(count)s messages deleted.", { count: eventTiles.length })}
-                layout={this.layout}
-            >
-                { eventTiles }
-            </EventListSummary>,
-        );
-
-        if (this.readMarker) {
-            ret.push(this.readMarker);
-        }
-
-        return ret;
-    }
-
-    public getNewPrevEvent(): MatrixEvent {
-        return this.events[this.events.length - 1];
-    }
-}
-
-// Wrap consecutive member events in a ListSummary, ignore if redacted
-class MemberGrouper extends BaseGrouper {
-    static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
-        return panel.shouldShowEvent(ev) && groupedEvents.includes(ev.getType() as EventType);
+        return false;
     };
 
     constructor(
@@ -1293,27 +1209,43 @@ class MemberGrouper extends BaseGrouper {
         public readonly prevEvent: MatrixEvent,
         public readonly lastShownEvent: MatrixEvent,
         protected readonly layout: Layout,
+        nextEvent: MatrixEvent,
+        nextEventTile: MatrixEvent,
     ) {
-        super(panel, event, prevEvent, lastShownEvent, layout);
+        super(panel, event, prevEvent, lastShownEvent, layout, nextEvent, nextEventTile);
         this.events = [event];
     }
 
     public shouldGroup(ev: MatrixEvent): boolean {
+        if (!this.panel.shouldShowEvent(ev)) {
+            // absorb hidden events so that they do not break up streams of messages & redaction events being grouped
+            return true;
+        }
         if (this.panel.wantsDateSeparator(this.events[0], ev.getDate())) {
             return false;
         }
-        return groupedEvents.includes(ev.getType() as EventType);
+        if (groupedEvents.includes(ev.getType() as EventType)) {
+            return true;
+        }
+        if (ev.isRedacted()) {
+            return true;
+        }
+        if (this.panel.showHiddenEvents && !this.panel.shouldShowEvent(ev, true)) {
+            return true;
+        }
+        return false;
     }
 
-    public add(ev: MatrixEvent, showHiddenEvents?: boolean): void {
+    public add(ev: MatrixEvent): void {
         if (ev.getType() === EventType.RoomMember) {
             // We can ignore any events that don't actually have a message to display
-            if (!hasText(ev, showHiddenEvents)) return;
+            if (!hasText(ev, this.panel.showHiddenEvents)) return;
         }
-        this.readMarker = this.readMarker || this.panel.readMarkerForEvent(
-            ev.getId(),
-            ev === this.lastShownEvent,
-        );
+        this.readMarker = this.readMarker || this.panel.readMarkerForEvent(ev.getId(), ev === this.lastShownEvent);
+        if (!this.panel.showHiddenEvents && !this.panel.shouldShowEvent(ev)) {
+            // absorb hidden events to not split the summary
+            return;
+        }
         this.events.push(ev);
     }
 
@@ -1321,7 +1253,7 @@ class MemberGrouper extends BaseGrouper {
         // If we don't have any events to group, don't even try to group them. The logic
         // below assumes that we have a group of events to deal with, but we might not if
         // the events we were supposed to group were redacted.
-        if (!this.events || !this.events.length) return [];
+        if (!this.events?.length) return [];
 
         const isGrouped = true;
         const panel = this.panel;
@@ -1335,28 +1267,26 @@ class MemberGrouper extends BaseGrouper {
             );
         }
 
-        // Ensure that the key of the MemberEventListSummary does not change with new
-        // member events. This will prevent it from being re-created unnecessarily, and
+        // Ensure that the key of the EventListSummary does not change with new events.
+        // This will prevent it from being re-created unnecessarily, and
         // instead will allow new props to be provided. In turn, the shouldComponentUpdate
-        // method on MELS can be used to prevent unnecessary renderings.
+        // method on ELS can be used to prevent unnecessary renderings.
         //
-        // Whilst back-paginating with a MELS at the top of the panel, prevEvent will be null,
-        // so use the key "membereventlistsummary-initial". Otherwise, use the ID of the first
+        // Whilst back-paginating with an ELS at the top of the panel, prevEvent will be null,
+        // so use the key "eventlistsummary-initial". Otherwise, use the ID of the first
         // membership event, which will not change during forward pagination.
-        const key = "membereventlistsummary-" + (
-            this.prevEvent ? this.events[0].getId() : "initial"
-        );
+        const key = "eventlistsummary-" + (this.prevEvent ? this.events[0].getId() : "initial");
 
-        let highlightInMels;
+        let highlightInSummary = false;
         let eventTiles = this.events.map((e) => {
             if (e.getId() === panel.props.highlightedEventId) {
-                highlightInMels = true;
+                highlightInSummary = true;
             }
             // In order to prevent DateSeparators from appearing in the expanded form
-            // of MemberEventListSummary, render each member event as if the previous
+            // of EventListSummary, render each member event as if the previous
             // one was itself. This way, the timestamp of the previous event === the
             // timestamp of the current event, and no DateSeparator is inserted.
-            return panel.getTilesForEvent(e, e, e === lastShownEvent, isGrouped);
+            return panel.getTilesForEvent(e, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
         }).reduce((a, b) => a.concat(b), []);
 
         if (eventTiles.length === 0) {
@@ -1370,15 +1300,15 @@ class MemberGrouper extends BaseGrouper {
         }
 
         ret.push(
-            <MemberEventListSummary
+            <EventListSummary
                 key={key}
                 events={this.events}
                 onToggle={panel.onHeightChanged} // Update scroll state
-                startExpanded={highlightInMels}
+                startExpanded={highlightInSummary}
                 layout={this.layout}
             >
                 { eventTiles }
-            </MemberEventListSummary>,
+            </EventListSummary>,
         );
 
         if (this.readMarker) {
@@ -1393,91 +1323,5 @@ class MemberGrouper extends BaseGrouper {
     }
 }
 
-// Wrap consecutive hidden events in a ListSummary, ignore if redacted
-class HiddenEventGrouper extends BaseGrouper {
-    static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
-        return !panel.shouldShowEvent(ev, true) && panel.showHiddenEvents;
-    };
-
-    constructor(
-        public readonly panel: MessagePanel,
-        public readonly event: MatrixEvent,
-        public readonly prevEvent: MatrixEvent,
-        public readonly lastShownEvent: MatrixEvent,
-        protected readonly layout: Layout,
-    ) {
-        super(panel, event, prevEvent, lastShownEvent, layout);
-        this.events = [event];
-    }
-
-    public shouldGroup(ev: MatrixEvent): boolean {
-        if (this.panel.wantsDateSeparator(this.events[0], ev.getDate())) {
-            return false;
-        }
-        return !this.panel.shouldShowEvent(ev, true);
-    }
-
-    public add(ev: MatrixEvent, showHiddenEvents?: boolean): void {
-        this.readMarker = this.readMarker || this.panel.readMarkerForEvent(ev.getId(), ev === this.lastShownEvent);
-        this.events.push(ev);
-    }
-
-    public getTiles(): ReactNode[] {
-        if (!this.events || !this.events.length) return [];
-
-        const isGrouped = true;
-        const panel = this.panel;
-        const ret = [];
-        const lastShownEvent = this.lastShownEvent;
-
-        if (panel.wantsDateSeparator(this.prevEvent, this.events[0].getDate())) {
-            const ts = this.events[0].getTs();
-            ret.push(
-                <li key={ts+'~'}><DateSeparator key={ts+'~'} roomId={this.events[0].getRoomId()} ts={ts} /></li>,
-            );
-        }
-
-        const key = "hiddeneventlistsummary-" + (
-            this.prevEvent ? this.events[0].getId() : "initial"
-        );
-
-        const senders = new Set<RoomMember>();
-        let eventTiles = this.events.map((e, i) => {
-            senders.add(e.sender);
-            const prevEvent = i === 0 ? this.prevEvent : this.events[i - 1];
-            return panel.getTilesForEvent(
-                prevEvent, e, e === lastShownEvent, isGrouped, this.nextEvent, this.nextEventTile);
-        }).reduce((a, b) => a.concat(b), []);
-
-        if (eventTiles.length === 0) {
-            eventTiles = null;
-        }
-
-        ret.push(
-            <EventListSummary
-                key={key}
-                threshold={2}
-                events={this.events}
-                onToggle={panel.onHeightChanged} // Update scroll state
-                summaryMembers={Array.from(senders)}
-                summaryText={_t("%(count)s hidden messages.", { count: eventTiles.length })}
-                layout={this.layout}
-            >
-                { eventTiles }
-            </EventListSummary>,
-        );
-
-        if (this.readMarker) {
-            ret.push(this.readMarker);
-        }
-
-        return ret;
-    }
-
-    public getNewPrevEvent(): MatrixEvent {
-        return this.events[this.events.length - 1];
-    }
-}
-
 // all the grouper classes that we use
-const groupers = [CreationGrouper, MemberGrouper, RedactionGrouper, HiddenEventGrouper];
+const groupers = [CreationGrouper, MainGrouper];

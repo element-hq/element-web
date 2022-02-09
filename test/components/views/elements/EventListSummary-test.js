@@ -5,12 +5,10 @@ import ShallowRenderer from "react-test-renderer/shallow";
 import sdk from '../../../skinned-sdk';
 import * as testUtils from '../../../test-utils';
 
-// Give MELS a matrixClient in its child context
-const MemberEventListSummary = testUtils.wrapInMatrixClientContext(
-    sdk.getComponent('views.elements.MemberEventListSummary'),
-);
+// Give ELS a matrixClient in its child context
+const EventListSummary = testUtils.wrapInMatrixClientContext(sdk.getComponent('views.elements.EventListSummary'));
 
-describe('MemberEventListSummary', function() {
+describe('EventListSummary', function() {
     // Generate dummy event tiles for use in simulating an expanded MELS
     const generateTiles = (events) => {
         return events.map((e) => {
@@ -102,7 +100,7 @@ describe('MemberEventListSummary', function() {
         };
 
         const renderer = new ShallowRenderer();
-        renderer.render(<MemberEventListSummary {...props} />);
+        renderer.render(<EventListSummary {...props} />);
         const wrapper = renderer.getRenderOutput(); // matrix cli context wrapper
         const result = wrapper.props.children;
 
@@ -125,7 +123,7 @@ describe('MemberEventListSummary', function() {
         };
 
         const renderer = new ShallowRenderer();
-        renderer.render(<MemberEventListSummary {...props} />);
+        renderer.render(<EventListSummary {...props} />);
         const wrapper = renderer.getRenderOutput(); // matrix cli context wrapper
         const result = wrapper.props.children;
 
@@ -150,10 +148,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -186,10 +184,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -234,10 +232,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -286,10 +284,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -345,10 +343,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -383,10 +381,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -433,10 +431,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -507,10 +505,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -554,10 +552,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -589,10 +587,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -617,10 +615,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -644,10 +642,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 
@@ -669,10 +667,10 @@ describe('MemberEventListSummary', function() {
         };
 
         const instance = ReactTestUtils.renderIntoDocument(
-            <MemberEventListSummary {...props} />,
+            <EventListSummary {...props} />,
         );
         const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_EventListSummary_summary",
+            instance, "mx_GenericEventListSummary_summary",
         );
         const summaryText = summary.textContent;
 

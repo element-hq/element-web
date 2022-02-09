@@ -122,8 +122,7 @@ describe('MessagePanel', function() {
         return events;
     }
 
-    // make a collection of events with some member events that should be collapsed
-    // with a MemberEventListSummary
+    // make a collection of events with some member events that should be collapsed with an EventListSummary
     function mkMelsEvents() {
         const events = [];
         const ts0 = Date.now();
@@ -304,7 +303,7 @@ describe('MessagePanel', function() {
         expect(tiles.length).toEqual(2);
 
         const summaryTiles = TestUtils.scryRenderedComponentsWithType(
-            res, sdk.getComponent('elements.MemberEventListSummary'),
+            res, sdk.getComponent('elements.EventListSummary'),
         );
         expect(summaryTiles.length).toEqual(1);
     });
@@ -341,7 +340,7 @@ describe('MessagePanel', function() {
             />,
         );
 
-        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
+        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_GenericEventListSummary');
 
         // find the <li> which wraps the read marker
         const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
@@ -363,7 +362,7 @@ describe('MessagePanel', function() {
             />,
         );
 
-        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_EventListSummary');
+        const summary = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_GenericEventListSummary');
 
         // find the <li> which wraps the read marker
         const rm = TestUtils.findRenderedDOMComponentWithClass(res, 'mx_RoomView_myReadMarker_container');
@@ -450,7 +449,7 @@ describe('MessagePanel', function() {
         expect(tiles.at(0).props().mxEvent.getType()).toEqual("m.room.create");
         expect(tiles.at(1).props().mxEvent.getType()).toEqual("m.room.encryption");
 
-        const summaryTiles = res.find(sdk.getComponent('views.elements.EventListSummary'));
+        const summaryTiles = res.find(sdk.getComponent('views.elements.GenericEventListSummary'));
         const summaryTile = summaryTiles.at(0);
 
         const summaryEventTiles = summaryTile.find(sdk.getComponent('views.rooms.EventTile'));
