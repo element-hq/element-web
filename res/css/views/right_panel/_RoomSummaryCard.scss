@@ -133,8 +133,7 @@ limitations under the License.
             }
 
             .mx_RoomSummaryCard_app_pinToggle,
-            .mx_RoomSummaryCard_app_maximise,
-            .mx_RoomSummaryCard_app_minimise,
+            .mx_RoomSummaryCard_app_maximiseToggle,
             .mx_RoomSummaryCard_app_options {
                 position: absolute;
                 top: 0;
@@ -176,7 +175,7 @@ limitations under the License.
                     mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
                 }
             }
-            .mx_RoomSummaryCard_app_maximise {
+            .mx_RoomSummaryCard_app_maximiseToggle {
                 right: 32px; //24 + 8
 
                 &::before {
@@ -184,24 +183,13 @@ limitations under the License.
                     mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
                 }
             }
-            .mx_RoomSummaryCard_app_minimise {
-                right: 32px; //24 + 8
-                &::before {
-                    mask-size: 14px;
-                    mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
-                    background-color: $accent;
-                }
-            }
 
             .mx_RoomSummaryCard_app_options {
-                right: 32px; //24 + 8
+                right: 56px; //2*24 + 8
                 display: none;
 
                 &::before {
                     mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
-                }
-                &.mx_RoomSummaryCard_maximised_widget {
-                    right: 56px; //2*24 + 8
                 }
             }
 
@@ -211,6 +199,16 @@ limitations under the License.
                 }
 
                 .mx_RoomSummaryCard_app_pinToggle::before {
+                    background-color: $accent;
+                }
+            }
+
+            &.mx_RoomSummaryCard_Button_maximised {
+                &::after {
+                    opacity: 0.2;
+                }
+
+                .mx_RoomSummaryCard_app_maximiseToggle::before {
                     background-color: $accent;
                 }
             }

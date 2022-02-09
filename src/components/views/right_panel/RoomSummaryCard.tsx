@@ -135,16 +135,12 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         pinTitle = isPinned ? _t("Unpin") : _t("Pin");
     }
 
-    const classes = classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", {
-        mx_RoomSummaryCard_Button_pinned: isPinned,
-    });
-
     const isMaximised = WidgetLayoutStore.instance.isInContainer(room, app, Container.Center);
     const toggleMaximised = isMaximised
         ? () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right); }
         : () => { WidgetLayoutStore.instance.moveToContainer(room, app, Container.Center); };
 
-    const maximiseTitle = isMaximised ? _t("Close") : _t("Maximise widget");
+    const maximiseTitle = isMaximised ? _t("Close") : _t("Maximise");
 
     let openTitle = "";
     if (isPinned) {
@@ -152,6 +148,11 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
     } else if (isMaximised) {
         openTitle =_t("Close this widget to view it in this panel");
     }
+
+    const classes = classNames("mx_BaseCard_Button mx_RoomSummaryCard_Button", {
+        mx_RoomSummaryCard_Button_pinned: isPinned,
+        mx_RoomSummaryCard_Button_maximised: isMaximised,
+    });
 
     return <div className={classes} ref={handle}>
         <AccessibleTooltipButton
@@ -169,7 +170,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
         </AccessibleTooltipButton>
 
         { canModifyWidget && <ContextMenuTooltipButton
-            className="mx_RoomSummaryCard_app_options mx_RoomSummaryCard_maximised_widget"
+            className="mx_RoomSummaryCard_app_options"
             isExpanded={menuDisplayed}
             onClick={openMenu}
             title={_t("Options")}
@@ -184,7 +185,7 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             yOffset={-24}
         />
         <AccessibleTooltipButton
-            className={isMaximised ? "mx_RoomSummaryCard_app_minimise" : "mx_RoomSummaryCard_app_maximise"}
+            className="mx_RoomSummaryCard_app_maximiseToggle"
             onClick={toggleMaximised}
             title={maximiseTitle}
             yOffset={-24}

@@ -1947,7 +1947,7 @@
     "Chat": "Chat",
     "Room Info": "Room Info",
     "You can only pin up to %(count)s widgets|other": "You can only pin up to %(count)s widgets",
-    "Maximise widget": "Maximise widget",
+    "Maximise": "Maximise",
     "Unpin this widget to view it in this panel": "Unpin this widget to view it in this panel",
     "Close this widget to view it in this panel": "Close this widget to view it in this panel",
     "Set my room layout for everyone": "Set my room layout for everyone",

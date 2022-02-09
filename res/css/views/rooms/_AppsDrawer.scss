@@ -231,14 +231,24 @@ $MinWidth: 240px;
     background-color: $topleftmenu-color;
     margin: 0 5px;
 
-    &.mx_AppTileMenuBar_iconButton_minWidget {
-        mask-size: auto 10px;
-        mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
-    }
-
-    &.mx_AppTileMenuBar_iconButton_maxWidget {
+    &.mx_AppTileMenuBar_iconButton_close {
         mask-size: auto 10px;
         mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+        background-color: $accent;
+    }
+
+    &.mx_AppTileMenuBar_iconButton_maximise {
+        mask-size: auto 10px;
+        mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+    }
+
+    &.mx_AppTileMenuBar_iconButton_unpin {
+        mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
+        background-color: $accent;
+    }
+
+    &.mx_AppTileMenuBar_iconButton_pin {
+        mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
     }
 
     &.mx_AppTileMenuBar_iconButton_popout {
