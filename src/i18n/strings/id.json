@@ -3541,5 +3541,13 @@
     "Voice Message": "Pesan Suara",
     "Hide stickers": "Sembunyikan stiker",
     "You do not have permissions to add spaces to this space": "Anda tidak memiliki izin untuk menambahkan space ke space ini",
-    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Balas ke utasan yang sedang terjadi atau gunakan “Balas di utasan” ketika kursor diletakkan pada pesan untuk memulai yang baru."
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Balas ke utasan yang sedang terjadi atau gunakan “Balas di utasan” ketika kursor diletakkan pada pesan untuk memulai yang baru.",
+    "How can I leave the beta?": "Bagaimana cara saya meninggalkan beta?",
+    "To feedback, join the beta, start a search and click on feedback.": "Untuk memberikan masukan, bergabung ke beta dan klik pada masukan.",
+    "How can I give feedback?": "Bagaimana saya dapat memberikan masukan?",
+    "This feature is a work in progress, we'd love to hear your feedback.": "Fitur ini masih dikerjakan, dan kami ingin masukan Anda.",
+    "A new, quick way to search spaces and rooms you're in.": "Cara baru dan cepat untuk mencari space dan ruangan Anda berada.",
+    "The new search": "Pencarian baru",
+    "New search experience": "Pengalaman pencarian baru",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s dan %(space2Name)s"
 }
