@@ -3614,6 +3614,16 @@
     "A new, quick way to search spaces and rooms you're in.": "Eine neue, schnelle Art der Suche nach Spaces und Räumen in denen du bist.",
     "New search experience": "Neue Sucherfahrung",
     "The new search": "Die neue Suche",
-    "How can I leave the beta?": "",
-    "To feedback, join the beta, start a search and click on feedback.": ""
+    "How can I leave the beta?": "Wie kann ich die Beta verlassen?",
+    "To feedback, join the beta, start a search and click on feedback.": "Um Feedback zu geben, tritt der Beta bei, starte eine Suche und klick auf Feedback.",
+    "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Danke dir für das Ausprobieren der Beta, bitte gehe so sehr ins Detail wie du kannst, damit wir es verbessern können.",
+    "This feature is a work in progress, we'd love to hear your feedback.": "An dieser Funktion wird fortlaufend gearbeitet, wir würden uns über dein Feedback freuen.",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s und %(space2Name)s",
+    "Use <arrows/> to scroll": "Benutze <arrows/> zum scrollen",
+    "New search beta available": "Beta der neuen Suche verfügbar",
+    "Click for more info": "Klicke für mehr Infos",
+    "This is a beta feature": "Dies ist eine Beta-Funktion",
+    "Maximise": "Maximieren",
+    "To leave, just return to this page or click on the beta badge when you search.": "Zum Verlassen komme einfach auf diese Seite zurück oder klicke auf Beta, wenn du suchst.",
+    "We're testing a new search to make finding what you want quicker.\n": "Wir testen eine neue Suche, damit du schneller findest, was du möchtest.\n"
 }
