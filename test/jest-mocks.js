@@ -13,5 +13,9 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 });
 
+Object.defineProperty(navigator, 'registerProtocolHandler', {
+    value: jest.fn().mockImplementation(),
+});
+
 // maplibre requires a createObjectURL mock
 global.URL.createObjectURL = jest.fn();
