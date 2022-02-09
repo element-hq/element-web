@@ -8,8 +8,22 @@ jobs:
     build:
         runs-on: ubuntu-latest
         if: >
-            ${{ github.event.workflow_run.conclusion == 'success' }}
+            ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' }}
         steps:
+            - name: "🔍 Read PR number"
+              id: readctx
+              # we need to find the PR number that corresponds to the branch, which we do by
+              # searching the GH API
+              # The workflow_run event includes a list of pull requests, but it doesn't get populated for
+              # forked PRs: https://docs.github.com/en/rest/reference/checks#create-a-check-run
+              run: |
+                head_branch='${{github.event.workflow_run.head_repository.owner.login}}:${{github.event.workflow_run.head_branch}}'
+                echo "head branch: $head_branch"
+                pulls_uri="https://api.github.com/repos/${{ github.repository }}/pulls?head=$(jq -Rr '@uri' <<<$head_branch)"
+                pr_number=$(curl -s -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' "$pulls_uri" |
+                     jq -r '.[] | .number')
+                echo "PR number: $pr_number"
+                echo "::set-output name=prnumber::$pr_number"
             # There's a 'download artifact' action but it hasn't been updated for the
             # workflow_run action (https://github.com/actions/download-artifact/issues/60)
             # so instead we get this mess:
@@ -44,6 +58,7 @@ jobs:
                   # These don't work because we're in workflow_run
                   enable-pull-request-comment: false
                   enable-commit-comment: false
+                  alias: pr${{ steps.readctx.outputs.prnumber }}
               env:
                   NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
                   NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -53,7 +68,7 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  pull-request-number: ${{github.event.workflow_run.pull_requests[0].number}}
+                  pull-request-number: ${{ steps.readctx.outputs.prnumber }}
                   description-message: |
                       Preview: ${{ steps.netlify.outputs.deploy-url }}
                       ⚠️ Do you trust the author of this PR? Maybe this build will steal your keys or give you malware. Exercise caution. Use test accounts.
