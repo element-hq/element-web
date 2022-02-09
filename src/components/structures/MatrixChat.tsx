@@ -1523,13 +1523,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         cli.on('sync', (state: SyncState, prevState?: SyncState, data?: ISyncStateData) => {
-            // LifecycleStore and others cannot directly subscribe to matrix client for
-            // events because flux only allows store state changes during flux dispatches.
-            // So dispatch directly from here. Ideally we'd use a SyncStateStore that
-            // would do this dispatch and expose the sync state itself (by listening to
-            // its own dispatch).
-            dis.dispatch({ action: 'sync_state', prevState, state });
-
             if (state === SyncState.Error || state === SyncState.Reconnecting) {
                 if (data.error instanceof InvalidStoreError) {
                     Lifecycle.handleInvalidStoreError(data.error);

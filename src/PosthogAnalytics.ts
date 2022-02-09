@@ -17,6 +17,7 @@ limitations under the License.
 import posthog, { PostHog } from 'posthog-js';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
+import { UserProperties } from "matrix-analytics-events/types/typescript/UserProperties";
 
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
@@ -42,6 +43,10 @@ import SettingsStore from "./settings/SettingsStore";
 interface IEvent {
     // The event name that will be used by PostHog. Event names should use camelCase.
     eventName: string;
+
+    // do not allow these to be sent manually, we enqueue them all for caching purposes
+    "$set"?: void;
+    "$set_once"?: void;
 }
 
 export enum Anonymity {
@@ -109,6 +114,8 @@ export class PosthogAnalytics {
     private static _instance = null;
     private platformSuperProperties = {};
     private static ANALYTICS_EVENT_TYPE = "im.vector.analytics";
+    private propertiesForNextEvent: Partial<Record<"$set" | "$set_once", UserProperties>> = {};
+    private userPropertyCache: UserProperties = {};
 
     public static get instance(): PosthogAnalytics {
         if (!this._instance) {
@@ -198,7 +205,11 @@ export class PosthogAnalytics {
         }
         const { origin, hash, pathname } = window.location;
         properties['$redacted_current_url'] = getRedactedCurrentLocation(origin, hash, pathname);
-        this.posthog.capture(eventName, properties);
+        this.posthog.capture(eventName, {
+            ...this.propertiesForNextEvent,
+            ...properties,
+        });
+        this.propertiesForNextEvent = {};
     }
 
     public isEnabled(): boolean {
@@ -260,13 +271,29 @@ export class PosthogAnalytics {
         this.setAnonymity(Anonymity.Disabled);
     }
 
-    public trackEvent<E extends IEvent>(
-        event: E,
-    ): void {
+    public trackEvent<E extends IEvent>({ eventName, ...properties }: E): void {
         if (this.anonymity == Anonymity.Disabled || this.anonymity == Anonymity.Anonymous) return;
-        const eventWithoutName = { ...event };
-        delete eventWithoutName.eventName;
-        this.capture(event.eventName, eventWithoutName);
+        this.capture(eventName, properties);
+    }
+
+    public setProperty<K extends keyof UserProperties>(key: K, value: UserProperties[K]): void {
+        if (this.userPropertyCache[key] === value) return; // nothing to do
+        this.userPropertyCache[key] = value;
+
+        if (!this.propertiesForNextEvent["$set"]) {
+            this.propertiesForNextEvent["$set"] = {};
+        }
+        this.propertiesForNextEvent["$set"][key] = value;
+    }
+
+    public setPropertyOnce<K extends keyof UserProperties>(key: K, value: UserProperties[K]): void {
+        if (this.userPropertyCache[key]) return; // nothing to do
+        this.userPropertyCache[key] = value;
+
+        if (!this.propertiesForNextEvent["$set_once"]) {
+            this.propertiesForNextEvent["$set_once"] = {};
+        }
+        this.propertiesForNextEvent["$set_once"][key] = value;
     }
 
     public async updatePlatformSuperProperties(): Promise<void> {

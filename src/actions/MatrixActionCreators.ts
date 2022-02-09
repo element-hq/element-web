@@ -22,8 +22,6 @@ import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import dis from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 
-// TODO: migrate from sync_state to MatrixActions.sync so that more js-sdk events
-//       become dispatches in the same place.
 /**
  * Create a MatrixActions.sync action that represents a MatrixClient `sync` event,
  * each parameter mapping to a key-value in the action.
