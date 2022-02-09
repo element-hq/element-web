@@ -3601,5 +3601,6 @@
     "A new, quick way to search spaces and rooms you're in.": "Ett nytt snabbt sätt att söka i utrymmen och rum du är med i.",
     "The new search": "Den nya sökfunktionen",
     "New search experience": "Ny sökupplevelse",
-    "%(space1Name)s and %(space2Name)s": "%(space1Name)s och %(space2Name)s"
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s och %(space2Name)s",
+    "Maximise": "Maximera"
 }
