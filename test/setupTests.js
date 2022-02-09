@@ -22,3 +22,16 @@ configure({ adapter: new Adapter() });
 
 // maplibre requires a createObjectURL mock
 global.URL.createObjectURL = jest.fn();
+
+// matchMedia is not included in jsdom
+const mockMatchMedia = jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // Deprecated
+    removeListener: jest.fn(), // Deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+}));
+global.matchMedia = mockMatchMedia;

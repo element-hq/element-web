@@ -23,22 +23,6 @@ import _ThemeChoicePanel from '../../../../src/components/views/settings/ThemeCh
 
 const ThemeChoicePanel = TestUtils.wrapInMatrixClientContext(_ThemeChoicePanel);
 
-// Avoid errors about global.matchMedia. See:
-// https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation(query => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-    })),
-});
-
 // Fake random strings to give a predictable snapshot
 jest.mock(
     'matrix-js-sdk/src/randomstring',

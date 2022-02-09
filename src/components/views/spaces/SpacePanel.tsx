@@ -70,6 +70,8 @@ import { ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from "../../../dispatcher/actions";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 const useSpaces = (): [Room[], MetaSpace[], Room[], SpaceKey] => {
     const invites = useEventEmitterState<Room[]>(SpaceStore.instance, UPDATE_INVITED_SPACES, () => {
@@ -235,6 +237,7 @@ const CreateSpaceButton = ({
         role="treeitem"
     >
         <SpaceButton
+            data-test-id='create-space-button'
             className={classNames("mx_SpaceButton_new", {
                 mx_SpaceButton_newCancel: menuDisplayed,
             })}
@@ -316,7 +319,11 @@ const InnerSpacePanel = React.memo<IInnerSpacePanelProps>(({
             </Draggable>
         )) }
         { children }
-        <CreateSpaceButton isPanelCollapsed={isPanelCollapsed} setPanelCollapsed={setPanelCollapsed} />
+        {
+            shouldShowComponent(UIComponent.CreateSpaces) &&
+            <CreateSpaceButton isPanelCollapsed={isPanelCollapsed} setPanelCollapsed={setPanelCollapsed} />
+        }
+
     </IndicatorScrollbar>;
 });
 

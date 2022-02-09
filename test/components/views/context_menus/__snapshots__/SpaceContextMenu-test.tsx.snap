@@ -1,0 +1,500 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
+<SpaceContextMenu
+  onFinished={[MockFunction]}
+  space={
+    Object {
+      "canInvite": [MockFunction] {
+        "calls": Array [
+          Array [
+            "@test:server",
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "client": Object {
+        "getUserId": [MockFunction] {
+          "calls": Array [
+            Array [],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": "@test:server",
+            },
+          ],
+        },
+      },
+      "currentState": Object {
+        "maySendStateEvent": [MockFunction] {
+          "calls": Array [
+            Array [
+              "m.space.child",
+              "@test:server",
+            ],
+          ],
+          "results": Array [
+            Object {
+              "type": "return",
+              "value": undefined,
+            },
+          ],
+        },
+      },
+      "getJoinRule": [MockFunction] {
+        "calls": Array [
+          Array [],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
+      "getMyMembership": [MockFunction],
+      "name": "test space",
+    }
+  }
+>
+  <IconizedContextMenu
+    className="mx_SpacePanel_contextMenu"
+    compact={true}
+    onFinished={[MockFunction]}
+  >
+    <ContextMenu
+      chevronFace="none"
+      hasBackground={true}
+      managed={true}
+      onFinished={[MockFunction]}
+    >
+      <Portal
+        containerInfo={
+          <div
+            id="mx_ContextualMenu_Container"
+          >
+            <div
+              class="mx_ContextualMenu_wrapper"
+            >
+              <div
+                class="mx_ContextualMenu_background"
+              />
+              <div
+                class="mx_ContextualMenu"
+                role="menu"
+              >
+                <div
+                  class="mx_IconizedContextMenu mx_SpacePanel_contextMenu mx_IconizedContextMenu_compact"
+                >
+                  <div
+                    class="mx_SpacePanel_contextMenu_header"
+                  >
+                    test space
+                  </div>
+                  <div
+                    class="mx_IconizedContextMenu_optionList"
+                  >
+                    <div
+                      aria-label="Space home"
+                      class="mx_AccessibleButton mx_IconizedContextMenu_item focus-visible"
+                      data-focus-visible-added=""
+                      role="menuitem"
+                      tabindex="0"
+                    >
+                      <span
+                        class="mx_IconizedContextMenu_icon mx_SpacePanel_iconHome"
+                      />
+                      <span
+                        class="mx_IconizedContextMenu_label"
+                      >
+                        Space home
+                      </span>
+                    </div>
+                    <div
+                      aria-label="Explore rooms"
+                      class="mx_AccessibleButton mx_IconizedContextMenu_item"
+                      role="menuitem"
+                      tabindex="-1"
+                    >
+                      <span
+                        class="mx_IconizedContextMenu_icon mx_SpacePanel_iconExplore"
+                      />
+                      <span
+                        class="mx_IconizedContextMenu_label"
+                      >
+                        Explore rooms
+                      </span>
+                    </div>
+                    <div
+                      aria-label="Preferences"
+                      class="mx_AccessibleButton mx_IconizedContextMenu_item"
+                      role="menuitem"
+                      tabindex="-1"
+                    >
+                      <span
+                        class="mx_IconizedContextMenu_icon mx_SpacePanel_iconPreferences"
+                      />
+                      <span
+                        class="mx_IconizedContextMenu_label"
+                      >
+                        Preferences
+                      </span>
+                    </div>
+                    <div
+                      aria-label="Leave space"
+                      class="mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
+                      data-test-id="leave-option"
+                      role="menuitem"
+                      tabindex="-1"
+                    >
+                      <span
+                        class="mx_IconizedContextMenu_icon mx_SpacePanel_iconLeave"
+                      />
+                      <span
+                        class="mx_IconizedContextMenu_label"
+                      >
+                        Leave space
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      >
+        <RovingTabIndexProvider
+          handleHomeEnd={true}
+          handleUpDown={true}
+          onKeyDown={[Function]}
+        >
+          <div
+            className="mx_ContextualMenu_wrapper"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onKeyDown={[Function]}
+            style={
+              Object {
+                "bottom": undefined,
+                "right": undefined,
+              }
+            }
+          >
+            <div
+              className="mx_ContextualMenu_background"
+              onClick={[Function]}
+              onContextMenu={[Function]}
+              style={Object {}}
+            />
+            <div
+              className="mx_ContextualMenu"
+              role="menu"
+              style={Object {}}
+            >
+              <div
+                className="mx_IconizedContextMenu mx_SpacePanel_contextMenu mx_IconizedContextMenu_compact"
+              >
+                <div
+                  className="mx_SpacePanel_contextMenu_header"
+                >
+                  test space
+                </div>
+                <IconizedContextMenuOptionList
+                  first={true}
+                >
+                  <div
+                    className="mx_IconizedContextMenu_optionList"
+                  >
+                    <IconizedContextMenuOption
+                      iconClassName="mx_SpacePanel_iconHome"
+                      label="Space home"
+                      onClick={[Function]}
+                    >
+                      <MenuItem
+                        className="mx_IconizedContextMenu_item"
+                        label="Space home"
+                        onClick={[Function]}
+                      >
+                        <RovingAccessibleButton
+                          aria-label="Space home"
+                          className="mx_IconizedContextMenu_item"
+                          onClick={[Function]}
+                          role="menuitem"
+                        >
+                          <AccessibleButton
+                            aria-label="Space home"
+                            className="mx_IconizedContextMenu_item"
+                            element="div"
+                            inputRef={
+                              Object {
+                                "current": <div
+                                  aria-label="Space home"
+                                  class="mx_AccessibleButton mx_IconizedContextMenu_item focus-visible"
+                                  data-focus-visible-added=""
+                                  role="menuitem"
+                                  tabindex="0"
+                                >
+                                  <span
+                                    class="mx_IconizedContextMenu_icon mx_SpacePanel_iconHome"
+                                  />
+                                  <span
+                                    class="mx_IconizedContextMenu_label"
+                                  >
+                                    Space home
+                                  </span>
+                                </div>,
+                              }
+                            }
+                            onClick={[Function]}
+                            onFocus={[Function]}
+                            role="menuitem"
+                            tabIndex={0}
+                          >
+                            <div
+                              aria-label="Space home"
+                              className="mx_AccessibleButton mx_IconizedContextMenu_item"
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onKeyUp={[Function]}
+                              role="menuitem"
+                              tabIndex={0}
+                            >
+                              <span
+                                className="mx_IconizedContextMenu_icon mx_SpacePanel_iconHome"
+                              />
+                              <span
+                                className="mx_IconizedContextMenu_label"
+                              >
+                                Space home
+                              </span>
+                            </div>
+                          </AccessibleButton>
+                        </RovingAccessibleButton>
+                      </MenuItem>
+                    </IconizedContextMenuOption>
+                    <IconizedContextMenuOption
+                      iconClassName="mx_SpacePanel_iconExplore"
+                      label="Explore rooms"
+                      onClick={[Function]}
+                    >
+                      <MenuItem
+                        className="mx_IconizedContextMenu_item"
+                        label="Explore rooms"
+                        onClick={[Function]}
+                      >
+                        <RovingAccessibleButton
+                          aria-label="Explore rooms"
+                          className="mx_IconizedContextMenu_item"
+                          onClick={[Function]}
+                          role="menuitem"
+                        >
+                          <AccessibleButton
+                            aria-label="Explore rooms"
+                            className="mx_IconizedContextMenu_item"
+                            element="div"
+                            inputRef={
+                              Object {
+                                "current": <div
+                                  aria-label="Explore rooms"
+                                  class="mx_AccessibleButton mx_IconizedContextMenu_item"
+                                  role="menuitem"
+                                  tabindex="-1"
+                                >
+                                  <span
+                                    class="mx_IconizedContextMenu_icon mx_SpacePanel_iconExplore"
+                                  />
+                                  <span
+                                    class="mx_IconizedContextMenu_label"
+                                  >
+                                    Explore rooms
+                                  </span>
+                                </div>,
+                              }
+                            }
+                            onClick={[Function]}
+                            onFocus={[Function]}
+                            role="menuitem"
+                            tabIndex={-1}
+                          >
+                            <div
+                              aria-label="Explore rooms"
+                              className="mx_AccessibleButton mx_IconizedContextMenu_item"
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onKeyUp={[Function]}
+                              role="menuitem"
+                              tabIndex={-1}
+                            >
+                              <span
+                                className="mx_IconizedContextMenu_icon mx_SpacePanel_iconExplore"
+                              />
+                              <span
+                                className="mx_IconizedContextMenu_label"
+                              >
+                                Explore rooms
+                              </span>
+                            </div>
+                          </AccessibleButton>
+                        </RovingAccessibleButton>
+                      </MenuItem>
+                    </IconizedContextMenuOption>
+                    <IconizedContextMenuOption
+                      iconClassName="mx_SpacePanel_iconPreferences"
+                      label="Preferences"
+                      onClick={[Function]}
+                    >
+                      <MenuItem
+                        className="mx_IconizedContextMenu_item"
+                        label="Preferences"
+                        onClick={[Function]}
+                      >
+                        <RovingAccessibleButton
+                          aria-label="Preferences"
+                          className="mx_IconizedContextMenu_item"
+                          onClick={[Function]}
+                          role="menuitem"
+                        >
+                          <AccessibleButton
+                            aria-label="Preferences"
+                            className="mx_IconizedContextMenu_item"
+                            element="div"
+                            inputRef={
+                              Object {
+                                "current": <div
+                                  aria-label="Preferences"
+                                  class="mx_AccessibleButton mx_IconizedContextMenu_item"
+                                  role="menuitem"
+                                  tabindex="-1"
+                                >
+                                  <span
+                                    class="mx_IconizedContextMenu_icon mx_SpacePanel_iconPreferences"
+                                  />
+                                  <span
+                                    class="mx_IconizedContextMenu_label"
+                                  >
+                                    Preferences
+                                  </span>
+                                </div>,
+                              }
+                            }
+                            onClick={[Function]}
+                            onFocus={[Function]}
+                            role="menuitem"
+                            tabIndex={-1}
+                          >
+                            <div
+                              aria-label="Preferences"
+                              className="mx_AccessibleButton mx_IconizedContextMenu_item"
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onKeyUp={[Function]}
+                              role="menuitem"
+                              tabIndex={-1}
+                            >
+                              <span
+                                className="mx_IconizedContextMenu_icon mx_SpacePanel_iconPreferences"
+                              />
+                              <span
+                                className="mx_IconizedContextMenu_label"
+                              >
+                                Preferences
+                              </span>
+                            </div>
+                          </AccessibleButton>
+                        </RovingAccessibleButton>
+                      </MenuItem>
+                    </IconizedContextMenuOption>
+                    <IconizedContextMenuOption
+                      className="mx_IconizedContextMenu_option_red"
+                      data-test-id="leave-option"
+                      iconClassName="mx_SpacePanel_iconLeave"
+                      label="Leave space"
+                      onClick={[Function]}
+                    >
+                      <MenuItem
+                        className="mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
+                        data-test-id="leave-option"
+                        label="Leave space"
+                        onClick={[Function]}
+                      >
+                        <RovingAccessibleButton
+                          aria-label="Leave space"
+                          className="mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
+                          data-test-id="leave-option"
+                          onClick={[Function]}
+                          role="menuitem"
+                        >
+                          <AccessibleButton
+                            aria-label="Leave space"
+                            className="mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
+                            data-test-id="leave-option"
+                            element="div"
+                            inputRef={
+                              Object {
+                                "current": <div
+                                  aria-label="Leave space"
+                                  class="mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
+                                  data-test-id="leave-option"
+                                  role="menuitem"
+                                  tabindex="-1"
+                                >
+                                  <span
+                                    class="mx_IconizedContextMenu_icon mx_SpacePanel_iconLeave"
+                                  />
+                                  <span
+                                    class="mx_IconizedContextMenu_label"
+                                  >
+                                    Leave space
+                                  </span>
+                                </div>,
+                              }
+                            }
+                            onClick={[Function]}
+                            onFocus={[Function]}
+                            role="menuitem"
+                            tabIndex={-1}
+                          >
+                            <div
+                              aria-label="Leave space"
+                              className="mx_AccessibleButton mx_IconizedContextMenu_option_red mx_IconizedContextMenu_item"
+                              data-test-id="leave-option"
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onKeyDown={[Function]}
+                              onKeyUp={[Function]}
+                              role="menuitem"
+                              tabIndex={-1}
+                            >
+                              <span
+                                className="mx_IconizedContextMenu_icon mx_SpacePanel_iconLeave"
+                              />
+                              <span
+                                className="mx_IconizedContextMenu_label"
+                              >
+                                Leave space
+                              </span>
+                            </div>
+                          </AccessibleButton>
+                        </RovingAccessibleButton>
+                      </MenuItem>
+                    </IconizedContextMenuOption>
+                  </div>
+                </IconizedContextMenuOptionList>
+              </div>
+            </div>
+          </div>
+        </RovingTabIndexProvider>
+      </Portal>
+    </ContextMenu>
+  </IconizedContextMenu>
+</SpaceContextMenu>
+`;

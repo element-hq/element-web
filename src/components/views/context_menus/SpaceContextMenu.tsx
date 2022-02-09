@@ -36,6 +36,8 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { BetaPill } from "../beta/BetaCard";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Action } from "../../../dispatcher/actions";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 interface IProps extends IContextMenuProps {
     space: Room;
@@ -58,6 +60,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
         inviteOption = (
             <IconizedContextMenuOption
+                data-test-id='invite-option'
                 className="mx_SpacePanel_contextMenu_inviteButton"
                 iconClassName="mx_SpacePanel_iconInvite"
                 label={_t("Invite")}
@@ -79,6 +82,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
         settingsOption = (
             <IconizedContextMenuOption
+                data-test-id='settings-option'
                 iconClassName="mx_SpacePanel_iconSettings"
                 label={_t("Settings")}
                 onClick={onSettingsClick}
@@ -95,6 +99,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
         leaveOption = (
             <IconizedContextMenuOption
+                data-test-id='leave-option'
                 iconClassName="mx_SpacePanel_iconLeave"
                 className="mx_IconizedContextMenu_option_red"
                 label={_t("Leave space")}
@@ -126,10 +131,12 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         );
     }
 
-    const canAddRooms = space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
+    const hasPermissionToAddSpaceChild = space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
+    const canAddRooms = hasPermissionToAddSpaceChild && shouldShowComponent(UIComponent.CreateRooms);
+    const canAddSubSpaces = hasPermissionToAddSpaceChild && shouldShowComponent(UIComponent.CreateSpaces);
 
     let newRoomSection: JSX.Element;
-    if (space.currentState.maySendStateEvent(EventType.SpaceChild, userId)) {
+    if (canAddRooms || canAddSubSpaces) {
         const onNewRoomClick = (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -147,21 +154,27 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         };
 
         newRoomSection = <>
-            <div className="mx_SpacePanel_contextMenu_separatorLabel">
+            <div data-test-id='add-to-space-header' className="mx_SpacePanel_contextMenu_separatorLabel">
                 { _t("Add") }
             </div>
-            <IconizedContextMenuOption
-                iconClassName="mx_SpacePanel_iconPlus"
-                label={_t("Room")}
-                onClick={onNewRoomClick}
-            />
-            <IconizedContextMenuOption
-                iconClassName="mx_SpacePanel_iconPlus"
-                label={_t("Space")}
-                onClick={onNewSubspaceClick}
-            >
-                <BetaPill />
-            </IconizedContextMenuOption>
+            { canAddRooms &&
+                <IconizedContextMenuOption
+                    data-test-id='new-room-option'
+                    iconClassName="mx_SpacePanel_iconPlus"
+                    label={_t("Room")}
+                    onClick={onNewRoomClick}
+                />
+            }
+            { canAddSubSpaces &&
+                <IconizedContextMenuOption
+                    data-test-id='new-subspace-option'
+                    iconClassName="mx_SpacePanel_iconPlus"
+                    label={_t("Space")}
+                    onClick={onNewSubspaceClick}
+                >
+                    <BetaPill />
+                </IconizedContextMenuOption>
+            }
         </>;
     }
 
