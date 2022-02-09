@@ -181,5 +181,9 @@ limitations under the License.
             margin-left: auto;
             height: min-content;
         }
+
+        .mx_Dropdown_menu {
+            max-height: 70px;
+        }
     }
 }
