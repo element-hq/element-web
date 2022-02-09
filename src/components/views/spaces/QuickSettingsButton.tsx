@@ -63,10 +63,7 @@ const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
             <AccessibleButton
                 onClick={() => {
                     closeMenu();
-                    defaultDispatcher.dispatch({
-                        action: Action.ViewUserSettings,
-                        initialTabId: UserTab.Sidebar,
-                    });
+                    defaultDispatcher.dispatch({ action: Action.ViewUserSettings });
                 }}
                 kind="primary_outline"
             >
