@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { PureComponent } from "react";
+import { PureComponent, SyntheticEvent } from "react";
 import { Screen as ScreenEvent } from "matrix-analytics-events/types/typescript/Screen";
+import { Interaction as InteractionEvent } from "matrix-analytics-events/types/typescript/Interaction";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
@@ -87,6 +88,21 @@ export default class PosthogTrackers {
         if (screenName !== this.override) return;
         this.override = null;
         this.trackPage();
+    }
+
+    public static trackInteraction(name: InteractionEvent["name"], ev?: SyntheticEvent): void {
+        let interactionType: InteractionEvent["interactionType"];
+        if (ev?.type === "click") {
+            interactionType = "Pointer";
+        } else if (ev?.type.startsWith("key")) {
+            interactionType = "Keyboard";
+        }
+
+        PosthogAnalytics.instance.trackEvent<InteractionEvent>({
+            eventName: "Interaction",
+            interactionType,
+            name,
+        });
     }
 }
 

@@ -18,7 +18,7 @@ import React, { ContextType } from 'react';
 
 import { _t } from "../../../../../languageHandler";
 import RoomProfileSettings from "../../../room_settings/RoomProfileSettings";
-import AccessibleButton from "../../../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -27,6 +27,7 @@ import { replaceableComponent } from "../../../../../utils/replaceableComponent"
 import UrlPreviewSettings from "../../../room_settings/UrlPreviewSettings";
 import RelatedGroupSettings from "../../../room_settings/RelatedGroupSettings";
 import AliasSettings from "../../../room_settings/AliasSettings";
+import PosthogTrackers from "../../../../../PosthogTrackers";
 
 interface IProps {
     roomId: string;
@@ -49,11 +50,13 @@ export default class GeneralRoomSettingsTab extends React.Component<IProps, ISta
         };
     }
 
-    private onLeaveClick = (): void => {
+    private onLeaveClick = (ev: ButtonEvent): void => {
         dis.dispatch({
             action: 'leave_room',
             room_id: this.props.roomId,
         });
+
+        PosthogTrackers.trackInteraction("WebRoomSettingsLeaveButton", ev);
     };
 
     public render(): JSX.Element {

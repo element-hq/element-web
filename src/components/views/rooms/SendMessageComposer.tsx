@@ -21,6 +21,7 @@ import { DebouncedFunc, throttle } from 'lodash';
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Room } from 'matrix-js-sdk/src/models/room';
+import { Composer as ComposerEvent } from "matrix-analytics-events/types/typescript/Composer";
 
 import dis from '../../../dispatcher/dispatcher';
 import EditorModel from '../../../editor/model';
@@ -57,6 +58,7 @@ import DocumentPosition from "../../../editor/position";
 import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { PosthogAnalytics } from "../../../PosthogAnalytics";
 
 interface IAddReplyOpts {
     permalinkCreator?: RoomPermalinkCreator;
@@ -343,6 +345,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
         if (model.isEmpty) {
             return;
         }
+
+        PosthogAnalytics.instance.trackEvent<ComposerEvent>({
+            eventName: "Composer",
+            isEditing: false,
+            inThread: this.props.relation?.rel_type === RelationType.Thread,
+            isReply: !!this.props.replyToEvent,
+        });
 
         // Replace emoticon at the end of the message
         if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {

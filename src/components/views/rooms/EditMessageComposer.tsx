@@ -20,6 +20,7 @@ import { EventStatus, IContent, MatrixEvent } from 'matrix-js-sdk/src/models/eve
 import { MsgType } from 'matrix-js-sdk/src/@types/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { logger } from "matrix-js-sdk/src/logger";
+import { Composer as ComposerEvent } from "matrix-analytics-events/types/typescript/Composer";
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -46,6 +47,7 @@ import RoomContext from '../../../contexts/RoomContext';
 import { ComposerType } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { getSlashCommand, isSlashCommand, runSlashCommand, shouldSendAnyway } from "../../../editor/commands";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { PosthogAnalytics } from "../../../PosthogAnalytics";
 
 function getHtmlReplyFallback(mxEvent: MatrixEvent): string {
     const html = mxEvent.getContent().formatted_body;
@@ -295,8 +297,16 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     private sendEdit = async (): Promise<void> => {
         if (this.state.saveDisabled) return;
 
-        const startTime = CountlyAnalytics.getTimestamp();
         const editedEvent = this.props.editState.getEvent();
+
+        PosthogAnalytics.instance.trackEvent<ComposerEvent>({
+            eventName: "Composer",
+            isEditing: true,
+            inThread: !!editedEvent?.getThread(),
+            isReply: !!editedEvent.replyEventId,
+        });
+
+        const startTime = CountlyAnalytics.getTimestamp();
 
         // Replace emoticon at the end of the message
         if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
@@ -323,7 +333,7 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
             if (!containsEmote(this.model) && isSlashCommand(this.model)) {
                 const [cmd, args, commandText] = getSlashCommand(this.model);
                 if (cmd) {
-                    const threadId = this.props.editState?.getEvent()?.getThread()?.id || null;
+                    const threadId = editedEvent?.getThread()?.id || null;
                     if (cmd.category === CommandCategories.messages) {
                         editContent["m.new_content"] = await runSlashCommand(cmd, args, roomId, threadId);
                         if (!editContent["m.new_content"]) {

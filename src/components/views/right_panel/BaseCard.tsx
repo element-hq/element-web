@@ -19,7 +19,7 @@ import classNames from 'classnames';
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { _t } from "../../../languageHandler";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
 import { backLabelForPhase } from '../../../stores/right-panel/RightPanelStorePhases';
 
@@ -30,8 +30,9 @@ interface IProps {
     className?: string;
     withoutScrollContainer?: boolean;
     closeLabel?: string;
-    onClose?(): void;
-    cardState?;
+    onClose?(ev: ButtonEvent): void;
+    onBack?(ev: ButtonEvent): void;
+    cardState?: any;
 }
 
 interface IGroupProps {
@@ -49,6 +50,7 @@ export const Group: React.FC<IGroupProps> = ({ className, title, children }) => 
 const BaseCard: React.FC<IProps> = ({
     closeLabel,
     onClose,
+    onBack,
     className,
     header,
     footer,
@@ -59,7 +61,8 @@ const BaseCard: React.FC<IProps> = ({
     const cardHistory = RightPanelStore.instance.roomPhaseHistory;
     if (cardHistory.length > 1) {
         const prevCard = cardHistory[cardHistory.length - 2];
-        const onBackClick = () => {
+        const onBackClick = (ev: ButtonEvent) => {
+            onBack?.(ev);
             RightPanelStore.instance.popCard();
         };
         const label = backLabelForPhase(prevCard.phase) ?? _t("Back");

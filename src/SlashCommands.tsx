@@ -25,6 +25,7 @@ import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import { parseFragment as parseHtml, Element as ChildElement } from "parse5";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IContent } from 'matrix-js-sdk/src/models/event';
+import { SlashCommand as SlashCommandEvent } from "matrix-analytics-events/types/typescript/SlashCommand";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
@@ -62,6 +63,7 @@ import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from './contexts/RoomContext';
 import RoomViewStore from "./stores/RoomViewStore";
 import { XOR } from "./@types/common";
+import { PosthogAnalytics } from "./PosthogAnalytics";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -105,6 +107,7 @@ interface ICommandOpts {
     aliases?: string[];
     args?: string;
     description: string;
+    analyticsName?: SlashCommandEvent["command"];
     runFn?: RunFn;
     category: string;
     hideCompletionAfterSpace?: boolean;
@@ -121,6 +124,7 @@ export class Command {
     public readonly category: string;
     public readonly hideCompletionAfterSpace: boolean;
     public readonly renderingTypes?: TimelineRenderingType[];
+    public readonly analyticsName?: SlashCommandEvent["command"];
     private readonly _isEnabled?: () => boolean;
 
     constructor(opts: ICommandOpts) {
@@ -133,6 +137,7 @@ export class Command {
         this.hideCompletionAfterSpace = opts.hideCompletionAfterSpace || false;
         this._isEnabled = opts.isEnabled;
         this.renderingTypes = opts.renderingTypes;
+        this.analyticsName = opts.analyticsName;
     }
 
     public getCommand() {
@@ -165,6 +170,13 @@ export class Command {
                     { renderingType },
                 ),
             );
+        }
+
+        if (this.analyticsName) {
+            PosthogAnalytics.instance.trackEvent<SlashCommandEvent>({
+                eventName: "SlashCommand",
+                command: this.analyticsName,
+            });
         }
 
         return this.runFn.bind(this)(roomId, args);
@@ -488,6 +500,7 @@ export const Commands = [
         command: 'invite',
         args: '<user-id> [<reason>]',
         description: _td('Invites user with given id to current room'),
+        analyticsName: "invite",
         isEnabled: () => shouldShowComponent(UIComponent.InviteUsers),
         runFn: function(roomId, args) {
             if (args) {
@@ -674,6 +687,7 @@ export const Commands = [
         command: 'part',
         args: '[<room-address>]',
         description: _td('Leave room'),
+        analyticsName: "part",
         runFn: function(roomId, args) {
             const cli = MatrixClientPeg.get();
 

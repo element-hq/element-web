@@ -40,13 +40,14 @@ import SettingsStore from "../../../settings/SettingsStore";
 import TruncatedList from '../elements/TruncatedList';
 import Spinner from "../elements/Spinner";
 import SearchBox from "../../structures/SearchBox";
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import EntityTile from "./EntityTile";
 import MemberTile from "./MemberTile";
 import BaseAvatar from '../avatars/BaseAvatar';
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
+import PosthogTrackers from "../../../PosthogTrackers";
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 const INITIAL_LOAD_NUM_INVITED = 5;
@@ -595,7 +596,9 @@ export default class MemberList extends React.Component<IProps, IState> {
         </BaseCard>;
     }
 
-    onInviteButtonClick = (): void => {
+    private onInviteButtonClick = (ev: ButtonEvent): void => {
+        PosthogTrackers.trackInteraction("WebRightPanelMemberListInviteButton", ev);
+
         if (MatrixClientPeg.get().isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;

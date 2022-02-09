@@ -23,7 +23,7 @@ import { useIsEncrypted } from '../../../hooks/useIsEncrypted';
 import BaseCard, { Group } from "./BaseCard";
 import { _t } from '../../../languageHandler';
 import RoomAvatar from "../avatars/RoomAvatar";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import Modal from "../../../Modal";
@@ -47,6 +47,7 @@ import RoomName from "../elements/RoomName";
 import UIStore from "../../../stores/UIStore";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import PosthogTrackers from "../../../PosthogTrackers";
 
 interface IProps {
     room: Room;
@@ -59,7 +60,7 @@ interface IAppsSectionProps {
 
 interface IButtonProps {
     className: string;
-    onClick(): void;
+    onClick(ev: ButtonEvent): void;
 }
 
 const Button: React.FC<IButtonProps> = ({ children, className, onClick }) => {
@@ -229,16 +230,18 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
     </Group>;
 };
 
-export const onRoomMembersClick = (allowClose = true) => {
-    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, allowClose);
+const onRoomMembersClick = (ev: ButtonEvent) => {
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, true);
+    PosthogTrackers.trackInteraction("WebRightPanelRoomInfoPeopleButton", ev);
 };
 
-export const onRoomFilesClick = (allowClose = true) => {
-    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, allowClose);
+const onRoomFilesClick = () => {
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, true);
 };
 
-const onRoomSettingsClick = () => {
+const onRoomSettingsClick = (ev: ButtonEvent) => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
+    PosthogTrackers.trackInteraction("WebRightPanelRoomInfoSettingsButton", ev);
 };
 
 const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
