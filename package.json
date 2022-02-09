@@ -38,6 +38,7 @@
     "prunei18n": "matrix-prune-i18n",
     "diff-i18n": "cp src/i18n/strings/en_EN.json src/i18n/strings/en_EN_orig.json && matrix-gen-i18n && matrix-compare-i18n-files src/i18n/strings/en_EN_orig.json src/i18n/strings/en_EN.json",
     "reskindex": "node scripts/reskindex.js -h header",
+    "make-component": "node scripts/make-react-component.js",
     "reskindex:watch": "node scripts/reskindex.js -h header -w",
     "rethemendex": "res/css/rethemendex.sh",
     "clean": "rimraf lib",
