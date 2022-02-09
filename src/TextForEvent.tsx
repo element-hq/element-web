@@ -57,38 +57,26 @@ export function getSenderName(event: MatrixEvent): string {
 function textForCallInviteEvent(event: MatrixEvent): () => string | null {
     const senderName = getSenderName(event);
     // FIXME: Find a better way to determine this from the event?
-    let isVoice = true;
-    if (event.getContent().offer && event.getContent().offer.sdp &&
-        event.getContent().offer.sdp.indexOf('m=video') !== -1) {
-        isVoice = false;
-    }
+    const isVoice = !event.getContent().offer?.sdp?.includes('m=video');
     const isSupported = MatrixClientPeg.get().supportsVoip();
 
     // This ladder could be reduced down to a couple string variables, however other languages
     // can have a hard time translating those strings. In an effort to make translations easier
     // and more accurate, we break out the string-based variables to a couple booleans.
     if (isVoice && isSupported) {
-        return () => _t("%(senderName)s placed a voice call.", {
-            senderName: senderName,
-        });
+        return () => _t("%(senderName)s placed a voice call.", { senderName });
     } else if (isVoice && !isSupported) {
-        return () => _t("%(senderName)s placed a voice call. (not supported by this browser)", {
-            senderName: senderName,
-        });
+        return () => _t("%(senderName)s placed a voice call. (not supported by this browser)", { senderName });
     } else if (!isVoice && isSupported) {
-        return () => _t("%(senderName)s placed a video call.", {
-            senderName: senderName,
-        });
+        return () => _t("%(senderName)s placed a video call.", { senderName });
     } else if (!isVoice && !isSupported) {
-        return () => _t("%(senderName)s placed a video call. (not supported by this browser)", {
-            senderName: senderName,
-        });
+        return () => _t("%(senderName)s placed a video call. (not supported by this browser)", { senderName });
     }
 }
 
 function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
-    const senderName = ev.sender ? ev.sender.name : ev.getSender();
+    const senderName = getSenderName(ev);
     const targetName = ev.target ? ev.target.name : ev.getStateKey();
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
@@ -389,7 +377,7 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
 }
 
 function textForCanonicalAliasEvent(ev: MatrixEvent): () => string | null {
-    const senderName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
+    const senderName = getSenderName(ev);
     const oldAlias = ev.getPrevContent().alias;
     const oldAltAliases = ev.getPrevContent().alt_aliases || [];
     const newAlias = ev.getContent().alias;
@@ -400,42 +388,42 @@ function textForCanonicalAliasEvent(ev: MatrixEvent): () => string | null {
     if (!removedAltAliases.length && !addedAltAliases.length) {
         if (newAlias) {
             return () => _t('%(senderName)s set the main address for this room to %(address)s.', {
-                senderName: senderName,
+                senderName,
                 address: ev.getContent().alias,
             });
         } else if (oldAlias) {
             return () => _t('%(senderName)s removed the main address for this room.', {
-                senderName: senderName,
+                senderName,
             });
         }
     } else if (newAlias === oldAlias) {
         if (addedAltAliases.length && !removedAltAliases.length) {
             return () => _t('%(senderName)s added the alternative addresses %(addresses)s for this room.', {
-                senderName: senderName,
+                senderName,
                 addresses: addedAltAliases.join(", "),
                 count: addedAltAliases.length,
             });
         } if (removedAltAliases.length && !addedAltAliases.length) {
             return () => _t('%(senderName)s removed the alternative addresses %(addresses)s for this room.', {
-                senderName: senderName,
+                senderName,
                 addresses: removedAltAliases.join(", "),
                 count: removedAltAliases.length,
             });
         } if (removedAltAliases.length && addedAltAliases.length) {
             return () => _t('%(senderName)s changed the alternative addresses for this room.', {
-                senderName: senderName,
+                senderName,
             });
         }
     } else {
         // both alias and alt_aliases where modified
         return () => _t('%(senderName)s changed the main and alternative addresses for this room.', {
-            senderName: senderName,
+            senderName,
         });
     }
     // in case there is no difference between the two events,
     // say something as we can't simply hide the tile from here
     return () => _t('%(senderName)s changed the addresses for this room.', {
-        senderName: senderName,
+        senderName,
     });
 }
 
@@ -633,7 +621,7 @@ function textForPinnedEvent(event: MatrixEvent, allowJSX: boolean): () => string
 }
 
 function textForWidgetEvent(event: MatrixEvent): () => string | null {
-    const senderName = event.getSender();
+    const senderName = getSenderName(event);
     const { name: prevName, type: prevType, url: prevUrl } = event.getPrevContent();
     const { name, type, url } = event.getContent() || {};
 
@@ -663,12 +651,12 @@ function textForWidgetEvent(event: MatrixEvent): () => string | null {
 }
 
 function textForWidgetLayoutEvent(event: MatrixEvent): () => string | null {
-    const senderName = event.sender?.name || event.getSender();
+    const senderName = getSenderName(event);
     return () => _t("%(senderName)s has updated the room layout", { senderName });
 }
 
 function textForMjolnirEvent(event: MatrixEvent): () => string | null {
-    const senderName = event.getSender();
+    const senderName = getSenderName(event);
     const { entity: prevEntity } = event.getPrevContent();
     const { entity, recommendation, reason } = event.getContent();
 
