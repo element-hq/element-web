@@ -34,6 +34,7 @@ chance of merge conflicts when updating your fork, and thus simplify ongoing
 maintenance.
 
 ### Component visibility customisation
+UI for some actions can be hidden via the ComponentVisibility customisation:
 - inviting users to rooms and spaces,
 - creating rooms,
 - creating spaces,
@@ -41,7 +42,8 @@ maintenance.
 To customise visibility create a customisation module from [ComponentVisibility](https://github.com/matrix-org/matrix-react-sdk/blob/master/src/customisations/ComponentVisibility.ts) following the instructions above.
 
 `shouldShowComponent` determines whether or not the active MatrixClient user should be able to use
-the given UI component. If shown, the user might still not be able to use the
+the given UI component. When `shouldShowComponent` returns falsy all UI components for that feature will be hidden.
+If shown, the user might still not be able to use the
 component depending on their contextual permissions. For example, invite options
 might be shown to the user but they won't have permission to invite users to
 the current room: the button will appear disabled.
@@ -56,3 +58,4 @@ function shouldShowComponent(component: UIComponent): boolean {
    return true;
 }
 ```
+In this example, all UI related to creating a space will be hidden unless the users meets a custom condition.
