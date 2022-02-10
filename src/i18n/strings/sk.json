@@ -140,7 +140,7 @@
     "Jump to read receipt": "Preskočiť na potvrdenie o prečítaní",
     "Mention": "Zmieniť sa",
     "Invite": "Pozvať",
-    "Unmute": "Zrušiť umlčanie",
+    "Unmute": "Zrušiť stlmenie",
     "Mute": "Umlčať",
     "Admin Tools": "Nástroje správcu",
     "and %(count)s others...|other": "a ďalších %(count)s…",
@@ -1291,11 +1291,11 @@
     "Show less": "Zobraziť menej",
     "Show more": "Zobraziť viac",
     "Changing password will currently reset any end-to-end encryption keys on all sessions, making encrypted chat history unreadable, unless you first export your room keys and re-import them afterwards. In future this will be improved.": "Zmena hesla reštartuje všetky šifrovacie kľúče pre všetky vaše relácie. Šifrované správy sa stanú nečitateľnými, pokiaľ najprv nevyexportujete vaše kľúče a po zmene ich nenaimportujete. V budúcnosti sa tento proces zjednoduší.",
-    "well formed": "dobre sformulované",
+    "well formed": "správne vytvorené",
     "unexpected type": "neočakávaný typ",
     "in memory": "v pamäti",
     "Self signing private key:": "Samopodpisujúci súkromný kľúč:",
-    "cached locally": "uložené do lokálnej vyrovnávacej pamäťe",
+    "cached locally": "uložené do lokálnej vyrovnávacej pamäte",
     "not found locally": "nenájdené lokálne",
     "User signing private key:": "Súkromný podpisový kľúč používateľa:",
     "Homeserver feature support:": "Funkcie podporované domovským serverom:",
@@ -3324,5 +3324,6 @@
     "Click for more info": "Kliknite pre viac informácií",
     "New search beta available": "K dispozícii je nová beta verzia vyhľadávania",
     "We're testing a new search to make finding what you want quicker.\n": "Testujeme nové vyhľadávanie, aby ste rýchlejšie našli to, čo chcete.\n",
-    "%(space1Name)s and %(space2Name)s": "%(space1Name)s a %(space2Name)s"
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s a %(space2Name)s",
+    "%(name)s on hold": "%(name)s je podržaný"
 }
