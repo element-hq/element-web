@@ -3581,5 +3581,14 @@
     "Use <arrows/> to scroll": "Використовуйте <arrows/>, щоб прокручувати",
     "Feedback sent! Thanks, we appreciate it!": "Відгук надісланий! Дякуємо, візьмемо до уваги!",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s і %(space2Name)s",
-    "Maximise": "Розгорнути"
+    "Maximise": "Розгорнути",
+    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sнадсилає приховане повідомлення",
+    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)sнадсилає %(count)s прихованих повідомлень",
+    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sнадсилають %(count)s приховане повідомлення",
+    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sнадсилають %(count)s прихованих повідомлень",
+    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sвидаляє повідомлення",
+    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sвидаляє %(count)s повідомлень",
+    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sвидаляють повідомлення",
+    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sвидаляють %(count)s повідомлень",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)sзмінюють <a>закріплені повідомлення</a> кімнати."
 }
