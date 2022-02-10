@@ -3559,5 +3559,14 @@
     "Feedback sent! Thanks, we appreciate it!": "Masukan terkirim! Terima kasih, kami mengapresiasinya!",
     "Maximise": "Maksimalkan",
     "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Terima kasih untuk mencoba beta, silakan",
-    "To leave, just return to this page or click on the beta badge when you search.": "Untuk meninggalkan beta, kembali ke halaman ini atau klik pada lencana beta ketika Anda mencari."
+    "To leave, just return to this page or click on the beta badge when you search.": "Untuk meninggalkan beta, kembali ke halaman ini atau klik pada lencana beta ketika Anda mencari.",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)s mengubah <a>pesan-pesan yang dipasangi pin</a> untuk ruangannya.",
+    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s menghapus %(count)s pesan",
+    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s menghapus sebuah pesan",
+    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s menghapus %(count)s pesan",
+    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s menghapus sebuah pesan",
+    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s mengirim %(count)s pesan tersembunyi",
+    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s mengirim %(count)s sebuah pesan tersembunyi",
+    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s sent %(count)s hidden messages",
+    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s mengirim sebuah pesan tersembunyi"
 }
