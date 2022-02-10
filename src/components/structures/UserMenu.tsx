@@ -60,6 +60,7 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
+import PosthogTrackers from "../../PosthogTrackers";
 
 const CustomStatusSection = () => {
     const cli = useContext(MatrixClientContext);
@@ -297,6 +298,8 @@ export default class UserMenu extends React.Component<IProps, IState> {
     private onSwitchThemeClick = (ev: React.MouseEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
+
+        PosthogTrackers.trackInteraction("WebUserMenuThemeToggleButton", ev);
 
         // Disable system theme matching if the user hits this button
         SettingsStore.setValue("use_system_theme", null, SettingLevel.DEVICE, false);

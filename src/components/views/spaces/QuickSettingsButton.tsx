@@ -35,6 +35,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import dis from "../../../dispatcher/dispatcher";
 import { RecheckThemePayload } from "../../../dispatcher/payloads/RecheckThemePayload";
+import PosthogTrackers from "../../../PosthogTrackers";
 
 const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
     const orderedThemes = useMemo(getOrderedThemes, []);
@@ -75,14 +76,14 @@ const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
             <StyledCheckbox
                 className="mx_QuickSettingsButton_favouritesCheckbox"
                 checked={!!favouritesEnabled}
-                onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites)}
+                onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
             >
                 { _t("Favourites") }
             </StyledCheckbox>
             <StyledCheckbox
                 className="mx_QuickSettingsButton_peopleCheckbox"
                 checked={!!peopleEnabled}
-                onChange={onMetaSpaceChangeFactory(MetaSpace.People)}
+                onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
             >
                 { _t("People") }
             </StyledCheckbox>
@@ -104,6 +105,8 @@ const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
                 <Dropdown
                     id="mx_QuickSettingsButton_themePickerDropdown"
                     onOptionChange={async (newTheme: string) => {
+                        PosthogTrackers.trackInteraction("WebQuickSettingsThemeDropdown");
+
                         // XXX: mostly copied from ThemeChoicePanel
                         // doing getValue in the .catch will still return the value we failed to set,
                         // so remember what the value was before we tried to set it so we can revert

@@ -22,13 +22,25 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import StyledCheckbox from "../../../elements/StyledCheckbox";
 import { useSettingValue } from "../../../../../hooks/useSettings";
 import { MetaSpace } from "../../../../../stores/spaces";
+import PosthogTrackers from "../../../../../PosthogTrackers";
 
-export const onMetaSpaceChangeFactory = (metaSpace: MetaSpace) => (e: ChangeEvent<HTMLInputElement>) => {
+type InteractionName = "WebSettingsSidebarTabSpacesCheckbox" | "WebQuickSettingsPinToSidebarCheckbox";
+
+export const onMetaSpaceChangeFactory = (
+    metaSpace: MetaSpace,
+    interactionName: InteractionName,
+) => (e: ChangeEvent<HTMLInputElement>) => {
     const currentValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
     SettingsStore.setValue("Spaces.enabledMetaSpaces", null, SettingLevel.ACCOUNT, {
         ...currentValue,
         [metaSpace]: e.target.checked,
     });
+
+    PosthogTrackers.trackInteraction(
+        interactionName,
+        e,
+        [MetaSpace.Home, null, MetaSpace.Favourites, MetaSpace.People, MetaSpace.Orphans].indexOf(metaSpace),
+    );
 };
 
 const SidebarUserSettingsTab = () => {
@@ -53,7 +65,7 @@ const SidebarUserSettingsTab = () => {
 
                 <StyledCheckbox
                     checked={!!homeEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.Home)}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.Home, "WebSettingsSidebarTabSpacesCheckbox")}
                     className="mx_SidebarUserSettingsTab_homeCheckbox"
                     disabled={homeEnabled}
                 >
@@ -73,6 +85,7 @@ const SidebarUserSettingsTab = () => {
                             SettingLevel.ACCOUNT,
                             e.target.checked,
                         );
+                        PosthogTrackers.trackInteraction("WebSettingsSidebarTabSpacesCheckbox", e, 1);
                     }}
                     className="mx_SidebarUserSettingsTab_homeAllRoomsCheckbox"
                 >
@@ -84,7 +97,7 @@ const SidebarUserSettingsTab = () => {
 
                 <StyledCheckbox
                     checked={!!favouritesEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites)}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebSettingsSidebarTabSpacesCheckbox")}
                     className="mx_SidebarUserSettingsTab_favouritesCheckbox"
                 >
                     { _t("Favourites") }
@@ -95,7 +108,7 @@ const SidebarUserSettingsTab = () => {
 
                 <StyledCheckbox
                     checked={!!peopleEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.People)}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebSettingsSidebarTabSpacesCheckbox")}
                     className="mx_SidebarUserSettingsTab_peopleCheckbox"
                 >
                     { _t("People") }
@@ -106,7 +119,7 @@ const SidebarUserSettingsTab = () => {
 
                 <StyledCheckbox
                     checked={!!orphansEnabled}
-                    onChange={onMetaSpaceChangeFactory(MetaSpace.Orphans)}
+                    onChange={onMetaSpaceChangeFactory(MetaSpace.Orphans, "WebSettingsSidebarTabSpacesCheckbox")}
                     className="mx_SidebarUserSettingsTab_orphansCheckbox"
                 >
                     { _t("Rooms outside of a space") }
