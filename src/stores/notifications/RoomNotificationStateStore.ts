@@ -26,6 +26,7 @@ import { RoomNotificationState } from "./RoomNotificationState";
 import { SummarizedNotificationState } from "./SummarizedNotificationState";
 import { ThreadsRoomNotificationState } from "./ThreadsRoomNotificationState";
 import { VisibilityProvider } from "../room-list/filters/VisibilityProvider";
+import { PosthogAnalytics } from "../../PosthogAnalytics";
 
 interface IState {}
 
@@ -105,11 +106,18 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         // Only count visible rooms to not torment the user with notification counts in rooms they can't see.
         // This will include highlights from the previous version of the room internally
         const globalState = new SummarizedNotificationState();
-        for (const room of this.matrixClient.getVisibleRooms()) {
+        const visibleRooms = this.matrixClient.getVisibleRooms();
+
+        let numFavourites = 0;
+        for (const room of visibleRooms) {
             if (VisibilityProvider.instance.isRoomVisible(room)) {
                 globalState.add(this.getRoomState(room));
+
+                if (room.tags[DefaultTagID.Favourite] && !room.getType()) numFavourites++;
             }
         }
+
+        PosthogAnalytics.instance.setProperty("numFavouriteRooms", numFavourites);
 
         if (this.globalState.symbol !== globalState.symbol ||
             this.globalState.count !== globalState.count ||

@@ -38,6 +38,7 @@ import JoinRuleSettings from "../../JoinRuleSettings";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import SettingsFieldset from '../../SettingsFieldset';
 import ExternalLink from '../../../elements/ExternalLink';
+import PosthogTrackers from "../../../../../PosthogTrackers";
 
 interface IProps {
     roomId: string;
@@ -212,6 +213,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             CreateRoomDialog,
             { defaultPublic, defaultEncrypted },
         );
+
+        PosthogTrackers.trackInteraction("WebRoomSettingsSecurityTabCreateNewRoomButton");
+
         const [shouldCreate, opts] = await modal.finished;
         if (shouldCreate) {
             await createRoom(opts);

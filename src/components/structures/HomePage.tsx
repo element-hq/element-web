@@ -26,13 +26,14 @@ import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import BaseAvatar from "../views/avatars/BaseAvatar";
 import { OwnProfileStore } from "../../stores/OwnProfileStore";
-import AccessibleButton from "../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../views/elements/MiniAvatarUploader";
 import Analytics from "../../Analytics";
 import CountlyAnalytics from "../../CountlyAnalytics";
+import PosthogTrackers from "../../PosthogTrackers";
 
 const onClickSendDm = () => {
     Analytics.trackEvent('home_page', 'button', 'dm');
@@ -46,9 +47,10 @@ const onClickExplore = () => {
     dis.fire(Action.ViewRoomDirectory);
 };
 
-const onClickNewRoom = () => {
+const onClickNewRoom = (ev: ButtonEvent) => {
     Analytics.trackEvent('home_page', 'button', 'create_room');
     CountlyAnalytics.instance.track("home_page_button", { button: "create_room" });
+    PosthogTrackers.trackInteraction("WebHomeCreateRoomButton", ev);
     dis.dispatch({ action: 'view_create_room' });
 };
 

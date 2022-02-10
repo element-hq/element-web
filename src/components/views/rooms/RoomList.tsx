@@ -64,6 +64,7 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../settings/SettingsStore";
+import PosthogTrackers from "../../../PosthogTrackers";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -233,6 +234,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                                 e.stopPropagation();
                                 closeMenu();
                                 showCreateNewRoom(activeSpace);
+                                PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                             }}
                             disabled={!canAddRooms}
                             tooltip={canAddRooms ? undefined
@@ -265,6 +267,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                     e.stopPropagation();
                     closeMenu();
                     defaultDispatcher.dispatch({ action: "view_create_room" });
+                    PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                 }}
             /> }
             <IconizedContextMenuOption

@@ -28,7 +28,7 @@ import SearchBox from "../../structures/SearchBox";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { getDisplayAliasForRoom } from "../../../Rooms";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { calculateRoomVia } from "../../../utils/permalinks/Permalinks";
@@ -47,7 +47,7 @@ const GROUP_MARGIN = 24;
 
 interface IProps {
     space: Room;
-    onCreateRoomClick(): void;
+    onCreateRoomClick(ev: ButtonEvent): void;
     onAddSubspaceClick(): void;
     onFinished(added?: boolean): void;
 }
@@ -439,8 +439,8 @@ const AddExistingToSpaceDialog: React.FC<IProps> = ({ space, onCreateRoomClick, 
                     <div>{ _t("Want to add a new room instead?") }</div>
                     <AccessibleButton
                         kind="link"
-                        onClick={() => {
-                            onCreateRoomClick();
+                        onClick={(ev: ButtonEvent) => {
+                            onCreateRoomClick(ev);
                             onFinished();
                         }}
                     >

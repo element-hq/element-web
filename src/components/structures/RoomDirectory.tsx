@@ -49,6 +49,7 @@ import Spinner from "../views/elements/Spinner";
 import { ActionPayload } from "../../dispatcher/payloads";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
 import { Action } from "../../dispatcher/actions";
+import PosthogTrackers from "../../PosthogTrackers";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -477,13 +478,14 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         ev.stopPropagation();
     };
 
-    private onCreateRoomClick = () => {
+    private onCreateRoomClick = (ev: ButtonEvent) => {
         this.onFinished();
         dis.dispatch({
             action: 'view_create_room',
             public: true,
             defaultName: this.state.filterString.trim(),
         });
+        PosthogTrackers.trackInteraction("WebRoomDirectoryCreateRoomButton", ev);
     };
 
     private showRoomAlias(alias: string, autoJoin = false) {

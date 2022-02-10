@@ -33,14 +33,16 @@ import { showRoomInviteDialog } from "../RoomInvite";
 import CreateSubspaceDialog from "../components/views/dialogs/CreateSubspaceDialog";
 import AddExistingSubspaceDialog from "../components/views/dialogs/AddExistingSubspaceDialog";
 import defaultDispatcher from "../dispatcher/dispatcher";
+import dis from "../dispatcher/dispatcher";
 import RoomViewStore from "../stores/RoomViewStore";
 import { Action } from "../dispatcher/actions";
 import { leaveRoomBehaviour } from "./membership";
 import Spinner from "../components/views/elements/Spinner";
-import dis from "../dispatcher/dispatcher";
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import CreateSpaceFromCommunityDialog from "../components/views/dialogs/CreateSpaceFromCommunityDialog";
 import SpacePreferencesDialog, { SpacePreferenceTab } from "../components/views/dialogs/SpacePreferencesDialog";
+import PosthogTrackers from "../PosthogTrackers";
+import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
@@ -73,7 +75,10 @@ export const showAddExistingRooms = (space: Room): void => {
         "Add Existing",
         AddExistingToSpaceDialog,
         {
-            onCreateRoomClick: () => showCreateNewRoom(space),
+            onCreateRoomClick: (ev: ButtonEvent) => {
+                showCreateNewRoom(space);
+                PosthogTrackers.trackInteraction("WebAddExistingToSpaceDialogCreateRoomButton", ev);
+            },
             onAddSubspaceClick: () => showAddExistingSubspace(space),
             space,
             onFinished: (added: boolean) => {
@@ -92,7 +97,7 @@ export const showCreateNewRoom = async (space: Room): Promise<boolean> => {
         "Create Room",
         CreateRoomDialog,
         {
-            defaultPublic: space.getJoinRule() === "public",
+            defaultPublic: space.getJoinRule() === JoinRule.Public,
             parentSpace: space,
         },
     );

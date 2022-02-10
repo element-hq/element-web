@@ -84,6 +84,7 @@ import { useRoomState } from "../../hooks/useRoomState";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
+import PosthogTrackers from "../../PosthogTrackers";
 
 interface IProps {
     space: Room;
@@ -386,6 +387,7 @@ const SpaceLandingAddButton = ({ space }) => {
                         e.stopPropagation();
                         closeMenu();
 
+                        PosthogTrackers.trackInteraction("WebSpaceHomeCreateRoomButton", e);
                         if (await showCreateNewRoom(space)) {
                             defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                         }
