@@ -500,7 +500,7 @@ export const Commands = [
         command: 'invite',
         args: '<user-id> [<reason>]',
         description: _td('Invites user with given id to current room'),
-        analyticsName: "invite",
+        analyticsName: "Invite",
         isEnabled: () => shouldShowComponent(UIComponent.InviteUsers),
         runFn: function(roomId, args) {
             if (args) {
@@ -687,7 +687,7 @@ export const Commands = [
         command: 'part',
         args: '[<room-address>]',
         description: _td('Leave room'),
-        analyticsName: "part",
+        analyticsName: "Part",
         runFn: function(roomId, args) {
             const cli = MatrixClientPeg.get();
 
