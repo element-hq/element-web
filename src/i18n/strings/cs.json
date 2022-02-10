@@ -3632,7 +3632,7 @@
     "New search experience": "Nový způsob vyhledávání",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s a %(space2Name)s",
     "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sodeslal(a) skrytou zprávu",
-    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s odeslal(a) skrytou zprávu",
+    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s odeslal(a) %(count)s skrytých zpráv",
     "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sodeslali %(count)s skrytou zprávu",
     "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sodeslali %(count)s skrytých zpráv",
     "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)ssmazal(a) %(count)s zpráv",
