@@ -35,7 +35,8 @@ const getKeyboardShortcutValue = (name: string) => {
 };
 
 const getKeyboardShortcutDisplayName = (name: string): string => {
-    return getKeyboardShortcuts()[name]?.displayName as string;
+    const keyboardShortcutDisplayName = getKeyboardShortcuts()[name]?.displayName as string;
+    return keyboardShortcutDisplayName && _t(keyboardShortcutDisplayName);
 };
 
 interface IKeyboardKeyProps {

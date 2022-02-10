@@ -140,7 +140,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
             <div
               className="mx_KeyboardShortcut_shortcutRow"
             >
-              Cancel replying to a message
+              missing translation: en|Cancel replying to a message
               <KeyboardShortcut
                 name="keybind1"
               >
@@ -177,7 +177,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
             <div
               className="mx_KeyboardShortcut_shortcutRow"
             >
-              Toggle Bold
+              missing translation: en|Toggle Bold
               <KeyboardShortcut
                 name="keybind2"
               >
@@ -241,7 +241,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
             <div
               className="mx_KeyboardShortcut_shortcutRow"
             >
-              Select room from the room list
+              missing translation: en|Select room from the room list
               <KeyboardShortcut
                 name="keybind3"
               >
