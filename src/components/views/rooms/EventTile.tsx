@@ -1636,17 +1636,18 @@ export default class EventTile extends React.Component<IProps, IState> {
 }
 
 // XXX this'll eventually be dynamic based on the fields once we have extensible event types
-const messageTypes = ['m.room.message', 'm.sticker'];
+const messageTypes = [EventType.RoomMessage, EventType.Sticker];
 function isMessageEvent(ev: MatrixEvent): boolean {
-    return (messageTypes.includes(ev.getType()));
+    return (messageTypes.includes(ev.getType() as EventType));
 }
 
 export function haveTileForEvent(e: MatrixEvent, showHiddenEvents?: boolean): boolean {
-    // Only show "Message deleted" tile for message or encrypted events
-    if (e.isRedacted() && !e.isEncrypted() && !isMessageEvent(e)) return false;
+    // Only show "Message deleted" tile for plain message events, encrypted events,
+    // and state events as they'll likely still contain enough keys to be relevant.
+    if (e.isRedacted() && !e.isEncrypted() && !isMessageEvent(e) && !e.isState()) return false;
 
     // No tile for replacement events since they update the original tile
-    if (e.isRelation("m.replace")) return false;
+    if (e.isRelation(RelationType.Replace)) return false;
 
     const handler = getHandlerTile(e);
     if (handler === undefined) return false;
