@@ -3612,5 +3612,22 @@
     "Voice Message": "Messaggio vocale",
     "Hide stickers": "Nascondi gli adesivi",
     "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Rispondi ad una conversazione in corso o usa \"Rispondi nella conversazione\" passando sopra ad un messaggio per iniziarne una nuova.",
-    "You do not have permissions to add spaces to this space": "Non hai i permessi per aggiungere spazi in questo spazio"
+    "You do not have permissions to add spaces to this space": "Non hai i permessi per aggiungere spazi in questo spazio",
+    "We're testing a new search to make finding what you want quicker.\n": "Stiamo provando una nuova ricerca per farti trovare più velocemente ciò che cerchi.\n",
+    "New search beta available": "Nuova ricerca beta disponibile",
+    "Click for more info": "Clicca per altre info",
+    "This is a beta feature": "Questa è una funzionalità beta",
+    "Results not as expected? Please <a>give feedback</a>.": "Risultati inaspettati? Inviaci <a>la tua opinione</a>.",
+    "Use <arrows/> to scroll": "Usa <arrows/> per scorrere",
+    "Feedback sent! Thanks, we appreciate it!": "Opinione inviata! Grazie, lo apprezziamo!",
+    "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Grazie per avere provato la beta, ti preghiamo di darci più dettagli possibili in modo che possiamo migliorare.",
+    "To leave, just return to this page or click on the beta badge when you search.": "Per uscire, torna in questa pagina o clicca l'icona della beta quando fai una ricerca.",
+    "How can I leave the beta?": "Come posso uscire dalla beta?",
+    "To feedback, join the beta, start a search and click on feedback.": "Per dare opinioni, unisciti alla beta, inizia una ricerca e clicca feedback.",
+    "How can I give feedback?": "Come posso dare le mia opinione?",
+    "This feature is a work in progress, we'd love to hear your feedback.": "Questa funzionalità è in lavorazione, ci piacerebbe sapere la tua opinione.",
+    "A new, quick way to search spaces and rooms you're in.": "Un modo nuovo e veloce di cercare gli spazi e le stanze in cui ti trovi.",
+    "The new search": "La nuova ricerca",
+    "New search experience": "Nuova esperienza di ricerca",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s e %(space2Name)s"
 }
