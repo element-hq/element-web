@@ -57,6 +57,7 @@ import { ListNotificationState } from "../../../stores/notifications/ListNotific
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 const SHOW_N_BUTTON_HEIGHT = 28; // As defined by CSS
 const RESIZE_HANDLE_HEIGHT = 4; // As defined by CSS
@@ -428,10 +429,12 @@ export default class RoomSublist extends React.Component<IProps, IState> {
         }
 
         if (room) {
-            dis.dispatch({
+            dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: room.roomId,
                 show_room_tile: true, // to make sure the room gets scrolled into view
+                _trigger: "WebRoomListNotificationBadge",
+                _viaKeyboard: ev.type !== "click",
             });
         }
     };

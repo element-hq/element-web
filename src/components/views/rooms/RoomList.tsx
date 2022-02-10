@@ -65,6 +65,7 @@ import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../str
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import PosthogTrackers from "../../../PosthogTrackers";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -217,9 +218,10 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                     e.preventDefault();
                     e.stopPropagation();
                     closeMenu();
-                    defaultDispatcher.dispatch({
+                    defaultDispatcher.dispatch<ViewRoomPayload>({
                         action: Action.ViewRoom,
                         room_id: activeSpace.roomId,
+                        _trigger: undefined, // other
                     });
                 }}
             />
@@ -417,10 +419,12 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const currentRoomId = RoomViewStore.getRoomId();
             const room = this.getRoomDelta(currentRoomId, viewRoomDeltaPayload.delta, viewRoomDeltaPayload.unread);
             if (room) {
-                defaultDispatcher.dispatch({
+                defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: room.roomId,
                     show_room_tile: true, // to make sure the room gets scrolled into view
+                    _trigger: "WebKeyboardShortcut",
+                    _viaKeyboard: true,
                 });
             }
         } else if (payload.action === Action.PstnSupportUpdated) {
@@ -501,9 +505,10 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private onExplore = () => {
         if (!isMetaSpace(this.props.activeSpace)) {
-            defaultDispatcher.dispatch({
+            defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: this.props.activeSpace,
+                _trigger: undefined, // other
             });
         } else {
             const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
@@ -525,16 +530,18 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     resizeMethod="crop"
                 />
             );
-            const viewRoom = () => {
-                defaultDispatcher.dispatch({
+            const viewRoom = (ev) => {
+                defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_alias: room.canonical_alias || room.aliases?.[0],
                     room_id: room.room_id,
                     via_servers: room.viaServers,
-                    oobData: {
+                    oob_data: {
                         avatarUrl: room.avatar_url,
                         name,
                     },
+                    _trigger: "RoomList",
+                    _viaKeyboard: ev.type !== "click",
                 });
             };
             return (

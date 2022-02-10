@@ -37,6 +37,7 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
 import { IDialogProps } from '../dialogs/IDialogProps';
 import UIStore from '../../../stores/UIStore';
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -333,11 +334,12 @@ export default class ImageView extends React.Component<IProps, IState> {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Element when clicked.
         ev.preventDefault();
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
+            _trigger: undefined, // room doesn't change
         });
         this.props.onFinished();
     };

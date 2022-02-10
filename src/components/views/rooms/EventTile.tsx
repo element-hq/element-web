@@ -77,6 +77,7 @@ import { CardContext } from '../right_panel/BaseCard';
 import { copyPlaintext } from '../../../utils/strings';
 import { DecryptionFailureTracker } from '../../../DecryptionFailureTracker';
 import RedactedBody from '../messages/RedactedBody';
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 const eventTileTypes = {
     [EventType.RoomMessage]: 'messages.MessageEvent',
@@ -714,11 +715,12 @@ export default class EventTile extends React.Component<IProps, IState> {
     private viewInRoom = (evt: ButtonEvent): void => {
         evt.preventDefault();
         evt.stopPropagation();
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
+            _trigger: undefined, // room doesn't change
         });
     };
 
@@ -1016,11 +1018,12 @@ export default class EventTile extends React.Component<IProps, IState> {
         // This allows the permalink to be opened in a new tab/window or copied as
         // matrix.to, but also for it to enable routing within Element when clicked.
         e.preventDefault();
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
+            _trigger: this.props.timelineRenderingType === TimelineRenderingType.Search ? "MessageSearch" : undefined,
         });
     };
 

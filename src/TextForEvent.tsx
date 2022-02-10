@@ -45,6 +45,7 @@ import { ROOM_SECURITY_TAB } from "./components/views/dialogs/RoomSettingsDialog
 import AccessibleButton from './components/views/elements/AccessibleButton';
 import RightPanelStore from './stores/right-panel/RightPanelStore';
 import UserIdentifierCustomisations from './customisations/UserIdentifier';
+import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 
 export function getSenderName(event: MatrixEvent): string {
     return event.sender?.name ?? event.getSender() ?? _t("Someone");
@@ -522,11 +523,12 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
 }
 
 const onPinnedOrUnpinnedMessageClick = (messageId: string, roomId: string): void => {
-    defaultDispatcher.dispatch({
+    defaultDispatcher.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
         event_id: messageId,
         highlighted: true,
         room_id: roomId,
+        _trigger: undefined, // room doesn't change
     });
 };
 

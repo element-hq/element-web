@@ -31,6 +31,7 @@ import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     toastKey: string;
@@ -110,10 +111,11 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
         const cli = MatrixClientPeg.get();
         try {
             if (request.channel.roomId) {
-                dis.dispatch({
+                dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: request.channel.roomId,
                     should_peek: false,
+                    _trigger: "VerificationRequest",
                 });
                 const member = cli.getUser(request.otherUserId);
                 RightPanelStore.instance.setCards(

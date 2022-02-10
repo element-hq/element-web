@@ -262,7 +262,7 @@ interface ICreateRoomEvent extends IEvent {
     };
 }
 
-interface IJoinRoomEvent extends IEvent {
+export interface IJoinRoomEvent extends IEvent {
     key: Action.JoinRoom;
     dur: number; // how long it took to join (until remote echo)
     segmentation: {
@@ -270,7 +270,7 @@ interface IJoinRoomEvent extends IEvent {
         num_users: number;
         is_encrypted: boolean;
         is_public: boolean;
-        type: "room_directory" | "slash_command" | "link" | "invite";
+        type: "room_directory" | "slash_command" | "link" | "invite" | "tombstone";
     };
 }
 /* eslint-enable camelcase */

@@ -23,6 +23,7 @@ import {
 } from "../../../accessibility/RovingTabIndex";
 import NotificationBadge from "./NotificationBadge";
 import { NotificationState } from "../../../stores/notifications/NotificationState";
+import { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
     isMinimized: boolean;
@@ -30,7 +31,7 @@ interface IProps {
     displayName: string;
     avatar: React.ReactElement;
     notificationState?: NotificationState;
-    onClick: () => void;
+    onClick: (ev: ButtonEvent) => void;
 }
 
 interface IState {

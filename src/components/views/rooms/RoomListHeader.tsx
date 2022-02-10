@@ -60,6 +60,7 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import TooltipTarget from "../elements/TooltipTarget";
 import { BetaPill } from "../beta/BetaCard";
 import PosthogTrackers from "../../../PosthogTrackers";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 const contextMenuBelow = (elementRect: DOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
@@ -104,9 +105,10 @@ const PrototypeCommunityContextMenu = (props: ComponentProps<typeof SpaceContext
         // anyways.
         const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
         if (chat) {
-            dis.dispatch({
+            dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: chat.roomId,
+                _trigger: undefined, // Deprecated groups
             }, true);
             RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomMemberList }, undefined, chat.roomId);
         } else {
@@ -274,9 +276,10 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        defaultDispatcher.dispatch({
+                        defaultDispatcher.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: activeSpace.roomId,
+                            _trigger: undefined, // other
                         });
                         closePlusMenu();
                     }}

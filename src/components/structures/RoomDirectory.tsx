@@ -46,10 +46,10 @@ import BaseDialog from "../views/dialogs/BaseDialog";
 import DirectorySearchBox from "../views/elements/DirectorySearchBox";
 import ScrollPanel from "./ScrollPanel";
 import Spinner from "../views/elements/Spinner";
-import { ActionPayload } from "../../dispatcher/payloads";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
 import { Action } from "../../dispatcher/actions";
 import PosthogTrackers from "../../PosthogTrackers";
+import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
@@ -494,11 +494,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
     private showRoom(room: IPublicRoomsChunkRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) {
         this.onFinished();
-        const payload: ActionPayload = {
+        const payload: ViewRoomPayload = {
             action: Action.ViewRoom,
             auto_join: autoJoin,
             should_peek: shouldPeek,
-            _type: "room_directory", // instrumentation
+            _trigger: "RoomDirectory",
         };
         if (room) {
             // Don't let the user view a room they won't be able to either
@@ -524,9 +524,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
             if (this.state.roomServer) {
                 payload.via_servers = [this.state.roomServer];
-                payload.opts = {
-                    viaServers: [this.state.roomServer],
-                };
             }
         }
         // It's not really possible to join Matrix rooms by ID because the HS has no way to know

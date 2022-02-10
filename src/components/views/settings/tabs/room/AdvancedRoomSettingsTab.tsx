@@ -27,6 +27,7 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from '../../../../../dispatcher/actions';
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import CopyableText from "../../../elements/CopyableText";
+import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     roomId: string;
@@ -90,10 +91,12 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
         e.preventDefault();
         e.stopPropagation();
 
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: this.state.oldRoomId,
             event_id: this.state.oldEventId,
+            _trigger: "WebPredecessorSettings",
+            _viaKeyboard: e.type !== "click",
         });
         this.props.closeSettingsFn();
     };

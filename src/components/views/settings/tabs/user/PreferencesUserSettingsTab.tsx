@@ -38,6 +38,7 @@ import Spinner from "../../../elements/Spinner";
 import { UserTab } from "../../../dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
+import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -113,9 +114,10 @@ const CommunityMigrator = ({ onFinished }) => {
                     kind="primary_outline"
                     onClick={() => {
                         if (community.spaceId) {
-                            dis.dispatch({
+                            dis.dispatch<ViewRoomPayload>({
                                 action: Action.ViewRoom,
                                 room_id: community.spaceId,
+                                _trigger: undefined, // other
                             });
                             onFinished();
                         } else {

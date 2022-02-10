@@ -28,6 +28,7 @@ import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOpti
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -75,11 +76,12 @@ const ThreadListContextMenu: React.FC<IExtendedProps> = ({
     const viewInRoom = useCallback((evt: ButtonEvent): void => {
         evt.preventDefault();
         evt.stopPropagation();
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: mxEvent.getId(),
             highlighted: true,
             room_id: mxEvent.getRoomId(),
+            _trigger: undefined, // room doesn't change
         });
         closeThreadOptions();
     }, [mxEvent, closeThreadOptions]);

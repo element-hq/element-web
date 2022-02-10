@@ -31,6 +31,7 @@ import { Action } from "./dispatcher/actions";
 import { hideToast as hideUpdateToast } from "./toasts/UpdateToast";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
+import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -185,9 +186,10 @@ export default abstract class BasePlatform {
         const notification = new window.Notification(title, notifBody);
 
         notification.onclick = () => {
-            const payload: ActionPayload = {
+            const payload: ViewRoomPayload = {
                 action: Action.ViewRoom,
                 room_id: room.roomId,
+                _trigger: "Notification",
             };
 
             if (ev.getThread()) {

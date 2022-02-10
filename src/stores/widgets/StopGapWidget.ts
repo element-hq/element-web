@@ -59,6 +59,7 @@ import { ELEMENT_CLIENT_ID } from "../../identifiers";
 import { getUserLanguage } from "../../languageHandler";
 import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
+import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 
 // TODO: Destroy all of this code
 
@@ -293,9 +294,10 @@ export class StopGapWidget extends EventEmitter {
             }
 
             // at this point we can change rooms, so do that
-            defaultDispatcher.dispatch({
+            defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: targetRoomId,
+                _trigger: "Widget",
             });
 
             // acknowledge so the widget doesn't freak out

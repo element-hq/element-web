@@ -32,6 +32,7 @@ import { replaceableComponent } from '../../../utils/replaceableComponent';
 import { getEventDisplayInfo, isVoiceMessage } from '../../../utils/EventUtils';
 import MFileBody from "../messages/MFileBody";
 import MVoiceMessageBody from "../messages/MVoiceMessageBody";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -94,11 +95,12 @@ export default class ReplyTile extends React.PureComponent<IProps> {
             if (this.props.toggleExpandedQuote && e.shiftKey) {
                 this.props.toggleExpandedQuote();
             } else {
-                dis.dispatch({
+                dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     event_id: this.props.mxEvent.getId(),
                     highlighted: true,
                     room_id: this.props.mxEvent.getRoomId(),
+                    _trigger: undefined, // room doesn't change
                 });
             }
         }

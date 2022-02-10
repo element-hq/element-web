@@ -119,6 +119,7 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { SummarizedNotificationState } from "../../stores/notifications/SummarizedNotificationState";
 import GenericToast from '../views/toasts/GenericToast';
 import Views from '../../Views';
+import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -139,25 +140,6 @@ interface IScreen {
     screen: string;
     params?: QueryDict;
 }
-
-/* eslint-disable camelcase */
-interface IRoomInfo {
-    room_id?: string;
-    room_alias?: string;
-    event_id?: string;
-
-    auto_join?: boolean;
-    highlighted?: boolean;
-    oob_data?: object;
-    via_servers?: string[];
-    threepid_invite?: IThreepidInvite;
-
-    justCreatedOpts?: IOpts;
-
-    // Whether or not to override default behaviour to end up at a timeline
-    forceTimeline?: boolean;
-}
-/* eslint-enable camelcase */
 
 interface IProps { // TODO type things better
     config: {
@@ -675,7 +657,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
                 // If the user is clicking on a room in the context of the alias being presented
                 // to them, supply the room alias. If both are supplied, the room ID will be ignored.
-                const promise = this.viewRoom(payload as any);
+                const promise = this.viewRoom(payload as ViewRoomPayload);
                 if (payload.deferred_action) {
                     promise.then(() => {
                         dis.dispatch(payload.deferred_action);
@@ -894,21 +876,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     // switch view to the given room
-    //
-    // @param {Object} roomInfo Object containing data about the room to be joined
-    // @param {string=} roomInfo.room_id ID of the room to join. One of room_id or room_alias must be given.
-    // @param {string=} roomInfo.room_alias Alias of the room to join. One of room_id or room_alias must be given.
-    // @param {boolean=} roomInfo.auto_join If true, automatically attempt to join the room if not already a member.
-    // @param {string=} roomInfo.event_id ID of the event in this room to show: this will cause a switch to the
-    //                                    context of that particular event.
-    // @param {boolean=} roomInfo.highlighted If true, add event_id to the hash of the URL
-    //                                        and alter the EventTile to appear highlighted.
-    // @param {Object=} roomInfo.threepid_invite Object containing data about the third party
-    //                                           we received to join the room, if any.
-    // @param {Object=} roomInfo.oob_data Object of additional data about the room
-    //                               that has been passed out-of-band (eg.
-    //                               room name and avatar from an invite email)
-    private async viewRoom(roomInfo: IRoomInfo) {
+    private async viewRoom(roomInfo: ViewRoomPayload) {
         this.focusComposer = true;
 
         if (roomInfo.room_alias) {
@@ -1120,9 +1088,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const dmRooms = dmRoomMap.getDMRoomsForUserId(userId);
 
         if (dmRooms.length > 0) {
-            dis.dispatch({
+            dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: dmRooms[0],
+                _trigger: "MessageUser",
             });
         } else {
             dis.dispatch({
@@ -1395,9 +1364,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private viewLastRoom() {
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: localStorage.getItem('mx_last_room_id'),
+            _trigger: undefined, // other
         });
     }
 
@@ -1823,7 +1793,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 else via = params.via;
             }
 
-            const payload = {
+            const payload: ViewRoomPayload = {
                 action: Action.ViewRoom,
                 event_id: eventId,
                 via_servers: via,
@@ -1842,6 +1812,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 },
                 room_alias: undefined,
                 room_id: undefined,
+                _trigger: undefined, // unknown or external trigger
             };
             if (roomString[0] === '#') {
                 payload.room_alias = roomString;

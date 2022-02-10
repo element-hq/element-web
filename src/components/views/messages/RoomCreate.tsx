@@ -25,6 +25,7 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTileBubble from "./EventTileBubble";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -39,11 +40,13 @@ export default class RoomCreate extends React.Component<IProps> {
 
         const predecessor = this.props.mxEvent.getContent()['predecessor'];
 
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: predecessor['event_id'],
             highlighted: true,
             room_id: predecessor['room_id'],
+            _trigger: "Predecessor",
+            _viaKeyboard: e.type !== "click",
         });
     };
 

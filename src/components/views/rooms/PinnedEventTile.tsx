@@ -31,6 +31,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { TileShape } from "./EventTile";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     room: Room;
@@ -45,11 +46,12 @@ export default class PinnedEventTile extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
 
     private onTileClicked = () => {
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             event_id: this.props.event.getId(),
             highlighted: true,
             room_id: this.props.event.getRoomId(),
+            _trigger: undefined, // room doesn't change
         });
     };
 

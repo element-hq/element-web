@@ -29,6 +29,7 @@ import { Action } from '../../../dispatcher/actions';
 import { showCommunityRoomInviteDialog } from "../../../RoomInvite";
 import GroupStore from "../../../stores/GroupStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps extends IDialogProps {
 }
@@ -100,9 +101,10 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
             if (result.room_id) {
                 // Force the group store to update as it might have missed the general chat
                 await GroupStore.refreshGroupRooms(result.group_id);
-                dis.dispatch({
+                dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: result.room_id,
+                    _trigger: undefined, // Deprecated groups
                 });
                 showCommunityRoomInviteDialog(result.room_id, this.state.name);
             } else {

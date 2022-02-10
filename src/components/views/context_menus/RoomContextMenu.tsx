@@ -44,6 +44,7 @@ import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import DMRoomMap from "../../../utils/DMRoomMap";
 import { Action } from "../../../dispatcher/actions";
 import PosthogTrackers from "../../../PosthogTrackers";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -198,7 +199,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                ensureViewingRoom();
+                ensureViewingRoom(ev);
                 RightPanelStore.instance.pushCard({ phase: RightPanelPhases.RoomMemberList }, false);
                 onFinished();
                 PosthogTrackers.trackInteraction("WebRoomHeaderContextMenuPeopleItem", ev);
@@ -247,11 +248,13 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         }
     };
 
-    const ensureViewingRoom = () => {
+    const ensureViewingRoom = (ev: ButtonEvent) => {
         if (RoomViewStore.getRoomId() === room.roomId) return;
-        dis.dispatch({
+        dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,
+            _trigger: "RoomList",
+            _viaKeyboard: ev.type !== "click",
         }, true);
     };
 
@@ -267,7 +270,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                     ev.preventDefault();
                     ev.stopPropagation();
 
-                    ensureViewingRoom();
+                    ensureViewingRoom(ev);
                     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, false);
                     onFinished();
                 }}
@@ -280,7 +283,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                     ev.preventDefault();
                     ev.stopPropagation();
 
-                    ensureViewingRoom();
+                    ensureViewingRoom(ev);
                     RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomSummary }, false);
                     onFinished();
                 }}

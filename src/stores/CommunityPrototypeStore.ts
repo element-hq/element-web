@@ -31,6 +31,7 @@ import FlairStore from "./FlairStore";
 import GroupFilterOrderStore from "./GroupFilterOrderStore";
 import GroupStore from "./GroupStore";
 import dis from "../dispatcher/dispatcher";
+import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 
 interface IState {
     // nothing of value - we use account data
@@ -150,9 +151,10 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
             // Automatically select the general chat when switching communities
             const chat = this.getGeneralChat(payload.tag);
             if (chat) {
-                dis.dispatch({
+                dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: chat.roomId,
+                    _trigger: undefined, // Deprecated groups
                 });
             }
         }

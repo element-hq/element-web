@@ -36,6 +36,7 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import JumpToDatePicker from './JumpToDatePicker';
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 function getDaysArray(): string[] {
     return [
@@ -141,11 +142,12 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 `found ${eventId} (${originServerTs}) for timestamp=${unixTimestamp} (looking forward)`,
             );
 
-            dis.dispatch({
+            dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 event_id: eventId,
                 highlighted: true,
                 room_id: roomId,
+                _trigger: undefined, // room doesn't change
             });
         } catch (e) {
             const code = e.errcode || e.statusCode;

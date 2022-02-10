@@ -41,6 +41,7 @@ import ContentMessages from '../../../ContentMessages';
 import UploadBar from '../../structures/UploadBar';
 import SettingsStore from '../../../settings/SettingsStore';
 import JumpToBottomButton from '../rooms/JumpToBottomButton';
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     room: Room;
@@ -144,12 +145,13 @@ export default class TimelineCard extends React.Component<IProps, IState> {
 
     private onUserScroll = (): void => {
         if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
-            dis.dispatch({
+            dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: this.props.room.roomId,
                 event_id: this.state.initialEventId,
                 highlighted: false,
                 replyingToEvent: this.state.replyToEvent,
+                _trigger: undefined, // room doesn't change
             });
         }
     };

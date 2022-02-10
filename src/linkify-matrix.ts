@@ -30,6 +30,7 @@ import {
 import dis from './dispatcher/dispatcher';
 import { Action } from './dispatcher/actions';
 import { ViewUserPayload } from './dispatcher/payloads/ViewUserPayload';
+import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 
 export enum Type {
     URL = "url",
@@ -116,9 +117,11 @@ function onUserClick(event: MouseEvent, userId: string) {
 
 function onAliasClick(event: MouseEvent, roomAlias: string) {
     event.preventDefault();
-    dis.dispatch({
+    dis.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
         room_alias: roomAlias,
+        _trigger: "Timeline",
+        _viaKeyboard: false,
     });
 }
 

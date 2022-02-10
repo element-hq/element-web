@@ -22,6 +22,7 @@ import RoomAvatar from '../../avatars/RoomAvatar';
 import dis from '../../../../dispatcher/dispatcher';
 import { Action } from '../../../../dispatcher/actions';
 import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
+import { ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 
 interface CallViewHeaderProps {
     pipMode: boolean;
@@ -37,9 +38,10 @@ const onFullscreenClick = () => {
 };
 
 const onExpandClick = (roomId: string) => {
-    dis.dispatch({
+    dis.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
         room_id: roomId,
+        _trigger: "WebFloatingCallWindow",
     });
 };
 

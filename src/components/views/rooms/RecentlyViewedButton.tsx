@@ -26,6 +26,7 @@ import InteractiveTooltip, { Direction } from "../elements/InteractiveTooltip";
 import { roomContextDetailsText } from "../../../Rooms";
 import { Action } from "../../../dispatcher/actions";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 const RecentlyViewedButton = () => {
     const tooltipRef = useRef<InteractiveTooltip>();
@@ -39,10 +40,12 @@ const RecentlyViewedButton = () => {
 
                 return <MenuItem
                     key={crumb.roomId}
-                    onClick={() => {
-                        dis.dispatch({
+                    onClick={(ev) => {
+                        dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: crumb.roomId,
+                            _trigger: "WebVerticalBreadcrumbs",
+                            _viaKeyboard: ev.type !== "click",
                         });
                         tooltipRef.current?.hideTooltip();
                     }}

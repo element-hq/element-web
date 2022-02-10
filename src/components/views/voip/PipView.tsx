@@ -36,6 +36,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from '../../../stores/Activ
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -227,9 +228,10 @@ export default class PipView extends React.Component<IProps, IState> {
         const callRoomId = this.state.primaryCall?.roomId;
         const widgetRoomId = ActiveWidgetStore.instance.getRoomId(this.state.persistentWidgetId);
         if (!!(callRoomId ?? widgetRoomId)) {
-            dis.dispatch({
+            dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: callRoomId ?? widgetRoomId,
+                _trigger: "WebFloatingCallWindow",
             });
         }
     };
