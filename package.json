@@ -91,7 +91,7 @@
     "linkifyjs": "^4.0.0-beta.4",
     "lodash": "^4.17.20",
     "maplibre-gl": "^1.15.2",
-    "matrix-analytics-events": "github:matrix-org/matrix-analytics-events.git#b183e6316826be11bbcc82d44b8f71921acd9d76",
+    "matrix-analytics-events": "github:matrix-org/matrix-analytics-events.git#bdabdd63280f052cedeeb0c25443f3d55f7c7108",
     "matrix-events-sdk": "^0.0.1-beta.6",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-widget-api": "^0.1.0-beta.18",

@@ -23,6 +23,7 @@ import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
+import { ScreenName } from "./PosthogTrackers";
 
 /* Posthog analytics tracking.
  *
@@ -148,20 +149,20 @@ export class PosthogAnalytics {
         }
     }
 
+    // we persist the last `$screen_name` and send it for all events until it is replaced
+    private lastScreen: ScreenName = "Loading";
+
     private sanitizeProperties = (properties: posthog.Properties): posthog.Properties => {
         // Callback from posthog to sanitize properties before sending them to the server.
         //
         // Here we sanitize posthog's built in properties which leak PII e.g. url reporting.
         // See utils.js _.info.properties in posthog-js.
 
-        // Replace the $current_url with a redacted version.
-        // $redacted_current_url is injected by this class earlier in capture(), as its generation
-        // is async and can't be done in this non-async callback.
-        if (!properties['$redacted_current_url']) {
-            logger.log("$redacted_current_url not set in sanitizeProperties, will drop $current_url entirely");
+        if (properties["eventName"] === "$pageview") {
+            this.lastScreen = properties["$current_url"];
         }
-        properties['$current_url'] = properties['$redacted_current_url'];
-        delete properties['$redacted_current_url'];
+        // We inject a screen identifier in $current_url as per https://posthog.com/tutorials/spa
+        properties["$current_url"] = this.lastScreen;
 
         if (this.anonymity == Anonymity.Anonymous) {
             // drop referrer information for anonymous users
@@ -204,7 +205,7 @@ export class PosthogAnalytics {
             return;
         }
         const { origin, hash, pathname } = window.location;
-        properties['$redacted_current_url'] = getRedactedCurrentLocation(origin, hash, pathname);
+        properties["redactedCurrentUrl"] = getRedactedCurrentLocation(origin, hash, pathname);
         this.posthog.capture(eventName, {
             ...this.propertiesForNextEvent,
             ...properties,

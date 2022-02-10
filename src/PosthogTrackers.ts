@@ -15,25 +15,25 @@ limitations under the License.
 */
 
 import { PureComponent, SyntheticEvent } from "react";
-import { Screen as ScreenEvent } from "matrix-analytics-events/types/typescript/Screen";
+import { WebScreen as ScreenEvent } from "matrix-analytics-events/types/typescript/WebScreen";
 import { Interaction as InteractionEvent } from "matrix-analytics-events/types/typescript/Interaction";
 
 import PageType from "./PageTypes";
 import Views from "./Views";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 
-export type ScreenName = ScreenEvent["screenName"];
+export type ScreenName = ScreenEvent["$current_url"];
 export type InteractionName = InteractionEvent["name"];
 
 const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
-    [Views.LOADING]: "WebLoading",
+    [Views.LOADING]: "Loading",
     [Views.WELCOME]: "Welcome",
     [Views.LOGIN]: "Login",
     [Views.REGISTER]: "Register",
     [Views.FORGOT_PASSWORD]: "ForgotPassword",
-    [Views.COMPLETE_SECURITY]: "WebCompleteSecurity",
-    [Views.E2E_SETUP]: "WebE2ESetup",
-    [Views.SOFT_LOGOUT]: "WebSoftLogout",
+    [Views.COMPLETE_SECURITY]: "CompleteSecurity",
+    [Views.E2E_SETUP]: "E2ESetup",
+    [Views.SOFT_LOGOUT]: "SoftLogout",
 };
 
 const loggedInPageTypeMap: Record<PageType, ScreenName> = {
@@ -70,8 +70,8 @@ export default class PosthogTrackers {
             ? loggedInPageTypeMap[this.pageType]
             : notLoggedInMap[this.view];
         PosthogAnalytics.instance.trackEvent<ScreenEvent>({
-            eventName: "$screen",
-            screenName,
+            eventName: "$pageview",
+            $current_url: screenName,
             durationMs,
         });
     }
@@ -80,8 +80,8 @@ export default class PosthogTrackers {
         if (!screenName) return;
         this.override = screenName;
         PosthogAnalytics.instance.trackEvent<ScreenEvent>({
-            eventName: "$screen",
-            screenName,
+            eventName: "$pageview",
+            $current_url: screenName,
         });
     }
 
