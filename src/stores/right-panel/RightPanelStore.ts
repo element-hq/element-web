@@ -372,12 +372,14 @@ export default class RightPanelStore extends ReadyWatchingStore {
             SettingsStore.getValue("feature_right_panel_default_open") &&
             !this.byRoom[this.viewedRoomId]?.isOpen
         ) {
+            const history = [{ phase: RightPanelPhases.RoomMemberList }];
+            const room = this.viewedRoomId && this.mxClient?.getRoom(this.viewedRoomId);
+            if (!room?.isSpaceRoom()) {
+                history.unshift({ phase: RightPanelPhases.RoomSummary });
+            }
             this.byRoom[this.viewedRoomId] = {
                 isOpen: true,
-                history: [
-                    { phase: RightPanelPhases.RoomSummary },
-                    { phase: RightPanelPhases.RoomMemberList },
-                ],
+                history,
             };
         }
         this.emitAndUpdateSettings();
