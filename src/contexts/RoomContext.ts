@@ -63,6 +63,7 @@ const RoomContext = createContext<IRoomState>({
     matrixClientIsReady: false,
     dragCounter: 0,
     timelineRenderingType: TimelineRenderingType.Room,
+    threadId: undefined,
     liveTimeline: undefined,
 });
 RoomContext.displayName = "RoomContext";

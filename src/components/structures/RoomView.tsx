@@ -209,6 +209,7 @@ export interface IRoomState {
     wasContextSwitch?: boolean;
     editState?: EditorStateTransfer;
     timelineRenderingType: TimelineRenderingType;
+    threadId?: string;
     liveTimeline?: EventTimeline;
 }
 

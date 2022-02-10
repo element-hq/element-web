@@ -649,13 +649,13 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     private renderThreadPanelSummary(): JSX.Element | null {
-        if (!this.thread) {
+        if (!this.state.thread) {
             return null;
         }
 
         return <div className="mx_ThreadPanel_replies">
             <span className="mx_ThreadPanel_repliesSummary">
-                { this.thread.length }
+                { this.state.thread.length }
             </span>
             { this.renderThreadLastMessagePreview() }
         </div>;
@@ -665,7 +665,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const { threadLastReply } = this.state;
         const threadMessagePreview = MessagePreviewStore.instance.generatePreviewForEvent(threadLastReply);
 
-        const sender = this.thread.roomState.getSentinelMember(threadLastReply.getSender());
+        const sender = this.state.thread?.roomState.getSentinelMember(threadLastReply.getSender());
         return <>
             <MemberAvatar
                 member={sender}
@@ -689,7 +689,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             return (
                 <p className="mx_ThreadSummaryIcon">{ _t("From a thread") }</p>
             );
-        } else if (this.state.threadReplyCount) {
+        } else if (this.state.threadReplyCount && this.props.mxEvent.isThreadRoot) {
             return (
                 <CardContext.Consumer>
                     { context =>
@@ -1092,11 +1092,10 @@ export default class EventTile extends React.Component<IProps, IState> {
         return this.props.getRelationsForEvent(eventId, "m.annotation", "m.reaction");
     };
 
-    private onReactionsCreated = (relationType: string, eventType: string) => {
+    private onReactionsCreated = (relationType: string, eventType: string): void => {
         if (relationType !== "m.annotation" || eventType !== "m.reaction") {
             return;
         }
-        this.props.mxEvent.removeListener("Event.relationsCreated", this.onReactionsCreated);
         this.setState({
             reactions: this.getReactions(),
         });

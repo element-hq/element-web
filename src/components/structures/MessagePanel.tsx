@@ -467,6 +467,16 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     // TODO: Implement granular (per-room) hide options
     public shouldShowEvent(mxEv: MatrixEvent, forceHideEvents = false): boolean {
+        if (this.props.hideThreadedMessages && SettingsStore.getValue("feature_thread")) {
+            if (mxEv.isThreadRelation) {
+                return false;
+            }
+
+            if (this.shouldLiveInThreadOnly(mxEv)) {
+                return false;
+            }
+        }
+
         if (MatrixClientPeg.get().isUserIgnored(mxEv.getSender())) {
             return false; // ignored = no show (only happens if the ignore happens after an event was received)
         }
@@ -482,17 +492,25 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         // Always show highlighted event
         if (this.props.highlightedEventId === mxEv.getId()) return true;
 
-        // Checking if the message has a "parentEventId" as we do not
-        // want to hide the root event of the thread
-        if (mxEv.isThreadRelation &&
-            !mxEv.isThreadRoot &&
-            this.props.hideThreadedMessages &&
-            SettingsStore.getValue("feature_thread")
-        ) {
+        return !shouldHideEvent(mxEv, this.context);
+    }
+
+    private shouldLiveInThreadOnly(event: MatrixEvent): boolean {
+        const associatedId = event.getAssociatedId();
+
+        const targetsThreadRoot = event.threadRootId === associatedId;
+        if (event.isThreadRoot || targetsThreadRoot || !event.isThreadRelation) {
             return false;
         }
 
-        return !shouldHideEvent(mxEv, this.context);
+        // If this is a reply, then we use the associated event to decide whether
+        // this should be thread only or not
+        const parentEvent = this.props.room.findEventById(associatedId);
+        if (parentEvent) {
+            return this.shouldLiveInThreadOnly(parentEvent);
+        } else {
+            return true;
+        }
     }
 
     public readMarkerForEvent(eventId: string, isLastEvent: boolean): ReactNode {
