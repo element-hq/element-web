@@ -485,7 +485,7 @@ export default class EventListSummary extends React.Component<IProps> {
 
             if (e.target && TARGET_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 latestUserAvatarMember.set(userId, e.target);
-            } else {
+            } else if (e.sender) {
                 latestUserAvatarMember.set(userId, e.sender);
             }
 
@@ -494,7 +494,7 @@ export default class EventListSummary extends React.Component<IProps> {
                 displayName = e.getContent().display_name;
             } else if (e.target && TARGET_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 displayName = e.target.name;
-            } else {
+            } else if (e.sender) {
                 displayName = e.sender.name;
             }
 
