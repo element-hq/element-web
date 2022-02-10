@@ -43,12 +43,12 @@ const FacePile = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, .
     const count = members.length;
 
     // sort users with an explicit avatar first
-    const iteratees = [member => !!member.getMxcAvatarUrl()];
+    const iteratees = [member => member.getMxcAvatarUrl() ? 0 : 1];
     if (onlyKnownUsers) {
         members = members.filter(isKnownMember);
     } else {
         // sort known users first
-        iteratees.unshift(member => isKnownMember(member));
+        iteratees.unshift(member => isKnownMember(member) ? 0 : 1);
     }
 
     // exclude ourselves from the shown members list
