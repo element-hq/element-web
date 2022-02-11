@@ -3609,5 +3609,13 @@
     "Voice Message": "Hang üzenet",
     "Hide stickers": "Matricák elrejtése",
     "You do not have permissions to add spaces to this space": "Nincs jogosultsága, hogy tereket adjon hozzá ehhez a térhez",
-    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Válasz egy meglévő üzenetszálra vagy „Válasz üzenetszálban” a menüből az üzenet fölött egy új üzenetszál indításhoz."
+    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Válasz egy meglévő üzenetszálra vagy „Válasz üzenetszálban” a menüből az üzenet fölött egy új üzenetszál indításhoz.",
+    "How can I leave the beta?": "Hogy tudom elhagyni a beta programot?",
+    "To feedback, join the beta, start a search and click on feedback.": "Visszajelzés adásához csatlakozzon a beta programunkhoz, kezdjen el keresni és nyomjon rá a visszajelzés gombra.",
+    "How can I give feedback?": "Hogy tudok véleményt nyilvánítani?",
+    "This feature is a work in progress, we'd love to hear your feedback.": "Ez a lehetőség még kialakítás alatt van, örülnénk ha megosztaná róla a véleményét.",
+    "A new, quick way to search spaces and rooms you're in.": "Új és gyors módja a terek és szobák keresésének amiben benn van.",
+    "The new search": "Az újfajta keresés",
+    "New search experience": "Új keresési élmény",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s és %(space2Name)s"
 }
