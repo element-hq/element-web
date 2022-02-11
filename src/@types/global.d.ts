@@ -109,7 +109,7 @@ declare global {
         mxActiveWidgetStore?: ActiveWidgetStore;
         mxSkinner?: Skinner;
         mxOnRecaptchaLoaded?: () => void;
-        electron?: unknown;
+        electron?: {}; // we should not rely on any fields on this in this layer
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
         mxAutoRageshakeStore?: AutoRageshakeStore;
