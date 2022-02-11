@@ -51,6 +51,13 @@ export function getSenderName(event: MatrixEvent): string {
     return event.sender?.name ?? event.getSender() ?? _t("Someone");
 }
 
+function getRoomMemberDisplayname(event: MatrixEvent, userId = event.getSender()): string {
+    const client = MatrixClientPeg.get();
+    const roomId = event.getRoomId();
+    const member = client.getRoom(roomId)?.getMember(userId);
+    return member?.rawDisplayName || userId || _t("Someone");
+}
+
 // These functions are frequently used just to check whether an event has
 // any text to display at all. For this reason they return deferred values
 // to avoid the expense of looking up translations when they're not needed.
@@ -77,8 +84,8 @@ function textForCallInviteEvent(event: MatrixEvent): () => string | null {
 
 function textForMemberEvent(ev: MatrixEvent, allowJSX: boolean, showHiddenEvents?: boolean): () => string | null {
     // XXX: SYJS-16 "sender is sometimes null for join messages"
-    const senderName = getSenderName(ev);
-    const targetName = ev.target ? ev.target.name : ev.getStateKey();
+    const senderName = ev.sender?.name || getRoomMemberDisplayname(ev);
+    const targetName = ev.target?.name || getRoomMemberDisplayname(ev, ev.getStateKey());
     const prevContent = ev.getPrevContent();
     const content = ev.getContent();
     const reason = content.reason;
