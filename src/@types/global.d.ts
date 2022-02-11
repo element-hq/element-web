@@ -109,10 +109,14 @@ declare global {
         mxActiveWidgetStore?: ActiveWidgetStore;
         mxSkinner?: Skinner;
         mxOnRecaptchaLoaded?: () => void;
-        electron?: {}; // we should not rely on any fields on this in this layer
+        electron?: Electron;
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
         mxAutoRageshakeStore?: AutoRageshakeStore;
+    }
+
+    interface Electron {
+        // will be extended by element-web downstream
     }
 
     interface DesktopCapturerSource {
