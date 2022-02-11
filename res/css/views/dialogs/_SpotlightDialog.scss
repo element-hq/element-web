@@ -148,6 +148,13 @@ limitations under the License.
 
                 .mx_DecoratedRoomAvatar {
                     margin-right: 8px;
+                    width: 20px;
+                    height: 20px;
+
+                    .mx_BaseAvatar {
+                        width: inherit;
+                        height: inherit;
+                    }
                 }
 
                 .mx_NotificationBadge {

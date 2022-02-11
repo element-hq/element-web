@@ -49,9 +49,13 @@ limitations under the License.
             background-color: $panel-actions;
         }
 
-        .mx_BaseAvatar {
+        .mx_DecoratedRoomAvatar {
             margin-right: 8px;
             width: 24px;
+
+            .mx_BaseAvatar {
+                width: inherit;
+            }
         }
 
         .mx_RecentlyViewedButton_entry_label {
