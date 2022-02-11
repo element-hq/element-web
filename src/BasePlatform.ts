@@ -301,6 +301,14 @@ export default abstract class BasePlatform {
         return null;
     }
 
+    async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
+        return [];
+    }
+
+    supportsDesktopCapturer(): boolean {
+        return false;
+    }
+
     getAvailableSpellCheckLanguages(): Promise<string[]> | null {
         return null;
     }

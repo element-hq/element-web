@@ -37,6 +37,7 @@ import Modal from '../../../Modal';
 import CallViewSidebar from './CallViewSidebar';
 import CallViewHeader from './CallView/CallViewHeader';
 import CallViewButtons from "./CallView/CallViewButtons";
+import PlatformPeg from "../../../PlatformPeg";
 
 interface IProps {
     // The call for us to display
@@ -270,7 +271,7 @@ export default class CallView extends React.Component<IProps, IState> {
         if (this.state.screensharing) {
             isScreensharing = await this.props.call.setScreensharingEnabled(false);
         } else {
-            if (window.electron?.getDesktopCapturerSources) {
+            if (PlatformPeg.get().supportsDesktopCapturer()) {
                 const { finished } = Modal.createDialog(DesktopCapturerSourcePicker);
                 const [source] = await finished;
                 if (!source) return;

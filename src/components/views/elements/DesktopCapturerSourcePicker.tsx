@@ -23,6 +23,7 @@ import DialogButtons from "./DialogButtons";
 import AccessibleButton from './AccessibleButton';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
+import PlatformPeg from "../../../PlatformPeg";
 
 export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource>> {
     const options: GetSourcesOptions = {
@@ -35,7 +36,7 @@ export function getDesktopCapturerSources(): Promise<Array<DesktopCapturerSource
             "window",
         ],
     };
-    return window.electron.getDesktopCapturerSources(options);
+    return PlatformPeg.get().getDesktopCapturerSources(options);
 }
 
 export enum Tabs {
