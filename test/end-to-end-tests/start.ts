@@ -15,11 +15,13 @@ limitations under the License.
 */
 
 import * as fs from "fs";
-import program = require('commander');
+import { Command } from "commander";
 
 import { ElementSession } from './src/session';
 import { scenario } from './src/scenario';
 import { RestSessionCreator } from './src/rest/creator';
+
+const program = new Command();
 
 program
     .option('--no-logs', "don't output logs, document html on error", false)
@@ -30,6 +32,7 @@ program
     .option('--throttle-cpu [factor]', "factor to slow down the cpu with", parseFloat, 1.0)
     .option('--no-sandbox', "same as puppeteer arg", false)
     .option('--log-directory <dir>', 'a directory to dump html and network logs in when the tests fail')
+    .requiredOption('--registration-shared-secret <secret>', 'the secret to use for registering users')
     .parse(process.argv);
 
 const hsUrl = 'http://localhost:5005';
@@ -37,12 +40,12 @@ const hsUrl = 'http://localhost:5005';
 async function runTests() {
     const sessions = [];
     const options = {
-        slowMo: program.slowMo ? 20 : undefined,
-        devtools: program.devTools,
-        headless: !program.windowed,
+        slowMo: program.opts().slowMo ? 20 : undefined,
+        devtools: program.opts().devTools,
+        headless: !program.opts().windowed,
         args: [],
     };
-    if (!program.sandbox) {
+    if (!program.opts().sandbox) {
         options.args.push('--no-sandbox', '--disable-setuid-sandbox');
     }
     if (process.env.CHROME_PATH) {
@@ -52,13 +55,14 @@ async function runTests() {
     }
 
     const restCreator = new RestSessionCreator(
-        '../synapse/installations/consent/env/bin',
         hsUrl,
-        __dirname,
+        program.opts().registrationSharedSecret,
     );
 
     async function createSession(username) {
-        const session = await ElementSession.create(username, options, program.appUrl, hsUrl, program.throttleCpu);
+        const session = await ElementSession.create(
+            username, options, program.opts().appUrl, hsUrl, program.opts().throttleCpu,
+        );
         sessions.push(session);
         return session;
     }
@@ -69,8 +73,8 @@ async function runTests() {
     } catch (err) {
         failure = true;
         console.log('failure: ', err);
-        if (program.logDirectory) {
-            await writeLogs(sessions, program.logDirectory);
+        if (program.opts().logDirectory) {
+            await writeLogs(sessions, program.opts().logDirectory);
         }
     }
 

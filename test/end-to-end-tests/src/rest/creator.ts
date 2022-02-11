@@ -15,28 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { exec } from 'child_process';
 import request = require('request-promise-native');
+import * as crypto from 'crypto';
 
 import { RestSession } from './session';
 import { RestMultiSession } from './multi';
-
-interface ExecResult {
-    stdout: string;
-    stderr: string;
-}
-
-function execAsync(command: string, options: Parameters<typeof exec>[1]): Promise<ExecResult> {
-    return new Promise((resolve, reject) => {
-        exec(command, options, (error, stdout, stderr) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve({ stdout, stderr });
-            }
-        });
-    });
-}
 
 export interface Credentials {
     accessToken: string;
@@ -47,7 +30,7 @@ export interface Credentials {
 }
 
 export class RestSessionCreator {
-    constructor(private readonly synapseSubdir: string, private readonly hsUrl: string, private readonly cwd: string) {}
+    constructor(private readonly hsUrl: string, private readonly regSecret: string) {}
 
     public async createSessionRange(usernames: string[], password: string,
         groupName: string): Promise<RestMultiSession> {
@@ -64,21 +47,25 @@ export class RestSessionCreator {
     }
 
     private async register(username: string, password: string): Promise<void> {
-        const registerArgs = [
-            '-c homeserver.yaml',
-            `-u ${username}`,
-            `-p ${password}`,
-            '--no-admin',
-            this.hsUrl,
-        ];
-        const registerCmd = `./register_new_matrix_user ${registerArgs.join(' ')}`;
-        const allCmds = [
-            `cd ${this.synapseSubdir}`,
-            ". ./activate",
-            registerCmd,
-        ].join(' && ');
+        // get a nonce
+        const regUrl = `${this.hsUrl}/_synapse/admin/v1/register`;
+        const nonceResp = await request.get({ uri: regUrl, json: true });
 
-        await execAsync(allCmds, { cwd: this.cwd, encoding: 'utf-8' });
+        const mac = crypto.createHmac('sha1', this.regSecret).update(
+            `${nonceResp.nonce}\0${username}\0${password}\0notadmin`,
+        ).digest('hex');
+
+        await request.post({
+            uri: regUrl,
+            json: true,
+            body: {
+                nonce: nonceResp.nonce,
+                username,
+                password,
+                mac,
+                admin: false,
+            },
+        });
     }
 
     private async authenticate(username: string, password: string): Promise<Credentials> {
