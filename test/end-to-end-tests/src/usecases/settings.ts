@@ -15,8 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { strict as assert } from 'assert';
-
 import { ElementSession } from "../session";
 
 export async function openSettings(session: ElementSession, section: string): Promise<void> {
@@ -29,34 +27,4 @@ export async function openSettings(session: ElementSession, section: string): Pr
             `.mx_UserSettingsDialog .mx_TabbedView_tabLabels .mx_UserSettingsDialog_${section}Icon`);
         await sectionButton.click();
     }
-}
-
-export async function enableLazyLoading(session: ElementSession): Promise<void> {
-    session.log.step(`enables lazy loading of members in the lab settings`);
-    const settingsButton = await session.query('.mx_BottomLeftMenu_settings');
-    await settingsButton.click();
-    const llCheckbox = await session.query("#feature_lazyloading");
-    await llCheckbox.click();
-    await session.waitForReload();
-    const closeButton = await session.query(".mx_RoomHeader_cancelButton");
-    await closeButton.click();
-    session.log.done();
-}
-
-interface E2EDevice {
-    id: string;
-    key: string;
-}
-
-export async function getE2EDeviceFromSettings(session: ElementSession): Promise<E2EDevice> {
-    session.log.step(`gets e2e device/key from settings`);
-    await openSettings(session, "security");
-    const deviceAndKey = await session.queryAll(".mx_SettingsTab_section .mx_CryptographyPanel code");
-    assert.equal(deviceAndKey.length, 2);
-    const id: string = await (await deviceAndKey[0].getProperty("innerText")).jsonValue();
-    const key: string = await (await deviceAndKey[1].getProperty("innerText")).jsonValue();
-    const closeButton = await session.query(".mx_UserSettingsDialog .mx_Dialog_cancelButton");
-    await closeButton.click();
-    session.log.done();
-    return { id, key };
 }

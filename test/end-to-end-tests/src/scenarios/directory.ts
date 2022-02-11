@@ -19,15 +19,24 @@ import { join } from '../usecases/join';
 import { sendMessage } from '../usecases/send-message';
 import { receiveMessage } from '../usecases/timeline';
 import { createRoom } from '../usecases/create-room';
-import { changeRoomSettings } from '../usecases/room-settings';
+import { changeRoomSettings, checkRoomSettings } from '../usecases/room-settings';
 import { ElementSession } from "../session";
 
 export async function roomDirectoryScenarios(alice: ElementSession, bob: ElementSession) {
     console.log(" creating a public room and join through directory:");
     const room = 'test';
     await createRoom(alice, room);
-    await changeRoomSettings(alice, { directory: true, visibility: "public", alias: "#test" });
+
+    const settings = {
+        directory: true,
+        visibility: "public",
+        alias: "#test:localhost",
+        publishedAlias: "#test:localhost",
+    };
+    await changeRoomSettings(alice, settings);
     await join(bob, room); //looks up room in directory
+    await checkRoomSettings(bob, settings);
+
     const bobMessage = "hi Alice!";
     await sendMessage(bob, bobMessage);
     await receiveMessage(alice, { sender: "bob", body: bobMessage });

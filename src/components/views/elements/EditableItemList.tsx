@@ -170,7 +170,7 @@ export default class EditableItemList<P = {}> extends React.PureComponent<IProps
         const label = this.props.items.length > 0 ? this.props.itemsLabel : this.props.noItemsLabel;
 
         return (
-            <div className="mx_EditableItemList">
+            <div className="mx_EditableItemList" id={this.props.id}>
                 <div className="mx_EditableItemList_label">
                     { label }
                 </div>
