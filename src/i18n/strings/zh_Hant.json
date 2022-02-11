@@ -3631,5 +3631,14 @@
     "The new search": "新的搜尋",
     "New search experience": "新的搜尋體驗",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s 與 %(space2Name)s",
-    "Maximise": "最大化"
+    "Maximise": "最大化",
+    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s 傳送了 1 個隱藏的訊息",
+    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s 傳送了 %(count)s 個隱藏的訊息",
+    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s 傳送了 %(count)s 個隱藏的訊息",
+    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s 傳送了 %(count)s 個隱藏的訊息",
+    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s 移除了 1 個訊息",
+    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s 移除了 %(count)s 個訊息",
+    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s 移除了 1 個訊息",
+    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s 咦除了 %(count)s 個訊息",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)s 變更了聊天室的<a>釘選訊息</a>。"
 }
