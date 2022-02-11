@@ -329,7 +329,6 @@ module.exports = (env, argv) => {
                                     require('postcss-import')(),
                                     require("postcss-mixins")(),
                                     require("postcss-simple-vars")(),
-                                    require("postcss-extend")(),
                                     require("postcss-nested")(),
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
