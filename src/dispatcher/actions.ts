@@ -218,4 +218,10 @@ export enum Action {
      * Payload: none
      */
     AnonymousAnalyticsReject = "anonymous_analytics_reject",
+
+    /**
+     * Fires after crypto is setup if key backup is not enabled
+     * Used to trigger auto rageshakes when configured
+     */
+    ReportKeyBackupNotEnabled = "report_key_backup_not_enabled",
 }

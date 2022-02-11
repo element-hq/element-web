@@ -960,6 +960,7 @@
     "Developer mode": "Developer mode",
     "Automatically send debug logs on any error": "Automatically send debug logs on any error",
     "Automatically send debug logs on decryption errors": "Automatically send debug logs on decryption errors",
+    "Automatically send debug logs when key backup is not functioning": "Automatically send debug logs when key backup is not functioning",
     "Collecting app version information": "Collecting app version information",
     "Collecting logs": "Collecting logs",
     "Uploading logs": "Uploading logs",

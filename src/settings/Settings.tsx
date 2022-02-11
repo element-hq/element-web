@@ -891,6 +891,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new ReloadOnChangeController(),
     },
+    "automaticKeyBackNotEnabledReporting": {
+        displayName: _td("Automatically send debug logs when key backup is not functioning"),
+        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
+        default: false,
+    },
     [UIFeature.RoomHistorySettings]: {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
