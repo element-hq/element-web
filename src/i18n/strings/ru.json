@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s использует расширенные возможности, которые не поддерживаются вашим браузером.",
     "Powered by Matrix": "На технологии Matrix",
     "Use %(brand)s on mobile": "Воспользуйтесь %(brand)s на мобильном телефоне",
-    "Switch to space by number": "Переключение на пространство по номеру"
+    "Switch to space by number": "Переключение на пространство по номеру",
+    "Next recently visited room or community": "Следующая недавно посещенная комната или сообщество",
+    "Previous recently visited room or community": "Предыдущая недавно посещенная комната или сообщество"
 }

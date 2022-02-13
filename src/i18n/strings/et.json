@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s kasutab mitmeid uusi brauseri-põhiseid tehnoloogiaid, mis ei ole veel sinu veebibrauseris toetatud.",
     "Powered by Matrix": "Põhineb Matrix'il",
     "Use %(brand)s on mobile": "Kasuta rakendust %(brand)s nutiseadmes",
-    "Switch to space by number": "Vaata kogukonnakeskust tema numbri alusel"
+    "Switch to space by number": "Vaata kogukonnakeskust tema numbri alusel",
+    "Next recently visited room or community": "Järgmine hiljuti külastatud jututuba või kogukond",
+    "Previous recently visited room or community": "Eelmine hiljuti külastatud jututuba või kogukond"
 }

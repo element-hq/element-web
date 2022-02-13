@@ -554,6 +554,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipcCall('getSpellCheckLanguages');
     }
 
+    async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
+        return this.ipcCall('getDesktopCapturerSources', options);
+    }
+
+    supportsDesktopCapturer(): boolean {
+        return true;
+    }
+
     async getAvailableSpellCheckLanguages(): Promise<string[]> {
         return this.ipcCall('getAvailableSpellCheckLanguages');
     }
