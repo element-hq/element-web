@@ -181,6 +181,7 @@
     "jest-canvas-mock": "^2.3.0",
     "jest-environment-jsdom": "^27.0.6",
     "jest-fetch-mock": "^3.0.3",
+    "jest-mock": "^27.5.1",
     "jest-raw-loader": "^1.0.1",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.3",
