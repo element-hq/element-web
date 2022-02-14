@@ -26,7 +26,7 @@ import Modal from '../../../Modal';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import * as ContextMenu from '../../structures/ContextMenu';
-import { toRightOf } from '../../structures/ContextMenu';
+import { ChevronFace, toRightOf } from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import ReplyChain from "../elements/ReplyChain";
 import { pillifyLinks, unmountPills } from '../../../utils/pillify';
@@ -177,8 +177,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         const button = document.createElement("span");
         button.className = "mx_EventTile_button mx_EventTile_copyButton ";
 
-        // Check if expansion button exists. If so
-        // we put the copy button to the bottom
+        // Check if expansion button exists. If so we put the copy button to the bottom
         const expansionButtonExists = div.getElementsByClassName("mx_EventTile_button");
         if (expansionButtonExists.length > 0) button.className += "mx_EventTile_buttonBottom";
 
@@ -188,7 +187,8 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
             const buttonRect = button.getBoundingClientRect();
             const { close } = ContextMenu.createMenu(GenericTextContextMenu, {
-                ...toRightOf(buttonRect, 2),
+                ...toRightOf(buttonRect, 0),
+                chevronFace: ChevronFace.None,
                 message: successful ? _t('Copied!') : _t('Failed to copy'),
             });
             button.onmouseleave = close;

@@ -740,20 +740,7 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                             onClick={this.onCopyClick}
                             disabled={this.state.phase === Phase.Storing}
                         >
-                            <span
-                                className="mx_CreateSecretStorageDialog_recoveryKeyCopyButtonText"
-                                style={{ height: this.state.copied ? '0' : 'auto' }}
-                                aria-hidden={this.state.copied}
-                            >
-                                { _t("Copy") }
-                            </span>
-                            <span
-                                className="mx_CreateSecretStorageDialog_recoveryKeyCopyButtonText"
-                                style={{ height: this.state.copied ? 'auto' : '0' }}
-                                aria-hidden={!this.state.copied}
-                            >
-                                { _t("Copied!") }
-                            </span>
+                            { this.state.copied ? _t("Copied!") : _t("Copy") }
                         </AccessibleButton>
                     </div>
                 </div>

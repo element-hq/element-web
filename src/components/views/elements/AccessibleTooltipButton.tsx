@@ -15,13 +15,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
 import AccessibleButton from "./AccessibleButton";
 import Tooltip, { Alignment } from './Tooltip';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
+interface IProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
     tooltip?: React.ReactNode;
     label?: React.ReactNode;
@@ -29,6 +29,7 @@ interface ITooltipProps extends React.ComponentProps<typeof AccessibleButton> {
     forceHide?: boolean;
     yOffset?: number;
     alignment?: Alignment;
+    onHideTooltip?(ev: SyntheticEvent): void;
 }
 
 interface IState {
@@ -36,15 +37,15 @@ interface IState {
 }
 
 @replaceableComponent("views.elements.AccessibleTooltipButton")
-export default class AccessibleTooltipButton extends React.PureComponent<ITooltipProps, IState> {
-    constructor(props: ITooltipProps) {
+export default class AccessibleTooltipButton extends React.PureComponent<IProps, IState> {
+    constructor(props: IProps) {
         super(props);
         this.state = {
             hover: false,
         };
     }
 
-    componentDidUpdate(prevProps: Readonly<ITooltipProps>) {
+    componentDidUpdate(prevProps: Readonly<IProps>) {
         if (!prevProps.forceHide && this.props.forceHide && this.state.hover) {
             this.setState({
                 hover: false,
@@ -52,22 +53,24 @@ export default class AccessibleTooltipButton extends React.PureComponent<IToolti
         }
     }
 
-    showTooltip = () => {
+    private showTooltip = () => {
         if (this.props.forceHide) return;
         this.setState({
             hover: true,
         });
     };
 
-    hideTooltip = () => {
+    private hideTooltip = (ev: SyntheticEvent) => {
         this.setState({
             hover: false,
         });
+        this.props.onHideTooltip?.(ev);
     };
 
     render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { title, tooltip, children, tooltipClassName, forceHide, yOffset, alignment, ...props } = this.props;
+        const { title, tooltip, children, tooltipClassName, forceHide, yOffset, alignment, onHideTooltip,
+            ...props } = this.props;
 
         const tip = this.state.hover && <Tooltip
             tooltipClassName={tooltipClassName}

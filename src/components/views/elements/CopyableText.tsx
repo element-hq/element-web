@@ -15,12 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 import { _t } from "../../../languageHandler";
 import { copyPlaintext } from "../../../utils/strings";
-import { toRightOf, createMenu } from "../../structures/ContextMenu";
-import GenericTextContextMenu from "../context_menus/GenericTextContextMenu";
 import { ButtonEvent } from "./AccessibleButton";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 
@@ -30,32 +28,27 @@ interface IProps {
 }
 
 const CopyableText: React.FC<IProps> = ({ children, getTextToCopy }) => {
-    const closeCopiedTooltip = useRef<() => void>();
-    const divRef = useRef<HTMLDivElement>();
-
-    useEffect(() => () => {
-        if (closeCopiedTooltip.current) closeCopiedTooltip.current();
-    }, [closeCopiedTooltip]);
+    const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent) => {
         e.preventDefault();
-        const target = e.target as HTMLDivElement; // copy target before we go async and React throws it away
-
         const successful = await copyPlaintext(getTextToCopy());
-        const buttonRect = target.getBoundingClientRect();
-        const { close } = createMenu(GenericTextContextMenu, {
-            ...toRightOf(buttonRect, 2),
-            message: successful ? _t('Copied!') : _t('Failed to copy'),
-        });
-        closeCopiedTooltip.current = target.onmouseleave = close;
+        setTooltip(successful ? _t('Copied!') : _t('Failed to copy'));
     };
 
-    return <div className="mx_CopyableText" ref={divRef}>
+    const onHideTooltip = () => {
+        if (tooltip) {
+            setTooltip(undefined);
+        }
+    };
+
+    return <div className="mx_CopyableText">
         { children }
         <AccessibleTooltipButton
-            title={_t("Copy")}
+            title={tooltip ?? _t("Copy")}
             onClick={onCopyClickInternal}
             className="mx_CopyableText_copyButton"
+            onHideTooltip={onHideTooltip}
         />
     </div>;
 };
