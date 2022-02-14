@@ -27,6 +27,18 @@ limitations under the License.
     margin-bottom: 10px;
 }
 
+.mx_DevTools_RoomStateExplorer_button {
+    font-family: monospace;
+}
+
+.mx_DevTools_RoomStateExplorer_button_hasSpaces {
+    text-decoration: underline;
+}
+
+.mx_DevTools_RoomStateExplorer_button.mx_DevTools_RoomStateExplorer_button_emptyString {
+    font-style: italic;
+}
+
 .mx_DevTools_RoomStateExplorer_button, .mx_DevTools_ServersInRoomList_button {
     margin-bottom: 10px;
     width: 100%;
