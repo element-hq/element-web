@@ -24,6 +24,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { ResizeObserverPolyfill } from "../../../stores/UIStore";
 
 export const getPersistKey = (appId: string) => 'widget_' + appId;
 
@@ -80,7 +81,7 @@ export default class PersistedElement extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);
 
-        this.resizeObserver = new ResizeObserver(this.repositionChild);
+        this.resizeObserver = new ResizeObserverPolyfill(this.repositionChild);
         // Annoyingly, a resize observer is insufficient, since we also care
         // about when the element moves on the screen without changing its
         // dimensions. Doesn't look like there's a ResizeObserver equivalent
