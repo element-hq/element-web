@@ -21,6 +21,7 @@ import { Store } from 'flux/utils';
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ViewRoom as ViewRoomEvent } from "matrix-analytics-events/types/typescript/ViewRoom";
+import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import dis from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -35,6 +36,9 @@ import CountlyAnalytics, { IJoinRoomEvent } from "../CountlyAnalytics";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { PosthogAnalytics } from "../PosthogAnalytics";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import DMRoomMap from "../utils/DMRoomMap";
+import SpaceStore from "./spaces/SpaceStore";
+import { isMetaSpace, MetaSpace } from "./spaces";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -189,10 +193,24 @@ class RoomViewStore extends Store<ActionPayload> {
     private async viewRoom(payload: ViewRoomPayload): Promise<void> {
         if (payload.room_id) {
             if (payload._trigger !== null && payload.room_id !== this.state.roomId) {
+                let activeSpace: ViewRoomEvent["activeSpace"];
+                if (SpaceStore.instance.activeSpace === MetaSpace.Home) {
+                    activeSpace = "Home";
+                } else if (isMetaSpace(SpaceStore.instance.activeSpace)) {
+                    activeSpace = "Meta";
+                } else {
+                    activeSpace = SpaceStore.instance.activeSpaceRoom.getJoinRule() === JoinRule.Public
+                        ? "Public"
+                        : "Private";
+                }
+
                 PosthogAnalytics.instance.trackEvent<ViewRoomEvent>({
                     eventName: "ViewRoom",
                     trigger: payload._trigger,
                     viaKeyboard: payload._viaKeyboard,
+                    isDM: !!DMRoomMap.shared().getUserIdForRoomId(payload.room_id),
+                    isSpace: MatrixClientPeg.get().getRoom(payload.room_id)?.isSpaceRoom(),
+                    activeSpace,
                 });
             }
 

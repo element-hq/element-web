@@ -190,7 +190,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         onFinished();
     };
 
-    const onExploreRoomsClick = (ev: ButtonEvent) => {
+    const openSpace = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
 
@@ -200,6 +200,16 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
             _trigger: undefined, // other
         });
         onFinished();
+    };
+
+    const onExploreRoomsClick = (ev: ButtonEvent) => {
+        PosthogTrackers.trackInteraction("WebSpaceContextMenuExploreRoomsItem", ev);
+        openSpace(ev);
+    };
+
+    const onHomeClick = (ev: ButtonEvent) => {
+        PosthogTrackers.trackInteraction("WebSpaceContextMenuHomeItem", ev);
+        openSpace(ev);
     };
 
     return <IconizedContextMenu
@@ -215,7 +225,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
             <IconizedContextMenuOption
                 iconClassName="mx_SpacePanel_iconHome"
                 label={_t("Space home")}
-                onClick={onExploreRoomsClick}
+                onClick={onHomeClick}
             />
             { inviteOption }
             <IconizedContextMenuOption

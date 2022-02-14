@@ -1,9 +1,22 @@
+import '../skinned-sdk'; // Must be first for skinning to work
 import RoomViewStore from '../../src/stores/RoomViewStore';
 import { Action } from '../../src/dispatcher/actions';
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import * as testUtils from '../test-utils';
 
 const dispatch = testUtils.getDispatchForStore(RoomViewStore);
+
+jest.mock('../../src/utils/DMRoomMap', () => {
+    const mock = {
+        getUserIdForRoomId: jest.fn(),
+        getDMRoomsForUserId: jest.fn(),
+    };
+
+    return {
+        shared: jest.fn().mockReturnValue(mock),
+        sharedInstance: mock,
+    };
+});
 
 describe('RoomViewStore', function() {
     beforeEach(function() {

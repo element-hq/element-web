@@ -43,7 +43,7 @@ import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import {
@@ -223,6 +223,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                         room_id: activeSpace.roomId,
                         _trigger: undefined, // other
                     });
+                    PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", e);
                 }}
             />
             {
@@ -503,13 +504,14 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         defaultDispatcher.dispatch({ action: "view_create_chat", initialText });
     };
 
-    private onExplore = () => {
+    private onExplore = (ev: ButtonEvent) => {
         if (!isMetaSpace(this.props.activeSpace)) {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: this.props.activeSpace,
                 _trigger: undefined, // other
             });
+            PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", ev);
         } else {
             const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
             defaultDispatcher.dispatch({ action: Action.ViewRoomDirectory, initialText });

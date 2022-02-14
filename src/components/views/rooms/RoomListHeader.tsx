@@ -282,6 +282,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
                             _trigger: undefined, // other
                         });
                         closePlusMenu();
+                        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuExploreRoomsItem", e);
                     }}
                 />
                 <IconizedContextMenuOption
