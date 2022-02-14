@@ -19,6 +19,7 @@ import { _td } from "../languageHandler";
 import { isMac, Key } from "../Keyboard";
 import { ISetting } from "../settings/Settings";
 import SettingsStore from "../settings/SettingsStore";
+import IncompatibleController from "../settings/controllers/IncompatibleController";
 
 export enum KeyBindingAction {
     /** Send a message */
@@ -396,6 +397,7 @@ const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
             key: Key.ESCAPE,
         },
         displayName: _td("Clear room list filter field"),
+        controller: new IncompatibleController("feature_spotlight", { key: null }),
     },
     [KeyBindingAction.NextRoom]: {
         default: {
@@ -591,7 +593,12 @@ export const getCustomizableShortcuts = (): IKeyboardShortcuts => {
         displayName: _td("Redo edit"),
     };
 
-    return keyboardShortcuts;
+    return Object.keys(keyboardShortcuts).filter(k => {
+        return !keyboardShortcuts[k].controller?.settingDisabled;
+    }).reduce((o, key) => {
+        o[key] = keyboardShortcuts[key];
+        return o;
+    }, {});
 };
 
 export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
