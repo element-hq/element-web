@@ -187,7 +187,7 @@
     "Banned by %(displayName)s": "Vstup zakázal %(displayName)s",
     "unknown error code": "neznámy kód chyby",
     "Failed to forget room %(errCode)s": "Nepodarilo sa zabudnúť miestnosť %(errCode)s",
-    "Privileged Users": "Poverení používatelia",
+    "Privileged Users": "Oprávnení používatelia",
     "No users have specific privileges in this room": "Žiadny používatelia nemajú v tejto miestnosti pridelené konkrétne poverenia",
     "Banned users": "Používatelia, ktorým bol zakázaný vstup",
     "This room is not accessible by remote Matrix servers": "Táto miestnosť nie je prístupná zo vzdialených Matrix serverov",
@@ -598,7 +598,7 @@
     "Messages containing my display name": "Správy obsahujúce moje zobrazované meno",
     "Failed to send custom event.": "Odoslanie vlastnej udalosti zlyhalo.",
     "What's new?": "Čo je nové?",
-    "When I'm invited to a room": "Pozvania vstúpiť do miestnosti",
+    "When I'm invited to a room": "Keď ma pozvú do miestnosti",
     "Unable to look up room ID from server": "Nie je možné vyhľadať ID miestnosti na serveri",
     "Couldn't find a matching Matrix room": "Nie je možné nájsť zodpovedajúcu Matrix miestnosť",
     "Invite to this room": "Pozvať do tejto miestnosti",
@@ -3407,5 +3407,6 @@
     "A call can only be transferred to a single user.": "Hovor je možné presmerovať len na jedného používateľa.",
     "Failed to transfer call": "Nepodarilo sa presmerovať hovor",
     "Transfer Failed": "Presmerovanie zlyhalo",
-    "Unable to transfer call": "Nie je možné presmerovať hovor"
+    "Unable to transfer call": "Nie je možné presmerovať hovor",
+    "Change which room, message, or user you're viewing": "Zmeniť zobrazovanú miestnosť, správu alebo používateľa"
 }
