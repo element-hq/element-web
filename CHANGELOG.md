@@ -1,3 +1,8 @@
+Changes in [1.10.3](https://github.com/vector-im/element-web/releases/tag/v1.10.3) (2022-02-14)
+===============================================================================================
+
+ * Add map tile URL for location sharing maps to sample config (and element.io release app config)
+
 Changes in [1.10.2](https://github.com/vector-im/element-web/releases/tag/v1.10.2) (2022-02-14)
 ===============================================================================================
 
