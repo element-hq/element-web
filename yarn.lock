@@ -8079,9 +8079,9 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-analytics-events@github:matrix-org/matrix-analytics-events.git#dfa6feaa12bcfc8e99b05a148e12fff7f9d62f08":
+"matrix-analytics-events@github:matrix-org/matrix-analytics-events.git#bdabdd63280f052cedeeb0c25443f3d55f7c7108":
   version "0.0.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/dfa6feaa12bcfc8e99b05a148e12fff7f9d62f08"
+  resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/bdabdd63280f052cedeeb0c25443f3d55f7c7108"
 
 matrix-events-sdk@^0.0.1-beta.6:
   version "0.0.1-beta.6"
@@ -8089,8 +8089,8 @@ matrix-events-sdk@^0.0.1-beta.6:
   integrity sha512-VMqPXe3Bg4R9yC9PNqGv6bDFwWlVYadYxp0Ke1ihhXUCpGcx7e28kOYcqK2T3RxLXK4KK7VH4JRbY53Do3r+Fw==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "15.5.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ffab55452adba404f46c3a2ccd43a86f0cd23f8d"
+  version "15.5.1"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2fd08d72dc905e1159176d6fd3afe834261ac6e0"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8113,8 +8113,8 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.39.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/0a45ae0781af5fc1afa6f68d63450ddfeb96350a"
+  version "3.40.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/9b3af6c49397ee7e1de5ee860a549d75f642e181"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
@@ -8149,9 +8149,9 @@ matrix-mock-request@^1.2.3:
     linkifyjs "^4.0.0-beta.4"
     lodash "^4.17.20"
     maplibre-gl "^1.15.2"
-    matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#dfa6feaa12bcfc8e99b05a148e12fff7f9d62f08"
+    matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#bdabdd63280f052cedeeb0c25443f3d55f7c7108"
     matrix-events-sdk "^0.0.1-beta.6"
-    matrix-js-sdk "15.5.1"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^0.1.0-beta.18"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
