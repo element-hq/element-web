@@ -226,6 +226,7 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): 
         !isBubbleMessage &&
         !isLeftAlignedBubbleMessage &&
         eventType !== EventType.RoomMessage &&
+        eventType !== EventType.RoomMessageEncrypted &&
         eventType !== EventType.Sticker &&
         eventType !== EventType.RoomCreate &&
         !M_POLL_START.matches(eventType)

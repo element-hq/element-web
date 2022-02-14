@@ -31,6 +31,7 @@ import { jsxJoin } from '../../../utils/ReactUtils';
 import { Layout } from '../../../settings/enums/Layout';
 import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
 import AccessibleButton from './AccessibleButton';
+import RoomContext from "../../../contexts/RoomContext";
 
 const onPinnedMessagesClick = (): void => {
     RightPanelStore.instance.setCard({ phase: RightPanelPhases.PinnedMessages }, false);
@@ -80,6 +81,9 @@ const SEP = ",";
 
 @replaceableComponent("views.elements.EventListSummary")
 export default class EventListSummary extends React.Component<IProps> {
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     static defaultProps = {
         summaryLength: 1,
         threshold: 3,
@@ -477,25 +481,37 @@ export default class EventListSummary extends React.Component<IProps> {
         const userEvents: Record<string, IUserEvents[]> = {};
         eventsToRender.forEach((e, index) => {
             const type = e.getType();
-            const userId = type === EventType.RoomServerAcl ? e.getSender() : e.getStateKey();
+
+            let userId = e.getSender();
+            if (type === EventType.RoomMember) {
+                userId = e.getStateKey();
+            } else if (e.isRedacted()) {
+                userId = e.getUnsigned()?.redacted_because?.sender;
+            }
+
             // Initialise a user's events
             if (!userEvents[userId]) {
                 userEvents[userId] = [];
             }
 
-            if (e.target && TARGET_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
-                latestUserAvatarMember.set(userId, e.target);
-            } else if (e.sender) {
-                latestUserAvatarMember.set(userId, e.sender);
-            }
-
             let displayName = userId;
             if (type === EventType.RoomThirdPartyInvite) {
                 displayName = e.getContent().display_name;
+                if (e.sender) {
+                    latestUserAvatarMember.set(userId, e.sender);
+                }
+            } else if (e.isRedacted()) {
+                const sender = this.context?.room.getMember(userId);
+                if (sender) {
+                    displayName = sender.name;
+                    latestUserAvatarMember.set(userId, sender);
+                }
             } else if (e.target && TARGET_AS_DISPLAY_NAME_EVENTS.includes(type as EventType)) {
                 displayName = e.target.name;
+                latestUserAvatarMember.set(userId, e.target);
             } else if (e.sender) {
                 displayName = e.sender.name;
+                latestUserAvatarMember.set(userId, e.sender);
             }
 
             userEvents[userId].push({
