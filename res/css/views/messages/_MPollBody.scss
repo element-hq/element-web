@@ -23,6 +23,12 @@ limitations under the License.
         line-height: $font-24px;
         margin-top: 0;
         margin-bottom: 8px;
+
+        .mx_MPollBody_edited {
+            color: $roomtopic-color;
+            font-size: $font-12px;
+            opacity: 0.6;
+        }
     }
 
     h2::before {
