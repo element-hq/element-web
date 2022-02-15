@@ -37,6 +37,7 @@ import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
 import InteractiveAuth from "../InteractiveAuth";
 import Spinner from "../../views/elements/Spinner";
+import { TokenLifecycle } from "../../../TokenLifecycle";
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -415,6 +416,7 @@ export default class Registration extends React.Component<IProps, IState> {
             initial_device_display_name: this.props.defaultDeviceDisplayName,
             auth: undefined,
             inhibit_login: undefined,
+            refresh_token: TokenLifecycle.instance.isFeasible,
         };
         if (auth) registerParams.auth = auth;
         if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibit_login = inhibitLogin;

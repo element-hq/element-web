@@ -33,6 +33,7 @@ import AccessibleButton from '../../views/elements/AccessibleButton';
 import Spinner from "../../views/elements/Spinner";
 import AuthHeader from "../../views/auth/AuthHeader";
 import AuthBody from "../../views/auth/AuthBody";
+import { TokenLifecycle } from "../../../TokenLifecycle";
 
 const LOGIN_VIEW = {
     LOADING: 1,
@@ -154,6 +155,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             },
             password: this.state.password,
             device_id: MatrixClientPeg.get().getDeviceId(),
+            refresh_token: TokenLifecycle.instance.isFeasible,
         };
 
         let credentials = null;
@@ -187,6 +189,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
         const loginParams = {
             token: this.props.realQueryParams['loginToken'],
             device_id: MatrixClientPeg.get().getDeviceId(),
+            refresh_token: TokenLifecycle.instance.isFeasible,
         };
 
         let credentials = null;

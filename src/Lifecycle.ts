@@ -58,6 +58,7 @@ import LazyLoadingDisabledDialog from "./components/views/dialogs/LazyLoadingDis
 import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestoreErrorDialog";
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 import { setSentryUser } from "./sentry";
+import { IRenewedMatrixClientCreds, TokenLifecycle } from "./TokenLifecycle";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -203,6 +204,7 @@ export function attemptTokenLogin(
         "m.login.token", {
             token: queryParams.loginToken as string,
             initial_device_display_name: defaultDeviceDisplayName,
+            refresh_token: TokenLifecycle.instance.isFeasible,
         },
     ).then(function(creds) {
         logger.log("Logged in with token");
@@ -309,6 +311,8 @@ export interface IStoredSession {
     userId: string;
     deviceId: string;
     isGuest: boolean;
+    accessTokenExpiryTs?: number; // set if the token expires
+    accessTokenRefreshToken?: string | IEncryptedPayload; // set if the token can be renewed
 }
 
 /**
@@ -319,7 +323,7 @@ export interface IStoredSession {
 export async function getStoredSessionVars(): Promise<IStoredSession> {
     const hsUrl = localStorage.getItem(HOMESERVER_URL_KEY);
     const isUrl = localStorage.getItem(ID_SERVER_URL_KEY);
-    let accessToken;
+    let accessToken: string;
     try {
         accessToken = await StorageManager.idbLoad("account", "mx_access_token");
     } catch (e) {
@@ -337,6 +341,43 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
             }
         }
     }
+
+    let accessTokenExpiryTs: number;
+    let accessTokenRefreshToken: string;
+    if (accessToken) {
+        const expiration = localStorage.getItem("mx_access_token_expires_ts");
+        if (expiration) accessTokenExpiryTs = Number(expiration);
+
+        if (localStorage.getItem("mx_has_refresh_token")) {
+            try {
+                accessTokenRefreshToken = await StorageManager.idbLoad(
+                    "account", "mx_refresh_token",
+                );
+            } catch (e) {
+                logger.warn(
+                    "StorageManager.idbLoad failed for account:mx_refresh_token " +
+                    "(presuming no refresh token)",
+                    e,
+                );
+            }
+
+            if (!accessTokenRefreshToken) {
+                accessTokenRefreshToken = localStorage.getItem("mx_refresh_token");
+                if (accessTokenRefreshToken) {
+                    try {
+                        // try to migrate refresh token to IndexedDB if we can
+                        await StorageManager.idbSave(
+                            "account", "mx_refresh_token", accessTokenRefreshToken,
+                        );
+                        localStorage.removeItem("mx_refresh_token");
+                    } catch (e) {
+                        logger.error("migration of refresh token to IndexedDB failed", e);
+                    }
+                }
+            }
+        }
+    }
+
     // if we pre-date storing "mx_has_access_token", but we retrieved an access
     // token, then we should say we have an access token
     const hasAccessToken =
@@ -352,7 +393,17 @@ export async function getStoredSessionVars(): Promise<IStoredSession> {
         isGuest = localStorage.getItem("matrix-is-guest") === "true";
     }
 
-    return { hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest };
+    return {
+        hsUrl,
+        isUrl,
+        hasAccessToken,
+        accessToken,
+        accessTokenExpiryTs,
+        accessTokenRefreshToken,
+        userId,
+        deviceId,
+        isGuest,
+    };
 }
 
 // The pickle key is a string of unspecified length and format.  For AES, we
@@ -391,6 +442,41 @@ async function abortLogin() {
     }
 }
 
+export async function getRenewedStoredSessionVars(): Promise<IRenewedMatrixClientCreds> {
+    const {
+        userId,
+        deviceId,
+        accessToken,
+        accessTokenExpiryTs,
+        accessTokenRefreshToken,
+    } = await getStoredSessionVars();
+
+    let decryptedAccessToken = accessToken;
+    let decryptedRefreshToken = accessTokenRefreshToken;
+    const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
+    if (pickleKey) {
+        logger.log("Got pickle key");
+        if (typeof accessToken !== "string") {
+            const encrKey = await pickleKeyToAesKey(pickleKey);
+            decryptedAccessToken = await decryptAES(accessToken, encrKey, "access_token");
+            encrKey.fill(0);
+        }
+        if (accessTokenRefreshToken && typeof accessTokenRefreshToken !== "string") {
+            const encrKey = await pickleKeyToAesKey(pickleKey);
+            decryptedRefreshToken = await decryptAES(accessTokenRefreshToken, encrKey, "refresh_token");
+            encrKey.fill(0);
+        }
+    } else {
+        logger.log("No pickle key available");
+    }
+
+    return {
+        accessToken: decryptedAccessToken as string,
+        accessTokenExpiryTs: accessTokenExpiryTs,
+        accessTokenRefreshToken: decryptedRefreshToken as string,
+    };
+}
+
 // returns a promise which resolves to true if a session is found in
 // localstorage
 //
@@ -408,7 +494,16 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
         return false;
     }
 
-    const { hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest } = await getStoredSessionVars();
+    const {
+        hsUrl,
+        isUrl,
+        hasAccessToken,
+        accessToken,
+        userId,
+        deviceId,
+        isGuest,
+        accessTokenExpiryTs,
+    } = await getStoredSessionVars();
 
     if (hasAccessToken && !accessToken) {
         abortLogin();
@@ -420,18 +515,11 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             return false;
         }
 
-        let decryptedAccessToken = accessToken;
         const pickleKey = await PlatformPeg.get().getPickleKey(userId, deviceId);
-        if (pickleKey) {
-            logger.log("Got pickle key");
-            if (typeof accessToken !== "string") {
-                const encrKey = await pickleKeyToAesKey(pickleKey);
-                decryptedAccessToken = await decryptAES(accessToken, encrKey, "access_token");
-                encrKey.fill(0);
-            }
-        } else {
-            logger.log("No pickle key available");
-        }
+        const {
+            accessToken: decryptedAccessToken,
+            accessTokenRefreshToken: decryptedRefreshToken,
+        } = await getRenewedStoredSessionVars();
 
         const freshLogin = sessionStorage.getItem("mx_fresh_login") === "true";
         sessionStorage.removeItem("mx_fresh_login");
@@ -446,6 +534,8 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
             guest: isGuest,
             pickleKey: pickleKey,
             freshLogin: freshLogin,
+            accessTokenExpiryTs: accessTokenExpiryTs,
+            accessTokenRefreshToken: decryptedRefreshToken as string,
         }, false);
         return true;
     } else {
@@ -511,12 +601,10 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
  *
  * If the credentials belong to a different user from the session already stored,
  * the old session will be cleared automatically.
- *
- * @param {MatrixClientCreds} credentials The credentials to use
- *
+ * @param {IMatrixClientCreds} credentials The credentials to use
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
-export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+export async function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixClient> {
     const oldUserId = MatrixClientPeg.get().getUserId();
     const oldDeviceId = MatrixClientPeg.get().getDeviceId();
 
@@ -529,7 +617,40 @@ export function hydrateSession(credentials: IMatrixClientCreds): Promise<MatrixC
         logger.warn("Clearing all data: Old session belongs to a different user/session");
     }
 
+    if (!credentials.pickleKey) {
+        logger.info("Lifecycle#hydrateSession: Pickle key not provided - trying to get one");
+        credentials.pickleKey = await PlatformPeg.get().getPickleKey(credentials.userId, credentials.deviceId);
+    }
+
     return doSetLoggedIn(credentials, overwrite);
+}
+
+/**
+ * Similar to hydrateSession(), this will update the credentials used by the current
+ * session in-place. Services will not be restarted, and storage will not be deleted.
+ * @param {IMatrixClientCreds} credentials The credentials to use
+ * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
+ */
+export async function hydrateSessionInPlace(credentials: IMatrixClientCreds): Promise<MatrixClient> {
+    const oldUserId = MatrixClientPeg.get().getUserId();
+    const oldDeviceId = MatrixClientPeg.get().getDeviceId();
+    if (credentials.userId !== oldUserId || credentials.deviceId !== oldDeviceId) {
+        throw new Error("Attempted to hydrate in-place with a different session");
+    }
+
+    const cli = MatrixClientPeg.get();
+    if (!cli) {
+        throw new Error("Attempted to hydrate a non-existent MatrixClient");
+    }
+
+    logger.info("Lifecycle#hydrateInPlace: Persisting credentials and updating access token");
+    await persistCredentials(credentials);
+    MatrixClientPeg.updateUsingCreds(credentials);
+
+    // reset the token timers
+    TokenLifecycle.instance.startTimers(credentials);
+
+    return cli;
 }
 
 /**
@@ -554,8 +675,10 @@ async function doSetLoggedIn(
         " deviceId: " + credentials.deviceId +
         " guest: " + credentials.guest +
         " hs: " + credentials.homeserverUrl +
-        " softLogout: " + softLogout,
-        " freshLogin: " + credentials.freshLogin,
+        " softLogout: " + softLogout +
+        " freshLogin: " + credentials.freshLogin +
+        " tokenExpires: " + (!!credentials.accessTokenExpiryTs) +
+        " tokenRenewable: " + (!!credentials.accessTokenRefreshToken),
     );
 
     // This is dispatched to indicate that the user is still in the process of logging in
@@ -583,6 +706,29 @@ async function doSetLoggedIn(
 
     MatrixClientPeg.replaceUsingCreds(credentials);
 
+    // Check the token's renewal early so we don't have to undo some of the work down below.
+    logger.info("Lifecycle#doSetLoggedIn: Trying token refresh in case it is needed");
+    let didTokenRefresh = false;
+    try {
+        const result = await TokenLifecycle.instance.tryTokenExchangeIfNeeded(credentials, MatrixClientPeg.get());
+        if (result) {
+            logger.info("Lifecycle#doSetLoggedIn: Token refresh successful, using credentials");
+            credentials.accessToken = result.accessToken;
+            credentials.accessTokenExpiryTs = result.accessTokenExpiryTs;
+            credentials.accessTokenRefreshToken = result.accessTokenRefreshToken;
+
+            // don't forget to replace the client with the new credentials
+            MatrixClientPeg.replaceUsingCreds(credentials);
+
+            didTokenRefresh = true;
+        } else {
+            logger.info("Lifecycle#doSetLoggedIn: Token refresh indicated as not needed");
+        }
+    } catch (e) {
+        logger.error("Lifecycle#doSetLoggedIn: Failed to exchange token", e);
+        await abortLogin();
+    }
+
     setSentryUser(credentials.userId);
 
     if (PosthogAnalytics.instance.isEnabled()) {
@@ -605,14 +751,21 @@ async function doSetLoggedIn(
     if (localStorage) {
         try {
             await persistCredentials(credentials);
-            // make sure we don't think that it's a fresh login any more
+            // make sure we don't think that it's a fresh login anymore
             sessionStorage.removeItem("mx_fresh_login");
+
+            if (didTokenRefresh) {
+                TokenLifecycle.instance.flagNewCredentialsPersisted();
+            }
         } catch (e) {
             logger.warn("Error using local storage: can't persist session!", e);
         }
     } else {
         logger.warn("No local storage available: can't persist session!");
     }
+
+    // Start the token lifecycle as late as possible in case something above goes wrong
+    TokenLifecycle.instance.startTimers(credentials);
 
     dis.dispatch({ action: 'on_logged_in' });
 
@@ -640,20 +793,44 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
     localStorage.setItem("mx_user_id", credentials.userId);
     localStorage.setItem("mx_is_guest", JSON.stringify(credentials.guest));
 
+    if (credentials.accessTokenExpiryTs) {
+        localStorage.setItem("mx_access_token_expires_ts", credentials.accessTokenExpiryTs.toString());
+    }
+
     // store whether we expect to find an access token, to detect the case
     // where IndexedDB is blown away
     if (credentials.accessToken) {
         localStorage.setItem("mx_has_access_token", "true");
     } else {
-        localStorage.deleteItem("mx_has_access_token");
+        localStorage.removeItem("mx_has_access_token");
+    }
+
+    // store a similar flag for the refresh token
+    if (credentials.accessTokenRefreshToken) {
+        localStorage.setItem("mx_has_refresh_token", "true");
+    } else {
+        localStorage.removeItem("mx_has_refresh_token");
+        localStorage.removeItem("mx_refresh_token");
+
+        try {
+            await StorageManager.idbDelete("account", "mx_refresh_token");
+        } catch (e) {
+            // ignore - no action needed
+        }
     }
 
     if (credentials.pickleKey) {
-        let encryptedAccessToken;
+        let encryptedAccessToken: IEncryptedPayload;
+        let encryptedRefreshToken: IEncryptedPayload;
         try {
             // try to encrypt the access token using the pickle key
             const encrKey = await pickleKeyToAesKey(credentials.pickleKey);
             encryptedAccessToken = await encryptAES(credentials.accessToken, encrKey, "access_token");
+            if (credentials.accessTokenRefreshToken) {
+                encryptedRefreshToken = await encryptAES(
+                    credentials.accessTokenRefreshToken, encrKey, "refresh_token",
+                );
+            }
             encrKey.fill(0);
         } catch (e) {
             logger.warn("Could not encrypt access token", e);
@@ -666,11 +843,20 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
                 "account", "mx_access_token",
                 encryptedAccessToken || credentials.accessToken,
             );
+            if (encryptedRefreshToken) {
+                await StorageManager.idbSave(
+                    "account", "mx_refresh_token",
+                    encryptedRefreshToken || credentials.accessTokenRefreshToken,
+                );
+            }
         } catch (e) {
             // if we couldn't save to indexedDB, fall back to localStorage.  We
             // store the access token unencrypted since localStorage only saves
             // strings.
             localStorage.setItem("mx_access_token", credentials.accessToken);
+            if (credentials.accessTokenRefreshToken) {
+                localStorage.setItem("mx_refresh_token", credentials.accessTokenRefreshToken);
+            }
         }
         localStorage.setItem("mx_has_pickle_key", String(true));
     } else {
@@ -680,6 +866,15 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
             );
         } catch (e) {
             localStorage.setItem("mx_access_token", credentials.accessToken);
+        }
+        if (credentials.accessTokenRefreshToken) {
+            try {
+                await StorageManager.idbSave(
+                    "account", "mx_refresh_token", credentials.accessTokenRefreshToken,
+                );
+            } catch (e) {
+                localStorage.setItem("mx_refresh_token", credentials.accessTokenRefreshToken);
+            }
         }
         if (localStorage.getItem("mx_has_pickle_key")) {
             logger.error("Expected a pickle key, but none provided.  Encryption may not work.");
@@ -891,6 +1086,7 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
  * on MatrixClientPeg after stopping.
  */
 export function stopMatrixClient(unsetClient = true): void {
+    TokenLifecycle.instance.stopTimers();
     Notifier.stop();
     CallHandler.instance.stop();
     UserActivity.sharedInstance().stop();

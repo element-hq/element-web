@@ -44,6 +44,8 @@ export interface IMatrixClientCreds {
     userId: string;
     deviceId?: string;
     accessToken: string;
+    accessTokenExpiryTs?: number; // set if access token expires
+    accessTokenRefreshToken?: string; // set if access token can be renewed
     guest?: boolean;
     pickleKey?: string;
     freshLogin?: boolean;
@@ -99,6 +101,14 @@ export interface IMatrixClientPeg {
      * @param {IMatrixClientCreds} creds The new credentials to use.
      */
     replaceUsingCreds(creds: IMatrixClientCreds): void;
+
+    /**
+     * Similar to replaceUsingCreds(), but without the replacement operation.
+     * Credentials that can be updated in-place will be updated. All others
+     * will be ignored.
+     * @param {IMatrixClientCreds} creds The new credentials to use.
+     */
+    updateUsingCreds(creds: IMatrixClientCreds): void;
 }
 
 /**
@@ -162,6 +172,15 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     public replaceUsingCreds(creds: IMatrixClientCreds): void {
         this.currentClientCreds = creds;
         this.createClient(creds);
+    }
+
+    public updateUsingCreds(creds: IMatrixClientCreds): void {
+        if (creds?.accessToken) {
+            this.currentClientCreds = creds;
+            this.matrixClient.setAccessToken(creds.accessToken);
+        } else {
+            // ignore, per signature
+        }
     }
 
     public async assign(): Promise<any> {
@@ -233,7 +252,15 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 
     public getCredentials(): IMatrixClientCreds {
+        let copiedCredentials = this.currentClientCreds;
+        if (this.currentClientCreds?.userId !== this.matrixClient?.credentials?.userId) {
+            // cached credentials belong to a different user - don't use them
+            copiedCredentials = null;
+        }
         return {
+            // Copy the cached credentials before overriding what we can.
+            ...(copiedCredentials ?? {}),
+
             homeserverUrl: this.matrixClient.baseUrl,
             identityServerUrl: this.matrixClient.idBaseUrl,
             userId: this.matrixClient.credentials.userId,
