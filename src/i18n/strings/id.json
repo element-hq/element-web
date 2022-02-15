@@ -3569,5 +3569,8 @@
     "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s mengirim %(count)s sebuah pesan tersembunyi",
     "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s sent %(count)s hidden messages",
     "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s mengirim sebuah pesan tersembunyi",
-    "Automatically send debug logs when key backup is not functioning": "Kirim log debug secara otomatis ketika pencadangan kunci tidak berfungsi"
+    "Automatically send debug logs when key backup is not functioning": "Kirim log debug secara otomatis ketika pencadangan kunci tidak berfungsi",
+    "<%(count)s spaces>|zero": "<string kosong>",
+    "<%(count)s spaces>|one": "<space>",
+    "<%(count)s spaces>|other": "<%(count)s space>"
 }
