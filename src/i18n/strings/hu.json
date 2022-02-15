@@ -3637,5 +3637,8 @@
     "Maximise": "Teljes méret",
     "Automatically send debug logs when key backup is not functioning": "Hibakereső naplóbejegyzés automatikus küldése, ha a kulcs mentés nem működik",
     "Thank you for trying the beta, please go into as much detail as you can so we can improve it.": "Köszönjük, hogy kipróbálja a beta programunkat, ahhoz hogy javítani tudjunk kérjük, hogy amennyire csak lehet részletesen adjon visszajelzést.",
-    "To leave, just return to this page or click on the beta badge when you search.": "Kilépéshez csak térjen vissza erre az oldalra vagy kattintson a beta jelre a keresésnél."
+    "To leave, just return to this page or click on the beta badge when you search.": "Kilépéshez csak térjen vissza erre az oldalra vagy kattintson a beta jelre a keresésnél.",
+    "<%(count)s spaces>|zero": "<üres karakterek>",
+    "<%(count)s spaces>|other": "<%(count)s szóköz>",
+    "<%(count)s spaces>|one": "<szóköz>"
 }
