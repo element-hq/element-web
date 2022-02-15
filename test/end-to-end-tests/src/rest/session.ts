@@ -22,10 +22,10 @@ import { approveConsent } from './consent';
 import { Credentials } from "./creator";
 
 interface RoomOptions {
-    invite: string;
-    public: boolean;
-    topic: string;
-    dm: boolean;
+    invite?: string;
+    public?: boolean;
+    topic?: string;
+    dm?: boolean;
 }
 
 export class RestSession {

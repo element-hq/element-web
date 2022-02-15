@@ -198,6 +198,10 @@ export class ElementSession {
         this.page.off('request', onRequest);
     }
 
+    public async waitNoSpinner(): Promise<void> {
+        await this.page.waitForSelector(".mx_Spinner", { hidden: true });
+    }
+
     public goto(url: string): Promise<puppeteer.HTTPResponse> {
         return this.page.goto(url);
     }

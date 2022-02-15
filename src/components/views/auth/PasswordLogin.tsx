@@ -315,6 +315,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
             case LoginField.Email:
                 classes.error = this.props.loginIncorrect && !this.props.username;
                 return <EmailField
+                    id="mx_LoginForm_email"
                     className={classNames(classes)}
                     name="username" // make it a little easier for browser's remember-password
                     autoComplete="email"
@@ -333,6 +334,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
             case LoginField.MatrixId:
                 classes.error = this.props.loginIncorrect && !this.props.username;
                 return <Field
+                    id="mx_LoginForm_username"
                     className={classNames(classes)}
                     name="username" // make it a little easier for browser's remember-password
                     autoComplete="username"
@@ -360,6 +362,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                 />;
 
                 return <Field
+                    id="mx_LoginForm_phone"
                     className={classNames(classes)}
                     name="phoneNumber"
                     autoComplete="tel-national"
@@ -447,6 +450,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     { loginType }
                     { loginField }
                     <Field
+                        id="mx_LoginForm_password"
                         className={pwFieldClass}
                         autoComplete="password"
                         type="password"
