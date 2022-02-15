@@ -3591,5 +3591,8 @@
     "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)sвидаляють повідомлення",
     "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)sвидаляють %(count)s повідомлень",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)sзмінюють <a>закріплені повідомлення</a> кімнати.",
-    "Automatically send debug logs when key backup is not functioning": "Автоматично надсилати журнали зневадження при збоях резервного копіювання ключів"
+    "Automatically send debug logs when key backup is not functioning": "Автоматично надсилати журнали зневадження при збоях резервного копіювання ключів",
+    "<%(count)s spaces>|zero": "<порожній рядок>",
+    "<%(count)s spaces>|one": "<простір>",
+    "<%(count)s spaces>|other": "<%(count)s просторів>"
 }
