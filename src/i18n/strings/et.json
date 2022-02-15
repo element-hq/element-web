@@ -3634,5 +3634,7 @@
     "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s kustutasid %(count)s sõnumit",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)s muutis selle jututoa <a>klammerdatud sõnumeid</a>.",
     "Maximise": "Suurenda maksimaalseks",
-    "Automatically send debug logs when key backup is not functioning": "Kui krüptovõtmete varundus ei toimi, siis automaatselt saada silumislogid arendajatele"
+    "Automatically send debug logs when key backup is not functioning": "Kui krüptovõtmete varundus ei toimi, siis automaatselt saada silumislogid arendajatele",
+    "<%(count)s spaces>|other": "<%(count)s kogukonda>",
+    "<%(count)s spaces>|one": "<kogukond>"
 }
