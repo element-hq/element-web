@@ -63,7 +63,6 @@ import {
     AddExistingToSpace,
     defaultDmsRenderer,
     defaultRoomsRenderer,
-    defaultSpacesRenderer,
 } from "../views/dialogs/AddExistingToSpaceDialog";
 import { ChevronFace, ContextMenuButton, useContextMenu } from "./ContextMenu";
 import IconizedContextMenu, {
@@ -614,7 +613,6 @@ const SpaceAddExistingRooms = ({ space, onFinished }) => {
             filterPlaceholder={_t("Search for rooms or spaces")}
             onFinished={onFinished}
             roomsRenderer={defaultRoomsRenderer}
-            spacesRenderer={defaultSpacesRenderer}
             dmsRenderer={defaultDmsRenderer}
         />
     </div>;
