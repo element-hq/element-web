@@ -44,7 +44,6 @@ import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
 import Analytics from './Analytics';
-import CountlyAnalytics from "./CountlyAnalytics";
 import { UIFeature } from "./settings/UIFeature";
 import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
@@ -745,7 +744,6 @@ export default class CallHandler extends EventEmitter {
 
     private async placeMatrixCall(roomId: string, type: CallType, transferee?: MatrixCall): Promise<void> {
         Analytics.trackEvent('voip', 'placeCall', 'type', type);
-        CountlyAnalytics.instance.trackStartCall(roomId, type === CallType.Video, false);
 
         const mappedRoomId = (await VoipUserMapper.sharedInstance().getOrCreateVirtualRoomForRoom(roomId)) || roomId;
         logger.debug("Mapped real room " + roomId + " to room ID " + mappedRoomId);
@@ -890,7 +888,6 @@ export default class CallHandler extends EventEmitter {
 
         call.answer();
         this.setActiveCallRoomId(roomId);
-        CountlyAnalytics.instance.trackJoinCall(roomId, call.type === CallType.Video, false);
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: roomId,
@@ -1010,7 +1007,6 @@ export default class CallHandler extends EventEmitter {
     private async placeJitsiCall(roomId: string, type: string): Promise<void> {
         logger.info("Place conference call in " + roomId);
         Analytics.trackEvent('voip', 'placeConferenceCall');
-        CountlyAnalytics.instance.trackStartCall(roomId, type === CallType.Video, true);
 
         dis.dispatch({
             action: 'appsDrawer',

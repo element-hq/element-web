@@ -48,7 +48,6 @@ import DeviceListener from "./DeviceListener";
 import { Jitsi } from "./widgets/Jitsi";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY, SSO_IDP_ID_KEY } from "./BasePlatform";
 import ThreepidInviteStore from "./stores/ThreepidInviteStore";
-import CountlyAnalytics from "./CountlyAnalytics";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import CallHandler from './CallHandler';
 import LifecycleCustomisations from "./customisations/Lifecycle";
@@ -708,10 +707,6 @@ let _isLoggingOut = false;
  */
 export function logout(): void {
     if (!MatrixClientPeg.get()) return;
-    if (!CountlyAnalytics.instance.disabled) {
-        // user has logged out, fall back to anonymous
-        CountlyAnalytics.instance.enable(/* anonymous = */ true);
-    }
 
     PosthogAnalytics.instance.logout();
 

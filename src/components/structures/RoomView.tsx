@@ -1286,7 +1286,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     action: Action.JoinRoom,
                     roomId: this.getRoomId(),
                     opts: { inviteSignUrl: signUrl },
-                    _type: "unknown", // TODO: instrumentation
                 });
                 return Promise.resolve();
             });

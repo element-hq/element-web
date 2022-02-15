@@ -38,7 +38,6 @@ import DMRoomMap from "./utils/DMRoomMap";
 import { getAddressType } from "./UserAddress";
 import { getE2EEWellKnown } from "./utils/WellKnownUtils";
 import GroupStore from "./stores/GroupStore";
-import CountlyAnalytics from "./CountlyAnalytics";
 import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
 import SpaceStore from "./stores/spaces/SpaceStore";
@@ -93,8 +92,6 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     if (opts.spinner === undefined) opts.spinner = true;
     if (opts.guestAccess === undefined) opts.guestAccess = true;
     if (opts.encryption === undefined) opts.encryption = false;
-
-    const startTime = CountlyAnalytics.getTimestamp();
 
     const client = MatrixClientPeg.get();
     if (client.isGuest()) {
@@ -270,7 +267,6 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 _trigger: "Created",
             });
         }
-        CountlyAnalytics.instance.trackRoomCreate(startTime, roomId);
         return roomId;
     }, function(err) {
         // Raise the error if the caller requested that we do so.

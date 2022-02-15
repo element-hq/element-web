@@ -34,7 +34,6 @@ import SettingsStore from "../../settings/SettingsStore";
 import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
 import GroupStore from "../../stores/GroupStore";
 import FlairStore from "../../stores/FlairStore";
-import CountlyAnalytics from "../../CountlyAnalytics";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../customisations/Media";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
@@ -87,9 +86,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
     constructor(props) {
         super(props);
-
-        CountlyAnalytics.instance.trackRoomDirectoryBegin();
-        this.startTime = CountlyAnalytics.getTimestamp();
 
         const selectedCommunityId = SettingsStore.getValue("feature_communities_v2_prototypes")
             ? GroupFilterOrderStore.getSelectedTags()[0]
@@ -260,11 +256,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             if (this.unmounted) {
                 // if we've been unmounted, we don't care either.
                 return false;
-            }
-
-            if (this.state.filterString) {
-                const count = data.total_room_count_estimate || data.chunk.length;
-                CountlyAnalytics.instance.trackRoomDirectorySearch(count, this.state.filterString);
             }
 
             this.nextBatch = data.next_batch;
@@ -668,7 +659,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     }
 
     private onFinished = () => {
-        CountlyAnalytics.instance.trackRoomDirectory(this.startTime);
         this.props.onFinished(false);
     };
 

@@ -31,7 +31,6 @@ import 'what-input';
 
 import PosthogTrackers from '../../PosthogTrackers';
 import Analytics from "../../Analytics";
-import CountlyAnalytics from "../../CountlyAnalytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
@@ -346,8 +345,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             Analytics.enable();
         }
 
-        CountlyAnalytics.instance.enable(/* anonymous = */ true);
-
         initSentry(SdkConfig.get()["sentry"]);
     }
 
@@ -407,7 +404,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         if (this.shouldTrackPageChange(prevState, this.state)) {
             const durationMs = this.stopPageChangeTimer();
             Analytics.trackPageChange(durationMs);
-            CountlyAnalytics.instance.trackPageChange(durationMs);
             PosthogTrackers.instance.trackPageChange(this.state.view, this.state.page_type, durationMs);
         }
         if (this.focusComposer) {
@@ -811,9 +807,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
                 if (Analytics.canEnable()) {
                     Analytics.enable();
-                }
-                if (CountlyAnalytics.instance.canEnable()) {
-                    CountlyAnalytics.instance.enable(/* anonymous = */ false);
                 }
                 break;
             case Action.AnonymousAnalyticsReject:
@@ -1299,12 +1292,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
-        } else if (Analytics.canEnable() || CountlyAnalytics.instance.canEnable()) {
-            if (SettingsStore.getValue("showCookieBar") &&
-                (Analytics.canEnable() || CountlyAnalytics.instance.canEnable())
-            ) {
-                showAnonymousAnalyticsOptInToast();
-            }
+        } else if (Analytics.canEnable() && SettingsStore.getValue("showCookieBar")) {
+            showAnonymousAnalyticsOptInToast();
         }
 
         if (SdkConfig.get().mobileGuideToast) {
@@ -1723,12 +1712,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'require_registration',
             });
         } else if (screen === 'directory') {
-            if (this.state.view === Views.WELCOME) {
-                CountlyAnalytics.instance.track("onboarding_room_directory");
-            }
             dis.fire(Action.ViewRoomDirectory);
         } else if (screen === "start_sso" || screen === "start_cas") {
-            // TODO if logged in, skip SSO
             let cli = MatrixClientPeg.get();
             if (!cli) {
                 const { hsUrl, isUrl } = this.props.serverConfig;

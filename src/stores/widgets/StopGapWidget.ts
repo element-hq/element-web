@@ -53,7 +53,6 @@ import { ElementWidgetActions, IViewRoomApiRequest } from "./ElementWidgetAction
 import { ModalWidgetStore } from "../ModalWidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
-import CountlyAnalytics from "../../CountlyAnalytics";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 import { ELEMENT_CLIENT_ID } from "../../identifiers";
 import { getUserLanguage } from "../../languageHandler";
@@ -322,9 +321,6 @@ export class StopGapWidget extends EventEmitter {
         this.messaging.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
             (ev: CustomEvent<IStickyActionRequest>) => {
                 if (this.messaging.hasCapability(MatrixCapabilities.AlwaysOnScreen)) {
-                    if (WidgetType.JITSI.matches(this.mockWidget.type)) {
-                        CountlyAnalytics.instance.trackJoinCall(this.appTileProps.room.roomId, true, true);
-                    }
                     ActiveWidgetStore.instance.setWidgetPersistence(this.mockWidget.id, ev.detail.data.value);
                     ev.preventDefault();
                     this.messaging.transport.reply(ev.detail, <IWidgetApiRequestEmptyData>{}); // ack

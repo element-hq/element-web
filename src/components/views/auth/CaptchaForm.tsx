@@ -18,7 +18,6 @@ import React, { createRef } from 'react';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
-import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const DIV_ID = 'mx_recaptcha';
@@ -51,8 +50,6 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
         this.state = {
             errorText: undefined,
         };
-
-        CountlyAnalytics.instance.track("onboarding_grecaptcha_begin");
     }
 
     componentDidMount() {
@@ -118,12 +115,10 @@ export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICap
             this.setState({
                 errorText: null,
             });
-            CountlyAnalytics.instance.track("onboarding_grecaptcha_loaded");
         } catch (e) {
             this.setState({
                 errorText: e.toString(),
             });
-            CountlyAnalytics.instance.track("onboarding_grecaptcha_error", { error: e.toString() });
         }
     }
 

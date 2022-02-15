@@ -20,12 +20,10 @@ import QuestionDialog from './QuestionDialog';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import AccessibleButton from "../elements/AccessibleButton";
-import CountlyAnalytics, { Rating } from "../../../CountlyAnalytics";
 import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import BugReportDialog from "./BugReportDialog";
 import InfoDialog from "./InfoDialog";
-import StyledRadioGroup from "../elements/StyledRadioGroup";
 import { IDialogProps } from "./IDialogProps";
 import { submitFeedback } from "../../../rageshake/submit-rageshake";
 import { useStateToggle } from "../../../hooks/useStateToggle";
@@ -39,7 +37,6 @@ interface IProps extends IDialogProps {}
 
 const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
     const feedbackRef = useRef<Field>();
-    const [rating, setRating] = useState<Rating>();
     const [comment, setComment] = useState<string>("");
     const [canContact, toggleCanContact] = useStateToggle(false);
 
@@ -53,16 +50,12 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
         Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
     };
 
-    const countlyEnabled = CountlyAnalytics.instance.canEnable();
     const rageshakeUrl = SdkConfig.get().bug_report_endpoint_url;
-
-    const hasFeedback = countlyEnabled || rageshakeUrl;
+    const hasFeedback = !!rageshakeUrl;
     const onFinished = (sendFeedback: boolean): void => {
         if (hasFeedback && sendFeedback) {
             if (rageshakeUrl) {
                 submitFeedback(rageshakeUrl, "feedback", comment, canContact);
-            } else if (countlyEnabled) {
-                CountlyAnalytics.instance.reportFeedback(rating, comment);
             }
 
             Modal.createTrackedDialog('Feedback sent', '', InfoDialog, {
@@ -72,8 +65,6 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
         }
         props.onFinished();
     };
-
-    const brand = SdkConfig.get().brand;
 
     let feedbackSection;
     if (rageshakeUrl) {
@@ -101,40 +92,6 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
             >
                 { _t("You may contact me if you want to follow up or to let me test out upcoming ideas") }
             </StyledCheckbox>
-        </div>;
-    } else if (countlyEnabled) {
-        feedbackSection = <div className="mx_FeedbackDialog_section mx_FeedbackDialog_rateApp">
-            <h3>{ _t("Rate %(brand)s", { brand }) }</h3>
-
-            <p>{ _t("Tell us below how you feel about %(brand)s so far.", { brand }) }</p>
-            <p>{ _t("Please go into as much detail as you like, so we can track down the problem.") }</p>
-
-            <StyledRadioGroup
-                name="feedbackRating"
-                value={String(rating)}
-                onChange={(r) => setRating(parseInt(r, 10) as Rating)}
-                definitions={[
-                    { value: "1", label: "😠" },
-                    { value: "2", label: "😞" },
-                    { value: "3", label: "😑" },
-                    { value: "4", label: "😄" },
-                    { value: "5", label: "😍" },
-                ]}
-            />
-
-            <Field
-                id="feedbackComment"
-                label={_t("Add comment")}
-                placeholder={_t("Comment")}
-                type="text"
-                autoComplete="off"
-                value={comment}
-                element="textarea"
-                onChange={(ev) => {
-                    setComment(ev.target.value);
-                }}
-                ref={feedbackRef}
-            />
         </div>;
     }
 
@@ -175,7 +132,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
             { feedbackSection }
         </React.Fragment>}
         button={hasFeedback ? _t("Send feedback") : _t("Go back")}
-        buttonDisabled={hasFeedback && !rating && !comment}
+        buttonDisabled={hasFeedback && !comment}
         onFinished={onFinished}
     />);
 };

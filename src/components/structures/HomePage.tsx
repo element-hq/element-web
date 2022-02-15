@@ -32,24 +32,20 @@ import { useEventEmitter } from "../../hooks/useEventEmitter";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../views/elements/MiniAvatarUploader";
 import Analytics from "../../Analytics";
-import CountlyAnalytics from "../../CountlyAnalytics";
 import PosthogTrackers from "../../PosthogTrackers";
 
 const onClickSendDm = () => {
     Analytics.trackEvent('home_page', 'button', 'dm');
-    CountlyAnalytics.instance.track("home_page_button", { button: "dm" });
     dis.dispatch({ action: 'view_create_chat' });
 };
 
 const onClickExplore = () => {
     Analytics.trackEvent('home_page', 'button', 'room_directory');
-    CountlyAnalytics.instance.track("home_page_button", { button: "room_directory" });
     dis.fire(Action.ViewRoomDirectory);
 };
 
 const onClickNewRoom = (ev: ButtonEvent) => {
     Analytics.trackEvent('home_page', 'button', 'create_room');
-    CountlyAnalytics.instance.track("home_page_button", { button: "create_room" });
     PosthogTrackers.trackInteraction("WebHomeCreateRoomButton", ev);
     dis.dispatch({ action: 'view_create_room' });
 };

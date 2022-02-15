@@ -24,7 +24,6 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
-import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { LocalisedPolicy, Policies } from '../../../Terms';
 import Field from '../elements/Field';
@@ -201,7 +200,6 @@ export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps
     }
 
     private onCaptchaResponse = (response: string) => {
-        CountlyAnalytics.instance.track("onboarding_grecaptcha_submit");
         this.props.submitAuthDict({
             type: AuthType.Recaptcha,
             response: response,
@@ -322,8 +320,6 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
             toggledPolicies: initToggles,
             policies: pickedPolicies,
         };
-
-        CountlyAnalytics.instance.track("onboarding_terms_begin");
     }
 
     componentDidMount() {
@@ -354,7 +350,6 @@ export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITerms
 
         if (allChecked) {
             this.props.submitAuthDict({ type: AuthType.Terms });
-            CountlyAnalytics.instance.track("onboarding_terms_complete");
         } else {
             this.setState({ errorText: _t("Please review and accept all of the homeserver's policies") });
         }

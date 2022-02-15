@@ -28,7 +28,6 @@ import AuthPage from "../../views/auth/AuthPage";
 import PlatformPeg from '../../../PlatformPeg';
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import CountlyAnalytics from "../../../CountlyAnalytics";
 import { IMatrixClientCreds } from "../../../MatrixClientPeg";
 import PasswordLogin from "../../views/auth/PasswordLogin";
 import InlineSpinner from "../../views/elements/InlineSpinner";
@@ -141,8 +140,6 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             'm.login.cas': () => this.renderSsoStep("cas"),
             'm.login.sso': () => this.renderSsoStep("sso"),
         };
-
-        CountlyAnalytics.instance.track("onboarding_login_begin");
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event

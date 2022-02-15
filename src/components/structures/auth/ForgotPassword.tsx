@@ -25,7 +25,6 @@ import Modal from "../../../Modal";
 import PasswordReset from "../../../PasswordReset";
 import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import AuthPage from "../../views/auth/AuthPage";
-import CountlyAnalytics from "../../../CountlyAnalytics";
 import ServerPicker from "../../views/elements/ServerPicker";
 import EmailField from "../../views/auth/EmailField";
 import PassphraseField from '../../views/auth/PassphraseField';
@@ -101,12 +100,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         serverErrorIsFatal: false,
         serverDeadError: "",
     };
-
-    constructor(props: IProps) {
-        super(props);
-
-        CountlyAnalytics.instance.track("onboarding_forgot_password_begin");
-    }
 
     public componentDidMount() {
         this.reset = null;
@@ -298,8 +291,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                         fieldRef={field => this[ForgotPasswordField.Email] = field}
                         autoFocus={true}
                         onChange={this.onInputChanged.bind(this, "email")}
-                        onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_focus")}
-                        onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_email_blur")}
                     />
                 </div>
                 <div className="mx_AuthBody_fieldRow">
@@ -311,8 +302,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                         minScore={PASSWORD_MIN_SCORE}
                         fieldRef={field => this[ForgotPasswordField.Password] = field}
                         onChange={this.onInputChanged.bind(this, "password")}
-                        onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_focus")}
-                        onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword_blur")}
                         autoComplete="new-password"
                     />
                     <PassphraseConfirmField
@@ -324,8 +313,6 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                         password={this.state.password}
                         fieldRef={field => this[ForgotPasswordField.PasswordConfirm] = field}
                         onChange={this.onInputChanged.bind(this, "password2")}
-                        onFocus={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_focus")}
-                        onBlur={() => CountlyAnalytics.instance.track("onboarding_forgot_password_newPassword2_blur")}
                         autoComplete="new-password"
                     />
                 </div>

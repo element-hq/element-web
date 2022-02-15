@@ -26,7 +26,6 @@ import withValidation, { IFieldState, IValidationResult } from '../elements/Vali
 import { _t, _td } from '../../../languageHandler';
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
-import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../auth/RegistrationForm';
 import SetEmailDialog from "../dialogs/SetEmailDialog";
@@ -270,7 +269,6 @@ export default class ChangePassword extends React.Component<IProps, IState> {
 
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
-            CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
             return;
         }
 

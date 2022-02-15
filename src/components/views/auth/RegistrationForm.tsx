@@ -29,7 +29,6 @@ import withValidation, { IValidationResult } from '../elements/Validation';
 import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
 import EmailField from "./EmailField";
 import PassphraseField from "./PassphraseField";
-import CountlyAnalytics from "../../../CountlyAnalytics";
 import Field from '../elements/Field';
 import RegistrationEmailPromptDialog from '../dialogs/RegistrationEmailPromptDialog';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -113,8 +112,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             passwordConfirm: this.props.defaultPassword || "",
             passwordComplexity: null,
         };
-
-        CountlyAnalytics.instance.track("onboarding_registration_begin");
     }
 
     private onSubmit = async ev => {
@@ -125,13 +122,11 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
         const allFieldsValid = await this.verifyFieldsBeforeSubmit();
         if (!allFieldsValid) {
-            CountlyAnalytics.instance.track("onboarding_registration_submit_failed");
             return;
         }
 
         if (this.state.email === '') {
             if (this.showEmail()) {
-                CountlyAnalytics.instance.track("onboarding_registration_submit_warn");
                 Modal.createTrackedDialog("Email prompt dialog", '', RegistrationEmailPromptDialog, {
                     onFinished: async (confirmed: boolean, email?: string) => {
                         if (confirmed) {
@@ -155,10 +150,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
     private doSubmit(ev) {
         const email = this.state.email.trim();
-
-        CountlyAnalytics.instance.track("onboarding_registration_submit_ok", {
-            email: !!email,
-        });
 
         const promise = this.props.onRegisterClick({
             username: this.state.username.trim(),
@@ -455,8 +446,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             validationRules={this.validateEmailRules.bind(this)}
             onChange={this.onEmailChange}
             onValidate={this.onEmailValidate}
-            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_email_focus")}
-            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_email_blur")}
         />;
     }
 
@@ -468,8 +457,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             value={this.state.password}
             onChange={this.onPasswordChange}
             onValidate={this.onPasswordValidate}
-            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_password_focus")}
-            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_password_blur")}
         />;
     }
 
@@ -482,8 +469,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             password={this.state.password}
             onChange={this.onPasswordConfirmChange}
             onValidate={this.onPasswordConfirmValidate}
-            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_focus")}
-            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_passwordConfirm_blur")}
         />;
     }
 
@@ -522,8 +507,6 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
             value={this.state.username}
             onChange={this.onUsernameChange}
             onValidate={this.onUsernameValidate}
-            onFocus={() => CountlyAnalytics.instance.track("onboarding_registration_username_focus")}
-            onBlur={() => CountlyAnalytics.instance.track("onboarding_registration_username_blur")}
         />;
     }
 

@@ -23,7 +23,6 @@ import AuthPage from "./AuthPage";
 import { _td } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import CountlyAnalytics from "../../../CountlyAnalytics";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import LanguageSelector from "./LanguageSelector";
 
@@ -36,12 +35,6 @@ interface IProps {
 
 @replaceableComponent("views.auth.Welcome")
 export default class Welcome extends React.PureComponent<IProps> {
-    constructor(props: IProps) {
-        super(props);
-
-        CountlyAnalytics.instance.track("onboarding_welcome");
-    }
-
     public render(): React.ReactNode {
         // FIXME: Using an import will result in wrench-element-tests failures
         const EmbeddedPage = sdk.getComponent("structures.EmbeddedPage");
