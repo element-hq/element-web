@@ -3624,5 +3624,18 @@
     "The new search": "A nova busca",
     "New search experience": "Nova experiencia de busca",
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s e %(space2Name)s",
-    "Maximise": "Maximizar"
+    "Maximise": "Maximizar",
+    "<%(count)s spaces>|zero": "<cadea baleira>",
+    "<%(count)s spaces>|one": "<spazo>",
+    "<%(count)s spaces>|other": "<%(count)s espazos>",
+    "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)s enviou unha mensaxe oculta",
+    "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)s enviou %(count)s mensaxes ocultas",
+    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)s enviou %(count)s mensaxe oculta",
+    "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)s enviaron %(count)s mensaxes ocultas",
+    "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)s eliminou unha mensaxe",
+    "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)s eliminou %(count)s mensaxes",
+    "%(severalUsers)sremoved a message %(count)s times|one": "%(severalUsers)s eliminaron unha mensaxe",
+    "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)s eliminaron %(count)s mensaxes",
+    "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)s cambiaron as <a>mensaxes fixadas</a> da sala.",
+    "Automatically send debug logs when key backup is not functioning": "Enviar automáticamente rexistros de depuración cando a chave da copia de apoio non funcione"
 }
