@@ -84,7 +84,7 @@ For a good example, see https://develop.element.io/config.json.
 1. `update_base_url` (electron app only): HTTPS URL to a web server to download
    updates from. This should be the path to the directory containing `macos`
    and `win32` (for update packages, not installer packages).
-1. `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
+1. DEPRECATED: `piwik`: Analytics can be disabled by setting `piwik: false` or by leaving the piwik config
    option out of your config file. If you want to enable analytics, set `piwik` to be an object
    containing the following properties:
     1. `url`: The URL of the Piwik instance to use for collecting analytics
