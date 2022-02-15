@@ -1,0 +1,139 @@
+name: Move pull requests asking for review to the relevant project
+on:
+  pull_request_target:
+    types: [review_requested]
+
+jobs:
+  add_design_pr_to_project:
+    name: Move PRs asking for design review to the design board
+    runs-on: ubuntu-latest
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: find_team_members
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            query find_team_members($team: String!) {
+              organization(login: "vector-im") {
+                team(slug: $team) {
+                  members {
+                    nodes {
+                      login
+                    }
+                  }
+                }
+              }
+            }
+          team: ${{ env.TEAM }}
+        env:
+          TEAM: "design"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+      - id: any_matching_reviewers
+        run: |
+          # Fetch requested reviewers, and people who are on the team
+          echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json
+          echo '${{ tojson(github.event.pull_request.requested_reviewers[*].login) }}' | tee /tmp/reviewers.json
+          jq --raw-output .[] < /tmp/team_members.json | sort | tee /tmp/team_members.txt
+          jq --raw-output .[] < /tmp/reviewers.json | sort | tee /tmp/reviewers.txt
+
+          # Fetch requested team reviewers, and the name of the team
+          echo '${{ tojson(github.event.pull_request.requested_teams[*].slug) }}' | tee /tmp/team_reviewers.json
+          jq --raw-output .[] < /tmp/team_reviewers.json | sort | tee /tmp/team_reviewers.txt
+          echo '${{ env.TEAM }}' | tee /tmp/team.txt
+
+          # If either a reviewer matches a team member, or a team matches our team, say "true"
+          if [ $(join /tmp/team_members.txt /tmp/reviewers.txt | wc -l) != 0 ]; then
+            echo "::set-output name=match::true"
+          elif [ $(join /tmp/team.txt /tmp/team_reviewers.txt | wc -l) != 0 ]; then
+            echo "::set-output name=match::true"
+          else
+            echo "::set-output name=match::false"
+          fi
+        env:
+          TEAM: "design"
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        if: steps.any_matching_reviewers.outputs.match == 'true'
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!, $contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.pull_request.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc0sUA"
+          TEAM: "design"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  add_product_pr_to_project:
+    name: Move PRs asking for design review to the design board
+    runs-on: ubuntu-latest
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: find_team_members
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            query find_team_members($team: String!) {
+              organization(login: "vector-im") {
+                team(slug: $team) {
+                  members {
+                    nodes {
+                      login
+                    }
+                  }
+                }
+              }
+            }
+          team: ${{ env.TEAM }}
+        env:
+          TEAM: "product"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+      - id: any_matching_reviewers
+        run: |
+          # Fetch requested reviewers, and people who are on the team
+          echo '${{ tojson(fromjson(steps.find_team_members.outputs.data).organization.team.members.nodes[*].login) }}' | tee /tmp/team_members.json
+          echo '${{ tojson(github.event.pull_request.requested_reviewers[*].login) }}' | tee /tmp/reviewers.json
+          jq --raw-output .[] < /tmp/team_members.json | sort | tee /tmp/team_members.txt
+          jq --raw-output .[] < /tmp/reviewers.json | sort | tee /tmp/reviewers.txt
+
+          # Fetch requested team reviewers, and the name of the team
+          echo '${{ tojson(github.event.pull_request.requested_teams[*].slug) }}' | tee /tmp/team_reviewers.json
+          jq --raw-output .[] < /tmp/team_reviewers.json | sort | tee /tmp/team_reviewers.txt
+          echo '${{ env.TEAM }}' | tee /tmp/team.txt
+
+          # If either a reviewer matches a team member, or a team matches our team, say "true"
+          if [ $(join /tmp/team_members.txt /tmp/reviewers.txt | wc -l) != 0 ]; then
+            echo "::set-output name=match::true"
+          elif [ $(join /tmp/team.txt /tmp/team_reviewers.txt | wc -l) != 0 ]; then
+            echo "::set-output name=match::true"
+          else
+            echo "::set-output name=match::false"
+          fi
+        env:
+          TEAM: "product"
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        if: steps.any_matching_reviewers.outputs.match == 'true'
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!, $contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.pull_request.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4AAg6N"
+          TEAM: "product"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
