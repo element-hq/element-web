@@ -69,6 +69,9 @@ import { UserTab } from "./UserSettingsDialog";
 import BetaFeedbackDialog from "./BetaFeedbackDialog";
 import SdkConfig from "../../../SdkConfig";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { getMetaSpaceName } from "../../../stores/spaces";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -175,23 +178,96 @@ function refIsForRecentlyViewed(ref: RefObject<HTMLElement>): boolean {
     return ref.current?.id.startsWith("mx_SpotlightDialog_button_recentlyViewed_");
 }
 
+enum Section {
+    People,
+    Rooms,
+    Spaces,
+}
+
+interface IBaseResult {
+    section: Section;
+    query?: string[]; // extra fields to query match, stored as lowercase
+}
+
+interface IRoomResult extends IBaseResult {
+    room: Room;
+}
+
+interface IResult extends IBaseResult {
+    avatar: JSX.Element;
+    name: string;
+    description?: string;
+    onClick?(): void;
+}
+
+type Result = IRoomResult | IResult;
+
+const isRoomResult = (result: any): result is IRoomResult => !!result?.room;
+
 const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => {
     const cli = MatrixClientPeg.get();
     const rovingContext = useContext(RovingTabIndexContext);
     const [query, _setQuery] = useState(initialText);
     const [recentSearches, clearRecentSearches] = useRecentSearches();
 
-    const results = useMemo<Room[] | null>(() => {
-        if (!query) return null;
+    const possibleResults = useMemo<Result[]>(() => [
+        ...SpaceStore.instance.enabledMetaSpaces.map(spaceKey => ({
+            section: Section.Spaces,
+            avatar: (
+                <div className={`mx_SpotlightDialog_metaspaceResult mx_SpotlightDialog_metaspaceResult_${spaceKey}`} />
+            ),
+            name: getMetaSpaceName(spaceKey, SpaceStore.instance.allRoomsInHome),
+            onClick() {
+                SpaceStore.instance.setActiveSpace(spaceKey);
+            },
+        })),
+        ...cli.getVisibleRooms().map(room => {
+            let section: Section;
+            let query: string[];
 
-        const trimmedQuery = query.trim();
+            const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+            if (otherUserId) {
+                section = Section.People;
+                query = [
+                    otherUserId.toLowerCase(),
+                    room.getMember(otherUserId)?.name.toLowerCase(),
+                ].filter(Boolean);
+            } else if (room.isSpaceRoom()) {
+                section = Section.Spaces;
+            } else {
+                section = Section.Rooms;
+            }
+
+            return { room, section, query };
+        }),
+    ], [cli]);
+
+    const trimmedQuery = query.trim();
+    const [people, rooms, spaces] = useMemo<[Result[], Result[], Result[]] | []>(() => {
+        if (!trimmedQuery) return [];
+
         const lcQuery = trimmedQuery.toLowerCase();
         const normalizedQuery = normalize(trimmedQuery);
 
-        return cli.getVisibleRooms().filter(r => {
-            return r.getCanonicalAlias()?.includes(lcQuery) || r.normalizedName.includes(normalizedQuery);
+        const results: [Result[], Result[], Result[]] = [[], [], []];
+
+        possibleResults.forEach(entry => {
+            if (isRoomResult(entry)) {
+                if (!entry.room.normalizedName.includes(normalizedQuery) &&
+                    !entry.room.getCanonicalAlias()?.toLowerCase().includes(lcQuery) &&
+                    !entry.query?.some(q => q.includes(lcQuery))
+                ) return; // bail, does not match query
+            } else {
+                if (!entry.name.toLowerCase().includes(lcQuery) &&
+                    !entry.query?.some(q => q.includes(lcQuery))
+                ) return; // bail, does not match query
+            }
+
+            results[entry.section].push(entry);
         });
-    }, [cli, query]);
+
+        return results;
+    }, [possibleResults, trimmedQuery]);
 
     const activeSpace = SpaceStore.instance.activeSpaceRoom;
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace, query);
@@ -240,29 +316,40 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
     };
 
     let content: JSX.Element;
-    if (results) {
-        const [people, rooms, spaces] = results.reduce((result, room: Room) => {
-            if (room.isSpaceRoom()) result[2].push(room);
-            else if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) result[1].push(room);
-            else result[0].push(room);
-            return result;
-        }, [[], [], []] as [Room[], Room[], Room[]]);
+    if (trimmedQuery) {
+        const resultMapper = (result: Result): JSX.Element => {
+            if (isRoomResult(result)) {
+                return (
+                    <Option
+                        id={`mx_SpotlightDialog_button_result_${result.room.roomId}`}
+                        key={result.room.roomId}
+                        onClick={(ev) => {
+                            viewRoom(result.room.roomId, true, ev.type !== "click");
+                        }}
+                    >
+                        <DecoratedRoomAvatar room={result.room} avatarSize={20} tooltipProps={{ tabIndex: -1 }} />
+                        { result.room.name }
+                        <NotificationBadge notification={RoomNotificationStateStore.instance.getRoomState(result.room)} />
+                        <ResultDetails room={result.room} />
+                        <div className="mx_SpotlightDialog_enterPrompt">↵</div>
+                    </Option>
+                );
+            }
 
-        const resultMapper = (room: Room): JSX.Element => (
-            <Option
-                id={`mx_SpotlightDialog_button_result_${room.roomId}`}
-                key={room.roomId}
-                onClick={(ev) => {
-                    viewRoom(room.roomId, true, ev.type !== "click");
-                }}
-            >
-                <DecoratedRoomAvatar room={room} avatarSize={20} tooltipProps={{ tabIndex: -1 }} />
-                { room.name }
-                <NotificationBadge notification={RoomNotificationStateStore.instance.getRoomState(room)} />
-                <ResultDetails room={room} />
-                <div className="mx_SpotlightDialog_enterPrompt">↵</div>
-            </Option>
-        );
+            const otherResult = (result as IResult);
+            return (
+                <Option
+                    id={`mx_SpotlightDialog_button_result_${otherResult.name}`}
+                    key={otherResult.name}
+                    onClick={otherResult.onClick}
+                >
+                    { otherResult.avatar }
+                    { otherResult.name }
+                    { otherResult.description }
+                    <div className="mx_SpotlightDialog_enterPrompt">↵</div>
+                </Option>
+            );
+        };
 
         let peopleSection: JSX.Element;
         if (people.length) {
@@ -454,10 +541,14 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
     }
 
     const onDialogKeyDown = (ev: KeyboardEvent) => {
-        if (ev.key === Key.ESCAPE) {
-            ev.stopPropagation();
-            ev.preventDefault();
-            onFinished();
+        const navAction = getKeyBindingsManager().getNavigationAction(ev);
+        switch (navAction) {
+            case "KeyBinding.closeDialogOrContextMenu" as KeyBindingAction:
+            case KeyBindingAction.FilterRooms:
+                ev.stopPropagation();
+                ev.preventDefault();
+                onFinished();
+                break;
         }
     };
 

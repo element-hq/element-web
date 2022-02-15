@@ -146,6 +146,7 @@ limitations under the License.
                 text-overflow: ellipsis;
                 overflow: hidden;
 
+                .mx_SpotlightDialog_metaspaceResult,
                 .mx_DecoratedRoomAvatar {
                     margin-right: 8px;
                     width: 20px;
@@ -248,6 +249,29 @@ limitations under the License.
             background-color: $quinary-content;
             margin: 0 4px 0 auto;
             display: none;
+        }
+
+        .mx_SpotlightDialog_metaspaceResult {
+            background-color: $secondary-content;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+
+            &.mx_SpotlightDialog_metaspaceResult_home-space {
+                mask-image: url('$(res)/img/element-icons/home.svg');
+            }
+
+            &.mx_SpotlightDialog_metaspaceResult_favourites-space {
+                mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
+            }
+
+            &.mx_SpotlightDialog_metaspaceResult_people-space {
+                mask-image: url('$(res)/img/element-icons/room/members.svg');
+            }
+
+            &.mx_SpotlightDialog_metaspaceResult_orphans-space {
+                mask-image: url('$(res)/img/element-icons/roomlist/hash-circle.svg');
+            }
         }
     }
 
