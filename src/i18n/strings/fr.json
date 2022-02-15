@@ -3535,7 +3535,7 @@
     "We couldn’t send your location": "Nous n’avons pas pu envoyer votre position",
     "Message pending moderation": "Message en attente de modération",
     "Message pending moderation: %(reason)s": "Message en attente de modération : %(reason)s",
-    "Remove from room": "Exclure du salon",
+    "Remove from room": "Expulser du salon",
     "Failed to remove user": "Échec de l’expulsion de l’utilisateur",
     "Remove them from specific things I'm able to": "Les expulser de certains endroits où j’ai le droit de le faire",
     "Remove them from everything I'm able to": "Les expulser de partout où j’ai le droit de le faire",
