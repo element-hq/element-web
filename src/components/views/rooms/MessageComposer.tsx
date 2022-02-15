@@ -19,7 +19,7 @@ import classNames from 'classnames';
 import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { RelationType } from 'matrix-js-sdk/src/@types/event';
+import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -223,7 +223,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         const replacementRoom = MatrixClientPeg.get().getRoom(replacementRoomId);
         let createEventId = null;
         if (replacementRoom) {
-            const createEvent = replacementRoom.currentState.getStateEvents('m.room.create', '');
+            const createEvent = replacementRoom.currentState.getStateEvents(EventType.RoomCreate, '');
             if (createEvent && createEvent.getId()) createEventId = createEvent.getId();
         }
 

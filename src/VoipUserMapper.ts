@@ -16,6 +16,7 @@ limitations under the License.
 
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { logger } from "matrix-js-sdk/src/logger";
+import { EventType } from 'matrix-js-sdk/src/@types/event';
 
 import { ensureVirtualRoomExists, findDMForUser } from './createRoom';
 import { MatrixClientPeg } from "./MatrixClientPeg";
@@ -87,7 +88,7 @@ export default class VoipUserMapper {
         // way we can recognise a virtual room we've created when it first arrives down
         // our stream. We don't trust this in general though, as it could be faked by an
         // inviter: our main source of truth is the DM state.
-        const roomCreateEvent = room.currentState.getStateEvents("m.room.create", "");
+        const roomCreateEvent = room.currentState.getStateEvents(EventType.RoomCreate, "");
         if (!roomCreateEvent || !roomCreateEvent.getContent()) return false;
         // we only look at this for rooms we created (so inviters can't just cause rooms
         // to be invisible)

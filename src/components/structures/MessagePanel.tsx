@@ -682,6 +682,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             for (const Grouper of groupers) {
                 if (Grouper.canStartGroup(this, mxEv) && !this.props.disableGrouping) {
                     grouper = new Grouper(this, mxEv, prevEvent, lastShownEvent, nextEvent, nextTile);
+                    break; // break on first grouper
                 }
             }
             if (!grouper) {
@@ -1156,7 +1157,7 @@ class CreationGrouper extends BaseGrouper {
         // Get sender profile from the latest event in the summary as the m.room.create doesn't contain one
         const ev = this.events[this.events.length - 1];
 
-        let summaryText;
+        let summaryText: string;
         const roomId = ev.getRoomId();
         const creator = ev.sender ? ev.sender.name : ev.getSender();
         if (DMRoomMap.shared().getUserIdForRoomId(roomId)) {
@@ -1334,5 +1335,5 @@ class MainGrouper extends BaseGrouper {
     }
 }
 
-// all the grouper classes that we use
+// all the grouper classes that we use, ordered by priority
 const groupers = [CreationGrouper, MainGrouper];

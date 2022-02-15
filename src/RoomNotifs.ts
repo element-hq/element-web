@@ -18,6 +18,7 @@ limitations under the License.
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
 import { ConditionKind, IPushRule, PushRuleActionName, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
+import { EventType } from 'matrix-js-sdk/src/@types/event';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 
@@ -120,7 +121,7 @@ export function getUnreadNotificationCount(room: Room, type: NotificationCountTy
     // Check notification counts in the old room just in case there's some lost
     // there. We only go one level down to avoid performance issues, and theory
     // is that 1st generation rooms will have already been read by the 3rd generation.
-    const createEvent = room.currentState.getStateEvents("m.room.create", "");
+    const createEvent = room.currentState.getStateEvents(EventType.RoomCreate, "");
     if (createEvent && createEvent.getContent()['predecessor']) {
         const oldRoomId = createEvent.getContent()['predecessor']['room_id'];
         const oldRoom = MatrixClientPeg.get().getRoom(oldRoomId);

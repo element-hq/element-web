@@ -1768,7 +1768,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getOldRoom() {
-        const createEvent = this.state.room.currentState.getStateEvents("m.room.create", "");
+        const createEvent = this.state.room.currentState.getStateEvents(EventType.RoomCreate, "");
         if (!createEvent || !createEvent.getContent()['predecessor']) return null;
 
         return this.context.getRoom(createEvent.getContent()['predecessor']['room_id']);
