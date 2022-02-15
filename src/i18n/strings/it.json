@@ -3640,5 +3640,8 @@
     "%(severalUsers)sremoved a message %(count)s times|other": "%(severalUsers)shanno rimosso %(count)s messaggi",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.|one": "%(severalUsers)shanno cambiato i <a>messaggi ancorati</a> della stanza.",
     "Maximise": "Espandi",
-    "Automatically send debug logs when key backup is not functioning": "Invia automaticamente log di debug quando il backup delle chiavi non funziona"
+    "Automatically send debug logs when key backup is not functioning": "Invia automaticamente log di debug quando il backup delle chiavi non funziona",
+    "<%(count)s spaces>|zero": "<stringa vuota>",
+    "<%(count)s spaces>|one": "<spazio>",
+    "<%(count)s spaces>|other": "<%(count)s spazi>"
 }
