@@ -40,19 +40,19 @@ const WidgetCard: React.FC<IProps> = ({ room, widgetId, onClose }) => {
 
     const apps = useWidgets(room);
     const app = apps.find(a => a.id === widgetId);
-    const isPinned = app && WidgetLayoutStore.instance.isInContainer(room, app, Container.Top);
+    const isRight = app && WidgetLayoutStore.instance.isInContainer(room, app, Container.Right);
 
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu();
 
     useEffect(() => {
-        if (!app || isPinned) {
+        if (!app || !isRight) {
             // stop showing this card
             RightPanelStore.instance.popCard();
         }
-    }, [app, isPinned]);
+    }, [app, isRight]);
 
     // Don't render anything as we are about to transition
-    if (!app || isPinned) return null;
+    if (!app || !isRight) return null;
 
     let contextMenu;
     if (menuDisplayed) {

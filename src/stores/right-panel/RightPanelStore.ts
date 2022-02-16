@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -90,14 +90,30 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     // Getters
-    public get isOpenForRoom(): boolean {
+    /**
+     * If you are calling this from a component that already knows about a
+     * specific room from props / state, then it's best to prefer
+     * `isOpenForRoom` below to ensure all your data is for a single room
+     * during room changes.
+     */
+    public get isOpen(): boolean {
         return this.byRoom[this.viewedRoomId]?.isOpen ?? false;
+    }
+
+    public isOpenForRoom(roomId: string): boolean {
+        return this.byRoom[roomId]?.isOpen ?? false;
     }
 
     public get roomPhaseHistory(): Array<IRightPanelCard> {
         return this.byRoom[this.viewedRoomId]?.history ?? [];
     }
 
+    /**
+     * If you are calling this from a component that already knows about a
+     * specific room from props / state, then it's best to prefer
+     * `currentCardForRoom` below to ensure all your data is for a single room
+     * during room changes.
+     */
     public get currentCard(): IRightPanelCard {
         const hist = this.roomPhaseHistory;
         if (hist.length >= 1) {
@@ -111,7 +127,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (hist.length > 0) {
             return hist[hist.length - 1];
         }
-        return this.currentCard ?? { state: {}, phase: null };
+        return { state: {}, phase: null };
     }
 
     public get previousCard(): IRightPanelCard {
@@ -123,7 +139,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     // The Group associated getters are just for backwards compatibility. Can be removed when deprecating groups.
-    public get isOpenForGroup(): boolean { return this.isOpenForRoom; }
+    public get isOpenForGroup(): boolean { return this.isOpen; }
     public get groupPhaseHistory(): Array<IRightPanelCard> { return this.roomPhaseHistory; }
     public get currentGroup(): IRightPanelCard { return this.currentCard; }
     public get previousGroup(): IRightPanelCard { return this.previousCard; }
@@ -216,13 +232,13 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     public show() {
-        if (!this.isOpenForRoom) {
+        if (!this.isOpen) {
             this.togglePanel();
         }
     }
 
     public hide() {
-        if (this.isOpenForRoom) {
+        if (this.isOpen) {
             this.togglePanel();
         }
     }
@@ -235,8 +251,8 @@ export default class RightPanelStore extends ReadyWatchingStore {
             this.byRoom[this.viewedRoomId] = this.byRoom[this.viewedRoomId] ??
                 convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room);
         } else {
-            console.warn("Could not restore the right panel after load because there was no associated room object." +
-                "The right panel can only be restored for rooms and spaces but not for groups");
+            console.warn("Could not restore the right panel after load because there was no associated room object. " +
+                "The right panel can only be restored for rooms and spaces but not for groups.");
         }
     }
 

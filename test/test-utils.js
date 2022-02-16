@@ -1,6 +1,5 @@
 import React from 'react';
 import EventEmitter from "events";
-import ShallowRenderer from 'react-test-renderer/shallow';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { JoinRule } from 'matrix-js-sdk/src/@types/partials';
 
@@ -9,11 +8,6 @@ import dis from '../src/dispatcher/dispatcher';
 import { makeType } from "../src/utils/TypeUtils";
 import { ValidatedServerConfig } from "../src/utils/AutoDiscoveryUtils";
 import MatrixClientContext from "../src/contexts/MatrixClientContext";
-
-export function getRenderer() {
-    // Old: ReactTestUtils.createRenderer();
-    return new ShallowRenderer();
-}
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
