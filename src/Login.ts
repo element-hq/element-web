@@ -22,7 +22,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
-import { TokenLifecycle } from "./TokenLifecycle";
 
 interface ILoginOptions {
     defaultDeviceDisplayName?: string;
@@ -65,11 +64,6 @@ interface ILoginParams {
     token?: string;
     device_id?: string;
     initial_device_display_name?: string;
-
-    // If true, a refresh token will be requested. If the server supports it, it
-    // will be returned. Does nothing out of the ordinary if not set, false, or
-    // the server doesn't support the feature.
-    refresh_token?: boolean;
 }
 /* eslint-enable camelcase */
 
@@ -168,7 +162,6 @@ export default class Login {
             password,
             identifier,
             initial_device_display_name: this.defaultDeviceDisplayName,
-            refresh_token: TokenLifecycle.instance.isFeasible,
         };
 
         const tryFallbackHs = (originalError) => {
@@ -242,9 +235,6 @@ export async function sendLoginRequest(
         userId: data.user_id,
         deviceId: data.device_id,
         accessToken: data.access_token,
-        // Use the browser's local time for expiration timestamp - see TokenLifecycle for more info
-        accessTokenExpiryTs: data.expires_in_ms ? (data.expires_in_ms + Date.now()) : null,
-        accessTokenRefreshToken: data.refresh_token,
     };
 
     SecurityCustomisations.examineLoginResponse?.(data, creds);

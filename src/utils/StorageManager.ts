@@ -25,12 +25,10 @@ const localStorage = window.localStorage;
 
 // just *accessing* indexedDB throws an exception in firefox with
 // indexeddb disabled.
-let indexedDB: IDBFactory;
+let indexedDB;
 try {
     indexedDB = window.indexedDB;
 } catch (e) {}
-
-export const IDB_SUPPORTED = !!indexedDB;
 
 // The JS SDK will add a prefix of "matrix-js-sdk:" to the sync store name.
 const SYNC_STORE_NAME = "riot-web-sync";
@@ -199,7 +197,7 @@ export function setCryptoInitialised(cryptoInited) {
 /* Simple wrapper functions around IndexedDB.
  */
 
-let idb: IDBDatabase = null;
+let idb = null;
 
 async function idbInit(): Promise<void> {
     if (!indexedDB) {
