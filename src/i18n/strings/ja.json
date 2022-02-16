@@ -731,7 +731,7 @@
     "Dates are often easy to guess": "たいていの日付は推測されやすいです",
     "Whether or not you're logged in (we don't record your username)": "ログインしているか否か（私たちはあなたのユーザー名を記録しません）",
     "Sets the room name": "部屋名を設定する",
-    "Change room name": "部屋名の変更",
+    "Change room name": "ルーム名の変更",
     "Room Name": "部屋名",
     "Add Email Address": "メールアドレスの追加",
     "Add Phone Number": "電話番号の追加",
@@ -840,7 +840,7 @@
     "Enable room encryption": "部屋の暗号化を有効化",
     "Change": "変更",
     "Change room avatar": "部屋アバターの変更",
-    "Change main address for the room": "部屋のメインアドレスの変更",
+    "Change main address for the room": "ルームのメインアドレスの変更",
     "Change history visibility": "履歴を表示できるかの変更",
     "Change permissions": "権限の変更",
     "Change topic": "トピックの変更",
@@ -2325,5 +2325,6 @@
     "%(senderName)s set a profile picture": "%(senderName)s がプロフィール画像を設定しました",
     "%(senderName)s changed their profile picture": "%(senderName)s がプロフィール画像を変更しました",
     "%(senderName)s removed their profile picture": "%(senderName)s がプロフィール画像を削除しました",
-    "%(targetName)s left the room": "%(targetName)s がこの部屋を退出しました"
+    "%(targetName)s left the room": "%(targetName)s がこの部屋を退出しました",
+    "Change main address for the space": "スペースのメインアドレスを変更"
 }
