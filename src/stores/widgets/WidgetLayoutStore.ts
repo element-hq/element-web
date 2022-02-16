@@ -16,6 +16,7 @@
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Optional } from "matrix-events-sdk";
 
 import SettingsStore from "../../settings/SettingsStore";
 import WidgetStore, { IApp } from "../WidgetStore";
@@ -345,15 +346,15 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
         }
     }
 
-    public getContainerWidgets(room: Room, container: Container): IApp[] {
+    public getContainerWidgets(room: Optional<Room>, container: Container): IApp[] {
         return this.byRoom[room?.roomId]?.[container]?.ordered || [];
     }
 
-    public isInContainer(room: Room, widget: IApp, container: Container): boolean {
+    public isInContainer(room: Optional<Room>, widget: IApp, container: Container): boolean {
         return this.getContainerWidgets(room, container).some(w => w.id === widget.id);
     }
 
-    public isVisibleOnScreen(room: Room, widgetId: string) {
+    public isVisibleOnScreen(room: Optional<Room>, widgetId: string) {
         const wId = widgetId;
         const inRightPanel =
             (RightPanelStore.instance.currentCard.phase == RightPanelPhases.Widget &&

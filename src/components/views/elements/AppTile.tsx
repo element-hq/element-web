@@ -174,7 +174,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private onRoomViewStoreUpdate = () => {
-        if (this.props.room.roomId == RoomViewStore.getRoomId()) return;
+        if (this.props.room?.roomId === RoomViewStore.getRoomId()) return;
         const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
         // Stop the widget if it's not the active (persistent) widget and it's not a user widget
         if (!isActiveWidget && !this.props.userWidget) {
@@ -186,7 +186,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
         if (isActiveWidget) {
             // We just left the room that the active widget was from.
-            if (RoomViewStore.getRoomId() !== this.props.room.roomId) {
+            if (this.props.room && RoomViewStore.getRoomId() !== this.props.room.roomId) {
                 // If we are not actively looking at the room then destroy this widget entirely.
                 this.endWidgetActions();
             } else if (WidgetType.JITSI.matches(this.props.app.type)) {
@@ -200,7 +200,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private onMyMembership = (room: Room, membership: string): void => {
-        if (membership === "leave" && room.roomId === this.props.room.roomId) {
+        if (membership === "leave" && room.roomId === this.props.room?.roomId) {
             this.onUserLeftRoom();
         }
     };
@@ -376,7 +376,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             this.iframe.src = 'about:blank';
         }
 
-        if (WidgetType.JITSI.matches(this.props.app.type)) {
+        if (WidgetType.JITSI.matches(this.props.app.type) && this.props.room) {
             CallHandler.instance.hangupCallApp(this.props.room.roomId);
         }
 
@@ -432,7 +432,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private grantWidgetPermission = (): void => {
-        const roomId = this.props.room.roomId;
+        const roomId = this.props.room?.roomId;
         logger.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
         current[this.props.app.eventId] = true;
@@ -509,6 +509,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private onToggleMaximisedClick = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
         const targetContainer =
             WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Center)
                 ? Container.Right
@@ -517,6 +518,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private onTogglePinnedClick = (): void => {
+        if (!this.props.room) return; // ignore action - it shouldn't even be visible
         const targetContainer =
             WidgetLayoutStore.instance.isInContainer(this.props.room, this.props.app, Container.Top)
                 ? Container.Right
