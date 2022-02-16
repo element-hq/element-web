@@ -297,21 +297,21 @@ export default class ElectronPlatform extends VectorBasePlatform {
         if (isMac) {
             registerShortcut("KeyBinding.openUserSettings", CategoryName.NAVIGATION, {
                 default: {
-                    commandKey: true,
+                    metaKey: true,
                     key: Key.COMMA,
                 },
                 displayName: _td("Open user settings"),
             });
             registerShortcut("KeyBinding.previousVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
                 default: {
-                    commandKey: true,
+                    metaKey: true,
                     key: Key.SQUARE_BRACKET_LEFT,
                 },
                 displayName: _td("Previous recently visited room or community"),
             });
             registerShortcut("KeyBinding.nextVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
                 default: {
-                    commandKey: true,
+                    metaKey: true,
                     key: Key.SQUARE_BRACKET_RIGHT,
                 },
                 displayName: _td("Next recently visited room or community"),
