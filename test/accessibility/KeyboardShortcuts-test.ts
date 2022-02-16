@@ -17,13 +17,24 @@ limitations under the License.
 import {
     CATEGORIES,
     CategoryName,
+    getCustomizableShortcuts,
     getKeyboardShortcuts,
+    KEYBOARD_SHORTCUTS,
     registerShortcut,
 } from "../../src/accessibility/KeyboardShortcuts";
 import { Key } from "../../src/Keyboard";
 import { ISetting } from "../../src/settings/Settings";
 
 describe("KeyboardShortcuts", () => {
+    it("doesn't change KEYBOARD_SHORTCUTS when getting shortcuts", () => {
+        const copyKeyboardShortcuts = Object.assign({}, KEYBOARD_SHORTCUTS);
+
+        getCustomizableShortcuts();
+        expect(KEYBOARD_SHORTCUTS).toEqual(copyKeyboardShortcuts);
+        getKeyboardShortcuts();
+        expect(KEYBOARD_SHORTCUTS).toEqual(copyKeyboardShortcuts);
+    });
+
     describe("registerShortcut()", () => {
         it("correctly registers shortcut", () => {
             const shortcutName = "Keybinding.definitelyARealShortcut";

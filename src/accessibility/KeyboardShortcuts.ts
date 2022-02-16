@@ -250,7 +250,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
 // This is very intentionally modelled after SETTINGS as it will make it easier
 // to implement customizable keyboard shortcuts
 // TODO: TravisR will fix this nightmare when the new version of the SettingsStore becomes a thing
-const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
+// XXX: Exported for tests
+export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     [KeyBindingAction.FormatBold]: {
         default: {
             ctrlOrCmdKey: true,
@@ -582,7 +583,7 @@ const getNonCustomizableShortcuts = (): IKeyboardShortcuts => {
 };
 
 export const getCustomizableShortcuts = (): IKeyboardShortcuts => {
-    const keyboardShortcuts = KEYBOARD_SHORTCUTS;
+    const keyboardShortcuts = Object.assign({}, KEYBOARD_SHORTCUTS);
 
     keyboardShortcuts[KeyBindingAction.EditRedo] = {
         default: {
@@ -607,11 +608,10 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
         ...Object.entries(getCustomizableShortcuts()),
     ];
 
-    const keyboardShortcuts: IKeyboardShortcuts = {};
-    for (const [key, value] of entries) {
-        keyboardShortcuts[key] = value;
-    }
-    return keyboardShortcuts;
+    return entries.reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+    }, {});
 };
 
 export const registerShortcut = (shortcutName: string, categoryName: CategoryName, shortcut: ISetting): void => {
