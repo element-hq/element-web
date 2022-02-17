@@ -18,7 +18,6 @@ import React from "react";
 import TestRenderer from "react-test-renderer";
 import { jest } from "@jest/globals";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { SyncState } from "matrix-js-sdk/src/sync";
 
 // We can't use the usual `skinned-sdk`, as it stubs out the RightPanel
 import "../../minimal-sdk";
@@ -34,6 +33,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import { RightPanelPhases } from "../../../src/stores/right-panel/RightPanelStorePhases";
 import RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
+import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
 
 describe("RightPanel", () => {
     it("renders info from only one room during room changes", async () => {
@@ -72,13 +72,13 @@ describe("RightPanel", () => {
             return null;
         });
 
-        // Wake up any stores waiting for a client
-        dis.dispatch({
-            action: "MatrixActions.sync",
-            prevState: SyncState.Prepared,
-            state: SyncState.Syncing,
-            matrixClient: cli,
-        });
+        // Wake up various stores we rely on
+        WidgetLayoutStore.instance.useUnitTestClient(cli);
+        // @ts-ignore
+        await WidgetLayoutStore.instance.onReady();
+        RightPanelStore.instance.useUnitTestClient(cli);
+        // @ts-ignore
+        await RightPanelStore.instance.onReady();
 
         const resizeNotifier = new ResizeNotifier();
 
@@ -139,7 +139,11 @@ describe("RightPanel", () => {
         await rendered;
     });
 
-    afterAll(() => {
+    afterAll(async () => {
+        // @ts-ignore
+        await WidgetLayoutStore.instance.onNotReady();
+        // @ts-ignore
+        await RightPanelStore.instance.onNotReady();
         jest.restoreAllMocks();
     });
 });

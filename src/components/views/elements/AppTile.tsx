@@ -2,7 +2,7 @@
 Copyright 2017 Vector Creations Ltd
 Copyright 2018 New Vector Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import classNames from 'classnames';
 import { MatrixCapabilities } from "matrix-widget-api";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
-import { EventSubscription } from 'fbemitter';
 
 import AccessibleButton from './AccessibleButton';
 import { _t } from '../../../languageHandler';
@@ -118,16 +117,39 @@ export default class AppTile extends React.Component<IProps, IState> {
         showLayoutButtons: true,
     };
 
+    // We track a count of all "live" `AppTile`s for a given widget ID.
+    // For this purpose, an `AppTile` is considered live from the time it is
+    // constructed until it is unmounted. This is used to aid logic around when
+    // to tear down the widget iframe. See `componentWillUnmount` for details.
+    private static liveTilesById: { [key: string]: number } = {};
+
+    public static addLiveTile(widgetId: string): void {
+        const refs = this.liveTilesById[widgetId] || 0;
+        this.liveTilesById[widgetId] = refs + 1;
+    }
+
+    public static removeLiveTile(widgetId: string): void {
+        const refs = this.liveTilesById[widgetId] || 0;
+        this.liveTilesById[widgetId] = refs - 1;
+    }
+
+    public static isLive(widgetId: string): boolean {
+        const refs = this.liveTilesById[widgetId] || 0;
+        return refs > 0;
+    }
+
     private contextMenuButton = createRef<any>();
     private iframe: HTMLIFrameElement; // ref to the iframe (callback style)
     private allowedWidgetsWatchRef: string;
     private persistKey: string;
     private sgWidget: StopGapWidget;
     private dispatcherRef: string;
-    private roomStoreToken: EventSubscription;
+    private unmounted: boolean;
 
     constructor(props: IProps) {
         super(props);
+
+        AppTile.addLiveTile(this.props.app.id);
 
         // The key used for PersistedElement
         this.persistKey = getPersistKey(this.props.app.id);
@@ -163,23 +185,6 @@ export default class AppTile extends React.Component<IProps, IState> {
             return props.userId === props.creatorUserId;
         }
         return !!currentlyAllowedWidgets[props.app.eventId];
-    };
-
-    private onWidgetLayoutChange = () => {
-        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
-        const isVisibleOnScreen = WidgetLayoutStore.instance.isVisibleOnScreen(this.props.room, this.props.app.id);
-        if (!isVisibleOnScreen && !isActiveWidget) {
-            this.endWidgetActions();
-        }
-    };
-
-    private onRoomViewStoreUpdate = () => {
-        if (this.props.room?.roomId === RoomViewStore.getRoomId()) return;
-        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
-        // Stop the widget if it's not the active (persistent) widget and it's not a user widget
-        if (!isActiveWidget && !this.props.userWidget) {
-            this.endWidgetActions();
-        }
     };
 
     private onUserLeftRoom() {
@@ -263,28 +268,46 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.watchUserReady();
 
         if (this.props.room) {
-            const emitEvent = WidgetLayoutStore.emissionForRoom(this.props.room);
-            WidgetLayoutStore.instance.on(emitEvent, this.onWidgetLayoutChange);
             this.context.on("Room.myMembership", this.onMyMembership);
         }
 
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
         // Widget action listeners
         this.dispatcherRef = dis.register(this.onAction);
     }
 
     public componentWillUnmount(): void {
+        this.unmounted = true;
+
+        // It might seem simplest to always tear down the widget itself here,
+        // and indeed that would be a bit easier to reason about... however, we
+        // support moving widgets between containers (e.g. top <-> center).
+        // During such a move, this component will unmount from the old
+        // container and remount in the new container. By keeping the widget
+        // iframe loaded across this transition, the widget doesn't notice that
+        // anything happened, which improves overall widget UX. During this kind
+        // of movement between containers, the new `AppTile` for the new
+        // container is constructed before the old one unmounts. By counting the
+        // mounted `AppTile`s for each widget, we know to only tear down the
+        // widget iframe when the last the `AppTile` unmounts.
+        AppTile.removeLiveTile(this.props.app.id);
+
+        // We also support a separate "persistence" mode where a single widget
+        // can request to be "sticky" and follow you across rooms in a PIP
+        // container.
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
+
+        if (!AppTile.isLive(this.props.app.id) && !isActiveWidget) {
+            this.endWidgetActions();
+        }
+
         // Widget action listeners
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
         if (this.props.room) {
-            const emitEvent = WidgetLayoutStore.emissionForRoom(this.props.room);
-            WidgetLayoutStore.instance.off(emitEvent, this.onWidgetLayoutChange);
             this.context.off("Room.myMembership", this.onMyMembership);
         }
 
-        this.roomStoreToken?.remove();
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);
         OwnProfileStore.instance.removeListener(UPDATE_EVENT, this.onUserReady);
     }
@@ -319,6 +342,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private startWidget(): void {
         this.sgWidget.prepare().then(() => {
+            if (this.unmounted) return;
             this.setState({ initialising: false });
         });
     }
@@ -333,6 +357,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private iframeRefChange = (ref: HTMLIFrameElement): void => {
         this.iframe = ref;
+        if (this.unmounted) return;
         if (ref) {
             this.startMessaging();
         } else {
@@ -668,6 +693,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 "mx_AppTileMenuBar_iconButton_maximise": !isMaximised,
             });
             layoutButtons.push(<AccessibleButton
+                key="toggleMaximised"
                 className={maximisedClasses}
                 title={
                     isMaximised ? _t("Close") : _t("Maximise")
@@ -683,6 +709,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 "mx_AppTileMenuBar_iconButton_pin": !isPinned,
             });
             layoutButtons.push(<AccessibleButton
+                key="togglePinned"
                 className={pinnedClasses}
                 title={
                     isPinned ? _t("Unpin") : _t("Pin")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,6 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import { arrayFastClone } from "../../utils/arrays";
 import { UPDATE_EVENT } from "../AsyncStore";
 import { compare } from "../../utils/strings";
-import RightPanelStore from "../right-panel/RightPanelStore";
-import { RightPanelPhases } from "../right-panel/RightPanelStorePhases";
 
 export const WIDGET_LAYOUT_EVENT_TYPE = "io.element.widgets.layout";
 
@@ -352,22 +350,6 @@ export class WidgetLayoutStore extends ReadyWatchingStore {
 
     public isInContainer(room: Optional<Room>, widget: IApp, container: Container): boolean {
         return this.getContainerWidgets(room, container).some(w => w.id === widget.id);
-    }
-
-    public isVisibleOnScreen(room: Optional<Room>, widgetId: string) {
-        const wId = widgetId;
-        const inRightPanel =
-            (RightPanelStore.instance.currentCard.phase == RightPanelPhases.Widget &&
-                wId == RightPanelStore.instance.currentCard.state?.widgetId);
-        const inCenterContainer =
-            this.getContainerWidgets(room, Container.Center).some((app) => app.id == wId);
-        const inTopContainer =
-            this.getContainerWidgets(room, Container.Top).some(app => app.id == wId);
-
-        // The widget should only be shown as a persistent app (in a floating pip container) if it is not visible on screen
-        // either, because we are viewing a different room OR because it is in none of the possible containers of the room view.
-        const isVisibleOnScreen = (inRightPanel || inCenterContainer || inTopContainer);
-        return isVisibleOnScreen;
     }
 
     public canAddToContainer(room: Room, container: Container): boolean {

@@ -56,8 +56,9 @@ export function createTestClient() {
         getGroups: jest.fn().mockReturnValue([]),
         loginFlows: jest.fn(),
         on: eventEmitter.on.bind(eventEmitter),
-        emit: eventEmitter.emit.bind(eventEmitter),
+        off: eventEmitter.off.bind(eventEmitter),
         removeListener: eventEmitter.removeListener.bind(eventEmitter),
+        emit: eventEmitter.emit.bind(eventEmitter),
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         peekInRoom: jest.fn().mockResolvedValue(mkStubRoom()),
 
