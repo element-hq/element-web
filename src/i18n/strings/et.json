@@ -3636,5 +3636,9 @@
     "Maximise": "Suurenda maksimaalseks",
     "Automatically send debug logs when key backup is not functioning": "Kui krüptovõtmete varundus ei toimi, siis automaatselt saada silumislogid arendajatele",
     "<%(count)s spaces>|other": "<%(count)s kogukonda>",
-    "<%(count)s spaces>|one": "<kogukond>"
+    "<%(count)s spaces>|one": "<kogukond>",
+    "Can't edit poll": "Küsimustikku ei saa muuta",
+    "Sorry, you can't edit a poll after votes have been cast.": "Vabandust, aga küsimustikku ei saa enam peale hääletamise lõppu muuta.",
+    "Edit poll": "Muuda küsitlust",
+    "Join %(roomAddress)s": "Liitu %(roomAddress)s jututoaga"
 }
