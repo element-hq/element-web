@@ -3597,5 +3597,6 @@
     "<%(count)s spaces>|other": "<%(count)s просторів>",
     "Edit poll": "Редагувати опитування",
     "Sorry, you can't edit a poll after votes have been cast.": "Ви не можете редагувати опитування після завершення голосування.",
-    "Can't edit poll": "Неможливо редагувати опитування"
+    "Can't edit poll": "Неможливо редагувати опитування",
+    "Join %(roomAddress)s": "Приєднатися до %(roomAddress)s"
 }
