@@ -3640,5 +3640,8 @@
     "To leave, just return to this page or click on the beta badge when you search.": "Kilépéshez csak térjen vissza erre az oldalra vagy kattintson a beta jelre a keresésnél.",
     "<%(count)s spaces>|zero": "<üres karakterek>",
     "<%(count)s spaces>|other": "<%(count)s szóköz>",
-    "<%(count)s spaces>|one": "<szóköz>"
+    "<%(count)s spaces>|one": "<szóköz>",
+    "Edit poll": "Szavazás szerkesztése",
+    "Sorry, you can't edit a poll after votes have been cast.": "Sajnálom, a szavazás nem szerkeszthető miután szavazatok érkeztek.",
+    "Can't edit poll": "A szavazás nem szerkeszthető"
 }
