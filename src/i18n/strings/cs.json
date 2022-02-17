@@ -3644,5 +3644,9 @@
     "Automatically send debug logs when key backup is not functioning": "Automaticky odeslat ladící protokoly, když zálohování klíčů nefunguje",
     "<%(count)s spaces>|zero": "<prázdný řetězec>",
     "<%(count)s spaces>|one": "<mezera>",
-    "<%(count)s spaces>|other": "<%(count)s mezer>"
+    "<%(count)s spaces>|other": "<%(count)s mezer>",
+    "Join %(roomAddress)s": "Vstoupit do %(roomAddress)s",
+    "Edit poll": "Upravit hlasování",
+    "Sorry, you can't edit a poll after votes have been cast.": "Je nám líto, ale po odevzdání hlasů nelze hlasování upravovat.",
+    "Can't edit poll": "Nelze upravit hlasování"
 }
