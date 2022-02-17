@@ -70,7 +70,9 @@ const GenericEventListSummary: React.FC<IProps> = ({
     if (events.length < threshold) {
         return (
             <li className="mx_GenericEventListSummary" data-scroll-tokens={eventIds} data-expanded={true} data-layout={layout}>
-                { children }
+                <ol className="mx_GenericEventListSummary_unstyledList">
+                    { children }
+                </ol>
             </li>
         );
     }

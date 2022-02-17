@@ -18,6 +18,11 @@ limitations under the License.
     position: relative;
 }
 
+.mx_GenericEventListSummary_unstyledList {
+    list-style: none;
+    padding: 0;
+}
+
 .mx_TextualEvent.mx_GenericEventListSummary_summary {
     font-size: $font-14px;
     display: inline-flex;
