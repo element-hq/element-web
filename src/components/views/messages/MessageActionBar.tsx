@@ -20,6 +20,7 @@ import React, { ReactElement, useEffect } from 'react';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import classNames from 'classnames';
 import { MsgType } from 'matrix-js-sdk/src/@types/event';
+import { M_POLL_START } from 'matrix-events-sdk';
 
 import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
@@ -42,6 +43,10 @@ import ReplyChain from '../elements/ReplyChain';
 import { showThread } from '../../../dispatcher/dispatch-actions/threads';
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import { CardContext } from '../right_panel/BaseCard';
+import Modal from '../../../Modal';
+import PollCreateDialog from '../elements/PollCreateDialog';
+import ErrorDialog from '../dialogs/ErrorDialog';
+import { createVoteRelations } from './MPollBody';
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -228,12 +233,59 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         });
     };
 
-    private onEditClick = (ev: React.MouseEvent): void => {
-        dis.dispatch({
-            action: Action.EditEvent,
-            event: this.props.mxEvent,
-            timelineRenderingType: this.context.timelineRenderingType,
-        });
+    private pollAlreadyHasVotes = (): boolean => {
+        if (!this.props.getRelationsForEvent) {
+            return false;
+        }
+
+        const voteRelations = createVoteRelations(
+            this.props.getRelationsForEvent,
+            this.props.mxEvent.getId(),
+        );
+
+        return voteRelations.getRelations().length > 0;
+    };
+
+    private launchPollEditor = (): void => {
+        if (this.pollAlreadyHasVotes()) {
+            Modal.createTrackedDialog(
+                'Not allowed to edit poll',
+                '',
+                ErrorDialog,
+                {
+                    title: _t("Can't edit poll"),
+                    description: _t(
+                        "Sorry, you can't edit a poll after votes have been cast.",
+                    ),
+                },
+            );
+        } else {
+            Modal.createTrackedDialog(
+                'Polls',
+                'create',
+                PollCreateDialog,
+                {
+                    room: this.context.room,
+                    threadId: this.context.threadId ?? null,
+                    editingMxEvent: this.props.mxEvent,
+                },
+                'mx_CompoundDialog',
+                false, // isPriorityModal
+                true,  // isStaticModal
+            );
+        }
+    };
+
+    private onEditClick = (): void => {
+        if (M_POLL_START.matches(this.props.mxEvent.getType())) {
+            this.launchPollEditor();
+        } else {
+            dis.dispatch({
+                action: Action.EditEvent,
+                event: this.props.mxEvent,
+                timelineRenderingType: this.context.timelineRenderingType,
+            });
+        }
     };
 
     private readonly forbiddenThreadHeadMsgType = [

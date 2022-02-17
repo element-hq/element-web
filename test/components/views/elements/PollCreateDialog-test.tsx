@@ -19,6 +19,8 @@ import '../../../skinned-sdk';
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { M_POLL_KIND_DISCLOSED, M_POLL_START, M_TEXT, PollStartEvent } from 'matrix-events-sdk';
+import { IContent, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import * as TestUtils from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
@@ -64,6 +66,27 @@ describe("PollCreateDialog", () => {
         expect(dialog.html()).toMatchSnapshot();
     });
 
+    it("renders info from a previous event", () => {
+        const previousEvent: MatrixEvent = new MatrixEvent(
+            PollStartEvent.from(
+                "Poll Q",
+                ["Answer 1", "Answer 2"],
+                M_POLL_KIND_DISCLOSED,
+            ).serialize(),
+        );
+
+        const dialog = mount(
+            <PollCreateDialog
+                room={createRoom()}
+                onFinished={jest.fn()}
+                editingMxEvent={previousEvent}
+            />,
+        );
+
+        expect(submitIsDisabled(dialog)).toBe(false);
+        expect(dialog.html()).toMatchSnapshot();
+    });
+
     it("doesn't allow submitting until there are options", () => {
         const dialog = mount(
             <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
@@ -101,6 +124,129 @@ describe("PollCreateDialog", () => {
 
         dialog.find("button").simulate("click");
         expect(dialog.find("Spinner").length).toBe(1);
+    });
+
+    it("sends a poll create event when submitted", () => {
+        TestUtils.stubClient();
+        let sentEventContent: IContent = null;
+        MatrixClientPeg.get().sendEvent = jest.fn(
+            (
+                _roomId: string,
+                _threadId: string,
+                eventType: string,
+                content: IContent,
+            ) => {
+                expect(M_POLL_START.matches(eventType)).toBeTruthy();
+                sentEventContent = content;
+                return Promise.resolve();
+            },
+        );
+
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+        );
+        changeValue(dialog, "Question or topic", "Q");
+        changeValue(dialog, "Option 1", "A1");
+        changeValue(dialog, "Option 2", "A2");
+
+        dialog.find("button").simulate("click");
+        expect(sentEventContent).toEqual(
+            {
+                [M_TEXT.name]: "Q\n1. A1\n2. A2",
+                [M_POLL_START.name]: {
+                    "answers": [
+                        {
+                            "id": expect.any(String),
+                            [M_TEXT.name]: "A1",
+                        },
+                        {
+                            "id": expect.any(String),
+                            [M_TEXT.name]: "A2",
+                        },
+                    ],
+                    "kind": M_POLL_KIND_DISCLOSED.name,
+                    "max_selections": 1,
+                    "question": {
+                        "body": "Q",
+                        "format": undefined,
+                        "formatted_body": undefined,
+                        "msgtype": "m.text",
+                        [M_TEXT.name]: "Q",
+                    },
+                },
+            },
+        );
+    });
+
+    it("sends a poll edit event when editing", () => {
+        TestUtils.stubClient();
+        let sentEventContent: IContent = null;
+        MatrixClientPeg.get().sendEvent = jest.fn(
+            (
+                _roomId: string,
+                _threadId: string,
+                eventType: string,
+                content: IContent,
+            ) => {
+                expect(M_POLL_START.matches(eventType)).toBeTruthy();
+                sentEventContent = content;
+                return Promise.resolve();
+            },
+        );
+
+        const previousEvent: MatrixEvent = new MatrixEvent(
+            PollStartEvent.from(
+                "Poll Q",
+                ["Answer 1", "Answer 2"],
+                M_POLL_KIND_DISCLOSED,
+            ).serialize(),
+        );
+        previousEvent.event.event_id = "$prevEventId";
+
+        const dialog = mount(
+            <PollCreateDialog
+                room={createRoom()}
+                onFinished={jest.fn()}
+                editingMxEvent={previousEvent}
+            />,
+        );
+
+        changeValue(dialog, "Question or topic", "Poll Q updated");
+        changeValue(dialog, "Option 2", "Answer 2 updated");
+        dialog.find("button").simulate("click");
+
+        expect(sentEventContent).toEqual(
+            {
+                "m.new_content": {
+                    [M_TEXT.name]: "Poll Q updated\n1. Answer 1\n2. Answer 2 updated",
+                    [M_POLL_START.name]: {
+                        "answers": [
+                            {
+                                "id": expect.any(String),
+                                [M_TEXT.name]: "Answer 1",
+                            },
+                            {
+                                "id": expect.any(String),
+                                [M_TEXT.name]: "Answer 2 updated",
+                            },
+                        ],
+                        "kind": M_POLL_KIND_DISCLOSED.name,
+                        "max_selections": 1,
+                        "question": {
+                            "body": "Poll Q updated",
+                            "format": undefined,
+                            "formatted_body": undefined,
+                            "msgtype": "m.text",
+                            [M_TEXT.name]: "Poll Q updated",
+                        },
+                    },
+                },
+                "m.relates_to": {
+                    "event_id": previousEvent.getId(),
+                    "rel_type": "m.replace",
+                },
+            },
+        );
     });
 });
 

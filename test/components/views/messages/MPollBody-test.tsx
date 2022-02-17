@@ -1110,8 +1110,8 @@ function newPollStart(
         question = "What should we order for the party?";
     }
 
-    const answersFallback = Array.from(answers.entries())
-        .map(([i, a]) => `${i + 1}. ${a[M_TEXT.name]}`)
+    const answersFallback = answers
+        .map((a, i) => `${i + 1}. ${a[M_TEXT.name]}`)
         .join("\n");
 
     const fallback = `${question}\n${answersFallback}`;

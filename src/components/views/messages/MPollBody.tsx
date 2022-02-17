@@ -45,6 +45,28 @@ interface IState {
     endRelations: RelatedRelations; // Poll end events
 }
 
+export function createVoteRelations(
+    getRelationsForEvent: (
+        eventId: string,
+        relationType: string,
+        eventType: string
+    ) => Relations,
+    eventId: string,
+) {
+    return new RelatedRelations([
+        getRelationsForEvent(
+            eventId,
+            "m.reference",
+            M_POLL_RESPONSE.name,
+        ),
+        getRelationsForEvent(
+            eventId,
+            "m.reference",
+            M_POLL_RESPONSE.altName,
+        ),
+    ]);
+}
+
 export function findTopAnswer(
     pollEvent: MatrixEvent,
     matrixClient: MatrixClient,
@@ -68,18 +90,7 @@ export function findTopAnswer(
         return poll.answers.find(a => a.id === answerId)?.text ?? "";
     };
 
-    const voteRelations = new RelatedRelations([
-        getRelationsForEvent(
-            pollEvent.getId(),
-            "m.reference",
-            M_POLL_RESPONSE.name,
-        ),
-        getRelationsForEvent(
-            pollEvent.getId(),
-            "m.reference",
-            M_POLL_RESPONSE.altName,
-        ),
-    ]);
+    const voteRelations = createVoteRelations(getRelationsForEvent, pollEvent.getId());
 
     const endRelations = new RelatedRelations([
         getRelationsForEvent(
