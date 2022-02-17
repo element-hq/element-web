@@ -1,3 +1,9 @@
+Changes in [3.40.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.40.1) (2022-02-17)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix bug where badge colour on encrypted rooms may not be correct until anothe rmessage is sent
+
 Changes in [3.40.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.40.0) (2022-02-14)
 =====================================================================================================
 
