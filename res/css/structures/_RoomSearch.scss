@@ -97,12 +97,15 @@ limitations under the License.
     }
 
     &.mx_RoomSearch_minimized {
-        height: auto;
-        width: auto;
-        padding: 5px;
+        height: 32px;
+        min-height: 32px;
+        width: 32px;
+        box-sizing: border-box;
 
         .mx_RoomSearch_icon {
-            margin-left: 0;
+            margin: 0 auto;
+            padding: 1px;
+            align-self: center;
         }
 
         &:hover {

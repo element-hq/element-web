@@ -188,7 +188,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             'mx_RoomSearch_inputExpanded': this.state.query || this.state.focused,
         });
 
-        let icon = (
+        const icon = (
             <div className="mx_RoomSearch_icon" />
         );
 
@@ -207,29 +207,12 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
             />
         );
 
-        let clearButton = (
-            <AccessibleButton
-                tabIndex={-1}
-                title={_t("Clear filter")}
-                className="mx_RoomSearch_clearButton"
-                onClick={this.clearInput}
-            />
-        );
-
         let shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt">
             { isMac ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K" }
         </div>;
 
         if (this.props.isMinimized) {
-            icon = (
-                <AccessibleButton
-                    title={_t("Filter rooms and people")}
-                    className="mx_RoomSearch_icon mx_RoomSearch_minimizedHandle"
-                    onClick={this.openSearch}
-                />
-            );
             input = null;
-            clearButton = null;
             shortcutPrompt = null;
         }
 
@@ -241,6 +224,14 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 </div> }
                 { shortcutPrompt }
             </AccessibleButton>;
+        } else if (this.props.isMinimized) {
+            return <AccessibleButton
+                onClick={this.openSearch}
+                className="mx_RoomSearch mx_RoomSearch_minimized"
+                title={_t("Filter rooms and people")}
+            >
+                { icon }
+            </AccessibleButton>;
         }
 
         return (
@@ -248,7 +239,12 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 { icon }
                 { input }
                 { shortcutPrompt }
-                { clearButton }
+                <AccessibleButton
+                    tabIndex={-1}
+                    title={_t("Clear filter")}
+                    className="mx_RoomSearch_clearButton"
+                    onClick={this.clearInput}
+                />
             </div>
         );
     }
