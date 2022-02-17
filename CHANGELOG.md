@@ -1,3 +1,9 @@
+Changes in [1.10.4](https://github.com/vector-im/element-web/releases/tag/v1.10.4) (2022-02-17)
+===============================================================================================
+
+## 🐛 Bug Fixes
+ * Fix bug where badge colour on encrypted rooms may not be correct until anothe rmessage is sent
+
 Changes in [1.10.3](https://github.com/vector-im/element-web/releases/tag/v1.10.3) (2022-02-14)
 ===============================================================================================
 
