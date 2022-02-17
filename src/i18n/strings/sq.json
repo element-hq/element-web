@@ -3637,5 +3637,8 @@
     "<%(count)s spaces>|zero": "<varg i zbrazët>",
     "<%(count)s spaces>|one": "<hapësirë>",
     "<%(count)s spaces>|other": "<%(count)s hapësira>",
-    "Automatically send debug logs when key backup is not functioning": "Dërgo automatikisht regjistra diagnostikimi, kur kopjeruajtja e kyçeve nuk funksionon"
+    "Automatically send debug logs when key backup is not functioning": "Dërgo automatikisht regjistra diagnostikimi, kur kopjeruajtja e kyçeve nuk funksionon",
+    "Edit poll": "Përpunoni pyetësor",
+    "Sorry, you can't edit a poll after votes have been cast.": "Na ndjeni, s’mund të përpunoni një pyetësor pasi të jenë hedhur votat.",
+    "Can't edit poll": "S’përpunohet dot pyetësori"
 }
