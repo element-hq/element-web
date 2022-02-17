@@ -72,6 +72,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getMetaSpaceName } from "../../../stores/spaces";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { getCachedRoomIDForAlias } from "../../../RoomAliasCache";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -413,11 +414,42 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             </div>;
         }
 
+        let joinRoomSection: JSX.Element;
+        if (trimmedQuery.startsWith("#") &&
+            trimmedQuery.includes(":") &&
+            (!getCachedRoomIDForAlias(trimmedQuery) || !cli.getRoom(getCachedRoomIDForAlias(trimmedQuery)))
+        ) {
+            joinRoomSection = <div className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches" role="group">
+                <div>
+                    <Option
+                        id="mx_SpotlightDialog_button_joinRoomAlias"
+                        className="mx_SpotlightDialog_joinRoomAlias"
+                        onClick={(ev) => {
+                            defaultDispatcher.dispatch<ViewRoomPayload>({
+                                action: Action.ViewRoom,
+                                room_alias: trimmedQuery,
+                                auto_join: true,
+                                _trigger: "WebUnifiedSearch",
+                                _viaKeyboard: ev.type !== "click",
+                            });
+                            onFinished();
+                        }}
+                    >
+                        { _t("Join %(roomAddress)s", {
+                            roomAddress: trimmedQuery,
+                        }) }
+                        <div className="mx_SpotlightDialog_enterPrompt">↵</div>
+                    </Option>
+                </div>
+            </div>;
+        }
+
         content = <>
             { peopleSection }
             { roomsSection }
             { spacesSection }
             { spaceRoomsSection }
+            { joinRoomSection }
             <div className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches" role="group">
                 <h4>{ _t('Use "%(query)s" to search', { query }) }</h4>
                 <div>

@@ -2794,6 +2794,7 @@
     "Settings - %(spaceName)s": "Settings - %(spaceName)s",
     "Spaces you're in": "Spaces you're in",
     "Other rooms in %(spaceName)s": "Other rooms in %(spaceName)s",
+    "Join %(roomAddress)s": "Join %(roomAddress)s",
     "Use \"%(query)s\" to search": "Use \"%(query)s\" to search",
     "Public rooms": "Public rooms",
     "Other searches": "Other searches",
