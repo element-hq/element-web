@@ -2820,7 +2820,7 @@
     "Search names and descriptions": "Rechercher par nom et description",
     "You may contact me if you have any follow up questions": "Vous pouvez me contacter si vous avez des questions par la suite",
     "To leave the beta, visit your settings.": "Pour quitter la bêta, consultez les paramètres.",
-    "Your platform and username will be noted to help us use your feedback as much as we can.": "Votre plateforme et nom d’utilisateur seront consignés pour nous aider à tirer le maximum de vos retours.",
+    "Your platform and username will be noted to help us use your feedback as much as we can.": "Votre plateforme et nom d’utilisateur seront consignés pour nous aider à tirer le maximum de vos commentaires.",
     "Add reaction": "Ajouter une réaction",
     "See when people join, leave, or are invited to this room": "Voir quand une personne rejoint, quitte ou est invitée sur ce salon",
     "Kick, ban, or invite people to this room, and make you leave": "Exclure, bannir ou inviter une personne dans ce salon et vous permettre de partir",
@@ -3610,5 +3610,10 @@
     "Location": "Position",
     "Poll": "Sondage",
     "Voice Message": "Message vocal",
-    "Hide stickers": "Cacher les autocollants"
+    "Hide stickers": "Cacher les autocollants",
+    "How can I give feedback?": "Comment puis-je écrire un commentaire ?",
+    "Feedback sent! Thanks, we appreciate it!": "Commentaire envoyé ! Merci, nous l’apprécions !",
+    "To feedback, join the beta, start a search and click on feedback.": "Pour transmettre vos commentaires, rejoignez la bêta, lancez une recherche et cliquez sur « commentaire ».",
+    "This feature is a work in progress, we'd love to hear your feedback.": "Cette fonctionnalité est en cours de développement, nous aimerions entendre vos commentaires.",
+    "New search experience": "Nouvelle expérience de recherche"
 }
