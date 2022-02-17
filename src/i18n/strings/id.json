@@ -3575,5 +3575,6 @@
     "<%(count)s spaces>|other": "<%(count)s space>",
     "Edit poll": "Edit poll",
     "Sorry, you can't edit a poll after votes have been cast.": "Maaf, Anda tidak dapat mengedit sebuah poll setelah suara-suara diberikan.",
-    "Can't edit poll": "Tidak dapat mengedit poll"
+    "Can't edit poll": "Tidak dapat mengedit poll",
+    "Join %(roomAddress)s": "Bergabung ke %(roomAddress)s"
 }
