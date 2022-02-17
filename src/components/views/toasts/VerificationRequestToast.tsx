@@ -115,7 +115,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     action: Action.ViewRoom,
                     room_id: request.channel.roomId,
                     should_peek: false,
-                    _trigger: "VerificationRequest",
+                    metricsTrigger: "VerificationRequest",
                 });
                 const member = cli.getUser(request.otherUserId);
                 RightPanelStore.instance.setCards(

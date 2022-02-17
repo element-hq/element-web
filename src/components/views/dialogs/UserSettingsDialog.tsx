@@ -199,7 +199,11 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
                 title={_t("Settings")}
             >
                 <div className='mx_SettingsDialog_content'>
-                    <TabbedView tabs={this.getTabs()} initialTabId={this.props.initialTabId} />
+                    <TabbedView
+                        tabs={this.getTabs()}
+                        initialTabId={this.props.initialTabId}
+                        screenName="UserSettings"
+                    />
                 </div>
             </BaseDialog>
         );

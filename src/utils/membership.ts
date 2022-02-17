@@ -191,7 +191,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: SpaceStore.instance.activeSpace,
-            _trigger: undefined, // other
+            metricsTrigger: undefined, // other
         });
     } else {
         dis.dispatch({ action: 'view_home_page' });

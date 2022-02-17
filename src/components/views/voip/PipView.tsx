@@ -218,7 +218,7 @@ export default class PipView extends React.Component<IProps, IState> {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: callRoomId ?? widgetRoomId,
-                _trigger: "WebFloatingCallWindow",
+                metricsTrigger: "WebFloatingCallWindow",
             });
         }
     };

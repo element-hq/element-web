@@ -120,8 +120,8 @@ function onAliasClick(event: MouseEvent, roomAlias: string) {
     dis.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
         room_alias: roomAlias,
-        _trigger: "Timeline",
-        _viaKeyboard: false,
+        metricsTrigger: "Timeline",
+        metricsViaKeyboard: false,
     });
 }
 

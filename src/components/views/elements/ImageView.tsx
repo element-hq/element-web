@@ -339,7 +339,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
-            _trigger: undefined, // room doesn't change
+            metricsTrigger: undefined, // room doesn't change
         });
         this.props.onFinished();
     };

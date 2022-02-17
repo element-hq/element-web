@@ -120,7 +120,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
                 action: Action.ViewRoom,
                 room_id: space.roomId,
                 forceTimeline: true,
-                _trigger: undefined, // room doesn't change
+                metricsTrigger: undefined, // room doesn't change
             });
             onFinished();
         };
@@ -197,7 +197,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: space.roomId,
-            _trigger: undefined, // other
+            metricsTrigger: undefined, // other
         });
         onFinished();
     };

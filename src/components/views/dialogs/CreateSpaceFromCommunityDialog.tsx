@@ -230,7 +230,7 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
                 dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: roomId,
-                    _trigger: undefined, // other
+                    metricsTrigger: undefined, // other
                 });
             };
 

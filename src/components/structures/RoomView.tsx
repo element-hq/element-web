@@ -102,6 +102,7 @@ import { RightPanelPhases } from '../../stores/right-panel/RightPanelStorePhases
 import { ActionPayload } from "../../dispatcher/payloads";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { JoinRoomPayload } from "../../dispatcher/payloads/JoinRoomPayload";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -776,7 +777,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 event_id: this.state.initialEventId,
                 highlighted: false,
                 replyingToEvent: this.state.replyToEvent,
-                _trigger: undefined, // room doesn't change
+                metricsTrigger: undefined, // room doesn't change
             });
         }
     };
@@ -879,7 +880,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             action: Action.ViewRoom,
                             room_id: roomId,
                             deferred_action: payload,
-                            _trigger: "MessageSearch",
+                            metricsTrigger: "MessageSearch",
                         });
                     });
                 }
@@ -1179,7 +1180,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: this.state.room.roomId,
-                _trigger: undefined, // room doesn't change
+                metricsTrigger: undefined, // room doesn't change
             });
             return; // this event cannot affect permissions so bail
         }
@@ -1283,10 +1284,11 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         } else {
             Promise.resolve().then(() => {
                 const signUrl = this.props.threepidInvite?.signUrl;
-                dis.dispatch({
+                dis.dispatch<JoinRoomPayload>({
                     action: Action.JoinRoom,
                     roomId: this.getRoomId(),
                     opts: { inviteSignUrl: signUrl },
+                    metricsTrigger: this.state.room?.getMyMembership() === "invite" ? "Invite" : "RoomPreview",
                 });
                 return Promise.resolve();
             });
@@ -1651,7 +1653,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: this.state.room.roomId,
-                _trigger: undefined, // room doesn't change
+                metricsTrigger: undefined, // room doesn't change
             });
         } else {
             // Otherwise we have to jump manually
@@ -1787,7 +1789,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: oldRoom.roomId,
-            _trigger: "Predecessor",
+            metricsTrigger: "Predecessor",
         });
     };
 

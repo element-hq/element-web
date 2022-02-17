@@ -81,8 +81,8 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,
-            _trigger: "WebForwardShortcut",
-            _viaKeyboard: ev.type !== "click",
+            metricsTrigger: "WebForwardShortcut",
+            metricsViaKeyboard: ev.type !== "click",
         });
         onFinished(true);
     };

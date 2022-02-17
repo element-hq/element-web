@@ -131,8 +131,8 @@ async function openDMForUser(matrixClient: MatrixClient, userId: string, viaKeyb
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: lastActiveRoom.roomId,
-            _trigger: "MessageUser",
-            _viaKeyboard: viaKeyboard,
+            metricsTrigger: "MessageUser",
+            metricsViaKeyboard: viaKeyboard,
         });
         return;
     }
@@ -397,7 +397,7 @@ const UserOptionsSection: React.FC<{
                     highlighted: true,
                     event_id: room.getEventReadUpTo(member.userId),
                     room_id: member.roomId,
-                    _trigger: undefined, // room doesn't change
+                    metricsTrigger: undefined, // room doesn't change
                 });
             };
 

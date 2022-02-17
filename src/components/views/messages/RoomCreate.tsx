@@ -45,8 +45,8 @@ export default class RoomCreate extends React.Component<IProps> {
             event_id: predecessor['event_id'],
             highlighted: true,
             room_id: predecessor['room_id'],
-            _trigger: "Predecessor",
-            _viaKeyboard: e.type !== "click",
+            metricsTrigger: "Predecessor",
+            metricsViaKeyboard: e.type !== "click",
         });
     };
 

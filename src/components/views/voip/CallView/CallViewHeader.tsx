@@ -41,7 +41,7 @@ const onExpandClick = (roomId: string) => {
     dis.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
         room_id: roomId,
-        _trigger: "WebFloatingCallWindow",
+        metricsTrigger: "WebFloatingCallWindow",
     });
 };
 

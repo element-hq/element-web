@@ -189,7 +189,7 @@ export default abstract class BasePlatform {
             const payload: ViewRoomPayload = {
                 action: Action.ViewRoom,
                 room_id: room.roomId,
-                _trigger: "Notification",
+                metricsTrigger: "Notification",
             };
 
             if (ev.getThread()) {

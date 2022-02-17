@@ -44,7 +44,7 @@ export default class RoomDetailList extends React.Component<IProps> {
             action: Action.ViewRoom,
             room_id: room.roomId,
             room_alias: room.getCanonicalAlias() || (room.getAltAliases() || [])[0],
-            _trigger: undefined, // Deprecated groups
+            metricsTrigger: undefined, // Deprecated groups
         });
     };
 

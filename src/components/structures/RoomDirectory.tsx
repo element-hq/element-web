@@ -489,7 +489,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             action: Action.ViewRoom,
             auto_join: autoJoin,
             should_peek: shouldPeek,
-            _trigger: "RoomDirectory",
+            metricsTrigger: "RoomDirectory",
         };
         if (room) {
             // Don't let the user view a room they won't be able to either

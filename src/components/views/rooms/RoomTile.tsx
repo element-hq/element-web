@@ -245,8 +245,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             show_room_tile: true, // make sure the room is visible in the list
             room_id: this.props.room.roomId,
             clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
-            _trigger: "RoomList",
-            _viaKeyboard: ev.type !== "click",
+            metricsTrigger: "RoomList",
+            metricsViaKeyboard: ev.type !== "click",
         });
     };
 

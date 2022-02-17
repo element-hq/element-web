@@ -433,8 +433,8 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                 action: Action.ViewRoom,
                 room_id: room.roomId,
                 show_room_tile: true, // to make sure the room gets scrolled into view
-                _trigger: "WebRoomListNotificationBadge",
-                _viaKeyboard: ev.type !== "click",
+                metricsTrigger: "WebRoomListNotificationBadge",
+                metricsViaKeyboard: ev.type !== "click",
             });
         }
     };

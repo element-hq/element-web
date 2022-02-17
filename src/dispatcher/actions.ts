@@ -153,12 +153,12 @@ export enum Action {
     UploadCanceled = "upload_canceled",
 
     /**
-     * Fired when requesting to join a room
+     * Fired when requesting to join a room. Should be used with JoinRoomPayload.
      */
     JoinRoom = "join_room",
 
     /**
-     * Fired when successfully joining a room
+     * Fired when successfully joining a room. Should be used with a JoinRoomReadyPayload.
      */
     JoinRoomReady = "join_room_ready",
 
@@ -168,7 +168,7 @@ export enum Action {
     JoinRoomError = "join_room_error",
 
     /**
-     * Inserts content into the active composer. Should be used with ComposerInsertPayload
+     * Inserts content into the active composer. Should be used with ComposerInsertPayload.
      */
     ComposerInsert = "composer_insert",
 

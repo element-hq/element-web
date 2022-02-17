@@ -720,7 +720,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
-            _trigger: undefined, // room doesn't change
+            metricsTrigger: undefined, // room doesn't change
         });
     };
 
@@ -1023,7 +1023,9 @@ export default class EventTile extends React.Component<IProps, IState> {
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
-            _trigger: this.props.timelineRenderingType === TimelineRenderingType.Search ? "MessageSearch" : undefined,
+            metricsTrigger: this.props.timelineRenderingType === TimelineRenderingType.Search
+                ? "MessageSearch"
+                : undefined,
         });
     };
 

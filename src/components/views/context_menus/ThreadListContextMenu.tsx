@@ -81,7 +81,7 @@ const ThreadListContextMenu: React.FC<IExtendedProps> = ({
             event_id: mxEvent.getId(),
             highlighted: true,
             room_id: mxEvent.getRoomId(),
-            _trigger: undefined, // room doesn't change
+            metricsTrigger: undefined, // room doesn't change
         });
         closeThreadOptions();
     }, [mxEvent, closeThreadOptions]);

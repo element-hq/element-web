@@ -48,7 +48,7 @@ export interface ViewRoomPayload extends Pick<ActionPayload, "action"> {
     deferred_action?: ActionPayload; // Action to fire after MatrixChat handles this ViewRoom action
 
     // additional parameters for the purpose of metrics & instrumentation
-    _trigger: ViewRoomEvent["trigger"];
-    _viaKeyboard?: ViewRoomEvent["viaKeyboard"];
+    metricsTrigger: ViewRoomEvent["trigger"];
+    metricsViaKeyboard?: ViewRoomEvent["viaKeyboard"];
 }
 /* eslint-enable camelcase */

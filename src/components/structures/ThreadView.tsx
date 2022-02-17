@@ -202,7 +202,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                 event_id: this.props.initialEvent?.getId(),
                 highlighted: false,
                 replyingToEvent: this.state.replyToEvent,
-                _trigger: undefined, // room doesn't change
+                metricsTrigger: undefined, // room doesn't change
             });
         }
     };

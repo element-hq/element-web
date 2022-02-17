@@ -147,7 +147,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
                 event_id: eventId,
                 highlighted: true,
                 room_id: roomId,
-                _trigger: undefined, // room doesn't change
+                metricsTrigger: undefined, // room doesn't change
             });
         } catch (e) {
             const code = e.errcode || e.statusCode;

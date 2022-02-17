@@ -100,7 +100,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                     event_id: this.props.mxEvent.getId(),
                     highlighted: true,
                     room_id: this.props.mxEvent.getRoomId(),
-                    _trigger: undefined, // room doesn't change
+                    metricsTrigger: undefined, // room doesn't change
                 });
             }
         }

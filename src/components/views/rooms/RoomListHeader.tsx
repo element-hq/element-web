@@ -61,6 +61,7 @@ import TooltipTarget from "../elements/TooltipTarget";
 import { BetaPill } from "../beta/BetaCard";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { useWebSearchMetrics } from "../dialogs/SpotlightDialog";
 
 const contextMenuBelow = (elementRect: DOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
@@ -108,7 +109,7 @@ const PrototypeCommunityContextMenu = (props: ComponentProps<typeof SpaceContext
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: chat.roomId,
-                _trigger: undefined, // Deprecated groups
+                metricsTrigger: undefined, // Deprecated groups
             }, true);
             RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomMemberList }, undefined, chat.roomId);
         } else {
@@ -177,13 +178,17 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
     });
     const joiningRooms = useJoiningRooms();
 
+    const filterCondition = RoomListStore.instance.getFirstNameFilterCondition();
     const count = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () => {
-        if (RoomListStore.instance.getFirstNameFilterCondition()) {
+        if (filterCondition) {
             return Object.values(RoomListStore.instance.orderedLists).flat(1).length;
         } else {
             return null;
         }
     });
+
+    // we pass null for the queryLength to inhibit the metrics hook for when there is no filterCondition
+    useWebSearchMetrics(count, filterCondition ? filterCondition.search.length : null, false);
 
     const spaceName = useEventEmitterState(activeSpace, "Room.name", () => activeSpace?.name);
 
@@ -279,7 +284,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
                         defaultDispatcher.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: activeSpace.roomId,
-                            _trigger: undefined, // other
+                            metricsTrigger: undefined, // other
                         });
                         closePlusMenu();
                         PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuExploreRoomsItem", e);

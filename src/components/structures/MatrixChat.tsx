@@ -1084,7 +1084,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: dmRooms[0],
-                _trigger: "MessageUser",
+                metricsTrigger: "MessageUser",
             });
         } else {
             dis.dispatch({
@@ -1356,7 +1356,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: localStorage.getItem('mx_last_room_id'),
-            _trigger: undefined, // other
+            metricsTrigger: undefined, // other
         });
     }
 
@@ -1797,7 +1797,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 },
                 room_alias: undefined,
                 room_id: undefined,
-                _trigger: undefined, // unknown or external trigger
+                metricsTrigger: undefined, // unknown or external trigger
             };
             if (roomString[0] === '#') {
                 payload.room_alias = roomString;

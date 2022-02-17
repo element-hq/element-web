@@ -221,7 +221,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                     defaultDispatcher.dispatch<ViewRoomPayload>({
                         action: Action.ViewRoom,
                         room_id: activeSpace.roomId,
-                        _trigger: undefined, // other
+                        metricsTrigger: undefined, // other
                     });
                     PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", e);
                 }}
@@ -424,8 +424,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                     action: Action.ViewRoom,
                     room_id: room.roomId,
                     show_room_tile: true, // to make sure the room gets scrolled into view
-                    _trigger: "WebKeyboardShortcut",
-                    _viaKeyboard: true,
+                    metricsTrigger: "WebKeyboardShortcut",
+                    metricsViaKeyboard: true,
                 });
             }
         } else if (payload.action === Action.PstnSupportUpdated) {
@@ -509,7 +509,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: this.props.activeSpace,
-                _trigger: undefined, // other
+                metricsTrigger: undefined, // other
             });
             PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", ev);
         } else {
@@ -542,8 +542,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         avatarUrl: room.avatar_url,
                         name,
                     },
-                    _trigger: "RoomList",
-                    _viaKeyboard: ev.type !== "click",
+                    metricsTrigger: "RoomList",
+                    metricsViaKeyboard: ev.type !== "click",
                 });
             };
             return (

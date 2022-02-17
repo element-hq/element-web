@@ -38,6 +38,8 @@ describe('RoomViewStore', function() {
     beforeEach(function() {
         testUtils.stubClient();
         peg.get().credentials = { userId: "@test:example.com" };
+        peg.get().on = jest.fn();
+        peg.get().off = jest.fn();
 
         // Reset the state of the store
         RoomViewStore.reset();

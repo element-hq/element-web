@@ -30,6 +30,7 @@ import { normalize } from "matrix-js-sdk/src/utils";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
+import { WebSearch as WebSearchEvent } from "matrix-analytics-events/types/typescript/WebSearch";
 
 import { IDialogProps } from "./IDialogProps";
 import { _t } from "../../../languageHandler";
@@ -72,6 +73,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getMetaSpaceName } from "../../../stores/spaces";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { getCachedRoomIDForAlias } from "../../../RoomAliasCache";
 
 const MAX_RECENT_SEARCHES = 10;
@@ -205,6 +207,26 @@ type Result = IRoomResult | IResult;
 
 const isRoomResult = (result: any): result is IRoomResult => !!result?.room;
 
+export const useWebSearchMetrics = (numResults: number, queryLength: number, viaSpotlight: boolean): void => {
+    useEffect(() => {
+        if (!queryLength) return;
+
+        // send metrics after a 1s debounce
+        const timeoutId = setTimeout(() => {
+            PosthogAnalytics.instance.trackEvent<WebSearchEvent>({
+                eventName: "WebSearch",
+                viaSpotlight,
+                numResults,
+                queryLength,
+            });
+        }, 1000);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [numResults, queryLength, viaSpotlight]);
+};
+
 const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => {
     const cli = MatrixClientPeg.get();
     const rovingContext = useContext(RovingTabIndexContext);
@@ -270,6 +292,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
         return results;
     }, [possibleResults, trimmedQuery]);
 
+    const numResults = trimmedQuery ? people.length + rooms.length + spaces.length : 0;
+    useWebSearchMetrics(numResults, query.length, true);
+
     const activeSpace = SpaceStore.instance.activeSpaceRoom;
     const [spaceResults, spaceResultsLoading] = useSpaceResults(activeSpace, query);
 
@@ -310,8 +335,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: roomId,
-            _trigger: "WebUnifiedSearch",
-            _viaKeyboard: viaKeyboard,
+            metricsTrigger: "WebUnifiedSearch",
+            metricsViaKeyboard: viaKeyboard,
         });
         onFinished();
     };
@@ -429,8 +454,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                                 action: Action.ViewRoom,
                                 room_alias: trimmedQuery,
                                 auto_join: true,
-                                _trigger: "WebUnifiedSearch",
-                                _viaKeyboard: ev.type !== "click",
+                                metricsTrigger: "WebUnifiedSearch",
+                                metricsViaKeyboard: ev.type !== "click",
                             });
                             onFinished();
                         }}
@@ -670,6 +695,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             onFinished={onFinished}
             hasCancel={false}
             onKeyDown={onDialogKeyDown}
+            screenName="UnifiedSearch"
         >
             <div className="mx_SpotlightDialog_searchBox mx_textinput">
                 <input

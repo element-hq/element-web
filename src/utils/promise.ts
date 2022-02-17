@@ -28,7 +28,11 @@ export async function timeout<T, Y>(promise: Promise<T>, timeoutValue: Y, ms: nu
 }
 
 // Helper method to retry a Promise a given number of times or until a predicate fails
-export async function retry<T, E extends Error>(fn: () => Promise<T>, num: number, predicate?: (e: E) => boolean) {
+export async function retry<T, E extends Error>(
+    fn: () => Promise<T>,
+    num: number,
+    predicate?: (e: E) => boolean,
+): Promise<T> {
     let lastErr: E;
     for (let i = 0; i < num; i++) {
         try {

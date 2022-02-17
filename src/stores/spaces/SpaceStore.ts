@@ -161,7 +161,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: roomId,
-                _trigger: "WebSpacePanelNotificationBadge",
+                context_switch: true,
+                metricsTrigger: "WebSpacePanelNotificationBadge",
             });
         } else {
             const lists = RoomListStore.instance.unfilteredLists;
@@ -178,7 +179,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     defaultDispatcher.dispatch<ViewRoomPayload>({
                         action: Action.ViewRoom,
                         room_id: unreadRoom.roomId,
-                        _trigger: "WebSpacePanelNotificationBadge",
+                        context_switch: true,
+                        metricsTrigger: "WebSpacePanelNotificationBadge",
                     });
                     break;
                 }
@@ -227,14 +229,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     action: Action.ViewRoom,
                     room_id: roomId,
                     context_switch: true,
-                    _trigger: "WebSpaceContextSwitch",
+                    metricsTrigger: "WebSpaceContextSwitch",
                 });
             } else if (cliSpace) {
                 defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: space,
                     context_switch: true,
-                    _trigger: "WebSpaceContextSwitch",
+                    metricsTrigger: "WebSpaceContextSwitch",
                 });
             } else {
                 defaultDispatcher.dispatch({

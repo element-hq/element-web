@@ -154,7 +154,7 @@ export class CommunityPrototypeStore extends AsyncStoreWithClient<IState> {
                 dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: chat.roomId,
-                    _trigger: undefined, // Deprecated groups
+                    metricsTrigger: undefined, // Deprecated groups
                 });
             }
         }

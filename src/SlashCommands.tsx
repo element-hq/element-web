@@ -350,8 +350,8 @@ export const Commands = [
                         event_id: eventId,
                         highlighted: true,
                         room_id: roomId,
-                        _trigger: "SlashCommand",
-                        _viaKeyboard: true,
+                        metricsTrigger: "SlashCommand",
+                        metricsViaKeyboard: true,
                     });
                 })());
             }
@@ -615,8 +615,8 @@ export const Commands = [
                         action: Action.ViewRoom,
                         room_alias: roomAlias,
                         auto_join: true,
-                        _trigger: "SlashCommand",
-                        _viaKeyboard: true,
+                        metricsTrigger: "SlashCommand",
+                        metricsViaKeyboard: true,
                     });
                     return success();
                 } else if (params[0][0] === '!') {
@@ -627,8 +627,8 @@ export const Commands = [
                         room_id: roomId,
                         via_servers: viaServers, // for the rejoin button
                         auto_join: true,
-                        _trigger: "SlashCommand",
-                        _viaKeyboard: true,
+                        metricsTrigger: "SlashCommand",
+                        metricsViaKeyboard: true,
                     });
                     return success();
                 } else if (isPermalink) {
@@ -653,8 +653,8 @@ export const Commands = [
                     const dispatch: ViewRoomPayload = {
                         action: Action.ViewRoom,
                         auto_join: true,
-                        _trigger: "SlashCommand",
-                        _viaKeyboard: true,
+                        metricsTrigger: "SlashCommand",
+                        metricsViaKeyboard: true,
                     };
 
                     if (entity[0] === '!') dispatch["room_id"] = entity;
@@ -1155,8 +1155,8 @@ export const Commands = [
                 dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: roomId,
-                    _trigger: "SlashCommand",
-                    _viaKeyboard: true,
+                    metricsTrigger: "SlashCommand",
+                    metricsViaKeyboard: true,
                 });
             })());
         },
@@ -1179,8 +1179,8 @@ export const Commands = [
                             dis.dispatch<ViewRoomPayload>({
                                 action: Action.ViewRoom,
                                 room_id: roomId,
-                                _trigger: "SlashCommand",
-                                _viaKeyboard: true,
+                                metricsTrigger: "SlashCommand",
+                                metricsViaKeyboard: true,
                             });
                             if (msg) {
                                 cli.sendTextMessage(roomId, msg);

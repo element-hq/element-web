@@ -271,7 +271,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
                         dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: roomId,
-                            _trigger: undefined, // other
+                            metricsTrigger: undefined, // other
                         });
 
                         // open new settings on this tab

@@ -117,7 +117,7 @@ const CommunityMigrator = ({ onFinished }) => {
                             dis.dispatch<ViewRoomPayload>({
                                 action: Action.ViewRoom,
                                 room_id: community.spaceId,
-                                _trigger: undefined, // other
+                                metricsTrigger: undefined, // other
                             });
                             onFinished();
                         } else {

@@ -535,7 +535,7 @@ const onPinnedOrUnpinnedMessageClick = (messageId: string, roomId: string): void
         event_id: messageId,
         highlighted: true,
         room_id: roomId,
-        _trigger: undefined, // room doesn't change
+        metricsTrigger: undefined, // room doesn't change
     });
 };
 

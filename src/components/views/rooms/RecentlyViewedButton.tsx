@@ -44,8 +44,8 @@ const RecentlyViewedButton = () => {
                         dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: crumb.roomId,
-                            _trigger: "WebVerticalBreadcrumbs",
-                            _viaKeyboard: ev.type !== "click",
+                            metricsTrigger: "WebVerticalBreadcrumbs",
+                            metricsViaKeyboard: ev.type !== "click",
                         });
                         tooltipRef.current?.hideTooltip();
                     }}

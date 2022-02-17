@@ -51,7 +51,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
             event_id: this.props.event.getId(),
             highlighted: true,
             room_id: this.props.event.getRoomId(),
-            _trigger: undefined, // room doesn't change
+            metricsTrigger: undefined, // room doesn't change
         });
     };
 

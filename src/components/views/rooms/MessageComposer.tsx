@@ -237,8 +237,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             // Try to join via the server that sent the event. This converts @something:example.org
             // into a server domain by splitting on colons and ignoring the first entry ("@something").
             via_servers: viaServers,
-            _trigger: "Tombstone",
-            _viaKeyboard: ev.type !== "click",
+            metricsTrigger: "Tombstone",
+            metricsViaKeyboard: ev.type !== "click",
         });
     };
 

@@ -253,8 +253,8 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,
-            _trigger: "RoomList",
-            _viaKeyboard: ev.type !== "click",
+            metricsTrigger: "RoomList",
+            metricsViaKeyboard: ev.type !== "click",
         }, true);
     };
 

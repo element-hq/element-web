@@ -104,7 +104,7 @@ export default class CreateCommunityPrototypeDialog extends React.PureComponent<
                 dis.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: result.room_id,
-                    _trigger: undefined, // Deprecated groups
+                    metricsTrigger: undefined, // Deprecated groups
                 });
                 showCommunityRoomInviteDialog(result.room_id, this.state.name);
             } else {
