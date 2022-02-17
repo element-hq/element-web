@@ -33,10 +33,10 @@ limitations under the License.
 .mx_RoomList_iconDialpad::before {
     mask-image: url('$(res)/img/element-icons/roomlist/dialpad.svg');
 }
-.mx_RoomList_iconStartChat {
+.mx_RoomList_iconStartChat::before {
     mask-image: url('$(res)/img/element-icons/roomlist/member-plus.svg');
 }
-.mx_RoomList_iconInvite {
+.mx_RoomList_iconInvite::before {
     mask-image: url('$(res)/img/element-icons/room/share.svg');
 }
 
