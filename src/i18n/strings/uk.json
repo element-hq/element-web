@@ -3594,5 +3594,8 @@
     "Automatically send debug logs when key backup is not functioning": "Автоматично надсилати журнали зневадження при збоях резервного копіювання ключів",
     "<%(count)s spaces>|zero": "<порожній рядок>",
     "<%(count)s spaces>|one": "<простір>",
-    "<%(count)s spaces>|other": "<%(count)s просторів>"
+    "<%(count)s spaces>|other": "<%(count)s просторів>",
+    "Edit poll": "Редагувати опитування",
+    "Sorry, you can't edit a poll after votes have been cast.": "Ви не можете редагувати опитування після завершення голосування.",
+    "Can't edit poll": "Неможливо редагувати опитування"
 }
