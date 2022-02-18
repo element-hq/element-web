@@ -3644,5 +3644,9 @@
     "Automatically send debug logs when key backup is not functioning": "金鑰備份無法運作時自動傳送除錯紀錄檔",
     "<%(count)s spaces>|zero": "<空字串>",
     "<%(count)s spaces>|one": "<空間>",
-    "<%(count)s spaces>|other": "<%(count)s 個空間>"
+    "<%(count)s spaces>|other": "<%(count)s 個空間>",
+    "Join %(roomAddress)s": "加入 %(roomAddress)s",
+    "Edit poll": "編輯投票",
+    "Sorry, you can't edit a poll after votes have been cast.": "抱歉，您無法在有人投票後編輯投票。",
+    "Can't edit poll": "無法編輯投票"
 }
