@@ -493,7 +493,7 @@
     "%(oneUser)schanged their avatar %(count)s times|one": "%(oneUser)s がアバターを変更しました",
     "%(items)s and %(count)s others|other": "%(items)s と 他 %(count)s 回",
     "%(items)s and %(count)s others|one": "%(items)s と他の1つ",
-    "%(items)s and %(lastItem)s": "%(items)s と %(lastItem)s",
+    "%(items)s and %(lastItem)s": "%(items)s また %(lastItem)s",
     "collapse": "折りたたむ",
     "expand": "展開",
     "Custom level": "カスタムレベル",
@@ -2353,5 +2353,11 @@
     "Reason (optional)": "理由（任意）",
     "Add image (optional)": "画像を追加（任意）",
     "Copy link to thread": "スレッドへのリンクをコピー",
-    "You're all caught up": "未読はありません"
+    "You're all caught up": "未読はありません",
+    "Unable to find Matrix ID for phone number": "電話番号からMatrix IDを発見できません",
+    "%(senderName)s banned %(targetName)s: %(reason)s": "%(senderName)sが%(targetName)sをブロックしました。理由：%(reason)s",
+    "%(senderName)s set their display name to %(displayName)s": "%(senderName)sが表示名を%(displayName)sに設定しました",
+    "%(oldDisplayName)s changed their display name to %(displayName)s": "%(oldDisplayName)sが表示名を%(displayName)sに変更しました",
+    "%(senderName)s banned %(targetName)s": "%(senderName)sが%(targetName)sをブロックしました",
+    "%(senderName)s removed their display name (%(oldDisplayName)s)": "%(senderName)sが表示名（%(oldDisplayName)s）を削除しました"
 }
