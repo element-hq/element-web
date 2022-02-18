@@ -38,6 +38,9 @@ import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import StyledRadioButton from '../elements/StyledRadioButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import ErrorDialog from '../dialogs/ErrorDialog';
+import { GetRelationsForEvent } from "../rooms/EventTile";
+import PollCreateDialog from "../elements/PollCreateDialog";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IState {
     selected?: string; // Which option was clicked by the local user
@@ -167,6 +170,43 @@ export function isPollEnded(
     const authorisedRelations = endRelations.getRelations().filter(userCanRedact);
 
     return authorisedRelations.length > 0;
+}
+
+export function pollAlreadyHasVotes(mxEvent: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): boolean {
+    if (!getRelationsForEvent) return false;
+
+    const voteRelations = createVoteRelations(getRelationsForEvent, mxEvent.getId());
+    return voteRelations.getRelations().length > 0;
+}
+
+export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): void {
+    if (pollAlreadyHasVotes(mxEvent, getRelationsForEvent)) {
+        Modal.createTrackedDialog(
+            'Not allowed to edit poll',
+            '',
+            ErrorDialog,
+            {
+                title: _t("Can't edit poll"),
+                description: _t(
+                    "Sorry, you can't edit a poll after votes have been cast.",
+                ),
+            },
+        );
+    } else {
+        Modal.createTrackedDialog(
+            'Polls',
+            'create',
+            PollCreateDialog,
+            {
+                room: MatrixClientPeg.get().getRoom(mxEvent.getRoomId()),
+                threadId: mxEvent.getThread()?.id ?? null,
+                editingMxEvent: mxEvent,
+            },
+            'mx_CompoundDialog',
+            false, // isPriorityModal
+            true,  // isStaticModal
+        );
+    }
 }
 
 @replaceableComponent("views.messages.MPollBody")
