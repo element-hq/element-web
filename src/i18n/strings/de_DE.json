@@ -3144,7 +3144,7 @@
     "You are about to leave <spaceName/>.": "Du bist dabei, <spaceName/> zu verlassen.",
     "Leave some rooms": "Zu verlassende Räume auswählen",
     "Leave all rooms": "Alle Räume verlassen",
-    "Don't leave any rooms": "Räume nicht verlassen",
+    "Don't leave any rooms": "Keine Räume und Subspaces verlassen",
     "%(reactors)s reacted with %(content)s": "%(reactors)s hat mit %(content)s reagiert",
     "Some encryption parameters have been changed.": "Einige Verschlüsselungsoptionen wurden geändert.",
     "Message": "Nachricht",
