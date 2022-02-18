@@ -1260,6 +1260,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                         width={avatarSize}
                         height={avatarSize}
                         viewUserOnClick={true}
+                        forceHistorical={this.props.mxEvent.getType() === EventType.RoomMember}
                     />
                 </div>
             );
