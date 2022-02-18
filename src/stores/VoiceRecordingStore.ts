@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Optional } from "matrix-events-sdk";
+
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { VoiceRecording } from "../audio/VoiceRecording";
 
 interface IState {
-    recording?: VoiceRecording;
+    [roomId: string]: Optional<VoiceRecording>;
 }
 
 export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
@@ -28,13 +30,6 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
 
     public constructor() {
         super(defaultDispatcher, {});
-    }
-
-    /**
-     * Gets the active recording instance, if any.
-     */
-    public get activeRecording(): VoiceRecording | null {
-        return this.state.recording;
     }
 
     public static get instance(): VoiceRecordingStore {
@@ -50,32 +45,44 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
     }
 
     /**
+     * Gets the active recording instance, if any.
+     * @param {string} roomId The room ID to get the recording in.
+     * @returns {Optional<VoiceRecording>} The recording, if any.
+     */
+    public getActiveRecording(roomId: string): Optional<VoiceRecording> {
+        return this.state[roomId];
+    }
+
+    /**
      * Starts a new recording if one isn't already in progress. Note that this simply
      * creates a recording instance - whether or not recording is actively in progress
      * can be seen via the VoiceRecording class.
+     * @param {string} roomId The room ID to start recording in.
      * @returns {VoiceRecording} The recording.
      */
-    public startRecording(): VoiceRecording {
+    public startRecording(roomId: string): VoiceRecording {
         if (!this.matrixClient) throw new Error("Cannot start a recording without a MatrixClient");
-        if (this.state.recording) throw new Error("A recording is already in progress");
+        if (!roomId) throw new Error("Recording must be associated with a room");
+        if (this.state[roomId]) throw new Error("A recording is already in progress");
 
         const recording = new VoiceRecording(this.matrixClient);
 
         // noinspection JSIgnoredPromiseFromCall - we can safely run this async
-        this.updateState({ recording });
+        this.updateState({ ...this.state, [roomId]: recording });
 
         return recording;
     }
 
     /**
      * Disposes of the current recording, no matter the state of it.
+     * @param {string} roomId The room ID to dispose of the recording in.
      * @returns {Promise<void>} Resolves when complete.
      */
-    public disposeRecording(): Promise<void> {
-        if (this.state.recording) {
-            this.state.recording.destroy(); // stops internally
+    public disposeRecording(roomId: string): Promise<void> {
+        if (this.state[roomId]) {
+            this.state[roomId].destroy(); // stops internally
         }
-        return this.updateState({ recording: null });
+        return this.updateState(Object.fromEntries(Object.entries(this.state).filter(e => e[0] !== roomId)));
     }
 }
 
