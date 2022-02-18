@@ -3643,5 +3643,6 @@
     "<%(count)s spaces>|one": "<szóköz>",
     "Edit poll": "Szavazás szerkesztése",
     "Sorry, you can't edit a poll after votes have been cast.": "Sajnálom, a szavazás nem szerkeszthető miután szavazatok érkeztek.",
-    "Can't edit poll": "A szavazás nem szerkeszthető"
+    "Can't edit poll": "A szavazás nem szerkeszthető",
+    "Join %(roomAddress)s": "Belépés ide: %(roomAddress)s"
 }
