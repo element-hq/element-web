@@ -229,7 +229,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
     };
 
     private onEditClick = (): void => {
-        editEvent(this.props.mxEvent, this.context.timelineRenderingType);
+        editEvent(this.props.mxEvent, this.context.timelineRenderingType, this.props.getRelationsForEvent);
     };
 
     private readonly forbiddenThreadHeadMsgType = [
