@@ -3644,5 +3644,6 @@
     "Edit poll": "Szavazás szerkesztése",
     "Sorry, you can't edit a poll after votes have been cast.": "Sajnálom, a szavazás nem szerkeszthető miután szavazatok érkeztek.",
     "Can't edit poll": "A szavazás nem szerkeszthető",
-    "Join %(roomAddress)s": "Belépés ide: %(roomAddress)s"
+    "Join %(roomAddress)s": "Belépés ide: %(roomAddress)s",
+    "Show current avatar and name for users in message history": "A felhasználó jelenlegi nevének és profilképének megjelenítése a régi üzenetekben"
 }
