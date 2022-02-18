@@ -36,7 +36,6 @@ import ContextMenu, { ChevronFace, MenuItemRadio, useContextMenu } from './Conte
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 import TimelinePanel from './TimelinePanel';
 import { Layout } from '../../settings/enums/Layout';
-import { TileShape } from '../views/rooms/EventTile';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import { useEventEmitter } from '../../hooks/useEventEmitter';
 
@@ -302,7 +301,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                         className="mx_RoomView_messagePanel mx_GroupLayout"
                         membersLoaded={true}
                         permalinkCreator={permalinkCreator}
-                        tileShape={TileShape.ThreadPanel}
                         disableGrouping={true}
                     />
                 ) }

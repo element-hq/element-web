@@ -33,7 +33,6 @@ import { replaceableComponent } from "../../utils/replaceableComponent";
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
-import { TileShape } from '../views/rooms/EventTile';
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 
@@ -270,7 +269,6 @@ class FilePanel extends React.Component<IProps, IState> {
                             timelineSet={this.state.timelineSet}
                             showUrlPreview={false}
                             onPaginationRequest={this.onPaginationRequest}
-                            tileShape={TileShape.FileGrid}
                             resizeNotifier={this.props.resizeNotifier}
                             empty={emptyState}
                             layout={Layout.Group}

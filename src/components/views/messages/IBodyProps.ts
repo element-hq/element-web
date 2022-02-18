@@ -17,7 +17,6 @@ limitations under the License.
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 
-import { TileShape } from "../rooms/EventTile";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
@@ -36,7 +35,6 @@ export interface IBodyProps {
 
     showUrlPreview?: boolean;
     forExport?: boolean;
-    tileShape: TileShape;
     maxImageHeight?: number;
     replacingEventId?: string;
     editState?: EditorStateTransfer;

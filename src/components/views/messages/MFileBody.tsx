@@ -24,12 +24,12 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { TileShape } from "../rooms/EventTile";
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 import { IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import TextWithTooltip from "../elements/TextWithTooltip";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
 
@@ -108,6 +108,9 @@ interface IState {
 
 @replaceableComponent("views.messages.MFileBody")
 export default class MFileBody extends React.Component<IProps, IState> {
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     static defaultProps = {
         showGenericPlaceholder: true,
     };
@@ -223,8 +226,15 @@ export default class MFileBody extends React.Component<IProps, IState> {
             </span>;
         }
 
-        const showDownloadLink = (this.props.tileShape || !this.props.showGenericPlaceholder) &&
-            this.props.tileShape !== TileShape.Thread;
+        let showDownloadLink = !this.props.showGenericPlaceholder || (
+            this.context.timelineRenderingType !== TimelineRenderingType.Room &&
+            this.context.timelineRenderingType !== TimelineRenderingType.Search &&
+            this.context.timelineRenderingType !== TimelineRenderingType.Pinned
+        );
+
+        if (this.context.timelineRenderingType === TimelineRenderingType.Thread) {
+            showDownloadLink = false;
+        }
 
         if (isEncrypted) {
             if (!this.state.decryptedBlob) {
@@ -334,9 +344,11 @@ export default class MFileBody extends React.Component<IProps, IState> {
                             <span className="mx_MFileBody_download_icon" />
                             { _t("Download %(text)s", { text: this.linkText }) }
                         </a>
-                        { this.props.tileShape === TileShape.FileGrid && <div className="mx_MImageBody_size">
-                            { this.content.info && this.content.info.size ? filesize(this.content.info.size) : "" }
-                        </div> }
+                        { this.context.timelineRenderingType === TimelineRenderingType.File && (
+                            <div className="mx_MImageBody_size">
+                                { this.content.info && this.content.info.size ? filesize(this.content.info.size) : "" }
+                            </div>
+                        ) }
                     </div> }
                 </span>
             );

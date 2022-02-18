@@ -26,7 +26,6 @@ import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import InlineSpinner from '../elements/InlineSpinner';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Media, mediaFromContent } from "../../../customisations/Media";
@@ -34,8 +33,9 @@ import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
 import { IBodyProps } from "./IBodyProps";
-import { TileShape } from '../rooms/EventTile';
 import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 interface IState {
     decryptedUrl?: string;
@@ -55,7 +55,9 @@ interface IState {
 
 @replaceableComponent("views.messages.MImageBody")
 export default class MImageBody extends React.Component<IBodyProps, IState> {
-    static contextType = MatrixClientContext;
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     private unmounted = true;
     private image = createRef<HTMLImageElement>();
     private timeout?: number;
@@ -297,7 +299,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     componentDidMount() {
         this.unmounted = false;
-        this.context.on('sync', this.onClientSync);
+        MatrixClientPeg.get().on('sync', this.onClientSync);
 
         const showImage = this.state.showImage ||
             localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
@@ -327,7 +329,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.removeListener('sync', this.onClientSync);
+        MatrixClientPeg.get().removeListener('sync', this.onClientSync);
         this.clearBlurhashTimeout();
         SettingsStore.unwatchSetting(this.sizeWatcher);
     }
@@ -524,9 +526,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
          * In the room timeline or the thread context we don't need the download
          * link as the message action bar will fullfil that
          */
-        const hasMessageActionBar = !this.props.tileShape
-            || this.props.tileShape === TileShape.Thread
-            || this.props.tileShape === TileShape.ThreadPanel;
+        const hasMessageActionBar = this.context.timelineRenderingType === TimelineRenderingType.Room
+            || this.context.timelineRenderingType === TimelineRenderingType.Pinned
+            || this.context.timelineRenderingType === TimelineRenderingType.Search
+            || this.context.timelineRenderingType === TimelineRenderingType.Thread
+            || this.context.timelineRenderingType === TimelineRenderingType.ThreadsList;
         if (!hasMessageActionBar) {
             return <MFileBody {...this.props} showGenericPlaceholder={false} />;
         }

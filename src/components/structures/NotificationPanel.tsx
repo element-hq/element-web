@@ -23,7 +23,6 @@ import BaseCard from "../views/right_panel/BaseCard";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
-import { TileShape } from "../views/rooms/EventTile";
 import { Layout } from "../../settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 
@@ -53,7 +52,6 @@ export default class NotificationPanel extends React.PureComponent<IProps> {
                     manageReadMarkers={false}
                     timelineSet={timelineSet}
                     showUrlPreview={false}
-                    tileShape={TileShape.Notif}
                     empty={emptyState}
                     alwaysShowTimestamps={true}
                     layout={Layout.Group}

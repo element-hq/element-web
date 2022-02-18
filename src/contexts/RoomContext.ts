@@ -25,7 +25,8 @@ export enum TimelineRenderingType {
     ThreadsList = "ThreadsList",
     File = "File",
     Notification = "Notification",
-    Search = "Search"
+    Search = "Search",
+    Pinned = "Pinned",
 }
 
 const RoomContext = createContext<IRoomState>({

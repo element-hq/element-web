@@ -19,16 +19,19 @@ import React, { ReactNode } from "react";
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { TileShape } from "../rooms/EventTile";
 import PlaybackWaveform from "./PlaybackWaveform";
 import AudioPlayerBase from "./AudioPlayerBase";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 @replaceableComponent("views.audio_messages.RecordingPlayback")
 export default class RecordingPlayback extends AudioPlayerBase {
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     private get isWaveformable(): boolean {
-        return this.props.tileShape !== TileShape.Notif
-            && this.props.tileShape !== TileShape.FileGrid
-            && this.props.tileShape !== TileShape.Pinned;
+        return this.context.timelineRenderingType !== TimelineRenderingType.Notification
+            && this.context.timelineRenderingType !== TimelineRenderingType.File
+            && this.context.timelineRenderingType !== TimelineRenderingType.Pinned;
     }
 
     protected renderComponent(): ReactNode {

@@ -28,6 +28,7 @@ import { IMediaEventContent } from "../../../customisations/models/IMediaEventCo
 import { IBodyProps } from "./IBodyProps";
 import MFileBody from "./MFileBody";
 import { ImageSize, suggestedSize as suggestedVideoSize } from "../../../settings/enums/ImageSize";
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
 interface IState {
     decryptedUrl?: string;
@@ -41,6 +42,9 @@ interface IState {
 
 @replaceableComponent("views.messages.MVideoBody")
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     private videoRef = React.createRef<HTMLVideoElement>();
     private sizeWatcher: string;
 
@@ -235,9 +239,15 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         this.props.onHeightChanged();
     };
 
+    protected get showFileBody(): boolean {
+        return this.context.timelineRenderingType !== TimelineRenderingType.Room &&
+            this.context.timelineRenderingType !== TimelineRenderingType.Pinned &&
+            this.context.timelineRenderingType !== TimelineRenderingType.Search;
+    }
+
     private getFileBody = () => {
         if (this.props.forExport) return null;
-        return this.props.tileShape && <MFileBody {...this.props} showGenericPlaceholder={false} />;
+        return this.showFileBody && <MFileBody {...this.props} showGenericPlaceholder={false} />;
     };
 
     render() {

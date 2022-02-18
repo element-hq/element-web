@@ -29,7 +29,7 @@ import SettingsStore from '../../settings/SettingsStore';
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
-import EventTile, { haveTileForEvent, IReadReceiptProps, TileShape } from "../views/rooms/EventTile";
+import EventTile, { haveTileForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
 import { hasText } from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -143,9 +143,6 @@ interface IProps {
 
     // className for the panel
     className: string;
-
-    // shape parameter to be passed to EventTiles
-    tileShape?: TileShape;
 
     // show twelve hour timestamps
     isTwelveHour?: boolean;
@@ -802,7 +799,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     showUrlPreview={this.props.showUrlPreview}
                     checkUnmounting={this.isUnmounting}
                     eventSendStatus={mxEv.getAssociatedStatus()}
-                    tileShape={this.props.tileShape}
                     isTwelveHour={this.props.isTwelveHour}
                     permalinkCreator={this.props.permalinkCreator}
                     last={last}
@@ -994,7 +990,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const style = this.props.hidden ? { display: 'none' } : {};
 
         let whoIsTyping;
-        if (this.props.room && !this.props.tileShape && this.state.showTypingNotifications) {
+        if (this.props.room &&
+            this.state.showTypingNotifications &&
+            this.context.timelineRenderingType === TimelineRenderingType.Room
+        ) {
             whoIsTyping = (<WhoIsTypingTile
                 room={this.props.room}
                 onShown={this.onTypingShown}
