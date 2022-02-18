@@ -3643,5 +3643,9 @@
     "Automatically send debug logs when key backup is not functioning": "Invia automaticamente log di debug quando il backup delle chiavi non funziona",
     "<%(count)s spaces>|zero": "<stringa vuota>",
     "<%(count)s spaces>|one": "<spazio>",
-    "<%(count)s spaces>|other": "<%(count)s spazi>"
+    "<%(count)s spaces>|other": "<%(count)s spazi>",
+    "Join %(roomAddress)s": "Entra in %(roomAddress)s",
+    "Edit poll": "Modifica sondaggio",
+    "Sorry, you can't edit a poll after votes have been cast.": "Spiacenti, non puoi modificare un sondaggio dopo che sono stati inviati voti.",
+    "Can't edit poll": "Impossibile modificare il sondaggio"
 }
