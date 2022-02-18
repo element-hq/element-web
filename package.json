@@ -110,7 +110,6 @@
     "react-dom": "17.0.2",
     "react-focus-lock": "^2.5.0",
     "react-transition-group": "^4.4.1",
-    "resize-observer-polyfill": "^1.5.1",
     "rfc4648": "^1.4.0",
     "sanitize-html": "^2.3.2",
     "tar-js": "^0.3.0",

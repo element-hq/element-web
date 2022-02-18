@@ -27,7 +27,6 @@ import InfoTooltip, { InfoTooltipKind } from '../elements/InfoTooltip';
 import AccessibleTooltipButton from '../elements/AccessibleTooltipButton';
 import { formatCallTime } from "../../../DateUtils";
 import Clock from "../audio_messages/Clock";
-import { ResizeObserverPolyfill } from "../../../stores/UIStore";
 
 const MAX_NON_NARROW_WIDTH = 450 / 70 * 100;
 
@@ -64,7 +63,7 @@ export default class CallEvent extends React.PureComponent<IProps, IState> {
         this.props.callEventGrouper.addListener(CallEventGrouperEvent.SilencedChanged, this.onSilencedChanged);
         this.props.callEventGrouper.addListener(CallEventGrouperEvent.LengthChanged, this.onLengthChanged);
 
-        this.resizeObserver = new ResizeObserverPolyfill(this.resizeObserverCallback);
+        this.resizeObserver = new ResizeObserver(this.resizeObserverCallback);
         this.wrapperElement.current && this.resizeObserver.observe(this.wrapperElement.current);
     }
 

@@ -13,6 +13,14 @@ require('jest-fetch-mock').enableMocks();
 // polyfill until setImmediate use in client can be removed
 global.setImmediate = callback => setTimeout(callback, 0);
 
+// Stub ResizeObserver
+class ResizeObserver {
+    observe() {} // do nothing
+    unobserve() {} // do nothing
+    disconnect() {} // do nothing
+}
+window.ResizeObserver = ResizeObserver;
+
 // polyfilling TextEncoder as it is not available on JSDOM
 // view https://github.com/facebook/jest/issues/9983
 global.TextEncoder = TextEncoder;
