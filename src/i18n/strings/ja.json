@@ -2005,7 +2005,7 @@
     "IRC display name width": "IRC表示名の幅",
     "How fast should messages be downloaded.": "メッセージをダウンロードする速度。",
     "Enable message search in encrypted rooms": "暗号化されたルームでもメッセージ検索を有効にする",
-    "Show hidden events in timeline": "省略されたイベントをタイムラインに表示する",
+    "Show hidden events in timeline": "タイムラインで非表示のイベントを表示",
     "Use Command + Enter to send a message": "メッセージ送信に Command + Enter を使う",
     "Show line numbers in code blocks": "コードブロックに行番号を表示する",
     "Expand code blocks by default": "デフォルトでコードブロックを展開表示する",
