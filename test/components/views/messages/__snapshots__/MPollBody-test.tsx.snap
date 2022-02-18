@@ -93,7 +93,7 @@ exports[`MPollBody renders a finished poll 1`] = `
         className="mx_MPollBody_allOptions"
       >
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="pizza"
           onClick={[Function]}
         >
@@ -155,7 +155,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="poutine"
           onClick={[Function]}
         >
@@ -217,7 +217,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          className="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
           key="italian"
           onClick={[Function]}
         >
@@ -279,7 +279,7 @@ exports[`MPollBody renders a finished poll 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="wings"
           onClick={[Function]}
         >
@@ -444,7 +444,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
         className="mx_MPollBody_allOptions"
       >
         <div
-          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          className="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
           key="pizza"
           onClick={[Function]}
         >
@@ -506,7 +506,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="poutine"
           onClick={[Function]}
         >
@@ -568,7 +568,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="italian"
           onClick={[Function]}
         >
@@ -630,7 +630,7 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option mx_MPollBody_option_checked"
+          className="mx_MPollBody_option mx_MPollBody_option_checked mx_MPollBody_option_ended"
           key="wings"
           onClick={[Function]}
         >
@@ -795,7 +795,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
         className="mx_MPollBody_allOptions"
       >
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="pizza"
           onClick={[Function]}
         >
@@ -857,7 +857,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="poutine"
           onClick={[Function]}
         >
@@ -919,7 +919,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="italian"
           onClick={[Function]}
         >
@@ -981,7 +981,7 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
           </div>
         </div>
         <div
-          className="mx_MPollBody_option"
+          className="mx_MPollBody_option mx_MPollBody_option_ended"
           key="wings"
           onClick={[Function]}
         >
@@ -1179,13 +1179,13 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="pizza"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -1266,13 +1266,13 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="poutine"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -1353,13 +1353,13 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="italian"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -1440,13 +1440,13 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="wings"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -1630,13 +1630,13 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="pizza"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -1719,13 +1719,13 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="poutine"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -1808,13 +1808,13 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             <StyledRadioButton
               checked={true}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="italian"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
               >
                 <input
                   checked={true}
@@ -1897,13 +1897,13 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="wings"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2089,13 +2089,13 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="pizza"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2176,13 +2176,13 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="poutine"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2263,13 +2263,13 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="italian"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2350,13 +2350,13 @@ exports[`MPollBody renders a poll with no votes 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="wings"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2540,13 +2540,13 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="pizza"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2629,13 +2629,13 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="poutine"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2718,13 +2718,13 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             <StyledRadioButton
               checked={false}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="italian"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled"
               >
                 <input
                   checked={false}
@@ -2807,13 +2807,13 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
             <StyledRadioButton
               checked={true}
               childrenInLabel={true}
-              className=""
+              className="mx_MPollBody_live-option"
               name="poll_answer_select-$mypoll"
               onChange={[Function]}
               value="wings"
             >
               <label
-                className="mx_StyledRadioButton mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
+                className="mx_StyledRadioButton mx_MPollBody_live-option mx_StyledRadioButton_enabled mx_StyledRadioButton_checked"
               >
                 <input
                   checked={true}

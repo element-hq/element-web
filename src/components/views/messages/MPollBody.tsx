@@ -438,6 +438,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
                         const cls = classNames({
                             "mx_MPollBody_option": true,
                             "mx_MPollBody_option_checked": checked,
+                            "mx_MPollBody_option_ended": ended,
                         });
 
                         const answerPercent = (
@@ -513,6 +514,7 @@ interface ILivePollOptionProps {
 
 function LivePollOption(props: ILivePollOptionProps) {
     return <StyledRadioButton
+        className="mx_MPollBody_live-option"
         name={`poll_answer_select-${props.pollId}`}
         value={props.answer.id}
         checked={props.checked}
