@@ -47,10 +47,6 @@ export default class AutoHideScrollbar extends React.Component<IProps> {
         }
     }
 
-    public getScrollTop(): number {
-        return this.containerRef.current.scrollTop;
-    }
-
     public render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { className, onScroll, onWheel, style, tabIndex, wrappedRef, children, ...otherProps } = this.props;
