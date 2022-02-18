@@ -3648,5 +3648,6 @@
     "Join %(roomAddress)s": "Vstoupit do %(roomAddress)s",
     "Edit poll": "Upravit hlasování",
     "Sorry, you can't edit a poll after votes have been cast.": "Je nám líto, ale po odevzdání hlasů nelze hlasování upravovat.",
-    "Can't edit poll": "Nelze upravit hlasování"
+    "Can't edit poll": "Nelze upravit hlasování",
+    "Show current avatar and name for users in message history": "Zobrazit aktuálního avatara a jména uživatelů v historii zpráv"
 }
