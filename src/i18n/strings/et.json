@@ -3640,5 +3640,6 @@
     "Can't edit poll": "Küsimustikku ei saa muuta",
     "Sorry, you can't edit a poll after votes have been cast.": "Vabandust, aga küsimustikku ei saa enam peale hääletamise lõppu muuta.",
     "Edit poll": "Muuda küsitlust",
-    "Join %(roomAddress)s": "Liitu %(roomAddress)s jututoaga"
+    "Join %(roomAddress)s": "Liitu %(roomAddress)s jututoaga",
+    "Show current avatar and name for users in message history": "Sõnumite ajaloos leiduvate kasutajate puhul näita kehtivat tunnuspilti ning nime"
 }
