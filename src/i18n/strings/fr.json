@@ -3615,5 +3615,7 @@
     "Feedback sent! Thanks, we appreciate it!": "Commentaire envoyé ! Merci, nous l’apprécions !",
     "To feedback, join the beta, start a search and click on feedback.": "Pour transmettre vos commentaires, rejoignez la bêta, lancez une recherche et cliquez sur « commentaire ».",
     "This feature is a work in progress, we'd love to hear your feedback.": "Cette fonctionnalité est en cours de développement, nous aimerions entendre vos commentaires.",
-    "New search experience": "Nouvelle expérience de recherche"
+    "New search experience": "Nouvelle expérience de recherche",
+    "Show current avatar and name for users in message history": "Afficher l'avatar et le nom actuels des utilisateurs dans l'historique des messages",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s et %(space2Name)s"
 }
