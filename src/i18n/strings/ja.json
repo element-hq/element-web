@@ -2610,7 +2610,7 @@
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "新しいアカウント（%(newAccountId)s）が登録されましたが、あなたは別のアカウント（%(loggedInUserId)s）でログインしています。",
     "Continue with previous account": "以前のアカウントで続行",
     "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)sあるいは、以下に入力して登録%(usernamePassword)s",
-    "Continue with %(ssoButtons)s": "%(ssoButtons)sで続行",
+    "Continue with %(ssoButtons)s": "以下のサービスにより続行%(ssoButtons)s",
     "That e-mail address is already in use.": "このメールアドレスは既に使われています。",
     "Someone already has that username, please try another.": "そのユーザー名は既に使用されています。他のユーザー名を試してください。",
     "Registration has been disabled on this homeserver.": "このサーバーはアカウントの新規登録を受け入れていません。",
@@ -2629,5 +2629,6 @@
     "Doesn't look like a valid email address": "メールアドレスの形式が正しくありません",
     "Enter email address (required on this homeserver)": "メールアドレスを入力してください（このホームサーバーでは必須）",
     "Use an email address to recover your account": "アカウント復旧用のメールアドレスを設定してください",
-    "Learn more": "詳しく知る"
+    "Learn more": "詳しく知る",
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "異なるホームサーバーのURLを入力すると、そのMatrixサーバーにサインインして接続することができます。それにより、他のホームサーバー上にあるMatrixのアカウントによってElementを使用することができます。"
 }
