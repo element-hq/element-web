@@ -28,6 +28,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { upsertRoomStateEvents } from '../../utils/test-utils';
 
 const TestUtils = require('react-dom/test-utils');
 const expect = require('expect');
@@ -199,6 +200,7 @@ describe('MessagePanel', function() {
             mkEvent({
                 event: true,
                 type: "m.room.create",
+                sender: '@test:example.org',
                 room: roomId,
                 user: alice,
                 content: {
@@ -435,6 +437,7 @@ describe('MessagePanel', function() {
 
     it('should collapse creation events', function() {
         const events = mkCreationEvents();
+        upsertRoomStateEvents(room, events);
         const res = mount(
             <WrappedMessagePanel className="cls" events={events} />,
         );
@@ -460,6 +463,7 @@ describe('MessagePanel', function() {
 
     it('should hide read-marker at the end of creation event summary', function() {
         const events = mkCreationEvents();
+        upsertRoomStateEvents(room, events);
         const res = mount(
             <WrappedMessagePanel
                 className="cls"

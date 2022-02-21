@@ -352,6 +352,7 @@ describe("<TextualBody />", () => {
             },
             event: true,
         });
+        jest.spyOn(ev, 'replacingEventDate').mockReturnValue(new Date(1993, 7, 3));
         ev.makeReplaced(ev2);
 
         wrapper.setProps({

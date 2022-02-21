@@ -3,9 +3,14 @@ import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure } from "enzyme";
 
 import * as languageHandler from "../src/languageHandler";
+import SdkConfig, { DEFAULTS } from '../src/SdkConfig';
 
 languageHandler.setLanguage('en');
 languageHandler.setMissingEntryGenerator(key => key.split("|", 2)[1]);
+
+// uninitialised SdkConfig causes lots of warnings in console
+// init with defaults
+SdkConfig.put(DEFAULTS);
 
 require('jest-fetch-mock').enableMocks();
 

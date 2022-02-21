@@ -176,7 +176,6 @@ describe('editor/operations: formatting operations', () => {
                 { "text": "__new paragraph__", "type": "plain" },
             ]);
             range = model.startRange(model.positionForOffset(0, true), model.getPositionAtEnd()); // select-all
-            console.log("RANGE", range.parts);
             toggleInlineFormat(range, "__");
             expect(model.serializeParts()).toEqual([
                 { "text": "hello world,", "type": "plain" },

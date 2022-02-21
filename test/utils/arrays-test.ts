@@ -30,8 +30,10 @@ import {
     GroupedArray,
 } from "../../src/utils/arrays";
 
-function expectSample(i: number, input: number[], expected: number[], smooth = false) {
-    console.log(`Resample case index: ${i}`); // for debugging test failures
+type TestParams = { input: number[], output: number[] };
+type TestCase = [string, TestParams];
+
+function expectSample(input: number[], expected: number[], smooth = false) {
     const result = (smooth ? arraySmoothingResample : arrayFastResample)(input, expected.length);
     expect(result).toBeDefined();
     expect(result).toHaveLength(expected.length);
@@ -40,60 +42,68 @@ function expectSample(i: number, input: number[], expected: number[], smooth = f
 
 describe('arrays', () => {
     describe('arrayFastResample', () => {
-        it('should downsample', () => {
-            [
-                { input: [1, 2, 3, 4, 5], output: [1, 4] }, // Odd -> Even
-                { input: [1, 2, 3, 4, 5], output: [1, 3, 5] }, // Odd -> Odd
-                { input: [1, 2, 3, 4], output: [1, 2, 3] }, // Even -> Odd
-                { input: [1, 2, 3, 4], output: [1, 3] }, // Even -> Even
-            ].forEach((c, i) => expectSample(i, c.input, c.output));
-        });
+        const downsampleCases: TestCase[] = [
+            ['Odd -> Even', { input: [1, 2, 3, 4, 5], output: [1, 4] }],
+            ['Odd -> Odd', { input: [1, 2, 3, 4, 5], output: [1, 3, 5] }],
+            ['Even -> Odd', { input: [1, 2, 3, 4], output: [1, 2, 3] }],
+            ['Even -> Even', { input: [1, 2, 3, 4], output: [1, 3] }],
+        ];
+        it.each(downsampleCases)('downsamples correctly from %s', (_d, { input, output }) =>
+            expectSample(input, output),
+        );
 
-        it('should upsample', () => {
-            [
-                { input: [1, 2, 3], output: [1, 1, 2, 2, 3, 3] }, // Odd -> Even
-                { input: [1, 2, 3], output: [1, 1, 2, 2, 3] }, // Odd -> Odd
-                { input: [1, 2], output: [1, 1, 1, 2, 2] }, // Even -> Odd
-                { input: [1, 2], output: [1, 1, 1, 2, 2, 2] }, // Even -> Even
-            ].forEach((c, i) => expectSample(i, c.input, c.output));
-        });
+        const upsampleCases: TestCase[] = [
+            ['Odd -> Even', { input: [1, 2, 3], output: [1, 1, 2, 2, 3, 3] }],
+            ['Odd -> Odd', { input: [1, 2, 3], output: [1, 1, 2, 2, 3] }],
+            ['Even -> Odd', { input: [1, 2], output: [1, 1, 1, 2, 2] }],
+            ['Even -> Even', { input: [1, 2], output: [1, 1, 1, 2, 2, 2] }],
+        ];
+        it.each(upsampleCases)('upsamples correctly from %s', (_d, { input, output }) =>
+            expectSample(input, output),
+        );
 
-        it('should maintain sample', () => {
-            [
-                { input: [1, 2, 3], output: [1, 2, 3] }, // Odd
-                { input: [1, 2], output: [1, 2] }, // Even
-            ].forEach((c, i) => expectSample(i, c.input, c.output));
-        });
+        const maintainSampleCases: TestCase[] = [
+            ['Odd', { input: [1, 2, 3], output: [1, 2, 3] }], // Odd
+            ['Even', { input: [1, 2], output: [1, 2] }], // Even
+        ];
+
+        it.each(maintainSampleCases)('maintains samples for %s', (_d, { input, output }) =>
+            expectSample(input, output),
+        );
     });
 
     describe('arraySmoothingResample', () => {
-        it('should downsample', () => {
-            // Dev note: these aren't great samples, but they demonstrate the bare minimum. Ideally
-            // we'd be feeding a thousand values in and seeing what a curve of 250 values looks like,
-            // but that's not really feasible to manually verify accuracy.
-            [
-                { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3, 3] }, // Odd -> Even
-                { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3] }, // Odd -> Odd
-                { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3, 3] }, // Even -> Odd
-                { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3] }, // Even -> Even
-            ].forEach((c, i) => expectSample(i, c.input, c.output, true));
-        });
+        // Dev note: these aren't great samples, but they demonstrate the bare minimum. Ideally
+        // we'd be feeding a thousand values in and seeing what a curve of 250 values looks like,
+        // but that's not really feasible to manually verify accuracy.
+        const downsampleCases: TestCase[] = [
+            ['Odd -> Even', { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3, 3] }],
+            ['Odd -> Odd', { input: [4, 4, 1, 4, 4, 1, 4, 4, 1], output: [3, 3, 3] }],
+            ['Even -> Odd', { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3, 3] }],
+            ['Even -> Even', { input: [4, 4, 1, 4, 4, 1, 4, 4], output: [3, 3] }],
+        ];
 
-        it('should upsample', () => {
-            [
-                { input: [2, 0, 2], output: [2, 2, 0, 0, 2, 2] }, // Odd -> Even
-                { input: [2, 0, 2], output: [2, 2, 0, 0, 2] }, // Odd -> Odd
-                { input: [2, 0], output: [2, 2, 2, 0, 0] }, // Even -> Odd
-                { input: [2, 0], output: [2, 2, 2, 0, 0, 0] }, // Even -> Even
-            ].forEach((c, i) => expectSample(i, c.input, c.output, true));
-        });
+        it.each(downsampleCases)('downsamples correctly from %s', (_d, { input, output }) =>
+            expectSample(input, output, true),
+        );
 
-        it('should maintain sample', () => {
-            [
-                { input: [2, 0, 2], output: [2, 0, 2] }, // Odd
-                { input: [2, 0], output: [2, 0] }, // Even
-            ].forEach((c, i) => expectSample(i, c.input, c.output, true));
-        });
+        const upsampleCases: TestCase[] = [
+            ['Odd -> Even', { input: [2, 0, 2], output: [2, 2, 0, 0, 2, 2] }],
+            ['Odd -> Odd', { input: [2, 0, 2], output: [2, 2, 0, 0, 2] }],
+            ['Even -> Odd', { input: [2, 0], output: [2, 2, 2, 0, 0] }],
+            ['Even -> Even', { input: [2, 0], output: [2, 2, 2, 0, 0, 0] }],
+        ];
+        it.each(upsampleCases)('upsamples correctly from %s', (_d, { input, output }) =>
+            expectSample(input, output, true),
+        );
+
+        const maintainCases: TestCase[] = [
+            ['Odd', { input: [2, 0, 2], output: [2, 0, 2] }],
+            ['Even', { input: [2, 0], output: [2, 0] }],
+        ];
+        it.each(maintainCases)('maintains samples for %s', (_d, { input, output }) =>
+            expectSample(input, output),
+        );
     });
 
     describe('arrayRescale', () => {

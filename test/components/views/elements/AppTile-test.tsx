@@ -139,7 +139,7 @@ describe("AppTile", () => {
         const instance = renderer.root.findByType(AppTile).instance;
         const endWidgetActions = jest.spyOn(instance, "endWidgetActions");
 
-        console.log("Switch to room 2");
+        // Switch to room 2
         dis.dispatch({
             action: Action.ViewRoom,
             room_id: "r2",
@@ -194,7 +194,7 @@ describe("AppTile", () => {
         const instance = renderer.root.findByType(AppTile).instance;
         const endWidgetActions = jest.spyOn(instance, "endWidgetActions");
 
-        console.log("Move widget to center");
+        // Move widget to center
 
         // Stop mocking settings so that the widget move can take effect
         mockSettings.mockRestore();

@@ -41,6 +41,10 @@ describe('Login', function() {
     };
 
     beforeEach(function() {
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
+            disable_custom_urls: true,
+            brand: 'test-brand',
+        });
         mockClient.login.mockClear().mockResolvedValue({});
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
         createClient.mockReturnValue(mockClient);
@@ -64,6 +68,10 @@ describe('Login', function() {
     }
 
     it('should show form with change server link', async () => {
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
+            disable_custom_urls: false,
+            brand: 'test',
+        });
         const root = render();
 
         await flushPromises();
@@ -79,10 +87,6 @@ describe('Login', function() {
     });
 
     it('should show form without change server link when custom URLs disabled', async () => {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
-            disable_custom_urls: true,
-        });
-
         const root = render();
         await flushPromises();
 
@@ -97,10 +101,6 @@ describe('Login', function() {
     });
 
     it("should show SSO button if that flow is available", async () => {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
-            disable_custom_urls: true,
-        });
-
         mockClient.loginFlows.mockReturnValue({ flows: [{ type: "m.login.sso" }] });
 
         const root = render();
@@ -111,10 +111,6 @@ describe('Login', function() {
     });
 
     it("should show both SSO button and username+password if both are available", async () => {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
-            disable_custom_urls: true,
-        });
-
         mockClient.loginFlows.mockReturnValue({ flows: [{ type: "m.login.password" }, { type: "m.login.sso" }] });
 
         const root = render();
@@ -128,10 +124,6 @@ describe('Login', function() {
     });
 
     it("should show multiple SSO buttons if multiple identity_providers are available", async () => {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
-            disable_custom_urls: true,
-        });
-
         mockClient.loginFlows.mockReturnValue({
             flows: [{
                 "type": "m.login.sso",

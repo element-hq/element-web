@@ -20,7 +20,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import { createClient } from 'matrix-js-sdk/src/matrix';
 
 import sdk from '../../../skinned-sdk';
-import SdkConfig from '../../../../src/SdkConfig';
+import SdkConfig, { DEFAULTS } from '../../../../src/SdkConfig';
 import { createTestClient, mkServerConfig } from "../../../test-utils";
 
 jest.mock('matrix-js-sdk/src/matrix');
@@ -34,6 +34,10 @@ describe('Registration', function() {
     let parentDiv;
 
     beforeEach(function() {
+        jest.spyOn(SdkConfig, "get").mockReturnValue({
+            ...DEFAULTS,
+            disable_custom_urls: true,
+        });
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
         createClient.mockImplementation(() => createTestClient());
@@ -61,10 +65,6 @@ describe('Registration', function() {
     });
 
     it('should show form when custom URLs disabled', async function() {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
-            disable_custom_urls: true,
-        });
-
         const root = render();
 
         // Set non-empty flows & matrixClient to get past the loading spinner
@@ -84,10 +84,6 @@ describe('Registration', function() {
     });
 
     it("should show SSO options if those are available", async () => {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
-            disable_custom_urls: true,
-        });
-
         const root = render();
 
         // Set non-empty flows & matrixClient to get past the loading spinner

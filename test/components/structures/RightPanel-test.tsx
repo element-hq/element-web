@@ -124,7 +124,7 @@ describe("RightPanel", () => {
             });
         });
 
-        console.log("Switch to room 2");
+        // Switch to room 2
         dis.dispatch({
             action: Action.ViewRoom,
             room_id: "r2",
