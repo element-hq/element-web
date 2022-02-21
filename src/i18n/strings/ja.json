@@ -320,7 +320,7 @@
     "Send an encrypted reply…": "暗号化された返信を送信…",
     "Send an encrypted message…": "暗号化されたメッセージを送信…",
     "This room has been replaced and is no longer active.": "このルームは交換されており、もうアクティブではありません。",
-    "The conversation continues here.": "会話はここで続けられます。",
+    "The conversation continues here.": "こちらから継続中の会話を確認する。",
     "You do not have permission to post to this room": "このルームに投稿する権限がありません",
     "Server error": "サーバーエラー",
     "Server unavailable, overloaded, or something else went wrong.": "サーバーが使用できない、オーバーロードされている、または何かが間違っていました。",
