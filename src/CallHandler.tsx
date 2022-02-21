@@ -901,7 +901,7 @@ export default class CallHandler extends EventEmitter {
         this.pause(AudioID.Ring);
     }
 
-    public async dialNumber(number: string): Promise<void> {
+    public async dialNumber(number: string, transferee?: MatrixCall): Promise<void> {
         const results = await this.pstnLookup(number);
         if (!results || results.length === 0 || !results[0].userid) {
             Modal.createTrackedDialog('', '', ErrorDialog, {
@@ -932,12 +932,19 @@ export default class CallHandler extends EventEmitter {
             metricsTrigger: "WebDialPad",
         });
 
-        await this.placeMatrixCall(roomId, CallType.Voice, null);
+        await this.placeMatrixCall(roomId, CallType.Voice, transferee);
     }
 
     public async startTransferToPhoneNumber(
         call: MatrixCall, destination: string, consultFirst: boolean,
     ): Promise<void> {
+        if (consultFirst) {
+            // if we're consulting, we just start by placing a call to the transfer
+            // target (passing the transferee so the actual tranfer can happen later)
+            this.dialNumber(destination, call);
+            return;
+        }
+
         const results = await this.pstnLookup(destination);
         if (!results || results.length === 0 || !results[0].userid) {
             Modal.createTrackedDialog('', '', ErrorDialog, {
