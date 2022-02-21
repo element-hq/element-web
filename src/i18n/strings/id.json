@@ -3577,5 +3577,11 @@
     "Sorry, you can't edit a poll after votes have been cast.": "Maaf, Anda tidak dapat mengedit sebuah poll setelah suara-suara diberikan.",
     "Can't edit poll": "Tidak dapat mengedit poll",
     "Join %(roomAddress)s": "Bergabung ke %(roomAddress)s",
-    "Show current avatar and name for users in message history": "Tampilkan avatar dan nama saat ini untuk pengguna di riwayat pesan"
+    "Show current avatar and name for users in message history": "Tampilkan avatar dan nama saat ini untuk pengguna di riwayat pesan",
+    "Results are only revealed when you end the poll": "Hasil hanya akan disediakan ketika Anda mengakhiri pemungutan suara",
+    "Voters see results as soon as they have voted": "Pemberi suara akan melihat hasilnya ketika mereka telah memberikan suara",
+    "Closed poll": "Pemungutan suara tertutup",
+    "Open poll": "Pemungutan suara terbuka",
+    "Poll type": "Tipe pemungutan suara",
+    "Results will be visible when the poll is ended": "Hasil akan tersedia setelah pemungutan suara berakhir"
 }
