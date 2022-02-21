@@ -14,7 +14,7 @@
     "Create new room": "新しいルームを作成",
     "Search": "検索",
     "Settings": "設定",
-    "Start chat": "対話開始",
+    "Start chat": "チャットを開始",
     "New Password": "新しいパスワード",
     "Failed to change password. Is your password correct?": "パスワード変更に失敗しました。パスワードは正しいですか?",
     "Only people who have been invited": "このルームに招待された人のみ参加可能",
@@ -930,7 +930,7 @@
     "This room is end-to-end encrypted": "このルームはエンドツーエンド暗号化されています",
     "Encrypted by an unverified session": "未検証のセッションによる暗号化",
     "Close preview": "プレビューを閉じる",
-    "Direct Messages": "対話",
+    "Direct Messages": "ダイレクトメッセージ",
     "Loading …": "読み込み中 …",
     "Your display name": "あなたの表示名",
     "Power level": "権限レベル",
@@ -1351,7 +1351,7 @@
     "%(count)s results|other": "%(count)s件の結果",
     "Use the + to make a new room or explore existing ones below": "+を使って新しい部屋を作成するか、以下の既存の部屋を探索します",
     "Explore all public rooms": "全ての公開ルームを探索",
-    "Start a new chat": "新しいチャットを開始",
+    "Start a new chat": "チャットを開始",
     "Can't see what you’re looking for?": "探しているものが見つかりませんか?",
     "Custom Tag": "カスタムタグ",
     "Explore public rooms": "公開ルームを探索",
@@ -2648,5 +2648,8 @@
     "Proceed with reset": "リセットする",
     "Please only proceed if you're sure you've lost all of your other devices and your security key.": "全ての端末とセキュリティーキーを紛失してしまったことが確かである場合にのみ、続行してください。",
     "Resetting your verification keys cannot be undone. After resetting, you won't have access to old encrypted messages, and any friends who have previously verified you will see security warnings until you re-verify with them.": "認証鍵のリセットは取り消せません。リセットすると、以前の暗号化されたメッセージにはアクセスできなくなります。また、あなたのアカウントを認証した連絡先には、再認証するまで、セキュリティーに関する警告が表示されます。",
-    "Really reset verification keys?": "本当に認証鍵をリセットしますか？"
+    "Really reset verification keys?": "本当に認証鍵をリセットしますか？",
+    "Start new chat": "チャットを開始",
+    "You do not have permissions to invite people to this space": "このスペースにユーザーを招待する権限がありません",
+    "Invite to space": "スペースに招待"
 }
