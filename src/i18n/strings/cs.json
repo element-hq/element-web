@@ -3649,5 +3649,11 @@
     "Edit poll": "Upravit hlasování",
     "Sorry, you can't edit a poll after votes have been cast.": "Je nám líto, ale po odevzdání hlasů nelze hlasování upravovat.",
     "Can't edit poll": "Nelze upravit hlasování",
-    "Show current avatar and name for users in message history": "Zobrazit aktuálního avatara a jména uživatelů v historii zpráv"
+    "Show current avatar and name for users in message history": "Zobrazit aktuálního avatara a jména uživatelů v historii zpráv",
+    "Results are only revealed when you end the poll": "Výsledky se zobrazí až po ukončení hlasování",
+    "Voters see results as soon as they have voted": "Hlasující uvidí výsledky ihned po hlasování",
+    "Closed poll": "Uzavřené hlasování",
+    "Open poll": "Otevřené hlasování",
+    "Poll type": "Typ hlasování",
+    "Results will be visible when the poll is ended": "Výsledky se zobrazí po ukončení hlasování"
 }
