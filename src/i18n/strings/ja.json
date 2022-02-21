@@ -2261,7 +2261,7 @@
     "Accept on your other login…": "他のログインで了承してください…",
     "Use Security Key": "セキュリティキーで検証",
     "Use another login": "他の端末から検証",
-    "Verify your identity to access encrypted messages and prove your identity to others.": "あなたが本人であることを検証し、暗号化されたメッセージにアクセスします。",
+    "Verify your identity to access encrypted messages and prove your identity to others.": "暗号化されたメッセージにアクセスするには、本人確認が必要です。",
     "New? <a>Create account</a>": "初めてですか？<a>アカウントを作成しましょう</a>",
     "Are you sure you want to sign out?": "サインアウトしてよろしいですか？",
     "Upgrade to %(hostSignupBrand)s": "%(hostSignupBrand)sにアップグレード",
@@ -2630,5 +2630,6 @@
     "Enter email address (required on this homeserver)": "メールアドレスを入力してください（このホームサーバーでは必須）",
     "Use an email address to recover your account": "アカウント復旧用のメールアドレスを設定してください",
     "Learn more": "詳しく知る",
-    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "異なるホームサーバーのURLを入力すると、そのMatrixサーバーにサインインして接続することができます。それにより、他のホームサーバー上にあるMatrixのアカウントによって、Elementを使用することができます。"
+    "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "異なるホームサーバーのURLを入力すると、そのMatrixサーバーにサインインして接続することができます。それにより、他のホームサーバー上にあるMatrixのアカウントによって、Elementを使用することができます。",
+    "Verify this device": "この端末を検証"
 }
