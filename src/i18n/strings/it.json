@@ -3647,5 +3647,12 @@
     "Join %(roomAddress)s": "Entra in %(roomAddress)s",
     "Edit poll": "Modifica sondaggio",
     "Sorry, you can't edit a poll after votes have been cast.": "Spiacenti, non puoi modificare un sondaggio dopo che sono stati inviati voti.",
-    "Can't edit poll": "Impossibile modificare il sondaggio"
+    "Can't edit poll": "Impossibile modificare il sondaggio",
+    "Results are only revealed when you end the poll": "I risultati verranno rivelati solo quando termini il sondaggio",
+    "Voters see results as soon as they have voted": "I votanti vedranno i risultati appena avranno votato",
+    "Closed poll": "Sondaggio chiuso",
+    "Open poll": "Apri sondaggio",
+    "Poll type": "Tipo sondaggio",
+    "Results will be visible when the poll is ended": "I risultati saranno visibili quando il sondaggio è terminato",
+    "Show current avatar and name for users in message history": "Mostra avatar e nome attuali degli utenti nella cronologia dei messaggi"
 }
