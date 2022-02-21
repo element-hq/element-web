@@ -3648,5 +3648,6 @@
     "Join %(roomAddress)s": "加入 %(roomAddress)s",
     "Edit poll": "編輯投票",
     "Sorry, you can't edit a poll after votes have been cast.": "抱歉，您無法在有人投票後編輯投票。",
-    "Can't edit poll": "無法編輯投票"
+    "Can't edit poll": "無法編輯投票",
+    "Show current avatar and name for users in message history": "在訊息歷史紀錄中顯示目前使用者的大頭照與名稱"
 }
