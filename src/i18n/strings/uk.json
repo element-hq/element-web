@@ -3599,5 +3599,11 @@
     "Sorry, you can't edit a poll after votes have been cast.": "Ви не можете редагувати опитування після завершення голосування.",
     "Can't edit poll": "Неможливо редагувати опитування",
     "Join %(roomAddress)s": "Приєднатися до %(roomAddress)s",
-    "Show current avatar and name for users in message history": "Показувати поточний аватар та ім'я для користувачів у історії повідомлень"
+    "Show current avatar and name for users in message history": "Показувати поточний аватар та ім'я для користувачів у історії повідомлень",
+    "Results are only revealed when you end the poll": "Результати показуються лише після завершення опитування",
+    "Voters see results as soon as they have voted": "Респонденти бачитимуть результати, як тільки вони проголосують",
+    "Closed poll": "Завершене опитування",
+    "Open poll": "Відкрите опитування",
+    "Poll type": "Тип опитування",
+    "Results will be visible when the poll is ended": "Результати будуть видимі після завершення опитування"
 }
