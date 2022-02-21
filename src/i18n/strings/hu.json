@@ -3645,5 +3645,12 @@
     "Sorry, you can't edit a poll after votes have been cast.": "Sajnálom, a szavazás nem szerkeszthető miután szavazatok érkeztek.",
     "Can't edit poll": "A szavazás nem szerkeszthető",
     "Join %(roomAddress)s": "Belépés ide: %(roomAddress)s",
-    "Show current avatar and name for users in message history": "A felhasználó jelenlegi nevének és profilképének megjelenítése a régi üzenetekben"
+    "Show current avatar and name for users in message history": "A felhasználó jelenlegi nevének és profilképének megjelenítése a régi üzenetekben",
+    "Search Dialog": "Keresés ablak",
+    "Results are only revealed when you end the poll": "Az eredmény csak a szavazás végeztével válik láthatóvá",
+    "Voters see results as soon as they have voted": "A szavazók a szavazásuk után látják a szavazatokat",
+    "Closed poll": "Lezárt szavazás",
+    "Open poll": "Szavazás megnyitása",
+    "Poll type": "Szavazás típusa",
+    "Results will be visible when the poll is ended": "Az eredmény a szavazás végeztével válik láthatóvá"
 }
