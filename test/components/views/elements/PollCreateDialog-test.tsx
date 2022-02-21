@@ -19,7 +19,13 @@ import '../../../skinned-sdk';
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { M_POLL_KIND_DISCLOSED, M_POLL_START, M_TEXT, PollStartEvent } from 'matrix-events-sdk';
+import {
+    M_POLL_KIND_DISCLOSED,
+    M_POLL_KIND_UNDISCLOSED,
+    M_POLL_START,
+    M_TEXT,
+    PollStartEvent,
+} from 'matrix-events-sdk';
 import { IContent, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import * as TestUtils from "../../../test-utils";
@@ -133,6 +139,71 @@ describe("PollCreateDialog", () => {
         expect(submitIsDisabled(dialog)).toBe(false);
     });
 
+    it("shows the open poll description at first", () => {
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+        );
+        expect(
+            dialog.find('select').prop("value"),
+        ).toEqual(M_POLL_KIND_DISCLOSED.name);
+        expect(
+            dialog.find('p').text(),
+        ).toEqual("Voters see results as soon as they have voted");
+    });
+
+    it("shows the closed poll description if we choose it", () => {
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+        );
+        changeKind(dialog, M_POLL_KIND_UNDISCLOSED.name);
+        expect(
+            dialog.find('select').prop("value"),
+        ).toEqual(M_POLL_KIND_UNDISCLOSED.name);
+        expect(
+            dialog.find('p').text(),
+        ).toEqual("Results are only revealed when you end the poll");
+    });
+
+    it("shows the open poll description if we choose it", () => {
+        const dialog = mount(
+            <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+        );
+        changeKind(dialog, M_POLL_KIND_UNDISCLOSED.name);
+        changeKind(dialog, M_POLL_KIND_DISCLOSED.name);
+        expect(
+            dialog.find('select').prop("value"),
+        ).toEqual(M_POLL_KIND_DISCLOSED.name);
+        expect(
+            dialog.find('p').text(),
+        ).toEqual("Voters see results as soon as they have voted");
+    });
+
+    it("shows the closed poll description when editing a closed poll", () => {
+        const previousEvent: MatrixEvent = new MatrixEvent(
+            PollStartEvent.from(
+                "Poll Q",
+                ["Answer 1", "Answer 2"],
+                M_POLL_KIND_UNDISCLOSED,
+            ).serialize(),
+        );
+        previousEvent.event.event_id = "$prevEventId";
+
+        const dialog = mount(
+            <PollCreateDialog
+                room={createRoom()}
+                onFinished={jest.fn()}
+                editingMxEvent={previousEvent}
+            />,
+        );
+
+        expect(
+            dialog.find('select').prop("value"),
+        ).toEqual(M_POLL_KIND_UNDISCLOSED.name);
+        expect(
+            dialog.find('p').text(),
+        ).toEqual("Results are only revealed when you end the poll");
+    });
+
     it("displays a spinner after submitting", () => {
         TestUtils.stubClient();
         MatrixClientPeg.get().sendEvent = jest.fn(() => Promise.resolve());
@@ -236,6 +307,7 @@ describe("PollCreateDialog", () => {
 
         changeValue(dialog, "Question or topic", "Poll Q updated");
         changeValue(dialog, "Option 2", "Answer 2 updated");
+        changeKind(dialog, M_POLL_KIND_UNDISCLOSED.name);
         dialog.find("button").simulate("click");
 
         expect(sentEventContent).toEqual(
@@ -253,7 +325,7 @@ describe("PollCreateDialog", () => {
                                 [M_TEXT.name]: "Answer 2 updated",
                             },
                         ],
-                        "kind": M_POLL_KIND_DISCLOSED.name,
+                        "kind": M_POLL_KIND_UNDISCLOSED.name,
                         "max_selections": 1,
                         "question": {
                             "body": "Poll Q updated",
@@ -284,6 +356,13 @@ function createRoom(): Room {
 
 function changeValue(wrapper: ReactWrapper, labelText: string, value: string) {
     wrapper.find(`input[label="${labelText}"]`).simulate(
+        "change",
+        { target: { value: value } },
+    );
+}
+
+function changeKind(wrapper: ReactWrapper, value: string) {
+    wrapper.find("select").simulate(
         "change",
         { target: { value: value } },
     );

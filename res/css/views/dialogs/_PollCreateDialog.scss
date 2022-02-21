@@ -37,6 +37,10 @@ limitations under the License.
         }
     }
 
+    p {
+        color: $secondary-content;
+    }
+
     .mx_PollCreateDialog_option {
         display: flex;
         align-items: center;
