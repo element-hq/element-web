@@ -2662,5 +2662,6 @@
     "Upgrade private room": "非公開のルームをアップグレード",
     "Private room (invite only)": "非公開のルーム（招待者のみ）",
     "Can't find this server or its room list": "サーバーまたはそのルーム一覧が見つかりません",
-    "Join public room": "公開ルームに参加"
+    "Join public room": "公開ルームに参加",
+    "You can change this at any time from room settings.": "これはルームの設定で後からいつでも変更できます。"
 }
