@@ -3615,5 +3615,10 @@
     "Automatically send debug logs when key backup is not functioning": "Skicka automatiskt felsökningsloggar när nyckelsäkerhetskopiering inte funkar",
     "<%(count)s spaces>|zero": "<tom sträng>",
     "<%(count)s spaces>|one": "<mellanslag>",
-    "<%(count)s spaces>|other": "<%(count)s mellanslag>"
+    "<%(count)s spaces>|other": "<%(count)s mellanslag>",
+    "Join %(roomAddress)s": "Gå med i %(roomAddress)s",
+    "Edit poll": "Redigera omröstning",
+    "Sorry, you can't edit a poll after votes have been cast.": "Tyvärr kan du inte redigera en omröstning efter att röster har avgivits.",
+    "Can't edit poll": "Kan inte redigera omröstning",
+    "Show current avatar and name for users in message history": "Visa nuvarande avatar och namn för användare i meddelandehistoriken"
 }
