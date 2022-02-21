@@ -3642,5 +3642,11 @@
     "Sorry, you can't edit a poll after votes have been cast.": "Na ndjeni, s’mund të përpunoni një pyetësor pasi të jenë hedhur votat.",
     "Can't edit poll": "S’përpunohet dot pyetësori",
     "Join %(roomAddress)s": "Hyni te %(roomAddress)s",
-    "Show current avatar and name for users in message history": "Për përdorues te historik mesazhesh, shfaq avatarin dhe emrin e tanishëm"
+    "Show current avatar and name for users in message history": "Për përdorues te historik mesazhesh, shfaq avatarin dhe emrin e tanishëm",
+    "Results are only revealed when you end the poll": "Përfundimet shfaqen vetëm kur të përfundoni pyetësorin",
+    "Voters see results as soon as they have voted": "Votuesit shohin përfundimet sapo të kenë votuar",
+    "Closed poll": "Pyetësor i mbyllur",
+    "Open poll": "Pyetësor i hapur",
+    "Poll type": "Lloj pyetësori",
+    "Results will be visible when the poll is ended": "Përfundimet do të jenë të dukshme pasi të ketë përfunduar pyetësori"
 }
