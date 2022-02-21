@@ -3620,5 +3620,12 @@
     "Edit poll": "Redigera omröstning",
     "Sorry, you can't edit a poll after votes have been cast.": "Tyvärr kan du inte redigera en omröstning efter att röster har avgivits.",
     "Can't edit poll": "Kan inte redigera omröstning",
-    "Show current avatar and name for users in message history": "Visa nuvarande avatar och namn för användare i meddelandehistoriken"
+    "Show current avatar and name for users in message history": "Visa nuvarande avatar och namn för användare i meddelandehistoriken",
+    "Search Dialog": "Sökdialog",
+    "Results are only revealed when you end the poll": "Resultat avslöjas inte förrän du avslutar omröstningen",
+    "Voters see results as soon as they have voted": "Röstare ser resultatet så fort de har röstat",
+    "Closed poll": "Sluten omröstning",
+    "Open poll": "Öppen omröstning",
+    "Poll type": "Omröstningstyp",
+    "Results will be visible when the poll is ended": "Resultat kommer att visas när omröstningen avslutas"
 }
