@@ -522,7 +522,7 @@
     "Deactivate Account": "アカウントを無効にする",
     "This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible.</b>": "これにより、あなたのアカウントは永久に使用できなくなります。ログインできなくなり、誰も同じユーザーIDを再登録できなくなります。これにより、参加している全てのルームから退室し、IDサーバーからあなたのアカウントの詳細が削除されます。<b>この操作は元に戻すことができません。</b>",
     "Deactivating your account <b>does not by default cause us to forget messages you have sent.</b> If you would like us to forget your messages, please tick the box below.": "アカウントを無効にしても、<b>送信されたメッセージはデフォルトでは忘れられません。</b>メッセージを忘れさせたい場合は、下のボックスにチェックを入れてください。",
-    "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Matrixのメッセージの可視性は電子メールと似ています。メッセージを忘れると、新規または未登録のユーザーと共有することができませんが、既にこれらのメッセージにアクセスしている登録ユーザーは、依然としてそのコピーにアクセスできます。",
+    "Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.": "Matrixのメッセージの見え方は、電子メールと同様のものです。メッセージの履歴を消去すると、あなたが送信したメッセージは、新規または未登録のユーザーに共有されることはありませんが、既にメッセージを取得している登録ユーザーは、今後もそのコピーにアクセスできます。",
     "Please forget all messages I have sent when my account is deactivated (<b>Warning:</b> this will cause future users to see an incomplete view of conversations)": "アカウントを無効する際、送信した全てのメッセージを削除(<b>警告:</b>これにより、今後のユーザーは会話履歴の全文を見ることができなくなります)",
     "To continue, please enter your password:": "続行するには、パスワードを入力してください:",
     "An error has occurred.": "エラーが発生しました。",
@@ -2604,5 +2604,6 @@
     "Decide where your account is hosted": "アカウントを管理する場所を決めましょう",
     "Host account on": "アカウントを以下のホームサーバーでホスト",
     "Continue with %(provider)s": "%(provider)sで続行",
-    "Join millions for free on the largest public server": "最大のパブリックサーバーで、数百万人に無料で参加"
+    "Join millions for free on the largest public server": "最大のパブリックサーバーで、数百万人に無料で参加",
+    "Already have an account? <a>Sign in here</a>": "既にアカウントを持っていますか？<a>ここからサインインしてください</a>"
 }
