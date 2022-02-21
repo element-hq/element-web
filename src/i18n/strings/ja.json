@@ -188,7 +188,7 @@
     "%(brand)s was not given permission to send notifications - please try again": "%(brand)sに通知を送信する権限がありませんでした。もう一度お試しください",
     "Unable to enable Notifications": "通知を有効にできません",
     "This email address was not found": "このメールアドレスが見つかりませんでした",
-    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "あなたのメールアドレスは、このホームサーバー上のマトリックスIDと関連付けられていないようです。",
+    "Your email address does not appear to be associated with a Matrix ID on this Homeserver.": "あなたのメールアドレスは、このホームサーバー上のMatrix IDと関連付けられていないようです。",
     "Default": "既定値",
     "Restricted": "制限",
     "Moderator": "モデレーター",
@@ -2599,7 +2599,7 @@
     "About homeservers": "ホームサーバーについて（英語）",
     "Use your preferred Matrix homeserver if you have one, or host your own.": "好みのホームサーバーがあるか、自分でホームサーバーを運営している場合は、そちらをお使いください。",
     "Other homeserver": "他のホームサーバー",
-    "Matrix.org is the biggest public homeserver in the world, so it's a good place for many.": "Matrix.orgは公開されているホームサーバーで世界最大のものなので、多くの人に適しています。",
+    "Matrix.org is the biggest public homeserver in the world, so it's a good place for many.": "Matrix.orgは、公開されているホームサーバーで世界最大のものなので、多くの人に適しています。",
     "We call the places where you can host your account 'homeservers'.": "Matrixでは、あなたが自分のアカウントを管理する場所を「ホームサーバー」と呼んでいます。",
     "Decide where your account is hosted": "アカウントを管理する場所を決めましょう",
     "Host account on": "アカウントを以下のホームサーバーでホスト",
@@ -2628,5 +2628,6 @@
     "This homeserver would like to make sure you are not a robot.": "このホームサーバーは、あなたがロボットではないことの確認を求めています。",
     "Doesn't look like a valid email address": "メールアドレスの形式が正しくありません",
     "Enter email address (required on this homeserver)": "メールアドレスを入力してください（このホームサーバーでは必須）",
-    "Use an email address to recover your account": "アカウント復旧用のメールアドレスを設定してください"
+    "Use an email address to recover your account": "アカウント復旧用のメールアドレスを設定してください",
+    "Learn more": "詳しく知る"
 }
