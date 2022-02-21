@@ -79,7 +79,7 @@ import { getCachedRoomIDForAlias } from "../../../RoomAliasCache";
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
 
-const Option: React.FC<ComponentProps<typeof RovingAccessibleButton>> = ({ inputRef, ...props }) => {
+const Option: React.FC<ComponentProps<typeof RovingAccessibleButton>> = ({ inputRef, children, ...props }) => {
     const [onFocus, isActive, ref] = useRovingTabIndex(inputRef);
     return <AccessibleButton
         {...props}
@@ -88,7 +88,10 @@ const Option: React.FC<ComponentProps<typeof RovingAccessibleButton>> = ({ input
         tabIndex={-1}
         aria-selected={isActive}
         role="option"
-    />;
+    >
+        { children }
+        <div className="mx_SpotlightDialog_enterPrompt" aria-hidden>↵</div>
+    </AccessibleButton>;
 };
 
 const TooltipOption: React.FC<ComponentProps<typeof RovingAccessibleTooltipButton>> = ({ inputRef, ...props }) => {
@@ -357,7 +360,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                         { result.room.name }
                         <NotificationBadge notification={RoomNotificationStateStore.instance.getRoomState(result.room)} />
                         <ResultDetails room={result.room} />
-                        <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                     </Option>
                 );
             }
@@ -372,7 +374,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                     { otherResult.avatar }
                     { otherResult.name }
                     { otherResult.description }
-                    <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                 </Option>
             );
         };
@@ -431,7 +432,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                             { room.name && room.canonical_alias && <div className="mx_SpotlightDialog_result_details">
                                 { room.canonical_alias }
                             </div> }
-                            <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                         </Option>
                     )) }
                     { spaceResultsLoading && <Spinner /> }
@@ -463,7 +463,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                         { _t("Join %(roomAddress)s", {
                             roomAddress: trimmedQuery,
                         }) }
-                        <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                     </Option>
                 </div>
             </div>;
@@ -490,7 +489,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                         }}
                     >
                         { _t("Public rooms") }
-                        <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                     </Option>
                     <Option
                         id="mx_SpotlightDialog_button_startChat"
@@ -501,7 +499,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                         }}
                     >
                         { _t("People") }
-                        <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                     </Option>
                 </div>
             </div>
@@ -544,7 +541,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                                 { room.name }
                                 <NotificationBadge notification={RoomNotificationStateStore.instance.getRoomState(room)} />
                                 <ResultDetails room={room} />
-                                <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                             </Option>
                         )) }
                     </div>
@@ -590,7 +586,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                         }}
                     >
                         { _t("Explore public rooms") }
-                        <div className="mx_SpotlightDialog_enterPrompt">↵</div>
                     </Option>
                 </div>
             </div>
@@ -679,7 +674,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
     const activeDescendant = rovingContext.state.activeRef?.current?.id;
 
     return <>
-        <div className="mx_SpotlightDialog_keyboardPrompt">
+        <div id="mx_SpotlightDialog_keyboardPrompt">
             { _t("Use <arrows/> to scroll", {}, {
                 arrows: () => <>
                     <div>↓</div>
@@ -696,6 +691,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
             hasCancel={false}
             onKeyDown={onDialogKeyDown}
             screenName="UnifiedSearch"
+            aria-label={_t("Search Dialog")}
         >
             <div className="mx_SpotlightDialog_searchBox mx_textinput">
                 <input
@@ -708,10 +704,17 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                     onKeyDown={onKeyDown}
                     aria-owns="mx_SpotlightDialog_content"
                     aria-activedescendant={activeDescendant}
+                    aria-label={_t("Search")}
+                    aria-describedby="mx_SpotlightDialog_keyboardPrompt"
                 />
             </div>
 
-            <div id="mx_SpotlightDialog_content" role="listbox" aria-activedescendant={activeDescendant}>
+            <div
+                id="mx_SpotlightDialog_content"
+                role="listbox"
+                aria-activedescendant={activeDescendant}
+                aria-describedby="mx_SpotlightDialog_keyboardPrompt"
+            >
                 { content }
             </div>
 

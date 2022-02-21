@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { createRef } from "react";
+import { createRef, RefObject } from "react";
 import classNames from "classnames";
 
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -54,7 +54,7 @@ interface IState {
 export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private readonly dispatcherRef: string;
     private readonly betaRef: string;
-    private inputRef: React.RefObject<HTMLInputElement> = createRef();
+    private elementRef: React.RefObject<HTMLInputElement | HTMLDivElement> = createRef();
     private searchFilter: NameFilterCondition = new NameFilterCondition();
 
     constructor(props: IProps) {
@@ -113,13 +113,17 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         if (payload.action === Action.ViewRoom && payload.clear_search) {
             this.clearInput();
         } else if (payload.action === 'focus_room_filter') {
-            this.focus();
+            if (this.state.spotlightBetaEnabled) {
+                this.openSpotlight();
+            } else {
+                this.focus();
+            }
         }
     };
 
     private clearInput = () => {
-        if (!this.inputRef.current) return;
-        this.inputRef.current.value = "";
+        if (this.elementRef.current?.tagName !== "INPUT") return;
+        (this.elementRef.current as HTMLInputElement).value = "";
         this.onChange();
     };
 
@@ -133,8 +137,8 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private onChange = () => {
-        if (!this.inputRef.current) return;
-        this.setState({ query: this.inputRef.current.value });
+        if (this.elementRef.current?.tagName !== "INPUT") return;
+        this.setState({ query: (this.elementRef.current as HTMLInputElement).value });
     };
 
     private onFocus = (ev: React.FocusEvent<HTMLInputElement>) => {
@@ -167,11 +171,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     public focus = (): void => {
-        if (this.state.spotlightBetaEnabled) {
-            this.openSpotlight();
-        } else {
-            this.inputRef.current?.focus();
-        }
+        this.elementRef.current?.focus();
     };
 
     public render(): React.ReactNode {
@@ -195,7 +195,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         let input = (
             <input
                 type="text"
-                ref={this.inputRef}
+                ref={this.elementRef as RefObject<HTMLInputElement>}
                 className={inputClasses}
                 value={this.state.query}
                 onFocus={this.onFocus}
@@ -217,7 +217,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         }
 
         if (this.state.spotlightBetaEnabled) {
-            return <AccessibleButton onClick={this.openSpotlight} className={classes}>
+            return <AccessibleButton onClick={this.openSpotlight} className={classes} inputRef={this.elementRef}>
                 { icon }
                 { input && <div className="mx_RoomSearch_spotlightTriggerText">
                     { _t("Search") }
@@ -229,6 +229,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
                 onClick={this.openSearch}
                 className="mx_RoomSearch mx_RoomSearch_minimized"
                 title={_t("Filter rooms and people")}
+                inputRef={this.elementRef}
             >
                 { icon }
             </AccessibleButton>;

@@ -404,13 +404,13 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
         default: {
             key: Key.ARROW_DOWN,
         },
-        displayName: _td("Navigate up in the room list"),
+        displayName: _td("Navigate down in the room list"),
     },
     [KeyBindingAction.PrevRoom]: {
         default: {
             key: Key.ARROW_UP,
         },
-        displayName: _td("Navigate down in the room list"),
+        displayName: _td("Navigate up in the room list"),
     },
     [KeyBindingAction.ToggleUserMenu]: {
         default: {
