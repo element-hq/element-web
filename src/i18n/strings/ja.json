@@ -2605,5 +2605,14 @@
     "Host account on": "アカウントを以下のホームサーバーでホスト",
     "Continue with %(provider)s": "%(provider)sで続行",
     "Join millions for free on the largest public server": "最大のパブリックサーバーで、数百万人に無料で参加",
-    "Already have an account? <a>Sign in here</a>": "既にアカウントを持っていますか？<a>ここからサインインしてください</a>"
+    "Already have an account? <a>Sign in here</a>": "既にアカウントを持っていますか？<a>ここからサインインしてください</a>",
+    "You can now close this window or <a>log in</a> to your new account.": "このウィンドウを閉じるか、新しいアカウントに<a>ログイン</a>できます。",
+    "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "新しいアカウント（%(newAccountId)s）が登録されましたが、あなたは別のアカウント（%(loggedInUserId)s）でログインしています。",
+    "Continue with previous account": "以前のアカウントで続行",
+    "%(ssoButtons)s Or %(usernamePassword)s": "%(ssoButtons)sあるいは、以下に入力して登録%(usernamePassword)s",
+    "Continue with %(ssoButtons)s": "%(ssoButtons)sで続行",
+    "That e-mail address is already in use.": "このメールアドレスは既に使われています。",
+    "Someone already has that username, please try another.": "そのユーザー名は既に使用されています。他のユーザー名を試してください。",
+    "Registration has been disabled on this homeserver.": "このサーバーはアカウントの新規登録を受け入れていません。",
+    "Registration Successful": "登録が成功しました"
 }
