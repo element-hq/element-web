@@ -29,6 +29,7 @@ import {
 import { IContent, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import * as TestUtils from "../../../test-utils";
+import { findById } from '../../../utils/test-utils';
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import _PollCreateDialog from "../../../../src/components/views/elements/PollCreateDialog";
 const PollCreateDialog = TestUtils.wrapInMatrixClientContext(_PollCreateDialog);
@@ -39,8 +40,6 @@ const realDateToISOString = Date.prototype.toISOString;
 Date.now = jest.fn(() => 2345678901234);
 // eslint-disable-next-line no-extend-native
 Date.prototype.toISOString = jest.fn(() => "2021-11-23T14:35:14.240Z");
-
-const findById = (component, id) => component.find(`[id="${id}"]`);
 
 afterAll(() => {
     Date.now = realDateNow;

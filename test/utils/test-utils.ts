@@ -103,4 +103,8 @@ export const mkSpace = (
 
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise(r => e.once(k, r));
 
-export const findByTestId = (component: ReactWrapper, id: string) => component.find(`[data-test-id="${id}"]`);
+const findByAttr = (attr: string) => (component: ReactWrapper, value: string) => component.find(`[${attr}="${value}"]`);
+export const findByTestId = findByAttr('data-test-id');
+export const findById = findByAttr('id');
+
+export const flushPromises = async () => await new Promise(resolve => setTimeout(resolve));
