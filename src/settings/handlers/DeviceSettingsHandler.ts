@@ -20,7 +20,6 @@ import SettingsHandler from "./SettingsHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SettingLevel } from "../SettingLevel";
 import { CallbackFn, WatchManager } from "../WatchManager";
-import { Layout } from "../enums/Layout";
 
 /**
  * Gets and sets settings at the "device" level for the current device.
@@ -55,19 +54,6 @@ export default class DeviceSettingsHandler extends SettingsHandler {
             const value = localStorage.getItem("audio_notifications_enabled");
             if (typeof(value) === "string") return value === "true";
             return null; // wrong type or otherwise not set
-        }
-
-        // Special case for old useIRCLayout setting
-        if (settingName === "layout") {
-            const settings = this.getSettings() || {};
-            if (settings["useIRCLayout"]) {
-                // Set the new layout setting and delete the old one so that we
-                // can delete this block of code after some time
-                settings["layout"] = Layout.IRC;
-                delete settings["useIRCLayout"];
-                localStorage.setItem("mx_local_settings", JSON.stringify(settings));
-            }
-            return settings[settingName];
         }
 
         const settings = this.getSettings() || {};
