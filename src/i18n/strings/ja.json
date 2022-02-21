@@ -2631,5 +2631,6 @@
     "Use an email address to recover your account": "アカウント復旧用のメールアドレスを設定してください",
     "Learn more": "詳しく知る",
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use Element with an existing Matrix account on a different homeserver.": "異なるホームサーバーのURLを入力すると、そのMatrixサーバーにサインインして接続することができます。それにより、他のホームサーバー上にあるMatrixのアカウントによって、Elementを使用することができます。",
-    "Verify this device": "この端末を検証"
+    "Verify this device": "この端末を検証",
+    "Verify with another device": "別の端末を使って認証"
 }
