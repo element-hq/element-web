@@ -198,6 +198,28 @@ limitations under the License.
         font-size: $font-12px;
         color: $secondary-content;
     }
+
+    // handling for hidden events (e.g reactions) in the thread view
+    &.mx_ThreadView .mx_GenericEventListSummary_unstyledList .mx_EventTile_info {
+        .mx_EventTile_line {
+            padding-left: 0 !important; // override main timeline padding
+
+            .mx_EventTile_content {
+                margin-left: 54px; // align with text
+                width: calc(100% - 54px - 8px); // match width of parent
+            }
+        }
+
+        .mx_EventTile_avatar {
+            position: absolute;
+            left: 36px !important; // override main timeline positioning
+            z-index: 9; // position above the hover styling
+        }
+
+        .mx_ViewSourceEvent_toggle {
+            display: none; // hide the hidden event expand button, not enough space, view source can still be used
+        }
+    }
 }
 
 .mx_ThreadPanel_replies {
