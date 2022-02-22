@@ -22,6 +22,7 @@ import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { logger } from 'matrix-js-sdk/src/logger';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { throttle } from "lodash";
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { wantsDateSeparator } from '../../DateUtils';
@@ -275,13 +276,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     componentDidMount() {
         this.calculateRoomMembersCount();
-        this.props.room?.currentState.on(RoomStateEvent.Members, this.calculateRoomMembersCount);
+        this.props.room?.currentState.on(RoomStateEvent.Members, this.onRoomMembers);
         this.isMounted = true;
     }
 
     componentWillUnmount() {
         this.isMounted = false;
-        this.props.room?.currentState.off(RoomStateEvent.Members, this.calculateRoomMembersCount);
+        this.props.room?.currentState.off(RoomStateEvent.Members, this.onRoomMembers);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
     }
 
@@ -312,11 +313,16 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return this.props.room?.getInvitedAndJoinedMemberCount() <= 2 && this.props.layout === Layout.Bubble;
     }
 
-    private calculateRoomMembersCount = (): void => {
+    private onRoomMembers = (event: MatrixEvent): void => {
+        if (this.props.room && event.getRoomId() !== this.props.room.roomId) return; // different room
+        this.calculateRoomMembersCount();
+    };
+
+    private calculateRoomMembersCount = throttle((): void => {
         this.setState({
             hideSender: this.shouldHideSender(),
         });
-    };
+    }, 200, { leading: true, trailing: true });
 
     private onShowTypingNotificationsChange = (): void => {
         this.setState({
