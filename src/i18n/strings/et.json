@@ -3647,5 +3647,6 @@
     "Open poll": "Pooleliolev küsitlus",
     "Closed poll": "Lõppenud küsitlus",
     "Voters see results as soon as they have voted": "Osalejad näevad tulemusi kohe peale oma valiku tegemist",
-    "Results are only revealed when you end the poll": "Tulemused on näha vaid siis, kui küsitlus in lõppenud"
+    "Results are only revealed when you end the poll": "Tulemused on näha vaid siis, kui küsitlus in lõppenud",
+    "Search Dialog": "Otsinguvaade"
 }
