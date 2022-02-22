@@ -81,7 +81,9 @@ const GenericEventListSummary: React.FC<IProps> = ({
     if (expanded) {
         body = <React.Fragment>
             <div className="mx_GenericEventListSummary_line">&nbsp;</div>
-            { children }
+            <ol className="mx_GenericEventListSummary_unstyledList">
+                { children }
+            </ol>
         </React.Fragment>;
     } else {
         const uniqueMembers = uniqBy(summaryMembers.filter(member => {
