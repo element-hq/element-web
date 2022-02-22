@@ -2860,5 +2860,6 @@
     "Unable to find Matrix ID for phone number": "ناتوانی در ییافتن شناسه ماتریکس برای شماره تلفن",
     "Removes user with given id from this room": "کاربر دارای شناسه ارائه شده از این اتاق حذف می‌شود",
     "Unrecognised room address: %(roomAlias)s": "نشانی اتاق غیرقابل شناسایی:",
-    "Command error: Unable to handle slash command.": "خطای دستور: ناتوانی در اجرای دستور اسلش."
+    "Command error: Unable to handle slash command.": "خطای دستور: ناتوانی در اجرای دستور اسلش.",
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s و %(space2Name)s"
 }
