@@ -1104,7 +1104,7 @@
     "Missing media permissions, click the button below to request.": "メディアの使用に関する権限がありません。リクエストするには下のボタンを押してください。",
     "Request media permissions": "メディア権限をリクエスト",
     "Joining room …": "ルームに参加しています…",
-    "Join the discussion": "話し合いに参加",
+    "Join the discussion": "ルームに参加",
     "%(roomName)s can't be previewed. Do you want to join it?": "%(roomName)sはプレビューできません。ルームに参加しますか？",
     "Set addresses for this room so users can find this room through your homeserver (%(localDomain)s)": "アドレスを設定すれば、他のユーザーがあなたのホームサーバー (%(localDomain)s) を通じてこのルームを見つけられるようになります。",
     "Verify this login": "このログインを承認",
@@ -1328,7 +1328,7 @@
     "%(errcode)s was returned while trying to access the room. If you think you're seeing this message in error, please <issueLink>submit a bug report</issueLink>.": "ルームにアクセスしようとした際にエラー (%(errcode)s) が発生しました。このメッセージが誤って表示されていると思われる場合は<issueLink>バグレポートを送信してください</issueLink>。",
     "Try again later, or ask a room admin to check if you have access.": "後でもう一度試すか、あなたがアクセスできるかどうかルームの管理者に問い合わせてください。",
     "This room doesn't exist. Are you sure you're at the right place?": "このルームは存在しません。表示内容が正しくない可能性があります?",
-    "You're previewing %(roomName)s. Want to join it?": "ルーム %(roomName)s のプレビューです。参加したいですか?",
+    "You're previewing %(roomName)s. Want to join it?": "ルーム %(roomName)s のプレビューです。参加しますか？",
     "Share this email in Settings to receive invites directly in %(brand)s.": "このメールアドレスを設定から共有すると、%(brand)sから招待を受け取れます。",
     "Use an identity server in Settings to receive invites directly in %(brand)s.": "設定からIDサーバーを使用すると、%(brand)sから直接招待を受け取れます。",
     "This invite to %(roomName)s was sent to %(email)s": "ルーム %(roomName)sへの招待がメールアドレス %(email)s へ送られました",
@@ -1343,7 +1343,7 @@
     "Re-join": "再参加",
     "Reason: %(reason)s": "理由：%(reason)s",
     "You were kicked from %(roomName)s by %(memberName)s": "%(memberName)s により %(roomName)s からあなたは蹴り出されました",
-    "Loading room preview": "ルームプレビューのロード中",
+    "Loading room preview": "ルームのプレビューを読み込んでいます",
     "Sign Up": "サインアップ",
     "Join the conversation with an account": "アカウントで会話に参加",
     "Rejecting invite …": "招待を拒否する…",
@@ -2683,5 +2683,6 @@
     "was removed %(count)s times|one": "が追放されました",
     "was removed %(count)s times|other": "が%(count)s回追放されました",
     "were removed %(count)s times|one": "が追放されました",
-    "were removed %(count)s times|other": "が%(count)s回追放されました"
+    "were removed %(count)s times|other": "が%(count)s回追放されました",
+    "Original event source": "元のイベントのソースコード"
 }
