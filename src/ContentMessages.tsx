@@ -447,7 +447,7 @@ export default class ContentMessages {
     public async sendContentListToRoom(
         files: File[],
         roomId: string,
-        relation: IEventRelation | null,
+        relation: IEventRelation | undefined,
         matrixClient: MatrixClient,
         context = TimelineRenderingType.Room,
     ): Promise<void> {
@@ -566,7 +566,7 @@ export default class ContentMessages {
     private sendContentToRoom(
         file: File,
         roomId: string,
-        relation: IEventRelation,
+        relation: IEventRelation | undefined,
         matrixClient: MatrixClient,
         promBefore: Promise<any>,
     ) {

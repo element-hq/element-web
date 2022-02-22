@@ -10,6 +10,7 @@
 @import "./structures/_ContextualMenu.scss";
 @import "./structures/_CreateRoom.scss";
 @import "./structures/_CustomRoomTagPanel.scss";
+@import "./structures/_FileDropTarget.scss";
 @import "./structures/_FilePanel.scss";
 @import "./structures/_GenericErrorPage.scss";
 @import "./structures/_GroupFilterPanel.scss";
@@ -141,11 +142,11 @@
 @import "./views/elements/_Dropdown.scss";
 @import "./views/elements/_EditableItemList.scss";
 @import "./views/elements/_ErrorBoundary.scss";
-@import "./views/elements/_GenericEventListSummary.scss";
 @import "./views/elements/_EventTilePreview.scss";
 @import "./views/elements/_ExternalLink.scss";
 @import "./views/elements/_FacePile.scss";
 @import "./views/elements/_Field.scss";
+@import "./views/elements/_GenericEventListSummary.scss";
 @import "./views/elements/_ImageView.scss";
 @import "./views/elements/_InfoTooltip.scss";
 @import "./views/elements/_InlineSpinner.scss";
@@ -183,9 +184,9 @@
 @import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
-@import "./views/messages/_JumpToDatePicker.scss";
 @import "./views/messages/_EventTileBubble.scss";
 @import "./views/messages/_HiddenBody.scss";
+@import "./views/messages/_JumpToDatePicker.scss";
 @import "./views/messages/_MEmoteBody.scss";
 @import "./views/messages/_MFileBody.scss";
 @import "./views/messages/_MImageBody.scss";

@@ -17,7 +17,7 @@ limitations under the License.
 import classNames from 'classnames';
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
 import { M_POLL_START } from "matrix-events-sdk";
-import React, { createContext, ReactElement, useContext } from 'react';
+import React, { createContext, ReactElement, useContext, useRef } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { RelationType } from 'matrix-js-sdk/src/@types/event';
@@ -33,10 +33,10 @@ import LocationButton from '../location/LocationButton';
 import Modal from "../../../Modal";
 import PollCreateDialog from "../elements/PollCreateDialog";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { ActionPayload } from '../../../dispatcher/payloads';
 import ContentMessages from '../../../ContentMessages';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import RoomContext from '../../../contexts/RoomContext';
+import { useDispatcher } from "../../../hooks/useDispatcher";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -189,50 +189,37 @@ interface IUploadButtonProps {
     relation?: IEventRelation | null;
 }
 
-class UploadButton extends React.Component<IUploadButtonProps> {
-    private uploadInput = React.createRef<HTMLInputElement>();
-    private dispatcherRef: string;
+const UploadButton = ({ roomId, relation }: IUploadButtonProps) => {
+    const cli = useContext(MatrixClientContext);
+    const roomContext = useContext(RoomContext);
+    const overflowMenuCloser = useContext(OverflowMenuContext);
+    const uploadInput = useRef<HTMLInputElement>();
 
-    constructor(props: IUploadButtonProps) {
-        super(props);
-
-        this.dispatcherRef = dis.register(this.onAction);
-    }
-
-    componentWillUnmount() {
-        dis.unregister(this.dispatcherRef);
-    }
-
-    private onAction = (payload: ActionPayload) => {
-        if (payload.action === "upload_file") {
-            this.onUploadClick();
-        }
-    };
-
-    private onUploadClick = () => {
-        if (MatrixClientPeg.get().isGuest()) {
+    const onUploadClick = () => {
+        if (cli.isGuest()) {
             dis.dispatch({ action: 'require_registration' });
             return;
         }
-        this.uploadInput.current?.click();
+        uploadInput.current?.click();
+        overflowMenuCloser?.(); // close overflow menu
     };
 
-    private onUploadFileInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    useDispatcher(dis, payload => {
+        if (roomContext.timelineRenderingType === payload.context && payload.action === "upload_file") {
+            onUploadClick();
+        }
+    });
+
+    const onUploadFileInputChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (ev.target.files.length === 0) return;
 
-        // take a copy so we can safely reset the value of the form control
-        // (Note it is a FileList: we can't use slice or sensible iteration).
-        const tfiles = [];
-        for (let i = 0; i < ev.target.files.length; ++i) {
-            tfiles.push(ev.target.files[i]);
-        }
-
+        // Take a copy, so we can safely reset the value of the form control
         ContentMessages.sharedInstance().sendContentListToRoom(
-            tfiles,
-            this.props.roomId,
-            this.props.relation,
-            MatrixClientPeg.get(),
-            this.context.timelineRenderingType,
+            Array.from(ev.target.files),
+            roomId,
+            relation,
+            cli,
+            roomContext.timelineRenderingType,
         );
 
         // This is the onChange handler for a file form control, but we're
@@ -242,24 +229,22 @@ class UploadButton extends React.Component<IUploadButtonProps> {
         ev.target.value = '';
     };
 
-    render() {
-        const uploadInputStyle = { display: 'none' };
-        return <>
-            <CollapsibleButton
-                className="mx_MessageComposer_button mx_MessageComposer_upload"
-                onClick={this.onUploadClick}
-                title={_t('Attachment')}
-            />
-            <input
-                ref={this.uploadInput}
-                type="file"
-                style={uploadInputStyle}
-                multiple
-                onChange={this.onUploadFileInputChange}
-            />
-        </>;
-    }
-}
+    const uploadInputStyle = { display: 'none' };
+    return <>
+        <CollapsibleButton
+            className="mx_MessageComposer_button mx_MessageComposer_upload"
+            onClick={onUploadClick}
+            title={_t('Attachment')}
+        />
+        <input
+            ref={uploadInput}
+            type="file"
+            style={uploadInputStyle}
+            multiple
+            onChange={onUploadFileInputChange}
+        />
+    </>;
+};
 
 function showStickersButton(props: IProps): ReactElement {
     return (

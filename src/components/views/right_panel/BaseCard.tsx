@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from 'react';
+import React, { forwardRef, ReactNode, KeyboardEvent, Ref } from 'react';
 import classNames from 'classnames';
 
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
@@ -32,7 +32,9 @@ interface IProps {
     closeLabel?: string;
     onClose?(ev: ButtonEvent): void;
     onBack?(ev: ButtonEvent): void;
+    onKeyDown?(ev: KeyboardEvent): void;
     cardState?: any;
+    ref?: Ref<HTMLDivElement>;
 }
 
 interface IGroupProps {
@@ -47,7 +49,7 @@ export const Group: React.FC<IGroupProps> = ({ className, title, children }) => 
     </div>;
 };
 
-const BaseCard: React.FC<IProps> = ({
+const BaseCard: React.FC<IProps> = forwardRef<HTMLDivElement, IProps>(({
     closeLabel,
     onClose,
     onBack,
@@ -56,7 +58,8 @@ const BaseCard: React.FC<IProps> = ({
     footer,
     withoutScrollContainer,
     children,
-}) => {
+    onKeyDown,
+}, ref) => {
     let backButton;
     const cardHistory = RightPanelStore.instance.roomPhaseHistory;
     if (cardHistory.length > 1) {
@@ -87,7 +90,7 @@ const BaseCard: React.FC<IProps> = ({
 
     return (
         <CardContext.Provider value={{ isCard: true }}>
-            <div className={classNames("mx_BaseCard", className)}>
+            <div className={classNames("mx_BaseCard", className)} ref={ref} onKeyDown={onKeyDown}>
                 <div className="mx_BaseCard_header">
                     { backButton }
                     { closeButton }
@@ -98,6 +101,6 @@ const BaseCard: React.FC<IProps> = ({
             </div>
         </CardContext.Provider>
     );
-};
+});
 
 export default BaseCard;

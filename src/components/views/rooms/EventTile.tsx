@@ -78,6 +78,7 @@ import { copyPlaintext } from '../../../utils/strings';
 import { DecryptionFailureTracker } from '../../../DecryptionFailureTracker';
 import RedactedBody from '../messages/RedactedBody';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { shouldDisplayReply } from '../../../utils/Reply';
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
 
@@ -1390,8 +1391,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             ? RelationType.Thread
             : undefined;
 
-        const replyChain = haveTileForEvent(this.props.mxEvent)
-            && ReplyChain.shouldDisplayReply(this.props.mxEvent, renderTarget)
+        const replyChain = haveTileForEvent(this.props.mxEvent) && shouldDisplayReply(this.props.mxEvent, renderTarget)
             ? <ReplyChain
                 parentEv={this.props.mxEvent}
                 onHeightChanged={this.props.onHeightChanged}

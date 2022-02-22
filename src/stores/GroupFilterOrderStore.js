@@ -23,7 +23,7 @@ import Analytics from '../Analytics';
 import * as RoomNotifs from "../RoomNotifs";
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import SettingsStore from "../settings/SettingsStore";
-import { CreateEventField } from "../components/views/dialogs/CreateSpaceFromCommunityDialog";
+import { CreateEventField } from "../@types/groups";
 
 const INITIAL_STATE = {
     orderedTags: null,

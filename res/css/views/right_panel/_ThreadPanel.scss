@@ -106,11 +106,18 @@ limitations under the License.
         padding-right: 16px;
     }
 
-    &.mx_ThreadView .mx_AutoHideScrollbar {
+    &.mx_ThreadView .mx_ThreadView_timelinePanelWrapper {
         /* the scrollbar is 8px wide, and we want a 12px gap with the side of the
         panel. Hence the magic number, 8+4=12 */
         width: calc(100% - 4px);
         padding-right: 4px;
+        position: relative;
+        min-height: 0; // don't displace the composer
+        flex-grow: 1;
+
+        .mx_FileDropTarget {
+            border-radius: 8px;
+        }
     }
 
     .mx_RoomView_MessageList {

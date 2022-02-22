@@ -20,7 +20,6 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { _t } from "../../languageHandler";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
-import { IGroupSummary } from "../views/dialogs/CreateSpaceFromCommunityDialog";
 import { useAsyncMemo } from "../../hooks/useAsyncMemo";
 import Spinner from "../views/elements/Spinner";
 import GroupAvatar from "../views/avatars/GroupAvatar";
@@ -28,6 +27,7 @@ import { linkifyElement } from "../../HtmlUtils";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { UserTab } from "../views/dialogs/UserSettingsDialog";
+import { IGroupSummary } from "../../@types/groups";
 
 interface IProps {
     groupId: string;

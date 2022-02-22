@@ -148,7 +148,6 @@ function createRoomState(room: Room): IRoomState {
         shouldPeek: true,
         membersLoaded: false,
         numUnreadMessages: 0,
-        draggingFile: false,
         searching: false,
         guestsCanJoin: false,
         canPeek: false,
@@ -175,7 +174,6 @@ function createRoomState(room: Room): IRoomState {
         showAvatarChanges: true,
         showDisplaynameChanges: true,
         matrixClientIsReady: false,
-        dragCounter: 0,
         timelineRenderingType: TimelineRenderingType.Room,
         liveTimeline: undefined,
     };

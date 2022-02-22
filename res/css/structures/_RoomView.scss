@@ -32,56 +32,6 @@ limitations under the License.
     position: relative;
 }
 
-@keyframes mx_RoomView_fileDropTarget_animation {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 0.95;
-    }
-}
-
-.mx_RoomView_fileDropTarget {
-    min-width: 0px;
-    width: 100%;
-    height: 100%;
-
-    font-size: $font-18px;
-    text-align: center;
-
-    pointer-events: none;
-
-    background-color: $background;
-    opacity: 0.95;
-
-    position: absolute;
-    z-index: 3000;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    animation: mx_RoomView_fileDropTarget_animation;
-    animation-duration: 0.5s;
-}
-
-@keyframes mx_RoomView_fileDropTarget_image_animation {
-    from {
-        transform: scaleX(0);
-    }
-    to {
-        transform: scaleX(1);
-    }
-}
-
-.mx_RoomView_fileDropTarget_image {
-    width: 32px;
-    animation: mx_RoomView_fileDropTarget_image_animation;
-    animation-duration: 0.5s;
-    margin-bottom: 16px;
-}
-
 .mx_RoomView_auxPanel {
     min-width: 0px;
     width: 100%;
