@@ -175,7 +175,7 @@ export const KEY_ICON: Record<string, string> = {
 };
 if (isMac) {
     KEY_ICON[Key.META] = "⌘";
-    KEY_ICON[Key.SHIFT] = "⌥";
+    KEY_ICON[Key.ALT] = "⌥";
 }
 
 export const CATEGORIES: Record<CategoryName, ICategory> = {
