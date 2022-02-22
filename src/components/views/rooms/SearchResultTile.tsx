@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from "react";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -27,6 +28,7 @@ import DateSeparator from "../messages/DateSeparator";
 import EventTile, { haveTileForEvent } from "./EventTile";
 import { shouldFormContinuation } from "../../structures/MessagePanel";
 import { wantsDateSeparator } from "../../../DateUtils";
+import CallEventGrouper, { buildCallEventGroupers } from "../../structures/CallEventGrouper";
 
 interface IProps {
     // a matrix-js-sdk SearchResult containing the details of this result
@@ -42,6 +44,20 @@ interface IProps {
 @replaceableComponent("views.rooms.SearchResultTile")
 export default class SearchResultTile extends React.Component<IProps> {
     static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
+    // A map of <callId, CallEventGrouper>
+    private callEventGroupers = new Map<string, CallEventGrouper>();
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.buildCallEventGroupers(this.props.searchResult.context.getTimeline());
+    }
+
+    private buildCallEventGroupers(events?: MatrixEvent[]): void {
+        this.callEventGroupers = buildCallEventGroupers(this.callEventGroupers, events);
+    }
 
     public render() {
         const result = this.props.searchResult;
@@ -109,6 +125,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                         timelineRenderingType={TimelineRenderingType.Search}
                         lastInSection={lastInSection}
                         continuation={continuation}
+                        callEventGrouper={this.callEventGroupers.get(mxEv.getContent().call_id)}
                     />,
                 );
             }

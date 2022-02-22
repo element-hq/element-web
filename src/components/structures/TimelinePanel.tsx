@@ -51,7 +51,7 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import ErrorDialog from '../views/dialogs/ErrorDialog';
-import CallEventGrouper from "./CallEventGrouper";
+import CallEventGrouper, { buildCallEventGroupers } from "./CallEventGrouper";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 
 const PAGINATE_SIZE = 20;
@@ -1546,24 +1546,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     ) => this.props.timelineSet.getRelationsForEvent(eventId, relationType, eventType);
 
     private buildCallEventGroupers(events?: MatrixEvent[]): void {
-        const oldCallEventGroupers = this.callEventGroupers;
-        this.callEventGroupers = new Map();
-        events?.forEach(ev => {
-            if (!ev.getType().startsWith("m.call.") && !ev.getType().startsWith("org.matrix.call.")) {
-                return;
-            }
-
-            const callId = ev.getContent().call_id;
-            if (!this.callEventGroupers.has(callId)) {
-                if (oldCallEventGroupers.has(callId)) {
-                    // reuse the CallEventGrouper object where possible
-                    this.callEventGroupers.set(callId, oldCallEventGroupers.get(callId));
-                } else {
-                    this.callEventGroupers.set(callId, new CallEventGrouper());
-                }
-            }
-            this.callEventGroupers.get(callId).add(ev);
-        });
+        this.callEventGroupers = buildCallEventGroupers(this.callEventGroupers, events);
     }
 
     render() {

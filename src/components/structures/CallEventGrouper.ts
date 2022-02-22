@@ -44,6 +44,30 @@ export enum CustomCallState {
     Missed = "missed",
 }
 
+export function buildCallEventGroupers(
+    callEventGroupers: Map<string, CallEventGrouper>,
+    events?: MatrixEvent[],
+): Map<string, CallEventGrouper> {
+    const newCallEventGroupers = new Map();
+    events?.forEach(ev => {
+        if (!ev.getType().startsWith("m.call.") && !ev.getType().startsWith("org.matrix.call.")) {
+            return;
+        }
+
+        const callId = ev.getContent().call_id;
+        if (!newCallEventGroupers.has(callId)) {
+            if (callEventGroupers.has(callId)) {
+                // reuse the CallEventGrouper object where possible
+                newCallEventGroupers.set(callId, callEventGroupers.get(callId));
+            } else {
+                newCallEventGroupers.set(callId, new CallEventGrouper());
+            }
+        }
+        newCallEventGroupers.get(callId).add(ev);
+    });
+    return newCallEventGroupers;
+}
+
 export default class CallEventGrouper extends EventEmitter {
     private events: Set<MatrixEvent> = new Set<MatrixEvent>();
     private call: MatrixCall;
