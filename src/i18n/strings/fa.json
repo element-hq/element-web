@@ -2864,5 +2864,10 @@
     "%(space1Name)s and %(space2Name)s": "%(space1Name)s و %(space2Name)s",
     "Command failed: Unable to find room (%(roomId)s": "دستور با خطا روبرو شد: اتاق %(roomId)s پیدا نشد",
     "Failed to get room topic: Unable to find room (%(roomId)s": "خطا در دریافت عنوان اتاق: اتاق %(roomId)s یافت نشد",
-    "Command error: Unable to find rendering type (%(renderingType)s)": "خطای دستوری: نوع نمایش (%(renderingType)s ) یافت نشد"
+    "Command error: Unable to find rendering type (%(renderingType)s)": "خطای دستوری: نوع نمایش (%(renderingType)s ) یافت نشد",
+    "Open this settings tab": "این تب تنظیمات را باز کنید",
+    "Navigate up in the room list": "پیمایش به بالا در لیست اتاق ها",
+    "Navigate down in the room list": "پیمایش به پایین در لیست اتاق ها",
+    "Previous room or DM": "اتاق یا گفتگوی خصوصی قبلی",
+    "Next room or DM": "اتاق یا گفتگوی خصوصی بعدی"
 }
