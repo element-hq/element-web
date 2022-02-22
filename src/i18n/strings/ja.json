@@ -2666,5 +2666,6 @@
     "You can change this at any time from room settings.": "これはルームの設定で後からいつでも変更できます。",
     "You can't disable this later. Bridges & most bots won't work yet.": "後から無効にすることはできません。ブリッジおよびほとんどのボットはまだ動作しません。",
     "Be found by phone or email": "自分を電話番号かメールアドレスで発見可能にする",
-    "Find others by phone or email": "他人を電話番号かメールアドレスで発見"
+    "Find others by phone or email": "他人を電話番号かメールアドレスで発見",
+    "You were removed from %(roomName)s by %(memberName)s": "%(memberName)sにより%(roomName)sから追放されました"
 }
