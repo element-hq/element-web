@@ -1009,7 +1009,7 @@
     "Go": "続行",
     "Session already verified!": "このセッションは検証済です!",
     "WARNING: Session already verified, but keys do NOT MATCH!": "警告：このセッションは検証済ですが、鍵が一致しません！",
-    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "警告：鍵の検証に失敗しました！提供された鍵「%(fingerprint)s」は、%(userId)sおよびセッション %(deviceId)s の署名鍵「%(fprint)s」と一致しません。これはつまり、あなたの会話が傍受・盗聴されている恐れがあるということです！",
+    "WARNING: KEY VERIFICATION FAILED! The signing key for %(userId)s and session %(deviceId)s is \"%(fprint)s\" which does not match the provided key \"%(fingerprint)s\". This could mean your communications are being intercepted!": "警告：鍵の検証に失敗しました！提供された鍵「%(fingerprint)s」は、%(userId)sおよびセッション %(deviceId)s の署名鍵「%(fprint)s」と一致しません。通信が傍受されている恐れがあります！",
     "Show typing notifications": "入力中通知を表示",
     "Allow fallback call assist server turn.matrix.org when your homeserver does not offer one (your IP address would be shared during a call)": "あなたのホームサーバーが対応していない場合は代替通話支援サーバー turn.matrix.org の使用を許可 (あなたの IP アドレスが通話相手に漏洩するのを防ぎます)",
     "Your homeserver does not support cross-signing.": "あなたのホームサーバーはクロス署名に対応していません。",
