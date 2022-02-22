@@ -1058,7 +1058,7 @@
     "Your theme": "あなたのテーマ",
     "%(brand)s URL": "%(brand)s URL",
     "Room ID": "ルームID",
-    "More options": "更なるオプション",
+    "More options": "他のオプション",
     "Manually verify all remote sessions": "全てのリモートセッションを手動で検証",
     "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.": "クロス署名された端末を信頼せず、信頼済としてマークするためにユーザーが使用する各セッションを個別に検証します。",
     "This session is backing up your keys. ": "このセッションは鍵をバックアップしています。 ",
@@ -2698,5 +2698,13 @@
     "Manage pinned events": "固定されたイベントの管理",
     "Change description": "説明文の変更",
     "Send reactions": "リアクションの送信",
-    "Change server ACLs": "サーバーのアクセス制御リストの変更"
+    "Change server ACLs": "サーバーのアクセス制御リストの変更",
+    "Missed call": "不在着信",
+    "Call back": "かけ直す",
+    "Search for rooms or spaces": "ルームとスペースを検索",
+    "Search for rooms or people": "ルームと連絡先を検索",
+    "Please enter a name for the space": "スペースに付ける名前を入力してください",
+    "Other rooms": "他のルーム",
+    "Pin to sidebar": "サイドバーに固定",
+    "Quick settings": "クイック設定"
 }
