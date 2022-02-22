@@ -2664,5 +2664,7 @@
     "Can't find this server or its room list": "サーバーまたはそのルーム一覧が見つかりません",
     "Join public room": "公開ルームに参加",
     "You can change this at any time from room settings.": "これはルームの設定で後からいつでも変更できます。",
-    "You can't disable this later. Bridges & most bots won't work yet.": "後から無効にすることはできません。ブリッジおよびほとんどのボットはまだ動作しません。"
+    "You can't disable this later. Bridges & most bots won't work yet.": "後から無効にすることはできません。ブリッジおよびほとんどのボットはまだ動作しません。",
+    "Be found by phone or email": "自分を電話番号かメールアドレスで発見可能にする",
+    "Find others by phone or email": "他人を電話番号かメールアドレスで発見"
 }
