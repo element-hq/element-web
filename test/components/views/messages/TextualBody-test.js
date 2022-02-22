@@ -222,6 +222,26 @@ describe("<TextualBody />", () => {
                 '</span></span>');
         });
 
+        it("pills do not appear in code blocks", () => {
+            const ev = mkEvent({
+                type: "m.room.message",
+                room: "room_id",
+                user: "sender",
+                content: {
+                    body: "`@room`\n```\n@room\n```",
+                    msgtype: "m.text",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "<p><code>@room</code></p>\n<pre><code>@room\n</code></pre>\n",
+                },
+                event: true,
+            });
+
+            const wrapper = mount(<TextualBody mxEvent={ev} />);
+            expect(wrapper.text()).toBe("@room\n1@room\n\n");
+            const content = wrapper.find(".mx_EventTile_body");
+            expect(content.html()).toMatchSnapshot();
+        });
+
         it("pills do not appear for event permalinks", () => {
             const ev = mkEvent({
                 type: "m.room.message",

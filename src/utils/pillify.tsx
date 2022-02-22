@@ -44,7 +44,11 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
     while (node) {
         let pillified = false;
 
-        if (node.tagName === "A" && node.getAttribute("href")) {
+        if (node.tagName === "PRE" || node.tagName === "CODE") {
+            // Skip code blocks
+            node = node.nextSibling as Element;
+            continue;
+        } else if (node.tagName === "A" && node.getAttribute("href")) {
             const href = node.getAttribute("href");
             const parts = parsePermalink(href);
             // If the link is a (localised) matrix.to link, replace it with a pill
