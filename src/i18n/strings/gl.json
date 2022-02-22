@@ -3641,5 +3641,13 @@
     "Join %(roomAddress)s": "Unirse a %(roomAddress)s",
     "Edit poll": "Editar enquisa",
     "Sorry, you can't edit a poll after votes have been cast.": "Non se pode editar unha enquisa cando xa recibiu votos.",
-    "Can't edit poll": "Non podes editar a enquisa"
+    "Can't edit poll": "Non podes editar a enquisa",
+    "Search Dialog": "Diálogo de busca",
+    "Results are only revealed when you end the poll": "Os resultados só son visibles cando remata a enquisa",
+    "Voters see results as soon as they have voted": "As votantes ven os resultados xusto despois de votar",
+    "Closed poll": "Enquisa pechada",
+    "Open poll": "Abrir enquisa",
+    "Poll type": "Tipo de enquisa",
+    "Results will be visible when the poll is ended": "Os resultados serán visibles cando remate a enquisa",
+    "Show current avatar and name for users in message history": "Mostrar o avatar actual e nome para as usuarias no historial de mensaxes"
 }
