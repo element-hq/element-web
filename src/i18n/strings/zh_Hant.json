@@ -3649,5 +3649,12 @@
     "Edit poll": "編輯投票",
     "Sorry, you can't edit a poll after votes have been cast.": "抱歉，您無法在有人投票後編輯投票。",
     "Can't edit poll": "無法編輯投票",
-    "Show current avatar and name for users in message history": "在訊息歷史紀錄中顯示目前使用者的大頭照與名稱"
+    "Show current avatar and name for users in message history": "在訊息歷史紀錄中顯示目前使用者的大頭照與名稱",
+    "Search Dialog": "搜尋對話方塊",
+    "Results are only revealed when you end the poll": "結果僅在您結束投票時顯示",
+    "Voters see results as soon as they have voted": "投票者可以在投票後立刻看到結果",
+    "Open poll": "開放投票",
+    "Closed poll": "已關閉的投票",
+    "Poll type": "投票類型",
+    "Results will be visible when the poll is ended": "結果將在投票結束時可見"
 }
