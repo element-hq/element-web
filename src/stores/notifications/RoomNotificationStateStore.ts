@@ -16,6 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import { ActionPayload } from "../../dispatcher/payloads";
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
@@ -130,10 +131,11 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     };
 
     protected async onReady() {
-        this.matrixClient.on("sync", this.onSync);
+        this.matrixClient.on(ClientEvent.Sync, this.onSync);
     }
 
     protected async onNotReady(): Promise<any> {
+        this.matrixClient?.off(ClientEvent.Sync, this.onSync);
         for (const roomState of this.roomMap.values()) {
             roomState.destroy();
         }

@@ -16,15 +16,17 @@ limitations under the License.
 
 import EventEmitter from 'events';
 import {
-    VerificationRequest,
     PHASE_DONE as VERIF_PHASE_DONE,
+    VerificationRequest,
+    VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { ISecretStorageKeyInfo } from "matrix-js-sdk/src/crypto/api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
-import { accessSecretStorage, AccessCancelledError } from '../SecurityManager';
+import { AccessCancelledError, accessSecretStorage } from '../SecurityManager';
 import Modal from '../Modal';
 import InteractiveAuthDialog from '../components/views/dialogs/InteractiveAuthDialog';
 import { _t } from '../languageHandler';
@@ -68,8 +70,8 @@ export class SetupEncryptionStore extends EventEmitter {
         this.keyInfo = null;
 
         const cli = MatrixClientPeg.get();
-        cli.on("crypto.verification.request", this.onVerificationRequest);
-        cli.on('userTrustStatusChanged', this.onUserTrustStatusChanged);
+        cli.on(CryptoEvent.VerificationRequest, this.onVerificationRequest);
+        cli.on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
 
         const requestsInProgress = cli.getVerificationRequestsToDeviceInProgress(cli.getUserId());
         if (requestsInProgress.length) {
@@ -88,11 +90,11 @@ export class SetupEncryptionStore extends EventEmitter {
         }
         this.started = false;
         if (this.verificationRequest) {
-            this.verificationRequest.off("change", this.onVerificationRequestChange);
+            this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
         }
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("crypto.verification.request", this.onVerificationRequest);
-            MatrixClientPeg.get().removeListener('userTrustStatusChanged', this.onUserTrustStatusChanged);
+            MatrixClientPeg.get().removeListener(CryptoEvent.VerificationRequest, this.onVerificationRequest);
+            MatrixClientPeg.get().removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
         }
     }
 
@@ -186,11 +188,11 @@ export class SetupEncryptionStore extends EventEmitter {
 
     public onVerificationRequestChange = (): void => {
         if (this.verificationRequest.cancelled) {
-            this.verificationRequest.off("change", this.onVerificationRequestChange);
+            this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
             this.verificationRequest = null;
             this.emit("update");
         } else if (this.verificationRequest.phase === VERIF_PHASE_DONE) {
-            this.verificationRequest.off("change", this.onVerificationRequestChange);
+            this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
             this.verificationRequest = null;
             // At this point, the verification has finished, we just need to wait for
             // cross signing to be ready to use, so wait for the user trust status to
@@ -271,11 +273,11 @@ export class SetupEncryptionStore extends EventEmitter {
         if (request.otherUserId !== MatrixClientPeg.get().getUserId()) return;
 
         if (this.verificationRequest) {
-            this.verificationRequest.off("change", this.onVerificationRequestChange);
+            this.verificationRequest.off(VerificationRequestEvent.Change, this.onVerificationRequestChange);
         }
         this.verificationRequest = request;
         await request.accept();
-        request.on("change", this.onVerificationRequestChange);
+        request.on(VerificationRequestEvent.Change, this.onVerificationRequestChange);
         this.emit("update");
     }
 

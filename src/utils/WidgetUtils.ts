@@ -20,6 +20,7 @@ import { Capability, IWidget, IWidgetData, MatrixCapabilities } from "matrix-wid
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ClientEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
@@ -156,16 +157,16 @@ export default class WidgetUtils {
             function onAccountData(ev) {
                 const currentAccountDataEvent = MatrixClientPeg.get().getAccountData('m.widgets');
                 if (eventInIntendedState(currentAccountDataEvent)) {
-                    MatrixClientPeg.get().removeListener('accountData', onAccountData);
+                    MatrixClientPeg.get().removeListener(ClientEvent.AccountData, onAccountData);
                     clearTimeout(timerId);
                     resolve();
                 }
             }
             const timerId = setTimeout(() => {
-                MatrixClientPeg.get().removeListener('accountData', onAccountData);
+                MatrixClientPeg.get().removeListener(ClientEvent.AccountData, onAccountData);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
             }, WIDGET_WAIT_TIME);
-            MatrixClientPeg.get().on('accountData', onAccountData);
+            MatrixClientPeg.get().on(ClientEvent.AccountData, onAccountData);
         });
     }
 
@@ -211,16 +212,16 @@ export default class WidgetUtils {
                 const currentWidgetEvents = room.currentState.getStateEvents('im.vector.modular.widgets');
 
                 if (eventsInIntendedState(currentWidgetEvents)) {
-                    MatrixClientPeg.get().removeListener('RoomState.events', onRoomStateEvents);
+                    MatrixClientPeg.get().removeListener(RoomStateEvent.Events, onRoomStateEvents);
                     clearTimeout(timerId);
                     resolve();
                 }
             }
             const timerId = setTimeout(() => {
-                MatrixClientPeg.get().removeListener('RoomState.events', onRoomStateEvents);
+                MatrixClientPeg.get().removeListener(RoomStateEvent.Events, onRoomStateEvents);
                 reject(new Error("Timed out waiting for widget ID " + widgetId + " to appear"));
             }, WIDGET_WAIT_TIME);
-            MatrixClientPeg.get().on('RoomState.events', onRoomStateEvents);
+            MatrixClientPeg.get().on(RoomStateEvent.Events, onRoomStateEvents);
         });
     }
 

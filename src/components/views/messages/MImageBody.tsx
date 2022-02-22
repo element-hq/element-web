@@ -21,6 +21,7 @@ import { SyncState } from 'matrix-js-sdk/src/sync';
 import classNames from 'classnames';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { logger } from "matrix-js-sdk/src/logger";
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import MFileBody from './MFileBody';
 import Modal from '../../../Modal';
@@ -299,7 +300,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     componentDidMount() {
         this.unmounted = false;
-        MatrixClientPeg.get().on('sync', this.onClientSync);
+        MatrixClientPeg.get().on(ClientEvent.Sync, this.onClientSync);
 
         const showImage = this.state.showImage ||
             localStorage.getItem("mx_ShowImage_" + this.props.mxEvent.getId()) === "true";
@@ -329,7 +330,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
     componentWillUnmount() {
         this.unmounted = true;
-        MatrixClientPeg.get().removeListener('sync', this.onClientSync);
+        MatrixClientPeg.get().removeListener(ClientEvent.Sync, this.onClientSync);
         this.clearBlurhashTimeout();
         SettingsStore.unwatchSetting(this.sizeWatcher);
     }

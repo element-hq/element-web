@@ -24,6 +24,7 @@ import { ViewRoom as ViewRoomEvent } from "matrix-analytics-events/types/typescr
 import { JoinedRoom as JoinedRoomEvent } from "matrix-analytics-events/types/typescript/JoinedRoom";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import dis from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -180,13 +181,13 @@ class RoomViewStore extends Store<ActionPayload> {
                         isSpace: room.isSpaceRoom(),
                     });
 
-                    cli.off("Room", updateMetrics);
+                    cli.off(ClientEvent.Room, updateMetrics);
                 };
 
                 if (cli.getRoom(payload.roomId)) {
                     updateMetrics();
                 } else {
-                    cli.on("Room", updateMetrics);
+                    cli.on(ClientEvent.Room, updateMetrics);
                 }
 
                 break;

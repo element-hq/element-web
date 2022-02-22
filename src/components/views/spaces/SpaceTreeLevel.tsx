@@ -14,15 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, {
-    createRef,
-    InputHTMLAttributes,
-    LegacyRef,
-    ComponentProps,
-    ComponentType,
-} from "react";
+import React, { ComponentProps, ComponentType, createRef, InputHTMLAttributes, LegacyRef } from "react";
 import classNames from "classnames";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 
 import RoomAvatar from "../avatars/RoomAvatar";
@@ -184,12 +178,12 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
         };
 
         SpaceStore.instance.on(this.props.space.roomId, this.onSpaceUpdate);
-        this.props.space.on("Room.name", this.onRoomNameChange);
+        this.props.space.on(RoomEvent.Name, this.onRoomNameChange);
     }
 
     componentWillUnmount() {
         SpaceStore.instance.off(this.props.space.roomId, this.onSpaceUpdate);
-        this.props.space.off("Room.name", this.onRoomNameChange);
+        this.props.space.off(RoomEvent.Name, this.onRoomNameChange);
     }
 
     private onSpaceUpdate = () => {

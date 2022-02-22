@@ -19,8 +19,9 @@ import * as utils from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixToPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./MatrixToPermalinkConstructor";
@@ -122,14 +123,14 @@ export class RoomPermalinkCreator {
 
     start() {
         this.load();
-        this.room.on("RoomMember.membership", this.onMembership);
-        this.room.on("RoomState.events", this.onRoomState);
+        this.room.client.on(RoomMemberEvent.Membership, this.onMembership);
+        this.room.currentState.on(RoomStateEvent.Events, this.onRoomState);
         this.started = true;
     }
 
     stop() {
-        this.room.removeListener("RoomMember.membership", this.onMembership);
-        this.room.removeListener("RoomState.events", this.onRoomState);
+        this.room.client.removeListener(RoomMemberEvent.Membership, this.onMembership);
+        this.room.currentState.removeListener(RoomStateEvent.Events, this.onRoomState);
         this.started = false;
     }
 
@@ -176,6 +177,8 @@ export class RoomPermalinkCreator {
     };
 
     private onMembership = (evt: MatrixEvent, member: RoomMember, oldMembership: string) => {
+        if (member.roomId !== this.room.roomId) return;
+
         const userId = member.userId;
         const membership = member.membership;
         const serverName = getServerName(userId);

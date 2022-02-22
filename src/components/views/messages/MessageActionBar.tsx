@@ -17,7 +17,7 @@ limitations under the License.
 */
 
 import React, { ReactElement, useEffect } from 'react';
-import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventStatus, MatrixEvent, MatrixEventEvent } from 'matrix-js-sdk/src/models/event';
 import classNames from 'classnames';
 import { MsgType } from 'matrix-js-sdk/src/@types/event';
 
@@ -175,22 +175,22 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
     public componentDidMount(): void {
         if (this.props.mxEvent.status && this.props.mxEvent.status !== EventStatus.SENT) {
-            this.props.mxEvent.on("Event.status", this.onSent);
+            this.props.mxEvent.on(MatrixEventEvent.Status, this.onSent);
         }
 
         const client = MatrixClientPeg.get();
         client.decryptEventIfNeeded(this.props.mxEvent);
 
         if (this.props.mxEvent.isBeingDecrypted()) {
-            this.props.mxEvent.once("Event.decrypted", this.onDecrypted);
+            this.props.mxEvent.once(MatrixEventEvent.Decrypted, this.onDecrypted);
         }
-        this.props.mxEvent.on("Event.beforeRedaction", this.onBeforeRedaction);
+        this.props.mxEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
     }
 
     public componentWillUnmount(): void {
-        this.props.mxEvent.off("Event.status", this.onSent);
-        this.props.mxEvent.off("Event.decrypted", this.onDecrypted);
-        this.props.mxEvent.off("Event.beforeRedaction", this.onBeforeRedaction);
+        this.props.mxEvent.off(MatrixEventEvent.Status, this.onSent);
+        this.props.mxEvent.off(MatrixEventEvent.Decrypted, this.onDecrypted);
+        this.props.mxEvent.off(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
     }
 
     private onDecrypted = (): void => {

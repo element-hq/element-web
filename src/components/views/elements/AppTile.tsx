@@ -21,7 +21,7 @@ import url from 'url';
 import React, { ContextType, createRef } from 'react';
 import classNames from 'classnames';
 import { MatrixCapabilities } from "matrix-widget-api";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import AccessibleButton from './AccessibleButton';
@@ -42,7 +42,7 @@ import WidgetAvatar from "../avatars/WidgetAvatar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CallHandler from '../../../CallHandler';
 import { IApp } from "../../../stores/WidgetStore";
-import { WidgetLayoutStore, Container } from "../../../stores/widgets/WidgetLayoutStore";
+import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from '../../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -269,7 +269,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         this.watchUserReady();
 
         if (this.props.room) {
-            this.context.on("Room.myMembership", this.onMyMembership);
+            this.context.on(RoomEvent.MyMembership, this.onMyMembership);
         }
 
         this.allowedWidgetsWatchRef = SettingsStore.watchSetting("allowedWidgets", null, this.onAllowedWidgetsChange);
@@ -306,7 +306,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
 
         if (this.props.room) {
-            this.context.off("Room.myMembership", this.onMyMembership);
+            this.context.off(RoomEvent.MyMembership, this.onMyMembership);
         }
 
         SettingsStore.unwatchSetting(this.allowedWidgetsWatchRef);

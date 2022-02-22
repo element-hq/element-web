@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixEvent } from 'matrix-js-sdk/src';
+import { MatrixEvent, MatrixEventEvent } from 'matrix-js-sdk/src';
 import classNames from 'classnames';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -48,7 +48,7 @@ export default class ViewSourceEvent extends React.PureComponent<IProps, IState>
         client.decryptEventIfNeeded(mxEvent);
 
         if (mxEvent.isBeingDecrypted()) {
-            mxEvent.once("Event.decrypted", () => this.forceUpdate());
+            mxEvent.once(MatrixEventEvent.Decrypted, () => this.forceUpdate());
         }
     }
 

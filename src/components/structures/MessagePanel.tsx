@@ -21,6 +21,7 @@ import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { logger } from 'matrix-js-sdk/src/logger';
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { wantsDateSeparator } from '../../DateUtils';
@@ -274,13 +275,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
     componentDidMount() {
         this.calculateRoomMembersCount();
-        this.props.room?.on("RoomState.members", this.calculateRoomMembersCount);
+        this.props.room?.currentState.on(RoomStateEvent.Members, this.calculateRoomMembersCount);
         this.isMounted = true;
     }
 
     componentWillUnmount() {
         this.isMounted = false;
-        this.props.room?.off("RoomState.members", this.calculateRoomMembersCount);
+        this.props.room?.currentState.off(RoomStateEvent.Members, this.calculateRoomMembersCount);
         SettingsStore.unwatchSetting(this.showTypingNotificationsWatcherRef);
     }
 

@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React, { createRef } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -149,8 +149,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 CommunityPrototypeStore.getUpdateEventName(this.props.room?.roomId),
                 this.onCommunityUpdate,
             );
-            prevProps.room?.off("Room.name", this.onRoomNameUpdate);
-            this.props.room?.on("Room.name", this.onRoomNameUpdate);
+            prevProps.room?.off(RoomEvent.Name, this.onRoomNameUpdate);
+            this.props.room?.on(RoomEvent.Name, this.onRoomNameUpdate);
         }
     }
 
@@ -168,7 +168,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         );
         this.notificationState.on(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        this.props.room?.on("Room.name", this.onRoomNameUpdate);
+        this.props.room?.on(RoomEvent.Name, this.onRoomNameUpdate);
         CommunityPrototypeStore.instance.on(
             CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
             this.onCommunityUpdate,
@@ -186,7 +186,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 CommunityPrototypeStore.getUpdateEventName(this.props.room.roomId),
                 this.onCommunityUpdate,
             );
-            this.props.room.off("Room.name", this.onRoomNameUpdate);
+            this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
         defaultDispatcher.unregister(this.dispatcherRef);

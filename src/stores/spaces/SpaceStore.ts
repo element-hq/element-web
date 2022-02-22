@@ -16,11 +16,12 @@ limitations under the License.
 
 import { ListIteratee, Many, sortBy, throttle } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { IRoomCapability } from "matrix-js-sdk/src/client";
+import { ClientEvent, IRoomCapability } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -1048,24 +1049,24 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     protected async onNotReady() {
         if (!SpaceStore.spacesEnabled) return;
         if (this.matrixClient) {
-            this.matrixClient.removeListener("Room", this.onRoom);
-            this.matrixClient.removeListener("Room.myMembership", this.onRoom);
-            this.matrixClient.removeListener("Room.accountData", this.onRoomAccountData);
-            this.matrixClient.removeListener("RoomState.events", this.onRoomState);
-            this.matrixClient.removeListener("RoomState.members", this.onRoomStateMembers);
-            this.matrixClient.removeListener("accountData", this.onAccountData);
+            this.matrixClient.removeListener(ClientEvent.Room, this.onRoom);
+            this.matrixClient.removeListener(RoomEvent.MyMembership, this.onRoom);
+            this.matrixClient.removeListener(RoomEvent.AccountData, this.onRoomAccountData);
+            this.matrixClient.removeListener(RoomStateEvent.Events, this.onRoomState);
+            this.matrixClient.removeListener(RoomStateEvent.Members, this.onRoomStateMembers);
+            this.matrixClient.removeListener(ClientEvent.AccountData, this.onAccountData);
         }
         await this.reset();
     }
 
     protected async onReady() {
         if (!spacesEnabled) return;
-        this.matrixClient.on("Room", this.onRoom);
-        this.matrixClient.on("Room.myMembership", this.onRoom);
-        this.matrixClient.on("Room.accountData", this.onRoomAccountData);
-        this.matrixClient.on("RoomState.events", this.onRoomState);
-        this.matrixClient.on("RoomState.members", this.onRoomStateMembers);
-        this.matrixClient.on("accountData", this.onAccountData);
+        this.matrixClient.on(ClientEvent.Room, this.onRoom);
+        this.matrixClient.on(RoomEvent.MyMembership, this.onRoom);
+        this.matrixClient.on(RoomEvent.AccountData, this.onRoomAccountData);
+        this.matrixClient.on(RoomStateEvent.Events, this.onRoomState);
+        this.matrixClient.on(RoomStateEvent.Members, this.onRoomStateMembers);
+        this.matrixClient.on(ClientEvent.AccountData, this.onAccountData);
 
         this.matrixClient.getCapabilities().then(capabilities => {
             this._restrictedJoinRuleSupport = capabilities

@@ -16,8 +16,8 @@ limitations under the License.
 
 import React from "react";
 import classNames from "classnames";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { User } from "matrix-js-sdk/src/models/user";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { User, UserEvent } from "matrix-js-sdk/src/models/user";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
@@ -89,7 +89,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
 
     public componentWillUnmount() {
         this.isUnmounted = true;
-        if (this.isWatchingTimeline) this.props.room.off('Room.timeline', this.onRoomTimeline);
+        if (this.isWatchingTimeline) this.props.room.off(RoomEvent.Timeline, this.onRoomTimeline);
         this.dmUser = null; // clear listeners, if any
     }
 
@@ -107,12 +107,12 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
         const oldUser = this._dmUser;
         this._dmUser = val;
         if (oldUser && oldUser !== this._dmUser) {
-            oldUser.off('User.currentlyActive', this.onPresenceUpdate);
-            oldUser.off('User.presence', this.onPresenceUpdate);
+            oldUser.off(UserEvent.CurrentlyActive, this.onPresenceUpdate);
+            oldUser.off(UserEvent.Presence, this.onPresenceUpdate);
         }
         if (this._dmUser && oldUser !== this._dmUser) {
-            this._dmUser.on('User.currentlyActive', this.onPresenceUpdate);
-            this._dmUser.on('User.presence', this.onPresenceUpdate);
+            this._dmUser.on(UserEvent.CurrentlyActive, this.onPresenceUpdate);
+            this._dmUser.on(UserEvent.Presence, this.onPresenceUpdate);
         }
     }
 
@@ -169,7 +169,7 @@ export default class DecoratedRoomAvatar extends React.PureComponent<IProps, ISt
             // Track publicity
             icon = this.isPublicRoom ? Icon.Globe : Icon.None;
             if (!this.isWatchingTimeline) {
-                this.props.room.on('Room.timeline', this.onRoomTimeline);
+                this.props.room.on(RoomEvent.Timeline, this.onRoomTimeline);
                 this.isWatchingTimeline = true;
             }
         }

@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
@@ -69,7 +70,7 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
@@ -86,7 +87,7 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
 
     public componentWillUnmount(): void {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+            MatrixClientPeg.get().removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
     }
 

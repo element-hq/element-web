@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Room } from "matrix-js-sdk/src/models/room";
 import { sleep } from "matrix-js-sdk/src/utils";
-import { EventStatus } from "matrix-js-sdk/src/models/event";
+import { EventStatus, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import React from "react";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -122,12 +122,12 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
             }
 
             if (!ev.status || ev.status === EventStatus.SENT) {
-                ev.off("Event.status", handler);
+                ev.off(MatrixEventEvent.Status, handler);
                 resolve();
             }
         };
 
-        ev.on("Event.status", handler);
+        ev.on(MatrixEventEvent.Status, handler);
     })));
 
     let results: { [roomId: string]: Error & { errcode?: string, message: string, data?: Record<string, any> } } = {};

@@ -18,7 +18,7 @@ import React from 'react';
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../../../languageHandler";
@@ -122,13 +122,13 @@ interface IProps {
 @replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
 export default class RolesRoomSettingsTab extends React.Component<IProps> {
     componentDidMount() {
-        MatrixClientPeg.get().on("RoomState.members", this.onRoomMembership);
+        MatrixClientPeg.get().on(RoomStateEvent.Members, this.onRoomMembership);
     }
 
     componentWillUnmount() {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("RoomState.members", this.onRoomMembership);
+            client.removeListener(RoomStateEvent.Members, this.onRoomMembership);
         }
     }
 

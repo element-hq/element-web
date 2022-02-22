@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import React from 'react';
-import { IGeneratedSas, ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
-import { VerificationBase } from "matrix-js-sdk/src/crypto/verification/Base";
+import { IGeneratedSas, ISasEvent, SasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
+import { VerificationBase, VerificationEvent } from "matrix-js-sdk/src/crypto/verification/Base";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -39,7 +39,7 @@ const PHASE_VERIFIED = 3;
 const PHASE_CANCELLED = 4;
 
 interface IProps extends IDialogProps {
-    verifier: VerificationBase;
+    verifier: VerificationBase<SasEvent, any>;
 }
 
 interface IState {
@@ -75,8 +75,8 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
             opponentProfileError: null,
             sas: null,
         };
-        this.props.verifier.on('show_sas', this.onVerifierShowSas);
-        this.props.verifier.on('cancel', this.onVerifierCancel);
+        this.props.verifier.on(SasEvent.ShowSas, this.onVerifierShowSas);
+        this.props.verifier.on(VerificationEvent.Cancel, this.onVerifierCancel);
         this.fetchOpponentProfile();
     }
 
@@ -84,7 +84,7 @@ export default class IncomingSasDialog extends React.Component<IProps, IState> {
         if (this.state.phase !== PHASE_CANCELLED && this.state.phase !== PHASE_VERIFIED) {
             this.props.verifier.cancel(new Error('User cancel'));
         }
-        this.props.verifier.removeListener('show_sas', this.onVerifierShowSas);
+        this.props.verifier.removeListener(SasEvent.ShowSas, this.onVerifierShowSas);
     }
 
     private async fetchOpponentProfile(): Promise<void> {

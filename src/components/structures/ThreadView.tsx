@@ -153,14 +153,12 @@ export default class ThreadView extends React.Component<IProps, IState> {
             thread = this.props.room.createThread(mxEv);
         }
         thread.on(ThreadEvent.Update, this.updateLastThreadReply);
-        thread.once(ThreadEvent.Ready, this.updateThread);
         this.updateThread(thread);
     };
 
     private teardownThread = () => {
         if (this.state.thread) {
             this.state.thread.removeListener(ThreadEvent.Update, this.updateLastThreadReply);
-            this.state.thread.removeListener(ThreadEvent.Ready, this.updateThread);
         }
     };
 

@@ -18,7 +18,7 @@ import React, { SyntheticEvent } from 'react';
 import maplibregl from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import { IClientWellKnown } from 'matrix-js-sdk/src/client';
+import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
 
 import DialogButtons from "../elements/DialogButtons";
 import { _t } from '../../../languageHandler';
@@ -71,7 +71,7 @@ class LocationPicker extends React.Component<IProps, IState> {
     };
 
     componentDidMount() {
-        this.context.on("WellKnown.client", this.updateStyleUrl);
+        this.context.on(ClientEvent.ClientWellKnown, this.updateStyleUrl);
 
         try {
             this.map = new maplibregl.Map({
@@ -134,7 +134,7 @@ class LocationPicker extends React.Component<IProps, IState> {
 
     componentWillUnmount() {
         this.geolocate?.off('geolocate', this.onGeolocate);
-        this.context.off("WellKnown.client", this.updateStyleUrl);
+        this.context.off(ClientEvent.ClientWellKnown, this.updateStyleUrl);
     }
 
     private updateStyleUrl = (clientWellKnown: IClientWellKnown) => {

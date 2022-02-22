@@ -17,8 +17,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { ClientEvent } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import { LOCATION_EVENT_TYPE } from "matrix-js-sdk/src/@types/location";
@@ -201,20 +202,20 @@ export const Notifier = {
         this.boundOnRoomReceipt = this.boundOnRoomReceipt || this.onRoomReceipt.bind(this);
         this.boundOnEventDecrypted = this.boundOnEventDecrypted || this.onEventDecrypted.bind(this);
 
-        MatrixClientPeg.get().on('event', this.boundOnEvent);
-        MatrixClientPeg.get().on('Room.receipt', this.boundOnRoomReceipt);
-        MatrixClientPeg.get().on('Event.decrypted', this.boundOnEventDecrypted);
-        MatrixClientPeg.get().on("sync", this.boundOnSyncStateChange);
+        MatrixClientPeg.get().on(ClientEvent.Event, this.boundOnEvent);
+        MatrixClientPeg.get().on(RoomEvent.Receipt, this.boundOnRoomReceipt);
+        MatrixClientPeg.get().on(MatrixEventEvent.Decrypted, this.boundOnEventDecrypted);
+        MatrixClientPeg.get().on(ClientEvent.Sync, this.boundOnSyncStateChange);
         this.toolbarHidden = false;
         this.isSyncing = false;
     },
 
     stop: function() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener('Event', this.boundOnEvent);
-            MatrixClientPeg.get().removeListener('Room.receipt', this.boundOnRoomReceipt);
-            MatrixClientPeg.get().removeListener('Event.decrypted', this.boundOnEventDecrypted);
-            MatrixClientPeg.get().removeListener('sync', this.boundOnSyncStateChange);
+            MatrixClientPeg.get().removeListener(ClientEvent.Event, this.boundOnEvent);
+            MatrixClientPeg.get().removeListener(RoomEvent.Receipt, this.boundOnRoomReceipt);
+            MatrixClientPeg.get().removeListener(MatrixEventEvent.Decrypted, this.boundOnEventDecrypted);
+            MatrixClientPeg.get().removeListener(ClientEvent.Sync, this.boundOnSyncStateChange);
         }
         this.isSyncing = false;
     },

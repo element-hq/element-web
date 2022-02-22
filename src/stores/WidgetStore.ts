@@ -18,6 +18,8 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { IWidget } from "matrix-widget-api";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ClientEvent } from "matrix-js-sdk/src/client";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -73,8 +75,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onReady(): Promise<any> {
-        this.matrixClient.on("Room", this.onRoom);
-        this.matrixClient.on("RoomState.events", this.onRoomStateEvents);
+        this.matrixClient.on(ClientEvent.Room, this.onRoom);
+        this.matrixClient.on(RoomStateEvent.Events, this.onRoomStateEvents);
         this.matrixClient.getRooms().forEach((room: Room) => {
             this.loadRoomWidgets(room);
         });
@@ -82,8 +84,8 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
     }
 
     protected async onNotReady(): Promise<any> {
-        this.matrixClient.off("Room", this.onRoom);
-        this.matrixClient.off("RoomState.events", this.onRoomStateEvents);
+        this.matrixClient.off(ClientEvent.Room, this.onRoom);
+        this.matrixClient.off(RoomStateEvent.Events, this.onRoomStateEvents);
         this.widgetMap = new Map();
         this.roomMap = new Map();
         await this.reset({});

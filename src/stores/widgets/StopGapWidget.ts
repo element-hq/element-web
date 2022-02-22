@@ -17,10 +17,12 @@
 import { Room } from "matrix-js-sdk/src/models/room";
 import {
     ClientWidgetApi,
+    IModalWidgetOpenRequest,
     IStickerActionRequest,
     IStickyActionRequest,
     ITemplateParams,
     IWidget,
+    IWidgetApiErrorResponseData,
     IWidgetApiRequest,
     IWidgetApiRequestEmptyData,
     IWidgetData,
@@ -28,13 +30,12 @@ import {
     runTemplate,
     Widget,
     WidgetApiFromWidgetAction,
-    IModalWidgetOpenRequest,
-    IWidgetApiErrorResponseData,
     WidgetKind,
 } from "matrix-widget-api";
 import { EventEmitter } from "events";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
@@ -315,8 +316,8 @@ export class StopGapWidget extends EventEmitter {
         }
 
         // Attach listeners for feeding events - the underlying widget classes handle permissions for us
-        MatrixClientPeg.get().on('event', this.onEvent);
-        MatrixClientPeg.get().on('Event.decrypted', this.onEventDecrypted);
+        MatrixClientPeg.get().on(ClientEvent.Event, this.onEvent);
+        MatrixClientPeg.get().on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
 
         this.messaging.on(`action:${WidgetApiFromWidgetAction.UpdateAlwaysOnScreen}`,
             (ev: CustomEvent<IStickyActionRequest>) => {
@@ -423,8 +424,8 @@ export class StopGapWidget extends EventEmitter {
         this.messaging = null;
 
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().off('event', this.onEvent);
-            MatrixClientPeg.get().off('Event.decrypted', this.onEventDecrypted);
+            MatrixClientPeg.get().off(ClientEvent.Event, this.onEvent);
+            MatrixClientPeg.get().off(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         }
     }
 

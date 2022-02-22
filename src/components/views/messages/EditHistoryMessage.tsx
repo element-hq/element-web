@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
-import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { EventStatus, MatrixEvent, MatrixEventEvent } from 'matrix-js-sdk/src/models/event';
 import classNames from 'classnames';
 
 import * as HtmlUtils from '../../../HtmlUtils';
@@ -62,7 +62,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         const event = this.props.mxEvent;
         const room = cli.getRoom(event.getRoomId());
         if (event.localRedactionEvent()) {
-            event.localRedactionEvent().on("status", this.onAssociatedStatusChanged);
+            event.localRedactionEvent().on(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
         }
         const canRedact = room.currentState.maySendRedactionForEvent(event, userId);
         this.state = { canRedact, sendStatus: event.getAssociatedStatus() };
@@ -102,7 +102,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
         unmountPills(this.pills);
         const event = this.props.mxEvent;
         if (event.localRedactionEvent()) {
-            event.localRedactionEvent().off("status", this.onAssociatedStatusChanged);
+            event.localRedactionEvent().off(MatrixEventEvent.Status, this.onAssociatedStatusChanged);
         }
     }
 

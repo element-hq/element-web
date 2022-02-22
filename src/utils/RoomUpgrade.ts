@@ -17,7 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 
 import { inviteUsersToRoom } from "../RoomInvite";
 import Modal, { IHandle } from "../Modal";
@@ -46,9 +46,9 @@ export async function awaitRoomDownSync(cli: MatrixClient, roomId: string): Prom
         const checkForRoomFn = (room: Room) => {
             if (room.roomId !== roomId) return;
             resolve(room);
-            cli.off("Room", checkForRoomFn);
+            cli.off(ClientEvent.Room, checkForRoomFn);
         };
-        cli.on("Room", checkForRoomFn);
+        cli.on(ClientEvent.Room, checkForRoomFn);
     });
 }
 

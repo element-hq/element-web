@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import React, { ClipboardEvent } from 'react';
-import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { ClientEvent, MatrixClient } from 'matrix-js-sdk/src/client';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 import { ISyncStateData, SyncState } from 'matrix-js-sdk/src/sync';
 import { IUsageLimit } from 'matrix-js-sdk/src/@types/partials';
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { Key } from '../../Keyboard';
 import PageTypes from '../../PageTypes';
@@ -174,15 +175,15 @@ class LoggedInView extends React.Component<IProps, IState> {
 
         this.updateServerNoticeEvents();
 
-        this._matrixClient.on("accountData", this.onAccountData);
-        this._matrixClient.on("sync", this.onSync);
+        this._matrixClient.on(ClientEvent.AccountData, this.onAccountData);
+        this._matrixClient.on(ClientEvent.Sync, this.onSync);
         // Call `onSync` with the current state as well
         this.onSync(
             this._matrixClient.getSyncState(),
             null,
             this._matrixClient.getSyncStateData(),
         );
-        this._matrixClient.on("RoomState.events", this.onRoomStateEvents);
+        this._matrixClient.on(RoomStateEvent.Events, this.onRoomStateEvents);
 
         this.layoutWatcherRef = SettingsStore.watchSetting("layout", null, this.onCompactLayoutChanged);
         this.compactLayoutWatcherRef = SettingsStore.watchSetting(
@@ -203,9 +204,9 @@ class LoggedInView extends React.Component<IProps, IState> {
     componentWillUnmount() {
         document.removeEventListener('keydown', this.onNativeKeyDown, false);
         CallHandler.instance.removeListener(CallHandlerEvent.CallState, this.onCallState);
-        this._matrixClient.removeListener("accountData", this.onAccountData);
-        this._matrixClient.removeListener("sync", this.onSync);
-        this._matrixClient.removeListener("RoomState.events", this.onRoomStateEvents);
+        this._matrixClient.removeListener(ClientEvent.AccountData, this.onAccountData);
+        this._matrixClient.removeListener(ClientEvent.Sync, this.onSync);
+        this._matrixClient.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         OwnProfileStore.instance.off(UPDATE_EVENT, this.refreshBackgroundImage);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
         SettingsStore.unwatchSetting(this.compactLayoutWatcherRef);

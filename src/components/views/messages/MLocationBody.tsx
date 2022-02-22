@@ -24,7 +24,7 @@ import {
     ILocationContent,
     LOCATION_EVENT_TYPE,
 } from 'matrix-js-sdk/src/@types/location';
-import { IClientWellKnown } from 'matrix-js-sdk/src/client';
+import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
 
 import SdkConfig from '../../../SdkConfig';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -71,7 +71,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
             return;
         }
 
-        this.context.on("WellKnown.client", this.updateStyleUrl);
+        this.context.on(ClientEvent.ClientWellKnown, this.updateStyleUrl);
 
         this.map = createMap(
             this.coords,
@@ -83,7 +83,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     }
 
     componentWillUnmount() {
-        this.context.off("WellKnown.client", this.updateStyleUrl);
+        this.context.off(ClientEvent.ClientWellKnown, this.updateStyleUrl);
     }
 
     private updateStyleUrl = (clientWellKnown: IClientWellKnown) => {

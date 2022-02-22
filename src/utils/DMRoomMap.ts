@@ -16,7 +16,7 @@ limitations under the License.
 
 import { uniq } from "lodash";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -76,11 +76,11 @@ export default class DMRoomMap {
 
     public start() {
         this.populateRoomToUser();
-        this.matrixClient.on("accountData", this.onAccountData);
+        this.matrixClient.on(ClientEvent.AccountData, this.onAccountData);
     }
 
     public stop() {
-        this.matrixClient.removeListener("accountData", this.onAccountData);
+        this.matrixClient.removeListener(ClientEvent.AccountData, this.onAccountData);
     }
 
     private onAccountData = (ev: MatrixEvent) => {

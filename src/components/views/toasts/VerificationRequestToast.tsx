@@ -15,7 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
+import {
+    VerificationRequest,
+    VerificationRequestEvent,
+} from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -62,7 +65,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                 this.setState({ counter });
             }, 1000);
         }
-        request.on("change", this.checkRequestIsPending);
+        request.on(VerificationRequestEvent.Change, this.checkRequestIsPending);
         // We should probably have a separate class managing the active verification toasts,
         // rather than monitoring this in the toast component itself, since we'll get problems
         // like the toasdt not going away when the verification is cancelled unless it's the
@@ -85,7 +88,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
     componentWillUnmount() {
         clearInterval(this.intervalHandle);
         const { request } = this.props;
-        request.off("change", this.checkRequestIsPending);
+        request.off(VerificationRequestEvent.Change, this.checkRequestIsPending);
     }
 
     private checkRequestIsPending = () => {

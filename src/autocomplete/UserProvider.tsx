@@ -20,9 +20,9 @@ limitations under the License.
 import React from 'react';
 import { sortBy } from 'lodash';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -60,14 +60,14 @@ export default class UserProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: false,
         });
 
-        MatrixClientPeg.get().on("Room.timeline", this.onRoomTimeline);
-        MatrixClientPeg.get().on("RoomState.members", this.onRoomStateMember);
+        MatrixClientPeg.get().on(RoomEvent.Timeline, this.onRoomTimeline);
+        MatrixClientPeg.get().on(RoomStateEvent.Members, this.onRoomStateMember);
     }
 
     destroy() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("Room.timeline", this.onRoomTimeline);
-            MatrixClientPeg.get().removeListener("RoomState.members", this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener(RoomEvent.Timeline, this.onRoomTimeline);
+            MatrixClientPeg.get().removeListener(RoomStateEvent.Members, this.onRoomStateMember);
         }
     }
 

@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { RoomState } from 'matrix-js-sdk/src/models/room-state';
+import { RoomState, RoomStateEvent } from 'matrix-js-sdk/src/models/room-state';
 
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
@@ -49,11 +49,11 @@ export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, I
     }
 
     public componentDidMount(): void {
-        this.context.on("RoomState.events", this.onStateEvents);
+        this.context.on(RoomStateEvent.Events, this.onStateEvents);
     }
 
     public componentWillUnmount(): void {
-        this.context.removeListener("RoomState.events", this.onStateEvents);
+        this.context.removeListener(RoomStateEvent.Events, this.onStateEvents);
     }
 
     private onStateEvents = (event: MatrixEvent, state: RoomState): void => {

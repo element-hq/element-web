@@ -16,10 +16,11 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from 'classnames';
-import { MatrixEvent, IEventRelation } from "matrix-js-sdk/src/models/event";
+import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Optional } from "matrix-events-sdk";
 
 import { _t } from '../../../languageHandler';
@@ -155,7 +156,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
         this.waitForOwnMember();
         UIStore.instance.trackElementDimensions(`MessageComposer${this.instanceId}`, this.ref.current);
         UIStore.instance.on(`MessageComposer${this.instanceId}`, this.onResize);
@@ -220,7 +221,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     public componentWillUnmount() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener("RoomState.events", this.onRoomStateEvents);
+            MatrixClientPeg.get().removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
         VoiceRecordingStore.instance.off(UPDATE_EVENT, this.onVoiceStoreUpdate);
         dis.unregister(this.dispatcherRef);

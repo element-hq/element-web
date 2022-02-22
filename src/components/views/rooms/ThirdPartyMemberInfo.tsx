@@ -18,6 +18,7 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
@@ -71,13 +72,13 @@ export default class ThirdPartyMemberInfo extends React.Component<IProps, IState
     }
 
     componentDidMount(): void {
-        MatrixClientPeg.get().on("RoomState.events", this.onRoomStateEvents);
+        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     componentWillUnmount(): void {
         const client = MatrixClientPeg.get();
         if (client) {
-            client.removeListener("RoomState.events", this.onRoomStateEvents);
+            client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
     }
 

@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import { throttle } from 'lodash';
-import { MatrixEvent, Room, RoomState } from 'matrix-js-sdk/src';
+import { MatrixEvent, Room, RoomState, RoomStateEvent } from 'matrix-js-sdk/src';
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { _t } from '../../../languageHandler';
@@ -82,13 +82,13 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
     public componentDidMount() {
         const cli = MatrixClientPeg.get();
-        cli.on("RoomState.events", this.onRoomStateEvents);
+        cli.on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     public componentWillUnmount() {
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener("RoomState.events", this.onRoomStateEvents);
+            cli.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
         const notiStore = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         notiStore.removeListener(NotificationStateEvents.Update, this.onNotificationUpdate);

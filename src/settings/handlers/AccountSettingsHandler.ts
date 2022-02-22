@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { MatrixClientPeg } from '../../MatrixClientPeg';
@@ -46,10 +46,10 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
     public initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
         if (oldClient) {
-            oldClient.removeListener("accountData", this.onAccountData);
+            oldClient.removeListener(ClientEvent.AccountData, this.onAccountData);
         }
 
-        newClient.on("accountData", this.onAccountData);
+        newClient.on(ClientEvent.AccountData, this.onAccountData);
     }
 
     private onAccountData = (event: MatrixEvent, prevEvent: MatrixEvent) => {

@@ -28,6 +28,7 @@ import {
     Visibility,
 } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
@@ -332,13 +333,13 @@ export async function waitForMember(client: MatrixClient, roomId: string, userId
             if (member.roomId !== roomId) return;
             resolve(true);
         };
-        client.on("RoomState.newMember", handler);
+        client.on(RoomStateEvent.NewMember, handler);
 
         /* We don't want to hang if this goes wrong, so we proceed and hope the other
            user is already in the megolm session */
         setTimeout(resolve, timeout, false);
     }).finally(() => {
-        client.removeListener("RoomState.newMember", handler);
+        client.removeListener(RoomStateEvent.NewMember, handler);
     });
 }
 

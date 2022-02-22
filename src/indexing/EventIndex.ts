@@ -17,16 +17,16 @@ limitations under the License.
 import { EventEmitter } from "events";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { Direction, EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
-import { Room } from 'matrix-js-sdk/src/models/room';
+import { Room, RoomEvent } from 'matrix-js-sdk/src/models/room';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventTimelineSet, IRoomTimelineData } from 'matrix-js-sdk/src/models/event-timeline-set';
-import { RoomState } from 'matrix-js-sdk/src/models/room-state';
+import { RoomState, RoomStateEvent } from 'matrix-js-sdk/src/models/room-state';
 import { TimelineIndex, TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 import { sleep } from "matrix-js-sdk/src/utils";
 import { IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 
 import PlatformPeg from "../PlatformPeg";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -68,10 +68,10 @@ export default class EventIndex extends EventEmitter {
     public registerListeners() {
         const client = MatrixClientPeg.get();
 
-        client.on('sync', this.onSync);
-        client.on('Room.timeline', this.onRoomTimeline);
-        client.on('Room.timelineReset', this.onTimelineReset);
-        client.on('RoomState.events', this.onRoomStateEvent);
+        client.on(ClientEvent.Sync, this.onSync);
+        client.on(RoomEvent.Timeline, this.onRoomTimeline);
+        client.on(RoomEvent.TimelineReset, this.onTimelineReset);
+        client.on(RoomStateEvent.Events, this.onRoomStateEvent);
     }
 
     /**
@@ -81,10 +81,10 @@ export default class EventIndex extends EventEmitter {
         const client = MatrixClientPeg.get();
         if (client === null) return;
 
-        client.removeListener('sync', this.onSync);
-        client.removeListener('Room.timeline', this.onRoomTimeline);
-        client.removeListener('Room.timelineReset', this.onTimelineReset);
-        client.removeListener('RoomState.events', this.onRoomStateEvent);
+        client.removeListener(ClientEvent.Sync, this.onSync);
+        client.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
+        client.removeListener(RoomEvent.TimelineReset, this.onTimelineReset);
+        client.removeListener(RoomStateEvent.Events, this.onRoomStateEvent);
     }
 
     /**

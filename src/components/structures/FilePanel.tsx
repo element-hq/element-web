@@ -19,8 +19,8 @@ import React from 'react';
 import { Filter } from 'matrix-js-sdk/src/filter';
 import { EventTimelineSet, IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
 import { Direction } from "matrix-js-sdk/src/models/event-timeline";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Room } from 'matrix-js-sdk/src/models/room';
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
+import { Room, RoomEvent } from 'matrix-js-sdk/src/models/room';
 import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -121,8 +121,8 @@ class FilePanel extends React.Component<IProps, IState> {
         // this could be made more general in the future or the filter logic
         // could be fixed.
         if (EventIndexPeg.get() !== null) {
-            client.on('Room.timeline', this.onRoomTimeline);
-            client.on('Event.decrypted', this.onEventDecrypted);
+            client.on(RoomEvent.Timeline, this.onRoomTimeline);
+            client.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         }
     }
 
@@ -133,8 +133,8 @@ class FilePanel extends React.Component<IProps, IState> {
         if (!MatrixClientPeg.get().isRoomEncrypted(this.props.roomId)) return;
 
         if (EventIndexPeg.get() !== null) {
-            client.removeListener('Room.timeline', this.onRoomTimeline);
-            client.removeListener('Event.decrypted', this.onEventDecrypted);
+            client.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
+            client.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         }
     }
 

@@ -18,6 +18,7 @@ import React from 'react';
 import { lexicographicCompare } from 'matrix-js-sdk/src/utils';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { throttle } from 'lodash';
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import AppsDrawer from './AppsDrawer';
@@ -66,14 +67,14 @@ export default class AuxPanel extends React.Component<IProps, IState> {
     componentDidMount() {
         const cli = MatrixClientPeg.get();
         if (SettingsStore.getValue("feature_state_counters")) {
-            cli.on("RoomState.events", this.rateLimitedUpdate);
+            cli.on(RoomStateEvent.Events, this.rateLimitedUpdate);
         }
     }
 
     componentWillUnmount() {
         const cli = MatrixClientPeg.get();
         if (cli && SettingsStore.getValue("feature_state_counters")) {
-            cli.removeListener("RoomState.events", this.rateLimitedUpdate);
+            cli.removeListener(RoomStateEvent.Events, this.rateLimitedUpdate);
         }
     }
 

@@ -22,6 +22,7 @@ import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
 import { CrossSigningKeys } from "matrix-js-sdk/src";
 import { IRecoveryKey } from "matrix-js-sdk/src/crypto/api";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import { MatrixClientPeg } from '../../../../MatrixClientPeg';
 import { _t, _td } from '../../../../languageHandler';
@@ -145,13 +146,13 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
             accountPassword,
         };
 
-        MatrixClientPeg.get().on('crypto.keyBackupStatus', this.onKeyBackupStatusChange);
+        MatrixClientPeg.get().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
 
         this.getInitialPhase();
     }
 
     public componentWillUnmount(): void {
-        MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this.onKeyBackupStatusChange);
+        MatrixClientPeg.get().removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatusChange);
     }
 
     private getInitialPhase(): void {

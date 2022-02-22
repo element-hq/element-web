@@ -16,8 +16,8 @@ limitations under the License.
 
 import url from 'url';
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient, ClientEvent } from "matrix-js-sdk/src/client";
 
-import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import SdkConfig from '../SdkConfig';
@@ -59,15 +59,15 @@ export class IntegrationManagers {
     startWatching(): void {
         this.stopWatching();
         this.client = MatrixClientPeg.get();
-        this.client.on("accountData", this.onAccountData);
-        this.client.on("WellKnown.client", this.setupHomeserverManagers);
+        this.client.on(ClientEvent.AccountData, this.onAccountData);
+        this.client.on(ClientEvent.ClientWellKnown, this.setupHomeserverManagers);
         this.compileManagers();
     }
 
     stopWatching(): void {
         if (!this.client) return;
-        this.client.removeListener("accountData", this.onAccountData);
-        this.client.removeListener("WellKnown.client", this.setupHomeserverManagers);
+        this.client.removeListener(ClientEvent.AccountData, this.onAccountData);
+        this.client.removeListener(ClientEvent.ClientWellKnown, this.setupHomeserverManagers);
     }
 
     private compileManagers() {

@@ -16,6 +16,8 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { ClientEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
@@ -32,7 +34,7 @@ import {
     hideToast as hideUnverifiedSessionsToast,
     showToast as showUnverifiedSessionsToast,
 } from "./toasts/UnverifiedSessionToast";
-import { isSecretStorageBeingAccessed, accessSecretStorage } from "./SecurityManager";
+import { accessSecretStorage, isSecretStorageBeingAccessed } from "./SecurityManager";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import { isLoggedIn } from './components/structures/MatrixChat';
 import { ActionPayload } from "./dispatcher/payloads";
@@ -63,28 +65,31 @@ export default class DeviceListener {
     }
 
     start() {
-        MatrixClientPeg.get().on('crypto.willUpdateDevices', this.onWillUpdateDevices);
-        MatrixClientPeg.get().on('crypto.devicesUpdated', this.onDevicesUpdated);
-        MatrixClientPeg.get().on('deviceVerificationChanged', this.onDeviceVerificationChanged);
-        MatrixClientPeg.get().on('userTrustStatusChanged', this.onUserTrustStatusChanged);
-        MatrixClientPeg.get().on('crossSigning.keysChanged', this.onCrossSingingKeysChanged);
-        MatrixClientPeg.get().on('accountData', this.onAccountData);
-        MatrixClientPeg.get().on('sync', this.onSync);
-        MatrixClientPeg.get().on('RoomState.events', this.onRoomStateEvents);
+        MatrixClientPeg.get().on(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
+        MatrixClientPeg.get().on(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
+        MatrixClientPeg.get().on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
+        MatrixClientPeg.get().on(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
+        MatrixClientPeg.get().on(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
+        MatrixClientPeg.get().on(ClientEvent.AccountData, this.onAccountData);
+        MatrixClientPeg.get().on(ClientEvent.Sync, this.onSync);
+        MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
         this.dispatcherRef = dis.register(this.onAction);
         this.recheck();
     }
 
     stop() {
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener('crypto.willUpdateDevices', this.onWillUpdateDevices);
-            MatrixClientPeg.get().removeListener('crypto.devicesUpdated', this.onDevicesUpdated);
-            MatrixClientPeg.get().removeListener('deviceVerificationChanged', this.onDeviceVerificationChanged);
-            MatrixClientPeg.get().removeListener('userTrustStatusChanged', this.onUserTrustStatusChanged);
-            MatrixClientPeg.get().removeListener('crossSigning.keysChanged', this.onCrossSingingKeysChanged);
-            MatrixClientPeg.get().removeListener('accountData', this.onAccountData);
-            MatrixClientPeg.get().removeListener('sync', this.onSync);
-            MatrixClientPeg.get().removeListener('RoomState.events', this.onRoomStateEvents);
+            MatrixClientPeg.get().removeListener(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
+            MatrixClientPeg.get().removeListener(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
+            MatrixClientPeg.get().removeListener(
+                CryptoEvent.DeviceVerificationChanged,
+                this.onDeviceVerificationChanged,
+            );
+            MatrixClientPeg.get().removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserTrustStatusChanged);
+            MatrixClientPeg.get().removeListener(CryptoEvent.KeysChanged, this.onCrossSingingKeysChanged);
+            MatrixClientPeg.get().removeListener(ClientEvent.AccountData, this.onAccountData);
+            MatrixClientPeg.get().removeListener(ClientEvent.Sync, this.onSync);
+            MatrixClientPeg.get().removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         }
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);

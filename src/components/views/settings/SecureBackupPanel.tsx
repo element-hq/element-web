@@ -18,6 +18,7 @@ limitations under the License.
 import React, { ComponentType } from 'react';
 import { IKeyBackupInfo } from "matrix-js-sdk/src/crypto/keybackup";
 import { TrustInfo } from "matrix-js-sdk/src/crypto/backup";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -68,9 +69,9 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     public componentDidMount(): void {
         this.checkKeyBackupStatus();
 
-        MatrixClientPeg.get().on('crypto.keyBackupStatus', this.onKeyBackupStatus);
+        MatrixClientPeg.get().on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
         MatrixClientPeg.get().on(
-            'crypto.keyBackupSessionsRemaining',
+            CryptoEvent.KeyBackupSessionsRemaining,
             this.onKeyBackupSessionsRemaining,
         );
     }
@@ -79,9 +80,9 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
         this.unmounted = true;
 
         if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener('crypto.keyBackupStatus', this.onKeyBackupStatus);
+            MatrixClientPeg.get().removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
             MatrixClientPeg.get().removeListener(
-                'crypto.keyBackupSessionsRemaining',
+                CryptoEvent.KeyBackupSessionsRemaining,
                 this.onKeyBackupSessionsRemaining,
             );
         }

@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from 'react';
+import { RoomEvent } from "matrix-js-sdk/src/models/room";
 
 import TabbedView, { Tab } from "../../structures/TabbedView";
 import { _t, _td } from "../../../languageHandler";
@@ -61,7 +62,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
 
     public componentDidMount() {
         this.dispatcherRef = dis.register(this.onAction);
-        MatrixClientPeg.get().on("Room.name", this.onRoomName);
+        MatrixClientPeg.get().on(RoomEvent.Name, this.onRoomName);
         this.onRoomName();
     }
 
@@ -70,7 +71,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
             dis.unregister(this.dispatcherRef);
         }
 
-        MatrixClientPeg.get().removeListener("Room.name", this.onRoomName);
+        MatrixClientPeg.get().removeListener(RoomEvent.Name, this.onRoomName);
     }
 
     private onAction = (payload): void => {

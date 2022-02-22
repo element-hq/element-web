@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import SettingsStore from "../settings/SettingsStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -92,13 +93,13 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         await this.updateRooms();
         await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
 
-        this.matrixClient.on("Room.myMembership", this.onMyMembership);
-        this.matrixClient.on("Room", this.onRoom);
+        this.matrixClient.on(RoomEvent.MyMembership, this.onMyMembership);
+        this.matrixClient.on(ClientEvent.Room, this.onRoom);
     }
 
     protected async onNotReady() {
-        this.matrixClient.removeListener("Room.myMembership", this.onMyMembership);
-        this.matrixClient.removeListener("Room", this.onRoom);
+        this.matrixClient.removeListener(RoomEvent.MyMembership, this.onMyMembership);
+        this.matrixClient.removeListener(ClientEvent.Room, this.onRoom);
     }
 
     private onMyMembership = async (room: Room) => {

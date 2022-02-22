@@ -29,8 +29,14 @@ export enum NotificationStateEvents {
     Update = "update",
 }
 
-export abstract class NotificationState extends TypedEventEmitter<NotificationStateEvents>
+type EventHandlerMap = {
+    [NotificationStateEvents.Update]: () => void;
+};
+
+export abstract class NotificationState
+    extends TypedEventEmitter<NotificationStateEvents, EventHandlerMap>
     implements INotificationStateSnapshotParams, IDestroyable {
+    //
     protected _symbol: string | null;
     protected _count: number;
     protected _color: NotificationColor;

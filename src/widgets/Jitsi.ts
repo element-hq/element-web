@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { IClientWellKnown } from "matrix-js-sdk/src/client";
+import { ClientEvent, IClientWellKnown } from "matrix-js-sdk/src/client";
 
 import SdkConfig from "../SdkConfig";
 import { MatrixClientPeg } from "../MatrixClientPeg";
@@ -63,7 +63,7 @@ export class Jitsi {
 
     public start() {
         const cli = MatrixClientPeg.get();
-        cli.on("WellKnown.client", this.update);
+        cli.on(ClientEvent.ClientWellKnown, this.update);
         // call update initially in case we missed the first WellKnown.client event and for if no well-known present
         this.update(cli.getClientWellKnown());
     }
