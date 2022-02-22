@@ -248,9 +248,9 @@
     "e.g. <CurrentPageURL>": "برای مثال <CurrentPageURL>",
     "Every page you use in the app": "هر صفحه‌ی برنامه از که آن استفاده می‌کنید",
     "e.g. %(exampleValue)s": "برای مثال %(exampleValue)s",
-    "Explore rooms": "کاوش اتاق",
+    "Explore rooms": "جستجو در اتاق ها",
     "Sign In": "ورود",
-    "Create Account": "ایجاد اکانت",
+    "Create Account": "ایجاد حساب کاربری",
     "Use an identity server": "از سرور هویت‌سنجی استفاده کنید",
     "Invites user with given id to current room": "کاربر با شناسه داده شده را به اتاق فعلی دعوت کن",
     "Sets the room name": "نام اتاق را تنظیم می کند",
@@ -2880,5 +2880,6 @@
     "Toggle hidden event visibility": "حالت نمایش رخدادهای پنهان را تغییر دهید",
     "Toggle space panel": "پنل فاصله را تغییر حالت دهید",
     "Previous autocomplete suggestion": "پیشنهاد تکمیل-خودکار قبلی",
-    "Next autocomplete suggestion": "پیشنهاد تکمیل-خودکار بعدی"
+    "Next autocomplete suggestion": "پیشنهاد تکمیل-خودکار بعدی",
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "دوتایی (کاربر و نشست) ناشناخته : ( %(userId)sو%(deviceId)s )"
 }
