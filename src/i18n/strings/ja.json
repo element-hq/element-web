@@ -554,7 +554,7 @@
     "Invalid Email Address": "無効なメールアドレス",
     "This doesn't appear to be a valid email address": "メールアドレスの形式が正しくありません",
     "Verification Pending": "認証の保留中",
-    "Please check your email and click on the link it contains. Once this is done, click continue.": "メールをチェックし、それに含まれているリンクをクリックしてください。 これが完了したら、[続行]をクリックします。",
+    "Please check your email and click on the link it contains. Once this is done, click continue.": "電子メールを確認して、本文中のURLをクリックしてください。 完了したら「続行する」をクリックしてください。",
     "Unable to add email address": "メールアドレスを追加できません",
     "Unable to verify email address.": "メールアドレスを確認できません。",
     "This will allow you to reset your password and receive notifications.": "これにより、パスワードをリセットして通知を受け取ることができます。",
