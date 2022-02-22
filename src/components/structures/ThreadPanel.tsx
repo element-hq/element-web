@@ -37,7 +37,6 @@ import RoomContext, { TimelineRenderingType } from '../../contexts/RoomContext';
 import TimelinePanel from './TimelinePanel';
 import { Layout } from '../../settings/enums/Layout';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
-import { useEventEmitter } from '../../hooks/useEventEmitter';
 
 async function getThreadTimelineSet(
     client: MatrixClient,
@@ -214,13 +213,64 @@ const EmptyThread: React.FC<EmptyThreadIProps> = ({ filterOption, showAllThreads
 const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) => {
     const mxClient = useContext(MatrixClientContext);
     const roomContext = useContext(RoomContext);
-    const room = mxClient.getRoom(roomId);
     const [filterOption, setFilterOption] = useState<ThreadFilterType>(ThreadFilterType.All);
     const ref = useRef<TimelinePanel>();
 
-    const [threadCount, setThreadCount] = useState(room.threads.size);
-
+    const [room, setRoom] = useState(mxClient.getRoom(roomId));
+    const [threadCount, setThreadCount] = useState<number>(0);
     const [timelineSet, setTimelineSet] = useState<EventTimelineSet | null>(null);
+
+    useEffect(() => {
+        setRoom(mxClient.getRoom(roomId));
+    }, [mxClient, roomId]);
+
+    useEffect(() => {
+        async function onNewThread(thread: Thread): Promise<void> {
+            setThreadCount(room.threads.size);
+            if (timelineSet) {
+                const capabilities = await mxClient.getCapabilities();
+                const serverSupportsThreads = capabilities['io.element.thread']?.enabled;
+
+                const discoveredScrollingBack =
+                    room.lastThread.rootEvent.localTimestamp < thread.rootEvent.localTimestamp;
+
+                // When the server support threads we're only interested in adding
+                // the newly created threads to the list.
+                // The ones discovered when scrolling back should be discarded as
+                // they will be discovered by the `/messages` filter
+                if (serverSupportsThreads) {
+                    if (!discoveredScrollingBack) {
+                        timelineSet.addEventToTimeline(
+                            thread.rootEvent,
+                            timelineSet.getLiveTimeline(),
+                            false,
+                        );
+                    }
+                } else {
+                    timelineSet.addEventToTimeline(
+                        thread.rootEvent,
+                        timelineSet.getLiveTimeline(),
+                        !discoveredScrollingBack,
+                    );
+                }
+            }
+        }
+
+        function refreshTimeline() {
+            if (timelineSet) ref.current.refreshTimeline();
+        }
+
+        setThreadCount(room.threads.size);
+
+        room.on(ThreadEvent.New, onNewThread);
+        room.on(ThreadEvent.Update, refreshTimeline);
+
+        return () => {
+            room.removeListener(ThreadEvent.New, onNewThread);
+            room.removeListener(ThreadEvent.Update, refreshTimeline);
+        };
+    }, [room, mxClient, timelineSet]);
+
     useEffect(() => {
         getThreadTimelineSet(mxClient, room, filterOption)
             .then(timelineSet => { setTimelineSet(timelineSet); })
@@ -230,39 +280,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
     useEffect(() => {
         if (timelineSet) ref.current.refreshTimeline();
     }, [timelineSet, ref]);
-    useEventEmitter(room, ThreadEvent.Update, () => {
-        if (timelineSet) ref.current.refreshTimeline();
-    });
-
-    useEventEmitter(room, ThreadEvent.New, async (thread: Thread) => {
-        setThreadCount(room.threads.size);
-        if (timelineSet) {
-            const capabilities = await mxClient.getCapabilities();
-            const serverSupportsThreads = capabilities['io.element.thread']?.enabled;
-
-            const discoveredScrollingBack = room.lastThread.rootEvent.localTimestamp < thread.rootEvent.localTimestamp;
-
-            // When the server support threads we're only interested in adding
-            // the newly created threads to the list.
-            // The ones discovered when scrolling back should be discarded as
-            // they will be discovered by the `/messages` filter
-            if (serverSupportsThreads) {
-                if (!discoveredScrollingBack) {
-                    timelineSet.addEventToTimeline(
-                        thread.rootEvent,
-                        timelineSet.getLiveTimeline(),
-                        false,
-                    );
-                }
-            } else {
-                timelineSet.addEventToTimeline(
-                    thread.rootEvent,
-                    timelineSet.getLiveTimeline(),
-                    !discoveredScrollingBack,
-                );
-            }
-        }
-    });
 
     return (
         <RoomContext.Provider value={{
