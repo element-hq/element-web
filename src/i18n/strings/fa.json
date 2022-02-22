@@ -2859,7 +2859,10 @@
     "No active call in this room": "تماس فعالی در این اتفاق وجود ندارد",
     "Unable to find Matrix ID for phone number": "ناتوانی در ییافتن شناسه ماتریکس برای شماره تلفن",
     "Removes user with given id from this room": "کاربر دارای شناسه ارائه شده از این اتاق حذف می‌شود",
-    "Unrecognised room address: %(roomAlias)s": "نشانی اتاق غیرقابل شناسایی:",
+    "Unrecognised room address: %(roomAlias)s": "نشانی اتاق %(roomAlias)s شناسایی نشد",
     "Command error: Unable to handle slash command.": "خطای دستور: ناتوانی در اجرای دستور اسلش.",
-    "%(space1Name)s and %(space2Name)s": "%(space1Name)s و %(space2Name)s"
+    "%(space1Name)s and %(space2Name)s": "%(space1Name)s و %(space2Name)s",
+    "Command failed: Unable to find room (%(roomId)s": "دستور با خطا روبرو شد: اتاق %(roomId)s پیدا نشد",
+    "Failed to get room topic: Unable to find room (%(roomId)s": "خطا در دریافت عنوان اتاق: اتاق %(roomId)s یافت نشد",
+    "Command error: Unable to find rendering type (%(renderingType)s)": "خطای دستوری: نوع نمایش (%(renderingType)s ) یافت نشد"
 }
