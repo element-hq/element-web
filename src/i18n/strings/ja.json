@@ -2684,5 +2684,8 @@
     "was removed %(count)s times|other": "が%(count)s回追放されました",
     "were removed %(count)s times|one": "が追放されました",
     "were removed %(count)s times|other": "が%(count)s回追放されました",
-    "Original event source": "元のイベントのソースコード"
+    "Original event source": "元のイベントのソースコード",
+    "Invite by email": "電子メールで招待",
+    "Start a conversation with someone using their name or username (like <userId/>).": "名前かユーザー名（<userId/>の形式）で検索して、チャットを開始しましょう。",
+    "Start a conversation with someone using their name, email address or username (like <userId/>).": "名前、メールアドレス、ユーザー名（<userId/>の形式）で検索して、チャットを開始しましょう。"
 }
