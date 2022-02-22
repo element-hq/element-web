@@ -247,7 +247,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                 SpaceStore.instance.setActiveSpace(spaceKey);
             },
         })),
-        ...cli.getVisibleRooms().map(room => {
+        ...cli.getVisibleRooms().filter(room => {
+            // TODO we may want to put invites in their own list
+            return room.getMyMembership() === "join" || room.getMyMembership() == "invite";
+        }).map(room => {
             let section: Section;
             let query: string[];
 
