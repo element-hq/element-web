@@ -2028,7 +2028,7 @@
     "Waiting for answer": "応答を待っています",
     "%(senderName)s started a call": "%(senderName)sが通話を開始しました",
     "You started a call": "あなたは通話を開始しました",
-    "Call ended": "通話が終了しました",
+    "Call ended": "通話終了",
     "%(senderName)s ended the call": "%(senderName)sが通話を終了しました",
     "You ended the call": "通話を終了しました",
     "Call in progress": "通話中",
