@@ -853,7 +853,7 @@ describe("SpaceStore", () => {
             await run();
 
             dispatcherRef = defaultDispatcher.register(payload => {
-                if (payload.action === Action.ViewRoom || payload.action === "view_home_page") {
+                if (payload.action === Action.ViewRoom || payload.action === Action.ViewHomePage) {
                     currentRoom = payload.room_id || null;
                 }
             });

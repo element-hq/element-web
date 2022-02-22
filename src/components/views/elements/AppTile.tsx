@@ -49,6 +49,7 @@ import RoomViewStore from '../../../stores/RoomViewStore';
 import WidgetUtils from '../../../utils/WidgetUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ActionPayload } from "../../../dispatcher/payloads";
+import { Action } from '../../../dispatcher/actions';
 
 interface IProps {
     app: IApp;
@@ -447,7 +448,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 }
                 break;
 
-            case "after_leave_room":
+            case Action.AfterLeaveRoom:
                 if (payload.room_id === this.props.room?.roomId) {
                     // call this before we get it echoed down /sync, so it doesn't hang around as long and look jarring
                     this.onUserLeftRoom();

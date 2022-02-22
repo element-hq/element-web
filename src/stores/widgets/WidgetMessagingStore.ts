@@ -40,7 +40,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
         return WidgetMessagingStore.internalInstance;
     }
 
-    protected async onAction(payload: ActionPayload): Promise<any> {
+    protected async onAction(payload: ActionPayload): Promise<void> {
         // nothing to do
     }
 

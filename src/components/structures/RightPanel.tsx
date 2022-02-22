@@ -47,6 +47,7 @@ import { E2EStatus } from '../../utils/ShieldUtils';
 import TimelineCard from '../views/right_panel/TimelineCard';
 import { UPDATE_EVENT } from '../../stores/AsyncStore';
 import { IRightPanelCard, IRightPanelCardState } from '../../stores/right-panel/RightPanelStoreIPanelState';
+import { Action } from '../../dispatcher/actions';
 
 interface IProps {
     room?: Room; // if showing panels for a given room, this is set
@@ -134,7 +135,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
             // to the home page which is not obviously the correct thing to do, but I'm not sure
             // anything else is - we could hide the close button altogether?)
             dis.dispatch({
-                action: "view_home_page",
+                action: Action.ViewHomePage,
             });
         } else if (
             this.state.phase === RightPanelPhases.EncryptionPanel &&

@@ -25,6 +25,8 @@ import { _t } from "../languageHandler";
 import dis from "../dispatcher/dispatcher";
 import { SettingLevel } from "../settings/SettingLevel";
 import { ActionPayload } from "../dispatcher/payloads";
+import { DoAfterSyncPreparedPayload } from "../dispatcher/payloads/DoAfterSyncPreparedPayload";
+import { Action } from "../dispatcher/actions";
 
 // TODO: Move this and related files to the js-sdk or something once finalized.
 
@@ -48,8 +50,8 @@ export class Mjolnir {
         this.mjolnirWatchRef = SettingsStore.watchSetting("mjolnirRooms", null, this.onListsChanged.bind(this));
 
         this.dispatcherRef = dis.register(this.onAction);
-        dis.dispatch({
-            action: 'do_after_sync_prepared',
+        dis.dispatch<DoAfterSyncPreparedPayload<ActionPayload>>({
+            action: Action.DoAfterSyncPrepared,
             deferred_action: { action: 'setup_mjolnir' },
         });
     }

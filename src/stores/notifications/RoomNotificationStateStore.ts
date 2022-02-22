@@ -140,7 +140,6 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
     }
 
     // We don't need this, but our contract says we do.
-    protected async onAction(payload: ActionPayload) {
-        return Promise.resolve();
+    protected async onAction(payload: ActionPayload): Promise<void> {
     }
 }

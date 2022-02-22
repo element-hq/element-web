@@ -24,7 +24,6 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import { AsyncStoreWithClient } from "../AsyncStoreWithClient";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import { ActionPayload } from "../../dispatcher/payloads";
 import RoomListStore from "../room-list/RoomListStore";
 import SettingsStore from "../../settings/SettingsStore";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -61,6 +60,9 @@ import {
 } from "./flattenSpaceHierarchy";
 import { PosthogAnalytics } from "../../PosthogAnalytics";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload";
+import { AfterLeaveRoomPayload } from "../../dispatcher/payloads/AfterLeaveRoomPayload";
 
 interface IState { }
 
@@ -92,13 +94,20 @@ const validOrder = (order: string): string | undefined => {
 };
 
 // For sorting space children using a validated `order`, `origin_server_ts`, `room_id`
-export const getChildOrder = (order: string, ts: number, roomId: string): Array<Many<ListIteratee<any>>> => {
+export const getChildOrder = (order: string, ts: number, roomId: string): Array<Many<ListIteratee<unknown>>> => {
     return [validOrder(order) ?? NaN, ts, roomId]; // NaN has lodash sort it at the end in asc
 };
 
 const getRoomFn: FetchRoomFn = (room: Room) => {
     return RoomNotificationStateStore.instance.getRoomState(room);
 };
+
+type SpaceStoreActions =
+    | SettingUpdatedPayload
+    | ViewRoomPayload
+    | ViewHomePagePayload
+    | SwitchSpacePayload
+    | AfterLeaveRoomPayload;
 
 export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     // The spaces representing the roots of the various tree-like hierarchies
@@ -254,8 +263,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     metricsTrigger: "WebSpaceContextSwitch",
                 });
             } else {
-                defaultDispatcher.dispatch({
-                    action: "view_home_page",
+                defaultDispatcher.dispatch<ViewHomePagePayload>({
+                    action: Action.ViewHomePage,
                     context_switch: true,
                 });
             }
@@ -1097,7 +1106,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.setActiveSpace(this.enabledMetaSpaces[0] ?? this.spacePanelSpaces[0]?.roomId, contextSwitch);
     }
 
-    protected async onAction(payload: ActionPayload) {
+    protected async onAction(payload: SpaceStoreActions) {
         if (!spacesEnabled || !this.matrixClient) return;
 
         switch (payload.action) {
@@ -1129,14 +1138,14 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 break;
             }
 
-            case "view_home_page":
+            case Action.ViewHomePage:
                 if (!payload.context_switch && this.enabledMetaSpaces.includes(MetaSpace.Home)) {
                     this.setActiveSpace(MetaSpace.Home, false);
                     window.localStorage.setItem(getSpaceContextKey(this.activeSpace), "");
                 }
                 break;
 
-            case "after_leave_room":
+            case Action.AfterLeaveRoom:
                 if (!isMetaSpace(this._activeSpace) && payload.room_id === this._activeSpace) {
                     // User has left the current space, go to first space
                     this.goToFirstSpace(true);

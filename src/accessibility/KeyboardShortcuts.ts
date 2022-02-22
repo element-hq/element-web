@@ -17,7 +17,7 @@ limitations under the License.
 
 import { _td } from "../languageHandler";
 import { isMac, Key } from "../Keyboard";
-import { ISetting } from "../settings/Settings";
+import { IBaseSetting } from "../settings/Settings";
 import SettingsStore from "../settings/SettingsStore";
 import IncompatibleController from "../settings/controllers/IncompatibleController";
 
@@ -119,9 +119,20 @@ export enum KeyBindingAction {
     ToggleHiddenEventVisibility = 'KeyBinding.toggleHiddenEventVisibility',
 }
 
+export type KeyBindingConfig = {
+    key: string;
+    ctrlOrCmdKey?: boolean;
+    ctrlKey?: boolean;
+    altKey?: boolean;
+    shiftKey?: boolean;
+    metaKey?: boolean;
+};
+
+type KeyboardShortcutSetting = IBaseSetting<KeyBindingConfig>;
+
 type IKeyboardShortcuts = {
     // TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
-    [k in (KeyBindingAction | string)]: ISetting;
+    [k in (KeyBindingAction | string)]: KeyboardShortcutSetting;
 };
 
 export interface ICategory {
@@ -614,7 +625,11 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
     }, {});
 };
 
-export const registerShortcut = (shortcutName: string, categoryName: CategoryName, shortcut: ISetting): void => {
+export const registerShortcut = (
+    shortcutName: string,
+    categoryName: CategoryName,
+    shortcut: KeyboardShortcutSetting,
+): void => {
     KEYBOARD_SHORTCUTS[shortcutName] = shortcut;
     CATEGORIES[categoryName].settingNames.push(shortcutName);
 };

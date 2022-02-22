@@ -342,7 +342,7 @@ class FeaturedUser extends React.Component {
         e.stopPropagation();
 
         dis.dispatch({
-            action: 'view_start_chat_or_reuse',
+            action: Action.ViewStartChatOrReuse,
             user_id: this.props.summaryInfo.user_id,
         });
     };
@@ -491,7 +491,7 @@ export default class GroupView extends React.Component {
             if (this._unmounted || groupId !== errorGroupId) return;
             if (err.errcode === 'M_GUEST_ACCESS_FORBIDDEN' && !willDoOnboarding) {
                 dis.dispatch({
-                    action: 'do_after_sync_prepared',
+                    action: Action.DoAfterSyncPrepared,
                     deferred_action: {
                         action: 'view_group',
                         group_id: groupId,

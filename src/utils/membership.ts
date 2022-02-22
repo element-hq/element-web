@@ -30,6 +30,7 @@ import { isMetaSpace } from "../stores/spaces";
 import SpaceStore from "../stores/spaces/SpaceStore";
 import { Action } from "../dispatcher/actions";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
+import { ViewHomePagePayload } from "../dispatcher/payloads/ViewHomePagePayload";
 
 /**
  * Approximation of a membership status for a given room.
@@ -194,6 +195,6 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
             metricsTrigger: undefined, // other
         });
     } else {
-        dis.dispatch({ action: 'view_home_page' });
+        dis.dispatch<ViewHomePagePayload>({ action: Action.ViewHomePage });
     }
 }

@@ -98,8 +98,6 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
         }
     }
 
-    protected async onAction(payload: ActionPayload): Promise<any> {
-        // We have nothing to actually listen for
-        return Promise.resolve();
+    protected async onAction(payload: ActionPayload): Promise<void> {
     }
 }

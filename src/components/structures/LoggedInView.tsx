@@ -490,7 +490,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
             case KeyBindingAction.GoToHome:
                 dis.dispatch({
-                    action: 'view_home_page',
+                    action: Action.ViewHomePage,
                 });
                 Modal.closeCurrentModal("homeKeyboardShortcut");
                 handled = true;

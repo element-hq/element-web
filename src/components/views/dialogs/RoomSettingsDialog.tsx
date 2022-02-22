@@ -31,6 +31,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
+import { Action } from '../../../dispatcher/actions';
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
@@ -75,7 +76,7 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
     private onAction = (payload): void => {
         // When view changes below us, close the room settings
         // whilst the modal is open this can only be triggered when someone hits Leave Room
-        if (payload.action === 'view_home_page') {
+        if (payload.action === Action.ViewHomePage) {
             this.props.onFinished(true);
         }
     };

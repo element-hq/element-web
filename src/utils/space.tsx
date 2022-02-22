@@ -43,6 +43,7 @@ import CreateSpaceFromCommunityDialog from "../components/views/dialogs/CreateSp
 import SpacePreferencesDialog, { SpacePreferenceTab } from "../components/views/dialogs/SpacePreferencesDialog";
 import PosthogTrackers from "../PosthogTrackers";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import { AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
@@ -189,8 +190,8 @@ export const leaveSpace = (space: Room) => {
             if (!leave) return;
             await bulkSpaceBehaviour(space, rooms, room => leaveRoomBehaviour(room.roomId));
 
-            dis.dispatch({
-                action: "after_leave_room",
+            dis.dispatch<AfterLeaveRoomPayload>({
+                action: Action.AfterLeaveRoom,
                 room_id: space.roomId,
             });
         },

@@ -24,13 +24,14 @@ import {
     ICategory,
     CATEGORIES,
     CategoryName,
+    KeyBindingConfig,
 } from "../../../../../accessibility/KeyboardShortcuts";
 import SdkConfig from "../../../../../SdkConfig";
 import { isMac, Key } from "../../../../../Keyboard";
 import { _t } from "../../../../../languageHandler";
 
 // TODO: This should return KeyCombo but it has ctrlOrCmd instead of ctrlOrCmdKey
-const getKeyboardShortcutValue = (name: string) => {
+const getKeyboardShortcutValue = (name: string): KeyBindingConfig => {
     return getKeyboardShortcuts()[name]?.default;
 };
 

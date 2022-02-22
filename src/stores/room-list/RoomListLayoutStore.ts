@@ -67,8 +67,7 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
     }
 
     // We don't need this function, but our contract says we do
-    protected async onAction(payload: ActionPayload): Promise<any> {
-        return Promise.resolve();
+    protected async onAction(payload: ActionPayload): Promise<void> {
     }
 }
 

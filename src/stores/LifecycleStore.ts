@@ -16,8 +16,10 @@ limitations under the License.
 
 import { Store } from 'flux/utils';
 
+import { Action } from '../dispatcher/actions';
 import dis from '../dispatcher/dispatcher';
 import { ActionPayload } from "../dispatcher/payloads";
+import { DoAfterSyncPreparedPayload } from '../dispatcher/payloads/DoAfterSyncPreparedPayload';
 
 interface IState {
     deferredAction: any;
@@ -44,9 +46,9 @@ class LifecycleStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    protected __onDispatch(payload: ActionPayload) { // eslint-disable-line @typescript-eslint/naming-convention
+    protected __onDispatch(payload: ActionPayload | DoAfterSyncPreparedPayload<ActionPayload>) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
-            case 'do_after_sync_prepared':
+            case Action.DoAfterSyncPrepared:
                 this.setState({
                     deferredAction: payload.deferred_action,
                 });

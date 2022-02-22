@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
-import { SettingLevel } from "../../settings/SettingLevel";
-import { SettingValueType } from "../../settings/Settings";
+import { ActionPayload } from "../payloads";
 
-export interface SettingUpdatedPayload extends ActionPayload {
-    action: Action.SettingUpdated;
-
-    settingName: string;
-    roomId: string;
-    level: SettingLevel;
-    newValueAtLevel: SettingLevel;
-    newValue: SettingValueType;
+export interface ViewHomePagePayload extends ActionPayload {
+    action: Action.ViewHomePage;
+    // eslint-disable-next-line camelcase
+    context_switch?: boolean;
+    justRegistered?: boolean;
 }

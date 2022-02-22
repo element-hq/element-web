@@ -18,13 +18,13 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 import SettingsStore from "../settings/SettingsStore";
-import { ActionPayload } from "../dispatcher/payloads";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { arrayHasDiff } from "../utils/arrays";
 import { SettingLevel } from "../settings/SettingLevel";
 import { Action } from "../dispatcher/actions";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
+import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 
 const MAX_ROOMS = 20; // arbitrary
 const AUTOJOIN_WAIT_THRESHOLD_MS = 90000; // 90s, the time we wait for an autojoined room to show up
@@ -64,15 +64,14 @@ export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
         return this.matrixClient?.getVisibleRooms().length >= 20;
     }
 
-    protected async onAction(payload: ActionPayload) {
+    protected async onAction(payload: SettingUpdatedPayload | ViewRoomPayload) {
         if (!this.matrixClient) return;
 
         if (payload.action === Action.SettingUpdated) {
-            const settingUpdatedPayload = payload as SettingUpdatedPayload;
-            if (settingUpdatedPayload.settingName === 'breadcrumb_rooms') {
+            if (payload.settingName === 'breadcrumb_rooms') {
                 await this.updateRooms();
-            } else if (settingUpdatedPayload.settingName === 'breadcrumbs' ||
-                settingUpdatedPayload.settingName === 'feature_breadcrumbs_v2'
+            } else if (payload.settingName === 'breadcrumbs' ||
+                payload.settingName === 'feature_breadcrumbs_v2'
             ) {
                 await this.updateState({ enabled: SettingsStore.getValue("breadcrumbs", null) });
             }

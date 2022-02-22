@@ -42,6 +42,8 @@ import SpaceStore from "./spaces/SpaceStore";
 import { isMetaSpace, MetaSpace } from "./spaces";
 import { JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
 import { JoinRoomReadyPayload } from "../dispatcher/payloads/JoinRoomReadyPayload";
+import { JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayload";
+import { ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -122,7 +124,7 @@ class RoomViewStore extends Store<ActionPayload> {
             // for these events blank out the roomId as we are no longer in the RoomView
             case 'view_create_group':
             case 'view_welcome_page':
-            case 'view_home_page':
+            case Action.ViewHomePage:
             case 'view_my_groups':
             case 'view_group':
                 this.setState({
@@ -132,7 +134,7 @@ class RoomViewStore extends Store<ActionPayload> {
                     wasContextSwitch: false,
                 });
                 break;
-            case 'view_room_error':
+            case Action.ViewRoomError:
                 this.viewRoomError(payload);
                 break;
             case 'will_join':
@@ -306,8 +308,8 @@ class RoomViewStore extends Store<ActionPayload> {
                     roomId = result.room_id;
                 } catch (err) {
                     logger.error("RVS failed to get room id for alias: ", err);
-                    dis.dispatch({
-                        action: 'view_room_error',
+                    dis.dispatch<ViewRoomErrorPayload>({
+                        action: Action.ViewRoomError,
                         room_id: null,
                         room_alias: payload.room_alias,
                         err,
@@ -324,7 +326,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private viewRoomError(payload: ActionPayload) {
+    private viewRoomError(payload: ViewRoomErrorPayload) {
         this.setState({
             roomId: payload.room_id,
             roomAlias: payload.room_alias,
@@ -411,7 +413,7 @@ class RoomViewStore extends Store<ActionPayload> {
         });
     }
 
-    private joinRoomError(payload: ActionPayload) {
+    private joinRoomError(payload: JoinRoomErrorPayload) {
         this.setState({
             joining: false,
             joinError: payload.err,
