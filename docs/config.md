@@ -182,6 +182,9 @@ For a good example, see https://develop.element.io/config.json.
    when explaining to the user where data is being sent. If not set, defaults to `brand`.
 1. `defaultDeviceDisplayName`: The default device display name to use for new logins
    and registrations. If not set then a calculated version will be used.
+1. `custom_translations_url`: An optional URL to allow overriding of translatable strings.
+   The JSON file must be in a format of `{"affected string": {"languageCode": "new string"}}`.
+   See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
 hosted on riot.im. This is the image used if links to your copy of Element
