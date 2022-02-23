@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import isIp from "is-ip";
+import { throttle } from "lodash";
 import * as utils from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
@@ -91,7 +92,10 @@ export class RoomPermalinkCreator {
     // We support being given a roomId as a fallback in the event the `room` object
     // doesn't exist or is not healthy for us to rely on. For example, loading a
     // permalink to a room which the MatrixClient doesn't know about.
-    constructor(room: Room, roomId: string = null) {
+    // Some of the tests done by this class are relatively expensive, so normally
+    // throttled to not happen on every update. Pass false as the shouldThrottle
+    // param to disable this behaviour, eg. for tests.
+    constructor(room: Room, roomId: string | null = null, shouldThrottle = true) {
         this.room = room;
         this.roomId = room ? room.roomId : roomId;
         this.highestPlUserId = null;
@@ -103,6 +107,12 @@ export class RoomPermalinkCreator {
 
         if (!this.roomId) {
             throw new Error("Failed to resolve a roomId for the permalink creator to use");
+        }
+
+        if (shouldThrottle) {
+            this.updateServerCandidates = throttle(
+                this.updateServerCandidates, 200, { leading: true, trailing: true },
+            );
         }
     }
 
@@ -260,7 +270,7 @@ export class RoomPermalinkCreator {
         this.populationMap = populationMap;
     }
 
-    private updateServerCandidates() {
+    private updateServerCandidates = () => {
         let candidates = [];
         if (this.highestPlUserId) {
             candidates.push(getServerName(this.highestPlUserId));
@@ -279,7 +289,7 @@ export class RoomPermalinkCreator {
         candidates = candidates.concat(remainingServers);
 
         this._serverCandidates = candidates;
-    }
+    };
 }
 
 export function makeGenericPermalink(entityId: string): string {

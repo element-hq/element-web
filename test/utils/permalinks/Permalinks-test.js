@@ -122,7 +122,7 @@ describe('Permalinks', function() {
             },
             member95,
         ]);
-        const creator = new RoomPermalinkCreator(room);
+        const creator = new RoomPermalinkCreator(room, null, false);
         creator.load();
         expect(creator._serverCandidates[0]).toBe("pl_95");
         member95.membership = "left";
