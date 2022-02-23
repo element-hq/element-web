@@ -64,6 +64,7 @@ const RoomContext = createContext<IRoomState>({
     timelineRenderingType: TimelineRenderingType.Room,
     threadId: undefined,
     liveTimeline: undefined,
+    narrow: false,
 });
 RoomContext.displayName = "RoomContext";
 export default RoomContext;

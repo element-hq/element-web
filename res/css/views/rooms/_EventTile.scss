@@ -723,7 +723,7 @@ $left-gutter: 64px;
 .mx_ThreadInfo {
     min-width: 267px;
     max-width: min(calc(100% - 64px), 600px);
-    width: auto;
+    width: fit-content;
     height: 40px;
     position: relative;
     background-color: $system;
@@ -775,6 +775,12 @@ $left-gutter: 64px;
         opacity: 1;
         transform: translateX(0);
     }
+}
+
+.mx_MessagePanel_narrow .mx_ThreadInfo {
+    min-width: initial;
+    max-width: initial;
+    width: initial;
 }
 
 .mx_ThreadInfo_content {

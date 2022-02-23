@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -54,7 +54,6 @@ import { ButtonEvent } from '../elements/AccessibleButton';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 let instanceCount = 0;
-const NARROW_MODE_BREAKPOINT = 500;
 
 interface ISendButtonProps {
     onClick: (ev: ButtonEvent) => void;
@@ -88,7 +87,6 @@ interface IState {
     haveRecording: boolean;
     recordingTimeLeftSeconds?: number;
     me?: RoomMember;
-    narrowMode?: boolean;
     isMenuOpen: boolean;
     isStickerPickerOpen: boolean;
     showStickersButton: boolean;
@@ -165,10 +163,9 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     private onResize = (type: UI_EVENTS, entry: ResizeObserverEntry) => {
         if (type === UI_EVENTS.Resize) {
-            const narrowMode = entry.contentRect.width <= NARROW_MODE_BREAKPOINT;
+            const { narrow } = this.context;
             this.setState({
-                narrowMode,
-                isMenuOpen: !narrowMode ? false : this.state.isMenuOpen,
+                isMenuOpen: !narrow ? false : this.state.isMenuOpen,
                 isStickerPickerOpen: false,
             });
         }
@@ -476,11 +473,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             isMenuOpen={this.state.isMenuOpen}
                             isStickerPickerOpen={this.state.isStickerPickerOpen}
                             menuPosition={menuPosition}
-                            narrowMode={this.state.narrowMode}
                             relation={this.props.relation}
                             onRecordStartEndClick={() => {
                                 this.voiceRecordingButton.current?.onRecordStartEndClick();
-                                if (this.state.narrowMode) {
+                                if (this.context.narrow) {
                                     this.toggleButtonMenu();
                                 }
                             }}

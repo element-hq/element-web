@@ -44,7 +44,6 @@ interface IProps {
     isMenuOpen: boolean;
     isStickerPickerOpen: boolean;
     menuPosition: AboveLeftOf;
-    narrowMode?: boolean;
     onRecordStartEndClick: () => void;
     relation?: IEventRelation;
     setStickerPickerOpen: (isStickerPickerOpen: boolean) => void;
@@ -58,7 +57,7 @@ export const OverflowMenuContext = createContext<OverflowMenuCloser | null>(null
 
 const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
     const matrixClient: MatrixClient = useContext(MatrixClientContext);
-    const { room, roomId } = useContext(RoomContext);
+    const { room, roomId, narrow } = useContext(RoomContext);
 
     if (props.haveRecording) {
         return null;
@@ -66,14 +65,14 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
 
     let mainButtons: ReactElement[];
     let moreButtons: ReactElement[];
-    if (props.narrowMode) {
+    if (narrow) {
         mainButtons = [
             emojiButton(props),
         ];
         moreButtons = [
             uploadButton(props, roomId),
             showStickersButton(props),
-            voiceRecordingButton(props),
+            voiceRecordingButton(props, narrow),
             pollButton(room, props.relation),
             showLocationButton(props, room, roomId, matrixClient),
         ];
@@ -84,7 +83,7 @@ const MessageComposerButtons: React.FC<IProps> = (props: IProps) => {
         ];
         moreButtons = [
             showStickersButton(props),
-            voiceRecordingButton(props),
+            voiceRecordingButton(props, narrow),
             pollButton(room, props.relation),
             showLocationButton(props, room, roomId, matrixClient),
         ];
@@ -260,10 +259,10 @@ function showStickersButton(props: IProps): ReactElement {
     );
 }
 
-function voiceRecordingButton(props: IProps): ReactElement {
+function voiceRecordingButton(props: IProps, narrow: boolean): ReactElement {
     // XXX: recording UI does not work well in narrow mode, so hide for now
     return (
-        props.narrowMode
+        narrow
             ? null
             : <CollapsibleButton
                 key="voice_message_send"

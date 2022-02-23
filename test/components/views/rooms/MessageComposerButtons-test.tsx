@@ -38,11 +38,11 @@ describe("MessageComposerButtons", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
                 isMenuOpen={false}
-                narrowMode={false}
                 showLocationButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
+            false,
         );
 
         expect(buttonLabels(buttons)).toEqual([
@@ -56,11 +56,11 @@ describe("MessageComposerButtons", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
                 isMenuOpen={true}
-                narrowMode={false}
                 showLocationButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
+            false,
         );
 
         expect(buttonLabels(buttons)).toEqual([
@@ -80,11 +80,11 @@ describe("MessageComposerButtons", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
                 isMenuOpen={false}
-                narrowMode={true}
                 showLocationButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
+            true,
         );
 
         expect(buttonLabels(buttons)).toEqual([
@@ -97,11 +97,11 @@ describe("MessageComposerButtons", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
                 isMenuOpen={true}
-                narrowMode={true}
                 showLocationButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
+            true,
         );
 
         expect(buttonLabels(buttons)).toEqual([
@@ -117,7 +117,7 @@ describe("MessageComposerButtons", () => {
     });
 });
 
-function wrapAndRender(component: React.ReactElement): ReactWrapper {
+function wrapAndRender(component: React.ReactElement, narrow: boolean): ReactWrapper {
     const mockClient = MatrixClientPeg.matrixClient = createTestClient();
     const roomId = "myroomid";
     const mockRoom: any = {
@@ -128,7 +128,7 @@ function wrapAndRender(component: React.ReactElement): ReactWrapper {
             return new RoomMember(roomId, userId);
         },
     };
-    const roomState = createRoomState(mockRoom);
+    const roomState = createRoomState(mockRoom, narrow);
 
     return mount(
         <MatrixClientContext.Provider value={mockClient}>
@@ -139,7 +139,7 @@ function wrapAndRender(component: React.ReactElement): ReactWrapper {
     );
 }
 
-function createRoomState(room: Room): IRoomState {
+function createRoomState(room: Room, narrow: boolean): IRoomState {
     return {
         room: room,
         roomId: room.roomId,
@@ -176,6 +176,7 @@ function createRoomState(room: Room): IRoomState {
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
         liveTimeline: undefined,
+        narrow,
     };
 }
 

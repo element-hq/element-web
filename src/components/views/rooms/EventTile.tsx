@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -677,6 +677,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                 <p className="mx_ThreadSummaryIcon">{ _t("From a thread") }</p>
             );
         } else if (this.state.threadReplyCount && this.props.mxEvent.isThreadRoot) {
+            let count: string | number = this.state.threadReplyCount;
+            if (!this.context.narrow) {
+                count = _t("%(count)s reply", {
+                    count: this.state.threadReplyCount,
+                });
+            }
             return (
                 <CardContext.Consumer>
                     { context =>
@@ -687,9 +693,7 @@ export default class EventTile extends React.Component<IProps, IState> {
                             }}
                         >
                             <span className="mx_ThreadInfo_threads-amount">
-                                { _t("%(count)s reply", {
-                                    count: this.state.threadReplyCount,
-                                }) }
+                                { count }
                             </span>
                             { this.renderThreadLastMessagePreview() }
                         </div>
