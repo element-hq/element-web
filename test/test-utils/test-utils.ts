@@ -12,6 +12,7 @@ import {
     EventTimeline,
     RoomState,
     EventType,
+    IEventRelation,
 } from 'matrix-js-sdk';
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
@@ -259,6 +260,12 @@ export function mkMembership(opts: MakeEventPassThruProps & {
     return e;
 }
 
+export type MessageEventProps = MakeEventPassThruProps & {
+    room: Room["roomId"];
+    relatesTo?: IEventRelation;
+    msg?: string;
+};
+
 /**
  * Create an m.room.message event.
  * @param {Object} opts Values for the message
@@ -269,20 +276,20 @@ export function mkMembership(opts: MakeEventPassThruProps & {
  * @param {string=} opts.msg Optional. The content.body for the event.
  * @return {Object|MatrixEvent} The event
  */
-export function mkMessage(opts: MakeEventPassThruProps & {
-    room: Room["roomId"];
-    msg?: string;
-}): MatrixEvent {
+export function mkMessage({
+    msg, relatesTo, ...opts
+}: MessageEventProps): MatrixEvent {
     if (!opts.room || !opts.user) {
         throw new Error("Missing .room or .user from options");
     }
-    const message = opts.msg ?? "Random->" + Math.random();
+    const message = msg ?? "Random->" + Math.random();
     const event: MakeEventProps = {
         ...opts,
         type: "m.room.message",
         content: {
             msgtype: "m.text",
             body: message,
+            ['m.relates_to']: relatesTo,
         },
     };
 
