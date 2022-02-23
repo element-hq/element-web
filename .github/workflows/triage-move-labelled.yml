@@ -119,7 +119,7 @@ jobs:
           PROJECT_ID: "PN_kwDOAM0swc0rRA"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-move_message_bubbles_issues:
+  move_message_bubbles_issues:
     name: A-Message-Bubbles to Message bubbles board
     runs-on: ubuntu-latest
     if: >
