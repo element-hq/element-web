@@ -123,7 +123,12 @@ For a good example, see https://develop.element.io/config.json.
   `/.well-known/matrix/client` in its well-known location, and the JSON file
   at that location has a key `m.vector.riot.jitsi`. In this case, the
   configuration found in the well-known location is used instead.
-
+1. `jitsiWidget`: Options to change the built-in Jitsi widget behaviour. `jitsi` controls
+   how the widget gets created, but not how it behaves.
+    1. `skipBuildInWelcomeScreen`: If you'd like to skip the default "Join Conference"
+       behaviour, set this to `true`. This will cause the widget to assume that there's
+       a Jitsi welcome screen set up and point the user towards that. Note that this can
+       cause the camera/microphone to flicker as "in use" while Jitsi tests the devices.
 1. `enable_presence_by_hs_url`: The property key should be the URL of the homeserver
     and its value defines whether to enable/disable the presence status display
     from that homeserver. If no options are configured, presence is shown for all
