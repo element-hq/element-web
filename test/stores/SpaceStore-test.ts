@@ -27,7 +27,7 @@ import {
     UPDATE_SELECTED_SPACE,
     UPDATE_TOP_LEVEL_SPACES,
 } from "../../src/stores/spaces";
-import * as testUtils from "../utils/test-utils";
+import * as testUtils from "../test-utils";
 import { mkEvent, stubClient } from "../test-utils";
 import DMRoomMap from "../../src/utils/DMRoomMap";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";

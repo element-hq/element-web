@@ -24,7 +24,7 @@ import '../../../skinned-sdk';
 import SpacePanel from '../../../../src/components/views/spaces/SpacePanel';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { SpaceKey } from '../../../../src/stores/spaces';
-import { findByTestId } from '../../../utils/test-utils';
+import { findByTestId } from '../../../test-utils';
 import { shouldShowComponent } from '../../../../src/customisations/helpers/UIComponents';
 import { UIComponent } from '../../../../src/settings/UIFeature';
 

@@ -21,7 +21,7 @@ import { act } from 'react-dom/test-utils';
 import sdk from '../../../skinned-sdk';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { stubClient } from '../../../test-utils';
-import { findById, flushPromises } from '../../../utils/test-utils';
+import { findById, flushPromises } from '../../../test-utils';
 
 const AccessSecretStorageDialog = sdk.getComponent("dialogs.security.AccessSecretStorageDialog");
 

@@ -23,7 +23,7 @@ import { act } from 'react-dom/test-utils';
 import '../../../skinned-sdk';
 import SpaceContextMenu from '../../../../src/components/views/context_menus/SpaceContextMenu';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
-import { findByTestId } from '../../../utils/test-utils';
+import { findByTestId } from '../../../test-utils';
 import {
     leaveSpace,
     shouldShowSpaceSettings,

@@ -28,7 +28,7 @@ import SettingsStore from "../../../src/settings/SettingsStore";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
-import { upsertRoomStateEvents } from '../../utils/test-utils';
+import { upsertRoomStateEvents } from '../../test-utils';
 
 const TestUtils = require('react-dom/test-utils');
 const expect = require('expect');
