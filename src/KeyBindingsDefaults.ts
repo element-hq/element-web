@@ -152,13 +152,17 @@ const navigationBindings = (): KeyBinding[] => {
     const bindings = getBindingsByCategory(CategoryName.NAVIGATION);
 
     bindings.push({
-        action: "KeyBinding.closeDialogOrContextMenu" as KeyBindingAction,
+        action: KeyBindingAction.CloseDialogOrContextMenu,
         keyCombo: {
             key: Key.ESCAPE,
         },
     });
 
     return bindings;
+};
+
+const callBindings = (): KeyBinding[] => {
+    return getBindingsByCategory(CategoryName.CALLS);
 };
 
 const labsBindings = (): KeyBinding[] => {
@@ -173,5 +177,6 @@ export const defaultBindingsProvider: IKeyBindingsProvider = {
     getRoomListBindings: roomListBindings,
     getRoomBindings: roomBindings,
     getNavigationBindings: navigationBindings,
+    getCallBindings: callBindings,
     getLabsBindings: labsBindings,
 };

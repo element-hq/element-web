@@ -29,7 +29,6 @@ import { _t, _td } from '../../../languageHandler';
 import VideoFeed from './VideoFeed';
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from '../elements/AccessibleButton';
-import { isOnlyCtrlOrCmdKeyEvent, Key } from '../../../Keyboard';
 import { avatarUrlForMember } from '../../../Avatar';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker";
@@ -38,6 +37,8 @@ import CallViewSidebar from './CallViewSidebar';
 import CallViewHeader from './CallView/CallViewHeader';
 import CallViewButtons from "./CallView/CallViewButtons";
 import PlatformPeg from "../../../PlatformPeg";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 interface IProps {
     // The call for us to display
@@ -293,25 +294,21 @@ export default class CallView extends React.Component<IProps, IState> {
     // CallHandler would probably be a better place for this
     private onNativeKeyDown = (ev): void => {
         let handled = false;
-        const ctrlCmdOnly = isOnlyCtrlOrCmdKeyEvent(ev);
 
-        switch (ev.key) {
-            case Key.D:
-                if (ctrlCmdOnly) {
-                    this.onMicMuteClick();
-                    // show the controls to give feedback
-                    this.buttonsRef.current?.showControls();
-                    handled = true;
-                }
+        const callAction = getKeyBindingsManager().getCallAction(ev);
+        switch (callAction) {
+            case KeyBindingAction.ToggleMicInCall:
+                this.onMicMuteClick();
+                // show the controls to give feedback
+                this.buttonsRef.current?.showControls();
+                handled = true;
                 break;
 
-            case Key.E:
-                if (ctrlCmdOnly) {
-                    this.onVidMuteClick();
-                    // show the controls to give feedback
-                    this.buttonsRef.current?.showControls();
-                    handled = true;
-                }
+            case KeyBindingAction.ToggleWebcamInCall:
+                this.onVidMuteClick();
+                // show the controls to give feedback
+                this.buttonsRef.current?.showControls();
+                handled = true;
                 break;
         }
 

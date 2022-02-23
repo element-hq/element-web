@@ -3442,10 +3442,14 @@
     "Jump to first message": "Jump to first message",
     "Jump to last message": "Jump to last message",
     "Undo edit": "Undo edit",
+    "Redo edit": "Redo edit",
+    "Previous recently visited room or community": "Previous recently visited room or community",
+    "Next recently visited room or community": "Next recently visited room or community",
+    "Switch to space by number": "Switch to space by number",
+    "Open user settings": "Open user settings",
     "New line": "New line",
     "Force complete": "Force complete",
     "Search (must be enabled)": "Search (must be enabled)",
     "Close dialog or context menu": "Close dialog or context menu",
-    "Activate selected button": "Activate selected button",
-    "Redo edit": "Redo edit"
+    "Activate selected button": "Activate selected button"
 }
