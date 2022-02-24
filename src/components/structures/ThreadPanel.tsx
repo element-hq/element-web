@@ -39,7 +39,7 @@ import { Layout } from '../../settings/enums/Layout';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import Measured from '../views/elements/Measured';
 
-async function getThreadTimelineSet(
+export async function getThreadTimelineSet(
     client: MatrixClient,
     room: Room,
     filterType = ThreadFilterType.All,
@@ -89,14 +89,12 @@ async function getThreadTimelineSet(
         Array.from(room.threads)
             .sort(([, threadA], [, threadB]) => threadA.replyToEvent.getTs() - threadB.replyToEvent.getTs())
             .forEach(([, thread]) => {
-                const isOwnEvent = thread.rootEvent.getSender() === client.getUserId();
-                if (filterType !== ThreadFilterType.My || isOwnEvent) {
+                const currentUserParticipated = thread.events.some(event => event.getSender() === client.getUserId());
+                if (filterType !== ThreadFilterType.My || currentUserParticipated) {
                     timelineSet.getLiveTimeline().addEvent(thread.rootEvent, false);
                 }
             });
 
-        // for (const [, thread] of room.threads) {
-        // }
         return timelineSet;
     }
 }
