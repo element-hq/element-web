@@ -357,7 +357,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         } else {
             const targetRight = targetRect.right + window.pageXOffset;
             const spaceOnRight = UIStore.instance.windowWidth - targetRight;
-            return !contentRect || (spaceOnRight - contentRect.width < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
+            return contentRect && (spaceOnRight - contentRect.width < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
         }
     }
 
@@ -371,7 +371,7 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         } else {
             const targetBottom = targetRect.bottom + window.pageYOffset;
             const spaceBelow = UIStore.instance.windowHeight - targetBottom;
-            return !contentRect || (spaceBelow - contentRect.height < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
+            return contentRect && (spaceBelow - contentRect.height < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
         }
     }
 
