@@ -31,6 +31,7 @@ import { checkInputableElement, RovingTabIndexProvider } from "../../accessibili
 // of doing reusable widgets like dialog boxes & menus where we go and
 // pass in a custom control as the actual body.
 
+const WINDOW_PADDING = 10;
 const ContextualMenuContainerId = "mx_ContextualMenu_Container";
 
 function getOrCreateContainer(): HTMLDivElement {
@@ -247,21 +248,49 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
 
         if (chevronFace === ChevronFace.Top || chevronFace === ChevronFace.Bottom) {
             chevronOffset.left = props.chevronOffset;
-        } else if (position.top !== undefined) {
-            const target = position.top;
+        } else {
+            chevronOffset.top = props.chevronOffset;
+        }
 
-            // By default, no adjustment is made
-            let adjusted = target;
-
-            // If we know the dimensions of the context menu, adjust its position
-            // such that it does not leave the (padded) window.
-            if (contextMenuRect) {
-                const padding = 10;
-                adjusted = Math.min(position.top, document.body.clientHeight - contextMenuRect.height - padding);
+        // If we know the dimensions of the context menu, adjust its position to
+        // keep it within the bounds of the (padded) window
+        const { windowWidth, windowHeight } = UIStore.instance;
+        if (contextMenuRect) {
+            if (position.top !== undefined) {
+                position.top = Math.min(
+                    position.top,
+                    windowHeight - contextMenuRect.height - WINDOW_PADDING,
+                );
+                // Adjust the chevron if necessary
+                if (chevronOffset.top !== undefined) {
+                    chevronOffset.top = props.chevronOffset + props.top - position.top;
+                }
+            } else if (position.bottom !== undefined) {
+                position.bottom = Math.min(
+                    position.bottom,
+                    windowHeight - contextMenuRect.height - WINDOW_PADDING,
+                );
+                if (chevronOffset.top !== undefined) {
+                    chevronOffset.top = props.chevronOffset + props.bottom - position.bottom;
+                }
             }
-
-            position.top = adjusted;
-            chevronOffset.top = Math.max(props.chevronOffset, props.chevronOffset + target - adjusted);
+            if (position.left !== undefined) {
+                position.left = Math.min(
+                    position.left,
+                    windowWidth - contextMenuRect.width - WINDOW_PADDING,
+                );
+                if (chevronOffset.left !== undefined) {
+                    chevronOffset.left = props.chevronOffset + props.left - position.left;
+                }
+            } else if (position.right !== undefined) {
+                position.right = Math.min(
+                    position.right,
+                    windowWidth - contextMenuRect.width - WINDOW_PADDING,
+                );
+                if (chevronOffset.left !== undefined) {
+                    chevronOffset.left = props.chevronOffset + props.right - position.right;
+                }
+            }
         }
 
         let chevron;
