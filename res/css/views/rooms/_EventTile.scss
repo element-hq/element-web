@@ -282,7 +282,7 @@ $left-gutter: 64px;
 
 .mx_EventTile:not([data-layout=bubble]).mx_EventTile_info .mx_EventTile_line,
 .mx_GenericEventListSummary:not([data-layout=bubble]) > ol > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
-    padding-left: calc($left-gutter + 20px);
+    padding-left: calc($left-gutter + 20px) !important; // override padding-left $left-gutter
 }
 
 .mx_EventTile:not([data-layout=bubble]).mx_EventTile_info .mx_EventTile_line,
