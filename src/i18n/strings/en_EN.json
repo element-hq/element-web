@@ -2296,7 +2296,7 @@
     "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)sremoved %(count)s messages",
     "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)sremoved a message",
     "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)ssent %(count)s hidden messages",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)ssent %(count)s a hidden message",
+    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)ssent a hidden message",
     "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)ssent %(count)s hidden messages",
     "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)ssent a hidden message",
     "Including you, %(commaSeparatedMembers)s": "Including you, %(commaSeparatedMembers)s",
