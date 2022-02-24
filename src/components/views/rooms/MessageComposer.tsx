@@ -229,19 +229,19 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         this.voiceRecording = null;
     }
 
-    private onRoomStateEvents = (ev, state) => {
+    private onRoomStateEvents = (ev: MatrixEvent) => {
         if (ev.getRoomId() !== this.props.room.roomId) return;
 
-        if (ev.getType() === 'm.room.tombstone') {
+        if (ev.getType() === EventType.RoomTombstone) {
             this.setState({ tombstone: this.getRoomTombstone() });
         }
-        if (ev.getType() === 'm.room.power_levels') {
+        if (ev.getType() === EventType.RoomPowerLevels) {
             this.setState({ canSendMessages: this.props.room.maySendMessage() });
         }
     };
 
     private getRoomTombstone() {
-        return this.props.room.currentState.getStateEvents('m.room.tombstone', '');
+        return this.props.room.currentState.getStateEvents(EventType.RoomTombstone, '');
     }
 
     private onTombstoneClick = (ev) => {

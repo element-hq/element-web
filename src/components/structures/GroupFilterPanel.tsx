@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import classNames from 'classnames';
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import type { EventSubscription } from "fbemitter";
 import GroupFilterOrderStore from '../../stores/GroupFilterOrderStore';
@@ -51,6 +52,7 @@ interface IGroupFilterPanelState {
 @replaceableComponent("structures.GroupFilterPanel")
 class GroupFilterPanel extends React.Component<IGroupFilterPanelProps, IGroupFilterPanelState> {
     public static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
 
     public state = {
         orderedTags: [],
@@ -63,8 +65,8 @@ class GroupFilterPanel extends React.Component<IGroupFilterPanelProps, IGroupFil
 
     public componentDidMount() {
         this.unmounted = false;
-        this.context.on("Group.myMembership", this.onGroupMyMembership);
-        this.context.on("sync", this.onClientSync);
+        this.context.on(ClientEvent.GroupMyMembership, this.onGroupMyMembership);
+        this.context.on(ClientEvent.Sync, this.onClientSync);
 
         this.groupFilterOrderStoreToken = GroupFilterOrderStore.addListener(() => {
             if (this.unmounted) {
@@ -82,8 +84,8 @@ class GroupFilterPanel extends React.Component<IGroupFilterPanelProps, IGroupFil
 
     public componentWillUnmount() {
         this.unmounted = true;
-        this.context.removeListener("Group.myMembership", this.onGroupMyMembership);
-        this.context.removeListener("sync", this.onClientSync);
+        this.context.removeListener(ClientEvent.GroupMyMembership, this.onGroupMyMembership);
+        this.context.removeListener(ClientEvent.Sync, this.onClientSync);
         if (this.groupFilterOrderStoreToken) {
             this.groupFilterOrderStoreToken.remove();
         }

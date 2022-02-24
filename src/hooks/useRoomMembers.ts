@@ -17,14 +17,15 @@ limitations under the License.
 import { useState } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { throttle } from "lodash";
 
-import { useEventEmitter } from "./useEventEmitter";
+import { useTypedEventEmitter } from "./useEventEmitter";
 
 // Hook to simplify watching Matrix Room joined members
 export const useRoomMembers = (room: Room, throttleWait = 250) => {
     const [members, setMembers] = useState<RoomMember[]>(room.getJoinedMembers());
-    useEventEmitter(room.currentState, "RoomState.members", throttle(() => {
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, throttle(() => {
         setMembers(room.getJoinedMembers());
     }, throttleWait, { leading: true, trailing: true }));
     return members;
@@ -33,7 +34,7 @@ export const useRoomMembers = (room: Room, throttleWait = 250) => {
 // Hook to simplify watching Matrix Room joined member count
 export const useRoomMemberCount = (room: Room, throttleWait = 250) => {
     const [count, setCount] = useState<number>(room.getJoinedMemberCount());
-    useEventEmitter(room.currentState, "RoomState.members", throttle(() => {
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, throttle(() => {
         setCount(room.getJoinedMemberCount());
     }, throttleWait, { leading: true, trailing: true }));
     return count;

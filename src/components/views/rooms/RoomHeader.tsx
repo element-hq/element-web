@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import { throttle } from 'lodash';
-import { MatrixEvent, Room, RoomState, RoomStateEvent } from 'matrix-js-sdk/src';
+import { MatrixEvent, Room, RoomStateEvent } from 'matrix-js-sdk/src';
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { _t } from '../../../languageHandler';
@@ -94,7 +94,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         notiStore.removeListener(NotificationStateEvents.Update, this.onNotificationUpdate);
     }
 
-    private onRoomStateEvents = (event: MatrixEvent, state: RoomState) => {
+    private onRoomStateEvents = (event: MatrixEvent) => {
         if (!this.props.room || event.getRoomId() !== this.props.room.roomId) {
             return;
         }

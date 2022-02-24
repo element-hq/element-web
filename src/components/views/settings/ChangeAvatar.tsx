@@ -18,6 +18,7 @@ import React from 'react';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
@@ -96,8 +97,10 @@ export default class ChangeAvatar extends React.Component<IProps, IState> {
             return;
         }
 
-        if (ev.getRoomId() !== this.props.room.roomId || ev.getType() !== 'm.room.avatar'
-            || ev.getSender() !== MatrixClientPeg.get().getUserId()) {
+        if (ev.getRoomId() !== this.props.room.roomId ||
+            ev.getType() !== EventType.RoomAvatar ||
+            ev.getSender() !== MatrixClientPeg.get().getUserId()
+        ) {
             return;
         }
 

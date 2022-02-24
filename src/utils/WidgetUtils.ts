@@ -205,8 +205,8 @@ export default class WidgetUtils {
                 return;
             }
 
-            function onRoomStateEvents(ev) {
-                if (ev.getRoomId() !== roomId) return;
+            function onRoomStateEvents(ev: MatrixEvent) {
+                if (ev.getRoomId() !== roomId || ev.getType() !== "im.vector.modular.widgets") return;
 
                 // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
                 const currentWidgetEvents = room.currentState.getStateEvents('im.vector.modular.widgets');

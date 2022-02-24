@@ -20,13 +20,14 @@ limitations under the License.
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { ResizeMethod } from 'matrix-js-sdk/src/@types/partials';
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import * as AvatarLogic from '../../../Avatar';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from '../elements/AccessibleButton';
 import RoomContext from "../../../contexts/RoomContext";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { toPx } from "../../../utils/units";
 import { _t } from '../../../languageHandler';
 
@@ -92,7 +93,7 @@ const useImageUrl = ({ url, urls }): [string, () => void] => {
             setIndex(0);
         }
     }, []);
-    useEventEmitter(cli, "sync", onClientSync);
+    useTypedEventEmitter(cli, ClientEvent.Sync, onClientSync);
 
     const imageUrl = imageUrls[urlsIndex];
     return [imageUrl, onError];

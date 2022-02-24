@@ -19,7 +19,7 @@ limitations under the License.
 
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
-import { MatrixClient } from 'matrix-js-sdk/src/client';
+import { ClientEvent, MatrixClient } from 'matrix-js-sdk/src/client';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { User } from 'matrix-js-sdk/src/models/user';
 import { Room } from 'matrix-js-sdk/src/models/room';
@@ -29,6 +29,7 @@ import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/reque
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
@@ -42,7 +43,7 @@ import MultiInviter from "../../../utils/MultiInviter";
 import GroupStore from "../../../stores/GroupStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
-import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { textualPowerLevel } from '../../../Roles';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
@@ -547,7 +548,7 @@ export const useRoomPowerLevels = (cli: MatrixClient, room: Room) => {
         setPowerLevels(getPowerLevels(room));
     }, [room]);
 
-    useEventEmitter(cli, "RoomState.events", update);
+    useTypedEventEmitter(cli, RoomStateEvent.Events, update);
     useEffect(() => {
         update();
         return () => {
@@ -1105,7 +1106,7 @@ function useRoomPermissions(cli: MatrixClient, room: Room, user: RoomMember): IR
         });
     }, [cli, user, room]);
 
-    useEventEmitter(cli, "RoomState.members", updateRoomPermissions);
+    useTypedEventEmitter(cli, RoomStateEvent.Update, updateRoomPermissions);
     useEffect(() => {
         updateRoomPermissions();
         return () => {
@@ -1316,7 +1317,7 @@ const BasicUserInfo: React.FC<{
             setIsIgnored(cli.isUserIgnored(member.userId));
         }
     }, [cli, member.userId]);
-    useEventEmitter(cli, "accountData", accountDataHandler);
+    useTypedEventEmitter(cli, ClientEvent.AccountData, accountDataHandler);
 
     // Count of how many operations are currently in progress, if > 0 then show a Spinner
     const [pendingUpdateCount, setPendingUpdateCount] = useState(0);

@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 import React, { ComponentProps, useContext, useEffect, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import { _t } from "../../../languageHandler";
-import { useEventEmitter, useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useEventEmitterState, useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import SpaceContextMenu from "../context_menus/SpaceContextMenu";
@@ -150,7 +151,7 @@ const useJoiningRooms = (): Set<string> => {
                 break;
         }
     });
-    useEventEmitter(cli, "Room", (room: Room) => {
+    useTypedEventEmitter(cli, ClientEvent.Room, (room: Room) => {
         if (joiningRooms.delete(room.roomId)) {
             setJoiningRooms(new Set(joiningRooms));
         }
@@ -190,7 +191,7 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
     // we pass null for the queryLength to inhibit the metrics hook for when there is no filterCondition
     useWebSearchMetrics(count, filterCondition ? filterCondition.search.length : null, false);
 
-    const spaceName = useEventEmitterState(activeSpace, "Room.name", () => activeSpace?.name);
+    const spaceName = useTypedEventEmitterState(activeSpace, RoomEvent.Name, () => activeSpace?.name);
 
     useEffect(() => {
         if (onVisibilityChange) {

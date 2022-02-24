@@ -317,7 +317,7 @@ class LoggedInView extends React.Component<IProps, IState> {
 
     private onRoomStateEvents = (ev: MatrixEvent): void => {
         const serverNoticeList = RoomListStore.instance.orderedLists[DefaultTagID.ServerNotice];
-        if (serverNoticeList && serverNoticeList.some(r => r.roomId === ev.getRoomId())) {
+        if (serverNoticeList?.some(r => r.roomId === ev.getRoomId())) {
             this.updateServerNoticeEvents();
         }
     };

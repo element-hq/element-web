@@ -26,6 +26,7 @@ import { User, UserEvent } from "matrix-js-sdk/src/models/user";
 import { throttle } from 'lodash';
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { ClientEvent } from "matrix-js-sdk/src/client";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
@@ -113,7 +114,7 @@ export default class MemberList extends React.Component<IProps, IState> {
 
     private listenForMembersChanges(): void {
         const cli = MatrixClientPeg.get();
-        cli.on(RoomStateEvent.Members, this.onRoomStateMember);
+        cli.on(RoomStateEvent.Update, this.onRoomStateUpdate);
         cli.on(RoomMemberEvent.Name, this.onRoomMemberName);
         cli.on(RoomStateEvent.Events, this.onRoomStateEvent);
         // We listen for changes to the lastPresenceTs which is essentially
@@ -129,7 +130,7 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.mounted = false;
         const cli = MatrixClientPeg.get();
         if (cli) {
-            cli.removeListener(RoomStateEvent.Members, this.onRoomStateMember);
+            cli.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
             cli.removeListener(RoomMemberEvent.Name, this.onRoomMemberName);
             cli.removeListener(RoomEvent.MyMembership, this.onMyMembership);
             cli.removeListener(RoomStateEvent.Events, this.onRoomStateEvent);
@@ -224,10 +225,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         }
     };
 
-    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember): void => {
-        if (member.roomId !== this.props.roomId) {
-            return;
-        }
+    private onRoomStateUpdate = (state: RoomState): void => {
+        if (state.roomId !== this.props.roomId) return;
         this.updateList();
     };
 
@@ -238,9 +237,8 @@ export default class MemberList extends React.Component<IProps, IState> {
         this.updateList();
     };
 
-    private onRoomStateEvent = (event: MatrixEvent, state: RoomState): void => {
-        if (event.getRoomId() === this.props.roomId &&
-            event.getType() === "m.room.third_party_invite") {
+    private onRoomStateEvent = (event: MatrixEvent): void => {
+        if (event.getRoomId() === this.props.roomId && event.getType() === EventType.RoomThirdPartyInvite) {
             this.updateList();
         }
 

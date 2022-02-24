@@ -22,17 +22,19 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 import classNames from 'classnames';
-import { IRecommendedVersion, NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IRecommendedVersion, NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { EventSubscription } from "fbemitter";
 import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
-import { RoomState } from 'matrix-js-sdk/src/models/room-state';
+import { RoomState, RoomStateEvent } from 'matrix-js-sdk/src/models/room-state';
 import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
 import { MatrixError } from 'matrix-js-sdk/src/http-api';
+import { ClientEvent } from "matrix-js-sdk/src/client";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { _t } from '../../languageHandler';
@@ -230,11 +232,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private roomViewBody = createRef<HTMLDivElement>();
 
     static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
 
-    constructor(props, context) {
+    constructor(props: IRoomProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
 
-        const llMembers = this.context.hasLazyLoadMembersEnabled();
+        const llMembers = context.hasLazyLoadMembersEnabled();
         this.state = {
             roomId: null,
             roomLoading: true,
@@ -268,7 +271,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             showJoinLeaves: true,
             showAvatarChanges: true,
             showDisplaynameChanges: true,
-            matrixClientIsReady: this.context && this.context.isInitialSyncComplete(),
+            matrixClientIsReady: context?.isInitialSyncComplete(),
             mainSplitContentType: MainSplitContentType.Timeline,
             timelineRenderingType: TimelineRenderingType.Room,
             liveTimeline: undefined,
@@ -276,19 +279,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         };
 
         this.dispatcherRef = dis.register(this.onAction);
-        this.context.on("Room", this.onRoom);
-        this.context.on("Room.timeline", this.onRoomTimeline);
-        this.context.on("Room.name", this.onRoomName);
-        this.context.on("Room.accountData", this.onRoomAccountData);
-        this.context.on("RoomState.events", this.onRoomStateEvents);
-        this.context.on("RoomState.members", this.onRoomStateMember);
-        this.context.on("Room.myMembership", this.onMyMembership);
-        this.context.on("accountData", this.onAccountData);
-        this.context.on("crypto.keyBackupStatus", this.onKeyBackupStatus);
-        this.context.on("deviceVerificationChanged", this.onDeviceVerificationChanged);
-        this.context.on("userTrustStatusChanged", this.onUserVerificationChanged);
-        this.context.on("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
-        this.context.on("Event.decrypted", this.onEventDecrypted);
+        context.on(ClientEvent.Room, this.onRoom);
+        context.on(RoomEvent.Timeline, this.onRoomTimeline);
+        context.on(RoomEvent.Name, this.onRoomName);
+        context.on(RoomEvent.AccountData, this.onRoomAccountData);
+        context.on(RoomStateEvent.Events, this.onRoomStateEvents);
+        context.on(RoomStateEvent.Update, this.onRoomStateUpdate);
+        context.on(RoomEvent.MyMembership, this.onMyMembership);
+        context.on(ClientEvent.AccountData, this.onAccountData);
+        context.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
+        context.on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
+        context.on(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+        context.on(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
+        context.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         // Start listening for RoomViewStore updates
         this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
 
@@ -704,19 +707,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         dis.unregister(this.dispatcherRef);
         if (this.context) {
-            this.context.removeListener("Room", this.onRoom);
-            this.context.removeListener("Room.timeline", this.onRoomTimeline);
-            this.context.removeListener("Room.name", this.onRoomName);
-            this.context.removeListener("Room.accountData", this.onRoomAccountData);
-            this.context.removeListener("RoomState.events", this.onRoomStateEvents);
-            this.context.removeListener("Room.myMembership", this.onMyMembership);
-            this.context.removeListener("RoomState.members", this.onRoomStateMember);
-            this.context.removeListener("accountData", this.onAccountData);
-            this.context.removeListener("crypto.keyBackupStatus", this.onKeyBackupStatus);
-            this.context.removeListener("deviceVerificationChanged", this.onDeviceVerificationChanged);
-            this.context.removeListener("userTrustStatusChanged", this.onUserVerificationChanged);
-            this.context.removeListener("crossSigning.keysChanged", this.onCrossSigningKeysChanged);
-            this.context.removeListener("Event.decrypted", this.onEventDecrypted);
+            this.context.removeListener(ClientEvent.Room, this.onRoom);
+            this.context.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
+            this.context.removeListener(RoomEvent.Name, this.onRoomName);
+            this.context.removeListener(RoomEvent.AccountData, this.onRoomAccountData);
+            this.context.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
+            this.context.removeListener(RoomEvent.MyMembership, this.onMyMembership);
+            this.context.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
+            this.context.removeListener(ClientEvent.AccountData, this.onAccountData);
+            this.context.removeListener(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
+            this.context.removeListener(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
+            this.context.removeListener(CryptoEvent.UserTrustStatusChanged, this.onUserVerificationChanged);
+            this.context.removeListener(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
+            this.context.removeListener(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         }
 
         window.removeEventListener('beforeunload', this.onPageUnload);
@@ -1097,7 +1100,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private onDeviceVerificationChanged = (userId: string, device: object) => {
+    private onDeviceVerificationChanged = (userId: string) => {
         const room = this.state.room;
         if (!room.currentState.getMember(userId)) {
             return;
@@ -1105,7 +1108,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.updateE2EStatus(room);
     };
 
-    private onUserVerificationChanged = (userId: string, trustStatus: object) => {
+    private onUserVerificationChanged = (userId: string) => {
         const room = this.state.room;
         if (!room || !room.currentState.getMember(userId)) {
             return;
@@ -1156,9 +1159,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onRoomStateEvents = (ev: MatrixEvent, state: RoomState) => {
         // ignore if we don't have a room yet
-        if (!this.state.room || this.state.room.roomId !== state.roomId) {
-            return;
-        }
+        if (!this.state.room || this.state.room.roomId !== state.roomId) return;
 
         if (ev.getType() === EventType.RoomCanonicalAlias) {
             // re-view the room so MatrixChat can manage the alias in the URL properly
@@ -1173,14 +1174,9 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.updatePermissions(this.state.room);
     };
 
-    private onRoomStateMember = (ev: MatrixEvent, state, member) => {
-        // ignore if we don't have a room yet
-        if (!this.state.room) {
-            return;
-        }
-
+    private onRoomStateUpdate = (state: RoomState) => {
         // ignore members in other rooms
-        if (member.roomId !== this.state.room.roomId) {
+        if (state.roomId !== this.state.room?.roomId) {
             return;
         }
 
@@ -1255,7 +1251,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onJoinButtonClicked = () => {
         // If the user is a ROU, allow them to transition to a PWLU
-        if (this.context && this.context.isGuest()) {
+        if (this.context?.isGuest()) {
             // Join this room once the user has registered and logged in
             // (If we failed to peek, we may not have a valid room object.)
             dis.dispatch<DoAfterSyncPreparedPayload<ViewRoomPayload>>({
@@ -1712,7 +1708,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     getHiddenHighlightCount() {
         const oldRoom = this.getOldRoom();
         if (!oldRoom) return 0;
-        return oldRoom.getUnreadNotificationCount('highlight');
+        return oldRoom.getUnreadNotificationCount(NotificationCountType.Highlight);
     }
 
     onHiddenHighlightsClick = () => {

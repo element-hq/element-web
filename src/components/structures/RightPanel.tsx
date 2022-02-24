@@ -17,7 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { throttle } from 'lodash';
@@ -67,6 +67,7 @@ interface IState {
 @replaceableComponent("structures.RightPanel")
 export default class RightPanel extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
 
     constructor(props, context) {
         super(props, context);
@@ -81,15 +82,12 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }, 500, { leading: true, trailing: true });
 
     public componentDidMount(): void {
-        const cli = this.context;
-        cli.on("RoomState.members", this.onRoomStateMember);
+        this.context.on(RoomStateEvent.Members, this.onRoomStateMember);
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
     public componentWillUnmount(): void {
-        if (this.context) {
-            this.context.removeListener("RoomState.members", this.onRoomStateMember);
-        }
+        this.context?.removeListener(RoomStateEvent.Members, this.onRoomStateMember);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 

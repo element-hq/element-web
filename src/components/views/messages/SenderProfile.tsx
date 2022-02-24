@@ -17,6 +17,7 @@
 import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import Flair from '../elements/Flair';
 import FlairStore from '../../../stores/FlairStore';
@@ -35,13 +36,14 @@ interface IProps {
 }
 
 interface IState {
-    userGroups;
-    relatedGroups;
+    userGroups: string[];
+    relatedGroups: string[];
 }
 
 @replaceableComponent("views.messages.SenderProfile")
 export default class SenderProfile extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
     private unmounted = false;
 
     constructor(props: IProps) {
@@ -61,12 +63,12 @@ export default class SenderProfile extends React.Component<IProps, IState> {
             this.getPublicisedGroups();
         }
 
-        this.context.on('RoomState.events', this.onRoomStateEvents);
+        this.context.on(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     componentWillUnmount() {
         this.unmounted = true;
-        this.context.removeListener('RoomState.events', this.onRoomStateEvents);
+        this.context.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
     private async getPublicisedGroups() {

@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { _t } from "../../../languageHandler";
 import BaseCard from "./BaseCard";
 import Spinner from "../elements/Spinner";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import PinningUtils from "../../../utils/PinningUtils";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import PinnedEventTile from "../rooms/PinnedEventTile";
@@ -45,7 +46,7 @@ export const usePinnedEvents = (room: Room): string[] => {
         setPinnedEvents(room.currentState.getStateEvents(EventType.RoomPinnedEvents, "")?.getContent()?.pinned || []);
     }, [room]);
 
-    useEventEmitter(room?.currentState, "RoomState.events", update);
+    useTypedEventEmitter(room?.currentState, RoomStateEvent.Events, update);
     useEffect(() => {
         update();
         return () => {
@@ -67,7 +68,7 @@ export const useReadPinnedEvents = (room: Room): Set<string> => {
         setReadPinnedEvents(new Set(readPins || []));
     }, [room]);
 
-    useEventEmitter(room, "Room.accountData", update);
+    useTypedEventEmitter(room, RoomEvent.AccountData, update);
     useEffect(() => {
         update();
         return () => {

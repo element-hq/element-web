@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room } from "matrix-js-sdk";
+import { Room } from "matrix-js-sdk/src/models/room";
 
 import { Action } from "../actions";
 import { ActionPayload } from "../payloads";

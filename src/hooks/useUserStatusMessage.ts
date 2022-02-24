@@ -15,11 +15,11 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { User } from "matrix-js-sdk/src/models/user";
+import { User, UserEvent } from "matrix-js-sdk/src/models/user";
 import { useContext } from "react";
 
 import MatrixClientContext from "../contexts/MatrixClientContext";
-import { useEventEmitterState } from "./useEventEmitter";
+import { useTypedEventEmitterState } from "./useEventEmitter";
 import { Member } from "../components/views/right_panel/UserInfo";
 import { useFeatureEnabled } from "./useSettings";
 
@@ -29,10 +29,11 @@ const getStatusMessage = (cli: MatrixClient, user: Member): string => {
 };
 
 // Hook to simplify handling Matrix User status
-export const useUserStatusMessage = (user?: Member): string => {
+export const useUserStatusMessage = (member?: Member): string => {
     const cli = useContext(MatrixClientContext);
     const enabled = useFeatureEnabled("feature_custom_status");
-    return useEventEmitterState(enabled && getUser(cli, user), "User.unstable_statusMessage", () => {
+    const user = enabled ? getUser(cli, member) : undefined;
+    return useTypedEventEmitterState(user, UserEvent._UnstableStatusMessage, () => {
         return getStatusMessage(cli, user);
     });
 };

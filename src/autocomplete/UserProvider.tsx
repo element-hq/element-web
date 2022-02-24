@@ -61,13 +61,13 @@ export default class UserProvider extends AutocompleteProvider {
         });
 
         MatrixClientPeg.get().on(RoomEvent.Timeline, this.onRoomTimeline);
-        MatrixClientPeg.get().on(RoomStateEvent.Members, this.onRoomStateMember);
+        MatrixClientPeg.get().on(RoomStateEvent.Update, this.onRoomStateUpdate);
     }
 
     destroy() {
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener(RoomEvent.Timeline, this.onRoomTimeline);
-            MatrixClientPeg.get().removeListener(RoomStateEvent.Members, this.onRoomStateMember);
+            MatrixClientPeg.get().removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
         }
     }
 
@@ -93,11 +93,9 @@ export default class UserProvider extends AutocompleteProvider {
         this.onUserSpoke(ev.sender);
     };
 
-    private onRoomStateMember = (ev: MatrixEvent, state: RoomState, member: RoomMember) => {
-        // ignore members in other rooms
-        if (member.roomId !== this.room.roomId) {
-            return;
-        }
+    private onRoomStateUpdate = (state: RoomState) => {
+        // ignore updates in other rooms
+        if (state.roomId !== this.room.roomId) return;
 
         // blow away the users cache
         this.users = null;

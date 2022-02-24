@@ -24,6 +24,7 @@ import {
     PHASE_STARTED,
     PHASE_CANCELLED,
     VerificationRequest,
+    VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -34,7 +35,7 @@ import SyntaxHighlight from '../elements/SyntaxHighlight';
 import { _t } from '../../../languageHandler';
 import Field from "../elements/Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { useEventEmitter } from "../../../hooks/useEventEmitter";
+import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { SETTINGS } from "../../../settings/Settings";
@@ -756,7 +757,7 @@ const VerificationRequestExplorer: React.FC<{
     const [timeout, setRequestTimeout] = useState(request.timeout);
 
     /* Re-render if something changes state */
-    useEventEmitter(request, "change", updateState);
+    useTypedEventEmitter(request, VerificationRequestEvent.Change, updateState);
 
     /* Keep re-rendering if there's a timeout */
     useEffect(() => {
