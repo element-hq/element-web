@@ -899,17 +899,19 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.ComposerInsert: {
                 if (payload.composerType) break;
 
+                let timelineRenderingType: TimelineRenderingType = payload.timelineRenderingType;
                 if (this.state.timelineRenderingType === TimelineRenderingType.Search &&
                     payload.timelineRenderingType === TimelineRenderingType.Search
                 ) {
                     // we don't have the composer rendered in this state, so bring it back first
                     await this.onCancelSearchClick();
+                    timelineRenderingType = TimelineRenderingType.Room;
                 }
 
                 // re-dispatch to the correct composer
                 dis.dispatch<ComposerInsertPayload>({
                     ...(payload as ComposerInsertPayload),
-                    timelineRenderingType: TimelineRenderingType.Room,
+                    timelineRenderingType,
                     composerType: this.state.editState ? ComposerType.Edit : ComposerType.Send,
                 });
                 break;
