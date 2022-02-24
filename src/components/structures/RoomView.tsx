@@ -95,7 +95,7 @@ import TopUnreadMessagesBar from "../views/rooms/TopUnreadMessagesBar";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { showThread } from '../../dispatcher/dispatch-actions/threads';
 import { fetchInitialEvent } from "../../utils/EventUtils";
-import { ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
+import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 import AppsDrawer from '../views/rooms/AppsDrawer';
 import { RightPanelPhases } from '../../stores/right-panel/RightPanelStorePhases';
 import { ActionPayload } from "../../dispatcher/payloads";
@@ -154,7 +154,6 @@ export interface IRoomState {
     isInitialEventHighlighted?: boolean;
     replyToEvent?: MatrixEvent;
     numUnreadMessages: number;
-    searching: boolean;
     searchTerm?: string;
     searchScope?: SearchScope;
     searchResults?: XOR<{}, ISearchResults>;
@@ -243,7 +242,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             shouldPeek: true,
             membersLoaded: !llMembers,
             numUnreadMessages: 0,
-            searching: false,
             searchResults: null,
             callState: null,
             guestsCanJoin: false,
@@ -898,14 +896,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case Action.ComposerInsert: {
                 if (payload.composerType) break;
 
-                if (this.state.searching && payload.timelineRenderingType === TimelineRenderingType.Room) {
+                if (this.state.timelineRenderingType === TimelineRenderingType.Search &&
+                    payload.timelineRenderingType === TimelineRenderingType.Search
+                ) {
                     // we don't have the composer rendered in this state, so bring it back first
                     await this.onCancelSearchClick();
                 }
 
                 // re-dispatch to the correct composer
-                dis.dispatch({
-                    ...payload,
+                dis.dispatch<ComposerInsertPayload>({
+                    ...(payload as ComposerInsertPayload),
+                    timelineRenderingType: TimelineRenderingType.Room,
                     composerType: this.state.editState ? ComposerType.Edit : ComposerType.Send,
                 });
                 break;
@@ -1349,7 +1350,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         return searchPromise.then((results) => {
             debuglog("search complete");
-            if (this.unmounted || !this.state.searching || this.searchId != localSearchId) {
+            if (this.unmounted ||
+                this.state.timelineRenderingType !== TimelineRenderingType.Search ||
+                this.searchId != localSearchId
+            ) {
                 logger.error("Discarding stale search results");
                 return false;
             }
@@ -1557,14 +1561,16 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private onSearchClick = () => {
         this.setState({
-            searching: !this.state.searching,
+            timelineRenderingType: this.state.timelineRenderingType === TimelineRenderingType.Search
+                ? TimelineRenderingType.Room
+                : TimelineRenderingType.Search,
         });
     };
 
     private onCancelSearchClick = (): Promise<void> => {
         return new Promise<void>(resolve => {
             this.setState({
-                searching: false,
+                timelineRenderingType: TimelineRenderingType.Room,
                 searchResults: null,
             }, resolve);
         });
@@ -1894,7 +1900,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         let aux = null;
         let previewBar;
-        if (this.state.searching) {
+        if (this.state.timelineRenderingType === TimelineRenderingType.Search) {
             aux = <SearchBar
                 searchInProgress={this.state.searchInProgress}
                 onCancelClick={this.onCancelSearchClick}

@@ -820,7 +820,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     showReadReceipts={this.props.showReadReceipts}
                     callEventGrouper={callEventGrouper}
                     hideSender={this.state.hideSender}
-                    timelineRenderingType={this.context.timelineRenderingType}
                 />
             </TileErrorBoundary>,
         );

@@ -122,7 +122,6 @@ export default class SearchResultTile extends React.Component<IProps> {
                         isTwelveHour={isTwelveHour}
                         alwaysShowTimestamps={alwaysShowTimestamps}
                         enableFlair={enableFlair}
-                        timelineRenderingType={TimelineRenderingType.Search}
                         lastInSection={lastInSection}
                         continuation={continuation}
                         callEventGrouper={this.callEventGroupers.get(mxEv.getContent().call_id)}

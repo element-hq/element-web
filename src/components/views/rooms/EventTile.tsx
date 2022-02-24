@@ -322,8 +322,6 @@ interface IProps {
     // whether or not to display thread info
     showThreadInfo?: boolean;
 
-    timelineRenderingType?: TimelineRenderingType;
-
     // if specified and `true`, the message his behing
     // hidden for moderation from other users but is
     // displayed to the current user either because they're
@@ -672,7 +670,7 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     private renderThreadInfo(): React.ReactNode {
-        if (this.props.timelineRenderingType === TimelineRenderingType.Search && this.props.mxEvent.threadRootId) {
+        if (this.context.timelineRenderingType === TimelineRenderingType.Search && this.props.mxEvent.threadRootId) {
             return (
                 <p className="mx_ThreadSummaryIcon">{ _t("From a thread") }</p>
             );
@@ -986,11 +984,10 @@ export default class EventTile extends React.Component<IProps, IState> {
     }
 
     private onSenderProfileClick = () => {
-        if (!this.props.timelineRenderingType) return;
         dis.dispatch<ComposerInsertPayload>({
             action: Action.ComposerInsert,
             userId: this.props.mxEvent.getSender(),
-            timelineRenderingType: this.props.timelineRenderingType,
+            timelineRenderingType: this.context.timelineRenderingType,
         });
     };
 
@@ -1016,7 +1013,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             event_id: this.props.mxEvent.getId(),
             highlighted: true,
             room_id: this.props.mxEvent.getRoomId(),
-            metricsTrigger: this.props.timelineRenderingType === TimelineRenderingType.Search
+            metricsTrigger: this.context.timelineRenderingType === TimelineRenderingType.Search
                 ? "MessageSearch"
                 : undefined,
         });
