@@ -815,7 +815,7 @@ export default class GroupView extends React.Component {
     _dismissUpgradeNotice = () => {
         localStorage.setItem(UPGRADE_NOTICE_LS_KEY, "true");
         this.setState({ showUpgradeNotice: false });
-    }
+    };
 
     _onCreateSpaceClick = () => {
         createSpaceFromCommunity(this._matrixClient, this.props.groupId);

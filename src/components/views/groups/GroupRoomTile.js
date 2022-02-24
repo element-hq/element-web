@@ -31,7 +31,7 @@ class GroupRoomTile extends React.Component {
         groupRoom: GroupRoomType.isRequired,
     };
 
-    static contextType = MatrixClientContext
+    static contextType = MatrixClientContext;
 
     onClick = e => {
         dis.dispatch({
