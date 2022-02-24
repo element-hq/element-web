@@ -82,7 +82,15 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         if (this.state[roomId]) {
             this.state[roomId].destroy(); // stops internally
         }
-        return this.updateState(Object.fromEntries(Object.entries(this.state).filter(e => e[0] !== roomId)));
+
+        const {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            [roomId]: _toDelete,
+            ...newState
+        } = this.state;
+        // unexpectedly AsyncStore.updateState merges state
+        // AsyncStore.reset actually just *sets*
+        return this.reset(newState);
     }
 }
 
