@@ -161,29 +161,4 @@ limitations under the License.
             mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
         }
     }
-
-    .mx_QuickSettingsButton_themePicker {
-        display: flex;
-        align-items: center;
-
-        > h4 {
-            font-weight: $font-semi-bold;
-            font-size: $font-12px;
-            line-height: $font-15px;
-            color: $secondary-content;
-            text-transform: uppercase;
-            display: inline-block;
-            margin: 0;
-        }
-
-        .mx_Dropdown {
-            min-width: 100px;
-            margin-left: auto;
-            height: min-content;
-        }
-
-        .mx_Dropdown_menu {
-            max-height: 70px;
-        }
-    }
 }

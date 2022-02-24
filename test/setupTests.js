@@ -48,3 +48,5 @@ const mockMatchMedia = jest.fn().mockImplementation(query => ({
     dispatchEvent: jest.fn(),
 }));
 global.matchMedia = mockMatchMedia;
+
+window.HTMLElement.prototype.scrollIntoView = jest.fn();
