@@ -125,7 +125,7 @@ For a good example, see https://develop.element.io/config.json.
   configuration found in the well-known location is used instead.
 1. `jitsiWidget`: Options to change the built-in Jitsi widget behaviour. `jitsi` controls
    how the widget gets created, but not how it behaves.
-    1. `skipBuildInWelcomeScreen`: If you'd like to skip the default "Join Conference"
+    1. `skipBuiltInWelcomeScreen`: If you'd like to skip the default "Join Conference"
        behaviour, set this to `true`. This will cause the widget to assume that there's
        a Jitsi welcome screen set up and point the user towards that. Note that this can
        cause the camera/microphone to flicker as "in use" while Jitsi tests the devices.
