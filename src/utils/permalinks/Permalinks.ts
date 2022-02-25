@@ -15,12 +15,8 @@ limitations under the License.
 */
 
 import isIp from "is-ip";
-import { throttle } from "lodash";
 import * as utils from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RoomMember, RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
@@ -108,15 +104,9 @@ export class RoomPermalinkCreator {
         if (!this.roomId) {
             throw new Error("Failed to resolve a roomId for the permalink creator to use");
         }
-
-        if (shouldThrottle) {
-            this.updateServerCandidates = throttle(
-                this.updateServerCandidates, 200, { leading: true, trailing: true },
-            );
-        }
     }
 
-    load() {
+    public load() {
         if (!this.room || !this.room.currentState) {
             // Under rare and unknown circumstances it is possible to have a room with no
             // currentState, at least potentially at the early stages of joining a room.
@@ -125,38 +115,33 @@ export class RoomPermalinkCreator {
             logger.warn("Tried to load a permalink creator with no room state");
             return;
         }
-        this.updateAllowedServers();
-        this.updateHighestPlUser();
-        this.updatePopulationMap();
-        this.updateServerCandidates();
+        this.fullUpdate();
     }
 
-    start() {
+    public start() {
         this.load();
-        this.room.client.on(RoomMemberEvent.Membership, this.onMembership);
-        this.room.currentState.on(RoomStateEvent.Events, this.onRoomState);
+        this.room.currentState.on(RoomStateEvent.Update, this.onRoomStateUpdate);
         this.started = true;
     }
 
-    stop() {
-        this.room.client.removeListener(RoomMemberEvent.Membership, this.onMembership);
-        this.room.currentState.removeListener(RoomStateEvent.Events, this.onRoomState);
+    public stop() {
+        this.room.currentState.removeListener(RoomStateEvent.Update, this.onRoomStateUpdate);
         this.started = false;
     }
 
-    get serverCandidates() {
+    public get serverCandidates() {
         return this._serverCandidates;
     }
 
-    isStarted() {
+    public isStarted() {
         return this.started;
     }
 
-    forEvent(eventId: string): string {
+    public forEvent(eventId: string): string {
         return getPermalinkConstructor().forEvent(this.roomId, eventId, this._serverCandidates);
     }
 
-    forShareableRoom(): string {
+    public forShareableRoom(): string {
         if (this.room) {
             // Prefer to use canonical alias for permalink if possible
             const alias = this.room.getCanonicalAlias();
@@ -167,43 +152,28 @@ export class RoomPermalinkCreator {
         return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
     }
 
-    forRoom(): string {
+    public forRoom(): string {
         return getPermalinkConstructor().forRoom(this.roomId, this._serverCandidates);
     }
 
-    private onRoomState = (event: MatrixEvent) => {
-        switch (event.getType()) {
-            case EventType.RoomServerAcl:
-                this.updateAllowedServers();
-                this.updateHighestPlUser();
-                this.updatePopulationMap();
-                this.updateServerCandidates();
-                return;
-            case EventType.RoomPowerLevels:
-                this.updateHighestPlUser();
-                this.updateServerCandidates();
-                return;
-        }
+    private onRoomStateUpdate = () => {
+        this.fullUpdate();
     };
 
-    private onMembership = (evt: MatrixEvent, member: RoomMember, oldMembership: string) => {
-        if (member.roomId !== this.room.roomId) return;
-
-        const userId = member.userId;
-        const membership = member.membership;
-        const serverName = getServerName(userId);
-        const hasJoined = oldMembership !== "join" && membership === "join";
-        const hasLeft = oldMembership === "join" && membership !== "join";
-
-        if (hasLeft) {
-            this.populationMap[serverName]--;
-        } else if (hasJoined) {
-            this.populationMap[serverName]++;
-        }
-
+    private fullUpdate() {
+        // This updates the internal state of this object from the room state. It's broken
+        // down into separate functions, previously because we did some of these as incremental
+        // updates, but they were on member events which can be very numerous, so the incremental
+        // updates ended up being much slower than a full update. We now have the batch state update
+        // event, so we just update in full, but on each batch of updates.
+        // A full update takes about 120ms for me on Matrix HQ, which still feels like way too long
+        // to be spending worrying about how we might generate a permalink, but it's better than
+        // multiple seconds.
+        this.updateAllowedServers();
         this.updateHighestPlUser();
+        this.updatePopulationMap();
         this.updateServerCandidates();
-    };
+    }
 
     private updateHighestPlUser() {
         const plEvent = this.room.currentState.getStateEvents("m.room.power_levels", "");
