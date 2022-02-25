@@ -103,8 +103,12 @@ class FormatButton extends React.PureComponent<IFormatButtonProps> {
             </div>
         </div>;
 
+        // element="button" and type="button" are necessary for the buttons to work on WebKit,
+        // otherwise the text is deselected before onClick can ever be called
         return (
             <AccessibleTooltipButton
+                element="button"
+                type="button"
                 onClick={this.props.onClick}
                 title={this.props.label}
                 tooltip={tooltip}

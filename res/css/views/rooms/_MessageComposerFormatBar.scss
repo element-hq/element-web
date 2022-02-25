@@ -37,12 +37,6 @@ limitations under the License.
         display: inline-block;
         position: relative;
         margin: 2px;
-
-        &:hover {
-            background: $panel-actions;
-            border-radius: 6px;
-            z-index: 1;
-        }
     }
 
     .mx_MessageComposerFormatBar_button {
@@ -50,6 +44,14 @@ limitations under the License.
         height: 28px;
         box-sizing: border-box;
         vertical-align: middle;
+        background: none;
+        border: none;
+
+        &:hover {
+            background: $panel-actions;
+            border-radius: 6px;
+            z-index: 1;
+        }
     }
 
     .mx_MessageComposerFormatBar_button::after {
