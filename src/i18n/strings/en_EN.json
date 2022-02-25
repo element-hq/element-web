@@ -486,6 +486,8 @@
     "Displays list of commands with usages and descriptions": "Displays list of commands with usages and descriptions",
     "Displays information about a user": "Displays information about a user",
     "Send a bug report with logs": "Send a bug report with logs",
+    "Switches to this room's virtual room, if it has one": "Switches to this room's virtual room, if it has one",
+    "No virtual room for this room": "No virtual room for this room",
     "Opens chat with the given user": "Opens chat with the given user",
     "Unable to find Matrix ID for phone number": "Unable to find Matrix ID for phone number",
     "Sends a message to the given user": "Sends a message to the given user",
