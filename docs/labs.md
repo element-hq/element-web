@@ -172,11 +172,3 @@ who prefer to have the right panel open consistently across rooms.
 If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
-
-## Show current profile of users on historical messages (`feature_use_only_current_profiles`)
-
-An experimental flag to determine how the app would behave if a user's current display
-name and avatar (profile) were shown on historical messages instead of the profile details
-at the time when the message was sent.
-
-When enabled, historical messages will use the current profile for the sender.
