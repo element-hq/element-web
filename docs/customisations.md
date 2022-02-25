@@ -16,24 +16,30 @@ the React SDK, you can still override it from the Element Web layer:
    `element-web/src/customisations/YourNameSecurity.ts`
 2. Edit customisations points and make sure export the ones you actually want to
    activate
-3. Tweak the Element build process to use the customised module instead of the
-   default by adding this to the `additionalPlugins` array in `webpack.config.js`:
+3. Create/add an entry to `customisations.json` next to the webpack config:
 
-```js
-new webpack.NormalModuleReplacementPlugin(
-    /src[\/\\]customisations[\/\\]Security\.ts/,
-    path.resolve(__dirname, 'src/customisations/YourNameSecurity.ts'),
-),
+```json
+{
+    "src/customisations/Security.ts": "src/customisations/YourNameSecurity.ts"
+}
 ```
-
-If we add more customisation modules in the future, we'll likely improve these
-steps to remove the need for build changes like the above.
 
 By isolating customisations to their own module, this approach should remove the
 chance of merge conflicts when updating your fork, and thus simplify ongoing
 maintenance.
 
+**Note**: The project deliberately does not exclude `customisations.json` from Git.
+This is to ensure that in shared projects it's possible to have a common config. By
+default, Element Web does *not* ship with this file to prevent conflicts.
+
+### Custom components
+
+Instead of implementing skinning from the react-sdk, maintainers can use the above system to override components
+if they wish. Maintenance and API surface compatibility are left as a responsibility for the project - the layering
+in Element Web (including the react-sdk) do not make guarantees that properties/state machines won't change.
+
 ### Component visibility customisation
+
 UI for some actions can be hidden via the ComponentVisibility customisation:
 - inviting users to rooms and spaces,
 - creating rooms,
@@ -41,21 +47,22 @@ UI for some actions can be hidden via the ComponentVisibility customisation:
 
 To customise visibility create a customisation module from [ComponentVisibility](https://github.com/matrix-org/matrix-react-sdk/blob/master/src/customisations/ComponentVisibility.ts) following the instructions above.
 
-`shouldShowComponent` determines whether or not the active MatrixClient user should be able to use
+`shouldShowComponent` determines whether the active MatrixClient user should be able to use
 the given UI component. When `shouldShowComponent` returns falsy all UI components for that feature will be hidden.
 If shown, the user might still not be able to use the
 component depending on their contextual permissions. For example, invite options
-might be shown to the user but they won't have permission to invite users to
+might be shown to the user, but they won't have permission to invite users to
 the current room: the button will appear disabled.
 
 For example, to only allow users who meet a certain condition to create spaces:
-```
+```typescript
 function shouldShowComponent(component: UIComponent): boolean {
-   if (component === UIComponent.CreateSpaces) {
-      const userMeetsCondition = <<check your custom condition here>>
-      return userMeetsCondition;
-   }
-   return true;
+    if (component === UIComponent.CreateSpaces) {
+        // customConditionCheck() is a function of your own creation
+        const userMeetsCondition = customConditionCheck(MatrixClientPeg.get().getUserId());
+        return userMeetsCondition;
+    }
+    return true;
 }
 ```
-In this example, all UI related to creating a space will be hidden unless the users meets a custom condition.
+In this example, all UI related to creating a space will be hidden unless the users meets the custom condition.
