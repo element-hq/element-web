@@ -34,26 +34,101 @@ describe("<ContextMenu />", () => {
         height: menuSize,
     });
 
-    const targetY = windowSize - menuSize + 50;
     const targetChevronOffset = 25;
 
-    const wrapper = mount(
-        <ContextMenu
-            top={targetY}
-            left={0}
-            chevronFace={ChevronFace.Right}
-            chevronOffset={targetChevronOffset}
-        />,
-    );
-    const chevron = wrapper.find(".mx_ContextualMenu_chevron_right");
+    describe("near top edge of window", () => {
+        const targetY = -50;
 
-    const actualY = parseInt(wrapper.getDOMNode().style.getPropertyValue("top"));
-    const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("top"));
+        const wrapper = mount(
+            <ContextMenu
+                bottom={windowSize - targetY - menuSize}
+                right={menuSize}
+                chevronFace={ChevronFace.Left}
+                chevronOffset={targetChevronOffset}
+            />,
+        );
+        const chevron = wrapper.find(".mx_ContextualMenu_chevron_left");
 
-    it("stays within the window", () => {
-        expect(actualY + menuSize).toBeLessThanOrEqual(windowSize);
+        const actualY = windowSize - parseInt(wrapper.getDOMNode().style.getPropertyValue("bottom")) - menuSize;
+        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("top"));
+
+        it("stays within the window", () => {
+            expect(actualY).toBeGreaterThanOrEqual(0);
+        });
+        it("positions the chevron correctly", () => {
+            expect(actualChevronOffset).toEqual(targetChevronOffset + targetY - actualY);
+        });
     });
-    it("positions the chevron correctly", () => {
-        expect(actualChevronOffset).toEqual(targetChevronOffset + targetY - actualY);
+
+    describe("near right edge of window", () => {
+        const targetX = windowSize - menuSize + 50;
+
+        const wrapper = mount(
+            <ContextMenu
+                bottom={0}
+                left={targetX}
+                chevronFace={ChevronFace.Top}
+                chevronOffset={targetChevronOffset}
+            />,
+        );
+        const chevron = wrapper.find(".mx_ContextualMenu_chevron_top");
+
+        const actualX = parseInt(wrapper.getDOMNode().style.getPropertyValue("left"));
+        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("left"));
+
+        it("stays within the window", () => {
+            expect(actualX + menuSize).toBeLessThanOrEqual(windowSize);
+        });
+        it("positions the chevron correctly", () => {
+            expect(actualChevronOffset).toEqual(targetChevronOffset + targetX - actualX);
+        });
+    });
+
+    describe("near bottom edge of window", () => {
+        const targetY = windowSize - menuSize + 50;
+
+        const wrapper = mount(
+            <ContextMenu
+                top={targetY}
+                left={0}
+                chevronFace={ChevronFace.Right}
+                chevronOffset={targetChevronOffset}
+            />,
+        );
+        const chevron = wrapper.find(".mx_ContextualMenu_chevron_right");
+
+        const actualY = parseInt(wrapper.getDOMNode().style.getPropertyValue("top"));
+        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("top"));
+
+        it("stays within the window", () => {
+            expect(actualY + menuSize).toBeLessThanOrEqual(windowSize);
+        });
+        it("positions the chevron correctly", () => {
+            expect(actualChevronOffset).toEqual(targetChevronOffset + targetY - actualY);
+        });
+    });
+
+    describe("near left edge of window", () => {
+        const targetX = -50;
+
+        const wrapper = mount(
+            <ContextMenu
+                top={0}
+                right={windowSize - targetX - menuSize}
+                chevronFace={ChevronFace.Bottom}
+                chevronOffset={targetChevronOffset}
+            />,
+        );
+        const chevron = wrapper.find(".mx_ContextualMenu_chevron_bottom");
+
+        const actualX = windowSize - parseInt(wrapper.getDOMNode().style.getPropertyValue("right")) - menuSize;
+        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("left"));
+
+        it("stays within the window", () => {
+            expect(actualX).toBeGreaterThanOrEqual(0);
+        });
+        it("positions the chevron correctly", () => {
+            expect(actualChevronOffset).toEqual(targetChevronOffset + targetX - actualX);
+        });
     });
 });
