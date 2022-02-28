@@ -55,7 +55,6 @@ limitations under the License.
     .mx_TabbedView_maskedIcon {
         width: 16px;
         height: 16px;
-        margin-left: 8px;
         margin-right: 16px;
     }
 
@@ -122,7 +121,7 @@ limitations under the License.
     align-items: center;
     vertical-align: text-top;
     cursor: pointer;
-    padding: 8px 0;
+    padding: 8px;
     border-radius: 8px;
     font-size: $font-13px;
     position: relative;
