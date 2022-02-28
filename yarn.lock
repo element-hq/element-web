@@ -8084,7 +8084,7 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-analytics-events@github:matrix-org/matrix-analytics-events.git#8e75aaf0b3e045587daeaf97a7691dbfda2f20c0":
+"matrix-analytics-events@github:matrix-org/matrix-analytics-events#8e75aaf0b3e045587daeaf97a7691dbfda2f20c0":
   version "0.0.1"
   resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/8e75aaf0b3e045587daeaf97a7691dbfda2f20c0"
 
@@ -8110,23 +8110,6 @@ matrix-js-sdk@15.6.0:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
-matrix-js-sdk@15.6.0-rc.1:
-  version "15.6.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-15.6.0-rc.1.tgz#92ce899d778ca1be80b89b146ba35860f3d5ff6e"
-  integrity sha512-kI5SdVipE6BH1x3cxuVhuSqtFdTKfAU2IYoHO75+JaUdorKsS2SHQ+s++NB5yi/v/PNiALTf4vbS9MEPR+zA0A==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "^0.0.1-beta.7"
-    p-retry "^4.5.0"
-    qs "^6.9.6"
-    request "^2.88.2"
-    unhomoglyph "^1.0.6"
-
 matrix-mock-request@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
@@ -8135,10 +8118,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.41.0-rc.1:
-  version "3.41.0-rc.1"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.41.0-rc.1.tgz#428171eed2a10c1a2bcdf5be3401b51a41f1eb9d"
-  integrity sha512-BJi+NOeFexhQFpXghrXPZYFWjS/63mI5Gd1fE/I4n038bfQ/+JWfaF9FgrXMcFrVlhCDu+0Cihnv27lI5dhgYw==
+matrix-react-sdk@3.41.0:
+  version "3.41.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.41.0.tgz#02ff28735f674be3fd1b886b34f8825b8ec4d1ab"
+  integrity sha512-Z0BkUkA1BfAlThutfHG/BfuKn7P87QtHbuXvWyqL7NshYE69f4UFv1vS2i0jTUJhQQdsOsZv9hSg2ZbaeWz2tw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
@@ -8175,7 +8158,7 @@ matrix-react-sdk@3.41.0-rc.1:
     maplibre-gl "^1.15.2"
     matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#8e75aaf0b3e045587daeaf97a7691dbfda2f20c0"
     matrix-events-sdk "^0.0.1-beta.7"
-    matrix-js-sdk "15.6.0-rc.1"
+    matrix-js-sdk "15.6.0"
     matrix-widget-api "^0.1.0-beta.18"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
