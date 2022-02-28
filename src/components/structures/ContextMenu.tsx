@@ -21,11 +21,12 @@ import ReactDOM from "react-dom";
 import classNames from "classnames";
 import FocusLock from "react-focus-lock";
 
-import { Key } from "../../Keyboard";
 import { Writeable } from "../../@types/common";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
 import { checkInputableElement, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 // Shamelessly ripped off Modal.js.  There's probably a better way
 // of doing reusable widgets like dialog boxes & menus where we go and
@@ -191,30 +192,32 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
     private onKeyDown = (ev: React.KeyboardEvent) => {
         ev.stopPropagation(); // prevent keyboard propagating out of the context menu, we're focus-locked
 
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+
         // If someone is managing their own focus, we will only exit for them with Escape.
         // They are probably using props.focusLock along with this option as well.
         if (!this.props.managed) {
-            if (ev.key === Key.ESCAPE) {
+            if (action === KeyBindingAction.Escape) {
                 this.props.onFinished();
             }
             return;
         }
 
         // When an <input> is focused, only handle the Escape key
-        if (checkInputableElement(ev.target as HTMLElement) && ev.key !== Key.ESCAPE) {
+        if (checkInputableElement(ev.target as HTMLElement) && action !== KeyBindingAction.Escape) {
             return;
         }
 
-        if (
-            ev.key === Key.ESCAPE ||
+        if ([
+            KeyBindingAction.Escape,
             // You can only navigate the ContextMenu by arrow keys and Home/End (see RovingTabIndex).
             // Tabbing to the next section of the page, will close the ContextMenu.
-            ev.key === Key.TAB ||
+            KeyBindingAction.Tab,
             // When someone moves left or right along a <Toolbar /> (like the
             // MessageActionBar), we should close any ContextMenu that is open.
-            ev.key === Key.ARROW_LEFT ||
-            ev.key === Key.ARROW_RIGHT
-        ) {
+            KeyBindingAction.ArrowLeft,
+            KeyBindingAction.ArrowRight,
+        ].includes(action)) {
             this.props.onFinished();
         }
     };

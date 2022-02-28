@@ -22,7 +22,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
-import { Key } from "../../../Keyboard";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
@@ -38,6 +37,8 @@ import { normalizeWheelEvent } from "../../../utils/Mouse";
 import { IDialogProps } from '../dialogs/IDialogProps';
 import UIStore from '../../../stores/UIStore';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 
 // Max scale to keep gaps around the image
 const MAX_SCALE = 0.95;
@@ -292,10 +293,13 @@ export default class ImageView extends React.Component<IProps, IState> {
     };
 
     private onKeyDown = (ev: KeyboardEvent) => {
-        if (ev.key === Key.ESCAPE) {
-            ev.stopPropagation();
-            ev.preventDefault();
-            this.props.onFinished();
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        switch (action) {
+            case KeyBindingAction.Escape:
+                ev.stopPropagation();
+                ev.preventDefault();
+                this.props.onFinished();
+                break;
         }
     };
 

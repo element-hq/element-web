@@ -19,11 +19,12 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import FocusLock from "react-focus-lock";
 
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { Key } from "../../../Keyboard";
 import { IDialogProps } from "./IDialogProps";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 
 export interface IScrollableBaseState {
     canSubmit: boolean;
@@ -45,10 +46,13 @@ export default abstract class ScrollableBaseModal<TProps extends IDialogProps, T
     }
 
     private onKeyDown = (e: KeyboardEvent | React.KeyboardEvent): void => {
-        if (e.key === Key.ESCAPE) {
-            e.stopPropagation();
-            e.preventDefault();
-            this.cancel();
+        const action = getKeyBindingsManager().getAccessibilityAction(e);
+        switch (action) {
+            case KeyBindingAction.Escape:
+                e.stopPropagation();
+                e.preventDefault();
+                this.cancel();
+                break;
         }
     };
 

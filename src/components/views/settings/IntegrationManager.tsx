@@ -18,10 +18,11 @@ import React from 'react';
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
-import { Key } from "../../../Keyboard";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
 import Spinner from "../elements/Spinner";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 interface IProps {
     // false to display an error saying that we couldn't connect to the integration manager
@@ -65,10 +66,13 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
     }
 
     private onKeyDown = (ev: KeyboardEvent): void => {
-        if (ev.key === Key.ESCAPE) {
-            ev.stopPropagation();
-            ev.preventDefault();
-            this.props.onFinished();
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        switch (action) {
+            case KeyBindingAction.Escape:
+                ev.stopPropagation();
+                ev.preventDefault();
+                this.props.onFinished();
+                break;
         }
     };
 

@@ -44,7 +44,6 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import NotificationBadge from "./NotificationBadge";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { Key } from "../../../Keyboard";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { polyfillTouchEvent } from "../../../@types/polyfill";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
@@ -503,14 +502,15 @@ export default class RoomSublist extends React.Component<IProps, IState> {
     };
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
-        switch (ev.key) {
-            // On ARROW_LEFT go to the sublist header
-            case Key.ARROW_LEFT:
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        switch (action) {
+            // On ArrowLeft go to the sublist header
+            case KeyBindingAction.ArrowLeft:
                 ev.stopPropagation();
                 this.headerButton.current.focus();
                 break;
-            // Consume ARROW_RIGHT so it doesn't cause focus to get sent to composer
-            case Key.ARROW_RIGHT:
+            // Consume ArrowRight so it doesn't cause focus to get sent to composer
+            case KeyBindingAction.ArrowRight:
                 ev.stopPropagation();
         }
     };

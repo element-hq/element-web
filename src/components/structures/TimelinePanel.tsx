@@ -37,7 +37,6 @@ import UserActivity from "../../UserActivity";
 import Modal from "../../Modal";
 import dis from "../../dispatcher/dispatcher";
 import { Action } from '../../dispatcher/actions';
-import { Key } from '../../Keyboard';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import { haveTileForEvent } from "../views/rooms/EventTile";
@@ -54,6 +53,8 @@ import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import ErrorDialog from '../views/dialogs/ErrorDialog';
 import CallEventGrouper, { buildCallEventGroupers } from "./CallEventGrouper";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1086,11 +1087,12 @@ class TimelinePanel extends React.Component<IProps, IState> {
      * We pass it down to the scroll panel.
      */
     public handleScrollKey = ev => {
-        if (!this.messagePanel.current) { return; }
+        if (!this.messagePanel.current) return;
 
         // jump to the live timeline on ctrl-end, rather than the end of the
         // timeline window.
-        if (ev.ctrlKey && !ev.shiftKey && !ev.altKey && !ev.metaKey && ev.key === Key.END) {
+        const action = getKeyBindingsManager().getRoomAction(ev);
+        if (action === KeyBindingAction.JumpToLatestMessage) {
             this.jumpToLiveTimeline();
         } else {
             this.messagePanel.current.handleScrollKey(ev);

@@ -155,6 +155,10 @@ export class KeyBindingsManager {
         return this.getAction(this.bindingsProviders.map(it => it.getNavigationBindings), ev);
     }
 
+    getAccessibilityAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
+        return this.getAction(this.bindingsProviders.map(it => it.getAccessibilityBindings), ev);
+    }
+
     getCallAction(ev: KeyboardEvent | React.KeyboardEvent): KeyBindingAction | undefined {
         return this.getAction(this.bindingsProviders.map(it => it.getCallBindings), ev);
     }

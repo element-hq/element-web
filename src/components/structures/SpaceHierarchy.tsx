@@ -54,7 +54,6 @@ import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { linkifyElement } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
-import { Key } from "../../Keyboard";
 import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
 import { getDisplayAliasForRoom } from "./RoomDirectory";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
@@ -64,6 +63,8 @@ import { awaitRoomDownSync } from "../../utils/RoomUpgrade";
 import RoomViewStore from "../../stores/RoomViewStore";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
+import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps {
     space: Room;
@@ -247,10 +248,13 @@ const Tile: React.FC<ITileProps> = ({
 
         if (showChildren) {
             const onChildrenKeyDown = (e) => {
-                if (e.key === Key.ARROW_LEFT) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    ref.current?.focus();
+                const action = getKeyBindingsManager().getAccessibilityAction(e);
+                switch (action) {
+                    case KeyBindingAction.ArrowLeft:
+                        e.preventDefault();
+                        e.stopPropagation();
+                        ref.current?.focus();
+                        break;
                 }
             };
 
@@ -266,15 +270,16 @@ const Tile: React.FC<ITileProps> = ({
         onKeyDown = (e) => {
             let handled = false;
 
-            switch (e.key) {
-                case Key.ARROW_LEFT:
+            const action = getKeyBindingsManager().getAccessibilityAction(e);
+            switch (action) {
+                case KeyBindingAction.ArrowLeft:
                     if (showChildren) {
                         handled = true;
                         toggleShowChildren();
                     }
                     break;
 
-                case Key.ARROW_RIGHT:
+                case KeyBindingAction.ArrowRight:
                     handled = true;
                     if (showChildren) {
                         const childSection = ref.current?.nextElementSibling;
@@ -700,7 +705,11 @@ const SpaceHierarchy = ({
     }
 
     const onKeyDown = (ev: KeyboardEvent, state: IState): void => {
-        if (ev.key === Key.ARROW_DOWN && ev.currentTarget.classList.contains("mx_SpaceHierarchy_search")) {
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        if (
+            action === KeyBindingAction.ArrowDown &&
+            ev.currentTarget.classList.contains("mx_SpaceHierarchy_search")
+        ) {
             state.refs[0]?.current?.focus();
         }
     };

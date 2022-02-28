@@ -28,6 +28,7 @@ import { findById } from '../../../test-utils';
 import { SettingLevel } from '../../../../src/settings/SettingLevel';
 import dis from '../../../../src/dispatcher/dispatcher';
 import { Action } from '../../../../src/dispatcher/actions';
+import PlatformPeg from "../../../../src/PlatformPeg";
 
 jest.mock('../../../../src/theme');
 jest.mock('../../../../src/components/views/settings/ThemeChoicePanel', () => ({
@@ -43,6 +44,8 @@ jest.mock('../../../../src/dispatcher/dispatcher', () => ({
     dispatch: jest.fn(),
     register: jest.fn(),
 }));
+
+PlatformPeg.get = () => ({ overrideBrowserShortcuts: () => false });
 
 describe('<QuickThemeSwitcher />', () => {
     const defaultProps = {

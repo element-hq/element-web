@@ -17,7 +17,8 @@
 import React, { ReactHTML } from 'react';
 import classnames from 'classnames';
 
-import { Key } from '../../../Keyboard';
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 export type ButtonEvent = React.MouseEvent<Element> | React.KeyboardEvent<Element> | React.FormEvent<Element>;
 
@@ -92,29 +93,36 @@ export default function AccessibleButton({
         // Browsers handle space and enter keypresses differently and we are only adjusting to the
         // inconsistencies here
         newProps.onKeyDown = (e) => {
-            if (e.key === Key.ENTER) {
-                e.stopPropagation();
-                e.preventDefault();
-                return onClick(e);
-            }
-            if (e.key === Key.SPACE) {
-                e.stopPropagation();
-                e.preventDefault();
-            } else {
-                onKeyDown?.(e);
+            const action = getKeyBindingsManager().getAccessibilityAction(e);
+
+            switch (action) {
+                case KeyBindingAction.Enter:
+                    e.stopPropagation();
+                    e.preventDefault();
+                    return onClick(e);
+                case KeyBindingAction.Space:
+                    e.stopPropagation();
+                    e.preventDefault();
+                    break;
+                default:
+                    onKeyDown?.(e);
             }
         };
         newProps.onKeyUp = (e) => {
-            if (e.key === Key.SPACE) {
-                e.stopPropagation();
-                e.preventDefault();
-                return onClick(e);
-            }
-            if (e.key === Key.ENTER) {
-                e.stopPropagation();
-                e.preventDefault();
-            } else {
-                onKeyUp?.(e);
+            const action = getKeyBindingsManager().getAccessibilityAction(e);
+
+            switch (action) {
+                case KeyBindingAction.Enter:
+                    e.stopPropagation();
+                    e.preventDefault();
+                    break;
+                case KeyBindingAction.Space:
+                    e.stopPropagation();
+                    e.preventDefault();
+                    return onClick(e);
+                default:
+                    onKeyUp?.(e);
+                    break;
             }
         };
     }

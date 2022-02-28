@@ -130,10 +130,20 @@ export enum KeyBindingAction {
     /** Toggles webcam while on a call */
     ToggleWebcamInCall = "KeyBinding.toggleWebcamInCall",
 
-    /** Closes a dialog or a context menu */
-    CloseDialogOrContextMenu = "KeyBinding.closeDialogOrContextMenu",
-    /** Clicks the selected button */
-    ActivateSelectedButton = "KeyBinding.activateSelectedButton",
+    /** Accessibility actions */
+    Escape = "KeyBinding.escape",
+    Enter = "KeyBinding.enter",
+    Space = "KeyBinding.space",
+    Backspace = "KeyBinding.backspace",
+    Delete = "KeyBinding.delete",
+    Home = "KeyBinding.home",
+    End = "KeyBinding.end",
+    ArrowLeft = "KeyBinding.arrowLeft",
+    ArrowUp = "KeyBinding.arrowUp",
+    ArrowRight = "KeyBinding.arrowRight",
+    ArrowDown = "KeyBinding.arrowDown",
+    Tab = "KeyBinding.tab",
+    Comma = "KeyBinding.comma",
 
     /** Toggle visibility of hidden events */
     ToggleHiddenEventVisibility = 'KeyBinding.toggleHiddenEventVisibility',
@@ -156,13 +166,14 @@ type IKeyboardShortcuts = {
 };
 
 export interface ICategory {
-    categoryLabel: string;
+    categoryLabel?: string;
     // TODO: We should figure out what to do with the keyboard shortcuts that are not handled by KeybindingManager
     settingNames: (KeyBindingAction)[];
 }
 
 export enum CategoryName {
     NAVIGATION = "Navigation",
+    ACCESSIBILITY = "Accessibility",
     CALLS = "Calls",
     COMPOSER = "Composer",
     ROOM_LIST = "Room List",
@@ -245,12 +256,26 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.NextRoom,
             KeyBindingAction.PrevRoom,
         ],
+    }, [CategoryName.ACCESSIBILITY]: {
+        categoryLabel: _td("Accessibility"),
+        settingNames: [
+            KeyBindingAction.Escape,
+            KeyBindingAction.Enter,
+            KeyBindingAction.Space,
+            KeyBindingAction.Backspace,
+            KeyBindingAction.Delete,
+            KeyBindingAction.Home,
+            KeyBindingAction.End,
+            KeyBindingAction.ArrowLeft,
+            KeyBindingAction.ArrowUp,
+            KeyBindingAction.ArrowRight,
+            KeyBindingAction.ArrowDown,
+            KeyBindingAction.Comma,
+        ],
     }, [CategoryName.NAVIGATION]: {
         categoryLabel: _td("Navigation"),
         settingNames: [
             KeyBindingAction.ToggleUserMenu,
-            KeyBindingAction.CloseDialogOrContextMenu,
-            KeyBindingAction.ActivateSelectedButton,
             KeyBindingAction.ToggleRoomSidePanel,
             KeyBindingAction.ToggleSpacePanel,
             KeyBindingAction.ShowKeyboardSettings,
@@ -611,6 +636,68 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
         },
         displayName: _td("Open user settings"),
     },
+    [KeyBindingAction.Escape]: {
+        default: {
+            key: Key.ESCAPE,
+        },
+        displayName: _td("Close dialog or context menu"),
+    },
+    [KeyBindingAction.Enter]: {
+        default: {
+            key: Key.ENTER,
+        },
+        displayName: _td("Activate selected button"),
+    },
+    [KeyBindingAction.Space]: {
+        default: {
+            key: Key.SPACE,
+        },
+    },
+    [KeyBindingAction.Backspace]: {
+        default: {
+            key: Key.BACKSPACE,
+        },
+    },
+    [KeyBindingAction.Delete]: {
+        default: {
+            key: Key.DELETE,
+        },
+    },
+    [KeyBindingAction.Home]: {
+        default: {
+            key: Key.HOME,
+        },
+    },
+    [KeyBindingAction.End]: {
+        default: {
+            key: Key.END,
+        },
+    },
+    [KeyBindingAction.ArrowLeft]: {
+        default: {
+            key: Key.ARROW_LEFT,
+        },
+    },
+    [KeyBindingAction.ArrowUp]: {
+        default: {
+            key: Key.ARROW_UP,
+        },
+    },
+    [KeyBindingAction.ArrowRight]: {
+        default: {
+            key: Key.ARROW_RIGHT,
+        },
+    },
+    [KeyBindingAction.ArrowDown]: {
+        default: {
+            key: Key.ARROW_DOWN,
+        },
+    },
+    [KeyBindingAction.Comma]: {
+        default: {
+            key: Key.COMMA,
+        },
+    },
 };
 
 // XXX: These have to be manually mirrored in KeyBindingDefaults
@@ -650,18 +737,6 @@ const getNonCustomizableShortcuts = (): IKeyboardShortcuts => {
                 key: Key.F,
             },
             displayName: _td("Search (must be enabled)"),
-        },
-        [KeyBindingAction.CloseDialogOrContextMenu]: {
-            default: {
-                key: Key.ESCAPE,
-            },
-            displayName: _td("Close dialog or context menu"),
-        },
-        [KeyBindingAction.ActivateSelectedButton]: {
-            default: {
-                key: Key.ENTER,
-            },
-            displayName: _td("Activate selected button"),
         },
     };
 

@@ -20,11 +20,12 @@ import PlayPauseButton from "./PlayPauseButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { formatBytes } from "../../../utils/FormattingUtils";
 import DurationClock from "./DurationClock";
-import { Key } from "../../../Keyboard";
 import { _t } from "../../../languageHandler";
 import SeekBar from "./SeekBar";
 import PlaybackClock from "./PlaybackClock";
 import AudioPlayerBase from "./AudioPlayerBase";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 @replaceableComponent("views.audio_messages.AudioPlayer")
 export default class AudioPlayer extends AudioPlayerBase {
@@ -32,18 +33,29 @@ export default class AudioPlayer extends AudioPlayerBase {
     private seekRef: RefObject<SeekBar> = createRef();
 
     private onKeyDown = (ev: React.KeyboardEvent) => {
+        let handled = true;
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+
+        switch (action) {
+            case KeyBindingAction.Space:
+                this.playPauseRef.current?.toggleState();
+                break;
+            case KeyBindingAction.ArrowLeft:
+                this.seekRef.current?.left();
+                break;
+            case KeyBindingAction.ArrowRight:
+                this.seekRef.current?.right();
+                break;
+            default:
+                handled = false;
+                break;
+        }
+
         // stopPropagation() prevents the FocusComposer catch-all from triggering,
         // but we need to do it on key down instead of press (even though the user
         // interaction is typically on press).
-        if (ev.key === Key.SPACE) {
+        if (handled) {
             ev.stopPropagation();
-            this.playPauseRef.current?.toggleState();
-        } else if (ev.key === Key.ARROW_LEFT) {
-            ev.stopPropagation();
-            this.seekRef.current?.left();
-        } else if (ev.key === Key.ARROW_RIGHT) {
-            ev.stopPropagation();
-            this.seekRef.current?.right();
         }
     };
 

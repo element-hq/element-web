@@ -45,7 +45,6 @@ import {
     showAnyInviteErrors,
     showCommunityInviteDialog,
 } from "../../../RoomInvite";
-import { Key } from "../../../Keyboard";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
@@ -71,6 +70,8 @@ import UserIdentifierCustomisations from '../../../customisations/UserIdentifier
 import CopyableText from "../elements/CopyableText";
 import { ScreenName } from '../../../PosthogTrackers';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -803,20 +804,36 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     private onKeyDown = (e) => {
         if (this.state.busy) return;
+
+        let handled = true;
         const value = e.target.value.trim();
-        const hasModifiers = e.ctrlKey || e.shiftKey || e.metaKey;
-        if (!value && this.state.targets.length > 0 && e.key === Key.BACKSPACE && !hasModifiers) {
-            // when the field is empty and the user hits backspace remove the right-most target
+        const action = getKeyBindingsManager().getAccessibilityAction(e);
+
+        switch (action) {
+            case KeyBindingAction.Backspace:
+                if (value || this.state.targets.length <= 0) break;
+
+                // when the field is empty and the user hits backspace remove the right-most target
+                this.removeMember(this.state.targets[this.state.targets.length - 1]);
+                break;
+            case KeyBindingAction.Space:
+                if (!value || !value.includes("@") || value.includes(" ")) break;
+
+                // when the user hits space and their input looks like an e-mail/MXID then try to convert it
+                this.convertFilter();
+                break;
+            case KeyBindingAction.Enter:
+                if (!value) break;
+
+                // when the user hits enter with something in their field try to convert it
+                this.convertFilter();
+                break;
+            default:
+                handled = false;
+        }
+
+        if (handled) {
             e.preventDefault();
-            this.removeMember(this.state.targets[this.state.targets.length - 1]);
-        } else if (value && e.key === Key.ENTER && !hasModifiers) {
-            // when the user hits enter with something in their field try to convert it
-            e.preventDefault();
-            this.convertFilter();
-        } else if (value && e.key === Key.SPACE && !hasModifiers && value.includes("@") && !value.includes(" ")) {
-            // when the user hits space and their input looks like an e-mail/MXID then try to convert it
-            e.preventDefault();
-            this.convertFilter();
         }
     };
 

@@ -38,7 +38,8 @@ import SettingsStore from "../../../settings/SettingsStore";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
-import { Key } from "../../../Keyboard";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 export const createSpace = async (
     name: string,
@@ -159,8 +160,11 @@ export const SpaceCreateForm: React.FC<ISpaceCreateFormProps> = ({
     const domain = cli.getDomain();
 
     const onKeyDown = (ev: KeyboardEvent) => {
-        if (ev.key === Key.ENTER) {
-            onSubmit(ev);
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        switch (action) {
+            case KeyBindingAction.Enter:
+                onSubmit(ev);
+                break;
         }
     };
 

@@ -3404,6 +3404,7 @@
     "[number]": "[number]",
     "Calls": "Calls",
     "Room List": "Room List",
+    "Accessibility": "Accessibility",
     "Navigation": "Navigation",
     "Autocomplete": "Autocomplete",
     "Toggle Bold": "Toggle Bold",
@@ -3451,9 +3452,9 @@
     "Next recently visited room or community": "Next recently visited room or community",
     "Switch to space by number": "Switch to space by number",
     "Open user settings": "Open user settings",
+    "Close dialog or context menu": "Close dialog or context menu",
+    "Activate selected button": "Activate selected button",
     "New line": "New line",
     "Force complete": "Force complete",
-    "Search (must be enabled)": "Search (must be enabled)",
-    "Close dialog or context menu": "Close dialog or context menu",
-    "Activate selected button": "Activate selected button"
+    "Search (must be enabled)": "Search (must be enabled)"
 }

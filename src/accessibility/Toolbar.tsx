@@ -17,7 +17,8 @@ limitations under the License.
 import React from "react";
 
 import { RovingTabIndexProvider } from "./RovingTabIndex";
-import { Key } from "../Keyboard";
+import { getKeyBindingsManager } from "../KeyBindingsManager";
+import { KeyBindingAction } from "./KeyboardShortcuts";
 
 interface IProps extends Omit<React.HTMLProps<HTMLDivElement>, "onKeyDown"> {
 }
@@ -34,9 +35,10 @@ const Toolbar: React.FC<IProps> = ({ children, ...props }) => {
         let handled = true;
 
         // HOME and END are handled by RovingTabIndexProvider
-        switch (ev.key) {
-            case Key.ARROW_UP:
-            case Key.ARROW_DOWN:
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+        switch (action) {
+            case KeyBindingAction.ArrowUp:
+            case KeyBindingAction.ArrowDown:
                 if (target.hasAttribute('aria-haspopup')) {
                     target.click();
                 }

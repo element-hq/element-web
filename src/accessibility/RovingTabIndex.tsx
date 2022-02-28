@@ -27,7 +27,8 @@ import React, {
     RefObject,
 } from "react";
 
-import { Key } from "../Keyboard";
+import { getKeyBindingsManager } from "../KeyBindingsManager";
+import { KeyBindingAction } from "./KeyboardShortcuts";
 import { FocusHandler, Ref } from "./roving/types";
 
 /**
@@ -207,12 +208,13 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
         }
 
         let handled = false;
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
         let focusRef: RefObject<HTMLElement>;
         // Don't interfere with input default keydown behaviour
         // but allow people to move focus from it with Tab.
         if (checkInputableElement(ev.target as HTMLElement)) {
-            switch (ev.key) {
-                case Key.TAB:
+            switch (action) {
+                case KeyBindingAction.Tab:
                     handled = true;
                     if (context.state.refs.length > 0) {
                         const idx = context.state.refs.indexOf(context.state.activeRef);
@@ -222,8 +224,8 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
             }
         } else {
             // check if we actually have any items
-            switch (ev.key) {
-                case Key.HOME:
+            switch (action) {
+                case KeyBindingAction.Home:
                     if (handleHomeEnd) {
                         handled = true;
                         // move focus to first (visible) item
@@ -231,7 +233,7 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                     }
                     break;
 
-                case Key.END:
+                case KeyBindingAction.End:
                     if (handleHomeEnd) {
                         handled = true;
                         // move focus to last (visible) item
@@ -239,10 +241,10 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                     }
                     break;
 
-                case Key.ARROW_DOWN:
-                case Key.ARROW_RIGHT:
-                    if ((ev.key === Key.ARROW_DOWN && handleUpDown) ||
-                        (ev.key === Key.ARROW_RIGHT && handleLeftRight)
+                case KeyBindingAction.ArrowDown:
+                case KeyBindingAction.ArrowRight:
+                    if ((action === KeyBindingAction.ArrowDown && handleUpDown) ||
+                        (action === KeyBindingAction.ArrowRight && handleLeftRight)
                     ) {
                         handled = true;
                         if (context.state.refs.length > 0) {
@@ -252,9 +254,11 @@ export const RovingTabIndexProvider: React.FC<IProps> = ({
                     }
                     break;
 
-                case Key.ARROW_UP:
-                case Key.ARROW_LEFT:
-                    if ((ev.key === Key.ARROW_UP && handleUpDown) || (ev.key === Key.ARROW_LEFT && handleLeftRight)) {
+                case KeyBindingAction.ArrowUp:
+                case KeyBindingAction.ArrowLeft:
+                    if ((action === KeyBindingAction.ArrowUp && handleUpDown) ||
+                        (action === KeyBindingAction.ArrowLeft && handleLeftRight)
+                    ) {
                         handled = true;
                         if (context.state.refs.length > 0) {
                             const idx = context.state.refs.indexOf(context.state.activeRef);

@@ -149,16 +149,11 @@ const roomBindings = (): KeyBinding[] => {
 };
 
 const navigationBindings = (): KeyBinding[] => {
-    const bindings = getBindingsByCategory(CategoryName.NAVIGATION);
+    return getBindingsByCategory(CategoryName.NAVIGATION);
+};
 
-    bindings.push({
-        action: KeyBindingAction.CloseDialogOrContextMenu,
-        keyCombo: {
-            key: Key.ESCAPE,
-        },
-    });
-
-    return bindings;
+const accessibilityBindings = (): KeyBinding[] => {
+    return getBindingsByCategory(CategoryName.ACCESSIBILITY);
 };
 
 const callBindings = (): KeyBinding[] => {
@@ -177,6 +172,7 @@ export const defaultBindingsProvider: IKeyBindingsProvider = {
     getRoomListBindings: roomListBindings,
     getRoomBindings: roomBindings,
     getNavigationBindings: navigationBindings,
+    getAccessibilityBindings: accessibilityBindings,
     getCallBindings: callBindings,
     getLabsBindings: labsBindings,
 };

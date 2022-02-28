@@ -18,14 +18,15 @@ limitations under the License.
 
 import React from "react";
 
-import { Key } from "../../Keyboard";
 import { useRovingTabIndex } from "../RovingTabIndex";
 import StyledRadioButton from "../../components/views/elements/StyledRadioButton";
+import { KeyBindingAction } from "../KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../KeyBindingsManager";
 
 interface IProps extends React.ComponentProps<typeof StyledRadioButton> {
     label?: string;
     onChange(); // we handle keyup/down ourselves so lose the ChangeEvent
-    onClose(): void; // gets called after onChange on Key.ENTER
+    onClose(): void; // gets called after onChange on KeyBindingAction.Enter
 }
 
 // Semantic component for representing a styled role=menuitemradio
@@ -33,22 +34,37 @@ export const StyledMenuItemRadio: React.FC<IProps> = ({ children, label, onChang
     const [onFocus, isActive, ref] = useRovingTabIndex<HTMLInputElement>();
 
     const onKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === Key.ENTER || e.key === Key.SPACE) {
+        let handled = true;
+        const action = getKeyBindingsManager().getAccessibilityAction(e);
+
+        switch (action) {
+            case KeyBindingAction.Space:
+                onChange();
+                break;
+            case KeyBindingAction.Enter:
+                onChange();
+                // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+                onClose();
+                break;
+            default:
+                handled = false;
+        }
+
+        if (handled) {
             e.stopPropagation();
             e.preventDefault();
-            onChange();
-            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            if (e.key === Key.ENTER) {
-                onClose();
-            }
         }
     };
     const onKeyUp = (e: React.KeyboardEvent) => {
-        // prevent the input default handler as we handle it on keydown to match
-        // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
-        if (e.key === Key.SPACE || e.key === Key.ENTER) {
-            e.stopPropagation();
-            e.preventDefault();
+        const action = getKeyBindingsManager().getAccessibilityAction(e);
+        switch (action) {
+            case KeyBindingAction.Enter:
+            case KeyBindingAction.Space:
+                // prevent the input default handler as we handle it on keydown to match
+                // https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-2/menubar-2.html
+                e.stopPropagation();
+                e.preventDefault();
+                break;
         }
     };
     return (

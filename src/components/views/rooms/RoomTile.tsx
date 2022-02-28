@@ -25,7 +25,6 @@ import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleBu
 import dis from '../../../dispatcher/dispatcher';
 import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
-import { Key } from "../../../Keyboard";
 import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
 import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
@@ -54,6 +53,8 @@ import { CommunityPrototypeStore, IRoomProfile } from "../../../stores/Community
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 
 interface IProps {
     room: Room;
@@ -240,11 +241,14 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     private onTileClick = (ev: React.KeyboardEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
+
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             show_room_tile: true, // make sure the room is visible in the list
             room_id: this.props.room.roomId,
-            clear_search: (ev && (ev.key === Key.ENTER || ev.key === Key.SPACE)),
+            clear_search: [KeyBindingAction.Enter, KeyBindingAction.Space].includes(action),
             metricsTrigger: "RoomList",
             metricsViaKeyboard: ev.type !== "click",
         });
@@ -313,9 +317,12 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             logger.warn(`Unexpected tag ${tagId} applied to ${this.props.room.roomId}`);
         }
 
-        if ((ev as React.KeyboardEvent).key === Key.ENTER) {
-            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            this.setState({ generalMenuPosition: null }); // hide the menu
+        const action = getKeyBindingsManager().getAccessibilityAction(ev as React.KeyboardEvent);
+        switch (action) {
+            case KeyBindingAction.Enter:
+                // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+                this.setState({ generalMenuPosition: null }); // hide the menu
+                break;
         }
     };
 
@@ -387,10 +394,12 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         this.roomProps.notificationVolume = newState;
 
-        const key = (ev as React.KeyboardEvent).key;
-        if (key === Key.ENTER) {
-            // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
-            this.setState({ notificationsMenuPosition: null }); // hide the menu
+        const action = getKeyBindingsManager().getAccessibilityAction(ev as React.KeyboardEvent);
+        switch (action) {
+            case KeyBindingAction.Enter:
+                // Implements https://www.w3.org/TR/wai-aria-practices/#keyboard-interaction-12
+                this.setState({ notificationsMenuPosition: null }); // hide the menu
+                break;
         }
     }
 

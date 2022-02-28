@@ -19,8 +19,9 @@ import React from 'react';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
-import { Key } from "../../../Keyboard";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 
 const CUSTOM_VALUE = "SELECT_VALUE_CUSTOM";
 
@@ -130,16 +131,19 @@ export default class PowerSelector extends React.Component<IProps, IState> {
     };
 
     private onCustomKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (event.key === Key.ENTER) {
-            event.preventDefault();
-            event.stopPropagation();
+        const action = getKeyBindingsManager().getAccessibilityAction(event);
+        switch (action) {
+            case KeyBindingAction.Enter:
+                event.preventDefault();
+                event.stopPropagation();
 
-            // Do not call the onChange handler directly here - it can cause an infinite loop.
-            // Long story short, a user hits Enter to submit the value which onChange handles as
-            // raising a dialog which causes a blur which causes a dialog which causes a blur and
-            // so on. By not causing the onChange to be called here, we avoid the loop because we
-            // handle the onBlur safely.
-            (event.target as HTMLInputElement).blur();
+                // Do not call the onChange handler directly here - it can cause an infinite loop.
+                // Long story short, a user hits Enter to submit the value which onChange handles as
+                // raising a dialog which causes a blur which causes a dialog which causes a blur and
+                // so on. By not causing the onChange to be called here, we avoid the loop because we
+                // handle the onBlur safely.
+                (event.target as HTMLInputElement).blur();
+                break;
         }
     };
 
