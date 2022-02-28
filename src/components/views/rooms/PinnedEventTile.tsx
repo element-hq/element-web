@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 import React from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import dis from "../../../dispatcher/dispatcher";
@@ -33,7 +32,6 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
-    room: Room;
     event: MatrixEvent;
     onUnpinClicked?(): void;
 }
@@ -56,7 +54,6 @@ export default class PinnedEventTile extends React.Component<IProps> {
 
     render() {
         const sender = this.props.event.getSender();
-        const senderProfile = this.props.room.getMember(sender);
 
         let unpinButton = null;
         if (this.props.onUnpinClicked) {
@@ -72,14 +69,14 @@ export default class PinnedEventTile extends React.Component<IProps> {
         return <div className="mx_PinnedEventTile">
             <MemberAvatar
                 className="mx_PinnedEventTile_senderAvatar"
-                member={senderProfile}
+                member={this.props.event.sender}
                 width={AVATAR_SIZE}
                 height={AVATAR_SIZE}
                 fallbackUserId={sender}
             />
 
             <span className={"mx_PinnedEventTile_sender " + getUserNameColorClass(sender)}>
-                { senderProfile?.name || sender }
+                { this.props.event.sender?.name || sender }
             </span>
 
             { unpinButton }

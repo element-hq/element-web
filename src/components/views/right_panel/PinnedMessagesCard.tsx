@@ -108,6 +108,8 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
                     await cli.decryptEventIfNeeded(event); // TODO await?
                 }
                 if (event && PinningUtils.isPinnable(event)) {
+                    // Inject sender information
+                    event.sender = room.getMember(event.getSender());
                     return event;
                 }
             } catch (err) {
@@ -140,7 +142,6 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
         content = pinnedEvents.filter(Boolean).reverse().map(ev => (
             <PinnedEventTile
                 key={ev.getId()}
-                room={room}
                 event={ev}
                 onUnpinClicked={canUnpin ? () => onUnpinClicked(ev) : undefined}
             />
