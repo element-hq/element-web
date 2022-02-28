@@ -42,6 +42,8 @@ import { UIFeature } from "../../../settings/UIFeature";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
+import { useSettingValue } from "../../../hooks/useSettings";
+import { usePinnedEvents } from "./PinnedMessagesCard";
 import { Container, MAX_PINNED, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import RoomName from "../elements/RoomName";
 import UIStore from "../../../stores/UIStore";
@@ -239,6 +241,10 @@ const onRoomFilesClick = () => {
     RightPanelStore.instance.pushCard({ phase: RightPanelPhases.FilePanel }, true);
 };
 
+const onRoomPinsClick = () => {
+    RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, true);
+};
+
 const onRoomSettingsClick = (ev: ButtonEvent) => {
     defaultDispatcher.dispatch({ action: "open_room_settings" });
     PosthogTrackers.trackInteraction("WebRightPanelRoomInfoSettingsButton", ev);
@@ -290,6 +296,8 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     </React.Fragment>;
 
     const memberCount = useRoomMemberCount(room);
+    const pinningEnabled = useSettingValue("feature_pinning");
+    const pinCount = usePinnedEvents(pinningEnabled && room)?.length;
 
     return <BaseCard header={header} className="mx_RoomSummaryCard" onClose={onClose}>
         <Group title={_t("About")} className="mx_RoomSummaryCard_aboutGroup">
@@ -302,6 +310,12 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             <Button className="mx_RoomSummaryCard_icon_files" onClick={onRoomFilesClick}>
                 { _t("Files") }
             </Button>
+            { pinningEnabled && <Button className="mx_RoomSummaryCard_icon_pins" onClick={onRoomPinsClick}>
+                { _t("Pinned") }
+                { pinCount > 0 && <span className="mx_BaseCard_Button_sublabel">
+                    { pinCount }
+                </span> }
+            </Button> }
             <Button className="mx_RoomSummaryCard_icon_export" onClick={onRoomExportClick}>
                 { _t("Export chat") }
             </Button>

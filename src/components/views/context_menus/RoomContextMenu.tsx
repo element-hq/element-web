@@ -36,6 +36,8 @@ import { EchoChamber } from "../../../stores/local-echo/EchoChamber";
 import { RoomNotifState } from "../../../RoomNotifs";
 import Modal from "../../../Modal";
 import ExportDialog from "../dialogs/ExportDialog";
+import { useSettingValue } from "../../../hooks/useSettings";
+import { usePinnedEvents } from "../right_panel/PinnedMessagesCard";
 import RoomViewStore from "../../../stores/RoomViewStore";
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { ROOM_NOTIFICATIONS_TAB } from "../dialogs/RoomSettingsDialog";
@@ -228,6 +230,29 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
         />;
     }
 
+    const pinningEnabled = useSettingValue("feature_pinning");
+    const pinCount = usePinnedEvents(pinningEnabled && room)?.length;
+
+    let pinsOption: JSX.Element;
+    if (pinningEnabled) {
+        pinsOption = <IconizedContextMenuOption
+            onClick={(ev: ButtonEvent) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                ensureViewingRoom(ev);
+                RightPanelStore.instance.pushCard({ phase: RightPanelPhases.PinnedMessages }, false);
+                onFinished();
+            }}
+            label={_t("Pinned")}
+            iconClassName="mx_RoomTile_iconPins"
+        >
+            { pinCount > 0 && <span className="mx_IconizedContextMenu_sublabel">
+                { pinCount }
+            </span> }
+        </IconizedContextMenuOption>;
+    }
+
     const onTagRoom = (ev: ButtonEvent, tagId: TagID) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -277,6 +302,8 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                 label={_t("Files")}
                 iconClassName="mx_RoomTile_iconFiles"
             />
+
+            { pinsOption }
 
             <IconizedContextMenuOption
                 onClick={(ev: ButtonEvent) => {

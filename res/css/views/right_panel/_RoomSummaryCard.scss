@@ -251,6 +251,10 @@ limitations under the License.
     mask-image: url('$(res)/img/element-icons/room/files.svg');
 }
 
+.mx_RoomSummaryCard_icon_pins::before {
+    mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+}
+
 .mx_RoomSummaryCard_icon_threads::before {
     mask-image: url('$(res)/img/element-icons/message/thread.svg');
 }
