@@ -5511,10 +5511,10 @@ flux@2.1.1:
     fbjs "0.1.0-alpha.7"
     immutable "^3.7.4"
 
-focus-lock@^0.10.1:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/focus-lock/-/focus-lock-0.10.1.tgz#5f46fa74fefb87144479c2f8e276f0eedd8081b2"
-  integrity sha512-b9yUklCi4fTu2GXn7dnaVf4hiLVVBp7xTiZarAHMODV2To6Bitf6F/UI67RmKbdgJQeVwI1UO0d9HYNbXt3GkA==
+focus-lock@^0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/focus-lock/-/focus-lock-0.10.2.tgz#561c62bae8387ecba1dd8e58a6df5ec29835c644"
+  integrity sha512-DSaI/UHZ/02sg1P616aIWgToQcrKKBmcCvomDZ1PZvcJFj350PnWhSJxJ76T3e5/GbtQEARIACtbrdlrF9C5kA==
   dependencies:
     tslib "^2.0.3"
 
@@ -8096,18 +8096,19 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-analytics-events@github:matrix-org/matrix-analytics-events.git#bdabdd63280f052cedeeb0c25443f3d55f7c7108":
+"matrix-analytics-events@github:matrix-org/matrix-analytics-events#8e75aaf0b3e045587daeaf97a7691dbfda2f20c0":
   version "0.0.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/bdabdd63280f052cedeeb0c25443f3d55f7c7108"
+  resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/8e75aaf0b3e045587daeaf97a7691dbfda2f20c0"
 
-matrix-events-sdk@^0.0.1-beta.6:
-  version "0.0.1-beta.6"
-  resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.6.tgz#9001090ed2e2bf29efc113d6b29871bcc6520749"
-  integrity sha512-VMqPXe3Bg4R9yC9PNqGv6bDFwWlVYadYxp0Ke1ihhXUCpGcx7e28kOYcqK2T3RxLXK4KK7VH4JRbY53Do3r+Fw==
+matrix-events-sdk@^0.0.1-beta.7:
+  version "0.0.1-beta.7"
+  resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
+  integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "15.5.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2fd08d72dc905e1159176d6fd3afe834261ac6e0"
+matrix-js-sdk@15.6.0:
+  version "15.6.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-15.6.0.tgz#de29a75c5407801c95940d68ef4a22e9756c623d"
+  integrity sha512-jxx2jiuFVs6Vn76/Nm4+9+mLRW8NJMnA8XhFPtG9gzLpAOq5NQeRvr8mvGQqOQp2F85wthGVd0EkiP6cC1JXuw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8115,7 +8116,7 @@ matrix-events-sdk@^0.0.1-beta.6:
     bs58 "^4.0.1"
     content-type "^1.0.4"
     loglevel "^1.7.1"
-    matrix-events-sdk "^0.0.1-beta.6"
+    matrix-events-sdk "^0.0.1-beta.7"
     p-retry "^4.5.0"
     qs "^6.9.6"
     request "^2.88.2"
@@ -8129,9 +8130,10 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.40.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/9b3af6c49397ee7e1de5ee860a549d75f642e181"
+matrix-react-sdk@3.41.0:
+  version "3.41.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.41.0.tgz#02ff28735f674be3fd1b886b34f8825b8ec4d1ab"
+  integrity sha512-Z0BkUkA1BfAlThutfHG/BfuKn7P87QtHbuXvWyqL7NshYE69f4UFv1vS2i0jTUJhQQdsOsZv9hSg2ZbaeWz2tw==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
@@ -8166,9 +8168,9 @@ matrix-mock-request@^1.2.3:
     linkifyjs "^4.0.0-beta.4"
     lodash "^4.17.20"
     maplibre-gl "^1.15.2"
-    matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#bdabdd63280f052cedeeb0c25443f3d55f7c7108"
-    matrix-events-sdk "^0.0.1-beta.6"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#8e75aaf0b3e045587daeaf97a7691dbfda2f20c0"
+    matrix-events-sdk "^0.0.1-beta.7"
+    matrix-js-sdk "15.6.0"
     matrix-widget-api "^0.1.0-beta.18"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
@@ -8183,9 +8185,8 @@ matrix-mock-request@^1.2.3:
     react-beautiful-dnd "^13.1.0"
     react-blurhash "^0.1.3"
     react-dom "17.0.2"
-    react-focus-lock "^2.5.0"
+    react-focus-lock "^2.5.1"
     react-transition-group "^4.4.1"
-    resize-observer-polyfill "^1.5.1"
     rfc4648 "^1.4.0"
     sanitize-html "^2.3.2"
     tar-js "^0.3.0"
@@ -10557,13 +10558,13 @@ react-dom@17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-focus-lock@^2.5.0:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.7.1.tgz#a9fbb3fa4efaee32162406e5eb96ae658964193b"
-  integrity sha512-ImSeVmcrLKNMqzUsIdqOkXwTVltj79OPu43oT8tVun7eIckA4VdM7UmYUFo3H/UC2nRVgagMZGFnAOQEDiDYcA==
+react-focus-lock@^2.5.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.8.1.tgz#a28f06a4ef5eab7d4ef0d859512772ec1331d529"
+  integrity sha512-4kb9I7JIiBm0EJ+CsIBQ+T1t5qtmwPRbFGYFQ0t2q2qIpbFbYTHDjnjJVFB7oMBtXityEOQehblJPjqSIf3Amg==
   dependencies:
     "@babel/runtime" "^7.0.0"
-    focus-lock "^0.10.1"
+    focus-lock "^0.10.2"
     prop-types "^15.6.2"
     react-clientside-effect "^1.2.5"
     use-callback-ref "^1.2.5"
@@ -10908,11 +10909,6 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
-
-resize-observer-polyfill@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
-  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"
