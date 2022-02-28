@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef, MouseEvent } from 'react';
 import classNames from "classnames";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
@@ -81,6 +81,7 @@ import { DecryptionFailureTracker } from '../../../DecryptionFailureTracker';
 import RedactedBody from '../messages/RedactedBody';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from '../../../utils/Reply';
+import PosthogTrackers from "../../../PosthogTrackers";
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
 
@@ -684,17 +685,19 @@ export default class EventTile extends React.Component<IProps, IState> {
             return (
                 <CardContext.Consumer>
                     { context =>
-                        <div
+                        <AccessibleButton
                             className="mx_ThreadInfo"
-                            onClick={() => {
+                            onClick={(ev: ButtonEvent) => {
                                 showThread({ rootEvent: this.props.mxEvent, push: context.isCard });
+                                PosthogTrackers.trackInteraction("WebRoomTimelineThreadSummaryButton", ev);
                             }}
+                            aria-label={_t("Open thread")}
                         >
                             <span className="mx_ThreadInfo_threads-amount">
                                 { count }
                             </span>
                             { this.renderThreadLastMessagePreview() }
-                        </div>
+                        </AccessibleButton>
                     }
                 </CardContext.Consumer>
             );
@@ -1507,7 +1510,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                         "data-notification": this.state.threadNotification,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
-                        "onClick": () => showThread({ rootEvent: this.props.mxEvent, push: true }),
+                        "onClick": (ev: MouseEvent) => {
+                            showThread({ rootEvent: this.props.mxEvent, push: true });
+                            const target = ev.currentTarget as HTMLElement;
+                            const index = Array.from(target.parentElement.children).indexOf(target);
+                            PosthogTrackers.trackInteraction("WebThreadsPanelThreadItem", ev, index);
+                        },
                     }, <>
                         { sender }
                         { avatar }

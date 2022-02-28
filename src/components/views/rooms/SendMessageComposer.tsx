@@ -345,12 +345,17 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
             return;
         }
 
-        PosthogAnalytics.instance.trackEvent<ComposerEvent>({
+        const posthogEvent: ComposerEvent = {
             eventName: "Composer",
             isEditing: false,
-            inThread: this.props.relation?.rel_type === RelationType.Thread,
             isReply: !!this.props.replyToEvent,
-        });
+            inThread: this.props.relation?.rel_type === RelationType.Thread,
+        };
+        if (posthogEvent.inThread) {
+            const threadRoot = this.props.room.findEventById(this.props.relation.event_id);
+            posthogEvent.startsThread = threadRoot?.getThread()?.events.length === 1;
+        }
+        PosthogAnalytics.instance.trackEvent<ComposerEvent>(posthogEvent);
 
         // Replace emoticon at the end of the message
         if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {

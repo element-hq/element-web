@@ -38,6 +38,8 @@ import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNo
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { ThreadsRoomNotificationState } from "../../../stores/notifications/ThreadsRoomNotificationState";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
+import PosthogTrackers from "../../../PosthogTrackers";
+import { ButtonEvent } from "../elements/AccessibleButton";
 
 const ROOM_INFO_PHASES = [
     RightPanelPhases.RoomSummary,
@@ -207,11 +209,12 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         this.setPhase(RightPanelPhases.Timeline);
     };
 
-    private onThreadsPanelClicked = () => {
+    private onThreadsPanelClicked = (ev: ButtonEvent) => {
         if (RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
             RightPanelStore.instance.togglePanel();
         } else {
             showThreadPanel();
+            PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", ev);
         }
     };
 

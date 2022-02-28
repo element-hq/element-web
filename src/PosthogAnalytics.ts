@@ -152,13 +152,13 @@ export class PosthogAnalytics {
     // we persist the last `$screen_name` and send it for all events until it is replaced
     private lastScreen: ScreenName = "Loading";
 
-    private sanitizeProperties = (properties: posthog.Properties): posthog.Properties => {
+    private sanitizeProperties = (properties: posthog.Properties, eventName: string): posthog.Properties => {
         // Callback from posthog to sanitize properties before sending them to the server.
         //
         // Here we sanitize posthog's built in properties which leak PII e.g. url reporting.
         // See utils.js _.info.properties in posthog-js.
 
-        if (properties["eventName"] === "$pageview") {
+        if (eventName === "$pageview") {
             this.lastScreen = properties["$current_url"];
         }
         // We inject a screen identifier in $current_url as per https://posthog.com/tutorials/spa

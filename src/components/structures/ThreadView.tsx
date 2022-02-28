@@ -50,6 +50,8 @@ import FileDropTarget from "./FileDropTarget";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import Measured from '../views/elements/Measured';
+import PosthogTrackers from "../../PosthogTrackers";
+import { ButtonEvent } from "../views/elements/AccessibleButton";
 
 interface IProps {
     room: Room;
@@ -321,6 +323,9 @@ export default class ThreadView extends React.Component<IProps, IState> {
                     header={this.renderThreadViewHeader()}
                     ref={this.card}
                     onKeyDown={this.onKeyDown}
+                    onBack={(ev: ButtonEvent) => {
+                        PosthogTrackers.trackInteraction("WebThreadViewBackButton", ev);
+                    }}
                 >
                     <Measured
                         sensor={this.card.current}
