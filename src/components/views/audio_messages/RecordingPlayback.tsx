@@ -36,6 +36,7 @@ export default class RecordingPlayback extends AudioPlayerBase {
 
     protected renderComponent(): ReactNode {
         const shapeClass = !this.isWaveformable ? 'mx_VoiceMessagePrimaryContainer_noWaveform' : '';
+
         return (
             <div className={'mx_MediaBody mx_VoiceMessagePrimaryContainer ' + shapeClass}>
                 <PlayPauseButton playback={this.props.playback} playbackPhase={this.state.playbackPhase} />

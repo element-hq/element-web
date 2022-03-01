@@ -40,8 +40,9 @@ export default abstract class AudioPlayerBase extends React.PureComponent<IProps
     constructor(props: IProps) {
         super(props);
 
+        // Playback instances can be reused in the composer
         this.state = {
-            playbackPhase: PlaybackState.Decoding, // default assumption
+            playbackPhase: this.props.playback.currentState,
         };
 
         // We don't need to de-register: the class handles this for us internally
