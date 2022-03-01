@@ -27,6 +27,7 @@ import UAParser from 'ua-parser-js';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from './VectorBasePlatform';
+import { parseQs } from "../url_utils";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -119,25 +120,45 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     startUpdater() {
-        this.pollForUpdate();
-        setInterval(this.pollForUpdate, POKE_RATE_MS);
+        // Poll for an update immediately, and reload the page now if we're out of date
+        // already as we've just initialised an old version of the app somehow.
+        //
+        // Forcibly reloading the page aims to avoid users interacting at all with the old
+        // and potentially broken version of the app.
+        //
+        // Ideally, loading an old copy would be impossible with the
+        // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
+        this.pollForUpdate((version: string, newVersion: string) => {
+            const query = parseQs(location);
+            if (query.updated === "1") {
+                // We just reloaded already and are still on the old version!
+                // Show the toast rather than reload in a loop.
+                showUpdateToast(version, newVersion);
+            } else {
+                location.search += "&updated=1";
+                location.reload();
+            }
+        });
+        setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
     }
 
     async canSelfUpdate(): Promise<boolean> {
         return true;
     }
 
-    pollForUpdate = () => {
+    pollForUpdate = (
+        showUpdate: (currentVersion: string, mostRecentVersion: string) => void,
+        showNoUpdate?: () => void) => {
         return this.getMostRecentVersion().then((mostRecentVersion) => {
             const currentVersion = this.getNormalizedAppVersion(process.env.VERSION);
 
             if (currentVersion !== mostRecentVersion) {
                 if (this.shouldShowUpdate(mostRecentVersion)) {
-                    showUpdateToast(currentVersion, mostRecentVersion);
+                    showUpdate(currentVersion, mostRecentVersion);
                 }
                 return { status: UpdateCheckStatus.Ready };
             } else {
-                hideUpdateToast();
+                showNoUpdate && showNoUpdate();
             }
 
             return { status: UpdateCheckStatus.NotAvailable };
