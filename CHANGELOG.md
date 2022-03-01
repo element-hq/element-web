@@ -1,3 +1,9 @@
+Changes in [3.41.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.41.1) (2022-03-01)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix some crashes in the right panel
+
 Changes in [3.41.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.41.0) (2022-02-28)
 =====================================================================================================
 
