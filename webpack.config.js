@@ -442,7 +442,7 @@ module.exports = (env, argv) => {
                             options: {
                                 namedExport: 'Icon',
                                 svgProps: {
-                                    role: 'img',
+                                    role: 'presentation',
                                     'aria-hidden': true,
                                 },
                                 // props set on the svg will override defaults
