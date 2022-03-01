@@ -30,7 +30,7 @@ function getColorName(hex) {
 
 ## Adding new strings
 
- 1. Check if the import ``import { _t } from 'matrix-react-sdk/lib/languageHandler';`` is present. If not add it to the other import statements. Also import `_td` if needed.
+ 1. Check if the import ``import { _t } from 'matrix-react-sdk/src/languageHandler';`` is present. If not add it to the other import statements. Also import `_td` if needed.
  1. Add ``_t()`` to your string. (Don't forget curly braces when you assign an expression to JSX attributes in the render method). If the string is introduced at a point before the translation system has not yet been initialized, use `_td()` instead, and call `_t()` at the appropriate time.
  1. Run `yarn i18n` to update ``src/i18n/strings/en_EN.json``
  1. If you added a string with a plural, you can add other English plural variants to ``src/i18n/strings/en_EN.json`` (remeber to edit the one in the same project as the source file containing your new translation).
