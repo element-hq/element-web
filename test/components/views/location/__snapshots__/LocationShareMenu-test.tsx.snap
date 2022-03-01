@@ -108,11 +108,8 @@ exports[`<LocationShareMenu /> renders 1`] = `
                         />
                       </span>
                     </div>
-                    <img
+                    <div
                       class="mx_MLocationBody_pointer"
-                      height="5"
-                      src="image-file-stub"
-                      width="9"
                     />
                   </div>
                 </div>
@@ -276,11 +273,8 @@ exports[`<LocationShareMenu /> renders 1`] = `
                         </BaseAvatar>
                       </MemberAvatar>
                     </div>
-                    <img
+                    <div
                       className="mx_MLocationBody_pointer"
-                      height="5"
-                      src="image-file-stub"
-                      width="9"
                     />
                   </div>
                 </div>
