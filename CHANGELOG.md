@@ -1,3 +1,9 @@
+Changes in [1.10.6](https://github.com/vector-im/element-web/releases/tag/v1.10.6) (2022-03-01)
+===============================================================================================
+
+## 🐛 Bug Fixes
+ * Fix some crashes in the right panel
+
 Changes in [1.10.5](https://github.com/vector-im/element-web/releases/tag/v1.10.5) (2022-02-28)
 ===============================================================================================
 
