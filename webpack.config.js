@@ -436,19 +436,42 @@ module.exports = (env, argv) => {
                 },
                 {
                     test: /\.svg$/,
-                    use: ['@svgr/webpack', 'file-loader'],
-                    options: {
-                        esModule: false,
-                        name: '[name].[hash:7].[ext]',
-                        outputPath: getAssetOutputPath,
-                        publicPath: function (url, resourcePath) {
-                            // CSS image usages end up in the `bundles/[hash]` output
-                            // directory, so we adjust the final path to navigate up
-                            // twice.
-                            const outputPath = getAssetOutputPath(url, resourcePath);
-                            return toPublicPath(path.join("../..", outputPath));
+                    use: [
+                        {
+                            loader: '@svgr/webpack',
+                            options: {
+                                namedExport: 'Icon',
+                                svgoConfig: {
+                                    plugins: {
+                                        // generates a viewbox if missing
+                                        removeDimensions: true,
+                                    },
+                                },
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(path.join("../..", outputPath));
+                                },
+                            },
                         },
-                    },
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    // CSS image usages end up in the `bundles/[hash]` output
+                                    // directory, so we adjust the final path to navigate up
+                                    // twice.
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(path.join("../..", outputPath));
+                                },
+                            },
+                        },
+                    ]
                 },
                 {
                     test: /\.(gif|png|ttf|woff|woff2|xml|ico)$/,
