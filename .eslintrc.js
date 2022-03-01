@@ -28,20 +28,32 @@ module.exports = {
 
             // Ban matrix-js-sdk/src imports in favour of matrix-js-sdk/src/matrix imports to prevent unleashing hell.
             "no-restricted-imports": ["error", {
-                "name": "matrix-js-sdk",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src/",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
-            }, {
-                "name": "matrix-js-sdk/src/index",
-                "message": "Please use matrix-js-sdk/src/matrix instead",
+                "paths": [{
+                    "name": "matrix-js-sdk",
+                    "message": "Please use matrix-js-sdk/src/matrix instead",
+                }, {
+                    "name": "matrix-js-sdk/",
+                    "message": "Please use matrix-js-sdk/src/matrix instead",
+                }, {
+                    "name": "matrix-js-sdk/src",
+                    "message": "Please use matrix-js-sdk/src/matrix instead",
+                }, {
+                    "name": "matrix-js-sdk/src/",
+                    "message": "Please use matrix-js-sdk/src/matrix instead",
+                }, {
+                    "name": "matrix-js-sdk/src/index",
+                    "message": "Please use matrix-js-sdk/src/matrix instead",
+                }, {
+                    "name": "matrix-react-sdk",
+                    "message": "Please use matrix-react-sdk/src/index instead",
+                }, {
+                    "name": "matrix-react-sdk/",
+                    "message": "Please use matrix-react-sdk/src/index instead",
+                }],
+                "patterns": [{
+                    "group": ["matrix-react-sdk/lib", "matrix-react-sdk/lib/", "matrix-react-sdk/lib/**"],
+                    "message": "Please use matrix-react-sdk/src/* instead",
+                }],
             }],
         },
     }],
