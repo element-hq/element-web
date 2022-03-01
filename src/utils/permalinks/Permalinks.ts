@@ -422,13 +422,17 @@ function getPermalinkConstructor(): PermalinkConstructor {
 }
 
 export function parsePermalink(fullUrl: string): PermalinkParts {
-    const elementPrefix = SdkConfig.get()['permalinkPrefix'];
-    if (decodeURIComponent(fullUrl).startsWith(matrixtoBaseUrl)) {
-        return new MatrixToPermalinkConstructor().parsePermalink(decodeURIComponent(fullUrl));
-    } else if (fullUrl.startsWith("matrix:")) {
-        return new MatrixSchemePermalinkConstructor().parsePermalink(fullUrl);
-    } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {
-        return new ElementPermalinkConstructor(elementPrefix).parsePermalink(fullUrl);
+    try {
+        const elementPrefix = SdkConfig.get()['permalinkPrefix'];
+        if (decodeURIComponent(fullUrl).startsWith(matrixtoBaseUrl)) {
+            return new MatrixToPermalinkConstructor().parsePermalink(decodeURIComponent(fullUrl));
+        } else if (fullUrl.startsWith("matrix:")) {
+            return new MatrixSchemePermalinkConstructor().parsePermalink(fullUrl);
+        } else if (elementPrefix && fullUrl.startsWith(elementPrefix)) {
+            return new ElementPermalinkConstructor(elementPrefix).parsePermalink(fullUrl);
+        }
+    } catch (e) {
+        logger.error("Failed to parse permalink", e);
     }
 
     return null; // not a permalink we can handle

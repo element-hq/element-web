@@ -48,7 +48,6 @@ import DateSeparator from '../views/messages/DateSeparator';
 import ErrorBoundary from '../views/elements/ErrorBoundary';
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import Spinner from "../views/elements/Spinner";
-import TileErrorBoundary from '../views/messages/TileErrorBoundary';
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from '../../dispatcher/actions';
@@ -787,37 +786,36 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         const callEventGrouper = this.props.callEventGroupers.get(mxEv.getContent().call_id);
         // use txnId as key if available so that we don't remount during sending
         ret.push(
-            <TileErrorBoundary key={mxEv.getTxnId() || eventId} mxEvent={mxEv} layout={this.props.layout}>
-                <EventTile
-                    as="li"
-                    ref={this.collectEventTile.bind(this, eventId)}
-                    alwaysShowTimestamps={this.props.alwaysShowTimestamps}
-                    mxEvent={mxEv}
-                    continuation={continuation}
-                    isRedacted={mxEv.isRedacted()}
-                    replacingEventId={mxEv.replacingEventId()}
-                    editState={isEditing && this.props.editState}
-                    onHeightChanged={this.onHeightChanged}
-                    readReceipts={readReceipts}
-                    readReceiptMap={this.readReceiptMap}
-                    showUrlPreview={this.props.showUrlPreview}
-                    checkUnmounting={this.isUnmounting}
-                    eventSendStatus={mxEv.getAssociatedStatus()}
-                    isTwelveHour={this.props.isTwelveHour}
-                    permalinkCreator={this.props.permalinkCreator}
-                    last={last}
-                    lastInSection={lastInSection}
-                    lastSuccessful={isLastSuccessful}
-                    isSelectedEvent={highlight}
-                    getRelationsForEvent={this.props.getRelationsForEvent}
-                    showReactions={this.props.showReactions}
-                    layout={this.props.layout}
-                    enableFlair={this.props.enableFlair}
-                    showReadReceipts={this.props.showReadReceipts}
-                    callEventGrouper={callEventGrouper}
-                    hideSender={this.state.hideSender}
-                />
-            </TileErrorBoundary>,
+            <EventTile
+                key={mxEv.getTxnId() || eventId}
+                as="li"
+                ref={this.collectEventTile.bind(this, eventId)}
+                alwaysShowTimestamps={this.props.alwaysShowTimestamps}
+                mxEvent={mxEv}
+                continuation={continuation}
+                isRedacted={mxEv.isRedacted()}
+                replacingEventId={mxEv.replacingEventId()}
+                editState={isEditing && this.props.editState}
+                onHeightChanged={this.onHeightChanged}
+                readReceipts={readReceipts}
+                readReceiptMap={this.readReceiptMap}
+                showUrlPreview={this.props.showUrlPreview}
+                checkUnmounting={this.isUnmounting}
+                eventSendStatus={mxEv.getAssociatedStatus()}
+                isTwelveHour={this.props.isTwelveHour}
+                permalinkCreator={this.props.permalinkCreator}
+                last={last}
+                lastInSection={lastInSection}
+                lastSuccessful={isLastSuccessful}
+                isSelectedEvent={highlight}
+                getRelationsForEvent={this.props.getRelationsForEvent}
+                showReactions={this.props.showReactions}
+                layout={this.props.layout}
+                enableFlair={this.props.enableFlair}
+                showReadReceipts={this.props.showReadReceipts}
+                callEventGrouper={callEventGrouper}
+                hideSender={this.state.hideSender}
+            />,
         );
 
         return ret;

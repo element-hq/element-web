@@ -82,6 +82,7 @@ import RedactedBody from '../messages/RedactedBody';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from '../../../utils/Reply';
 import PosthogTrackers from "../../../PosthogTrackers";
+import TileErrorBoundary from '../messages/TileErrorBoundary';
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
 
@@ -1114,7 +1115,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         return false;
     }
 
-    render() {
+    private renderEvent() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
         const {
@@ -1640,6 +1641,12 @@ export default class EventTile extends React.Component<IProps, IState> {
                 );
             }
         }
+    }
+
+    public render() {
+        return <TileErrorBoundary mxEvent={this.props.mxEvent} layout={this.props.layout}>
+            { this.renderEvent() }
+        </TileErrorBoundary>;
     }
 }
 
