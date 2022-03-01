@@ -180,3 +180,7 @@ name and avatar (profile) were shown on historical messages instead of the profi
 at the time when the message was sent.
 
 When enabled, historical messages will use the current profile for the sender.
+
+## Pin drop location sharing (`feature_location_share_pin_drop`) [In Development]
+
+Enables sharing a pin drop location to the timeline.
