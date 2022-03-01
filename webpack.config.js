@@ -39,6 +39,26 @@ function getActiveThemes() {
     return themes;
 }
 
+// See docs/customisations.md
+let fileOverrides = {/* {[file: string]: string} */};
+try {
+    fileOverrides = require('./customisations.json');
+
+    // stringify the output so it appears in logs correctly, as large files can sometimes get
+    // represented as `<Object>` which is less than helpful.
+    console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
+} catch (e) {
+    // ignore - not important
+}
+const moduleReplacementPlugins = Object.entries(fileOverrides).map(([oldPath, newPath]) => {
+    return new webpack.NormalModuleReplacementPlugin(
+        // because the input is effectively defined by the person running the build, we don't
+        // need to do anything special to protect against regex overrunning, etc.
+        new RegExp(oldPath.replace(/\//g, '[\\/\\\\]').replace(/\./g, '\\.')),
+        path.resolve(__dirname, newPath),
+    );
+});
+
 module.exports = (env, argv) => {
     // Establish settings based on the environment and args.
     //
@@ -95,6 +115,8 @@ module.exports = (env, argv) => {
         node: {
             // Mock out the NodeFS module: The opus decoder imports this wrongly.
             fs: 'empty',
+            net: 'empty',
+            tls: 'empty',
         },
 
         entry: {
@@ -473,6 +495,8 @@ module.exports = (env, argv) => {
         },
 
         plugins: [
+            ...moduleReplacementPlugins,
+
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
                 filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",

@@ -24,6 +24,8 @@ import {
 import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { getVectorConfig } from "../getconfig";
+
 // We have to trick webpack into loading our CSS for us.
 require("./index.scss");
 
@@ -50,9 +52,14 @@ let startAudioOnly: boolean;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
+let skipOurWelcomeScreen = false;
 
 (async function() {
     try {
+        // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
+        // other setup work and therefore do not block.
+        const configPromise = getVectorConfig('..');
+
         // The widget's options are encoded into the fragment to avoid leaking info to the server.
         const widgetQuery = new URLSearchParams(window.location.hash.substring(1));
         // The widget spec on the other hand requires the widgetId and parentUrl to show up in the regular query string.
@@ -110,6 +117,16 @@ let meetApi: any; // JitsiMeetExternalAPI
         roomName = qsParam('roomName', true);
         startAudioOnly = qsParam('isAudioOnly', true) === "true";
 
+        // We've reached the point where we have to wait for the config, so do that then parse it.
+        const instanceConfig = await configPromise;
+        skipOurWelcomeScreen = instanceConfig?.['jitsiWidget']?.['skipBuiltInWelcomeScreen'] || false;
+
+        // If we're meant to skip our screen, skip to the part where we show Jitsi instead of us.
+        // We don't set up the call yet though as this might lead to failure without the widget API.
+        if (skipOurWelcomeScreen) {
+            toggleConferenceVisibility(true);
+        }
+
         if (widgetApi) {
             await readyPromise;
             await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
@@ -147,6 +164,11 @@ let meetApi: any; // JitsiMeetExternalAPI
             );
         }
 
+        // Now that everything should be set up, skip to the Jitsi splash screen if needed
+        if (skipOurWelcomeScreen) {
+            skipToJitsiSplashScreen();
+        }
+
         enableJoinButton(); // always enable the button
     } catch (e) {
         logger.error("Error setting up Jitsi widget", e);
@@ -160,8 +182,22 @@ function enableJoinButton() {
 
 function switchVisibleContainers() {
     inConference = !inConference;
+
+    // Our welcome screen is managed by other code, so just don't switch to it ever
+    // if we're not supposed to.
+    if (!skipOurWelcomeScreen) {
+        toggleConferenceVisibility(inConference);
+    }
+}
+
+function toggleConferenceVisibility(inConference: boolean) {
     document.getElementById("jitsiContainer").style.visibility = inConference ? 'unset' : 'hidden';
     document.getElementById("joinButtonContainer").style.visibility = inConference ? 'hidden' : 'unset';
+}
+
+function skipToJitsiSplashScreen() {
+    // really just a function alias for self-documenting code
+    joinConference();
 }
 
 /**
@@ -267,5 +303,9 @@ function joinConference() { // event handler bound in HTML
 
         document.getElementById("jitsiContainer").innerHTML = "";
         meetApi = null;
+
+        if (skipOurWelcomeScreen) {
+            skipToJitsiSplashScreen();
+        }
     });
 }

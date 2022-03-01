@@ -30,6 +30,7 @@
     "test/iframe/sandbox",
     "test/json",
     "test/network/fetch",
-    "test/storage/localstorage"
+    "test/storage/localstorage",
+    "test/window/resizeobserver"
   ]
 }

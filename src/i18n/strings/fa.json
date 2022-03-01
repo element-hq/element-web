@@ -34,5 +34,7 @@
     "Failed to start": "مشکل در آغاز",
     "Powered by Matrix": "قدرت‌گرفته از ماتریکس",
     "Use %(brand)s on mobile": "استفاده از %(brand)s روی گوشی",
-    "Switch to space by number": "تغییر به فضا با شماره"
+    "Switch to space by number": "تغییر به فضا با شماره",
+    "Previous recently visited room or community": "جلسه یا اتاق قبلی که اخیرا مشاهده شده است",
+    "Next recently visited room or community": "جلسه یا اتاق بعدی که اخیرا مشاهده شده است"
 }
