@@ -26,6 +26,7 @@ import { RestMultiSession } from "./rest/multi";
 import { spacesScenarios } from './scenarios/spaces';
 import { RestSession } from "./rest/session";
 import { stickerScenarios } from './scenarios/sticker';
+import { userViewScenarios } from "./scenarios/user-view";
 
 export async function scenario(createSession: (s: string) => Promise<ElementSession>,
     restCreator: RestSessionCreator): Promise<void> {
@@ -45,6 +46,7 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
     const bob = await createUser("bob");
 
     await toastScenarios(alice, bob);
+    await userViewScenarios(alice, bob);
     await roomDirectoryScenarios(alice, bob);
     await e2eEncryptionScenarios(alice, bob);
     console.log("create REST users:");
