@@ -156,7 +156,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const cardState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
 
         // Checks for wrong SetRightPanelPhase requests
-        if (!this.isPhaseActionValid(targetPhase)) return;
+        if (!this.isPhaseValid(targetPhase)) return;
 
         if ((targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState)) {
             // Update state: set right panel with a new state but keep the phase (dont know it this is ever needed...)
@@ -195,16 +195,16 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const pState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
 
         // Checks for wrong SetRightPanelPhase requests
-        if (!this.isPhaseActionValid(targetPhase)) return;
+        if (!this.isPhaseValid(targetPhase)) return;
 
-        let roomCache = this.byRoom[rId];
+        const roomCache = this.byRoom[rId];
         if (!!roomCache) {
             // append new phase
             roomCache.history.push({ state: pState, phase: targetPhase });
             roomCache.isOpen = allowClose ? roomCache.isOpen : true;
         } else {
             // setup room panel cache with the new card
-            roomCache = {
+            this.byRoom[rId] = {
                 history: [{ phase: targetPhase, state: pState ?? {} }],
                 // if there was no right panel store object the the panel was closed -> keep it closed, except if allowClose==false
                 isOpen: !allowClose,
@@ -345,18 +345,18 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return null;
     }
 
-    private isPhaseActionValid(targetPhase) {
+    public isPhaseValid(targetPhase: RightPanelPhases, isViewingRoom = this.isViewingRoom): boolean {
         if (!RightPanelPhases[targetPhase]) {
             logger.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
             return false;
         }
-        if (GROUP_PHASES.includes(targetPhase) && this.isViewingRoom) {
+        if (GROUP_PHASES.includes(targetPhase) && isViewingRoom) {
             logger.warn(
                 `Tried to switch right panel to a group phase: ${targetPhase}, ` +
                 `but we are currently not viewing a group`,
             );
             return false;
-        } else if (!GROUP_PHASES.includes(targetPhase) && !this.isViewingRoom) {
+        } else if (!GROUP_PHASES.includes(targetPhase) && !isViewingRoom) {
             logger.warn(
                 `Tried to switch right panel to a room phase: ${targetPhase}, ` +
                 `but we are currently not viewing a room`,

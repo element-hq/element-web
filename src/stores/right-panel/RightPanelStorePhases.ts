@@ -56,23 +56,3 @@ export function backLabelForPhase(phase: RightPanelPhases) {
     }
     return null;
 }
-
-// These are the phases that are safe to persist (the ones that don't require additional
-// arguments).
-export const RIGHT_PANEL_PHASES_NO_ARGS = [
-    RightPanelPhases.RoomSummary,
-    RightPanelPhases.NotificationPanel,
-    RightPanelPhases.PinnedMessages,
-    RightPanelPhases.FilePanel,
-    RightPanelPhases.RoomMemberList,
-    RightPanelPhases.GroupMemberList,
-    RightPanelPhases.GroupRoomList,
-    RightPanelPhases.Timeline,
-];
-
-// Subset of phases visible in the Space View
-export const RIGHT_PANEL_SPACE_PHASES = [
-    RightPanelPhases.SpaceMemberList,
-    RightPanelPhases.Space3pidMemberInfo,
-    RightPanelPhases.SpaceMemberInfo,
-];
