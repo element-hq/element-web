@@ -51,6 +51,9 @@ module.exports = {
                     "message": "Please use matrix-react-sdk/src/index instead",
                 }],
                 "patterns": [{
+                    "group": ["matrix-js-sdk/lib", "matrix-js-sdk/lib/", "matrix-js-sdk/lib/**"],
+                    "message": "Please use matrix-js-sdk/src/* instead",
+                }, {
                     "group": ["matrix-react-sdk/lib", "matrix-react-sdk/lib/", "matrix-react-sdk/lib/**"],
                     "message": "Please use matrix-react-sdk/src/* instead",
                 }],
