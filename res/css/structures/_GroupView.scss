@@ -18,6 +18,7 @@ limitations under the License.
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    flex-grow: 1;
 }
 
 .mx_GroupView_error {

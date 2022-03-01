@@ -975,7 +975,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.viewWelcome();
             return;
         }
-        if (!this.state.currentGroupId && !this.state.currentRoomId) {
+        if (!this.state.currentGroupId && !this.state.currentRoomId && !this.state.currentUserId) {
             this.viewHome();
         }
     }

@@ -94,10 +94,23 @@ export default class RightPanel extends React.Component<IProps, IState> {
     }
 
     public static getDerivedStateFromProps(props: IProps): Partial<IState> {
-        const currentCard = RightPanelStore.instance.currentCardForRoom(props.room.roomId);
+        let currentCard: IRightPanelCard;
+        if (props.room) {
+            currentCard = RightPanelStore.instance.currentCardForRoom(props.room.roomId);
+        }
+        if (props.groupId) {
+            currentCard = RightPanelStore.instance.currentGroup;
+        }
+
+        if (currentCard?.phase && !RightPanelStore.instance.isPhaseValid(currentCard.phase, !!props.room)) {
+            // XXX: We can probably get rid of this workaround once GroupView is dead, it's unmounting happens weirdly
+            // late causing the app to soft-crash due to lack of a room object being passed to a RightPanel
+            return null; // skip this update, we're about to be unmounted and don't have the appropriate props
+        }
+
         return {
-            cardState: currentCard.state,
-            phase: currentCard.phase,
+            cardState: currentCard?.state,
+            phase: currentCard?.phase,
         };
     }
 
@@ -118,11 +131,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
     };
 
     private onRightPanelStoreUpdate = () => {
-        const currentCard = RightPanelStore.instance.currentCardForRoom(this.props.room.roomId);
-        this.setState({
-            cardState: currentCard.state,
-            phase: currentCard.phase,
-        });
+        this.setState({ ...RightPanel.getDerivedStateFromProps(this.props) as IState });
     };
 
     private onClose = () => {
@@ -139,7 +148,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
             });
         } else if (
             this.state.phase === RightPanelPhases.EncryptionPanel &&
-            this.state.cardState.verificationRequest && this.state.cardState.verificationRequest.pending
+            this.state.cardState.verificationRequest?.pending
         ) {
             // When the user clicks close on the encryption panel cancel the pending request first if any
             this.state.cardState.verificationRequest.cancel();
@@ -154,7 +163,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
     public render(): JSX.Element {
         let card = <div />;
-        const roomId = this.props.room ? this.props.room.roomId : undefined;
+        const roomId = this.props.room?.roomId;
         const phase = this.props.overwriteCard?.phase ?? this.state.phase;
         const cardState = this.props.overwriteCard?.state ?? this.state.cardState;
         switch (phase) {
