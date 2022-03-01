@@ -435,7 +435,23 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    test: /\.(gif|png|svg|ttf|woff|woff2|xml|ico)$/,
+                    test: /\.svg$/,
+                    use: ['@svgr/webpack', 'file-loader'],
+                    options: {
+                        esModule: false,
+                        name: '[name].[hash:7].[ext]',
+                        outputPath: getAssetOutputPath,
+                        publicPath: function (url, resourcePath) {
+                            // CSS image usages end up in the `bundles/[hash]` output
+                            // directory, so we adjust the final path to navigate up
+                            // twice.
+                            const outputPath = getAssetOutputPath(url, resourcePath);
+                            return toPublicPath(path.join("../..", outputPath));
+                        },
+                    },
+                },
+                {
+                    test: /\.(gif|png|ttf|woff|woff2|xml|ico)$/,
                     // Use a content-based hash in the name so that we can set a long cache
                     // lifetime for assets while still delivering changes quickly.
                     oneOf: [
