@@ -496,4 +496,80 @@ describe('MessagePanel', function() {
 
         expect(Dates.length).toEqual(1);
     });
+
+    it('appends events into summaries during forward pagination without changing key', () => {
+        const events = mkMelsEvents().slice(1, 11);
+
+        const res = mount(<WrappedMessagePanel events={events} />);
+        let els = res.find("EventListSummary");
+        expect(els.length).toEqual(1);
+        expect(els.key()).toEqual("eventlistsummary-" + events[0].getId());
+        expect(els.prop("events").length).toEqual(10);
+
+        res.setProps({
+            events: [
+                ...events,
+                TestUtilsMatrix.mkMembership({
+                    event: true,
+                    room: "!room:id",
+                    user: "@user:id",
+                    target: {
+                        userId: "@user:id",
+                        name: "Bob",
+                        getAvatarUrl: () => {
+                            return "avatar.jpeg";
+                        },
+                        getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
+                    },
+                    ts: Date.now(),
+                    mship: 'join',
+                    prevMship: 'join',
+                    name: 'A user',
+                }),
+            ],
+        });
+
+        els = res.find("EventListSummary");
+        expect(els.length).toEqual(1);
+        expect(els.key()).toEqual("eventlistsummary-" + events[0].getId());
+        expect(els.prop("events").length).toEqual(11);
+    });
+
+    it('prepends events into summaries during backward pagination without changing key', () => {
+        const events = mkMelsEvents().slice(1, 11);
+
+        const res = mount(<WrappedMessagePanel events={events} />);
+        let els = res.find("EventListSummary");
+        expect(els.length).toEqual(1);
+        expect(els.key()).toEqual("eventlistsummary-" + events[0].getId());
+        expect(els.prop("events").length).toEqual(10);
+
+        res.setProps({
+            events: [
+                TestUtilsMatrix.mkMembership({
+                    event: true,
+                    room: "!room:id",
+                    user: "@user:id",
+                    target: {
+                        userId: "@user:id",
+                        name: "Bob",
+                        getAvatarUrl: () => {
+                            return "avatar.jpeg";
+                        },
+                        getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
+                    },
+                    ts: Date.now(),
+                    mship: 'join',
+                    prevMship: 'join',
+                    name: 'A user',
+                }),
+                ...events,
+            ],
+        });
+
+        els = res.find("EventListSummary");
+        expect(els.length).toEqual(1);
+        expect(els.key()).toEqual("eventlistsummary-" + events[0].getId());
+        expect(els.prop("events").length).toEqual(11);
+    });
 });
