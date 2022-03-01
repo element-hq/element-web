@@ -1580,6 +1580,7 @@
     "Enable room encryption": "Enable room encryption",
     "Change server ACLs": "Change server ACLs",
     "Send reactions": "Send reactions",
+    "Remove messages sent by me": "Remove messages sent by me",
     "Modify widgets": "Modify widgets",
     "Manage pinned events": "Manage pinned events",
     "Default role": "Default role",
