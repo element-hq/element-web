@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { ClientEvent, MatrixEvent } from 'matrix-js-sdk/src';
+import { ClientEvent, MatrixEvent } from 'matrix-js-sdk/src/matrix';
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 

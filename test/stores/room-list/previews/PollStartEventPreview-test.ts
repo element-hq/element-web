@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { POLL_ANSWER, M_TEXT, M_POLL_KIND_DISCLOSED, M_POLL_START } from "matrix-events-sdk";
 
 import { PollStartEventPreview } from "../../../../src/stores/room-list/previews/PollStartEventPreview";

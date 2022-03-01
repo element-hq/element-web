@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { RefCallback } from "react";
-import { MatrixClient } from "matrix-js-sdk";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";

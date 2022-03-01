@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import "../skinned-sdk"; // Must be first for skinning to work
 import { VoiceRecording } from '../../src/audio/VoiceRecording';

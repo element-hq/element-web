@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixEvent, MatrixEventEvent } from 'matrix-js-sdk/src';
+import { MatrixEvent, MatrixEventEvent } from 'matrix-js-sdk/src/matrix';
 import classNames from 'classnames';
 
 import { replaceableComponent } from "../../../utils/replaceableComponent";

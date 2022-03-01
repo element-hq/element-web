@@ -2,7 +2,7 @@ import '../../../skinned-sdk'; // Must be first for skinning to work
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
 import { EventEmitter } from 'events';
-import { MatrixEvent } from 'matrix-js-sdk';
+import { MatrixEvent } from 'matrix-js-sdk/src/matrix';
 
 import * as TestUtils from '../../../test-utils';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';

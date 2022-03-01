@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import { mount } from 'enzyme';
 import { act } from "react-dom/test-utils";
-import { Room, User } from 'matrix-js-sdk';
+import { Room, User } from 'matrix-js-sdk/src/matrix';
 import { Phase, VerificationRequest } from 'matrix-js-sdk/src/crypto/verification/request/VerificationRequest';
 
 import "../../../skinned-sdk";

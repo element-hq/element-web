@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useRef, useState, Dispatch, SetStateAction } from "react";
-import { Room } from "matrix-js-sdk/src";
+import { Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";

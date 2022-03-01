@@ -13,7 +13,7 @@ import {
     RoomState,
     EventType,
     IEventRelation,
-} from 'matrix-js-sdk';
+} from 'matrix-js-sdk/src/matrix';
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import dis from '../../src/dispatcher/dispatcher';

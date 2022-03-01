@@ -6,7 +6,7 @@ import {
     Simulate,
 } from 'react-dom/test-utils';
 import { act } from "react-dom/test-utils";
-import { EventType, MatrixClient, Room } from 'matrix-js-sdk';
+import { EventType, MatrixClient, Room } from 'matrix-js-sdk/src/matrix';
 import { GuestAccess, HistoryVisibility, JoinRule } from 'matrix-js-sdk/src/@types/partials';
 
 import _SpaceSettingsVisibilityTab from "../../../../src/components/views/spaces/SpaceSettingsVisibilityTab";

@@ -15,7 +15,7 @@ limitations under the License.
 import React from 'react';
 import { mount } from 'enzyme';
 import '../../../skinned-sdk';
-import { IPushRule, IPushRules, RuleId } from 'matrix-js-sdk';
+import { IPushRule, IPushRules, RuleId } from 'matrix-js-sdk/src/matrix';
 import { ThreepidMedium } from 'matrix-js-sdk/src/@types/threepids';
 import { act } from 'react-dom/test-utils';
 

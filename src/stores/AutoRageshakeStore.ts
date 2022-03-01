@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientEvent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src";
+import { ClientEvent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/matrix";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 

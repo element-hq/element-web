@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IEventRelation } from "matrix-js-sdk/src";
+import { IEventRelation } from "matrix-js-sdk/src/matrix";
 import { IAbortablePromise } from "matrix-js-sdk/src/@types/partials";
 
 export interface IUpload {

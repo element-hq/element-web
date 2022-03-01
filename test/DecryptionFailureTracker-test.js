@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from 'matrix-js-sdk';
+import { MatrixEvent } from 'matrix-js-sdk/src/matrix';
 
 import './skinned-sdk'; // Must be first for skinning to work
 import { DecryptionFailureTracker } from '../src/DecryptionFailureTracker';

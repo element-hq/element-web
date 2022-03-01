@@ -2,7 +2,7 @@ import '../../../skinned-sdk';
 
 import React, { ReactElement } from 'react';
 import ReactDOM from 'react-dom';
-import { MatrixClient } from 'matrix-js-sdk';
+import { MatrixClient } from 'matrix-js-sdk/src/matrix';
 
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import * as TestUtils from '../../../test-utils';

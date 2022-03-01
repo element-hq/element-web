@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
-import { Callback, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
+import { Callback, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";

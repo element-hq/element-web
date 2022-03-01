@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import ReactDOM from "react-dom";
 import { EventEmitter } from "events";
-import Matrix from 'matrix-js-sdk';
+import * as Matrix from 'matrix-js-sdk/src/matrix';
 import FakeTimers from '@sinonjs/fake-timers';
 import { mount } from "enzyme";
 

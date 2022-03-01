@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { renderToString } from "react-dom/server";
-import { IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk";
+import { IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { IExportOptions, ExportType, ExportFormat } from "../../src/utils/exportUtils/exportUtils";

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Room, PendingEventOrdering, MatrixEvent, MatrixClient } from 'matrix-js-sdk';
+import { Room, PendingEventOrdering, MatrixEvent, MatrixClient } from 'matrix-js-sdk/src/matrix';
 
 import "../../../skinned-sdk";
 import * as TestUtils from '../../../test-utils';

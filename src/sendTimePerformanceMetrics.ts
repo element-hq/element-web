@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src";
+import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 /**
  * Decorates the given event content object with the "send start time". The

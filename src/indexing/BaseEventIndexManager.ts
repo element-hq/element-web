@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
-import { Direction } from "matrix-js-sdk/src";
+import { Direction } from "matrix-js-sdk/src/matrix";
 
 // The following interfaces take their names and member names from seshat and the spec
 /* eslint-disable camelcase */

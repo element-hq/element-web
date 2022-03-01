@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as Matrix from 'matrix-js-sdk';
+import * as Matrix from 'matrix-js-sdk/src/matrix';
 
 import { startTermsFlow, Service } from '../src/Terms';
 import { stubClient } from './test-utils';

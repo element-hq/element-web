@@ -18,7 +18,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { act } from "react-dom/test-utils";
-import { Room } from 'matrix-js-sdk';
+import { Room } from 'matrix-js-sdk/src/matrix';
 
 import '../../../skinned-sdk';
 import ExportDialog from '../../../../src/components/views/dialogs/ExportDialog';

@@ -18,7 +18,7 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 import { throttle } from 'lodash';
-import { MatrixEvent, Room, RoomStateEvent } from 'matrix-js-sdk/src';
+import { MatrixEvent, Room, RoomStateEvent } from 'matrix-js-sdk/src/matrix';
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { _t } from '../../../languageHandler';
