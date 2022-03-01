@@ -16,7 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { RoomMember } from 'matrix-js-sdk';
+import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 
 import '../../../skinned-sdk';
 import LocationShareMenu from '../../../../src/components/views/location/LocationShareMenu';

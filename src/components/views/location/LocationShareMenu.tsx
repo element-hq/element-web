@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { SyntheticEvent, useContext } from 'react';
-import { Room } from 'matrix-js-sdk';
+import { Room } from 'matrix-js-sdk/src/models/room';
 
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import ContextMenu, { AboveLeftOf } from '../../structures/ContextMenu';
