@@ -29,6 +29,8 @@ export interface ConfigOptions {
     // sso_immediate_redirect is deprecated in favour of sso_redirect_options.immediate
     sso_immediate_redirect?: boolean;
     sso_redirect_options?: ISsoRedirectOptions;
+
+    custom_translations_url?: string;
 }
 /* eslint-enable camelcase*/
 
