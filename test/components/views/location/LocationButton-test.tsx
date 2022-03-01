@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import sdk from "../../../skinned-sdk";
-import { textForLocation } from "../../../../src/components/views/location/LocationButton";
+import { textForLocation } from "../../../../src/components/views/location/shareLocation";
 
 sdk.getComponent("LocationPicker");
 

@@ -1,0 +1,295 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LocationShareMenu /> renders 1`] = `
+<LocationShareMenu
+  menuPosition={
+    Object {
+      "chevronFace": "bottom",
+      "left": 1,
+      "top": 1,
+    }
+  }
+  onFinished={[MockFunction]}
+  openMenu={[MockFunction]}
+  roomId="!room:server.org"
+  sender={
+    Object {
+      "id": "@ernie:server.org",
+    }
+  }
+>
+  <ContextMenu
+    chevronFace="bottom"
+    hasBackground={true}
+    left={1}
+    managed={false}
+    onFinished={[MockFunction]}
+    top={1}
+  >
+    <Portal
+      containerInfo={
+        <div
+          id="mx_ContextualMenu_Container"
+        >
+          <div
+            class="mx_ContextualMenu_wrapper"
+            style="top: 1px; left: 1px;"
+          >
+            <div
+              class="mx_ContextualMenu_background"
+            />
+            <div
+              class="mx_ContextualMenu mx_ContextualMenu_withChevron_bottom"
+            >
+              <div
+                class="mx_ContextualMenu_chevron_bottom"
+              />
+              <div
+                class="mx_LocationShareMenu"
+              >
+                <div
+                  class="mx_LocationPicker"
+                >
+                  <div
+                    id="mx_LocationPicker_map"
+                  />
+                  <div
+                    class="mx_LocationPicker_error"
+                  >
+                    Failed to load map
+                  </div>
+                  <div
+                    class="mx_LocationPicker_footer"
+                  >
+                    <form>
+                      <div
+                        class="mx_Dialog_buttons"
+                      >
+                        <button
+                          class="mx_LocationPicker_cancelButton"
+                          data-test-id="dialog-cancel-button"
+                          type="button"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          class="mx_Dialog_primary"
+                          data-test-id="dialog-primary-button"
+                          disabled=""
+                          type="submit"
+                        >
+                          Share location
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  <div
+                    class="mx_MLocationBody_marker"
+                    id="mx_MLocationPicker_marker"
+                  >
+                    <div
+                      class="mx_MLocationBody_markerBorder"
+                    >
+                      <span
+                        class="mx_BaseAvatar"
+                        role="presentation"
+                      >
+                        <span
+                          aria-hidden="true"
+                          class="mx_BaseAvatar_initial"
+                          style="font-size: 17.55px; width: 27px; line-height: 27px;"
+                        />
+                        <img
+                          alt=""
+                          aria-hidden="true"
+                          class="mx_BaseAvatar_image"
+                          src=""
+                          style="width: 27px; height: 27px;"
+                        />
+                      </span>
+                    </div>
+                    <img
+                      class="mx_MLocationBody_pointer"
+                      height="5"
+                      src="image-file-stub"
+                      width="9"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <RovingTabIndexProvider
+        handleHomeEnd={true}
+        handleUpDown={true}
+        onKeyDown={[Function]}
+      >
+        <div
+          className="mx_ContextualMenu_wrapper"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onKeyDown={[Function]}
+          style={
+            Object {
+              "left": 1,
+              "top": 1,
+            }
+          }
+        >
+          <div
+            className="mx_ContextualMenu_background"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            style={Object {}}
+          />
+          <div
+            className="mx_ContextualMenu mx_ContextualMenu_withChevron_bottom"
+            style={Object {}}
+          >
+            <div
+              className="mx_ContextualMenu_chevron_bottom"
+              style={
+                Object {
+                  "left": undefined,
+                }
+              }
+            />
+            <div
+              className="mx_LocationShareMenu"
+            >
+              <LocationPicker
+                onChoose={[Function]}
+                onFinished={[MockFunction]}
+                sender={
+                  Object {
+                    "id": "@ernie:server.org",
+                  }
+                }
+              >
+                <div
+                  className="mx_LocationPicker"
+                >
+                  <div
+                    id="mx_LocationPicker_map"
+                  />
+                  <div
+                    className="mx_LocationPicker_error"
+                  >
+                    Failed to load map
+                  </div>
+                  <div
+                    className="mx_LocationPicker_footer"
+                  >
+                    <form
+                      onSubmit={[Function]}
+                    >
+                      <DialogButtons
+                        cancelButtonClass="mx_LocationPicker_cancelButton"
+                        disabled={false}
+                        hasCancel={true}
+                        onCancel={[MockFunction]}
+                        onPrimaryButtonClick={[Function]}
+                        primaryButton="Share location"
+                        primaryDisabled={true}
+                        primaryIsSubmit={true}
+                      >
+                        <div
+                          className="mx_Dialog_buttons"
+                        >
+                          <button
+                            className="mx_LocationPicker_cancelButton"
+                            data-test-id="dialog-cancel-button"
+                            disabled={false}
+                            onClick={[Function]}
+                            type="button"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="mx_Dialog_primary"
+                            data-test-id="dialog-primary-button"
+                            disabled={true}
+                            onClick={[Function]}
+                            type="submit"
+                          >
+                            Share location
+                          </button>
+                        </div>
+                      </DialogButtons>
+                    </form>
+                  </div>
+                  <div
+                    className="mx_MLocationBody_marker"
+                    id="mx_MLocationPicker_marker"
+                  >
+                    <div
+                      className="mx_MLocationBody_markerBorder"
+                    >
+                      <MemberAvatar
+                        height={27}
+                        member={
+                          Object {
+                            "id": "@ernie:server.org",
+                          }
+                        }
+                        resizeMethod="crop"
+                        viewUserOnClick={false}
+                        width={27}
+                      >
+                        <BaseAvatar
+                          height={27}
+                          resizeMethod="crop"
+                          width={27}
+                        >
+                          <span
+                            className="mx_BaseAvatar"
+                            role="presentation"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="mx_BaseAvatar_initial"
+                              style={
+                                Object {
+                                  "fontSize": "17.55px",
+                                  "lineHeight": "27px",
+                                  "width": "27px",
+                                }
+                              }
+                            />
+                            <img
+                              alt=""
+                              aria-hidden="true"
+                              className="mx_BaseAvatar_image"
+                              onError={[Function]}
+                              src=""
+                              style={
+                                Object {
+                                  "height": "27px",
+                                  "width": "27px",
+                                }
+                              }
+                            />
+                          </span>
+                        </BaseAvatar>
+                      </MemberAvatar>
+                    </div>
+                    <img
+                      className="mx_MLocationBody_pointer"
+                      height="5"
+                      src="image-file-stub"
+                      width="9"
+                    />
+                  </div>
+                </div>
+              </LocationPicker>
+            </div>
+          </div>
+        </div>
+      </RovingTabIndexProvider>
+    </Portal>
+  </ContextMenu>
+</LocationShareMenu>
+`;
