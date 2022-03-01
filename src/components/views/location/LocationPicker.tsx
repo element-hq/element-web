@@ -197,11 +197,8 @@ class LocationPicker extends React.Component<IProps, IState> {
                             viewUserOnClick={false}
                         />
                     </div>
-                    <img
+                    <div
                         className="mx_MLocationBody_pointer"
-                        src={require("../../../../res/img/location/pointer.svg")}
-                        width="9"
-                        height="5"
                     />
                 </div>
             </div>

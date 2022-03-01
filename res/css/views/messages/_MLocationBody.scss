@@ -38,7 +38,22 @@ limitations under the License.
     .mx_MLocationBody_pointer {
         position: absolute;
         bottom: -3px;
-        left: 12px;
+        left: 11px;
+        width: 9px;
+        height: 5px;
+
+        &::before {
+            mask-image: url('$(res)/img/location/pointer.svg');
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: 9px;
+            content: '';
+            display: inline-block;
+            width: 9px;
+            height: 5px;
+            position: absolute;
+            background-color: $accent;
+        }
     }
 
     .mx_MLocationBody_markerContents {
