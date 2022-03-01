@@ -441,6 +441,10 @@ module.exports = (env, argv) => {
                             loader: '@svgr/webpack',
                             options: {
                                 namedExport: 'Icon',
+                                svgProps: {
+                                    role: 'img',
+                                    'aria-hidden': true,
+                                },
                                 svgoConfig: {
                                     plugins: {
                                         // generates a viewbox if missing
