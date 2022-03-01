@@ -445,6 +445,8 @@ module.exports = (env, argv) => {
                                     role: 'img',
                                     'aria-hidden': true,
                                 },
+                                // props set on the svg will override defaults
+                                expandProps: 'end',
                                 svgoConfig: {
                                     plugins: {
                                         // generates a viewbox if missing
