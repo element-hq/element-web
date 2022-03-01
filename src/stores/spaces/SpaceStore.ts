@@ -235,13 +235,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             return;
         }
 
-        this._activeSpace = space;
-        this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
-        this.emit(UPDATE_SUGGESTED_ROOMS, this._suggestedRooms = []);
-
         if (contextSwitch) {
             // view last selected room from space
-            const roomId = window.localStorage.getItem(getSpaceContextKey(this.activeSpace));
+            const roomId = window.localStorage.getItem(getSpaceContextKey(space));
 
             // if the space being selected is an invite then always view that invite
             // else if the last viewed room in this space is joined then view that
@@ -255,21 +251,30 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     room_id: roomId,
                     context_switch: true,
                     metricsTrigger: "WebSpaceContextSwitch",
-                });
+                }, true);
             } else if (cliSpace) {
                 defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: space,
                     context_switch: true,
                     metricsTrigger: "WebSpaceContextSwitch",
-                });
+                }, true);
             } else {
                 defaultDispatcher.dispatch<ViewHomePagePayload>({
                     action: Action.ViewHomePage,
                     context_switch: true,
-                });
+                }, true);
             }
         }
+
+        // We can set the space after context switching as the dispatch handler which stores the last viewed room
+        // specifically no-ops on context_switch=true.
+        this._activeSpace = space;
+        // Emit after a synchronous dispatch for context switching to prevent racing with SpaceWatcher calling
+        // Room::loadMembersIfNeeded which could (via onMemberUpdate) call upon switchSpaceIfNeeded causing the
+        // space to wrongly bounce.
+        this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
+        this.emit(UPDATE_SUGGESTED_ROOMS, this._suggestedRooms = []);
 
         // persist space selected
         window.localStorage.setItem(ACTIVE_SPACE_LS_KEY, space);

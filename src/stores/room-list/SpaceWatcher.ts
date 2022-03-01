@@ -69,7 +69,7 @@ export class SpaceWatcher {
         if (!isMetaSpace(this.activeSpace)) {
             SpaceStore.instance.traverseSpace(this.activeSpace, roomId => {
                 this.store.matrixClient?.getRoom(roomId)?.loadMembersIfNeeded();
-            });
+            }, false);
         }
         this.filter.updateSpace(this.activeSpace);
     };

@@ -16,9 +16,10 @@ limitations under the License.
 
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { defer } from "matrix-js-sdk/src/utils";
 
 import "../skinned-sdk"; // Must be first for skinning to work
-
 import SpaceStore from "../../src/stores/spaces/SpaceStore";
 import {
     MetaSpace,
@@ -30,11 +31,11 @@ import {
 import * as testUtils from "../test-utils";
 import { mkEvent, stubClient } from "../test-utils";
 import DMRoomMap from "../../src/utils/DMRoomMap";
-import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { SettingLevel } from "../../src/settings/SettingLevel";
 import { Action } from "../../src/dispatcher/actions";
+import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
 jest.useFakeTimers();
 
@@ -92,6 +93,8 @@ describe("SpaceStore", () => {
     const store = SpaceStore.instance;
     const client = MatrixClientPeg.get();
 
+    const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");
+
     let rooms = [];
     const mkRoom = (roomId: string) => testUtils.mkRoom(client, roomId, rooms);
     const mkSpace = (spaceId: string, children: string[] = []) => testUtils.mkSpace(client, spaceId, rooms, children);
@@ -122,6 +125,8 @@ describe("SpaceStore", () => {
             [MetaSpace.People]: true,
             [MetaSpace.Orphans]: true,
         });
+
+        spyDispatcher.mockClear();
     });
 
     afterEach(async () => {
@@ -840,6 +845,61 @@ describe("SpaceStore", () => {
             expect(fn).not.toHaveBeenCalledWith(UPDATE_SELECTED_SPACE, space.roomId);
             expect(store.activeSpace).toBe(MetaSpace.Home);
         });
+    });
+
+    it("does not race with lazy loading", async () => {
+        store.setActiveSpace(MetaSpace.Home);
+
+        mkRoom(room1);
+        const space = mkSpace(space1, [room1]);
+        // seed the context for space1 to be room1
+        window.localStorage.setItem(`mx_space_context_${space1}`, room1);
+
+        await run();
+
+        const deferred = defer<void>();
+        (space.loadMembersIfNeeded as jest.Mock).mockImplementation(() => {
+            const event = mkEvent({
+                event: true,
+                type: EventType.RoomMember,
+                content: { membership: "join" },
+                skey: dm1Partner.userId,
+                user: dm1Partner.userId,
+                room: space1,
+            });
+
+            client.emit(RoomStateEvent.Members, event, null, null);
+            deferred.resolve();
+        });
+
+        spyDispatcher.mockClear();
+        const getCurrentRoom = () => {
+            for (let i = spyDispatcher.mock.calls.length - 1; i >= 0; i--) {
+                if (spyDispatcher.mock.calls[i][0].action === Action.ViewRoom) {
+                    return spyDispatcher.mock.calls[i][0]["room_id"];
+                }
+            }
+        };
+
+        // set up space with LL where loadMembersIfNeeded emits membership events which trip switchSpaceIfNeeded
+        expect(space.loadMembersIfNeeded).not.toHaveBeenCalled();
+
+        store.setActiveSpace(space1, true);
+        // traverse the space and call loadMembersIfNeeded, similarly to SpaceWatcher's behaviour
+        store.traverseSpace(space1, roomId => {
+            client.getRoom(roomId)?.loadMembersIfNeeded();
+        }, false);
+
+        expect(store.activeSpace).toBe(space1);
+        expect(getCurrentRoom()).toBe(room1);
+
+        await deferred.promise;
+        expect(store.activeSpace).toBe(space1);
+        expect(getCurrentRoom()).toBe(room1);
+
+        jest.runAllTimers();
+        expect(store.activeSpace).toBe(space1);
+        expect(getCurrentRoom()).toBe(room1);
     });
 
     describe("context switching tests", () => {
