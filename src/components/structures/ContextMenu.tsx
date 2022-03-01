@@ -260,10 +260,11 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
         const { windowWidth, windowHeight } = UIStore.instance;
         if (contextMenuRect) {
             if (position.top !== undefined) {
-                position.top = Math.min(
-                    position.top,
-                    windowHeight - contextMenuRect.height - WINDOW_PADDING,
-                );
+                let maxTop = windowHeight - WINDOW_PADDING;
+                if (!this.props.bottomAligned) {
+                    maxTop -= contextMenuRect.height;
+                }
+                position.top = Math.min(position.top, maxTop);
                 // Adjust the chevron if necessary
                 if (chevronOffset.top !== undefined) {
                     chevronOffset.top = props.chevronOffset + props.top - position.top;
@@ -278,10 +279,11 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                 }
             }
             if (position.left !== undefined) {
-                position.left = Math.min(
-                    position.left,
-                    windowWidth - contextMenuRect.width - WINDOW_PADDING,
-                );
+                let maxLeft = windowWidth - WINDOW_PADDING;
+                if (!this.props.rightAligned) {
+                    maxLeft -= contextMenuRect.width;
+                }
+                position.left = Math.min(position.left, maxLeft);
                 if (chevronOffset.left !== undefined) {
                     chevronOffset.left = props.chevronOffset + props.left - position.left;
                 }

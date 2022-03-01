@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { RefObject, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src";
 
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -27,20 +27,12 @@ import { _t } from "../../../languageHandler";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
     mxEvent: MatrixEvent;
     permalinkCreator: RoomPermalinkCreator;
     onMenuToggle?: (open: boolean) => void;
-}
-
-interface IExtendedProps extends IProps {
-    // Props for making the button into a roving one
-    tabIndex?: number;
-    inputRef?: RefObject<HTMLElement>;
-    onFocus?(): void;
 }
 
 const contextMenuBelow = (elementRect: DOMRect) => {
@@ -51,27 +43,13 @@ const contextMenuBelow = (elementRect: DOMRect) => {
     return { left, top, chevronFace };
 };
 
-export const RovingThreadListContextMenu: React.FC<IProps> = (props) => {
-    const [onFocus, isActive, ref] = useRovingTabIndex();
-
-    return <ThreadListContextMenu
-        {...props}
-        onFocus={onFocus}
-        tabIndex={isActive ? 0 : -1}
-        inputRef={ref}
-    />;
-};
-
-const ThreadListContextMenu: React.FC<IExtendedProps> = ({
+const ThreadListContextMenu: React.FC<IProps> = ({
     mxEvent,
     permalinkCreator,
     onMenuToggle,
-    onFocus,
-    inputRef,
     ...props
 }) => {
-    const [menuDisplayed, _ref, openMenu, closeThreadOptions] = useContextMenu();
-    const button = inputRef ?? _ref; // prefer the ref we receive via props in case we are being controlled
+    const [menuDisplayed, button, openMenu, closeThreadOptions] = useContextMenu();
 
     const viewInRoom = useCallback((evt: ButtonEvent): void => {
         evt.preventDefault();
@@ -95,11 +73,8 @@ const ThreadListContextMenu: React.FC<IExtendedProps> = ({
     }, [mxEvent, closeThreadOptions, permalinkCreator]);
 
     useEffect(() => {
-        if (onMenuToggle) {
-            onMenuToggle(menuDisplayed);
-        }
-        onFocus?.();
-    }, [menuDisplayed, onMenuToggle, onFocus]);
+        onMenuToggle?.(menuDisplayed);
+    }, [menuDisplayed, onMenuToggle]);
 
     const isMainSplitTimelineShown = !WidgetLayoutStore.instance.hasMaximisedWidget(
         MatrixClientPeg.get().getRoom(mxEvent.getRoomId()),
