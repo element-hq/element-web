@@ -58,6 +58,7 @@ import LazyLoadingDisabledDialog from "./components/views/dialogs/LazyLoadingDis
 import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestoreErrorDialog";
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 import { setSentryUser } from "./sentry";
+import SdkConfig from "./SdkConfig";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -845,6 +846,13 @@ export async function onLoggedOut(): Promise<void> {
     stopMatrixClient();
     await clearStorage({ deleteEverything: true });
     LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
+
+    // Do this last so we can make sure all storage has been cleared and all
+    // customisations got the memo.
+    if (SdkConfig.get().logout_redirect_url) {
+        logger.log("Redirecting to external provider to finish logout");
+        window.location.href = SdkConfig.get().logout_redirect_url;
+    }
 }
 
 /**
