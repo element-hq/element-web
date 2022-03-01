@@ -25,7 +25,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
-import * as jssdk from 'matrix-js-sdk';
+import * as jssdk from 'matrix-js-sdk/src/matrix';
 import * as sdk from 'matrix-react-sdk';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import {Views} from 'matrix-react-sdk/src/components/structures/MatrixChat';
