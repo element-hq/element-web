@@ -805,7 +805,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
     private onKeyDown = (e) => {
         if (this.state.busy) return;
 
-        let handled = true;
+        let handled = false;
         const value = e.target.value.trim();
         const action = getKeyBindingsManager().getAccessibilityAction(e);
 
@@ -815,21 +815,22 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
                 // when the field is empty and the user hits backspace remove the right-most target
                 this.removeMember(this.state.targets[this.state.targets.length - 1]);
+                handled = true;
                 break;
             case KeyBindingAction.Space:
                 if (!value || !value.includes("@") || value.includes(" ")) break;
 
                 // when the user hits space and their input looks like an e-mail/MXID then try to convert it
                 this.convertFilter();
+                handled = true;
                 break;
             case KeyBindingAction.Enter:
                 if (!value) break;
 
                 // when the user hits enter with something in their field try to convert it
                 this.convertFilter();
+                handled = true;
                 break;
-            default:
-                handled = false;
         }
 
         if (handled) {
