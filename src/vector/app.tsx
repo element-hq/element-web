@@ -180,6 +180,8 @@ export async function loadApp(fragParams: {}) {
         return;
     }
 
+    const defaultDeviceName = config['defaultDeviceDisplayName'] ?? platform.getDefaultDeviceDisplayName();
+
     const MatrixChat = sdk.getComponent('structures.MatrixChat');
     return <MatrixChat
         onNewScreen={onNewScreen}
@@ -190,7 +192,7 @@ export async function loadApp(fragParams: {}) {
         enableGuest={!config.disable_guests}
         onTokenLoginCompleted={onTokenLoginCompleted}
         initialScreenAfterLogin={getScreenFromLocation(window.location)}
-        defaultDeviceDisplayName={platform.getDefaultDeviceDisplayName()}
+        defaultDeviceDisplayName={defaultDeviceName}
     />;
 }
 

@@ -34,5 +34,5 @@
     "The message from the parser is: %(message)s": "ההודעה מהמנתח היא: %(message)s",
     "Missing indexeddb worker script!": "סקריפט indexeddb worker חסר!",
     "Switch to space by number": "עבור 'למרחב' על פי המספר שלו",
-    "Use %(brand)s on mobile": "השתמש ב%(brand)s  במכשיר הנייד"
+    "Use %(brand)s on mobile": "השתמש ב-%(brand)s במכשיר הנייד"
 }

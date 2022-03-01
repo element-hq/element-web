@@ -34,5 +34,7 @@
     "Invalid JSON": "JSON tidak valid",
     "The message from the parser is: %(message)s": "Pesan dari pengurai adalah: %(message)s",
     "Your Element is misconfigured": "Anda mengatur Element dengan salah",
-    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurasi tidak valid: hanya bisa menentukan satu dari default_server_config, default_server_name, atau default_hs_url."
+    "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurasi tidak valid: hanya bisa menentukan satu dari default_server_config, default_server_name, atau default_hs_url.",
+    "Next recently visited room or community": "Ruangan atau komunitas berikutnya yang baru saja dilihat",
+    "Previous recently visited room or community": "Ruangan atau komunitas sebelumnya yang baru saja dilihat"
 }

@@ -5,8 +5,8 @@
     "You need to be using HTTPS to place a screen-sharing call.": "Musisz używać bezpiecznego protokołu HTTPS aby użyć połączenia współdzielenia ekranu.",
     "Welcome to Element": "Witamy w Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Zdecentralizowany, szyfrowany czat &amp; współpraca oparta na [matrix]",
-    "Create Account": "Stwórz konto",
-    "Sign In": "Zaloguj",
+    "Create Account": "Utwórz konto",
+    "Sign In": "Zaloguj się",
     "Explore rooms": "Przeglądaj pokoje",
     "The message from the parser is: %(message)s": "Wiadomość od parsera to: %(message)s",
     "Invalid JSON": "Błędny JSON",
@@ -29,10 +29,12 @@
     "Download Completed": "Pobieranie Zakończone",
     "Open": "Otwórz",
     "Your browser can't run %(brand)s": "Twoja przeglądarka nie obsługuje %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s używa zaawansowanych funkcji przeglądarki, które nie są dostępne w twojej przeglądarce.",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s używa zaawansowanych funkcji które nie są dostępne w obecnej przeglądarce.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracja Elementa zawiera niepoprawny JSON. Popraw konfiguracje i odśwież stronę.",
     "Your Element is misconfigured": "Element jest nieprawidłowo skonfigurowany",
     "Powered by Matrix": "Zasilane przez Matrix",
     "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie",
-    "Switch to space by number": "Przełącz na przestrzeń według numeru"
+    "Switch to space by number": "Przełącz na przestrzeń według numeru",
+    "Next recently visited room or community": "Następne ostatnio odwiedzone pokoje i społeczności",
+    "Previous recently visited room or community": "Ostatnio odwiedzone pokoje i społeczności"
 }

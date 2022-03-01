@@ -34,5 +34,7 @@
     "Your browser can't run %(brand)s": "%(brand)s ei toimi selaimessasi",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue.",
     "Use %(brand)s on mobile": "Käytä %(brand)sia mobiilisti",
-    "Switch to space by number": "Vaihda avaruuteen käyttäen numeroa"
+    "Switch to space by number": "Vaihda avaruuteen käyttäen numeroa",
+    "Next recently visited room or community": "Seuraava aiemmin vierailtu huone tai yhteisö",
+    "Previous recently visited room or community": "Aiemmin viimeaikoina vierailtu huone tai yhteisö"
 }

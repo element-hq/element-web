@@ -21,6 +21,19 @@ Enables rendering of LaTeX maths in messages using [KaTeX](https://katex.org/). 
 Allows you to pin messages in the room. To pin a message, use the 3 dots to the right of the message
 and select "Pin".
 
+## Jump to date (`feature_jump_to_date`)
+
+Note: This labs feature is only visible when your homeserver has MSC3030 enabled
+(in Synapse, add `experimental_features` -> `msc3030_enabled` to your
+`homeserver.yaml`) which means `GET /_matrix/client/versions` responds with
+`org.matrix.msc3030` under the `unstable_features` key.
+
+Adds a dropdown menu to the date separator headers in the timeline which allows
+you to jump to last week, last month, the beginning of the room, or choose a
+date from the calendar.
+
+Also adds the `/jumptodate 2022-01-31` slash command.
+
 ## Custom status (`feature_custom_status`)
 
 An experimental approach for supporting custom status messages across DMs. To set a status, click on
@@ -126,19 +139,6 @@ and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
 
-## Location sharing (`feature_location_share`) [In Development]
-
-Allows users to send and display location data using [maplibre](https://maplibre.org).
-
-The current implementation is a quick in-progress development spike to
-demonstrate viability and prove [MSC3488](https://github.com/matrix-org/matrix-doc/pull/3488)
-and [MSC3489](https://github.com/matrix-org/matrix-doc/pull/3489) - **the UI has not yet
-been designed, and it will not exit labs until it has**.
-
-For this to work, you must specify the URL of a valid map tile server style file in
-the `map_style_url` setting in config.json.
-For example: "https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE"`
-
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
 Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
@@ -172,3 +172,15 @@ who prefer to have the right panel open consistently across rooms.
 If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
+
+## Show current profile of users on historical messages (`feature_use_only_current_profiles`)
+
+An experimental flag to determine how the app would behave if a user's current display
+name and avatar (profile) were shown on historical messages instead of the profile details
+at the time when the message was sent.
+
+When enabled, historical messages will use the current profile for the sender.
+
+## Pin drop location sharing (`feature_location_share_pin_drop`) [In Development]
+
+Enables sharing a pin drop location to the timeline.
