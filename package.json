@@ -90,6 +90,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@principalstudio/html-webpack-inject-preload": "^1.2.7",
     "@sentry/webpack-plugin": "^1.18.1",
+    "@svgr/webpack": "^5.5.0",
     "@types/flux": "^3.1.9",
     "@types/jest": "^27.0.2",
     "@types/modernizr": "^3.5.3",
