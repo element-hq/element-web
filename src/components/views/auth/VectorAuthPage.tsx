@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 import React, { CSSProperties } from 'react';
-import * as sdk from 'matrix-react-sdk/src/index';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
+
+import VectorAuthFooter from "./VectorAuthFooter";
 
 export default class VectorAuthPage extends React.PureComponent {
     static replaces = 'AuthPage';
@@ -44,8 +45,6 @@ export default class VectorAuthPage extends React.PureComponent {
     }
 
     render() {
-        const AuthFooter = sdk.getComponent('auth.AuthFooter');
-
         const pageStyle = {
             background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
         };
@@ -80,7 +79,7 @@ export default class VectorAuthPage extends React.PureComponent {
                         { this.props.children }
                     </div>
                 </div>
-                <AuthFooter />
+                <VectorAuthFooter />
             </div>
         );
     }

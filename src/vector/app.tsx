@@ -19,7 +19,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from 'matrix-react-sdk/src/index';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import { _td, newTranslatableError } from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
@@ -30,6 +29,7 @@ import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { logger } from "matrix-js-sdk/src/logger";
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
+import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 
 import { parseQs } from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
@@ -133,7 +133,6 @@ export async function loadApp(fragParams: {}) {
     const defaultDeviceName = snakedConfig.get("default_device_display_name")
         ?? platform.getDefaultDeviceDisplayName();
 
-    const MatrixChat = sdk.getComponent('structures.MatrixChat');
     return <MatrixChat
         onNewScreen={onNewScreen}
         makeRegistrationUrl={makeRegistrationUrl}
@@ -147,7 +146,7 @@ export async function loadApp(fragParams: {}) {
     />;
 }
 
-async function verifyServerConfig() {
+async function verifyServerConfig(): Promise<IConfigOptions> {
     let validatedConfig;
     try {
         logger.log("Verifying homeserver configuration");
