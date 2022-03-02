@@ -361,6 +361,7 @@ function showLocationButton(
             ? <LocationButton
                 key="location"
                 roomId={roomId}
+                relation={props.relation}
                 sender={room.getMember(matrixClient.getUserId())}
                 menuPosition={props.menuPosition}
             />

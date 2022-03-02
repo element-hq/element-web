@@ -399,7 +399,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             thread,
             threadReplyCount: thread?.length,
             threadLastReply: thread?.replyToEvent,
-            threadLastSender: thread?.replyToEvent.sender,
+            threadLastSender: thread?.replyToEvent?.sender,
         };
 
         // don't do RR animations until we are mounted

@@ -17,6 +17,7 @@ limitations under the License.
 import React, { ReactElement, SyntheticEvent, useContext } from 'react';
 import classNames from 'classnames';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
+import { IEventRelation } from 'matrix-js-sdk/src/models/event';
 
 import { _t } from '../../../languageHandler';
 import { CollapsibleButton } from '../rooms/CollapsibleButton';
@@ -28,9 +29,10 @@ interface IProps {
     roomId: string;
     sender: RoomMember;
     menuPosition: AboveLeftOf;
+    relation?: IEventRelation;
 }
 
-export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition }) => {
+export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition, relation }) => {
     const overflowMenuCloser = useContext(OverflowMenuContext);
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
 
@@ -49,7 +51,9 @@ export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition 
             onFinished={_onFinished}
             sender={sender}
             roomId={roomId}
-            openMenu={openMenu} />;
+            openMenu={openMenu}
+            relation={relation}
+        />;
     }
 
     const className = classNames(

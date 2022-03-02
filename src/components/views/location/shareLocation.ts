@@ -14,43 +14,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IEventRelation } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
+import SdkConfig from "../../../SdkConfig";
 
-export const shareLocation = (client: MatrixClient, roomId: string, openMenu: () => void) =>
-    (uri: string, ts: number) => {
-        if (!uri) return false;
-        try {
-            const text = textForLocation(uri, ts, null);
-            client.sendMessage(
-                roomId,
-                makeLocationContent(text, uri, ts, null),
-            );
-        } catch (e) {
-            logger.error("We couldn’t send your location", e);
+export const shareLocation = (
+    client: MatrixClient,
+    roomId: string,
+    relation: IEventRelation | undefined,
+    openMenu: () => void,
+) => async (uri: string, ts: number) => {
+    if (!uri) return false;
+    try {
+        const text = textForLocation(uri, ts, null);
+        const threadId = relation?.rel_type === RelationType.Thread ? relation.event_id : null;
+        await client.sendMessage(roomId, threadId, makeLocationContent(text, uri, ts, null));
+    } catch (e) {
+        logger.error("We couldn't send your location", e);
 
-            const analyticsAction = 'We couldn’t send your location';
-            const params = {
-                title: _t("We couldn’t send your location"),
-                description: _t(
-                    "Element could not send your location. Please try again later."),
-                button: _t('Try again'),
-                cancelButton: _t('Cancel'),
-                onFinished: (tryAgain: boolean) => {
-                    if (tryAgain) {
-                        openMenu();
-                    }
-                },
-            };
-            Modal.createTrackedDialog(analyticsAction, '', QuestionDialog, params);
-        }
-        return true;
-    };
+        const analyticsAction = "We couldn't send your location";
+        const params = {
+            title: _t("We couldn't send your location"),
+            description: _t("%(brand)s could not send your location. Please try again later.", {
+                brand: SdkConfig.get().brand,
+            }),
+            button: _t('Try again'),
+            cancelButton: _t('Cancel'),
+            onFinished: (tryAgain: boolean) => {
+                if (tryAgain) {
+                    openMenu();
+                }
+            },
+        };
+        Modal.createTrackedDialog(analyticsAction, '', QuestionDialog, params);
+    }
+    return true;
+};
 
 export function textForLocation(
     uri: string,
