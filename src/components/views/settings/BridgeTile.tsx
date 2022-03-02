@@ -26,7 +26,6 @@ import { makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
 import { isUrlPermitted } from '../../../HtmlUtils';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 
 interface IProps {
@@ -66,7 +65,6 @@ interface IBridgeStateEvent {
     };
 }
 
-@replaceableComponent("views.settings.BridgeTile")
 export default class BridgeTile extends React.PureComponent<IProps> {
     static propTypes = {
         ev: PropTypes.object.isRequired,

@@ -24,7 +24,6 @@ import { ListRule } from "../../../../../mjolnir/ListRule";
 import { BanList, RULE_SERVER, RULE_USER } from "../../../../../mjolnir/BanList";
 import Modal from "../../../../../Modal";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import ErrorDialog from "../../../dialogs/ErrorDialog";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
 import AccessibleButton from "../../../elements/AccessibleButton";
@@ -36,7 +35,6 @@ interface IState {
     newList: string;
 }
 
-@replaceableComponent("views.settings.tabs.user.MjolnirUserSettingsTab")
 export default class MjolnirUserSettingsTab extends React.Component<{}, IState> {
     constructor(props) {
         super(props);

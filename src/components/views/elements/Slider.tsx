@@ -16,8 +16,6 @@ limitations under the License.
 
 import * as React from 'react';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-
 interface IProps {
     // A callback for the selected value
     onSelectionChange: (value: number) => void;
@@ -36,7 +34,6 @@ interface IProps {
     disabled: boolean;
 }
 
-@replaceableComponent("views.elements.Slider")
 export default class Slider extends React.Component<IProps> {
     // offset is a terrible inverse approximation.
     // if the values represents some function f(x) = y where x is the

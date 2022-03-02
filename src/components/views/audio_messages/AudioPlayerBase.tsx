@@ -19,7 +19,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { Playback, PlaybackState } from "../../../audio/Playback";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { _t } from "../../../languageHandler";
 
 interface IProps {
@@ -35,7 +34,6 @@ interface IState {
     error?: boolean;
 }
 
-@replaceableComponent("views.audio_messages.AudioPlayerBase")
 export default abstract class AudioPlayerBase extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);

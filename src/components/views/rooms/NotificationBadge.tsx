@@ -22,7 +22,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import { XOR } from "../../../@types/common";
 import { NotificationState, NotificationStateEvents } from "../../../stores/notifications/NotificationState";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
 import { _t } from "../../../languageHandler";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
@@ -55,7 +54,6 @@ interface IState {
     showTooltip: boolean;
 }
 
-@replaceableComponent("views.rooms.NotificationBadge")
 export default class NotificationBadge extends React.PureComponent<XOR<IProps, IClickableProps>, IState> {
     private countWatcherRef: string;
 

@@ -23,7 +23,6 @@ import classNames from 'classnames';
 
 import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
@@ -54,7 +53,6 @@ interface IState {
 const isSharingOwnLocation = (shareType: LocationShareType): boolean =>
     shareType === LocationShareType.Own || shareType === LocationShareType.Live;
 
-@replaceableComponent("views.location.LocationPicker")
 class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;

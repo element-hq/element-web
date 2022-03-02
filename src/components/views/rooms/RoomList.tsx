@@ -51,7 +51,6 @@ import {
     UPDATE_SUGGESTED_ROOMS,
 } from "../../../stores/spaces";
 import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -349,7 +348,6 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
     },
 };
 
-@replaceableComponent("views.rooms.RoomList")
 export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
     private roomStoreToken: fbEmitter.EventSubscription;

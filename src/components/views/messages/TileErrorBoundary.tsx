@@ -21,7 +21,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
 import SdkConfig from "../../../SdkConfig";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BugReportDialog from '../dialogs/BugReportDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -37,7 +36,6 @@ interface IState {
     error: Error;
 }
 
-@replaceableComponent("views.messages.TileErrorBoundary")
 export default class TileErrorBoundary extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);

@@ -23,7 +23,6 @@ import AuthPage from "./AuthPage";
 import { _td } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import LanguageSelector from "./LanguageSelector";
 
 // translatable strings for Welcome pages
@@ -33,7 +32,6 @@ interface IProps {
 
 }
 
-@replaceableComponent("views.auth.Welcome")
 export default class Welcome extends React.PureComponent<IProps> {
     public render(): React.ReactNode {
         // FIXME: Using an import will result in wrench-element-tests failures

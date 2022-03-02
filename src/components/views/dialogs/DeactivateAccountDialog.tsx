@@ -26,7 +26,6 @@ import { _t } from '../../../languageHandler';
 import InteractiveAuth, { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
 import { DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 
 interface IProps {
@@ -46,7 +45,6 @@ interface IState {
     continueKind: string;
 }
 
-@replaceableComponent("views.dialogs.DeactivateAccountDialog")
 export default class DeactivateAccountDialog extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);

@@ -31,7 +31,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { formatFullDate } from "../../../DateUtils";
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from '../../../dispatcher/actions';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { normalizeWheelEvent } from "../../../utils/Mouse";
 import { IDialogProps } from '../dialogs/IDialogProps';
@@ -90,7 +89,6 @@ interface IState {
     contextMenuDisplayed: boolean;
 }
 
-@replaceableComponent("views.elements.ImageView")
 export default class ImageView extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);

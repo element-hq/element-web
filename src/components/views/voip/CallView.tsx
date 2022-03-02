@@ -30,7 +30,6 @@ import VideoFeed from './VideoFeed';
 import RoomAvatar from "../avatars/RoomAvatar";
 import AccessibleButton from '../elements/AccessibleButton';
 import { avatarUrlForMember } from '../../../Avatar';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DesktopCapturerSourcePicker from "../elements/DesktopCapturerSourcePicker";
 import Modal from '../../../Modal';
 import CallViewSidebar from './CallViewSidebar';
@@ -103,7 +102,6 @@ function exitFullscreen() {
     if (exitMethod) exitMethod.call(document);
 }
 
-@replaceableComponent("views.voip.CallView")
 export default class CallView extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private contentRef = createRef<HTMLDivElement>();

@@ -27,7 +27,6 @@ import { Layout } from "../../../settings/enums/Layout";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { SettingLevel } from "../../../settings/SettingLevel";
 import { _t } from "../../../languageHandler";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -45,7 +44,6 @@ interface IState {
     avatarUrl: string;
 }
 
-@replaceableComponent("views.settings.tabs.user.FontScalingPanel")
 export default class FontScalingPanel extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 

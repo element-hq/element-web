@@ -26,7 +26,6 @@ import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import PictureInPictureDragger from './PictureInPictureDragger';
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
@@ -105,7 +104,6 @@ function getPrimarySecondaryCallsForPip(roomId: string): [MatrixCall, MatrixCall
  * and all widgets that are active but not shown in any other possible container.
  */
 
-@replaceableComponent("views.voip.PipView")
 export default class PipView extends React.Component<IProps, IState> {
     private roomStoreToken: EventSubscription;
     private settingsWatcherRef: string;

@@ -22,7 +22,6 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 import dis from '../../../dispatcher/dispatcher';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from "../../../dispatcher/payloads";
 
 export const getPersistKey = (appId: string) => 'widget_' + appId;
@@ -70,7 +69,6 @@ interface IProps {
  * children are made visible and are positioned into a div that is given the same
  * bounding rect as the parent of PE.
  */
-@replaceableComponent("views.elements.PersistedElement")
 export default class PersistedElement extends React.Component<IProps> {
     private resizeObserver: ResizeObserver;
     private dispatcherRef: string;

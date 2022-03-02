@@ -26,7 +26,6 @@ import withValidation, { IFieldState, IValidationResult } from '../elements/Vali
 import { _t, _td } from '../../../languageHandler';
 import Modal from "../../../Modal";
 import PassphraseField from "../auth/PassphraseField";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../auth/RegistrationForm';
 import SetEmailDialog from "../dialogs/SetEmailDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
@@ -63,7 +62,6 @@ interface IState {
     newPasswordConfirm: string;
 }
 
-@replaceableComponent("views.settings.ChangePassword")
 export default class ChangePassword extends React.Component<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         onFinished() {},

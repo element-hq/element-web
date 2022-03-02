@@ -24,7 +24,6 @@ import RoomUpgradeDialog from "../../../dialogs/RoomUpgradeDialog";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from '../../../../../dispatcher/actions';
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import CopyableText from "../../../elements/CopyableText";
 import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
 
@@ -46,7 +45,6 @@ interface IState {
     upgraded?: boolean;
 }
 
-@replaceableComponent("views.settings.tabs.room.AdvancedRoomSettingsTab")
 export default class AdvancedRoomSettingsTab extends React.Component<IProps, IState> {
     constructor(props, context) {
         super(props, context);

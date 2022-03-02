@@ -33,7 +33,6 @@ import EditorStateTransfer from '../../../utils/EditorStateTransfer';
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from '../../../utils/replaceableComponent';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import { Action } from '../../../dispatcher/actions';
 import RoomViewStore from '../../../stores/RoomViewStore';
@@ -71,7 +70,6 @@ interface IState {
     showReadReceipts?: boolean;
 }
 
-@replaceableComponent("structures.TimelineCard")
 export default class TimelineCard extends React.Component<IProps, IState> {
     static contextType = RoomContext;
 

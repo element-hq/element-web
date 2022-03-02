@@ -17,7 +17,6 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TooltipTarget from './TooltipTarget';
 
 interface IProps {
@@ -28,7 +27,6 @@ interface IProps {
     onClick?: (ev?: React.MouseEvent) => void;
 }
 
-@replaceableComponent("views.elements.TextWithTooltip")
 export default class TextWithTooltip extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);

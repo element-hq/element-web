@@ -23,7 +23,6 @@ import { _t } from '../../../languageHandler';
 import { formatDate } from '../../../DateUtils';
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MemberAvatar from '../avatars/MemberAvatar';
 
 export interface IReadReceiptInfo {
@@ -77,7 +76,6 @@ interface IReadReceiptMarkerStyle {
     left: number;
 }
 
-@replaceableComponent("views.rooms.ReadReceiptMarker")
 export default class ReadReceiptMarker extends React.PureComponent<IProps, IState> {
     private avatar: React.RefObject<HTMLDivElement | HTMLImageElement | HTMLSpanElement> = createRef();
 

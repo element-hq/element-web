@@ -23,7 +23,6 @@ import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
-import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import AccessibleButton from "../../elements/AccessibleButton";
 
@@ -244,7 +243,6 @@ interface IProps {
     emails: IThreepid[];
 }
 
-@replaceableComponent("views.settings.discovery.EmailAddresses")
 export default class EmailAddresses extends React.Component<IProps> {
     public render(): JSX.Element {
         let content;

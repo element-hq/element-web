@@ -31,7 +31,6 @@ import EmailField from "./EmailField";
 import PassphraseField from "./PassphraseField";
 import Field from '../elements/Field';
 import RegistrationEmailPromptDialog from '../dialogs/RegistrationEmailPromptDialog';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CountryDropdown from "./CountryDropdown";
 import PassphraseConfirmField from "./PassphraseConfirmField";
 
@@ -92,7 +91,6 @@ interface IState {
 /*
  * A pure UI component which displays a registration form.
  */
-@replaceableComponent("views.auth.RegistrationForm")
 export default class RegistrationForm extends React.PureComponent<IProps, IState> {
     static defaultProps = {
         onValidationChange: logger.error,

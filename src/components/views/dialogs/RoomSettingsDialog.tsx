@@ -30,7 +30,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import { Action } from '../../../dispatcher/actions';
 
@@ -51,7 +50,6 @@ interface IState {
     roomName: string;
 }
 
-@replaceableComponent("views.dialogs.RoomSettingsDialog")
 export default class RoomSettingsDialog extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 

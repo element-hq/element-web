@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // The number of elements to show before truncating. If negative, no truncation is done.
@@ -38,7 +37,6 @@ interface IProps {
     createOverflowElement?: (overflowCount: number, totalCount: number) => React.ReactNode;
 }
 
-@replaceableComponent("views.elements.TruncatedList")
 export default class TruncatedList extends React.Component<IProps> {
     static defaultProps ={
         truncateAt: 2,

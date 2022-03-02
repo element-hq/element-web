@@ -30,7 +30,6 @@ import StyledRadioGroup from '../../../elements/StyledRadioGroup';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import createRoom, { IOpts } from '../../../../../createRoom';
@@ -55,7 +54,6 @@ interface IState {
     showAdvancedSection: boolean;
 }
 
-@replaceableComponent("views.settings.tabs.room.SecurityRoomSettingsTab")
 export default class SecurityRoomSettingsTab extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);

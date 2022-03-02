@@ -19,7 +19,6 @@ import React, { createRef } from 'react';
 import UIStore from '../../../stores/UIStore';
 import { lerp } from '../../../utils/AnimationUtils';
 import { MarkedExecution } from '../../../utils/MarkedExecution';
-import { replaceableComponent } from '../../../utils/replaceableComponent';
 
 const PIP_VIEW_WIDTH = 336;
 const PIP_VIEW_HEIGHT = 232;
@@ -56,7 +55,6 @@ interface IState {
  * PictureInPictureDragger shows a small version of CallView hovering over the UI in 'picture-in-picture'
  * (PiP mode). It displays the call(s) which is *not* in the room the user is currently viewing.
  */
-@replaceableComponent("views.voip.PictureInPictureDragger")
 export default class PictureInPictureDragger extends React.Component<IProps, IState> {
     private callViewWrapper = createRef<HTMLDivElement>();
     private initX = 0;

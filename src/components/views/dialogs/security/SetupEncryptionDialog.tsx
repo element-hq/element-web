@@ -20,7 +20,6 @@ import SetupEncryptionBody from '../../../structures/auth/SetupEncryptionBody';
 import BaseDialog from '../BaseDialog';
 import { _t } from '../../../../languageHandler';
 import { SetupEncryptionStore, Phase } from '../../../../stores/SetupEncryptionStore';
-import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import { IDialogProps } from "../IDialogProps";
 
 function iconFromPhase(phase: Phase) {
@@ -36,7 +35,6 @@ interface IState {
     icon: string;
 }
 
-@replaceableComponent("views.dialogs.security.SetupEncryptionDialog")
 export default class SetupEncryptionDialog extends React.Component<IProps, IState> {
     private store: SetupEncryptionStore;
 

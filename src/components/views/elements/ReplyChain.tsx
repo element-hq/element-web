@@ -29,7 +29,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/enums/Layout";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
@@ -76,7 +75,6 @@ interface IState {
 // This component does no cycle detection, simply because the only way to make such a cycle would be to
 // craft event_id's, using a homeserver that generates predictable event IDs; even then the impact would
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
-@replaceableComponent("views.elements.ReplyChain")
 export default class ReplyChain extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

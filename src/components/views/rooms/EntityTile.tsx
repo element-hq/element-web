@@ -22,7 +22,6 @@ import classNames from "classnames";
 import AccessibleButton from '../elements/AccessibleButton';
 import { _t, _td } from '../../../languageHandler';
 import E2EIcon, { E2EState } from './E2EIcon';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseAvatar from '../avatars/BaseAvatar';
 import PresenceLabel from "./PresenceLabel";
 
@@ -85,7 +84,6 @@ interface IState {
     hover: boolean;
 }
 
-@replaceableComponent("views.rooms.EntityTile")
 export default class EntityTile extends React.PureComponent<IProps, IState> {
     static defaultProps = {
         onClick: () => {},

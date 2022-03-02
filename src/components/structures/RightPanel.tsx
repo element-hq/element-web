@@ -28,7 +28,6 @@ import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import RoomSummaryCard from "../views/right_panel/RoomSummaryCard";
 import WidgetCard from "../views/right_panel/WidgetCard";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import SettingsStore from "../../settings/SettingsStore";
 import MemberList from "../views/rooms/MemberList";
 import UserInfo from "../views/right_panel/UserInfo";
@@ -60,7 +59,6 @@ interface IState {
     cardState?: IRightPanelCardState;
 }
 
-@replaceableComponent("structures.RightPanel")
 export default class RightPanel extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;

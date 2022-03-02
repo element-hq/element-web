@@ -22,7 +22,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../languageHandler';
 import AutoHideScrollbar from './AutoHideScrollbar';
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { PosthogScreenTracker, ScreenName } from "../../PosthogTrackers";
 
@@ -64,7 +63,6 @@ interface IState {
     activeTabIndex: number;
 }
 
-@replaceableComponent("structures.TabbedView")
 export default class TabbedView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

@@ -18,7 +18,6 @@ import React from 'react';
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
 import Spinner from "../elements/Spinner";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
@@ -42,7 +41,6 @@ interface IState {
     errored: boolean;
 }
 
-@replaceableComponent("views.settings.IntegrationManager")
 export default class IntegrationManager extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 

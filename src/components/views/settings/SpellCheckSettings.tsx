@@ -19,7 +19,6 @@ import React from 'react';
 import SpellCheckLanguagesDropdown from "../../../components/views/elements/SpellCheckLanguagesDropdown";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface ExistingSpellCheckLanguageIProps {
     language: string;
@@ -55,7 +54,6 @@ export class ExistingSpellCheckLanguage extends React.Component<ExistingSpellChe
     }
 }
 
-@replaceableComponent("views.settings.SpellCheckLanguages")
 export default class SpellCheckLanguages extends React.Component<SpellCheckLanguagesIProps, SpellCheckLanguagesIState> {
     constructor(props) {
         super(props);

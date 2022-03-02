@@ -26,7 +26,6 @@ import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import RedactedBody from "./RedactedBody";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
@@ -50,7 +49,6 @@ interface IState {
     sendStatus: EventStatus;
 }
 
-@replaceableComponent("views.messages.EditHistoryMessage")
 export default class EditHistoryMessage extends React.PureComponent<IProps, IState> {
     private content = createRef<HTMLDivElement>();
     private pills: Element[] = [];

@@ -25,7 +25,6 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IMediaBody } from "./IMediaBody";
 import { IOperableEventTile } from "../context_menus/MessageContextMenu";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -45,7 +44,6 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
     isSeeingThroughMessageHiddenForModeration?: boolean;
 }
 
-@replaceableComponent("views.messages.MessageEvent")
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
     private body: React.RefObject<React.Component | IOperableEventTile> = createRef();
     private mediaHelper: MediaEventHelper;

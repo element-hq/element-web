@@ -45,7 +45,6 @@ import { WidgetType } from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
 import { WIDGET_LAYOUT_EVENT_TYPE } from "../../../stores/widgets/WidgetLayoutStore";
 import { objectHasDiff } from "../../../utils/objects";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
@@ -347,7 +346,6 @@ interface IState {
 }
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
-@replaceableComponent("views.rooms.EventTile")
 export class UnwrappedEventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;

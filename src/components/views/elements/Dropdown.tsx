@@ -20,7 +20,6 @@ import classnames from 'classnames';
 
 import AccessibleButton, { ButtonEvent } from './AccessibleButton';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
@@ -107,7 +106,6 @@ interface IState {
  * but somewhat simpler as react-select is 79KB of minified
  * javascript.
  */
-@replaceableComponent("views.elements.Dropdown")
 export default class Dropdown extends React.Component<IProps, IState> {
     private readonly buttonRef = createRef<HTMLDivElement>();
     private dropdownRootElement: HTMLDivElement = null;

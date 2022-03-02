@@ -23,7 +23,6 @@ import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
 import PlatformPeg from "../../../../../PlatformPeg";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
@@ -49,7 +48,6 @@ interface IState {
     readMarkerOutOfViewThresholdMs: string;
 }
 
-@replaceableComponent("views.settings.tabs.user.PreferencesUserSettingsTab")
 export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
     static ROOM_LIST_SETTINGS = [
         'breadcrumbs',

@@ -24,7 +24,6 @@ import * as WhoIsTyping from '../../../WhoIsTyping';
 import Timer from '../../../utils/Timer';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { compare } from "../../../utils/strings";
 
 interface IProps {
@@ -47,7 +46,6 @@ interface IState {
     delayedStopTypingTimers: Record<string, Timer>;
 }
 
-@replaceableComponent("views.rooms.WhoIsTypingTile")
 export default class WhoIsTypingTile extends React.Component<IProps, IState> {
     static defaultProps = {
         whoIsTypingLimit: 3,

@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { ChangeEvent, FormEvent } from "react";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Field from "./Field";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "./AccessibleButton";
@@ -38,7 +37,6 @@ interface IState {
  * A simple, controlled, composer for entering string tags. Contains a simple
  * input, add button, and per-tag remove button.
  */
-@replaceableComponent("views.elements.TagComposer")
 export default class TagComposer extends React.PureComponent<IProps, IState> {
     public constructor(props: IProps) {
         super(props);

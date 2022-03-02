@@ -18,7 +18,6 @@ import React, { ChangeEvent, createRef } from 'react';
 
 import Field from "../elements/Field";
 import { _t, _td } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IFieldState, IValidationResult } from "../elements/Validation";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -43,7 +42,6 @@ interface IState {
     valid: boolean;
 }
 
-@replaceableComponent("views.dialogs.TextInputDialog")
 export default class TextInputDialog extends React.Component<IProps, IState> {
     private field = createRef<Field>();
 

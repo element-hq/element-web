@@ -21,7 +21,6 @@ import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
 
 import { _t } from '../../../languageHandler';
 import { isContentActionable } from '../../../utils/EventUtils';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ContextMenuTooltipButton } from "../../../accessibility/context_menu/ContextMenuTooltipButton";
 import ContextMenu, { aboveLeftOf, useContextMenu } from "../../structures/ContextMenu";
 import ReactionPicker from "../emojipicker/ReactionPicker";
@@ -74,7 +73,6 @@ interface IState {
     showAll: boolean;
 }
 
-@replaceableComponent("views.messages.ReactionsRow")
 export default class ReactionsRow extends React.PureComponent<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

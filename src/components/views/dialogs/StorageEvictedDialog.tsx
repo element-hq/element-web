@@ -19,7 +19,6 @@ import React from 'react';
 import SdkConfig from '../../../SdkConfig';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import BugReportDialog from "./BugReportDialog";
@@ -28,7 +27,6 @@ import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps extends IDialogProps { }
 
-@replaceableComponent("views.dialogs.StorageEvictedDialog")
 export default class StorageEvictedDialog extends React.Component<IProps> {
     private sendBugReport = (ev: React.MouseEvent): void => {
         ev.preventDefault();

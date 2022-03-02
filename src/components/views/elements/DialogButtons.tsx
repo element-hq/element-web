@@ -19,7 +19,6 @@ limitations under the License.
 import React from "react";
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // The primary button which is styled differently and has default focus.
@@ -61,7 +60,6 @@ interface IProps {
 /**
  * Basic container for buttons in modal dialogs.
  */
-@replaceableComponent("views.elements.DialogButtons")
 export default class DialogButtons extends React.Component<IProps> {
     public static defaultProps: Partial<IProps> = {
         hasCancel: true,

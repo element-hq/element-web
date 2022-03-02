@@ -24,7 +24,6 @@ import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
 import sendBugReport, { downloadBugReport } from '../../../rageshake/submit-rageshake';
 import AccessibleButton from "../elements/AccessibleButton";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import Field from '../elements/Field';
@@ -50,7 +49,6 @@ interface IState {
     downloadProgress: string;
 }
 
-@replaceableComponent("views.dialogs.BugReportDialog")
 export default class BugReportDialog extends React.Component<IProps, IState> {
     private unmounted: boolean;
 

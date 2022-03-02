@@ -24,7 +24,6 @@ import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import EventTileBubble from "./EventTileBubble";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
 interface IProps {
@@ -33,7 +32,6 @@ interface IProps {
     timestamp?: JSX.Element;
 }
 
-@replaceableComponent("views.messages.RoomCreate")
 export default class RoomCreate extends React.Component<IProps> {
     private onLinkClicked = (e: React.MouseEvent): void => {
         e.preventDefault();

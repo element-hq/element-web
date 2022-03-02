@@ -22,7 +22,6 @@ import classNames from "classnames";
 import FocusLock from "react-focus-lock";
 
 import { Writeable } from "../../@types/common";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore from "../../stores/UIStore";
 import { checkInputableElement, RovingTabIndexProvider } from "../../accessibility/RovingTabIndex";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
@@ -105,7 +104,6 @@ interface IState {
 // Generic ContextMenu Portal wrapper
 // all options inside the menu should be of role=menuitem/menuitemcheckbox/menuitemradiobutton and have tabIndex={-1}
 // this will allow the ContextMenu to manage its own focus using arrow keys as per the ARIA guidelines.
-@replaceableComponent("structures.ContextMenu")
 export default class ContextMenu extends React.PureComponent<IProps, IState> {
     private readonly initialFocus: HTMLElement;
 

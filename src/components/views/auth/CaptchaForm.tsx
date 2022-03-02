@@ -18,7 +18,6 @@ import React, { createRef } from 'react';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const DIV_ID = 'mx_recaptcha';
 
@@ -35,7 +34,6 @@ interface ICaptchaFormState {
 /**
  * A pure UI component which displays a captcha form.
  */
-@replaceableComponent("views.auth.CaptchaForm")
 export default class CaptchaForm extends React.Component<ICaptchaFormProps, ICaptchaFormState> {
     static defaultProps = {
         onCaptchaResponse: () => {},

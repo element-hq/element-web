@@ -22,7 +22,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DateSeparator from "../messages/DateSeparator";
 import EventTile, { haveTileForEvent } from "./EventTile";
 import { shouldFormContinuation } from "../../structures/MessagePanel";
@@ -40,7 +39,6 @@ interface IProps {
     permalinkCreator?: RoomPermalinkCreator;
 }
 
-@replaceableComponent("views.rooms.SearchResultTile")
 export default class SearchResultTile extends React.Component<IProps> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

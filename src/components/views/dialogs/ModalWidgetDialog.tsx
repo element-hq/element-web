@@ -39,7 +39,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import { arrayFastClone } from "../../../utils/arrays";
 import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
 import SettingsStore from "../../../settings/SettingsStore";
 
@@ -57,7 +56,6 @@ interface IState {
 
 const MAX_BUTTONS = 3;
 
-@replaceableComponent("views.dialogs.ModalWidgetDialog")
 export default class ModalWidgetDialog extends React.PureComponent<IProps, IState> {
     private readonly widget: Widget;
     private readonly possibleButtons: ModalButtonID[];

@@ -31,7 +31,6 @@ import ToastStore from "../../../stores/ToastStore";
 import Modal from "../../../Modal";
 import GenericToast from "./GenericToast";
 import { Action } from "../../../dispatcher/actions";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VerificationRequestDialog from "../dialogs/VerificationRequestDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -47,7 +46,6 @@ interface IState {
     ip?: string;
 }
 
-@replaceableComponent("views.toasts.VerificationRequestToast")
 export default class VerificationRequestToast extends React.PureComponent<IProps, IState> {
     private intervalHandle: number;
 

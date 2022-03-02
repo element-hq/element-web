@@ -19,7 +19,6 @@ import React, { createRef } from 'react';
 
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 enum Phases {
     Display = "display",
@@ -45,7 +44,6 @@ interface IState {
     phase: Phases;
 }
 
-@replaceableComponent("views.elements.EditableText")
 export default class EditableText extends React.Component<IProps, IState> {
     // we track value as an JS object field rather than in React state
     // as React doesn't play nice with contentEditable.

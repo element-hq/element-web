@@ -19,7 +19,6 @@ import React, { createRef } from 'react';
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Field from "../elements/Field";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from "../elements/AccessibleButton";
 import AvatarSetting from "../settings/AvatarSetting";
@@ -43,7 +42,6 @@ interface IState {
 }
 
 // TODO: Merge with ProfileSettings?
-@replaceableComponent("views.room_settings.RoomProfileSettings")
 export default class RoomProfileSettings extends React.Component<IProps, IState> {
     private avatarUpload = createRef<HTMLInputElement>();
 

@@ -18,12 +18,10 @@ import React, { ReactNode } from "react";
 
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import PlaybackWaveform from "./PlaybackWaveform";
 import AudioPlayerBase from "./AudioPlayerBase";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 
-@replaceableComponent("views.audio_messages.RecordingPlayback")
 export default class RecordingPlayback extends AudioPlayerBase {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

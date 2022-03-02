@@ -23,7 +23,6 @@ import dis from "../../../../../dispatcher/dispatcher";
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import UrlPreviewSettings from "../../../room_settings/UrlPreviewSettings";
 import AliasSettings from "../../../room_settings/AliasSettings";
 import PosthogTrackers from "../../../../../PosthogTrackers";
@@ -36,7 +35,6 @@ interface IState {
     isRoomPublished: boolean;
 }
 
-@replaceableComponent("views.settings.tabs.room.GeneralRoomSettingsTab")
 export default class GeneralRoomSettingsTab extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     context: ContextType<typeof MatrixClientContext>;

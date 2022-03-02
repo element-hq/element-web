@@ -27,7 +27,6 @@ import DialogButtons from '../../elements/DialogButtons';
 import BaseDialog from '../BaseDialog';
 import Spinner from '../../elements/Spinner';
 import InteractiveAuthDialog from '../InteractiveAuthDialog';
-import { replaceableComponent } from "../../../../utils/replaceableComponent";
 
 interface IProps {
     accountPassword?: string;
@@ -46,7 +45,6 @@ interface IState {
  * cases, only a spinner is shown, but for more complex auth like SSO, the user
  * may need to complete some steps to proceed.
  */
-@replaceableComponent("views.dialogs.security.CreateCrossSigningDialog")
 export default class CreateCrossSigningDialog extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);

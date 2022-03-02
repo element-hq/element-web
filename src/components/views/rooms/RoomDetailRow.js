@@ -20,7 +20,6 @@ import PropTypes from 'prop-types';
 import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { getDisplayAliasForAliasSet } from '../../../Rooms';
 
@@ -41,7 +40,6 @@ export const roomShape = PropTypes.shape({
     guestCanJoin: PropTypes.bool,
 });
 
-@replaceableComponent("views.rooms.RoomDetailRow")
 export default class RoomDetailRow extends React.Component {
     static propTypes = {
         room: roomShape,

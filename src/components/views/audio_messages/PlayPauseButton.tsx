@@ -17,7 +17,6 @@ limitations under the License.
 import React, { ReactNode } from "react";
 import classNames from "classnames";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
 import { Playback, PlaybackState } from "../../../audio/Playback";
@@ -35,7 +34,6 @@ interface IProps extends Omit<React.ComponentProps<typeof AccessibleTooltipButto
  * Displays a play/pause button (activating the play/pause function of the recorder)
  * to be displayed in reference to a recording.
  */
-@replaceableComponent("views.audio_messages.PlayPauseButton")
 export default class PlayPauseButton extends React.PureComponent<IProps> {
     public constructor(props) {
         super(props);

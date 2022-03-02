@@ -49,7 +49,6 @@ import { DefaultTagID } from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
@@ -387,7 +386,6 @@ interface IInviteDialogState {
     errorText: string;
 }
 
-@replaceableComponent("views.dialogs.InviteDialog")
 export default class InviteDialog extends React.PureComponent<IInviteDialogProps, IInviteDialogState> {
     static defaultProps = {
         kind: KIND_DM,

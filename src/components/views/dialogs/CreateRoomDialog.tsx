@@ -26,7 +26,6 @@ import withValidation, { IFieldState } from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { IOpts, privateShouldBeEncrypted } from "../../../createRoom";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Heading from "../typography/Heading";
 import Field from "../elements/Field";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
@@ -61,7 +60,6 @@ interface IState {
     canChangeEncryption: boolean;
 }
 
-@replaceableComponent("views.dialogs.CreateRoomDialog")
 export default class CreateRoomDialog extends React.Component<IProps, IState> {
     private readonly supportsRestricted: boolean;
     private nameField = createRef<Field>();

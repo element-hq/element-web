@@ -28,7 +28,6 @@ import Modal from "../../../Modal";
 import { isValid3pidInvite } from "../../../RoomInvite";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ErrorDialog from '../dialogs/ErrorDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 
@@ -45,7 +44,6 @@ interface IState {
     senderName: string;
 }
 
-@replaceableComponent("views.rooms.ThirdPartyMemberInfo")
 export default class ThirdPartyMemberInfo extends React.Component<IProps, IState> {
     private room: Room;
 

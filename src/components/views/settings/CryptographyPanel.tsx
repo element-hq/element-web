@@ -19,7 +19,6 @@ import React, { ComponentType } from 'react';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 import * as FormattingUtils from "../../../utils/FormattingUtils";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -32,7 +31,6 @@ interface IProps {
 interface IState {
 }
 
-@replaceableComponent("views.settings.CryptographyPanel")
 export default class CryptographyPanel extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

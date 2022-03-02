@@ -20,7 +20,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { unicodeToShortcode } from '../../../HtmlUtils';
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
@@ -34,7 +33,6 @@ interface IProps {
     visible: boolean;
 }
 
-@replaceableComponent("views.messages.ReactionsRowButtonTooltip")
 export default class ReactionsRowButtonTooltip extends React.PureComponent<IProps> {
     static contextType = MatrixClientContext;
 

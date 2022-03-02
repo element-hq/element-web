@@ -39,7 +39,6 @@ import { StopGapWidget } from "../../../stores/widgets/StopGapWidget";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import CallHandler from '../../../CallHandler';
 import { IApp } from "../../../stores/WidgetStore";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
@@ -101,7 +100,6 @@ interface IState {
     requiresClient: boolean;
 }
 
-@replaceableComponent("views.elements.AppTile")
 export default class AppTile extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     context: ContextType<typeof MatrixClientContext>;

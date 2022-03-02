@@ -26,7 +26,6 @@ import AccessibleButton from "../../elements/AccessibleButton";
 import * as Email from "../../../../email";
 import AddThreepid from "../../../../AddThreepid";
 import Modal from '../../../../Modal';
-import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 
 /*
@@ -136,7 +135,6 @@ interface IState {
     newEmailAddress: string;
 }
 
-@replaceableComponent("views.settings.account.EmailAddresses")
 export default class EmailAddresses extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

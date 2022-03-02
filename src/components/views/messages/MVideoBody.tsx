@@ -21,7 +21,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import InlineSpinner from '../elements/InlineSpinner';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromContent } from "../../../customisations/Media";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
 import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
@@ -40,7 +39,6 @@ interface IState {
     blurhashUrl: string;
 }
 
-@replaceableComponent("views.messages.MVideoBody")
 export default class MVideoBody extends React.PureComponent<IBodyProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

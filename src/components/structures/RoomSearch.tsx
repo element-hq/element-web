@@ -26,7 +26,6 @@ import { Action } from "../../dispatcher/actions";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCondition";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { isMac, Key } from "../../Keyboard";
@@ -50,7 +49,6 @@ interface IState {
     spotlightBetaEnabled: boolean;
 }
 
-@replaceableComponent("structures.RoomSearch")
 export default class RoomSearch extends React.PureComponent<IProps, IState> {
     private readonly dispatcherRef: string;
     private readonly betaRef: string;

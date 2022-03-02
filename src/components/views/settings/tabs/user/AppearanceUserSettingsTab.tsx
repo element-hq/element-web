@@ -26,7 +26,6 @@ import Field from '../../../elements/Field';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { Layout } from "../../../../../settings/enums/Layout";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import LayoutSwitcher from "../../LayoutSwitcher";
 import FontScalingPanel from '../../FontScalingPanel';
 import ThemeChoicePanel from '../../ThemeChoicePanel';
@@ -46,7 +45,6 @@ interface IState {
     avatarUrl: string;
 }
 
-@replaceableComponent("views.settings.tabs.user.AppearanceUserSettingsTab")
 export default class AppearanceUserSettingsTab extends React.Component<IProps, IState> {
     private readonly MESSAGE_PREVIEW_TEXT = _t("Hey you. You're the best!");
 

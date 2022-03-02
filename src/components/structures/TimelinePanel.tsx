@@ -41,7 +41,6 @@ import { Action } from '../../dispatcher/actions';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
 import { haveTileForEvent } from "../views/rooms/EventTile";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import { arrayFastClone } from "../../utils/arrays";
 import MessagePanel from "./MessagePanel";
 import { IScrollState } from "./ScrollPanel";
@@ -211,7 +210,6 @@ interface IEventIndexOpts {
  *
  * Also responsible for handling and sending read receipts.
  */
-@replaceableComponent("structures.TimelinePanel")
 class TimelinePanel extends React.Component<IProps, IState> {
     static contextType = RoomContext;
 

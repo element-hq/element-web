@@ -19,7 +19,6 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import classNames from "classnames";
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MemberAvatar from '../avatars/MemberAvatar';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -55,7 +54,6 @@ interface IState {
  * to make it obvious what is going to happen.
  * Also tweaks the style for 'dangerous' actions (albeit only with colour)
  */
-@replaceableComponent("views.dialogs.ConfirmUserActionDialog")
 export default class ConfirmUserActionDialog extends React.Component<IProps, IState> {
     static defaultProps = {
         danger: false,

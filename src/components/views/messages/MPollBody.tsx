@@ -32,7 +32,6 @@ import {
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Modal from '../../../Modal';
 import { IBodyProps } from "./IBodyProps";
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
@@ -210,7 +209,6 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
     }
 }
 
-@replaceableComponent("views.messages.MPollBody")
 export default class MPollBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;

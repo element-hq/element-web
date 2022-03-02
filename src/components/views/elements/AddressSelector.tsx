@@ -18,7 +18,6 @@ limitations under the License.
 import React, { createRef } from 'react';
 import classNames from 'classnames';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IUserAddress } from '../../../UserAddress';
 import AddressTile from './AddressTile';
 
@@ -41,7 +40,6 @@ interface IState {
     hover: boolean;
 }
 
-@replaceableComponent("views.elements.AddressSelector")
 export default class AddressSelector extends React.Component<IProps, IState> {
     private scrollElement = createRef<HTMLDivElement>();
     private addressListElement = createRef<HTMLDivElement>();

@@ -19,7 +19,6 @@ import React from 'react';
 import { COUNTRIES, getEmojiFlag, PhoneNumberCountryDefinition } from '../../../phonenumber';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Dropdown from "../elements/Dropdown";
 
 const COUNTRIES_BY_ISO2 = {};
@@ -53,7 +52,6 @@ interface IState {
     defaultCountry: PhoneNumberCountryDefinition;
 }
 
-@replaceableComponent("views.auth.CountryDropdown")
 export default class CountryDropdown extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

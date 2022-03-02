@@ -23,7 +23,6 @@ import { SDPStreamMetadataPurpose } from 'matrix-js-sdk/src/webrtc/callEventType
 
 import SettingsStore from "../../../settings/SettingsStore";
 import MemberAvatar from "../avatars/MemberAvatar";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     call: MatrixCall;
@@ -48,7 +47,6 @@ interface IState {
     videoMuted: boolean;
 }
 
-@replaceableComponent("views.voip.VideoFeed")
 export default class VideoFeed extends React.PureComponent<IProps, IState> {
     private element: HTMLVideoElement;
 

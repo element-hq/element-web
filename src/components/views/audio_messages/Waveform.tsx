@@ -17,8 +17,6 @@ limitations under the License.
 import React, { CSSProperties } from "react";
 import classNames from "classnames";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-
 interface WaveformCSSProperties extends CSSProperties {
     '--barHeight': number;
 }
@@ -39,7 +37,6 @@ interface IState {
  * For CSS purposes, a mx_Waveform_bar_100pct class is added when the bar should be
  * "filled", as a demonstration of the progress property.
  */
-@replaceableComponent("views.audio_messages.Waveform")
 export default class Waveform extends React.PureComponent<IProps, IState> {
     public static defaultProps = {
         progress: 1,

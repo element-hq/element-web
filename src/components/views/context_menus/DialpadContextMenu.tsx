@@ -22,7 +22,6 @@ import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import ContextMenu, { IProps as IContextMenuProps } from '../../structures/ContextMenu';
 import Field from "../elements/Field";
 import DialPad from '../voip/DialPad';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IContextMenuProps {
     call: MatrixCall;
@@ -32,7 +31,6 @@ interface IState {
     value: string;
 }
 
-@replaceableComponent("views.context_menus.DialpadContextMenu")
 export default class DialpadContextMenu extends React.Component<IProps, IState> {
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
 

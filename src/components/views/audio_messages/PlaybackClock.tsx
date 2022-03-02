@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Clock from "./Clock";
 import { Playback, PlaybackState } from "../../../audio/Playback";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -39,7 +38,6 @@ interface IState {
 /**
  * A clock for a playback of a recording.
  */
-@replaceableComponent("views.audio_messages.PlaybackClock")
 export default class PlaybackClock extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);

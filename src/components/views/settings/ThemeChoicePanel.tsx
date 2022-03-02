@@ -29,7 +29,6 @@ import StyledCheckbox from '../elements/StyledCheckbox';
 import Field from '../elements/Field';
 import StyledRadioGroup from "../elements/StyledRadioGroup";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import PosthogTrackers from "../../../PosthogTrackers";
 
 interface IProps {
@@ -50,7 +49,6 @@ interface IState extends IThemeState {
     customThemeMessage: CustomThemeMessage;
 }
 
-@replaceableComponent("views.settings.tabs.user.ThemeChoicePanel")
 export default class ThemeChoicePanel extends React.Component<IProps, IState> {
     private themeTimer: number;
 

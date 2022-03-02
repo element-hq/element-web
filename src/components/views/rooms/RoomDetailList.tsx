@@ -21,7 +21,6 @@ import classNames from 'classnames';
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from '../../../dispatcher/actions';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomDetailRow from "./RoomDetailRow";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 
@@ -30,7 +29,6 @@ interface IProps {
     className?: string;
 }
 
-@replaceableComponent("views.rooms.RoomDetailList")
 export default class RoomDetailList extends React.Component<IProps> {
     private getRows(): JSX.Element[] {
         if (!this.props.rooms) return [];

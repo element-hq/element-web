@@ -23,7 +23,6 @@ import SdkConfig from "../../../SdkConfig";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IDialogProps } from "./IDialogProps";
 import BugReportDialog from './BugReportDialog';
 import BaseDialog from "./BaseDialog";
@@ -50,7 +49,6 @@ interface IState {
     total?: number;
 }
 
-@replaceableComponent("views.dialogs.RoomUpgradeWarningDialog")
 export default class RoomUpgradeWarningDialog extends React.Component<IProps, IState> {
     private readonly isPrivate: boolean;
     private readonly currentVersion: string;

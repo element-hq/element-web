@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from "../../../../languageHandler";
-import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import BaseDialog from "../BaseDialog";
 import DialogButtons from "../../elements/DialogButtons";
 
@@ -25,7 +24,6 @@ interface IProps {
     onFinished: (success: boolean) => void;
 }
 
-@replaceableComponent("views.dialogs.security.ConfirmDestroyCrossSigningDialog")
 export default class ConfirmDestroyCrossSigningDialog extends React.Component<IProps> {
     private onConfirm = (): void => {
         this.props.onFinished(true);

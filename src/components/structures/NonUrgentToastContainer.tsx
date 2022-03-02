@@ -19,7 +19,6 @@ import * as React from "react";
 import { ComponentClass } from "../../@types/common";
 import NonUrgentToastStore from "../../stores/NonUrgentToastStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 
 interface IProps {
 }
@@ -28,7 +27,6 @@ interface IState {
     toasts: ComponentClass[];
 }
 
-@replaceableComponent("structures.NonUrgentToastContainer")
 export default class NonUrgentToastContainer extends React.PureComponent<IProps, IState> {
     public constructor(props, context) {
         super(props, context);

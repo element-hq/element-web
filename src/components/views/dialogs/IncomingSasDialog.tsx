@@ -21,7 +21,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import VerificationComplete from "../verification/VerificationComplete";
 import VerificationCancelled from "../verification/VerificationCancelled";
@@ -54,7 +53,6 @@ interface IState {
     sas: IGeneratedSas;
 }
 
-@replaceableComponent("views.dialogs.IncomingSasDialog")
 export default class IncomingSasDialog extends React.Component<IProps, IState> {
     private showSasEvent: ISasEvent;
 

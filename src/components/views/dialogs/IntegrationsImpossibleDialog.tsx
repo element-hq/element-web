@@ -18,14 +18,12 @@ import React from 'react';
 
 import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
 interface IProps extends IDialogProps {}
 
-@replaceableComponent("views.dialogs.IntegrationsImpossibleDialog")
 export default class IntegrationsImpossibleDialog extends React.Component<IProps> {
     private onAcknowledgeClick = (): void => {
         this.props.onFinished();

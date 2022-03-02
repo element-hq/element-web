@@ -37,7 +37,6 @@ import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResiz
 import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import HistoryTile from "../views/rooms/HistoryTile";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import defaultDispatcher from '../../dispatcher/dispatcher';
 import CallEventGrouper from "./CallEventGrouper";
 import WhoIsTypingTile from '../views/rooms/WhoIsTypingTile';
@@ -199,7 +198,6 @@ interface IReadReceiptForUser {
 
 /* (almost) stateless UI component which builds the event tiles in the room timeline.
  */
-@replaceableComponent("structures.MessagePanel")
 export default class MessagePanel extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

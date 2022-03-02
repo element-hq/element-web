@@ -19,7 +19,6 @@ import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export enum Formatting {
     Bold = "bold",
@@ -39,7 +38,6 @@ interface IState {
     visible: boolean;
 }
 
-@replaceableComponent("views.rooms.MessageComposerFormatBar")
 export default class MessageComposerFormatBar extends React.PureComponent<IProps, IState> {
     private readonly formatBarRef = createRef<HTMLDivElement>();
 

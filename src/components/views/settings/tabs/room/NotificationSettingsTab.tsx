@@ -23,7 +23,6 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from '../../../../../settings/SettingsStore';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
 import { EchoChamber } from '../../../../../stores/local-echo/EchoChamber';
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
@@ -43,7 +42,6 @@ interface IState {
     uploadedFile: File;
 }
 
-@replaceableComponent("views.settings.tabs.room.NotificationsSettingsTab")
 export default class NotificationsSettingsTab extends React.Component<IProps, IState> {
     private readonly roomProps: RoomEchoChamber;
     private soundUpload = createRef<HTMLInputElement>();

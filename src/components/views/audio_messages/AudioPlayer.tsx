@@ -17,7 +17,6 @@ limitations under the License.
 import React, { createRef, ReactNode, RefObject } from "react";
 
 import PlayPauseButton from "./PlayPauseButton";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { formatBytes } from "../../../utils/FormattingUtils";
 import DurationClock from "./DurationClock";
 import { _t } from "../../../languageHandler";
@@ -27,7 +26,6 @@ import AudioPlayerBase from "./AudioPlayerBase";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
-@replaceableComponent("views.audio_messages.AudioPlayer")
 export default class AudioPlayer extends AudioPlayerBase {
     private playPauseRef: RefObject<PlayPauseButton> = createRef();
     private seekRef: RefObject<SeekBar> = createRef();
