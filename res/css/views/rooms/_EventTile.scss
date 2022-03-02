@@ -18,6 +18,8 @@ limitations under the License.
 $left-gutter: 64px;
 
 .mx_EventTile {
+    flex-shrink: 0;
+
     .mx_EventTile_receiptSent,
     .mx_EventTile_receiptSending {
         // Give it some dimensions so the tooltip can position properly
