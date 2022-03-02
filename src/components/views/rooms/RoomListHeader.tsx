@@ -63,6 +63,8 @@ import { BetaPill } from "../beta/BetaCard";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { useWebSearchMetrics } from "../dialogs/SpotlightDialog";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { UIComponent } from "../../../settings/UIFeature";
 
 const contextMenuBelow = (elementRect: DOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
@@ -210,6 +212,14 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
     const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
     const canAddRooms = activeSpace?.currentState?.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
+    const canCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
+    const canExploreRooms = shouldShowComponent(UIComponent.ExploreRooms);
+
+    // If the user can't do anything on the plus menu, don't show it. This aims to target the
+    // plus menu shown on the Home tab primarily: the user has options to use the menu for
+    // communities and spaces, but is at risk of no options on the Home tab.
+    const canShowPlusMenu = canCreateRooms || canExploreRooms || activeSpace || communityId;
+
     let contextMenu: JSX.Element;
     if (mainMenuDisplayed) {
         let ContextMenuComponent;
@@ -320,12 +330,12 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>;
     } else if (plusMenuDisplayed) {
-        contextMenu = <IconizedContextMenu
-            {...contextMenuBelow(plusMenuHandle.current.getBoundingClientRect())}
-            onFinished={closePlusMenu}
-            compact
-        >
-            <IconizedContextMenuOptionList first>
+        let startChatOpt: JSX.Element;
+        let createRoomOpt: JSX.Element;
+        let joinRoomOpt: JSX.Element;
+
+        if (canCreateRooms) {
+            startChatOpt = (
                 <IconizedContextMenuOption
                     label={_t("Start new chat")}
                     iconClassName="mx_RoomListHeader_iconStartChat"
@@ -336,6 +346,8 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
                         closePlusMenu();
                     }}
                 />
+            );
+            createRoomOpt = (
                 <IconizedContextMenuOption
                     label={_t("Create new room")}
                     iconClassName="mx_RoomListHeader_iconCreateRoom"
@@ -347,6 +359,10 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
                         closePlusMenu();
                     }}
                 />
+            );
+        }
+        if (canExploreRooms) {
+            joinRoomOpt = (
                 <IconizedContextMenuOption
                     label={_t("Join public room")}
                     iconClassName="mx_RoomListHeader_iconExplore"
@@ -357,6 +373,18 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
                         closePlusMenu();
                     }}
                 />
+            );
+        }
+
+        contextMenu = <IconizedContextMenu
+            {...contextMenuBelow(plusMenuHandle.current.getBoundingClientRect())}
+            onFinished={closePlusMenu}
+            compact
+        >
+            <IconizedContextMenuOptionList first>
+                { startChatOpt }
+                { createRoomOpt }
+                { joinRoomOpt }
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>;
     }
@@ -397,13 +425,13 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
     return <div className="mx_RoomListHeader">
         { contextMenuButton }
         { pendingRoomJoinSpinner }
-        <ContextMenuTooltipButton
+        { canShowPlusMenu && <ContextMenuTooltipButton
             inputRef={plusMenuHandle}
             onClick={openPlusMenu}
             isExpanded={plusMenuDisplayed}
             className="mx_RoomListHeader_plusButton"
             title={_t("Add")}
-        />
+        /> }
 
         { contextMenu }
     </div>;

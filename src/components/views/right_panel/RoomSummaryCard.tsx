@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useState, useEffect, useContext } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { Room } from "matrix-js-sdk/src/models/room";
 
@@ -38,7 +38,7 @@ import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { E2EStatus } from "../../../utils/ShieldUtils";
 import RoomContext from "../../../contexts/RoomContext";
-import { UIFeature } from "../../../settings/UIFeature";
+import { UIComponent, UIFeature } from "../../../settings/UIFeature";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import { useRoomMemberCount } from "../../../hooks/useRoomMembers";
@@ -50,6 +50,7 @@ import UIStore from "../../../stores/UIStore";
 import ExportDialog from "../dialogs/ExportDialog";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import PosthogTrackers from "../../../PosthogTrackers";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 
 interface IProps {
     room: Room;
@@ -327,7 +328,11 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
             </Button>
         </Group>
 
-        { SettingsStore.getValue(UIFeature.Widgets) && <AppsSection room={room} /> }
+        {
+            SettingsStore.getValue(UIFeature.Widgets)
+            && shouldShowComponent(UIComponent.AddIntegrations)
+            && <AppsSection room={room} />
+        }
     </BaseCard>;
 };
 

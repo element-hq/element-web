@@ -135,7 +135,7 @@ const NewRoomIntro = () => {
         }
 
         let buttons;
-        if (parentSpace) {
+        if (parentSpace && shouldShowComponent(UIComponent.InviteUsers)) {
             buttons = <div className="mx_NewRoomIntro_buttons">
                 <AccessibleButton
                     className="mx_NewRoomIntro_inviteButton"
