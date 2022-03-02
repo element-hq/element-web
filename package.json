@@ -98,6 +98,7 @@
     "@types/react": "17.0.14",
     "@types/react-dom": "17.0.9",
     "@types/sanitize-html": "^2.3.1",
+    "@types/ua-parser-js": "^0.7.36",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "allchange": "^1.0.6",
