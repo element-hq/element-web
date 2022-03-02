@@ -29,7 +29,6 @@ import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 import maplibregl from 'maplibre-gl';
 import { logger } from 'matrix-js-sdk/src/logger';
 
-import sdk from "../../../skinned-sdk";
 import MLocationBody, {
     isSelfLocation,
 } from "../../../../src/components/views/messages/MLocationBody";
@@ -43,8 +42,6 @@ import { makeLocationEvent } from "../../../test-utils/location";
 jest.mock("../../../../src/utils/WellKnownUtils", () => ({
     getTileServerWellKnown: jest.fn(),
 }));
-
-sdk.getComponent("views.messages.MLocationBody");
 
 describe("MLocationBody", () => {
     describe("isSelfLocation", () => {

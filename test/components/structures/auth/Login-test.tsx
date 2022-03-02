@@ -20,19 +20,16 @@ import ReactTestUtils from 'react-dom/test-utils';
 import { mocked } from 'jest-mock';
 import { createClient, MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import sdk from '../../../skinned-sdk';
 import SdkConfig from '../../../../src/SdkConfig';
 import { mkServerConfig } from "../../../test-utils";
+import Login from "../../../../src/components/structures/auth/Login";
+import PasswordLogin from "../../../../src/components/views/auth/PasswordLogin";
 
 jest.mock("matrix-js-sdk/src/matrix");
 
 const flushPromises = async () => await new Promise(process.nextTick);
 
 jest.useRealTimers();
-
-const Login = sdk.getComponent(
-    'structures.auth.Login',
-);
 
 describe('Login', function() {
     let parentDiv;
@@ -80,7 +77,7 @@ describe('Login', function() {
 
         const form = ReactTestUtils.findRenderedComponentWithType(
             root,
-            sdk.getComponent('auth.PasswordLogin'),
+            PasswordLogin,
         );
         expect(form).toBeTruthy();
 
@@ -94,7 +91,7 @@ describe('Login', function() {
 
         const form = ReactTestUtils.findRenderedComponentWithType(
             root,
-            sdk.getComponent('auth.PasswordLogin'),
+            PasswordLogin,
         );
         expect(form).toBeTruthy();
 
@@ -118,7 +115,7 @@ describe('Login', function() {
         const root = render();
         await flushPromises();
 
-        const form = ReactTestUtils.findRenderedComponentWithType(root, sdk.getComponent('auth.PasswordLogin'));
+        const form = ReactTestUtils.findRenderedComponentWithType(root, PasswordLogin);
         expect(form).toBeTruthy();
 
         const ssoButton = ReactTestUtils.findRenderedDOMComponentWithClass(root, "mx_SSOButton");

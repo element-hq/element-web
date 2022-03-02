@@ -31,7 +31,6 @@ import {
     PollEndEvent,
 } from "matrix-events-sdk";
 
-import "../../../skinned-sdk";
 import {
     stubClient,
     mkStubRoom,

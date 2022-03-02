@@ -19,7 +19,6 @@ import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { mocked } from "jest-mock";
 
-import "../../../skinned-sdk";
 import { stubClient, mkStubRoom, wrapInMatrixClientContext } from "../../../test-utils";
 import { stubVoiceChannelStore } from "../../../test-utils/voice";
 import _VoiceChannelRadio from "../../../../src/components/views/voip/VoiceChannelRadio";

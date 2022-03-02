@@ -19,15 +19,13 @@ import { mount, ReactWrapper } from "enzyme";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import sdk from "../../../skinned-sdk";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { Layout } from "../../../../src/settings/enums/Layout";
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { createTestClient } from "../../../test-utils";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-
-const MessageComposerButtons = sdk.getComponent("views.rooms.MessageComposerButtons");
+import MessageComposerButtons from "../../../../src/components/views/rooms/MessageComposerButtons";
 
 describe("MessageComposerButtons", () => {
     it("Renders emoji and upload buttons in wide mode", () => {

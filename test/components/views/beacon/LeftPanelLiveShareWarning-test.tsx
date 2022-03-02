@@ -18,7 +18,6 @@ import React from 'react';
 import { mocked } from 'jest-mock';
 import { mount } from 'enzyme';
 
-import '../../../skinned-sdk';
 import LeftPanelLiveShareWarning from '../../../../src/components/views/beacon/LeftPanelLiveShareWarning';
 import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../../src/stores/OwnBeaconStore';
 import { flushPromises } from '../../../test-utils';

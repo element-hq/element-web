@@ -18,7 +18,6 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 
-import '../../../skinned-sdk';
 import LiveDurationDropdown, { DEFAULT_DURATION_MS }
     from '../../../../src/components/views/location/LiveDurationDropdown';
 import { findById, mockPlatformPeg } from '../../../test-utils';

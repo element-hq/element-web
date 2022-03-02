@@ -24,7 +24,6 @@ import { mount } from "enzyme";
 import * as TestUtils from "react-dom/test-utils";
 
 import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
-import sdk from '../../skinned-sdk';
 import MessagePanel, { shouldFormContinuation } from "../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
@@ -32,6 +31,9 @@ import RoomContext from "../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { UnwrappedEventTile } from "../../../src/components/views/rooms/EventTile";
 import * as TestUtilsMatrix from "../../test-utils";
+import EventListSummary from "../../../src/components/views/elements/EventListSummary";
+import GenericEventListSummary from "../../../src/components/views/elements/GenericEventListSummary";
+import DateSeparator from "../../../src/components/views/messages/DateSeparator";
 
 let client;
 const room = new Matrix.Room("!roomId:server_name");
@@ -298,7 +300,7 @@ describe('MessagePanel', function() {
         expect(tiles.length).toEqual(2);
 
         const summaryTiles = TestUtils.scryRenderedComponentsWithType(
-            res, sdk.getComponent('elements.EventListSummary'),
+            res, EventListSummary,
         );
         expect(summaryTiles.length).toEqual(1);
     });
@@ -443,7 +445,7 @@ describe('MessagePanel', function() {
         expect(tiles.at(0).props().mxEvent.getType()).toEqual("m.room.create");
         expect(tiles.at(1).props().mxEvent.getType()).toEqual("m.room.encryption");
 
-        const summaryTiles = res.find(sdk.getComponent('views.elements.GenericEventListSummary'));
+        const summaryTiles = res.find(GenericEventListSummary);
         const summaryTile = summaryTiles.at(0);
 
         const summaryEventTiles = summaryTile.find(UnwrappedEventTile);
@@ -483,7 +485,7 @@ describe('MessagePanel', function() {
                 events={events}
             />,
         );
-        const Dates = res.find(sdk.getComponent('messages.DateSeparator'));
+        const Dates = res.find(DateSeparator);
 
         expect(Dates.length).toEqual(1);
     });

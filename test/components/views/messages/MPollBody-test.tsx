@@ -31,7 +31,6 @@ import {
 } from "matrix-events-sdk";
 import { MockedObject } from "jest-mock";
 
-import sdk from "../../../skinned-sdk";
 import {
     UserVote,
     allVotes,
@@ -43,10 +42,9 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { IBodyProps } from "../../../../src/components/views/messages/IBodyProps";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import MPollBody from "../../../../src/components/views/messages/MPollBody";
 
 const CHECKED = "mx_MPollBody_option_checked";
-
-const MPollBody = sdk.getComponent("views.messages.MPollBody");
 
 const mockClient = getMockClientWithEventEmitter({
     getUserId: jest.fn().mockReturnValue("@me:example.com"),

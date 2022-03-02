@@ -21,7 +21,6 @@ import { mocked } from "jest-mock";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import "../../../skinned-sdk";
 import {
     stubClient,
     mockStateEventImplementation,
