@@ -17,7 +17,7 @@ limitations under the License.
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { EventType } from 'matrix-js-sdk/src/@types/event';
+import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
@@ -102,14 +102,22 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
             if (localEvent) return localEvent;
 
             try {
-                const evJson = await cli.fetchRoomEvent(room.roomId, eventId);
+                // Fetch the event and latest edit in parallel
+                const [evJson, { events: [edit] }] = await Promise.all([
+                    cli.fetchRoomEvent(room.roomId, eventId),
+                    cli.relations(room.roomId, eventId, RelationType.Replace, null, { limit: 1 }),
+                ]);
                 const event = new MatrixEvent(evJson);
                 if (event.isEncrypted()) {
                     await cli.decryptEventIfNeeded(event); // TODO await?
                 }
+
                 if (event && PinningUtils.isPinnable(event)) {
                     // Inject sender information
                     event.sender = room.getMember(event.getSender());
+                    // Also inject any edits we've found
+                    if (edit) event.makeReplaced(edit);
+
                     return event;
                 }
             } catch (err) {
