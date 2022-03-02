@@ -183,7 +183,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     startUpdateCheck() {
         super.startUpdateCheck();
-        this.pollForUpdate().then((updateState) => {
+        this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...updateState,
