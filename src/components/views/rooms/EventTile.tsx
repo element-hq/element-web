@@ -514,6 +514,11 @@ export default class EventTile extends React.Component<IProps, IState> {
 
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         room?.on(ThreadEvent.New, this.onNewThread);
+
+        if (this.state.threadLastReply?.isEncrypted()) {
+            this.state.threadLastReply.once(MatrixEventEvent.Decrypted, this.onEventDecryption);
+            MatrixClientPeg.get().decryptEventIfNeeded(this.state.threadLastReply);
+        }
     }
 
     private setupNotificationListener = (thread: Thread): void => {
@@ -596,6 +601,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         if (this.threadState) {
             this.threadState.off(NotificationStateEvents.Update, this.onThreadStateUpdate);
         }
+        this.state.threadLastReply?.removeListener(MatrixEventEvent.Decrypted, this.onEventDecryption);
     }
 
     componentDidUpdate(prevProps: IProps, prevState: IState, snapshot) {
@@ -604,7 +610,19 @@ export default class EventTile extends React.Component<IProps, IState> {
             MatrixClientPeg.get().on(RoomEvent.Receipt, this.onRoomReceipt);
             this.isListeningForReceipts = true;
         }
+
+        if (this.state.threadLastReply !== prevState.threadLastReply) {
+            if (this.state.threadLastReply.isEncrypted()) {
+                this.state.threadLastReply.once(MatrixEventEvent.Decrypted, this.onEventDecryption);
+                MatrixClientPeg.get().decryptEventIfNeeded(this.state.threadLastReply);
+            }
+            prevState.threadLastReply?.removeListener(MatrixEventEvent.Decrypted, this.onEventDecryption);
+        }
     }
+
+    private onEventDecryption = () => {
+        this.forceUpdate();
+    };
 
     private onNewThread = (thread: Thread) => {
         if (thread.id === this.props.mxEvent.getId()) {
