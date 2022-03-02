@@ -23,7 +23,7 @@ import { getCurrentLanguage, _t, _td, IVariables } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import Modal from './Modal';
-import * as sdk from './index';
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import { SnakedObject } from "./utils/SnakedObject";
 import { IConfigOptions } from "./IConfigOptions";
 
@@ -406,14 +406,12 @@ export class Analytics {
             { expl: _td('Your device resolution'), value: resolution },
         ];
 
-        // FIXME: Using an import will result in test failures
         const piwikConfig = SdkConfig.get("piwik");
         let piwik: Optional<SnakedObject<Extract<IConfigOptions["piwik"], object>>>;
         if (typeof piwikConfig === 'object') {
             piwik = new SnakedObject(piwikConfig);
         }
         const cookiePolicyUrl = piwik?.get("policy_url");
-        const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         const cookiePolicyLink = _t(
             "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.",
             {},

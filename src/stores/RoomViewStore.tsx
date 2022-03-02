@@ -28,7 +28,6 @@ import { ClientEvent } from "matrix-js-sdk/src/client";
 
 import dis from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
-import * as sdk from '../index';
 import Modal from '../Modal';
 import { _t } from '../languageHandler';
 import { getCachedRoomIDForAlias, storeRoomAliasInCache } from '../RoomAliasCache';
@@ -45,6 +44,8 @@ import { JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
 import { JoinRoomReadyPayload } from "../dispatcher/payloads/JoinRoomReadyPayload";
 import { JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayload";
 import { ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
+import RoomSettingsDialog from "../components/views/dialogs/RoomSettingsDialog";
+import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -211,8 +212,6 @@ class RoomViewStore extends Store<ActionPayload> {
                 }
                 break;
             case 'open_room_settings': {
-                // FIXME: Using an import will result in test failures
-                const RoomSettingsDialog = sdk.getComponent("dialogs.RoomSettingsDialog");
                 Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
                     roomId: payload.room_id || this.state.roomId,
                     initialTabId: payload.initial_tab_id,
@@ -402,8 +401,6 @@ class RoomViewStore extends Store<ActionPayload> {
             }
         }
 
-        // FIXME: Using an import will result in test failures
-        const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
             title: _t("Failed to join room"),
             description: msg,

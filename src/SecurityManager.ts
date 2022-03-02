@@ -25,7 +25,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ComponentType } from "react";
 
 import Modal from './Modal';
-import * as sdk from './index';
 import { MatrixClientPeg } from './MatrixClientPeg';
 import { _t } from './languageHandler';
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
@@ -34,6 +33,7 @@ import RestoreKeyBackupDialog from './components/views/dialogs/security/RestoreK
 import SettingsStore from "./settings/SettingsStore";
 import SecurityCustomisations from "./customisations/Security";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
+import InteractiveAuthDialog from "./components/views/dialogs/InteractiveAuthDialog";
 
 // This stores the secret storage private keys in memory for the JS SDK. This is
 // only meant to act as a cache to avoid prompting the user multiple times
@@ -360,8 +360,6 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
                 throw new Error("Secret storage creation canceled");
             }
         } else {
-            // FIXME: Using an import will result in test failures
-            const InteractiveAuthDialog = sdk.getComponent("dialogs.InteractiveAuthDialog");
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {
                     const { finished } = Modal.createTrackedDialog(

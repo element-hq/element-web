@@ -28,7 +28,6 @@ import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { IEncryptedFile, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import Spinner from "./components/views/elements/Spinner";
@@ -47,6 +46,9 @@ import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerform
 import { TimelineRenderingType } from "./contexts/RoomContext";
 import RoomViewStore from "./stores/RoomViewStore";
 import { addReplyToMessageContent } from "./utils/Reply";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import UploadFailureDialog from "./components/views/dialogs/UploadFailureDialog";
+import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -485,8 +487,6 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
-            // FIXME: Using an import will result in Element crashing
-            const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
                 badFiles: tooBigFiles,
                 totalFiles: files.length,
@@ -503,8 +503,6 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                // FIXME: Using an import will result in Element crashing
-                const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
                 const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
                     '', UploadConfirmDialog, {
                         file,
@@ -686,8 +684,6 @@ export default class ContentMessages {
                         { fileName: upload.fileName },
                     );
                 }
-                // FIXME: Using an import will result in Element crashing
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),
                     description: desc,

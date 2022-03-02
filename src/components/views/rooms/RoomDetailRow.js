@@ -17,11 +17,11 @@ limitations under the License.
 import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { linkifyElement } from '../../../HtmlUtils';
 import { mediaFromMxc } from "../../../customisations/Media";
 import { getDisplayAliasForAliasSet } from '../../../Rooms';
+import BaseAvatar from "../avatars/BaseAvatar";
 
 export function getDisplayAliasForRoom(room) {
     return getDisplayAliasForAliasSet(room.canonicalAlias, room.aliases);
@@ -82,8 +82,6 @@ export default class RoomDetailRow extends React.Component {
     };
 
     render() {
-        const BaseAvatar = sdk.getComponent('avatars.BaseAvatar');
-
         const room = this.props.room;
         const name = room.name || getDisplayAliasForRoom(room) || _t('Unnamed room');
 
