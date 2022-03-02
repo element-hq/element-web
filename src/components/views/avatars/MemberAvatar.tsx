@@ -108,7 +108,8 @@ export default class MemberAvatar extends React.PureComponent<IProps, IState> {
     }
 
     render() {
-        let { member, fallbackUserId, onClick, viewUserOnClick, ...otherProps } = this.props;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let { member, fallbackUserId, onClick, viewUserOnClick, forceHistorical, ...otherProps } = this.props;
         const userId = member ? member.userId : fallbackUserId;
 
         if (viewUserOnClick) {
@@ -122,7 +123,8 @@ export default class MemberAvatar extends React.PureComponent<IProps, IState> {
         }
 
         return (
-            <BaseAvatar {...otherProps}
+            <BaseAvatar
+                {...otherProps}
                 name={this.state.name}
                 title={this.state.title}
                 idName={userId}
