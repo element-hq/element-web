@@ -22,8 +22,8 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 import {
     Filter,
     IFilterDefinition,
-    UNSTABLE_FILTER_RELATION_SENDERS,
-    UNSTABLE_FILTER_RELATION_TYPES,
+    UNSTABLE_FILTER_RELATED_BY_SENDERS,
+    UNSTABLE_FILTER_RELATED_BY_REL_TYPES,
 } from 'matrix-js-sdk/src/filter';
 import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 
@@ -46,23 +46,20 @@ export async function getThreadTimelineSet(
     room: Room,
     filterType = ThreadFilterType.All,
 ): Promise<EventTimelineSet> {
-    const capabilities = await client.getCapabilities();
-    const serverSupportsThreads = capabilities['io.element.thread']?.enabled;
-
-    if (serverSupportsThreads) {
+    if (Thread.hasServerSideSupport) {
         const myUserId = client.getUserId();
         const filter = new Filter(myUserId);
 
         const definition: IFilterDefinition = {
             "room": {
                 "timeline": {
-                    [UNSTABLE_FILTER_RELATION_TYPES.name]: [RelationType.Thread],
+                    [UNSTABLE_FILTER_RELATED_BY_REL_TYPES.name]: [RelationType.Thread],
                 },
             },
         };
 
         if (filterType === ThreadFilterType.My) {
-            definition.room.timeline[UNSTABLE_FILTER_RELATION_SENDERS.name] = [myUserId];
+            definition.room.timeline[UNSTABLE_FILTER_RELATED_BY_SENDERS.name] = [myUserId];
         }
 
         filter.setDefinition(definition);
@@ -241,9 +238,6 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
         async function onNewThread(thread: Thread): Promise<void> {
             setThreadCount(room.threads.size);
             if (timelineSet) {
-                const capabilities = await mxClient.getCapabilities();
-                const serverSupportsThreads = capabilities['io.element.thread']?.enabled;
-
                 const discoveredScrollingBack =
                     room.lastThread.rootEvent.localTimestamp < thread.rootEvent.localTimestamp;
 
@@ -251,7 +245,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                 // the newly created threads to the list.
                 // The ones discovered when scrolling back should be discarded as
                 // they will be discovered by the `/messages` filter
-                if (serverSupportsThreads) {
+                if (Thread.hasServerSideSupport) {
                     if (!discoveredScrollingBack) {
                         timelineSet.addEventToTimeline(
                             thread.rootEvent,

@@ -20,11 +20,12 @@ import {
     MatrixClient,
     RelationType,
     Room,
-    UNSTABLE_FILTER_RELATION_SENDERS,
-    UNSTABLE_FILTER_RELATION_TYPES,
+    UNSTABLE_FILTER_RELATED_BY_REL_TYPES,
+    UNSTABLE_FILTER_RELATED_BY_SENDERS,
 } from 'matrix-js-sdk/src/matrix';
 import { mocked } from 'jest-mock';
 import '../../skinned-sdk';
+import { Thread } from 'matrix-js-sdk/src/models/thread';
 
 import {
     ThreadFilterType,
@@ -94,7 +95,7 @@ describe('ThreadPanel', () => {
         const filterId = '123';
         const client = {
             getUserId: jest.fn(),
-            getCapabilities: jest.fn().mockResolvedValue({}),
+            doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
             decryptEventIfNeeded: jest.fn().mockResolvedValue(undefined),
             getOrCreateFilter: jest.fn().mockResolvedValue(filterId),
             paginateEventTimeline: jest.fn().mockResolvedValue(undefined),
@@ -128,7 +129,7 @@ describe('ThreadPanel', () => {
 
         beforeEach(() => {
             mocked(client.getUserId).mockReturnValue(aliceId);
-            mocked(client.getCapabilities).mockResolvedValue({});
+            mocked(client.doesServerSupportUnstableFeature).mockResolvedValue(false);
         });
 
         describe('when extra capabilities are not enabled on server', () => {
@@ -168,9 +169,8 @@ describe('ThreadPanel', () => {
         describe('when extra capabilities are enabled on server', () => {
             beforeEach(() => {
                 jest.clearAllMocks();
-                mocked(client.getCapabilities).mockResolvedValue({
-                    ['io.element.thread']: { enabled: true },
-                });
+                Thread.hasServerSideSupport = true;
+                mocked(client.doesServerSupportUnstableFeature).mockResolvedValue(true);
             });
 
             it('creates a filter with correct definition when filterType is All', async () => {
@@ -179,7 +179,7 @@ describe('ThreadPanel', () => {
                 const [filterKey, filter] = mocked(client).getOrCreateFilter.mock.calls[0];
                 expect(filterKey).toEqual(`THREAD_PANEL_${room.roomId}_${ThreadFilterType.All}`);
                 expect(filter.getDefinition().room.timeline).toEqual({
-                    [UNSTABLE_FILTER_RELATION_TYPES.name]: [RelationType.Thread],
+                    [UNSTABLE_FILTER_RELATED_BY_REL_TYPES.name]: [RelationType.Thread],
                 });
             });
 
@@ -189,8 +189,8 @@ describe('ThreadPanel', () => {
                 const [filterKey, filter] = mocked(client).getOrCreateFilter.mock.calls[0];
                 expect(filterKey).toEqual(`THREAD_PANEL_${room.roomId}_${ThreadFilterType.My}`);
                 expect(filter.getDefinition().room.timeline).toEqual({
-                    [UNSTABLE_FILTER_RELATION_TYPES.name]: [RelationType.Thread],
-                    [UNSTABLE_FILTER_RELATION_SENDERS.name]: [aliceId],
+                    [UNSTABLE_FILTER_RELATED_BY_REL_TYPES.name]: [RelationType.Thread],
+                    [UNSTABLE_FILTER_RELATED_BY_SENDERS.name]: [aliceId],
                 });
             });
         });
