@@ -19,7 +19,10 @@ import { Action } from "../actions";
 import { TimelineRenderingType } from "../../contexts/RoomContext";
 
 export interface FocusComposerPayload extends ActionPayload {
-    action: Action.FocusEditMessageComposer | Action.FocusSendMessageComposer | "reply_to_event";
+    action: Action.FocusAComposer
+        | Action.FocusEditMessageComposer
+        | Action.FocusSendMessageComposer
+        | "reply_to_event";
 
     context?: TimelineRenderingType; // defaults to Room type for backwards compatibility
 }

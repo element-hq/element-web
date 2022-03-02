@@ -77,8 +77,7 @@ export enum Action {
 
     /**
      * Focuses the user's cursor to the edit message composer or send message
-     * composer based on the current edit state. No additional payload
-     * information required.
+     * composer based on the current edit state. Should be used with a FocusComposerPayload.
      */
     FocusAComposer = "focus_a_composer",
 
