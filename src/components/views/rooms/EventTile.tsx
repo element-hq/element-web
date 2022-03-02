@@ -628,11 +628,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
         const thread = room?.threads.get(this.props.mxEvent.getId());
 
-        if (!thread || thread.length === 0) {
-            return null;
-        }
-
-        return thread;
+        return thread || null;
     }
 
     private renderThreadPanelSummary(): JSX.Element | null {
@@ -676,7 +672,7 @@ export default class EventTile extends React.Component<IProps, IState> {
             return (
                 <p className="mx_ThreadSummaryIcon">{ _t("From a thread") }</p>
             );
-        } else if (this.state.threadReplyCount && this.props.mxEvent.isThreadRoot) {
+        } else if (this.state.threadReplyCount && this.state.thread.id === this.props.mxEvent.getId()) {
             let count: string | number = this.state.threadReplyCount;
             if (!this.context.narrow) {
                 count = _t("%(count)s reply", {
@@ -1303,13 +1299,10 @@ export default class EventTile extends React.Component<IProps, IState> {
             || this.state.hover
             || this.state.actionBarFocused);
 
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const thread = room?.findThreadForEvent?.(this.props.mxEvent);
-
         // Thread panel shows the timestamp of the last reply in that thread
         const ts = this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList
             ? this.props.mxEvent.getTs()
-            : thread?.replyToEvent.getTs();
+            : this.state.thread?.replyToEvent.getTs();
 
         const messageTimestamp = <MessageTimestamp
             showRelative={this.context.timelineRenderingType === TimelineRenderingType.ThreadsList}
