@@ -98,6 +98,8 @@ export default class Tooltip extends React.Component<ITooltipProps> {
         });
     }
 
+    // Add the parent's position to the tooltips, so it's correctly
+    // positioned, also taking into account any window zoom
     private updatePosition(style: CSSProperties) {
         const parentBox = this.parent.getBoundingClientRect();
         let offset = 0;
@@ -155,11 +157,12 @@ export default class Tooltip extends React.Component<ITooltipProps> {
     }
 
     private renderTooltip = () => {
-        // Add the parent's position to the tooltips, so it's correctly
-        // positioned, also taking into account any window zoom
-        // NOTE: The additional 6 pixels for the left position, is to take account of the
-        // tooltips chevron
-        const style = this.updatePosition({});
+        let style: CSSProperties = {};
+        // When the tooltip is hidden, no need to thrash the DOM with `style`
+        // attribute updates (performance)
+        if (this.props.visible) {
+            style = this.updatePosition({});
+        }
         // Hide the entire container when not visible. This prevents flashing of the tooltip
         // if it is not meant to be visible on first mount.
         style.display = this.props.visible ? "block" : "none";

@@ -22,8 +22,5 @@ exports[`<TooltipTarget /> renders container 1`] = `
   <span>
     child
   </span>
-  <div
-    class="test className"
-  />
 </div>
 `;
