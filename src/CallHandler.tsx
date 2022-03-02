@@ -152,9 +152,9 @@ export default class CallHandler extends EventEmitter {
     public roomIdForCall(call: MatrixCall): string {
         if (!call) return null;
 
-        const voipConfig = SdkConfig.get()['voip'];
-
-        if (voipConfig && voipConfig.obeyAssertedIdentity) {
+        // check asserted identity: if we're not obeying asserted identity,
+        // this map will never be populated, but we check anyway for sanity
+        if (this.shouldObeyAssertedfIdentity()) {
             const nativeUser = this.assertedIdentityNativeUsers[call.callId];
             if (nativeUser) {
                 const room = findDMForUser(MatrixClientPeg.get(), nativeUser);
@@ -260,6 +260,10 @@ export default class CallHandler extends EventEmitter {
                 }, 10000);
             }
         }
+    }
+
+    private shouldObeyAssertedfIdentity(): boolean {
+        return SdkConfig.get()['voip']?.obeyAssertedIdentity;
     }
 
     public getSupportsPstnProtocol(): boolean {
@@ -488,6 +492,11 @@ export default class CallHandler extends EventEmitter {
             if (!this.matchesCallForThisRoom(call)) return;
 
             logger.log(`Call ID ${call.callId} got new asserted identity:`, call.getRemoteAssertedIdentity());
+
+            if (!this.shouldObeyAssertedfIdentity()) {
+                logger.log("asserted identity not enabled in config: ignoring");
+                return;
+            }
 
             const newAssertedIdentity = call.getRemoteAssertedIdentity().id;
             let newNativeAssertedIdentity = newAssertedIdentity;
