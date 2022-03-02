@@ -23,6 +23,7 @@ import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ReplyTile from './ReplyTile';
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
+import CancelSvg from '../../../../res/img/cancel.svg';
 
 function cancelQuoting(context: TimelineRenderingType) {
     dis.dispatch({
@@ -52,7 +53,7 @@ export default class ReplyPreview extends React.Component<IProps> {
                 <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
                     <img
                         className="mx_filterFlipColor"
-                        src={require("../../../../res/img/cancel.svg")}
+                        src={CancelSvg}
                         width="18"
                         height="18"
                         onClick={() => cancelQuoting(this.context.timelineRenderingType)}

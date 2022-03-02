@@ -25,6 +25,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
+import CancelSvg from '../../../../res/img/cancel.svg';
 
 const INITIAL_NUM_PREVIEWS = 2;
 
@@ -72,7 +73,7 @@ const LinkPreviewGroup: React.FC<IProps> = ({ links, mxEvent, onCancelClick, onH
                             className="mx_filterFlipColor"
                             alt=""
                             role="presentation"
-                            src={require("../../../../res/img/cancel.svg")}
+                            src={CancelSvg}
                             width="18"
                             height="18"
                         />

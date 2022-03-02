@@ -39,6 +39,7 @@ import ProgressBar from "../elements/ProgressBar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import LazyRenderList from "../elements/LazyRenderList";
+import WarningBadgeSvg from '../../../../res/img/element-icons/warning-badge.svg';
 
 // These values match CSS
 const ROW_HEIGHT = 32 + 12;
@@ -213,7 +214,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     if (error) {
         footer = <>
             <img
-                src={require("../../../../res/img/element-icons/warning-badge.svg")}
+                src={WarningBadgeSvg}
                 height="24"
                 width="24"
                 alt=""

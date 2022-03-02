@@ -23,6 +23,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getBlobSafeMimeType } from '../../../utils/blobs';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
+import FilesSvg from '../../../../res/img/feather-customised/files.svg';
 
 interface IProps {
     file: File;
@@ -94,7 +95,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
             preview = <div>
                 <div>
                     <img className="mx_UploadConfirmDialog_fileIcon"
-                        src={require("../../../../res/img/feather-customised/files.svg")}
+                        src={FilesSvg}
                     />
                     { this.props.file.name } ({ filesize(this.props.file.size) })
                 </div>

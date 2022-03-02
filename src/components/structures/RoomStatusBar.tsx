@@ -30,6 +30,7 @@ import { StaticNotificationState } from "../../stores/notifications/StaticNotifi
 import AccessibleButton from "../views/elements/AccessibleButton";
 import InlineSpinner from "../views/elements/InlineSpinner";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
+import WarningTriangleSvg from '../../../res/img/feather-customised/warning-triangle.svg';
 
 const STATUS_BAR_HIDDEN = 0;
 const STATUS_BAR_EXPANDED = 1;
@@ -285,7 +286,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                     <div role="alert">
                         <div className="mx_RoomStatusBar_connectionLostBar">
                             <img
-                                src={require("../../../res/img/feather-customised/warning-triangle.svg")}
+                                src={WarningTriangleSvg}
                                 width="24"
                                 height="24"
                                 title="/!\ "

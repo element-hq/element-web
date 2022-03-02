@@ -22,12 +22,14 @@ import { _t } from '../../../../languageHandler';
 import { SetupEncryptionStore, Phase } from '../../../../stores/SetupEncryptionStore';
 import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import { IDialogProps } from "../IDialogProps";
+import VerifiedSvg from '../../../../../res/img/e2e/verified.svg';
+import WarningSvg from '../../../../../res/img/e2e/warning.svg';
 
 function iconFromPhase(phase: Phase) {
     if (phase === Phase.Done) {
-        return require("../../../../../res/img/e2e/verified.svg");
+        return VerifiedSvg;
     } else {
-        return require("../../../../../res/img/e2e/warning.svg");
+        return WarningSvg;
     }
 }
 

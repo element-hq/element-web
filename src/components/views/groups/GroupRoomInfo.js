@@ -28,6 +28,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
+import CancelSvg from '../../../../res/img/cancel.svg';
 
 @replaceableComponent("views.groups.GroupRoomInfo")
 export default class GroupRoomInfo extends React.Component {
@@ -216,7 +217,7 @@ export default class GroupRoomInfo extends React.Component {
             <div className="mx_MemberInfo" role="tabpanel">
                 <AutoHideScrollbar>
                     <AccessibleButton className="mx_MemberInfo_cancel" onClick={this._onCancel}>
-                        <img src={require("../../../../res/img/cancel.svg")} width="18" height="18" className="mx_filterFlipColor" />
+                        <img src={CancelSvg} width="18" height="18" className="mx_filterFlipColor" />
                     </AccessibleButton>
                     { avatarElement }
 

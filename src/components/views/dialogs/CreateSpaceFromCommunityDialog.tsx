@@ -44,6 +44,7 @@ import { inviteUsersToRoom } from "../../../RoomInvite";
 import ProgressBar from "../elements/ProgressBar";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { CreateEventField, IGroupRoom, IGroupSummary } from "../../../@types/groups";
+import WarningBadgeSvg from '../../../../res/img/element-icons/warning-badge.svg';
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -241,7 +242,7 @@ const CreateSpaceFromCommunityDialog: React.FC<IProps> = ({ matrixClient: cli, g
     let footer;
     if (error) {
         footer = <>
-            <img src={require("../../../../res/img/element-icons/warning-badge.svg")} height="24" width="24" alt="" />
+            <img src={WarningBadgeSvg} height="24" width="24" alt="" />
 
             <span className="mx_CreateSpaceFromCommunityDialog_error">
                 <div className="mx_CreateSpaceFromCommunityDialog_errorHeading">{ _t("Failed to migrate community") }</div>

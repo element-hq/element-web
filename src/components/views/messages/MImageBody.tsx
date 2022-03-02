@@ -37,6 +37,7 @@ import { IBodyProps } from "./IBodyProps";
 import { ImageSize, suggestedSize as suggestedImageSize } from "../../../settings/enums/ImageSize";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import WarningSvg from '../../../../res/img/warning.svg';
 
 interface IState {
     decryptedUrl?: string;
@@ -543,7 +544,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         if (this.state.error !== null) {
             return (
                 <div className="mx_MImageBody">
-                    <img src={require("../../../../res/img/warning.svg")} width="16" height="16" />
+                    <img src={WarningSvg} width="16" height="16" />
                     { _t("Error decrypting image") }
                 </div>
             );

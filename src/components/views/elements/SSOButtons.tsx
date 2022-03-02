@@ -25,6 +25,12 @@ import { _t } from "../../../languageHandler";
 import { IdentityProviderBrand, IIdentityProvider, ISSOFlow } from "../../../Login";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import { mediaFromMxc } from "../../../customisations/Media";
+import AppleSvg from '../../../../res/img/element-icons/brands/apple.svg';
+import FacebookSvg from '../../../../res/img/element-icons/brands/facebook.svg';
+import GithubSvg from '../../../../res/img/element-icons/brands/github.svg';
+import GitlabSvg from '../../../../res/img/element-icons/brands/gitlab.svg';
+import GoogleSvg from '../../../../res/img/element-icons/brands/google.svg';
+import TwitterSvg from '../../../../res/img/element-icons/brands/twitter.svg';
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -34,17 +40,17 @@ interface ISSOButtonProps extends Omit<IProps, "flow"> {
 const getIcon = (brand: IdentityProviderBrand | string) => {
     switch (brand) {
         case IdentityProviderBrand.Apple:
-            return require(`../../../../res/img/element-icons/brands/apple.svg`);
+            return AppleSvg;
         case IdentityProviderBrand.Facebook:
-            return require(`../../../../res/img/element-icons/brands/facebook.svg`);
+            return FacebookSvg;
         case IdentityProviderBrand.Github:
-            return require(`../../../../res/img/element-icons/brands/github.svg`);
+            return GithubSvg;
         case IdentityProviderBrand.Gitlab:
-            return require(`../../../../res/img/element-icons/brands/gitlab.svg`);
+            return GitlabSvg;
         case IdentityProviderBrand.Google:
-            return require(`../../../../res/img/element-icons/brands/google.svg`);
+            return GoogleSvg;
         case IdentityProviderBrand.Twitter:
-            return require(`../../../../res/img/element-icons/brands/twitter.svg`);
+            return TwitterSvg;
         default:
             return null;
     }

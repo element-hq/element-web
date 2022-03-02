@@ -26,6 +26,7 @@ import AccessibleButton from '../views/elements/AccessibleButton';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { replaceableComponent } from "../../utils/replaceableComponent";
+import GroupsSvg from '../../../res/img/icons-groups.svg';
 
 @replaceableComponent("structures.MyGroups")
 export default class MyGroups extends React.Component {
@@ -106,7 +107,7 @@ export default class MyGroups extends React.Component {
         }
 
         return <div className="mx_MyGroups">
-            <SimpleRoomHeader title={_t("Communities")} icon={require("../../../res/img/icons-groups.svg")} />
+            <SimpleRoomHeader title={_t("Communities")} icon={GroupsSvg} />
             <div className='mx_MyGroups_header'>
                 <div className="mx_MyGroups_headerCard">
                     <AccessibleButton className='mx_MyGroups_headerCard_button' onClick={this._onCreateGroupClick} />

@@ -34,6 +34,7 @@ import * as sdk from "../../../index";
 import { _t } from "../../../languageHandler";
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
+import WarningSvg from '../../../../res/img/e2e/warning.svg';
 
 // cancellation codes which constitute a key mismatch
 const MISMATCHES = ["m.key_mismatch", "m.user_error", "m.mismatched_sas"];
@@ -87,7 +88,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
             // FIXME: Using an import will result in test failures
             const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
             Modal.createTrackedDialog("Verification failed", "insecure", ErrorDialog, {
-                headerImage: require("../../../../res/img/e2e/warning.svg"),
+                headerImage: WarningSvg,
                 title: _t("Your messages are not secure"),
                 description: <div>
                     { _t("One of the following may be compromised:") }

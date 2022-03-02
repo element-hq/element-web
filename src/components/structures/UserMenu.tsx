@@ -62,6 +62,7 @@ import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedP
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
+import SwitchThemeSvg from '../../../res/img/element-icons/roomlist/dark-light-mode.svg';
 
 const CustomStatusSection = () => {
     const cli = useContext(MatrixClientContext);
@@ -515,7 +516,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     title={this.state.isDarkTheme ? _t("Switch to light mode") : _t("Switch to dark mode")}
                 >
                     <img
-                        src={require("../../../res/img/element-icons/roomlist/dark-light-mode.svg")}
+                        src={SwitchThemeSvg}
                         alt={_t("Switch theme")}
                         width={16}
                     />

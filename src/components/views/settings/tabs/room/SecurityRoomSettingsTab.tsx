@@ -40,6 +40,7 @@ import ErrorDialog from "../../../dialogs/ErrorDialog";
 import SettingsFieldset from '../../SettingsFieldset';
 import ExternalLink from '../../../elements/ExternalLink';
 import PosthogTrackers from "../../../../../PosthogTrackers";
+import WarningSvg from '../../../../../../res/img/warning.svg';
 
 interface IProps {
     roomId: string;
@@ -263,7 +264,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (room.getJoinRule() === JoinRule.Public && !this.state.hasAliases) {
             aliasWarning = (
                 <div className='mx_SecurityRoomSettingsTab_warning'>
-                    <img src={require("../../../../../../res/img/warning.svg")} width={15} height={15} />
+                    <img src={WarningSvg} width={15} height={15} />
                     <span>
                         { _t("To link to this room, please add an address.") }
                     </span>

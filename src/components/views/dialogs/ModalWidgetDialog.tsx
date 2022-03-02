@@ -42,7 +42,7 @@ import { ElementWidget } from "../../../stores/widgets/StopGapWidget";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ELEMENT_CLIENT_ID } from "../../../identifiers";
 import SettingsStore from "../../../settings/SettingsStore";
-
+import WarningBadgeSvg from '../../../../res/img/element-icons/warning-badge.svg';
 interface IProps {
     widgetDefinition: IModalWidgetOpenRequestData;
     widgetRoomId?: string;
@@ -187,7 +187,7 @@ export default class ModalWidgetDialog extends React.PureComponent<IProps, IStat
         >
             <div className="mx_ModalWidgetDialog_warning">
                 <img
-                    src={require("../../../../res/img/element-icons/warning-badge.svg")}
+                    src={WarningBadgeSvg}
                     height="16"
                     width="16"
                     alt=""

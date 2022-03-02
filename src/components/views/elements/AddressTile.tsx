@@ -24,6 +24,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { IUserAddress } from '../../../UserAddress';
 import BaseAvatar from '../avatars/BaseAvatar';
 import EmailUserIcon from "../../../../res/img/icon-email-user.svg";
+import AddressDeleteSvg from '../../../../res/img/icon-address-delete.svg';
 
 interface IProps {
     address: IUserAddress;
@@ -124,7 +125,7 @@ export default class AddressTile extends React.Component<IProps> {
         if (this.props.canDismiss) {
             dismiss = (
                 <div className="mx_AddressTile_dismiss" onClick={this.props.onDismissed}>
-                    <img src={require("../../../../res/img/icon-address-delete.svg")} width="9" height="9" />
+                    <img src={AddressDeleteSvg} width="9" height="9" />
                 </div>
             );
         }

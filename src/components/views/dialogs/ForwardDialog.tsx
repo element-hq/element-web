@@ -48,6 +48,7 @@ import { roomContextDetailsText } from "../../../Rooms";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { ButtonEvent } from "../elements/AccessibleButton";
+import EllipsisSvg from '../../../../res/img/ellipsis.svg';
 
 const AVATAR_SIZE = 30;
 
@@ -216,7 +217,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
             <EntityTile
                 className="mx_EntityTile_ellipsis"
                 avatarJsx={
-                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg")} name="..." width={36} height={36} />
+                    <BaseAvatar url={EllipsisSvg} name="..." width={36} height={36} />
                 }
                 name={text}
                 presenceState="online"
