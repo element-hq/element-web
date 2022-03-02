@@ -86,7 +86,9 @@ export async function getThreadTimelineSet(
         // Filter creation fails if HomeServer does not support the new relation
         // filter fields. We fallback to the threads that have been discovered in
         // the main timeline
-        const timelineSet = new EventTimelineSet(room, {});
+        const timelineSet = new EventTimelineSet(room, {
+            pendingEvents: false,
+        });
 
         Array.from(room.threads)
             .sort(([, threadA], [, threadB]) => threadA.replyToEvent.getTs() - threadB.replyToEvent.getTs())
