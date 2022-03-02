@@ -30,6 +30,20 @@ import { IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import DownloadSvg from '../../../../res/img/download.svg';
+
+export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
+
+async function cacheDownloadIcon() {
+    if (DOWNLOAD_ICON_URL) return; // cached already
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const svg = await fetch(DownloadSvg).then(r => r.text());
+    DOWNLOAD_ICON_URL = "data:image/svg+xml;base64," + window.btoa(svg);
+}
+
+// Cache the asset immediately
+// noinspection JSIgnoredPromiseFromCall
+cacheDownloadIcon();
 
 // User supplied content can contain scripts, we have to be careful that
 // we don't accidentally run those script within the same origin as the
@@ -61,6 +75,29 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 // the downside of using a sandboxed iframe is that the browers are overly
 // restrictive in what you are allowed to do with the generated URL.
 
+/**
+ * Get the current CSS style for a DOMElement.
+ * @param {HTMLElement} element The element to get the current style of.
+ * @return {string} The CSS style encoded as a string.
+ */
+export function computedStyle(element: HTMLElement) {
+    if (!element) {
+        return "";
+    }
+    const style = window.getComputedStyle(element, null);
+    let cssText = style.cssText;
+    // noinspection EqualityComparisonWithCoercionJS
+    if (cssText == "") {
+        // Firefox doesn't implement ".cssText" for computed styles.
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=137687
+        for (let i = 0; i < style.length; i++) {
+            cssText += style[i] + ":";
+            cssText += style.getPropertyValue(style[i]) + ";";
+        }
+    }
+    return cssText;
+}
+
 interface IProps extends IBodyProps {
     /* whether or not to show the default placeholder for the file. Defaults to true. */
     showGenericPlaceholder: boolean;
@@ -79,9 +116,10 @@ export default class MFileBody extends React.Component<IProps, IState> {
         showGenericPlaceholder: true,
     };
 
+    private iframe: React.RefObject<HTMLIFrameElement> = createRef();
     private dummyLink: React.RefObject<HTMLAnchorElement> = createRef();
     private userDidClick = false;
-    private fileDownloader: FileDownloader = new FileDownloader();
+    private fileDownloader: FileDownloader = new FileDownloader(() => this.iframe.current);
 
     public constructor(props: IProps) {
         super(props);
@@ -106,11 +144,17 @@ export default class MFileBody extends React.Component<IProps, IState> {
         return presentableTextForFile(this.content);
     }
 
-    private downloadFile(fileName: string) {
+    private downloadFile(fileName: string, text: string) {
         this.fileDownloader.download({
             blob: this.state.decryptedBlob,
             name: fileName,
             autoDownload: this.userDidClick,
+            opts: {
+                imgSrc: DOWNLOAD_ICON_URL,
+                imgStyle: null,
+                style: computedStyle(this.dummyLink.current),
+                textContent: _t("Download %(text)s", { text }),
+            },
         });
     }
 
@@ -142,7 +186,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
         const mediaHelper = this.props.mediaEventHelper;
         if (mediaHelper?.media.isEncrypted) {
             await this.decryptFile();
-            this.downloadFile(this.fileName);
+            this.downloadFile(this.fileName, this.linkText);
         } else {
             // As a button we're missing the `download` attribute for styling reasons, so
             // download with the file downloader.
@@ -213,6 +257,8 @@ export default class MFileBody extends React.Component<IProps, IState> {
                 );
             }
 
+            const url = "usercontent/"; // XXX: this path should probably be passed from the skin
+
             // If the attachment is encrypted then put the link inside an iframe.
             return (
                 <span className="mx_MFileBody">
@@ -229,6 +275,20 @@ export default class MFileBody extends React.Component<IProps, IState> {
                             { /* eslint-disable-next-line */ }
                             <a ref={this.dummyLink} />
                         </div>
+                        { /*
+                            TODO: Move iframe (and dummy link) into FileDownloader.
+                            We currently have it set up this way because of styles applied to the iframe
+                            itself which cannot be easily handled/overridden by the FileDownloader. In
+                            future, the download link may disappear entirely at which point it could also
+                            be suitable to just remove this bit of code.
+                         */ }
+                        <iframe
+                            aria-hidden
+                            title={presentableTextForFile(this.content, _t("Attachment"), true, true)}
+                            src={url}
+                            onLoad={() => this.downloadFile(this.fileName, this.linkText)}
+                            ref={this.iframe}
+                            sandbox="allow-scripts allow-downloads allow-downloads-without-user-activation" />
                     </div> }
                 </span>
             );

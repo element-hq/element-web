@@ -16,10 +16,18 @@ limitations under the License.
 
 export type getIframeFn = () => HTMLIFrameElement; // eslint-disable-line @typescript-eslint/naming-convention
 
+export const DEFAULT_STYLES = {
+    imgSrc: "",
+    imgStyle: null, // css props
+    style: "",
+    textContent: "",
+};
+
 type DownloadOptions = {
     blob: Blob;
     name: string;
     autoDownload?: boolean;
+    opts?: typeof DEFAULT_STYLES;
 };
 
 // set up the iframe as a singleton so we don't have to figure out destruction of it down the line.
@@ -81,10 +89,11 @@ export class FileDownloader {
         return iframe;
     }
 
-    public async download({ blob, name, autoDownload = true }: DownloadOptions) {
+    public async download({ blob, name, autoDownload = true, opts = DEFAULT_STYLES }: DownloadOptions) {
         const iframe = this.iframe; // get the iframe first just in case we need to await onload
         if (this.onLoadPromise) await this.onLoadPromise;
         iframe.contentWindow.postMessage({
+            ...opts,
             blob: blob,
             download: name,
             auto: autoDownload,
