@@ -134,10 +134,20 @@ export default class WebPlatform extends VectorBasePlatform {
                 // We just reloaded already and are still on the old version!
                 // Show the toast rather than reload in a loop.
                 showUpdateToast(version, newVersion);
-            } else {
-                location.search += "&updated=1";
-                location.reload();
+                return;
             }
+
+            // Set updated=1 as a query param so we can detect that we've already done this once
+            // and reload the page.
+            let suffix = "updated=1";
+            if (window.location.search.length === 0) {
+                suffix = "?" + suffix;
+            } else {
+                suffix = "&" + suffix;
+            }
+
+            // This line has the effect of loading the page at the new location
+            window.location.href = window.location.href + suffix;
         });
         setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
     }
