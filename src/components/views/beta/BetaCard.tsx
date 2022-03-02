@@ -15,20 +15,19 @@ limitations under the License.
 */
 
 import React, { ReactNode, useState } from "react";
-import classNames from "classnames";
 import { sleep } from "matrix-js-sdk/src/utils";
 
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "../elements/AccessibleButton";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import TextWithTooltip from "../elements/TextWithTooltip";
 import Modal from "../../../Modal";
 import BetaFeedbackDialog from "../dialogs/BetaFeedbackDialog";
 import SdkConfig from "../../../SdkConfig";
 import SettingsFlag from "../elements/SettingsFlag";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import InlineSpinner from "../elements/InlineSpinner";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 // XXX: Keep this around for re-use in future Betas
 
@@ -39,10 +38,9 @@ interface IProps {
 
 export const BetaPill = ({ onClick }: { onClick?: () => void }) => {
     if (onClick) {
-        return <TextWithTooltip
-            class={classNames("mx_BetaCard_betaPill", {
-                mx_BetaCard_betaPill_clickable: !!onClick,
-            })}
+        return <AccessibleTooltipButton
+            className="mx_BetaCard_betaPill"
+            title={_t("This is a beta feature. Click for more info")}
             tooltip={<div>
                 <div className="mx_Tooltip_title">
                     { _t("This is a beta feature") }
@@ -52,18 +50,13 @@ export const BetaPill = ({ onClick }: { onClick?: () => void }) => {
                 </div>
             </div>}
             onClick={onClick}
-            tooltipProps={{ yOffset: -10 }}
+            yOffset={-10}
         >
             { _t("Beta") }
-        </TextWithTooltip>;
+        </AccessibleTooltipButton>;
     }
 
-    return <span
-        className={classNames("mx_BetaCard_betaPill", {
-            mx_BetaCard_betaPill_clickable: !!onClick,
-        })}
-        onClick={onClick}
-    >
+    return <span className="mx_BetaCard_betaPill">
         { _t("Beta") }
     </span>;
 };
