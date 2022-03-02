@@ -1290,12 +1290,11 @@ class MainGrouper extends BaseGrouper {
         const keyEvent = this.events.find(e => this.panel.grouperKeyMap.get(e));
         const key = keyEvent ? this.panel.grouperKeyMap.get(keyEvent) : this.generateKey();
         if (!keyEvent) {
-            // Populate the weak map with the key that we are using for all related events.
-            this.events.forEach(e => {
-                if (!this.panel.grouperKeyMap.has(e)) {
-                    this.panel.grouperKeyMap.set(e, key);
-                }
-            });
+            // Populate the weak map with the key.
+            // Note that we only set the key on the specific event it refers to, since this group might get
+            // split up in the future by other intervening events. If we were to set the key on all events
+            // currently in the group, we would risk later giving the same key to multiple groups.
+            this.panel.grouperKeyMap.set(this.events[0], key);
         }
 
         let highlightInSummary = false;
