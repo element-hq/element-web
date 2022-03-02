@@ -307,7 +307,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         // Display successful cancellation message
         return (
             <InfoDialog
-                title={_t("Export Successful")}
+                title={_t("Export Cancelled")}
                 description={_t("The export was cancelled successfully")}
                 hasCloseButton={true}
                 onFinished={onFinished}
