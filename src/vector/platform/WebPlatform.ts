@@ -168,7 +168,7 @@ export default class WebPlatform extends VectorBasePlatform {
                 }
                 return { status: UpdateCheckStatus.Ready };
             } else {
-                showNoUpdate && showNoUpdate();
+                showNoUpdate?.();
             }
 
             return { status: UpdateCheckStatus.NotAvailable };
