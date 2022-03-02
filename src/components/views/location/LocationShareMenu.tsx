@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { SyntheticEvent, useContext } from 'react';
+import React, { SyntheticEvent, useContext, useState } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import ContextMenu, { AboveLeftOf } from '../../structures/ContextMenu';
 import LocationPicker, { ILocationPickerProps } from "./LocationPicker";
 import { shareLocation } from './shareLocation';
+import SettingsStore from '../../../settings/SettingsStore';
+import ShareType, { LocationShareType } from './ShareType';
 
 type Props = Omit<ILocationPickerProps, 'onChoose'> & {
     onFinished: (ev?: SyntheticEvent) => void;
@@ -29,10 +31,26 @@ type Props = Omit<ILocationPickerProps, 'onChoose'> & {
     roomId: Room["roomId"];
 };
 
+const getEnabledShareTypes = (): LocationShareType[] => {
+    const isPinDropLocationShareEnabled = SettingsStore.getValue("feature_location_share_pin_drop");
+
+    if (isPinDropLocationShareEnabled) {
+        return [LocationShareType.Own, LocationShareType.Pin];
+    }
+    return [
+        LocationShareType.Own,
+    ];
+};
+
 const LocationShareMenu: React.FC<Props> = ({
     menuPosition, onFinished, sender, roomId, openMenu,
 }) => {
     const matrixClient = useContext(MatrixClientContext);
+    const enabledShareTypes = getEnabledShareTypes();
+
+    const [shareType, setShareType] = useState<LocationShareType>(
+        enabledShareTypes.length === 1 ? LocationShareType.Own : undefined,
+    );
 
     return <ContextMenu
         {...menuPosition}
@@ -40,11 +58,13 @@ const LocationShareMenu: React.FC<Props> = ({
         managed={false}
     >
         <div className="mx_LocationShareMenu">
-            <LocationPicker
+            { shareType ? <LocationPicker
                 sender={sender}
                 onChoose={shareLocation(matrixClient, roomId, openMenu)}
                 onFinished={onFinished}
             />
+                :
+                <ShareType setShareType={setShareType} enabledShareTypes={enabledShareTypes} /> }
         </div>
     </ContextMenu>;
 };

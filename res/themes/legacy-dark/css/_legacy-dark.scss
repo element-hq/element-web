@@ -188,6 +188,12 @@ $eventbubble-others-bg: $event-selected-color;
 $eventbubble-bg-hover: #1C2026;
 $eventbubble-reply-color: #C1C6CD;
 
+// Location sharing
+// ********************
+$location-marker-color: #ffffff;
+$location-live-color: #5c56f5;
+// ********************
+
 // ***** Mixins! *****
 
 @define-mixin mx_DialogButton {

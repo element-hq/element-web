@@ -283,7 +283,6 @@ $pinned-color: $tertiary-content;
 $avatar-initial-color: $background;
 $primary-hairline-color: transparent;
 $focus-brightness: 105%;
-$location-marker-color: #ffffff;
 // ********************
 
 // blur amounts for left left panel (only for element theme)
@@ -296,6 +295,12 @@ $location-marker-color: #ffffff;
 // Icon URLs
 // ********************
 $copy-button-url: "$(res)/img/feather-customised/clipboard.svg";
+// ********************
+
+// Location sharing
+// ********************
+$location-marker-color: #ffffff;
+$location-live-color: #5c56f5;
 // ********************
 
 // Mixins
