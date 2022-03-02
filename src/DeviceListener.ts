@@ -297,8 +297,9 @@ export default class DeviceListener {
             }
         }
 
-        logger.log("Old unverified sessions: " + Array.from(oldUnverifiedDeviceIds).join(','));
-        logger.log("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(','));
+        logger.debug("Old unverified sessions: " + Array.from(oldUnverifiedDeviceIds).join(','));
+        logger.debug("New unverified sessions: " + Array.from(newUnverifiedDeviceIds).join(','));
+        logger.debug("Currently showing toasts for: " + Array.from(this.displayingToastsForDeviceIds).join(','));
 
         // Display or hide the batch toast for old unverified sessions
         if (oldUnverifiedDeviceIds.size > 0) {
@@ -315,6 +316,7 @@ export default class DeviceListener {
         // ...and hide any we don't need any more
         for (const deviceId of this.displayingToastsForDeviceIds) {
             if (!newUnverifiedDeviceIds.has(deviceId)) {
+                logger.debug("Hiding unverified session toast for " + deviceId);
                 hideUnverifiedSessionsToast(deviceId);
             }
         }
