@@ -1664,7 +1664,7 @@ export default class EventTile extends React.Component<IProps, IState> {
 // XXX this'll eventually be dynamic based on the fields once we have extensible event types
 const messageTypes = [EventType.RoomMessage, EventType.Sticker];
 function isMessageEvent(ev: MatrixEvent): boolean {
-    return (messageTypes.includes(ev.getType() as EventType));
+    return (messageTypes.includes(ev.getType() as EventType)) || M_POLL_START.matches(ev.getType());
 }
 
 export function haveTileForEvent(e: MatrixEvent, showHiddenEvents?: boolean): boolean {
