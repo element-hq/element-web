@@ -23,6 +23,6 @@ components['views.messages.MessageTimestamp'] = stubComponent({ displayName: 'Me
 components['views.messages.SenderProfile'] = stubComponent({ displayName: 'SenderProfile' });
 components['views.rooms.SearchBar'] = stubComponent();
 
-sdk.loadSkin({ components });
+// sdk.loadSkin({ components });
 
 export default sdk;

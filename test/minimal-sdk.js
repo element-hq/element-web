@@ -24,6 +24,6 @@ import * as sdk from "../src/index";
 
 const components = {};
 
-sdk.loadSkin({ components });
+// sdk.loadSkin({ components });
 
 export default sdk;
