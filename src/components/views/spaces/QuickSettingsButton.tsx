@@ -29,6 +29,10 @@ import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserSettingsDialog";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
+import { Icon as PinUprightIcon } from '../../../../res/img/element-icons/room/pin-upright.svg';
+import { Icon as EllipsisIcon } from '../../../../res/img/element-icons/room/ellipsis.svg';
+import { Icon as MembersIcon } from '../../../../res/img/element-icons/room/members.svg';
+import { Icon as FavoriteIcon } from '../../../../res/img/element-icons/roomlist/favorite.svg';
 
 const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
     const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
@@ -59,13 +63,17 @@ const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
                 { _t("All settings") }
             </AccessibleButton>
 
-            <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">{ _t("Pin to sidebar") }</h4>
+            <h4 className="mx_QuickSettingsButton_pinToSidebarHeading">
+                <PinUprightIcon className="mx_QuickSettingsButton_icon" />
+                { _t("Pin to sidebar") }
+            </h4>
 
             <StyledCheckbox
                 className="mx_QuickSettingsButton_favouritesCheckbox"
                 checked={!!favouritesEnabled}
                 onChange={onMetaSpaceChangeFactory(MetaSpace.Favourites, "WebQuickSettingsPinToSidebarCheckbox")}
             >
+                <FavoriteIcon className="mx_QuickSettingsButton_icon" />
                 { _t("Favourites") }
             </StyledCheckbox>
             <StyledCheckbox
@@ -73,6 +81,8 @@ const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
                 checked={!!peopleEnabled}
                 onChange={onMetaSpaceChangeFactory(MetaSpace.People, "WebQuickSettingsPinToSidebarCheckbox")}
             >
+
+                <MembersIcon className="mx_QuickSettingsButton_icon" />
                 { _t("People") }
             </StyledCheckbox>
             <AccessibleButton
@@ -85,6 +95,7 @@ const QuickSettingsButton = ({ isPanelCollapsed = false }) => {
                     });
                 }}
             >
+                <EllipsisIcon className="mx_QuickSettingsButton_icon" />
                 { _t("More options") }
             </AccessibleButton>
 

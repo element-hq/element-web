@@ -82,21 +82,6 @@ limitations under the License.
     .mx_QuickSettingsButton_pinToSidebarHeading {
         padding-left: 24px;
         position: relative;
-
-        &::before {
-            background-color: $secondary-content;
-            content: "";
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: contain;
-            mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
     }
 
     .mx_Checkbox {
@@ -112,29 +97,7 @@ limitations under the License.
             font-size: $font-15px;
             line-height: $font-24px;
             color: $secondary-content;
-
-            &::before {
-                background-color: $secondary-content;
-                content: "";
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
-                width: 16px;
-                height: 16px;
-                position: absolute;
-                left: 0;
-                top: 50%;
-                transform: translateY(-50%);
-            }
         }
-    }
-
-    .mx_QuickSettingsButton_favouritesCheckbox .mx_Checkbox_background + div::before {
-        mask-image: url('$(res)/img/element-icons/roomlist/favorite.svg');
-    }
-
-    .mx_QuickSettingsButton_peopleCheckbox .mx_Checkbox_background + div::before {
-        mask-image: url('$(res)/img/element-icons/room/members.svg');
     }
 
     .mx_QuickSettingsButton_moreOptionsButton {
@@ -145,20 +108,17 @@ limitations under the License.
         color: $secondary-content;
         position: relative;
         margin-bottom: 16px;
-
-        &::before {
-            background-color: $secondary-content;
-            content: "";
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: contain;
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
-        }
     }
+}
+
+.mx_QuickSettingsButton_icon {
+    * {
+        fill: $secondary-content;
+    }
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
