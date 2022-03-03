@@ -20,27 +20,22 @@ import classNames from 'classnames';
 import { IApp } from "../../../stores/WidgetStore";
 import BaseAvatar, { BaseAvatarType } from "./BaseAvatar";
 import { mediaFromMxc } from "../../../customisations/Media";
-import DefaultAppSvg from '../../../../res/img/element-icons/room/default_app.svg';
-import DefaultVideoSvg from '../../../../res/img/element-icons/room/default_video.svg';
-import DefaultCalSvg from '../../../../res/img/element-icons/room/default_cal.svg';
-import DefaultDocSvg from '../../../../res/img/element-icons/room/default_doc.svg';
-import DefaultClockSvg from '../../../../res/img/element-icons/room/default_clock.svg';
 
 interface IProps extends Omit<ComponentProps<BaseAvatarType>, "name" | "url" | "urls"> {
     app: IApp;
 }
 
 const WidgetAvatar: React.FC<IProps> = ({ app, className, width = 20, height = 20, ...props }) => {
-    let iconUrls = [DefaultAppSvg];
+    let iconUrls = [require("../../../../res/img/element-icons/room/default_app.svg").default];
     // heuristics for some better icons until Widgets support their own icons
     if (app.type.includes("jitsi")) {
-        iconUrls = [DefaultVideoSvg];
+        iconUrls = [require("../../../../res/img/element-icons/room/default_video.svg").default];
     } else if (app.type.includes("meeting") || app.type.includes("calendar")) {
-        iconUrls = [DefaultCalSvg];
+        iconUrls = [require("../../../../res/img/element-icons/room/default_cal.svg").default];
     } else if (app.type.includes("pad") || app.type.includes("doc") || app.type.includes("calc")) {
-        iconUrls = [DefaultDocSvg];
+        iconUrls = [require("../../../../res/img/element-icons/room/default_doc.svg").default];
     } else if (app.type.includes("clock")) {
-        iconUrls = [DefaultClockSvg];
+        iconUrls = [require("../../../../res/img/element-icons/room/default_clock.svg").default];
     }
 
     return (

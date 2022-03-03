@@ -29,7 +29,6 @@ import { PlaybackManager } from "../../../audio/PlaybackManager";
 import { isVoiceMessage } from "../../../utils/EventUtils";
 import { PlaybackQueue } from "../../../audio/PlaybackQueue";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import WarningSvg from '../../../../res/img/warning.svg';
 
 interface IState {
     error?: Error;
@@ -97,7 +96,7 @@ export default class MAudioBody extends React.PureComponent<IBodyProps, IState> 
         if (this.state.error) {
             return (
                 <span className="mx_MAudioBody">
-                    <img src={WarningSvg} width="16" height="16" />
+                    <img src={require("../../../../res/img/warning.svg").default} width="16" height="16" />
                     { _t("Error processing audio message") }
                 </span>
             );

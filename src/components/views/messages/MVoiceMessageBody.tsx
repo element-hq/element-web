@@ -22,7 +22,6 @@ import { _t } from "../../../languageHandler";
 import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import MAudioBody from "./MAudioBody";
 import MFileBody from "./MFileBody";
-import WarningSvg from '../../../../res/img/warning.svg';
 
 @replaceableComponent("views.messages.MVoiceMessageBody")
 export default class MVoiceMessageBody extends MAudioBody {
@@ -31,7 +30,7 @@ export default class MVoiceMessageBody extends MAudioBody {
         if (this.state.error) {
             return (
                 <span className="mx_MVoiceMessageBody">
-                    <img src={WarningSvg} width="16" height="16" />
+                    <img src={require("../../../../res/img/warning.svg").default} width="16" height="16" />
                     { _t("Error processing voice message") }
                 </span>
             );

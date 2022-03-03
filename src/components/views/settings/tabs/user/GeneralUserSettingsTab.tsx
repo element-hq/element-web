@@ -51,7 +51,6 @@ import ChangePassword from "../../ChangePassword";
 import InlineTermsAgreement from "../../../terms/InlineTermsAgreement";
 import SetIdServer from "../../SetIdServer";
 import SetIntegrationManager from "../../SetIntegrationManager";
-import WarningTriangleSvg from '../../../../../../res/img/feather-customised/warning-triangle.svg';
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -454,7 +453,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
             ? <img
                 className='mx_GeneralUserSettingsTab_warningIcon'
-                src={WarningTriangleSvg}
+                src={require("../../../../../../res/img/feather-customised/warning-triangle.svg").default}
                 width="18"
                 height="18"
                 alt={_t("Warning")}

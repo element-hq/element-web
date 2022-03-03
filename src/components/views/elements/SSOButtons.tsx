@@ -25,12 +25,6 @@ import { _t } from "../../../languageHandler";
 import { IdentityProviderBrand, IIdentityProvider, ISSOFlow } from "../../../Login";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import { mediaFromMxc } from "../../../customisations/Media";
-import AppleSvg from '../../../../res/img/element-icons/brands/apple.svg';
-import FacebookSvg from '../../../../res/img/element-icons/brands/facebook.svg';
-import GithubSvg from '../../../../res/img/element-icons/brands/github.svg';
-import GitlabSvg from '../../../../res/img/element-icons/brands/gitlab.svg';
-import GoogleSvg from '../../../../res/img/element-icons/brands/google.svg';
-import TwitterSvg from '../../../../res/img/element-icons/brands/twitter.svg';
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -40,17 +34,17 @@ interface ISSOButtonProps extends Omit<IProps, "flow"> {
 const getIcon = (brand: IdentityProviderBrand | string) => {
     switch (brand) {
         case IdentityProviderBrand.Apple:
-            return AppleSvg;
+            return require(`../../../../res/img/element-icons/brands/apple.svg`).default;
         case IdentityProviderBrand.Facebook:
-            return FacebookSvg;
+            return require(`../../../../res/img/element-icons/brands/facebook.svg`).default;
         case IdentityProviderBrand.Github:
-            return GithubSvg;
+            return require(`../../../../res/img/element-icons/brands/github.svg`).default;
         case IdentityProviderBrand.Gitlab:
-            return GitlabSvg;
+            return require(`../../../../res/img/element-icons/brands/gitlab.svg`).default;
         case IdentityProviderBrand.Google:
-            return GoogleSvg;
+            return require(`../../../../res/img/element-icons/brands/google.svg`).default;
         case IdentityProviderBrand.Twitter:
-            return TwitterSvg;
+            return require(`../../../../res/img/element-icons/brands/twitter.svg`).default;
         default:
             return null;
     }

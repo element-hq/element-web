@@ -30,14 +30,13 @@ import { IBodyProps } from "./IBodyProps";
 import { FileDownloader } from "../../../utils/FileDownloader";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
-import DownloadSvg from '../../../../res/img/download.svg';
 
 export let DOWNLOAD_ICON_URL; // cached copy of the download.svg asset for the sandboxed iframe later on
 
 async function cacheDownloadIcon() {
     if (DOWNLOAD_ICON_URL) return; // cached already
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const svg = await fetch(DownloadSvg).then(r => r.text());
+    const svg = await fetch(require('../../../../res/img/download.svg').default).then(r => r.text());
     DOWNLOAD_ICON_URL = "data:image/svg+xml;base64," + window.btoa(svg);
 }
 

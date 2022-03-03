@@ -17,7 +17,6 @@ limitations under the License.
 import React, { useEffect, useState } from "react";
 
 import { _t } from "../../languageHandler";
-import FileDropSvg from '../../../res/img/upload-big.svg';
 
 interface IProps {
     parent: HTMLElement;
@@ -110,7 +109,7 @@ const FileDropTarget: React.FC<IProps> = ({ parent, onFileDrop }) => {
 
     if (state.dragging) {
         return <div className="mx_FileDropTarget">
-            <img src={FileDropSvg} className="mx_FileDropTarget_image" alt="" />
+            <img src={require("../../../res/img/upload-big.svg").default} className="mx_FileDropTarget_image" alt="" />
             { _t("Drop file here to upload") }
         </div>;
     }

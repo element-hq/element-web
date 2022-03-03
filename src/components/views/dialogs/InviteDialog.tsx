@@ -72,9 +72,6 @@ import { ScreenName } from '../../../PosthogTrackers';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import EmailPillSvg from '../../../../res/img/icon-email-pill-avatar.svg';
-import PillRemoveSvg from '../../../../res/img/icon-pill-remove.svg';
-import InfoSvg from '../../../../res/img/element-icons/info.svg';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -198,7 +195,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
         const avatar = (this.props.member as ThreepidMember).isEmail
             ? <img
                 className='mx_InviteDialog_userTile_avatar mx_InviteDialog_userTile_threepidAvatar'
-                src={EmailPillSvg}
+                src={require("../../../../res/img/icon-email-pill-avatar.svg").default}
                 width={avatarSize}
                 height={avatarSize}
             />
@@ -220,7 +217,7 @@ class DMUserTile extends React.PureComponent<IDMUserTileProps> {
                     onClick={this.onRemove}
                 >
                     <img
-                        src={PillRemoveSvg}
+                        src={require("../../../../res/img/icon-pill-remove.svg").default}
                         alt={_t('Remove')}
                         width={8}
                         height={8}
@@ -304,7 +301,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
         const avatarSize = 36;
         const avatar = (this.props.member as ThreepidMember).isEmail
             ? <img
-                src={EmailPillSvg}
+                src={require("../../../../res/img/icon-email-pill-avatar.svg").default}
                 width={avatarSize}
                 height={avatarSize}
             />
@@ -1475,7 +1472,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                     keySharingWarning =
                         <p className='mx_InviteDialog_helpText'>
                             <img
-                                src={InfoSvg}
+                                src={require("../../../../res/img/element-icons/info.svg").default}
                                 width={14}
                                 height={14} />
                             { " " + _t("Invited people will be able to read old messages.") }

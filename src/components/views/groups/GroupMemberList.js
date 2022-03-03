@@ -27,7 +27,6 @@ import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePha
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
-import EllipsisSvg from '../../../../res/img/ellipsis.svg';
 
 const INITIAL_LOAD_NUM_MEMBERS = 30;
 
@@ -90,7 +89,7 @@ export default class GroupMemberList extends React.Component {
             <EntityTile
                 className="mx_EntityTile_ellipsis"
                 avatarJsx={
-                    <BaseAvatar url={EllipsisSvg} name="..." width={36} height={36} />
+                    <BaseAvatar url={require("../../../../res/img/ellipsis.svg").default} name="..." width={36} height={36} />
                 }
                 name={text}
                 presenceState="online"

@@ -50,7 +50,7 @@ export const DEFAULTS: ConfigOptions = {
     },
     desktopBuilds: {
         available: true,
-        logo: require("../res/img/element-desktop-logo.svg"),
+        logo: require("../res/img/element-desktop-logo.svg").default,
         url: "https://element.io/get-started",
     },
 };

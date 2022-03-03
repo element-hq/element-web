@@ -20,7 +20,6 @@ import MImageBody from './MImageBody';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { BLURHASH_FIELD } from "../../../ContentMessages";
 import Tooltip from "../elements/Tooltip";
-import ShowStickersSvg from '../../../../res/img/icons-show-stickers.svg';
 
 @replaceableComponent("views.messages.MStickerBody")
 export default class MStickerBody extends MImageBody {
@@ -46,7 +45,7 @@ export default class MStickerBody extends MImageBody {
     // img onLoad hasn't fired yet.
     protected getPlaceholder(width: number, height: number): JSX.Element {
         if (this.props.mxEvent.getContent().info?.[BLURHASH_FIELD]) return super.getPlaceholder(width, height);
-        return <img src={ShowStickersSvg} width="75" height="75" />;
+        return <img src={require("../../../../res/img/icons-show-stickers.svg").default} width="75" height="75" />;
     }
 
     // Tooltip to show on mouse over

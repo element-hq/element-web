@@ -52,7 +52,6 @@ import { SettingUpdatedPayload } from "../../../dispatcher/payloads/SettingUpdat
 import MessageComposerButtons from './MessageComposerButtons';
 import { ButtonEvent } from '../elements/AccessibleButton';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import RoomReplaceSvg from '../../../../res/img/room_replaced.svg';
 
 let instanceCount = 0;
 
@@ -409,7 +408,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             controls.push(<div className="mx_MessageComposer_replaced_wrapper" key="room_replaced">
                 <div className="mx_MessageComposer_replaced_valign">
                     <img className="mx_MessageComposer_roomReplaced_icon"
-                        src={RoomReplaceSvg}
+                        src={require("../../../../res/img/room_replaced.svg").default}
                     />
                     <span className="mx_MessageComposer_roomReplaced_header">
                         { _t("This room has been replaced and is no longer active.") }
