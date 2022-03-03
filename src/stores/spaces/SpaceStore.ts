@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ListIteratee, Many, sortBy, throttle } from "lodash";
+import { ListIteratee, Many, sortBy } from "lodash";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -235,6 +235,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             return;
         }
 
+        window.localStorage.setItem(ACTIVE_SPACE_LS_KEY, this._activeSpace = space); // Update & persist selected space
+
         if (contextSwitch) {
             // view last selected room from space
             const roomId = window.localStorage.getItem(getSpaceContextKey(space));
@@ -251,36 +253,33 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     room_id: roomId,
                     context_switch: true,
                     metricsTrigger: "WebSpaceContextSwitch",
-                }, true);
+                });
             } else if (cliSpace) {
                 defaultDispatcher.dispatch<ViewRoomPayload>({
                     action: Action.ViewRoom,
                     room_id: space,
                     context_switch: true,
                     metricsTrigger: "WebSpaceContextSwitch",
-                }, true);
+                });
             } else {
                 defaultDispatcher.dispatch<ViewHomePagePayload>({
                     action: Action.ViewHomePage,
                     context_switch: true,
-                }, true);
+                });
             }
         }
 
-        // We can set the space after context switching as the dispatch handler which stores the last viewed room
-        // specifically no-ops on context_switch=true.
-        this._activeSpace = space;
-        // Emit after a synchronous dispatch for context switching to prevent racing with SpaceWatcher calling
-        // Room::loadMembersIfNeeded which could (via onMemberUpdate) call upon switchSpaceIfNeeded causing the
-        // space to wrongly bounce.
         this.emit(UPDATE_SELECTED_SPACE, this.activeSpace);
         this.emit(UPDATE_SUGGESTED_ROOMS, this._suggestedRooms = []);
 
-        // persist space selected
-        window.localStorage.setItem(ACTIVE_SPACE_LS_KEY, space);
-
         if (cliSpace) {
             this.loadSuggestedRooms(cliSpace);
+
+            // Load all members for the selected space and its subspaces,
+            // so we can correctly show DMs we have with members of this space.
+            SpaceStore.instance.traverseSpace(space, roomId => {
+                this.matrixClient.getRoom(roomId)?.loadMembersIfNeeded();
+            }, false);
         }
     }
 
@@ -683,7 +682,10 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.emit(space.roomId);
         affectedParentSpaceIds.forEach(spaceId => this.emit(spaceId));
 
-        this.switchSpaceIfNeeded();
+        if (!inSpace) {
+            // switch space if the DM is no longer considered part of the space
+            this.switchSpaceIfNeeded();
+        }
     };
 
     private onRoomsUpdate = () => {
@@ -804,12 +806,12 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.updateNotificationStates(notificationStatesToUpdate);
     };
 
-    private switchSpaceIfNeeded = throttle(() => {
+    private switchSpaceIfNeeded = () => {
         const roomId = RoomViewStore.getRoomId();
         if (!this.isRoomInSpace(this.activeSpace, roomId) && !this.matrixClient.getRoom(roomId)?.isSpaceRoom()) {
             this.switchToRelatedSpace(roomId);
         }
-    }, 100, { leading: true, trailing: true });
+    };
 
     private switchToRelatedSpace = (roomId: string) => {
         if (this.suggestedRooms.find(r => r.room_id === roomId)) return;

@@ -867,6 +867,13 @@ describe("SpaceStore", () => {
                 user: dm1Partner.userId,
                 room: space1,
             });
+            space.getMember.mockImplementation(userId => {
+                if (userId === dm1Partner.userId) {
+                    const member = new RoomMember(space1, dm1Partner.userId);
+                    member.membership = "join";
+                    return member;
+                }
+            });
 
             client.emit(RoomStateEvent.Members, event, null, null);
             deferred.resolve();
@@ -885,10 +892,9 @@ describe("SpaceStore", () => {
         expect(space.loadMembersIfNeeded).not.toHaveBeenCalled();
 
         store.setActiveSpace(space1, true);
-        // traverse the space and call loadMembersIfNeeded, similarly to SpaceWatcher's behaviour
-        store.traverseSpace(space1, roomId => {
-            client.getRoom(roomId)?.loadMembersIfNeeded();
-        }, false);
+        jest.runOnlyPendingTimers();
+        expect(space.loadMembersIfNeeded).toHaveBeenCalled();
+        jest.runAllTimers();
 
         expect(store.activeSpace).toBe(space1);
         expect(getCurrentRoom()).toBe(room1);
