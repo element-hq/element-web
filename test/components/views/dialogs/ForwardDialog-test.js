@@ -53,6 +53,7 @@ describe("ForwardDialog", () => {
             // Wait one tick for our profile data to load so the state update happens within act
             await new Promise(resolve => setImmediate(resolve));
         });
+        wrapper.update();
 
         return wrapper;
     };
@@ -97,31 +98,42 @@ describe("ForwardDialog", () => {
             cancelSend = reject;
         }));
 
-        const firstButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
-        expect(firstButton.render().is(".mx_ForwardList_canSend")).toBe(true);
+        let firstButton;
+        let secondButton;
+        const update = () => {
+            wrapper.update();
+            firstButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
+            secondButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").at(1);
+        };
+        update();
+
+        expect(firstButton.is(".mx_ForwardList_canSend")).toBe(true);
 
         act(() => { firstButton.simulate("click"); });
-        expect(firstButton.render().is(".mx_ForwardList_sending")).toBe(true);
+        update();
+        expect(firstButton.is(".mx_ForwardList_sending")).toBe(true);
 
         await act(async () => {
             cancelSend();
             // Wait one tick for the button to realize the send failed
             await new Promise(resolve => setImmediate(resolve));
         });
-        expect(firstButton.render().is(".mx_ForwardList_sendFailed")).toBe(true);
+        update();
+        expect(firstButton.is(".mx_ForwardList_sendFailed")).toBe(true);
 
-        const secondButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").at(1);
-        expect(secondButton.render().is(".mx_ForwardList_canSend")).toBe(true);
+        expect(secondButton.is(".mx_ForwardList_canSend")).toBe(true);
 
         act(() => { secondButton.simulate("click"); });
-        expect(secondButton.render().is(".mx_ForwardList_sending")).toBe(true);
+        update();
+        expect(secondButton.is(".mx_ForwardList_sending")).toBe(true);
 
         await act(async () => {
             finishSend();
             // Wait one tick for the button to realize the send succeeded
             await new Promise(resolve => setImmediate(resolve));
         });
-        expect(secondButton.render().is(".mx_ForwardList_sent")).toBe(true);
+        update();
+        expect(secondButton.is(".mx_ForwardList_sent")).toBe(true);
     });
 
     it("can render replies", async () => {
