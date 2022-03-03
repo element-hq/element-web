@@ -18,14 +18,15 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import { defer } from "matrix-js-sdk/src/utils";
 
-import { MatrixClientPeg } from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
 import { WatchManager } from "../WatchManager";
 
 const ALLOWED_WIDGETS_EVENT_TYPE = "im.vector.setting.allowed_widgets";
+const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
 
 /**
  * Gets and sets settings at the "room-account" level for the current user.
@@ -55,7 +56,7 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
             }
 
             this.watchers.notifyUpdate("urlPreviewsEnabled", roomId, SettingLevel.ROOM_ACCOUNT, val);
-        } else if (event.getType() === "im.vector.web.settings") {
+        } else if (event.getType() === DEFAULT_SETTINGS_EVENT_TYPE) {
             // Figure out what changed and fire those updates
             const prevContent = prevEvent ? prevEvent.getContent() : {};
             const changedSettings = objectKeyChanges<Record<string, any>>(prevContent, event.getContent());
@@ -87,43 +88,62 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         return settings[settingName];
     }
 
-    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
-        // Special case URL previews
-        if (settingName === "urlPreviewsEnabled") {
-            const content = this.getSettings(roomId, "org.matrix.room.preview_urls") || {};
-            content['disable'] = !newValue;
-            await MatrixClientPeg.get().setRoomAccountData(roomId, "org.matrix.room.preview_urls", content);
-            return;
+    // helper function to send room account data then await it being echoed back
+    private async setRoomAccountData(
+        roomId: string,
+        eventType: string,
+        field: string | null,
+        value: any,
+    ): Promise<void> {
+        let content: ReturnType<RoomAccountSettingsHandler["getSettings"]>;
+
+        if (field === null) {
+            content = value;
+        } else {
+            const content = this.getSettings(roomId, eventType) || {};
+            content[field] = value;
         }
 
-        // Special case allowed widgets
-        if (settingName === "allowedWidgets") {
-            await MatrixClientPeg.get().setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, newValue);
-            return;
-        }
+        await this.client.setRoomAccountData(roomId, eventType, content);
 
-        const content = this.getSettings(roomId) || {};
-        content[settingName] = newValue;
-        await MatrixClientPeg.get().setRoomAccountData(roomId, "im.vector.web.settings", content);
+        const deferred = defer<void>();
+        const handler = (event: MatrixEvent) => {
+            if (event.getRoomId() !== roomId || event.getType() !== eventType) return;
+            if (field !== null && event.getContent()[field] !== value) return;
+            this.client.off(RoomEvent.AccountData, handler);
+            deferred.resolve();
+        };
+        this.client.on(RoomEvent.AccountData, handler);
+
+        await deferred.promise;
+    }
+
+    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+        switch (settingName) {
+            // Special case URL previews
+            case "urlPreviewsEnabled":
+                return this.setRoomAccountData(roomId, "org.matrix.room.preview_urls", "disable", !newValue);
+
+            // Special case allowed widgets
+            case "allowedWidgets":
+                return this.setRoomAccountData(roomId, ALLOWED_WIDGETS_EVENT_TYPE, null, newValue);
+
+            default:
+                return this.setRoomAccountData(roomId, DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
+        }
     }
 
     public canSetValue(settingName: string, roomId: string): boolean {
-        const room = MatrixClientPeg.get().getRoom(roomId);
-
         // If they have the room, they can set their own account data
-        return room !== undefined && room !== null;
+        return !!this.client.getRoom(roomId);
     }
 
     public isSupported(): boolean {
-        const cli = MatrixClientPeg.get();
-        return cli !== undefined && cli !== null && !cli.isGuest();
+        return this.client && !this.client.isGuest();
     }
 
-    private getSettings(roomId: string, eventType = "im.vector.web.settings"): any { // TODO: [TS] Type return
-        const room = MatrixClientPeg.get().getRoom(roomId);
-        if (!room) return null;
-
-        const event = room.getAccountData(eventType);
+    private getSettings(roomId: string, eventType = DEFAULT_SETTINGS_EVENT_TYPE): any { // TODO: [TS] Type return
+        const event = this.client.getRoom(roomId)?.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
         return objectClone(event.getContent()); // clone to prevent mutation
     }

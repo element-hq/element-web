@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { logger } from "matrix-js-sdk/src/logger";
 
 import SettingsHandler from "./SettingsHandler";
 
@@ -49,7 +48,5 @@ export default abstract class MatrixClientBackedSettingsHandler extends Settings
         return MatrixClientBackedSettingsHandler._matrixClient;
     }
 
-    protected initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
-        logger.warn("initMatrixClient not overridden");
-    }
+    protected abstract initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient);
 }

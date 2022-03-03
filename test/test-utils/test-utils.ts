@@ -20,6 +20,7 @@ import dis from '../../src/dispatcher/dispatcher';
 import { makeType } from "../../src/utils/TypeUtils";
 import { ValidatedServerConfig } from "../../src/utils/AutoDiscoveryUtils";
 import { EnhancedMap } from "../../src/utils/maps";
+import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/MatrixClientBackedSettingsHandler";
 
 /**
  * Stub out the MatrixClient, and configure the MatrixClientPeg object to
@@ -44,6 +45,7 @@ export function stubClient() {
     // MatrixClientPeg.get() is called a /lot/, so implement it with our own
     // fast stub function rather than a sinon stub
     peg.get = function() { return client; };
+    MatrixClientBackedSettingsHandler.matrixClient = client;
 }
 
 /**

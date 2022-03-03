@@ -17,8 +17,8 @@ limitations under the License.
 
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { defer } from "matrix-js-sdk/src/utils";
 
-import { MatrixClientPeg } from '../../MatrixClientPeg';
 import MatrixClientBackedSettingsHandler from "./MatrixClientBackedSettingsHandler";
 import { objectClone, objectKeyChanges } from "../../utils/objects";
 import { SettingLevel } from "../SettingLevel";
@@ -30,6 +30,7 @@ const BREADCRUMBS_EVENT_TYPES = [BREADCRUMBS_LEGACY_EVENT_TYPE, BREADCRUMBS_EVEN
 const RECENT_EMOJI_EVENT_TYPE = "io.element.recent_emoji";
 const INTEG_PROVISIONING_EVENT_TYPE = "im.vector.setting.integration_provisioning";
 const ANALYTICS_EVENT_TYPE = "im.vector.analytics";
+const DEFAULT_SETTINGS_EVENT_TYPE = "im.vector.web.settings";
 
 /**
  * Gets and sets settings at the "account" level for the current user.
@@ -45,10 +46,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
     }
 
     public initMatrixClient(oldClient: MatrixClient, newClient: MatrixClient) {
-        if (oldClient) {
-            oldClient.removeListener(ClientEvent.AccountData, this.onAccountData);
-        }
-
+        oldClient?.removeListener(ClientEvent.AccountData, this.onAccountData);
         newClient.on(ClientEvent.AccountData, this.onAccountData);
     }
 
@@ -62,9 +60,9 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             }
 
             this.watchers.notifyUpdate("urlPreviewsEnabled", null, SettingLevel.ACCOUNT, val);
-        } else if (event.getType() === "im.vector.web.settings" || event.getType() === ANALYTICS_EVENT_TYPE) {
+        } else if (event.getType() === DEFAULT_SETTINGS_EVENT_TYPE || event.getType() === ANALYTICS_EVENT_TYPE) {
             // Figure out what changed and fire those updates
-            const prevContent = prevEvent ? prevEvent.getContent() : {};
+            const prevContent = prevEvent?.getContent() ?? {};
             const changedSettings = objectKeyChanges<Record<string, any>>(prevContent, event.getContent());
             for (const settingName of changedSettings) {
                 const val = event.getContent()[settingName];
@@ -136,56 +134,67 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
         return preferredValue;
     }
 
-    public async setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
-        // Special case URL previews
-        if (settingName === "urlPreviewsEnabled") {
-            const content = this.getSettings("org.matrix.preview_urls") || {};
-            content['disable'] = !newValue;
-            await MatrixClientPeg.get().setAccountData("org.matrix.preview_urls", content);
-            return;
+    // helper function to set account data then await it being echoed back
+    private async setAccountData(
+        eventType: string,
+        field: string,
+        value: any,
+        legacyEventType?: string,
+    ): Promise<void> {
+        let content = this.getSettings(eventType);
+        if (legacyEventType && !content?.[field]) {
+            content = this.getSettings(legacyEventType);
         }
 
-        // Special case for breadcrumbs
-        if (settingName === "breadcrumb_rooms") {
-            // We read the value first just to make sure we preserve whatever random keys might be present.
-            let content = this.getSettings(BREADCRUMBS_EVENT_TYPE);
-            if (!content || !content['recent_rooms']) {
-                content = this.getSettings(BREADCRUMBS_LEGACY_EVENT_TYPE);
-            }
-            if (!content) content = {}; // If we still don't have content, make some
-
-            content['recent_rooms'] = newValue;
-            await MatrixClientPeg.get().setAccountData(BREADCRUMBS_EVENT_TYPE, content);
-            return;
+        if (!content) {
+            content = {};
         }
 
-        // Special case recent emoji
-        if (settingName === "recent_emoji") {
-            const content = this.getSettings(RECENT_EMOJI_EVENT_TYPE) || {};
-            content["recent_emoji"] = newValue;
-            await MatrixClientPeg.get().setAccountData(RECENT_EMOJI_EVENT_TYPE, content);
-            return;
-        }
+        content[field] = value;
 
-        // Special case integration manager provisioning
-        if (settingName === "integrationProvisioning") {
-            const content = this.getSettings(INTEG_PROVISIONING_EVENT_TYPE) || {};
-            content['enabled'] = newValue;
-            await MatrixClientPeg.get().setAccountData(INTEG_PROVISIONING_EVENT_TYPE, content);
-            return;
-        }
+        await this.client.setAccountData(eventType, content);
 
-        // Special case analytics
-        if (settingName === "pseudonymousAnalyticsOptIn") {
-            const content = this.getSettings(ANALYTICS_EVENT_TYPE) || {};
-            content[settingName] = newValue;
-            await MatrixClientPeg.get().setAccountData(ANALYTICS_EVENT_TYPE, content);
-            return;
-        }
+        const deferred = defer<void>();
+        const handler = (event: MatrixEvent) => {
+            if (event.getType() !== eventType || event.getContent()[field] !== value) return;
+            this.client.off(ClientEvent.AccountData, handler);
+            deferred.resolve();
+        };
+        this.client.on(ClientEvent.AccountData, handler);
 
-        const content = this.getSettings() || {};
-        content[settingName] = newValue;
-        await MatrixClientPeg.get().setAccountData("im.vector.web.settings", content);
+        await deferred.promise;
+    }
+
+    public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+        switch (settingName) {
+            // Special case URL previews
+            case "urlPreviewsEnabled":
+                return this.setAccountData("org.matrix.preview_urls", "disable", !newValue);
+
+            // Special case for breadcrumbs
+            case "breadcrumb_rooms":
+                return this.setAccountData(
+                    BREADCRUMBS_EVENT_TYPE,
+                    "recent_rooms",
+                    newValue,
+                    BREADCRUMBS_LEGACY_EVENT_TYPE,
+                );
+
+            // Special case recent emoji
+            case "recent_emoji":
+                return this.setAccountData(RECENT_EMOJI_EVENT_TYPE, "recent_emoji", newValue);
+
+            // Special case integration manager provisioning
+            case "integrationProvisioning":
+                return this.setAccountData(INTEG_PROVISIONING_EVENT_TYPE, "enabled", newValue);
+
+            // Special case analytics
+            case "pseudonymousAnalyticsOptIn":
+                return this.setAccountData(ANALYTICS_EVENT_TYPE, "pseudonymousAnalyticsOptIn", newValue);
+
+            default:
+                return this.setAccountData(DEFAULT_SETTINGS_EVENT_TYPE, settingName, newValue);
+        }
     }
 
     public canSetValue(settingName: string, roomId: string): boolean {
@@ -193,15 +202,13 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
     }
 
     public isSupported(): boolean {
-        const cli = MatrixClientPeg.get();
-        return cli !== undefined && cli !== null && !cli.isGuest();
+        return this.client && !this.client.isGuest();
     }
 
     private getSettings(eventType = "im.vector.web.settings"): any { // TODO: [TS] Types on return
-        const cli = MatrixClientPeg.get();
-        if (!cli) return null;
+        if (!this.client) return null;
 
-        const event = cli.getAccountData(eventType);
+        const event = this.client.getAccountData(eventType);
         if (!event || !event.getContent()) return null;
         return objectClone(event.getContent()); // clone to prevent mutation
     }
