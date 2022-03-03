@@ -25,11 +25,15 @@ limitations under the License.
         border-radius: 8px;
 
         .maplibregl-ctrl.maplibregl-ctrl-group {
+            // place below the close button
+            // padding-16 + 24px close button + padding-10
             margin-top: 50px;
+            margin-right: $spacing-16;
         }
 
         .maplibregl-ctrl-bottom-right {
             bottom: 68px;
+            margin-right: $spacing-16;
         }
 
         .maplibregl-user-location-accuracy-circle {
@@ -90,34 +94,6 @@ limitations under the License.
                 margin: 0px 0px 16px 0px;
                 min-width: 328px;
                 min-height: 48px;
-            }
-
-            button.mx_LocationPicker_cancelButton {
-                border: none;
-                border-radius: 12px;
-                position: absolute;
-                top: -360px;
-                right: 5px;
-                background-color: $quinary-content;
-                width: 24px;
-                height: 24px;
-                padding: 0px;
-                color: rgba(0, 0, 0, 0);
-            }
-
-            button.mx_LocationPicker_cancelButton::before {
-                content: '';
-                background-color: $primary-content;
-                min-width: 8px;
-                min-height: 8px;
-                width: 8px;
-                height: 8px;
-                position: absolute;
-                margin: 4px 8px;
-                mask-repeat: no-repeat;
-                mask-size: contain;
-                mask-position: center;
-                mask-image: url('$(res)/img/cancel-small.svg');
             }
         }
     }

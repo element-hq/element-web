@@ -52,6 +52,7 @@ describe('<LocationShareMenu />', () => {
     const userId = '@ernie:server.org';
     const mockClient = {
         on: jest.fn(),
+        off: jest.fn(),
         removeListener: jest.fn(),
         getUserId: jest.fn().mockReturnValue(userId),
         getClientWellKnown: jest.fn().mockResolvedValue({
@@ -85,33 +86,96 @@ describe('<LocationShareMenu />', () => {
 
     const getShareTypeOption = (component, shareType: LocationShareType) =>
         findByTestId(component, `share-location-option-${shareType}`);
+    const getBackButton = component => findByTestId(component, 'share-dialog-buttons-back');
+    const getCancelButton = component => findByTestId(component, 'share-dialog-buttons-cancel');
 
-    it('renders location picker when only Own share type is enabled', () => {
-        mocked(SettingsStore).getValue.mockReturnValue(false);
-        const component = getComponent();
-        expect(component.find('ShareType').length).toBeFalsy();
-        expect(component.find('LocationPicker').length).toBeTruthy();
-    });
-
-    it('renders share type switch with own and pin drop options when enabled', () => {
-        // feature_location_share_pin_drop is set to enabled by default mocking
-        const component = getComponent();
-        expect(component.find('LocationPicker').length).toBeFalsy();
-
-        expect(getShareTypeOption(component, LocationShareType.Own).length).toBeTruthy();
-        expect(getShareTypeOption(component, LocationShareType.Pin).length).toBeTruthy();
-    });
-
-    it('selecting own location share type advances to location picker', () => {
-        // feature_location_share_pin_drop is set to enabled by default mocking
-        const component = getComponent();
-
-        act(() => {
-            getShareTypeOption(component, LocationShareType.Own).at(0).simulate('click');
+    describe('when only Own share type is enabled', () => {
+        beforeEach(() => {
+            mocked(SettingsStore).getValue.mockReturnValue(false);
         });
 
-        component.setProps({});
+        it('renders location picker when only Own share type is enabled', () => {
+            const component = getComponent();
+            expect(component.find('ShareType').length).toBeFalsy();
+            expect(component.find('LocationPicker').length).toBeTruthy();
+        });
 
-        expect(component.find('LocationPicker').length).toBeTruthy();
+        it('does not render back button when only Own share type is enabled', () => {
+            const component = getComponent();
+            expect(getBackButton(component).length).toBeFalsy();
+        });
+
+        it('clicking cancel button from location picker closes dialog', () => {
+            const onFinished = jest.fn();
+            const component = getComponent({ onFinished });
+
+            act(() => {
+                getCancelButton(component).at(0).simulate('click');
+            });
+
+            expect(onFinished).toHaveBeenCalled();
+        });
+    });
+
+    describe('with pin drop share type enabled', () => {
+        // feature_location_share_pin_drop is set to enabled by default mocking
+
+        it('renders share type switch with own and pin drop options', () => {
+            const component = getComponent();
+            expect(component.find('LocationPicker').length).toBeFalsy();
+
+            expect(getShareTypeOption(component, LocationShareType.Own).length).toBeTruthy();
+            expect(getShareTypeOption(component, LocationShareType.Pin).length).toBeTruthy();
+        });
+
+        it('does not render back button on share type screen', () => {
+            const component = getComponent();
+            expect(getBackButton(component).length).toBeFalsy();
+        });
+
+        it('clicking cancel button from share type screen closes dialog', () => {
+            const onFinished = jest.fn();
+            const component = getComponent({ onFinished });
+
+            act(() => {
+                getCancelButton(component).at(0).simulate('click');
+            });
+
+            expect(onFinished).toHaveBeenCalled();
+        });
+
+        it('selecting own location share type advances to location picker', () => {
+            const component = getComponent();
+
+            act(() => {
+                getShareTypeOption(component, LocationShareType.Own).at(0).simulate('click');
+            });
+
+            component.setProps({});
+
+            expect(component.find('LocationPicker').length).toBeTruthy();
+        });
+
+        it('clicking back button from location picker screen goes back to share screen', () => {
+            // feature_location_share_pin_drop is set to enabled by default mocking
+            const onFinished = jest.fn();
+            const component = getComponent({ onFinished });
+
+            // advance to location picker
+            act(() => {
+                getShareTypeOption(component, LocationShareType.Own).at(0).simulate('click');
+                component.setProps({});
+            });
+
+            expect(component.find('LocationPicker').length).toBeTruthy();
+
+            act(() => {
+                getBackButton(component).at(0).simulate('click');
+                component.setProps({});
+            });
+
+            // back to share type
+            expect(component.find('ShareType').length).toBeTruthy();
+        });
     });
 });

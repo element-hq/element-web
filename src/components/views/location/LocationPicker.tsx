@@ -177,10 +177,9 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                     <form onSubmit={this.onOk}>
                         <DialogButtons
                             primaryButton={_t('Share location')}
-                            cancelButtonClass="mx_LocationPicker_cancelButton"
                             primaryIsSubmit={true}
                             onPrimaryButtonClick={this.onOk}
-                            onCancel={this.props.onFinished}
+                            hasCancel={false}
                             primaryDisabled={!this.state.position}
                         />
                     </form>
