@@ -20,7 +20,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import {
     ASSET_NODE_TYPE,
-    ASSET_TYPE_SELF,
+    LocationAssetType,
     ILocationContent,
     LOCATION_EVENT_TYPE,
 } from 'matrix-js-sdk/src/@types/location';
@@ -130,8 +130,8 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 
 export function isSelfLocation(locationContent: ILocationContent): boolean {
     const asset = ASSET_NODE_TYPE.findIn(locationContent) as { type: string };
-    const assetType = asset?.type ?? ASSET_TYPE_SELF;
-    return assetType == ASSET_TYPE_SELF;
+    const assetType = asset?.type ?? LocationAssetType.Self;
+    return assetType == LocationAssetType.Self;
 }
 
 interface ILocationBodyContentProps {

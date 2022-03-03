@@ -17,6 +17,7 @@ limitations under the License.
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 import {
     ASSET_NODE_TYPE,
+    LocationAssetType,
     ILocationContent,
     LOCATION_EVENT_TYPE,
     TIMESTAMP_NODE_TYPE,
@@ -235,7 +236,7 @@ describe("MLocationBody", () => {
         });
 
         it("Returns false for an unknown asset type", () => {
-            const content = makeLocationContent("", "", 0, "", "org.example.unknown");
+            const content = makeLocationContent("", "", 0, "", "org.example.unknown" as unknown as LocationAssetType);
             expect(isSelfLocation(content)).toBe(false);
         });
     });
