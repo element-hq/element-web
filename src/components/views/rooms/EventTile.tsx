@@ -1536,7 +1536,6 @@ export default class EventTile extends React.Component<IProps, IState> {
                             className={lineClasses}
                             key="mx_EventTile_line"
                         >
-                            { this.renderE2EPadlock() }
                             <div className="mx_EventTile_body">
                                 { this.props.mxEvent.isRedacted()
                                     ? <RedactedBody mxEvent={this.props.mxEvent} />
