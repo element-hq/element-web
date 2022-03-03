@@ -29,6 +29,7 @@ import { RestSession } from "./rest/session";
 import { stickerScenarios } from './scenarios/sticker';
 import { userViewScenarios } from "./scenarios/user-view";
 import { ssoCustomisationScenarios } from "./scenarios/sso-customisations";
+import { updateScenarios } from "./scenarios/update";
 
 export async function scenario(createSession: (s: string) => Promise<ElementSession>,
     restCreator: RestSessionCreator): Promise<void> {
@@ -71,6 +72,10 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
     // stickers for the performance loss of doing this.
     const ssoSession = await createUser("enterprise_erin");
     await ssoCustomisationScenarios(ssoSession);
+
+    // Create a new window to test app auto-updating
+    const updateSession = await createSession("update");
+    await updateScenarios(updateSession);
 }
 
 async function createRestUsers(restCreator: RestSessionCreator): Promise<RestMultiSession> {
