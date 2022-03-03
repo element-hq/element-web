@@ -18,10 +18,16 @@ import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, RelationType, MsgType } from "matrix-js-sdk/src/@types/event";
 
 import "../../../skinned-sdk";
-import { stubClient, wrapInMatrixClientContext, mkStubRoom, mkEvent } from "../../../test-utils";
+import {
+    stubClient,
+    wrapInMatrixClientContext,
+    mkStubRoom,
+    mkEvent,
+    mkMessage,
+} from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import _PinnedMessagesCard from "../../../../src/components/views/right_panel/PinnedMessagesCard";
 import PinnedEventTile from "../../../../src/components/views/rooms/PinnedEventTile";
@@ -35,7 +41,7 @@ describe("<PinnedMessagesCard />", () => {
 
     const mkRoom = (localPins: MatrixEvent[], nonLocalPins: MatrixEvent[]) => {
         const pins = [...localPins, ...nonLocalPins];
-        const room = mkStubRoom();
+        const room = mkStubRoom("!room:example.org");
 
         // Insert pin IDs into room state
         const pinState = mkEvent({
@@ -96,5 +102,46 @@ describe("<PinnedMessagesCard />", () => {
         });
         pins.update();
         expect(pins.find(PinnedEventTile).length).toBe(0);
+    });
+
+    it("accounts for edits", async () => {
+        const pin = mkMessage({
+            event: true,
+            room: "!room:example.org",
+            user: "@alice:example.org",
+            msg: "Hello!",
+        });
+        cli.relations.mockResolvedValue({
+            events: [mkEvent({
+                event: true,
+                type: EventType.RoomMessage,
+                room: "!room:example.org",
+                user: "@alice:example.org",
+                content: {
+                    "msgtype": MsgType.Text,
+                    "body": " * Hello again!",
+                    "m.new_content": {
+                        msgtype: MsgType.Text,
+                        body: "Hello again!",
+                    },
+                    "m.relates_to": {
+                        rel_type: RelationType.Replace,
+                        event_id: pin.getId(),
+                    },
+                },
+            })],
+        });
+
+        let pins;
+        await act(async () => {
+            pins = mount(<PinnedMessagesCard room={mkRoom([], [pin])} onClose={() => {}} />);
+            // Wait a tick for state updates
+            await new Promise(resolve => setImmediate(resolve));
+        });
+        pins.update();
+
+        const pinTile = pins.find(PinnedEventTile);
+        expect(pinTile.length).toBe(1);
+        expect(pinTile.find(".mx_EventTile_body").text()).toEqual("Hello again!");
     });
 });
