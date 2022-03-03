@@ -158,7 +158,8 @@ export default class WebPlatform extends VectorBasePlatform {
 
     pollForUpdate = (
         showUpdate: (currentVersion: string, mostRecentVersion: string) => void,
-        showNoUpdate?: () => void) => {
+        showNoUpdate?: () => void,
+    ) => {
         return this.getMostRecentVersion().then((mostRecentVersion) => {
             const currentVersion = this.getNormalizedAppVersion(process.env.VERSION);
 
