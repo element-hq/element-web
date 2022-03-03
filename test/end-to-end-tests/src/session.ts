@@ -19,7 +19,7 @@ import * as puppeteer from 'puppeteer';
 
 import { Logger } from './logger';
 import { LogBuffer } from './logbuffer';
-import { delay } from './util';
+import { delay, serializeLog } from './util';
 
 const DEFAULT_TIMEOUT = 20000;
 
@@ -35,7 +35,7 @@ export class ElementSession {
     constructor(readonly browser: puppeteer.Browser, readonly page: puppeteer.Page, readonly username: string,
                 readonly elementServer: string, readonly hsUrl: string) {
         this.consoleLog = new LogBuffer(page, "console",
-            async (msg: puppeteer.ConsoleMessage) => Promise.resolve(`${msg.text()}\n`));
+            async (msg: puppeteer.ConsoleMessage) => `${await serializeLog(msg)}\n`);
         this.networkLog = new LogBuffer(page,
             "requestfinished", async (req: puppeteer.HTTPRequest) => {
                 const type = req.resourceType();

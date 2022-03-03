@@ -112,7 +112,7 @@ async function runTests() {
         /**
          * TODO: temporary only use one user session data
          */
-        performanceEntries = JSON.parse(measurements);
+        performanceEntries = JSON.parse(measurements ?? "[]");
         return session.close();
     }));
     if (performanceEntries?.length > 0) {
