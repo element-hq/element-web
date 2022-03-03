@@ -172,6 +172,7 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
         prev_content: opts.prev_content,
         event_id: "$" + Math.random() + "-" + Math.random(),
         origin_server_ts: opts.ts,
+        unsigned: opts.unsigned,
     };
     if (opts.skey) {
         event.state_key = opts.skey;
