@@ -13,6 +13,7 @@ import {
     RoomState,
     EventType,
     IEventRelation,
+    IUnsigned,
 } from 'matrix-js-sdk/src/matrix';
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
@@ -132,6 +133,7 @@ export function createTestClient() {
         setPusher: jest.fn().mockResolvedValue(),
         setPushRuleEnabled: jest.fn().mockResolvedValue(),
         setPushRuleActions: jest.fn().mockResolvedValue(),
+        isCryptoEnabled: jest.fn().mockReturnValue(false),
     };
 }
 
@@ -147,6 +149,7 @@ type MakeEventProps = MakeEventPassThruProps & {
     room: Room["roomId"];
     // eslint-disable-next-line camelcase
     prev_content?: IContent;
+    unsigned?: IUnsigned;
 };
 
 /**
@@ -176,13 +179,13 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
         origin_server_ts: opts.ts ?? 0,
         unsigned: opts.unsigned,
     };
-    if (opts.skey) {
+    if (opts.skey !== undefined) {
         event.state_key = opts.skey;
     } else if ([
         "m.room.name", "m.room.topic", "m.room.create", "m.room.join_rules",
         "m.room.power_levels", "m.room.topic", "m.room.history_visibility",
         "m.room.encryption", "m.room.member", "com.example.state",
-        "m.room.guest_access",
+        "m.room.guest_access", "m.room.tombstone",
     ].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }

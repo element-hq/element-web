@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { mount, ReactWrapper } from 'enzyme';
 import { Room, PendingEventOrdering, MatrixEvent, MatrixClient } from 'matrix-js-sdk/src/matrix';
 
 import "../../../skinned-sdk";
@@ -11,6 +11,8 @@ import { SearchScope } from '../../../../src/components/views/rooms/SearchBar';
 import { E2EStatus } from '../../../../src/utils/ShieldUtils';
 import { PlaceCallType } from '../../../../src/CallHandler';
 import { mkEvent } from '../../../test-utils';
+import { IRoomState } from "../../../../src/components/structures/RoomView";
+import RoomContext from '../../../../src/contexts/RoomContext';
 
 describe('RoomHeader', () => {
     it('shows the room avatar in a room with only ourselves', () => {
@@ -20,11 +22,11 @@ describe('RoomHeader', () => {
 
         // Then the room's avatar is the initial of its name
         const initial = findSpan(rendered, ".mx_BaseAvatar_initial");
-        expect(initial.innerHTML).toEqual("X");
+        expect(initial.text()).toEqual("X");
 
         // And there is no image avatar (because it's not set on this room)
         const image = findImg(rendered, ".mx_BaseAvatar_image");
-        expect(image.src).toEqual("data:image/png;base64,00");
+        expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
     it('shows the room avatar in a room with 2 people', () => {
@@ -35,26 +37,25 @@ describe('RoomHeader', () => {
 
         // Then the room's avatar is the initial of its name
         const initial = findSpan(rendered, ".mx_BaseAvatar_initial");
-        expect(initial.innerHTML).toEqual("Y");
+        expect(initial.text()).toEqual("Y");
 
         // And there is no image avatar (because it's not set on this room)
         const image = findImg(rendered, ".mx_BaseAvatar_image");
-        expect(image.src).toEqual("data:image/png;base64,00");
+        expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
     it('shows the room avatar in a room with >2 people', () => {
         // When we render a non-DM room with 3 people in it
-        const room = createRoom(
-            { name: "Z Room", isDm: false, userIds: ["other1", "other2"] });
+        const room = createRoom({ name: "Z Room", isDm: false, userIds: ["other1", "other2"] });
         const rendered = render(room);
 
         // Then the room's avatar is the initial of its name
         const initial = findSpan(rendered, ".mx_BaseAvatar_initial");
-        expect(initial.innerHTML).toEqual("Z");
+        expect(initial.text()).toEqual("Z");
 
         // And there is no image avatar (because it's not set on this room)
         const image = findImg(rendered, ".mx_BaseAvatar_image");
-        expect(image.src).toEqual("data:image/png;base64,00");
+        expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
     it('shows the room avatar in a DM with only ourselves', () => {
@@ -64,11 +65,11 @@ describe('RoomHeader', () => {
 
         // Then the room's avatar is the initial of its name
         const initial = findSpan(rendered, ".mx_BaseAvatar_initial");
-        expect(initial.innerHTML).toEqual("Z");
+        expect(initial.text()).toEqual("Z");
 
         // And there is no image avatar (because it's not set on this room)
         const image = findImg(rendered, ".mx_BaseAvatar_image");
-        expect(image.src).toEqual("data:image/png;base64,00");
+        expect(image.prop("src")).toEqual("data:image/png;base64,00");
     });
 
     it('shows the user avatar in a DM with 2 people', () => {
@@ -81,13 +82,10 @@ describe('RoomHeader', () => {
 
         // Then we use the other user's avatar as our room's image avatar
         const image = findImg(rendered, ".mx_BaseAvatar_image");
-        expect(image.src).toEqual(
-            "http://this.is.a.url/example.org/other");
+        expect(image.prop("src")).toEqual("http://this.is.a.url/example.org/other");
 
         // And there is no initial avatar
-        expect(
-            rendered.querySelectorAll(".mx_BaseAvatar_initial"),
-        ).toHaveLength(0);
+        expect(rendered.find(".mx_BaseAvatar_initial")).toHaveLength(0);
     });
 
     it('shows the room avatar in a DM with >2 people', () => {
@@ -98,11 +96,37 @@ describe('RoomHeader', () => {
 
         // Then the room's avatar is the initial of its name
         const initial = findSpan(rendered, ".mx_BaseAvatar_initial");
-        expect(initial.innerHTML).toEqual("Z");
+        expect(initial.text()).toEqual("Z");
 
         // And there is no image avatar (because it's not set on this room)
         const image = findImg(rendered, ".mx_BaseAvatar_image");
-        expect(image.src).toEqual("data:image/png;base64,00");
+        expect(image.prop("src")).toEqual("data:image/png;base64,00");
+    });
+
+    it("renders call buttons normally", () => {
+        const room = createRoom({ name: "Room", isDm: false, userIds: [] });
+        const wrapper = render(room);
+
+        expect(wrapper.find('[aria-label="Voice call"]').hostNodes()).toHaveLength(1);
+        expect(wrapper.find('[aria-label="Video call"]').hostNodes()).toHaveLength(1);
+    });
+
+    it("hides call buttons when the room is tombstoned", () => {
+        const room = createRoom({ name: "Room", isDm: false, userIds: [] });
+        const wrapper = render(room, {
+            tombstone: mkEvent({
+                event: true,
+                type: "m.room.tombstone",
+                room: room.roomId,
+                user: "@user1:server",
+                skey: "",
+                content: {},
+                ts: Date.now(),
+            }),
+        });
+
+        expect(wrapper.find('[aria-label="Voice call"]').hostNodes()).toHaveLength(0);
+        expect(wrapper.find('[aria-label="Video call"]').hostNodes()).toHaveLength(0);
     });
 });
 
@@ -147,11 +171,9 @@ function createRoom(info: IRoomCreationInfo) {
     return room;
 }
 
-function render(room: Room): HTMLDivElement {
-    const parentDiv = document.createElement('div');
-    document.body.appendChild(parentDiv);
-    ReactDOM.render(
-        (
+function render(room: Room, roomContext?: Partial<IRoomState>): ReactWrapper {
+    return mount((
+        <RoomContext.Provider value={{ ...roomContext, room }}>
             <RoomHeader
                 room={room}
                 inRoom={true}
@@ -167,10 +189,8 @@ function render(room: Room): HTMLDivElement {
                     searchCount: 0,
                 }}
             />
-        ),
-        parentDiv,
-    );
-    return parentDiv;
+        </RoomContext.Provider>
+    ));
 }
 
 function mkCreationEvent(roomId: string, userId: string): MatrixEvent {
@@ -233,14 +253,14 @@ function mkDirectEvent(
     });
 }
 
-function findSpan(parent: HTMLElement, selector: string): HTMLSpanElement {
-    const els = parent.querySelectorAll(selector);
-    expect(els.length).toEqual(1);
-    return els[0] as HTMLSpanElement;
+function findSpan(wrapper: ReactWrapper, selector: string): ReactWrapper {
+    const els = wrapper.find(selector).hostNodes();
+    expect(els).toHaveLength(1);
+    return els.at(0);
 }
 
-function findImg(parent: HTMLElement, selector: string): HTMLImageElement {
-    const els = parent.querySelectorAll(selector);
-    expect(els.length).toEqual(1);
-    return els[0] as HTMLImageElement;
+function findImg(wrapper: ReactWrapper, selector: string): ReactWrapper {
+    const els = wrapper.find(selector).hostNodes();
+    expect(els).toHaveLength(1);
+    return els.at(0);
 }

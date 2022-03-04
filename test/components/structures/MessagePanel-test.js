@@ -50,7 +50,7 @@ class WrappedMessagePanel extends React.Component {
             room,
             roomId: room.roomId,
             canReact: true,
-            canReply: true,
+            canSendMessages: true,
             showReadReceipts: true,
             showRedactions: false,
             showJoinLeaves: false,

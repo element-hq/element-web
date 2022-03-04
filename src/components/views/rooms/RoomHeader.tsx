@@ -40,6 +40,7 @@ import { contextMenuBelow } from './RoomTile';
 import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNotificationStateStore';
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
+import RoomContext from "../../../contexts/RoomContext";
 
 export interface ISearchInfo {
     searchTerm: string;
@@ -72,6 +73,9 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         inRoom: false,
         excludedRightPanelPhaseButtons: [],
     };
+
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
 
     constructor(props, context) {
         super(props, context);
@@ -200,7 +204,10 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const buttons: JSX.Element[] = [];
 
-        if (this.props.inRoom && SettingsStore.getValue("showCallButtonsInComposer")) {
+        if (this.props.inRoom &&
+            !this.context.tombstone &&
+            SettingsStore.getValue("showCallButtonsInComposer")
+        ) {
             const voiceCallButton = <AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
                 onClick={() => this.props.onCallPlaced(CallType.Voice)}

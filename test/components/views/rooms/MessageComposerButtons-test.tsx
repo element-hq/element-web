@@ -160,7 +160,7 @@ function createRoomState(room: Room, narrow: boolean): IRoomState {
         showTopUnreadMessagesBar: false,
         statusBarVisible: false,
         canReact: false,
-        canReply: false,
+        canSendMessages: false,
         layout: Layout.Group,
         lowBandwidth: false,
         alwaysShowTimestamps: false,
