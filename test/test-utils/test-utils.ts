@@ -334,6 +334,7 @@ export function mkStubRoom(roomId = null, name: string, client: MatrixClient): R
             getMember: jest.fn(),
             mayClientSendStateEvent: jest.fn().mockReturnValue(true),
             maySendStateEvent: jest.fn().mockReturnValue(true),
+            maySendRedactionForEvent: jest.fn().mockReturnValue(true),
             maySendEvent: jest.fn().mockReturnValue(true),
             members: {},
             getJoinRule: jest.fn().mockReturnValue(JoinRule.Invite),
