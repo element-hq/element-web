@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {
-    getCustomizableShortcuts,
+    getKeyboardShortcutsForUI,
     getKeyboardShortcuts,
     KEYBOARD_SHORTCUTS,
     mock,
@@ -35,9 +35,9 @@ describe("KeyboardShortcuts", () => {
         PlatformPeg.get = () => ({ overrideBrowserShortcuts: () => false });
         const copyKeyboardShortcuts = Object.assign({}, KEYBOARD_SHORTCUTS);
 
-        getCustomizableShortcuts();
-        expect(KEYBOARD_SHORTCUTS).toEqual(copyKeyboardShortcuts);
         getKeyboardShortcuts();
+        expect(KEYBOARD_SHORTCUTS).toEqual(copyKeyboardShortcuts);
+        getKeyboardShortcutsForUI();
         expect(KEYBOARD_SHORTCUTS).toEqual(copyKeyboardShortcuts);
     });
 
@@ -54,7 +54,7 @@ describe("KeyboardShortcuts", () => {
 
         });
         PlatformPeg.get = () => ({ overrideBrowserShortcuts: () => false });
-        expect(getCustomizableShortcuts()).toEqual({ "Keybind4": {} });
+        expect(getKeyboardShortcuts()).toEqual({ "Keybind4": {} });
 
         mock({
             keyboardShortcuts: {
@@ -65,7 +65,7 @@ describe("KeyboardShortcuts", () => {
             desktopShortcuts: ["Keybind2"],
         });
         PlatformPeg.get = () => ({ overrideBrowserShortcuts: () => true });
-        expect(getCustomizableShortcuts()).toEqual({ "Keybind1": {}, "Keybind2": {} });
+        expect(getKeyboardShortcuts()).toEqual({ "Keybind1": {}, "Keybind2": {} });
         jest.resetModules();
     });
 });

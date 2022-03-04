@@ -60,7 +60,7 @@ describe("KeyboardUserSettingsTab", () => {
 
     it("doesn't render same modifier twice", async () => {
         mockKeyboardShortcuts({
-            "getKeyboardShortcuts": () => ({
+            "getKeyboardShortcutsForUI": () => ({
                 "keybind1": {
                     default: {
                         key: Key.A,
@@ -76,7 +76,7 @@ describe("KeyboardUserSettingsTab", () => {
         jest.resetModules();
 
         mockKeyboardShortcuts({
-            "getKeyboardShortcuts": () => ({
+            "getKeyboardShortcutsForUI": () => ({
                 "keybind1": {
                     default: {
                         key: Key.A,
@@ -94,7 +94,7 @@ describe("KeyboardUserSettingsTab", () => {
 
     it("renders list of keyboard shortcuts", async () => {
         mockKeyboardShortcuts({
-            "getKeyboardShortcuts": () => ({
+            "getKeyboardShortcutsForUI": () => ({
                 "keybind1": {
                     default: {
                         key: Key.A,
