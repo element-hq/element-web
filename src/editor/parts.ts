@@ -651,10 +651,10 @@ export class PartCreator {
         userId: string,
     ): [UserPillPart, PlainPart] {
         const pill = this.userPill(displayName, userId);
-        const postfix = this.plain(
-            insertTrailingCharacter &&
-            (SettingsStore.getValue("MessageComposerInput.insertTrailingComma") ? ": " : " "),
-        );
+        if (!SettingsStore.getValue("MessageComposerInput.insertTrailingComma")) {
+            insertTrailingCharacter = false;
+        }
+        const postfix = this.plain(insertTrailingCharacter ? ": " : " ");
         return [pill, postfix];
     }
 }
