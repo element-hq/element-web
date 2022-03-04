@@ -30,8 +30,9 @@ interface IProps {
     // If true, make the primary button a form submit button (input type="submit")
     primaryIsSubmit?: boolean;
 
-    // onClick handler for the primary button.
-    onPrimaryButtonClick?: (ev: React.MouseEvent) => void;
+    // onClick handler for the primary button. Note that the returned promise, if
+    // returning a promise, is not used.
+    onPrimaryButtonClick?: (ev: React.MouseEvent) => (void | Promise<void>);
 
     // should there be a cancel button? default: true
     hasCancel?: boolean;

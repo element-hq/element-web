@@ -37,7 +37,7 @@ interface IProps {
     // Whether to wrap the page in a scrollbar
     scrollbar?: boolean;
     // Map of keys to replace with values, e.g {$placeholder: "value"}
-    replaceMap?: Map<string, string>;
+    replaceMap?: Record<string, string>;
 }
 
 interface IState {

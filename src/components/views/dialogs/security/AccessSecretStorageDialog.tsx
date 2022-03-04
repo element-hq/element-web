@@ -174,7 +174,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         this.fileUpload.current.click();
     };
 
-    private onPassPhraseNext = async (ev: FormEvent<HTMLFormElement>) => {
+    private onPassPhraseNext = async (ev: FormEvent<HTMLFormElement> | React.MouseEvent) => {
         ev.preventDefault();
 
         if (this.state.passPhrase.length <= 0) return;
@@ -189,7 +189,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
         }
     };
 
-    private onRecoveryKeyNext = async (ev: FormEvent<HTMLFormElement>) => {
+    private onRecoveryKeyNext = async (ev: FormEvent<HTMLFormElement> | React.MouseEvent) => {
         ev.preventDefault();
 
         if (!this.state.recoveryKeyValid) return;
