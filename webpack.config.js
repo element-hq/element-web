@@ -456,6 +456,7 @@ module.exports = (env, argv) => {
                 },
                 {
                     test: /\.svg$/,
+                    issuer: /\.(js|ts|jsx|tsx|html)$/,
                     use: [
                         {
                             loader: '@svgr/webpack',
@@ -478,10 +479,28 @@ module.exports = (env, argv) => {
                                 outputPath: getAssetOutputPath,
                                 publicPath: function (url, resourcePath) {
                                     const outputPath = getAssetOutputPath(url, resourcePath);
-                                    return toPublicPath(path.join("../..", outputPath));
+                                    return toPublicPath(outputPath);
                                 },
                             },
                         },
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(outputPath);
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    test: /\.svg$/,
+                    issuer: /\.(scss|css)$/,
+                    use: [
                         {
                             loader: 'file-loader',
                             options: {
