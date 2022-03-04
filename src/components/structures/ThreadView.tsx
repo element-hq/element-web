@@ -186,8 +186,10 @@ export default class ThreadView extends React.Component<IProps, IState> {
             }, async () => {
                 thread.emit(ThreadEvent.ViewThread);
                 if (!thread.initialEventsFetched) {
-                    const { nextBatch } = await thread.fetchInitialEvents();
-                    this.nextBatch = nextBatch;
+                    const response = await thread.fetchInitialEvents();
+                    if (response?.nextBatch) {
+                        this.nextBatch = response.nextBatch;
+                    }
                 }
 
                 this.timelinePanel.current?.refreshTimeline();
