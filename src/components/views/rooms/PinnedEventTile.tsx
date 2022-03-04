@@ -17,6 +17,10 @@ limitations under the License.
 
 import React from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Relations } from "matrix-js-sdk/src/models/relations";
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { logger } from "matrix-js-sdk/src/logger";
+import { M_POLL_START, M_POLL_RESPONSE, M_POLL_END } from "matrix-events-sdk";
 
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
@@ -52,6 +56,51 @@ export default class PinnedEventTile extends React.Component<IProps> {
         });
     };
 
+    // For event types like polls that use relations, we fetch those manually on
+    // mount and store them here, exposing them through getRelationsForEvent
+    private relations = new Map<string, Map<string, Relations>>();
+    private getRelationsForEvent = (
+        eventId: string,
+        relationType: RelationType | string,
+        eventType: EventType | string,
+    ): Relations => {
+        if (eventId === this.props.event.getId()) {
+            return this.relations.get(relationType)?.get(eventType);
+        }
+    };
+
+    async componentDidMount() {
+        // Fetch poll responses
+        if (M_POLL_START.matches(this.props.event.getType())) {
+            const eventId = this.props.event.getId();
+            const roomId = this.props.event.getRoomId();
+            const room = this.context.getRoom(roomId);
+
+            try {
+                await Promise.all(
+                    [M_POLL_RESPONSE.name, M_POLL_RESPONSE.altName, M_POLL_END.name, M_POLL_END.altName]
+                        .map(async eventType => {
+                            const { events } = await this.context.relations(
+                                roomId, eventId, RelationType.Reference, eventType,
+                            );
+
+                            const relations = new Relations(RelationType.Reference, eventType, room);
+                            if (!this.relations.has(RelationType.Reference)) {
+                                this.relations.set(RelationType.Reference, new Map<string, Relations>());
+                            }
+                            this.relations.get(RelationType.Reference).set(eventType, relations);
+
+                            relations.setTargetEvent(this.props.event);
+                            events.forEach(event => relations.addEvent(event));
+                        }),
+                );
+            } catch (err) {
+                logger.error(`Error fetching responses to pinned poll ${eventId} in room ${roomId}`);
+                logger.error(err);
+            }
+        }
+    }
+
     render() {
         const sender = this.props.event.getSender();
 
@@ -84,6 +133,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
             <div className="mx_PinnedEventTile_message">
                 <MessageEvent
                     mxEvent={this.props.event}
+                    getRelationsForEvent={this.getRelationsForEvent}
                     // @ts-ignore - complaining that className is invalid when it's not
                     className="mx_PinnedEventTile_body"
                     maxImageHeight={150}
