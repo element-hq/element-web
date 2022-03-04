@@ -157,7 +157,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
     private setupThread = (mxEv: MatrixEvent) => {
         let thread = this.props.room.threads?.get(mxEv.getId());
         if (!thread) {
-            thread = this.props.room.createThread(mxEv);
+            thread = this.props.room.createThread(mxEv, [mxEv]);
         }
         thread.on(ThreadEvent.Update, this.updateLastThreadReply);
         this.updateThread(thread);
