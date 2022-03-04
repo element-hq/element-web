@@ -204,8 +204,8 @@ const EmptyThread: React.FC<EmptyThreadIProps> = ({ filterOption, showAllThreads
     return <aside className="mx_ThreadPanel_empty">
         <div className="mx_ThreadPanel_largeIcon" />
         <h2>{ _t("Keep discussions organised with threads") }</h2>
-        <p>{ _t("Reply to an ongoing thread or use “Reply in thread”"
-              + "when hovering over a message to start a new one.") }
+        <p>{ _t("Reply to an ongoing thread or use “%(replyInThread)s” "
+              + "when hovering over a message to start a new one.", { replyInThread: _t("Reply in thread") }) }
         </p>
         <p>
             { /* Always display that paragraph to prevent layout shift

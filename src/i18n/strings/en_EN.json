@@ -3204,7 +3204,7 @@
     "Shows all threads you've participated in": "Shows all threads you've participated in",
     "Show:": "Show:",
     "Keep discussions organised with threads": "Keep discussions organised with threads",
-    "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.": "Reply to an ongoing thread or use “Reply in thread”when hovering over a message to start a new one.",
+    "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.": "Reply to an ongoing thread or use “%(replyInThread)s” when hovering over a message to start a new one.",
     "Show all threads": "Show all threads",
     "Thread": "Thread",
     "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.": "Tried to load a specific point in this room's timeline, but you do not have permission to view the message in question.",
