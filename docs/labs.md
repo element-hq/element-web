@@ -177,9 +177,6 @@ used in that room is shown.
 
 Threading allows users to branch out a new conversation from the main timeline of a room. This is particularly useful in high traffic rooms where multiple conversations can happen in parallel or when a single discussion might stretch over a very long period of time.
 
-When a thread head is aggregated (as in MSC2675), it returns a summary of the thread: the latest message, a list of participants and the total count of messages. I.e. in places which include bundled relations (per MSC2675).
+Threads can be access by clicking their summary below the root event on the room timeline. Users can find a comprehensive list of threads by click the icon on the room header button.
 
-A thread will be displayed as a chain of replies on clients unaware of threads.
-Thread-ready clients would recieve the latest event in the thread unless a user is explicitly replying to another event.
-
-Clients can synthesize read receipts but it is possible that some notifications get lost on a fresh start.
+This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.
