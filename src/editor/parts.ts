@@ -651,7 +651,7 @@ export class PartCreator {
         userId: string,
     ): [UserPillPart, PlainPart] {
         const pill = this.userPill(displayName, userId);
-        if (!SettingsStore.getValue("MessageComposerInput.insertTrailingComma")) {
+        if (!SettingsStore.getValue("MessageComposerInput.insertTrailingColon")) {
             insertTrailingCharacter = false;
         }
         const postfix = this.plain(insertTrailingCharacter ? ": " : " ");

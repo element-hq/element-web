@@ -121,7 +121,7 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             return content[settingName];
         }
 
-        if (settingName === "MessageComposerInput.insertTrailingComma") {
+        if (settingName === "MessageComposerInput.insertTrailingColon") {
             const content = this.getSettings() || {};
             const value = content[settingName];
             if (value === null || value === undefined) {
