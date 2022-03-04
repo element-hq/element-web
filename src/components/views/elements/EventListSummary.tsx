@@ -327,14 +327,14 @@ export default class EventListSummary extends React.Component<IProps> {
                 break;
             case TransitionType.ChangedPins:
                 res = (userCount > 1)
-                    ? _t("%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times.",
+                    ? _t("%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times",
                         { severalUsers: "", count },
                         {
                             "a": (sub) => <AccessibleButton kind='link_inline' onClick={onPinnedMessagesClick}>
                                 { sub }
                             </AccessibleButton>,
                         })
-                    : _t("%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times.",
+                    : _t("%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times",
                         { oneUser: "", count },
                         {
                             "a": (sub) => <AccessibleButton kind='link_inline' onClick={onPinnedMessagesClick}>
