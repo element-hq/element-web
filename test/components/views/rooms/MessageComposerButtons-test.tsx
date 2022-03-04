@@ -39,6 +39,7 @@ describe("MessageComposerButtons", () => {
             <MessageComposerButtons
                 isMenuOpen={false}
                 showLocationButton={true}
+                showPollsButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
@@ -57,6 +58,7 @@ describe("MessageComposerButtons", () => {
             <MessageComposerButtons
                 isMenuOpen={true}
                 showLocationButton={true}
+                showPollsButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
@@ -81,6 +83,7 @@ describe("MessageComposerButtons", () => {
             <MessageComposerButtons
                 isMenuOpen={false}
                 showLocationButton={true}
+                showPollsButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
@@ -98,6 +101,7 @@ describe("MessageComposerButtons", () => {
             <MessageComposerButtons
                 isMenuOpen={true}
                 showLocationButton={true}
+                showPollsButton={true}
                 showStickersButton={true}
                 toggleButtonMenu={() => {}}
             />,
@@ -114,6 +118,56 @@ describe("MessageComposerButtons", () => {
                 "Location",
             ],
         ]);
+    });
+
+    describe('polls button', () => {
+        it('should render when asked to', () => {
+            const buttons = wrapAndRender(
+                <MessageComposerButtons
+                    isMenuOpen={true}
+                    showLocationButton={true}
+                    showPollsButton={true}
+                    showStickersButton={true}
+                    toggleButtonMenu={() => {}}
+                />,
+                true,
+            );
+
+            expect(buttonLabels(buttons)).toEqual([
+                "Emoji",
+                "More options",
+                [
+                    "Attachment",
+                    "Sticker",
+                    "Poll",
+                    "Location",
+                ],
+            ]);
+        });
+
+        it('should not render when asked not to', () => {
+            const buttons = wrapAndRender(
+                <MessageComposerButtons
+                    isMenuOpen={true}
+                    showLocationButton={true}
+                    showPollsButton={false} // !! the change from the alternate test
+                    showStickersButton={true}
+                    toggleButtonMenu={() => {}}
+                />,
+                true,
+            );
+
+            expect(buttonLabels(buttons)).toEqual([
+                "Emoji",
+                "More options",
+                [
+                    "Attachment",
+                    "Sticker",
+                    // "Poll", // should be hidden
+                    "Location",
+                ],
+            ]);
+        });
     });
 });
 
