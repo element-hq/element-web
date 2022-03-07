@@ -100,15 +100,15 @@ export default class RoomAccountSettingsHandler extends MatrixClientBackedSettin
         if (field === null) {
             content = value;
         } else {
-            const content = this.getSettings(roomId, eventType) || {};
+            content = this.getSettings(roomId, eventType) || {};
             content[field] = value;
         }
 
         await this.client.setRoomAccountData(roomId, eventType, content);
 
         const deferred = defer<void>();
-        const handler = (event: MatrixEvent) => {
-            if (event.getRoomId() !== roomId || event.getType() !== eventType) return;
+        const handler = (event: MatrixEvent, room: Room) => {
+            if (room.roomId !== roomId || event.getType() !== eventType) return;
             if (field !== null && event.getContent()[field] !== value) return;
             this.client.off(RoomEvent.AccountData, handler);
             deferred.resolve();
