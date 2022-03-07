@@ -185,6 +185,10 @@ When enabled, historical messages will use the current profile for the sender.
 
 Enables sharing a pin drop location to the timeline.
 
+## Live location sharing (`feature_location_share_live`) [In Development]
+
+Enables sharing your current location to the timeline, with live updates.
+
 ## Threaded Messaging (`feature_thread`)
 
 Threading allows users to branch out a new conversation from the main timeline of a room. This is particularly useful in high traffic rooms where multiple conversations can happen in parallel or when a single discussion might stretch over a very long period of time.
