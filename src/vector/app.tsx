@@ -19,7 +19,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import * as sdk from 'matrix-react-sdk';
+import * as sdk from 'matrix-react-sdk/src/index';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import { _td, newTranslatableError } from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';

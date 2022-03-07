@@ -33,7 +33,6 @@ const INCLUDE_LANGS = [
     {'value': 'is', 'label': 'íslenska'},
     {'value': 'it', 'label': 'Italiano'},
     {'value': 'ja', 'label': '日本語'},
-    {'value': 'jbo', 'label': 'banjubu\'o'},
     {'value': 'kab', 'label': 'Taqbaylit'},
     {'value': 'ko', 'label': '한국어'},
     {'value': 'lt', 'label': 'Lietuvių'},
