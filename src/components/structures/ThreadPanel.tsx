@@ -70,7 +70,10 @@ export async function getThreadTimelineSet(
         filter.filterId = filterId;
         const timelineSet = room.getOrCreateFilteredTimelineSet(
             filter,
-            { prepopulateTimeline: false },
+            {
+                prepopulateTimeline: false,
+                pendingEvents: false,
+            },
         );
 
         timelineSet.resetLiveTimeline();
