@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.41.1",
+  "version": "3.42.0-rc.1",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -25,7 +25,7 @@
   "bin": {
     "reskindex": "scripts/reskindex.js"
   },
-  "main": "./src/index.ts",
+  "main": "./lib/index.ts",
   "matrix_src_main": "./src/index.ts",
   "matrix_lib_main": "./lib/index.ts",
   "matrix_lib_typings": "./lib/index.d.ts",
@@ -233,5 +233,6 @@
     "coverageReporters": [
       "text"
     ]
-  }
+  },
+  "typings": "./lib/index.d.ts"
 }
