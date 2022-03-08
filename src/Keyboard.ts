@@ -45,6 +45,7 @@ export const Key = {
     SLASH: "/",
     SQUARE_BRACKET_LEFT: "[",
     SQUARE_BRACKET_RIGHT: "]",
+    SEMICOLON: ";",
     A: "a",
     B: "b",
     C: "c",

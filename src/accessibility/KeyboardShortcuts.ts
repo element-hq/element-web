@@ -35,6 +35,8 @@ export enum KeyBindingAction {
     EditNextMessage = 'KeyBinding.editNextMessage',
     /** Cancel editing a message or cancel replying to a message */
     CancelReplyOrEdit = 'KeyBinding.cancelReplyInComposer',
+    /** Show the sticker picker */
+    ShowStickerPicker = 'KeyBinding.showStickerPicker',
 
     /** Set bold format the current selection */
     FormatBold = 'KeyBinding.toggleBoldInComposer',
@@ -227,6 +229,7 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.EditPrevMessage,
             KeyBindingAction.SelectNextSendHistory,
             KeyBindingAction.SelectPrevSendHistory,
+            KeyBindingAction.ShowStickerPicker,
         ],
     }, [CategoryName.CALLS]: {
         categoryLabel: _td("Calls"),
@@ -391,6 +394,13 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
             key: Key.ARROW_UP,
         },
         displayName: _td("Navigate to previous message in composer history"),
+    },
+    [KeyBindingAction.ShowStickerPicker]: {
+        default: {
+            ctrlOrCmdKey: true,
+            key: Key.SEMICOLON,
+        },
+        displayName: _td("Send a sticker"),
     },
     [KeyBindingAction.ToggleMicInCall]: {
         default: {
