@@ -278,11 +278,8 @@ const SpaceCreateMenu = ({ onFinished }) => {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
             <p>
-                { _t("Spaces are a new way to group rooms and people.") }
-                &nbsp;
-                { _t("What kind of Space do you want to create?") }
-                &nbsp;
-                { _t("You can change this later.") }
+                { _t("Spaces are a new way to group rooms and people. What kind of Space do you want to create? " +
+                  "You can change this later.") }
             </p>
 
             <SpaceCreateMenuType
