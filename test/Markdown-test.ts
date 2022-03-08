@@ -157,5 +157,12 @@ describe("Markdown parser test", () => {
             const md = new Markdown(testString);
             expect(md.toHTML()).toEqual(expectedResult);
         });
+
+        it('resumes applying formatting to the rest of a message after a link', () => {
+            const testString = 'http://google.com/_thing_ *does* __not__ exist';
+            const expectedResult = 'http://google.com/_thing_ <em>does</em> <strong>not</strong> exist';
+            const md = new Markdown(testString);
+            expect(md.toHTML()).toEqual(expectedResult);
+        });
     });
 });

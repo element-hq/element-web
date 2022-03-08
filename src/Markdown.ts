@@ -153,10 +153,27 @@ export default class Markdown {
                     (node.type === 'text' && node.literal === ' ')
                 ) {
                     text = '';
+                    continue;
                 }
+
+                // Break up text nodes on spaces, so that we don't shoot past them without resetting
                 if (node.type === 'text') {
-                    text += node.literal;
+                    const [thisPart, ...nextParts] = node.literal.split(/( )/);
+                    node.literal = thisPart;
+                    text += thisPart;
+
+                    // Add the remaining parts as siblings
+                    nextParts.reverse().forEach(part => {
+                        if (part) {
+                            const nextNode = new commonmark.Node('text');
+                            nextNode.literal = part;
+                            node.insertAfter(nextNode);
+                            // Make the iterator aware of the newly inserted node
+                            walker.resumeAt(nextNode, true);
+                        }
+                    });
                 }
+
                 // We should not do this if previous node was not a textnode, as we can't combine it then.
                 if ((node.type === 'emph' || node.type === 'strong') && previousNode.type === 'text') {
                     if (event.entering) {
