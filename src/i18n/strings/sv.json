@@ -3605,7 +3605,7 @@
     "Maximise": "Maximera",
     "%(oneUser)ssent %(count)s hidden messages|one": "%(oneUser)sskickade ett dolt meddelande",
     "%(oneUser)ssent %(count)s hidden messages|other": "%(oneUser)sskickade %(count)s dolda meddelanden",
-    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sskickade %(count)s ett dolt meddelande",
+    "%(severalUsers)ssent %(count)s hidden messages|one": "%(severalUsers)sskickade ett dolt meddelande",
     "%(severalUsers)ssent %(count)s hidden messages|other": "%(severalUsers)sskickade %(count)s dolda meddelanden",
     "%(oneUser)sremoved a message %(count)s times|one": "%(oneUser)stog bort ett meddelande",
     "%(oneUser)sremoved a message %(count)s times|other": "%(oneUser)stog bort %(count)s meddelanden",
@@ -3627,5 +3627,16 @@
     "Closed poll": "Sluten omröstning",
     "Open poll": "Öppen omröstning",
     "Poll type": "Omröstningstyp",
-    "Results will be visible when the poll is ended": "Resultat kommer att visas när omröstningen avslutas"
+    "Results will be visible when the poll is ended": "Resultat kommer att visas när omröstningen avslutas",
+    "Open user settings": "Öppna användarinställningar",
+    "Switch to space by number": "Byt till utrymme med nummer",
+    "Next recently visited room or community": "Nästa nyligen besökta rummet eller gemenskapen",
+    "Previous recently visited room or community": "Förra nyligen besökta rummet eller gemenskapen",
+    "Accessibility": "Tillgänglighet",
+    "Pinned": "Fäst",
+    "Open thread": "Öppna tråd",
+    "Remove messages sent by me": "Ta bort meddelanden skickade av mig",
+    "Location sharing - pin drop (under active development)": "Platsdelning - stiftsläpp (under aktiv utveckling)",
+    "No virtual room for this room": "Inget virtuellt rum för det här rummet",
+    "Switches to this room's virtual room, if it has one": "Byter till det här rummets virtuella rum, om det har ett"
 }
