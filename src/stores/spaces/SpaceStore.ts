@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -1236,7 +1236,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             return this.notificationStateMap.get(key);
         }
 
-        const state = new SpaceNotificationState(key, getRoomFn);
+        const state = new SpaceNotificationState(getRoomFn);
         this.notificationStateMap.set(key, state);
         return state;
     }

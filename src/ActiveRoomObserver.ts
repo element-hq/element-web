@@ -1,5 +1,5 @@
 /*
-Copyright 2017 New Vector Ltd
+Copyright 2017 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventSubscription } from 'fbemitter';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import RoomViewStore from './stores/RoomViewStore';
@@ -33,11 +32,10 @@ type Listener = (isActive: boolean) => void;
 export class ActiveRoomObserver {
     private listeners: {[key: string]: Listener[]} = {};
     private _activeRoomId = RoomViewStore.getRoomId();
-    private readonly roomStoreToken: EventSubscription;
 
     constructor() {
         // TODO: We could self-destruct when the last listener goes away, or at least stop listening.
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        RoomViewStore.addListener(this.onRoomViewStoreUpdate);
     }
 
     public get activeRoomId(): string {

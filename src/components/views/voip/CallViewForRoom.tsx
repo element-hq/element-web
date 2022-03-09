@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -42,8 +42,6 @@ interface IState {
  */
 @replaceableComponent("views.voip.CallViewForRoom")
 export default class CallViewForRoom extends React.Component<IProps, IState> {
-    private dispatcherRef: string;
-
     constructor(props: IProps) {
         super(props);
         this.state = {

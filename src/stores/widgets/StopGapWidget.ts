@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -236,10 +236,6 @@ export class StopGapWidget extends EventEmitter {
 
     public get started(): boolean {
         return !!this.messaging;
-    }
-
-    private get widgetId() {
-        return this.messaging.widget.id;
     }
 
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>) => {

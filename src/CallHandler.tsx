@@ -1,7 +1,7 @@
 /*
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017, 2018 New Vector Ltd
-Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
 Copyright 2021 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -125,10 +125,6 @@ export default class CallHandler extends EventEmitter {
     private supportsPstnProtocol = null;
     private pstnSupportPrefixed = null; // True if the server only support the prefixed pstn protocol
     private supportsSipNativeVirtual = null; // im.vector.protocol.sip_virtual and im.vector.protocol.sip_native
-    private pstnSupportCheckTimer: number;
-    // For rooms we've been invited to, true if they're from virtual user, false if we've checked and they aren't.
-    private invitedRoomsAreVirtual = new Map<string, boolean>();
-    private invitedRoomCheckInProgress = false;
 
     // Map of the asserted identity users after we've looked them up using the API.
     // We need to be be able to determine the mapped room synchronously, so we
@@ -255,7 +251,7 @@ export default class CallHandler extends EventEmitter {
                 logger.log("Failed to check for protocol support and no retries remain: assuming no support", e);
             } else {
                 logger.log("Failed to check for protocol support: will retry", e);
-                this.pstnSupportCheckTimer = setTimeout(() => {
+                setTimeout(() => {
                     this.checkProtocols(maxTries - 1);
                 }, 10000);
             }

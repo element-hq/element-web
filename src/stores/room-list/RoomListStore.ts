@@ -1,5 +1,5 @@
 /*
-Copyright 2018-2021 The Matrix.org Foundation C.I.C.
+Copyright 2018 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -64,8 +64,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     private algorithm = new Algorithm();
     private filterConditions: IFilterCondition[] = [];
     private prefilterConditions: IFilterCondition[] = [];
-    private tagWatcher: TagWatcher;
-    private spaceWatcher: SpaceWatcher;
     private updateFn = new MarkedExecution(() => {
         for (const tagId of Object.keys(this.orderedLists)) {
             RoomNotificationStateStore.instance.getListState(tagId).setRooms(this.orderedLists[tagId]);
@@ -83,10 +81,11 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     }
 
     private setupWatchers() {
+        // TODO: Maybe destroy these if this class supports destruction
         if (SpaceStore.spacesEnabled) {
-            this.spaceWatcher = new SpaceWatcher(this);
+            new SpaceWatcher(this);
         } else {
-            this.tagWatcher = new TagWatcher(this);
+            new TagWatcher(this);
         }
     }
 
@@ -106,7 +105,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         this.filterConditions = [];
         this.prefilterConditions = [];
         this.initialListsGenerated = false;
-        this.setupWatchers();
 
         this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.off(FILTER_CHANGED, this.onAlgorithmListUpdated);
@@ -131,7 +129,6 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
         this.setupWatchers();
 
-        // Update any settings here, as some may have happened before we were logically ready.
         // Update any settings here, as some may have happened before we were logically ready.
         logger.log("Regenerating room lists: Startup");
         await this.readAndCacheSettingsFromStore();

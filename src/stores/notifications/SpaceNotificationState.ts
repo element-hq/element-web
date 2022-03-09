@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ export class SpaceNotificationState extends NotificationState {
     public rooms: Room[] = []; // exposed only for tests
     private states: { [spaceId: string]: RoomNotificationState } = {};
 
-    constructor(private spaceId: string | symbol, private getRoomFn: FetchRoomFn) {
+    constructor(private getRoomFn: FetchRoomFn) {
         super();
     }
 

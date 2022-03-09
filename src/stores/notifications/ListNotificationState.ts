@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import { NotificationColor } from "./NotificationColor";
-import { TagID } from "../room-list/models";
 import { arrayDiff } from "../../utils/arrays";
 import { RoomNotificationState } from "./RoomNotificationState";
 import { NotificationState, NotificationStateEvents } from "./NotificationState";
@@ -28,7 +27,7 @@ export class ListNotificationState extends NotificationState {
     private rooms: Room[] = [];
     private states: { [roomId: string]: RoomNotificationState } = {};
 
-    constructor(private byTileCount = false, private tagId: TagID, private getRoomFn: FetchRoomFn) {
+    constructor(private byTileCount = false, private getRoomFn: FetchRoomFn) {
         super();
     }
 

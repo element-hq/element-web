@@ -229,7 +229,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     private firstSyncPromise: IDeferred<void>;
 
     private screenAfterLogin?: IScreen;
-    private pageChanging: boolean;
     private tokenLogin?: boolean;
     private accountPassword?: string;
     private accountPasswordTimer?: number;
@@ -283,8 +282,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         this.prevWindowWidth = UIStore.instance.windowWidth || 1000;
         UIStore.instance.on(UI_EVENTS.Resize, this.handleResize);
-
-        this.pageChanging = false;
 
         // For PersistentElement
         this.state.resizeNotifier.on("middlePanelResized", this.dispatchTimelineResize);

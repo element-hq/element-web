@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -205,7 +205,7 @@ const CreateSpaceButton = ({
 }: Pick<IInnerSpacePanelProps, "isPanelCollapsed" | "setPanelCollapsed">) => {
     // We don't need the handle as we position the menu in a constant location
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<void>();
+    const [menuDisplayed, _handle, openMenu, closeMenu] = useContextMenu<void>();
 
     useEffect(() => {
         if (!isPanelCollapsed && menuDisplayed) {

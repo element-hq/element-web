@@ -1,5 +1,5 @@
 /*
-Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -58,6 +58,7 @@ import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
 import { OwnProfileStore } from '../../stores/OwnProfileStore';
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RoomView from './RoomView';
+import type { RoomView as RoomViewType } from './RoomView';
 import ToastContainer from './ToastContainer';
 import MyGroups from "./MyGroups";
 import UserView from "./UserView";
@@ -139,7 +140,7 @@ class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 
     protected readonly _matrixClient: MatrixClient;
-    protected readonly _roomView: React.RefObject<any>;
+    protected readonly _roomView: React.RefObject<RoomViewType>;
     protected readonly _resizeContainer: React.RefObject<HTMLDivElement>;
     protected readonly resizeHandler: React.RefObject<HTMLDivElement>;
     protected layoutWatcherRef: string;

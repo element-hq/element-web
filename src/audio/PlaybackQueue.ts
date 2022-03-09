@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
@@ -49,7 +48,7 @@ export class PlaybackQueue {
     private currentPlaybackId: string; // event ID, broken out from above for ease of use
     private recentFullPlays = new Set<string>(); // event IDs
 
-    constructor(private client: MatrixClient, private room: Room) {
+    constructor(private room: Room) {
         this.loadClocks();
 
         RoomViewStore.addListener(() => {
@@ -71,7 +70,7 @@ export class PlaybackQueue {
         if (PlaybackQueue.queues.has(room.roomId)) {
             return PlaybackQueue.queues.get(room.roomId);
         }
-        const queue = new PlaybackQueue(cli, room);
+        const queue = new PlaybackQueue(room);
         PlaybackQueue.queues.set(room.roomId, queue);
         return queue;
     }

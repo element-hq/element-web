@@ -177,10 +177,6 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
         }
     };
 
-    private tryContinue = (): void => {
-        this.stageComponent.current?.tryContinue?.();
-    };
-
     private authStateUpdated = (stageType: AuthType, stageState: IStageStatus): void => {
         const oldStage = this.state.authStage;
         this.setState({
