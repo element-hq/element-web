@@ -897,10 +897,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                     title={_t("What are some things you want to discuss in %(spaceName)s?", {
                         spaceName: this.props.justCreatedOpts?.createOpts?.name || this.props.space.name,
                     })}
-                    description={
-                        _t("Let's create a room for each of them.") + "\n" +
-                        _t("You can add more later too, including already existing ones.")
-                    }
+                    description={<>
+                        { _t("Let's create a room for each of them.") }
+                        <br />
+                        { _t("You can add more later too, including already existing ones.") }
+                    </>}
                     onFinished={(firstRoomId: string) => this.setState({ phase: Phase.PublicShare, firstRoomId })}
                 />;
             case Phase.PublicShare:
@@ -928,8 +929,11 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
                 return <SpaceSetupFirstRooms
                     space={this.props.space}
                     title={_t("What projects are your team working on?")}
-                    description={_t("We'll create rooms for each of them. " +
-                        "You can add more later too, including already existing ones.")}
+                    description={<>
+                        { _t("We'll create rooms for each of them.") }
+                        <br />
+                        { _t("You can add more later too, including already existing ones.") }
+                    </>}
                     onFinished={(firstRoomId: string) => this.setState({ phase: Phase.PrivateInvite, firstRoomId })}
                 />;
             case Phase.PrivateExistingRooms:
