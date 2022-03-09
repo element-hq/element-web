@@ -31,7 +31,7 @@ import SettingsStore from '../../settings/SettingsStore';
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
-import EventTile, { haveTileForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
+import EventTile, { UnwrappedEventTile, haveTileForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
 import { hasText } from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -251,7 +251,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     private scrollPanel = createRef<ScrollPanel>();
 
     private readonly showTypingNotificationsWatcherRef: string;
-    private eventTiles: Record<string, EventTile> = {};
+    private eventTiles: Record<string, UnwrappedEventTile> = {};
 
     // A map to allow groupers to maintain consistent keys even if their first event is uprooted due to back-pagination.
     public grouperKeyMap = new WeakMap<MatrixEvent, string>();
@@ -336,7 +336,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return this.eventTiles[eventId]?.ref?.current;
     }
 
-    public getTileForEventId(eventId: string): EventTile {
+    public getTileForEventId(eventId: string): UnwrappedEventTile {
         if (!this.eventTiles) {
             return undefined;
         }
@@ -919,7 +919,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         return receiptsByEvent;
     }
 
-    private collectEventTile = (eventId: string, node: EventTile): void => {
+    private collectEventTile = (eventId: string, node: UnwrappedEventTile): void => {
         this.eventTiles[eventId] = node;
     };
 

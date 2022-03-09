@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, MouseEvent } from 'react';
+import React, { createRef, forwardRef, MouseEvent, RefObject } from 'react';
 import classNames from "classnames";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
@@ -356,7 +356,7 @@ interface IState {
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
 @replaceableComponent("views.rooms.EventTile")
-export default class EventTile extends React.Component<IProps, IState> {
+export class UnwrappedEventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
     // TODO: Types
@@ -1129,7 +1129,7 @@ export default class EventTile extends React.Component<IProps, IState> {
         return false;
     }
 
-    private renderEvent() {
+    public render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
         const {
@@ -1652,13 +1652,15 @@ export default class EventTile extends React.Component<IProps, IState> {
             }
         }
     }
-
-    public render() {
-        return <TileErrorBoundary mxEvent={this.props.mxEvent} layout={this.props.layout}>
-            { this.renderEvent() }
-        </TileErrorBoundary>;
-    }
 }
+
+// Wrap all event tiles with the tile error boundary so that any throws even during construction are captured
+const SafeEventTile = forwardRef((props: IProps, ref: RefObject<UnwrappedEventTile>) => {
+    return <TileErrorBoundary mxEvent={props.mxEvent} layout={props.layout}>
+        <UnwrappedEventTile ref={ref} {...props} />
+    </TileErrorBoundary>;
+});
+export default SafeEventTile;
 
 // XXX this'll eventually be dynamic based on the fields once we have extensible event types
 const messageTypes = [EventType.RoomMessage, EventType.Sticker];
