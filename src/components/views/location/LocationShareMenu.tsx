@@ -23,10 +23,11 @@ import ContextMenu, { AboveLeftOf } from '../../structures/ContextMenu';
 import LocationPicker, { ILocationPickerProps } from "./LocationPicker";
 import { shareLocation } from './shareLocation';
 import SettingsStore from '../../../settings/SettingsStore';
-import ShareType, { LocationShareType } from './ShareType';
 import ShareDialogButtons from './ShareDialogButtons';
+import ShareType from './ShareType';
+import { LocationShareType } from './shareLocation';
 
-type Props = Omit<ILocationPickerProps, 'onChoose'> & {
+type Props = Omit<ILocationPickerProps, 'onChoose' | 'shareType'> & {
     onFinished: (ev?: SyntheticEvent) => void;
     menuPosition: AboveLeftOf;
     openMenu: () => void;
@@ -70,7 +71,8 @@ const LocationShareMenu: React.FC<Props> = ({
         <div className="mx_LocationShareMenu">
             { shareType ? <LocationPicker
                 sender={sender}
-                onChoose={shareLocation(matrixClient, roomId, relation, openMenu)}
+                shareType={shareType}
+                onChoose={shareLocation(matrixClient, roomId, shareType, relation, openMenu)}
                 onFinished={onFinished}
             />
                 :

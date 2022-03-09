@@ -25,6 +25,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import Heading from '../typography/Heading';
 import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
 import { Icon as LiveLocationIcon } from '../../../../res/img/location/live-location.svg';
+import { LocationShareType } from './shareLocation';
 
 const UserAvatar = () => {
     const matrixClient = useContext(MatrixClientContext);
@@ -48,12 +49,6 @@ const UserAvatar = () => {
     </div>;
 };
 
-// TODO this will be defined somewhere better
-export enum LocationShareType {
-    Own = 'Own',
-    Pin = 'Pin',
-    Live = 'Live'
-}
 type ShareTypeOptionProps = HTMLAttributes<Element> & { label: string, shareType: LocationShareType };
 const ShareTypeOption: React.FC<ShareTypeOptionProps> = ({
     onClick, label, shareType, ...rest
@@ -62,7 +57,7 @@ const ShareTypeOption: React.FC<ShareTypeOptionProps> = ({
     className='mx_ShareType_option'
     onClick={onClick}
     // not yet implemented
-    disabled={shareType !== LocationShareType.Own}
+    disabled={shareType === LocationShareType.Live}
     {...rest}>
     { shareType === LocationShareType.Own && <UserAvatar /> }
     { shareType === LocationShareType.Pin &&

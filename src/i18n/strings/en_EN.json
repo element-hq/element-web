@@ -2175,6 +2175,8 @@
     "toggle event": "toggle event",
     "Location": "Location",
     "Could not fetch location": "Could not fetch location",
+    "Click to move the pin": "Click to move the pin",
+    "Click to drop a pin": "Click to drop a pin",
     "Share location": "Share location",
     "Element was denied permission to fetch your location. Please allow location access in your browser settings.": "Element was denied permission to fetch your location. Please allow location access in your browser settings.",
     "Failed to fetch your location. Please try again later.": "Failed to fetch your location. Please try again later.",

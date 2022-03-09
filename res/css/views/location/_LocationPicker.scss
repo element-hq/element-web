@@ -19,21 +19,25 @@ limitations under the License.
 
     height: 100%;
     position: relative;
+    overflow: hidden;
 
     #mx_LocationPicker_map {
         height: 100%;
         border-radius: 8px;
 
+        .maplibregl-ctrl.maplibregl-ctrl-group,
+        .maplibregl-ctrl.maplibregl-ctrl-attrib {
+            margin-right: $spacing-16;
+        }
+
         .maplibregl-ctrl.maplibregl-ctrl-group {
             // place below the close button
             // padding-16 + 24px close button + padding-10
             margin-top: 50px;
-            margin-right: $spacing-16;
         }
 
         .maplibregl-ctrl-bottom-right {
-            bottom: 68px;
-            margin-right: $spacing-16;
+            bottom: 80px;
         }
 
         .maplibregl-user-location-accuracy-circle {
@@ -51,10 +55,9 @@ limitations under the License.
             background-color: $accent;
             filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.2));
 
-            .mx_BaseAvatar {
-                margin-top: 2px;
-                margin-left: 2px;
-            }
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .mx_MLocationBody_pointer {
@@ -83,23 +86,47 @@ limitations under the License.
         position: absolute;
         bottom: 0px;
         width: 100%;
+        box-sizing: border-box;
+        padding: $spacing-16;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
 
-        .mx_Dialog_buttons {
-            text-align: center;
-
-            /* Note the `button` prefix and `not()` clauses are needed to make
-               these selectors more specific than those in _common.scss. */
-
-            button.mx_Dialog_primary:not(.mx_Dialog_nonDialogButton):not(.mx_AccessibleButton) {
-                margin: 0px 0px 16px 0px;
-                min-width: 328px;
-                min-height: 48px;
-            }
-        }
+        background-color: $header-panel-bg-color;
     }
 
     .mx_LocationPicker_error {
         color: red;
         margin: auto;
     }
+}
+
+.mx_MLocationBody_markerIcon {
+    color: white;
+    height: 20px;
+}
+
+.mx_LocationPicker_pinText {
+    position: absolute;
+    top: $spacing-16;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    height: 0;
+    pointer-events: none;
+
+    span {
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        padding: $spacing-8;
+        background-color: $background;
+        color: $primary-content;
+
+        font-size: $font-12px;
+    }
+}
+
+.mx_LocationPicker_submitButton {
+    width: 100%;
+    height: 48px;
 }

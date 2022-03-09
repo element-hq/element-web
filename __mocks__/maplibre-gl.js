@@ -1,20 +1,23 @@
 const EventEmitter = require("events");
-const { LngLat } = require('maplibre-gl');
+const { LngLat, NavigationControl } = require('maplibre-gl');
 
 class MockMap extends EventEmitter {
     addControl = jest.fn();
     removeControl = jest.fn();
 }
-class MockGeolocateControl extends EventEmitter {
+const MockMapInstance = new MockMap();
 
+class MockGeolocateControl extends EventEmitter {
+    trigger = jest.fn();
 }
-class MockMarker extends EventEmitter {
-    setLngLat = jest.fn().mockReturnValue(this);
-    addTo = jest.fn();
-}
+const MockGeolocateInstance = new MockGeolocateControl();
+const MockMarker = {}
+MockMarker.setLngLat = jest.fn().mockReturnValue(MockMarker);
+MockMarker.addTo = jest.fn().mockReturnValue(MockMarker);
 module.exports = {
-    Map: MockMap,
-    GeolocateControl: MockGeolocateControl,
-    Marker: MockMarker,
+    Map: jest.fn().mockReturnValue(MockMapInstance),
+    GeolocateControl: jest.fn().mockReturnValue(MockGeolocateInstance),
+    Marker: jest.fn().mockReturnValue(MockMarker),
     LngLat,
+    NavigationControl
 };

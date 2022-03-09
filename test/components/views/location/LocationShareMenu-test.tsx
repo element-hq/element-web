@@ -20,6 +20,7 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { mocked } from 'jest-mock';
 import { act } from 'react-dom/test-utils';
+import { ASSET_NODE_TYPE, LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 
 import '../../../skinned-sdk';
 import LocationShareMenu from '../../../../src/components/views/location/LocationShareMenu';
@@ -27,7 +28,7 @@ import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import { ChevronFace } from '../../../../src/components/structures/ContextMenu';
 import SettingsStore from '../../../../src/settings/SettingsStore';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-import { LocationShareType } from '../../../../src/components/views/location/ShareType';
+import { LocationShareType } from '../../../../src/components/views/location/shareLocation';
 import { findByTestId } from '../../../test-utils';
 
 jest.mock('../../../../src/components/views/messages/MLocationBody', () => ({
@@ -58,6 +59,7 @@ describe('<LocationShareMenu />', () => {
         getClientWellKnown: jest.fn().mockResolvedValue({
             map_style_url: 'maps.com',
         }),
+        sendMessage: jest.fn(),
     };
 
     const defaultProps = {
@@ -70,6 +72,17 @@ describe('<LocationShareMenu />', () => {
         roomId: '!room:server.org',
         sender: new RoomMember('!room:server.org', userId),
     };
+
+    const position = {
+        coords: {
+            latitude: -36.24484561954707,
+            longitude: 175.46884959563613,
+            accuracy: 10,
+        },
+        timestamp: 1646305006802,
+        type: 'geolocate',
+    };
+
     const getComponent = (props = {}) =>
         mount(<LocationShareMenu {...defaultProps} {...props} />, {
             wrappingComponent: MatrixClientContext.Provider,
@@ -81,6 +94,8 @@ describe('<LocationShareMenu />', () => {
             (settingName) => settingName === "feature_location_share_pin_drop",
         );
 
+        mockClient.sendMessage.mockClear();
+
         jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient as unknown as MatrixClient);
     });
 
@@ -88,6 +103,21 @@ describe('<LocationShareMenu />', () => {
         findByTestId(component, `share-location-option-${shareType}`);
     const getBackButton = component => findByTestId(component, 'share-dialog-buttons-back');
     const getCancelButton = component => findByTestId(component, 'share-dialog-buttons-cancel');
+    const getSubmitButton = component => findByTestId(component, 'location-picker-submit-button');
+    const setLocation = (component) => {
+        // set the location
+        const locationPickerInstance = component.find('LocationPicker').instance();
+        act(() => {
+            // @ts-ignore
+            locationPickerInstance.onGeolocate(position);
+            // make sure button gets enabled
+            component.setProps({});
+        });
+    };
+    const setShareType = (component, shareType) => act(() => {
+        getShareTypeOption(component, shareType).at(0).simulate('click');
+        component.setProps({});
+    });
 
     describe('when only Own share type is enabled', () => {
         beforeEach(() => {
@@ -114,6 +144,28 @@ describe('<LocationShareMenu />', () => {
             });
 
             expect(onFinished).toHaveBeenCalled();
+        });
+
+        it('creates static own location share event on submission', () => {
+            const onFinished = jest.fn();
+            const component = getComponent({ onFinished });
+
+            setLocation(component);
+
+            act(() => {
+                getSubmitButton(component).at(0).simulate('click');
+                component.setProps({});
+            });
+
+            expect(onFinished).toHaveBeenCalled();
+            const [messageRoomId, relation, messageBody] = mockClient.sendMessage.mock.calls[0];
+            expect(messageRoomId).toEqual(defaultProps.roomId);
+            expect(relation).toEqual(null);
+            expect(messageBody).toEqual(expect.objectContaining({
+                [ASSET_NODE_TYPE.name]: {
+                    type: LocationAssetType.Self,
+                },
+            }));
         });
     });
 
@@ -147,11 +199,7 @@ describe('<LocationShareMenu />', () => {
         it('selecting own location share type advances to location picker', () => {
             const component = getComponent();
 
-            act(() => {
-                getShareTypeOption(component, LocationShareType.Own).at(0).simulate('click');
-            });
-
-            component.setProps({});
+            setShareType(component, LocationShareType.Own);
 
             expect(component.find('LocationPicker').length).toBeTruthy();
         });
@@ -162,10 +210,7 @@ describe('<LocationShareMenu />', () => {
             const component = getComponent({ onFinished });
 
             // advance to location picker
-            act(() => {
-                getShareTypeOption(component, LocationShareType.Own).at(0).simulate('click');
-                component.setProps({});
-            });
+            setShareType(component, LocationShareType.Own);
 
             expect(component.find('LocationPicker').length).toBeTruthy();
 
@@ -176,6 +221,32 @@ describe('<LocationShareMenu />', () => {
 
             // back to share type
             expect(component.find('ShareType').length).toBeTruthy();
+        });
+
+        it('creates pin drop location share event on submission', () => {
+            // feature_location_share_pin_drop is set to enabled by default mocking
+            const onFinished = jest.fn();
+            const component = getComponent({ onFinished });
+
+            // advance to location picker
+            setShareType(component, LocationShareType.Pin);
+
+            setLocation(component);
+
+            act(() => {
+                getSubmitButton(component).at(0).simulate('click');
+                component.setProps({});
+            });
+
+            expect(onFinished).toHaveBeenCalled();
+            const [messageRoomId, relation, messageBody] = mockClient.sendMessage.mock.calls[0];
+            expect(messageRoomId).toEqual(defaultProps.roomId);
+            expect(relation).toEqual(null);
+            expect(messageBody).toEqual(expect.objectContaining({
+                [ASSET_NODE_TYPE.name]: {
+                    type: LocationAssetType.Pin,
+                },
+            }));
         });
     });
 });

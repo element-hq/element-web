@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 import React, { SyntheticEvent } from 'react';
-import maplibregl from 'maplibre-gl';
+import maplibregl, { MapMouseEvent } from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
 
-import DialogButtons from "../elements/DialogButtons";
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MemberAvatar from '../avatars/MemberAvatar';
@@ -29,15 +28,26 @@ import Modal from '../../../Modal';
 import ErrorDialog from '../dialogs/ErrorDialog';
 import { findMapStyleUrl } from '../messages/MLocationBody';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
+import { LocationShareType } from './shareLocation';
+import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
+import AccessibleButton from '../elements/AccessibleButton';
 
 export interface ILocationPickerProps {
     sender: RoomMember;
+    shareType: LocationShareType;
     onChoose(uri: string, ts: number): unknown;
     onFinished(ev?: SyntheticEvent): void;
 }
 
+interface IPosition {
+    latitude: number;
+    longitude: number;
+    altitude?: number;
+    accuracy?: number;
+    timestamp: number;
+}
 interface IState {
-    position?: GeolocationPosition;
+    position?: IPosition;
     error: Error;
 }
 
@@ -88,15 +98,8 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                 },
                 trackUserLocation: true,
             });
-            this.map.addControl(this.geolocate);
 
-            this.marker = new maplibregl.Marker({
-                element: document.getElementById(this.getMarkerId()),
-                anchor: 'bottom',
-                offset: [0, -1],
-            })
-                .setLngLat(new maplibregl.LngLat(0, 0))
-                .addTo(this.map);
+            this.map.addControl(this.geolocate);
 
             this.map.on('error', (e) => {
                 logger.error(
@@ -112,7 +115,18 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             });
 
             this.geolocate.on('error', this.onGeolocateError);
-            this.geolocate.on('geolocate', this.onGeolocate);
+
+            if (this.props.shareType === LocationShareType.Own) {
+                this.geolocate.on('geolocate', this.onGeolocate);
+            }
+
+            if (this.props.shareType === LocationShareType.Pin) {
+                const navigationControl = new maplibregl.NavigationControl({
+                    showCompass: false, showZoom: true,
+                });
+                this.map.addControl(navigationControl, 'bottom-right');
+                this.map.on('click', this.onClick);
+            }
         } catch (e) {
             logger.error("Failed to render map", e);
             this.setState({ error: e });
@@ -122,8 +136,18 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     componentWillUnmount() {
         this.geolocate?.off('error', this.onGeolocateError);
         this.geolocate?.off('geolocate', this.onGeolocate);
+        this.map?.off('click', this.onClick);
         this.context.off(ClientEvent.ClientWellKnown, this.updateStyleUrl);
     }
+
+    private addMarkerToMap = () => {
+        this.marker = new maplibregl.Marker({
+            element: document.getElementById(this.getMarkerId()),
+            anchor: 'bottom',
+            offset: [0, -1],
+        }).setLngLat(new maplibregl.LngLat(0, 0))
+            .addTo(this.map);
+    };
 
     private updateStyleUrl = (clientWellKnown: IClientWellKnown) => {
         const style = tileServerFromWellKnown(clientWellKnown)?.["map_style_url"];
@@ -133,7 +157,10 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     };
 
     private onGeolocate = (position: GeolocationPosition) => {
-        this.setState({ position });
+        if (!this.marker) {
+            this.addMarkerToMap();
+        }
+        this.setState({ position: genericPositionFromGeolocation(position) });
         this.marker?.setLngLat(
             new maplibregl.LngLat(
                 position.coords.longitude,
@@ -142,18 +169,40 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         );
     };
 
-    private onGeolocateError = (e: GeolocationPositionError) => {
-        this.props.onFinished();
-        logger.error("Could not fetch location", e);
-        Modal.createTrackedDialog(
-            'Could not fetch location',
-            '',
-            ErrorDialog,
-            {
-                title: _t("Could not fetch location"),
-                description: positionFailureMessage(e.code),
+    private onClick = (event: MapMouseEvent) => {
+        if (!this.marker) {
+            this.addMarkerToMap();
+        }
+        this.marker?.setLngLat(event.lngLat);
+        this.setState({
+            position: {
+                timestamp: Date.now(),
+                latitude: event.lngLat.lat,
+                longitude: event.lngLat.lng,
             },
-        );
+        });
+    };
+
+    private onGeolocateError = (e: GeolocationPositionError) => {
+        logger.error("Could not fetch location", e);
+        // close the dialog and show an error when trying to share own location
+        // pin drop location without permissions is ok
+        if (this.props.shareType === LocationShareType.Own) {
+            this.props.onFinished();
+            Modal.createTrackedDialog(
+                'Could not fetch location',
+                '',
+                ErrorDialog,
+                {
+                    title: _t("Could not fetch location"),
+                    description: positionFailureMessage(e.code),
+                },
+            );
+        }
+
+        if (this.geolocate) {
+            this.map?.removeControl(this.geolocate);
+        }
     };
 
     private onOk = () => {
@@ -165,33 +214,46 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
     render() {
         const error = this.state.error ?
-            <div className="mx_LocationPicker_error">
+            <div data-test-id='location-picker-error' className="mx_LocationPicker_error">
                 { _t("Failed to load map") }
             </div> : null;
 
         return (
             <div className="mx_LocationPicker">
                 <div id="mx_LocationPicker_map" />
+                { this.props.shareType === LocationShareType.Pin && <div className="mx_LocationPicker_pinText">
+                    <span>
+                        { this.state.position ? _t("Click to move the pin") : _t("Click to drop a pin") }
+                    </span>
+                </div>
+                }
                 { error }
                 <div className="mx_LocationPicker_footer">
                     <form onSubmit={this.onOk}>
-                        <DialogButtons
-                            primaryButton={_t('Share location')}
-                            primaryIsSubmit={true}
-                            onPrimaryButtonClick={this.onOk}
-                            hasCancel={false}
-                            primaryDisabled={!this.state.position}
-                        />
+
+                        <AccessibleButton
+                            data-test-id="location-picker-submit-button"
+                            type="submit"
+                            element='button'
+                            kind='primary'
+                            className='mx_LocationPicker_submitButton'
+                            disabled={!this.state.position}
+                            onClick={this.onOk}>
+                            { _t('Share location') }
+                        </AccessibleButton>
                     </form>
                 </div>
                 <div className="mx_MLocationBody_marker" id={this.getMarkerId()}>
                     <div className="mx_MLocationBody_markerBorder">
-                        <MemberAvatar
-                            member={this.props.sender}
-                            width={27}
-                            height={27}
-                            viewUserOnClick={false}
-                        />
+                        { this.props.shareType === LocationShareType.Own ?
+                            <MemberAvatar
+                                member={this.props.sender}
+                                width={27}
+                                height={27}
+                                viewUserOnClick={false}
+                            />
+                            : <LocationIcon className="mx_MLocationBody_markerIcon" />
+                        }
                     </div>
                     <div
                         className="mx_MLocationBody_pointer"
@@ -202,17 +264,27 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     }
 }
 
-export function getGeoUri(position: GeolocationPosition): string {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
+const genericPositionFromGeolocation = (geoPosition: GeolocationPosition): IPosition => {
+    const {
+        latitude, longitude, altitude, accuracy,
+    } = geoPosition.coords;
+    return {
+        timestamp: geoPosition.timestamp,
+        latitude, longitude, altitude, accuracy,
+    };
+};
+
+export function getGeoUri(position: IPosition): string {
+    const lat = position.latitude;
+    const lon = position.longitude;
     const alt = (
-        Number.isFinite(position.coords.altitude)
-            ? `,${position.coords.altitude}`
+        Number.isFinite(position.altitude)
+            ? `,${position.altitude}`
             : ""
     );
     const acc = (
-        Number.isFinite(position.coords.accuracy)
-            ? `;u=${ position.coords.accuracy }`
+        Number.isFinite(position.accuracy)
+            ? `;u=${position.accuracy}`
             : ""
     );
     return `geo:${lat},${lon}${alt}${acc}`;
