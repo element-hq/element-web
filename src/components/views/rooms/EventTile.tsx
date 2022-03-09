@@ -1403,11 +1403,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             msgOption = readAvatars;
         }
 
-        const renderTarget = this.context.timelineRenderingType === TimelineRenderingType.Thread
-            ? RelationType.Thread
-            : undefined;
-
-        const replyChain = haveTileForEvent(this.props.mxEvent) && shouldDisplayReply(this.props.mxEvent, renderTarget)
+        const inThread = this.context.timelineRenderingType === TimelineRenderingType.Thread;
+        const replyChain = haveTileForEvent(this.props.mxEvent) && shouldDisplayReply(this.props.mxEvent, inThread)
             ? <ReplyChain
                 parentEv={this.props.mxEvent}
                 onHeightChanged={this.props.onHeightChanged}
