@@ -237,18 +237,6 @@ describe('editor/deserialize', function() {
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[4]).toStrictEqual({ type: "plain", text: "3. Finish" });
         });
-        it('non tight lists', () => {
-            const html = "<ol><li><p>Start</p></li><li><p>Continue</p></li><li><p>Finish</p></li></ol>";
-            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
-            expect(parts.length).toBe(8);
-            expect(parts[0]).toStrictEqual({ type: "plain", text: "1. Start" });
-            expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[2]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[3]).toStrictEqual({ type: "plain", text: "2. Continue" });
-            expect(parts[4]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[5]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[6]).toStrictEqual({ type: "plain", text: "3. Finish" });
-        });
         it('nested unordered lists', () => {
             const html = "<ul><li>Oak<ul><li>Spruce<ul><li>Birch</li></ul></li></ul></li></ul>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
@@ -269,13 +257,13 @@ describe('editor/deserialize', function() {
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}1. Birch` });
         });
-        it('nested tight lists', () => {
+        it('nested lists', () => {
             const html = "<ol><li>Oak\n<ol><li>Spruce\n<ol><li>Birch</li></ol></li></ol></li></ol>";
             const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
             expect(parts.length).toBe(5);
-            expect(parts[0]).toStrictEqual({ type: "plain", text: "1. Oak" });
+            expect(parts[0]).toStrictEqual({ type: "plain", text: "1. Oak\n" });
             expect(parts[1]).toStrictEqual({ type: "newline", text: "\n" });
-            expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}1. Spruce` });
+            expect(parts[2]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES}1. Spruce\n` });
             expect(parts[3]).toStrictEqual({ type: "newline", text: "\n" });
             expect(parts[4]).toStrictEqual({ type: "plain", text: `${FOUR_SPACES.repeat(2)}1. Birch` });
         });
@@ -290,6 +278,57 @@ describe('editor/deserialize', function() {
             const parts = normalize(parseEvent(htmlMessage(html, "m.emote"), createPartCreator()));
             expect(parts.length).toBe(1);
             expect(parts[0]).toStrictEqual({ type: "plain", text: "/me says _DON'T SHOUT_!" });
+        });
+        it('preserves nested quotes', () => {
+            const html = "<blockquote>foo<blockquote>bar</blockquote></blockquote>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('surrounds lists with newlines', () => {
+            const html = "foo<ul><li>bar</li></ul>baz";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('preserves nested formatting', () => {
+            const html = "a<sub>b<em>c<strong>d<u>e</u></strong></em></sub>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('escapes backticks in code blocks', () => {
+            const html = "<p><code>this → ` is a backtick</code></p>" +
+                "<pre><code>and here are 3 of them:\n```</code></pre>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('escapes backticks outside of code blocks', () => {
+            const html = "some `backticks`";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('escapes backslashes', () => {
+            const html = "C:\\My Documents";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('escapes asterisks', () => {
+            const html = "*hello*";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('escapes underscores', () => {
+            const html = "__emphasis__";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('escapes square brackets', () => {
+            const html = "[not an actual link](https://example.org)";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
+        });
+        it('escapes angle brackets', () => {
+            const html = "> \\<del>no formatting here\\</del>";
+            const parts = normalize(parseEvent(htmlMessage(html), createPartCreator()));
+            expect(parts).toMatchSnapshot();
         });
     });
 });
