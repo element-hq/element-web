@@ -50,6 +50,10 @@ limitations under the License.
         height: 24px;
         color: $tertiary-content;
 
+        .mx_RoomSublist_stickableContainer {
+            width: 100%;
+        }
+
         .mx_RoomSublist_stickable {
             flex: 1;
             max-width: 100%;
@@ -174,6 +178,14 @@ limitations under the License.
                 }
             }
         }
+    }
+
+    // In the general case, we reserve space for each sublist header to prevent
+    // scroll jumps when they become sticky. However, that leaves a gap when
+    // scrolled to the top above the first sublist (whose header can only ever
+    // stick to top), so we make sure to exclude the first visible sublist.
+    &:not(.mx_RoomSublist_hidden) ~ .mx_RoomSublist .mx_RoomSublist_stickableContainer {
+        height: 24px;
     }
 
     .mx_RoomSublist_resizeBox {

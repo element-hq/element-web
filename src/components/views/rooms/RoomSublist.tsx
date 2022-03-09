@@ -698,25 +698,27 @@ export default class RoomSublist extends React.Component<IProps, IState> {
                             onFocus={onFocus}
                             aria-label={this.props.label}
                         >
-                            <div className="mx_RoomSublist_stickable">
-                                <Button
-                                    onFocus={onFocus}
-                                    inputRef={ref}
-                                    tabIndex={tabIndex}
-                                    className="mx_RoomSublist_headerText"
-                                    role="treeitem"
-                                    aria-expanded={this.state.isExpanded}
-                                    aria-level={1}
-                                    onClick={this.onHeaderClick}
-                                    onContextMenu={this.onContextMenu}
-                                    title={this.props.isMinimized ? this.props.label : undefined}
-                                >
-                                    <span className={collapseClasses} />
-                                    <span>{ this.props.label }</span>
-                                </Button>
-                                { this.renderMenu() }
-                                { this.props.isMinimized ? null : badgeContainer }
-                                { this.props.isMinimized ? null : addRoomButton }
+                            <div className="mx_RoomSublist_stickableContainer">
+                                <div className="mx_RoomSublist_stickable">
+                                    <Button
+                                        onFocus={onFocus}
+                                        inputRef={ref}
+                                        tabIndex={tabIndex}
+                                        className="mx_RoomSublist_headerText"
+                                        role="treeitem"
+                                        aria-expanded={this.state.isExpanded}
+                                        aria-level={1}
+                                        onClick={this.onHeaderClick}
+                                        onContextMenu={this.onContextMenu}
+                                        title={this.props.isMinimized ? this.props.label : undefined}
+                                    >
+                                        <span className={collapseClasses} />
+                                        <span>{ this.props.label }</span>
+                                    </Button>
+                                    { this.renderMenu() }
+                                    { this.props.isMinimized ? null : badgeContainer }
+                                    { this.props.isMinimized ? null : addRoomButton }
+                                </div>
                             </div>
                             { this.props.isMinimized ? badgeContainer : null }
                             { this.props.isMinimized ? addRoomButton : null }
