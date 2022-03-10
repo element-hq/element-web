@@ -17,7 +17,7 @@ limitations under the License.
 import React, { createRef } from 'react';
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
-import { LOCATION_EVENT_TYPE } from 'matrix-js-sdk/src/@types/location';
+import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
 
 import * as sdk from '../../../index';
@@ -132,7 +132,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
 
             // TODO: move to eventTypes when location sharing spec stabilises
             if (
-                LOCATION_EVENT_TYPE.matches(type) ||
+                M_LOCATION.matches(type) ||
                 (type === EventType.RoomMessage && msgtype === MsgType.Location)
             ) {
                 BodyType = sdk.getComponent('messages.MLocationBody');

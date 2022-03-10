@@ -16,11 +16,11 @@ limitations under the License.
 
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 import {
-    ASSET_NODE_TYPE,
+    M_ASSET,
     LocationAssetType,
     ILocationContent,
-    LOCATION_EVENT_TYPE,
-    TIMESTAMP_NODE_TYPE,
+    M_LOCATION,
+    M_TIMESTAMP,
 } from "matrix-js-sdk/src/@types/location";
 import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -203,7 +203,7 @@ describe("MLocationBody", () => {
 
     describe("isSelfLocation", () => {
         it("Returns true for a full m.asset event", () => {
-            const content = makeLocationContent("", "", 0);
+            const content = makeLocationContent("", 0);
             expect(isSelfLocation(content)).toBe(true);
         });
 
@@ -212,9 +212,9 @@ describe("MLocationBody", () => {
                 body: "",
                 msgtype: "m.location",
                 geo_uri: "",
-                [LOCATION_EVENT_TYPE.name]: { uri: "" },
+                [M_LOCATION.name]: { uri: "" },
                 [TEXT_NODE_TYPE.name]: "",
-                [TIMESTAMP_NODE_TYPE.name]: 0,
+                [M_TIMESTAMP.name]: 0,
                 // Note: no m.asset!
             };
             expect(isSelfLocation(content as ILocationContent)).toBe(true);
@@ -225,10 +225,10 @@ describe("MLocationBody", () => {
                 body: "",
                 msgtype: "m.location",
                 geo_uri: "",
-                [LOCATION_EVENT_TYPE.name]: { uri: "" },
+                [M_LOCATION.name]: { uri: "" },
                 [TEXT_NODE_TYPE.name]: "",
-                [TIMESTAMP_NODE_TYPE.name]: 0,
-                [ASSET_NODE_TYPE.name]: {
+                [M_TIMESTAMP.name]: 0,
+                [M_ASSET.name]: {
                     // Note: no type!
                 },
             };
@@ -236,7 +236,12 @@ describe("MLocationBody", () => {
         });
 
         it("Returns false for an unknown asset type", () => {
-            const content = makeLocationContent("", "", 0, "", "org.example.unknown" as unknown as LocationAssetType);
+            const content = makeLocationContent(
+                undefined, /* text */
+                "geo:foo",
+                0,
+                undefined, /* description */
+                "org.example.unknown" as unknown as LocationAssetType);
             expect(isSelfLocation(content)).toBe(false);
         });
     });
@@ -246,7 +251,7 @@ function oldLocationEvent(geoUri: string): MatrixEvent {
     return new MatrixEvent(
         {
             "event_id": nextId(),
-            "type": LOCATION_EVENT_TYPE.name,
+            "type": M_LOCATION.name,
             "content": {
                 "body": "Something about where I am",
                 "msgtype": "m.location",
@@ -260,7 +265,7 @@ function modernLocationEvent(geoUri: string): MatrixEvent {
     return new MatrixEvent(
         {
             "event_id": nextId(),
-            "type": LOCATION_EVENT_TYPE.name,
+            "type": M_LOCATION.name,
             "content": makeLocationContent(
                 `Found at ${geoUri} at 2021-12-21T12:22+0000`,
                 geoUri,

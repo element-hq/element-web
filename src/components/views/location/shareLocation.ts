@@ -41,10 +41,9 @@ export const shareLocation = (
 ) => async (uri: string, ts: number) => {
     if (!uri) return false;
     try {
-        const text = textForLocation(uri, ts, null);
         const threadId = relation?.rel_type === RelationType.Thread ? relation.event_id : null;
         const assetType = shareType === LocationShareType.Pin ? LocationAssetType.Pin : LocationAssetType.Self;
-        await client.sendMessage(roomId, threadId, makeLocationContent(text, uri, ts, null, assetType));
+        await client.sendMessage(roomId, threadId, makeLocationContent(undefined, uri, ts, undefined, assetType));
     } catch (e) {
         logger.error("We couldn't send your location", e);
 

@@ -20,7 +20,7 @@ import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { RoomMemberEvent } from "matrix-js-sdk/src/models/room-member";
-import { LOCATION_EVENT_TYPE } from 'matrix-js-sdk/src/@types/location';
+import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -526,10 +526,10 @@ function canForward(event: MatrixEvent): boolean {
 function isLocationEvent(event: MatrixEvent): boolean {
     const eventType = event.getType();
     return (
-        LOCATION_EVENT_TYPE.matches(eventType) ||
+        M_LOCATION.matches(eventType) ||
         (
             eventType === EventType.RoomMessage &&
-            LOCATION_EVENT_TYPE.matches(event.getContent().msgtype)
+            M_LOCATION.matches(event.getContent().msgtype)
         )
     );
 }

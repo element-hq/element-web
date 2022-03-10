@@ -20,7 +20,7 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { mocked } from 'jest-mock';
 import { act } from 'react-dom/test-utils';
-import { ASSET_NODE_TYPE, LocationAssetType } from 'matrix-js-sdk/src/@types/location';
+import { M_ASSET, LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 
 import '../../../skinned-sdk';
 import LocationShareMenu from '../../../../src/components/views/location/LocationShareMenu';
@@ -162,7 +162,7 @@ describe('<LocationShareMenu />', () => {
             expect(messageRoomId).toEqual(defaultProps.roomId);
             expect(relation).toEqual(null);
             expect(messageBody).toEqual(expect.objectContaining({
-                [ASSET_NODE_TYPE.name]: {
+                [M_ASSET.name]: {
                     type: LocationAssetType.Self,
                 },
             }));
@@ -243,7 +243,7 @@ describe('<LocationShareMenu />', () => {
             expect(messageRoomId).toEqual(defaultProps.roomId);
             expect(relation).toEqual(null);
             expect(messageBody).toEqual(expect.objectContaining({
-                [ASSET_NODE_TYPE.name]: {
+                [M_ASSET.name]: {
                     type: LocationAssetType.Pin,
                 },
             }));

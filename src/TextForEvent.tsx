@@ -29,7 +29,7 @@ import {
     M_POLL_END,
     PollStartEvent,
 } from "matrix-events-sdk";
-import { LOCATION_EVENT_TYPE } from "matrix-js-sdk/src/@types/location";
+import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
@@ -339,7 +339,7 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
     const content = ev.getContent();
     const msgtype = content.msgtype;
 
-    if (LOCATION_EVENT_TYPE.matches(type) || LOCATION_EVENT_TYPE.matches(msgtype)) {
+    if (M_LOCATION.matches(type) || M_LOCATION.matches(msgtype)) {
         return textForLocationEvent(ev);
     }
 

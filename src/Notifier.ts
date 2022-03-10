@@ -22,7 +22,7 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
-import { LOCATION_EVENT_TYPE } from "matrix-js-sdk/src/@types/location";
+import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import SdkConfig from './SdkConfig';
@@ -64,10 +64,10 @@ const msgTypeHandlers = {
         const name = (event.sender || {}).name;
         return _t("%(name)s is requesting verification", { name });
     },
-    [LOCATION_EVENT_TYPE.name]: (event: MatrixEvent) => {
+    [M_LOCATION.name]: (event: MatrixEvent) => {
         return TextForEvent.textForLocationEvent(event)();
     },
-    [LOCATION_EVENT_TYPE.altName]: (event: MatrixEvent) => {
+    [M_LOCATION.altName]: (event: MatrixEvent) => {
         return TextForEvent.textForLocationEvent(event)();
     },
 };

@@ -18,7 +18,7 @@ import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
-import { LOCATION_EVENT_TYPE } from 'matrix-js-sdk/src/@types/location';
+import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -252,10 +252,10 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): 
     const noBubbleEvent = (
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
         M_POLL_START.matches(eventType) ||
-        LOCATION_EVENT_TYPE.matches(eventType) ||
+        M_LOCATION.matches(eventType) ||
         (
             eventType === EventType.RoomMessage &&
-            LOCATION_EVENT_TYPE.matches(msgtype)
+            M_LOCATION.matches(msgtype)
         )
     );
 
