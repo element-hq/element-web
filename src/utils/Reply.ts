@@ -149,7 +149,7 @@ export function makeReplyMixIn(ev?: MatrixEvent, inThread = false): RecursivePar
         'm.relates_to': {
             'm.in_reply_to': {
                 'event_id': ev.getId(),
-                'io.element.is_falling_back': !inThread, // MSC3440 unstable `is_falling_back` field
+                'io.element.show_reply': inThread, // MSC3440 unstable `is_falling_back` field
             },
         },
     };
@@ -177,6 +177,5 @@ export function shouldDisplayReply(event: MatrixEvent, inThread = false): boolea
     if (!inThread) return true;
 
     const inReplyTo = event.getRelation()?.["m.in_reply_to"];
-    const isFallingBack = inReplyTo?.is_falling_back ?? inReplyTo?.["io.element.is_falling_back"];
-    return !isFallingBack;
+    return inReplyTo?.is_falling_back ?? inReplyTo?.["io.element.show_reply"] ?? false;
 }

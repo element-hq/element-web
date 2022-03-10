@@ -20,13 +20,13 @@ import classNames from 'classnames';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { Relations } from 'matrix-js-sdk/src/models/relations';
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import { makeUserPermalink, RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/enums/Layout";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -34,7 +34,9 @@ import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
 import { ButtonEvent } from './AccessibleButton';
-import { getParentEventId } from '../../../utils/Reply';
+import { getParentEventId, shouldDisplayReply } from '../../../utils/Reply';
+import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import { MatrixClientPeg } from '../../../MatrixClientPeg';
 
 /**
  * This number is based on the previous behavior - if we have message of height
@@ -76,12 +78,14 @@ interface IState {
 // be low as each event being loaded (after the first) is triggered by an explicit user action.
 @replaceableComponent("views.elements.ReplyChain")
 export default class ReplyChain extends React.Component<IProps, IState> {
-    static contextType = MatrixClientContext;
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
     private unmounted = false;
     private room: Room;
     private blockquoteRef = React.createRef<HTMLElement>();
 
-    constructor(props, context) {
+    constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);
 
         this.state = {
@@ -91,7 +95,11 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             err: false,
         };
 
-        this.room = this.context.getRoom(this.props.parentEv.getRoomId());
+        this.room = this.matrixClient.getRoom(this.props.parentEv.getRoomId());
+    }
+
+    private get matrixClient(): MatrixClient {
+        return MatrixClientPeg.get();
     }
 
     componentDidMount() {
@@ -158,7 +166,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
         try {
             // ask the client to fetch the event we want using the context API, only interface to do so is to ask
             // for a timeline with that event, but once it is loaded we can use findEventById to look up the ev map
-            await this.context.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
+            await this.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
             // if it fails catch the error and return early, there's no point trying to find the event in this case.
             // Return null as it is falsey and thus should be treated as an error (as the event cannot be resolved).
@@ -198,6 +206,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
     render() {
         let header = null;
 
+        const inThread = this.context.timelineRenderingType === TimelineRenderingType.Thread;
         if (this.state.err) {
             header = <blockquote className="mx_ReplyChain mx_ReplyChain_error">
                 {
@@ -205,9 +214,9 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                         'it either does not exist or you do not have permission to view it.')
                 }
             </blockquote>;
-        } else if (this.state.loadedEv) {
+        } else if (this.state.loadedEv && shouldDisplayReply(this.state.events[0], inThread)) {
             const ev = this.state.loadedEv;
-            const room = this.context.getRoom(ev.getRoomId());
+            const room = this.matrixClient.getRoom(ev.getRoomId());
             header = <blockquote className={`mx_ReplyChain ${this.getReplyChainColorClass(ev)}`}>
                 {
                     _t('<a>In reply to</a> <pill>', {}, {
