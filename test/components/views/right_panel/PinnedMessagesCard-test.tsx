@@ -234,11 +234,16 @@ describe("<PinnedMessagesCard />", () => {
         });
 
         // Make the responses available
-        cli.relations.mockImplementation((roomId, eventId, relationType, eventType) => {
+        cli.relations.mockImplementation((roomId, eventId, relationType, eventType, { from }) => {
             if (eventId === poll.getId() && relationType === RelationType.Reference) {
                 switch (eventType) {
-                    case M_POLL_RESPONSE.name: return { events: responses };
-                    case M_POLL_END.name: return { events: [end] };
+                    case M_POLL_RESPONSE.name:
+                        // Paginate the results, for added challenge
+                        return (from === "page2") ?
+                            { events: responses.slice(2) } :
+                            { events: responses.slice(0, 2), nextBatch: "page2" };
+                    case M_POLL_END.name:
+                        return { events: [end] };
                 }
             }
             return { events: [] };

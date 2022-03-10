@@ -80,18 +80,22 @@ export default class PinnedEventTile extends React.Component<IProps> {
                 await Promise.all(
                     [M_POLL_RESPONSE.name, M_POLL_RESPONSE.altName, M_POLL_END.name, M_POLL_END.altName]
                         .map(async eventType => {
-                            const { events } = await this.context.relations(
-                                roomId, eventId, RelationType.Reference, eventType,
-                            );
-
                             const relations = new Relations(RelationType.Reference, eventType, room);
+                            relations.setTargetEvent(this.props.event);
+
                             if (!this.relations.has(RelationType.Reference)) {
                                 this.relations.set(RelationType.Reference, new Map<string, Relations>());
                             }
                             this.relations.get(RelationType.Reference).set(eventType, relations);
 
-                            relations.setTargetEvent(this.props.event);
-                            events.forEach(event => relations.addEvent(event));
+                            let nextBatch: string | undefined;
+                            do {
+                                const page = await this.context.relations(
+                                    roomId, eventId, RelationType.Reference, eventType, { from: nextBatch },
+                                );
+                                nextBatch = page.nextBatch;
+                                page.events.forEach(event => relations.addEvent(event));
+                            } while (nextBatch);
                         }),
                 );
             } catch (err) {
