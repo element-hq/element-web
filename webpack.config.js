@@ -39,6 +39,26 @@ function getActiveThemes() {
     return themes;
 }
 
+// See docs/customisations.md
+let fileOverrides = {/* {[file: string]: string} */};
+try {
+    fileOverrides = require('./customisations.json');
+
+    // stringify the output so it appears in logs correctly, as large files can sometimes get
+    // represented as `<Object>` which is less than helpful.
+    console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
+} catch (e) {
+    // ignore - not important
+}
+const moduleReplacementPlugins = Object.entries(fileOverrides).map(([oldPath, newPath]) => {
+    return new webpack.NormalModuleReplacementPlugin(
+        // because the input is effectively defined by the person running the build, we don't
+        // need to do anything special to protect against regex overrunning, etc.
+        new RegExp(oldPath.replace(/\//g, '[\\/\\\\]').replace(/\./g, '\\.')),
+        path.resolve(__dirname, newPath),
+    );
+});
+
 module.exports = (env, argv) => {
     // Establish settings based on the environment and args.
     //
@@ -95,6 +115,8 @@ module.exports = (env, argv) => {
         node: {
             // Mock out the NodeFS module: The opus decoder imports this wrongly.
             fs: 'empty',
+            net: 'empty',
+            tls: 'empty',
         },
 
         entry: {
@@ -329,7 +351,6 @@ module.exports = (env, argv) => {
                                     require('postcss-import')(),
                                     require("postcss-mixins")(),
                                     require("postcss-simple-vars")(),
-                                    require("postcss-extend")(),
                                     require("postcss-nested")(),
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
@@ -434,7 +455,71 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    test: /\.(gif|png|svg|ttf|woff|woff2|xml|ico)$/,
+                    test: /\.svg$/,
+                    issuer: /\.(js|ts|jsx|tsx|html)$/,
+                    use: [
+                        {
+                            loader: '@svgr/webpack',
+                            options: {
+                                namedExport: 'Icon',
+                                svgProps: {
+                                    role: 'presentation',
+                                    'aria-hidden': true,
+                                },
+                                // props set on the svg will override defaults
+                                expandProps: 'end',
+                                svgoConfig: {
+                                    plugins: {
+                                        // generates a viewbox if missing
+                                        removeDimensions: true,
+                                    },
+                                },
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(outputPath);
+                                },
+                            },
+                        },
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(outputPath);
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    test: /\.svg$/,
+                    issuer: /\.(scss|css)$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    // CSS image usages end up in the `bundles/[hash]` output
+                                    // directory, so we adjust the final path to navigate up
+                                    // twice.
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(path.join("../..", outputPath));
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    test: /\.(gif|png|ttf|woff|woff2|xml|ico)$/,
                     // Use a content-based hash in the name so that we can set a long cache
                     // lifetime for assets while still delivering changes quickly.
                     oneOf: [
@@ -474,6 +559,8 @@ module.exports = (env, argv) => {
         },
 
         plugins: [
+            ...moduleReplacementPlugins,
+
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
                 filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",

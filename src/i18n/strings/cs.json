@@ -34,5 +34,7 @@
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s pro desktopový počítač (%(platformName)s)",
     "Missing indexeddb worker script!": "Nenačetl se skript spravující indexdb!",
     "Use %(brand)s on mobile": "Používání %(brand)s v mobilních zařízeních",
-    "Switch to space by number": "Přepnout na prostor podle čísla"
+    "Switch to space by number": "Přepnout na prostor podle čísla",
+    "Next recently visited room or community": "Další nedávno navštívená místnost nebo komunita",
+    "Previous recently visited room or community": "Nedávno navštívená místnost nebo komunita"
 }

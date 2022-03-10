@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s používa pokročilé funkcie prehliadača, ktoré nie sú podporované vaším aktuálnym prehliadačom.",
     "Powered by Matrix": "používa protokol Matrix",
     "Use %(brand)s on mobile": "Používať %(brand)s pri mobilných zariadeniach",
-    "Switch to space by number": "Prepnúť do priestoru podľa čísla"
+    "Switch to space by number": "Prepnúť do priestoru podľa čísla",
+    "Next recently visited room or community": "Ďalšia nedávno navštívená miestnosť alebo komunita",
+    "Previous recently visited room or community": "Predchádzajúca nedávno navštívená miestnosť alebo komunita"
 }

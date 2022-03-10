@@ -165,3 +165,27 @@ who prefer to have the right panel open consistently across rooms.
 If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
+
+## Show current profile of users on historical messages (`feature_use_only_current_profiles`)
+
+An experimental flag to determine how the app would behave if a user's current display
+name and avatar (profile) were shown on historical messages instead of the profile details
+at the time when the message was sent.
+
+When enabled, historical messages will use the current profile for the sender.
+
+## Pin drop location sharing (`feature_location_share_pin_drop`) [In Development]
+
+Enables sharing a pin drop location to the timeline.
+
+## Live location sharing (`feature_location_share_live`) [In Development]
+
+Enables sharing your current location to the timeline, with live updates.
+
+## Threaded Messaging (`feature_thread`)
+
+Threading allows users to branch out a new conversation from the main timeline of a room. This is particularly useful in high traffic rooms where multiple conversations can happen in parallel or when a single discussion might stretch over a very long period of time.
+
+Threads can be access by clicking their summary below the root event on the room timeline. Users can find a comprehensive list of threads by click the icon on the room header button.
+
+This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.

@@ -34,5 +34,6 @@
     "Open": "Aç",
     "Missing indexeddb worker script!": "Indexeddb worker kodu eksik!",
     "Use %(brand)s on mobile": "Mobilde %(brand)s kullan",
-    "Switch to space by number": "Sayı ile belirtilen alana geç"
+    "Switch to space by number": "Sayı ile belirtilen alana geç",
+    "Previous recently visited room or community": "En son ziyaret edilen oda veya topluluk"
 }

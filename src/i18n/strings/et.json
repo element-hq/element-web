@@ -9,7 +9,7 @@
     "Go to your browser to complete Sign In": "Sisselogimiseks ava oma brauser",
     "Dismiss": "Loobu",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Matrix'i protokollil põhinev hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus",
-    "Explore rooms": "Uuri jututubasid",
+    "Explore rooms": "Tutvu jututubadega",
     "Missing indexeddb worker script!": "Lahendusest puudub indexeddb skript!",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Vigane seadistus. Sa võid määrata vaid ühe alljärgnevatest: default_server_config, default_server_name või default_hs_url.",
     "Previous/next recently visited room or community": "Eelmine/järgmine hiljuti kasutatud jututuba või kogukond",
@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s kasutab mitmeid uusi brauseri-põhiseid tehnoloogiaid, mis ei ole veel sinu veebibrauseris toetatud.",
     "Powered by Matrix": "Põhineb Matrix'il",
     "Use %(brand)s on mobile": "Kasuta rakendust %(brand)s nutiseadmes",
-    "Switch to space by number": "Vaata kogukonnakeskust tema numbri alusel"
+    "Switch to space by number": "Vaata kogukonnakeskust tema numbri alusel",
+    "Next recently visited room or community": "Järgmine hiljuti külastatud jututuba või kogukond",
+    "Previous recently visited room or community": "Eelmine hiljuti külastatud jututuba või kogukond"
 }

@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funcionalidade de browser avançada que não é suportada por seu browser atual.",
     "Powered by Matrix": "Powered by Matrix",
     "Use %(brand)s on mobile": "Usar %(brand)s em celular",
-    "Switch to space by number": "Trocar para espaço por número"
+    "Switch to space by number": "Trocar para espaço por número",
+    "Next recently visited room or community": "Próxima sala ou comunidade recentemente visitada",
+    "Previous recently visited room or community": "Anterior sala ou comunidade recentemente visitada"
 }

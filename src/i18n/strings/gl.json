@@ -5,7 +5,7 @@
     "You need to be using HTTPS to place a screen-sharing call.": "Precisa utilizar HTTPS para establecer unha chamada de pantalla compartida.",
     "Welcome to Element": "Benvida/o a Element",
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Conversas e colaboración descentralizada e cifrada grazas a [matrix]",
-    "Sign In": "Conectar",
+    "Sign In": "Acceder",
     "Create Account": "Crear conta",
     "Explore rooms": "Explorar salas",
     "The message from the parser is: %(message)s": "A mensaxe desde o intérprete é: %(message)s",
@@ -34,5 +34,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza características avanzadas do navegador que non están dispoñibles no teu navegador.",
     "Powered by Matrix": "Funciona grazas a Matrix",
     "Use %(brand)s on mobile": "Utiliza %(brand)s no móbil",
-    "Switch to space by number": "Cambiar a espazo polo número"
+    "Switch to space by number": "Cambiar a espazo polo número",
+    "Next recently visited room or community": "Seguinte sala ou comunidade visitada recentemente",
+    "Previous recently visited room or community": "Sala ou Comunidade visitada recentemente"
 }
