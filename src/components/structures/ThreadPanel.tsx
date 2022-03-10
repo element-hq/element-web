@@ -91,8 +91,8 @@ export async function getThreadTimelineSet(
         });
 
         Array.from(room.threads)
-            .sort(([, threadA], [, threadB]) => threadA.replyToEvent.getTs() - threadB.replyToEvent.getTs())
             .forEach(([, thread]) => {
+                if (thread.length === 0) return;
                 const currentUserParticipated = thread.events.some(event => event.getSender() === client.getUserId());
                 if (filterType !== ThreadFilterType.My || currentUserParticipated) {
                     timelineSet.getLiveTimeline().addEvent(thread.rootEvent, false);
