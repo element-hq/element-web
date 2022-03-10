@@ -24,5 +24,7 @@
     "./src/**/*.tsx" ,
     "./test/test-utils/**/*.ts",
     "./test/test-utils/**/*.tsx",
+    "./test/utils/**/*.ts",
+    "./test/utils/**/*.tsx",
   ],
 }
