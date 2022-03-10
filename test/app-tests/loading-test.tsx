@@ -313,7 +313,7 @@ describe('loading:', function() {
         });
 
         it('shows the last known room by default', function() {
-            httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
+            httpBackend.when('GET', '/versions').respond(200, {});
             httpBackend.when('GET', '/pushrules').respond(200, {});
 
             loadApp();
@@ -333,7 +333,7 @@ describe('loading:', function() {
         it('shows a home page by default if we have no joined rooms', function() {
             localStorage.removeItem("mx_last_room_id");
 
-            httpBackend.when('GET', '/capabilities').respond(200, { capabilities : {} });
+            httpBackend.when('GET', '/versions').respond(200, {});
             httpBackend.when('GET', '/pushrules').respond(200, {});
 
             loadApp();
@@ -351,7 +351,7 @@ describe('loading:', function() {
         });
 
         it('shows a room view if we followed a room link', function() {
-            httpBackend.when('GET', '/capabilities').respond(200, { capabilities : {} });
+            httpBackend.when('GET', '/versions').respond(200, {});
             httpBackend.when('GET', '/pushrules').respond(200, {});
 
             loadApp({
@@ -425,7 +425,6 @@ describe('loading:', function() {
 
     describe('Guest auto-registration:', function() {
         it('shows a welcome page by default', function() {
-            httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
 
             loadApp();
 
@@ -457,7 +456,6 @@ describe('loading:', function() {
         });
 
         it('uses the default homeserver to register with', function() {
-            httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
 
             loadApp();
 
@@ -493,7 +491,6 @@ describe('loading:', function() {
         });
 
         it('shows a room view if we followed a room link', function() {
-            httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
 
             loadApp({
                 uriFragment: "#/room/!room:id",
@@ -526,7 +523,6 @@ describe('loading:', function() {
 
         describe('Login as user', function() {
             beforeEach(function() {
-                httpBackend.when('GET', '/capabilities').respond(200, { capabilities: {} });
 
                 // first we have to load the homepage
                 loadApp();
@@ -674,7 +670,7 @@ describe('loading:', function() {
             // Wait for another trip around the event loop for the UI to update
             return sleep(1);
         }).then(() => {
-            httpBackend.when('GET', '/capabilities').respond(200, { capabilities : {} });
+            httpBackend.when('GET', '/versions').respond(200, {});
             httpBackend.when('GET', '/pushrules').respond(200, {});
             return expectAndAwaitSync().catch((e) => {
                 throw new Error("Never got /sync after login: did the client start?");
