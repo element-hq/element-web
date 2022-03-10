@@ -1,0 +1,25 @@
+name: Test coverage
+on:
+  pull_request: {}
+  push:
+    branches: [develop, main, master]
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Yarn cache
+        uses: c-hive/gha-yarn-cache@v2
+
+      - name: Install Deps
+        run: "./scripts/ci/install-deps.sh --ignore-scripts"
+
+      - name: Run tests with coverage
+        run: "yarn install && yarn reskindex && yarn coverage"
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v2
+        with:
+          verbose: true
