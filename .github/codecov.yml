@@ -1,3 +1,9 @@
+coverage:
+  status:
+    patch:
+      default:
+        enabled: no
+        if_not_found: success
 comment:
   layout: "diff, files"
   behavior: default
