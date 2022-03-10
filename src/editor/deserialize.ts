@@ -52,12 +52,12 @@ function isListChild(n: Node): boolean {
     return LIST_TYPES.includes(n.parentNode?.nodeName);
 }
 
-function parseAtRoomMentions(text: string, pc: PartCreator): Part[] {
+function parseAtRoomMentions(text: string, pc: PartCreator, shouldEscape = true): Part[] {
     const ATROOM = "@room";
     const parts: Part[] = [];
     text.split(ATROOM).forEach((textPart, i, arr) => {
         if (textPart.length) {
-            parts.push(...pc.plainWithEmoji(escape(textPart)));
+            parts.push(...pc.plainWithEmoji(shouldEscape ? escape(textPart) : textPart));
         }
         // it's safe to never append @room after the last textPart
         // as split will report an empty string at the end if
@@ -261,13 +261,17 @@ function parseHtmlMessage(html: string, pc: PartCreator, isQuotedMessage: boolea
     return parts;
 }
 
-export function parsePlainTextMessage(body: string, pc: PartCreator, isQuotedMessage?: boolean): Part[] {
+export function parsePlainTextMessage(
+    body: string,
+    pc: PartCreator,
+    opts: { isQuotedMessage?: boolean, shouldEscape?: boolean },
+): Part[] {
     const lines = body.split(/\r\n|\r|\n/g); // split on any new-line combination not just \n, collapses \r\n
     return lines.reduce((parts, line, i) => {
-        if (isQuotedMessage) {
+        if (opts.isQuotedMessage) {
             parts.push(pc.plain("> "));
         }
-        parts.push(...parseAtRoomMentions(line, pc));
+        parts.push(...parseAtRoomMentions(line, pc, opts.shouldEscape));
         const isLast = i === lines.length - 1;
         if (!isLast) {
             parts.push(pc.newline());
@@ -288,7 +292,7 @@ export function parseEvent(event: MatrixEvent, pc: PartCreator, { isQuotedMessag
             isRainbow = true;
         }
     } else {
-        parts = parsePlainTextMessage(content.body || "", pc, isQuotedMessage);
+        parts = parsePlainTextMessage(content.body || "", pc, { isQuotedMessage });
     }
 
     if (isEmote && isRainbow) {

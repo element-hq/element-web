@@ -348,7 +348,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             parts = deserializedParts;
         } else {
             const text = event.clipboardData.getData("text/plain");
-            parts = parsePlainTextMessage(text, partCreator);
+            parts = parsePlainTextMessage(text, partCreator, { shouldEscape: false });
         }
         this.modifiedFlag = true;
         const range = getRangeForSelection(this.editorRef.current, model, document.getSelection());
