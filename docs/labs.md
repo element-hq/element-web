@@ -39,13 +39,6 @@ Also adds the `/jumptodate 2022-01-31` slash command.
 An experimental approach for supporting custom status messages across DMs. To set a status, click on
 your avatar next to the message composer.
 
-## Custom tags (`feature_custom_tags`)
-
-An experimental approach for dealing with custom tags. Custom tags will appear in the bottom portion
-of the community filter panel.
-
-Setting custom tags is not supported by Element.
-
 ## Render simple counters in room header (`feature_state_counters`)
 
 Allows rendering of labelled counters above the message list.
