@@ -656,6 +656,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
     };
 
     private copyLinkToThread = async (evt: ButtonEvent): Promise<void> => {
+        evt.preventDefault();
+        evt.stopPropagation();
         const { permalinkCreator, mxEvent } = this.props;
         const matrixToUrl = permalinkCreator.forEvent(mxEvent.getId());
         await copyPlaintext(matrixToUrl);
