@@ -2103,6 +2103,7 @@
     "React": "React",
     "Edit": "Edit",
     "Reply in thread": "Reply in thread",
+    "Can't create a thread from an event with an existing relation": "Can't create a thread from an event with an existing relation",
     "Reply": "Reply",
     "Collapse quotes": "Collapse quotes",
     "Expand quotes": "Expand quotes",

@@ -65,6 +65,12 @@ limitations under the License.
 .mx_MessageActionBar_maskButton {
     width: 28px;
     height: 28px;
+
+    &:disabled,
+    &[disabled] {
+        cursor: not-allowed;
+        opacity: .75;
+    }
 }
 
 .mx_MessageActionBar_maskButton::after {
