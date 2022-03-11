@@ -84,7 +84,8 @@ export async function serializeLog(msg: ConsoleMessage): Promise<string> {
         // Note: we have to run the checks against the object in the page context, so call
         // evaluate instead of just doing it ourselves.
         const stringyArg: string = await arg.evaluate((argInContext: any) => {
-            if (argInContext.stack || (argInContext instanceof Error)) {
+            // sometimes the argument will be `null` or similar - treat it safely.
+            if (argInContext?.stack || (argInContext instanceof Error)) {
                 // probably an error - toString it and append any properties which might not be
                 // caught. For example, on HTTP errors the JSON stringification will capture the
                 // status code.
