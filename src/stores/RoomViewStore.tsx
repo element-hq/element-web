@@ -198,10 +198,10 @@ class RoomViewStore extends Store<ActionPayload> {
                 break;
             case 'reply_to_event':
                 // If currently viewed room does not match the room in which we wish to reply then change rooms
-                // this can happen when performing a search across all rooms
-                if (payload.context === TimelineRenderingType.Room) {
-                    if (payload.event
-                        && payload.event.getRoomId() !== this.state.roomId) {
+                // this can happen when performing a search across all rooms. Persist the data from this event for
+                // both room and search timeline rendering types, search will get auto-closed by RoomView at this time.
+                if ([TimelineRenderingType.Room, TimelineRenderingType.Search].includes(payload.context)) {
+                    if (payload.event?.getRoomId() !== this.state.roomId) {
                         dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: payload.event.getRoomId(),
