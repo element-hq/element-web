@@ -130,8 +130,9 @@ export default class MultiInviter {
                     invitedUsers.push(addr);
                 }
             }
+
             logger.log("Sharing history with", invitedUsers);
-            await this.matrixClient.sendSharedHistoryKeys(this.roomId, invitedUsers);
+            this.matrixClient.sendSharedHistoryKeys(this.roomId, invitedUsers); // do this in the background
 
             return states;
         });
