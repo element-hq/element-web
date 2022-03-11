@@ -100,6 +100,7 @@ limitations under the License.
                 display: flex;
                 white-space: nowrap;
                 overflow-x: hidden;
+                margin-right: 1px; // occlude the 1px visible of the very next tile to prevent it looking broken
             }
 
             .mx_AccessibleButton {
@@ -109,15 +110,16 @@ limitations under the License.
                 font-size: $font-12px;
                 line-height: $font-15px;
                 display: inline-block;
-                width: 50px;
-                min-width: 50px;
+                width: 58px;
+                height: 58px;
+                min-width: 58px;
                 box-sizing: border-box;
                 text-align: center;
                 overflow: hidden;
                 text-overflow: ellipsis;
 
                 .mx_DecoratedRoomAvatar {
-                    margin: 0 5px 4px; // maintain centering
+                    margin: 0 9px 4px; // maintain centering
                 }
 
                 & + .mx_AccessibleButton {
@@ -150,8 +152,8 @@ limitations under the License.
                 > .mx_DecoratedRoomAvatar,
                 > .mx_BaseAvatar {
                     margin-right: 8px;
-                    width: 20px;
-                    height: 20px;
+                    width: 24px;
+                    height: 24px;
 
                     .mx_BaseAvatar {
                         width: inherit;
@@ -186,8 +188,8 @@ limitations under the License.
                     mask-repeat: no-repeat;
                     mask-position: center;
                     mask-size: contain;
-                    width: 20px;
-                    height: 20px;
+                    width: 24px;
+                    height: 24px;
                     position: absolute;
                     left: 4px;
                     top: 50%;
@@ -214,8 +216,8 @@ limitations under the License.
 
             .mx_SpotlightDialog_otherSearches_messageSearchIcon {
                 display: inline-block;
-                width: 20px;
-                height: 20px;
+                width: 24px;
+                height: 24px;
                 background-color: $secondary-content;
                 vertical-align: text-bottom;
                 mask-repeat: no-repeat;
