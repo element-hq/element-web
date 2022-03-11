@@ -1,3 +1,5 @@
+# Docker file for end-to-end tests
+
 # Update on docker hub with the following commands in the directory of this file:
 # If you're on linux amd64
 #   docker build -t vectorim/element-web-ci-e2etests-env:latest .

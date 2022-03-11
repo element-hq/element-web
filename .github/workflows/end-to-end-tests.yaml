@@ -1,4 +1,4 @@
-name: Develop
+name: End-to-end Tests
 on:
     # These tests won't work for non-develop branches at the moment as they
     # won't pull in the right versions of other repos, so they're only enabled
@@ -11,6 +11,7 @@ jobs:
     end-to-end:
         runs-on: ubuntu-latest
         env:
+          # This must be set for fetchdep.sh to get the right branch
           PR_NUMBER: ${{github.event.number}}
         container: vectorim/element-web-ci-e2etests-env:latest
         steps:

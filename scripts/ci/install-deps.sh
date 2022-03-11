@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# This installs other Matrix dependencies that are often
+# developed in parallel with react-sdk, using fetchdep.sh
+# for branch matching.
+# This will set up a working react-sdk environment, so is
+# used for running react-sdk standalone tests. To set up a
+# build of element-web, use layered.sh
+
 set -ex
 
 scripts/fetchdep.sh matrix-org matrix-js-sdk

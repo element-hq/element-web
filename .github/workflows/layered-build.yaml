@@ -1,3 +1,5 @@
+# Produce a 'layered build' (a build of element-web with this version of
+# react-sdk) and output it as an artifact
 name: Layered Preview Build
 on:
     pull_request:
@@ -5,6 +7,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         env:
+          # This must be set for fetchdep.sh to get the right branch
           PR_NUMBER: ${{github.event.number}}
         steps:
             - uses: actions/checkout@v2

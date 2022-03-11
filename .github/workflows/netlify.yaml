@@ -1,3 +1,5 @@
+# Triggers after the layered build has finished, taking the artifact
+# and uploading it to netlify
 name: Upload Preview Build to Netlify
 on:
     workflow_run:

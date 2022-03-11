@@ -6,6 +6,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         env:
+          # This must be set for fetchdep.sh to get the right branch
           PR_NUMBER: ${{github.event.number}}
         steps:
             - uses: actions/checkout@v2
