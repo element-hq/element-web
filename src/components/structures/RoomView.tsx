@@ -844,7 +844,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             case 'reply_to_event':
                 if (!this.unmounted &&
                     this.state.searchResults &&
-                    payload.event.getRoomId() === this.state.roomId &&
+                    payload.event?.getRoomId() === this.state.roomId &&
                     payload.context === TimelineRenderingType.Search
                 ) {
                     this.onCancelSearchClick();

@@ -201,7 +201,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 // this can happen when performing a search across all rooms. Persist the data from this event for
                 // both room and search timeline rendering types, search will get auto-closed by RoomView at this time.
                 if ([TimelineRenderingType.Room, TimelineRenderingType.Search].includes(payload.context)) {
-                    if (payload.event?.getRoomId() !== this.state.roomId) {
+                    if (payload.event && payload.event.getRoomId() !== this.state.roomId) {
                         dis.dispatch<ViewRoomPayload>({
                             action: Action.ViewRoom,
                             room_id: payload.event.getRoomId(),
