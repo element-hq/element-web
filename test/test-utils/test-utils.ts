@@ -1,5 +1,5 @@
 import EventEmitter from "events";
-import { mocked } from 'jest-mock';
+import { mocked, MockedObject } from 'jest-mock';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { JoinRule } from 'matrix-js-sdk/src/@types/partials';
 import {
@@ -417,8 +417,12 @@ export const mockStateEventImplementation = (events: MatrixEvent[]) => {
     return getStateEvents;
 };
 
-export const mkRoom = (client: MatrixClient, roomId: string, rooms?: ReturnType<typeof mkStubRoom>[]) => {
-    const room = mkStubRoom(roomId, roomId, client);
+export const mkRoom = (
+    client: MatrixClient,
+    roomId: string,
+    rooms?: ReturnType<typeof mkStubRoom>[],
+): MockedObject<Room> => {
+    const room = mocked(mkStubRoom(roomId, roomId, client));
     mocked(room.currentState).getStateEvents.mockImplementation(mockStateEventImplementation([]));
     rooms?.push(room);
     return room;
@@ -447,9 +451,9 @@ export const mkSpace = (
     spaceId: string,
     rooms?: ReturnType<typeof mkStubRoom>[],
     children: string[] = [],
-) => {
-    const space = mkRoom(client, spaceId, rooms);
-    mocked(space).isSpaceRoom.mockReturnValue(true);
+): MockedObject<Room> => {
+    const space = mocked(mkRoom(client, spaceId, rooms));
+    space.isSpaceRoom.mockReturnValue(true);
     mocked(space.currentState).getStateEvents.mockImplementation(mockStateEventImplementation(children.map(roomId =>
         mkEvent({
             event: true,

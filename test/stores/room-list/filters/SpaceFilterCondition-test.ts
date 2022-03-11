@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from 'jest-mock';
+import { Room } from "matrix-js-sdk/src/matrix";
 
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { FILTER_CHANGED } from "../../../../src/stores/room-list/filters/IFilterCondition";

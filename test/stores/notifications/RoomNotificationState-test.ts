@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixEventEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import "../../skinned-sdk";
 import { stubClient } from "../../test-utils";
@@ -28,16 +29,16 @@ describe("RoomNotificationState", () => {
     const client = MatrixClientPeg.get();
 
     it("Updates on event decryption", () => {
-        const testRoom = testUtils.mkStubRoom(client, "$aroomid", "Test room");
+        const testRoom = testUtils.mkStubRoom("$aroomid", "Test room", client);
 
         const roomNotifState = new RoomNotificationState(testRoom as any as Room);
         const listener = jest.fn();
         roomNotifState.addListener(NotificationStateEvents.Update, listener);
         const testEvent = {
             getRoomId: () => testRoom.roomId,
-        };
+        } as unknown as MatrixEvent;
         testRoom.getUnreadNotificationCount = jest.fn().mockReturnValue(1);
-        client.emit("Event.decrypted", testEvent);
+        client.emit(MatrixEventEvent.Decrypted, testEvent);
         expect(listener).toHaveBeenCalled();
     });
 });

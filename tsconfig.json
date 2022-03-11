@@ -26,5 +26,7 @@
     "./test/test-utils/**/*.tsx",
     "./test/utils/**/*.ts",
     "./test/utils/**/*.tsx",
+    "./test/stores/**/*.ts",
+    "./test/stores/**/*.tsx",
   ],
 }

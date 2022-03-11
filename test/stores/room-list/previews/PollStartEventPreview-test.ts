@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { POLL_ANSWER, M_TEXT, M_POLL_KIND_DISCLOSED, M_POLL_START } from "matrix-events-sdk";
 
 import { PollStartEventPreview } from "../../../../src/stores/room-list/previews/PollStartEventPreview";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
-MatrixClientPeg.matrixClient = {
+jest.spyOn(MatrixClientPeg, 'get').mockReturnValue({
     getUserId: () => "@me:example.com",
-};
+} as unknown as MatrixClient);
 
 describe("PollStartEventPreview", () => {
     it("shows the question for a poll I created", async () => {
