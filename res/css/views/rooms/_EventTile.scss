@@ -723,7 +723,7 @@ $left-gutter: 64px;
 
 .mx_ThreadInfo {
     min-width: 267px;
-    max-width: min(calc(100% - 64px), 600px);
+    max-width: min(calc(100% - $left-gutter - 64px), 600px); // leave space on both left & right gutters
     width: fit-content;
     height: 40px;
     position: relative;
@@ -740,41 +740,49 @@ $left-gutter: 64px;
     justify-content: flex-start;
     clear: both;
     overflow: hidden;
+    border: 1px solid $system; // always render a border so the hover effect doesn't require a re-layout
 
-    &:hover {
-        cursor: pointer;
-        border: 1px solid $quinary-content;
-        padding-top: 7px;
-        padding-bottom: 7px;
-        padding-left: 11px;
-        padding-right: 15px;
-    }
-
-    &::after {
-        content: "›";
+    .mx_ThreadInfo_chevron {
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         width: 60px;
-        padding: 0 10px;
-        font-size: 15px;
-        line-height: 39px;
         box-sizing: border-box;
-
-        text-align: right;
-        font-weight: 600;
-
         background: linear-gradient(270deg, $system 52.6%, transparent 100%);
 
         opacity: 0;
-        transform: translateX(20px);
+        transform: translateX(60px);
         transition: all .1s ease-in-out;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            mask-image: url('$(res)/img/compound/chevron-right-12px.svg');
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $secondary-content;
+        }
     }
 
-    &:hover::after {
-        opacity: 1;
-        transform: translateX(0);
+    &:hover, &:focus {
+        cursor: pointer;
+        border-color: $quinary-content;
+
+        .mx_ThreadInfo_chevron {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    &::before {
+        align-self: center; // v-align the threads icon
     }
 }
 
@@ -784,25 +792,34 @@ $left-gutter: 64px;
     width: initial;
 }
 
+$threadInfoLineHeight: calc(2 * $font-12px);
+
+.mx_ThreadInfo_sender {
+    font-weight: $font-semi-bold;
+    line-height: $threadInfoLineHeight;
+}
+
 .mx_ThreadInfo_content {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    padding-left: 8px;
+    margin-left: 4px;
     font-size: $font-12px;
-    line-height: calc(2 * $font-12px);
+    line-height: $threadInfoLineHeight;
     color: $secondary-content;
 }
 
 .mx_ThreadInfo_avatar {
     float: left;
+    margin-right: 8px;
 }
 
 .mx_ThreadInfo_threads-amount {
-    font-weight: 600;
+    font-weight: $font-semi-bold;
     position: relative;
     padding: 0 12px 0 8px;
     white-space: nowrap;
+    line-height: $threadInfoLineHeight;
 }
 
 .mx_EventTile[data-shape=ThreadsList] {
