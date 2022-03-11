@@ -20,7 +20,7 @@ import { M_POLL_START } from "matrix-events-sdk";
 import React, { createContext, ReactElement, useContext, useRef } from 'react';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { RelationType } from 'matrix-js-sdk/src/@types/event';
+import { THREAD_RELATION_TYPE } from 'matrix-js-sdk/src/models/thread';
 
 import { _t } from '../../../languageHandler';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -318,7 +318,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
                 },
             );
         } else {
-            const threadId = this.props.relation?.rel_type === RelationType.Thread
+            const threadId = this.props.relation?.rel_type === THREAD_RELATION_TYPE.name
                 ? this.props.relation.event_id
                 : null;
 
@@ -339,7 +339,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
 
     public render() {
         // do not allow sending polls within threads at this time
-        if (this.props.relation?.rel_type === RelationType.Thread) return null;
+        if (this.props.relation?.rel_type === THREAD_RELATION_TYPE.name) return null;
 
         return (
             <CollapsibleButton

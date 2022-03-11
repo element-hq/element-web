@@ -18,10 +18,7 @@ import React from 'react';
 import { shallow, mount } from "enzyme";
 import {
     MatrixClient,
-    RelationType,
     Room,
-    UNSTABLE_FILTER_RELATED_BY_REL_TYPES,
-    UNSTABLE_FILTER_RELATED_BY_SENDERS,
 } from 'matrix-js-sdk/src/matrix';
 import { mocked } from 'jest-mock';
 import '../../skinned-sdk';
@@ -179,7 +176,7 @@ describe('ThreadPanel', () => {
                 const [filterKey, filter] = mocked(client).getOrCreateFilter.mock.calls[0];
                 expect(filterKey).toEqual(`THREAD_PANEL_${room.roomId}_${ThreadFilterType.All}`);
                 expect(filter.getDefinition().room.timeline).toEqual({
-                    [UNSTABLE_FILTER_RELATED_BY_REL_TYPES.name]: [RelationType.Thread],
+                    related_by_rel_types: ["m.thread"],
                 });
             });
 
@@ -189,8 +186,8 @@ describe('ThreadPanel', () => {
                 const [filterKey, filter] = mocked(client).getOrCreateFilter.mock.calls[0];
                 expect(filterKey).toEqual(`THREAD_PANEL_${room.roomId}_${ThreadFilterType.My}`);
                 expect(filter.getDefinition().room.timeline).toEqual({
-                    [UNSTABLE_FILTER_RELATED_BY_REL_TYPES.name]: [RelationType.Thread],
-                    [UNSTABLE_FILTER_RELATED_BY_SENDERS.name]: [aliceId],
+                    related_by_rel_types: ["m.thread"],
+                    related_by_senders: [aliceId],
                 });
             });
         });

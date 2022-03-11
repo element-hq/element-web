@@ -29,10 +29,11 @@ import {
     WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
-import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
+import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -169,7 +170,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                     if (containsEmoji(content, effect.emojis)) {
                         // For initial threads launch, chat effects are disabled
                         // see #19731
-                        const isNotThread = content["m.relates_to"].rel_type !== RelationType.Thread;
+                        const isNotThread = content["m.relates_to"].rel_type !== THREAD_RELATION_TYPE.name;
                         if (!SettingsStore.getValue("feature_thread") || isNotThread) {
                             dis.dispatch({ action: `effects.${effect.command}` });
                         }

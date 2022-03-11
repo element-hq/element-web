@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
 import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
+import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
@@ -41,7 +41,7 @@ export const shareLocation = (
 ) => async (uri: string, ts: number) => {
     if (!uri) return false;
     try {
-        const threadId = relation?.rel_type === RelationType.Thread ? relation.event_id : null;
+        const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
         const assetType = shareType === LocationShareType.Pin ? LocationAssetType.Pin : LocationAssetType.Self;
         await client.sendMessage(roomId, threadId, makeLocationContent(undefined, uri, ts, undefined, assetType));
     } catch (e) {

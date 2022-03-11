@@ -15,9 +15,9 @@ limitations under the License.
 */
 
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { RelationType } from "matrix-js-sdk/src/@types/event";
 import sanitizeHtml from "sanitize-html";
 import escapeHtml from "escape-html";
+import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { PERMITTED_URL_SCHEMES } from "../HtmlUtils";
 import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
@@ -163,7 +163,7 @@ export function makeReplyMixIn(ev?: MatrixEvent, inThread = false): RecursivePar
     if (ev.isThreadRelation) {
         mixin['m.relates_to'] = {
             ...mixin['m.relates_to'],
-            rel_type: RelationType.Thread,
+            rel_type: THREAD_RELATION_TYPE.name,
             event_id: ev.threadRootId,
         };
     }

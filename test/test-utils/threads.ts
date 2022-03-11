@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, RelationType, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { Thread } from "matrix-js-sdk/src/models/thread";
 
 import { mkMessage, MessageEventProps } from "./test-utils";
@@ -25,7 +25,7 @@ export const makeThreadEvent = ({ rootEventId, replyToEventId, ...props }: Messa
     ...props,
     relatesTo: {
         event_id: rootEventId,
-        rel_type: RelationType.Thread,
+        rel_type: "m.thread",
         ['m.in_reply_to']: {
             event_id: replyToEventId,
         },
@@ -79,7 +79,7 @@ export const makeThreadEvents = ({
 
     rootEvent.setUnsigned({
         "m.relations": {
-            [RelationType.Thread]: {
+            "m.thread": {
                 latest_event: events[events.length - 1],
                 count: length,
                 current_user_participated: [...participantUserIds, authorId].includes(currentUserId),

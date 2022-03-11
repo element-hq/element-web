@@ -17,15 +17,18 @@ limitations under the License.
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { RelationType } from 'matrix-js-sdk/src/@types/event';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import {
     Filter,
     IFilterDefinition,
-    UNSTABLE_FILTER_RELATED_BY_SENDERS,
-    UNSTABLE_FILTER_RELATED_BY_REL_TYPES,
 } from 'matrix-js-sdk/src/filter';
-import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
+import {
+    FILTER_RELATED_BY_REL_TYPES,
+    FILTER_RELATED_BY_SENDERS,
+    Thread,
+    ThreadEvent,
+    THREAD_RELATION_TYPE,
+} from 'matrix-js-sdk/src/models/thread';
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 
 import BaseCard from "../views/right_panel/BaseCard";
@@ -54,13 +57,13 @@ export async function getThreadTimelineSet(
         const definition: IFilterDefinition = {
             "room": {
                 "timeline": {
-                    [UNSTABLE_FILTER_RELATED_BY_REL_TYPES.name]: [RelationType.Thread],
+                    [FILTER_RELATED_BY_REL_TYPES.name]: [THREAD_RELATION_TYPE.name],
                 },
             },
         };
 
         if (filterType === ThreadFilterType.My) {
-            definition.room.timeline[UNSTABLE_FILTER_RELATED_BY_SENDERS.name] = [myUserId];
+            definition.room.timeline[FILTER_RELATED_BY_SENDERS.name] = [myUserId];
         }
 
         filter.setDefinition(definition);

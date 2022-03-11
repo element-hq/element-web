@@ -18,7 +18,6 @@ import React from "react";
 import { act } from "react-dom/test-utils";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { mount } from 'enzyme';
-import { RelationType } from 'matrix-js-sdk/src/@types/event';
 
 import '../../../skinned-sdk'; // Must be first for skinning to work
 import SendMessageComposer, {
@@ -298,7 +297,7 @@ describe('<SendMessageComposer/>', () => {
                         placeholder=""
                         permalinkCreator={new MatrixToPermalinkConstructor() as any}
                         relation={{
-                            rel_type: RelationType.Thread,
+                            rel_type: "m.thread",
                             event_id: "myFakeThreadId",
                         }}
                         includeReplyLegacyFallback={false}
