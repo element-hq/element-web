@@ -6,6 +6,8 @@ on:
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{github.event.number}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
