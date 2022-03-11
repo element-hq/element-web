@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MapError /> renders correctly for MapStyleUrlNotConfigured 1`] = `
+<MapError
+  error="MapStyleUrlNotConfigured"
+  onFinished={[MockFunction]}
+>
+  <div
+    className="mx_MapError"
+    data-test-id="location-picker-error"
+  >
+    <div
+      className="mx_MapError_icon"
+    />
+    <Heading
+      className="mx_MapError_heading"
+      size="h3"
+    >
+      <h3
+        className="mx_Heading_h3 mx_MapError_heading"
+      >
+        Unable to load map
+      </h3>
+    </Heading>
+    <p>
+      This homeserver is not configured to display maps.
+    </p>
+    <AccessibleButton
+      element="button"
+      kind="primary"
+      onClick={[MockFunction]}
+      role="button"
+      tabIndex={0}
+    >
+      <button
+        className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        onClick={[MockFunction]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        OK
+      </button>
+    </AccessibleButton>
+  </div>
+</MapError>
+`;
+
+exports[`<MapError /> renders correctly for MapStyleUrlNotReachable 1`] = `
+<MapError
+  error="MapStyleUrlNotReachable"
+  onFinished={[MockFunction]}
+>
+  <div
+    className="mx_MapError"
+    data-test-id="location-picker-error"
+  >
+    <div
+      className="mx_MapError_icon"
+    />
+    <Heading
+      className="mx_MapError_heading"
+      size="h3"
+    >
+      <h3
+        className="mx_Heading_h3 mx_MapError_heading"
+      >
+        Unable to load map
+      </h3>
+    </Heading>
+    <p>
+      This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.
+    </p>
+    <AccessibleButton
+      element="button"
+      kind="primary"
+      onClick={[MockFunction]}
+      role="button"
+      tabIndex={0}
+    >
+      <button
+        className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        onClick={[MockFunction]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        OK
+      </button>
+    </AccessibleButton>
+  </div>
+</MapError>
+`;

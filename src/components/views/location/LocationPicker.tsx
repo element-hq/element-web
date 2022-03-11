@@ -26,12 +26,13 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import Modal from '../../../Modal';
 import ErrorDialog from '../dialogs/ErrorDialog';
-import { findMapStyleUrl } from '../messages/MLocationBody';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
+import { findMapStyleUrl } from './findMapStyleUrl';
 import { LocationShareType } from './shareLocation';
 import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
+import { LocationShareError } from './LocationShareErrors';
 import AccessibleButton from '../elements/AccessibleButton';
-
+import { MapError } from './MapError';
 export interface ILocationPickerProps {
     sender: RoomMember;
     shareType: LocationShareType;
@@ -48,7 +49,7 @@ interface IPosition {
 }
 interface IState {
     position?: IPosition;
-    error: Error;
+    error?: LocationShareError;
 }
 
 /*
@@ -104,10 +105,10 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             this.map.on('error', (e) => {
                 logger.error(
                     "Failed to load map: check map_style_url in config.json "
-                        + "has a valid URL and API key",
+                    + "has a valid URL and API key",
                     e.error,
                 );
-                this.setState({ error: e.error });
+                this.setState({ error: LocationShareError.MapStyleUrlNotReachable });
             });
 
             this.map.on('load', () => {
@@ -129,7 +130,10 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             }
         } catch (e) {
             logger.error("Failed to render map", e);
-            this.setState({ error: e });
+            const errorType = e?.message === LocationShareError.MapStyleUrlNotConfigured ?
+                LocationShareError.MapStyleUrlNotConfigured :
+                LocationShareError.Default;
+            this.setState({ error: errorType });
         }
     }
 
@@ -213,10 +217,13 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     };
 
     render() {
-        const error = this.state.error ?
-            <div data-test-id='location-picker-error' className="mx_LocationPicker_error">
-                { _t("Failed to load map") }
-            </div> : null;
+        if (this.state.error) {
+            return <div className="mx_LocationPicker mx_LocationPicker_hasError">
+                <MapError
+                    error={this.state.error}
+                    onFinished={this.props.onFinished} />
+            </div>;
+        }
 
         return (
             <div className="mx_LocationPicker">
@@ -227,7 +234,6 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                     </span>
                 </div>
                 }
-                { error }
                 <div className="mx_LocationPicker_footer">
                     <form onSubmit={this.onOk}>
 

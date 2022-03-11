@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React from 'react';
 import maplibregl from "maplibre-gl";
 import { mount } from "enzyme";
@@ -28,8 +29,10 @@ import { LocationShareType } from "../../../../src/components/views/location/sha
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { findByTestId } from '../../../test-utils';
+import { findMapStyleUrl } from '../../../../src/components/views/location/findMapStyleUrl';
+import { LocationShareError } from '../../../../src/components/views/location/LocationShareErrors';
 
-jest.mock('../../../../src/components/views/messages/MLocationBody', () => ({
+jest.mock('../../../../src/components/views/location/findMapStyleUrl', () => ({
     findMapStyleUrl: jest.fn().mockReturnValue('tileserver.com'),
 }));
 
@@ -139,6 +142,7 @@ describe("LocationPicker", () => {
             jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient as unknown as MatrixClient);
             jest.clearAllMocks();
             mocked(mockMap).addControl.mockReset();
+            mocked(findMapStyleUrl).mockReturnValue('tileserver.com');
         });
 
         it('displays error when map emits an error', () => {
@@ -152,7 +156,25 @@ describe("LocationPicker", () => {
                 wrapper.setProps({});
             });
 
-            expect(findByTestId(wrapper, 'location-picker-error').length).toBeTruthy();
+            expect(findByTestId(wrapper, 'location-picker-error').find('p').text()).toEqual(
+                "This homeserver is not configured correctly to display maps, "
+                + "or the configured map server may be unreachable.",
+            );
+        });
+
+        it('displays error when map display is not configured properly', () => {
+            // suppress expected error log
+            jest.spyOn(logger, 'error').mockImplementation(() => { });
+            mocked(findMapStyleUrl).mockImplementation(() => {
+                throw new Error(LocationShareError.MapStyleUrlNotConfigured);
+            });
+
+            const wrapper = getComponent();
+            wrapper.setProps({});
+
+            expect(findByTestId(wrapper, 'location-picker-error').find('p').text()).toEqual(
+                "This homeserver is not configured to display maps.",
+            );
         });
 
         it('displays error when map setup throws', () => {
@@ -165,7 +187,10 @@ describe("LocationPicker", () => {
             const wrapper = getComponent();
             wrapper.setProps({});
 
-            expect(findByTestId(wrapper, 'location-picker-error').length).toBeTruthy();
+            expect(findByTestId(wrapper, 'location-picker-error').find('p').text()).toEqual(
+                "This homeserver is not configured correctly to display maps, "
+                + "or the configured map server may be unreachable.",
+            );
         });
 
         it('initiates map with geolocation', () => {

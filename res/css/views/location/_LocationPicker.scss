@@ -21,6 +21,16 @@ limitations under the License.
     position: relative;
     overflow: hidden;
 
+    // when there are errors loading the map
+    // the canvas is still inserted
+    // and can overlap error message/close buttons
+    // hide it
+    &.mx_LocationPicker_hasError {
+        .maplibregl-canvas-container, .maplibregl-control-container {
+            display: none;
+        }
+    }
+
     #mx_LocationPicker_map {
         height: 100%;
         border-radius: 8px;
@@ -93,11 +103,6 @@ limitations under the License.
         justify-content: stretch;
 
         background-color: $header-panel-bg-color;
-    }
-
-    .mx_LocationPicker_error {
-        color: red;
-        margin: auto;
     }
 }
 

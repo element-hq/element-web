@@ -31,7 +31,7 @@ import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { LocationShareType } from '../../../../src/components/views/location/shareLocation';
 import { findByTestId } from '../../../test-utils';
 
-jest.mock('../../../../src/components/views/messages/MLocationBody', () => ({
+jest.mock('../../../../src/components/views/location/findMapStyleUrl', () => ({
     findMapStyleUrl: jest.fn().mockReturnValue('test'),
 }));
 
