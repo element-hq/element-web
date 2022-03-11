@@ -23,7 +23,7 @@ import shouldHideEvent from './shouldHideEvent';
 import { haveTileForEvent } from "./components/views/rooms/EventTile";
 
 /**
- * Returns true iff this event arriving in a room should affect the room's
+ * Returns true if this event arriving in a room should affect the room's
  * count of unread messages
  *
  * @param {Object} ev The event
