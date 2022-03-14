@@ -65,6 +65,10 @@ limitations under the License.
         background-color: $presence-away;
     }
 
+    .mx_DecoratedRoomAvatar_icon_busy::before {
+        background-color: $presence-busy;
+    }
+
     .mx_NotificationBadge, .mx_RoomTile_badgeContainer {
         position: absolute;
         top: 0;

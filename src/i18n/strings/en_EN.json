@@ -1740,6 +1740,7 @@
     "%(duration)sm": "%(duration)sm",
     "%(duration)sh": "%(duration)sh",
     "%(duration)sd": "%(duration)sd",
+    "Busy": "Busy",
     "Online for %(duration)s": "Online for %(duration)s",
     "Idle for %(duration)s": "Idle for %(duration)s",
     "Offline for %(duration)s": "Offline for %(duration)s",
