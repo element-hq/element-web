@@ -1,9 +1,7 @@
 coverage:
   status:
-    patch:
-      default:
-        enabled: no
-        if_not_found: success
+    project: off
+    patch: off
 comment:
   layout: "diff, files"
   behavior: default
