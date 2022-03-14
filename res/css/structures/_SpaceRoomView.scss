@@ -152,6 +152,7 @@ $SpaceRoomViewInnerWidth: 428px;
             right: 24px;
             top: 32px;
         }
+
         // XXX remove this when spaces leaves Beta
         .mx_SpaceRoomView_preview_spaceBetaPrompt {
             font-weight: $font-semi-bold;
@@ -254,13 +255,27 @@ $SpaceRoomViewInnerWidth: 428px;
         flex-direction: column;
         min-width: 0;
 
-        > .mx_BaseAvatar {
-            width: 80px;
-        }
+        .mx_SpaceRoomView_landing_header {
+            display: flex;
+            justify-content: space-between;
 
-        > .mx_BaseAvatar_image,
-        > .mx_BaseAvatar > .mx_BaseAvatar_image {
-            border-radius: 12px;
+            .mx_BaseAvatar {
+                width: 80px;
+
+                .mx_BaseAvatar_image {
+                    border-radius: 12px;
+                }
+            }
+
+            // XXX: Temporary for the Spaces release only
+            .mx_SpaceFeedbackPrompt {
+                padding: 7px; // 8px - 1px border
+                border: 1px solid rgba($primary-content, .1);
+                border-radius: 8px;
+                width: max-content;
+                height: fit-content;
+                margin-left: 24px;
+            }
         }
 
         .mx_SpaceRoomView_landing_name {
@@ -359,14 +374,6 @@ $SpaceRoomViewInnerWidth: 428px;
         .mx_SearchBox {
             margin: 0 0 20px;
             flex: 0;
-        }
-
-        .mx_SpaceFeedbackPrompt {
-            padding: 7px; // 8px - 1px border
-            border: 1px solid rgba($primary-content, .1);
-            border-radius: 8px;
-            width: max-content;
-            margin: 0 0 -40px auto; // collapse its own height to not push other components down
         }
     }
 

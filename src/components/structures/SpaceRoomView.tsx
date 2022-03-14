@@ -479,8 +479,10 @@ const SpaceLanding = ({ space }: { space: Room }) => {
     };
 
     return <div className="mx_SpaceRoomView_landing">
-        <SpaceFeedbackPrompt />
-        <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
+        <div className="mx_SpaceRoomView_landing_header">
+            <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
+            <SpaceFeedbackPrompt />
+        </div>
         <div className="mx_SpaceRoomView_landing_name">
             <RoomName room={space}>
                 { (name) => {
