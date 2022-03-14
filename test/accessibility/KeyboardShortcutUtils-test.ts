@@ -15,14 +15,13 @@ limitations under the License.
 */
 
 import {
-    getKeyboardShortcutsForUI,
-    getKeyboardShortcuts,
     KEYBOARD_SHORTCUTS,
     mock,
 } from "../../src/accessibility/KeyboardShortcuts";
+import { getKeyboardShortcuts, getKeyboardShortcutsForUI } from "../../src/accessibility/KeyboardShortcutUtils";
 import PlatformPeg from "../../src/PlatformPeg";
 
-describe("KeyboardShortcuts", () => {
+describe("KeyboardShortcutUtils", () => {
     it("doesn't change KEYBOARD_SHORTCUTS when getting shortcuts", async () => {
         mock({
             keyboardShortcuts: {
