@@ -93,7 +93,10 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
                     ) }</p>
                     <p>{ _t(
                         "If you've submitted a bug via GitHub, debug logs can help " +
-                        "us track down the problem. Debug logs contain application " +
+                        "us track down the problem. ")
+                    }
+                    { _t(
+                        "Debug logs contain application " +
                         "usage data including your username, the IDs or aliases of " +
                         "the rooms or groups you have visited, which UI elements you " +
                         "last interacted with, and the usernames of other users. " +
