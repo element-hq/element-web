@@ -770,8 +770,10 @@ const SpaceHierarchy = ({
 
                 content = <>
                     <div className="mx_SpaceHierarchy_listHeader">
-                        <h4>{ query.trim() ? _t("Results") : _t("Rooms and spaces") }</h4>
-                        <span>
+                        <h4 className="mx_SpaceHierarchy_listHeader_header">
+                            { query.trim() ? _t("Results") : _t("Rooms and spaces") }
+                        </h4>
+                        <div className="mx_SpaceHierarchy_listHeader_buttons">
                             { additionalButtons }
                             { hasPermissions && (
                                 <ManageButtons
@@ -781,7 +783,7 @@ const SpaceHierarchy = ({
                                     setError={setError}
                                 />
                             ) }
-                        </span>
+                        </div>
                     </div>
                     { errorText && <div className="mx_SpaceHierarchy_error">
                         { errorText }

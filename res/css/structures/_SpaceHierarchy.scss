@@ -35,35 +35,39 @@ limitations under the License.
     }
 
     .mx_SpaceHierarchy_listHeader {
-        display: flex;
-        min-height: 32px;
+        display: grid;
+        justify-content: space-between;
         align-items: center;
+        column-gap: 10px;
+        min-height: 32px;
         font-size: $font-15px;
         line-height: $font-24px;
         color: $primary-content;
         margin-bottom: 12px;
 
-        > h4 {
+        .mx_SpaceHierarchy_listHeader_header {
+            grid-column-start: 1;
             font-weight: $font-semi-bold;
             margin: 0;
         }
 
-        .mx_AccessibleButton {
-            padding: 4px 12px;
-            font-weight: normal;
+        .mx_SpaceHierarchy_listHeader_buttons {
+            grid-column-start: 2;
+            display: flex;
+            flex-flow: wrap;
+            justify-content: flex-end;
+            row-gap: 12px;
+            column-gap: 12px;
 
-            & + .mx_AccessibleButton {
-                margin-left: 16px;
+            .mx_AccessibleButton {
+                padding: 4px 12px;
+                font-weight: normal;
             }
         }
 
         .mx_AccessibleButton_kind_danger_outline,
         .mx_AccessibleButton_kind_primary_outline {
             padding: 3px 12px; // to account for the 1px border
-        }
-
-        > span {
-            margin-left: auto;
         }
     }
 
