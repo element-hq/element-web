@@ -1,8 +1,9 @@
 // Parse the given window.location and return parameters that can be used when calling
 // MatrixChat.showScreen(screen, params)
+import { logger } from "matrix-js-sdk/src/logger";
+import MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
+
 import { parseQsFromFragment } from "./url_utils";
-import { logger } from "../../../matrix-js-sdk/src/logger";
-import MatrixChatType from "../../../matrix-react-sdk/src/components/structures/MatrixChat";
 
 let lastLocationHashSet: string = null;
 
