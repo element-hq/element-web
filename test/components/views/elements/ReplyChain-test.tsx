@@ -70,7 +70,7 @@ describe("ReplyChain", () => {
                     },
                     "m.relates_to": {
                         "rel_type": "m.replace",
-                        "event_id": originalEventWithRelation.event_id,
+                        "event_id": originalEventWithRelation.getId(),
                     },
                 },
                 user: "some_other_user",
@@ -114,7 +114,7 @@ describe("ReplyChain", () => {
                     },
                     "m.relates_to": {
                         "rel_type": "m.replace",
-                        "event_id": originalEvent.event_id,
+                        "event_id": originalEvent.getId(),
                     },
                 },
                 user: "some_other_user",
@@ -163,7 +163,7 @@ describe("ReplyChain", () => {
                     },
                     "m.relates_to": {
                         "rel_type": "m.replace",
-                        "event_id": originalEventWithRelation.event_id,
+                        "event_id": originalEventWithRelation.getId(),
                     },
                 },
                 user: "some_other_user",
@@ -208,7 +208,7 @@ describe("ReplyChain", () => {
                     },
                     "m.relates_to": {
                         "rel_type": "m.replace",
-                        "event_id": originalEventWithRelation.event_id,
+                        "event_id": originalEventWithRelation.getId(),
                     },
                 },
                 user: "some_other_user",

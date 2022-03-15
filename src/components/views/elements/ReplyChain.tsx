@@ -35,7 +35,7 @@ import ReplyTile from "../rooms/ReplyTile";
 import Pill from './Pill';
 import { ButtonEvent } from './AccessibleButton';
 import { getParentEventId, shouldDisplayReply } from '../../../utils/Reply';
-import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+import RoomContext from "../../../contexts/RoomContext";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 
 /**
@@ -205,8 +205,6 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     render() {
         let header = null;
-
-        const inThread = this.context.timelineRenderingType === TimelineRenderingType.Thread;
         if (this.state.err) {
             header = <blockquote className="mx_ReplyChain mx_ReplyChain_error">
                 {
@@ -214,7 +212,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                         'it either does not exist or you do not have permission to view it.')
                 }
             </blockquote>;
-        } else if (this.state.loadedEv && shouldDisplayReply(this.state.events[0], inThread)) {
+        } else if (this.state.loadedEv && shouldDisplayReply(this.state.events[0])) {
             const ev = this.state.loadedEv;
             const room = this.matrixClient.getRoom(ev.getRoomId());
             header = <blockquote className={`mx_ReplyChain ${this.getReplyChainColorClass(ev)}`}>

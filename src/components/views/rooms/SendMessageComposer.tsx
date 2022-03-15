@@ -63,7 +63,6 @@ import { getNestedReplyText, makeReplyMixIn } from '../../../utils/Reply';
 interface IAddReplyOpts {
     permalinkCreator?: RoomPermalinkCreator;
     includeLegacyFallback?: boolean;
-    inThread?: boolean;
 }
 
 function addReplyToMessageContent(
@@ -73,7 +72,7 @@ function addReplyToMessageContent(
         includeLegacyFallback: true,
     },
 ): void {
-    const replyContent = makeReplyMixIn(replyToEvent, opts.inThread);
+    const replyContent = makeReplyMixIn(replyToEvent);
     Object.assign(content, replyContent);
 
     if (opts.includeLegacyFallback) {
@@ -133,7 +132,6 @@ export function createMessageContent(
         addReplyToMessageContent(content, replyToEvent, {
             permalinkCreator,
             includeLegacyFallback: includeReplyLegacyFallback,
-            inThread: relation?.rel_type === THREAD_RELATION_TYPE.name,
         });
     }
 
@@ -399,7 +397,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         addReplyToMessageContent(content, replyToEvent, {
                             permalinkCreator: this.props.permalinkCreator,
                             includeLegacyFallback: true,
-                            inThread: this.props.relation?.rel_type === THREAD_RELATION_TYPE.name,
                         });
                     }
                 } else {
