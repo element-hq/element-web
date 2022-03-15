@@ -118,24 +118,27 @@ export default class AppTile extends React.Component<IProps, IState> {
         showLayoutButtons: true,
     };
 
-    // We track a count of all "live" `AppTile`s for a given widget ID.
+    // We track a count of all "live" `AppTile`s for a given widget UID.
     // For this purpose, an `AppTile` is considered live from the time it is
     // constructed until it is unmounted. This is used to aid logic around when
     // to tear down the widget iframe. See `componentWillUnmount` for details.
-    private static liveTilesById: { [key: string]: number } = {};
+    private static liveTilesByUid = new Map<string, number>();
 
-    public static addLiveTile(widgetId: string): void {
-        const refs = this.liveTilesById[widgetId] || 0;
-        this.liveTilesById[widgetId] = refs + 1;
+    public static addLiveTile(widgetId: string, roomId: string): void {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+        const refs = this.liveTilesByUid.get(uid) ?? 0;
+        this.liveTilesByUid.set(uid, refs + 1);
     }
 
-    public static removeLiveTile(widgetId: string): void {
-        const refs = this.liveTilesById[widgetId] || 0;
-        this.liveTilesById[widgetId] = refs - 1;
+    public static removeLiveTile(widgetId: string, roomId: string): void {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+        const refs = this.liveTilesByUid.get(uid);
+        if (refs) this.liveTilesByUid.set(uid, refs - 1);
     }
 
-    public static isLive(widgetId: string): boolean {
-        const refs = this.liveTilesById[widgetId] || 0;
+    public static isLive(widgetId: string, roomId: string): boolean {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+        const refs = this.liveTilesByUid.get(uid) ?? 0;
         return refs > 0;
     }
 
@@ -150,10 +153,10 @@ export default class AppTile extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        AppTile.addLiveTile(this.props.app.id);
+        AppTile.addLiveTile(this.props.app.id, this.props.app.roomId);
 
         // The key used for PersistedElement
-        this.persistKey = getPersistKey(this.props.app.id);
+        this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
         try {
             this.sgWidget = new StopGapWidget(this.props);
             this.setupSgListeners();
@@ -189,7 +192,9 @@ export default class AppTile extends React.Component<IProps, IState> {
     };
 
     private onUserLeftRoom() {
-        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(
+            this.props.app.id, this.props.app.roomId,
+        );
         if (isActiveWidget) {
             // We just left the room that the active widget was from.
             if (this.props.room && RoomViewStore.getRoomId() !== this.props.room.roomId) {
@@ -200,7 +205,7 @@ export default class AppTile extends React.Component<IProps, IState> {
                 this.reload();
             } else {
                 // Otherwise just cancel its persistence.
-                ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
+                ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id, this.props.app.roomId);
             }
         }
     }
@@ -241,7 +246,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         if (this.state.hasPermissionToLoad && !hasPermissionToLoad) {
             // Force the widget to be non-persistent (able to be deleted/forgotten)
-            ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
+            ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id, this.props.app.roomId);
             PersistedElement.destroyElement(this.persistKey);
             this.sgWidget?.stopMessaging();
         }
@@ -291,14 +296,16 @@ export default class AppTile extends React.Component<IProps, IState> {
         // container is constructed before the old one unmounts. By counting the
         // mounted `AppTile`s for each widget, we know to only tear down the
         // widget iframe when the last the `AppTile` unmounts.
-        AppTile.removeLiveTile(this.props.app.id);
+        AppTile.removeLiveTile(this.props.app.id, this.props.app.roomId);
 
         // We also support a separate "persistence" mode where a single widget
         // can request to be "sticky" and follow you across rooms in a PIP
         // container.
-        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(this.props.app.id);
+        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(
+            this.props.app.id, this.props.app.roomId,
+        );
 
-        if (!AppTile.isLive(this.props.app.id) && !isActiveWidget) {
+        if (!AppTile.isLive(this.props.app.id, this.props.app.roomId) && !isActiveWidget) {
             this.endWidgetActions();
         }
 
@@ -408,7 +415,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
         // Delete the widget from the persisted store for good measure.
         PersistedElement.destroyElement(this.persistKey);
-        ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id);
+        ActiveWidgetStore.instance.destroyPersistentWidget(this.props.app.id, this.props.app.roomId);
 
         this.sgWidget?.stopMessaging({ forceDestroy: true });
     }

@@ -508,6 +508,14 @@ export default class WidgetUtils {
         return app?.data?.title?.trim() || "";
     }
 
+    static getWidgetUid(app?: IApp): string {
+        return app ? WidgetUtils.calcWidgetUid(app.id, app.roomId) : "";
+    }
+
+    static calcWidgetUid(widgetId: string, roomId?: string): string {
+        return roomId ? `room_${roomId}_${widgetId}` : `user_${widgetId}`;
+    }
+
     static editWidget(room: Room, app: IApp): void {
         // TODO: Open the right manager for the widget
         if (SettingsStore.getValue("feature_many_integration_managers")) {

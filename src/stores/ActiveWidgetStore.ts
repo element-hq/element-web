@@ -16,8 +16,10 @@ limitations under the License.
 
 import EventEmitter from 'events';
 import { MatrixEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
+import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 
 export enum ActiveWidgetStoreEvent {
@@ -33,8 +35,7 @@ export enum ActiveWidgetStoreEvent {
 export default class ActiveWidgetStore extends EventEmitter {
     private static internalInstance: ActiveWidgetStore;
     private persistentWidgetId: string;
-    // What room ID each widget is associated with (if it's a room widget)
-    private roomIdByWidgetId = new Map<string, string>();
+    private persistentRoomId: string;
 
     public static get instance(): ActiveWidgetStore {
         if (!ActiveWidgetStore.internalInstance) {
@@ -48,64 +49,49 @@ export default class ActiveWidgetStore extends EventEmitter {
     }
 
     public stop(): void {
-        if (MatrixClientPeg.get()) {
-            MatrixClientPeg.get().removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
-        }
-        this.roomIdByWidgetId.clear();
+        MatrixClientPeg.get()?.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
     }
 
-    private onRoomStateEvents = (ev: MatrixEvent): void => {
+    private onRoomStateEvents = (ev: MatrixEvent, { roomId }: RoomState): void => {
         // XXX: This listens for state events in order to remove the active widget.
         // Everything else relies on views listening for events and calling setters
         // on this class which is terrible. This store should just listen for events
         // and keep itself up to date.
         // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-        if (ev.getType() !== 'im.vector.modular.widgets') return;
-
-        if (ev.getStateKey() === this.persistentWidgetId) {
-            this.destroyPersistentWidget(this.persistentWidgetId);
+        if (ev.getType() === "im.vector.modular.widgets") {
+            this.destroyPersistentWidget(ev.getStateKey(), roomId);
         }
     };
 
-    public destroyPersistentWidget(id: string): void {
-        if (id !== this.persistentWidgetId) return;
-        const toDeleteId = this.persistentWidgetId;
-
-        WidgetMessagingStore.instance.stopMessagingById(id);
-
-        this.setWidgetPersistence(toDeleteId, false);
-        this.delRoomId(toDeleteId);
+    public destroyPersistentWidget(widgetId: string, roomId: string): void {
+        if (!this.getWidgetPersistence(widgetId, roomId)) return;
+        WidgetMessagingStore.instance.stopMessagingByUid(WidgetUtils.calcWidgetUid(widgetId, roomId));
+        this.setWidgetPersistence(widgetId, roomId, false);
     }
 
-    public setWidgetPersistence(widgetId: string, val: boolean): void {
-        if (this.persistentWidgetId === widgetId && !val) {
+    public setWidgetPersistence(widgetId: string, roomId: string, val: boolean): void {
+        const isPersisted = this.getWidgetPersistence(widgetId, roomId);
+
+        if (isPersisted && !val) {
             this.persistentWidgetId = null;
-        } else if (this.persistentWidgetId !== widgetId && val) {
+            this.persistentRoomId = null;
+        } else if (!isPersisted && val) {
             this.persistentWidgetId = widgetId;
+            this.persistentRoomId = roomId;
         }
         this.emit(ActiveWidgetStoreEvent.Update);
     }
 
-    public getWidgetPersistence(widgetId: string): boolean {
-        return this.persistentWidgetId === widgetId;
+    public getWidgetPersistence(widgetId: string, roomId: string): boolean {
+        return this.persistentWidgetId === widgetId && this.persistentRoomId === roomId;
     }
 
     public getPersistentWidgetId(): string {
         return this.persistentWidgetId;
     }
 
-    public getRoomId(widgetId: string): string {
-        return this.roomIdByWidgetId.get(widgetId);
-    }
-
-    public setRoomId(widgetId: string, roomId: string): void {
-        this.roomIdByWidgetId.set(widgetId, roomId);
-        this.emit(ActiveWidgetStoreEvent.Update);
-    }
-
-    public delRoomId(widgetId: string): void {
-        this.roomIdByWidgetId.delete(widgetId);
-        this.emit(ActiveWidgetStoreEvent.Update);
+    public getPersistentRoomId(): string {
+        return this.persistentRoomId;
     }
 }
 
