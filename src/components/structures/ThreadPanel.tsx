@@ -309,7 +309,7 @@ const ThreadPanel: React.FC<IProps> = ({ roomId, onClose, permalinkCreator }) =>
                         manageReadMarkers={false} // No RM support in thread's MVP
                         sendReadReceiptOnLoad={false} // No RR support in thread's MVP
                         timelineSet={timelineSet}
-                        showUrlPreview={true}
+                        showUrlPreview={false} // No URL previews at the threads list level
                         empty={<EmptyThread
                             filterOption={filterOption}
                             showAllThreadsCallback={() => setFilterOption(ThreadFilterType.All)}

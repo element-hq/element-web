@@ -248,7 +248,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                             manageReadMarkers={false} // No RM support in the TimelineCard
                             sendReadReceiptOnLoad={true}
                             timelineSet={this.props.timelineSet}
-                            showUrlPreview={true}
+                            showUrlPreview={this.context.showUrlPreview}
                             // The right panel timeline (and therefore threads) don't support IRC layout at this time
                             layout={this.state.layout === Layout.Bubble ? Layout.Bubble : Layout.Group}
                             hideThreadedMessages={false}
