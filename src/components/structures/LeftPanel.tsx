@@ -27,7 +27,6 @@ import { Action } from "../../dispatcher/actions";
 import RoomSearch from "./RoomSearch";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
-import LeftPanelWidget from "./LeftPanelWidget";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../../stores/spaces";
@@ -444,7 +443,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             { roomList }
                         </div>
                     </div>
-                    { !this.props.isMinimized && <LeftPanelWidget /> }
                 </aside>
             </div>
         );
