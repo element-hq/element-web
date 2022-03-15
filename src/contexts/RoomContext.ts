@@ -60,6 +60,7 @@ const RoomContext = createContext<IRoomState>({
     showAvatarChanges: true,
     showDisplaynameChanges: true,
     matrixClientIsReady: false,
+    showUrlPreview: false,
     timelineRenderingType: TimelineRenderingType.Room,
     threadId: undefined,
     liveTimeline: undefined,
