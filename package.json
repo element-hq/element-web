@@ -25,7 +25,7 @@
   "bin": {
     "reskindex": "scripts/reskindex.js"
   },
-  "main": "./lib/index.ts",
+  "main": "./src/index.ts",
   "matrix_src_main": "./src/index.ts",
   "matrix_lib_main": "./lib/index.ts",
   "matrix_lib_typings": "./lib/index.d.ts",
@@ -234,6 +234,5 @@
       "text",
       "json"
     ]
-  },
-  "typings": "./lib/index.d.ts"
+  }
 }
