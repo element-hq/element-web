@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import "../../skinned-sdk";
-import { MatrixClient } from 'matrix-js-sdk/src/matrix';
+import { MatrixClient, MatrixEvent } from 'matrix-js-sdk/src/matrix';
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CallState } from "matrix-js-sdk/src/webrtc/call";
 
@@ -52,7 +52,7 @@ describe('CallEventGrouper', () => {
             sender: {
                 userId: THEIR_USER_ID,
             },
-        });
+        } as unknown as MatrixEvent);
 
         expect(grouper.state).toBe(CustomCallState.Missed);
     });
@@ -73,7 +73,7 @@ describe('CallEventGrouper', () => {
             sender: {
                 userId: MY_USER_ID,
             },
-        });
+        } as unknown as MatrixEvent);
         grouperHangup.add({
             getContent: () => {
                 return {
@@ -86,7 +86,7 @@ describe('CallEventGrouper', () => {
             sender: {
                 userId: THEIR_USER_ID,
             },
-        });
+        } as unknown as MatrixEvent);
 
         grouperReject.add({
             getContent: () => {
@@ -100,7 +100,7 @@ describe('CallEventGrouper', () => {
             sender: {
                 userId: MY_USER_ID,
             },
-        });
+        } as unknown as MatrixEvent);
         grouperReject.add({
             getContent: () => {
                 return {
@@ -113,7 +113,7 @@ describe('CallEventGrouper', () => {
             sender: {
                 userId: THEIR_USER_ID,
             },
-        });
+        } as unknown as MatrixEvent);
 
         expect(grouperHangup.state).toBe(CallState.Ended);
         expect(grouperReject.state).toBe(CallState.Ended);
@@ -134,7 +134,7 @@ describe('CallEventGrouper', () => {
             getType: () => {
                 return EventType.CallInvite;
             },
-        });
+        } as unknown as MatrixEvent);
 
         expect(grouper.isVoice).toBe(false);
     });

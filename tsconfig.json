@@ -28,5 +28,9 @@
     "./test/utils/**/*.tsx",
     "./test/stores/**/*.ts",
     "./test/stores/**/*.tsx",
+    "./test/components/structures/**/*.ts",
+    "./test/components/structures/**/*.tsx",
+    "./test/components/views/context_menus/**/*.ts",
+    "./test/components/views/context_menus/**/*.tsx",
   ],
 }

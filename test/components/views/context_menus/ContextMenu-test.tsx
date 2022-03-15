@@ -18,8 +18,8 @@ import React from "react";
 import { mount } from "enzyme";
 
 import "../../../skinned-sdk";
-import ContextMenu, { ChevronFace } from "../../../../src/components/structures/ContextMenu.tsx";
-import UIStore from "../../../../src/stores/UIStore.ts";
+import ContextMenu, { ChevronFace } from "../../../../src/components/structures/ContextMenu";
+import UIStore from "../../../../src/stores/UIStore";
 
 describe("<ContextMenu />", () => {
     // Hardcode window and menu dimensions
@@ -28,7 +28,7 @@ describe("<ContextMenu />", () => {
     jest.spyOn(UIStore, "instance", "get").mockImplementation(() => ({
         windowWidth: windowSize,
         windowHeight: windowSize,
-    }));
+    }) as unknown as UIStore);
     window.Element.prototype.getBoundingClientRect = jest.fn().mockReturnValue({
         width: menuSize,
         height: menuSize,
@@ -38,19 +38,22 @@ describe("<ContextMenu />", () => {
 
     describe("near top edge of window", () => {
         const targetY = -50;
+        const onFinished = jest.fn();
 
         const wrapper = mount(
             <ContextMenu
                 bottom={windowSize - targetY - menuSize}
                 right={menuSize}
+                onFinished={onFinished}
                 chevronFace={ChevronFace.Left}
                 chevronOffset={targetChevronOffset}
             />,
         );
         const chevron = wrapper.find(".mx_ContextualMenu_chevron_left");
 
-        const actualY = windowSize - parseInt(wrapper.getDOMNode().style.getPropertyValue("bottom")) - menuSize;
-        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("top"));
+        const bottomStyle = parseInt(wrapper.getDOMNode<HTMLElement>().style.getPropertyValue("bottom"));
+        const actualY = windowSize - bottomStyle - menuSize;
+        const actualChevronOffset = parseInt(chevron.getDOMNode<HTMLElement>().style.getPropertyValue("top"));
 
         it("stays within the window", () => {
             expect(actualY).toBeGreaterThanOrEqual(0);
@@ -62,10 +65,12 @@ describe("<ContextMenu />", () => {
 
     describe("near right edge of window", () => {
         const targetX = windowSize - menuSize + 50;
+        const onFinished = jest.fn();
 
         const wrapper = mount(
             <ContextMenu
                 bottom={0}
+                onFinished={onFinished}
                 left={targetX}
                 chevronFace={ChevronFace.Top}
                 chevronOffset={targetChevronOffset}
@@ -73,8 +78,8 @@ describe("<ContextMenu />", () => {
         );
         const chevron = wrapper.find(".mx_ContextualMenu_chevron_top");
 
-        const actualX = parseInt(wrapper.getDOMNode().style.getPropertyValue("left"));
-        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("left"));
+        const actualX = parseInt(wrapper.getDOMNode<HTMLElement>().style.getPropertyValue("left"));
+        const actualChevronOffset = parseInt(chevron.getDOMNode<HTMLElement>().style.getPropertyValue("left"));
 
         it("stays within the window", () => {
             expect(actualX + menuSize).toBeLessThanOrEqual(windowSize);
@@ -86,19 +91,21 @@ describe("<ContextMenu />", () => {
 
     describe("near bottom edge of window", () => {
         const targetY = windowSize - menuSize + 50;
+        const onFinished = jest.fn();
 
         const wrapper = mount(
             <ContextMenu
                 top={targetY}
                 left={0}
+                onFinished={onFinished}
                 chevronFace={ChevronFace.Right}
                 chevronOffset={targetChevronOffset}
             />,
         );
         const chevron = wrapper.find(".mx_ContextualMenu_chevron_right");
 
-        const actualY = parseInt(wrapper.getDOMNode().style.getPropertyValue("top"));
-        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("top"));
+        const actualY = parseInt(wrapper.getDOMNode<HTMLElement>().style.getPropertyValue("top"));
+        const actualChevronOffset = parseInt(chevron.getDOMNode<HTMLElement>().style.getPropertyValue("top"));
 
         it("stays within the window", () => {
             expect(actualY + menuSize).toBeLessThanOrEqual(windowSize);
@@ -110,19 +117,22 @@ describe("<ContextMenu />", () => {
 
     describe("near left edge of window", () => {
         const targetX = -50;
+        const onFinished = jest.fn();
 
         const wrapper = mount(
             <ContextMenu
                 top={0}
                 right={windowSize - targetX - menuSize}
                 chevronFace={ChevronFace.Bottom}
+                onFinished={onFinished}
                 chevronOffset={targetChevronOffset}
             />,
         );
         const chevron = wrapper.find(".mx_ContextualMenu_chevron_bottom");
 
-        const actualX = windowSize - parseInt(wrapper.getDOMNode().style.getPropertyValue("right")) - menuSize;
-        const actualChevronOffset = parseInt(chevron.getDOMNode().style.getPropertyValue("left"));
+        const rightStyle = parseInt(wrapper.getDOMNode<HTMLElement>().style.getPropertyValue("right"));
+        const actualX = windowSize - rightStyle - menuSize;
+        const actualChevronOffset = parseInt(chevron.getDOMNode<HTMLElement>().style.getPropertyValue("left"));
 
         it("stays within the window", () => {
             expect(actualX).toBeGreaterThanOrEqual(0);
