@@ -36,14 +36,17 @@ type Props = Omit<ILocationPickerProps, 'onChoose' | 'shareType'> & {
 };
 
 const getEnabledShareTypes = (): LocationShareType[] => {
-    const isPinDropLocationShareEnabled = SettingsStore.getValue("feature_location_share_pin_drop");
+    const enabledShareTypes = [LocationShareType.Own];
 
-    if (isPinDropLocationShareEnabled) {
-        return [LocationShareType.Own, LocationShareType.Pin];
+    if (SettingsStore.getValue("feature_location_share_live")) {
+        enabledShareTypes.push(LocationShareType.Live);
     }
-    return [
-        LocationShareType.Own,
-    ];
+
+    if (SettingsStore.getValue("feature_location_share_pin_drop")) {
+        enabledShareTypes.push(LocationShareType.Pin);
+    }
+
+    return enabledShareTypes;
 };
 
 const LocationShareMenu: React.FC<Props> = ({
