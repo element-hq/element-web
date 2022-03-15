@@ -8220,23 +8220,6 @@ matrix-events-sdk@^0.0.1-beta.7:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
-matrix-js-sdk@16.0.0:
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-16.0.0.tgz#0eba446a7d17f0c0bf8880f11e1e46f897408984"
-  integrity sha512-ZlrRjqo493pY6OwtQto+oNG2tFALbJKHUtIHUbay0eX100jQjbgMzXtWHrrFEU01+/aAccx+UP4ap0/MRcsALQ==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^4.0.1"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "^0.0.1-beta.7"
-    p-retry "^4.5.0"
-    qs "^6.9.6"
-    request "^2.88.2"
-    unhomoglyph "^1.0.6"
-
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "16.0.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ee9eccb85afd1b8ee55b16e017d062271f6c66f3"
@@ -8261,10 +8244,9 @@ matrix-mock-request@^1.2.3:
     bluebird "^3.5.0"
     expect "^1.20.2"
 
-matrix-react-sdk@3.42.0:
+"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
   version "3.42.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.42.0.tgz#acdcbc25044fa65525639a68d0af3b857ba39bcb"
-  integrity sha512-QPFhGzDsy+UcSBpnoTeDSQpkCdtDUCplQ6NPuTRz35jfaaQOk9yPrzcT2EoHNlXnt9EiQ93r9yor1BG0ztq2gA==
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/2778fd135ef80d8e097256e5c97ea13d49da441f"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
@@ -8301,7 +8283,7 @@ matrix-react-sdk@3.42.0:
     maplibre-gl "^1.15.2"
     matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#daad3faed54f0b1f1e026a7498b4653e4d01cd90"
     matrix-events-sdk "^0.0.1-beta.7"
-    matrix-js-sdk "16.0.0"
+    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^0.1.0-beta.18"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
