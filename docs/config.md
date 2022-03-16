@@ -1,10 +1,269 @@
-Configuration
-=============
+# Configuration
 
-You can configure the app by copying `config.sample.json` to
-`config.json` and customising it:
+You can configure the app by copying `config.sample.json` to `config.json` and customising it. The file is in JSON
+format and can often result in syntax errors when editing it - visit [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org)
+on Matrix if you run into issues. The possible options are described here.
 
-For a good example, see https://develop.element.io/config.json.
+For a good example of a production-tuned config, see https://app.element.io/config.json
+
+For an example of a development/beta-tuned config, see https://develop.element.io/config.json
+
+After changing the config, the app will need to be reloaded. For web browsers this is a simple page refresh, however
+for the desktop app the application will need to be exited fully (including via the task tray) and re-started.
+
+## Homeserver configuration
+
+In order for Element to even start you will need to tell it what homeserver to connect to *by default*. Users will be
+able to use a different homeserver if they like, though this can be disabled with `"disable_custom_urls": false` in your
+config.
+
+One of the following options **must** be supplied:
+
+1. `default_server_config`: The preferred method of setting the homeserver connection information. Simply copy/paste
+   your [`/.well-known/matrix/client`](https://spec.matrix.org/latest/client-server-api/#getwell-knownmatrixclient)
+   into this field. For example:
+   ```json
+   {
+      "default_server_config": {
+         "m.homeserver": {
+            "base_url": "https://matrix-client.matrix.org"
+         },
+         "m.identity_server": {
+            "base_url": "https://vector.im"
+         }
+      }
+   }
+   ```
+2. `default_server_name`: A deprecated method of connecting to the homeserver by looking up the connection information
+   using `.well-known`. When using this option, simply use your server's domain name (the part at the end of user IDs):
+   `"default_server_name": "matrix.org"`
+3. `default_hs_url` and (optionally) `default_is_url`: A very deprecated method of defining the connection information.
+   These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url` being
+   optional.
+
+If a combination of these three methods is used then Element will fail to load. This is because it is unclear which
+should be considered "first".
+
+## Labs flags
+
+Labs flags are optional, typically beta or in-development, features that can be turned on or off. The full range of
+labs flags and their development status are documented [here](./labs.md). If interested, the feature flag process is
+documented [here](./feature-flags.md).
+
+To force a labs flag on or off, use the following:
+
+```json
+{
+   "features": {
+      "feature_you_want_to_turn_on": true,
+      "feature_you_want_to_keep_off": false
+   }
+}
+```
+
+If you'd like the user to be able to self-select which labs flags they can turn on, add `"show_labs_flags": true` to
+your config. This will turn on the tab in user settings.
+
+**Note**: Feature support varries release-by-release. Check the [labs flag documentation](./labs.md) frequently if enabling
+the functionality.
+
+## Default settings
+
+Some settings additionally support being specified at the config level to affect the user experience of your Element Web
+instance. As of writing those settings are not fully documented, however a few are:
+
+1. `default_federate`: When `true` (default), rooms will be marked as "federatable" during creation. Typically this setting
+   shouldn't be used as the federation capabilities of a room **cannot** be changed after the room is created.
+2. `default_country_code`: An optional ISO 3166 alpha2 country code (eg: `GB`, the default) to use when showing phone number
+   inputs.
+3. `room_directory`: Optionally defines how the room directory component behaves. Currently only a single property, `servers`
+   is supported to add additional servers to the dropdown. For example:
+   ```json
+   {
+      "room_directory": {
+         "servers": ["matrix.org", "example.org"]
+      }
+   }
+   ```
+4. `setting_defaults`: Optional configuration for settings which are not described by this document and support the `config`
+   level. This list is incomplete. For example:
+   ```json
+   {
+      "setting_defaults": {
+         "MessageComposerInput.showStickersButton": false,
+         "MessageComposerInput.showPollsButton": false
+      }
+   }
+   ```
+   These values will take priority over the hardcoded defaults for the settings.
+
+## Customisation & branding
+
+<!-- Author's note: https://english.stackexchange.com/questions/570116/alternative-ways-of-saying-white-labeled -->
+
+Element supports some customisation of the user experience through various branding and theme options. While it doesn't support
+complete re-branding/private labeling, a more personalised experience can be achieved for your users.
+
+1. `default_theme`: Typically either `"light"` (the default) or `"dark"`, this is the optional name of the colour theme to use.
+   If using custom themes, this can be a theme name from that as well.
+2. `default_device_display_name`: Optional public name for devices created by login and registration, instead of the default
+   templated string. Note that this option does not support templating, currently.
+3. `brand`: Optional name for the app. Defaults to `"Element"`. This is used throughout the application in various strings/locations.
+4. `permalink_prefix`: An optional URL pointing to an Element Web deployment. For example, `"https://app.element.io"`. This will
+   change all permalinks (via the "Share" menus) to point at the Element Web deployment rather than `matrix.to`.
+5. `desktop_builds`: Optional. Where the desktop builds for the application are, if available. This is explained in more detail
+   down below.
+6. `mobile_builds`: Optional. Like `desktop_builds`, except for the mobile apps. Also described in more detail down below.
+7. `mobile_guide_toast`: When `true` (default), users accessing the Element Web instance from a mobile device will be prompted to
+   download the app instead.
+8. `update_base_url`: For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory
+   containing `macos` and `win32` directories, with the update packages within. Defaults to `"https://packages.element.io/desktop/update/"`
+   in production.
+9. `map_style_url`: Map tile server style URL for location sharing. e.g. 'https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE'
+   This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
+   at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
+   configuration found in the well-known location is used instead.
+10. `welcome_user_id`: An optional user ID to start a DM with after creating an account. Defaults to nothing (no DM created).
+11. `custom_translations_url`: An optional URL to allow overriding of translatable strings. The JSON file must be in a format of
+    `{"affected string": {"languageCode": "new string"}}`. See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
+12. `branding`: Options for configuring various assets used within the app. Described in more detail down below.
+13. `embedded_pages`: Further optional URLs for various assets used within the app. Described in more detail down below.
+14. `disable_3pid_login`: When `false` (default), **enables** the options to log in with email address or phone number. Set to
+    `true` to hide these options.
+15. `disable_login_language_selector`: When `false` (default), **enables** the language selector on the login pages. Set to `true`
+    to hide this dropdown.
+16. `disable_guests`: When `false` (default), **enable** guest-related functionality (peeking/previewing rooms, etc) for unregistered
+    users. Set to `true` to disable this functionality.
+
+### `desktop_builds` and `mobile_builds`
+
+These two options describe the various availability for the application. When the app needs to promote an alternative download,
+such as trying to get the user to use an Android app or the desktop app for encrypted search, the config options will be looked
+at to see if the link should be to somewhere else.
+
+Starting with `desktop_builds`, the following subproperties are available:
+
+1. `available`: Required. When `true`, the desktop app can be downloaded from somewhere.
+2. `logo`: Required. A URL to a logo (SVG), intended to be shown at 24x24 pixels.
+3. `url`: Required. The download URL for the app. This is used as a hyperlink.
+
+When `desktop_builds` is not specified at all, the app will assume desktop downloads are available from https://element.io
+
+For `mobile_builds`, the following subproperties are available:
+
+1. `ios`: The URL for where to download the iOS app, such as an App Store link. When explicitly `null`, the app will assume the
+   iOS app cannot be downloaded. When not provided, the default Element app will be assumed available.
+2. `android`: The same as `ios`, except for Android instead.
+3. `fdroid`: The same as `android`, except for FDroid instead.
+
+Together, these two options might look like the following in your config:
+
+```json
+{
+   "desktop_builds": {
+      "available": true,
+      "logo": "https://example.org/assets/logo-small.svg",
+      "url": "https://example.org/not_element/download"
+   },
+   "mobile_builds": {
+      "ios": null,
+      "android": "https://example.org/not_element/android",
+      "fdroid": "https://example.org/not_element/fdroid"
+   }
+}
+```
+
+### `branding` and `embedded_pages`
+
+These two options point at various URLs for changing different internal pages (like the welcome page) and logos within the
+application.
+
+Starting with `branding`, the following subproperties are available:
+
+1. `welcome_background_url`: When a string, the URL for the full-page image background of the login, registration, and welcome
+   pages. This property can additionally be an array to have the app choose an image at random from the selections.
+2. `auth_header_logo_url`: A URL to the logo used on the login, registration, etc pages.
+3. `auth_footer_links`: A list of links to add to the footer during login, registration, etc. Each entry must have a `text` and
+   `url` property.
+
+`embedded_pages` can be configured as such:
+
+1. `welcome_url`: A URL to an HTML page to show as a welcome page (landing on `#/welcome`). When not specified, the default
+   `welcome.html` that ships with Element will be used instead.
+2. `home_url`: A URL to an HTML page to show within the app as the "home" page. When the app doesn't have a room/screen to
+   show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default,
+   no home page is set and therefore a hardcoded landing screen is used.
+3. `login_for_welcome`: When `true` (default `false`), the app will use the login form as a welcome page instead of the welcome
+   page itself. This disables use of `welcome_url` and all welcome page functionality.
+
+Together, the options might look like this in your config:
+
+```json
+{
+   "branding": {
+      "welcome_background_url": "https://example.org/assets/background.jpg",
+      "auth_header_logo_url": "https://example.org/assets/logo.svg",
+      "auth_footer_links": [
+         {"text": "FAQ", "url": "https://example.org/faq"},
+         {"text": "Donate", "url": "https://example.org/donate"},
+      ]
+   },
+   "embedded_pages": {
+      "welcome_url": "https://example.org/assets/welcome.html",
+      "home_url": "https://example.org/assets/home.html"
+   }
+}
+```
+
+Note that `index.html` also has an og:image meta tag that is set to an image hosted on element.io. This is the image used if
+links to your copy of Element appear in some websites like Facebook, and indeed Element itself. This has to be static in the HTML
+and an absolute URL (and HTTP rather than HTTPS), so it's not possible for this to be an option in config.json. If you'd like to
+change it, you can build Element, but run `RIOT_OG_IMAGE_URL="http://example.com/logo.png" yarn build`. Alternatively, you can edit
+the `og:image` meta tag in `index.html` directly each time you download a new version of Element.
+
+## SSO setup
+
+TODO: @@TR Description of options for SSO-only deployments
+
+## VoIP / Jitsi calls
+
+TODO: @@TR
+
+## Bug reporting
+
+TODO: @@TR
+
+## Integration managers
+
+TODO: @@TR
+
+## Administrative options
+
+TODO: @@TR (report_event, terms_and_conditions_links)
+
+## Analytics
+
+TODO: @@TR
+
+## Server hosting links
+
+TODO: @@TR (EMS options)
+
+## Miscellaneous
+
+TODO: @@TR (latex_maths_delims, enable_presence_by_hs_url)
+
+## Undocumented / developer options
+
+The following are undocumented or intended for developer use only.
+
+1. `fallback_hs_url`
+2. `sync_timeline_limit`
+3. `dangerously_allow_unsafe_and_insecure_passwords`
+
+## TODO: @@TR: Copy sections below about identity servers and such
+
+----------------------------------------
 
 1. `default_server_config` sets the default homeserver and identity server URL for
    Element to use. The object is the same as returned by [https://<server_name>/.well-known/matrix/client](https://matrix.org/docs/spec/client_server/latest.html#get-well-known-matrix-client),
@@ -195,7 +454,7 @@ For a good example, see https://develop.element.io/config.json.
    See https://github.com/matrix-org/matrix-react-sdk/pull/7886 for details.
 
 Note that `index.html` also has an og:image meta tag that is set to an image
-hosted on riot.im. This is the image used if links to your copy of Element
+hosted on element.io. This is the image used if links to your copy of Element
 appear in some websites like Facebook, and indeed Element itself. This has to be
 static in the HTML and an absolute URL (and HTTP rather than HTTPS), so it's
 not possible for this to be an option in config.json. If you'd like to change
