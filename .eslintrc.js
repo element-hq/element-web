@@ -12,6 +12,11 @@ module.exports = {
         // Things we do that break the ideal style
         "quotes": "off",
     },
+    settings: {
+        react: {
+            version: 'detect'
+        }
+    },
     overrides: [{
         files: ["src/**/*.{ts,tsx}"],
         extends: [

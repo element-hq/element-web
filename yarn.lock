@@ -8221,8 +8221,8 @@ matrix-events-sdk@^0.0.1-beta.7:
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "15.6.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/0739da4ef485f8e7835306f68b0087e78ae07773"
+  version "16.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/ee9eccb85afd1b8ee55b16e017d062271f6c66f3"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8245,8 +8245,8 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.41.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/b7787eaf2e5cf364a8495934c30e2f09c81f7e01"
+  version "3.42.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/2778fd135ef80d8e097256e5c97ea13d49da441f"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
