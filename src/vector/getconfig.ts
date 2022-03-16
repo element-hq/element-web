@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import request from 'browser-request';
+
 import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 
 // Load the config file. First try to load up a domain-specific config of the
