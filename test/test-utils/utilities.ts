@@ -23,6 +23,12 @@ const findByAttr = (attr: string) => (component: ReactWrapper, value: string) =>
 export const findByTestId = findByAttr('data-test-id');
 export const findById = findByAttr('id');
 
+const findByTagAndAttr = (attr: string) =>
+    (component: ReactWrapper, value: string, tag: string) =>
+        component.find(`${tag}[${attr}="${value}"]`);
+
+export const findByTagAndTestId = findByTagAndAttr('data-test-id');
+
 export const flushPromises = async () => await new Promise(resolve => setTimeout(resolve));
 
 /**

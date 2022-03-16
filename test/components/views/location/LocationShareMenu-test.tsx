@@ -29,7 +29,7 @@ import { ChevronFace } from '../../../../src/components/structures/ContextMenu';
 import SettingsStore from '../../../../src/settings/SettingsStore';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { LocationShareType } from '../../../../src/components/views/location/shareLocation';
-import { findByTestId } from '../../../test-utils';
+import { findByTagAndTestId } from '../../../test-utils';
 
 jest.mock('../../../../src/components/views/location/findMapStyleUrl', () => ({
     findMapStyleUrl: jest.fn().mockReturnValue('test'),
@@ -96,16 +96,16 @@ describe('<LocationShareMenu />', () => {
     });
 
     const getShareTypeOption = (component: ReactWrapper, shareType: LocationShareType) =>
-        findByTestId(component, `share-location-option-${shareType}`);
+        findByTagAndTestId(component, `share-location-option-${shareType}`, 'button');
 
     const getBackButton = (component: ReactWrapper) =>
-        findByTestId(component, 'share-dialog-buttons-back');
+        findByTagAndTestId(component, 'share-dialog-buttons-back', 'button');
 
     const getCancelButton = (component: ReactWrapper) =>
-        findByTestId(component, 'share-dialog-buttons-cancel');
+        findByTagAndTestId(component, 'share-dialog-buttons-cancel', 'button');
 
     const getSubmitButton = (component: ReactWrapper) =>
-        findByTestId(component, 'location-picker-submit-button');
+        findByTagAndTestId(component, 'location-picker-submit-button', 'button');
 
     const setLocation = (component: ReactWrapper) => {
         // set the location
@@ -129,13 +129,13 @@ describe('<LocationShareMenu />', () => {
 
         it('renders location picker when only Own share type is enabled', () => {
             const component = getComponent();
-            expect(component.find('ShareType').length).toBeFalsy();
-            expect(component.find('LocationPicker').length).toBeTruthy();
+            expect(component.find('ShareType').length).toBe(0);
+            expect(component.find('LocationPicker').length).toBe(1);
         });
 
         it('does not render back button when only Own share type is enabled', () => {
             const component = getComponent();
-            expect(getBackButton(component).length).toBeFalsy();
+            expect(getBackButton(component).length).toBe(0);
         });
 
         it('clicking cancel button from location picker closes dialog', () => {
@@ -177,15 +177,15 @@ describe('<LocationShareMenu />', () => {
 
         it('renders share type switch with own and pin drop options', () => {
             const component = getComponent();
-            expect(component.find('LocationPicker').length).toBeFalsy();
+            expect(component.find('LocationPicker').length).toBe(0);
 
-            expect(getShareTypeOption(component, LocationShareType.Own).length).toBeTruthy();
-            expect(getShareTypeOption(component, LocationShareType.Pin).length).toBeTruthy();
+            expect(getShareTypeOption(component, LocationShareType.Own).length).toBe(1);
+            expect(getShareTypeOption(component, LocationShareType.Pin).length).toBe(1);
         });
 
         it('does not render back button on share type screen', () => {
             const component = getComponent();
-            expect(getBackButton(component).length).toBeFalsy();
+            expect(getBackButton(component).length).toBe(0);
         });
 
         it('clicking cancel button from share type screen closes dialog', () => {
@@ -204,7 +204,7 @@ describe('<LocationShareMenu />', () => {
 
             setShareType(component, LocationShareType.Own);
 
-            expect(component.find('LocationPicker').length).toBeTruthy();
+            expect(component.find('LocationPicker').length).toBe(1);
         });
 
         it('clicking back button from location picker screen goes back to share screen', () => {
@@ -214,7 +214,7 @@ describe('<LocationShareMenu />', () => {
             // advance to location picker
             setShareType(component, LocationShareType.Own);
 
-            expect(component.find('LocationPicker').length).toBeTruthy();
+            expect(component.find('LocationPicker').length).toBe(1);
 
             act(() => {
                 getBackButton(component).at(0).simulate('click');
@@ -222,7 +222,7 @@ describe('<LocationShareMenu />', () => {
             });
 
             // back to share type
-            expect(component.find('ShareType').length).toBeTruthy();
+            expect(component.find('ShareType').length).toBe(1);
         });
 
         it('creates pin drop location share event on submission', () => {
@@ -263,20 +263,22 @@ describe('<LocationShareMenu />', () => {
             const component = getComponent();
 
             // The the Location picker is not visible yet
-            expect(component.find('LocationPicker').length).toBeFalsy();
+            expect(component.find('LocationPicker').length).toBe(0);
 
             // And all 3 buttons are visible on the LocationShare dialog
             expect(
                 getShareTypeOption(component, LocationShareType.Own).length,
-            ).toBeTruthy();
+            ).toBe(1);
 
             expect(
                 getShareTypeOption(component, LocationShareType.Pin).length,
-            ).toBeTruthy();
+            ).toBe(1);
 
-            expect(
-                getShareTypeOption(component, LocationShareType.Live).length,
-            ).toBeTruthy();
+            const liveButton = getShareTypeOption(component, LocationShareType.Live);
+            expect(liveButton.length).toBe(1);
+
+            // The live location button is enabled
+            expect(liveButton.hasClass("mx_AccessibleButton_disabled")).toBeFalsy();
         });
     });
 });

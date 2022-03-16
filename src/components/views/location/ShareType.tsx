@@ -56,8 +56,6 @@ const ShareTypeOption: React.FC<ShareTypeOptionProps> = ({
     element='button'
     className='mx_ShareType_option'
     onClick={onClick}
-    // not yet implemented
-    disabled={shareType === LocationShareType.Live}
     {...rest}>
     { shareType === LocationShareType.Own && <UserAvatar /> }
     { shareType === LocationShareType.Pin &&
