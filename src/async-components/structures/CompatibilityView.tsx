@@ -27,7 +27,8 @@ interface IProps {
 }
 
 const CompatibilityView: React.FC<IProps> = ({ onAccept }) => {
-    const { brand, mobileBuilds } = SdkConfig.get();
+    const brand = SdkConfig.get("brand");
+    const mobileBuilds = SdkConfig.get("mobile_builds");
 
     let ios = null;
     const iosCustomUrl = mobileBuilds?.ios;
