@@ -275,8 +275,22 @@ limitations under the License.
     height: 600px;
     padding-left: 20px; // the design wants some padding on the left
 
-    .mx_InviteDialog_userSections {
-        height: calc(100% - 115px); // mx_InviteDialog's height minus some for the upper and lower elements
+    .mx_InviteDialog_addressBar {
+        margin-right: 0;
+    }
+
+    .mx_InviteDialog_content {
+        padding-right: 20px; // same padding on the right
+
+        .mx_InviteDialog_userSections {
+            height: calc(100% - 115px); // mx_InviteDialog's height minus some for the upper and lower elements
+            padding-right: 0;
+
+            .mx_InviteDialog_section {
+                padding-bottom: 0;
+                margin-top: 12px;
+            }
+        }
     }
 }
 
