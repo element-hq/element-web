@@ -56,9 +56,9 @@ export default class MessageComposerFormatBar extends React.PureComponent<IProps
             <FormatButton label={_t("Bold")} onClick={() => this.props.onAction(Formatting.Bold)} icon="Bold" shortcut={this.props.shortcuts.bold} visible={this.state.visible} />
             <FormatButton label={_t("Italics")} onClick={() => this.props.onAction(Formatting.Italics)} icon="Italic" shortcut={this.props.shortcuts.italics} visible={this.state.visible} />
             <FormatButton label={_t("Strikethrough")} onClick={() => this.props.onAction(Formatting.Strikethrough)} icon="Strikethrough" visible={this.state.visible} />
-            <FormatButton label={_t("Code block")} onClick={() => this.props.onAction(Formatting.Code)} icon="Code" visible={this.state.visible} />
+            <FormatButton label={_t("Code block")} onClick={() => this.props.onAction(Formatting.Code)} icon="Code" shortcut={this.props.shortcuts.code} visible={this.state.visible} />
             <FormatButton label={_t("Quote")} onClick={() => this.props.onAction(Formatting.Quote)} icon="Quote" shortcut={this.props.shortcuts.quote} visible={this.state.visible} />
-            <FormatButton label={_t("Insert link")} onClick={() => this.props.onAction(Formatting.InsertLink)} icon="InsertLink" visible={this.state.visible} />
+            <FormatButton label={_t("Insert link")} onClick={() => this.props.onAction(Formatting.InsertLink)} icon="InsertLink" shortcut={this.props.shortcuts.insert_link} visible={this.state.visible} />
         </div>);
     }
 

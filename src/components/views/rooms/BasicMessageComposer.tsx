@@ -24,13 +24,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import { Caret, setSelection } from '../../../editor/caret';
-import {
-    formatRangeAsQuote,
-    formatRangeAsCode,
-    toggleInlineFormat,
-    replaceRangeAndMoveCaret,
-    formatRangeAsLink,
-} from '../../../editor/operations';
+import { formatRange, replaceRangeAndMoveCaret, toggleInlineFormat } from '../../../editor/operations';
 import { getCaretOffsetAndText, getRangeForSelection } from '../../../editor/dom';
 import Autocomplete, { generateCompletionDomId } from '../rooms/Autocomplete';
 import { getAutoCompleteCreator, Type } from '../../../editor/parts';
@@ -46,7 +40,7 @@ import MessageComposerFormatBar, { Formatting } from "./MessageComposerFormatBar
 import DocumentOffset from "../../../editor/offset";
 import { IDiff } from "../../../editor/diff";
 import AutocompleteWrapperModel from "../../../editor/autocomplete";
-import DocumentPosition from "../../../editor/position";
+import DocumentPosition from '../../../editor/position';
 import { ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from '../../../KeyBindingsManager';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -67,8 +61,11 @@ const SURROUND_WITH_DOUBLE_CHARACTERS = new Map([
     ["<", ">"],
 ]);
 
-function ctrlShortcutLabel(key: string): string {
-    return (IS_MAC ? "⌘" : _t(ALTERNATE_KEY_NAME[Key.CONTROL])) + "+" + key;
+function ctrlShortcutLabel(key: string, needsShift = false, needsAlt = false): string {
+    return (IS_MAC ? "⌘" : _t(ALTERNATE_KEY_NAME[Key.CONTROL])) +
+        (needsShift ? ("+" + _t(ALTERNATE_KEY_NAME[Key.SHIFT])) : "") +
+        (needsAlt ? ("+" + _t(ALTERNATE_KEY_NAME[Key.ALT])) : "") +
+        "+" + key;
 }
 
 function cloneSelection(selection: Selection): Partial<Selection> {
@@ -530,8 +527,16 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
                 this.onFormatAction(Formatting.Italics);
                 handled = true;
                 break;
+            case KeyBindingAction.FormatCode:
+                this.onFormatAction(Formatting.Code);
+                handled = true;
+                break;
             case KeyBindingAction.FormatQuote:
                 this.onFormatAction(Formatting.Quote);
+                handled = true;
+                break;
+            case KeyBindingAction.FormatLink:
+                this.onFormatAction(Formatting.InsertLink);
                 handled = true;
                 break;
             case KeyBindingAction.EditRedo:
@@ -690,37 +695,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         return caretPosition;
     }
 
-    private onFormatAction = (action: Formatting): void => {
-        const range = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
-        // trim the range as we want it to exclude leading/trailing spaces
-        range.trim();
-
-        if (range.length === 0) {
-            return;
-        }
+    public onFormatAction = (action: Formatting): void => {
+        const range: Range = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
 
         this.historyManager.ensureLastChangesPushed(this.props.model);
         this.modifiedFlag = true;
-        switch (action) {
-            case Formatting.Bold:
-                toggleInlineFormat(range, "**");
-                break;
-            case Formatting.Italics:
-                toggleInlineFormat(range, "_");
-                break;
-            case Formatting.Strikethrough:
-                toggleInlineFormat(range, "<del>", "</del>");
-                break;
-            case Formatting.Code:
-                formatRangeAsCode(range);
-                break;
-            case Formatting.Quote:
-                formatRangeAsQuote(range);
-                break;
-            case Formatting.InsertLink:
-                formatRangeAsLink(range);
-                break;
-        }
+
+        formatRange(range, action);
     };
 
     render() {
@@ -750,7 +731,9 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         const shortcuts = {
             [Formatting.Bold]: ctrlShortcutLabel("B"),
             [Formatting.Italics]: ctrlShortcutLabel("I"),
+            [Formatting.Code]: ctrlShortcutLabel("E"),
             [Formatting.Quote]: ctrlShortcutLabel(">"),
+            [Formatting.InsertLink]: ctrlShortcutLabel("L", true),
         };
 
         const { completionIndex } = this.state;
