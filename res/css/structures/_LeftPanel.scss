@@ -23,13 +23,20 @@ $roomListCollapsedWidth: 68px;
     }
 }
 
-.mx_LeftPanel_wrapper {
+.mx_LeftPanel_outerWrapper {
     display: flex;
+    flex-direction: column;
     max-width: 50%;
     position: relative;
 
     // Contain the amount of layers rendered by constraining what actually needs re-layering via css
     contain: layout paint;
+}
+
+.mx_LeftPanel_wrapper {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
 
     .mx_LeftPanel_wrapper--user {
         background-color: $roomlist-bg-color;
