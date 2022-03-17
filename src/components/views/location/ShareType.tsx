@@ -19,7 +19,6 @@ import React, { HTMLAttributes, useContext } from 'react';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import { _t } from '../../../languageHandler';
 import { OwnProfileStore } from '../../../stores/OwnProfileStore';
-import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import Heading from '../typography/Heading';
@@ -34,9 +33,8 @@ const UserAvatar = () => {
     // 40 - 2px border
     const avatarSize = 36;
     const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
-    const colorClass = getUserNameColorClass(userId);
 
-    return <div className={`mx_ShareType_option-icon ${LocationShareType.Own} ${colorClass}`}>
+    return <div className={`mx_ShareType_option-icon ${LocationShareType.Own}`}>
         <BaseAvatar
             idName={userId}
             name={displayName}

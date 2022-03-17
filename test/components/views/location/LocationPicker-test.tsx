@@ -205,61 +205,66 @@ describe("LocationPicker", () => {
             expect(mockGeolocate.trigger).toHaveBeenCalled();
         });
 
-        describe('for Own location share type', () => {
-            it('closes and displays error when geolocation errors', () => {
-                // suppress expected error log
-                jest.spyOn(logger, 'error').mockImplementation(() => { });
-                const onFinished = jest.fn();
-                getComponent({ onFinished });
+        const testUserLocationShareTypes = (shareType: LocationShareType.Own | LocationShareType.Live) => {
+            describe(`for ${shareType} location share type`, () => {
+                it('closes and displays error when geolocation errors', () => {
+                    // suppress expected error log
+                    jest.spyOn(logger, 'error').mockImplementation(() => { });
+                    const onFinished = jest.fn();
+                    getComponent({ onFinished, shareType });
 
-                expect(mockMap.addControl).toHaveBeenCalledWith(mockGeolocate);
-                act(() => {
-                    // @ts-ignore
-                    mockMap.emit('load');
-                    // @ts-ignore
-                    mockGeolocate.emit('error', {});
+                    expect(mockMap.addControl).toHaveBeenCalledWith(mockGeolocate);
+                    act(() => {
+                        // @ts-ignore
+                        mockMap.emit('load');
+                        // @ts-ignore
+                        mockGeolocate.emit('error', {});
+                    });
+
+                    // dialog is closed on error
+                    expect(onFinished).toHaveBeenCalled();
                 });
 
-                // dialog is closed on error
-                expect(onFinished).toHaveBeenCalled();
+                it('sets position on geolocate event', () => {
+                    const wrapper = getComponent({ shareType });
+                    act(() => {
+                        // @ts-ignore
+                        mocked(mockGeolocate).emit('geolocate', mockGeolocationPosition);
+                        wrapper.setProps({});
+                    });
+
+                    // marker added
+                    expect(maplibregl.Marker).toHaveBeenCalled();
+                    expect(mockMarker.setLngLat).toHaveBeenCalledWith(new maplibregl.LngLat(
+                        12.4, 43.2,
+                    ));
+                    // submit button is enabled when position is truthy
+                    expect(findByTestId(wrapper, 'location-picker-submit-button').at(0).props().disabled).toBeFalsy();
+                    expect(wrapper.find('MemberAvatar').length).toBeTruthy();
+                });
+
+                it('submits location', () => {
+                    const onChoose = jest.fn();
+                    const wrapper = getComponent({ onChoose, shareType });
+                    act(() => {
+                        // @ts-ignore
+                        mocked(mockGeolocate).emit('geolocate', mockGeolocationPosition);
+                        // make sure button is enabled
+                        wrapper.setProps({});
+                    });
+
+                    act(() => {
+                        findByTestId(wrapper, 'location-picker-submit-button').at(0).simulate('click');
+                    });
+
+                    // content of this call is tested in LocationShareMenu-test
+                    expect(onChoose).toHaveBeenCalled();
+                });
             });
+        };
 
-            it('sets position on geolocate event', () => {
-                const wrapper = getComponent();
-                act(() => {
-                    // @ts-ignore
-                    mocked(mockGeolocate).emit('geolocate', mockGeolocationPosition);
-                    wrapper.setProps({});
-                });
-
-                // marker added
-                expect(maplibregl.Marker).toHaveBeenCalled();
-                expect(mockMarker.setLngLat).toHaveBeenCalledWith(new maplibregl.LngLat(
-                    12.4, 43.2,
-                ));
-                // submit button is enabled when position is truthy
-                expect(findByTestId(wrapper, 'location-picker-submit-button').at(0).props().disabled).toBeFalsy();
-                expect(wrapper.find('MemberAvatar').length).toBeTruthy();
-            });
-
-            it('submits location', () => {
-                const onChoose = jest.fn();
-                const wrapper = getComponent({ onChoose });
-                act(() => {
-                    // @ts-ignore
-                    mocked(mockGeolocate).emit('geolocate', mockGeolocationPosition);
-                    // make sure button is enabled
-                    wrapper.setProps({});
-                });
-
-                act(() => {
-                    findByTestId(wrapper, 'location-picker-submit-button').at(0).simulate('click');
-                });
-
-                // content of this call is tested in LocationShareMenu-test
-                expect(onChoose).toHaveBeenCalled();
-            });
-        });
+        testUserLocationShareTypes(LocationShareType.Own);
+        testUserLocationShareTypes(LocationShareType.Live);
 
         describe('for Pin drop location share type', () => {
             const shareType = LocationShareType.Pin;

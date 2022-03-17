@@ -19,6 +19,7 @@ import maplibregl, { MapMouseEvent } from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
+import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -33,6 +34,7 @@ import { Icon as LocationIcon } from '../../../../res/img/element-icons/location
 import { LocationShareError } from './LocationShareErrors';
 import AccessibleButton from '../elements/AccessibleButton';
 import { MapError } from './MapError';
+import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 export interface ILocationPickerProps {
     sender: RoomMember;
     shareType: LocationShareType;
@@ -52,13 +54,8 @@ interface IState {
     error?: LocationShareError;
 }
 
-/*
- * An older version of this file allowed manually picking a location on
- * the map to share, instead of sharing your current location.
- * Since the current designs do not cover this case, it was removed from
- * the code but you should be able to find it in the git history by
- * searching for the commit that remove manualPosition from this file.
- */
+const isSharingOwnLocation = (shareType: LocationShareType): boolean =>
+    shareType === LocationShareType.Own || shareType === LocationShareType.Live;
 
 @replaceableComponent("views.location.LocationPicker")
 class LocationPicker extends React.Component<ILocationPickerProps, IState> {
@@ -117,7 +114,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
             this.geolocate.on('error', this.onGeolocateError);
 
-            if (this.props.shareType === LocationShareType.Own) {
+            if (isSharingOwnLocation(this.props.shareType)) {
                 this.geolocate.on('geolocate', this.onGeolocate);
             }
 
@@ -191,7 +188,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         logger.error("Could not fetch location", e);
         // close the dialog and show an error when trying to share own location
         // pin drop location without permissions is ok
-        if (this.props.shareType === LocationShareType.Own) {
+        if (isSharingOwnLocation(this.props.shareType)) {
             this.props.onFinished();
             Modal.createTrackedDialog(
                 'Could not fetch location',
@@ -225,6 +222,8 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             </div>;
         }
 
+        const userColorClass = getUserNameColorClass(this.props.sender.userId);
+
         return (
             <div className="mx_LocationPicker">
                 <div id="mx_LocationPicker_map" />
@@ -249,9 +248,14 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                         </AccessibleButton>
                     </form>
                 </div>
-                <div className="mx_MLocationBody_marker" id={this.getMarkerId()}>
+                <div className={classNames(
+                    "mx_MLocationBody_marker",
+                    `mx_MLocationBody_marker-${this.props.shareType}`,
+                    userColorClass,
+                )}
+                id={this.getMarkerId()}>
                     <div className="mx_MLocationBody_markerBorder">
-                        { this.props.shareType === LocationShareType.Own ?
+                        { isSharingOwnLocation(this.props.shareType) ?
                             <MemberAvatar
                                 member={this.props.sender}
                                 width={27}
