@@ -15,7 +15,15 @@ limitations under the License.
 */
 
 import { renderToString } from "react-dom/server";
-import { IContent, MatrixClient, MatrixEvent, Room, RoomMember, RelationType } from "matrix-js-sdk/src/matrix";
+import {
+    IContent,
+    MatrixClient,
+    MatrixEvent,
+    Room,
+    RoomMember,
+    RelationType,
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { IExportOptions, ExportType, ExportFormat } from "../../src/utils/exportUtils/exportUtils";
@@ -71,7 +79,7 @@ describe('export', function() {
                     "origin_server_ts": ts0 + i*1000,
                     "redacts": "$9999999999999999999999999999999999999999998",
                     "sender": "@me:here",
-                    "type": "m.room.redaction",
+                    "type": EventType.RoomRedaction,
                     "unsigned": {
                         "age": 94,
                         "transaction_id": "m1111111111.1",
