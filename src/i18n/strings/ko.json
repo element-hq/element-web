@@ -24,5 +24,14 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "현재 사용중이신 브라우저를 계속 사용하셔도 됩니다, 다만 일부 기능들이 작동하지 않을 수 있으며 애플리케이션이 잘못돼 보일 수 있습니다.",
     "I understand the risks and wish to continue": "위험하다는 것을 이해했으며 계속하고 싶습니다",
     "Go to element.io": "element.io으로 가기",
-    "Failed to start": "시작 실패"
+    "Failed to start": "시작 실패",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s 는 당신의 브라우저에서 지원되지 않는 고급 기능을 사용합니다.",
+    "Your browser can't run %(brand)s": "당신의 브라우저는 %(brand)s 를 작동할 수 없습니다",
+    "Use %(brand)s on mobile": "모바일에서 %(brand)s 사용",
+    "Powered by Matrix": "Matrix로 지원됨",
+    "Switch to space by number": "숫자로 스페이스 전환하기",
+    "Open": "열기",
+    "Download Completed": "다운로드 완료",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "당신의 Element 설정은 유효하지 않은 JSON을 포함합니다. 이 문제를 해결하고 페이지를 새로고침해주세요.",
+    "Your Element is misconfigured": "당신의 Element가 잘못 설정되었습니다"
 }

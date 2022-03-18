@@ -32,5 +32,7 @@
     "I understand the risks and wish to continue": "Entenc els riscos i vull continuar",
     "Go to element.io": "Vés a element.io",
     "Failed to start": "Ha fallat l'inici",
-    "Missing indexeddb worker script!": "Falta l'script del treballador indexeddb!"
+    "Missing indexeddb worker script!": "Falta l'script del treballador indexeddb!",
+    "Use %(brand)s on mobile": "Utilitza %(brand)s al mòbil",
+    "Switch to space by number": "Canvia d'espai per número"
 }

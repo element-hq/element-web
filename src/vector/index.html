@@ -32,10 +32,9 @@
         font-src 'self' data:;
         media-src * blob: data:;
         child-src * blob: data:;
-        worker-src 'self';
+        worker-src 'self' blob:;
         frame-src * blob: data:;
         form-action 'self';
-        object-src 'self';
         manifest-src 'self';
     ">
     <% for (var i=0; i < htmlWebpackPlugin.files.css.length; i++) {
@@ -44,7 +43,7 @@
         if (match) {
             var title = match[1].charAt(0).toUpperCase() + match[1].slice(1);
         %>
-           <link rel="stylesheet" disabled="disabled" title="<%= title %>" href="<%= file %>">
+           <link rel="stylesheet" disabled="disabled" data-mx-theme="<%= title %>" title="<%= title %>" href="<%= file %>">
         <% } else { %>
            <link rel="stylesheet" href="<%= file %>">
         <% }
@@ -59,24 +58,20 @@
     } %>
 
   </head>
-  <body
-      style="height: 100%; margin: 0;"
-      data-vector-indexeddb-worker-script="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("indexeddb-worker.js")) %>"
-      data-vector-recorder-worklet-script="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("recorder-worklet.js")) %>"
-  >
+  <body style="height: 100%; margin: 0;">
     <noscript>Sorry, Element requires JavaScript to be enabled.</noscript> <!-- TODO: Translate this? -->
-    <section id="matrixchat" style="height: 100%; overflow: auto;" class="notranslate"></section>
+    <section id="matrixchat" style="height: 100%;" class="notranslate"></section>
     <script src="<%= htmlWebpackPlugin.files.js.find(entry => entry.includes("bundle.js")) %>"></script>
 
     <!-- Legacy supporting Prefetch images -->
-    <img src="<%= require('matrix-react-sdk/res/img/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg') %>" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/bold.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/code.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/italics.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/quote.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
-    <img src="<%= require('matrix-react-sdk/res/img/format/strikethrough.svg') %>" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/e2e/warning.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/feather-customised/warning-triangle.svg').default %>" aria-hidden alt="" width="24" height="23" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/bold.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/code.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/italics.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/quote.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
+    <img src="<%= require('matrix-react-sdk/res/img/format/strikethrough.svg').default %>" aria-hidden alt="" width="25" height="22" style="visibility: hidden; position: absolute; top: 0px; left: 0px;"/>
 
     <audio id="messageAudio">
         <source src="media/message.ogg" type="audio/ogg" />

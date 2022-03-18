@@ -19,34 +19,33 @@ limitations under the License.
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import olmWasmPath from "olm/olm.wasm";
-import Olm from 'olm';
+import olmWasmPath from "@matrix-org/olm/olm.wasm";
+import Olm from '@matrix-org/olm';
 import * as ReactDOM from "react-dom";
 import * as React from "react";
-
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
+import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
+import SdkConfig from "matrix-react-sdk/src/SdkConfig";
+import { setTheme } from "matrix-react-sdk/src/theme";
+import { logger } from "matrix-js-sdk/src/logger";
+
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
-import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
-import SdkConfig from "matrix-react-sdk/src/SdkConfig";
-import {setTheme} from "matrix-react-sdk/src/theme";
-
-import {initRageshake, initRageshakeStore} from "./rageshakesetup";
-
+import { initRageshake, initRageshakeStore } from "./rageshakesetup";
 
 export const rageshakePromise = initRageshake();
 
 export function preparePlatform() {
     if (window.electron) {
-        console.log("Using Electron platform");
+        logger.log("Using Electron platform");
         PlatformPeg.set(new ElectronPlatform());
     } else if (window.matchMedia('(display-mode: standalone)').matches) {
-        console.log("Using PWA platform");
+        logger.log("Using PWA platform");
         PlatformPeg.set(new PWAPlatform());
     } else {
-        console.log("Using Web platform");
+        logger.log("Using Web platform");
         PlatformPeg.set(new WebPlatform());
     }
 }
@@ -55,7 +54,7 @@ export function setupLogStorage() {
     if (SdkConfig.get().bug_report_endpoint_url) {
         return initRageshakeStore();
     }
-    console.warn("No bug report endpoint set - logs will not be persisted");
+    logger.warn("No bug report endpoint set - logs will not be persisted");
     return Promise.resolve();
 }
 
@@ -64,7 +63,12 @@ export async function loadConfig() {
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     //
     // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-    SdkConfig.put(await PlatformPeg.get().getConfig() || {});
+    const platformConfig = await PlatformPeg.get().getConfig();
+    if (platformConfig) {
+        SdkConfig.put(platformConfig);
+    } else {
+        SdkConfig.unset(); // clears the config (sets to empty object)
+    }
 }
 
 export function loadOlm(): Promise<void> {
@@ -83,9 +87,9 @@ export function loadOlm(): Promise<void> {
     return Olm.init({
         locateFile: () => olmWasmPath,
     }).then(() => {
-        console.log("Using WebAssembly Olm");
+        logger.log("Using WebAssembly Olm");
     }).catch((e) => {
-        console.log("Failed to load Olm: trying legacy version", e);
+        logger.log("Failed to load Olm: trying legacy version", e);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
             s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
@@ -97,9 +101,9 @@ export function loadOlm(): Promise<void> {
             // not 'Olm' which is still the failed wasm version.
             return window.Olm.init();
         }).then(() => {
-            console.log("Using legacy Olm");
+            logger.log("Using legacy Olm");
         }).catch((e) => {
-            console.log("Both WebAssembly and asm.js Olm failed!", e);
+            logger.log("Both WebAssembly and asm.js Olm failed!", e);
         });
     });
 }
@@ -119,14 +123,14 @@ export async function loadLanguage() {
         await languageHandler.setLanguage(langs);
         document.documentElement.setAttribute("lang", languageHandler.getCurrentLanguage());
     } catch (e) {
-        console.error("Unable to set language", e);
+        logger.error("Unable to set language", e);
     }
 }
 
 export async function loadSkin() {
     // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
     // the SDK until we have to in imports.
-    console.log("Loading skin...");
+    logger.log("Loading skin...");
     // load these async so that its code is not executed immediately and we can catch any exceptions
     const [sdk, skin] = await Promise.all([
         import(
@@ -141,7 +145,7 @@ export async function loadSkin() {
             "../component-index"),
     ]);
     sdk.loadSkin(skin);
-    console.log("Skin loaded!");
+    logger.log("Skin loaded!");
 }
 
 export async function loadTheme() {

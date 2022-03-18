@@ -61,13 +61,11 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
             ],
             "bug_report_endpoint_url": "https://element.io/bugreports/submit",
             "defaultCountryCode": "GB",
-            "showLabsSettings": false,
-            "features": {
-                "feature_new_spinner": false
-            },
+            "show_labs_settings": false,
+            "features": { },
             "default_federate": true,
             "default_theme": "light",
-            "roomDirectory": {
+            "room_directory": {
                 "servers": [
                         "matrix.org"
                 ]
@@ -82,11 +80,11 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
                 "https://matrix.org": false,
                 "https://matrix-client.matrix.org": false
             },
-            "settingDefaults": {
+            "setting_defaults": {
                 "breadcrumbs": true
             },
             "jitsi": {
-                "preferredDomain": "jitsi.riot.im"
+                "preferred_domain": "meet.element.io"
             }
         }
 

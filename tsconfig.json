@@ -8,15 +8,11 @@
     "moduleResolution": "node",
     "target": "es2016",
     "noImplicitAny": false,
+    "noUnusedLocals": true,
     "sourceMap": false,
     "outDir": "./lib",
     "declaration": true,
     "jsx": "react",
-    "types": [
-      "node",
-      "react",
-      "flux"
-    ],
     "lib": [
       "es2019",
       "dom",

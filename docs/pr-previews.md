@@ -5,10 +5,7 @@ automatically set up a preview site with a full deployment of Element with the
 changes from the pull request added in so that anyone can easily test and review
 them. This is especially useful for checking visual and interactive changes.
 
-To access the preview site, scroll down to the bottom of the PR where the
-various CI results are displayed:
-
-![Pull request: checks section](./img/pr-checks.png)
+To access the preview site, click the link in the description of the PR.
 
 The checks section could be collapsed at first, so you may need to click "Show
 all checks" to reveal them. Look for an entry that mentions `deploy-preview`. It

@@ -16,9 +16,11 @@ limitations under the License.
 
 import request from 'browser-request';
 
+import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+
 // Load the config file. First try to load up a domain-specific config of the
 // form "config.$domain.json" and if that fails, fall back to config.json.
-export async function getVectorConfig(relativeLocation='') {
+export async function getVectorConfig(relativeLocation=''): Promise<IConfigOptions> {
     if (relativeLocation !== '' && !relativeLocation.endsWith('/')) relativeLocation += '/';
 
     const specificConfigPromise = getConfig(`${relativeLocation}config.${document.domain}.json`);
@@ -30,9 +32,9 @@ export async function getVectorConfig(relativeLocation='') {
         if (Object.keys(configJson).length === 0) {
             throw new Error(); // throw to enter the catch
         }
-        return configJson;
+        return configJson as IConfigOptions;
     } catch (e) {
-        return await generalConfigPromise;
+        return await generalConfigPromise as IConfigOptions;
     }
 }
 
@@ -55,7 +57,7 @@ function getConfig(configJsonFilename: string): Promise<{}> {
                                 resolve({});
                             }
                         }
-                        reject({err: err, response: response});
+                        reject({ err: err, response: response });
                         return;
                     }
 
@@ -65,7 +67,7 @@ function getConfig(configJsonFilename: string): Promise<{}> {
                     // loading from the filesystem (see above).
                     resolve(JSON.parse(body));
                 } catch (e) {
-                    reject({err: e});
+                    reject({ err: e });
                 }
             },
         );

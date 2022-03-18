@@ -32,5 +32,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s bruker avanserte nettleserfunksjoner som ikke støttes av din nåværende nettleser.",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Skrivebord (%(platformName)s)",
-    "Open": "Åpne"
+    "Open": "Åpne",
+    "Use %(brand)s on mobile": "Bruk %(brand)s på mobil",
+    "Switch to space by number": "Bytt til plass etter nummer"
 }

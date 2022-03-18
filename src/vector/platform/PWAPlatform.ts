@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { logger } from "matrix-js-sdk/src/logger";
+
 import WebPlatform from "./WebPlatform";
 
 export default class PWAPlatform extends WebPlatform {
@@ -23,7 +25,7 @@ export default class PWAPlatform extends WebPlatform {
         this.notificationCount = count;
 
         navigator.setAppBadge(count).catch(e => {
-            console.error("Failed to update PWA app badge", e);
+            logger.error("Failed to update PWA app badge", e);
         });
     }
 }

@@ -57,7 +57,7 @@ export default class Favicon {
     private readyCb = () => {};
 
     constructor(params: Partial<IParams> = {}) {
-        this.params = {...defaults, ...params};
+        this.params = { ...defaults, ...params };
 
         this.icons = Favicon.getIcons();
         // create work canvas
@@ -125,7 +125,7 @@ export default class Favicon {
     }
 
     private circle(n: number | string, opts?: Partial<IParams>) {
-        const params = {...this.params, ...opts};
+        const params = { ...this.params, ...opts };
         const opt = this.options(n, params);
 
         let more = false;
@@ -214,7 +214,7 @@ export default class Favicon {
         if (!this.isReady) {
             this.readyCb = () => {
                 this.badge(content, opts);
-            }
+            };
             return;
         }
 
