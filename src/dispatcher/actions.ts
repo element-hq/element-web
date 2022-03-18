@@ -177,6 +177,16 @@ export enum Action {
     JoinRoomError = "join_room_error",
 
     /**
+     * Fired when starting to bulk redact messages from a user in a room.
+     */
+    BulkRedactStart = "bulk_redact_start",
+
+    /**
+     * Fired when done bulk redacting messages from a user in a room.
+     */
+    BulkRedactEnd = "bulk_redact_end",
+
+    /**
      * Inserts content into the active composer. Should be used with ComposerInsertPayload.
      */
     ComposerInsert = "composer_insert",

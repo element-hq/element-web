@@ -23,7 +23,6 @@ import { ClientEvent, MatrixClient } from 'matrix-js-sdk/src/client';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { User } from 'matrix-js-sdk/src/models/user';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { EventType } from "matrix-js-sdk/src/@types/event";
@@ -60,11 +59,11 @@ import Spinner from "../elements/Spinner";
 import PowerSelector from "../elements/PowerSelector";
 import MemberAvatar from "../avatars/MemberAvatar";
 import PresenceLabel from "../rooms/PresenceLabel";
+import BulkRedactDialog from "../dialogs/BulkRedactDialog";
 import ShareDialog from "../dialogs/ShareDialog";
 import ErrorDialog from "../dialogs/ErrorDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import ConfirmUserActionDialog from "../dialogs/ConfirmUserActionDialog";
-import InfoDialog from "../dialogs/InfoDialog";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
 import { mediaFromMxc } from "../../../customisations/Media";
@@ -629,75 +628,14 @@ const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBas
 const RedactMessagesButton: React.FC<IBaseProps> = ({ member }) => {
     const cli = useContext(MatrixClientContext);
 
-    const onRedactAllMessages = async () => {
-        const { roomId, userId } = member;
-        const room = cli.getRoom(roomId);
-        if (!room) {
-            return;
-        }
-        let timeline = room.getLiveTimeline();
-        let eventsToRedact = [];
-        while (timeline) {
-            eventsToRedact = timeline.getEvents().reduce((events, event) => {
-                if (event.getSender() === userId && !event.isRedacted() && !event.isRedaction() &&
-                    event.getType() !== EventType.RoomCreate &&
-                    // Don't redact ACLs because that'll obliterate the room
-                    // See https://github.com/matrix-org/synapse/issues/4042 for details.
-                    event.getType() !== EventType.RoomServerAcl
-                ) {
-                    return events.concat(event);
-                } else {
-                    return events;
-                }
-            }, eventsToRedact);
-            timeline = timeline.getNeighbouringTimeline(EventTimeline.BACKWARDS);
-        }
+    const onRedactAllMessages = () => {
+        const room = cli.getRoom(member.roomId);
+        if (!room) return;
 
-        const count = eventsToRedact.length;
-        const user = member.name;
-
-        if (count === 0) {
-            Modal.createTrackedDialog('No user messages found to remove', '', InfoDialog, {
-                title: _t("No recent messages by %(user)s found", { user }),
-                description:
-                    <div>
-                        <p>{ _t("Try scrolling up in the timeline to see if there are any earlier ones.") }</p>
-                    </div>,
-            });
-        } else {
-            const { finished } = Modal.createTrackedDialog('Remove recent messages by user', '', QuestionDialog, {
-                title: _t("Remove recent messages by %(user)s", { user }),
-                description:
-                    <div>
-                        <p>{ _t("You are about to remove %(count)s messages by %(user)s. " +
-                            "This cannot be undone. Do you wish to continue?", { count, user }) }</p>
-                        <p>{ _t("For a large amount of messages, this might take some time. " +
-                            "Please don't refresh your client in the meantime.") }</p>
-                    </div>,
-                button: _t("Remove %(count)s messages", { count }),
-            });
-
-            const [confirmed] = await finished;
-            if (!confirmed) {
-                return;
-            }
-
-            // Submitting a large number of redactions freezes the UI,
-            // so first yield to allow to rerender after closing the dialog.
-            await Promise.resolve();
-
-            logger.info(`Started redacting recent ${count} messages for ${user} in ${roomId}`);
-            await Promise.all(eventsToRedact.map(async event => {
-                try {
-                    await cli.redactEvent(roomId, event.getId());
-                } catch (err) {
-                    // log and swallow errors
-                    logger.error("Could not redact", event.getId());
-                    logger.error(err);
-                }
-            }));
-            logger.info(`Finished redacting recent ${count} messages for ${user} in ${roomId}`);
-        }
+        Modal.createTrackedDialog("Bulk Redact Dialog", "", BulkRedactDialog, {
+            matrixClient: cli,
+            room, member,
+        });
     };
 
     return <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={onRedactAllMessages}>
