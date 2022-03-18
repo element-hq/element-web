@@ -145,52 +145,51 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
                     joinConference();
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
                     meetApi?.executeCommand('hangup');
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
                     if (meetApi && !await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
                     if (meetApi && await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
                     if (meetApi && !await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
                     if (meetApi && await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.StartLiveStream}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     if (meetApi) {
-                        ack(ev);
                         meetApi.executeCommand('startRecording', {
                             mode: 'stream',
                             // this looks like it should be rtmpStreamKey but we may be on too old
@@ -198,6 +197,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
                             //rtmpStreamKey: ev.detail.data.rtmpStreamKey,
                             youtubeStreamKey: ev.detail.data.rtmpStreamKey,
                         });
+                        ack(ev);
                     } else {
                         widgetApi.transport.reply(ev.detail, { error: { message: "Conference not joined" } });
                     }
