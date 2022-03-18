@@ -1,8 +1,8 @@
 # Configuration
 
-You can configure the app by copying `config.sample.json` to `config.json` and customising it. The file is in JSON
-format and can often result in syntax errors when editing it - visit [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org)
-on Matrix if you run into issues. The possible options are described here.
+You can configure the app by copying `config.sample.json` to `config.json` and customising it. The possible options are
+described here. If you run into issues, please visit [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org)
+on Matrix.
 
 For a good example of a production-tuned config, see https://app.element.io/config.json
 
@@ -34,12 +34,12 @@ One of the following options **must** be supplied:
       }
    }
    ```
-2. `default_server_name`: A deprecated method of connecting to the homeserver by looking up the connection information
+2. `default_server_name`: A different method of connecting to the homeserver by looking up the connection information
    using `.well-known`. When using this option, simply use your server's domain name (the part at the end of user IDs):
    `"default_server_name": "matrix.org"`
-3. `default_hs_url` and (optionally) `default_is_url`: A very deprecated method of defining the connection information.
-   These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url` being
-   optional.
+3. <del>`default_hs_url` and (optionally) `default_is_url`</del>: A very deprecated method of defining the connection
+   information. These are the same values seen as `base_url` in the `default_server_config` example, with `default_is_url`
+   being optional.
 
 If a combination of these three methods is used then Element will fail to load. This is because it is unclear which
 should be considered "first".
@@ -392,8 +392,9 @@ To add additional "terms and conditions" links throughout the app, use the follo
 
 ## Analytics
 
-Analytics are currently possible with two systems: `piwik` (matomo; deprecated) and `posthog` (preferred). When these configuration
-options are not present, analytics are deemed impossible and the user won't be asked to opt-in to the system.
+Analytics are currently possible with two systems: `posthog` (preferred) and <del>`piwik`</del> (matomo; deprecated). When
+these configuration options are not present, analytics are deemed impossible and the user won't be asked to opt-in to the
+system.
 
 To configure [Posthog](https://posthog.com/), add the following under `posthog` in your config:
 
