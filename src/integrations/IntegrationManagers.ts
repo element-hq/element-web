@@ -77,8 +77,8 @@ export class IntegrationManagers {
     }
 
     private setupConfiguredManager() {
-        const apiUrl: string = SdkConfig.get()['integrations_rest_url'];
-        const uiUrl: string = SdkConfig.get()['integrations_ui_url'];
+        const apiUrl: string = SdkConfig.get("integrations_rest_url");
+        const uiUrl: string = SdkConfig.get("integrations_ui_url");
 
         if (apiUrl && uiUrl) {
             this.managers.push(new IntegrationManagerInstance(Kind.Config, apiUrl, uiUrl));

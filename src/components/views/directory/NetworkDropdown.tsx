@@ -40,6 +40,8 @@ import TextInputDialog from "../dialogs/TextInputDialog";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import UIStore from "../../../stores/UIStore";
 import { compare } from "../../../utils/strings";
+import { SnakedObject } from "../../../utils/SnakedObject";
+import { IConfigOptions } from "../../../IConfigOptions";
 
 // XXX: We would ideally use a symbol here but we can't since we save this value to localStorage
 export const ALL_ROOMS = "ALL_ROOMS";
@@ -122,11 +124,11 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
     // we either show the button or the dropdown in its place.
     let content;
     if (menuDisplayed) {
-        const config = SdkConfig.get();
-        const roomDirectory = config.roomDirectory || {};
+        const roomDirectory = SdkConfig.getObject("room_directory")
+            ?? new SnakedObject<IConfigOptions["room_directory"]>({ servers: [] });
 
         const hsName = MatrixClientPeg.getHomeserverName();
-        const configServers = new Set<string>(roomDirectory.servers);
+        const configServers = new Set<string>(roomDirectory.get("servers"));
 
         // configured servers take preference over user-defined ones, if one occurs in both ignore the latter one.
         const removableServers = new Set(userDefinedServers.filter(s => !configServers.has(s) && s !== hsName));

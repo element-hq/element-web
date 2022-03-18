@@ -28,12 +28,13 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { HostSignupStore } from "../../../stores/HostSignupStore";
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import {
-    IHostSignupConfig,
     IPostmessage,
     IPostmessageResponseData,
     PostmessageAction,
 } from "./HostSignupDialogTypes";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IConfigOptions } from "../../../IConfigOptions";
+import { SnakedObject } from "../../../utils/SnakedObject";
 
 const HOST_SIGNUP_KEY = "host_signup";
 
@@ -48,7 +49,7 @@ interface IState {
 @replaceableComponent("views.dialogs.HostSignupDialog")
 export default class HostSignupDialog extends React.PureComponent<IProps, IState> {
     private iframeRef: React.RefObject<HTMLIFrameElement> = React.createRef();
-    private readonly config: IHostSignupConfig;
+    private readonly config: SnakedObject<IConfigOptions["host_signup"]>;
 
     constructor(props: IProps) {
         super(props);
@@ -59,11 +60,11 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
             minimized: false,
         };
 
-        this.config = SdkConfig.get().hostSignup;
+        this.config = SdkConfig.getObject("host_signup");
     }
 
     private messageHandler = async (message: IPostmessage) => {
-        if (!this.config.url.startsWith(message.origin)) {
+        if (!this.config.get("url").startsWith(message.origin)) {
             return;
         }
         switch (message.data.action) {
@@ -142,7 +143,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     };
 
     private sendMessage = (message: IPostmessageResponseData) => {
-        this.iframeRef.current.contentWindow.postMessage(message, this.config.url);
+        this.iframeRef.current.contentWindow.postMessage(message, this.config.get("url"));
     };
 
     private async sendAccountDetails() {
@@ -176,12 +177,16 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
     };
 
     private onAccountDetailsRequest = () => {
+        const cookiePolicyUrl = this.config.get("cookie_policy_url");
+        const privacyPolicyUrl = this.config.get("privacy_policy_url");
+        const tosUrl = this.config.get("terms_of_service_url");
+
         const textComponent = (
             <>
                 <p>
                     { _t("Continuing temporarily allows the %(hostSignupBrand)s setup process to access your " +
                         "account to fetch verified email addresses. This data is not stored.", {
-                        hostSignupBrand: this.config.brand,
+                        hostSignupBrand: this.config.get("brand"),
                     }) }
                 </p>
                 <p>
@@ -189,17 +194,17 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                         {},
                         {
                             cookiePolicyLink: () => (
-                                <a href={this.config.cookiePolicyUrl} target="_blank" rel="noreferrer noopener">
+                                <a href={cookiePolicyUrl} target="_blank" rel="noreferrer noopener">
                                     { _t("Cookie Policy") }
                                 </a>
                             ),
                             privacyPolicyLink: () => (
-                                <a href={this.config.privacyPolicyUrl} target="_blank" rel="noreferrer noopener">
+                                <a href={privacyPolicyUrl} target="_blank" rel="noreferrer noopener">
                                     { _t("Privacy Policy") }
                                 </a>
                             ),
                             termsOfServiceLink: () => (
-                                <a href={this.config.termsOfServiceUrl} target="_blank" rel="noreferrer noopener">
+                                <a href={tosUrl} target="_blank" rel="noreferrer noopener">
                                     { _t("Terms of Service") }
                                 </a>
                             ),
@@ -247,7 +252,7 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                 <div className="mx_Dialog_header mx_Dialog_headerWithButton">
                                     <div className="mx_Dialog_title">
                                         { _t("%(hostSignupBrand)s Setup", {
-                                            hostSignupBrand: this.config.brand,
+                                            hostSignupBrand: this.config.get("brand"),
                                         }) }
                                     </div>
                                     <AccessibleButton
@@ -284,10 +289,10 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
                                     title={_t(
                                         "Upgrade to %(hostSignupBrand)s",
                                         {
-                                            hostSignupBrand: this.config.brand,
+                                            hostSignupBrand: this.config.get("brand"),
                                         },
                                     )}
-                                    src={this.config.url}
+                                    src={this.config.get("url")}
                                     ref={this.iframeRef}
                                     sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
                                 />

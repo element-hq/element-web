@@ -413,7 +413,7 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 }
 
 function getPermalinkConstructor(): PermalinkConstructor {
-    const elementPrefix = SdkConfig.get()['permalinkPrefix'];
+    const elementPrefix = SdkConfig.get("permalink_prefix");
     if (elementPrefix && elementPrefix !== matrixtoBaseUrl) {
         return new ElementPermalinkConstructor(elementPrefix);
     }
@@ -423,7 +423,7 @@ function getPermalinkConstructor(): PermalinkConstructor {
 
 export function parsePermalink(fullUrl: string): PermalinkParts {
     try {
-        const elementPrefix = SdkConfig.get()['permalinkPrefix'];
+        const elementPrefix = SdkConfig.get("permalink_prefix");
         if (decodeURIComponent(fullUrl).startsWith(matrixtoBaseUrl)) {
             return new MatrixToPermalinkConstructor().parsePermalink(decodeURIComponent(fullUrl));
         } else if (fullUrl.startsWith("matrix:")) {

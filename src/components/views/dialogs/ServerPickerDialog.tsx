@@ -50,7 +50,7 @@ export default class ServerPickerDialog extends React.PureComponent<IProps, ISta
         super(props);
 
         const config = SdkConfig.get();
-        this.defaultServer = config["validated_server_config"] as ValidatedServerConfig;
+        this.defaultServer = config["validated_server_config"];
         const { serverConfig } = this.props;
 
         let otherHomeserver = "";

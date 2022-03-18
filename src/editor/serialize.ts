@@ -95,7 +95,7 @@ export function htmlSerializeIfNeeded(model: EditorModel, { forceHTML = false } 
         patternNames.forEach(function(patternName) {
             patternTypes.forEach(function(patternType) {
                 // get the regex replace pattern from config or use the default
-                const pattern = (((SdkConfig.get()["latex_maths_delims"] ||
+                const pattern = (((SdkConfig.get("latex_maths_delims") ||
                     {})[patternType] || {})["pattern"] || {})[patternName] ||
                     patternDefaults[patternName][patternType];
 

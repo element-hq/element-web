@@ -39,10 +39,10 @@ export default class Welcome extends React.PureComponent<IProps> {
         // FIXME: Using an import will result in wrench-element-tests failures
         const EmbeddedPage = sdk.getComponent("structures.EmbeddedPage");
 
-        const pagesConfig = SdkConfig.get().embeddedPages;
+        const pagesConfig = SdkConfig.getObject("embedded_pages");
         let pageUrl = null;
         if (pagesConfig) {
-            pageUrl = pagesConfig.welcomeUrl;
+            pageUrl = pagesConfig.get("welcome_url");
         }
         if (!pageUrl) {
             pageUrl = 'welcome.html';

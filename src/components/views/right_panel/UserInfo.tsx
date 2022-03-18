@@ -1575,7 +1575,7 @@ const UserInfoHeader: React.FC<{
         presenceCurrentlyActive = member.user.currentlyActive;
     }
 
-    const enablePresenceByHsUrl = SdkConfig.get()["enable_presence_by_hs_url"];
+    const enablePresenceByHsUrl = SdkConfig.get("enable_presence_by_hs_url");
     let showPresence = true;
     if (enablePresenceByHsUrl && enablePresenceByHsUrl[cli.baseUrl] !== undefined) {
         showPresence = enablePresenceByHsUrl[cli.baseUrl];

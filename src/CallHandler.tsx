@@ -259,7 +259,7 @@ export default class CallHandler extends EventEmitter {
     }
 
     private shouldObeyAssertedfIdentity(): boolean {
-        return SdkConfig.get()['voip']?.obeyAssertedIdentity;
+        return SdkConfig.getObject("voip")?.get("obey_asserted_identity");
     }
 
     public getSupportsPstnProtocol(): boolean {

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from "react";
+import { Optional } from "matrix-events-sdk";
 
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
@@ -28,6 +29,8 @@ import {
     showDialog as showAnalyticsLearnMoreDialog,
 } from "../components/views/dialogs/AnalyticsLearnMoreDialog";
 import { Action } from "../dispatcher/actions";
+import { SnakedObject } from "../utils/SnakedObject";
+import { IConfigOptions } from "../IConfigOptions";
 
 const onAccept = () => {
     dis.dispatch({
@@ -81,7 +84,12 @@ const TOAST_KEY = "analytics";
 const getAnonymousDescription = (): ReactNode => {
     // get toast description for anonymous tracking (the previous scheme pre-posthog)
     const brand = SdkConfig.get().brand;
-    const cookiePolicyUrl = SdkConfig.get().piwik?.policyUrl;
+    const piwikConfig = SdkConfig.get("piwik");
+    let piwik: Optional<SnakedObject<Extract<IConfigOptions["piwik"], object>>>;
+    if (typeof piwikConfig === 'object') {
+        piwik = new SnakedObject(piwikConfig);
+    }
+    const cookiePolicyUrl = piwik?.get("policy_url");
     return _t(
         "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. " +
         "This will use a <PolicyLink>cookie</PolicyLink>.",
@@ -100,7 +108,7 @@ const getAnonymousDescription = (): ReactNode => {
 };
 
 const showToast = (props: Omit<React.ComponentProps<typeof GenericToast>, "toastKey">) => {
-    const analyticsOwner = SdkConfig.get().analyticsOwner ?? SdkConfig.get().brand;
+    const analyticsOwner = SdkConfig.get("analytics_owner") ?? SdkConfig.get().brand;
     ToastStore.sharedInstance().addOrReplaceToast({
         key: TOAST_KEY,
         title: _t("Help improve %(analyticsOwner)s", { analyticsOwner }),

@@ -207,7 +207,7 @@ export default class AutoDiscoveryUtils {
         const hsResult = discoveryResult['m.homeserver'];
         const isResult = discoveryResult['m.identity_server'];
 
-        const defaultConfig = SdkConfig.get()["validated_server_config"];
+        const defaultConfig = SdkConfig.get("validated_server_config");
 
         // Validate the identity server first because an invalid identity server causes
         // an invalid homeserver, which may not be picked up correctly.

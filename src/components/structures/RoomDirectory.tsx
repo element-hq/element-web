@@ -103,7 +103,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
                 let roomServer = myHomeserver;
                 if (
-                    SdkConfig.get().roomDirectory?.servers?.includes(lsRoomServer) ||
+                    SdkConfig.getObject("room_directory")?.get("servers")?.includes(lsRoomServer) ||
                     SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
                 ) {
                     roomServer = lsRoomServer;

@@ -86,7 +86,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
         }
 
         let labsSection;
-        if (SdkConfig.get()['showLabsSettings']) {
+        if (SdkConfig.get("show_labs_settings")) {
             const groups = new EnhancedMap<LabGroup, JSX.Element[]>();
             labs.forEach(f => {
                 groups.getOrCreate(SettingsStore.getLabGroup(f), []).push(

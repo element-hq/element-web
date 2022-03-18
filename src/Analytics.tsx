@@ -17,12 +17,15 @@ limitations under the License.
 
 import React from 'react';
 import { logger } from "matrix-js-sdk/src/logger";
+import { Optional } from "matrix-events-sdk";
 
 import { getCurrentLanguage, _t, _td, IVariables } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
 import SdkConfig from './SdkConfig';
 import Modal from './Modal';
 import * as sdk from './index';
+import { SnakedObject } from "./utils/SnakedObject";
+import { IConfigOptions } from "./IConfigOptions";
 
 const hashRegex = /#\/(groups?|room|user|settings|register|login|forgot_password|home|directory)/;
 const hashVarRegex = /#\/(group|room|user)\/.*$/;
@@ -193,8 +196,12 @@ export class Analytics {
     }
 
     public canEnable() {
-        const config = SdkConfig.get();
-        return navigator.doNotTrack !== "1" && config && config.piwik && config.piwik.url && config.piwik.siteId;
+        const piwikConfig = SdkConfig.get("piwik");
+        let piwik: Optional<SnakedObject<Extract<IConfigOptions["piwik"], object>>>;
+        if (typeof piwikConfig === 'object') {
+            piwik = new SnakedObject(piwikConfig);
+        }
+        return navigator.doNotTrack !== "1" && piwik?.get("site_id");
     }
 
     /**
@@ -204,12 +211,16 @@ export class Analytics {
     public async enable() {
         if (!this.disabled) return;
         if (!this.canEnable()) return;
-        const config = SdkConfig.get();
+        const piwikConfig = SdkConfig.get("piwik");
+        let piwik: Optional<SnakedObject<Extract<IConfigOptions["piwik"], object>>>;
+        if (typeof piwikConfig === 'object') {
+            piwik = new SnakedObject(piwikConfig);
+        }
 
-        this.baseUrl = new URL("piwik.php", config.piwik.url);
+        this.baseUrl = new URL("piwik.php", piwik.get("url"));
         // set constants
         this.baseUrl.searchParams.set("rec", "1"); // rec is required for tracking
-        this.baseUrl.searchParams.set("idsite", config.piwik.siteId); // rec is required for tracking
+        this.baseUrl.searchParams.set("idsite", piwik.get("site_id")); // idsite is required for tracking
         this.baseUrl.searchParams.set("apiv", "1"); // API version to use
         this.baseUrl.searchParams.set("send_image", "0"); // we want a 204, not a tiny GIF
         // set user parameters
@@ -347,10 +358,14 @@ export class Analytics {
     public setLoggedIn(isGuest: boolean, homeserverUrl: string) {
         if (this.disabled) return;
 
-        const config = SdkConfig.get();
-        if (!config.piwik) return;
+        const piwikConfig = SdkConfig.get("piwik");
+        let piwik: Optional<SnakedObject<Extract<IConfigOptions["piwik"], object>>>;
+        if (typeof piwikConfig === 'object') {
+            piwik = new SnakedObject(piwikConfig);
+        }
+        if (!piwik) return;
 
-        const whitelistedHSUrls = config.piwik.whitelistedHSUrls || [];
+        const whitelistedHSUrls = piwik.get("whitelisted_hs_urls", "whitelistedHSUrls") || [];
 
         this.setVisitVariable('User Type', isGuest ? 'Guest' : 'Logged In');
         this.setVisitVariable('Homeserver URL', whitelistRedact(whitelistedHSUrls, homeserverUrl));
@@ -391,7 +406,12 @@ export class Analytics {
         ];
 
         // FIXME: Using an import will result in test failures
-        const cookiePolicyUrl = SdkConfig.get().piwik?.policyUrl;
+        const piwikConfig = SdkConfig.get("piwik");
+        let piwik: Optional<SnakedObject<Extract<IConfigOptions["piwik"], object>>>;
+        if (typeof piwikConfig === 'object') {
+            piwik = new SnakedObject(piwikConfig);
+        }
+        const cookiePolicyUrl = piwik?.get("policy_url");
         const ErrorDialog = sdk.getComponent('dialogs.ErrorDialog');
         const cookiePolicyLink = _t(
             "Our complete cookie policy can be found <CookiePolicyLink>here</CookiePolicyLink>.",

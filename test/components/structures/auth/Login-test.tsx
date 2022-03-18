@@ -42,9 +42,9 @@ describe('Login', function() {
     } as unknown as MatrixClient);
 
     beforeEach(function() {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
+        SdkConfig.put({
+            brand: "test-brand",
             disable_custom_urls: true,
-            brand: 'test-brand',
         });
         mockClient.login.mockClear().mockResolvedValue({});
         mockClient.loginFlows.mockClear().mockResolvedValue({ flows: [{ type: "m.login.password" }] });
@@ -57,6 +57,7 @@ describe('Login', function() {
     afterEach(function() {
         ReactDOM.unmountComponentAtNode(parentDiv);
         parentDiv.remove();
+        SdkConfig.unset(); // we touch the config, so clean up
     });
 
     function render() {
@@ -69,9 +70,9 @@ describe('Login', function() {
     }
 
     it('should show form with change server link', async () => {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
+        SdkConfig.put({
+            brand: "test-brand",
             disable_custom_urls: false,
-            brand: 'test',
         });
         const root = render();
 

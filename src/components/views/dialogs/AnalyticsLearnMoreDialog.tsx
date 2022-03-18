@@ -15,12 +15,14 @@ limitations under the License.
 */
 
 import React from "react";
+import { Optional } from "matrix-events-sdk";
 
 import BaseDialog from "./BaseDialog";
 import { _t } from "../../../languageHandler";
 import DialogButtons from "../elements/DialogButtons";
 import Modal from "../../../Modal";
 import SdkConfig from "../../../SdkConfig";
+import { SnakedObject } from "../../../utils/SnakedObject";
 
 export enum ButtonClicked {
     Primary,
@@ -96,8 +98,12 @@ const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
 };
 
 export const showDialog = (props: Omit<IProps, "cookiePolicyUrl" | "analyticsOwner">): void => {
-    const privacyPolicyUrl = SdkConfig.get().piwik?.policyUrl;
-    const analyticsOwner = SdkConfig.get().analyticsOwner ?? SdkConfig.get().brand;
+    const piwikConfig = SdkConfig.get("piwik");
+    let privacyPolicyUrl: Optional<string>;
+    if (piwikConfig && typeof piwikConfig === "object") {
+        privacyPolicyUrl = (new SnakedObject(piwikConfig)).get("policy_url");
+    }
+    const analyticsOwner = SdkConfig.get("analytics_owner") ?? SdkConfig.get("brand");
     Modal.createTrackedDialog(
         "Analytics Learn More",
         "",

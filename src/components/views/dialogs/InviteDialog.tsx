@@ -412,7 +412,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             throw new Error("When using KIND_CALL_TRANSFER a call is required for an InviteDialog");
         }
 
-        const alreadyInvited = new Set([MatrixClientPeg.get().getUserId(), SdkConfig.get()['welcomeUserId']]);
+        const alreadyInvited = new Set([MatrixClientPeg.get().getUserId(), SdkConfig.get("welcome_user_id")]);
         if (props.roomId) {
             const room = MatrixClientPeg.get().getRoom(props.roomId);
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");

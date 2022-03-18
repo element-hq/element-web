@@ -14,23 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ConfigOptions } from "../SdkConfig";
+import { logger } from "matrix-js-sdk/src/logger";
 
-export function getHomePageUrl(appConfig: ConfigOptions): string | null {
-    const pagesConfig = appConfig.embeddedPages;
-    let pageUrl = pagesConfig?.homeUrl;
+import { IConfigOptions } from "../IConfigOptions";
+import { SnakedObject } from "./SnakedObject";
+
+export function getHomePageUrl(appConfig: IConfigOptions): string | null {
+    const config = new SnakedObject(appConfig);
+
+    const pagesConfig = config.get("embedded_pages");
+    let pageUrl = pagesConfig ? (new SnakedObject(pagesConfig).get("home_url")) : null;
 
     if (!pageUrl) {
         // This is a deprecated config option for the home page
         // (despite the name, given we also now have a welcome
         // page, which is not the same).
-        pageUrl = appConfig.welcomePageUrl;
+        pageUrl = (<any>appConfig).welcomePageUrl;
+        if (pageUrl) {
+            logger.warn(
+                "You are using a deprecated config option: `welcomePageUrl`. Please use " +
+                "`embedded_pages.home_url` instead, per https://github.com/vector-im/element-web/issues/21428",
+            );
+        }
     }
 
     return pageUrl;
 }
 
-export function shouldUseLoginForWelcome(appConfig: ConfigOptions): boolean {
-    const pagesConfig = appConfig.embeddedPages;
-    return pagesConfig?.loginForWelcome === true;
+export function shouldUseLoginForWelcome(appConfig: IConfigOptions): boolean {
+    const config = new SnakedObject(appConfig);
+    const pagesConfig = config.get("embedded_pages");
+    return pagesConfig
+        ? ((new SnakedObject(pagesConfig).get("login_for_welcome")) === true)
+        : false;
 }

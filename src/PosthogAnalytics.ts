@@ -126,10 +126,10 @@ export class PosthogAnalytics {
     }
 
     constructor(private readonly posthog: PostHog) {
-        const posthogConfig = SdkConfig.get()["posthog"];
+        const posthogConfig = SdkConfig.getObject("posthog");
         if (posthogConfig) {
-            this.posthog.init(posthogConfig.projectApiKey, {
-                api_host: posthogConfig.apiHost,
+            this.posthog.init(posthogConfig.get("project_api_key"), {
+                api_host: posthogConfig.get("api_host"),
                 autocapture: false,
                 mask_all_text: true,
                 mask_all_element_attributes: true,

@@ -75,7 +75,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             joinRule = JoinRule.Restricted;
         }
 
-        const config = SdkConfig.get();
         this.state = {
             isPublic: this.props.defaultPublic || false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(),
@@ -84,7 +83,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             topic: "",
             alias: "",
             detailsOpen: false,
-            noFederate: config.default_federate === false,
+            noFederate: SdkConfig.get().default_federate === false,
             nameIsValid: false,
             canChangeEncryption: true,
         };

@@ -259,9 +259,8 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             );
         }
 
-        const adminMessageMD =
-            SdkConfig.get().reportEvent &&
-            SdkConfig.get().reportEvent.adminMessageMD;
+        const adminMessageMD = SdkConfig
+            .getObject("report_event")?.get("admin_message_md", "adminMessageMD");
         let adminMessage;
         if (adminMessageMD) {
             const html = new Markdown(adminMessageMD).toHTML({ externalLinks: true });
@@ -272,7 +271,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             // Display report-to-moderator dialog.
             // We let the user pick a nature.
             const client = MatrixClientPeg.get();
-            const homeServerName = SdkConfig.get()["validated_server_config"].hsName;
+            const homeServerName = SdkConfig.get("validated_server_config").hsName;
             let subtitle;
             switch (this.state.nature) {
                 case Nature.Disagreement:

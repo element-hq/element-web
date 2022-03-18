@@ -21,7 +21,7 @@ import SdkConfig from '../SdkConfig';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 
 export function getDefaultIdentityServerUrl(): string {
-    return SdkConfig.get()['validated_server_config']['isUrl'];
+    return SdkConfig.get("validated_server_config").isUrl;
 }
 
 export function useDefaultIdentityServer(): void {

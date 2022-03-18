@@ -52,7 +52,7 @@ import { ConsoleLogger, IndexedDBLogStore } from "../rageshake/rageshake";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import { Skinner } from "../Skinner";
 import AutoRageshakeStore from "../stores/AutoRageshakeStore";
-import { ConfigOptions } from "../SdkConfig";
+import { IConfigOptions } from "../IConfigOptions";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -63,7 +63,7 @@ declare global {
         Olm: {
             init: () => Promise<void>;
         };
-        mxReactSdkConfig: ConfigOptions;
+        mxReactSdkConfig: IConfigOptions;
 
         // Needed for Safari, unknown to TypeScript
         webkitAudioContext: typeof AudioContext;

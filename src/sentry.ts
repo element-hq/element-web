@@ -20,6 +20,7 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import SdkConfig from "./SdkConfig";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import SettingsStore from "./settings/SettingsStore";
+import { IConfigOptions } from "./IConfigOptions";
 
 /* eslint-disable camelcase */
 
@@ -173,7 +174,7 @@ async function getContexts(): Promise<Contexts> {
 }
 
 export async function sendSentryReport(userText: string, issueUrl: string, error: Error): Promise<void> {
-    const sentryConfig = SdkConfig.get()["sentry"];
+    const sentryConfig = SdkConfig.getObject("sentry");
     if (!sentryConfig) return;
 
     const captureContext = {
@@ -198,12 +199,7 @@ export function setSentryUser(mxid: string): void {
     Sentry.setUser({ username: mxid });
 }
 
-interface ISentryConfig {
-    dsn: string;
-    environment?: string;
-}
-
-export async function initSentry(sentryConfig: ISentryConfig): Promise<void> {
+export async function initSentry(sentryConfig: IConfigOptions["sentry"]): Promise<void> {
     if (!sentryConfig) return;
     // Only enable Integrations.GlobalHandlers, which hooks uncaught exceptions, if automaticErrorReporting is true
     const integrations = [

@@ -35,7 +35,7 @@ interface IKeyboardShortcutRowProps {
 
 // Filter out the labs section if labs aren't enabled.
 const visibleCategories = Object.entries(CATEGORIES).filter(([categoryName]) =>
-    categoryName !== CategoryName.LABS || SdkConfig.get()['showLabsSettings']);
+    categoryName !== CategoryName.LABS || SdkConfig.get("show_labs_settings"));
 
 const KeyboardShortcutRow: React.FC<IKeyboardShortcutRowProps> = ({ name }) => {
     const displayName = getKeyboardShortcutDisplayName(name);

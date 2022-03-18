@@ -39,8 +39,8 @@ export default class HostSignupAction extends React.PureComponent<IProps, IState
     };
 
     public render(): React.ReactNode {
-        const hostSignupConfig = SdkConfig.get().hostSignup;
-        if (!hostSignupConfig?.brand) {
+        const hostSignupConfig = SdkConfig.getObject("host_signup");
+        if (!hostSignupConfig?.get("brand")) {
             return null;
         }
 
@@ -51,7 +51,7 @@ export default class HostSignupAction extends React.PureComponent<IProps, IState
                     label={_t(
                         "Upgrade to %(hostSignupBrand)s",
                         {
-                            hostSignupBrand: hostSignupConfig.brand,
+                            hostSignupBrand: hostSignupConfig.get("brand"),
                         },
                     )}
                     onClick={this.openDialog}

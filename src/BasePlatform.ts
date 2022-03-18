@@ -32,6 +32,7 @@ import { hideToast as hideUpdateToast } from "./toasts/UpdateToast";
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import { idbLoad, idbSave, idbDelete } from "./utils/StorageManager";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { IConfigOptions } from "./IConfigOptions";
 
 export const SSO_HOMESERVER_URL_KEY = "mx_sso_hs_url";
 export const SSO_ID_SERVER_URL_KEY = "mx_sso_is_url";
@@ -62,7 +63,7 @@ export default abstract class BasePlatform {
         this.startUpdateCheck = this.startUpdateCheck.bind(this);
     }
 
-    abstract getConfig(): Promise<{}>;
+    abstract getConfig(): Promise<IConfigOptions>;
 
     abstract getDefaultDeviceDisplayName(): string;
 

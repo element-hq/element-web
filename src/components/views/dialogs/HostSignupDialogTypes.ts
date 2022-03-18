@@ -45,12 +45,3 @@ export interface IPostmessage {
     data: IPostmessageRequestData;
     origin: string;
 }
-
-export interface IHostSignupConfig {
-    brand: string;
-    cookiePolicyUrl: string;
-    domains: Array<string>;
-    privacyPolicyUrl: string;
-    termsOfServiceUrl: string;
-    url: string;
-}

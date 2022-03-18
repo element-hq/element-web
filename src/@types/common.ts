@@ -41,3 +41,11 @@ export type RecursivePartial<T> = {
         T[P] extends object ? RecursivePartial<T[P]> :
             T[P];
 };
+
+// Inspired by https://stackoverflow.com/a/60206860
+export type KeysWithObjectShape<Input> = {
+    [P in keyof Input]: Input[P] extends object
+        // Arrays are counted as objects - exclude them
+        ? (Input[P] extends Array<unknown> ? never : P)
+        : never;
+}[keyof Input];

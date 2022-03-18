@@ -19,6 +19,8 @@ import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
 
 import SettingsHandler from "./SettingsHandler";
 import SdkConfig from "../../SdkConfig";
+import { SnakedObject } from "../../utils/SnakedObject";
+import { IConfigOptions } from "../../IConfigOptions";
 
 /**
  * Gets and sets settings at the "config" level. This handler does not make use of the
@@ -30,10 +32,10 @@ export default class ConfigSettingsHandler extends SettingsHandler {
     }
 
     public getValue(settingName: string, roomId: string): any {
-        const config = SdkConfig.get() || {};
+        const config = new SnakedObject<IConfigOptions>(SdkConfig.get());
 
         if (this.featureNames.includes(settingName)) {
-            const labsConfig = config["features"] || {};
+            const labsConfig = config.get("features") || {};
             const val = labsConfig[settingName];
             if (isNullOrUndefined(val)) return null; // no definition at this level
             if (val === true || val === false) return val; // new style: mapped as a boolean
@@ -45,10 +47,10 @@ export default class ConfigSettingsHandler extends SettingsHandler {
 
         // Special case themes
         if (settingName === "theme") {
-            return config["default_theme"];
+            return config.get("default_theme");
         }
 
-        const settingsConfig = config["settingDefaults"];
+        const settingsConfig = config.get("setting_defaults");
         if (!settingsConfig || isNullOrUndefined(settingsConfig[settingName])) return null;
         return settingsConfig[settingName];
     }

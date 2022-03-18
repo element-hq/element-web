@@ -73,7 +73,7 @@ class PassphraseField extends PureComponent<IProps> {
                         return false;
                     }
                     const safe = complexity.score >= this.props.minScore;
-                    const allowUnsafe = SdkConfig.get()["dangerously_allow_unsafe_and_insecure_passwords"];
+                    const allowUnsafe = SdkConfig.get("dangerously_allow_unsafe_and_insecure_passwords");
                     return allowUnsafe || safe;
                 },
                 valid: function(complexity) {

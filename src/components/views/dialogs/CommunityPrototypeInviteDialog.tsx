@@ -71,7 +71,7 @@ export default class CommunityPrototypeInviteDialog extends React.PureComponent<
     }
 
     private buildSuggestions(): IPerson[] {
-        const alreadyInvited = new Set([MatrixClientPeg.get().getUserId(), SdkConfig.get()['welcomeUserId']]);
+        const alreadyInvited = new Set([MatrixClientPeg.get().getUserId(), SdkConfig.get("welcome_user_id")]);
         if (this.props.roomId) {
             const room = MatrixClientPeg.get().getRoom(this.props.roomId);
             if (!room) throw new Error("Room ID given to InviteDialog does not look like a room");

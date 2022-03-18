@@ -53,7 +53,7 @@ const onHelpClick = () => {
 };
 
 const ServerPicker = ({ title, dialogTitle, serverConfig, onServerConfigChange }: IProps) => {
-    const disableCustomUrls = SdkConfig.get()["disable_custom_urls"];
+    const disableCustomUrls = SdkConfig.get("disable_custom_urls");
 
     let editBtn;
     if (!disableCustomUrls && onServerConfigChange) {

@@ -34,7 +34,7 @@ describe('Registration', function() {
     let parentDiv;
 
     beforeEach(function() {
-        jest.spyOn(SdkConfig, "get").mockReturnValue({
+        SdkConfig.put({
             ...DEFAULTS,
             disable_custom_urls: true,
         });
@@ -46,6 +46,7 @@ describe('Registration', function() {
     afterEach(function() {
         ReactDOM.unmountComponentAtNode(parentDiv);
         parentDiv.remove();
+        SdkConfig.unset(); // we touch the config, so clean up
     });
 
     function render() {

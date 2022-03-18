@@ -44,8 +44,8 @@ export default class ScalarAuthClient {
 
         // We try and store the token on a per-manager basis, but need a fallback
         // for the default manager.
-        const configApiUrl = SdkConfig.get()['integrations_rest_url'];
-        const configUiUrl = SdkConfig.get()['integrations_ui_url'];
+        const configApiUrl = SdkConfig.get("integrations_rest_url");
+        const configUiUrl = SdkConfig.get("integrations_ui_url");
         this.isDefaultManager = apiUrl === configApiUrl && configUiUrl === uiUrl;
     }
 
