@@ -104,7 +104,7 @@ export function attachRelation(
 export function createMessageContent(
     model: EditorModel,
     replyToEvent: MatrixEvent,
-    relation: IEventRelation,
+    relation: IEventRelation | undefined,
     permalinkCreator: RoomPermalinkCreator,
     includeReplyLegacyFallback = true,
 ): IContent {

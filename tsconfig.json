@@ -32,5 +32,9 @@
     "./test/components/structures/**/*.tsx",
     "./test/components/views/context_menus/**/*.ts",
     "./test/components/views/context_menus/**/*.tsx",
+    "./test/components/views/rooms/SendMessageComposer-test.tsx" ,
   ],
+  "exclude": [
+    "./test/end-to-end-tests/"
+  ]
 }
