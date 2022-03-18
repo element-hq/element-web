@@ -2191,6 +2191,7 @@
     "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.": "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.",
     "We couldn't send your location": "We couldn't send your location",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s could not send your location. Please try again later.",
+    "%(displayName)s's live location": "%(displayName)s's live location",
     "My current location": "My current location",
     "My live location": "My live location",
     "Drop a Pin": "Drop a Pin",

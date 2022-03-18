@@ -29,7 +29,7 @@ import Modal from '../../../Modal';
 import ErrorDialog from '../dialogs/ErrorDialog';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
 import { findMapStyleUrl } from './findMapStyleUrl';
-import { LocationShareType } from './shareLocation';
+import { LocationShareType, ShareLocationFn } from './shareLocation';
 import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
 import { LocationShareError } from './LocationShareErrors';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -38,7 +38,7 @@ import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 export interface ILocationPickerProps {
     sender: RoomMember;
     shareType: LocationShareType;
-    onChoose(uri: string, ts: number): unknown;
+    onChoose: ShareLocationFn;
     onFinished(ev?: SyntheticEvent): void;
 }
 
@@ -209,7 +209,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     private onOk = () => {
         const position = this.state.position;
 
-        this.props.onChoose(position ? getGeoUri(position) : undefined, position?.timestamp);
+        this.props.onChoose(position ? { uri: getGeoUri(position), timestamp: position.timestamp } : {});
         this.props.onFinished();
     };
 
