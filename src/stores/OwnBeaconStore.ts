@@ -20,6 +20,9 @@ import {
     MatrixEvent,
     Room,
 } from "matrix-js-sdk/src/matrix";
+import {
+    BeaconInfoState, makeBeaconInfoContent,
+} from "matrix-js-sdk/src/content-helpers";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
@@ -83,6 +86,17 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         return this.liveBeaconIds.filter(beaconId => this.beaconsByRoomId.get(roomId)?.has(beaconId));
     }
 
+    public stopBeacon = async (beaconInfoId: string): Promise<void> => {
+        const beacon = this.beacons.get(beaconInfoId);
+        // if no beacon, or beacon is already explicitly set isLive: false
+        // do nothing
+        if (!beacon?.beaconInfo?.live) {
+            return;
+        }
+
+        return await this.updateBeaconEvent(beacon, { live: false });
+    };
+
     private onNewBeacon = (_event: MatrixEvent, beacon: Beacon): void => {
         if (!isOwnBeacon(beacon, this.matrixClient.getUserId())) {
             return;
@@ -106,9 +120,14 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             this.liveBeaconIds.push(beacon.beaconInfoId);
         }
 
+        // beacon expired, update beacon to un-alive state
+        if (!isLive) {
+            this.stopBeacon(beacon.beaconInfoId);
+        }
+
+        // TODO start location polling here
+
         this.emit(OwnBeaconStoreEvent.LivenessChange, this.hasLiveBeacons());
-        // TODO stop or start polling here
-        // if not content is live but beacon is not, update state event with live: false
     };
 
     private initialiseBeaconState = () => {
@@ -134,6 +153,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         }
 
         this.beaconsByRoomId.get(beacon.roomId).add(beacon.beaconInfoId);
+
         beacon.monitorLiveness();
     };
 
@@ -148,5 +168,20 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         if (prevLiveness !== newLiveness) {
             this.emit(OwnBeaconStoreEvent.LivenessChange, newLiveness);
         }
+    };
+
+    private updateBeaconEvent = async (beacon: Beacon, update: Partial<BeaconInfoState>): Promise<void> => {
+        const { description, timeout, timestamp, live, assetType } = {
+            ...beacon.beaconInfo,
+            ...update,
+        };
+
+        const updateContent = makeBeaconInfoContent(timeout,
+            live,
+            description,
+            assetType,
+            timestamp);
+
+        await this.matrixClient.unstable_setLiveBeacon(beacon.roomId, beacon.beaconInfoEventType, updateContent);
     };
 }
