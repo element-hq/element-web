@@ -494,7 +494,7 @@ See https://github.com/vector-im/element-desktop#user-specified-configjson
 ## UI Features
 
 Parts of the UI can be disabled using UI features. These are settings which appear
-under `settingDefaults` and can only be `true` (default) or `false`. When `false`,
+under `setting_defaults` and can only be `true` (default) or `false`. When `false`,
 parts of the UI relating to that feature will be disabled regardless of the user's
 preferences.
 
