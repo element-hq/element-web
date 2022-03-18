@@ -35,7 +35,7 @@ default theme, you would use `default_theme: "custom-Electric Blue"`.
 
 eg. in config.json:
 
-```
+```json5
 "setting_defaults": {
         "custom_themes": [
             {
@@ -65,8 +65,10 @@ eg. in config.json:
                     "timeline-text-color": "#2e2f32",
                     "timeline-text-secondary-color": "#61708b",
                     "timeline-highlights-color": "#f3f8fd",
-                    "username-colors": ["#ff0000"],
-                    "avatar-background-colors": ["#cc0000"]
+
+                    // These should both be 8 values long
+                    "username-colors": ["#ff0000", /*...*/],
+                    "avatar-background-colors": ["#cc0000", /*...*/]
                 }
             }, {
                 "name": "Deep Purple",
