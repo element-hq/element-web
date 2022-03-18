@@ -28,6 +28,7 @@ import BaseEventIndexManager, {
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
+import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -280,7 +281,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this.ipcCall("startSSOFlow", this.ssoID);
     }
 
-    async getConfig(): Promise<{}> {
+    async getConfig(): Promise<IConfigOptions> {
         return this.ipcCall('getConfig');
     }
 
