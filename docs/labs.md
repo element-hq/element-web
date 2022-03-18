@@ -199,4 +199,4 @@ This feature might work in degraded mode if the homeserver a user is connected t
 
 ## Voice & video rooms (`feature_voice_rooms`)
 
-Enables support for creating and joining voice & video rooms, which are rooms with a persistent group call that users can jump in and out of.
+Enables support for creating and joining voice & video rooms, which are persistent voice chats that users can jump in and out of.
