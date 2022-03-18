@@ -63,7 +63,12 @@ export async function loadConfig() {
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     //
     // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-    SdkConfig.put(await PlatformPeg.get().getConfig() || {});
+    const platformConfig = await PlatformPeg.get().getConfig();
+    if (platformConfig) {
+        SdkConfig.put(platformConfig);
+    } else {
+        SdkConfig.unset(); // clears the config (sets to empty object)
+    }
 }
 
 export function loadOlm(): Promise<void> {

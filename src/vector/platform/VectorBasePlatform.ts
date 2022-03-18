@@ -20,6 +20,7 @@ limitations under the License.
 import BasePlatform from 'matrix-react-sdk/src/BasePlatform';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 
+import type { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { getVectorConfig } from "../getconfig";
 import Favicon from "../../favicon";
 
@@ -29,7 +30,7 @@ import Favicon from "../../favicon";
 export default abstract class VectorBasePlatform extends BasePlatform {
     protected _favicon: Favicon;
 
-    async getConfig(): Promise<{}> {
+    async getConfig(): Promise<IConfigOptions> {
         return getVectorConfig();
     }
 

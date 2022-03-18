@@ -26,8 +26,10 @@ import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
+import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { logger } from "matrix-js-sdk/src/logger";
 import { createClient } from "matrix-js-sdk/src/matrix";
+import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 
 import { parseQs } from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
@@ -101,6 +103,7 @@ export async function loadApp(fragParams: {}) {
 
     // Don't bother loading the app until the config is verified
     const config = await verifyServerConfig();
+    const snakedConfig = new SnakedObject<IConfigOptions>(config);
 
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
@@ -116,8 +119,8 @@ export async function loadApp(fragParams: {}) {
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
         logger.log("Bypassing app load to redirect to SSO");
         const tempCli = createClient({
-            baseUrl: config['validated_server_config'].hsUrl,
-            idBaseUrl: config['validated_server_config'].isUrl,
+            baseUrl: config.validated_server_config.hsUrl,
+            idBaseUrl: config.validated_server_config.isUrl,
         });
         PlatformPeg.get().startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
 
@@ -127,7 +130,8 @@ export async function loadApp(fragParams: {}) {
         return;
     }
 
-    const defaultDeviceName = config['defaultDeviceDisplayName'] ?? platform.getDefaultDeviceDisplayName();
+    const defaultDeviceName = snakedConfig.get("default_device_display_name")
+        ?? platform.getDefaultDeviceDisplayName();
 
     const MatrixChat = sdk.getComponent('structures.MatrixChat');
     return <MatrixChat

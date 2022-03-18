@@ -36,7 +36,7 @@ default theme, you would use `default_theme: "custom-Electric Blue"`.
 eg. in config.json:
 
 ```
-"settingDefaults": {
+"setting_defaults": {
         "custom_themes": [
             {
                 "name": "Electric Blue",
