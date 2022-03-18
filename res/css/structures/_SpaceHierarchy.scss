@@ -35,11 +35,11 @@ limitations under the License.
     }
 
     .mx_SpaceHierarchy_listHeader {
-        display: grid;
+        display: flex;
+        flex-flow: wrap;
         justify-content: space-between;
         align-items: center;
-        column-gap: 10px;
-        min-height: 32px;
+        gap: 12px;
         font-size: $font-15px;
         line-height: $font-24px;
         color: $primary-content;
@@ -55,9 +55,8 @@ limitations under the License.
             grid-column-start: 2;
             display: flex;
             flex-flow: wrap;
-            justify-content: flex-end;
-            row-gap: 12px;
-            column-gap: 12px;
+            gap: 12px;
+            min-height: 32px;
 
             .mx_AccessibleButton {
                 padding: 4px 12px;
