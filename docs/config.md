@@ -64,7 +64,7 @@ To force a labs flag on or off, use the following:
 If you'd like the user to be able to self-select which labs flags they can turn on, add `"show_labs_flags": true` to
 your config. This will turn on the tab in user settings.
 
-**Note**: Feature support varries release-by-release. Check the [labs flag documentation](./labs.md) frequently if enabling
+**Note**: Feature support varies release-by-release. Check the [labs flag documentation](./labs.md) frequently if enabling
 the functionality.
 
 ## Default settings
@@ -104,12 +104,12 @@ instance. As of writing those settings are not fully documented, however a few a
 Element supports some customisation of the user experience through various branding and theme options. While it doesn't support
 complete re-branding/private labeling, a more personalised experience can be achieved for your users.
 
-1. `default_theme`: Typically either `"light"` (the default) or `"dark"`, this is the optional name of the colour theme to use.
+1. `default_theme`: Typically either `light` (the default) or `dark`, this is the optional name of the colour theme to use.
    If using custom themes, this can be a theme name from that as well.
 2. `default_device_display_name`: Optional public name for devices created by login and registration, instead of the default
    templated string. Note that this option does not support templating, currently.
-3. `brand`: Optional name for the app. Defaults to `"Element"`. This is used throughout the application in various strings/locations.
-4. `permalink_prefix`: An optional URL pointing to an Element Web deployment. For example, `"https://app.element.io"`. This will
+3. `brand`: Optional name for the app. Defaults to `Element`. This is used throughout the application in various strings/locations.
+4. `permalink_prefix`: An optional URL pointing to an Element Web deployment. For example, `https://app.element.io`. This will
    change all permalinks (via the "Share" menus) to point at the Element Web deployment rather than `matrix.to`.
 5. `desktop_builds`: Optional. Where the desktop builds for the application are, if available. This is explained in more detail
    down below.
@@ -117,9 +117,9 @@ complete re-branding/private labeling, a more personalised experience can be ach
 7. `mobile_guide_toast`: When `true` (default), users accessing the Element Web instance from a mobile device will be prompted to
    download the app instead.
 8. `update_base_url`: For the desktop app only, the URL where to acquire update packages. If specified, must be a path to a directory
-   containing `macos` and `win32` directories, with the update packages within. Defaults to `"https://packages.element.io/desktop/update/"`
+   containing `macos` and `win32` directories, with the update packages within. Defaults to `https://packages.element.io/desktop/update/`
    in production.
-9. `map_style_url`: Map tile server style URL for location sharing. e.g. 'https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE'
+9. `map_style_url`: Map tile server style URL for location sharing. e.g. `https://api.maptiler.com/maps/streets/style.json?key=YOUR_KEY_GOES_HERE`
    This setting is ignored if your homeserver provides `/.well-known/matrix/client` in its well-known location, and the JSON file
    at that location has a key `m.tile_server` (or the unstable version `org.matrix.msc3488.tile_server`). In this case, the
    configuration found in the well-known location is used instead.
@@ -318,13 +318,13 @@ The VoIP and Jitsi options are:
 If you run your own rageshake server to collect bug reports, the following options may be of interest:
 
 1. `bug_report_endpoint_url`: URL for where to submit rageshake logs to. Rageshakes include feedback submissions and bug reports. When
-   not present in the config, the app will disable all rageshake functionality. Set to `"https://element.io/bugreports/submit"` to submit
+   not present in the config, the app will disable all rageshake functionality. Set to `https://element.io/bugreports/submit` to submit
    rageshakes to us, or use your own rageshake server.
 2. `uisi_autorageshake_app`: If a user has enabled the "automatically send debug logs on decryption errors" flag, this option will be sent
-   alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `"element-web"`, as with any other
+   alongside the rageshake so the rageshake server can filter them by app name. By default, this will be `element-web`, as with any other
    rageshake submitted by the app.
 
-   If you are using the element.io rageshake server, please set this to `"element-auto-uisi"` so we can better filter them.
+   If you are using the element.io rageshake server, please set this to `element-auto-uisi` so we can better filter them.
 
 If you would like to use [Sentry](https://sentry.io/) for rageshake data, add a `sentry` object to your config with the following values:
 
