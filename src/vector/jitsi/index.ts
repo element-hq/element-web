@@ -157,34 +157,34 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
                     if (meetApi && !await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
-                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
                     if (meetApi && await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
-                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
                     if (meetApi && !await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
-                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
                     if (meetApi && await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
-                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.StartLiveStream}`,
