@@ -184,3 +184,31 @@ export function shouldDisplayReply(event: MatrixEvent): boolean {
 
     return !!inReplyTo.event_id;
 }
+
+interface IAddReplyOpts {
+    permalinkCreator?: RoomPermalinkCreator;
+    includeLegacyFallback?: boolean;
+}
+
+export function addReplyToMessageContent(
+    content: IContent,
+    replyToEvent: MatrixEvent,
+    opts: IAddReplyOpts = {
+        includeLegacyFallback: true,
+    },
+): void {
+    const replyContent = makeReplyMixIn(replyToEvent);
+    Object.assign(content, replyContent);
+
+    if (opts.includeLegacyFallback) {
+        // Part of Replies fallback support - prepend the text we're sending
+        // with the text we're replying to
+        const nestedReply = getNestedReplyText(replyToEvent, opts.permalinkCreator);
+        if (nestedReply) {
+            if (content.formatted_body) {
+                content.formatted_body = nestedReply.html + content.formatted_body;
+            }
+            content.body = nestedReply.body + content.body;
+        }
+    }
+}
