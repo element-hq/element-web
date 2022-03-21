@@ -144,6 +144,7 @@
     "@types/css-font-loading-module": "^0.0.6",
     "@types/diff-match-patch": "^1.0.32",
     "@types/enzyme": "^3.10.9",
+    "@types/escape-html": "^1.0.1",
     "@types/file-saver": "^2.0.3",
     "@types/flux": "^3.1.9",
     "@types/jest": "^26.0.20",
