@@ -131,6 +131,20 @@ describe('<SendMessageComposer/>', () => {
             });
         });
 
+        it("allows emoting with non-text parts", () => {
+            const model = new EditorModel([], createPartCreator(), createRenderer());
+            const documentOffset = new DocumentOffset(16, true);
+            model.update("/me ✨sparkles✨", "insertText", documentOffset);
+            expect(model.parts.length).toEqual(4); // Emoji count as non-text
+
+            const content = createMessageContent(model, null, undefined, permalinkCreator);
+
+            expect(content).toEqual({
+                body: "✨sparkles✨",
+                msgtype: "m.emote",
+            });
+        });
+
         it("allows sending double-slash escaped slash commands correctly", () => {
             const model = new EditorModel([], createPartCreator(), createRenderer());
             const documentOffset = new DocumentOffset(32, true);
@@ -194,7 +208,7 @@ describe('<SendMessageComposer/>', () => {
             });
         };
 
-        fit("renders text and placeholder correctly", () => {
+        it("renders text and placeholder correctly", () => {
             const wrapper = getComponent({ placeholder: "placeholder string" });
 
             expect(wrapper.find('[aria-label="placeholder string"]')).toHaveLength(1);
