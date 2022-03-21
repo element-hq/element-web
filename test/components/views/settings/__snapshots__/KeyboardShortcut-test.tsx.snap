@@ -23,7 +23,9 @@ exports[`KeyboardShortcut doesn't render same modifier twice 1`] = `
     }
   }
 >
-  <div>
+  <div
+    className="mx_KeyboardShortcut"
+  >
     <KeyboardKey
       key="ctrlOrCmdKey"
       name="Control"
@@ -59,7 +61,9 @@ exports[`KeyboardShortcut doesn't render same modifier twice 2`] = `
     }
   }
 >
-  <div>
+  <div
+    className="mx_KeyboardShortcut"
+  >
     <KeyboardKey
       key="ctrlOrCmdKey"
       name="Control"

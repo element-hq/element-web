@@ -50,7 +50,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   }
                 }
               >
-                <div>
+                <div
+                  className="mx_KeyboardShortcut"
+                >
                   <KeyboardKey
                     key="ctrlKey"
                     name="Control"
@@ -92,7 +94,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   }
                 }
               >
-                <div>
+                <div
+                  className="mx_KeyboardShortcut"
+                >
                   <KeyboardKey
                     key="ctrlKey"
                     name="Control"
@@ -160,7 +164,9 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   }
                 }
               >
-                <div>
+                <div
+                  className="mx_KeyboardShortcut"
+                >
                   <KeyboardKey
                     last={true}
                     name="Enter"
