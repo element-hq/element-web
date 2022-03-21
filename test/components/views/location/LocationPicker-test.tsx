@@ -28,13 +28,16 @@ import LocationPicker, { getGeoUri } from "../../../../src/components/views/loca
 import { LocationShareType } from "../../../../src/components/views/location/shareLocation";
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
-import { findByTestId } from '../../../test-utils';
+import { findById, findByTestId, mockPlatformPeg } from '../../../test-utils';
 import { findMapStyleUrl } from '../../../../src/components/views/location/findMapStyleUrl';
 import { LocationShareError } from '../../../../src/components/views/location/LocationShareErrors';
 
 jest.mock('../../../../src/components/views/location/findMapStyleUrl', () => ({
     findMapStyleUrl: jest.fn().mockReturnValue('tileserver.com'),
 }));
+
+// dropdown uses this
+mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
 
 describe("LocationPicker", () => {
     describe("getGeoUri", () => {
@@ -108,6 +111,7 @@ describe("LocationPicker", () => {
         };
         const mockClient = {
             on: jest.fn(),
+            removeListener: jest.fn(),
             off: jest.fn(),
             isGuest: jest.fn(),
             getClientWellKnown: jest.fn(),
@@ -206,7 +210,7 @@ describe("LocationPicker", () => {
         });
 
         const testUserLocationShareTypes = (shareType: LocationShareType.Own | LocationShareType.Live) => {
-            describe(`for ${shareType} location share type`, () => {
+            describe('user location behaviours', () => {
                 it('closes and displays error when geolocation errors', () => {
                     // suppress expected error log
                     jest.spyOn(logger, 'error').mockImplementation(() => { });
@@ -263,8 +267,42 @@ describe("LocationPicker", () => {
             });
         };
 
-        testUserLocationShareTypes(LocationShareType.Own);
-        testUserLocationShareTypes(LocationShareType.Live);
+        describe('for Own location share type', () => {
+            testUserLocationShareTypes(LocationShareType.Own);
+        });
+
+        describe('for Live location share type', () => {
+            const shareType = LocationShareType.Live;
+            testUserLocationShareTypes(shareType);
+
+            const getOption = (wrapper, timeout) => findById(wrapper, `live-duration__${timeout}`).at(0);
+            const getDropdown = wrapper => findByTestId(wrapper, 'live-duration-dropdown');
+            const getSelectedOption = (wrapper) => findById(wrapper, 'live-duration_value');
+
+            const openDropdown = (wrapper) => act(() => {
+                const dropdown = getDropdown(wrapper);
+                dropdown.find('[role="button"]').at(0).simulate('click');
+                wrapper.setProps({});
+            });
+
+            it('renders live duration dropdown with default option', () => {
+                const wrapper = getComponent({ shareType });
+                expect(getSelectedOption(getDropdown(wrapper)).text()).toEqual('Share for 15m');
+            });
+
+            it('updates selected duration', () => {
+                const wrapper = getComponent({ shareType });
+
+                openDropdown(wrapper);
+                const dropdown = getDropdown(wrapper);
+                act(() => {
+                    getOption(dropdown, 3600000).simulate('click');
+                });
+
+                // value updated
+                expect(getSelectedOption(getDropdown(wrapper)).text()).toEqual('Share for 1h');
+            });
+        });
 
         describe('for Pin drop location share type', () => {
             const shareType = LocationShareType.Pin;
@@ -298,14 +336,15 @@ describe("LocationPicker", () => {
             });
 
             it('does not set position on geolocate event', () => {
-                getComponent({ shareType });
+                mocked(maplibregl.Marker).mockClear();
+                const wrapper = getComponent({ shareType });
                 act(() => {
                     // @ts-ignore
                     mocked(mockGeolocate).emit('geolocate', mockGeolocationPosition);
                 });
 
-                // marker added
-                expect(maplibregl.Marker).not.toHaveBeenCalled();
+                // marker not added
+                expect(wrapper.find('.mx_MLocationBody_markerBorder').length).toBeFalsy();
             });
 
             it('sets position on click event', () => {

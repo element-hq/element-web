@@ -35,6 +35,7 @@ import { LocationShareError } from './LocationShareErrors';
 import AccessibleButton from '../elements/AccessibleButton';
 import { MapError } from './MapError';
 import { getUserNameColorClass } from '../../../utils/FormattingUtils';
+import LiveDurationDropdown, { DEFAULT_DURATION_MS } from './LiveDurationDropdown';
 export interface ILocationPickerProps {
     sender: RoomMember;
     shareType: LocationShareType;
@@ -50,6 +51,7 @@ interface IPosition {
     timestamp: number;
 }
 interface IState {
+    timeout: number;
     position?: IPosition;
     error?: LocationShareError;
 }
@@ -70,6 +72,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
 
         this.state = {
             position: undefined,
+            timeout: DEFAULT_DURATION_MS,
             error: undefined,
         };
     }
@@ -206,10 +209,17 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         }
     };
 
-    private onOk = () => {
-        const position = this.state.position;
+    private onTimeoutChange = (timeout: number): void => {
+        this.setState({ timeout });
+    };
 
-        this.props.onChoose(position ? { uri: getGeoUri(position), timestamp: position.timestamp } : {});
+    private onOk = () => {
+        const { timeout, position } = this.state;
+
+        this.props.onChoose(
+            position ? { uri: getGeoUri(position), timestamp: position.timestamp, timeout } : {
+                timeout,
+            });
         this.props.onFinished();
     };
 
@@ -235,7 +245,12 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                 }
                 <div className="mx_LocationPicker_footer">
                     <form onSubmit={this.onOk}>
-
+                        { this.props.shareType === LocationShareType.Live &&
+                            <LiveDurationDropdown
+                                onChange={this.onTimeoutChange}
+                                timeout={this.state.timeout}
+                            />
+                        }
                         <AccessibleButton
                             data-test-id="location-picker-submit-button"
                             type="submit"
@@ -253,21 +268,32 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                     `mx_MLocationBody_marker-${this.props.shareType}`,
                     userColorClass,
                 )}
-                id={this.getMarkerId()}>
-                    <div className="mx_MLocationBody_markerBorder">
-                        { isSharingOwnLocation(this.props.shareType) ?
-                            <MemberAvatar
-                                member={this.props.sender}
-                                width={27}
-                                height={27}
-                                viewUserOnClick={false}
-                            />
-                            : <LocationIcon className="mx_MLocationBody_markerIcon" />
-                        }
-                    </div>
-                    <div
-                        className="mx_MLocationBody_pointer"
-                    />
+                id={this.getMarkerId()}
+                >
+                    { /*
+                    maplibregl hijacks the div above to style the marker
+                    it must be in the dom when the map is initialised
+                    and keep a consistent class
+                    we want to hide the marker until it is set in the case of pin drop
+                    so hide the internal visible elements
+                    */ }
+
+                    { !!this.marker && <>
+                        <div className="mx_MLocationBody_markerBorder">
+                            { isSharingOwnLocation(this.props.shareType) ?
+                                <MemberAvatar
+                                    member={this.props.sender}
+                                    width={27}
+                                    height={27}
+                                    viewUserOnClick={false}
+                                />
+                                : <LocationIcon className="mx_MLocationBody_markerIcon" />
+                            }
+                        </div>
+                        <div
+                            className="mx_MLocationBody_pointer"
+                        />
+                    </> }
                 </div>
             </div>
         );

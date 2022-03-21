@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { formatSeconds, formatRelativeTime } from "../../src/DateUtils";
+import { formatSeconds, formatRelativeTime, formatDuration } from "../../src/DateUtils";
 
 describe("formatSeconds", () => {
     it("correctly formats time with hours", () => {
@@ -68,5 +68,27 @@ describe("formatRelativeTime", () => {
     it("appends the year for events created in previous years", () => {
         const date = new Date(1604142141000);
         expect(formatRelativeTime(date, true)).toBe("Oct 31, 2020");
+    });
+});
+
+describe('formatDuration()', () => {
+    type TestCase = [string, string, number];
+
+    const MINUTE_MS = 60000;
+    const HOUR_MS = MINUTE_MS * 60;
+
+    it.each<TestCase>([
+        ['rounds up to nearest day when more than 24h - 40 hours', '2d', 40 * HOUR_MS],
+        ['rounds down to nearest day when more than 24h - 26 hours', '1d', 26 * HOUR_MS],
+        ['24 hours', '1d', 24 * HOUR_MS],
+        ['rounds to nearest hour when less than 24h - 23h', '23h', 23 * HOUR_MS],
+        ['rounds to nearest hour when less than 24h - 6h and 10min', '6h', 6 * HOUR_MS + 10 * MINUTE_MS],
+        ['rounds to nearest hours when less than 24h', '2h', 2 * HOUR_MS + 124234],
+        ['rounds to nearest minute when less than 1h - 59 minutes', '59m', 59 * MINUTE_MS],
+        ['rounds to nearest minute when less than 1h -  1 minute', '1m', MINUTE_MS],
+        ['rounds to nearest second when less than 1min - 59 seconds', '59s', 59000],
+        ['rounds to 0 seconds when less than a second - 123ms', '0s', 123],
+    ])('%s formats to %s', (_description, expectedResult, input) => {
+        expect(formatDuration(input)).toEqual(expectedResult);
     });
 });

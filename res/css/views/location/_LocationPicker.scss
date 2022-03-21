@@ -19,7 +19,8 @@ limitations under the License.
 
     height: 100%;
     position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
     // when there are errors loading the map
     // the canvas is still inserted
@@ -32,8 +33,9 @@ limitations under the License.
     }
 
     #mx_LocationPicker_map {
-        height: 100%;
-        border-radius: 8px;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        flex: 1;
 
         .maplibregl-ctrl.maplibregl-ctrl-group,
         .maplibregl-ctrl.maplibregl-ctrl-attrib {
@@ -44,10 +46,6 @@ limitations under the License.
             // place below the close button
             // padding-16 + 24px close button + padding-10
             margin-top: 50px;
-        }
-
-        .maplibregl-ctrl-bottom-right {
-            bottom: 80px;
         }
 
         .maplibregl-user-location-accuracy-circle {
@@ -93,14 +91,16 @@ limitations under the License.
     }
 
     .mx_LocationPicker_footer {
-        position: absolute;
-        bottom: 0px;
+        flex: 0;
         width: 100%;
         box-sizing: border-box;
         padding: $spacing-16;
         display: flex;
         flex-direction: column;
         justify-content: stretch;
+
+        border-bottom-left-radius: inherit;
+        border-bottom-right-radius: inherit;
 
         background-color: $header-panel-bg-color;
     }
