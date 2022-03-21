@@ -25,6 +25,9 @@ import MessageComposer from "../../../../src/components/views/rooms/MessageCompo
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import RoomContext from "../../../../src/contexts/RoomContext";
+import { IRoomState } from "../../../../src/components/structures/RoomView";
+import ResizeNotifier from "../../../../src/utils/ResizeNotifier";
+import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 describe("MessageComposer", () => {
     stubClient();
@@ -32,18 +35,14 @@ describe("MessageComposer", () => {
     const room = mkStubRoom("!roomId:server", "Room 1", cli);
 
     it("Renders a SendMessageComposer and MessageComposerButtons by default", () => {
-        const wrapper = wrapAndRender((
-            <MessageComposer room={room} resizeNotifier={jest.fn()} permalinkCreator={jest.fn()} />
-        ));
+        const wrapper = wrapAndRender({ room });
 
         expect(wrapper.find("SendMessageComposer")).toHaveLength(1);
         expect(wrapper.find("MessageComposerButtons")).toHaveLength(1);
     });
 
     it("Does not render a SendMessageComposer or MessageComposerButtons when user has no permission", () => {
-        const wrapper = wrapAndRender((
-            <MessageComposer room={room} resizeNotifier={jest.fn()} permalinkCreator={jest.fn()} />
-        ), false);
+        const wrapper = wrapAndRender({ room }, false);
 
         expect(wrapper.find("SendMessageComposer")).toHaveLength(0);
         expect(wrapper.find("MessageComposerButtons")).toHaveLength(0);
@@ -51,9 +50,7 @@ describe("MessageComposer", () => {
     });
 
     it("Does not render a SendMessageComposer or MessageComposerButtons when room is tombstoned", () => {
-        const wrapper = wrapAndRender((
-            <MessageComposer room={room} resizeNotifier={jest.fn()} permalinkCreator={jest.fn()} />
-        ), true, mkEvent({
+        const wrapper = wrapAndRender({ room }, true, mkEvent({
             event: true,
             type: "m.room.tombstone",
             room: room.roomId,
@@ -69,7 +66,7 @@ describe("MessageComposer", () => {
     });
 });
 
-function wrapAndRender(component: React.ReactElement, canSendMessages = true, tombstone?: MatrixEvent): ReactWrapper {
+function wrapAndRender(props = {}, canSendMessages = true, tombstone?: MatrixEvent): ReactWrapper {
     const mockClient = MatrixClientPeg.get();
     const roomId = "myroomid";
     const room: any = {
@@ -80,10 +77,21 @@ function wrapAndRender(component: React.ReactElement, canSendMessages = true, to
             return new RoomMember(roomId, userId);
         },
     };
+
+    const roomState = {
+        room, canSendMessages, tombstone,
+    } as unknown as IRoomState;
+
+    const defaultProps = {
+        room,
+        resizeNotifier: new ResizeNotifier(),
+        permalinkCreator: new RoomPermalinkCreator(room),
+    };
+
     return mount(
         <MatrixClientContext.Provider value={mockClient}>
-            <RoomContext.Provider value={{ room, canSendMessages, tombstone }}>
-                { component }
+            <RoomContext.Provider value={roomState}>
+                <MessageComposer {...defaultProps} {...props} />
             </RoomContext.Provider>
         </MatrixClientContext.Provider>,
     );

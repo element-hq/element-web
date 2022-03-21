@@ -133,7 +133,9 @@ export function createTestClient(): MatrixClient {
         setPusher: jest.fn().mockResolvedValue(undefined),
         setPushRuleEnabled: jest.fn().mockResolvedValue(undefined),
         setPushRuleActions: jest.fn().mockResolvedValue(undefined),
+        relations: jest.fn().mockRejectedValue(undefined),
         isCryptoEnabled: jest.fn().mockReturnValue(false),
+        fetchRoomEvent: jest.fn(),
     } as unknown as MatrixClient;
 }
 

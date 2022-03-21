@@ -16,8 +16,9 @@ limitations under the License.
 
 import React from 'react';
 import { mount } from 'enzyme';
+import { mocked } from 'jest-mock';
 import { act } from "react-dom/test-utils";
-import { Room, User } from 'matrix-js-sdk/src/matrix';
+import { Room, User, MatrixClient } from 'matrix-js-sdk/src/matrix';
 import { Phase, VerificationRequest } from 'matrix-js-sdk/src/crypto/verification/request/VerificationRequest';
 
 import "../../../skinned-sdk";
@@ -46,13 +47,7 @@ describe('<UserInfo />', () => {
     const defaultUserId = '@test:test';
     const defaultUser = new User(defaultUserId);
 
-    const defaultProps = {
-        user: defaultUser,
-        phase: RightPanelPhases.RoomMemberInfo,
-        onClose: jest.fn(),
-    };
-
-    const mockClient = {
+    const mockClient = mocked({
         getUser: jest.fn(),
         isGuest: jest.fn().mockReturnValue(false),
         isUserIgnored: jest.fn(),
@@ -67,7 +62,7 @@ describe('<UserInfo />', () => {
         currentState: {
             on: jest.fn(),
         },
-    };
+    } as unknown as MatrixClient);
 
     const verificationRequest = {
         pending: true, on: jest.fn(), phase: Phase.Ready,
@@ -75,17 +70,27 @@ describe('<UserInfo />', () => {
         otherPartySupportsMethod: jest.fn(),
     } as unknown as VerificationRequest;
 
-    const getComponent = (props = {}) => mount(<UserInfo {...defaultProps} {...props} />, {
-        wrappingComponent: MatrixClientContext.Provider,
-        wrappingComponentProps: { value: mockClient },
-    });
+    const defaultProps = {
+        user: defaultUser,
+        // idk what is wrong with this type
+        phase: RightPanelPhases.RoomMemberInfo as RightPanelPhases.RoomMemberInfo,
+        onClose: jest.fn(),
+    };
+
+    const getComponent = (props = {}) => mount(
+        <UserInfo {...defaultProps} {...props} />,
+        {
+            wrappingComponent: MatrixClientContext.Provider,
+            wrappingComponentProps: { value: mockClient },
+        },
+    );
 
     beforeAll(() => {
         jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient);
     });
 
     beforeEach(() => {
-        mockClient.getUser.mockClear().mockResolvedValue(undefined);
+        mockClient.getUser.mockClear().mockReturnValue({} as unknown as User);
     });
 
     it('closes on close button click', () => {

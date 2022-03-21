@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
-import { mount } from "enzyme";
+import React, { ComponentProps } from "react";
+import { mount, ReactWrapper } from "enzyme";
+import { mocked } from "jest-mock";
 import { act } from "react-dom/test-utils";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, RelationType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { IEvent, Room, EventTimelineSet, IMinimalEvent } from "matrix-js-sdk/src/matrix";
 import {
     M_POLL_RESPONSE,
     M_POLL_END,
@@ -32,37 +34,37 @@ import {
 import "../../../skinned-sdk";
 import {
     stubClient,
-    wrapInMatrixClientContext,
     mkStubRoom,
     mkEvent,
     mkMessage,
 } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import _PinnedMessagesCard from "../../../../src/components/views/right_panel/PinnedMessagesCard";
+import PinnedMessagesCard from "../../../../src/components/views/right_panel/PinnedMessagesCard";
 import PinnedEventTile from "../../../../src/components/views/rooms/PinnedEventTile";
-import MPollBody from "../../../../src/components/views/messages/MPollBody.tsx";
-
-const PinnedMessagesCard = wrapInMatrixClientContext(_PinnedMessagesCard);
+import MPollBody from "../../../../src/components/views/messages/MPollBody";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 
 describe("<PinnedMessagesCard />", () => {
     stubClient();
-    const cli = MatrixClientPeg.get();
+    const cli = mocked(MatrixClientPeg.get());
     cli.getUserId.mockReturnValue("@alice:example.org");
-    cli.setRoomAccountData = () => {};
-    cli.relations = jest.fn().mockResolvedValue({ events: [] });
+    cli.setRoomAccountData.mockReturnValue(undefined);
+    cli.relations.mockResolvedValue({ originalEvent: {} as unknown as MatrixEvent, events: [] });
 
     const mkRoom = (localPins: MatrixEvent[], nonLocalPins: MatrixEvent[]): Room => {
-        const room = mkStubRoom("!room:example.org");
+        const room = mkStubRoom("!room:example.org", 'room', cli);
         // Deferred since we may be adding or removing pins later
         const pins = () => [...localPins, ...nonLocalPins];
 
         // Insert pin IDs into room state
-        room.currentState.getStateEvents.mockImplementation(() => mkEvent({
+        mocked(room.currentState).getStateEvents.mockImplementation(() => mkEvent({
             event: true,
             type: EventType.RoomPinnedEvents,
             content: {
                 pinned: pins().map(e => e.getId()),
             },
+            user: '@user:example.org',
+            room: '!room:example.org',
         }));
 
         // Insert local pins into local timeline set
@@ -70,18 +72,24 @@ describe("<PinnedMessagesCard />", () => {
             getTimelineForEvent: () => ({
                 getEvents: () => localPins,
             }),
-        });
+        } as unknown as EventTimelineSet);
 
         // Return all pins over fetchRoomEvent
-        cli.fetchRoomEvent = (roomId, eventId) => pins().find(e => e.getId() === eventId)?.event;
+        cli.fetchRoomEvent.mockImplementation((roomId, eventId) => {
+            const event = pins().find(e => e.getId() === eventId)?.event;
+            return Promise.resolve(event as IMinimalEvent);
+        });
 
         return room;
     };
 
-    const mountPins = async (room: Room): ReactWrapper => {
+    const mountPins = async (room: Room): Promise<ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>> => {
         let pins;
         await act(async () => {
-            pins = mount(<PinnedMessagesCard room={room} onClose={() => {}} />);
+            pins = mount(<PinnedMessagesCard room={room} onClose={jest.fn()} />, {
+                wrappingComponent: MatrixClientContext.Provider,
+                wrappingComponentProps: { value: cli },
+            });
             // Wait a tick for state updates
             await new Promise(resolve => setImmediate(resolve));
         });
@@ -90,13 +98,14 @@ describe("<PinnedMessagesCard />", () => {
         return pins;
     };
 
-    const emitPinUpdates = async (pins: ReactWrapper) => {
+    const emitPinUpdates = async (pins: ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>) => {
         const room = pins.props().room;
-        const pinListener = room.currentState.on.mock.calls
+        const pinListener = mocked(room.currentState).on.mock.calls
             .find(([eventName, listener]) => eventName === RoomStateEvent.Events)[1];
 
         await act(async () => {
             // Emit the update
+            // @ts-ignore what is going on here?
             pinListener(room.currentState.getStateEvents());
             // Wait a tick for state updates
             await new Promise(resolve => setImmediate(resolve));
@@ -159,7 +168,9 @@ describe("<PinnedMessagesCard />", () => {
             event: true,
             type: EventType.RoomMessage,
             content: {},
-            unsigned: { redacted_because: {} },
+            unsigned: { redacted_because: {} as unknown as IEvent },
+            room: "!room:example.org",
+            user: "@alice:example.org",
         });
 
         const pins = await mountPins(mkRoom([pin], []));
@@ -172,7 +183,9 @@ describe("<PinnedMessagesCard />", () => {
             event: true,
             type: EventType.RoomMessage,
             content: {},
-            unsigned: { redacted_because: {} },
+            unsigned: { redacted_because: {} as unknown as IEvent },
+            room: "!room:example.org",
+            user: "@alice:example.org",
         });
 
         const pins = await mountPins(mkRoom([], [pin]));
@@ -180,25 +193,27 @@ describe("<PinnedMessagesCard />", () => {
     });
 
     it("accounts for edits", async () => {
-        cli.relations.mockResolvedValue({
-            events: [mkEvent({
-                event: true,
-                type: EventType.RoomMessage,
-                room: "!room:example.org",
-                user: "@alice:example.org",
-                content: {
-                    "msgtype": MsgType.Text,
-                    "body": " * First pinned message, edited",
-                    "m.new_content": {
-                        msgtype: MsgType.Text,
-                        body: "First pinned message, edited",
-                    },
-                    "m.relates_to": {
-                        rel_type: RelationType.Replace,
-                        event_id: pin1.getId(),
-                    },
+        const messageEvent = mkEvent({
+            event: true,
+            type: EventType.RoomMessage,
+            room: "!room:example.org",
+            user: "@alice:example.org",
+            content: {
+                "msgtype": MsgType.Text,
+                "body": " * First pinned message, edited",
+                "m.new_content": {
+                    msgtype: MsgType.Text,
+                    body: "First pinned message, edited",
                 },
-            })],
+                "m.relates_to": {
+                    rel_type: RelationType.Replace,
+                    event_id: pin1.getId(),
+                },
+            },
+        });
+        cli.relations.mockResolvedValue({
+            originalEvent: pin1,
+            events: [messageEvent],
         });
 
         const pins = await mountPins(mkRoom([], [pin1]));
@@ -224,7 +239,7 @@ describe("<PinnedMessagesCard />", () => {
             ...PollResponseEvent.from([answers[option].id], poll.getId()).serialize(),
             event: true,
             room: "!room:example.org",
-            user,
+            user: user as string,
         }));
         const end = mkEvent({
             ...PollEndEvent.from(poll.getId(), "Closing the poll").serialize(),
@@ -234,19 +249,22 @@ describe("<PinnedMessagesCard />", () => {
         });
 
         // Make the responses available
-        cli.relations.mockImplementation((roomId, eventId, relationType, eventType, { from }) => {
+        cli.relations.mockImplementation(async (roomId, eventId, relationType, eventType, { from }) => {
             if (eventId === poll.getId() && relationType === RelationType.Reference) {
                 switch (eventType) {
                     case M_POLL_RESPONSE.name:
                         // Paginate the results, for added challenge
                         return (from === "page2") ?
-                            { events: responses.slice(2) } :
-                            { events: responses.slice(0, 2), nextBatch: "page2" };
+                            { originalEvent: poll, events: responses.slice(2) } :
+                            { originalEvent: poll, events: responses.slice(0, 2), nextBatch: "page2" };
                     case M_POLL_END.name:
-                        return { events: [end] };
+                        return { originalEvent: null, events: [end] };
                 }
             }
-            return { events: [] };
+            // type does not allow originalEvent to be falsy
+            // but code seems to
+            // so still test that
+            return { originalEvent: undefined as unknown as MatrixEvent, events: [] };
         });
 
         const pins = await mountPins(mkRoom([], [poll]));

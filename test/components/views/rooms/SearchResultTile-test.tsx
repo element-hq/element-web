@@ -81,6 +81,7 @@ describe("SearchResultTile", () => {
         const tiles = wrapper.find(EventTile);
         expect(tiles.length).toEqual(2);
         expect(tiles.at(0).prop("mxEvent").getId()).toBe("$1:server");
+        // @ts-ignore accessing private property
         expect(tiles.at(0).prop("callEventGrouper").events.size).toBe(2);
         expect(tiles.at(1).prop("mxEvent").getId()).toBe("$144429830826TWwbB:localhost");
     });
