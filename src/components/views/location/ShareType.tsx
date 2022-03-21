@@ -23,8 +23,8 @@ import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from '../elements/AccessibleButton';
 import Heading from '../typography/Heading';
 import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
-import { Icon as LiveLocationIcon } from '../../../../res/img/location/live-location.svg';
 import { LocationShareType } from './shareLocation';
+import StyledLiveBeaconIcon from '../beacon/StyledLiveBeaconIcon';
 
 const UserAvatar = () => {
     const matrixClient = useContext(MatrixClientContext);
@@ -59,7 +59,7 @@ const ShareTypeOption: React.FC<ShareTypeOptionProps> = ({
     { shareType === LocationShareType.Pin &&
             <LocationIcon className={`mx_ShareType_option-icon ${LocationShareType.Pin}`} /> }
     { shareType === LocationShareType.Live &&
-            <LiveLocationIcon className={`mx_ShareType_option-icon ${LocationShareType.Live}`} /> }
+            <StyledLiveBeaconIcon className={`mx_ShareType_option-icon ${LocationShareType.Live}`} /> }
 
     { label }
 </AccessibleButton>;

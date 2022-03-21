@@ -83,17 +83,10 @@ limitations under the License.
     border-style: solid;
     border-radius: 50%;
 
+    // Live is styled by StyledLiveBeaconIcon
+
     &.Own {
         border-color: $accent;
-    }
-
-    &.Live {
-        background-color: $location-live-color;
-        // 20% brightness $location-live-color
-        border-color: #deddfd;
-        padding: 2px;
-        // colors icon
-        color: white;
     }
 
     &.Pin {
