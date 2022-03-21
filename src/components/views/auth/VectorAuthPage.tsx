@@ -27,14 +27,16 @@ export default class VectorAuthPage extends React.PureComponent {
     static getWelcomeBackgroundUrl() {
         if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
-        const brandingConfig = SdkConfig.get().branding;
+        const brandingConfig = SdkConfig.getObject("branding");
         VectorAuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
-        if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
-            if (Array.isArray(brandingConfig.welcomeBackgroundUrl)) {
-                const index = Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length);
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl[index];
+
+        const configuredUrl = brandingConfig?.get("welcome_background_url");
+        if (configuredUrl) {
+            if (Array.isArray(configuredUrl)) {
+                const index = Math.floor(Math.random() * configuredUrl.length);
+                VectorAuthPage.welcomeBackgroundUrl = configuredUrl[index];
             } else {
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl;
+                VectorAuthPage.welcomeBackgroundUrl = configuredUrl;
             }
         }
 

@@ -23,6 +23,8 @@ import {
 } from "matrix-widget-api";
 import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 
 import { getVectorConfig } from "../getconfig";
 
@@ -118,8 +120,10 @@ let skipOurWelcomeScreen = false;
         startAudioOnly = qsParam('isAudioOnly', true) === "true";
 
         // We've reached the point where we have to wait for the config, so do that then parse it.
-        const instanceConfig = await configPromise;
-        skipOurWelcomeScreen = instanceConfig?.['jitsiWidget']?.['skipBuiltInWelcomeScreen'] || false;
+        const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
+        const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
+        skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
+            .get("skip_built_in_welcome_screen") || false;
 
         // If we're meant to skip our screen, skip to the part where we show Jitsi instead of us.
         // We don't set up the call yet though as this might lead to failure without the widget API.
