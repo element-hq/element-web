@@ -159,7 +159,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         if (!this.isPhaseValid(targetPhase)) return;
 
         if ((targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState)) {
-            // Update state: set right panel with a new state but keep the phase (dont know it this is ever needed...)
+            // Update state: set right panel with a new state but keep the phase (don't know it this is ever needed...)
             const hist = this.byRoom[rId]?.history ?? [];
             hist[hist.length - 1].state = cardState;
             this.emitAndUpdateSettings();
@@ -367,6 +367,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     private onVerificationRequestUpdate = () => {
+        if (!this.currentCard?.state) return;
         const { member } = this.currentCard.state;
         if (!member) return;
         const pendingRequest = pendingVerificationRequestForUser(member);
@@ -378,9 +379,25 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     private onRoomViewStoreUpdate = () => {
         // TODO: only use this function instead of the onDispatch (the whole onDispatch can get removed!) as soon groups are removed
+        const oldRoomId = this.viewedRoomId;
         this.viewedRoomId = RoomViewStore.getRoomId();
         // load values from byRoomCache with the viewedRoomId.
         this.loadCacheFromSettings();
+
+        // if we're switching to a room, clear out any stale MemberInfo cards
+        // in order to fix https://github.com/vector-im/element-web/issues/21487
+        if (oldRoomId !== this.viewedRoomId) {
+            if (this.currentCard?.phase !== RightPanelPhases.EncryptionPanel) {
+                const panel = this.byRoom[this.viewedRoomId];
+                if (panel?.history) {
+                    panel.history = panel.history.filter(
+                        (card) => card.phase != RightPanelPhases.RoomMemberInfo &&
+                                  card.phase != RightPanelPhases.Room3pidMemberInfo,
+                    );
+                }
+            }
+        }
+
         // If the right panel stays open mode is used, and the panel was either
         // closed or never shown for that room, then force it open and display
         // the room member list.
