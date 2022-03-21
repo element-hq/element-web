@@ -32,6 +32,12 @@ start.js accepts these parameters (and more, see `node start.js --help`) that ca
  - `--windowed` run the tests in an actual browser window Try to limit interacting with the windows while the tests are running. Hovering over the window tends to fail the tests, dragging the title bar should be fine though.
  - `--dev-tools` open the devtools in the browser window, only applies if `--windowed` is set as well.
 
+For god level debug (e.g. for debugging slow tests):
+
+`env DEBUG="puppeteer:*" ./test/end-to-end-tests/run.sh --app-url http://localhost:8080 --log-directory `pwd`/logs --dev-tools --windowed` 2>&1 | cat
+
+(piping everything through cat means you get proper timestamps on the debugging, and the chromiums hang around at the end)
+
 Developer Guide
 ===============
 
@@ -40,3 +46,4 @@ https://github.com/matrix-org/synapse/tree/master/CONTRIBUTING.rst
 
 Please follow the Matrix JS/React code style as per:
 https://github.com/matrix-org/matrix-react-sdk/blob/master/code_style.md
+

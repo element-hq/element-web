@@ -64,7 +64,9 @@ export async function inviteSpace(session: ElementSession, spaceName: string, us
     await inviteButton.click();
 
     try {
-        const button = await session.query('.mx_SpacePublicShare_inviteButton');
+        // You only get this interstitial if it's a public space, so give up after 200ms
+        // if it hasn't appeared
+        const button = await session.query('.mx_SpacePublicShare_inviteButton', 200);
         await button.click();
     } catch (e) {
         // ignore

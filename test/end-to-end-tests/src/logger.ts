@@ -24,7 +24,7 @@ export class Logger {
     public startGroup(description: string): Logger {
         if (!this.muted) {
             const indent = " ".repeat(this.indent * 2);
-            console.log(`${indent} * ${this.username} ${description}:`);
+            console.log(`${new Date().toISOString()} ${indent} * ${this.username} ${description}:`);
         }
         this.indent += 1;
         return this;
@@ -38,7 +38,7 @@ export class Logger {
     public step(description: string): Logger {
         if (!this.muted) {
             const indent = " ".repeat(this.indent * 2);
-            process.stdout.write(`${indent} * ${this.username} ${description} ... `);
+            process.stdout.write(`${new Date().toISOString()} ${indent} * ${this.username} ${description} ... `);
         }
         return this;
     }

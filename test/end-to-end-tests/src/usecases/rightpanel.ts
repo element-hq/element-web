@@ -17,11 +17,14 @@ limitations under the License.
 import { ElementSession } from "../session";
 
 export async function openRoomRightPanel(session: ElementSession): Promise<void> {
-    try {
-        await session.query('.mx_RoomHeader .mx_RightPanel_headerButton_highlight[aria-label="Room Info"]');
-    } catch (e) {
+    // block until we have a roomSummaryButton
+    const roomSummaryButton = await session.query('.mx_RoomHeader .mx_AccessibleButton[aria-label="Room Info"]');
+    // check if it's highlighted
+    const highlightedRoomSummaryButton = await session.queryWithoutWaiting(
+        '.mx_RoomHeader .mx_RightPanel_headerButton_highlight[aria-label="Room Info"]',
+    );
+    if (!highlightedRoomSummaryButton) {
         // If the room summary is not yet open, open it
-        const roomSummaryButton = await session.query('.mx_RoomHeader .mx_AccessibleButton[aria-label="Room Info"]');
         await roomSummaryButton.click();
     }
 }

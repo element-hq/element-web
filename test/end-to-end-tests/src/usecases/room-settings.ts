@@ -156,7 +156,8 @@ export async function checkRoomSettings(session: ElementSession, expectedSetting
 
 async function getValidationError(session: ElementSession): Promise<string | undefined> {
     try {
-        const validationDetail = await session.query(".mx_Validation_detail");
+        // give it 500ms to fail to produce a validation error
+        const validationDetail = await session.query(".mx_Validation_detail", 500);
         return session.innerText(validationDetail);
     } catch (e) {
         // no validation tooltips

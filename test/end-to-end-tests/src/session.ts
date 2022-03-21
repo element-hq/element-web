@@ -40,7 +40,8 @@ export class ElementSession {
             "requestfinished", async (req: puppeteer.HTTPRequest) => {
                 const type = req.resourceType();
                 const response = await req.response();
-                return `${type} ${response?.status() ?? '<no response>'} ${req.method()} ${req.url()} \n`;
+                return new Date().toISOString() +
+                       ` ${type} ${response?.status() ?? '<no response>'} ${req.method()} ${req.url()} \n`;
             });
         this.log = new Logger(this.username);
     }
@@ -133,6 +134,10 @@ export class ElementSession {
     public query(selector: string, timeout: number = DEFAULT_TIMEOUT,
         hidden = false): Promise<puppeteer.ElementHandle> {
         return this.page.waitForSelector(selector, { visible: true, timeout, hidden });
+    }
+
+    public queryWithoutWaiting(selector: string): Promise<puppeteer.ElementHandle> {
+        return this.page.$(selector);
     }
 
     public async queryAll(selector: string): Promise<puppeteer.ElementHandle[]> {

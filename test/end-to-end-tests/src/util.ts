@@ -57,11 +57,17 @@ export async function applyConfigChange(session: ElementSession, config: any): P
 
 export async function serializeLog(msg: ConsoleMessage): Promise<string> {
     // 9 characters padding is somewhat arbitrary ("warning".length + some)
-    let s = `${padEnd(msg.type(), 9, ' ')}| ${msg.text()} `; // trailing space is intentional
+    let s = `${new Date().toISOString()} | ${ padEnd(msg.type(), 9, ' ')}| ${msg.text()} `; // trailing space is intentional
     const args = msg.args();
     for (let i = 0; i < args.length; i++) {
         const arg = args[i];
-        const val = await arg.jsonValue();
+
+        let val;
+        try {
+            val = await arg.jsonValue();
+        } catch (error) {
+            val = `<error: ${error}>`;
+        }
 
         // We handle strings a bit differently because the `jsonValue` will be in a weird-looking
         // shape ("JSHandle:words are here"). Weirdly, `msg.text()` also catches text nodes that
@@ -96,7 +102,13 @@ export async function serializeLog(msg: ConsoleMessage): Promise<string> {
             }
 
             // not an error, as far as we're concerned - return it as human-readable JSON
-            return JSON.stringify(argInContext, null, 4);
+            let ret;
+            try {
+                ret = JSON.stringify(argInContext, null, 4);
+            } catch (error) {
+                ret = `<error: ${error}>`;
+            }
+            return ret;
         });
         s += `${stringyArg} `; // trailing space is intentional
     }
