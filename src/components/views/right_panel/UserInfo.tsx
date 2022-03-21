@@ -1416,7 +1416,7 @@ const BasicUserInfo: React.FC<{
 
     let editDevices;
     if (member.userId == cli.getUserId()) {
-        editDevices = (<p>
+        editDevices = (<div>
             <AccessibleButton
                 className="mx_UserInfo_field"
                 onClick={() => {
@@ -1428,7 +1428,7 @@ const BasicUserInfo: React.FC<{
             >
                 { _t("Edit devices") }
             </AccessibleButton>
-        </p>);
+        </div>);
     }
 
     const securitySection = (
