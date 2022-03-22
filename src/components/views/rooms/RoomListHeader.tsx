@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ClientEvent } from "matrix-js-sdk/src/client";
@@ -30,7 +30,6 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import dis from "../../../dispatcher/dispatcher";
 import {
     shouldShowSpaceInvite,
     showAddExistingRooms,
@@ -38,14 +37,7 @@ import {
     showCreateNewSubspace,
     showSpaceInvite,
 } from "../../../utils/space";
-import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
-import { ButtonEvent } from "../elements/AccessibleButton";
-import Modal from "../../../Modal";
-import EditCommunityPrototypeDialog from "../dialogs/EditCommunityPrototypeDialog";
 import { Action } from "../../../dispatcher/actions";
-import { RightPanelPhases } from "../../../stores/right-panel/RightPanelStorePhases";
-import ErrorDialog from "../dialogs/ErrorDialog";
-import { showCommunityInviteDialog } from "../../../RoomInvite";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import InlineSpinner from "../elements/InlineSpinner";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -57,7 +49,6 @@ import {
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_SELECTED_SPACE,
 } from "../../../stores/spaces";
-import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import TooltipTarget from "../elements/TooltipTarget";
 import { BetaPill } from "../beta/BetaCard";
 import PosthogTrackers from "../../../PosthogTrackers";
@@ -72,69 +63,6 @@ const contextMenuBelow = (elementRect: DOMRect) => {
     const top = elementRect.bottom + window.pageYOffset + 12;
     const chevronFace = ChevronFace.None;
     return { left, top, chevronFace };
-};
-
-const PrototypeCommunityContextMenu = (props: ComponentProps<typeof SpaceContextMenu>) => {
-    const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
-
-    let settingsOption;
-    if (CommunityPrototypeStore.instance.isAdminOf(communityId)) {
-        const onCommunitySettingsClick = (ev: ButtonEvent) => {
-            ev.preventDefault();
-            ev.stopPropagation();
-
-            Modal.createTrackedDialog('Edit Community', '', EditCommunityPrototypeDialog, {
-                communityId: CommunityPrototypeStore.instance.getSelectedCommunityId(),
-            });
-            props.onFinished();
-        };
-
-        settingsOption = (
-            <IconizedContextMenuOption
-                iconClassName="mx_UserMenu_iconSettings"
-                label={_t("Settings")}
-                aria-label={_t("Community settings")}
-                onClick={onCommunitySettingsClick}
-            />
-        );
-    }
-
-    const onCommunityMembersClick = (ev: ButtonEvent) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        // We'd ideally just pop open a right panel with the member list, but the current
-        // way the right panel is structured makes this exceedingly difficult. Instead, we'll
-        // switch to the general room and open the member list there as it should be in sync
-        // anyways.
-        const chat = CommunityPrototypeStore.instance.getSelectedCommunityGeneralChat();
-        if (chat) {
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: chat.roomId,
-                metricsTrigger: undefined, // Deprecated groups
-            }, true);
-            RightPanelStore.instance.setCard({ phase: RightPanelPhases.RoomMemberList }, undefined, chat.roomId);
-        } else {
-            // "This should never happen" clauses go here for the prototype.
-            Modal.createTrackedDialog('Failed to find general chat', '', ErrorDialog, {
-                title: _t('Failed to find the general chat for this community'),
-                description: _t("Failed to find the general chat for this community"),
-            });
-        }
-        props.onFinished();
-    };
-
-    return <IconizedContextMenu {...props} compact>
-        <IconizedContextMenuOptionList first>
-            { settingsOption }
-            <IconizedContextMenuOption
-                iconClassName="mx_UserMenu_iconMembers"
-                label={_t("Members")}
-                onClick={onCommunityMembersClick}
-            />
-        </IconizedContextMenuOptionList>
-    </IconizedContextMenu>;
 };
 
 // Long-running actions that should trigger a spinner
@@ -184,11 +112,10 @@ const usePendingActions = (): Map<PendingActionType, Set<string>> => {
 };
 
 interface IProps {
-    spacePanelDisabled: boolean;
     onVisibilityChange?(): void;
 }
 
-const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
+const RoomListHeader = ({ onVisibilityChange }: IProps) => {
     const cli = useContext(MatrixClientContext);
     const [mainMenuDisplayed, mainMenuHandle, openMainMenu, closeMainMenu] = useContextMenu<HTMLDivElement>();
     const [plusMenuDisplayed, plusMenuHandle, openPlusMenu, closePlusMenu] = useContextMenu<HTMLDivElement>();
@@ -226,11 +153,8 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
         return <div className="mx_LeftPanel_roomListFilterCount">
             { _t("%(count)s results", { count }) }
         </div>;
-    } else if (spacePanelDisabled) {
-        return null;
     }
 
-    const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
     const canAddRooms = activeSpace?.currentState?.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
     const canCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
@@ -239,15 +163,13 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
     // If the user can't do anything on the plus menu, don't show it. This aims to target the
     // plus menu shown on the Home tab primarily: the user has options to use the menu for
     // communities and spaces, but is at risk of no options on the Home tab.
-    const canShowPlusMenu = canCreateRooms || canExploreRooms || activeSpace || communityId;
+    const canShowPlusMenu = canCreateRooms || canExploreRooms || activeSpace;
 
     let contextMenu: JSX.Element;
     if (mainMenuDisplayed) {
         let ContextMenuComponent;
         if (activeSpace) {
             ContextMenuComponent = SpaceContextMenu;
-        } else if (communityId) {
-            ContextMenuComponent = PrototypeCommunityContextMenu;
         } else {
             ContextMenuComponent = HomeButtonContextMenu;
         }
@@ -268,17 +190,6 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
                     e.preventDefault();
                     e.stopPropagation();
                     showSpaceInvite(activeSpace);
-                    closePlusMenu();
-                }}
-            />;
-        } else if (CommunityPrototypeStore.instance.canInviteTo(communityId)) {
-            inviteOption = <IconizedContextMenuOption
-                iconClassName="mx_RoomListHeader_iconInvite"
-                label={_t("Invite")}
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
                     closePlusMenu();
                 }}
             />;
@@ -413,8 +324,6 @@ const RoomListHeader = ({ spacePanelDisabled, onVisibilityChange }: IProps) => {
     let title: string;
     if (activeSpace) {
         title = spaceName;
-    } else if (communityId) {
-        title = CommunityPrototypeStore.instance.getSelectedCommunityName();
     } else {
         title = getMetaSpaceName(spaceKey as MetaSpace, allRoomsInHome);
     }

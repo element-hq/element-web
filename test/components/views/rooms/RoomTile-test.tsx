@@ -18,6 +18,7 @@ import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { ClientWidgetApi, MatrixWidgetType } from "matrix-widget-api";
+import { mocked } from "jest-mock";
 
 import "../../../skinned-sdk";
 import { stubClient, mkStubRoom } from "../../../test-utils";
@@ -30,9 +31,8 @@ import VoiceChannelStore, { VoiceChannelEvent } from "../../../../src/stores/Voi
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { VOICE_CHANNEL_ID } from "../../../../src/utils/VoiceChannelUtils";
-import { mocked } from "jest-mock";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import PlatformPeg  from "../../../../src/PlatformPeg";
+import PlatformPeg from "../../../../src/PlatformPeg";
 import BasePlatform from "../../../../src/BasePlatform";
 
 describe("RoomTile", () => {

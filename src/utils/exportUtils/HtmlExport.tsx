@@ -284,7 +284,6 @@ export default class HTMLExporter extends Exporter {
                     getRelationsForEvent={null}
                     showReactions={false}
                     layout={Layout.Group}
-                    enableFlair={false}
                     showReadReceipts={false}
                 />
             </MatrixClientContext.Provider>

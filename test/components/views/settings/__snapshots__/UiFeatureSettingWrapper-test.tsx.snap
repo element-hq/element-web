@@ -2,7 +2,7 @@
 
 exports[`<UiFeatureSettingWrapper> renders children when setting is truthy 1`] = `
 <UiFeatureSettingWrapper
-  uiFeature="UIFeature.flair"
+  uiFeature="UIFeature.feedback"
 >
   <div>
     test

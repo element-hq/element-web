@@ -21,9 +21,7 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 
 import * as Avatar from '../../../Avatar';
 import EventTile from '../rooms/EventTile';
-import SettingsStore from "../../../settings/SettingsStore";
 import { Layout } from "../../../settings/enums/Layout";
-import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from './Spinner';
 
@@ -133,7 +131,6 @@ export default class EventTilePreview extends React.Component<IProps, IState> {
             <EventTile
                 mxEvent={event}
                 layout={this.props.layout}
-                enableFlair={SettingsStore.getValue(UIFeature.Flair)}
                 as="div"
             />
         </div>;

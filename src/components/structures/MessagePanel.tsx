@@ -157,9 +157,6 @@ interface IProps {
     // which layout to use
     layout?: Layout;
 
-    // whether or not to show flair at all
-    enableFlair?: boolean;
-
     resizeNotifier: ResizeNotifier;
     permalinkCreator?: RoomPermalinkCreator;
     editState?: EditorStateTransfer;
@@ -811,7 +808,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                 getRelationsForEvent={this.props.getRelationsForEvent}
                 showReactions={this.props.showReactions}
                 layout={this.props.layout}
-                enableFlair={this.props.enableFlair}
                 showReadReceipts={this.props.showReadReceipts}
                 callEventGrouper={callEventGrouper}
                 hideSender={this.state.hideSender}

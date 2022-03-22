@@ -43,7 +43,7 @@ limitations under the License.
             min-width: max-content; // prevent manipulation by flexbox
         }
 
-        // Mostly copied from AddressPickerDialog; overrides bunch of our default text input styles
+        // overrides bunch of our default text input styles
         > input[type="text"] {
             margin: 6px 0 !important;
             height: 24px;
@@ -95,13 +95,6 @@ limitations under the License.
 
     > span {
         color: $primary-content;
-    }
-
-    .mx_InviteDialog_subname {
-        margin-bottom: 10px;
-        margin-top: -10px; // HACK: Positioning with margins is bad
-        font-size: $font-12px;
-        color: $muted-fg-color;
     }
 }
 
@@ -446,4 +439,8 @@ limitations under the License.
             }
         }
     }
+}
+
+.mx_InviteDialog_identityServer {
+    margin-top: 1em;
 }

@@ -15,7 +15,6 @@ limitations under the License.
 
 import { MatrixClientPeg as peg } from '../../../src/MatrixClientPeg';
 import {
-    makeGroupPermalink,
     makeRoomPermalink,
     makeUserPermalink,
     parsePermalink,
@@ -442,11 +441,6 @@ describe('Permalinks', function() {
     it('should generate a user permalink', function() {
         const result = makeUserPermalink("@someone:example.org");
         expect(result).toBe("https://matrix.to/#/@someone:example.org");
-    });
-
-    it('should generate a group permalink', function() {
-        const result = makeGroupPermalink("+community:example.org");
-        expect(result).toBe("https://matrix.to/#/+community:example.org");
     });
 
     it('should correctly parse room permalinks with a via argument', () => {

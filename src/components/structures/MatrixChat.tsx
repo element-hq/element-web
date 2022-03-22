@@ -84,14 +84,11 @@ import {
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
 import { leaveRoomBehaviour } from "../../utils/membership";
-import CreateCommunityPrototypeDialog from "../views/dialogs/CreateCommunityPrototypeDialog";
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
 import { UIFeature } from "../../settings/UIFeature";
-import { CommunityPrototypeStore } from "../../stores/CommunityPrototypeStore";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import SpaceStore from "../../stores/spaces/SpaceStore";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { RoomUpdateCause } from "../../stores/room-list/models";
@@ -99,7 +96,6 @@ import SecurityCustomisations from "../../customisations/Security";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import UserSettingsDialog, { UserTab } from '../views/dialogs/UserSettingsDialog';
-import CreateGroupDialog from '../views/dialogs/CreateGroupDialog';
 import CreateRoomDialog from '../views/dialogs/CreateRoomDialog';
 import RoomDirectory from './RoomDirectory';
 import KeySignatureUploadFailedDialog from "../views/dialogs/KeySignatureUploadFailedDialog";
@@ -147,7 +143,6 @@ const ONBOARDING_FLOW_STARTERS = [
     Action.ViewUserSettings,
     'view_create_chat',
     'view_create_room',
-    'view_create_group',
 ];
 
 interface IScreen {
@@ -184,10 +179,10 @@ interface IState {
     // in the case where we view a room by ID or by RoomView when it resolves
     // what ID an alias points at.
     currentRoomId?: string;
-    currentGroupId?: string;
-    currentGroupIsNew?: boolean;
     // If we're trying to just view a user ID (i.e. /user URL), this is it
     currentUserId?: string;
+    // Group ID for legacy "communities don't exist" page
+    currentGroupId?: string;
     // this is persisted as mx_lhs_size, loaded in LoggedInView
     collapseLhs: boolean;
     // Parameters used in the registration dance with the IS
@@ -668,6 +663,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             }
+            case 'view_legacy_group':
+                this.viewLegacyGroup(payload.groupId);
+                break;
             case Action.ViewUserSettings: {
                 const tabPayload = payload as OpenToTabPayload;
                 Modal.createTrackedDialog('User settings', '', UserSettingsDialog,
@@ -684,15 +682,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
                 break;
-            case 'view_create_group': {
-                const prototype = SettingsStore.getValue("feature_communities_v2_prototypes");
-                Modal.createTrackedDialog(
-                    'Create Community',
-                    '',
-                    prototype ? CreateCommunityPrototypeDialog : CreateGroupDialog,
-                );
-                break;
-            }
             case Action.ViewRoomDirectory: {
                 Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
                     initialText: payload.initialText,
@@ -702,13 +691,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewSomethingBehindModal();
                 break;
             }
-            case 'view_my_groups':
-                this.setPage(PageType.MyGroups);
-                this.notifyNewScreen('groups');
-                break;
-            case 'view_group':
-                this.viewGroup(payload);
-                break;
             case 'view_welcome_page':
                 this.viewWelcome();
                 break;
@@ -739,17 +721,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 // have to worry about email invites or similar being re-triggered because the
                 // function will have cleared that state and not execute that path.
                 this.showScreenAfterLogin();
-                break;
-            case 'toggle_my_groups':
-                // persist that the user has interacted with this, use it to dismiss the beta dot
-                localStorage.setItem("mx_seenSpacesBeta", "1");
-                // We just dispatch the page change rather than have to worry about
-                // what the logic is for each of these branches.
-                if (this.state.page_type === PageType.MyGroups) {
-                    dis.dispatch({ action: 'view_last_screen' });
-                } else {
-                    dis.dispatch({ action: 'view_my_groups' });
-                }
                 break;
             case 'hide_left_panel':
                 this.setState({
@@ -952,33 +923,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private async viewGroup(payload) {
-        const groupId = payload.group_id;
-
-        // Wait for the first sync to complete
-        if (!this.firstSyncComplete) {
-            if (!this.firstSyncPromise) {
-                logger.warn('Cannot view a group before first sync. group_id:', groupId);
-                return;
-            }
-            await this.firstSyncPromise.promise;
-        }
-
-        this.setState({
-            view: Views.LOGGED_IN,
-            currentGroupId: groupId,
-            currentGroupIsNew: payload.group_is_new,
-        });
-        this.setPage(PageType.GroupView);
-        this.notifyNewScreen('group/' + groupId);
-    }
-
     private viewSomethingBehindModal() {
         if (this.state.view !== Views.LOGGED_IN) {
             this.viewWelcome();
             return;
         }
-        if (!this.state.currentGroupId && !this.state.currentRoomId && !this.state.currentUserId) {
+        if (!this.state.currentRoomId && !this.state.currentUserId) {
             this.viewHome();
         }
     }
@@ -1034,19 +984,17 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
     }
 
-    private async createRoom(defaultPublic = false, defaultName?: string) {
-        const communityId = CommunityPrototypeStore.instance.getSelectedCommunityId();
-        if (communityId) {
-            // double check the user will have permission to associate this room with the community
-            if (!CommunityPrototypeStore.instance.isAdminOf(communityId)) {
-                Modal.createTrackedDialog('Pre-failure to create room', '', ErrorDialog, {
-                    title: _t("Cannot create rooms in this community"),
-                    description: _t("You do not have permission to create rooms in this community."),
-                });
-                return;
-            }
-        }
+    private viewLegacyGroup(groupId: string) {
+        this.setStateForNewView({
+            view: Views.LOGGED_IN,
+            currentRoomId: null,
+            currentGroupId: groupId,
+        });
+        this.notifyNewScreen('group/' + groupId);
+        this.setPage(PageType.LegacyGroupView);
+    }
 
+    private async createRoom(defaultPublic = false, defaultName?: string) {
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
             defaultPublic,
             defaultName,
@@ -1110,7 +1058,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
     private leaveRoomWarnings(roomId: string) {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
-        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
+        const isSpace = roomToLeave?.isSpaceRoom();
         // Show a warning if there are additional complications.
         const warnings = [];
 
@@ -1148,7 +1096,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomToLeave = MatrixClientPeg.get().getRoom(roomId);
         const warnings = this.leaveRoomWarnings(roomId);
 
-        const isSpace = SpaceStore.spacesEnabled && roomToLeave?.isSpaceRoom();
+        const isSpace = roomToLeave?.isSpaceRoom();
         Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
             title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (
@@ -1775,14 +1723,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             const type = screen === "start_sso" ? "sso" : "cas";
             PlatformPeg.get().startSingleSignOn(cli, type, this.getFragmentAfterLogin());
-        } else if (screen === 'groups') {
-            if (SpaceStore.spacesEnabled) {
-                dis.dispatch({ action: Action.ViewHomePage });
-                return;
-            }
-            dis.dispatch({
-                action: 'view_my_groups',
-            });
         } else if (screen.indexOf('room/') === 0) {
             // Rooms can have the following formats:
             // #room_alias:domain or !opaque_id:domain
@@ -1865,12 +1805,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         } else if (screen.indexOf('group/') === 0) {
             const groupId = screen.substring(6);
-
-            // TODO: Check valid group ID
-
             dis.dispatch({
-                action: 'view_group',
-                group_id: groupId,
+                action: 'view_legacy_group',
+                groupId: groupId,
             });
         } else {
             logger.info("Ignoring showScreen for '%s'", screen);

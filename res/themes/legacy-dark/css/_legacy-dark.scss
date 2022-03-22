@@ -33,8 +33,8 @@ $rte-room-pill-color: $room-highlight-color;
 $info-plinth-bg-color: $header-panel-bg-color;
 $info-plinth-fg-color: #888;
 
-$groupFilterPanel-bg-color: $base-color;
-$inverted-bg-color: $groupFilterPanel-bg-color;
+$spacePanel-bg-color: $base-color;
+$inverted-bg-color: $spacePanel-bg-color;
 
 // used by AddressSelector
 $selected-color: $room-highlight-color;
@@ -120,7 +120,7 @@ $roomlist-bg-color: $header-panel-bg-color;
 
 $roomsublist-skeleton-ui-bg: linear-gradient(180deg, #3e444c 0%, #3e444c00 100%);
 
-$groupFilterPanel-divider-color: $tertiary-content;
+$spacePanel-divider-color: $tertiary-content;
 
 $roomtile-default-badge-bg-color: #61708b;
 $roomtile-selected-bg-color: #1A1D23;
@@ -166,7 +166,7 @@ $reaction-row-button-selected-bg-color: #1f6954;
 
 $kbd-border-color: #000000;
 
-$tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
+$tooltip-timeline-bg-color: $spacePanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $breadcrumb-placeholder-bg-color: #272c35;

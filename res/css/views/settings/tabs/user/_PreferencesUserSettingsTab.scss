@@ -38,25 +38,4 @@ limitations under the License.
             font-size: inherit;
         }
     }
-
-    .mx_PreferencesUserSettingsTab_CommunityMigrator {
-        margin-right: 200px;
-
-        > div {
-            font-weight: $font-semi-bold;
-            font-size: $font-15px;
-            line-height: $font-18px;
-            color: $primary-content;
-            margin: 16px 0;
-
-            .mx_BaseAvatar {
-                margin-right: 12px;
-                vertical-align: middle;
-            }
-
-            .mx_AccessibleButton {
-                float: right;
-            }
-        }
-    }
 }

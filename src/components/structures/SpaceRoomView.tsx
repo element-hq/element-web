@@ -57,7 +57,6 @@ import {
 } from "../../utils/space";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
-import SpaceStore from "../../stores/spaces/SpaceStore";
 import { RoomFacePile } from "../views/elements/FacePile";
 import {
     AddExistingToSpace,
@@ -71,12 +70,9 @@ import IconizedContextMenu, {
 } from "../views/context_menus/IconizedContextMenu";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import { BetaPill } from "../views/beta/BetaCard";
-import { UserTab } from "../views/dialogs/UserSettingsDialog";
 import { EffectiveMembership, getEffectiveMembership } from "../../utils/membership";
 import { SpaceFeedbackPrompt } from "../views/spaces/SpaceCreateMenu";
 import { useAsyncMemo } from "../../hooks/useAsyncMemo";
-import Spinner from "../views/elements/Spinner";
-import GroupAvatar from "../views/avatars/GroupAvatar";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { useRoomState } from "../../hooks/useRoomState";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
@@ -84,7 +80,6 @@ import { UIComponent } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-import { CreateEventField, IGroupSummary } from "../../@types/groups";
 
 interface IProps {
     space: Room;
@@ -179,33 +174,6 @@ const SpaceInfo = ({ space }: { space: Room }) => {
     </div>;
 };
 
-const onPreferencesClick = () => {
-    defaultDispatcher.dispatch({
-        action: Action.ViewUserSettings,
-        initialTabId: UserTab.Preferences,
-    });
-};
-
-// XXX: temporary community migration component
-const GroupTile = ({ groupId }: { groupId: string }) => {
-    const cli = useContext(MatrixClientContext);
-    const groupSummary = useAsyncMemo<IGroupSummary>(() => cli.getGroupSummary(groupId), [cli, groupId]);
-
-    if (!groupSummary) return <Spinner />;
-
-    return <>
-        <GroupAvatar
-            groupId={groupId}
-            groupName={groupSummary.profile.name}
-            groupAvatarUrl={groupSummary.profile.avatar_url}
-            width={16}
-            height={16}
-            resizeMethod='crop'
-        />
-        { groupSummary.profile.name }
-    </>;
-};
-
 interface ISpacePreviewProps {
     space: Room;
     onJoinButtonClicked(): void;
@@ -222,8 +190,6 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
     });
 
     const [busy, setBusy] = useState(false);
-
-    const spacesEnabled = SpaceStore.spacesEnabled;
 
     const joinRule = useRoomState(space, state => state.getJoinRule());
     const cannotJoin = getEffectiveMembership(myMembership) === EffectiveMembership.Leave
@@ -282,7 +248,6 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
                     setBusy(true);
                     onJoinButtonClicked();
                 }}
-                disabled={!spacesEnabled}
             >
                 { _t("Accept") }
             </AccessibleButton>
@@ -298,7 +263,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
                         setBusy(true);
                     }
                 }}
-                disabled={!spacesEnabled || cannotJoin}
+                disabled={cannotJoin}
             >
                 { _t("Join") }
             </AccessibleButton>
@@ -310,18 +275,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
     }
 
     let footer;
-    if (!spacesEnabled) {
-        footer = <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
-            { myMembership === "join"
-                ? _t("To view this Space, hide communities in your <a>preferences</a>", {}, {
-                    a: sub => <AccessibleButton onClick={onPreferencesClick} kind="link">{ sub }</AccessibleButton>,
-                })
-                : _t("To join this Space, hide communities in your <a>preferences</a>", {}, {
-                    a: sub => <AccessibleButton onClick={onPreferencesClick} kind="link">{ sub }</AccessibleButton>,
-                })
-            }
-        </div>;
-    } else if (cannotJoin) {
+    if (cannotJoin) {
         footer = <div className="mx_SpaceRoomView_preview_spaceBetaPrompt">
             { _t("To view %(spaceName)s, you need an invite", {
                 spaceName: space.name,
@@ -329,18 +283,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
         </div>;
     }
 
-    let migratedCommunitySection: JSX.Element;
-    const createContent = space.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent();
-    if (createContent[CreateEventField]) {
-        migratedCommunitySection = <div className="mx_SpaceRoomView_preview_migratedCommunity">
-            { _t("Created from <Community />", {}, {
-                Community: () => <GroupTile groupId={createContent[CreateEventField]} />,
-            }) }
-        </div>;
-    }
-
     return <div className="mx_SpaceRoomView_preview">
-        { migratedCommunitySection }
         { inviterSection }
         <RoomAvatar room={space} height={80} width={80} viewAvatarOnClick={true} />
         <h1 className="mx_SpaceRoomView_preview_name">
@@ -884,7 +827,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
     private renderBody() {
         switch (this.state.phase) {
             case Phase.Landing:
-                if (this.state.myMembership === "join" && SpaceStore.spacesEnabled) {
+                if (this.state.myMembership === "join") {
                     return <SpaceLanding space={this.props.space} />;
                 } else {
                     return <SpacePreview

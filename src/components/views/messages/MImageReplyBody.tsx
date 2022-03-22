@@ -52,7 +52,6 @@ export default class MImageReplyBody extends MImageBody {
         const fileBody = this.getFileBody();
         const sender = <SenderProfile
             mxEvent={this.props.mxEvent}
-            enableFlair={false}
         />;
 
         return <div className="mx_MImageReplyBody">

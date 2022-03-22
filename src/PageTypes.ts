@@ -20,8 +20,7 @@ enum PageType {
     HomePage = "home_page",
     RoomView = "room_view",
     UserView = "user_view",
-    GroupView = "group_view",
-    MyGroups = "my_groups",
+    LegacyGroupView = "legacy_group_view",
 }
 
 export default PageType;

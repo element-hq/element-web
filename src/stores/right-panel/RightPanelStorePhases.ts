@@ -30,11 +30,6 @@ export enum RightPanelPhases {
     Timeline = "Timeline",
 
     Room3pidMemberInfo = 'Room3pidMemberInfo',
-    // Group stuff
-    GroupMemberList = 'GroupMemberList',
-    GroupRoomList = 'GroupRoomList',
-    GroupRoomInfo = 'GroupRoomInfo',
-    GroupMemberInfo = 'GroupMemberInfo',
 
     // Space stuff
     SpaceMemberList = "SpaceMemberList",

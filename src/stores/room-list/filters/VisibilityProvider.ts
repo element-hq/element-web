@@ -19,7 +19,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
 import VoipUserMapper from "../../../VoipUserMapper";
-import SpaceStore from "../../spaces/SpaceStore";
 
 export class VisibilityProvider {
     private static internalInstance: VisibilityProvider;
@@ -51,7 +50,7 @@ export class VisibilityProvider {
         }
 
         // hide space rooms as they'll be shown in the SpacePanel
-        if (SpaceStore.spacesEnabled && room.isSpaceRoom()) {
+        if (room.isSpaceRoom()) {
             return false;
         }
 

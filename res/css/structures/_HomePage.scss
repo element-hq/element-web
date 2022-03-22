@@ -98,9 +98,6 @@ limitations under the License.
             &.mx_HomePage_button_explore::before {
                 mask-image: url('$(res)/img/element-icons/roomlist/explore.svg');
             }
-            &.mx_HomePage_button_createGroup::before {
-                mask-image: url('$(res)/img/element-icons/community-members.svg');
-            }
         }
     }
 }

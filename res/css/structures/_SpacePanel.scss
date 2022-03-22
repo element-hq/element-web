@@ -23,7 +23,7 @@ $activeBackgroundColor: $panel-actions;
 $activeBorderColor: $primary-content;
 
 .mx_SpacePanel {
-    background-color: $groupFilterPanel-bg-color;
+    background-color: $spacePanel-bg-color;
     flex: 0 0 auto;
     padding: 0;
     margin: 0;
@@ -309,13 +309,13 @@ $activeBorderColor: $primary-content;
         .mx_NotificationBadge_dot {
             // make the smaller dot occupy the same width for centering
             margin: 0 -1px 0 0;
-            border: 3px solid $groupFilterPanel-bg-color;
+            border: 3px solid $spacePanel-bg-color;
         }
 
         .mx_NotificationBadge_2char,
         .mx_NotificationBadge_3char {
             margin: -5px -5px 0 0;
-            border: 2px solid $groupFilterPanel-bg-color;
+            border: 2px solid $spacePanel-bg-color;
         }
     }
 

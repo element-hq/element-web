@@ -45,7 +45,7 @@ $info-plinth-bg-color: $header-panel-bg-color;
 $event-selected-color: $system;
 $topleftmenu-color: $primary-content;
 $roomtopic-color: $text-secondary-color;
-$groupFilterPanel-bg-color: rgba(38, 39, 43, 0.82);
+$spacePanel-bg-color: rgba(38, 39, 43, 0.82);
 $panel-gradient: rgba(34, 38, 46, 0), rgba(34, 38, 46, 1);
 $h3-color: $primary-content;
 $event-highlight-bg-color: #25271F;
@@ -54,7 +54,7 @@ $header-panel-text-primary-color: $text-secondary-color;
 
 // Tooltip
 // ********************
-$tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
+$tooltip-timeline-bg-color: $spacePanel-bg-color;
 $tooltip-timeline-fg-color: $primary-content;
 // ********************
 

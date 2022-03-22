@@ -54,14 +54,14 @@ export class PermalinkParts {
     roomIdOrAlias: string;
     eventId: string;
     userId: string;
-    groupId: string;
     viaServers: string[];
+    groupId: string;
 
     constructor(roomIdOrAlias: string, eventId: string, userId: string, groupId: string, viaServers: string[]) {
         this.roomIdOrAlias = roomIdOrAlias;
         this.eventId = eventId;
-        this.groupId = groupId;
         this.userId = userId;
+        this.groupId = groupId;
         this.viaServers = viaServers;
     }
 
@@ -82,7 +82,7 @@ export class PermalinkParts {
     }
 
     get primaryEntityId(): string {
-        return this.roomIdOrAlias || this.userId || this.groupId;
+        return this.roomIdOrAlias || this.userId;
     }
 
     get sigil(): string {

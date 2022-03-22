@@ -18,13 +18,12 @@ limitations under the License.
 import * as React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
 import { User } from "matrix-js-sdk/src/models/user";
-import { Group } from "matrix-js-sdk/src/models/group";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from '../../../languageHandler';
 import QRCode from "../elements/QRCode";
-import { RoomPermalinkCreator, makeGroupPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
+import { RoomPermalinkCreator, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import { selectText } from "../../../utils/strings";
 import StyledCheckbox from '../elements/StyledCheckbox';
 import { IDialogProps } from "./IDialogProps";
@@ -63,7 +62,7 @@ const socials = [
 ];
 
 interface IProps extends IDialogProps {
-    target: Room | User | Group | RoomMember | MatrixEvent;
+    target: Room | User | RoomMember | MatrixEvent;
     permalinkCreator: RoomPermalinkCreator;
 }
 
@@ -121,8 +120,6 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             matrixToUrl = makeUserPermalink(this.props.target.userId);
-        } else if (this.props.target instanceof Group) {
-            matrixToUrl = makeGroupPermalink(this.props.target.groupId);
         } else if (this.props.target instanceof MatrixEvent) {
             if (this.state.linkSpecificEvent) {
                 matrixToUrl = this.props.permalinkCreator.forEvent(this.props.target.getId());
@@ -153,8 +150,6 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             }
         } else if (this.props.target instanceof User || this.props.target instanceof RoomMember) {
             title = _t('Share User');
-        } else if (this.props.target instanceof Group) {
-            title = _t('Share Community');
         } else if (this.props.target instanceof MatrixEvent) {
             title = _t('Share Room Message');
             checkbox = <div>

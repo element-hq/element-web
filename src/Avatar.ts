@@ -22,7 +22,6 @@ import { split } from "lodash";
 
 import DMRoomMap from './utils/DMRoomMap';
 import { mediaFromMxc } from "./customisations/Media";
-import SpaceStore from "./stores/spaces/SpaceStore";
 
 // Not to be used for BaseAvatar urls as that has similar default avatar fallback already
 export function avatarUrlForMember(
@@ -140,7 +139,7 @@ export function avatarUrlForRoom(room: Room, width: number, height: number, resi
     }
 
     // space rooms cannot be DMs so skip the rest
-    if (SpaceStore.spacesEnabled && room.isSpaceRoom()) return null;
+    if (room.isSpaceRoom()) return null;
 
     // If the room is not a DM don't fallback to a member avatar
     if (!DMRoomMap.shared().getUserIdForRoomId(room.roomId)) return null;

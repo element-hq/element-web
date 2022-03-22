@@ -23,11 +23,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import FlairStore from "../../../stores/FlairStore";
 import { getPrimaryPermalinkEntity, parsePermalink } from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
-import { mediaFromMxc } from "../../../customisations/Media";
 import Tooltip from './Tooltip';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 
@@ -43,7 +41,6 @@ class Pill extends React.Component {
 
     static TYPE_USER_MENTION = 'TYPE_USER_MENTION';
     static TYPE_ROOM_MENTION = 'TYPE_ROOM_MENTION';
-    static TYPE_GROUP_MENTION = 'TYPE_GROUP_MENTION';
     static TYPE_AT_ROOM_MENTION = 'TYPE_AT_ROOM_MENTION'; // '@room' mention
 
     static propTypes = {
@@ -69,8 +66,6 @@ class Pill extends React.Component {
 
         // The member related to the user pill
         member: null,
-        // The group related to the group pill
-        group: null,
         // The room related to the room pill
         room: null,
         // Is the user hovering the pill
@@ -98,11 +93,9 @@ class Pill extends React.Component {
             '@': Pill.TYPE_USER_MENTION,
             '#': Pill.TYPE_ROOM_MENTION,
             '!': Pill.TYPE_ROOM_MENTION,
-            '+': Pill.TYPE_GROUP_MENTION,
         }[prefix];
 
         let member;
-        let group;
         let room;
         switch (pillType) {
             case Pill.TYPE_AT_ROOM_MENTION: {
@@ -116,8 +109,8 @@ class Pill extends React.Component {
                     member = new RoomMember(null, resourceId);
                     this.doProfileLookup(resourceId, member);
                 }
-            }
                 break;
+            }
             case Pill.TYPE_ROOM_MENTION: {
                 const localRoom = resourceId[0] === '#' ?
                     MatrixClientPeg.get().getRooms().find((r) => {
@@ -130,23 +123,10 @@ class Pill extends React.Component {
                     // a room avatar and name.
                     // this.doRoomProfileLookup(resourceId, member);
                 }
-            }
                 break;
-            case Pill.TYPE_GROUP_MENTION: {
-                const cli = MatrixClientPeg.get();
-
-                try {
-                    group = await FlairStore.getGroupProfileCached(cli, resourceId);
-                } catch (e) { // if FlairStore failed, fall back to just groupId
-                    group = {
-                        groupId: resourceId,
-                        avatarUrl: null,
-                        name: null,
-                    };
-                }
             }
         }
-        this.setState({ resourceId, pillType, member, group, room });
+        this.setState({ resourceId, pillType, member, room });
     }
 
     componentDidMount() {
@@ -203,7 +183,6 @@ class Pill extends React.Component {
     };
 
     render() {
-        const BaseAvatar = sdk.getComponent('views.avatars.BaseAvatar');
         const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
         const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
 
@@ -225,8 +204,8 @@ class Pill extends React.Component {
                     }
                     pillClass = 'mx_AtRoomPill';
                 }
-            }
                 break;
+            }
             case Pill.TYPE_USER_MENTION: {
                 // If this user is not a member of this room, default to the empty member
                 const member = this.state.member;
@@ -241,8 +220,8 @@ class Pill extends React.Component {
                     href = null;
                     onClick = this.onUserPillClicked;
                 }
-            }
                 break;
+            }
             case Pill.TYPE_ROOM_MENTION: {
                 const room = this.state.room;
                 if (room) {
@@ -252,25 +231,8 @@ class Pill extends React.Component {
                     }
                 }
                 pillClass = 'mx_RoomPill';
-            }
                 break;
-            case Pill.TYPE_GROUP_MENTION: {
-                if (this.state.group) {
-                    const { avatarUrl, groupId, name } = this.state.group;
-
-                    linkText = groupId;
-                    if (this.props.shouldShowPillAvatar) {
-                        avatar = <BaseAvatar
-                            name={name || groupId}
-                            width={16}
-                            height={16}
-                            aria-hidden="true"
-                            url={avatarUrl ? mediaFromMxc(avatarUrl).getSquareThumbnailHttp(16) : null} />;
-                    }
-                    pillClass = 'mx_GroupPill';
-                }
             }
-                break;
         }
 
         const classes = classNames("mx_Pill", pillClass, {

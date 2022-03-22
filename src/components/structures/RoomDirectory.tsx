@@ -31,9 +31,6 @@ import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/Di
 import Analytics from '../../Analytics';
 import NetworkDropdown, { ALL_ROOMS, Protocols } from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
-import GroupFilterOrderStore from "../../stores/GroupFilterOrderStore";
-import GroupStore from "../../stores/GroupStore";
-import FlairStore from "../../stores/FlairStore";
 import { replaceableComponent } from "../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../customisations/Media";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
@@ -72,8 +69,6 @@ interface IState {
     instanceId: string;
     roomServer: string;
     filterString: string;
-    selectedCommunityId?: string;
-    communityName?: string;
 }
 
 @replaceableComponent("structures.RoomDirectory")
@@ -86,15 +81,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
-        const selectedCommunityId = SettingsStore.getValue("feature_communities_v2_prototypes")
-            ? GroupFilterOrderStore.getSelectedTags()[0]
-            : null;
-
         let protocolsLoading = true;
         if (!MatrixClientPeg.get()) {
             // We may not have a client yet when invoked from welcome page
             protocolsLoading = false;
-        } else if (!selectedCommunityId) {
+        } else {
             MatrixClientPeg.get().getThirdpartyProtocols().then((response) => {
                 this.protocols = response;
                 const myHomeserver = MatrixClientPeg.getHomeserverName();
@@ -147,14 +138,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     ),
                 });
             });
-        } else {
-            // We don't use the protocols in the communities v2 prototype experience
-            protocolsLoading = false;
-
-            // Grab the profile info async
-            FlairStore.getGroupProfileCached(MatrixClientPeg.get(), this.state.selectedCommunityId).then(profile => {
-                this.setState({ communityName: profile.name });
-            });
         }
 
         this.state = {
@@ -164,8 +147,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             instanceId: localStorage.getItem(LAST_INSTANCE_KEY),
             roomServer: localStorage.getItem(LAST_SERVER_KEY),
             filterString: this.props.initialText || "",
-            selectedCommunityId,
-            communityName: null,
             protocolsLoading,
         };
     }
@@ -182,33 +163,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     }
 
     private refreshRoomList = () => {
-        if (this.state.selectedCommunityId) {
-            this.setState({
-                publicRooms: GroupStore.getGroupRooms(this.state.selectedCommunityId).map(r => {
-                    return {
-                        // Translate all the group properties to the directory format
-                        room_id: r.roomId,
-                        name: r.name,
-                        topic: r.topic,
-                        canonical_alias: r.canonicalAlias,
-                        num_joined_members: r.numJoinedMembers,
-                        avatarUrl: r.avatarUrl,
-                        world_readable: r.worldReadable,
-                        guest_can_join: r.guestsCanJoin,
-                    };
-                }).filter(r => {
-                    const filterString = this.state.filterString;
-                    if (filterString) {
-                        const containedIn = (s: string) => (s || "").toLowerCase().includes(filterString.toLowerCase());
-                        return containedIn(r.name) || containedIn(r.topic) || containedIn(r.canonical_alias);
-                    }
-                    return true;
-                }),
-                loading: false,
-            });
-            return;
-        }
-
         this.nextBatch = null;
         this.setState({
             publicRooms: [],
@@ -218,7 +172,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     };
 
     private getMoreRooms(): Promise<boolean> {
-        if (this.state.selectedCommunityId) return Promise.resolve(false); // no more rooms
         if (!MatrixClientPeg.get()) return Promise.resolve(false);
 
         this.setState({
@@ -342,7 +295,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
 
     private onRoomClicked = (room: IPublicRoomsChunkRoom, ev: React.MouseEvent) => {
         // If room was shift-clicked, remove it from the room directory
-        if (ev.shiftKey && !this.state.selectedCommunityId) {
+        if (ev.shiftKey) {
             ev.preventDefault();
             this.removeFromDirectory(room);
         }
@@ -755,18 +708,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 }
             }
 
-            let dropdown = (
-                <NetworkDropdown
-                    protocols={this.protocols}
-                    onOptionChange={this.onOptionChange}
-                    selectedServerName={this.state.roomServer}
-                    selectedInstanceId={this.state.instanceId}
-                />
-            );
-            if (this.state.selectedCommunityId) {
-                dropdown = null;
-            }
-
             listHeader = <div className="mx_RoomDirectory_listheader">
                 <DirectorySearchBox
                     className="mx_RoomDirectory_searchbox"
@@ -777,7 +718,12 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     showJoinButton={showJoinButton}
                     initialText={this.props.initialText}
                 />
-                { dropdown }
+                <NetworkDropdown
+                    protocols={this.protocols}
+                    onOptionChange={this.onOptionChange}
+                    selectedServerName={this.state.roomServer}
+                    selectedInstanceId={this.state.instanceId}
+                />
             </div>;
         }
         const explanation =
@@ -789,10 +735,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 ) },
             );
 
-        const title = this.state.selectedCommunityId
-            ? _t("Explore rooms in %(communityName)s", {
-                communityName: this.state.communityName || this.state.selectedCommunityId,
-            }) : _t("Explore rooms");
+        const title = _t("Explore rooms");
         return (
             <BaseDialog
                 className="mx_RoomDirectory_dialog"

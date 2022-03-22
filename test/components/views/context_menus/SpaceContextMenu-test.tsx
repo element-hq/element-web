@@ -48,9 +48,6 @@ jest.mock('../../../../src/utils/space', () => ({
     showSpacePreferences: jest.fn(),
     showSpaceSettings: jest.fn(),
 }));
-jest.mock('../../../../src/stores/spaces/SpaceStore', () => ({
-    spacesEnabled: true,
-}));
 
 describe('<SpaceContextMenu />', () => {
     const userId = '@test:server';

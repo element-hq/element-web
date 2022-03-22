@@ -46,8 +46,8 @@ $info-plinth-fg-color: #888;
 // left-panel style muted accent color
 $secondary-accent-color: #f2f5f8;
 
-$groupFilterPanel-bg-color: #27303a;
-$inverted-bg-color: $groupFilterPanel-bg-color;
+$spacePanel-bg-color: #27303a;
+$inverted-bg-color: $spacePanel-bg-color;
 
 // used by RoomDropTarget
 $droptarget-bg-color: rgba(255, 255, 255, 0.5);
@@ -255,7 +255,7 @@ $reaction-row-button-selected-bg-color: #e9fff9;
 
 $kbd-border-color: $message-action-bar-border-color;
 
-$tooltip-timeline-bg-color: $groupFilterPanel-bg-color;
+$tooltip-timeline-bg-color: $spacePanel-bg-color;
 $tooltip-timeline-fg-color: #ffffff;
 
 $breadcrumb-placeholder-bg-color: #e8eef5;
@@ -282,7 +282,7 @@ $eventbubble-reply-color: #C1C6CD;
 // pinned events indicator
 $pinned-color: $tertiary-content;
 
-$groupFilterPanel-divider-color: $tertiary-content;
+$spacePanel-divider-color: $tertiary-content;
 
 // Location sharing
 // ********************

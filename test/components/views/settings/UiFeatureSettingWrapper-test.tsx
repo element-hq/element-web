@@ -25,7 +25,7 @@ jest.mock('../../../../src/settings/SettingsStore');
 
 describe('<UiFeatureSettingWrapper>', () => {
     const defaultProps = {
-        uiFeature: UIFeature.Flair,
+        uiFeature: UIFeature.Feedback,
         children: <div>test</div>,
     };
     const getComponent = (props = {}) => mount(<UiFeatureSettingWrapper {...defaultProps} {...props} />);

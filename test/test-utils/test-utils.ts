@@ -68,7 +68,6 @@ export function createTestClient(): MatrixClient {
         getRoom: jest.fn().mockImplementation(mkStubRoom),
         getRooms: jest.fn().mockReturnValue([]),
         getVisibleRooms: jest.fn().mockReturnValue([]),
-        getGroups: jest.fn().mockReturnValue([]),
         loginFlows: jest.fn(),
         on: eventEmitter.on.bind(eventEmitter),
         off: eventEmitter.off.bind(eventEmitter),

@@ -80,8 +80,8 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
     }
 
     /**
-     * Parses an app route (`(user|room|group)/identifer`) to a Matrix entity
-     * (room, user, group).
+     * Parses an app route (`(user|room)/identifer`) to a Matrix entity
+     * (room, user).
      * @param {string} route The app route
      * @returns {PermalinkParts}
      */
@@ -102,14 +102,13 @@ export default class ElementPermalinkConstructor extends PermalinkConstructor {
         if (entityType === 'user') {
             // Probably a user, no further parsing needed.
             return PermalinkParts.forUser(entity);
-        } else if (entityType === 'group') {
-            // Probably a group, no further parsing needed.
-            return PermalinkParts.forGroup(entity);
         } else if (entityType === 'room') {
             // Rejoin the rest because v3 events can have slashes (annoyingly)
             const eventId = parts.length > 2 ? parts.slice(2).join('/') : "";
             const via = query.split(/&?via=/).filter(p => !!p);
             return PermalinkParts.forEvent(entity, eventId, via);
+        } else if (entityType === 'group') {
+            return PermalinkParts.forGroup(entity);
         } else {
             throw new Error("Unknown entity type in permalink");
         }

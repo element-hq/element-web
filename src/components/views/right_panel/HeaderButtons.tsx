@@ -30,7 +30,6 @@ import { NotificationColor } from '../../../stores/notifications/NotificationCol
 
 export enum HeaderKind {
   Room = "room",
-  Group = "group",
 }
 
 interface IState {
@@ -91,9 +90,7 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
 
     private onRightPanelStoreUpdate = () => {
         if (this.unmounted) return;
-        let phase = RightPanelStore.instance.currentCard.phase;
-        if (!RightPanelStore.instance.isOpenForGroup) {phase = null;}
-        this.setState({ phase });
+        this.setState({ phase: RightPanelStore.instance.currentCard.phase });
     };
 
     // XXX: Make renderButtons a prop

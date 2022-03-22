@@ -25,7 +25,6 @@ import UserIdentifier from "../../../customisations/UserIdentifier";
 interface IProps {
     member?: RoomMember;
     fallbackName: string;
-    flair?: JSX.Element;
     onClick?(): void;
     colored?: boolean;
     emphasizeDisplayName?: boolean;
@@ -33,7 +32,7 @@ interface IProps {
 
 export default class DisambiguatedProfile extends React.Component<IProps> {
     render() {
-        const { fallbackName, member, flair, colored, emphasizeDisplayName, onClick } = this.props;
+        const { fallbackName, member, colored, emphasizeDisplayName, onClick } = this.props;
         const rawDisplayName = member?.rawDisplayName || fallbackName;
         const mxid = member?.userId;
 
@@ -64,7 +63,6 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
                     { rawDisplayName }
                 </span>
                 { mxidElement }
-                { flair }
             </div>
         );
     }

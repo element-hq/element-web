@@ -61,8 +61,7 @@ limitations under the License.
     width: 26px;
 }
 
-.mx_EntityTile_avatar,
-.mx_GroupRoomTile_avatar {
+.mx_EntityTile_avatar {
     padding-left: 3px;
     padding-right: 12px;
     padding-top: 4px;
@@ -70,8 +69,7 @@ limitations under the License.
     position: relative;
 }
 
-.mx_EntityTile_name,
-.mx_GroupRoomTile_name {
+.mx_EntityTile_name {
     flex: 1 1 0;
     overflow: hidden;
     font-size: $font-14px;

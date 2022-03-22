@@ -123,7 +123,6 @@ module.exports = {
                 "src/components/structures/UserMenu.tsx",
                 "src/components/views/avatars/WidgetAvatar.tsx",
                 "src/components/views/dialogs/AddExistingToSpaceDialog.tsx",
-                "src/components/views/dialogs/CreateSpaceFromCommunityDialog.tsx",
                 "src/components/views/dialogs/ForwardDialog.tsx",
                 "src/components/views/dialogs/InviteDialog.tsx",
                 "src/components/views/dialogs/ModalWidgetDialog.tsx",

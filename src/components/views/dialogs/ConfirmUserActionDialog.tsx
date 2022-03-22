@@ -15,28 +15,20 @@ limitations under the License.
 */
 
 import React, { ChangeEvent, FormEvent, ReactNode } from 'react';
-import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import classNames from "classnames";
 
 import { _t } from '../../../languageHandler';
-import { GroupMemberType } from '../../../groups';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { mediaFromMxc } from "../../../customisations/Media";
 import MemberAvatar from '../avatars/MemberAvatar';
-import BaseAvatar from '../avatars/BaseAvatar';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import Field from '../elements/Field';
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 
 interface IProps {
-    // matrix-js-sdk (room) member object. Supply either this or 'groupMember'
-    member?: RoomMember;
-    // group member object. Supply either this or 'member'
-    groupMember?: GroupMemberType;
-    // needed if a group member is specified
-    matrixClient?: MatrixClient;
+    // matrix-js-sdk (room) member object.
+    member: RoomMember;
     action: string; // eg. 'Ban'
     title: string; // eg. 'Ban this user?'
 
@@ -112,21 +104,9 @@ export default class ConfirmUserActionDialog extends React.Component<IProps, ISt
             );
         }
 
-        let avatar;
-        let name;
-        let userId;
-        if (this.props.member) {
-            avatar = <MemberAvatar member={this.props.member} width={48} height={48} />;
-            name = this.props.member.name;
-            userId = this.props.member.userId;
-        } else {
-            const httpAvatarUrl = this.props.groupMember.avatarUrl
-                ? mediaFromMxc(this.props.groupMember.avatarUrl).getSquareThumbnailHttp(48)
-                : null;
-            name = this.props.groupMember.displayname || this.props.groupMember.userId;
-            userId = this.props.groupMember.userId;
-            avatar = <BaseAvatar name={name} url={httpAvatarUrl} width={48} height={48} />;
-        }
+        const avatar = <MemberAvatar member={this.props.member} width={48} height={48} />;
+        const name = this.props.member.name;
+        const userId = this.props.member.userId;
 
         const displayUserIdentifier = UserIdentifierCustomisations.getDisplayUserIdentifier(
             userId, { roomId: this.props.roomId, withDisplayName: true },

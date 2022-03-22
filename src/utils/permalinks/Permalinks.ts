@@ -321,7 +321,7 @@ export function tryTransformEntityToPermalink(entity: string): string {
             if (permalinkParts) {
                 if (permalinkParts.roomIdOrAlias) {
                     const eventIdPart = permalinkParts.eventId ? `/${permalinkParts.eventId}` : '';
-                    let pl = matrixtoBaseUrl+`/#/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
+                    let pl = matrixtoBaseUrl + `/#/${permalinkParts.roomIdOrAlias}${eventIdPart}`;
                     if (permalinkParts.viaServers.length > 0) {
                         pl += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
                     }
@@ -373,10 +373,10 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
                 if (permalinkParts.viaServers.length > 0) {
                     permalink += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
                 }
-            } else if (permalinkParts.groupId) {
-                permalink = `#/group/${permalinkParts.groupId}`;
             } else if (permalinkParts.userId) {
                 permalink = `#/user/${permalinkParts.userId}`;
+            } else if (permalinkParts.groupId) {
+                permalink = `#/group/${permalinkParts.groupId}`;
             } // else not a valid permalink for our purposes - do not handle
         }
     } catch (e) {
@@ -403,8 +403,8 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
 
         if (!permalinkParts) return null; // not processable
         if (permalinkParts.userId) return permalinkParts.userId;
-        if (permalinkParts.groupId) return permalinkParts.groupId;
         if (permalinkParts.roomIdOrAlias) return permalinkParts.roomIdOrAlias;
+        if (permalinkParts.groupId) return permalinkParts.groupId;
     } catch (e) {
         // no entity - not a permalink
     }

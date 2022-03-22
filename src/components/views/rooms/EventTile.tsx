@@ -115,7 +115,6 @@ const stateEventTileTypes = {
     [EventType.RoomTombstone]: 'messages.TextualEvent',
     [EventType.RoomJoinRules]: 'messages.TextualEvent',
     [EventType.RoomGuestAccess]: 'messages.TextualEvent',
-    'm.room.related_groups': 'messages.TextualEvent', // legacy communities flair
 };
 
 const stateEventSingular = new Set([
@@ -133,7 +132,6 @@ const stateEventSingular = new Set([
     EventType.RoomTombstone,
     EventType.RoomJoinRules,
     EventType.RoomGuestAccess,
-    'm.room.related_groups',
 ]);
 
 // Add all the Mjolnir stuff to the renderer
@@ -291,9 +289,6 @@ interface IProps {
 
     // which layout to use
     layout?: Layout;
-
-    // whether or not to show flair at all
-    enableFlair?: boolean;
 
     // whether or not to show read receipts
     showReadReceipts?: boolean;
@@ -1214,12 +1209,10 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                 sender = <SenderProfile
                     onClick={this.onSenderProfileClick}
                     mxEvent={this.props.mxEvent}
-                    enableFlair={this.props.enableFlair}
                 />;
             } else {
                 sender = <SenderProfile
                     mxEvent={this.props.mxEvent}
-                    enableFlair={this.props.enableFlair}
                 />;
             }
         }

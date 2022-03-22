@@ -204,7 +204,7 @@ export default class BugReportDialog extends React.Component<IProps, IState> {
                     <p>
                         { _t(
                             "Debug logs contain application usage data including your " +
-                            "username, the IDs or aliases of the rooms or groups you " +
+                            "username, the IDs or aliases of the rooms you " +
                             "have visited, which UI elements you last interacted with, " +
                             "and the usernames of other users. They do not contain messages.",
                         ) }

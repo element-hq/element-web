@@ -274,36 +274,6 @@ function textForGuestAccessEvent(ev: MatrixEvent): () => string | null {
     }
 }
 
-function textForRelatedGroupsEvent(ev: MatrixEvent): () => string | null {
-    const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
-    const groups = ev.getContent().groups || [];
-    const prevGroups = ev.getPrevContent().groups || [];
-    const added = groups.filter((g) => !prevGroups.includes(g));
-    const removed = prevGroups.filter((g) => !groups.includes(g));
-
-    if (added.length && !removed.length) {
-        return () => _t('%(senderDisplayName)s enabled flair for %(groups)s in this room.', {
-            senderDisplayName,
-            groups: added.join(', '),
-        });
-    } else if (!added.length && removed.length) {
-        return () => _t('%(senderDisplayName)s disabled flair for %(groups)s in this room.', {
-            senderDisplayName,
-            groups: removed.join(', '),
-        });
-    } else if (added.length && removed.length) {
-        return () => _t('%(senderDisplayName)s enabled flair for %(newGroups)s and disabled flair for ' +
-            '%(oldGroups)s in this room.', {
-            senderDisplayName,
-            newGroups: added.join(', '),
-            oldGroups: removed.join(', '),
-        });
-    } else {
-        // Don't bother rendering this change (because there were no changes)
-        return null;
-    }
-}
-
 function textForServerACLEvent(ev: MatrixEvent): () => string | null {
     const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
     const prevContent = ev.getPrevContent();
@@ -800,7 +770,6 @@ const stateHandlers: IHandlers = {
     [EventType.RoomTombstone]: textForTombstoneEvent,
     [EventType.RoomJoinRules]: textForJoinRulesEvent,
     [EventType.RoomGuestAccess]: textForGuestAccessEvent,
-    'm.room.related_groups': textForRelatedGroupsEvent,
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     'im.vector.modular.widgets': textForWidgetEvent,

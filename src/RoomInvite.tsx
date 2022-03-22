@@ -25,8 +25,6 @@ import MultiInviter, { CompletionStates } from './utils/MultiInviter';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import InviteDialog, { KIND_DM, KIND_INVITE, Member } from "./components/views/dialogs/InviteDialog";
-import CommunityPrototypeInviteDialog from "./components/views/dialogs/CommunityPrototypeInviteDialog";
-import { CommunityPrototypeStore } from "./stores/CommunityPrototypeStore";
 import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
@@ -76,23 +74,6 @@ export function showRoomInviteDialog(roomId: string, initialText = ""): void {
         },
         /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
     );
-}
-
-export function showCommunityRoomInviteDialog(roomId: string, communityName: string): void {
-    Modal.createTrackedDialog(
-        'Invite Users to Community', '', CommunityPrototypeInviteDialog, { communityName, roomId },
-        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
-    );
-}
-
-export function showCommunityInviteDialog(communityId: string): void {
-    const chat = CommunityPrototypeStore.instance.getGeneralChat(communityId);
-    if (chat) {
-        const name = CommunityPrototypeStore.instance.getCommunityName(communityId);
-        showCommunityRoomInviteDialog(chat.roomId, name);
-    } else {
-        throw new Error("Failed to locate appropriate room to start an invite in");
-    }
 }
 
 /**

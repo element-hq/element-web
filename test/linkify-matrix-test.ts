@@ -19,7 +19,6 @@ describe('linkify-matrix', () => {
     const linkTypesByInitialCharacter = {
         '#': 'roomalias',
         '@': 'userid',
-        '+': 'groupid',
     };
 
     /**
@@ -267,10 +266,6 @@ describe('linkify-matrix', () => {
 
     describe('roomalias plugin', () => {
         genTests('#');
-    });
-
-    describe('groupid plugin', () => {
-        genTests('+');
     });
 
     describe('userid plugin', () => {

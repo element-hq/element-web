@@ -252,10 +252,4 @@ $irc-line-height: $font-18px;
         cursor: col-resize;
         z-index: 100;
     }
-
-    // Need to use important to override the js provided height and width values.
-    .mx_Flair > img {
-        height: $font-14px !important;
-        width: $font-14px !important;
-    }
 }

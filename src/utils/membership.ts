@@ -184,8 +184,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
         return;
     }
 
-    if (SpaceStore.spacesEnabled &&
-        !isMetaSpace(SpaceStore.instance.activeSpace) &&
+    if (!isMetaSpace(SpaceStore.instance.activeSpace) &&
         SpaceStore.instance.activeSpace !== roomId &&
         RoomViewStore.getRoomId() === roomId
     ) {

@@ -4,7 +4,6 @@
 
 .mx_UserPill,
 .mx_RoomPill,
-.mx_GroupPill,
 .mx_AtRoomPill {
     display: inline-flex;
     align-items: center;
@@ -26,13 +25,6 @@ a.mx_Pill {
     padding-right: 0.4em;
     vertical-align: text-top;
     line-height: $font-17px;
-}
-
-/* More specific to override `.markdown-body a` color */
-.mx_EventTile_content .markdown-body a.mx_GroupPill,
-.mx_GroupPill {
-    color: $accent-fg-color;
-    background-color: $rte-room-pill-color;
 }
 
 /* More specific to override `.markdown-body a` text-decoration */
@@ -62,22 +54,18 @@ a.mx_Pill {
 
 /* More specific to override `.markdown-body a` color */
 .mx_EventTile_content .markdown-body a.mx_RoomPill,
-.mx_EventTile_content .markdown-body a.mx_GroupPill,
-.mx_RoomPill,
-.mx_GroupPill {
+.mx_RoomPill {
     color: $accent-fg-color;
     background-color: $rte-room-pill-color;
 }
 
 .mx_EventTile_body .mx_UserPill,
-.mx_EventTile_body .mx_RoomPill,
-.mx_EventTile_body .mx_GroupPill {
+.mx_EventTile_body .mx_RoomPill {
     cursor: pointer;
 }
 
 .mx_UserPill .mx_BaseAvatar,
 .mx_RoomPill .mx_BaseAvatar,
-.mx_GroupPill .mx_BaseAvatar,
 .mx_AtRoomPill .mx_BaseAvatar {
     position: relative;
     display: inline-flex;

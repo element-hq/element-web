@@ -58,7 +58,7 @@ export enum Anonymity {
 
 const whitelistedScreens = new Set([
     "register", "login", "forgot_password", "soft_logout", "new", "settings", "welcome", "home", "start", "directory",
-    "start_sso", "start_cas", "groups", "complete_security", "post_registration", "room", "user", "group",
+    "start_sso", "start_cas", "complete_security", "post_registration", "room", "user",
 ]);
 
 export function getRedactedCurrentLocation(

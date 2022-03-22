@@ -14,9 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MemberList,
-.mx_GroupMemberList,
-.mx_GroupRoomList {
+.mx_MemberList {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -50,11 +48,6 @@ limitations under the License.
         // to prevent it bouncing as user navigates right panel
         margin-top: -8px;
     }
-}
-
-.mx_GroupMemberList_query,
-.mx_GroupRoomList_query {
-    flex: 0 0 auto;
 }
 
 .mx_MemberList_chevron {
@@ -116,12 +109,4 @@ limitations under the License.
         height: 20px;
         margin-right: 5px;
     }
-}
-
-.mx_MemberList_inviteCommunity span::before {
-    mask-image: url('$(res)/img/icon-invite-people.svg');
-}
-
-.mx_MemberList_addRoomToCommunity span::before {
-    mask-image: url('$(res)/img/icons-room-add.svg');
 }

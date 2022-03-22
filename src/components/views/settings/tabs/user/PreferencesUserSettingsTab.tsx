@@ -15,8 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext, useEffect, useState } from 'react';
-import { EventType } from 'matrix-js-sdk/src/@types/event';
+import React from 'react';
 
 import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
@@ -27,18 +26,10 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import AccessibleButton from "../../../elements/AccessibleButton";
-import GroupAvatar from "../../../avatars/GroupAvatar";
 import dis from "../../../../../dispatcher/dispatcher";
-import GroupActions from "../../../../../actions/GroupActions";
-import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
-import { useDispatcher } from "../../../../../hooks/useDispatcher";
-import { createSpaceFromCommunity } from "../../../../../utils/space";
-import Spinner from "../../../elements/Spinner";
 import { UserTab } from "../../../dialogs/UserSettingsDialog";
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
-import { ViewRoomPayload } from "../../../../../dispatcher/payloads/ViewRoomPayload";
-import { CreateEventField, IGroupSummary } from '../../../../../@types/groups';
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -58,85 +49,6 @@ interface IState {
     readMarkerOutOfViewThresholdMs: string;
 }
 
-type Community = IGroupSummary & {
-    groupId: string;
-    spaceId?: string;
-};
-
-const CommunityMigrator = ({ onFinished }) => {
-    const cli = useContext(MatrixClientContext);
-    const [communities, setCommunities] = useState<Community[]>(null);
-    useEffect(() => {
-        dis.dispatch(GroupActions.fetchJoinedGroups(cli));
-    }, [cli]);
-    useDispatcher(dis, async payload => {
-        if (payload.action === "GroupActions.fetchJoinedGroups.success") {
-            const communities: Community[] = [];
-
-            const migratedSpaceMap = new Map(cli.getRooms().map(room => {
-                const createContent = room.currentState.getStateEvents(EventType.RoomCreate, "")?.getContent();
-                if (createContent?.[CreateEventField]) {
-                    return [createContent[CreateEventField], room.roomId] as [string, string];
-                }
-            }).filter(Boolean));
-
-            for (const groupId of payload.result.groups) {
-                const summary = await cli.getGroupSummary(groupId) as IGroupSummary;
-                if (summary.user.is_privileged) {
-                    communities.push({
-                        ...summary,
-                        groupId,
-                        spaceId: migratedSpaceMap.get(groupId),
-                    });
-                }
-            }
-
-            setCommunities(communities);
-        }
-    });
-
-    if (!communities) {
-        return <Spinner />;
-    }
-
-    return <div className="mx_PreferencesUserSettingsTab_CommunityMigrator">
-        { communities.map(community => (
-            <div key={community.groupId}>
-                <GroupAvatar
-                    groupId={community.groupId}
-                    groupAvatarUrl={community.profile.avatar_url}
-                    groupName={community.profile.name}
-                    width={32}
-                    height={32}
-                />
-                { community.profile.name }
-                <AccessibleButton
-                    kind="primary_outline"
-                    onClick={() => {
-                        if (community.spaceId) {
-                            dis.dispatch<ViewRoomPayload>({
-                                action: Action.ViewRoom,
-                                room_id: community.spaceId,
-                                metricsTrigger: undefined, // other
-                            });
-                            onFinished();
-                        } else {
-                            createSpaceFromCommunity(cli, community.groupId).then(([spaceId]) => {
-                                if (spaceId) {
-                                    community.spaceId = spaceId;
-                                    setCommunities([...communities]); // force component re-render
-                                }
-                            });
-                        }
-                    }}
-                >
-                    { community.spaceId ? _t("Open Space") : _t("Create Space") }
-                </AccessibleButton>
-            </div>
-        )) }
-    </div>;
-};
-
 @replaceableComponent("views.settings.tabs.user.PreferencesUserSettingsTab")
 export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
     static ROOM_LIST_SETTINGS = [
@@ -145,10 +57,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
     static SPACES_SETTINGS = [
         "Spaces.allRoomsInHome",
-    ];
-
-    static COMMUNITIES_SETTINGS = [
-        "showCommunitiesInsteadOfSpaces",
     ];
 
     static KEYBINDINGS_SETTINGS = [
@@ -193,7 +101,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         'scrollToBottomOnMessageSent',
     ];
     static GENERAL_SETTINGS = [
-        'TagPanel.enableTagPanel',
         'promptBeforeInviteUnknownUsers',
         // Start automatically after startup (electron-only)
         // Autocomplete delay (niche text box)
@@ -354,19 +261,6 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Spaces") }</span>
                     { this.renderGroup(PreferencesUserSettingsTab.SPACES_SETTINGS, SettingLevel.ACCOUNT) }
-                </div>
-
-                <div className="mx_SettingsTab_section">
-                    <span className="mx_SettingsTab_subheading">{ _t("Communities") }</span>
-                    <p>{ _t("Communities have been archived to make way for Spaces but you can convert your " +
-                        "communities into Spaces below. Converting will ensure your conversations get the latest " +
-                        "features.") }</p>
-                    <details>
-                        <summary>{ _t("Show my Communities") }</summary>
-                        <p>{ _t("If a community isn't shown you may not have permission to convert it.") }</p>
-                        <CommunityMigrator onFinished={this.props.closeSettingsFn} />
-                    </details>
-                    { this.renderGroup(PreferencesUserSettingsTab.COMMUNITIES_SETTINGS, SettingLevel.DEVICE) }
                 </div>
 
                 <div className="mx_SettingsTab_section">

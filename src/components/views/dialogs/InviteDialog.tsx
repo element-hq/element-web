@@ -43,12 +43,10 @@ import {
     IInviteResult,
     inviteMultipleToRoom,
     showAnyInviteErrors,
-    showCommunityInviteDialog,
 } from "../../../RoomInvite";
 import { Action } from "../../../dispatcher/actions";
 import { DefaultTagID } from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
-import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -64,7 +62,6 @@ import QuestionDialog from "./QuestionDialog";
 import Spinner from "../elements/Spinner";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import CallHandler from "../../../CallHandler";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import CopyableText from "../elements/CopyableText";
@@ -1104,23 +1101,12 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         this.props.onFinished(false);
     };
 
-    private onCommunityInviteClick = (e) => {
-        this.props.onFinished(false);
-        showCommunityInviteDialog(CommunityPrototypeStore.instance.getSelectedCommunityId());
-    };
-
     private renderSection(kind: "recents"|"suggestions") {
         let sourceMembers = kind === 'recents' ? this.state.recents : this.state.suggestions;
         let showNum = kind === 'recents' ? this.state.numRecentsShown : this.state.numSuggestionsShown;
         const showMoreFn = kind === 'recents' ? this.showMoreRecents.bind(this) : this.showMoreSuggestions.bind(this);
         const lastActive = (m) => kind === 'recents' ? m.lastActive : null;
         let sectionName = kind === 'recents' ? _t("Recent Conversations") : _t("Suggestions");
-        let sectionSubname = null;
-
-        if (kind === 'suggestions' && CommunityPrototypeStore.instance.getSelectedCommunityId()) {
-            const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
-            sectionSubname = _t("May include members not in %(communityName)s", { communityName });
-        }
 
         if (this.props.kind === KIND_INVITE) {
             sectionName = kind === 'recents' ? _t("Recently Direct Messaged") : _t("Suggestions");
@@ -1199,7 +1185,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         return (
             <div className='mx_InviteDialog_section'>
                 <h3>{ sectionName }</h3>
-                { sectionSubname ? <p className="mx_InviteDialog_subname">{ sectionSubname }</p> : null }
                 { tiles }
                 { showMore }
             </div>
@@ -1247,7 +1232,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
         if (defaultIdentityServerUrl) {
             return (
-                <div className="mx_AddressPickerDialog_identityServer">{ _t(
+                <div className="mx_InviteDialog_identityServer">{ _t(
                     "Use an identity server to invite by email. " +
                     "<default>Use the default (%(defaultIdentityServerName)s)</default> " +
                     "or manage in <settings>Settings</settings>.",
@@ -1268,7 +1253,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             );
         } else {
             return (
-                <div className="mx_AddressPickerDialog_identityServer">{ _t(
+                <div className="mx_InviteDialog_identityServer">{ _t(
                     "Use an identity server to invite by email. " +
                     "Manage in <settings>Settings</settings>.",
                     {}, {
@@ -1377,35 +1362,6 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 );
             }
 
-            if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
-                const communityName = CommunityPrototypeStore.instance.getSelectedCommunityName();
-                const inviteText = _t(
-                    "This won't invite them to %(communityName)s. " +
-                    "To invite someone to %(communityName)s, click <a>here</a>",
-                    { communityName }, {
-                        userId: () => {
-                            return (
-                                <a
-                                    href={makeUserPermalink(userId)}
-                                    rel="noreferrer noopener"
-                                    target="_blank"
-                                >{ userId }</a>
-                            );
-                        },
-                        a: (sub) => {
-                            return (
-                                <AccessibleButton
-                                    kind="link"
-                                    onClick={this.onCommunityInviteClick}
-                                >{ sub }</AccessibleButton>
-                            );
-                        },
-                    },
-                );
-                helpText = <React.Fragment>
-                    { helpText } { inviteText }
-                </React.Fragment>;
-            }
             buttonText = _t("Go");
             goButtonFn = this.startDm;
             extraSection = <div className="mx_InviteDialog_section_hidden_suggestions_disclaimer">
@@ -1423,7 +1379,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
             </div>;
         } else if (this.props.kind === KIND_INVITE) {
             const room = MatrixClientPeg.get()?.getRoom(this.props.roomId);
-            const isSpace = SpaceStore.spacesEnabled && room?.isSpaceRoom();
+            const isSpace = room?.isSpaceRoom();
             title = isSpace
                 ? _t("Invite to %(spaceName)s", {
                     spaceName: room.name || _t("Unnamed Space"),

@@ -25,7 +25,7 @@ import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
 import { findDMForUser } from './createRoom';
 import { accessSecretStorage } from './SecurityManager';
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
-import { GroupMember, IDevice } from "./components/views/right_panel/UserInfo";
+import { IDevice } from "./components/views/right_panel/UserInfo";
 import ManualDeviceKeyVerificationDialog from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
@@ -124,7 +124,7 @@ function setRightPanel(state: IRightPanelCardState) {
     }
 }
 
-export function pendingVerificationRequestForUser(user: User | RoomMember | GroupMember) {
+export function pendingVerificationRequestForUser(user: User | RoomMember) {
     const cli = MatrixClientPeg.get();
     const dmRoom = findDMForUser(cli, user.userId);
     if (dmRoom) {

@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType } from "matrix-js-sdk/src/@types/event";
-import { MatrixClient } from "matrix-js-sdk/src/client";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { calculateRoomVia } from "./permalinks/Permalinks";
@@ -39,7 +38,6 @@ import { Action } from "../dispatcher/actions";
 import { leaveRoomBehaviour } from "./membership";
 import Spinner from "../components/views/elements/Spinner";
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
-import CreateSpaceFromCommunityDialog from "../components/views/dialogs/CreateSpaceFromCommunityDialog";
 import SpacePreferencesDialog, { SpacePreferenceTab } from "../components/views/dialogs/SpacePreferencesDialog";
 import PosthogTrackers from "../PosthogTrackers";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
@@ -200,13 +198,6 @@ export const leaveSpace = (space: Room) => {
             });
         },
     }, "mx_LeaveSpaceDialog_wrapper");
-};
-
-export const createSpaceFromCommunity = (cli: MatrixClient, groupId: string): Promise<[string?]> => {
-    return Modal.createTrackedDialog('Create Space', 'from community', CreateSpaceFromCommunityDialog, {
-        matrixClient: cli,
-        groupId,
-    }, "mx_CreateSpaceFromCommunityDialog_wrapper").finished as Promise<[string?]>;
 };
 
 export const showSpacePreferences = (space: Room, initialTabId?: SpacePreferenceTab): Promise<unknown> => {

@@ -26,7 +26,6 @@ import withValidation, { IFieldState } from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { IOpts, privateShouldBeEncrypted } from "../../../createRoom";
-import { CommunityPrototypeStore } from "../../../stores/CommunityPrototypeStore";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Heading from "../typography/Heading";
 import Field from "../elements/Field";
@@ -120,10 +119,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
         if (this.state.noFederate) {
             createOpts.creation_content = { 'm.federate': false };
-        }
-
-        if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
-            opts.associatedWithCommunity = CommunityPrototypeStore.instance.getSelectedCommunityId();
         }
 
         opts.parentSpace = this.props.parentSpace;
@@ -250,14 +245,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
 
         let publicPrivateLabel: JSX.Element;
-        if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
-            publicPrivateLabel = <p>
-                { _t(
-                    "Private rooms can be found and joined by invitation only. Public rooms can be " +
-                    "found and joined by anyone in this community.",
-                ) }
-            </p>;
-        } else if (this.state.joinRule === JoinRule.Restricted) {
+        if (this.state.joinRule === JoinRule.Restricted) {
             publicPrivateLabel = <p>
                 { _t(
                     "Everyone in <SpaceName/> will be able to find and join this room.", {}, {
@@ -332,10 +320,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
 
         let title = _t("Create a room");
-        if (CommunityPrototypeStore.instance.getSelectedCommunityId()) {
-            const name = CommunityPrototypeStore.instance.getSelectedCommunityName();
-            title = _t("Create a room in %(communityName)s", { communityName: name });
-        } else if (!this.props.parentSpace) {
+        if (!this.props.parentSpace) {
             title = this.state.joinRule === JoinRule.Public ? _t('Create a public room') : _t('Create a private room');
         }
 

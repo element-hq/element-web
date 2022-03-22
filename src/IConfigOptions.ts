@@ -178,6 +178,9 @@ export interface IConfigOptions {
 
     sync_timeline_limit?: number;
     dangerously_allow_unsafe_and_insecure_passwords?: boolean; // developer option
+
+    // XXX: Undocumented URL for the "Learn more about spaces" link in the "Communities don't exist" messaging.
+    spaces_learn_more_url?: string;
 }
 
 export interface ISsoRedirectOptions {

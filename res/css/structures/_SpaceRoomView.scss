@@ -184,18 +184,6 @@ $SpaceRoomViewInnerWidth: 428px;
             }
         }
 
-        .mx_SpaceRoomView_preview_migratedCommunity {
-            margin-bottom: 16px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid $input-border-color;
-            width: max-content;
-
-            .mx_BaseAvatar {
-                margin-right: 4px;
-            }
-        }
-
         .mx_SpaceRoomView_preview_inviter {
             display: flex;
             align-items: center;

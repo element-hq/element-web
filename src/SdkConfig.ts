@@ -40,6 +40,7 @@ export const DEFAULTS: Partial<IConfigOptions> = {
         logo: require("../res/img/element-desktop-logo.svg").default,
         url: "https://element.io/get-started",
     },
+    spaces_learn_more_url: "https://element.io/blog/spaces-blast-out-of-beta/",
 };
 
 export default class SdkConfig {

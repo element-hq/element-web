@@ -28,8 +28,6 @@ export enum UIFeature {
     ShareSocial = "UIFeature.shareSocial",
     IdentityServer = "UIFeature.identityServer",
     ThirdPartyID = "UIFeature.thirdPartyId",
-    Flair = "UIFeature.flair",
-    Communities = "UIFeature.communities",
     AdvancedSettings = "UIFeature.advancedSettings",
     RoomHistorySettings = "UIFeature.roomHistorySettings",
     TimelineEnableRelativeDates = "UIFeature.timelineEnableRelativeDates",
