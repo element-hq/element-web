@@ -3682,5 +3682,21 @@
     "%(oneUser)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(oneUser)s a changé %(count)s fois les <a>messages épinglés</a> du salon",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|one": "%(severalUsers)s ont modifié les <a>messages épinglés</a> pour le salon",
     "%(severalUsers)schanged the <a>pinned messages</a> for the room %(count)s times|other": "%(severalUsers)s ont changé %(count)s fois les <a>messages épinglés</a> du salon",
-    "Show polls button": "Afficher le bouton des sondages"
+    "Show polls button": "Afficher le bouton des sondages",
+    "Location sharing - share your current location with live updates (under active development)": "Partage de la position - partagez votre position en direct (en développement actif)",
+    "We'll create rooms for each of them.": "Nous allons créer un salon pour chacun d’entre eux.",
+    "This homeserver is not configured correctly to display maps, or the configured map server may be unreachable.": "Ce serveur d’accueil n’est pas configuré correctement pour afficher des cartes, ou bien le serveur de carte configuré est peut-être injoignable.",
+    "This homeserver is not configured to display maps.": "Ce serveur d’accueil n’est pas configuré pour afficher des cartes.",
+    "Click to drop a pin": "Cliquer pour mettre un marqueur",
+    "Click to move the pin": "Cliquer pour déplacer le marqueur",
+    "Shared a location: ": "A partagé une position : ",
+    "Shared their location: ": "Ont partagé leur position : ",
+    "Unable to load map": "Impossible de charger la carte",
+    "Click": "Clic",
+    "Expand quotes": "Étendre les citations",
+    "Collapse quotes": "Réduire les citations",
+    "Can't create a thread from an event with an existing relation": "Impossible de créer un fil de discussion à partir d’un événement avec une relation existante",
+    "Busy": "Occupé",
+    "If you've submitted a bug via GitHub, debug logs can help us track down the problem. ": "Si vous avez soumis une anomalie via GitHub, les journaux de débogage peuvent nous aider à cibler le problème. ",
+    "Spaces are a new way to group rooms and people. What kind of Space do you want to create? You can change this later.": "Les espaces sont une nouvelle manière de regrouper les salons et les personnes. Quel type d’espace voulez-vous créer ? Vous pouvez changer ceci plus tard."
 }
