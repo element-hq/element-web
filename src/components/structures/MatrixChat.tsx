@@ -1465,24 +1465,24 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 setTimeout(() => {
                     if (SettingsStore.getValue("feature_thread") && SdkConfig.get("show_labs_settings")) {
                         Modal.createDialog(InfoDialog, {
-                            title: _t("Threads are no longer experimental! 🎉"),
+                            title: _t("Threads Approaching Beta 🎉"),
                             description: <>
                                 <p>
-                                    { _t("We’ve recently introduced key stability "
-                                    + "improvements for Threads, which also means "
-                                    + "phasing out support for experimental Threads.") }
+                                    { _t("We're getting closer to releasing a public Beta for Threads.") }
                                 </p>
                                 <p>
-                                    { _t("All thread events created during the "
-                                    + "experimental period will now be rendered in "
-                                    + "the room timeline and displayed as replies. "
-                                    + "This is a one-off transition. Threads are now "
-                                    + "part of the Matrix specification.") }
+                                    { _t("As we prepare for it, we need to make some changes: threads created "
+                                       + "before this point will be <strong>displayed as regular replies</strong>.",
+                                    {}, {
+                                        "strong": sub => <strong>{ sub }</strong>,
+                                    }) }
                                 </p>
                                 <p>
-                                    { _t("Thank you for helping us testing Threads!") }
+                                    { _t("This will be a one-off transition, as threads are now part "
+                                       + "of the Matrix specification.") }
                                 </p>
                             </>,
+                            button: _t("Got it"),
                             onFinished: () => {
                                 localStorage.setItem("mx_seen_feature_thread_experimental", "true");
                             },
