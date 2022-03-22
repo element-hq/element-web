@@ -56,6 +56,8 @@ let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
 let skipOurWelcomeScreen = false;
 
+const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev.detail, {});
+
 (async function() {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
@@ -133,7 +135,6 @@ let skipOurWelcomeScreen = false;
 
         if (widgetApi) {
             await readyPromise;
-            await widgetApi.setAlwaysOnScreen(false); // start off as detachable from the screen
 
             // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
             if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
@@ -142,12 +143,48 @@ let skipOurWelcomeScreen = false;
                 logger.log("Got OpenID Connect token");
             }
 
-            // TODO: register widgetApi listeners for PTT controls (https://github.com/vector-im/element-web/issues/12795)
-
+            widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    joinConference();
+                    ack(ev);
+                },
+            );
             widgetApi.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    if (meetApi) meetApi.executeCommand('hangup');
-                    widgetApi.transport.reply(ev.detail, {}); // ack
+                    meetApi?.executeCommand('hangup');
+                    ack(ev);
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.MuteAudio}`,
+                async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
+                    if (meetApi && !await meetApi.isAudioMuted()) {
+                        meetApi.executeCommand('toggleAudio');
+                    }
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.UnmuteAudio}`,
+                async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
+                    if (meetApi && await meetApi.isAudioMuted()) {
+                        meetApi.executeCommand('toggleAudio');
+                    }
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.MuteVideo}`,
+                async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
+                    if (meetApi && !await meetApi.isVideoMuted()) {
+                        meetApi.executeCommand('toggleVideo');
+                    }
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.UnmuteVideo}`,
+                async (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ack(ev);
+                    if (meetApi && await meetApi.isVideoMuted()) {
+                        meetApi.executeCommand('toggleVideo');
+                    }
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.StartLiveStream}`,
@@ -160,7 +197,7 @@ let skipOurWelcomeScreen = false;
                             //rtmpStreamKey: ev.detail.data.rtmpStreamKey,
                             youtubeStreamKey: ev.detail.data.rtmpStreamKey,
                         });
-                        widgetApi.transport.reply(ev.detail, {}); // ack
+                        ack(ev);
                     } else {
                         widgetApi.transport.reply(ev.detail, { error: { message: "Conference not joined" } });
                     }
@@ -293,6 +330,7 @@ function joinConference() { // event handler bound in HTML
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
             widgetApi.setAlwaysOnScreen(true);
+            widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
         }
     });
 
@@ -300,9 +338,13 @@ function joinConference() { // event handler bound in HTML
         switchVisibleContainers();
 
         if (widgetApi) {
+            // We send the hangup event before setAlwaysOnScreen, because the latter
+            // can cause the receiving side to instantly stop listening.
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
-            widgetApi.setAlwaysOnScreen(false);
+            widgetApi.transport.send(ElementWidgetActions.HangupCall, {}).then(() =>
+                widgetApi.setAlwaysOnScreen(false),
+            );
         }
 
         document.getElementById("jitsiContainer").innerHTML = "";
@@ -311,5 +353,23 @@ function joinConference() { // event handler bound in HTML
         if (skipOurWelcomeScreen) {
             skipToJitsiSplashScreen();
         }
+    });
+
+    meetApi.on("audioMuteStatusChanged", ({ muted }) => {
+        const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
+        widgetApi.transport.send(action, {});
+    });
+
+    meetApi.on("videoMuteStatusChanged", ({ muted }) => {
+        const action = muted ? ElementWidgetActions.MuteVideo : ElementWidgetActions.UnmuteVideo;
+        widgetApi.transport.send(action, {});
+    });
+
+    ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach(event => {
+        meetApi.on(event, () => {
+            widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
+                participants: meetApi.getParticipantsInfo(),
+            });
+        });
     });
 }
