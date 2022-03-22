@@ -192,7 +192,6 @@
 @import "./views/messages/_CallEvent.scss";
 @import "./views/messages/_CreateEvent.scss";
 @import "./views/messages/_DateSeparator.scss";
-@import "./views/messages/_DisambiguatedProfile.scss";
 @import "./views/messages/_EventTileBubble.scss";
 @import "./views/messages/_HiddenBody.scss";
 @import "./views/messages/_JumpToDatePicker.scss";
@@ -215,6 +214,7 @@
 @import "./views/messages/_ReactionsRowButton.scss";
 @import "./views/messages/_RedactedBody.scss";
 @import "./views/messages/_RoomAvatarEvent.scss";
+@import "./views/messages/_SenderProfile.scss";
 @import "./views/messages/_TextualEvent.scss";
 @import "./views/messages/_UnknownBody.scss";
 @import "./views/messages/_ViewSourceEvent.scss";

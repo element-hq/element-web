@@ -64,7 +64,6 @@ function presenceClassForMember(presenceState: string, lastActiveAgo: number, sh
 
 interface IProps {
     name?: string;
-    nameJSX?: JSX.Element;
     title?: string;
     avatarJsx?: JSX.Element; // <BaseAvatar />
     className?: string;
@@ -118,7 +117,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         mainClassNames[presenceClass] = true;
 
         let nameEl;
-        const name = this.props.nameJSX || this.props.name;
+        const { name } = this.props;
 
         if (!this.props.suppressOnHover) {
             const activeAgo = this.props.presenceLastActiveAgo ?

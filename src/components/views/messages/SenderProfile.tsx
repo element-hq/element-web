@@ -21,9 +21,10 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import Flair from '../elements/Flair';
 import FlairStore from '../../../stores/FlairStore';
+import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import DisambiguatedProfile from "./DisambiguatedProfile";
+import UserIdentifier from '../../../customisations/UserIdentifier';
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 import SettingsStore from "../../../settings/SettingsStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -105,8 +106,9 @@ export default class SenderProfile extends React.Component<IProps, IState> {
     }
 
     render() {
-        const { mxEvent, onClick } = this.props;
-        const msgtype = mxEvent.getContent().msgtype;
+        const { mxEvent } = this.props;
+        const colorClass = getUserNameColorClass(mxEvent.getSender());
+        const { msgtype } = mxEvent.getContent();
 
         let member = mxEvent.sender;
         if (SettingsStore.getValue("feature_use_only_current_profiles")) {
@@ -116,12 +118,27 @@ export default class SenderProfile extends React.Component<IProps, IState> {
             }
         }
 
+        const disambiguate = member?.disambiguate || mxEvent.sender?.disambiguate;
+        const displayName = member?.rawDisplayName || mxEvent.getSender() || "";
+        const mxid = member?.userId || mxEvent.getSender() || "";
+
         return <RoomContext.Consumer>
             { roomContext => {
                 if (msgtype === MsgType.Emote &&
                     roomContext.timelineRenderingType !== TimelineRenderingType.ThreadsList
                 ) {
                     return null; // emote message must include the name so don't duplicate it
+                }
+
+                let mxidElement;
+                if (disambiguate) {
+                    mxidElement = (
+                        <span className="mx_SenderProfile_mxid">
+                            { UserIdentifier.getDisplayUserIdentifier(
+                                mxid, { withDisplayName: true, roomId: mxEvent.getRoomId() },
+                            ) }
+                        </span>
+                    );
                 }
 
                 let flair;
@@ -134,14 +151,13 @@ export default class SenderProfile extends React.Component<IProps, IState> {
                 }
 
                 return (
-                    <DisambiguatedProfile
-                        fallbackName={mxEvent.getSender() || ""}
-                        flair={flair}
-                        onClick={onClick}
-                        member={member}
-                        colored={true}
-                        emphasizeDisplayName={true}
-                    />
+                    <div className="mx_SenderProfile" dir="auto" onClick={this.props.onClick}>
+                        <span className={`mx_SenderProfile_displayName ${colorClass}`}>
+                            { displayName }
+                        </span>
+                        { mxidElement }
+                        { flair }
+                    </div>
                 );
             } }
         </RoomContext.Consumer>;
