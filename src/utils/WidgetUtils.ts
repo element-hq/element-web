@@ -16,11 +16,14 @@ limitations under the License.
 */
 
 import * as url from "url";
+import { base32 } from "rfc4648";
 import { Capability, IWidget, IWidgetData, MatrixCapabilities } from "matrix-widget-api";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { randomLowercaseString, randomUppercaseString } from "matrix-js-sdk/src/randomstring";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import SdkConfig from "../SdkConfig";
@@ -29,6 +32,7 @@ import WidgetEchoStore from '../stores/WidgetEchoStore';
 import SettingsStore from "../settings/SettingsStore";
 import { IntegrationManagers } from "../integrations/IntegrationManagers";
 import { WidgetType } from "../widgets/WidgetType";
+import { Jitsi } from "../widgets/Jitsi";
 import { objectClone } from "./objects";
 import { _t } from "../languageHandler";
 import { IApp } from "../stores/WidgetStore";
@@ -432,6 +436,42 @@ export default class WidgetUtils {
             }
         });
         await client.setAccountData('m.widgets', userWidgets);
+    }
+
+    static async addJitsiWidget(
+        roomId: string,
+        type: CallType,
+        name: string,
+        widgetId: string,
+        oobRoomName?: string,
+    ): Promise<void> {
+        const domain = Jitsi.getInstance().preferredDomain;
+        const auth = await Jitsi.getInstance().getJitsiAuth();
+
+        let confId;
+        if (auth === 'openidtoken-jwt') {
+            // Create conference ID from room ID
+            // For compatibility with Jitsi, use base32 without padding.
+            // More details here:
+            // https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
+            confId = base32.stringify(Buffer.from(roomId), { pad: false });
+        } else {
+            // Create a random conference ID
+            confId = `Jitsi${randomUppercaseString(1)}${randomLowercaseString(23)}`;
+        }
+
+        // TODO: Remove URL hacks when the mobile clients eventually support v2 widgets
+        const widgetUrl = new URL(WidgetUtils.getLocalJitsiWrapperUrl({ auth }));
+        widgetUrl.search = ''; // Causes the URL class use searchParams instead
+        widgetUrl.searchParams.set('confId', confId);
+
+        await WidgetUtils.setRoomWidget(roomId, widgetId, WidgetType.JITSI, widgetUrl.toString(), name, {
+            conferenceId: confId,
+            roomName: oobRoomName ?? MatrixClientPeg.get().getRoom(roomId)?.name,
+            isAudioOnly: type === CallType.Voice,
+            domain,
+            auth,
+        });
     }
 
     static makeAppConfig(

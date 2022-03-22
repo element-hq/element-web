@@ -126,7 +126,7 @@ export default class GroupInviteTile extends React.Component {
         const av = <BaseAvatar name={groupName} width={24} height={24} url={httpAvatarUrl} />;
 
         const isMenuDisplayed = Boolean(this.state.contextMenuPosition);
-        const nameClasses = classNames('mx_RoomTile_name mx_RoomTile_invite mx_RoomTile_badgeShown', {
+        const nameClasses = classNames('mx_RoomTile_title mx_RoomTile_invite mx_RoomTile_badgeShown', {
             'mx_RoomTile_badgeShown': this.state.badgeHover || isMenuDisplayed,
         });
 
@@ -180,17 +180,21 @@ export default class GroupInviteTile extends React.Component {
                         <div className="mx_RoomTile_avatar">
                             { av }
                         </div>
-                        <div className="mx_RoomTile_nameContainer">
-                            { label }
-                            <ContextMenuButton
-                                className={badgeClasses}
-                                onClick={this.onContextMenuButtonClick}
-                                label={_t("Options")}
-                                isExpanded={isMenuDisplayed}
-                                tabIndex={isActive ? 0 : -1}
-                            >
-                                { badgeContent }
-                            </ContextMenuButton>
+                        <div className="mx_RoomTile_details">
+                            <div className="mx_RoomTile_primaryDetails">
+                                <div className="mx_RoomTile_titleContainer">
+                                    { label }
+                                    <ContextMenuButton
+                                        className={badgeClasses}
+                                        onClick={this.onContextMenuButtonClick}
+                                        label={_t("Options")}
+                                        isExpanded={isMenuDisplayed}
+                                        tabIndex={isActive ? 0 : -1}
+                                    >
+                                        { badgeContent }
+                                    </ContextMenuButton>
+                                </div>
+                            </div>
                         </div>
                         { tooltip }
                     </AccessibleButton>

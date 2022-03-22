@@ -75,6 +75,8 @@ import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
 import { CHAT_EFFECTS } from '../../effects';
 import WidgetStore from "../../stores/WidgetStore";
+import { getVoiceChannel } from "../../utils/VoiceChannelUtils";
+import AppTile from "../views/elements/AppTile";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
@@ -137,7 +139,7 @@ interface IRoomProps extends MatrixClientProps {
 enum MainSplitContentType {
     Timeline,
     MaximisedWidget,
-    // Video
+    Video, // immersive voip
 }
 export interface IRoomState {
     room?: Room;
@@ -189,6 +191,7 @@ export interface IRoomState {
     canReact: boolean;
     canSendMessages: boolean;
     tombstone?: MatrixEvent;
+    resizing: boolean;
     layout: Layout;
     lowBandwidth: boolean;
     alwaysShowTimestamps: boolean;
@@ -261,6 +264,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             statusBarVisible: false,
             canReact: false,
             canSendMessages: false,
+            resizing: false,
             layout: SettingsStore.getValue("layout"),
             lowBandwidth: SettingsStore.getValue("lowBandwidth"),
             alwaysShowTimestamps: SettingsStore.getValue("alwaysShowTimestamps"),
@@ -302,6 +306,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         WidgetEchoStore.on(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         WidgetStore.instance.on(UPDATE_EVENT, this.onWidgetStoreUpdate);
 
+        this.props.resizeNotifier.on("isResizing", this.onIsResizing);
+
         this.settingWatchers = [
             SettingsStore.watchSetting("layout", null, (...[,,, value]) =>
                 this.setState({ layout: value as Layout }),
@@ -326,6 +332,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             ),
         ];
     }
+
+    private onIsResizing = (resizing: boolean) => {
+        this.setState({ resizing });
+    };
 
     private onWidgetStoreUpdate = () => {
         if (!this.state.room) return;
@@ -366,10 +376,13 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getMainSplitContentType = (room) => {
-        // TODO-video check if video should be displayed in main panel
-        return (WidgetLayoutStore.instance.hasMaximisedWidget(room))
-            ? MainSplitContentType.MaximisedWidget
-            : MainSplitContentType.Timeline;
+        if (SettingsStore.getValue("feature_voice_rooms") && room.isCallRoom()) {
+            return MainSplitContentType.Video;
+        }
+        if (WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
+            return MainSplitContentType.MaximisedWidget;
+        }
+        return MainSplitContentType.Timeline;
     };
 
     private onRoomViewStoreUpdate = async (initial?: boolean): Promise<void> => {
@@ -728,6 +741,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         WidgetEchoStore.removeListener(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);
         WidgetStore.instance.removeListener(UPDATE_EVENT, this.onWidgetStoreUpdate);
+
+        this.props.resizeNotifier.off("isResizing", this.onIsResizing);
 
         if (this.state.room) {
             WidgetLayoutStore.instance.off(
@@ -2089,28 +2104,27 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const showChatEffects = SettingsStore.getValue('showChatEffects');
 
+        let mainSplitBody;
         // Decide what to show in the main split
-        let mainSplitBody = <React.Fragment>
-            <Measured
-                sensor={this.roomViewBody.current}
-                onMeasurement={this.onMeasurement}
-            />
-            { auxPanel }
-            <div className={timelineClasses}>
-                <FileDropTarget parent={this.roomView.current} onFileDrop={this.onFileDrop} />
-                { topUnreadMessagesBar }
-                { jumpToBottom }
-                { messagePanel }
-                { searchResultsPanel }
-            </div>
-            { statusBarArea }
-            { previewBar }
-            { messageComposer }
-        </React.Fragment>;
-
         switch (this.state.mainSplitContentType) {
             case MainSplitContentType.Timeline:
-                // keep the timeline in as the mainSplitBody
+                mainSplitBody = <>
+                    <Measured
+                        sensor={this.roomViewBody.current}
+                        onMeasurement={this.onMeasurement}
+                    />
+                    { auxPanel }
+                    <div className={timelineClasses}>
+                        <FileDropTarget parent={this.roomView.current} onFileDrop={this.onFileDrop} />
+                        { topUnreadMessagesBar }
+                        { jumpToBottom }
+                        { messagePanel }
+                        { searchResultsPanel }
+                    </div>
+                    { statusBarArea }
+                    { previewBar }
+                    { messageComposer }
+                </>;
                 break;
             case MainSplitContentType.MaximisedWidget:
                 mainSplitBody = <AppsDrawer
@@ -2120,15 +2134,26 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     showApps={true}
                 />;
                 break;
-            // TODO-video MainSplitContentType.Video:
-            //     break;
+            case MainSplitContentType.Video: {
+                const app = getVoiceChannel(this.state.room.roomId);
+                if (!app) break;
+                mainSplitBody = <AppTile
+                    app={app}
+                    room={this.state.room}
+                    userId={this.context.credentials.userId}
+                    creatorUserId={app.creatorUserId}
+                    waitForIframeLoad={app.waitForIframeLoad}
+                    showMenubar={false}
+                    pointerEvents={this.state.resizing ? "none" : null}
+                />;
+            }
         }
         let excludedRightPanelPhaseButtons = [RightPanelPhases.Timeline];
         let onAppsClick = this.onAppsClick;
         let onForgetClick = this.onForgetClick;
         let onSearchClick = this.onSearchClick;
-        if (this.state.mainSplitContentType === MainSplitContentType.MaximisedWidget) {
-            // Disable phase buttons and action button to have a simplified header when a widget is maximised
+        if (this.state.mainSplitContentType !== MainSplitContentType.Timeline) {
+            // Disable phase buttons and action button to have a simplified header
             // and enable (not disable) the RightPanelPhases.Timeline button
             excludedRightPanelPhaseButtons = [
                 RightPanelPhases.ThreadPanel,

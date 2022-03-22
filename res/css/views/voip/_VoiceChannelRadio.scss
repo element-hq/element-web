@@ -1,0 +1,121 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_VoiceChannelRadio {
+    background-color: $system;
+
+    > .mx_VoiceChannelRadio_statusBar {
+        display: flex;
+        padding: 12px 16px;
+        align-items: center;
+        gap: 12px;
+
+        > .mx_VoiceChannelRadio_titleContainer {
+            flex-grow: 1;
+
+            > .mx_VoiceChannelRadio_status {
+                font-size: $font-15px;
+                color: $accent;
+
+                &::before {
+                    content: '';
+                    display: inline-block;
+                    margin-right: 4px;
+                    width: 11px;
+                    height: 11px;
+                    background-color: $accent;
+                    mask-image: url('$(res)/img/voip/signal-bars.svg');
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                }
+            }
+
+            > .mx_VoiceChannelRadio_name {
+                font-size: $font-13px;
+                color: $secondary-content;
+            }
+        }
+
+        > .mx_VoiceChannelRadio_disconnectButton::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 36px;
+            background-color: $tertiary-content;
+            mask-image: url('$(res)/img/element-icons/call/hangup.svg');
+            mask-position: center;
+            mask-size: 24px;
+            mask-repeat: no-repeat;
+        }
+    }
+
+    > .mx_VoiceChannelRadio_controlBar {
+        display: flex;
+        border-top: 1px solid $quinary-content;
+        padding: 12px 16px;
+        align-items: center;
+        justify-content: space-between;
+
+        > .mx_AccessibleButton {
+            font-size: $font-15px;
+            padding: 6px 0;
+
+            &.mx_VoiceChannelRadio_button_active {
+                padding: 6px 12px;
+                background-color: $quinary-content;
+                border-radius: 8px;
+                font-weight: 600;
+            }
+        }
+
+        > .mx_VoiceChannelRadio_videoButton::before {
+            content: '';
+            display: inline-block;
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            background-color: $primary-content;
+            vertical-align: sub;
+            mask-image: url('$(res)/img/voip/call-view/cam-off.svg');
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+        }
+
+        > .mx_VoiceChannelRadio_videoButton.mx_VoiceChannelRadio_button_active::before {
+            mask-image: url('$(res)/img/voip/call-view/cam-on.svg');
+        }
+
+        > .mx_VoiceChannelRadio_audioButton::before {
+            content: '';
+            display: inline-block;
+            margin-right: 4px;
+            width: 16px;
+            height: 16px;
+            background-color: $primary-content;
+            vertical-align: sub;
+            mask-image: url('$(res)/img/voip/call-view/mic-off.svg');
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+        }
+
+        > .mx_VoiceChannelRadio_audioButton.mx_VoiceChannelRadio_button_active::before {
+            mask-image: url('$(res)/img/voip/call-view/mic-on.svg');
+        }
+    }
+}

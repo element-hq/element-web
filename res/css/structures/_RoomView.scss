@@ -212,6 +212,17 @@ hr.mx_RoomView_myReadMarker {
     opacity: 1;
 }
 
+// Immersive widgets
+.mx_RoomView_body > .mx_AppTile {
+    margin: $container-gap-width;
+    margin-right: calc($container-gap-width / 2);
+    width: auto;
+    height: 100%;
+
+    background: none;
+    border: none;
+}
+
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
     background-color: $background;
 }

@@ -41,6 +41,7 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import IndicatorScrollbar from "./IndicatorScrollbar";
 import RoomBreadcrumbs from "../views/rooms/RoomBreadcrumbs";
 import SettingsStore from "../../settings/SettingsStore";
+import VoiceChannelRadio from "../views/voip/VoiceChannelRadio";
 import UserMenu from "./UserMenu";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
@@ -443,6 +444,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             { roomList }
                         </div>
                     </div>
+                    { SettingsStore.getValue("feature_voice_rooms") && <VoiceChannelRadio /> }
                 </aside>
             </div>
         );

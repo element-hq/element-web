@@ -20,7 +20,7 @@ import { ElementSession } from "../session";
 export async function selectRoom(session: ElementSession, name: string): Promise<void> {
     session.log.step(`select "${name}" room`);
     const inviteSublist = await findSublist(session, "rooms");
-    const invitesHandles = await inviteSublist.$$(".mx_RoomTile_name");
+    const invitesHandles = await inviteSublist.$$(".mx_RoomTile_title");
     const invitesWithText = await Promise.all(invitesHandles.map(async (roomHandle) => {
         const text = await session.innerText(roomHandle);
         return { roomHandle, text };

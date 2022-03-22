@@ -20,7 +20,6 @@ limitations under the License.
     padding: 4px;
 
     contain: content; // Not strict as it will break when resizing a sublist vertically
-    height: 40px;
     box-sizing: border-box;
 
     // The tile is also a flexbox row itself
@@ -35,106 +34,166 @@ limitations under the License.
     }
 
     .mx_DecoratedRoomAvatar, .mx_RoomTile_avatarContainer {
-        margin-right: 8px;
+        margin-right: 10px;
     }
 
-    .mx_RoomTile_nameContainer {
+    .mx_RoomTile_details {
         flex-grow: 1;
         min-width: 0; // allow flex to shrink it
-        margin-right: 8px; // spacing to buttons/badges
-
-        // Create a new column layout flexbox for the name parts
         display: flex;
         flex-direction: column;
-        justify-content: center;
 
-        .mx_RoomTile_name,
-        .mx_RoomTile_messagePreview {
-            margin: 0 2px;
+        .mx_RoomTile_primaryDetails {
+            height: 32px;
+            display: flex;
+            flex-wrap: wrap;
+
+            .mx_RoomTile_titleContainer {
+                min-width: 0;
+                flex-basis: 0;
+                flex-grow: 1;
+                margin-right: 8px; // spacing to buttons/badges
+
+                // Create a new column layout flexbox for the title parts
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                .mx_RoomTile_title, .mx_RoomTile_subtitle {
+                    width: 100%;
+
+                    // Ellipsize any text overflow
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
+
+                .mx_RoomTile_title {
+                    font-size: $font-14px;
+                    line-height: $font-18px;
+                }
+
+                .mx_RoomTile_title.mx_RoomTile_titleHasUnreadEvents {
+                    font-weight: 600;
+                }
+
+                .mx_RoomTile_subtitle {
+                    font-size: $font-13px;
+                    line-height: $font-18px;
+                    color: $secondary-content;
+                }
+
+                .mx_RoomTile_subtitle.mx_RoomTile_voiceIndicator {
+                    &::before {
+                        display: inline-block;
+                        vertical-align: text-bottom;
+                        content: '';
+                        background-color: $secondary-content;
+                        mask-image: url('$(res)/img/voip/voice-room.svg');
+                        mask-size: 16px;
+                        width: 16px;
+                        height: 16px;
+                        margin-right: 4px;
+                    }
+
+                    &.mx_RoomTile_voiceIndicator_active {
+                        color: $accent;
+
+                        &::before {
+                            background-color: $accent;
+                        }
+                    }
+                }
+
+                .mx_RoomTile_titleWithSubtitle {
+                    margin-top: -3px; // shift the title up a bit more
+                }
+            }
+
+            .mx_RoomTile_notificationsButton {
+                margin-left: 4px; // spacing between buttons
+            }
+
+            .mx_RoomTile_badgeContainer {
+                height: 16px;
+                // don't set width so that it takes no space when there is no badge to show
+                margin: auto 0; // vertically align
+
+                // Create a flexbox to make aligning dot badges easier
+                display: flex;
+                align-items: center;
+
+                .mx_NotificationBadge {
+                    margin-right: 2px; // centering
+                }
+
+                .mx_NotificationBadge_dot {
+                    // make the smaller dot occupy the same width for centering
+                    margin-left: 5px;
+                    margin-right: 7px;
+                }
+            }
+
+            // The context menu buttons are hidden by default
+            .mx_RoomTile_menuButton,
+            .mx_RoomTile_notificationsButton {
+                width: 20px;
+                min-width: 20px; // yay flex
+                height: 20px;
+                margin-top: auto;
+                margin-bottom: auto;
+                position: relative;
+                display: none;
+
+                &::before {
+                    top: 2px;
+                    left: 2px;
+                    content: '';
+                    width: 16px;
+                    height: 16px;
+                    position: absolute;
+                    mask-position: center;
+                    mask-size: contain;
+                    mask-repeat: no-repeat;
+                    background: $primary-content;
+                }
+            }
+
+            // If the room has an overriden notification setting then we always show the notifications menu button
+            .mx_RoomTile_notificationsButton.mx_RoomTile_notificationsButton_show {
+                display: block;
+            }
+
+            .mx_RoomTile_menuButton::before {
+                mask-image: url('$(res)/img/element-icons/context-menu.svg');
+            }
+        }
+
+        .mx_RoomTile_voiceChannel {
             width: 100%;
+            display: flex;
+            align-items: center;
 
-            // Ellipsize any text overflow
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
+            .mx_FacePile {
+                margin: 6px 0 4px;
+            }
+
+            .mx_RoomTile_connectVoiceButton {
+                font-weight: 600;
+                padding-left: 10px;
+                padding-right: 10px;
+
+                &::before {
+                    content: '';
+                    background-color: $accent;
+                    mask-image: url('$(res)/img/voip/voice-room.svg');
+                    mask-size: 16px;
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 4px;
+                }
+            }
         }
-
-        .mx_RoomTile_name {
-            font-size: $font-14px;
-            line-height: $font-18px;
-        }
-
-        .mx_RoomTile_name.mx_RoomTile_nameHasUnreadEvents {
-            font-weight: 600;
-        }
-
-        .mx_RoomTile_messagePreview {
-            font-size: $font-13px;
-            line-height: $font-18px;
-            color: $secondary-content;
-        }
-
-        .mx_RoomTile_nameWithPreview {
-            margin-top: -4px; // shift the name up a bit more
-        }
-    }
-
-    .mx_RoomTile_notificationsButton {
-        margin-left: 4px; // spacing between buttons
-    }
-
-    .mx_RoomTile_badgeContainer {
-        height: 16px;
-        // don't set width so that it takes no space when there is no badge to show
-        margin: auto 0; // vertically align
-
-        // Create a flexbox to make aligning dot badges easier
-        display: flex;
-        align-items: center;
-
-        .mx_NotificationBadge {
-            margin-right: 2px; // centering
-        }
-
-        .mx_NotificationBadge_dot {
-            // make the smaller dot occupy the same width for centering
-            margin-left: 5px;
-            margin-right: 7px;
-        }
-    }
-
-    // The context menu buttons are hidden by default
-    .mx_RoomTile_menuButton,
-    .mx_RoomTile_notificationsButton {
-        width: 20px;
-        min-width: 20px; // yay flex
-        height: 20px;
-        margin-top: auto;
-        margin-bottom: auto;
-        position: relative;
-        display: none;
-
-        &::before {
-            top: 2px;
-            left: 2px;
-            content: '';
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background: $primary-content;
-        }
-    }
-
-    // If the room has an overriden notification setting then we always show the notifications menu button
-    .mx_RoomTile_notificationsButton.mx_RoomTile_notificationsButton_show {
-        display: block;
-    }
-
-    .mx_RoomTile_menuButton::before {
-        mask-image: url('$(res)/img/element-icons/context-menu.svg');
     }
 
     &:not(.mx_RoomTile_minimized) {
@@ -162,6 +221,10 @@ limitations under the License.
 
         .mx_DecoratedRoomAvatar, .mx_RoomTile_avatarContainer {
             margin-right: 0;
+        }
+
+        .mx_RoomTile_details {
+            display: none;
         }
     }
 }

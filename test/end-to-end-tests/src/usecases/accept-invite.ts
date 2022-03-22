@@ -21,7 +21,7 @@ import { ElementSession } from "../session";
 export async function acceptInvite(session: ElementSession, name: string): Promise<void> {
     session.log.step(`accepts "${name}" invite`);
     const inviteSublist = await findSublist(session, "invites");
-    const invitesHandles = await inviteSublist.$$(".mx_RoomTile_name");
+    const invitesHandles = await inviteSublist.$$(".mx_RoomTile_title");
     const invitesWithText = await Promise.all(invitesHandles.map(async (inviteHandle) => {
         const text = await session.innerText(inviteHandle);
         return { inviteHandle, text };
