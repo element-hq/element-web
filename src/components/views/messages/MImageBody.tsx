@@ -377,28 +377,13 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             infoHeight = this.state.loadedImageDimensions.naturalHeight;
         }
 
-        // The maximum size of the thumbnail as it is rendered as an <img>
-        // check for any height constraints
-        const imageSize = SettingsStore.getValue("Images.size") as ImageSize;
-        const isPortrait = infoWidth < infoHeight;
-        const suggestedAndPossibleWidth = Math.min(suggestedImageSize(imageSize, isPortrait).w, infoWidth);
-        const suggestedAndPossibleHeight = Math.min(suggestedImageSize(imageSize, isPortrait).h, infoHeight);
-        const aspectRatio = infoWidth / infoHeight;
-
-        let maxWidth: number;
-        let maxHeight: number;
-        const maxHeightConstraint = forcedHeight || this.props.maxImageHeight || suggestedAndPossibleHeight;
-        if (maxHeightConstraint * aspectRatio < suggestedAndPossibleWidth || imageSize === ImageSize.Large) {
-            // The width is dictated by the maximum height that was defined by the props or the function param `forcedHeight`
-            // If the thumbnail size is set to Large, we always let the size be dictated by the height.
-            maxWidth = maxHeightConstraint * aspectRatio;
-            // there is no need to check for infoHeight here since this is done with `maxHeightConstraint * aspectRatio < suggestedAndPossibleWidth`
-            maxHeight = maxHeightConstraint;
-        } else {
-            // height is dictated by suggestedWidth (based on the Image.size setting)
-            maxWidth = suggestedAndPossibleWidth;
-            maxHeight = suggestedAndPossibleWidth / aspectRatio;
-        }
+        // The maximum size of the thumbnail as it is rendered as an <img>,
+        // accounting for any height constraints
+        const { w: maxWidth, h: maxHeight } = suggestedImageSize(
+            SettingsStore.getValue("Images.size") as ImageSize,
+            { w: infoWidth, h: infoHeight },
+            forcedHeight ?? this.props.maxImageHeight,
+        );
 
         let img = null;
         let placeholder = null;

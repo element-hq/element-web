@@ -62,38 +62,6 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         };
     }
 
-    private suggestedDimensions(isPortrait): { w: number, h: number } {
-        return suggestedVideoSize(SettingsStore.getValue("Images.size") as ImageSize);
-    }
-
-    private thumbScale(
-        fullWidth: number,
-        fullHeight: number,
-        thumbWidth?: number,
-        thumbHeight?: number,
-    ): number {
-        if (!fullWidth || !fullHeight) {
-            // Cannot calculate thumbnail height for image: missing w/h in metadata. We can't even
-            // log this because it's spammy
-            return undefined;
-        }
-
-        if (!thumbWidth || !thumbHeight) {
-            const dims = this.suggestedDimensions(fullWidth < fullHeight);
-            thumbWidth = dims.w;
-            thumbHeight = dims.h;
-        }
-
-        if (fullWidth < thumbWidth && fullHeight < thumbHeight) {
-            // no scaling needs to be applied
-            return 1;
-        }
-
-        // always scale the videos based on their width.
-        const widthMulti = thumbWidth / fullWidth;
-        return widthMulti;
-    }
-
     private getContentUrl(): string|null {
         const content = this.props.mxEvent.getContent<IMediaEventContent>();
         // During export, the content url will point to the MSC, which will later point to a local url
@@ -135,13 +103,10 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
 
         const canvas = document.createElement("canvas");
 
-        let width = info.w;
-        let height = info.h;
-        const scale = this.thumbScale(info.w, info.h);
-        if (scale) {
-            width = Math.floor(info.w * scale);
-            height = Math.floor(info.h * scale);
-        }
+        const { w: width, h: height } = suggestedVideoSize(
+            SettingsStore.getValue("Images.size") as ImageSize,
+            { w: info.w, h: info.h },
+        );
 
         canvas.width = width;
         canvas.height = height;
@@ -286,24 +251,18 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
             );
         }
 
+        const { w: maxWidth, h: maxHeight } = suggestedVideoSize(
+            SettingsStore.getValue("Images.size") as ImageSize,
+            { w: content.info?.w, h: content.info?.h },
+        );
+
         const contentUrl = this.getContentUrl();
         const thumbUrl = this.getThumbUrl();
-        const defaultDims = this.suggestedDimensions(false);
-        let height = defaultDims.h;
-        let width = defaultDims.w;
         let poster = null;
         let preload = "metadata";
-        if (content.info) {
-            const scale = this.thumbScale(content.info.w, content.info.h);
-            if (scale) {
-                width = Math.floor(content.info.w * scale);
-                height = Math.floor(content.info.h * scale);
-            }
-
-            if (thumbUrl) {
-                poster = thumbUrl;
-                preload = "none";
-            }
+        if (content.info && thumbUrl) {
+            poster = thumbUrl;
+            preload = "none";
         }
 
         const fileBody = this.getFileBody();
@@ -318,8 +277,7 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                     preload={preload}
                     muted={autoplay}
                     autoPlay={autoplay}
-                    height={height}
-                    width={width}
+                    style={{ maxHeight, maxWidth }}
                     poster={poster}
                     onPlay={this.videoOnPlay}
                 />
