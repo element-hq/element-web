@@ -24,6 +24,7 @@ type InfoContentProps = {
     isLive?: boolean;
     assetType?: LocationAssetType;
     description?: string;
+    timestamp?: number;
 };
 const DEFAULT_INFO_CONTENT_PROPS: InfoContentProps = {
     timeout: 3600000,
@@ -43,7 +44,11 @@ export const makeBeaconInfoEvent = (
     eventId?: string,
 ): MatrixEvent => {
     const {
-        timeout, isLive, description, assetType,
+        timeout,
+        isLive,
+        description,
+        assetType,
+        timestamp,
     } = {
         ...DEFAULT_INFO_CONTENT_PROPS,
         ...contentProps,
@@ -52,7 +57,7 @@ export const makeBeaconInfoEvent = (
         type: `${M_BEACON_INFO.name}.${sender}.${++count}`,
         room_id: roomId,
         state_key: sender,
-        content: makeBeaconInfoContent(timeout, isLive, description, assetType),
+        content: makeBeaconInfoContent(timeout, isLive, description, assetType, timestamp),
     });
 
     // live beacons use the beacon_info event id
