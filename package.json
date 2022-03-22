@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.10.7",
+  "version": "1.10.8-rc.1",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
