@@ -19,7 +19,7 @@ $left-gutter: 64px;
 
 .mx_GroupLayout {
     .mx_EventTile {
-        > .mx_SenderProfile {
+        > .mx_DisambiguatedProfile {
             line-height: $font-20px;
             margin-left: $left-gutter;
         }
@@ -65,7 +65,7 @@ $left-gutter: 64px;
             }
         }
 
-        .mx_SenderProfile {
+        .mx_DisambiguatedProfile {
             font-size: $font-13px;
         }
 
