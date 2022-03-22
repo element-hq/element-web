@@ -126,7 +126,7 @@ $left-gutter: 64px;
         max-width: calc(100% - $left-gutter);
     }
 
-    .mx_SenderProfile .mx_Flair {
+    .mx_DisambiguatedProfile .mx_Flair {
         opacity: 0.7;
         margin-left: 5px;
         display: inline-block;
@@ -139,6 +139,21 @@ $left-gutter: 64px;
             margin-right: 2px;
             border-radius: 8px;
         }
+    }
+
+    .mx_DisambiguatedProfile {
+        color: $primary-content;
+        font-size: $font-14px;
+        display: inline-block; /* anti-zalgo, with overflow hidden */
+        overflow: hidden;
+        cursor: pointer;
+        padding-bottom: 0px;
+        padding-top: 0px;
+        margin: 0px;
+        /* the next three lines, along with overflow hidden, truncate long display names */
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: calc(100% - $left-gutter);
     }
 
     &.mx_EventTile_isEditing .mx_MessageTimestamp {

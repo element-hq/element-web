@@ -173,7 +173,7 @@ $irc-line-height: $font-18px;
         border-left: 0;
     }
 
-    .mx_SenderProfile {
+    .mx_DisambiguatedProfile {
         width: var(--name-width);
         display: flex;
         order: 2;
@@ -181,14 +181,14 @@ $irc-line-height: $font-18px;
         justify-content: flex-start;
         align-items: center;
 
-        > .mx_SenderProfile_displayName {
+        > .mx_DisambiguatedProfile_displayName {
             width: 100%;
             text-align: end;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        > .mx_SenderProfile_mxid {
+        > .mx_DisambiguatedProfile_mxid {
             visibility: collapse;
             // Override the inherited margin.
             margin-left: 0;
@@ -196,11 +196,11 @@ $irc-line-height: $font-18px;
         }
     }
 
-    .mx_SenderProfile:hover {
+    .mx_DisambiguatedProfile:hover {
         overflow: visible;
         z-index: 10;
 
-        > .mx_SenderProfile_displayName {
+        > .mx_DisambiguatedProfile_displayName {
             overflow: visible;
             display: inline;
             background-color: $event-selected-color;
@@ -208,7 +208,7 @@ $irc-line-height: $font-18px;
             padding-right: 8px;
         }
 
-        > .mx_SenderProfile_mxid {
+        > .mx_DisambiguatedProfile_mxid {
             visibility: visible;
             opacity: 1;
             background-color: $event-selected-color;
@@ -217,7 +217,7 @@ $irc-line-height: $font-18px;
 
     .mx_ReplyChain {
         margin: 0;
-        .mx_SenderProfile {
+        .mx_DisambiguatedProfile {
             order: unset;
             max-width: unset;
             width: unset;

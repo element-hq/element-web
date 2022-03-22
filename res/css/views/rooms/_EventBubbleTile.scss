@@ -88,7 +88,7 @@ limitations under the License.
         }
     }
 
-    .mx_SenderProfile,
+    .mx_DisambiguatedProfile,
     .mx_EventTile_line {
         width: fit-content;
         max-width: 70%;
@@ -96,7 +96,7 @@ limitations under the License.
         line-height: $font-18px;
     }
 
-    > .mx_SenderProfile {
+    > .mx_DisambiguatedProfile {
         position: relative;
         top: -2px;
         left: 2px;
@@ -168,11 +168,11 @@ limitations under the License.
             margin-right: calc(-1 * var(--gutterSize));
         }
 
-        .mx_SenderProfile {
+        .mx_DisambiguatedProfile {
             display: none;
         }
 
-        .mx_ReplyTile .mx_SenderProfile {
+        .mx_ReplyTile .mx_DisambiguatedProfile {
             display: block;
         }
 
@@ -379,7 +379,7 @@ limitations under the License.
                 .mx_EventTile_avatar {
                     position: static;
                 }
-                .mx_SenderProfile {
+                .mx_DisambiguatedProfile {
                     display: none;
                 }
             }

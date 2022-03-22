@@ -77,7 +77,7 @@ limitations under the License.
     display: none; // we don't need this in this view
 }
 
-.mx_NotificationPanel .mx_EventTile .mx_SenderProfile,
+.mx_NotificationPanel .mx_EventTile .mx_DisambiguatedProfile,
 .mx_NotificationPanel .mx_EventTile .mx_MessageTimestamp {
     color: $primary-content;
     font-size: $font-12px;
