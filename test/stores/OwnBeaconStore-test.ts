@@ -24,8 +24,7 @@ import { getMockClientWithEventEmitter } from "../test-utils/client";
 
 jest.useFakeTimers();
 
-// xdescribing while mismatch with matrix-js-sdk
-xdescribe('OwnBeaconStore', () => {
+describe('OwnBeaconStore', () => {
     // 14.03.2022 16:15
     const now = 1647270879403;
     const HOUR_MS = 3600000;
@@ -46,11 +45,36 @@ xdescribe('OwnBeaconStore', () => {
 
     // event creation sets timestamp to Date.now()
     jest.spyOn(global.Date, 'now').mockReturnValue(now - HOUR_MS);
-    const alicesRoom1BeaconInfo = makeBeaconInfoEvent(aliceId, room1Id, { isLive: true }, '$alice-room1-1');
-    const alicesRoom2BeaconInfo = makeBeaconInfoEvent(aliceId, room2Id, { isLive: true }, '$alice-room2-1');
-    const alicesOldRoomIdBeaconInfo = makeBeaconInfoEvent(aliceId, room1Id, { isLive: false }, '$alice-room1-2');
-    const bobsRoom1BeaconInfo = makeBeaconInfoEvent(bobId, room1Id, { isLive: true }, '$bob-room1-1');
-    const bobsOldRoom1BeaconInfo = makeBeaconInfoEvent(bobId, room1Id, { isLive: false }, '$bob-room1-2');
+    const alicesRoom1BeaconInfo = makeBeaconInfoEvent(aliceId,
+        room1Id,
+        { isLive: true },
+        '$alice-room1-1'
+        , '$alice-room1-1',
+    );
+    const alicesRoom2BeaconInfo = makeBeaconInfoEvent(aliceId,
+        room2Id,
+        { isLive: true },
+        '$alice-room2-1'
+        , '$alice-room2-1',
+    );
+    const alicesOldRoomIdBeaconInfo = makeBeaconInfoEvent(aliceId,
+        room1Id,
+        { isLive: false },
+        '$alice-room1-2'
+        , '$alice-room1-2',
+    );
+    const bobsRoom1BeaconInfo = makeBeaconInfoEvent(bobId,
+        room1Id,
+        { isLive: true },
+        '$bob-room1-1'
+        , '$bob-room1-1',
+    );
+    const bobsOldRoom1BeaconInfo = makeBeaconInfoEvent(bobId,
+        room1Id,
+        { isLive: false },
+        '$bob-room1-2'
+        , '$bob-room1-2',
+    );
 
     // make fresh rooms every time
     // as we update room state
@@ -121,8 +145,8 @@ xdescribe('OwnBeaconStore', () => {
             const store = await makeOwnBeaconStore();
             expect(store.hasLiveBeacons()).toBe(true);
             expect(store.getLiveBeaconIds()).toEqual([
-                alicesRoom1BeaconInfo.getId(),
-                alicesRoom2BeaconInfo.getId(),
+                alicesRoom1BeaconInfo.getType(),
+                alicesRoom2BeaconInfo.getType(),
             ]);
         });
     });
@@ -143,7 +167,7 @@ xdescribe('OwnBeaconStore', () => {
                 alicesRoom1BeaconInfo,
             ]);
             const store = await makeOwnBeaconStore();
-            const beacon = room1.currentState.beacons.get(alicesRoom1BeaconInfo.getId());
+            const beacon = room1.currentState.beacons.get(alicesRoom1BeaconInfo.getType());
             const destroySpy = jest.spyOn(beacon, 'destroy');
             // @ts-ignore
             store.onNotReady();
@@ -226,7 +250,7 @@ xdescribe('OwnBeaconStore', () => {
             ]);
             const store = await makeOwnBeaconStore();
             expect(store.getLiveBeaconIds()).toEqual([
-                alicesRoom1BeaconInfo.getId(),
+                alicesRoom1BeaconInfo.getType(),
             ]);
         });
 
@@ -249,10 +273,10 @@ xdescribe('OwnBeaconStore', () => {
             ]);
             const store = await makeOwnBeaconStore();
             expect(store.getLiveBeaconIds(room1Id)).toEqual([
-                alicesRoom1BeaconInfo.getId(),
+                alicesRoom1BeaconInfo.getType(),
             ]);
             expect(store.getLiveBeaconIds(room2Id)).toEqual([
-                alicesRoom2BeaconInfo.getId(),
+                alicesRoom2BeaconInfo.getType(),
             ]);
         });
 
@@ -303,10 +327,10 @@ xdescribe('OwnBeaconStore', () => {
 
             mockClient.emit(BeaconEvent.New, alicesRoom1BeaconInfo, alicesLiveBeacon);
 
-            expect(emitSpy).toHaveBeenCalledWith(OwnBeaconStoreEvent.LivenessChange, true);
+            expect(emitSpy).toHaveBeenCalledWith(OwnBeaconStoreEvent.LivenessChange, [alicesRoom1BeaconInfo.getType()]);
         });
 
-        it('does not emit a liveness change event when new beacons do not change live state', async () => {
+        it('emits a liveness change event when new beacons do not change live state', async () => {
             makeRoomsWithStateEvents([
                 alicesRoom2BeaconInfo,
             ]);
@@ -318,7 +342,7 @@ xdescribe('OwnBeaconStore', () => {
 
             mockClient.emit(BeaconEvent.New, alicesRoom1BeaconInfo, alicesLiveBeacon);
 
-            expect(emitSpy).not.toHaveBeenCalled();
+            expect(emitSpy).toHaveBeenCalled();
         });
     });
 
@@ -357,7 +381,7 @@ xdescribe('OwnBeaconStore', () => {
 
             expect(store.hasLiveBeacons()).toBe(false);
             expect(store.hasLiveBeacons(room1Id)).toBe(false);
-            expect(emitSpy).toHaveBeenCalledWith(OwnBeaconStoreEvent.LivenessChange, false);
+            expect(emitSpy).toHaveBeenCalledWith(OwnBeaconStoreEvent.LivenessChange, []);
         });
 
         it('stops beacon when liveness changes from true to false and beacon is expired', async () => {
@@ -400,7 +424,7 @@ xdescribe('OwnBeaconStore', () => {
             const emitSpy = jest.spyOn(store, 'emit');
             const alicesBeacon = new Beacon(alicesOldRoomIdBeaconInfo);
             const liveUpdate = makeBeaconInfoEvent(
-                aliceId, room1Id, { isLive: true }, alicesOldRoomIdBeaconInfo.getId(),
+                aliceId, room1Id, { isLive: true }, alicesOldRoomIdBeaconInfo.getId(), '$alice-room1-2',
             );
 
             // bring the beacon back to life
@@ -410,7 +434,10 @@ xdescribe('OwnBeaconStore', () => {
 
             expect(store.hasLiveBeacons()).toBe(true);
             expect(store.hasLiveBeacons(room1Id)).toBe(true);
-            expect(emitSpy).toHaveBeenCalledWith(OwnBeaconStoreEvent.LivenessChange, true);
+            expect(emitSpy).toHaveBeenCalledWith(
+                OwnBeaconStoreEvent.LivenessChange,
+                [alicesOldRoomIdBeaconInfo.getType()],
+            );
         });
     });
 
@@ -437,10 +464,10 @@ xdescribe('OwnBeaconStore', () => {
         it('updates beacon to live:false when it is unexpired', async () => {
             const store = await makeOwnBeaconStore();
 
-            await store.stopBeacon(alicesOldRoomIdBeaconInfo.getId());
+            await store.stopBeacon(alicesOldRoomIdBeaconInfo.getType());
             const prevEventContent = alicesRoom1BeaconInfo.getContent();
 
-            await store.stopBeacon(alicesRoom1BeaconInfo.getId());
+            await store.stopBeacon(alicesRoom1BeaconInfo.getType());
 
             // matches original state of event content
             // except for live property
@@ -461,13 +488,13 @@ xdescribe('OwnBeaconStore', () => {
         it('updates beacon to live:false when it is expired but live property is true', async () => {
             const store = await makeOwnBeaconStore();
 
-            await store.stopBeacon(alicesOldRoomIdBeaconInfo.getId());
+            await store.stopBeacon(alicesOldRoomIdBeaconInfo.getType());
             const prevEventContent = alicesRoom1BeaconInfo.getContent();
 
             // time travel until beacon is expired
             advanceDateAndTime(HOUR_MS * 3);
 
-            await store.stopBeacon(alicesRoom1BeaconInfo.getId());
+            await store.stopBeacon(alicesRoom1BeaconInfo.getType());
 
             // matches original state of event content
             // except for live property

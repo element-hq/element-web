@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<RoomLiveShareWarning /> when user has live beacons renders correctly with one live beacon in room 1`] = `
+<RoomLiveShareWarning
+  roomId="$room1:server.org"
+>
+  <div
+    className="mx_RoomLiveShareWarning"
+  >
+    <StyledLiveBeaconIcon
+      className="mx_RoomLiveShareWarning_icon"
+    >
+      <div
+        className="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon"
+      />
+    </StyledLiveBeaconIcon>
+    <span
+      className="mx_RoomLiveShareWarning_label"
+    >
+      You are sharing your live location
+    </span>
+    <span
+      className="mx_RoomLiveShareWarning_expiry"
+      data-test-id="room-live-share-expiry"
+    >
+      1h left
+    </span>
+    <AccessibleButton
+      data-test-id="room-live-share-stop-sharing"
+      disabled={false}
+      element="button"
+      kind="danger"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+    >
+      <button
+        className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+        data-test-id="room-live-share-stop-sharing"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Stop sharing
+      </button>
+    </AccessibleButton>
+  </div>
+</RoomLiveShareWarning>
+`;
+
+exports[`<RoomLiveShareWarning /> when user has live beacons renders correctly with two live beacons in room 1`] = `
+<RoomLiveShareWarning
+  roomId="$room2:server.org"
+>
+  <div
+    className="mx_RoomLiveShareWarning"
+  >
+    <StyledLiveBeaconIcon
+      className="mx_RoomLiveShareWarning_icon"
+    >
+      <div
+        className="mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon"
+      />
+    </StyledLiveBeaconIcon>
+    <span
+      className="mx_RoomLiveShareWarning_label"
+    >
+      You are sharing 2 live locations
+    </span>
+    <span
+      className="mx_RoomLiveShareWarning_expiry"
+      data-test-id="room-live-share-expiry"
+    >
+      12h left
+    </span>
+    <AccessibleButton
+      data-test-id="room-live-share-stop-sharing"
+      disabled={false}
+      element="button"
+      kind="danger"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+    >
+      <button
+        className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+        data-test-id="room-live-share-stop-sharing"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Stop sharing
+      </button>
+    </AccessibleButton>
+  </div>
+</RoomLiveShareWarning>
+`;

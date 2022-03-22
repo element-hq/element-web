@@ -41,6 +41,7 @@ import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNo
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
 import RoomContext from "../../../contexts/RoomContext";
+import RoomLiveShareWarning from '../beacon/RoomLiveShareWarning';
 
 export interface ISearchInfo {
     searchTerm: string;
@@ -273,6 +274,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     { rightRow }
                     <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} />
                 </div>
+                <RoomLiveShareWarning roomId={this.props.room.roomId} />
             </div>
         );
     }
