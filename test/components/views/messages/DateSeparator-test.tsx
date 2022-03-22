@@ -16,17 +16,18 @@ limitations under the License.
 
 import React from "react";
 import { mount } from "enzyme";
+import { mocked } from "jest-mock";
 
 import sdk from "../../../skinned-sdk";
-import * as TestUtils from "../../../test-utils";
 import { formatFullDateNoTime } from "../../../../src/DateUtils";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../src/settings/UIFeature";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import { getMockClientWithEventEmitter } from "../../../test-utils";
 
 jest.mock("../../../../src/settings/SettingsStore");
 
-const _DateSeparator = sdk.getComponent("views.messages.DateSeparator");
-const DateSeparator = TestUtils.wrapInMatrixClientContext(_DateSeparator);
+const DateSeparator = sdk.getComponent("views.messages.DateSeparator");
 
 describe("DateSeparator", () => {
     const HOUR_MS = 3600000;
@@ -45,8 +46,12 @@ describe("DateSeparator", () => {
         }
     }
 
+    const mockClient = getMockClientWithEventEmitter({});
     const getComponent = (props = {}) =>
-        mount(<DateSeparator {...defaultProps} {...props} />);
+        mount(<DateSeparator {...defaultProps} {...props} />, {
+            wrappingComponent: MatrixClientContext.Provider,
+            wrappingComponentProps: { value: mockClient },
+        });
 
     type TestCase = [string, number, string];
     const testCases: TestCase[] = [
@@ -106,7 +111,7 @@ describe("DateSeparator", () => {
 
     describe('when feature_jump_to_date is enabled', () => {
         beforeEach(() => {
-            (SettingsStore.getValue as jest.Mock) = jest.fn((arg) => {
+            mocked(SettingsStore).getValue.mockImplementation((arg) => {
                 if (arg === "feature_jump_to_date") {
                     return true;
                 }

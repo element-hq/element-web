@@ -222,7 +222,7 @@ describe("MLocationBody", () => {
 
     describe("isSelfLocation", () => {
         it("Returns true for a full m.asset event", () => {
-            const content = makeLocationContent("", 0);
+            const content = makeLocationContent("", '0');
             expect(isSelfLocation(content)).toBe(true);
         });
 

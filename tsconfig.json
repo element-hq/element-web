@@ -28,14 +28,8 @@
     "./test/utils/**/*.tsx",
     "./test/stores/**/*.ts",
     "./test/stores/**/*.tsx",
-    "./test/components/structures/**/*.ts",
-    "./test/components/structures/**/*.tsx",
-    "./test/components/views/context_menus/**/*.ts",
-    "./test/components/views/context_menus/**/*.tsx",
-    "./test/components/views/rooms/**/*.tsx",
-    "./test/components/views/rooms/**/*.ts",
-    "./test/components/views/right_panel/**/*.tsx",
-    "./test/components/views/right_panel/**/*.ts",
+    "./test/components/**/*.tsx",
+    "./test/components/**/*.ts",
   ],
   "exclude": [
     "./test/end-to-end-tests/"

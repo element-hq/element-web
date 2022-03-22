@@ -114,6 +114,10 @@ describe("AppTile", () => {
         await RightPanelStore.instance.onReady();
     });
 
+    beforeEach(() => {
+        jest.spyOn(SettingsStore, "getValue").mockRestore();
+    });
+
     it("tracks live tiles correctly", () => {
         expect(AppTile.isLive("1", "r1")).toEqual(false);
 
@@ -196,7 +200,7 @@ describe("AppTile", () => {
     it("distinguishes widgets with the same ID in different rooms", async () => {
         // Set up right panel state
         const realGetValue = SettingsStore.getValue;
-        SettingsStore.getValue = (name, roomId) => {
+        jest.spyOn(SettingsStore, 'getValue').mockImplementation((name, roomId) => {
             if (name === "RightPanel.phases") {
                 if (roomId === "r1") {
                     return {
@@ -212,7 +216,7 @@ describe("AppTile", () => {
                 return null;
             }
             return realGetValue(name, roomId);
-        };
+        });
 
         // Run initial render with room 1, and also running lifecycle methods
         const renderer = TestRenderer.create(<MatrixClientContext.Provider value={cli}>
@@ -232,7 +236,7 @@ describe("AppTile", () => {
         expect(AppTile.isLive("1", "r1")).toBe(true);
         expect(AppTile.isLive("1", "r2")).toBe(false);
 
-        SettingsStore.getValue = (name, roomId) => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
             if (name === "RightPanel.phases") {
                 if (roomId === "r2") {
                     return {
@@ -248,7 +252,7 @@ describe("AppTile", () => {
                 return null;
             }
             return realGetValue(name, roomId);
-        };
+        });
         // Wait for RPS room 2 updates to fire
         const rpsUpdated2 = waitForRps("r2");
         // Switch to room 2
@@ -266,8 +270,6 @@ describe("AppTile", () => {
 
         expect(AppTile.isLive("1", "r1")).toBe(false);
         expect(AppTile.isLive("1", "r2")).toBe(true);
-
-        SettingsStore.getValue = realGetValue;
     });
 
     it("preserves non-persisted widget on container move", async () => {

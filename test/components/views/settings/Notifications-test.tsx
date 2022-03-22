@@ -15,14 +15,14 @@ limitations under the License.
 import React from 'react';
 import { mount } from 'enzyme';
 import '../../../skinned-sdk';
-import { IPushRule, IPushRules, RuleId } from 'matrix-js-sdk/src/matrix';
-import { ThreepidMedium } from 'matrix-js-sdk/src/@types/threepids';
+import { IPushRule, IPushRules, RuleId, IPusher } from 'matrix-js-sdk/src/matrix';
+import { IThreepid, ThreepidMedium } from 'matrix-js-sdk/src/@types/threepids';
 import { act } from 'react-dom/test-utils';
 
 import Notifications from '../../../../src/components/views/settings/Notifications';
 import SettingsStore from "../../../../src/settings/SettingsStore";
-import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { StandardActions } from '../../../../src/notifications/StandardActions';
+import { getMockClientWithEventEmitter } from '../../../test-utils';
 
 jest.mock('../../../../src/settings/SettingsStore', () => ({
     monitorSetting: jest.fn(),
@@ -64,7 +64,7 @@ describe('<Notifications />', () => {
         return component;
     };
 
-    const mockClient = {
+    const mockClient = getMockClientWithEventEmitter({
         getPushRules: jest.fn(),
         getPushers: jest.fn(),
         getThreePids: jest.fn(),
@@ -72,14 +72,10 @@ describe('<Notifications />', () => {
         setPushRuleEnabled: jest.fn(),
         setPushRuleActions: jest.fn(),
         getRooms: jest.fn().mockReturnValue([]),
-    };
+    });
     mockClient.getPushRules.mockResolvedValue(pushRules);
 
     const findByTestId = (component, id) => component.find(`[data-test-id="${id}"]`);
-
-    beforeAll(() => {
-        MatrixClientPeg.get = () => mockClient;
-    });
 
     beforeEach(() => {
         mockClient.getPushRules.mockClear().mockResolvedValue(pushRules);
@@ -124,7 +120,7 @@ describe('<Notifications />', () => {
                     ...pushRules.global,
                     override: [{ ...masterRule, enabled: true }],
                 },
-            };
+            } as unknown as IPushRules;
             mockClient.getPushRules.mockClear().mockResolvedValue(disableNotificationsPushRules);
             const component = await getComponentAndWait();
 
@@ -148,7 +144,7 @@ describe('<Notifications />', () => {
                         {
                             medium: ThreepidMedium.Email,
                             address: testEmail,
-                        },
+                        } as unknown as IThreepid,
                     ],
                 });
             });
@@ -160,7 +156,11 @@ describe('<Notifications />', () => {
             });
 
             it('renders email switches correctly when notifications are on for email', async () => {
-                mockClient.getPushers.mockResolvedValue({ pushers: [{ kind: 'email', pushkey: testEmail }] });
+                mockClient.getPushers.mockResolvedValue({
+                    pushers: [
+                        { kind: 'email', pushkey: testEmail } as unknown as IPusher,
+                    ],
+                });
                 const component = await getComponentAndWait();
 
                 expect(findByTestId(component, 'notif-email-switch').props().value).toEqual(true);
@@ -205,7 +205,7 @@ describe('<Notifications />', () => {
             });
 
             it('enables email notification when toggling off', async () => {
-                const testPusher = { kind: 'email', pushkey: 'tester@test.com' };
+                const testPusher = { kind: 'email', pushkey: 'tester@test.com' } as unknown as IPusher;
                 mockClient.getPushers.mockResolvedValue({ pushers: [testPusher] });
                 const component = await getComponentAndWait();
 

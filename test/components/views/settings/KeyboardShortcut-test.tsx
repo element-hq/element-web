@@ -19,7 +19,7 @@ import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 
 import { Key } from "../../../../src/Keyboard";
-import PlatformPeg from "../../../../src/PlatformPeg";
+import { mockPlatformPeg, unmockPlatformPeg } from "../../../test-utils/platform";
 
 const PATH_TO_COMPONENT = "../../../../src/components/views/settings/KeyboardShortcut.tsx";
 
@@ -31,6 +31,7 @@ const renderKeyboardShortcut = async (component, props?): Promise<ReactWrapper> 
 describe("KeyboardShortcut", () => {
     beforeEach(() => {
         jest.resetModules();
+        unmockPlatformPeg();
     });
 
     it("renders key icon", async () => {
@@ -49,7 +50,7 @@ describe("KeyboardShortcut", () => {
     });
 
     it("doesn't render same modifier twice", async () => {
-        PlatformPeg.get = () => ({ overrideBrowserShortcuts: () => false });
+        mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
         const body1 = await renderKeyboardShortcut("KeyboardShortcut", {
             value: {
                 key: Key.A,

@@ -26,16 +26,15 @@ import {
     M_TEXT,
     PollStartEvent,
 } from 'matrix-events-sdk';
-import { IContent, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import {
-    wrapInMatrixClientContext,
     findById,
-    stubClient,
+    getMockClientWithEventEmitter,
 } from '../../../test-utils';
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import _PollCreateDialog from "../../../../src/components/views/elements/PollCreateDialog";
-const PollCreateDialog = wrapInMatrixClientContext(_PollCreateDialog);
+import PollCreateDialog from "../../../../src/components/views/elements/PollCreateDialog";
+import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 
 // Fake date to give a predictable snapshot
 const realDateNow = Date.now;
@@ -51,9 +50,21 @@ afterAll(() => {
 });
 
 describe("PollCreateDialog", () => {
+    const mockClient = getMockClientWithEventEmitter({
+        sendEvent: jest.fn().mockResolvedValue({ event_id: '1' }),
+    });
+
+    beforeEach(() => {
+        mockClient.sendEvent.mockClear();
+    });
+
     it("renders a blank poll", () => {
         const dialog = mount(
             <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
+            {
+                wrappingComponent: MatrixClientContext.Provider,
+                wrappingComponentProps: { value: mockClient },
+            },
         );
         expect(dialog.html()).toMatchSnapshot();
     });
@@ -207,9 +218,6 @@ describe("PollCreateDialog", () => {
     });
 
     it("displays a spinner after submitting", () => {
-        stubClient();
-        MatrixClientPeg.get().sendEvent = jest.fn(() => Promise.resolve());
-
         const dialog = mount(
             <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
         );
@@ -223,21 +231,6 @@ describe("PollCreateDialog", () => {
     });
 
     it("sends a poll create event when submitted", () => {
-        stubClient();
-        let sentEventContent: IContent = null;
-        MatrixClientPeg.get().sendEvent = jest.fn(
-            (
-                _roomId: string,
-                _threadId: string,
-                eventType: string,
-                content: IContent,
-            ) => {
-                expect(M_POLL_START.matches(eventType)).toBeTruthy();
-                sentEventContent = content;
-                return Promise.resolve();
-            },
-        );
-
         const dialog = mount(
             <PollCreateDialog room={createRoom()} onFinished={jest.fn()} />,
         );
@@ -246,6 +239,8 @@ describe("PollCreateDialog", () => {
         changeValue(dialog, "Option 2", "A2");
 
         dialog.find("button").simulate("click");
+        const [, , eventType, sentEventContent] = mockClient.sendEvent.mock.calls[0];
+        expect(M_POLL_START.matches(eventType)).toBeTruthy();
         expect(sentEventContent).toEqual(
             {
                 [M_TEXT.name]: "Q\n1. A1\n2. A2",
@@ -275,21 +270,6 @@ describe("PollCreateDialog", () => {
     });
 
     it("sends a poll edit event when editing", () => {
-        stubClient();
-        let sentEventContent: IContent = null;
-        MatrixClientPeg.get().sendEvent = jest.fn(
-            (
-                _roomId: string,
-                _threadId: string,
-                eventType: string,
-                content: IContent,
-            ) => {
-                expect(M_POLL_START.matches(eventType)).toBeTruthy();
-                sentEventContent = content;
-                return Promise.resolve();
-            },
-        );
-
         const previousEvent: MatrixEvent = new MatrixEvent(
             PollStartEvent.from(
                 "Poll Q",
@@ -312,6 +292,8 @@ describe("PollCreateDialog", () => {
         changeKind(dialog, M_POLL_KIND_UNDISCLOSED.name);
         dialog.find("button").simulate("click");
 
+        const [, , eventType, sentEventContent] = mockClient.sendEvent.mock.calls[0];
+        expect(M_POLL_START.matches(eventType)).toBeTruthy();
         expect(sentEventContent).toEqual(
             {
                 "m.new_content": {

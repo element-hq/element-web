@@ -1,6 +1,7 @@
 // skinned-sdk should be the first import in most tests
 import '../../../skinned-sdk';
 import React from "react";
+import { mocked } from 'jest-mock';
 import {
     renderIntoDocument,
     Simulate,
@@ -53,11 +54,10 @@ describe('<SpaceSettingsVisibilityTab />', () => {
         ];
         const space = mkSpace(client, mockSpaceId);
         const getStateEvents = mockStateEventImplementation(events);
-        space.currentState.getStateEvents.mockImplementation(getStateEvents);
-        space.currentState.mayClientSendStateEvent.mockReturnValue(false);
-        const mockGetJoinRule = jest.fn().mockReturnValue(joinRule);
-        space.getJoinRule = mockGetJoinRule;
-        space.currentState.getJoinRule = mockGetJoinRule;
+        mocked(space.currentState).getStateEvents.mockImplementation(getStateEvents);
+        mocked(space.currentState).mayClientSendStateEvent.mockReturnValue(false);
+        space.getJoinRule.mockReturnValue(joinRule);
+        mocked(space.currentState).getJoinRule.mockReturnValue(joinRule);
         return space as unknown as Room;
     };
     const defaultProps = {
@@ -70,6 +70,7 @@ describe('<SpaceSettingsVisibilityTab />', () => {
         const wrapper = renderIntoDocument<HTMLSpanElement>(
             // wrap in element so renderIntoDocument can render functional component
             <span>
+                { /* @ts-ignore */ }
                 <SpaceSettingsVisibilityTab {...defaultProps} {...props} />
             </span>,
         ) as HTMLSpanElement;

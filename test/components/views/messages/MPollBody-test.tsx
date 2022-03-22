@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
-import { Callback, IContent, MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RelatedRelations } from "matrix-js-sdk/src/models/related-relations";
 import {
@@ -30,8 +29,8 @@ import {
     M_TEXT,
     POLL_ANSWER,
 } from "matrix-events-sdk";
+import { MockedObject } from "jest-mock";
 
-import * as TestUtils from "../../../test-utils";
 import sdk from "../../../skinned-sdk";
 import {
     UserVote,
@@ -42,19 +41,26 @@ import {
 } from "../../../../src/components/views/messages/MPollBody";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { IBodyProps } from "../../../../src/components/views/messages/IBodyProps";
+import { getMockClientWithEventEmitter } from "../../../test-utils";
+import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 
 const CHECKED = "mx_MPollBody_option_checked";
 
-const _MPollBody = sdk.getComponent("views.messages.MPollBody");
-const MPollBody = TestUtils.wrapInMatrixClientContext(_MPollBody);
+const MPollBody = sdk.getComponent("views.messages.MPollBody");
 
-MatrixClientPeg.matrixClient = {
-    getUserId: () => "@me:example.com",
-    sendEvent: () => Promise.resolve({ "event_id": "fake_send_id" }),
-};
-setRedactionAllowedForMeOnly(MatrixClientPeg.matrixClient);
+const mockClient = getMockClientWithEventEmitter({
+    getUserId: jest.fn().mockReturnValue("@me:example.com"),
+    sendEvent: jest.fn().mockReturnValue(Promise.resolve({ "event_id": "fake_send_id" })),
+    getRoom: jest.fn(),
+});
+
+setRedactionAllowedForMeOnly(mockClient);
 
 describe("MPollBody", () => {
+    beforeEach(() => {
+        mockClient.sendEvent.mockClear();
+    });
+
     it("finds no votes if there are none", () => {
         expect(
             allVotes(
@@ -110,13 +116,12 @@ describe("MPollBody", () => {
             ]),
         ]);
 
-        const matrixClient = TestUtils.createTestClient();
-        setRedactionAllowedForMeOnly(matrixClient);
+        setRedactionAllowedForMeOnly(mockClient);
 
         expect(
             pollEndTs(
                 { getRoomId: () => "$room" } as MatrixEvent,
-                matrixClient,
+                mockClient,
                 endRelations,
             ),
         ).toBe(12);
@@ -132,13 +137,12 @@ describe("MPollBody", () => {
             ]),
         ]);
 
-        const matrixClient = TestUtils.createTestClient();
-        setRedactionAllowedForMeOnly(matrixClient);
+        setRedactionAllowedForMeOnly(mockClient);
 
         expect(
             pollEndTs(
                 { getRoomId: () => "$room" } as MatrixEvent,
-                matrixClient,
+                mockClient,
                 endRelations,
             ),
         ).toBe(13);
@@ -460,7 +464,7 @@ describe("MPollBody", () => {
         const votes = [];
         const ends = [];
         const body = newMPollBody(votes, ends, answers);
-        expect(body.html()).toBe("");
+        expect(body.html()).toBeNull();
     });
 
     it("renders the first 20 answers if 21 were given", () => {
@@ -530,110 +534,47 @@ describe("MPollBody", () => {
     });
 
     it("sends a vote event when I choose an option", () => {
-        const receivedEvents = [];
-        MatrixClientPeg.matrixClient.sendEvent = (
-            roomId: string,
-            eventType: string,
-            content: IContent,
-            txnId?: string,
-            callback?: Callback,
-        ): Promise<ISendEventResponse> => {
-            receivedEvents.push({ roomId, eventType, content, txnId, callback });
-            return Promise.resolve({ "event_id": "fake_tracked_send_id" });
-        };
-
         const votes = [];
         const body = newMPollBody(votes);
         clickRadio(body, "wings");
-        expect(receivedEvents).toEqual([
-            expectedResponseEvent("wings"),
-        ]);
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(...expectedResponseEventCall("wings"));
     });
 
     it("sends only one vote event when I click several times", () => {
-        const receivedEvents = [];
-        MatrixClientPeg.matrixClient.sendEvent = (
-            roomId: string,
-            eventType: string,
-            content: IContent,
-            txnId?: string,
-            callback?: Callback,
-        ): Promise<ISendEventResponse> => {
-            receivedEvents.push({ roomId, eventType, content, txnId, callback });
-            return Promise.resolve({ "event_id": "fake_tracked_send_id" });
-        };
-
         const votes = [];
         const body = newMPollBody(votes);
         clickRadio(body, "wings");
         clickRadio(body, "wings");
         clickRadio(body, "wings");
         clickRadio(body, "wings");
-        expect(receivedEvents).toEqual([
-            expectedResponseEvent("wings"),
-        ]);
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(
+            ...expectedResponseEventCall("wings"),
+        );
     });
 
     it("sends no vote event when I click what I already chose", () => {
-        const receivedEvents = [];
-        MatrixClientPeg.matrixClient.sendEvent = (
-            roomId: string,
-            eventType: string,
-            content: IContent,
-            txnId?: string,
-            callback?: Callback,
-        ): Promise<ISendEventResponse> => {
-            receivedEvents.push({ roomId, eventType, content, txnId, callback });
-            return Promise.resolve({ "event_id": "fake_tracked_send_id" });
-        };
-
         const votes = [responseEvent("@me:example.com", "wings")];
         const body = newMPollBody(votes);
         clickRadio(body, "wings");
         clickRadio(body, "wings");
         clickRadio(body, "wings");
         clickRadio(body, "wings");
-        expect(receivedEvents).toEqual([]);
+        expect(mockClient.sendEvent).not.toHaveBeenCalled();
     });
 
     it("sends several events when I click different options", () => {
-        const receivedEvents = [];
-        MatrixClientPeg.matrixClient.sendEvent = (
-            roomId: string,
-            eventType: string,
-            content: IContent,
-            txnId?: string,
-            callback?: Callback,
-        ): Promise<ISendEventResponse> => {
-            receivedEvents.push({ roomId, eventType, content, txnId, callback });
-            return Promise.resolve({ "event_id": "fake_tracked_send_id" });
-        };
-
         const votes = [];
         const body = newMPollBody(votes);
         clickRadio(body, "wings");
         clickRadio(body, "italian");
         clickRadio(body, "poutine");
-        expect(receivedEvents).toEqual([
-            expectedResponseEvent("wings"),
-            expectedResponseEvent("italian"),
-            expectedResponseEvent("poutine"),
-        ]);
+        expect(mockClient.sendEvent).toHaveBeenCalledTimes(3);
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(...expectedResponseEventCall("wings"));
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(...expectedResponseEventCall("italian"));
+        expect(mockClient.sendEvent).toHaveBeenCalledWith(...expectedResponseEventCall("poutine"));
     });
 
     it("sends no events when I click in an ended poll", () => {
-        const receivedEvents = [];
-        MatrixClientPeg.matrixClient.sendEvent = (
-            roomId: string,
-            eventType: string,
-            content: IContent,
-            txnId?: string,
-            callback?: Callback,
-        ): Promise<ISendEventResponse> => {
-            receivedEvents.push({ roomId, eventType, content, txnId, callback });
-            return Promise.resolve({ "event_id": "fake_tracked_send_id" });
-        };
-
         const ends = [
             endEvent("@me:example.com", 25),
         ];
@@ -645,7 +586,7 @@ describe("MPollBody", () => {
         clickEndedOption(body, "wings");
         clickEndedOption(body, "italian");
         clickEndedOption(body, "poutine");
-        expect(receivedEvents).toEqual([]);
+        expect(mockClient.sendEvent).not.toHaveBeenCalled();
     });
 
     it("finds the top answer among several votes", () => {
@@ -888,9 +829,8 @@ describe("MPollBody", () => {
 
     it("says poll is not ended if endRelations is undefined", () => {
         const pollEvent = new MatrixEvent();
-        const matrixClient = TestUtils.createTestClient();
-        setRedactionAllowedForMeOnly(matrixClient);
-        expect(isPollEnded(pollEvent, matrixClient, undefined)).toBe(false);
+        setRedactionAllowedForMeOnly(mockClient);
+        expect(isPollEnded(pollEvent, mockClient, undefined)).toBe(false);
     });
 
     it("says poll is not ended if asking for relations returns undefined", () => {
@@ -899,15 +839,15 @@ describe("MPollBody", () => {
             "room_id": "#myroom:example.com",
             "content": newPollStart([]),
         });
-        MatrixClientPeg.matrixClient.getRoom = () => {
+        mockClient.getRoom.mockImplementation((_roomId) => {
             return {
                 currentState: {
                     maySendRedactionForEvent: (_evt: MatrixEvent, userId: string) => {
                         return userId === "@me:example.com";
                     },
                 },
-            };
-        };
+            } as unknown as Room;
+        });
         const getRelationsForEvent =
             (eventId: string, relationType: string, eventType: string) => {
                 expect(eventId).toBe("$mypoll");
@@ -1134,7 +1074,12 @@ function newMPollBodyFromEvent(
                 }
             }
         }
-    />);
+    />, {
+        wrappingComponent: MatrixClientContext.Provider,
+        wrappingComponentProps: {
+            value: mockClient,
+        },
+    });
 }
 
 function clickRadio(wrapper: ReactWrapper, value: string) {
@@ -1271,11 +1216,19 @@ function expectedResponseEvent(answer: string) {
                 "rel_type": "m.reference",
             },
         },
-        "eventType": M_POLL_RESPONSE.name,
         "roomId": "#myroom:example.com",
+        "eventType": M_POLL_RESPONSE.name,
         "txnId": undefined,
         "callback": undefined,
     };
+}
+function expectedResponseEventCall(answer: string) {
+    const {
+        content, roomId, eventType,
+    } = expectedResponseEvent(answer);
+    return [
+        roomId, eventType, content,
+    ];
 }
 
 function endEvent(
@@ -1309,8 +1262,7 @@ function runIsPollEnded(ends: MatrixEvent[]) {
         "content": newPollStart(),
     });
 
-    const matrixClient = TestUtils.createTestClient();
-    setRedactionAllowedForMeOnly(matrixClient);
+    setRedactionAllowedForMeOnly(mockClient);
 
     const getRelationsForEvent =
         (eventId: string, relationType: string, eventType: string) => {
@@ -1320,7 +1272,7 @@ function runIsPollEnded(ends: MatrixEvent[]) {
             return newEndRelations(ends);
         };
 
-    return isPollEnded(pollEvent, matrixClient, getRelationsForEvent);
+    return isPollEnded(pollEvent, mockClient, getRelationsForEvent);
 }
 
 function runFindTopAnswer(votes: MatrixEvent[], ends: MatrixEvent[]) {
@@ -1347,8 +1299,8 @@ function runFindTopAnswer(votes: MatrixEvent[], ends: MatrixEvent[]) {
     return findTopAnswer(pollEvent, MatrixClientPeg.get(), getRelationsForEvent);
 }
 
-function setRedactionAllowedForMeOnly(matrixClient: MatrixClient) {
-    matrixClient.getRoom = (_roomId: string) => {
+function setRedactionAllowedForMeOnly(matrixClient: MockedObject<MatrixClient>) {
+    matrixClient.getRoom.mockImplementation((_roomId: string) => {
         return {
             currentState: {
                 maySendRedactionForEvent: (_evt: MatrixEvent, userId: string) => {
@@ -1356,7 +1308,7 @@ function setRedactionAllowedForMeOnly(matrixClient: MatrixClient) {
                 },
             },
         } as Room;
-    };
+    });
 }
 
 let EVENT_ID = 0;

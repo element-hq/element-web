@@ -1,115 +1,113 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ThemeChoicePanel renders the theme choice UI 1`] = `
-<Wrapper>
-  <ThemeChoicePanel>
-    <div
-      className="mx_SettingsTab_section mx_ThemeChoicePanel"
+<ThemeChoicePanel>
+  <div
+    className="mx_SettingsTab_section mx_ThemeChoicePanel"
+  >
+    <span
+      className="mx_SettingsTab_subheading"
     >
-      <span
-        className="mx_SettingsTab_subheading"
+      Theme
+    </span>
+    <div
+      className="mx_ThemeSelectors"
+    >
+      <StyledRadioGroup
+        definitions={
+          Array [
+            Object {
+              "className": "mx_ThemeSelector_light",
+              "disabled": true,
+              "label": "Light",
+              "value": "light",
+            },
+            Object {
+              "className": "mx_ThemeSelector_dark",
+              "disabled": true,
+              "label": "Dark",
+              "value": "dark",
+            },
+          ]
+        }
+        name="theme"
+        onChange={[Function]}
+        outlined={true}
       >
-        Theme
-      </span>
-      <div
-        className="mx_ThemeSelectors"
-      >
-        <StyledRadioGroup
-          definitions={
-            Array [
-              Object {
-                "className": "mx_ThemeSelector_light",
-                "disabled": true,
-                "label": "Light",
-                "value": "light",
-              },
-              Object {
-                "className": "mx_ThemeSelector_dark",
-                "disabled": true,
-                "label": "Dark",
-                "value": "dark",
-              },
-            ]
-          }
+        <StyledRadioButton
+          checked={false}
+          childrenInLabel={true}
+          className="mx_ThemeSelector_light"
+          disabled={true}
+          id="theme-light"
           name="theme"
           onChange={[Function]}
           outlined={true}
+          value="light"
         >
-          <StyledRadioButton
-            checked={false}
-            childrenInLabel={true}
-            className="mx_ThemeSelector_light"
-            disabled={true}
-            id="theme-light"
-            name="theme"
-            onChange={[Function]}
-            outlined={true}
-            value="light"
+          <label
+            className="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
           >
-            <label
-              className="mx_StyledRadioButton mx_ThemeSelector_light mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+            <input
+              checked={false}
+              disabled={true}
+              id="theme-light"
+              name="theme"
+              onChange={[Function]}
+              type="radio"
+              value="light"
+            />
+            <div>
+              <div />
+            </div>
+            <div
+              className="mx_StyledRadioButton_content"
             >
-              <input
-                checked={false}
-                disabled={true}
-                id="theme-light"
-                name="theme"
-                onChange={[Function]}
-                type="radio"
-                value="light"
-              />
-              <div>
-                <div />
-              </div>
-              <div
-                className="mx_StyledRadioButton_content"
-              >
-                Light
-              </div>
-              <div
-                className="mx_StyledRadioButton_spacer"
-              />
-            </label>
-          </StyledRadioButton>
-          <StyledRadioButton
-            checked={false}
-            childrenInLabel={true}
-            className="mx_ThemeSelector_dark"
-            disabled={true}
-            id="theme-dark"
-            name="theme"
-            onChange={[Function]}
-            outlined={true}
-            value="dark"
+              Light
+            </div>
+            <div
+              className="mx_StyledRadioButton_spacer"
+            />
+          </label>
+        </StyledRadioButton>
+        <StyledRadioButton
+          checked={false}
+          childrenInLabel={true}
+          className="mx_ThemeSelector_dark"
+          disabled={true}
+          id="theme-dark"
+          name="theme"
+          onChange={[Function]}
+          outlined={true}
+          value="dark"
+        >
+          <label
+            className="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
           >
-            <label
-              className="mx_StyledRadioButton mx_ThemeSelector_dark mx_StyledRadioButton_disabled mx_StyledRadioButton_outlined"
+            <input
+              checked={false}
+              disabled={true}
+              id="theme-dark"
+              name="theme"
+              onChange={[Function]}
+              type="radio"
+              value="dark"
+            />
+            <div>
+              <div />
+            </div>
+            <div
+              className="mx_StyledRadioButton_content"
             >
-              <input
-                checked={false}
-                disabled={true}
-                id="theme-dark"
-                name="theme"
-                onChange={[Function]}
-                type="radio"
-                value="dark"
-              />
-              <div>
-                <div />
-              </div>
-              <div
-                className="mx_StyledRadioButton_content"
-              >
-                Dark
-              </div>
-              <div
-                className="mx_StyledRadioButton_spacer"
-              />
-            </label>
-          </StyledRadioButton>
-        </StyledRadioGroup>
-      </div>
+              Dark
+            </div>
+            <div
+              className="mx_StyledRadioButton_spacer"
+            />
+          </label>
+        </StyledRadioButton>
+      </StyledRadioGroup>
     </div>
-  </ThemeChoicePanel>
-</Wrapper>
+  </div>
+</ThemeChoicePanel>
 `;
