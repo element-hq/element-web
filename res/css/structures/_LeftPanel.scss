@@ -37,6 +37,7 @@ $roomListCollapsedWidth: 68px;
     display: flex;
     flex-direction: row;
     flex: 1;
+    height: 100%; // ensure space panel is still scrollable with an outer wrapper
 
     .mx_LeftPanel_wrapper--user {
         background-color: $roomlist-bg-color;
