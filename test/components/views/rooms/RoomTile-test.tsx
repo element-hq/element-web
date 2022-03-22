@@ -17,11 +17,10 @@ limitations under the License.
 import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
-import { MatrixWidgetType } from "matrix-widget-api";
+import { ClientWidgetApi, MatrixWidgetType } from "matrix-widget-api";
 
 import "../../../skinned-sdk";
 import { stubClient, mkStubRoom } from "../../../test-utils";
-import PlatformPeg from "../../../../src/PlatformPeg";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import WidgetStore from "../../../../src/stores/WidgetStore";
@@ -31,18 +30,33 @@ import VoiceChannelStore, { VoiceChannelEvent } from "../../../../src/stores/Voi
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { VOICE_CHANNEL_ID } from "../../../../src/utils/VoiceChannelUtils";
+import { mocked } from "jest-mock";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import PlatformPeg  from "../../../../src/PlatformPeg";
+import BasePlatform from "../../../../src/BasePlatform";
 
 describe("RoomTile", () => {
-    PlatformPeg.get = () => ({ overrideBrowserShortcuts: () => false });
-    SettingsStore.getValue = setting => setting === "feature_voice_rooms";
+    jest.spyOn(PlatformPeg, 'get')
+        .mockReturnValue({ overrideBrowserShortcuts: () => false } as unknown as BasePlatform);
+
+    const cli = mocked(MatrixClientPeg.get());
+
     beforeEach(() => {
+        const realGetValue = SettingsStore.getValue;
+        jest.spyOn(SettingsStore, 'getValue').mockImplementation((name, roomId) => {
+            if (name === "feature_voice_rooms") {
+                return true;
+            }
+            return realGetValue(name, roomId);
+        });
+
         stubClient();
         DMRoomMap.makeShared();
     });
 
     describe("voice rooms", () => {
-        const room = mkStubRoom("!1:example.org");
-        room.isCallRoom.mockReturnValue(true);
+        const room = mkStubRoom("!1:example.org", "voice room", cli);
+        room.isCallRoom = () => true;
 
         // Set up mocks to simulate the remote end of the widget API
         let messageSent;
@@ -72,7 +86,7 @@ describe("RoomTile", () => {
                     send: messageSendMock,
                     reply: () => {},
                 },
-            });
+            } as unknown as ClientWidgetApi);
         });
 
         it("tracks connection state", async () => {

@@ -226,6 +226,7 @@ function createRoomState(room: Room, narrow: boolean): IRoomState {
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
         liveTimeline: undefined,
+        resizing: false,
         narrow,
     };
 }

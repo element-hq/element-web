@@ -24,6 +24,8 @@ import { stubClient, mkStubRoom, wrapInMatrixClientContext } from "../../../test
 import _VoiceChannelRadio from "../../../../src/components/views/voip/VoiceChannelRadio";
 import VoiceChannelStore, { VoiceChannelEvent } from "../../../../src/stores/VoiceChannelStore";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import { mocked } from "jest-mock";
+import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 
 const VoiceChannelRadio = wrapInMatrixClientContext(_VoiceChannelRadio);
 
@@ -64,17 +66,20 @@ class StubVoiceChannelStore extends EventEmitter {
 }
 
 describe("VoiceChannelRadio", () => {
-    const room = mkStubRoom("!1:example.org");
-    room.isCallRoom.mockReturnValue(true);
+    const cli = mocked(MatrixClientPeg.get());
+    const room = mkStubRoom("!1:example.org", "voice channel", cli);
+    room.isCallRoom = () => true;
 
     beforeEach(() => {
         stubClient();
         DMRoomMap.makeShared();
         // Stub out the VoiceChannelStore
-        jest.spyOn(VoiceChannelStore, "instance", "get").mockReturnValue(new StubVoiceChannelStore());
+        jest.spyOn(VoiceChannelStore, "instance", "get")
+            .mockReturnValue(new StubVoiceChannelStore() as unknown as VoiceChannelStore);
     });
 
     it("shows when connecting voice", async () => {
+        // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
         const radio = mount(<VoiceChannelRadio />);
         expect(radio.children().children().exists()).toEqual(false);
 
@@ -85,6 +90,7 @@ describe("VoiceChannelRadio", () => {
 
     it("hides when disconnecting voice", () => {
         VoiceChannelStore.instance.connect("!1:example.org");
+        // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
         const radio = mount(<VoiceChannelRadio />);
         expect(radio.children().children().exists()).toEqual(true);
 
@@ -96,6 +102,7 @@ describe("VoiceChannelRadio", () => {
     describe("disconnect button", () => {
         it("works", () => {
             VoiceChannelStore.instance.connect("!1:example.org");
+            // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
             const radio = mount(<VoiceChannelRadio />);
 
             act(() => {
@@ -108,6 +115,7 @@ describe("VoiceChannelRadio", () => {
     describe("video button", () => {
         it("works", () => {
             VoiceChannelStore.instance.connect("!1:example.org");
+            // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
             const radio = mount(<VoiceChannelRadio />);
 
             act(() => {
@@ -125,6 +133,7 @@ describe("VoiceChannelRadio", () => {
     describe("audio button", () => {
         it("works", () => {
             VoiceChannelStore.instance.connect("!1:example.org");
+            // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
             const radio = mount(<VoiceChannelRadio />);
 
             act(() => {
