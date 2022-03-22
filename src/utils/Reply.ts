@@ -22,6 +22,7 @@ import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { PERMITTED_URL_SCHEMES } from "../HtmlUtils";
 import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
 import { RecursivePartial } from "../@types/common";
+import SettingsStore from "../settings/SettingsStore";
 
 export function getParentEventId(ev: MatrixEvent): string | undefined {
     if (!ev || ev.isRedacted()) return;
@@ -178,7 +179,10 @@ export function shouldDisplayReply(event: MatrixEvent): boolean {
     }
 
     const relation = event.getRelation();
-    if (relation?.rel_type === THREAD_RELATION_TYPE.name && relation?.is_falling_back) {
+    if (SettingsStore.getValue("feature_thread") &&
+        relation?.rel_type === THREAD_RELATION_TYPE.name &&
+        relation?.is_falling_back
+    ) {
         return false;
     }
 
