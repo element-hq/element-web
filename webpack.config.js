@@ -64,7 +64,7 @@ module.exports = (env, argv) => {
     //
     // argv.mode is always set to "production" by yarn build
     //      (called to build prod, nightly and develop.element.io)
-    // arg.mode is set to "delopment" by yarn start
+    // arg.mode is set to "development" by yarn start
     //      (called by developers, runs the continuous reload script)
     // process.env.CI_PACKAGE is set when yarn build is called from scripts/ci_package.sh
     //      (called to build nightly and develop.element.io)
