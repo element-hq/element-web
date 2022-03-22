@@ -292,7 +292,14 @@ function loadVideoElement(videoFile): Promise<HTMLVideoElement> {
                 reject(e);
             };
 
-            video.src = ev.target.result as string;
+            let dataUrl = ev.target.result as string;
+            // Chrome chokes on quicktime but likes mp4, and `file.type` is
+            // read only, so do this horrible hack to unbreak quicktime
+            if (dataUrl.startsWith("data:video/quicktime;")) {
+                dataUrl = dataUrl.replace("data:video/quicktime;", "data:video/mp4;");
+            }
+
+            video.src = dataUrl;
             video.load();
             video.play();
         };
