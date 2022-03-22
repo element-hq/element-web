@@ -279,8 +279,6 @@ export default class RightPanel extends React.Component<IProps, IState> {
                     resizeNotifier={this.props.resizeNotifier}
                     onClose={this.onClose}
                     permalinkCreator={this.props.permalinkCreator}
-                    allThreadsTimelineSet={this.props.room.threadsTimelineSets[0]}
-                    myThreadsTimelineSet={this.props.room.threadsTimelineSets[1]}
                 />;
                 break;
 
