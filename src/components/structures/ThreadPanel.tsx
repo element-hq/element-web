@@ -172,6 +172,7 @@ const ThreadPanel: React.FC<IProps> = ({
         room.createThreadsTimelineSets().then(() => {
             setRoom(room);
             setFilterOption(ThreadFilterType.All);
+            room.fetchRoomThreads();
         });
     }, [mxClient, roomId]);
 
