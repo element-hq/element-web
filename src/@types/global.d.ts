@@ -29,7 +29,6 @@ import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import { IntegrationManagers } from "../integrations/IntegrationManagers";
 import { ModalManager } from "../Modal";
 import SettingsStore from "../settings/SettingsStore";
-import { ActiveRoomObserver } from "../ActiveRoomObserver";
 import { Notifier } from "../Notifier";
 import type { Renderer } from "react-dom";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
@@ -82,7 +81,6 @@ declare global {
         mxDeviceListener: DeviceListener;
         mxRoomListStore: RoomListStoreClass;
         mxRoomListLayoutStore: RoomListLayoutStore;
-        mxActiveRoomObserver: ActiveRoomObserver;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;
         singletonModalManager: ModalManager;

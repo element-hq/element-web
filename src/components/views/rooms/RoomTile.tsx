@@ -28,7 +28,6 @@ import dis from '../../../dispatcher/dispatcher';
 import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
 import SettingsStore from "../../../settings/SettingsStore";
-import ActiveRoomObserver from "../../../ActiveRoomObserver";
 import { _t } from "../../../languageHandler";
 import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
@@ -61,6 +60,7 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { RoomViewStore } from "../../../stores/RoomViewStore";
 
 enum VoiceConnectionState {
     Disconnected,
@@ -110,7 +110,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         super(props);
 
         this.state = {
-            selected: ActiveRoomObserver.activeRoomId === this.props.room.roomId,
+            selected: RoomViewStore.instance.getRoomId() === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
             // generatePreview() will return nothing if the user has previews disabled
@@ -177,7 +177,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         }
         this.updateVoiceMembers();
 
-        ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        RoomViewStore.instance.addRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
         MessagePreviewStore.instance.on(
             MessagePreviewStore.getPreviewChangedEventName(this.props.room),
@@ -185,21 +185,18 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         );
         this.notificationState.on(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
-        this.props.room?.on(RoomEvent.Name, this.onRoomNameUpdate);
-        this.props.room?.currentState?.on(RoomStateEvent.Events, this.updateVoiceMembers);
+        this.props.room.on(RoomEvent.Name, this.onRoomNameUpdate);
+        this.props.room.currentState.on(RoomStateEvent.Events, this.updateVoiceMembers);
     }
 
     public componentWillUnmount() {
-        if (this.props.room) {
-            ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
-            MessagePreviewStore.instance.off(
-                MessagePreviewStore.getPreviewChangedEventName(this.props.room),
-                this.onRoomPreviewChanged,
-            );
-            this.props.room.currentState.off(RoomStateEvent.Events, this.updateVoiceMembers);
-            this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
-        }
-        ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        RoomViewStore.instance.removeRoomListener(this.props.room.roomId, this.onActiveRoomUpdate);
+        MessagePreviewStore.instance.off(
+            MessagePreviewStore.getPreviewChangedEventName(this.props.room),
+            this.onRoomPreviewChanged,
+        );
+        this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
+        this.props.room.currentState.off(RoomStateEvent.Events, this.updateVoiceMembers);
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);

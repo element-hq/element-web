@@ -79,18 +79,50 @@ const INITIAL_STATE = {
     wasContextSwitch: false,
 };
 
+type Listener = (isActive: boolean) => void;
+
 /**
  * A class for storing application state for RoomView. This is the RoomView's interface
 *  with a subset of the js-sdk.
  *  ```
  */
 export class RoomViewStore extends Store<ActionPayload> {
+    // Important: This cannot be a dynamic getter (lazily-constructed instance) because
+    // otherwise we'll miss view_room dispatches during startup, breaking relaunches of
+    // the app. We need to eagerly create the instance.
     public static readonly instance = new RoomViewStore();
 
     private state = INITIAL_STATE; // initialize state
 
+    // Keep these out of state to avoid causing excessive/recursive updates
+    private roomIdActivityListeners: Record<string, Listener[]> = {};
+
     public constructor() {
         super(dis);
+    }
+
+    public addRoomListener(roomId: string, fn: Listener) {
+        if (!this.roomIdActivityListeners[roomId]) this.roomIdActivityListeners[roomId] = [];
+        this.roomIdActivityListeners[roomId].push(fn);
+    }
+
+    public removeRoomListener(roomId: string, fn: Listener) {
+        if (this.roomIdActivityListeners[roomId]) {
+            const i = this.roomIdActivityListeners[roomId].indexOf(fn);
+            if (i > -1) {
+                this.roomIdActivityListeners[roomId].splice(i, 1);
+            }
+        } else {
+            logger.warn("Unregistering unrecognised listener (roomId=" + roomId + ")");
+        }
+    }
+
+    private emitForRoom(roomId: string, isActive: boolean) {
+        if (!this.roomIdActivityListeners[roomId]) return;
+
+        for (const fn of this.roomIdActivityListeners[roomId]) {
+            fn.call(null, isActive);
+        }
     }
 
     private setState(newState: Partial<typeof INITIAL_STATE>) {
@@ -108,7 +140,13 @@ export class RoomViewStore extends Store<ActionPayload> {
             return;
         }
 
+        const lastRoomId = this.state.roomId;
         this.state = Object.assign(this.state, newState);
+        if (lastRoomId !== this.state.roomId) {
+            if (lastRoomId) this.emitForRoom(lastRoomId, false);
+            if (this.state.roomId) this.emitForRoom(this.state.roomId, true);
+        }
+
         this.__emitChange();
     }
 
