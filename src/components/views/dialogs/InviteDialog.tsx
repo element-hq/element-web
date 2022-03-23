@@ -1166,9 +1166,11 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         let showMore = null;
         if (hasMore) {
             showMore = (
-                <AccessibleButton onClick={showMoreFn} kind="link">
-                    { _t("Show more") }
-                </AccessibleButton>
+                <div className="mx_InviteDialog_section_showMore">
+                    <AccessibleButton onClick={showMoreFn} kind="link">
+                        { _t("Show more") }
+                    </AccessibleButton>
+                </div>
             );
         }
 

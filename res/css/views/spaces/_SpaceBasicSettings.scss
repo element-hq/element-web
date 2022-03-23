@@ -63,8 +63,7 @@ limitations under the License.
 
         > .mx_AccessibleButton_kind_link {
             display: inline-block;
-            padding: 0;
-            margin: auto 16px;
+            margin: auto 18px;
             color: #368bd6;
         }
 
@@ -74,7 +73,6 @@ limitations under the License.
     }
 
     .mx_AccessibleButton_hasKind {
-        padding: 8px 22px;
         margin-left: auto;
         display: block;
         width: min-content;

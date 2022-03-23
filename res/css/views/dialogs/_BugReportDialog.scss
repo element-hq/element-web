@@ -17,7 +17,7 @@ limitations under the License.
 .mx_BugReportDialog {
     .mx_BugReportDialog_download {
         .mx_AccessibleButton_kind_link {
-            padding-left: 0;
+            margin-right: 18px; // Space between "Downloading logs..."
         }
     }
 }

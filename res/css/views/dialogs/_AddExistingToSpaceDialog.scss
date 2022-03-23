@@ -54,7 +54,6 @@ limitations under the License.
             font-size: $font-12px;
             line-height: $font-15px;
             margin-top: 8px;
-            padding: 0;
         }
     }
 
@@ -135,10 +134,6 @@ limitations under the License.
                 height: 18px;
                 left: 0;
             }
-        }
-
-        .mx_AccessibleButton_kind_link {
-            padding: 0;
         }
     }
 }
