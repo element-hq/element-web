@@ -16,7 +16,7 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 
-import RoomViewStore from './stores/RoomViewStore';
+import { RoomViewStore } from './stores/RoomViewStore';
 
 type Listener = (isActive: boolean) => void;
 
@@ -31,11 +31,12 @@ type Listener = (isActive: boolean) => void;
  */
 export class ActiveRoomObserver {
     private listeners: {[key: string]: Listener[]} = {};
-    private _activeRoomId = RoomViewStore.getRoomId();
+    private _activeRoomId = RoomViewStore.instance.getRoomId();
+    private readonly roomStoreToken: EventSubscription;
 
     constructor() {
         // TODO: We could self-destruct when the last listener goes away, or at least stop listening.
-        RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.instance.addListener(this.onRoomViewStoreUpdate);
     }
 
     public get activeRoomId(): string {
@@ -71,7 +72,7 @@ export class ActiveRoomObserver {
         if (this._activeRoomId) this.emit(this._activeRoomId, false);
 
         // update our cache
-        this._activeRoomId = RoomViewStore.getRoomId();
+        this._activeRoomId = RoomViewStore.instance.getRoomId();
 
         // and emit for the new one
         if (this._activeRoomId) this.emit(this._activeRoomId, true);

@@ -33,7 +33,7 @@ import CreateSubspaceDialog from "../components/views/dialogs/CreateSubspaceDial
 import AddExistingSubspaceDialog from "../components/views/dialogs/AddExistingSubspaceDialog";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import dis from "../dispatcher/dispatcher";
-import RoomViewStore from "../stores/RoomViewStore";
+import { RoomViewStore } from "../stores/RoomViewStore";
 import { Action } from "../dispatcher/actions";
 import { leaveRoomBehaviour } from "./membership";
 import Spinner from "../components/views/elements/Spinner";
@@ -83,7 +83,7 @@ export const showAddExistingRooms = (space: Room): void => {
             onAddSubspaceClick: () => showAddExistingSubspace(space),
             space,
             onFinished: (added: boolean) => {
-                if (added && RoomViewStore.getRoomId() === space.roomId) {
+                if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
                     defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                 }
             },
@@ -142,7 +142,7 @@ export const showAddExistingSubspace = (space: Room): void => {
             space,
             onCreateSubspaceClick: () => showCreateNewSubspace(space),
             onFinished: (added: boolean) => {
-                if (added && RoomViewStore.getRoomId() === space.roomId) {
+                if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
                     defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                 }
             },
@@ -160,7 +160,7 @@ export const showCreateNewSubspace = (space: Room): void => {
             space,
             onAddExistingSpaceClick: () => showAddExistingSubspace(space),
             onFinished: (added: boolean) => {
-                if (added && RoomViewStore.getRoomId() === space.roomId) {
+                if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
                     defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                 }
             },

@@ -35,7 +35,7 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { ActionPayload } from '../../../dispatcher/payloads';
 import { Action } from '../../../dispatcher/actions';
-import RoomViewStore from '../../../stores/RoomViewStore';
+import { RoomViewStore } from '../../../stores/RoomViewStore';
 import ContentMessages from '../../../ContentMessages';
 import UploadBar from '../../structures/UploadBar';
 import SettingsStore from '../../../settings/SettingsStore';
@@ -92,7 +92,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
     }
 
     public componentDidMount(): void {
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.instance.addListener(this.onRoomViewStoreUpdate);
         this.dispatcherRef = dis.register(this.onAction);
         this.readReceiptsSettingWatcher = SettingsStore.watchSetting("showReadReceipts", null, (...[,,, value]) =>
             this.setState({ showReadReceipts: value as boolean }),
@@ -119,12 +119,12 @@ export default class TimelineCard extends React.Component<IProps, IState> {
 
     private onRoomViewStoreUpdate = async (initial?: boolean): Promise<void> => {
         const newState: Pick<IState, any> = {
-            // roomLoading: RoomViewStore.isRoomLoading(),
-            // roomLoadError: RoomViewStore.getRoomLoadError(),
+            // roomLoading: RoomViewStore.instance.isRoomLoading(),
+            // roomLoadError: RoomViewStore.instance.getRoomLoadError(),
 
-            initialEventId: RoomViewStore.getInitialEventId(),
-            isInitialEventHighlighted: RoomViewStore.isInitialEventHighlighted(),
-            replyToEvent: RoomViewStore.getQuotingEvent(),
+            initialEventId: RoomViewStore.instance.getInitialEventId(),
+            isInitialEventHighlighted: RoomViewStore.instance.isInitialEventHighlighted(),
+            replyToEvent: RoomViewStore.instance.getQuotingEvent(),
         };
 
         this.setState(newState);

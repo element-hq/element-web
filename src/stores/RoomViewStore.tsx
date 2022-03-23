@@ -1,7 +1,7 @@
 /*
 Copyright 2017 Vector Creations Ltd
 Copyright 2017, 2018 New Vector Ltd
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -84,14 +84,16 @@ const INITIAL_STATE = {
 *  with a subset of the js-sdk.
  *  ```
  */
-class RoomViewStore extends Store<ActionPayload> {
+export class RoomViewStore extends Store<ActionPayload> {
+    public static readonly instance = new RoomViewStore();
+
     private state = INITIAL_STATE; // initialize state
 
-    constructor() {
+    public constructor() {
         super(dis);
     }
 
-    setState(newState: Partial<typeof INITIAL_STATE>) {
+    private setState(newState: Partial<typeof INITIAL_STATE>) {
         // If values haven't changed, there's nothing to do.
         // This only tries a shallow comparison, so unchanged objects will slip
         // through, but that's probably okay for now.
@@ -110,7 +112,7 @@ class RoomViewStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    __onDispatch(payload) { // eslint-disable-line @typescript-eslint/naming-convention
+    protected __onDispatch(payload) { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'
@@ -367,7 +369,7 @@ class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private static getInvitingUserId(roomId: string): string {
+    private getInvitingUserId(roomId: string): string {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
         if (room && room.getMyMembership() === "invite") {
@@ -389,7 +391,7 @@ class RoomViewStore extends Store<ActionPayload> {
                 { _t("Please contact your homeserver administrator.") }
             </div>;
         } else if (err.httpStatus === 404) {
-            const invitingUserId = RoomViewStore.getInvitingUserId(roomId);
+            const invitingUserId = this.getInvitingUserId(roomId);
             // only provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
@@ -466,7 +468,7 @@ class RoomViewStore extends Store<ActionPayload> {
     //         // Not joined
     //     }
     // } else {
-    //     if (RoomViewStore.isJoining()) {
+    //     if (RoomViewStore.instance.isJoining()) {
     //         // show spinner
     //     } else {
     //         // show join prompt
@@ -494,9 +496,3 @@ class RoomViewStore extends Store<ActionPayload> {
         return this.state.wasContextSwitch;
     }
 }
-
-let singletonRoomViewStore: RoomViewStore = null;
-if (!singletonRoomViewStore) {
-    singletonRoomViewStore = new RoomViewStore();
-}
-export default singletonRoomViewStore;

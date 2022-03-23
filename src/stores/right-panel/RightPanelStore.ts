@@ -31,7 +31,7 @@ import {
     IRightPanelCard,
     IRightPanelForRoom,
 } from './RightPanelStoreIPanelState';
-import RoomViewStore from '../RoomViewStore';
+import { RoomViewStore } from '../RoomViewStore';
 
 /**
  * A class for tracking the state of the right panel between layouts and
@@ -55,9 +55,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     protected async onReady(): Promise<any> {
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.instance.addListener(this.onRoomViewStoreUpdate);
         this.matrixClient.on(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
-        this.viewedRoomId = RoomViewStore.getRoomId();
+        this.viewedRoomId = RoomViewStore.instance.getRoomId();
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();
     }
@@ -338,7 +338,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
 
     private onRoomViewStoreUpdate = () => {
         const oldRoomId = this.viewedRoomId;
-        this.viewedRoomId = RoomViewStore.getRoomId();
+        this.viewedRoomId = RoomViewStore.instance.getRoomId();
         // load values from byRoomCache with the viewedRoomId.
         this.loadCacheFromSettings();
 

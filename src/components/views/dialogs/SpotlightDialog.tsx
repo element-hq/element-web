@@ -58,7 +58,7 @@ import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { Action } from "../../../dispatcher/actions";
 import Modal from "../../../Modal";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import RoomViewStore from "../../../stores/RoomViewStore";
+import { RoomViewStore } from "../../../stores/RoomViewStore";
 import { showStartChatInviteDialog } from "../../../RoomInvite";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
@@ -559,7 +559,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                 <h4>{ _t("Recently viewed") }</h4>
                 <div>
                     { BreadcrumbsStore.instance.rooms
-                        .filter(r => r.roomId !== RoomViewStore.getRoomId())
+                        .filter(r => r.roomId !== RoomViewStore.instance.getRoomId())
                         .map(room => (
                             <TooltipOption
                                 id={`mx_SpotlightDialog_button_recentlyViewed_${room.roomId}`}

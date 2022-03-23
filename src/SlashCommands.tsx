@@ -61,7 +61,7 @@ import InfoDialog from "./components/views/dialogs/InfoDialog";
 import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from './contexts/RoomContext';
-import RoomViewStore from "./stores/RoomViewStore";
+import { RoomViewStore } from "./stores/RoomViewStore";
 import { XOR } from "./@types/common";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
@@ -851,7 +851,7 @@ export const Commands = [
         description: _td('Define the power level of a user'),
         isEnabled(): boolean {
             const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(RoomViewStore.getRoomId());
+            const room = cli.getRoom(RoomViewStore.instance.getRoomId());
             return room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId());
         },
         runFn: function(roomId, args) {
@@ -891,7 +891,7 @@ export const Commands = [
         description: _td('Deops user with given id'),
         isEnabled(): boolean {
             const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(RoomViewStore.getRoomId());
+            const room = cli.getRoom(RoomViewStore.instance.getRoomId());
             return room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId());
         },
         runFn: function(roomId, args) {

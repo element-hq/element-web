@@ -21,7 +21,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import classNames from 'classnames';
 
 import CallView from "./CallView";
-import RoomViewStore from '../../../stores/RoomViewStore';
+import { RoomViewStore } from '../../../stores/RoomViewStore';
 import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import PersistentApp from "../elements/PersistentApp";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -111,7 +111,7 @@ export default class PipView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        const roomId = RoomViewStore.getRoomId();
+        const roomId = RoomViewStore.instance.getRoomId();
 
         const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(roomId);
 
@@ -129,7 +129,7 @@ export default class PipView extends React.Component<IProps, IState> {
     public componentDidMount() {
         CallHandler.instance.addListener(CallHandlerEvent.CallChangeRoom, this.updateCalls);
         CallHandler.instance.addListener(CallHandlerEvent.CallState, this.updateCalls);
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.instance.addListener(this.onRoomViewStoreUpdate);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         const room = MatrixClientPeg.get()?.getRoom(this.state.viewedRoomId);
         if (room) {
@@ -162,7 +162,7 @@ export default class PipView extends React.Component<IProps, IState> {
     }
 
     private onRoomViewStoreUpdate = () => {
-        const newRoomId = RoomViewStore.getRoomId();
+        const newRoomId = RoomViewStore.instance.getRoomId();
         const oldRoomId = this.state.viewedRoomId;
         if (newRoomId === oldRoomId) return;
         // The WidgetLayoutStore observer always tracks the currently viewed Room,

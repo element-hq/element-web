@@ -24,7 +24,7 @@ import { _t } from "../languageHandler";
 import Modal, { IHandle } from "../Modal";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import dis from "../dispatcher/dispatcher";
-import RoomViewStore from "../stores/RoomViewStore";
+import { RoomViewStore } from "../stores/RoomViewStore";
 import Spinner from "../components/views/elements/Spinner";
 import { isMetaSpace } from "../stores/spaces";
 import SpaceStore from "../stores/spaces/SpaceStore";
@@ -186,7 +186,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
 
     if (!isMetaSpace(SpaceStore.instance.activeSpace) &&
         SpaceStore.instance.activeSpace !== roomId &&
-        RoomViewStore.getRoomId() === roomId
+        RoomViewStore.instance.getRoomId() === roomId
     ) {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
