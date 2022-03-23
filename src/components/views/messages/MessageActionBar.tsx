@@ -24,7 +24,6 @@ import { MsgType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
-import { Action } from '../../../dispatcher/actions';
 import ContextMenu, { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent, editEvent } from '../../../utils/EventUtils';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
@@ -225,10 +224,6 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
     private onThreadClick = (isCard: boolean): void => {
         showThread({ rootEvent: this.props.mxEvent, push: isCard });
-        dis.dispatch({
-            action: Action.FocusSendMessageComposer,
-            context: TimelineRenderingType.Thread,
-        });
     };
 
     private onEditClick = (): void => {

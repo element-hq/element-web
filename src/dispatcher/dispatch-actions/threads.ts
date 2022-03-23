@@ -13,10 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
+import dis from "../dispatcher";
+import { Action } from "../actions";
+import { TimelineRenderingType } from "../../contexts/RoomContext";
 
 export const showThread = (props: {
     rootEvent: MatrixEvent;
@@ -41,6 +45,12 @@ export const showThread = (props: {
             threadViewCard,
         ]);
     }
+
+    // Focus the composer
+    dis.dispatch({
+        action: Action.FocusSendMessageComposer,
+        context: TimelineRenderingType.Thread,
+    });
 };
 
 export const showThreadPanel = () => {
