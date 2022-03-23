@@ -19,12 +19,57 @@ exports[`<RoomLiveShareWarning /> when user has live beacons renders correctly w
     >
       You are sharing your live location
     </span>
-    <span
-      className="mx_RoomLiveShareWarning_expiry"
-      data-test-id="room-live-share-expiry"
+    <LiveTimeRemaining
+      beacon={
+        Beacon {
+          "_beaconInfo": Object {
+            "assetType": "m.self",
+            "description": undefined,
+            "live": true,
+            "timeout": 3600000,
+            "timestamp": 1647270879403,
+          },
+          "_events": Object {
+            "Beacon.LivenessChange": Array [
+              [Function],
+              [Function],
+            ],
+            "Beacon.new": [Function],
+            "Beacon.update": [Function],
+          },
+          "_eventsCount": 3,
+          "_isLive": true,
+          "_maxListeners": undefined,
+          "livenessWatchInterval": 1000000000002,
+          "roomId": "$room1:server.org",
+          "rootEvent": Object {
+            "content": Object {
+              "org.matrix.msc3488.asset": Object {
+                "type": "m.self",
+              },
+              "org.matrix.msc3488.ts": 1647270879403,
+              "org.matrix.msc3489.beacon_info": Object {
+                "description": undefined,
+                "live": true,
+                "timeout": 3600000,
+              },
+            },
+            "event_id": "$0",
+            "room_id": "$room1:server.org",
+            "state_key": "@alice:server.org",
+            "type": "org.matrix.msc3489.beacon_info.@alice:server.org.2",
+          },
+          Symbol(kCapture): false,
+        }
+      }
     >
-      1h left
-    </span>
+      <span
+        className="mx_RoomLiveShareWarning_expiry"
+        data-test-id="room-live-share-expiry"
+      >
+        1h left
+      </span>
+    </LiveTimeRemaining>
     <AccessibleButton
       data-test-id="room-live-share-stop-sharing"
       disabled={false}
@@ -67,14 +112,59 @@ exports[`<RoomLiveShareWarning /> when user has live beacons renders correctly w
     <span
       className="mx_RoomLiveShareWarning_label"
     >
-      You are sharing 2 live locations
+      You are sharing your live location
     </span>
-    <span
-      className="mx_RoomLiveShareWarning_expiry"
-      data-test-id="room-live-share-expiry"
+    <LiveTimeRemaining
+      beacon={
+        Beacon {
+          "_beaconInfo": Object {
+            "assetType": "m.self",
+            "description": undefined,
+            "live": true,
+            "timeout": 43200000,
+            "timestamp": 1647270879403,
+          },
+          "_events": Object {
+            "Beacon.LivenessChange": Array [
+              [Function],
+              [Function],
+            ],
+            "Beacon.new": [Function],
+            "Beacon.update": [Function],
+          },
+          "_eventsCount": 3,
+          "_isLive": true,
+          "_maxListeners": undefined,
+          "livenessWatchInterval": 1000000000010,
+          "roomId": "$room2:server.org",
+          "rootEvent": Object {
+            "content": Object {
+              "org.matrix.msc3488.asset": Object {
+                "type": "m.self",
+              },
+              "org.matrix.msc3488.ts": 1647270879403,
+              "org.matrix.msc3489.beacon_info": Object {
+                "description": undefined,
+                "live": true,
+                "timeout": 43200000,
+              },
+            },
+            "event_id": "$2",
+            "room_id": "$room2:server.org",
+            "state_key": "@alice:server.org",
+            "type": "org.matrix.msc3489.beacon_info.@alice:server.org.4",
+          },
+          Symbol(kCapture): false,
+        }
+      }
     >
-      12h left
-    </span>
+      <span
+        className="mx_RoomLiveShareWarning_expiry"
+        data-test-id="room-live-share-expiry"
+      >
+        12h left
+      </span>
+    </LiveTimeRemaining>
     <AccessibleButton
       data-test-id="room-live-share-stop-sharing"
       disabled={false}
