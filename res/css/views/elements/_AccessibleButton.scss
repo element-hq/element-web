@@ -17,20 +17,20 @@ limitations under the License.
 .mx_AccessibleButton {
     cursor: pointer;
 
-    .mx_AccessibleButton_disabled {
+    &.mx_AccessibleButton_disabled {
         cursor: default;
 
-        .mx_AccessibleButton_kind_primary,
-        .mx_AccessibleButton_kind_primary_outline,
-        .mx_AccessibleButton_kind_primary_sm,
-        .mx_AccessibleButton_kind_link,
-        .mx_AccessibleButton_kind_link_inline,
-        .mx_AccessibleButton_kind_link_sm {
+        &.mx_AccessibleButton_kind_primary,
+        &.mx_AccessibleButton_kind_primary_outline,
+        &.mx_AccessibleButton_kind_primary_sm,
+        &.mx_AccessibleButton_kind_link,
+        &.mx_AccessibleButton_kind_link_inline,
+        &.mx_AccessibleButton_kind_link_sm {
             opacity: 0.4;
         }
     }
 
-    .mx_AccessibleButton_hasKind {
+    &.mx_AccessibleButton_hasKind {
         padding: 7px 18px;
         text-align: center;
         border-radius: 8px;
@@ -40,27 +40,27 @@ limitations under the License.
         font-size: $font-14px;
         border: none; // override default <button /> styles
 
-        .mx_AccessibleButton_kind_primary_sm,
-        .mx_AccessibleButton_kind_danger_sm,
-        .mx_AccessibleButton_kind_link_sm {
+        &.mx_AccessibleButton_kind_primary_sm,
+        &.mx_AccessibleButton_kind_danger_sm,
+        &.mx_AccessibleButton_kind_link_sm {
             padding: 5px 12px;
         }
 
-        .mx_AccessibleButton_kind_primary_sm {
+        &.mx_AccessibleButton_kind_primary_sm {
             color: $button-primary-fg-color;
             background-color: $accent;
         }
 
-        .mx_AccessibleButton_kind_danger_sm {
+        &.mx_AccessibleButton_kind_danger_sm {
             color: $button-danger-fg-color;
             background-color: $alert;
         }
 
-        .mx_AccessibleButton_kind_link_sm {
+        &.mx_AccessibleButton_kind_link_sm {
             color: $accent;
         }
 
-        .mx_AccessibleButton_kind_confirm_sm {
+        &.mx_AccessibleButton_kind_confirm_sm {
             background-color: $accent;
 
             &::before {
@@ -68,7 +68,7 @@ limitations under the License.
             }
         }
 
-        .mx_AccessibleButton_kind_cancel_sm {
+        &.mx_AccessibleButton_kind_cancel_sm {
             background-color: $alert;
 
             &::before {
@@ -77,32 +77,32 @@ limitations under the License.
         }
     }
 
-    .mx_AccessibleButton_kind_primary,
-    .mx_AccessibleButton_kind_primary_outline,
-    .mx_AccessibleButton_kind_secondary {
+    &.mx_AccessibleButton_kind_primary,
+    &.mx_AccessibleButton_kind_primary_outline,
+    &.mx_AccessibleButton_kind_secondary {
         font-weight: 600;
     }
 
-    .mx_AccessibleButton_kind_primary,
-    .mx_AccessibleButton_kind_primary_outline {
+    &.mx_AccessibleButton_kind_primary,
+    &.mx_AccessibleButton_kind_primary_outline {
         border: 1px solid $accent;
     }
 
-    .mx_AccessibleButton_kind_primary {
+    &.mx_AccessibleButton_kind_primary {
         color: $button-primary-fg-color;
         background-color: $accent;
     }
 
-    .mx_AccessibleButton_kind_primary_outline {
+    &.mx_AccessibleButton_kind_primary_outline {
         color: $accent;
         background-color: $button-secondary-bg-color;
     }
 
-    .mx_AccessibleButton_kind_secondary {
+    &.mx_AccessibleButton_kind_secondary {
         color: $accent;
     }
 
-    .mx_AccessibleButton_kind_danger {
+    &.mx_AccessibleButton_kind_danger {
         color: $button-danger-fg-color;
         background-color: $alert;
 
@@ -110,58 +110,58 @@ limitations under the License.
             color: $button-danger-disabled-fg-color;
             background-color: $button-danger-disabled-bg-color;
         }
+    }
 
-        .mx_AccessibleButton_kind_danger_outline {
-            color: $alert;
-            background-color: transparent;
-            border: 1px solid $alert;
+    &.mx_AccessibleButton_kind_danger_outline {
+        color: $alert;
+        background-color: transparent;
+        border: 1px solid $alert;
 
-            &.mx_AccessibleButton_disabled {
-                color: $button-danger-disabled-bg-color;
-                border-color: $button-danger-disabled-bg-color;
-            }
+        &.mx_AccessibleButton_disabled {
+            color: $button-danger-disabled-bg-color;
+            border-color: $button-danger-disabled-bg-color;
         }
+    }
 
-        .mx_AccessibleButton_kind_danger_sm {
-            &.mx_AccessibleButton_disabled {
-                color: $button-danger-disabled-fg-color;
-                background-color: $button-danger-disabled-bg-color;
-            }
+    &.mx_AccessibleButton_kind_danger_sm {
+        &.mx_AccessibleButton_disabled {
+            color: $button-danger-disabled-fg-color;
+            background-color: $button-danger-disabled-bg-color;
         }
+    }
 
-        .mx_AccessibleButton_kind_link {
-            color: $accent;
-            padding: 0;
-        }
+    &.mx_AccessibleButton_kind_link {
+        color: $accent;
+        padding: 0;
+    }
 
-        .mx_AccessibleButton_kind_link_inline {
-            color: $accent;
-            font-size: inherit;
-            padding: 0 2px;
-        }
+    &.mx_AccessibleButton_kind_link_inline {
+        color: $accent;
+        font-size: inherit;
+        padding: 0 2px;
+    }
 
-        .mx_AccessibleButton_kind_confirm_sm,
-        .mx_AccessibleButton_kind_cancel_sm {
-            padding: 0px;
-            width: 16px;
-            height: 16px;
-            border-radius: 100%;
-            position: relative;
+    &.mx_AccessibleButton_kind_confirm_sm,
+    &.mx_AccessibleButton_kind_cancel_sm {
+        padding: 0px;
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        position: relative;
+        display: block;
+
+        &::before {
+            content: "";
             display: block;
-
-            &::before {
-                content: "";
-                display: block;
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background-color: #ffffff;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: 80%;
-            }
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #ffffff;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: 80%;
         }
     }
 }
