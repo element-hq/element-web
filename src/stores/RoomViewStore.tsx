@@ -69,8 +69,6 @@ const INITIAL_STATE = {
     // Any error that has occurred during loading
     roomLoadError: null,
 
-    quotingEvent: null,
-
     replyingToEvent: null,
 
     shouldPeek: false,
@@ -261,8 +259,6 @@ class RoomViewStore extends Store<ActionPayload> {
                 joining: payload.joining || false,
                 // Reset replyingToEvent because we don't want cross-room because bad UX
                 replyingToEvent: null,
-                // pull the user out of Room Settings
-                isEditingSettings: false,
                 viaServers: payload.via_servers,
                 wasContextSwitch: payload.context_switch,
             };
@@ -270,6 +266,9 @@ class RoomViewStore extends Store<ActionPayload> {
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
             if (payload.replyingToEvent?.getRoomId() === payload.room_id) {
                 newState.replyingToEvent = payload.replyingToEvent;
+            } else if (this.state.roomId === payload.room_id) {
+                // if the room isn't being changed, e.g visiting a permalink then maintain replyingToEvent
+                newState.replyingToEvent = this.state.replyingToEvent;
             }
 
             this.setState(newState);
