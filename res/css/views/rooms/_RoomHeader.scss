@@ -84,27 +84,6 @@ limitations under the License.
     align-items: center;
 }
 
-.mx_RoomHeader_simpleHeader {
-    line-height: $font-52px;
-    color: $primary-content;
-    font-size: $font-18px;
-    font-weight: $font-semi-bold;
-    overflow: hidden;
-    margin-left: 63px;
-    text-overflow: ellipsis;
-    width: 100%;
-
-    .mx_RoomHeader_cancelButton {
-        float: right;
-    }
-
-    .mx_RoomHeader_icon {
-        margin-left: 14px;
-        margin-right: 24px;
-        vertical-align: -4px;
-    }
-}
-
 .mx_RoomHeader_name {
     flex: 0 1 auto;
     overflow: hidden;
