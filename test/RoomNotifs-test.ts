@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { mocked } from 'jest-mock';
 import { ConditionKind, PushRuleActionName, TweakName } from "matrix-js-sdk/src/@types/PushRules";
 
 import { stubClient } from "./test-utils";
@@ -26,7 +27,7 @@ describe("RoomNotifs test", () => {
     });
 
     it("getRoomNotifsState handles rules with no conditions", () => {
-        MatrixClientPeg.get().pushRules = {
+        mocked(MatrixClientPeg.get()).pushRules = {
             global: {
                 override: [{
                     rule_id: "!roomId:server",
@@ -40,7 +41,7 @@ describe("RoomNotifs test", () => {
     });
 
     it("getRoomNotifsState handles guest users", () => {
-        MatrixClientPeg.get().isGuest.mockReturnValue(true);
+        mocked(MatrixClientPeg.get()).isGuest.mockReturnValue(true);
         expect(getRoomNotifsState("!roomId:server")).toBe(RoomNotifState.AllMessages);
     });
 

@@ -35,10 +35,9 @@ import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import DocumentOffset from '../../../../src/editor/offset';
 import { Layout } from '../../../../src/settings/enums/Layout';
-import PlatformPeg from "../../../../src/PlatformPeg";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
-import BasePlatform from "../../../../src/BasePlatform";
+import { mockPlatformPeg } from "../../../test-utils/platform";
 
 const WrapWithProviders: React.FC<{
     roomContext: IRoomState;
@@ -271,8 +270,7 @@ describe('<SendMessageComposer/>', () => {
         });
 
         it("persists to session history upon sending", async () => {
-            jest.spyOn(PlatformPeg, 'get').mockReturnValue(
-                { overrideBrowserShortcuts: () => false } as unknown as BasePlatform);
+            mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
 
             const wrapper = getComponent({ replyToEvent: mockEvent });
 

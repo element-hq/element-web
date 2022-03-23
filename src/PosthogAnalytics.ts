@@ -41,7 +41,7 @@ import { ScreenName } from "./PosthogTrackers";
  * - If both flags are false or not set, events are not sent.
  */
 
-interface IEvent {
+export interface IPosthogEvent {
     // The event name that will be used by PostHog. Event names should use camelCase.
     eventName: string;
 
@@ -272,7 +272,7 @@ export class PosthogAnalytics {
         this.setAnonymity(Anonymity.Disabled);
     }
 
-    public trackEvent<E extends IEvent>({ eventName, ...properties }: E): void {
+    public trackEvent<E extends IPosthogEvent>({ eventName, ...properties }: E): void {
         if (this.anonymity == Anonymity.Disabled || this.anonymity == Anonymity.Anonymous) return;
         this.capture(eventName, properties);
     }

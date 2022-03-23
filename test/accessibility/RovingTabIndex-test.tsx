@@ -108,7 +108,10 @@ describe("RovingTabIndex", () => {
                 { button2 }
                 <RovingTabIndexWrapper>
                     { ({ onFocus, isActive, ref }) =>
-                        <button onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref}>.</button>
+                        <button
+                            onFocus={onFocus}
+                            tabIndex={isActive ? 0 : -1}
+                            ref={ref as React.RefObject<HTMLButtonElement>}>.</button>
                     }
                 </RovingTabIndexWrapper>
             </React.Fragment> }

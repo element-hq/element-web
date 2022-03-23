@@ -22,14 +22,8 @@
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx",
-    "./test/test-utils/**/*.ts",
-    "./test/test-utils/**/*.tsx",
-    "./test/utils/**/*.ts",
-    "./test/utils/**/*.tsx",
-    "./test/stores/**/*.ts",
-    "./test/stores/**/*.tsx",
-    "./test/components/**/*.tsx",
-    "./test/components/**/*.ts",
+    "./test/**/*.ts",
+    "./test/**/*.tsx",
   ],
   "exclude": [
     "./test/end-to-end-tests/"
