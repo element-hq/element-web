@@ -51,15 +51,15 @@ export class PlaybackQueue {
     constructor(private room: Room) {
         this.loadClocks();
 
-        RoomViewStore.instance.addListener(() => {
-            if (RoomViewStore.instance.getRoomId() === this.room.roomId) {
-                // Reset the state of the playbacks before they start mounting and enqueuing updates.
-                // We reset the entirety of the queue, including order, to ensure the user isn't left
-                // confused with what order the messages are playing in.
-                this.currentPlaybackId = null; // this in particular stops autoplay when the room is switched to
-                this.recentFullPlays = new Set<string>();
-                this.playbackIdOrder = [];
-            }
+        RoomViewStore.instance.addRoomListener(this.room.roomId, (isActive) => {
+            if (!isActive) return;
+
+            // Reset the state of the playbacks before they start mounting and enqueuing updates.
+            // We reset the entirety of the queue, including order, to ensure the user isn't left
+            // confused with what order the messages are playing in.
+            this.currentPlaybackId = null; // this in particular stops autoplay when the room is switched to
+            this.recentFullPlays = new Set<string>();
+            this.playbackIdOrder = [];
         });
     }
 
