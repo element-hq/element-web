@@ -20,15 +20,13 @@ limitations under the License.
     .mx_AccessibleButton_disabled {
         cursor: default;
 
-        &.mx_AccessibleButton_kind {
-            .mx_AccessibleButton_kind_primary,
-            .mx_AccessibleButton_kind_primary_outline,
-            .mx_AccessibleButton_kind_primary_sm,
-            .mx_AccessibleButton_kind_link,
-            .mx_AccessibleButton_kind_link_inline,
-            .mx_AccessibleButton_kind_link_sm {
-                opacity: 0.4;
-            }
+        .mx_AccessibleButton_kind_primary,
+        .mx_AccessibleButton_kind_primary_outline,
+        .mx_AccessibleButton_kind_primary_sm,
+        .mx_AccessibleButton_kind_link,
+        .mx_AccessibleButton_kind_link_inline,
+        .mx_AccessibleButton_kind_link_sm {
+            opacity: 0.4;
         }
     }
 
@@ -42,108 +40,104 @@ limitations under the License.
         font-size: $font-14px;
         border: none; // override default <button /> styles
 
-        &.mx_AccessibleButton_kind {
-            .mx_AccessibleButton_kind_primary_sm,
-            .mx_AccessibleButton_kind_danger_sm,
-            .mx_AccessibleButton_kind_link_sm {
-                padding: 5px 12px;
-            }
-
-            .mx_AccessibleButton_kind_primary_sm {
-                color: $button-primary-fg-color;
-                background-color: $accent;
-            }
-
-            .mx_AccessibleButton_kind_danger_sm {
-                color: $button-danger-fg-color;
-                background-color: $alert;
-            }
-
-            .mx_AccessibleButton_kind_link_sm {
-                color: $accent;
-            }
-
-            .mx_AccessibleButton_kind_confirm_sm {
-                background-color: $accent;
-
-                &::before {
-                    mask-image: url('$(res)/img/feather-customised/check.svg');
-                }
-            }
-
-            .mx_AccessibleButton_kind_cancel_sm {
-                background-color: $alert;
-
-                &::before {
-                    mask-image: url('$(res)/img/feather-customised/x.svg');
-                }
-            }
-        }
-    }
-
-    .mx_AccessibleButton_kind {
-        .mx_AccessibleButton_kind_primary,
-        .mx_AccessibleButton_kind_primary_outline,
-        .mx_AccessibleButton_kind_secondary {
-            font-weight: 600;
+        .mx_AccessibleButton_kind_primary_sm,
+        .mx_AccessibleButton_kind_danger_sm,
+        .mx_AccessibleButton_kind_link_sm {
+            padding: 5px 12px;
         }
 
-        .mx_AccessibleButton_kind_primary,
-        .mx_AccessibleButton_kind_primary_outline {
-            border: 1px solid $accent;
-        }
-
-        .mx_AccessibleButton_kind_primary {
+        .mx_AccessibleButton_kind_primary_sm {
             color: $button-primary-fg-color;
             background-color: $accent;
         }
 
-        .mx_AccessibleButton_kind_primary_outline {
-            color: $accent;
-            background-color: $button-secondary-bg-color;
-        }
-
-        .mx_AccessibleButton_kind_secondary {
-            color: $accent;
-        }
-
-        .mx_AccessibleButton_kind_danger {
+        .mx_AccessibleButton_kind_danger_sm {
             color: $button-danger-fg-color;
             background-color: $alert;
+        }
 
+        .mx_AccessibleButton_kind_link_sm {
+            color: $accent;
+        }
+
+        .mx_AccessibleButton_kind_confirm_sm {
+            background-color: $accent;
+
+            &::before {
+                mask-image: url('$(res)/img/feather-customised/check.svg');
+            }
+        }
+
+        .mx_AccessibleButton_kind_cancel_sm {
+            background-color: $alert;
+
+            &::before {
+                mask-image: url('$(res)/img/feather-customised/x.svg');
+            }
+        }
+    }
+
+    .mx_AccessibleButton_kind_primary,
+    .mx_AccessibleButton_kind_primary_outline,
+    .mx_AccessibleButton_kind_secondary {
+        font-weight: 600;
+    }
+
+    .mx_AccessibleButton_kind_primary,
+    .mx_AccessibleButton_kind_primary_outline {
+        border: 1px solid $accent;
+    }
+
+    .mx_AccessibleButton_kind_primary {
+        color: $button-primary-fg-color;
+        background-color: $accent;
+    }
+
+    .mx_AccessibleButton_kind_primary_outline {
+        color: $accent;
+        background-color: $button-secondary-bg-color;
+    }
+
+    .mx_AccessibleButton_kind_secondary {
+        color: $accent;
+    }
+
+    .mx_AccessibleButton_kind_danger {
+        color: $button-danger-fg-color;
+        background-color: $alert;
+
+        &.mx_AccessibleButton_disabled {
+            color: $button-danger-disabled-fg-color;
+            background-color: $button-danger-disabled-bg-color;
+        }
+
+        .mx_AccessibleButton_kind_danger_outline {
+            color: $alert;
+            background-color: transparent;
+            border: 1px solid $alert;
+
+            &.mx_AccessibleButton_disabled {
+                color: $button-danger-disabled-bg-color;
+                border-color: $button-danger-disabled-bg-color;
+            }
+        }
+
+        .mx_AccessibleButton_kind_danger_sm {
             &.mx_AccessibleButton_disabled {
                 color: $button-danger-disabled-fg-color;
                 background-color: $button-danger-disabled-bg-color;
-            }
-
-            .mx_AccessibleButton_kind_danger_outline {
-                color: $alert;
-                background-color: transparent;
-                border: 1px solid $alert;
-
-                &.mx_AccessibleButton_disabled {
-                    color: $button-danger-disabled-bg-color;
-                    border-color: $button-danger-disabled-bg-color;
-                }
-            }
-
-            .mx_AccessibleButton_kind_danger_sm {
-                &.mx_AccessibleButton_disabled {
-                    color: $button-danger-disabled-fg-color;
-                    background-color: $button-danger-disabled-bg-color;
-                }
             }
         }
 
         .mx_AccessibleButton_kind_link {
             color: $accent;
             padding: 0;
+        }
 
-            .mx_AccessibleButton_kind_link_inline {
-                color: $accent;
-                font-size: inherit;
-                padding: 0 2px;
-            }
+        .mx_AccessibleButton_kind_link_inline {
+            color: $accent;
+            font-size: inherit;
+            padding: 0 2px;
         }
 
         .mx_AccessibleButton_kind_confirm_sm,
