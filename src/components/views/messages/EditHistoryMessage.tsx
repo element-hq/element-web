@@ -30,6 +30,7 @@ import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 import ConfirmAndWaitRedactDialog from "../dialogs/ConfirmAndWaitRedactDialog";
 import ViewSource from "../../structures/ViewSource";
+import SettingsStore from "../../../settings/SettingsStore";
 
 function getReplacedContent(event) {
     const originalContent = event.getOriginalContent();
@@ -112,7 +113,7 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
 
     private renderActionBar(): JSX.Element {
         // hide the button when already redacted
-        let redactButton;
+        let redactButton: JSX.Element;
         if (!this.props.mxEvent.isRedacted() && !this.props.isBaseEvent && this.state.canRedact) {
             redactButton = (
                 <AccessibleButton onClick={this.onRedactClick}>
@@ -120,11 +121,16 @@ export default class EditHistoryMessage extends React.PureComponent<IProps, ISta
                 </AccessibleButton>
             );
         }
-        const viewSourceButton = (
-            <AccessibleButton onClick={this.onViewSourceClick}>
-                { _t("View Source") }
-            </AccessibleButton>
-        );
+
+        let viewSourceButton: JSX.Element;
+        if (SettingsStore.getValue("developerMode")) {
+            viewSourceButton = (
+                <AccessibleButton onClick={this.onViewSourceClick}>
+                    { _t("View Source") }
+                </AccessibleButton>
+            );
+        }
+
         // disabled remove button when not allowed
         return (
             <div className="mx_MessageActionBar">

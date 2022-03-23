@@ -48,6 +48,8 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import SettingsStore from "../../../settings/SettingsStore";
+import DevtoolsDialog from "../dialogs/DevtoolsDialog";
 
 interface IProps extends IContextMenuProps {
     room: Room;
@@ -352,6 +354,20 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                 label={_t("Export chat")}
                 iconClassName="mx_RoomTile_iconExport"
             />
+
+            { SettingsStore.getValue("developerMode") && <IconizedContextMenuOption
+                onClick={(ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+
+                    Modal.createDialog(DevtoolsDialog, {
+                        roomId: RoomViewStore.getRoomId(),
+                    }, "mx_DevtoolsDialog_wrapper");
+                    onFinished();
+                }}
+                label={_t("Developer tools")}
+                iconClassName="mx_RoomTile_iconDeveloperTools"
+            /> }
 
             { leaveOption }
         </IconizedContextMenuOptionList>

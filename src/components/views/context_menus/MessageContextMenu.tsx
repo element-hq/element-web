@@ -359,13 +359,16 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             }
         }
 
-        const viewSourceButton = (
-            <IconizedContextMenuOption
-                iconClassName="mx_MessageContextMenu_iconSource"
-                label={_t("View source")}
-                onClick={this.onViewSourceClick}
-            />
-        );
+        let viewSourceButton: JSX.Element;
+        if (SettingsStore.getValue("developerMode")) {
+            viewSourceButton = (
+                <IconizedContextMenuOption
+                    iconClassName="mx_MessageContextMenu_iconSource"
+                    label={_t("View source")}
+                    onClick={this.onViewSourceClick}
+                />
+            );
+        }
 
         if (this.props.eventTileOps) {
             if (this.props.eventTileOps.isWidgetHidden()) {

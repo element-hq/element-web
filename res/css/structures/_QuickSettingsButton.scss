@@ -66,8 +66,9 @@ limitations under the License.
         margin: 0 0 16px;
     }
 
-    .mx_AccessibleButton_kind_primary_outline {
+    .mx_AccessibleButton_hasKind {
         display: block;
+        margin-top: 4px;
     }
 
     > div > h4 {

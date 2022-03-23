@@ -110,19 +110,6 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                 />,
             );
 
-            groups.getOrCreate(LabGroup.Developer, []).push(
-                <SettingsFlag
-                    key="developerMode"
-                    name="developerMode"
-                    level={SettingLevel.ACCOUNT}
-                />,
-                <SettingsFlag
-                    key="showHiddenEventsInTimeline"
-                    name="showHiddenEventsInTimeline"
-                    level={SettingLevel.DEVICE}
-                />,
-            );
-
             groups.getOrCreate(LabGroup.Analytics, []).push(
                 <SettingsFlag
                     key="automaticErrorReporting"

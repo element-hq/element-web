@@ -736,11 +736,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Prompt before sending invites to potentially invalid matrix IDs'),
         default: true,
     },
-    "showDeveloperTools": {
-        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: _td('Show developer tools'),
-        default: false,
-    },
     "widgetOpenIDPermissions": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
         default: {

@@ -21,7 +21,6 @@ import { _t } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import RoomUpgradeDialog from "../../../dialogs/RoomUpgradeDialog";
-import DevtoolsDialog from "../../../dialogs/DevtoolsDialog";
 import Modal from "../../../../../Modal";
 import dis from "../../../../../dispatcher/dispatcher";
 import { Action } from '../../../../../dispatcher/actions';
@@ -81,10 +80,6 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
     private upgradeRoom = (e) => {
         const room = MatrixClientPeg.get().getRoom(this.props.roomId);
         Modal.createTrackedDialog('Upgrade Room Version', '', RoomUpgradeDialog, { room });
-    };
-
-    private openDevtools = (e) => {
-        Modal.createDialog(DevtoolsDialog, { roomId: this.props.roomId });
     };
 
     private onOldRoomClicked = (e) => {
@@ -168,12 +163,6 @@ export default class AdvancedRoomSettingsTab extends React.Component<IProps, ISt
                     </div>
                     { oldRoomLink }
                     { roomUpgradeButton }
-                </div>
-                <div className='mx_SettingsTab_section mx_SettingsTab_subsectionText'>
-                    <span className='mx_SettingsTab_subheading'>{ _t("Developer options") }</span>
-                    <AccessibleButton onClick={this.openDevtools} kind='primary'>
-                        { _t("Open Devtools") }
-                    </AccessibleButton>
                 </div>
             </div>
         );
