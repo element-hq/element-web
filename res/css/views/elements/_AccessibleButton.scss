@@ -17,22 +17,22 @@ limitations under the License.
 .mx_AccessibleButton {
     cursor: pointer;
 
-    &_disabled {
+    .mx_AccessibleButton_disabled {
         cursor: default;
 
         &.mx_AccessibleButton_kind {
-            &_primary,
-            &_primary_outline,
-            &_primary_sm,
-            &_link,
-            &_link_inline,
-            &_link_sm {
+            .mx_AccessibleButton_kind_primary,
+            .mx_AccessibleButton_kind_primary_outline,
+            .mx_AccessibleButton_kind_primary_sm,
+            .mx_AccessibleButton_kind_link,
+            .mx_AccessibleButton_kind_link_inline,
+            .mx_AccessibleButton_kind_link_sm {
                 opacity: 0.4;
             }
         }
     }
 
-    &_hasKind {
+    .mx_AccessibleButton_hasKind {
         padding: 7px 18px;
         text-align: center;
         border-radius: 8px;
@@ -43,27 +43,27 @@ limitations under the License.
         border: none; // override default <button /> styles
 
         &.mx_AccessibleButton_kind {
-            &_primary_sm,
-            &_danger_sm,
-            &_link_sm {
+            .mx_AccessibleButton_kind_primary_sm,
+            .mx_AccessibleButton_kind_danger_sm,
+            .mx_AccessibleButton_kind_link_sm {
                 padding: 5px 12px;
             }
 
-            &_primary_sm {
+            .mx_AccessibleButton_kind_primary_sm {
                 color: $button-primary-fg-color;
                 background-color: $accent;
             }
 
-            &_danger_sm {
+            .mx_AccessibleButton_kind_danger_sm {
                 color: $button-danger-fg-color;
                 background-color: $alert;
             }
 
-            &_link_sm {
+            .mx_AccessibleButton_kind_link_sm {
                 color: $accent;
             }
 
-            &_confirm_sm {
+            .mx_AccessibleButton_kind_confirm_sm {
                 background-color: $accent;
 
                 &::before {
@@ -71,7 +71,7 @@ limitations under the License.
                 }
             }
 
-            &_cancel_sm {
+            .mx_AccessibleButton_kind_cancel_sm {
                 background-color: $alert;
 
                 &::before {
@@ -81,33 +81,33 @@ limitations under the License.
         }
     }
 
-    &_kind {
-        &_primary,
-        &_primary_outline,
-        &_secondary {
+    .mx_AccessibleButton_kind {
+        .mx_AccessibleButton_kind_primary,
+        .mx_AccessibleButton_kind_primary_outline,
+        .mx_AccessibleButton_kind_secondary {
             font-weight: 600;
         }
 
-        &_primary,
-        &_primary_outline {
+        .mx_AccessibleButton_kind_primary,
+        .mx_AccessibleButton_kind_primary_outline {
             border: 1px solid $accent;
         }
 
-        &_primary {
+        .mx_AccessibleButton_kind_primary {
             color: $button-primary-fg-color;
             background-color: $accent;
         }
 
-        &_primary_outline {
+        .mx_AccessibleButton_kind_primary_outline {
             color: $accent;
             background-color: $button-secondary-bg-color;
         }
 
-        &_secondary {
+        .mx_AccessibleButton_kind_secondary {
             color: $accent;
         }
 
-        &_danger {
+        .mx_AccessibleButton_kind_danger {
             color: $button-danger-fg-color;
             background-color: $alert;
 
@@ -116,7 +116,7 @@ limitations under the License.
                 background-color: $button-danger-disabled-bg-color;
             }
 
-            &_outline {
+            .mx_AccessibleButton_kind_danger_outline {
                 color: $alert;
                 background-color: transparent;
                 border: 1px solid $alert;
@@ -127,7 +127,7 @@ limitations under the License.
                 }
             }
 
-            &_sm {
+            .mx_AccessibleButton_kind_danger_sm {
                 &.mx_AccessibleButton_disabled {
                     color: $button-danger-disabled-fg-color;
                     background-color: $button-danger-disabled-bg-color;
@@ -135,19 +135,19 @@ limitations under the License.
             }
         }
 
-        &_link {
+        .mx_AccessibleButton_kind_link {
             color: $accent;
             padding: 0;
 
-            &_inline {
+            .mx_AccessibleButton_kind_link_inline {
                 color: $accent;
                 font-size: inherit;
                 padding: 0 2px;
             }
         }
 
-        &_confirm_sm,
-        &_cancel_sm {
+        .mx_AccessibleButton_kind_confirm_sm,
+        .mx_AccessibleButton_kind_cancel_sm {
             padding: 0px;
             width: 16px;
             height: 16px;
