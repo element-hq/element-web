@@ -17,6 +17,7 @@ limitations under the License.
 import { _t } from "../languageHandler";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
+import SdkConfig from "../SdkConfig";
 
 const onAccept = () => {
     window.location.href = "mobile_guide/";
@@ -32,6 +33,7 @@ const TOAST_KEY = "mobileguide";
 export const showToast = () => {
     const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isAndroid = /Android/.test(navigator.userAgent);
+    const brand = SdkConfig.get().brand;
     if (!isIos && !isAndroid) {
         return;
     }
@@ -43,8 +45,8 @@ export const showToast = () => {
         title: _t("Use app for a better experience"),
         props: {
             description: _t(
-                "Element Web is experimental on mobile. " +
-                "For a better experience and the latest features, use our free native app.",
+                "%(brand)s is experimental on a mobile web browser. " +
+                "For a better experience and the latest features, use our free native app.", { brand },
             ),
             acceptLabel: _t("Use app"),
             onAccept,

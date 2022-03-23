@@ -36,6 +36,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import { MapError } from './MapError';
 import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from './LiveDurationDropdown';
+import SdkConfig from '../../../SdkConfig';
 export interface ILocationPickerProps {
     sender: RoomMember;
     shareType: LocationShareType;
@@ -329,10 +330,11 @@ export function getGeoUri(position: IPosition): string {
 export default LocationPicker;
 
 function positionFailureMessage(code: number): string {
+    const brand = SdkConfig.get().brand;
     switch (code) {
         case 1: return _t(
-            "Element was denied permission to fetch your location. " +
-            "Please allow location access in your browser settings.",
+            "%(brand)s was denied permission to fetch your location. " +
+            "Please allow location access in your browser settings.", { brand },
         );
         case 2: return _t(
             "Failed to fetch your location. Please try again later.",

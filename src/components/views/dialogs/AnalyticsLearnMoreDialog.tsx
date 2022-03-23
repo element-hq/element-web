@@ -73,9 +73,9 @@ const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
         <div className="mx_Dialog_content">
             <div className="mx_AnalyticsLearnMore_image_holder" />
             <div className="mx_AnalyticsLearnMore_copy">
-                { _t("Help us identify issues and improve Element by sharing anonymous usage data. " +
+                { _t("Help us identify issues and improve %(analyticsOwner)s by sharing anonymous usage data. " +
                     "To understand how people use multiple devices, we'll generate a random identifier, " +
-                    "shared by your devices.",
+                    "shared by your devices.", { analyticsOwner },
                 ) }
             </div>
             <ul className="mx_AnalyticsLearnMore_bullets">
