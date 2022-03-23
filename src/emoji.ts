@@ -18,7 +18,7 @@ import EMOJIBASE from 'emojibase-data/en/compact.json';
 import SHORTCODES from 'emojibase-data/en/shortcodes/iamcal.json';
 
 export interface IEmoji {
-    annotation: string;
+    label: string;
     group?: number;
     hexcode: string;
     order?: number;
@@ -26,7 +26,7 @@ export interface IEmoji {
     tags?: string[];
     unicode: string;
     skins?: Omit<IEmoji, "shortcodes" | "tags">[]; // Currently unused
-    emoticon?: string;
+    emoticon?: string | string[];
 }
 
 // The unicode is stored without the variant selector
@@ -74,7 +74,7 @@ export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcode
     // If there's ever a gap in shortcode coverage, we fudge it by
     // filling it in with the emoji's CLDR annotation
     const shortcodeData = SHORTCODES[emojiData.hexcode] ??
-        [emojiData.annotation.toLowerCase().replace(/\W+/g, "_")];
+        [emojiData.label.toLowerCase().replace(/\W+/g, "_")];
 
     const emoji: IEmoji = {
         ...emojiData,
@@ -102,7 +102,9 @@ export const EMOJI: IEmoji[] = EMOJIBASE.map((emojiData: Omit<IEmoji, "shortcode
 
     if (emoji.emoticon) {
         // Add mapping from emoticon to Emoji object
-        EMOTICON_TO_EMOJI.set(emoji.emoticon, emoji);
+        Array.isArray(emoji.emoticon)
+            ? emoji.emoticon.forEach((x) => EMOTICON_TO_EMOJI.set(x, emoji))
+            : EMOTICON_TO_EMOJI.set(emoji.emoticon, emoji);
     }
 
     return emoji;

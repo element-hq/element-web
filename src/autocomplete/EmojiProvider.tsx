@@ -75,7 +75,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             shouldMatchWordsOnly: false,
         });
         this.nameMatcher = new QueryMatcher(SORTED_EMOJI, {
-            keys: ['emoji.annotation'],
+            keys: ['emoji.label'],
             // For removing punctuation
             shouldMatchWordsOnly: true,
         });

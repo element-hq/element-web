@@ -196,8 +196,11 @@ class EmojiPicker extends React.Component<IProps, IState> {
     };
 
     private emojiMatchesFilter = (emoji: IEmoji, filter: string): boolean => {
-        return emoji.annotation.toLowerCase().includes(filter) ||
-            emoji.emoticon?.toLowerCase().includes(filter) ||
+        return emoji.label.toLowerCase().includes(filter) ||
+            (Array.isArray(emoji.emoticon)
+                ? emoji.emoticon.some((x) => x.includes(filter))
+                : emoji.emoticon?.includes(filter)
+            ) ||
             emoji.shortcodes.some(x => x.toLowerCase().includes(filter)) ||
             emoji.unicode.split(ZERO_WIDTH_JOINER).includes(filter);
     };
