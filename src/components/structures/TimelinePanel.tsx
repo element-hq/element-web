@@ -40,7 +40,6 @@ import dis from "../../dispatcher/dispatcher";
 import { Action } from '../../dispatcher/actions';
 import Timer from '../../utils/Timer';
 import shouldHideEvent from '../../shouldHideEvent';
-import { haveTileForEvent } from "../views/rooms/EventTile";
 import { arrayFastClone } from "../../utils/arrays";
 import MessagePanel from "./MessagePanel";
 import { IScrollState } from "./ScrollPanel";
@@ -54,6 +53,7 @@ import CallEventGrouper, { buildCallEventGroupers } from "./CallEventGrouper";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
+import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 const PAGINATE_SIZE = 20;
 const INITIAL_SIZE = 20;
@@ -1473,7 +1473,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
             const shouldIgnore = !!ev.status || // local echo
                 (ignoreOwn && ev.getSender() === myUserId); // own message
-            const isWithoutTile = !haveTileForEvent(ev, this.context?.showHiddenEventsInTimeline) ||
+            const isWithoutTile = !haveRendererForEvent(ev, this.context?.showHiddenEventsInTimeline) ||
                 shouldHideEvent(ev, this.context);
 
             if (isWithoutTile || !node) {

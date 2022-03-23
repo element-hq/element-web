@@ -18,8 +18,3 @@ limitations under the License.
 // Import the js-sdk so the proper `request` object can be set. This does some
 // magic with the browser injection to make all subsequent imports work fine.
 import "matrix-js-sdk/src/browser-index";
-
-export function getComponent(componentName: string): any {
-    // return Skinner.getComponent(componentName);
-}
-

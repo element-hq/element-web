@@ -41,10 +41,10 @@ import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 
 // onMessageAllowed is handled internally
-interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
+interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
     /* overrides for the msgtype-specific components, used by ReplyTile to override file rendering */
-    overrideBodyTypes?: Record<string, React.Component>;
-    overrideEventTypes?: Record<string, React.Component>;
+    overrideBodyTypes?: Record<string, typeof React.Component>;
+    overrideEventTypes?: Record<string, typeof React.Component>;
 
     // helper function to access relations for this event
     getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;

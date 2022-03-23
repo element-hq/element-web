@@ -31,7 +31,7 @@ import SettingsStore from '../../settings/SettingsStore';
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import { Layout } from "../../settings/enums/Layout";
 import { _t } from "../../languageHandler";
-import EventTile, { UnwrappedEventTile, haveTileForEvent, IReadReceiptProps } from "../views/rooms/EventTile";
+import EventTile, { UnwrappedEventTile, IReadReceiptProps } from "../views/rooms/EventTile";
 import { hasText } from "../../TextForEvent";
 import IRCTimelineProfileResizer from "../views/elements/IRCTimelineProfileResizer";
 import DMRoomMap from "../../utils/DMRoomMap";
@@ -52,6 +52,7 @@ import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from '../../dispatcher/actions';
 import { getEventDisplayInfo } from "../../utils/EventUtils";
 import { IReadReceiptInfo } from "../views/rooms/ReadReceiptMarker";
+import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -95,7 +96,7 @@ export function shouldFormContinuation(
         timelineRenderingType !== TimelineRenderingType.Thread) return false;
 
     // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
-    if (!haveTileForEvent(prevEvent, showHiddenEvents)) return false;
+    if (!haveRendererForEvent(prevEvent, showHiddenEvents)) return false;
 
     return true;
 }
@@ -488,7 +489,7 @@ export default class MessagePanel extends React.Component<IProps, IState> {
             return true;
         }
 
-        if (!haveTileForEvent(mxEv, this.showHiddenEvents)) {
+        if (!haveRendererForEvent(mxEv, this.showHiddenEvents)) {
             return false; // no tile = no show
         }
 

@@ -20,7 +20,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
-import { haveTileForEvent } from "./components/views/rooms/EventTile";
+import { haveRendererForEvent } from "./events/EventTileFactory";
 
 /**
  * Returns true if this event arriving in a room should affect the room's
@@ -46,7 +46,7 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
     }
 
     if (ev.isRedacted()) return false;
-    return haveTileForEvent(ev);
+    return haveRendererForEvent(ev);
 }
 
 export function doesRoomHaveUnreadMessages(room: Room): boolean {
