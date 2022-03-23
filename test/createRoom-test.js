@@ -1,4 +1,3 @@
-import './skinned-sdk'; // Must be first for skinning to work
 import { EventEmitter } from 'events';
 
 import { waitForMember, canEncryptToAllUsers } from '../src/createRoom';

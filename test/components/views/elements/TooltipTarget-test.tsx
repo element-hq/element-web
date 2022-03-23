@@ -1,5 +1,3 @@
-// skinned-sdk should be the first import in most tests
-import '../../../skinned-sdk';
 import React from "react";
 import {
     renderIntoDocument,

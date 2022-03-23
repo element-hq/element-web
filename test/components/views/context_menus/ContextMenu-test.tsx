@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { mount } from "enzyme";
 
-import "../../../skinned-sdk";
 import ContextMenu, { ChevronFace } from "../../../../src/components/structures/ContextMenu";
 import UIStore from "../../../../src/stores/UIStore";
 

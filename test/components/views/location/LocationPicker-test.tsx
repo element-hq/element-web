@@ -23,7 +23,6 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { mocked } from 'jest-mock';
 import { logger } from 'matrix-js-sdk/src/logger';
 
-import "../../../skinned-sdk"; // Must be first for skinning to work
 import LocationPicker from "../../../../src/components/views/location/LocationPicker";
 import { LocationShareType } from "../../../../src/components/views/location/shareLocation";
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';

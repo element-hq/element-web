@@ -17,7 +17,6 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEventEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import "../../skinned-sdk";
 import { stubClient } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { RoomNotificationState } from "../../../src/stores/notifications/RoomNotificationState";

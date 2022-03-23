@@ -23,7 +23,6 @@ import {
 } from 'react-dom/test-utils';
 import { Room, RoomMember, MatrixError, IContent } from 'matrix-js-sdk/src/matrix';
 
-import "../../../skinned-sdk";
 import { stubClient } from '../../../test-utils';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import DMRoomMap from '../../../../src/utils/DMRoomMap';

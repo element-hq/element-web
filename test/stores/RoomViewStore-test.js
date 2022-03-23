@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import '../skinned-sdk'; // Must be first for skinning to work
 import RoomViewStore from '../../src/stores/RoomViewStore';
 import { Action } from '../../src/dispatcher/actions';
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';

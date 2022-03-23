@@ -1,5 +1,3 @@
-import './skinned-sdk';
-
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import TestRenderer from 'react-test-renderer';
 

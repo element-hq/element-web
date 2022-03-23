@@ -16,7 +16,6 @@ limitations under the License.
 
 import { ClientWidgetApi, MatrixWidgetType } from "matrix-widget-api";
 
-import "../skinned-sdk";
 import { stubClient } from "../test-utils";
 import WidgetStore from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";

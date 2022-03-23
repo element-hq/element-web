@@ -21,7 +21,6 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { PendingEventOrdering } from 'matrix-js-sdk/src/matrix';
 import { ExtensibleEvent, MessageEvent, M_POLL_KIND_DISCLOSED, PollStartEvent } from 'matrix-events-sdk';
 
-import '../../../skinned-sdk';
 import * as TestUtils from '../../../test-utils';
 import MessageContextMenu from '../../../../src/components/views/context_menus/MessageContextMenu';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';

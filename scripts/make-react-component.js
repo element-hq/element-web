@@ -6,7 +6,7 @@ const path = require('path');
  * Unsophisticated script to create a styled, unit-tested react component.
  * -filePath / -f : path to the component to be created, including new component name, excluding extension, relative to src
  * -withStyle / -s : optional, flag to create a style file for the component. Defaults to false.
- * 
+ *
  * eg:
  * ```
  * node srcipts/make-react-component.js -f components/toasts/NewToast -s
@@ -15,7 +15,7 @@ const path = require('path');
  * - src/components/toasts/NewToast.tsx
  * - test/components/toasts/NewToast-test.tsx
  * - res/css/components/toasts/_NewToast.scss
- * 
+ *
  */
 
 const TEMPLATES = {
@@ -34,7 +34,6 @@ export default %%ComponentName%%;
 import React from 'react';
 import { mount } from 'enzyme';
 
-import '%%SkinnedSdkPath%%';
 import %%ComponentName%% from '%%RelativeComponentPath%%';
 
 describe('<%%ComponentName%% />', () => {
@@ -85,10 +84,8 @@ const makeFile = async ({
     const relativePathToComponent = path.parse(path.relative(path.dirname(newFilePath), componentFilePath || ''));
     const importComponentPath = path.join(relativePathToComponent.dir, relativePathToComponent.name);
 
-    const skinnedSdkPath = path.relative(path.dirname(newFilePath), 'test/skinned-sdk')
-
     try {
-        await fs.writeFile(newFilePath, fillTemplate(template, componentName, importComponentPath, skinnedSdkPath), { flag: 'wx' });
+        await fs.writeFile(newFilePath, fillTemplate(template, componentName, importComponentPath), { flag: 'wx' });
         console.log(`Created ${path.relative(process.cwd(), newFilePath)}`);
         return newFilePath;
     } catch (error) {
@@ -104,7 +101,6 @@ const makeFile = async ({
 const fillTemplate = (template, componentName, relativeComponentFilePath, skinnedSdkPath) =>
     template.replace(/%%ComponentName%%/g, componentName)
         .replace(/%%RelativeComponentPath%%/g, relativeComponentFilePath)
-        .replace(/%%SkinnedSdkPath%%/g, skinnedSdkPath)
 
 
 const makeReactComponent = async () => {

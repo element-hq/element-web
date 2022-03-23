@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// skinned-sdk should be the first import in most tests
-import '../../../skinned-sdk';
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
 import { Room } from "matrix-js-sdk/src/models/room";

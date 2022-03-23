@@ -20,7 +20,6 @@ import { sleep } from "matrix-js-sdk/src/utils";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { mount } from 'enzyme';
 
-import '../../../skinned-sdk'; // Must be first for skinning to work
 import SendMessageComposer, {
     createMessageContent,
     isQuickReaction,
