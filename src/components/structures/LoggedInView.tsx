@@ -529,11 +529,11 @@ class LoggedInView extends React.Component<IProps, IState> {
                     unread: true,
                 });
                 break;
-            case KeyBindingAction.PreviousVisitedRoomOrCommunity:
+            case KeyBindingAction.PreviousVisitedRoomOrSpace:
                 PlatformPeg.get().navigateForwardBack(true);
                 handled = true;
                 break;
-            case KeyBindingAction.NextVisitedRoomOrCommunity:
+            case KeyBindingAction.NextVisitedRoomOrSpace:
                 PlatformPeg.get().navigateForwardBack(false);
                 handled = true;
                 break;

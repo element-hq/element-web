@@ -126,9 +126,9 @@ export enum KeyBindingAction {
     /** Opens user settings */
     OpenUserSettings = "KeyBinding.openUserSettings",
     /** Navigates backward */
-    PreviousVisitedRoomOrCommunity = "KeyBinding.previousVisitedRoomOrCommunity",
+    PreviousVisitedRoomOrSpace = "KeyBinding.PreviousVisitedRoomOrSpace",
     /** Navigates forward */
-    NextVisitedRoomOrCommunity = "KeyBinding.nextVisitedRoomOrCommunity",
+    NextVisitedRoomOrSpace = "KeyBinding.NextVisitedRoomOrSpace",
 
     /** Toggles microphone while on a call */
     ToggleMicInCall = "KeyBinding.toggleMicInCall",
@@ -286,8 +286,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
             KeyBindingAction.SelectPrevRoom,
             KeyBindingAction.OpenUserSettings,
             KeyBindingAction.SwitchToSpaceByNumber,
-            KeyBindingAction.PreviousVisitedRoomOrCommunity,
-            KeyBindingAction.NextVisitedRoomOrCommunity,
+            KeyBindingAction.PreviousVisitedRoomOrSpace,
+            KeyBindingAction.NextVisitedRoomOrSpace,
         ],
     }, [CategoryName.AUTOCOMPLETE]: {
         categoryLabel: _td("Autocomplete"),
@@ -309,8 +309,8 @@ export const CATEGORIES: Record<CategoryName, ICategory> = {
 export const DESKTOP_SHORTCUTS = [
     KeyBindingAction.OpenUserSettings,
     KeyBindingAction.SwitchToSpaceByNumber,
-    KeyBindingAction.PreviousVisitedRoomOrCommunity,
-    KeyBindingAction.NextVisitedRoomOrCommunity,
+    KeyBindingAction.PreviousVisitedRoomOrSpace,
+    KeyBindingAction.NextVisitedRoomOrSpace,
 ];
 
 export const MAC_ONLY_SHORTCUTS = [
@@ -627,21 +627,21 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
         },
         displayName: _td("Redo edit"),
     },
-    [KeyBindingAction.PreviousVisitedRoomOrCommunity]: {
+    [KeyBindingAction.PreviousVisitedRoomOrSpace]: {
         default: {
             metaKey: isMac,
             altKey: !isMac,
             key: isMac ? Key.SQUARE_BRACKET_LEFT : Key.ARROW_LEFT,
         },
-        displayName: _td("Previous recently visited room or community"),
+        displayName: _td("Previous recently visited room or space"),
     },
-    [KeyBindingAction.NextVisitedRoomOrCommunity]: {
+    [KeyBindingAction.NextVisitedRoomOrSpace]: {
         default: {
             metaKey: isMac,
             altKey: !isMac,
             key: isMac ? Key.SQUARE_BRACKET_RIGHT : Key.ARROW_RIGHT,
         },
-        displayName: _td("Next recently visited room or community"),
+        displayName: _td("Next recently visited room or space"),
     },
     [KeyBindingAction.SwitchToSpaceByNumber]: {
         default: {
