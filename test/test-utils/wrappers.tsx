@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { RefCallback } from "react";
+import React, { RefCallback, ComponentType } from "react";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import MatrixClientContext from "../../src/contexts/MatrixClientContext";
 
-type WrapperType<T> = React.Component<{ wrappedRef?: RefCallback<T> }>;
+type WrapperProps<T> = { wrappedRef?: RefCallback<ComponentType<T>> } & T;
 
-export function wrapInMatrixClientContext<T>(WrappedComponent): WrapperType<T> {
-    class Wrapper extends React.Component<{ wrappedRef?: RefCallback<T> }> {
+export function wrapInMatrixClientContext<T>(WrappedComponent: ComponentType<T>): ComponentType<WrapperProps<T>> {
+    class Wrapper extends React.Component<WrapperProps<T>> {
         _matrixClient: MatrixClient;
         constructor(props) {
             super(props);
@@ -37,5 +37,5 @@ export function wrapInMatrixClientContext<T>(WrappedComponent): WrapperType<T> {
             </MatrixClientContext.Provider>;
         }
     }
-    return Wrapper as unknown as WrapperType<T>;
+    return Wrapper;
 }

@@ -70,7 +70,6 @@ describe('<SpaceSettingsVisibilityTab />', () => {
         const wrapper = renderIntoDocument<HTMLSpanElement>(
             // wrap in element so renderIntoDocument can render functional component
             <span>
-                { /* @ts-ignore */ }
                 <SpaceSettingsVisibilityTab {...defaultProps} {...props} />
             </span>,
         ) as HTMLSpanElement;

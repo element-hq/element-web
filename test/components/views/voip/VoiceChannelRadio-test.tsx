@@ -79,7 +79,6 @@ describe("VoiceChannelRadio", () => {
     });
 
     it("shows when connecting voice", async () => {
-        // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
         const radio = mount(<VoiceChannelRadio />);
         expect(radio.children().children().exists()).toEqual(false);
 
@@ -90,7 +89,6 @@ describe("VoiceChannelRadio", () => {
 
     it("hides when disconnecting voice", () => {
         VoiceChannelStore.instance.connect("!1:example.org");
-        // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
         const radio = mount(<VoiceChannelRadio />);
         expect(radio.children().children().exists()).toEqual(true);
 
@@ -102,7 +100,6 @@ describe("VoiceChannelRadio", () => {
     describe("disconnect button", () => {
         it("works", () => {
             VoiceChannelStore.instance.connect("!1:example.org");
-            // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
             const radio = mount(<VoiceChannelRadio />);
 
             act(() => {
@@ -115,7 +112,6 @@ describe("VoiceChannelRadio", () => {
     describe("video button", () => {
         it("works", () => {
             VoiceChannelStore.instance.connect("!1:example.org");
-            // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
             const radio = mount(<VoiceChannelRadio />);
 
             act(() => {
@@ -133,7 +129,6 @@ describe("VoiceChannelRadio", () => {
     describe("audio button", () => {
         it("works", () => {
             VoiceChannelStore.instance.connect("!1:example.org");
-            // @ts-ignore - TS doesn't like mounting this for some reason, but is fine with it elsewhere
             const radio = mount(<VoiceChannelRadio />);
 
             act(() => {
