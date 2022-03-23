@@ -24,7 +24,7 @@ import { mocked } from 'jest-mock';
 import { logger } from 'matrix-js-sdk/src/logger';
 
 import "../../../skinned-sdk"; // Must be first for skinning to work
-import LocationPicker, { getGeoUri } from "../../../../src/components/views/location/LocationPicker";
+import LocationPicker from "../../../../src/components/views/location/LocationPicker";
 import { LocationShareType } from "../../../../src/components/views/location/shareLocation";
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
@@ -40,65 +40,6 @@ jest.mock('../../../../src/components/views/location/findMapStyleUrl', () => ({
 mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
 
 describe("LocationPicker", () => {
-    describe("getGeoUri", () => {
-        it("Renders a URI with only lat and lon", () => {
-            const pos = {
-                latitude: 43.2,
-                longitude: 12.4,
-                altitude: undefined,
-                accuracy: undefined,
-
-                timestamp: 12334,
-            };
-            expect(getGeoUri(pos)).toEqual("geo:43.2,12.4");
-        });
-
-        it("Nulls in location are not shown in URI", () => {
-            const pos = {
-                latitude: 43.2,
-                longitude: 12.4,
-                altitude: null,
-                accuracy: null,
-
-                timestamp: 12334,
-            };
-            expect(getGeoUri(pos)).toEqual("geo:43.2,12.4");
-        });
-
-        it("Renders a URI with 3 coords", () => {
-            const pos = {
-                latitude: 43.2,
-                longitude: 12.4,
-                altitude: 332.54,
-                accuracy: undefined,
-                timestamp: 12334,
-            };
-            expect(getGeoUri(pos)).toEqual("geo:43.2,12.4,332.54");
-        });
-
-        it("Renders a URI with accuracy", () => {
-            const pos = {
-                latitude: 43.2,
-                longitude: 12.4,
-                altitude: undefined,
-                accuracy: 21,
-                timestamp: 12334,
-            };
-            expect(getGeoUri(pos)).toEqual("geo:43.2,12.4;u=21");
-        });
-
-        it("Renders a URI with accuracy and altitude", () => {
-            const pos = {
-                latitude: 43.2,
-                longitude: 12.4,
-                altitude: 12.3,
-                accuracy: 21,
-                timestamp: 12334,
-            };
-            expect(getGeoUri(pos)).toEqual("geo:43.2,12.4,12.3;u=21");
-        });
-    });
-
     describe('<LocationPicker />', () => {
         const roomId = '!room:server.org';
         const userId = '@user:server.org';

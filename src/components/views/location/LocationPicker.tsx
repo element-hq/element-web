@@ -36,6 +36,7 @@ import AccessibleButton from '../elements/AccessibleButton';
 import { MapError } from './MapError';
 import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from './LiveDurationDropdown';
+import { GenericPosition, genericPositionFromGeolocation, getGeoUri } from '../../../utils/beacon';
 import SdkConfig from '../../../SdkConfig';
 export interface ILocationPickerProps {
     sender: RoomMember;
@@ -44,16 +45,9 @@ export interface ILocationPickerProps {
     onFinished(ev?: SyntheticEvent): void;
 }
 
-interface IPosition {
-    latitude: number;
-    longitude: number;
-    altitude?: number;
-    accuracy?: number;
-    timestamp: number;
-}
 interface IState {
     timeout: number;
-    position?: IPosition;
+    position?: GenericPosition;
     error?: LocationShareError;
 }
 
@@ -299,32 +293,6 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             </div>
         );
     }
-}
-
-const genericPositionFromGeolocation = (geoPosition: GeolocationPosition): IPosition => {
-    const {
-        latitude, longitude, altitude, accuracy,
-    } = geoPosition.coords;
-    return {
-        timestamp: geoPosition.timestamp,
-        latitude, longitude, altitude, accuracy,
-    };
-};
-
-export function getGeoUri(position: IPosition): string {
-    const lat = position.latitude;
-    const lon = position.longitude;
-    const alt = (
-        Number.isFinite(position.altitude)
-            ? `,${position.altitude}`
-            : ""
-    );
-    const acc = (
-        Number.isFinite(position.accuracy)
-            ? `;u=${position.accuracy}`
-            : ""
-    );
-    return `geo:${lat},${lon}${alt}${acc}`;
 }
 
 export default LocationPicker;
