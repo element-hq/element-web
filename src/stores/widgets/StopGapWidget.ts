@@ -241,7 +241,7 @@ export class StopGapWidget extends EventEmitter {
     private onOpenModal = async (ev: CustomEvent<IModalWidgetOpenRequest>) => {
         ev.preventDefault();
         if (ModalWidgetStore.instance.canOpenModalWidget()) {
-            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget);
+            ModalWidgetStore.instance.openModalWidget(ev.detail.data, this.mockWidget, this.roomId);
             this.messaging.transport.reply(ev.detail, {}); // ack
         } else {
             this.messaging.transport.reply(ev.detail, {
