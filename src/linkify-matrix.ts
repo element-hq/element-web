@@ -156,21 +156,21 @@ export const options = {
                 // intercept local permalinks to users and show them like userids (in userinfo of current room)
                 try {
                     const permalink = parsePermalink(href);
-                    if (permalink && permalink.userId) {
+                    if (permalink?.userId) {
                         return {
                             // @ts-ignore see https://linkify.js.org/docs/options.html
-                            click: function(e) {
+                            click: function(e: MouseEvent) {
                                 onUserClick(e, permalink.userId);
                             },
                         };
                     } else {
-                        // for events, rooms etc. (anything other then users)
+                        // for events, rooms etc. (anything other than users)
                         const localHref = tryTransformPermalinkToLocalHref(href);
                         if (localHref !== href) {
                             // it could be converted to a localHref -> therefore handle locally
                             return {
                             // @ts-ignore see https://linkify.js.org/docs/options.html
-                                click: function(e) {
+                                click: function(e: MouseEvent) {
                                     e.preventDefault();
                                     window.location.hash = localHref;
                                 },
@@ -185,7 +185,7 @@ export const options = {
             case Type.UserId:
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
-                    click: function(e) {
+                    click: function(e: MouseEvent) {
                         const userId = parsePermalink(href).userId;
                         onUserClick(e, userId);
                     },
@@ -193,7 +193,7 @@ export const options = {
             case Type.RoomAlias:
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
-                    click: function(e) {
+                    click: function(e: MouseEvent) {
                         const alias = parsePermalink(href).roomIdOrAlias;
                         onAliasClick(e, alias);
                     },
@@ -202,7 +202,7 @@ export const options = {
             case Type.GroupId:
                 return {
                     // @ts-ignore see https://linkify.js.org/docs/options.html
-                    click: function(e) {
+                    click: function(e: MouseEvent) {
                         const groupId = parsePermalink(href).groupId;
                         onGroupClick(e, groupId);
                     },

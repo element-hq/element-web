@@ -182,7 +182,11 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
             ) {
                 delete attribs.target;
             }
+        } else {
+            // Delete the href attrib if it is falsey
+            delete attribs.href;
         }
+
         attribs.rel = 'noreferrer noopener'; // https://mathiasbynens.github.io/rel-noopener/
         return { tagName, attribs };
     },
