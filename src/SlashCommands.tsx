@@ -46,7 +46,7 @@ import BugReportDialog from "./components/views/dialogs/BugReportDialog";
 import { ensureDMExists } from "./createRoom";
 import { ViewUserPayload } from "./dispatcher/payloads/ViewUserPayload";
 import { Action } from "./dispatcher/actions";
-import { EffectiveMembership, getEffectiveMembership, leaveRoomBehaviour } from "./utils/membership";
+import { EffectiveMembership, getEffectiveMembership } from "./utils/membership";
 import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
 import { UIComponent, UIFeature } from "./settings/UIFeature";
@@ -66,6 +66,7 @@ import { XOR } from "./@types/common";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import VoipUserMapper from './VoipUserMapper';
+import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {

@@ -24,13 +24,13 @@ import SpaceContextMenu from '../../../../src/components/views/context_menus/Spa
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import { findByTestId } from '../../../test-utils';
 import {
-    leaveSpace,
     shouldShowSpaceSettings,
     showCreateNewRoom,
     showCreateNewSubspace,
     showSpaceInvite,
     showSpaceSettings,
 } from '../../../../src/utils/space';
+import { leaveSpace } from "../../../../src/utils/leave-behaviour";
 import { shouldShowComponent } from '../../../../src/customisations/helpers/UIComponents';
 import { UIComponent } from '../../../../src/settings/UIFeature';
 
@@ -39,13 +39,16 @@ jest.mock('../../../../src/customisations/helpers/UIComponents', () => ({
 }));
 
 jest.mock('../../../../src/utils/space', () => ({
-    leaveSpace: jest.fn(),
     shouldShowSpaceSettings: jest.fn(),
     showCreateNewRoom: jest.fn(),
     showCreateNewSubspace: jest.fn(),
     showSpaceInvite: jest.fn(),
     showSpacePreferences: jest.fn(),
     showSpaceSettings: jest.fn(),
+}));
+
+jest.mock('../../../../src/utils/leave-behaviour', () => ({
+    leaveSpace: jest.fn(),
 }));
 
 describe('<SpaceContextMenu />', () => {

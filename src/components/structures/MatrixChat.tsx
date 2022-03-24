@@ -83,7 +83,6 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import { leaveRoomBehaviour } from "../../utils/membership";
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
 import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
@@ -129,6 +128,7 @@ import { ViewStartChatOrReusePayload } from '../../dispatcher/payloads/ViewStart
 import { IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import InfoDialog from '../views/dialogs/InfoDialog';
+import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 
 // legacy export
 export { default as Views } from "../../Views";

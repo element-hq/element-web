@@ -32,16 +32,12 @@ import { showRoomInviteDialog } from "../RoomInvite";
 import CreateSubspaceDialog from "../components/views/dialogs/CreateSubspaceDialog";
 import AddExistingSubspaceDialog from "../components/views/dialogs/AddExistingSubspaceDialog";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import dis from "../dispatcher/dispatcher";
 import { RoomViewStore } from "../stores/RoomViewStore";
 import { Action } from "../dispatcher/actions";
-import { leaveRoomBehaviour } from "./membership";
 import Spinner from "../components/views/elements/Spinner";
-import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import SpacePreferencesDialog, { SpacePreferenceTab } from "../components/views/dialogs/SpacePreferencesDialog";
 import PosthogTrackers from "../PosthogTrackers";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
-import { AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 import { UIComponent } from "../settings/UIFeature";
 
@@ -183,21 +179,6 @@ export const bulkSpaceBehaviour = async (
     } finally {
         modal.close();
     }
-};
-
-export const leaveSpace = (space: Room) => {
-    Modal.createTrackedDialog("Leave Space", "", LeaveSpaceDialog, {
-        space,
-        onFinished: async (leave: boolean, rooms: Room[]) => {
-            if (!leave) return;
-            await bulkSpaceBehaviour(space, rooms, room => leaveRoomBehaviour(room.roomId));
-
-            dis.dispatch<AfterLeaveRoomPayload>({
-                action: Action.AfterLeaveRoom,
-                room_id: space.roomId,
-            });
-        },
-    }, "mx_LeaveSpaceDialog_wrapper");
 };
 
 export const showSpacePreferences = (space: Room, initialTabId?: SpacePreferenceTab): Promise<unknown> => {

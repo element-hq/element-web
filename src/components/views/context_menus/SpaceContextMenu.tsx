@@ -22,7 +22,6 @@ import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
 import { _t } from "../../../languageHandler";
 import {
-    leaveSpace,
     shouldShowSpaceSettings,
     showCreateNewRoom,
     showCreateNewSubspace,
@@ -30,6 +29,7 @@ import {
     showSpacePreferences,
     showSpaceSettings,
 } from "../../../utils/space";
+import { leaveSpace } from "../../../utils/leave-behaviour";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
