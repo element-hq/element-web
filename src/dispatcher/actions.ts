@@ -277,4 +277,10 @@ export enum Action {
      * Payload: OpenReportEventDialogPayload.
      */
     OpenReportEventDialog = "open_report_event_dialog",
+
+    /**
+     * Fired when the tabbed integration manager dialog needs to be opened.
+     * Payload: OpenTabbedIntegrationManagerDialogPayload
+     */
+    OpenTabbedIntegrationManagerDialog = "open_tabbed_imanager_dialog",
 }

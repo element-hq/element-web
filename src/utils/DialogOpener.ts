@@ -23,6 +23,7 @@ import ForwardDialog from "../components/views/dialogs/ForwardDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Action } from "../dispatcher/actions";
 import ReportEventDialog from "../components/views/dialogs/ReportEventDialog";
+import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIntegrationManagerDialog";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -64,6 +65,17 @@ export class DialogOpener {
                 Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
                     event: payload.event,
                 }, 'mx_Dialog_reportEvent');
+                break;
+            case Action.OpenTabbedIntegrationManagerDialog:
+                Modal.createTrackedDialog(
+                    'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
+                    {
+                        room: payload.room,
+                        screen: payload.screen,
+                        integrationId: payload.integrationId,
+                    },
+                    'mx_TabbedIntegrationManagerDialog',
+                );
                 break;
         }
     };
