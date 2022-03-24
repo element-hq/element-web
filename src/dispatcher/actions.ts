@@ -259,4 +259,10 @@ export enum Action {
      * Fired when clicking user name from group view
      */
     ViewStartChatOrReuse = "view_start_chat_or_reuse",
+
+    /**
+     * Fired when the user's active room changed, possibly from/to a non-room view.
+     * Payload: ActiveRoomChangedPayload
+     */
+    ActiveRoomChanged = "active_room_changed",
 }

@@ -24,7 +24,7 @@ import { ViewRoom as ViewRoomEvent } from "matrix-analytics-events/types/typescr
 import { JoinedRoom as JoinedRoomEvent } from "matrix-analytics-events/types/typescript/JoinedRoom";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { ClientEvent } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 
 import dis from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -46,6 +46,7 @@ import { JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayloa
 import { ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
 import RoomSettingsDialog from "../components/views/dialogs/RoomSettingsDialog";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
+import { ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -93,12 +94,21 @@ export class RoomViewStore extends Store<ActionPayload> {
     public static readonly instance = new RoomViewStore();
 
     private state = INITIAL_STATE; // initialize state
+    private forcedMatrixClient: MatrixClient;
 
     // Keep these out of state to avoid causing excessive/recursive updates
     private roomIdActivityListeners: Record<string, Listener[]> = {};
 
     public constructor() {
         super(dis);
+    }
+
+    private get matrixClient(): MatrixClient {
+        return this.forcedMatrixClient || MatrixClientPeg.get();
+    }
+
+    public useUnitTestClient(client: MatrixClient) {
+        this.forcedMatrixClient = client;
     }
 
     public addRoomListener(roomId: string, fn: Listener) {
@@ -145,6 +155,14 @@ export class RoomViewStore extends Store<ActionPayload> {
         if (lastRoomId !== this.state.roomId) {
             if (lastRoomId) this.emitForRoom(lastRoomId, false);
             if (this.state.roomId) this.emitForRoom(this.state.roomId, true);
+
+            // Fired so we can reduce dependency on event emitters to this store, which is relatively
+            // central to the application and can easily cause import cycles.
+            dis.dispatch({
+                action: Action.ActiveRoomChanged,
+                oldRoomId: lastRoomId,
+                newRoomId: this.state.roomId,
+            } as ActiveRoomChangedPayload);
         }
 
         this.__emitChange();
@@ -197,7 +215,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     this.setState({ shouldPeek: false });
                 }
 
-                const cli = MatrixClientPeg.get();
+                const cli = this.matrixClient;
 
                 const updateMetrics = () => {
                     const room = cli.getRoom(payload.roomId);
@@ -280,7 +298,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     trigger: payload.metricsTrigger,
                     viaKeyboard: payload.metricsViaKeyboard,
                     isDM: !!DMRoomMap.shared().getUserIdForRoomId(payload.room_id),
-                    isSpace: MatrixClientPeg.get().getRoom(payload.room_id)?.isSpaceRoom(),
+                    isSpace: this.matrixClient.getRoom(payload.room_id)?.isSpaceRoom(),
                     activeSpace,
                 });
             }
@@ -339,7 +357,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     wasContextSwitch: payload.context_switch,
                 });
                 try {
-                    const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
+                    const result = await this.matrixClient.getRoomIdForAlias(payload.room_alias);
                     storeRoomAliasInCache(payload.room_alias, result.room_id);
                     roomId = result.room_id;
                 } catch (err) {
@@ -376,7 +394,7 @@ export class RoomViewStore extends Store<ActionPayload> {
             joining: true,
         });
 
-        const cli = MatrixClientPeg.get();
+        const cli = this.matrixClient;
         // take a copy of roomAlias & roomId as they may change by the time the join is complete
         const { roomAlias, roomId } = this.state;
         const address = roomAlias || roomId;
@@ -408,7 +426,7 @@ export class RoomViewStore extends Store<ActionPayload> {
     }
 
     private getInvitingUserId(roomId: string): string {
-        const cli = MatrixClientPeg.get();
+        const cli = this.matrixClient;
         const room = cli.getRoom(roomId);
         if (room && room.getMyMembership() === "invite") {
             const myMember = room.getMember(cli.getUserId());
@@ -433,7 +451,7 @@ export class RoomViewStore extends Store<ActionPayload> {
             // only provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
-                if (invitingUserId.endsWith(`:${MatrixClientPeg.get().getDomain()}`)) {
+                if (invitingUserId.endsWith(`:${this.matrixClient.getDomain()}`)) {
                     msg = _t("The person who invited you already left the room.");
                 } else {
                     msg = _t("The person who invited you already left the room, or their server is offline.");
