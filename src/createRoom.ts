@@ -39,7 +39,7 @@ import DMRoomMap from "./utils/DMRoomMap";
 import { getAddressType } from "./UserAddress";
 import { getE2EEWellKnown } from "./utils/WellKnownUtils";
 import { isJoinedOrNearlyJoined } from "./utils/membership";
-import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
+import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
 import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { VOICE_CHANNEL_MEMBER, addVoiceChannel } from "./utils/VoiceChannelUtils";
