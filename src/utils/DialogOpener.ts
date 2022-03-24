@@ -24,6 +24,8 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Action } from "../dispatcher/actions";
 import ReportEventDialog from "../components/views/dialogs/ReportEventDialog";
 import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIntegrationManagerDialog";
+import SpacePreferencesDialog from "../components/views/dialogs/SpacePreferencesDialog";
+import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -76,6 +78,18 @@ export class DialogOpener {
                     },
                     'mx_TabbedIntegrationManagerDialog',
                 );
+                break;
+            case Action.OpenSpacePreferences:
+                Modal.createTrackedDialog("Space preferences", "", SpacePreferencesDialog, {
+                    initialTabId: payload.initalTabId,
+                    space: payload.space,
+                }, null, false, true);
+                break;
+            case Action.OpenSpaceSettings:
+                Modal.createTrackedDialog("Space Settings", "", SpaceSettingsDialog, {
+                    matrixClient: payload.space.client,
+                    space: payload.space,
+                }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
                 break;
         }
     };

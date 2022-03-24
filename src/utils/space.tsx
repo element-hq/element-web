@@ -21,7 +21,6 @@ import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { calculateRoomVia } from "./permalinks/Permalinks";
 import Modal from "../Modal";
-import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
 import CreateRoomDialog from "../components/views/dialogs/CreateRoomDialog";
 import createRoom, { IOpts } from "../createRoom";
@@ -35,11 +34,13 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { RoomViewStore } from "../stores/RoomViewStore";
 import { Action } from "../dispatcher/actions";
 import Spinner from "../components/views/elements/Spinner";
-import SpacePreferencesDialog, { SpacePreferenceTab } from "../components/views/dialogs/SpacePreferencesDialog";
 import PosthogTrackers from "../PosthogTrackers";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 import { UIComponent } from "../settings/UIFeature";
+import { OpenSpacePreferencesPayload, SpacePreferenceTab } from "../dispatcher/payloads/OpenSpacePreferencesPayload";
+import { OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
+import dis from "../dispatcher/dispatcher";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
@@ -59,12 +60,12 @@ export const makeSpaceParentEvent = (room: Room, canonical = false) => ({
     state_key: room.roomId,
 });
 
-export const showSpaceSettings = (space: Room) => {
-    Modal.createTrackedDialog("Space Settings", "", SpaceSettingsDialog, {
-        matrixClient: space.client,
+export function showSpaceSettings(space: Room) {
+    dis.dispatch<OpenSpaceSettingsPayload>({
+        action: Action.OpenSpaceSettings,
         space,
-    }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
-};
+    });
+}
 
 export const showAddExistingRooms = (space: Room): void => {
     Modal.createTrackedDialog(
@@ -181,9 +182,10 @@ export const bulkSpaceBehaviour = async (
     }
 };
 
-export const showSpacePreferences = (space: Room, initialTabId?: SpacePreferenceTab): Promise<unknown> => {
-    return Modal.createTrackedDialog("Space preferences", "", SpacePreferencesDialog, {
-        initialTabId,
+export function showSpacePreferences(space: Room, initialTabId?: SpacePreferenceTab) {
+    dis.dispatch<OpenSpacePreferencesPayload>({
+        action: Action.OpenSpacePreferences,
         space,
-    }, null, false, true).finished;
-};
+        initialTabId,
+    });
+}
