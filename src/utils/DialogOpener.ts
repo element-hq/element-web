@@ -19,6 +19,9 @@ import { ActionPayload } from "../dispatcher/payloads";
 import Modal from "../Modal";
 import RoomSettingsDialog from "../components/views/dialogs/RoomSettingsDialog";
 import { RoomViewStore } from "../stores/RoomViewStore";
+import ForwardDialog from "../components/views/dialogs/ForwardDialog";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { Action } from "../dispatcher/actions";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -48,6 +51,13 @@ export class DialogOpener {
                     roomId: payload.room_id || RoomViewStore.instance.getRoomId(),
                     initialTabId: payload.initial_tab_id,
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+                break;
+            case Action.OpenForwardDialog:
+                Modal.createTrackedDialog('Forward Message', '', ForwardDialog, {
+                    matrixClient: MatrixClientPeg.get(),
+                    event: payload.event,
+                    permalinkCreator: payload.permalinkCreator,
+                });
                 break;
         }
     };

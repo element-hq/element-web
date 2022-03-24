@@ -33,7 +33,6 @@ import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
 import { ReadPinsEventId } from "../right_panel/types";
-import ForwardDialog from "../dialogs/ForwardDialog";
 import { Action } from "../../../dispatcher/actions";
 import ReportEventDialog from '../dialogs/ReportEventDialog';
 import ViewSource from '../../structures/ViewSource';
@@ -47,6 +46,7 @@ import { WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
 import EndPollDialog from '../dialogs/EndPollDialog';
 import { isPollEnded } from '../messages/MPollBody';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { createMapSiteLink } from '../../../utils/location';
 
 export function canCancel(status: EventStatus): boolean {
@@ -177,11 +177,11 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onForwardClick = (): void => {
-        Modal.createTrackedDialog('Forward Message', '', ForwardDialog, {
-            matrixClient: MatrixClientPeg.get(),
+        dis.dispatch({
+            action: Action.OpenForwardDialog,
             event: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
-        });
+        } as OpenForwardDialogPayload);
         this.closeMenu();
     };
 

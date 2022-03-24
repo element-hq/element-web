@@ -265,4 +265,10 @@ export enum Action {
      * Payload: ActiveRoomChangedPayload
      */
     ActiveRoomChanged = "active_room_changed",
+
+    /**
+     * Fired when the forward dialog needs to be opened.
+     * Payload: OpenForwardDialogPayload
+     */
+    OpenForwardDialog = "open_forward_dialog",
 }
