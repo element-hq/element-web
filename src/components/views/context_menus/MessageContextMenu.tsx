@@ -32,7 +32,7 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
-import { ReadPinsEventId } from "../right_panel/PinnedMessagesCard";
+import { ReadPinsEventId } from "../right_panel/types";
 import ForwardDialog from "../dialogs/ForwardDialog";
 import { Action } from "../../../dispatcher/actions";
 import ReportEventDialog from '../dialogs/ReportEventDialog';
