@@ -43,10 +43,10 @@ import QueryMatcher from "../../../autocomplete/QueryMatcher";
 import TruncatedList from "../elements/TruncatedList";
 import EntityTile from "../rooms/EntityTile";
 import BaseAvatar from "../avatars/BaseAvatar";
-import { roomContextDetailsText } from "../../../Rooms";
 import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { ButtonEvent } from "../elements/AccessibleButton";
+import { roomContextDetailsText } from "../../../utils/i18n-helpers";
 
 const AVATAR_SIZE = 30;
 

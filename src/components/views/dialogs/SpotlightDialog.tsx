@@ -53,7 +53,6 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { mediaFromMxc } from "../../../customisations/Media";
 import BaseAvatar from "../avatars/BaseAvatar";
 import Spinner from "../elements/Spinner";
-import { roomContextDetailsText, spaceContextDetailsText } from "../../../Rooms";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { Action } from "../../../dispatcher/actions";
 import Modal from "../../../Modal";
@@ -74,6 +73,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { getCachedRoomIDForAlias } from "../../../RoomAliasCache";
+import { roomContextDetailsText, spaceContextDetailsText } from "../../../utils/i18n-helpers";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
