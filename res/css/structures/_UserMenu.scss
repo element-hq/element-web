@@ -64,9 +64,13 @@ limitations under the License.
     }
 }
 
-.mx_UserMenu_contextMenu {
-    width: 258px;
+.mx_IconizedContextMenu {
+    &.mx_UserMenu_contextMenu {
+        width: 258px;
+    }
+}
 
+.mx_UserMenu_contextMenu {
     &.mx_IconizedContextMenu .mx_IconizedContextMenu_optionList_red {
         .mx_AccessibleButton {
             padding-top: 16px;
@@ -87,12 +91,15 @@ limitations under the License.
             flex-direction: column;
             width: calc(100% - 40px); // 40px = 32px theme button + 8px margin to theme button
 
-            * {
-                // Automatically grow all subelements to fit the container
+            .mx_UserMenu_contextMenu_displayName,
+            .mx_UserMenu_contextMenu_userId {
+                font-size: $font-15px;
+
+                // Automatically grow subelements to fit the container
                 flex: 1;
                 width: 100%;
 
-                // Ellipsize any text overflow
+                // Ellipsize text overflow
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
@@ -100,12 +107,10 @@ limitations under the License.
 
             .mx_UserMenu_contextMenu_displayName {
                 font-weight: bold;
-                font-size: $font-15px;
                 line-height: $font-20px;
             }
 
             .mx_UserMenu_contextMenu_userId {
-                font-size: $font-15px;
                 line-height: $font-24px;
             }
         }
