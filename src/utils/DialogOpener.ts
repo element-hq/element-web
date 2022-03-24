@@ -26,6 +26,7 @@ import ReportEventDialog from "../components/views/dialogs/ReportEventDialog";
 import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIntegrationManagerDialog";
 import SpacePreferencesDialog from "../components/views/dialogs/SpacePreferencesDialog";
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
+import InviteDialog from "../components/views/dialogs/InviteDialog";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -90,6 +91,15 @@ export class DialogOpener {
                     matrixClient: payload.space.client,
                     space: payload.space,
                 }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
+                break;
+            case Action.OpenInviteDialog:
+                Modal.createTrackedDialog(payload.analyticsName, '', InviteDialog, {
+                    kind: payload.kind,
+                    call: payload.call,
+                    roomId: payload.roomId,
+                }, payload.className, false, true).finished.then((results) => {
+                    payload.onFinishedCallback?.(results);
+                });
                 break;
         }
     };

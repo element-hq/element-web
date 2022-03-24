@@ -44,7 +44,6 @@ import { WidgetType } from "./widgets/WidgetType";
 import { SettingLevel } from "./settings/SettingLevel";
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import InviteDialog, { KIND_CALL_TRANSFER } from "./components/views/dialogs/InviteDialog";
 import WidgetStore from "./stores/WidgetStore";
 import { WidgetMessagingStore } from "./stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "./stores/widgets/ElementWidgetActions";
@@ -61,6 +60,8 @@ import ToastStore from './stores/ToastStore';
 import Resend from './Resend';
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { findDMForUser } from "./utils/direct-messages";
+import { KIND_CALL_TRANSFER } from "./components/views/dialogs/InviteDialogTypes";
+import { OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogPayload";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -1092,15 +1093,18 @@ export default class CallHandler extends EventEmitter {
      */
     public showTransferDialog(call: MatrixCall): void {
         call.setRemoteOnHold(true);
-        const { finished } = Modal.createTrackedDialog(
-            'Transfer Call', '', InviteDialog, { kind: KIND_CALL_TRANSFER, call },
-            /*className=*/"mx_InviteDialog_transferWrapper", /*isPriority=*/false, /*isStatic=*/true,
-        );
-        finished.then((results: boolean[]) => {
-            if (results.length === 0 || results[0] === false) {
-                call.setRemoteOnHold(false);
-            }
-        });
+        dis.dispatch({
+            action: Action.OpenInviteDialog,
+            kind: KIND_CALL_TRANSFER,
+            call,
+            analyticsName: "Transfer Call",
+            className: "mx_InviteDialog_transferWrapper",
+            onFinishedCallback: (results) => {
+                if (results.length === 0 || results[0] === false) {
+                    call.setRemoteOnHold(false);
+                }
+            },
+        } as OpenInviteDialogPayload);
     }
 
     private addCallForRoom(roomId: string, call: MatrixCall, changedRooms = false): void {

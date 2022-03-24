@@ -302,4 +302,9 @@ export enum Action {
      * Opens the settings for the given space. Used with a OpenSpaceSettingsPayload.
      */
     OpenSpaceSettings = "open_space_settings",
+
+    /**
+     * Opens the invite dialog. Used with a OpenInviteDialogPayload.
+     */
+    OpenInviteDialog = "open_invite_dialog",
 }
