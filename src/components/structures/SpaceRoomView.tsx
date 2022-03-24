@@ -801,7 +801,7 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         } else if (payload.action === "view_3pid_invite" && payload.event) {
             RightPanelStore.instance.setCard({
                 phase: RightPanelPhases.Space3pidMemberInfo,
-                state: { spaceId: this.props.space.roomId, member: payload.member },
+                state: { spaceId: this.props.space.roomId, memberInfoEvent: payload.event },
             });
         } else {
             RightPanelStore.instance.setCard({
