@@ -59,6 +59,7 @@ import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestore
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 import { setSentryUser } from "./sentry";
 import SdkConfig from "./SdkConfig";
+import { DialogOpener } from "./utils/DialogOpener";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -790,6 +791,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     TypingStore.sharedInstance().reset();
     ToastStore.sharedInstance().reset();
 
+    DialogOpener.instance.prepare();
     Notifier.start();
     UserActivity.sharedInstance().start();
     DMRoomMap.makeShared().start();

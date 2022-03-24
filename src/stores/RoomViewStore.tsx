@@ -44,7 +44,6 @@ import { JoinRoomPayload } from "../dispatcher/payloads/JoinRoomPayload";
 import { JoinRoomReadyPayload } from "../dispatcher/payloads/JoinRoomReadyPayload";
 import { JoinRoomErrorPayload } from "../dispatcher/payloads/JoinRoomErrorPayload";
 import { ViewRoomErrorPayload } from "../dispatcher/payloads/ViewRoomErrorPayload";
-import RoomSettingsDialog from "../components/views/dialogs/RoomSettingsDialog";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { ActiveRoomChangedPayload } from "../dispatcher/payloads/ActiveRoomChangedPayload";
 
@@ -269,13 +268,6 @@ export class RoomViewStore extends Store<ActionPayload> {
                     }
                 }
                 break;
-            case 'open_room_settings': {
-                Modal.createTrackedDialog('Room settings', '', RoomSettingsDialog, {
-                    roomId: payload.room_id || this.state.roomId,
-                    initialTabId: payload.initial_tab_id,
-                }, /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
-                break;
-            }
         }
     }
 
