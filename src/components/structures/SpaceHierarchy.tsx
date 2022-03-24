@@ -206,24 +206,27 @@ const Tile: React.FC<ITileProps> = ({
     }
 
     const content = <React.Fragment>
-        { avatar }
-        <div className="mx_SpaceHierarchy_roomTile_name">
-            { name }
-            { joinedSection }
-            { suggestedSection }
-        </div>
-
-        <div
-            className="mx_SpaceHierarchy_roomTile_info"
-            ref={e => e && linkifyElement(e)}
-            onClick={ev => {
-                // prevent clicks on links from bubbling up to the room tile
-                if ((ev.target as HTMLElement).tagName === "A") {
-                    ev.stopPropagation();
-                }
-            }}
-        >
-            { description }
+        <div className="mx_SpaceHierarchy_roomTile_item">
+            <div className="mx_SpaceHierarchy_roomTile_avatar">
+                { avatar }
+            </div>
+            <div className="mx_SpaceHierarchy_roomTile_name">
+                { name }
+                { joinedSection }
+                { suggestedSection }
+            </div>
+            <div
+                className="mx_SpaceHierarchy_roomTile_info"
+                ref={e => e && linkifyElement(e)}
+                onClick={ev => {
+                    // prevent clicks on links from bubbling up to the room tile
+                    if ((ev.target as HTMLElement).tagName === "A") {
+                        ev.stopPropagation();
+                    }
+                }}
+            >
+                { description }
+            </div>
         </div>
         <div className="mx_SpaceHierarchy_actions">
             { button }
