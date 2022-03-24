@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Reply getNestedReplyText Returns valid reply fallback text for m.text msgtypes 1`] = `
+Object {
+  "body": "> <@user1:server> body
+
+",
+  "html": "<mx-reply><blockquote><a href=\\"$$permalink$$\\">In reply to</a> <a href=\\"https://matrix.to/#/@user1:server\\">@user1:server</a><br>body</blockquote></mx-reply>",
+}
+`;
