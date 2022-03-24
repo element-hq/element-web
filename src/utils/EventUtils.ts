@@ -18,7 +18,6 @@ import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
-import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -29,7 +28,6 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import { launchPollEditor } from "../components/views/messages/MPollBody";
 import { Action } from "../dispatcher/actions";
-import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";
 
 /**
  * Returns whether an event should allow actions like reply, reactions, edit, etc.
@@ -194,93 +192,6 @@ export function getMessageModerationState(mxEvent: MatrixEvent, client?: MatrixC
     }
     // For everybody else, hide the message.
     return MessageModerationState.HIDDEN_TO_CURRENT_USER;
-}
-
-export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): {
-    isInfoMessage: boolean;
-    hasRenderer: boolean;
-    isBubbleMessage: boolean;
-    isLeftAlignedBubbleMessage: boolean;
-    noBubbleEvent: boolean;
-    isSeeingThroughMessageHiddenForModeration: boolean;
-} {
-    const content = mxEvent.getContent();
-    const msgtype = content.msgtype;
-    const eventType = mxEvent.getType();
-
-    let isSeeingThroughMessageHiddenForModeration = false;
-    if (SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
-        switch (getMessageModerationState(mxEvent)) {
-            case MessageModerationState.VISIBLE_FOR_ALL:
-            case MessageModerationState.HIDDEN_TO_CURRENT_USER:
-                // Nothing specific to do here
-                break;
-            case MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER:
-                // Show message with a marker.
-                isSeeingThroughMessageHiddenForModeration = true;
-                break;
-        }
-    }
-
-    // TODO: Thread a MatrixClient through to here
-    let factory = pickFactory(mxEvent, MatrixClientPeg.get());
-
-    // Info messages are basically information about commands processed on a room
-    let isBubbleMessage = (
-        eventType.startsWith("m.key.verification") ||
-        (eventType === EventType.RoomMessage && msgtype?.startsWith("m.key.verification")) ||
-        (eventType === EventType.RoomCreate) ||
-        (eventType === EventType.RoomEncryption) ||
-        (factory === JitsiEventFactory)
-    );
-    const isLeftAlignedBubbleMessage = (
-        !isBubbleMessage &&
-        eventType === EventType.CallInvite
-    );
-    let isInfoMessage = (
-        !isBubbleMessage &&
-        !isLeftAlignedBubbleMessage &&
-        eventType !== EventType.RoomMessage &&
-        eventType !== EventType.RoomMessageEncrypted &&
-        eventType !== EventType.Sticker &&
-        eventType !== EventType.RoomCreate &&
-        !M_POLL_START.matches(eventType)
-    );
-    // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
-    const noBubbleEvent = (
-        (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
-        M_POLL_START.matches(eventType) ||
-        M_LOCATION.matches(eventType) ||
-        (
-            eventType === EventType.RoomMessage &&
-            M_LOCATION.matches(msgtype)
-        )
-    );
-
-    // If we're showing hidden events in the timeline, we should use the
-    // source tile when there's no regular tile for an event and also for
-    // replace relations (which otherwise would display as a confusing
-    // duplicate of the thing they are replacing).
-    if (hideEvent || !haveRendererForEvent(mxEvent)) {
-        // forcefully ask for a factory for a hidden event (hidden event
-        // setting is checked internally)
-        // TODO: Thread a MatrixClient through to here
-        factory = pickFactory(mxEvent, MatrixClientPeg.get(), true);
-        if (factory === JSONEventFactory) {
-            isBubbleMessage = false;
-            // Reuse info message avatar and sender profile styling
-            isInfoMessage = true;
-        }
-    }
-
-    return {
-        hasRenderer: !!factory,
-        isInfoMessage,
-        isBubbleMessage,
-        isLeftAlignedBubbleMessage,
-        noBubbleEvent,
-        isSeeingThroughMessageHiddenForModeration,
-    };
 }
 
 export function isVoiceMessage(mxEvent: MatrixEvent): boolean {

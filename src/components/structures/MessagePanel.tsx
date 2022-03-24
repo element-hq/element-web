@@ -50,7 +50,7 @@ import Spinner from "../views/elements/Spinner";
 import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import { Action } from '../../dispatcher/actions';
-import { getEventDisplayInfo } from "../../utils/EventUtils";
+import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { IReadReceiptInfo } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 

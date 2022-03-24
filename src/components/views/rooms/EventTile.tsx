@@ -54,7 +54,7 @@ import TooltipButton from '../elements/TooltipButton';
 import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
-import { getEventDisplayInfo } from '../../../utils/EventUtils';
+import { getEventDisplayInfo } from '../../../utils/EventRenderingUtils';
 import SettingsStore from "../../../settings/SettingsStore";
 import { showThread } from '../../../dispatcher/dispatch-actions/threads';
 import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewStore';
