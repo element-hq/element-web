@@ -137,6 +137,23 @@ $SpaceRoomViewInnerWidth: 428px;
         }
     }
 
+    .mx_SpaceRoomView_preview,
+    .mx_SpaceRoomView_landing {
+        .mx_SpaceRoomView_info_memberCount {
+            color: inherit;
+            position: relative;
+            padding: 0 0 0 16px;
+            font-size: $font-15px;
+            display: inline; // cancel inline-flex
+
+            &::before {
+                content: "·"; // visual separator
+                position: absolute;
+                left: 6px;
+            }
+        }
+    }
+
     .mx_SpaceRoomView_preview {
         padding: 32px 24px !important; // override default padding from above
         margin: auto;
@@ -328,20 +345,6 @@ $SpaceRoomViewInnerWidth: 428px;
                 .mx_SpaceRoomView_info_private::before {
                     mask-size: 14px;
                     mask-image: url("$(res)/img/element-icons/lock.svg");
-                }
-
-                .mx_SpaceRoomView_info_memberCount {
-                    color: inherit;
-                    position: relative;
-                    padding: 0 0 0 16px;
-                    font-size: $font-15px;
-                    display: inline; // cancel inline-flex
-
-                    &::before {
-                        content: "·"; // visual separator
-                        position: absolute;
-                        left: 6px;
-                    }
                 }
             }
 
