@@ -29,7 +29,7 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import Spinner from '../elements/Spinner';
 import { Media, mediaFromContent } from "../../../customisations/Media";
-import { BLURHASH_FIELD, createThumbnail } from "../../../ContentMessages";
+import { BLURHASH_FIELD, createThumbnail } from "../../../utils/image-media";
 import { IMediaEventContent } from '../../../customisations/models/IMediaEventContent';
 import ImageView from '../elements/ImageView';
 import { IBodyProps } from "./IBodyProps";
