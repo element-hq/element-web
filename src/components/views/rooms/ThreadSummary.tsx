@@ -19,7 +19,7 @@ import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../../../languageHandler";
-import { CardContext } from "../right_panel/BaseCard";
+import { CardContext } from "../right_panel/context";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import { showThread } from "../../../dispatcher/dispatch-actions/threads";
 import PosthogTrackers from "../../../PosthogTrackers";

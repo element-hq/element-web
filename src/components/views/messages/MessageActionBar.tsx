@@ -38,7 +38,7 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';
 import ReactionPicker from "../emojipicker/ReactionPicker";
-import { CardContext } from '../right_panel/BaseCard';
+import { CardContext } from '../right_panel/context';
 import { showThread } from "../../../dispatcher/dispatch-actions/threads";
 import { shouldDisplayReply } from '../../../utils/Reply';
 import { Key } from "../../../Keyboard";

@@ -24,7 +24,7 @@ import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import BaseAvatar from "./BaseAvatar";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { CardContext } from '../right_panel/BaseCard';
+import { CardContext } from '../right_panel/context';
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import SettingsStore from "../../../settings/SettingsStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
