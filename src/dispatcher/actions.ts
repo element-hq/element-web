@@ -283,4 +283,13 @@ export enum Action {
      * Payload: OpenTabbedIntegrationManagerDialogPayload
      */
     OpenTabbedIntegrationManagerDialog = "open_tabbed_imanager_dialog",
+
+    /**
+     * Fired when something within the application has determined that a logout,
+     * or logout-like behaviour, needs to happen. Specifically meant to target
+     * storage deletion rather than calling the logout API.
+     *
+     * No payload.
+     */
+    TriggerLogout = "trigger_logout",
 }

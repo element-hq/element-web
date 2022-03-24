@@ -60,9 +60,17 @@ import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialo
 import { setSentryUser } from "./sentry";
 import SdkConfig from "./SdkConfig";
 import { DialogOpener } from "./utils/DialogOpener";
+import { Action } from "./dispatcher/actions";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
+
+dis.register((payload) => {
+    if (payload.action === Action.TriggerLogout) {
+        // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
+        onLoggedOut();
+    }
+});
 
 interface ILoadSessionOpts {
     enableGuest?: boolean;
