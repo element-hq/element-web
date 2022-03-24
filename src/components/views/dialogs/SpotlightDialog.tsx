@@ -64,7 +64,7 @@ import { SettingLevel } from "../../../settings/SettingLevel";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { BetaPill } from "../beta/BetaCard";
-import { UserTab } from "./UserSettingsDialog";
+import { UserTab } from "./UserTab";
 import BetaFeedbackDialog from "./BetaFeedbackDialog";
 import SdkConfig from "../../../SdkConfig";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";

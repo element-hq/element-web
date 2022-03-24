@@ -30,7 +30,7 @@ import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { RoomNotifState } from '../../../../../RoomNotifs';
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { UserTab } from "../../../dialogs/UserSettingsDialog";
+import { UserTab } from "../../../dialogs/UserTab";
 
 interface IProps {
     roomId: string;

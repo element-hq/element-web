@@ -28,7 +28,7 @@ import UpdateCheckButton from "../../UpdateCheckButton";
 import BugReportDialog from '../../../dialogs/BugReportDialog';
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
-import { UserTab } from "../../../dialogs/UserSettingsDialog";
+import { UserTab } from "../../../dialogs/UserTab";
 import dis from "../../../../../dispatcher/dispatcher";
 import CopyableText from "../../../elements/CopyableText";
 

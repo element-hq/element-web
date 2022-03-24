@@ -25,7 +25,7 @@ import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { _t } from "../../languageHandler";
 import { ChevronFace, ContextMenuButton } from "./ContextMenu";
-import { UserTab } from "../views/dialogs/UserSettingsDialog";
+import { UserTab } from "../views/dialogs/UserTab";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import FeedbackDialog from "../views/dialogs/FeedbackDialog";
 import Modal from "../../Modal";

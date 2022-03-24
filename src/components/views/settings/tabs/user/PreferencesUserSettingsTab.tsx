@@ -26,7 +26,7 @@ import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import AccessibleButton from "../../../elements/AccessibleButton";
 import dis from "../../../../../dispatcher/dispatcher";
-import { UserTab } from "../../../dialogs/UserSettingsDialog";
+import { UserTab } from "../../../dialogs/UserTab";
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
 

@@ -62,7 +62,7 @@ import ToastContainer from './ToastContainer';
 import UserView from "./UserView";
 import BackdropPanel from "./BackdropPanel";
 import { mediaFromMxc } from "../../customisations/Media";
-import { UserTab } from "../views/dialogs/UserSettingsDialog";
+import { UserTab } from "../views/dialogs/UserTab";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RightPanelStore from '../../stores/right-panel/RightPanelStore';
 import { TimelineRenderingType } from "../../contexts/RoomContext";

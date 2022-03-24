@@ -27,7 +27,7 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import { onMetaSpaceChangeFactory } from "../settings/tabs/user/SidebarUserSettingsTab";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "../dialogs/UserSettingsDialog";
+import { UserTab } from "../dialogs/UserTab";
 import QuickThemeSwitcher from "./QuickThemeSwitcher";
 import { Icon as PinUprightIcon } from '../../../../res/img/element-icons/room/pin-upright.svg';
 import { Icon as EllipsisIcon } from '../../../../res/img/element-icons/room/ellipsis.svg';
