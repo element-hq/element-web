@@ -271,4 +271,10 @@ export enum Action {
      * Payload: OpenForwardDialogPayload
      */
     OpenForwardDialog = "open_forward_dialog",
+
+    /**
+     * Fired when the "report event" dialog needs to be opened.
+     * Payload: OpenReportEventDialogPayload.
+     */
+    OpenReportEventDialog = "open_report_event_dialog",
 }

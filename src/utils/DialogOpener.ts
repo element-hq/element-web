@@ -22,6 +22,7 @@ import { RoomViewStore } from "../stores/RoomViewStore";
 import ForwardDialog from "../components/views/dialogs/ForwardDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Action } from "../dispatcher/actions";
+import ReportEventDialog from "../components/views/dialogs/ReportEventDialog";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -58,6 +59,11 @@ export class DialogOpener {
                     event: payload.event,
                     permalinkCreator: payload.permalinkCreator,
                 });
+                break;
+            case Action.OpenReportEventDialog:
+                Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
+                    event: payload.event,
+                }, 'mx_Dialog_reportEvent');
                 break;
         }
     };
