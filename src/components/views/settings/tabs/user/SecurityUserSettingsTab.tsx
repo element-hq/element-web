@@ -24,7 +24,6 @@ import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Analytics from "../../../../../Analytics";
 import dis from "../../../../../dispatcher/dispatcher";
-import { privateShouldBeEncrypted } from "../../../../../createRoom";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SecureBackupPanel from "../../SecureBackupPanel";
 import SettingsStore from "../../../../../settings/SettingsStore";
@@ -39,6 +38,7 @@ import EventIndexPanel from "../../EventIndexPanel";
 import InlineSpinner from "../../../elements/InlineSpinner";
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
 import { showDialog as showAnalyticsLearnMoreDialog } from "../../../dialogs/AnalyticsLearnMoreDialog";
+import { privateShouldBeEncrypted } from "../../../../../utils/rooms";
 
 interface IIgnoredUserProps {
     userId: string;

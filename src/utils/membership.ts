@@ -15,6 +15,9 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/models/room";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 /**
  * Approximation of a membership status for a given room.
@@ -74,4 +77,28 @@ export function getEffectiveMembership(membership: string): EffectiveMembership 
 export function isJoinedOrNearlyJoined(membership: string): boolean {
     const effective = getEffectiveMembership(membership);
     return effective === EffectiveMembership.Join || effective === EffectiveMembership.Invite;
+}
+
+/**
+ * Try to ensure the user is already in the megolm session before continuing
+ * NOTE: this assumes you've just created the room and there's not been an opportunity
+ * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
+ */
+export async function waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
+    const { timeout } = opts;
+    let handler;
+    return new Promise((resolve) => {
+        handler = function(_, __, member: RoomMember) { // eslint-disable-line @typescript-eslint/naming-convention
+            if (member.userId !== userId) return;
+            if (member.roomId !== roomId) return;
+            resolve(true);
+        };
+        client.on(RoomStateEvent.NewMember, handler);
+
+        /* We don't want to hang if this goes wrong, so we proceed and hope the other
+           user is already in the megolm session */
+        setTimeout(resolve, timeout, false);
+    }).finally(() => {
+        client.removeListener(RoomStateEvent.NewMember, handler);
+    });
 }

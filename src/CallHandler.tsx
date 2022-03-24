@@ -54,12 +54,13 @@ import { Action } from './dispatcher/actions';
 import VoipUserMapper from './VoipUserMapper';
 import { addManagedHybridWidget, isManagedHybridWidgetEnabled } from './widgets/ManagedHybrid';
 import SdkConfig from './SdkConfig';
-import { ensureDMExists, findDMForUser } from './createRoom';
+import { ensureDMExists } from './createRoom';
 import { Container, WidgetLayoutStore } from './stores/widgets/WidgetLayoutStore';
 import IncomingCallToast, { getIncomingCallToastKey } from './toasts/IncomingCallToast';
 import ToastStore from './stores/ToastStore';
 import Resend from './Resend';
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { findDMForUser } from "./utils/direct-messages";
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';

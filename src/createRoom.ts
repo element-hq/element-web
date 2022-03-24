@@ -17,7 +17,6 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType, RoomCreateTypeField, RoomType } from "matrix-js-sdk/src/@types/event";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
 import {
@@ -28,17 +27,13 @@ import {
     Visibility,
 } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
-import DMRoomMap from "./utils/DMRoomMap";
 import { getAddressType } from "./UserAddress";
-import { getE2EEWellKnown } from "./utils/WellKnownUtils";
-import { isJoinedOrNearlyJoined } from "./utils/membership";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
 import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
@@ -47,6 +42,9 @@ import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { findDMForUser } from "./utils/direct-messages";
+import { privateShouldBeEncrypted } from "./utils/rooms";
+import { waitForMember } from "./utils/membership";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -313,55 +311,6 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     });
 }
 
-export function findDMForUser(client: MatrixClient, userId: string): Room {
-    const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const rooms = roomIds.map(id => client.getRoom(id));
-    const suitableDMRooms = rooms.filter(r => {
-        // Validate that we are joined and the other person is also joined. We'll also make sure
-        // that the room also looks like a DM (until we have canonical DMs to tell us). For now,
-        // a DM is a room of two people that contains those two people exactly. This does mean
-        // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
-        // canonical DMs to solve.
-        if (r && r.getMyMembership() === "join") {
-            const members = r.currentState.getMembers();
-            const joinedMembers = members.filter(m => isJoinedOrNearlyJoined(m.membership));
-            const otherMember = joinedMembers.find(m => m.userId === userId);
-            return otherMember && joinedMembers.length === 2;
-        }
-        return false;
-    }).sort((r1, r2) => {
-        return r2.getLastActiveTimestamp() -
-            r1.getLastActiveTimestamp();
-    });
-    if (suitableDMRooms.length) {
-        return suitableDMRooms[0];
-    }
-}
-
-/*
- * Try to ensure the user is already in the megolm session before continuing
- * NOTE: this assumes you've just created the room and there's not been an opportunity
- * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
- */
-export async function waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
-    const { timeout } = opts;
-    let handler;
-    return new Promise((resolve) => {
-        handler = function(_, __, member: RoomMember) { // eslint-disable-line @typescript-eslint/naming-convention
-            if (member.userId !== userId) return;
-            if (member.roomId !== roomId) return;
-            resolve(true);
-        };
-        client.on(RoomStateEvent.NewMember, handler);
-
-        /* We don't want to hang if this goes wrong, so we proceed and hope the other
-           user is already in the megolm session */
-        setTimeout(resolve, timeout, false);
-    }).finally(() => {
-        client.removeListener(RoomStateEvent.NewMember, handler);
-    });
-}
-
 /*
  * Ensure that for every user in a room, there is at least one device that we
  * can encrypt to.
@@ -423,13 +372,4 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         await waitForMember(client, roomId, userId);
     }
     return roomId;
-}
-
-export function privateShouldBeEncrypted(): boolean {
-    const e2eeWellKnown = getE2EEWellKnown();
-    if (e2eeWellKnown) {
-        const defaultDisabled = e2eeWellKnown["default"] === false;
-        return !defaultDisabled;
-    }
-    return true;
 }

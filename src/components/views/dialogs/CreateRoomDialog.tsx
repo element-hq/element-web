@@ -25,7 +25,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import withValidation, { IFieldState } from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { IOpts, privateShouldBeEncrypted } from "../../../createRoom";
+import { IOpts } from "../../../createRoom";
 import Heading from "../typography/Heading";
 import Field from "../elements/Field";
 import StyledRadioGroup from "../elements/StyledRadioGroup";
@@ -37,6 +37,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import JoinRuleDropdown from "../elements/JoinRuleDropdown";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { privateShouldBeEncrypted } from "../../../utils/rooms";
 
 interface IProps {
     defaultPublic?: boolean;

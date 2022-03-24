@@ -34,11 +34,7 @@ import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import { humanizeTime } from "../../../utils/humanize";
-import createRoom, {
-    canEncryptToAllUsers,
-    findDMForUser,
-    privateShouldBeEncrypted,
-} from "../../../createRoom";
+import createRoom, { canEncryptToAllUsers } from "../../../createRoom";
 import {
     IInviteResult,
     inviteMultipleToRoom,
@@ -68,6 +64,8 @@ import { ScreenName } from '../../../PosthogTrackers';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { privateShouldBeEncrypted } from "../../../utils/rooms";
+import { findDMForUser } from "../../../utils/direct-messages";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */

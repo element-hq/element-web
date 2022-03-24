@@ -33,7 +33,7 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import createRoom, { findDMForUser, privateShouldBeEncrypted } from '../../../createRoom';
+import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -79,6 +79,8 @@ import { useUserStatusMessage } from "../../../hooks/useUserStatusMessage";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { findDMForUser } from "../../../utils/direct-messages";
+import { privateShouldBeEncrypted } from "../../../utils/rooms";
 
 export interface IDevice {
     deviceId: string;
