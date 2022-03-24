@@ -16,10 +16,11 @@ limitations under the License.
 
 import React, { useEffect, useMemo, useState } from "react";
 import classnames from "classnames";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -60,7 +61,8 @@ interface IProps extends IDialogProps {
 
 interface IEntryProps {
     room: Room;
-    event: MatrixEvent;
+    type: EventType | string;
+    content: IContent;
     matrixClient: MatrixClient;
     onFinished(success: boolean): void;
 }
@@ -72,7 +74,7 @@ enum SendState {
     Failed,
 }
 
-const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinished }) => {
+const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, onFinished }) => {
     const [sendState, setSendState] = useState<SendState>(SendState.CanSend);
 
     const jumpToRoom = (ev: ButtonEvent) => {
@@ -87,7 +89,7 @@ const Entry: React.FC<IEntryProps> = ({ room, event, matrixClient: cli, onFinish
     const send = async () => {
         setSendState(SendState.Sending);
         try {
-            await cli.sendEvent(room.roomId, event.getType(), event.getContent());
+            await cli.sendEvent(room.roomId, type, content);
             setSendState(SendState.Sent);
         } catch (e) {
             setSendState(SendState.Failed);
@@ -161,11 +163,18 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         cli.getProfileInfo(userId).then(info => setProfileInfo(info));
     }, [cli, userId]);
 
+    const {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
+        // We're taking a shallow copy here to avoid https://github.com/vector-im/element-web/issues/10924
+        ...content
+    } = event.getContent();
+
     // For the message preview we fake the sender as ourselves
     const mockEvent = new MatrixEvent({
         type: "m.room.message",
         sender: userId,
-        content: event.getContent(),
+        content,
         unsigned: {
             age: 97,
         },
@@ -258,7 +267,8 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                 <Entry
                                     key={room.roomId}
                                     room={room}
-                                    event={event}
+                                    type={event.getType()}
+                                    content={content}
                                     matrixClient={cli}
                                     onFinished={onFinished}
                                 />,
