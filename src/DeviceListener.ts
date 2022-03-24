@@ -36,9 +36,9 @@ import {
 } from "./toasts/UnverifiedSessionToast";
 import { accessSecretStorage, isSecretStorageBeingAccessed } from "./SecurityManager";
 import { isSecureBackupRequired } from './utils/WellKnownUtils';
-import { isLoggedIn } from './components/structures/MatrixChat';
 import { ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
+import { isLoggedIn } from "./utils/login";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
