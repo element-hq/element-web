@@ -226,7 +226,7 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
                 ),
             });
 
-            content= (
+            content = (
                 <video className={videoClasses} ref={this.setElementRef} />
             );
         }

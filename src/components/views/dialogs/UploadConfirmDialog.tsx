@@ -33,8 +33,8 @@ interface IProps {
 
 @replaceableComponent("views.dialogs.UploadConfirmDialog")
 export default class UploadConfirmDialog extends React.Component<IProps> {
-    private objectUrl: string;
-    private mimeType: string;
+    private readonly objectUrl: string;
+    private readonly mimeType: string;
 
     static defaultProps = {
         totalFiles: 1,
@@ -69,7 +69,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
     };
 
     render() {
-        let title;
+        let title: string;
         if (this.props.totalFiles > 1 && this.props.currentIndex !== undefined) {
             title = _t(
                 "Upload files (%(current)s of %(total)s)",
@@ -82,23 +82,23 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
             title = _t('Upload files');
         }
 
-        let preview;
-        if (this.mimeType.startsWith('image/')) {
-            preview = <div className="mx_UploadConfirmDialog_previewOuter">
-                <div className="mx_UploadConfirmDialog_previewInner">
-                    <div><img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} /></div>
-                    <div>{ this.props.file.name } ({ filesize(this.props.file.size) })</div>
-                </div>
-            </div>;
+        let preview: JSX.Element;
+        let placeholder: JSX.Element;
+        if (this.mimeType.startsWith("image/")) {
+            preview = (
+                <img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} />
+            );
+        } else if (this.mimeType.startsWith("video/")) {
+            preview = (
+                <video className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} playsInline controls={false} />
+            );
         } else {
-            preview = <div>
-                <div>
-                    <img className="mx_UploadConfirmDialog_fileIcon"
-                        src={require("../../../../res/img/feather-customised/files.svg").default}
-                    />
-                    { this.props.file.name } ({ filesize(this.props.file.size) })
-                </div>
-            </div>;
+            placeholder = (
+                <img
+                    className="mx_UploadConfirmDialog_fileIcon"
+                    src={require("../../../../res/img/feather-customised/files.svg").default}
+                />
+            );
         }
 
         let uploadAllButton;
@@ -109,14 +109,23 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
         }
 
         return (
-            <BaseDialog className='mx_UploadConfirmDialog'
+            <BaseDialog
+                className="mx_UploadConfirmDialog"
                 fixedWidth={false}
                 onFinished={this.onCancelClick}
                 title={title}
-                contentId='mx_Dialog_content'
+                contentId="mx_Dialog_content"
             >
-                <div id='mx_Dialog_content'>
-                    { preview }
+                <div id="mx_Dialog_content">
+                    <div className="mx_UploadConfirmDialog_previewOuter">
+                        <div className="mx_UploadConfirmDialog_previewInner">
+                            { preview && <div>{ preview }</div> }
+                            <div>
+                                { placeholder }
+                                { this.props.file.name } ({ filesize(this.props.file.size) })
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <DialogButtons primaryButton={_t('Upload')}
