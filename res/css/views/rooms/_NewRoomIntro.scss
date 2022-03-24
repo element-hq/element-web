@@ -29,14 +29,13 @@ limitations under the License.
 
     .mx_NewRoomIntro_buttons {
         margin-top: 28px;
+        display: flex;
+        flex-flow: wrap;
+        gap: 14px 12px;
 
         .mx_AccessibleButton {
             line-height: $font-24px;
             display: inline-block;
-
-            & + .mx_AccessibleButton {
-                margin-left: 12px;
-            }
 
             &:not(.mx_AccessibleButton_kind_primary_outline)::before {
                 content: '';
