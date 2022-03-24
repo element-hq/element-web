@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { useContext } from "react";
 import { Thread, ThreadEvent } from "matrix-js-sdk/src/models/thread";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/BaseCard";
@@ -74,12 +74,20 @@ interface IPreviewProps {
 
 export const ThreadMessagePreview = ({ thread, showDisplayname = false }: IPreviewProps) => {
     const cli = useContext(MatrixClientContext);
+
     const lastReply = useTypedEventEmitterState(thread, ThreadEvent.Update, () => thread.replyToEvent);
+    // track the replacing event id as a means to regenerate the thread message preview
+    const replacingEventId = useTypedEventEmitterState(
+        lastReply,
+        MatrixEventEvent.Replaced,
+        () => lastReply?.replacingEventId(),
+    );
+
     const preview = useAsyncMemo(async () => {
         if (!lastReply) return;
         await cli.decryptEventIfNeeded(lastReply);
         return MessagePreviewStore.instance.generatePreviewForEvent(lastReply);
-    }, [lastReply]);
+    }, [lastReply, replacingEventId]);
     if (!preview) return null;
 
     const sender = thread.roomState.getSentinelMember(lastReply.getSender());
