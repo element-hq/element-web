@@ -36,6 +36,7 @@ describe("DateSeparator", () => {
     const defaultProps = {
         ts: nowMs,
         now,
+        roomId: "!unused:example.org",
     };
     const RealDate = global.Date;
     class MockDate extends Date {

@@ -1072,6 +1072,14 @@ function newMPollBodyFromEvent(
                 }
             }
         }
+
+        // We don't use any of these props, but they're required.
+        highlightLink="unused"
+        highlights={[]}
+        mediaEventHelper={null}
+        onHeightChanged={() => {}}
+        onMessageAllowed={() => {}}
+        permalinkCreator={null}
     />, {
         wrappingComponent: MatrixClientContext.Provider,
         wrappingComponentProps: {

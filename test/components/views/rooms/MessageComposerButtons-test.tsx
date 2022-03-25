@@ -27,6 +27,18 @@ import { IRoomState } from "../../../../src/components/structures/RoomView";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import MessageComposerButtons from "../../../../src/components/views/rooms/MessageComposerButtons";
 
+// @ts-ignore - we're deliberately not implementing the whole interface here, but
+// can't use Partial<> for types because it'll annoy TS more than it helps.
+const mockProps: React.ComponentProps<typeof MessageComposerButtons> = {
+    addEmoji: () => false,
+    haveRecording: false,
+    isStickerPickerOpen: false,
+    menuPosition: null,
+    onRecordStartEndClick: () => {},
+    setStickerPickerOpen: () => {},
+    toggleButtonMenu: () => {},
+};
+
 describe("MessageComposerButtons", () => {
     it("Renders emoji and upload buttons in wide mode", () => {
         const buttons = wrapAndRender(
@@ -35,7 +47,7 @@ describe("MessageComposerButtons", () => {
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                toggleButtonMenu={() => {}}
+                {...mockProps}
             />,
             false,
         );
@@ -54,7 +66,7 @@ describe("MessageComposerButtons", () => {
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                toggleButtonMenu={() => {}}
+                {...mockProps}
             />,
             false,
         );
@@ -79,7 +91,7 @@ describe("MessageComposerButtons", () => {
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                toggleButtonMenu={() => {}}
+                {...mockProps}
             />,
             true,
         );
@@ -97,7 +109,7 @@ describe("MessageComposerButtons", () => {
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                toggleButtonMenu={() => {}}
+                {...mockProps}
             />,
             true,
         );
@@ -122,7 +134,7 @@ describe("MessageComposerButtons", () => {
                     showLocationButton={true}
                     showPollsButton={true}
                     showStickersButton={true}
-                    toggleButtonMenu={() => {}}
+                    {...mockProps}
                 />,
                 true,
             );
@@ -146,7 +158,7 @@ describe("MessageComposerButtons", () => {
                     showLocationButton={true}
                     showPollsButton={false} // !! the change from the alternate test
                     showStickersButton={true}
-                    toggleButtonMenu={() => {}}
+                    {...mockProps}
                 />,
                 true,
             );
