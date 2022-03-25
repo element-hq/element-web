@@ -35,7 +35,7 @@ import { findByTagAndTestId, flushPromises } from '../../../test-utils';
 import Modal from '../../../../src/Modal';
 import { DEFAULT_DURATION_MS } from '../../../../src/components/views/location/LiveDurationDropdown';
 
-jest.mock('../../../../src/components/views/location/findMapStyleUrl', () => ({
+jest.mock('../../../../src/utils/location/findMapStyleUrl', () => ({
     findMapStyleUrl: jest.fn().mockReturnValue('test'),
 }));
 

@@ -16,8 +16,8 @@ limitations under the License.
 
 import { logger } from "matrix-js-sdk/src/logger";
 
-import SdkConfig from "../../../SdkConfig";
-import { getTileServerWellKnown } from "../../../utils/WellKnownUtils";
+import SdkConfig from "../../SdkConfig";
+import { getTileServerWellKnown } from "../WellKnownUtils";
 import { LocationShareError } from "./LocationShareErrors";
 
 /**

@@ -21,8 +21,9 @@ import { ClientEvent, IClientWellKnown, MatrixClient } from 'matrix-js-sdk/src/c
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "../dialogs/BaseDialog";
 import { IDialogProps } from "../dialogs/IDialogProps";
-import { createMap, LocationBodyContent, locationEventGeoUri, parseGeoUri } from '../messages/MLocationBody';
+import { LocationBodyContent } from '../messages/MLocationBody';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
+import { parseGeoUri, locationEventGeoUri, createMap } from '../../../utils/location';
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;

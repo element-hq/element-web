@@ -19,7 +19,7 @@ import { mount } from 'enzyme';
 
 import '../../../skinned-sdk';
 import { MapError } from '../../../../src/components/views/location/MapError';
-import { LocationShareError } from '../../../../src/components/views/location/LocationShareErrors';
+import { LocationShareError } from '../../../../src/utils/location';
 
 describe('<MapError />', () => {
     const defaultProps = {

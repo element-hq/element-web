@@ -29,10 +29,9 @@ import { LocationShareType } from "../../../../src/components/views/location/sha
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { findById, findByTestId, mockPlatformPeg } from '../../../test-utils';
-import { findMapStyleUrl } from '../../../../src/components/views/location/findMapStyleUrl';
-import { LocationShareError } from '../../../../src/components/views/location/LocationShareErrors';
+import { findMapStyleUrl, LocationShareError } from '../../../../src/utils/location';
 
-jest.mock('../../../../src/components/views/location/findMapStyleUrl', () => ({
+jest.mock('../../../../src/utils/location/findMapStyleUrl', () => ({
     findMapStyleUrl: jest.fn().mockReturnValue('tileserver.com'),
 }));
 

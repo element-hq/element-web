@@ -18,9 +18,9 @@ import React from 'react';
 
 import { Icon as WarningBadge } from '../../../../res/img/element-icons/warning-badge.svg';
 import { _t } from '../../../languageHandler';
+import { getLocationShareErrorMessage, LocationShareError } from '../../../utils/location';
 import AccessibleButton from '../elements/AccessibleButton';
 import Heading from '../typography/Heading';
-import { getLocationShareErrorMessage, LocationShareError } from './LocationShareErrors';
 
 interface Props {
     onFinished: () => void;

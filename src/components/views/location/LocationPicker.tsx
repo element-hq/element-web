@@ -28,16 +28,16 @@ import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import Modal from '../../../Modal';
 import ErrorDialog from '../dialogs/ErrorDialog';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
-import { findMapStyleUrl } from './findMapStyleUrl';
 import { LocationShareType, ShareLocationFn } from './shareLocation';
 import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
-import { LocationShareError } from './LocationShareErrors';
 import AccessibleButton from '../elements/AccessibleButton';
 import { MapError } from './MapError';
 import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from './LiveDurationDropdown';
 import { GenericPosition, genericPositionFromGeolocation, getGeoUri } from '../../../utils/beacon';
 import SdkConfig from '../../../SdkConfig';
+import { LocationShareError, findMapStyleUrl } from '../../../utils/location';
+
 export interface ILocationPickerProps {
     sender: RoomMember;
     shareType: LocationShareType;

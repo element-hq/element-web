@@ -47,8 +47,8 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import { WidgetLayoutStore } from '../../../stores/widgets/WidgetLayoutStore';
 import EndPollDialog from '../dialogs/EndPollDialog';
 import { isPollEnded } from '../messages/MPollBody';
-import { createMapSiteLink } from "../messages/MLocationBody";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { createMapSiteLink } from '../../../utils/location';
 
 export function canCancel(status: EventStatus): boolean {
     return status === EventStatus.QUEUED || status === EventStatus.NOT_SENT || status === EventStatus.ENCRYPTING;
