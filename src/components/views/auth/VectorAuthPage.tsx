@@ -20,12 +20,10 @@ import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 import VectorAuthFooter from "./VectorAuthFooter";
 
 export default class VectorAuthPage extends React.PureComponent {
-    static replaces = 'AuthPage';
-
-    static welcomeBackgroundUrl;
+    private static welcomeBackgroundUrl;
 
     // cache the url as a static to prevent it changing without refreshing
-    static getWelcomeBackgroundUrl() {
+    private static getWelcomeBackgroundUrl() {
         if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
         const brandingConfig = SdkConfig.getObject("branding");
@@ -44,7 +42,7 @@ export default class VectorAuthPage extends React.PureComponent {
         return VectorAuthPage.welcomeBackgroundUrl;
     }
 
-    render() {
+    public render() {
         const pageStyle = {
             background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
         };

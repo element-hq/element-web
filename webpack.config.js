@@ -50,14 +50,24 @@ try {
 } catch (e) {
     // ignore - not important
 }
-const moduleReplacementPlugins = Object.entries(fileOverrides).map(([oldPath, newPath]) => {
-    return new webpack.NormalModuleReplacementPlugin(
-        // because the input is effectively defined by the person running the build, we don't
-        // need to do anything special to protect against regex overrunning, etc.
-        new RegExp(oldPath.replace(/\//g, '[\\/\\\\]').replace(/\./g, '\\.')),
-        path.resolve(__dirname, newPath),
-    );
-});
+
+function parseOverridesToReplacements(overrides) {
+    return Object.entries(overrides).map(([oldPath, newPath]) => {
+        return new webpack.NormalModuleReplacementPlugin(
+            // because the input is effectively defined by the person running the build, we don't
+            // need to do anything special to protect against regex overrunning, etc.
+            new RegExp(oldPath.replace(/\//g, '[\\/\\\\]').replace(/\./g, '\\.')),
+            path.resolve(__dirname, newPath),
+        );
+    });
+}
+
+const moduleReplacementPlugins = [
+    ...parseOverridesToReplacements(require('./components.json')),
+
+    // Allow customisations to override the default components too
+    ...parseOverridesToReplacements(fileOverrides),
+];
 
 module.exports = (env, argv) => {
     // Establish settings based on the environment and args.
