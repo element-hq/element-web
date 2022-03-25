@@ -51,7 +51,7 @@
     "lint:js": "eslint --max-warnings 0 src",
     "lint:js-fix": "eslint --fix src",
     "lint:types": "tsc --noEmit --jsx react",
-    "lint:style": "stylelint 'res/css/**/*.scss'",
+    "lint:style": "stylelint \"res/css/**/*.scss\"",
     "test": "jest"
   },
   "dependencies": {
