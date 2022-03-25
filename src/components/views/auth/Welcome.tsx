@@ -24,6 +24,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import LanguageSelector from "./LanguageSelector";
 import EmbeddedPage from "../../structures/EmbeddedPage";
+import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
 
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
@@ -54,6 +55,7 @@ export default class Welcome extends React.PureComponent<IProps> {
                         replaceMap={{
                             "$riot:ssoUrl": "#/start_sso",
                             "$riot:casUrl": "#/start_cas",
+                            "$matrixLogo": MATRIX_LOGO_HTML,
                         }}
                     />
                     <LanguageSelector />
