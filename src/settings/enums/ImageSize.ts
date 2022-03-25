@@ -52,9 +52,9 @@ export function suggestedSize(size: ImageSize, contentSize: Dimensions, maxHeigh
 
     if (constrainedSize.h * aspectRatio < constrainedSize.w) {
         // Height dictates width
-        return { w: constrainedSize.h * aspectRatio, h: constrainedSize.h };
+        return { w: Math.floor(constrainedSize.h * aspectRatio), h: constrainedSize.h };
     } else {
         // Width dictates height
-        return { w: constrainedSize.w, h: constrainedSize.w / aspectRatio };
+        return { w: constrainedSize.w, h: Math.floor(constrainedSize.w / aspectRatio) };
     }
 }
