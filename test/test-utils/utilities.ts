@@ -31,6 +31,16 @@ export const findByTagAndTestId = findByTagAndAttr('data-test-id');
 
 export const flushPromises = async () => await new Promise(resolve => setTimeout(resolve));
 
+// with jest's modern fake timers process.nextTick is also mocked,
+// flushing promises in the normal way then waits for some advancement
+// of the fake timers
+// https://gist.github.com/apieceofbart/e6dea8d884d29cf88cdb54ef14ddbcc4?permalink_comment_id=4018174#gistcomment-4018174
+export const flushPromisesWithFakeTimers = async (): Promise<void> => {
+    const promise = new Promise(resolve => process.nextTick(resolve));
+    jest.advanceTimersByTime(1);
+    await promise;
+};
+
 /**
  * Call fn before calling componentDidUpdate on a react component instance, inst.
  * @param {React.Component} inst an instance of a React component.
@@ -57,3 +67,13 @@ export function waitForUpdate(inst: React.Component, updates = 1): Promise<void>
         };
     });
 }
+
+/**
+ * Advance jests fake timers and Date.now mock by ms
+ * Useful for testing code using timeouts or intervals
+ * that also checks timestamps
+ */
+export const advanceDateAndTime = (ms: number) => {
+    jest.spyOn(global.Date, 'now').mockReturnValue(Date.now() + ms);
+    jest.advanceTimersByTime(ms);
+};

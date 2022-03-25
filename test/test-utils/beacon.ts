@@ -141,3 +141,27 @@ export const mockGeolocation = (): MockedObject<Geolocation> => {
 
     return mockGeolocation;
 };
+
+/**
+ * Creates a mock watchPosition implementation
+ * that calls success callback at the provided delays
+ * ```
+ * geolocation.watchPosition.mockImplementation([0, 1000, 5000, 50])
+ * ```
+ * will call the provided handler with a mock position at
+ * next tick, 1000ms, 6000ms, 6050ms
+ */
+export const watchPositionMockImplementation = (delays: number[]) => {
+    return (callback: PositionCallback) => {
+        const position = makeGeolocationPosition({});
+
+        let totalDelay = 0;
+        delays.map(delayMs => {
+            totalDelay += delayMs;
+            const timeout = setTimeout(() => {
+                callback({ ...position, timestamp: position.timestamp + totalDelay });
+            }, totalDelay);
+            return timeout;
+        });
+    };
+};

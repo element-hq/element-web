@@ -23,6 +23,7 @@ import {
     mapGeolocationPositionToTimedGeo,
     watchPosition,
 } from "../../../src/utils/beacon";
+import { getCurrentPosition } from "../../../src/utils/beacon/geolocation";
 import { makeGeolocationPosition, mockGeolocation } from "../../test-utils/beacon";
 
 describe('geolocation utilities', () => {
@@ -166,7 +167,7 @@ describe('geolocation utilities', () => {
 
             const [, , options] = geolocation.watchPosition.mock.calls[0];
             expect(options).toEqual({
-                maximumAge: 1000,
+                maximumAge: 2000,
                 timeout: 5000,
             });
         });
@@ -202,6 +203,38 @@ describe('geolocation utilities', () => {
             watchPosition(positionHandler, errorHandler);
 
             expect(errorHandler).toHaveBeenCalledWith(GeolocationError.PermissionDenied);
+        });
+    });
+
+    describe('getCurrentPosition()', () => {
+        it('throws with unavailable error when geolocation is not available', async () => {
+            // suppress expected errors from test log
+            jest.spyOn(logger, 'error').mockImplementation(() => { });
+
+            // remove the mock we added
+            // @ts-ignore illegal assignment to readonly property
+            navigator.geolocation = undefined;
+
+            await expect(() => getCurrentPosition()).rejects.toThrow(GeolocationError.Unavailable);
+        });
+
+        it('throws with geolocation error when geolocation.getCurrentPosition fails', async () => {
+            // suppress expected errors from test log
+            jest.spyOn(logger, 'error').mockImplementation(() => { });
+
+            const timeoutError = getMockGeolocationPositionError(3, 'message');
+            geolocation.getCurrentPosition.mockImplementation((callback, error) => error(timeoutError));
+
+            await expect(() => getCurrentPosition()).rejects.toThrow(GeolocationError.Timeout);
+        });
+
+        it('resolves with current location', async () => {
+            jest.spyOn(logger, 'error').mockImplementation(() => { });
+
+            geolocation.getCurrentPosition.mockImplementation((callback, error) => callback(defaultPosition));
+
+            const result = await getCurrentPosition();
+            expect(result).toEqual(defaultPosition);
         });
     });
 });

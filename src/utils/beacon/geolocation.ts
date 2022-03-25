@@ -33,7 +33,7 @@ export enum GeolocationError {
 
 const GeolocationOptions = {
     timeout: 5000,
-    maximumAge: 1000,
+    maximumAge: 2000,
 };
 
 const isGeolocationPositionError = (error: unknown): error is GeolocationPositionError =>
@@ -112,13 +112,31 @@ export const mapGeolocationPositionToTimedGeo = (position: GeolocationPosition):
     return { timestamp: position.timestamp, geoUri: getGeoUri(genericPositionFromGeolocation(position)) };
 };
 
+/**
+ * Gets current position, returns a promise
+ * @returns Promise<GeolocationPosition>
+ */
+export const getCurrentPosition = async (): Promise<GeolocationPosition> => {
+    try {
+        const position = await new Promise((resolve: PositionCallback, reject) => {
+            getGeolocation().getCurrentPosition(resolve, reject, GeolocationOptions);
+        });
+        return position;
+    } catch (error) {
+        throw new Error(mapGeolocationError(error));
+    }
+};
+
+export type ClearWatchCallback = () => void;
 export const watchPosition = (
     onWatchPosition: PositionCallback,
-    onWatchPositionError: (error: GeolocationError) => void): () => void => {
+    onWatchPositionError: (error: GeolocationError) => void): ClearWatchCallback => {
     try {
         const onError = (error) => onWatchPositionError(mapGeolocationError(error));
         const watchId = getGeolocation().watchPosition(onWatchPosition, onError, GeolocationOptions);
-        const clearWatch = () => getGeolocation().clearWatch(watchId);
+        const clearWatch = () => {
+            getGeolocation().clearWatch(watchId);
+        };
         return clearWatch;
     } catch (error) {
         throw new Error(mapGeolocationError(error));
