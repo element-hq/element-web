@@ -1,6 +1,7 @@
 import { TextEncoder, TextDecoder } from 'util';
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { configure } from "enzyme";
+import "blob-polyfill"; // https://github.com/jsdom/jsdom/issues/2555
 
 import * as languageHandler from "../src/languageHandler";
 import SdkConfig, { DEFAULTS } from '../src/SdkConfig';

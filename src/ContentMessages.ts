@@ -106,15 +106,17 @@ interface IThumbnail {
  * @param {HTMLElement} element The element to thumbnail.
  * @param {number} inputWidth The width of the image in the input element.
  * @param {number} inputHeight the width of the image in the input element.
- * @param {String} mimeType The mimeType to save the blob as.
+ * @param {string} mimeType The mimeType to save the blob as.
+ * @param {boolean} calculateBlurhash Whether to calculate a blurhash of the given image too.
  * @return {Promise} A promise that resolves with an object with an info key
  *  and a thumbnail key.
  */
-async function createThumbnail(
+export async function createThumbnail(
     element: ThumbnailableElement,
     inputWidth: number,
     inputHeight: number,
     mimeType: string,
+    calculateBlurhash = true,
 ): Promise<IThumbnail> {
     let targetWidth = inputWidth;
     let targetHeight = inputHeight;
@@ -152,7 +154,7 @@ async function createThumbnail(
 
     const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
     // thumbnailPromise and blurhash promise are being awaited concurrently
-    const blurhash = await BlurhashEncoder.instance.getBlurhash(imageData);
+    const blurhash = calculateBlurhash ? await BlurhashEncoder.instance.getBlurhash(imageData) : undefined;
     const thumbnail = await thumbnailPromise;
 
     return {
