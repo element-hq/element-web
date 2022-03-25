@@ -633,6 +633,12 @@ uploads_path: "{{SYNAPSE_ROOT}}uploads"
 #
 enable_registration: true
 
+# Enable registration without email or captcha verification. Note: this option is *not* recommended,
+# as registration without verification is a known vector for spam and abuse. Defaults to false. Has no effect
+# unless `enable_registration` is also enabled.
+#
+enable_registration_without_verification: true
+
 # The user must provide all of the below types of 3PID when registering.
 #
 #registrations_require_3pid:
@@ -792,13 +798,50 @@ signing_key_path: "{{SYNAPSE_ROOT}}localhost.signing.key"
 
 # The trusted servers to download signing keys from.
 #
-#perspectives:
-#  servers:
-#    "matrix.org":
-#      verify_keys:
-#        "ed25519:auto":
-#          key: "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw"
+# When we need to fetch a signing key, each server is tried in parallel.
+#
+# Normally, the connection to the key server is validated via TLS certificates.
+# Additional security can be provided by configuring a `verify key`, which
+# will make synapse check that the response is signed by that key.
+#
+# This setting supercedes an older setting named `perspectives`. The old format
+# is still supported for backwards-compatibility, but it is deprecated.
+#
+# 'trusted_key_servers' defaults to matrix.org, but using it will generate a
+# warning on start-up. To suppress this warning, set
+# 'suppress_key_server_warning' to true.
+#
+# Options for each entry in the list include:
+#
+#    server_name: the name of the server. required.
+#
+#    verify_keys: an optional map from key id to base64-encoded public key.
+#       If specified, we will check that the response is signed by at least
+#       one of the given keys.
+#
+#    accept_keys_insecurely: a boolean. Normally, if `verify_keys` is unset,
+#       and federation_verify_certificates is not `true`, synapse will refuse
+#       to start, because this would allow anyone who can spoof DNS responses
+#       to masquerade as the trusted key server. If you know what you are doing
+#       and are sure that your network environment provides a secure connection
+#       to the key server, you can set this to `true` to override this
+#       behaviour.
+#
+# An example configuration might look like:
+#
+#trusted_key_servers:
+#  - server_name: "my_trusted_server.example.com"
+#    verify_keys:
+#      "ed25519:auto": "abcdefghijklmnopqrstuvwxyzabcdefghijklmopqr"
+#  - server_name: "my_other_trusted_server.example.com"
+#
+trusted_key_servers:
+    - server_name: "matrix.org"
 
+# Uncomment the following to disable the warning that is emitted when the
+# trusted_key_servers include 'matrix.org'. See above.
+#
+suppress_key_server_warning: true
 
 # Enable SAML2 for registration and login. Uses pysaml2.
 #
