@@ -24,8 +24,7 @@ and start following these steps to get going:
    sudo dpkg -i google-chrome-stable_current_amd64.deb
    sudo apt -f install
    ```
-8. Get the IP of your host machine out of WSL: `cat /etc/resolv.conf` - use the nameserver IP.
-9. Run:
+8. Run:
    ```bash
    cd ./test/end-to-end-tests
    ./synapse/install.sh
