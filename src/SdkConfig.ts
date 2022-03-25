@@ -22,7 +22,7 @@ import { IConfigOptions, ISsoRedirectOptions } from "./IConfigOptions";
 import { KeysWithObjectShape } from "./@types/common";
 
 // see element-web config.md for docs, or the IConfigOptions interface for dev docs
-export const DEFAULTS: Partial<IConfigOptions> = {
+export const DEFAULTS: IConfigOptions = {
     brand: "Element",
     integrations_ui_url: "https://scalar.vector.im/",
     integrations_rest_url: "https://scalar.vector.im/api",
