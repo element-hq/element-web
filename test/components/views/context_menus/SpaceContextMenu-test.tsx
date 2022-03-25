@@ -19,6 +19,7 @@ import { mount } from 'enzyme';
 import { Room } from 'matrix-js-sdk/src/matrix';
 import { mocked } from 'jest-mock';
 import { act } from 'react-dom/test-utils';
+import 'focus-visible'; // to fix context menus
 
 import SpaceContextMenu from '../../../../src/components/views/context_menus/SpaceContextMenu';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';

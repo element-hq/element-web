@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { shallow, mount } from "enzyme";
+import 'focus-visible'; // to fix context menus
 
 import {
     ThreadFilterType,
