@@ -27,6 +27,10 @@ import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIn
 import SpacePreferencesDialog from "../components/views/dialogs/SpacePreferencesDialog";
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 import InviteDialog from "../components/views/dialogs/InviteDialog";
+import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
+import { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import PosthogTrackers from "../PosthogTrackers";
+import { showAddExistingSubspace, showCreateNewRoom } from "./space";
 
 /**
  * Auxiliary class to listen for dialog opening over the dispatcher and
@@ -101,6 +105,29 @@ export class DialogOpener {
                     payload.onFinishedCallback?.(results);
                 });
                 break;
+            case Action.OpenAddToExistingSpaceDialog: {
+                const space = payload.space;
+                Modal.createTrackedDialog(
+                    "Space Landing",
+                    "Add Existing",
+                    AddExistingToSpaceDialog,
+                    {
+                        onCreateRoomClick: (ev: ButtonEvent) => {
+                            showCreateNewRoom(space);
+                            PosthogTrackers.trackInteraction("WebAddExistingToSpaceDialogCreateRoomButton", ev);
+                        },
+                        onAddSubspaceClick: () => showAddExistingSubspace(space),
+                        space,
+                        onFinished: (added: boolean) => {
+                            if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
+                                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+                            }
+                        },
+                    },
+                    "mx_AddExistingToSpaceDialog_wrapper",
+                );
+                break;
+            }
         }
     };
 }

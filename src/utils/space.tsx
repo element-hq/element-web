@@ -21,7 +21,6 @@ import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { calculateRoomVia } from "./permalinks/Permalinks";
 import Modal from "../Modal";
-import AddExistingToSpaceDialog from "../components/views/dialogs/AddExistingToSpaceDialog";
 import CreateRoomDialog from "../components/views/dialogs/CreateRoomDialog";
 import createRoom, { IOpts } from "../createRoom";
 import { _t } from "../languageHandler";
@@ -34,13 +33,12 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { RoomViewStore } from "../stores/RoomViewStore";
 import { Action } from "../dispatcher/actions";
 import Spinner from "../components/views/elements/Spinner";
-import PosthogTrackers from "../PosthogTrackers";
-import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 import { UIComponent } from "../settings/UIFeature";
 import { OpenSpacePreferencesPayload, SpacePreferenceTab } from "../dispatcher/payloads/OpenSpacePreferencesPayload";
 import { OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
 import dis from "../dispatcher/dispatcher";
+import { OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/OpenAddExistingToSpaceDialogPayload";
 
 export const shouldShowSpaceSettings = (space: Room) => {
     const userId = space.client.getUserId();
@@ -68,25 +66,10 @@ export function showSpaceSettings(space: Room) {
 }
 
 export const showAddExistingRooms = (space: Room): void => {
-    Modal.createTrackedDialog(
-        "Space Landing",
-        "Add Existing",
-        AddExistingToSpaceDialog,
-        {
-            onCreateRoomClick: (ev: ButtonEvent) => {
-                showCreateNewRoom(space);
-                PosthogTrackers.trackInteraction("WebAddExistingToSpaceDialogCreateRoomButton", ev);
-            },
-            onAddSubspaceClick: () => showAddExistingSubspace(space),
-            space,
-            onFinished: (added: boolean) => {
-                if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
-                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                }
-            },
-        },
-        "mx_AddExistingToSpaceDialog_wrapper",
-    );
+    dis.dispatch({
+        action: Action.OpenAddToExistingSpaceDialog,
+        space,
+    } as OpenAddExistingToSpaceDialogPayload);
 };
 
 export const showCreateNewRoom = async (space: Room): Promise<boolean> => {

@@ -307,4 +307,9 @@ export enum Action {
      * Opens the invite dialog. Used with a OpenInviteDialogPayload.
      */
     OpenInviteDialog = "open_invite_dialog",
+
+    /**
+     * Opens a dialog to add an existing object to a space. Used with a OpenAddExistingToSpaceDialogPayload.
+     */
+    OpenAddToExistingSpaceDialog = "open_add_to_existing_space_dialog",
 }
