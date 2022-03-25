@@ -19,7 +19,6 @@ limitations under the License.
 
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
-import '../skin-sdk';
 import "../jest-mocks";
 import React from 'react';
 import ReactDOM from 'react-dom';
