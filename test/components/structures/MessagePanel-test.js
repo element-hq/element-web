@@ -25,14 +25,13 @@ import * as TestUtils from "react-dom/test-utils";
 
 import { MatrixClientPeg } from '../../../src/MatrixClientPeg';
 import sdk from '../../skinned-sdk';
+import MessagePanel, { shouldFormContinuation } from "../../../src/components/structures/MessagePanel";
 import SettingsStore from "../../../src/settings/SettingsStore";
 import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
 import RoomContext from "../../../src/contexts/RoomContext";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { UnwrappedEventTile } from "../../../src/components/views/rooms/EventTile";
 import * as TestUtilsMatrix from "../../test-utils";
-
-const MessagePanel = sdk.getComponent('structures.MessagePanel');
 
 let client;
 const room = new Matrix.Room("!roomId:server_name");
@@ -592,5 +591,27 @@ describe('MessagePanel', function() {
         expect(els.first().key()).not.toEqual(els.last().key());
         expect(els.first().prop("events").length).toEqual(5);
         expect(els.last().prop("events").length).toEqual(5);
+    });
+});
+
+describe("shouldFormContinuation", () => {
+    it("does not form continuations from thread roots", () => {
+        const threadRoot = TestUtilsMatrix.mkMessage({
+            event: true,
+            room: "!room:id",
+            user: "@user:id",
+            msg: "Here is a thread",
+        });
+        jest.spyOn(threadRoot, "isThreadRoot", "get").mockReturnValue(true);
+
+        const message = TestUtilsMatrix.mkMessage({
+            event: true,
+            room: "!room:id",
+            user: "@user:id",
+            msg: "And here's another message in the main timeline",
+        });
+
+        expect(shouldFormContinuation(threadRoot, message, false, true)).toEqual(false);
+        expect(shouldFormContinuation(message, threadRoot, false, true)).toEqual(true);
     });
 });

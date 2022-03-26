@@ -68,6 +68,7 @@ export default class SearchResultTile extends React.Component<IProps> {
         const layout = SettingsStore.getValue("layout");
         const isTwelveHour = SettingsStore.getValue("showTwelveHourTimestamps");
         const alwaysShowTimestamps = SettingsStore.getValue("alwaysShowTimestamps");
+        const threadsEnabled = SettingsStore.getValue("feature_thread");
 
         const timeline = result.context.getTimeline();
         for (let j = 0; j < timeline.length; j++) {
@@ -88,6 +89,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                         prevEv,
                         mxEv,
                         this.context?.showHiddenEventsInTimeline,
+                        threadsEnabled,
                         TimelineRenderingType.Search,
                     );
 
@@ -102,6 +104,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                             mxEv,
                             nextEv,
                             this.context?.showHiddenEventsInTimeline,
+                            threadsEnabled,
                             TimelineRenderingType.Search,
                         )
                     );

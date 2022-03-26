@@ -191,7 +191,20 @@ export function mkEvent(opts: MakeEventProps): MatrixEvent {
     ].indexOf(opts.type) !== -1) {
         event.state_key = "";
     }
-    return opts.event ? new MatrixEvent(event) : event as unknown as MatrixEvent;
+
+    const mxEvent = opts.event ? new MatrixEvent(event) : event as unknown as MatrixEvent;
+    if (!mxEvent.sender && opts.user && opts.room) {
+        mxEvent.sender = {
+            userId: opts.user,
+            membership: "join",
+            name: opts.user,
+            rawDisplayName: opts.user,
+            roomId: opts.room,
+            getAvatarUrl: () => {},
+            getMxcAvatarUrl: () => {},
+        } as unknown as RoomMember;
+    }
+    return mxEvent;
 }
 
 /**
