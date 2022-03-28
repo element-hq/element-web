@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<LeftPanelLiveShareWarning /> when user has live beacons renders correctly when minimized 1`] = `
+exports[`<LeftPanelLiveShareWarning /> when user has live location monitor renders correctly when minimized 1`] = `
 <LeftPanelLiveShareWarning
   isMinimized={true}
 >
@@ -15,7 +15,7 @@ exports[`<LeftPanelLiveShareWarning /> when user has live beacons renders correc
 </LeftPanelLiveShareWarning>
 `;
 
-exports[`<LeftPanelLiveShareWarning /> when user has live beacons renders correctly when not minimized 1`] = `
+exports[`<LeftPanelLiveShareWarning /> when user has live location monitor renders correctly when not minimized 1`] = `
 <LeftPanelLiveShareWarning>
   <div
     className="mx_LeftPanelLiveShareWarning"

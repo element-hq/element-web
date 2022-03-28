@@ -27,13 +27,13 @@ interface Props {
 }
 
 const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
-    const hasLiveBeacons = useEventEmitterState(
+    const isMonitoringLiveLocation = useEventEmitterState(
         OwnBeaconStore.instance,
-        OwnBeaconStoreEvent.LivenessChange,
-        () => OwnBeaconStore.instance.hasLiveBeacons(),
+        OwnBeaconStoreEvent.MonitoringLivePosition,
+        () => OwnBeaconStore.instance.isMonitoringLiveLocation,
     );
 
-    if (!hasLiveBeacons) {
+    if (!isMonitoringLiveLocation) {
         return null;
     }
 

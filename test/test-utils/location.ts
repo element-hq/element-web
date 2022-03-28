@@ -48,3 +48,11 @@ export const makeLocationEvent = (geoUri: string, assetType?: LocationAssetType)
         },
     );
 };
+
+// https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
+export const getMockGeolocationPositionError = (code: number, message: string): GeolocationPositionError => ({
+    code, message,
+    PERMISSION_DENIED: 1,
+    POSITION_UNAVAILABLE: 2,
+    TIMEOUT: 3,
+});

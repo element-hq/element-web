@@ -77,6 +77,13 @@ type LiveBeaconsState = {
 const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
     const [stoppingInProgress, setStoppingInProgress] = useState(false);
 
+    // do we have an active geolocation.watchPosition
+    const isMonitoringLiveLocation = useEventEmitterState(
+        OwnBeaconStore.instance,
+        OwnBeaconStoreEvent.MonitoringLivePosition,
+        () => OwnBeaconStore.instance.isMonitoringLiveLocation,
+    );
+
     const liveBeaconIds = useEventEmitterState(
         OwnBeaconStore.instance,
         OwnBeaconStoreEvent.LivenessChange,
@@ -88,7 +95,7 @@ const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
         setStoppingInProgress(false);
     }, [liveBeaconIds]);
 
-    if (!liveBeaconIds?.length) {
+    if (!isMonitoringLiveLocation || !liveBeaconIds?.length) {
         return {};
     }
 

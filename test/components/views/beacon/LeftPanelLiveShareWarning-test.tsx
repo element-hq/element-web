@@ -49,9 +49,9 @@ describe('<LeftPanelLiveShareWarning />', () => {
         expect(component.html()).toBe(null);
     });
 
-    describe('when user has live beacons', () => {
+    describe('when user has live location monitor', () => {
         beforeEach(() => {
-            mocked(OwnBeaconStore.instance).hasLiveBeacons.mockReturnValue(true);
+            mocked(OwnBeaconStore.instance).isMonitoringLiveLocation = true;
         });
         it('renders correctly when not minimized', () => {
             const component = getComponent();
@@ -68,8 +68,8 @@ describe('<LeftPanelLiveShareWarning />', () => {
             // started out rendered
             expect(component.html()).toBeTruthy();
 
-            mocked(OwnBeaconStore.instance).hasLiveBeacons.mockReturnValue(false);
-            OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.LivenessChange, false);
+            mocked(OwnBeaconStore.instance).isMonitoringLiveLocation = false;
+            OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.MonitoringLivePosition);
 
             await flushPromises();
             component.setProps({});

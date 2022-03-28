@@ -24,19 +24,15 @@ import {
     watchPosition,
 } from "../../../src/utils/beacon";
 import { getCurrentPosition } from "../../../src/utils/beacon/geolocation";
-import { makeGeolocationPosition, mockGeolocation } from "../../test-utils/beacon";
+import {
+    makeGeolocationPosition,
+    mockGeolocation,
+    getMockGeolocationPositionError,
+} from "../../test-utils";
 
 describe('geolocation utilities', () => {
     let geolocation;
     const defaultPosition = makeGeolocationPosition({});
-
-    // https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPositionError
-    const getMockGeolocationPositionError = (code, message) => ({
-        code, message,
-        PERMISSION_DENIED: 1,
-        POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3,
-    });
 
     beforeEach(() => {
         geolocation = mockGeolocation();

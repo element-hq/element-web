@@ -44,6 +44,7 @@ const isOwnBeacon = (beacon: Beacon, userId: string): boolean => beacon.beaconIn
 
 export enum OwnBeaconStoreEvent {
     LivenessChange = 'OwnBeaconStore.LivenessChange',
+    MonitoringLivePosition = 'OwnBeaconStore.MonitoringLivePosition',
 }
 
 const MOVING_UPDATE_INTERVAL = 2000;
@@ -232,18 +233,28 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         await this.matrixClient.unstable_setLiveBeacon(beacon.roomId, beacon.beaconInfoEventType, updateContent);
     };
 
-    private togglePollingLocation = async (): Promise<void> => {
+    private togglePollingLocation = () => {
         if (!!this.liveBeaconIds.length) {
-            return this.startPollingLocation();
+            this.startPollingLocation();
+        } else {
+            this.stopPollingLocation();
         }
-        return this.stopPollingLocation();
     };
 
     private startPollingLocation = async () => {
         // clear any existing interval
         this.stopPollingLocation();
 
-        this.clearPositionWatch = await watchPosition(this.onWatchedPosition, this.onWatchedPositionError);
+        try {
+            this.clearPositionWatch = await watchPosition(
+                this.onWatchedPosition,
+                this.onGeolocationError,
+            );
+        } catch (error) {
+            this.onGeolocationError(error?.message);
+            // don't set locationInterval if geolocation failed to setup
+            return;
+        }
 
         this.locationInterval = setInterval(() => {
             if (!this.lastPublishedPositionTimestamp) {
@@ -255,6 +266,8 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
                 this.publishCurrentLocationToBeacons();
             }
         }, STATIC_UPDATE_INTERVAL);
+
+        this.emit(OwnBeaconStoreEvent.MonitoringLivePosition);
     };
 
     private onWatchedPosition = (position: GeolocationPosition) => {
@@ -268,11 +281,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         }
     };
 
-    private onWatchedPositionError = (error: GeolocationError) => {
-        this.geolocationError = error;
-        logger.error(this.geolocationError);
-    };
-
     private stopPollingLocation = () => {
         clearInterval(this.locationInterval);
         this.locationInterval = undefined;
@@ -283,6 +291,8 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             this.clearPositionWatch();
             this.clearPositionWatch = undefined;
         }
+
+        this.emit(OwnBeaconStoreEvent.MonitoringLivePosition);
     };
 
     /**
@@ -313,8 +323,31 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * and publishes it to all live beacons
      */
     private publishCurrentLocationToBeacons = async () => {
-        const position = await getCurrentPosition();
-        // TODO error handling
-        this.publishLocationToBeacons(mapGeolocationPositionToTimedGeo(position));
+        try {
+            const position = await getCurrentPosition();
+            // TODO error handling
+            this.publishLocationToBeacons(mapGeolocationPositionToTimedGeo(position));
+        } catch (error) {
+            this.onGeolocationError(error?.message);
+        }
+    };
+
+    private onGeolocationError = async (error: GeolocationError): Promise<void> => {
+        this.geolocationError = error;
+        logger.error('Geolocation failed', this.geolocationError);
+
+        // other errors are considered non-fatal
+        // and self recovering
+        if (![
+            GeolocationError.Unavailable,
+            GeolocationError.PermissionDenied,
+        ].includes(error)) {
+            return;
+        }
+
+        this.stopPollingLocation();
+        // kill live beacons when location permissions are revoked
+        // TODO may need adjustment when PSF-797 is done
+        await Promise.all(this.liveBeaconIds.map(this.stopBeacon));
     };
 }
