@@ -26,8 +26,8 @@ import {
     mockStateEventImplementation,
     mkRoom,
     mkEvent,
+    stubVoiceChannelStore,
 } from "../../../test-utils";
-import { stubVoiceChannelStore } from "../../../test-utils/voice";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
 import MemberAvatar from "../../../../src/components/views/avatars/MemberAvatar";
 import SettingsStore from "../../../../src/settings/SettingsStore";
