@@ -15,18 +15,33 @@ limitations under the License.
 */
 
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import WidgetStore, { IApp } from "../stores/WidgetStore";
 import { WidgetType } from "../widgets/WidgetType";
 import WidgetUtils from "./WidgetUtils";
 
-export const VOICE_CHANNEL_ID = "io.element.voice";
+export const VOICE_CHANNEL = "io.element.voice";
+export const VOICE_CHANNEL_MEMBER = "io.element.voice.member";
+
+export interface IVoiceChannelMemberContent {
+    // Connected device IDs
+    devices: string[];
+}
 
 export const getVoiceChannel = (roomId: string): IApp => {
     const apps = WidgetStore.instance.getApps(roomId);
-    return apps.find(app => WidgetType.JITSI.matches(app.type) && app.id === VOICE_CHANNEL_ID);
+    return apps.find(app => WidgetType.JITSI.matches(app.type) && app.id === VOICE_CHANNEL);
 };
 
 export const addVoiceChannel = async (roomId: string, roomName: string) => {
-    await WidgetUtils.addJitsiWidget(roomId, CallType.Voice, "Voice channel", VOICE_CHANNEL_ID, roomName);
+    await WidgetUtils.addJitsiWidget(roomId, CallType.Voice, "Voice channel", VOICE_CHANNEL, roomName);
 };
+
+export const getConnectedMembers = (state: RoomState): RoomMember[] =>
+    state.getStateEvents(VOICE_CHANNEL_MEMBER)
+        // Must have a device connected and still be joined to the room
+        .filter(e => e.getContent<IVoiceChannelMemberContent>().devices?.length)
+        .map(e => state.getMember(e.getStateKey()))
+        .filter(member => member.membership === "join");

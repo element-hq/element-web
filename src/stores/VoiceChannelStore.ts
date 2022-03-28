@@ -15,11 +15,17 @@ limitations under the License.
 */
 
 import { EventEmitter } from "events";
+import { logger } from "matrix-js-sdk/src/logger";
 import { ClientWidgetApi, IWidgetApiRequest } from "matrix-widget-api";
 
+import { MatrixClientPeg } from "../MatrixClientPeg";
 import { ElementWidgetActions } from "./widgets/ElementWidgetActions";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
-import { getVoiceChannel } from "../utils/VoiceChannelUtils";
+import {
+    VOICE_CHANNEL_MEMBER,
+    IVoiceChannelMemberContent,
+    getVoiceChannel,
+} from "../utils/VoiceChannelUtils";
 import { timeout } from "../utils/promise";
 import WidgetUtils from "../utils/WidgetUtils";
 
@@ -54,6 +60,7 @@ export default class VoiceChannelStore extends EventEmitter {
         return VoiceChannelStore._instance;
     }
 
+    private readonly cli = MatrixClientPeg.get();
     private activeChannel: ClientWidgetApi;
     private _roomId: string;
     private _participants: IJitsiParticipant[];
@@ -118,6 +125,9 @@ export default class VoiceChannelStore extends EventEmitter {
         messaging.once(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
 
         this.emit(VoiceChannelEvent.Connect);
+
+        // Tell others that we're connected, by adding our device to room state
+        await this.updateDevices(devices => Array.from(new Set(devices).add(this.cli.getDeviceId())));
     };
 
     public disconnect = async () => {
@@ -169,8 +179,8 @@ export default class VoiceChannelStore extends EventEmitter {
     private waitForAction = async (action: ElementWidgetActions) => {
         const wait = new Promise<void>(resolve =>
             this.activeChannel.once(`action:${action}`, (ev: CustomEvent<IWidgetApiRequest>) => {
-                resolve();
                 this.ack(ev);
+                resolve();
             }),
         );
         if (await timeout(wait, false, VoiceChannelStore.TIMEOUT) === false) {
@@ -182,22 +192,47 @@ export default class VoiceChannelStore extends EventEmitter {
         this.activeChannel.transport.reply(ev.detail, {});
     };
 
-    private onHangup = (ev: CustomEvent<IWidgetApiRequest>) => {
+    private updateDevices = async (fn: (devices: string[]) => string[]) => {
+        if (!this.roomId) {
+            logger.error("Tried to update devices while disconnected");
+            return;
+        }
+
+        const devices = this.cli.getRoom(this.roomId)
+            .currentState.getStateEvents(VOICE_CHANNEL_MEMBER, this.cli.getUserId())
+            ?.getContent<IVoiceChannelMemberContent>()?.devices ?? [];
+
+        await this.cli.sendStateEvent(
+            this.roomId, VOICE_CHANNEL_MEMBER, { devices: fn(devices) }, this.cli.getUserId(),
+        );
+    };
+
+    private onHangup = async (ev: CustomEvent<IWidgetApiRequest>) => {
+        this.ack(ev);
+
         this.activeChannel.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
         this.activeChannel.off(`action:${ElementWidgetActions.MuteAudio}`, this.onMuteAudio);
         this.activeChannel.off(`action:${ElementWidgetActions.UnmuteAudio}`, this.onUnmuteAudio);
         this.activeChannel.off(`action:${ElementWidgetActions.MuteVideo}`, this.onMuteVideo);
         this.activeChannel.off(`action:${ElementWidgetActions.UnmuteVideo}`, this.onUnmuteVideo);
 
-        this._roomId = null;
+        this.activeChannel = null;
         this._participants = null;
         this._audioMuted = null;
         this._videoMuted = null;
 
-        this.emit(VoiceChannelEvent.Disconnect);
-        this.ack(ev);
-        // Save this for last, since ack needs activeChannel to exist
-        this.activeChannel = null;
+        try {
+            // Tell others that we're disconnected, by removing our device from room state
+            await this.updateDevices(devices => {
+                const devicesSet = new Set(devices);
+                devicesSet.delete(this.cli.getDeviceId());
+                return Array.from(devicesSet);
+            });
+        } finally {
+            // Save this for last, since updateDevices needs the room ID
+            this._roomId = null;
+            this.emit(VoiceChannelEvent.Disconnect);
+        }
     };
 
     private onParticipants = (ev: CustomEvent<IWidgetApiRequest>) => {

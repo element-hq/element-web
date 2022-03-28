@@ -19,6 +19,8 @@ import React, { createRef } from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
+import { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
@@ -32,6 +34,7 @@ import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextM
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
 import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewStore";
 import BaseAvatar from "../avatars/BaseAvatar";
+import MemberAvatar from "../avatars/MemberAvatar";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import FacePile from "../elements/FacePile";
 import { RoomNotifState } from "../../../RoomNotifs";
@@ -53,6 +56,7 @@ import IconizedContextMenu, {
     IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import VoiceChannelStore, { VoiceChannelEvent, IJitsiParticipant } from "../../../stores/VoiceChannelStore";
+import { getConnectedMembers } from "../../../utils/VoiceChannelUtils";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -80,7 +84,10 @@ interface IState {
     generalMenuPosition: PartialDOMRect;
     messagePreview?: string;
     voiceConnectionState: VoiceConnectionState;
-    voiceParticipants: IJitsiParticipant[];
+    // Active voice channel members, according to room state
+    voiceMembers: RoomMember[];
+    // Active voice channel members, according to Jitsi
+    jitsiParticipants: IJitsiParticipant[];
 }
 
 const messagePreviewId = (roomId: string) => `mx_RoomTile_messagePreview_${roomId}`;
@@ -112,7 +119,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             messagePreview: "",
             voiceConnectionState: VoiceChannelStore.instance.roomId === this.props.room.roomId ?
                 VoiceConnectionState.Connected : VoiceConnectionState.Disconnected,
-            voiceParticipants: [],
+            voiceMembers: [],
+            jitsiParticipants: [],
         };
         this.generatePreview();
 
@@ -157,6 +165,8 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 MessagePreviewStore.getPreviewChangedEventName(this.props.room),
                 this.onRoomPreviewChanged,
             );
+            prevProps.room?.currentState?.off(RoomStateEvent.Events, this.updateVoiceMembers);
+            this.props.room?.currentState?.on(RoomStateEvent.Events, this.updateVoiceMembers);
             prevProps.room?.off(RoomEvent.Name, this.onRoomNameUpdate);
             this.props.room?.on(RoomEvent.Name, this.onRoomNameUpdate);
         }
@@ -167,6 +177,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         if (this.state.selected) {
             this.scrollIntoView();
         }
+        this.updateVoiceMembers();
 
         ActiveRoomObserver.addListener(this.props.room.roomId, this.onActiveRoomUpdate);
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
@@ -177,6 +188,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.notificationState.on(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
         this.props.room?.on(RoomEvent.Name, this.onRoomNameUpdate);
+        this.props.room?.currentState?.on(RoomStateEvent.Events, this.updateVoiceMembers);
     }
 
     public componentWillUnmount() {
@@ -186,6 +198,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 MessagePreviewStore.getPreviewChangedEventName(this.props.room),
                 this.onRoomPreviewChanged,
             );
+            this.props.room.currentState.off(RoomStateEvent.Events, this.updateVoiceMembers);
             this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
         }
         ActiveRoomObserver.removeListener(this.props.room.roomId, this.onActiveRoomUpdate);
@@ -571,24 +584,40 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         );
     }
 
-    private updateVoiceParticipants = (participants: IJitsiParticipant[]) => {
-        this.setState({ voiceParticipants: participants });
+    private updateVoiceMembers = () => {
+        this.setState({ voiceMembers: getConnectedMembers(this.props.room.currentState) });
     };
 
-    private renderVoiceChannel(): React.ReactElement {
-        if (!this.state.voiceParticipants.length) return null;
+    private updateJitsiParticipants = (participants: IJitsiParticipant[]) => {
+        this.setState({ jitsiParticipants: participants });
+    };
 
-        const faces = this.state.voiceParticipants.map(p =>
-            <BaseAvatar
-                key={p.participantId}
-                name={p.displayName ?? p.formattedDisplayName}
-                idName={p.participantId}
-                // This comes directly from Jitsi, so we shouldn't apply custom media routing to it
-                url={p.avatarURL}
-                width={24}
-                height={24}
-            />,
-        );
+    private renderVoiceChannel(): React.ReactElement | null {
+        let faces;
+        if (this.state.voiceConnectionState === VoiceConnectionState.Connected) {
+            faces = this.state.jitsiParticipants.map(p =>
+                <BaseAvatar
+                    key={p.participantId}
+                    name={p.displayName ?? p.formattedDisplayName}
+                    idName={p.participantId}
+                    // This comes directly from Jitsi, so we shouldn't apply custom media routing to it
+                    url={p.avatarURL}
+                    width={24}
+                    height={24}
+                />,
+            );
+        } else if (this.state.voiceMembers.length) {
+            faces = this.state.voiceMembers.map(m =>
+                <MemberAvatar
+                    key={m.userId}
+                    member={m}
+                    width={24}
+                    height={24}
+                />,
+            );
+        } else {
+            return null;
+        }
 
         // TODO: The below "join" button will eventually show up on text rooms
         // with an active voice channel, but that isn't implemented yet
@@ -615,21 +644,24 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         // effort to solve this properly.
         await new Promise(resolve => setTimeout(resolve, 1000));
 
+        const waitForConnect = VoiceChannelStore.instance.connect(this.props.room.roomId);
+        // Participant data comes down the event channel quickly, so prepare in advance
+        VoiceChannelStore.instance.on(VoiceChannelEvent.Participants, this.updateJitsiParticipants);
         try {
-            await VoiceChannelStore.instance.connect(this.props.room.roomId);
-
+            await waitForConnect;
             this.setState({ voiceConnectionState: VoiceConnectionState.Connected });
+
             VoiceChannelStore.instance.once(VoiceChannelEvent.Disconnect, () => {
                 this.setState({
                     voiceConnectionState: VoiceConnectionState.Disconnected,
-                    voiceParticipants: [],
+                    jitsiParticipants: [],
                 }),
-                VoiceChannelStore.instance.off(VoiceChannelEvent.Participants, this.updateVoiceParticipants);
+                VoiceChannelStore.instance.off(VoiceChannelEvent.Participants, this.updateJitsiParticipants);
             });
-            VoiceChannelStore.instance.on(VoiceChannelEvent.Participants, this.updateVoiceParticipants);
         } catch (e) {
+            // If it failed, clean up our advance preparations
             logger.error("Failed to connect voice", e);
-            this.setState({ voiceConnectionState: VoiceConnectionState.Disconnected });
+            VoiceChannelStore.instance.off(VoiceChannelEvent.Participants, this.updateJitsiParticipants);
         }
     }
 

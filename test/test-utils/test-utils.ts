@@ -62,6 +62,7 @@ export function createTestClient(): MatrixClient {
         getDomain: jest.fn().mockReturnValue("matrix.rog"),
         getUserId: jest.fn().mockReturnValue("@userId:matrix.rog"),
         getUser: jest.fn().mockReturnValue({ on: jest.fn() }),
+        getDeviceId: jest.fn().mockReturnValue("ABCDEFGHI"),
         credentials: { userId: "@userId:matrix.rog" },
 
         getPushActionsForEvent: jest.fn(),
