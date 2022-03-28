@@ -52,6 +52,7 @@ const ALLOWED_BLOB_MIMETYPES = [
     'image/jpeg',
     'image/gif',
     'image/png',
+    'image/apng',
     'image/webp',
 
     'video/mp4',
