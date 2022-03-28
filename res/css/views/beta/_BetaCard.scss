@@ -104,6 +104,7 @@ limitations under the License.
     color: #FFFFFF;
     display: inline-block;
     vertical-align: text-bottom;
+    word-break: keep-all; // avoid multiple lines on CJK language
 
     &.mx_AccessibleButton {
         cursor: pointer;
