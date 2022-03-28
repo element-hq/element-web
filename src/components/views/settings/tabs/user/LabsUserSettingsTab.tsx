@@ -85,7 +85,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
             </div>;
         }
 
-        let labsSection;
+        let labsSections;
         if (SdkConfig.get("show_labs_settings")) {
             const groups = new EnhancedMap<LabGroup, JSX.Element[]>();
             labs.forEach(f => {
@@ -143,14 +143,14 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                 );
             }
 
-            labsSection = <div className="mx_SettingsTab_section">
+            labsSections = <>
                 { sortBy(Array.from(groups.entries()), "0").map(([group, flags]) => (
-                    <div key={group}>
+                    <div className="mx_SettingsTab_section" key={group}>
                         <span className="mx_SettingsTab_subheading">{ _t(labGroupNames[group]) }</span>
                         { flags }
                     </div>
                 )) }
-            </div>;
+            </>;
         }
 
         return (
@@ -172,7 +172,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                     }
                 </div>
                 { betaSection }
-                { labsSection }
+                { labsSections }
             </div>
         );
     }
