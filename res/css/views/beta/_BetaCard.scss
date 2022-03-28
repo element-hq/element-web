@@ -23,8 +23,13 @@ limitations under the License.
 
     .mx_BetaCard_columns {
         display: flex;
+        flex-flow: wrap;
+        gap: 20px;
+        justify-content: center;
 
-        > div {
+        .mx_BetaCard_columns_description {
+            flex: 1;
+
             .mx_BetaCard_title {
                 font-weight: $font-semi-bold;
                 font-size: $font-18px;
@@ -32,47 +37,60 @@ limitations under the License.
                 color: $primary-content;
                 margin: 4px 0 14px;
 
-                .mx_BetaCard_betaPill {
-                    margin-left: 12px;
-                }
+                display: flex;
+                align-items: center;
+                column-gap: 12px;
             }
 
             .mx_BetaCard_caption {
                 font-size: $font-15px;
                 line-height: $font-20px;
                 color: $secondary-content;
-                margin-bottom: 20px;
             }
 
-            .mx_BetaCard_buttons .mx_AccessibleButton {
-                display: block;
-                margin: 12px 0;
-                padding: 7px 40px;
-                width: auto;
+            .mx_BetaCard_buttons {
+                display: flex;
+                flex-wrap: wrap-reverse;
+                gap: 12px;
+                margin: 20px auto;
+
+                .mx_AccessibleButton {
+                    padding: 7px 40px;
+                    width: auto;
+                    flex: 1;
+                    white-space: nowrap; // text might overflow
+
+                    &:nth-child(1) {
+                        order: 2; // Place feedback button top and right
+                    }
+                }
             }
 
             .mx_BetaCard_disclaimer {
                 font-size: $font-12px;
                 line-height: $font-15px;
                 color: $secondary-content;
-                margin-top: 20px;
 
                 > h4 {
-                    margin: 0;
+                    margin: 12px 0 0;
                 }
 
                 > p {
-                    margin-top: 0;
+                    margin: 0;
                 }
             }
         }
 
-        > img {
-            margin: auto 0 auto 20px;
-            width: 300px;
-            object-fit: contain;
-            height: 100%;
-            border-radius: 4px;
+        .mx_BetaCard_columns_image_wrapper {
+            margin: auto 0;
+
+            .mx_BetaCard_columns_image {
+                width: 100%;
+                max-width: 300px;
+                object-fit: contain;
+                height: 100%;
+                border-radius: 4px;
+            }
         }
     }
 

@@ -101,12 +101,12 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
 
     return <div className="mx_BetaCard">
         <div className="mx_BetaCard_columns">
-            <div>
+            <div className="mx_BetaCard_columns_description">
                 <h3 className="mx_BetaCard_title">
-                    { titleOverride || _t(title) }
+                    <span>{ titleOverride || _t(title) }</span>
                     <BetaPill />
                 </h3>
-                <span className="mx_BetaCard_caption">{ caption() }</span>
+                <div className="mx_BetaCard_caption">{ caption() }</div>
                 <div className="mx_BetaCard_buttons">
                     { feedbackButton }
                     <AccessibleButton
@@ -132,7 +132,9 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
                     { disclaimer(value) }
                 </div> }
             </div>
-            <img src={image} alt="" />
+            <div className="mx_BetaCard_columns_image_wrapper">
+                <img className="mx_BetaCard_columns_image" src={image} alt="" />
+            </div>
         </div>
         { extraSettings && value && <div className="mx_BetaCard_relatedSettings">
             { extraSettings.map(key => (
