@@ -155,7 +155,7 @@ export default class ShareDialog extends React.PureComponent<IProps, IState> {
             checkbox = <div>
                 <StyledCheckbox
                     checked={this.state.linkSpecificEvent}
-                    onClick={this.onLinkSpecificEventCheckboxClick}
+                    onChange={this.onLinkSpecificEventCheckboxClick}
                 >
                     { _t('Link to selected message') }
                 </StyledCheckbox>
