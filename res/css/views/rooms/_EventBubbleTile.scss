@@ -126,8 +126,9 @@ limitations under the License.
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
 
-            .mx_MImageBody .mx_MImageBody_thumbnail,
+            .mx_MImageBody .mx_MImageBody_thumbnail_container,
             .mx_MImageBody::before,
+            .mx_MVideoBody .mx_MVideoBody_container,
             .mx_MediaBody,
             .mx_MLocationBody_map {
                 border-bottom-right-radius: var(--cornerRadius) !important;
@@ -150,8 +151,9 @@ limitations under the License.
             float: right;
             border-bottom-left-radius: var(--cornerRadius);
 
-            .mx_MImageBody .mx_MImageBody_thumbnail,
+            .mx_MImageBody .mx_MImageBody_thumbnail_container,
             .mx_MImageBody::before,
+            .mx_MVideoBody .mx_MVideoBody_container,
             .mx_MediaBody,
             .mx_MLocationBody_map {
                 border-bottom-left-radius: var(--cornerRadius) !important;
@@ -266,7 +268,8 @@ limitations under the License.
         }
 
         //noinspection CssReplaceWithShorthandSafely
-        .mx_MImageBody .mx_MImageBody_thumbnail,
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MediaBody {
             border-radius: unset;
             border-top-left-radius: var(--cornerRadius);
@@ -293,7 +296,8 @@ limitations under the License.
     &.mx_EventTile_continuation[data-self=false] .mx_EventTile_line {
         border-top-left-radius: 0;
 
-        .mx_MImageBody .mx_MImageBody_thumbnail,
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map {
@@ -303,7 +307,8 @@ limitations under the License.
     &.mx_EventTile_lastInSection[data-self=false] .mx_EventTile_line {
         border-bottom-left-radius: var(--cornerRadius);
 
-        .mx_MImageBody .mx_MImageBody_thumbnail,
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map {
@@ -314,7 +319,8 @@ limitations under the License.
     &.mx_EventTile_continuation[data-self=true] .mx_EventTile_line {
         border-top-right-radius: 0;
 
-        .mx_MImageBody .mx_MImageBody_thumbnail,
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map {
@@ -324,7 +330,8 @@ limitations under the License.
     &.mx_EventTile_lastInSection[data-self=true] .mx_EventTile_line {
         border-bottom-right-radius: var(--cornerRadius);
 
-        .mx_MImageBody .mx_MImageBody_thumbnail,
+        .mx_MImageBody .mx_MImageBody_thumbnail_container,
+        .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
         .mx_MLocationBody_map {

@@ -228,6 +228,18 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         const content = this.props.mxEvent.getContent();
         const autoplay = SettingsStore.getValue("autoplayVideo");
 
+        let aspectRatio;
+        if (content.info?.w && content.info?.h) {
+            aspectRatio = `${content.info.w}/${content.info.h}`;
+        }
+        const { w: maxWidth, h: maxHeight } = suggestedVideoSize(
+            SettingsStore.getValue("Images.size") as ImageSize,
+            { w: content.info?.w, h: content.info?.h },
+        );
+
+        // HACK: This div fills out space while the video loads, to prevent scroll jumps
+        const spaceFiller = <div style={{ width: maxWidth, height: maxHeight }} />;
+
         if (this.state.error !== null) {
             return (
                 <span className="mx_MVideoBody">
@@ -241,20 +253,16 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         if (!this.props.forExport && content.file !== undefined && this.state.decryptedUrl === null && autoplay) {
             // Need to decrypt the attachment
             // The attachment is decrypted in componentDidMount.
-            // For now add an img tag with a spinner.
+            // For now show a spinner.
             return (
                 <span className="mx_MVideoBody">
-                    <div className="mx_MImageBody_thumbnail mx_MImageBody_thumbnail_spinner">
+                    <div className="mx_MVideoBody_container" style={{ maxWidth, maxHeight, aspectRatio }}>
                         <InlineSpinner />
                     </div>
+                    { spaceFiller }
                 </span>
             );
         }
-
-        const { w: maxWidth, h: maxHeight } = suggestedVideoSize(
-            SettingsStore.getValue("Images.size") as ImageSize,
-            { w: content.info?.w, h: content.info?.h },
-        );
 
         const contentUrl = this.getContentUrl();
         const thumbUrl = this.getThumbUrl();
@@ -268,19 +276,21 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
         const fileBody = this.getFileBody();
         return (
             <span className="mx_MVideoBody">
-                <video
-                    className="mx_MVideoBody"
-                    ref={this.videoRef}
-                    src={contentUrl}
-                    title={content.body}
-                    controls
-                    preload={preload}
-                    muted={autoplay}
-                    autoPlay={autoplay}
-                    style={{ maxHeight, maxWidth }}
-                    poster={poster}
-                    onPlay={this.videoOnPlay}
-                />
+                <div className="mx_MVideoBody_container" style={{ maxWidth, maxHeight, aspectRatio }}>
+                    <video
+                        className="mx_MVideoBody"
+                        ref={this.videoRef}
+                        src={contentUrl}
+                        title={content.body}
+                        controls
+                        preload={preload}
+                        muted={autoplay}
+                        autoPlay={autoplay}
+                        poster={poster}
+                        onPlay={this.videoOnPlay}
+                    />
+                    { spaceFiller }
+                </div>
                 { fileBody }
             </span>
         );

@@ -15,7 +15,15 @@ limitations under the License.
 */
 
 span.mx_MVideoBody {
-    video.mx_MVideoBody {
+    overflow: hidden;
+
+    .mx_MVideoBody_container {
         border-radius: $timeline-image-border-radius;
+        overflow: hidden;
+
+        video {
+            height: 100%;
+            width: 100%;
+        }
     }
 }
