@@ -25,7 +25,7 @@ jobs:
         run: "./scripts/ci/install-deps.sh --ignore-scripts"
 
       - name: Run tests with coverage
-        run: "yarn install && yarn reskindex && yarn coverage"
+        run: "yarn install && yarn coverage"
 
       - name: Upload coverage
         uses: codecov/codecov-action@v2

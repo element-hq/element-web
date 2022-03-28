@@ -31,7 +31,6 @@ yarn link matrix-js-sdk
 yarn link matrix-analytics-events
 yarn link
 yarn install --pure-lockfile
-yarn reskindex
 
 # Finally, set up element-web
 scripts/fetchdep.sh vector-im element-web
