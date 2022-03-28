@@ -727,9 +727,9 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             </div>;
         }
         const explanation =
-            _t("If you can't find the room you're looking for, ask for an invite or <a>Create a new room</a>.", null,
+            _t("If you can't find the room you're looking for, ask for an invite or <a>create a new room</a>.", null,
                 { a: sub => (
-                    <AccessibleButton kind="secondary" onClick={this.onCreateRoomClick}>
+                    <AccessibleButton kind="link_inline" onClick={this.onCreateRoomClick}>
                         { sub }
                     </AccessibleButton>
                 ) },
