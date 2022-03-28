@@ -229,8 +229,6 @@ describe('geolocation utilities', () => {
         });
 
         it('resolves with current location', async () => {
-            jest.spyOn(logger, 'error').mockImplementation(() => { });
-
             geolocation.getCurrentPosition.mockImplementation((callback, error) => callback(defaultPosition));
 
             const result = await getCurrentPosition();

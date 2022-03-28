@@ -23,14 +23,17 @@ import '../../../skinned-sdk';
 import RoomLiveShareWarning from '../../../../src/components/views/beacon/RoomLiveShareWarning';
 import { OwnBeaconStore } from '../../../../src/stores/OwnBeaconStore';
 import {
+    advanceDateAndTime,
     findByTestId,
     getMockClientWithEventEmitter,
     makeBeaconInfoEvent,
+    mockGeolocation,
     resetAsyncStoreWithClient,
     setupAsyncStoreWithClient,
 } from '../../../test-utils';
 
 jest.useFakeTimers();
+mockGeolocation();
 describe('<RoomLiveShareWarning />', () => {
     const aliceId = '@alice:server.org';
     const room1Id = '$room1:server.org';
@@ -40,6 +43,7 @@ describe('<RoomLiveShareWarning />', () => {
         getVisibleRooms: jest.fn().mockReturnValue([]),
         getUserId: jest.fn().mockReturnValue(aliceId),
         unstable_setLiveBeacon: jest.fn().mockResolvedValue({ event_id: '1' }),
+        sendEvent: jest.fn(),
     });
 
     // 14.03.2022 16:15
@@ -67,14 +71,6 @@ describe('<RoomLiveShareWarning />', () => {
         mockClient.getVisibleRooms.mockReturnValue([room1, room2]);
 
         return [room1, room2];
-    };
-
-    const advanceDateAndTime = (ms: number) => {
-        // bc liveness check uses Date.now we have to advance this mock
-        jest.spyOn(global.Date, 'now').mockReturnValue(Date.now() + ms);
-
-        // then advance time for the interval by the same amount
-        jest.advanceTimersByTime(ms);
     };
 
     const makeOwnBeaconStore = async () => {
@@ -137,12 +133,16 @@ describe('<RoomLiveShareWarning />', () => {
 
         it('renders correctly with one live beacon in room', () => {
             const component = getComponent({ roomId: room1Id });
-            expect(component).toMatchSnapshot();
+            // beacons have generated ids that break snapshots
+            // assert on html
+            expect(component.html()).toMatchSnapshot();
         });
 
         it('renders correctly with two live beacons in room', () => {
             const component = getComponent({ roomId: room2Id });
-            expect(component).toMatchSnapshot();
+            // beacons have generated ids that break snapshots
+            // assert on html
+            expect(component.html()).toMatchSnapshot();
             // later expiry displayed
             expect(getExpiryText(component)).toEqual('12h left');
         });

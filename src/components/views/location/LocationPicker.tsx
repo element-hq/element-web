@@ -21,22 +21,22 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
 import classNames from 'classnames';
 
+import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
 import { _t } from '../../../languageHandler';
 import { replaceableComponent } from "../../../utils/replaceableComponent";
-import MemberAvatar from '../avatars/MemberAvatar';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import Modal from '../../../Modal';
-import ErrorDialog from '../dialogs/ErrorDialog';
+import SdkConfig from '../../../SdkConfig';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
-import { LocationShareType, ShareLocationFn } from './shareLocation';
-import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
+import { getUserNameColorClass } from '../../../utils/FormattingUtils';
+import { GenericPosition, genericPositionFromGeolocation, getGeoUri } from '../../../utils/beacon';
+import { LocationShareError, findMapStyleUrl } from '../../../utils/location';
+import MemberAvatar from '../avatars/MemberAvatar';
+import ErrorDialog from '../dialogs/ErrorDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 import { MapError } from './MapError';
-import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from './LiveDurationDropdown';
-import { GenericPosition, genericPositionFromGeolocation, getGeoUri } from '../../../utils/beacon';
-import SdkConfig from '../../../SdkConfig';
-import { LocationShareError, findMapStyleUrl } from '../../../utils/location';
+import { LocationShareType, ShareLocationFn } from './shareLocation';
 
 export interface ILocationPickerProps {
     sender: RoomMember;
