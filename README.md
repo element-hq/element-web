@@ -43,7 +43,7 @@ released version of Element:
 1. Configure the correct caching headers in your webserver (see below)
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it. See the [configuration docs](docs/config.md) for details.
-3. Enter the URL into your browser and log into Element!
+1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
 at <https://packages.riot.im/element-release-key.asc>.
