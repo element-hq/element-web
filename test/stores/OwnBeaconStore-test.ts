@@ -14,7 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Room, Beacon, BeaconEvent, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import {
+    Room,
+    Beacon,
+    BeaconEvent,
+    MatrixEvent,
+    RoomStateEvent,
+    RoomMember,
+} from "matrix-js-sdk/src/matrix";
 import { makeBeaconContent } from "matrix-js-sdk/src/content-helpers";
 import { M_BEACON, M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -23,6 +30,7 @@ import { OwnBeaconStore, OwnBeaconStoreEvent } from "../../src/stores/OwnBeaconS
 import {
     advanceDateAndTime,
     flushPromisesWithFakeTimers,
+    makeMembershipEvent,
     resetAsyncStoreWithClient,
     setupAsyncStoreWithClient,
 } from "../test-utils";
@@ -243,6 +251,7 @@ describe('OwnBeaconStore', () => {
 
             expect(removeSpy.mock.calls[0]).toEqual(expect.arrayContaining([BeaconEvent.LivenessChange]));
             expect(removeSpy.mock.calls[1]).toEqual(expect.arrayContaining([BeaconEvent.New]));
+            expect(removeSpy.mock.calls[2]).toEqual(expect.arrayContaining([RoomStateEvent.Members]));
         });
 
         it('destroys beacons', async () => {
@@ -506,6 +515,112 @@ describe('OwnBeaconStore', () => {
                 OwnBeaconStoreEvent.LivenessChange,
                 [alicesOldRoomIdBeaconInfo.getType()],
             );
+        });
+    });
+
+    describe('on room membership changes', () => {
+        it('ignores events for rooms without beacons', async () => {
+            const membershipEvent = makeMembershipEvent(room2Id, aliceId);
+            // no beacons for room2
+            const [, room2] = makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+            const emitSpy = jest.spyOn(store, 'emit');
+            const oldLiveBeaconIds = store.getLiveBeaconIds();
+
+            mockClient.emit(
+                RoomStateEvent.Members,
+                membershipEvent,
+                room2.currentState,
+                new RoomMember(room2Id, aliceId),
+            );
+
+            expect(emitSpy).not.toHaveBeenCalled();
+            // strictly equal
+            expect(store.getLiveBeaconIds()).toBe(oldLiveBeaconIds);
+        });
+
+        it('ignores events for membership changes that are not current user', async () => {
+            // bob joins room1
+            const membershipEvent = makeMembershipEvent(room1Id, bobId);
+            const member = new RoomMember(room1Id, bobId);
+            member.setMembershipEvent(membershipEvent);
+
+            const [room1] = makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+            const emitSpy = jest.spyOn(store, 'emit');
+            const oldLiveBeaconIds = store.getLiveBeaconIds();
+
+            mockClient.emit(
+                RoomStateEvent.Members,
+                membershipEvent,
+                room1.currentState,
+                member,
+            );
+
+            expect(emitSpy).not.toHaveBeenCalled();
+            // strictly equal
+            expect(store.getLiveBeaconIds()).toBe(oldLiveBeaconIds);
+        });
+
+        it('ignores events for membership changes that are not leave/ban', async () => {
+            // alice joins room1
+            const membershipEvent = makeMembershipEvent(room1Id, aliceId);
+            const member = new RoomMember(room1Id, aliceId);
+            member.setMembershipEvent(membershipEvent);
+
+            const [room1] = makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+                alicesRoom2BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+            const emitSpy = jest.spyOn(store, 'emit');
+            const oldLiveBeaconIds = store.getLiveBeaconIds();
+
+            mockClient.emit(
+                RoomStateEvent.Members,
+                membershipEvent,
+                room1.currentState,
+                member,
+            );
+
+            expect(emitSpy).not.toHaveBeenCalled();
+            // strictly equal
+            expect(store.getLiveBeaconIds()).toBe(oldLiveBeaconIds);
+        });
+
+        it('destroys and removes beacons when current user leaves room', async () => {
+            // alice leaves room1
+            const membershipEvent = makeMembershipEvent(room1Id, aliceId, 'leave');
+            const member = new RoomMember(room1Id, aliceId);
+            member.setMembershipEvent(membershipEvent);
+
+            const [room1] = makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+                alicesRoom2BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+            const room1BeaconInstance = store.beacons.get(alicesRoom1BeaconInfo.getType());
+            const beaconDestroySpy = jest.spyOn(room1BeaconInstance, 'destroy');
+            const emitSpy = jest.spyOn(store, 'emit');
+
+            mockClient.emit(
+                RoomStateEvent.Members,
+                membershipEvent,
+                room1.currentState,
+                member,
+            );
+
+            expect(emitSpy).toHaveBeenCalledWith(
+                OwnBeaconStoreEvent.LivenessChange,
+                // other rooms beacons still live
+                [alicesRoom2BeaconInfo.getType()],
+            );
+            expect(beaconDestroySpy).toHaveBeenCalledTimes(1);
+            expect(store.getLiveBeaconIds(room1Id)).toEqual([]);
         });
     });
 
