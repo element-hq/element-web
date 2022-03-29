@@ -125,7 +125,7 @@ export function showAnyInviteErrors(
         // user. This usually means that no other users were attempted, making it
         // pointless for us to list who failed exactly.
         Modal.createTrackedDialog('Failed to invite users to the room', '', ErrorDialog, {
-            title: _t("Failed to invite users to the room:", { roomName: room.name }),
+            title: _t("Failed to invite users to %(roomName)s", { roomName: room.name }),
             description: inviter.getErrorText(failedUsers[0]),
         });
         return false;

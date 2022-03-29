@@ -379,14 +379,14 @@ class RoomViewStore extends Store<ActionPayload> {
     }
 
     public showJoinRoomError(err: MatrixError, roomId: string) {
-        let msg: ReactNode = err.message ? err.message : JSON.stringify(err);
-        logger.log("Failed to join room:", msg);
+        let description: ReactNode = err.message ? err.message : JSON.stringify(err);
+        logger.log("Failed to join room:", description);
 
         if (err.name === "ConnectionError") {
-            msg = _t("There was an error joining the room");
+            description = _t("There was an error joining.");
         } else if (err.errcode === 'M_INCOMPATIBLE_ROOM_VERSION') {
-            msg = <div>
-                { _t("Sorry, your homeserver is too old to participate in this room.") }<br />
+            description = <div>
+                { _t("Sorry, your homeserver is too old to participate here.") }<br />
                 { _t("Please contact your homeserver administrator.") }
             </div>;
         } else if (err.httpStatus === 404) {
@@ -395,9 +395,9 @@ class RoomViewStore extends Store<ActionPayload> {
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
                 if (invitingUserId.endsWith(`:${MatrixClientPeg.get().getDomain()}`)) {
-                    msg = _t("The person who invited you already left the room.");
+                    description = _t("The person who invited you has already left.");
                 } else {
-                    msg = _t("The person who invited you already left the room, or their server is offline.");
+                    description = _t("The person who invited you has already left, or their server is offline.");
                 }
             }
         }
@@ -405,8 +405,8 @@ class RoomViewStore extends Store<ActionPayload> {
         // FIXME: Using an import will result in test failures
         const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
         Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
-            title: _t("Failed to join room"),
-            description: msg,
+            title: _t("Failed to join"),
+            description,
         });
     }
 

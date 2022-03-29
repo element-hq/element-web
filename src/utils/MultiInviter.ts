@@ -203,18 +203,32 @@ export default class MultiInviter {
 
                 logger.error(err);
 
-                let errorText;
+                const isSpace = this.roomId && this.matrixClient.getRoom(this.roomId)?.isSpaceRoom();
+
+                let errorText: string;
                 let fatal = false;
                 switch (err.errcode) {
                     case "M_FORBIDDEN":
-                        errorText = _t('You do not have permission to invite people to this room.');
+                        if (isSpace) {
+                            errorText = _t('You do not have permission to invite people to this space.');
+                        } else {
+                            errorText = _t('You do not have permission to invite people to this room.');
+                        }
                         fatal = true;
                         break;
                     case USER_ALREADY_INVITED:
-                        errorText = _t("User %(userId)s is already invited to the room", { userId: address });
+                        if (isSpace) {
+                            errorText = _t("User is already invited to the space");
+                        } else {
+                            errorText = _t("User is already invited to the room");
+                        }
                         break;
                     case USER_ALREADY_JOINED:
-                        errorText = _t("User %(userId)s is already in the room", { userId: address });
+                        if (isSpace) {
+                            errorText = _t("User is already in the space");
+                        } else {
+                            errorText = _t("User is already in the room");
+                        }
                         break;
                     case "M_LIMIT_EXCEEDED":
                         // we're being throttled so wait a bit & try again
@@ -224,10 +238,10 @@ export default class MultiInviter {
                         return;
                     case "M_NOT_FOUND":
                     case "M_USER_NOT_FOUND":
-                        errorText = _t("User %(user_id)s does not exist", { user_id: address });
+                        errorText = _t("User does not exist");
                         break;
                     case "M_PROFILE_UNDISCLOSED":
-                        errorText = _t("User %(user_id)s may or may not exist", { user_id: address });
+                        errorText = _t("User may or may not exist");
                         break;
                     case "M_PROFILE_NOT_FOUND":
                         if (!ignoreProfile) {
@@ -241,7 +255,11 @@ export default class MultiInviter {
                         errorText = _t("The user must be unbanned before they can be invited.");
                         break;
                     case "M_UNSUPPORTED_ROOM_VERSION":
-                        errorText = _t("The user's homeserver does not support the version of the room.");
+                        if (isSpace) {
+                            errorText = _t("The user's homeserver does not support the version of the space.");
+                        } else {
+                            errorText = _t("The user's homeserver does not support the version of the room.");
+                        }
                         break;
                 }
 
