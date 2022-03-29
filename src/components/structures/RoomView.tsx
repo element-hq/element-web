@@ -366,7 +366,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.checkWidgets(this.state.room);
     };
 
-    private checkWidgets = (room) => {
+    private checkWidgets = (room: Room): void => {
         this.setState({
             hasPinnedWidgets: WidgetLayoutStore.instance.hasPinnedWidgets(room),
             mainSplitContentType: this.getMainSplitContentType(room),
@@ -374,7 +374,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         });
     };
 
-    private getMainSplitContentType = (room) => {
+    private getMainSplitContentType = (room: Room) => {
         if (SettingsStore.getValue("feature_voice_rooms") && room.isCallRoom()) {
             return MainSplitContentType.Video;
         }
