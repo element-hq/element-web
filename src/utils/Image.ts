@@ -17,7 +17,8 @@
 import { arrayHasDiff } from "./arrays";
 
 export function mayBeAnimated(mimeType: string): boolean {
-    return ["image/gif", "image/webp", "image/png", "image/apng"].includes(mimeType);
+    // AVIF animation support at the time of writing is only available in Chrome hence not having `blobIsAnimated` check
+    return ["image/gif", "image/webp", "image/png", "image/apng", "image/avif"].includes(mimeType);
 }
 
 function arrayBufferRead(arr: ArrayBuffer, start: number, len: number): Uint8Array {
