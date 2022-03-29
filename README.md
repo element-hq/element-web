@@ -41,8 +41,8 @@ released version of Element:
 1. Untar the tarball on your web server
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
-1. If desired, copy `config.sample.json` to `config.json` and edit it
-   as desired. See the [configuration docs](docs/config.md) for details.
+1. Configure the app by copying `config.sample.json` to `config.json` and
+   modifying it. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
