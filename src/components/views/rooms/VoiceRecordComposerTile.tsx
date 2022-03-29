@@ -233,7 +233,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (!this.state.recorder) return null; // no recorder means we're not recording: no waveform
 
         if (this.state.recordingPhase !== RecordingState.Started) {
-            return <RecordingPlayback playback={this.state.recorder.getPlayback()} />;
+            return <RecordingPlayback playback={this.state.recorder.getPlayback()} withWaveform={true} />;
         }
 
         // only other UI is the recording-in-progress UI

@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ limitations under the License.
 
     contain: content;
 
+    // Waveforms are present in live recording only
     .mx_Waveform {
         .mx_Waveform_bar {
             background-color: $quaternary-content;
@@ -46,11 +47,22 @@ limitations under the License.
 
     .mx_Clock {
         width: $font-42px; // we're not using a monospace font, so fake it
+        min-width: $font-42px; // force sensible layouts in awkward flexboxes (file panel, for example)
         padding-right: 6px; // with the fixed width this ends up as a visual 8px most of the time, as intended.
         padding-left: 8px; // isolate from recording circle / play control
     }
 
-    &.mx_VoiceMessagePrimaryContainer_noWaveform {
-        max-width: 162px; // with all the padding this results in 185px wide
+    // For timeline-rendered playback, mirror the values for where the clock is in
+    // the waveform version.
+    .mx_SeekBar {
+        margin-left: 8px;
+        margin-right: 6px;
+
+        & + .mx_Clock {
+            text-align: right;
+
+            // Take the padding off the clock because it's accounted for in the seek bar
+            padding: 0;
+        }
     }
 }

@@ -27,6 +27,7 @@ import RoomContext, { TimelineRenderingType } from '../../../../src/contexts/Roo
 import { createAudioContext } from '../../../../src/audio/compat';
 import { findByTestId, flushPromises } from '../../../test-utils';
 import PlaybackWaveform from '../../../../src/components/views/audio_messages/PlaybackWaveform';
+import SeekBar from "../../../../src/components/views/audio_messages/SeekBar";
 
 jest.mock('../../../../src/audio/compat', () => ({
     createAudioContext: jest.fn(),
@@ -56,7 +57,7 @@ describe('<RecordingPlayback />', () => {
     const mockChannelData = new Float32Array();
 
     const defaultRoom = { roomId: '!room:server.org', timelineRenderingType: TimelineRenderingType.File };
-    const getComponent = (props: { playback: Playback }, room = defaultRoom) =>
+    const getComponent = (props: React.ComponentProps<RecordingPlayback>, room = defaultRoom) =>
         mount(<RecordingPlayback {...props} />, {
             wrappingComponent: RoomContext.Provider,
             wrappingComponentProps: { value: room },
@@ -128,34 +129,19 @@ describe('<RecordingPlayback />', () => {
         expect(playback.toggle).toHaveBeenCalled();
     });
 
-    it.each([
-        [TimelineRenderingType.Notification],
-        [TimelineRenderingType.File],
-        [TimelineRenderingType.Pinned],
-    ])('does not render waveform when timeline rendering type for room is %s', (timelineRenderingType) => {
+    it('should render a seek bar by default', () => {
         const playback = new Playback(new ArrayBuffer(8));
-        const room = {
-            ...defaultRoom,
-            timelineRenderingType,
-        };
-        const component = getComponent({ playback }, room);
+        const component = getComponent({ playback });
 
         expect(component.find(PlaybackWaveform).length).toBeFalsy();
+        expect(component.find(SeekBar).length).toBeTruthy();
     });
 
-    it.each([
-        [TimelineRenderingType.Room],
-        [TimelineRenderingType.Thread],
-        [TimelineRenderingType.ThreadsList],
-        [TimelineRenderingType.Search],
-    ])('renders waveform when timeline rendering type for room is %s', (timelineRenderingType) => {
+    it('should render a waveform when requested', () => {
         const playback = new Playback(new ArrayBuffer(8));
-        const room = {
-            ...defaultRoom,
-            timelineRenderingType,
-        };
-        const component = getComponent({ playback }, room);
+        const component = getComponent({ playback, withWaveform: true });
 
         expect(component.find(PlaybackWaveform).length).toBeTruthy();
+        expect(component.find(SeekBar).length).toBeFalsy();
     });
 });

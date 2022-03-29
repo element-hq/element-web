@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,29 +19,50 @@ import React, { ReactNode } from "react";
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
+import AudioPlayerBase, { IProps as IAudioPlayerBaseProps } from "./AudioPlayerBase";
+import SeekBar from "./SeekBar";
 import PlaybackWaveform from "./PlaybackWaveform";
-import AudioPlayerBase from "./AudioPlayerBase";
-import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
+
+interface IProps extends IAudioPlayerBaseProps {
+    /**
+     * When true, use a waveform instead of a seek bar
+     */
+    withWaveform?: boolean;
+}
 
 @replaceableComponent("views.audio_messages.RecordingPlayback")
-export default class RecordingPlayback extends AudioPlayerBase {
-    static contextType = RoomContext;
-    public context!: React.ContextType<typeof RoomContext>;
+export default class RecordingPlayback extends AudioPlayerBase<IProps> {
+    // This component is rendered in two ways: the composer and timeline. They have different
+    // rendering properties (specifically the difference of a waveform or not).
 
-    private get isWaveformable(): boolean {
-        return this.context.timelineRenderingType !== TimelineRenderingType.Notification
-            && this.context.timelineRenderingType !== TimelineRenderingType.File
-            && this.context.timelineRenderingType !== TimelineRenderingType.Pinned;
+    private renderWaveformLook(): ReactNode {
+        return <>
+            <PlaybackClock playback={this.props.playback} />
+            <PlaybackWaveform playback={this.props.playback} />
+        </>;
+    }
+
+    private renderSeekableLook(): ReactNode {
+        return <>
+            <SeekBar
+                playback={this.props.playback}
+                tabIndex={-1} // prevent tabbing into the bar
+                playbackPhase={this.state.playbackPhase}
+                ref={this.seekRef}
+            />
+            <PlaybackClock playback={this.props.playback} />
+        </>;
     }
 
     protected renderComponent(): ReactNode {
-        const shapeClass = !this.isWaveformable ? 'mx_VoiceMessagePrimaryContainer_noWaveform' : '';
-
         return (
-            <div className={'mx_MediaBody mx_VoiceMessagePrimaryContainer ' + shapeClass}>
-                <PlayPauseButton playback={this.props.playback} playbackPhase={this.state.playbackPhase} />
-                <PlaybackClock playback={this.props.playback} />
-                { this.isWaveformable && <PlaybackWaveform playback={this.props.playback} /> }
+            <div className="mx_MediaBody mx_VoiceMessagePrimaryContainer" onKeyDown={this.onKeyDown}>
+                <PlayPauseButton
+                    playback={this.props.playback}
+                    playbackPhase={this.state.playbackPhase}
+                    ref={this.playPauseRef}
+                />
+                { this.props.withWaveform ? this.renderWaveformLook() : this.renderSeekableLook() }
             </div>
         );
     }

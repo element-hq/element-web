@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, ReactNode, RefObject } from "react";
+import React, { ReactNode } from "react";
 
 import PlayPauseButton from "./PlayPauseButton";
 import { replaceableComponent } from "../../../utils/replaceableComponent";
@@ -24,41 +24,9 @@ import { _t } from "../../../languageHandler";
 import SeekBar from "./SeekBar";
 import PlaybackClock from "./PlaybackClock";
 import AudioPlayerBase from "./AudioPlayerBase";
-import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 
 @replaceableComponent("views.audio_messages.AudioPlayer")
 export default class AudioPlayer extends AudioPlayerBase {
-    private playPauseRef: RefObject<PlayPauseButton> = createRef();
-    private seekRef: RefObject<SeekBar> = createRef();
-
-    private onKeyDown = (ev: React.KeyboardEvent) => {
-        let handled = true;
-        const action = getKeyBindingsManager().getAccessibilityAction(ev);
-
-        switch (action) {
-            case KeyBindingAction.Space:
-                this.playPauseRef.current?.toggleState();
-                break;
-            case KeyBindingAction.ArrowLeft:
-                this.seekRef.current?.left();
-                break;
-            case KeyBindingAction.ArrowRight:
-                this.seekRef.current?.right();
-                break;
-            default:
-                handled = false;
-                break;
-        }
-
-        // stopPropagation() prevents the FocusComposer catch-all from triggering,
-        // but we need to do it on key down instead of press (even though the user
-        // interaction is typically on press).
-        if (handled) {
-            ev.stopPropagation();
-        }
-    };
-
     protected renderFileSize(): string {
         const bytes = this.props.playback.sizeBytes;
         if (!bytes) return null;
