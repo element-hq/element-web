@@ -889,7 +889,7 @@
     "Jump to date (adds /jumptodate and jump to date headers)": "Jump to date (adds /jumptodate and jump to date headers)",
     "Don't send read receipts": "Don't send read receipts",
     "Location sharing - pin drop (under active development)": "Location sharing - pin drop (under active development)",
-    "Location sharing - share your current location with live updates (under active development)": "Location sharing - share your current location with live updates (under active development)",
+    "Live location sharing - share current location (active development, and temporarily, locations persist in room history)": "Live location sharing - share current location (active development, and temporarily, locations persist in room history)",
     "Font size": "Font size",
     "Use custom size": "Use custom size",
     "Enable Emoji suggestions while typing": "Enable Emoji suggestions while typing",
