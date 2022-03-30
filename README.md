@@ -305,11 +305,19 @@ yarn install
 popd
 ```
 
-Finally, build and start Element itself:
+Clone the repo and switch to the `element-web` directory:
 
 ```bash
 git clone https://github.com/vector-im/element-web.git
 cd element-web
+```
+
+Configure the app by copying `config.sample.json` to `config.json` and
+modifying it. See the [configuration docs](docs/config.md) for details.
+
+Finally, build and start Element itself:
+
+```bash
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
@@ -329,9 +337,6 @@ Wait a few seconds for the initial build to finish; you should see something lik
    Remember, the command will not terminate since it runs the web server
    and rebuilds source files when they change. This development server also
    disables caching, so do NOT use it in production.
-
-Configure the app by copying `config.sample.json` to `config.json` and
-modifying it. See the [configuration docs](docs/config.md) for details.
 
 Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
 
