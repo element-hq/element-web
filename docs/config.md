@@ -541,4 +541,4 @@ The following are undocumented or intended for developer use only.
 1. `fallback_hs_url`
 2. `sync_timeline_limit`
 3. `dangerously_allow_unsafe_and_insecure_passwords`
-4. `latex_maths_delims`
+4. `latex_maths_delims`: An optional setting to override the default delimiters used for maths parsing. See https://github.com/matrix-org/matrix-react-sdk/pull/5939 for details. Only used when `feature_latex_maths` is enabled.
