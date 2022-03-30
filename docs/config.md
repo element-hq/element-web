@@ -61,7 +61,7 @@ To force a labs flag on or off, use the following:
 }
 ```
 
-If you'd like the user to be able to self-select which labs flags they can turn on, add `"show_labs_flags": true` to
+If you'd like the user to be able to self-select which labs flags they can turn on, add `"show_labs_settings": true` to
 your config. This will turn on the tab in user settings.
 
 **Note**: Feature support varies release-by-release. Check the [labs flag documentation](./labs.md) frequently if enabling
