@@ -147,30 +147,13 @@ export function getNestedReplyText(
 export function makeReplyMixIn(ev?: MatrixEvent): RecursivePartial<IContent> {
     if (!ev) return {};
 
-    const mixin: RecursivePartial<IContent> = {
+    return {
         'm.relates_to': {
             'm.in_reply_to': {
                 'event_id': ev.getId(),
             },
         },
     };
-
-    /**
-     * If the event replied is part of a thread
-     * Add the `m.thread` relation so that clients
-     * that know how to handle that relation will
-     * be able to render them more accurately
-     */
-    if (ev.isThreadRelation || ev.isThreadRoot) {
-        mixin['m.relates_to'] = {
-            ...mixin['m.relates_to'],
-            is_falling_back: false,
-            rel_type: THREAD_RELATION_TYPE.name,
-            event_id: ev.threadRootId,
-        };
-    }
-
-    return mixin;
 }
 
 export function shouldDisplayReply(event: MatrixEvent): boolean {
@@ -210,8 +193,7 @@ export function addReplyToMessageContent(
     Object.assign(content, replyContent);
 
     if (opts.includeLegacyFallback) {
-        // Part of Replies fallback support - prepend the text we're sending
-        // with the text we're replying to
+        // Part of Replies fallback support - prepend the text we're sending with the text we're replying to
         const nestedReply = getNestedReplyText(replyToEvent, opts.permalinkCreator);
         if (nestedReply) {
             if (content.formatted_body) {
