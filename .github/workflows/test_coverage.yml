@@ -16,7 +16,7 @@ jobs:
           # If this is a pull request, make sure we check out its head rather than the
           # automatically generated merge commit, so that the coverage diff excludes
           # unrelated changes in the base branch
-          ref: ${{ github.event.type == 'PullRequestEvent' && github.event.pull_request.head.sha || '' }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
 
       - name: Yarn cache
         uses: c-hive/gha-yarn-cache@v2
