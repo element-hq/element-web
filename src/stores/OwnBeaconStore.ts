@@ -55,6 +55,7 @@ const STATIC_UPDATE_INTERVAL = 30000;
 
 type OwnBeaconStoreState = {
     beacons: Map<string, Beacon>;
+    beaconWireErrors: Map<string, Beacon>;
     beaconsByRoomId: Map<Room['roomId'], Set<string>>;
     liveBeaconIds: string[];
 };
@@ -63,6 +64,10 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     // users beacons, keyed by event type
     public readonly beacons = new Map<string, Beacon>();
     public readonly beaconsByRoomId = new Map<Room['roomId'], Set<string>>();
+    /**
+     * Track over the wire errors for beacons
+     */
+    public readonly beaconWireErrors = new Map<string, Error>();
     private liveBeaconIds = [];
     private locationInterval: number;
     private geolocationError: GeolocationError | undefined;
@@ -101,6 +106,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         this.beacons.clear();
         this.beaconsByRoomId.clear();
         this.liveBeaconIds = [];
+        this.beaconWireErrors.clear();
     }
 
     protected async onReady(): Promise<void> {
@@ -362,7 +368,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     private publishCurrentLocationToBeacons = async () => {
         try {
             const position = await getCurrentPosition();
-            // TODO error handling
             this.publishLocationToBeacons(mapGeolocationPositionToTimedGeo(position));
         } catch (error) {
             this.onGeolocationError(error?.message);
@@ -394,7 +399,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      */
     private publishLocationToBeacons = async (position: TimedGeoUri) => {
         this.lastPublishedPositionTimestamp = Date.now();
-        // TODO handle failure in individual beacon without rejecting rest
         await Promise.all(this.liveBeaconIds.map(beaconId =>
             this.sendLocationToBeacon(this.beacons.get(beaconId), position)),
         );
@@ -407,6 +411,11 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      */
     private sendLocationToBeacon = async (beacon: Beacon, { geoUri, timestamp }: TimedGeoUri) => {
         const content = makeBeaconContent(geoUri, timestamp, beacon.beaconInfoId);
-        await this.matrixClient.sendEvent(beacon.roomId, M_BEACON.name, content);
+        try {
+            await this.matrixClient.sendEvent(beacon.roomId, M_BEACON.name, content);
+        } catch (error) {
+            logger.error(error);
+            this.beaconWireErrors.set(beacon.identifier, error);
+        }
     };
 }

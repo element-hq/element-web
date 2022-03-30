@@ -73,9 +73,11 @@ type LiveBeaconsState = {
     beacon?: Beacon;
     onStopSharing?: () => void;
     stoppingInProgress?: boolean;
+    hasStopSharingError?: boolean;
 };
 const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
     const [stoppingInProgress, setStoppingInProgress] = useState(false);
+    const [error, setError] = useState<Error>();
 
     // do we have an active geolocation.watchPosition
     const isMonitoringLiveLocation = useEventEmitterState(
@@ -93,6 +95,7 @@ const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
     // reset stopping in progress on change in live ids
     useEffect(() => {
         setStoppingInProgress(false);
+        setError(undefined);
     }, [liveBeaconIds]);
 
     if (!isMonitoringLiveLocation || !liveBeaconIds?.length) {
@@ -112,11 +115,12 @@ const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
             // only clear loading in case of error
             // to avoid flash of not-loading state
             // after beacons have been stopped but we wait for sync
+            setError(error);
             setStoppingInProgress(false);
         }
     };
 
-    return { onStopSharing, beacon, stoppingInProgress };
+    return { onStopSharing, beacon, stoppingInProgress, hasStopSharingError: !!error };
 };
 
 const LiveTimeRemaining: React.FC<{ beacon: Beacon }> = ({ beacon }) => {
@@ -136,6 +140,7 @@ const RoomLiveShareWarning: React.FC<Props> = ({ roomId }) => {
         onStopSharing,
         beacon,
         stoppingInProgress,
+        hasStopSharingError,
     } = useLiveBeacons(roomId);
 
     if (!beacon) {
@@ -145,15 +150,19 @@ const RoomLiveShareWarning: React.FC<Props> = ({ roomId }) => {
     return <div
         className={classNames('mx_RoomLiveShareWarning')}
     >
-        <StyledLiveBeaconIcon className="mx_RoomLiveShareWarning_icon" />
+        <StyledLiveBeaconIcon className="mx_RoomLiveShareWarning_icon" withError={hasStopSharingError} />
         <span className="mx_RoomLiveShareWarning_label">
-            { _t('You are sharing your live location') }
+            { hasStopSharingError ?
+                _t('An error occurred while stopping your live location, please try again') :
+                _t('You are sharing your live location')
+            }
         </span>
 
-        { stoppingInProgress ?
-            <span className='mx_RoomLiveShareWarning_spinner'><Spinner h={16} w={16} /></span> :
-            <LiveTimeRemaining beacon={beacon} />
+        { stoppingInProgress &&
+            <span className='mx_RoomLiveShareWarning_spinner'><Spinner h={16} w={16} /></span>
         }
+        { !stoppingInProgress && !hasStopSharingError && <LiveTimeRemaining beacon={beacon} /> }
+
         <AccessibleButton
             data-test-id='room-live-share-stop-sharing'
             onClick={onStopSharing}
@@ -161,7 +170,7 @@ const RoomLiveShareWarning: React.FC<Props> = ({ roomId }) => {
             element='button'
             disabled={stoppingInProgress}
         >
-            { _t('Stop sharing') }
+            { hasStopSharingError ? _t('Retry') : _t('Stop sharing') }
         </AccessibleButton>
     </div>;
 };

@@ -2898,6 +2898,7 @@
     "Join the beta": "Join the beta",
     "You are sharing your live location": "You are sharing your live location",
     "%(timeRemaining)s left": "%(timeRemaining)s left",
+    "An error occurred while stopping your live location, please try again": "An error occurred while stopping your live location, please try again",
     "Stop sharing": "Stop sharing",
     "Avatar": "Avatar",
     "This room is public": "This room is public",

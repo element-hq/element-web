@@ -26,6 +26,7 @@ import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../../src/stores/OwnB
 import {
     advanceDateAndTime,
     findByTestId,
+    flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
     makeBeaconInfoEvent,
     mockGeolocation,
@@ -96,7 +97,7 @@ describe('<RoomLiveShareWarning />', () => {
     beforeEach(() => {
         mockGeolocation();
         jest.spyOn(global.Date, 'now').mockReturnValue(now);
-        mockClient.unstable_setLiveBeacon.mockClear();
+        mockClient.unstable_setLiveBeacon.mockReset().mockResolvedValue({ event_id: '1' });
     });
 
     afterEach(async () => {
@@ -244,6 +245,30 @@ describe('<RoomLiveShareWarning />', () => {
                 expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledTimes(2);
                 expect(component.find('Spinner').length).toBeTruthy();
                 expect(findByTestId(component, 'room-live-share-stop-sharing').at(0).props().disabled).toBeTruthy();
+            });
+
+            it('displays error when stop sharing fails', async () => {
+                const component = getComponent({ roomId: room1Id });
+
+                // fail first time
+                mockClient.unstable_setLiveBeacon
+                    .mockRejectedValueOnce(new Error('oups'))
+                    .mockResolvedValue(({ event_id: '1' }));
+
+                await act(async () => {
+                    findByTestId(component, 'room-live-share-stop-sharing').at(0).simulate('click');
+                    await flushPromisesWithFakeTimers();
+                });
+                component.setProps({});
+
+                expect(component.html()).toMatchSnapshot();
+
+                act(() => {
+                    findByTestId(component, 'room-live-share-stop-sharing').at(0).simulate('click');
+                    component.setProps({});
+                });
+
+                expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledTimes(2);
             });
 
             it('displays again with correct state after stopping a beacon', () => {

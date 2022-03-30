@@ -19,10 +19,14 @@ import classNames from 'classnames';
 
 import { Icon as LiveLocationIcon } from '../../../../res/img/location/live-location.svg';
 
-const StyledLiveBeaconIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({ className, ...props }) =>
+interface Props extends React.SVGProps<SVGSVGElement> {
+    // use error styling when true
+    withError?: boolean;
+}
+const StyledLiveBeaconIcon: React.FC<Props> = ({ className, withError, ...props }) =>
     <LiveLocationIcon
         {...props}
-        className={classNames('mx_StyledLiveBeaconIcon', className)}
+        className={classNames('mx_StyledLiveBeaconIcon', className, { 'mx_StyledLiveBeaconIcon_error': withError })}
     />;
 
 export default StyledLiveBeaconIcon;
