@@ -51,6 +51,7 @@ import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import Measured from '../views/elements/Measured';
 import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
+import RoomViewStore from '../../stores/RoomViewStore';
 
 interface IProps {
     room: Room;
@@ -106,9 +107,19 @@ export default class ThreadView extends React.Component<IProps, IState> {
     public componentWillUnmount(): void {
         this.teardownThread();
         if (this.dispatcherRef) dis.unregister(this.dispatcherRef);
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+        const roomId = this.props.mxEvent.getRoomId();
+        const room = MatrixClientPeg.get().getRoom(roomId);
         room.removeListener(ThreadEvent.New, this.onNewThread);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
+
+        const hasRoomChanged = RoomViewStore.getRoomId() !== roomId;
+        if (this.props.isInitialEventHighlighted && !hasRoomChanged) {
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: this.props.room.roomId,
+                metricsTrigger: undefined, // room doesn't change
+            });
+        }
     }
 
     public componentDidUpdate(prevProps) {
@@ -206,7 +217,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private onScroll = (): void => {
+    private resetHighlightedEvent = (): void => {
         if (this.props.initialEvent && this.props.isInitialEventHighlighted) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
@@ -363,7 +374,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             editState={this.state.editState}
                             eventId={this.props.initialEvent?.getId()}
                             highlightedEventId={highlightedEventId}
-                            onUserScroll={this.onScroll}
+                            onUserScroll={this.resetHighlightedEvent}
                             onPaginationRequest={this.onPaginationRequest}
                         />
                     </div> }
