@@ -8,7 +8,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const SentryCliPlugin = require("@sentry/webpack-plugin");
 
 dotenv.config();
@@ -242,9 +241,6 @@ module.exports = (env, argv) => {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
-                        plugins: [
-                            useHMR && require.resolve('react-refresh/babel'),
-                        ].filter(Boolean),
                     },
                 },
                 {
@@ -624,7 +620,6 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
-            useHMR && new ReactRefreshWebpackPlugin(fullPageErrors ? undefined : { overlay: { entry: false } }),
 
             // upload to sentry if sentry env is present
             process.env.SENTRY_DSN &&
