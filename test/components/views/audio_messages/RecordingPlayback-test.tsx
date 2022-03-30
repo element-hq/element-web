@@ -57,7 +57,7 @@ describe('<RecordingPlayback />', () => {
     const mockChannelData = new Float32Array();
 
     const defaultRoom = { roomId: '!room:server.org', timelineRenderingType: TimelineRenderingType.File };
-    const getComponent = (props: React.ComponentProps<RecordingPlayback>, room = defaultRoom) =>
+    const getComponent = (props: React.ComponentProps<typeof RecordingPlayback>, room = defaultRoom) =>
         mount(<RecordingPlayback {...props} />, {
             wrappingComponent: RoomContext.Provider,
             wrappingComponentProps: { value: room },
