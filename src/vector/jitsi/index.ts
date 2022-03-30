@@ -51,6 +51,7 @@ let roomId: string;
 let openIdToken: IOpenIDCredentials;
 let roomName: string;
 let startAudioOnly: boolean;
+let isVideoChannel: boolean;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -120,12 +121,13 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         roomId = qsParam('roomId', true);
         roomName = qsParam('roomName', true);
         startAudioOnly = qsParam('isAudioOnly', true) === "true";
+        isVideoChannel = qsParam('isVideoChannel', true) === "true";
 
         // We've reached the point where we have to wait for the config, so do that then parse it.
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
         const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
         skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") || false;
+            .get("skip_built_in_welcome_screen") || isVideoChannel;
 
         // If we're meant to skip our screen, skip to the part where we show Jitsi instead of us.
         // We don't set up the call yet though as this might lead to failure without the widget API.
@@ -300,6 +302,7 @@ function joinConference() { // event handler bound in HTML
         "they mention 'external_api' or 'jitsi' in the stack. They're just Jitsi Meet trying to parse " +
         "our fragment values and not recognizing the options.",
     );
+
     const options = {
         width: "100%",
         height: "100%",
@@ -313,9 +316,22 @@ function joinConference() { // event handler bound in HTML
         },
         configOverwrite: {
             startAudioOnly,
-        },
+        } as any,
         jwt: jwt,
     };
+
+    // Video channel widgets need some more tailored config options
+    if (isVideoChannel) {
+        // Ensure that we start on Jitsi Meet's native prejoin screen, for
+        // deployments that skip straight to the conference by default
+        options.configOverwrite.prejoinConfig = { enabled: true };
+        // Use a simplified set of toolbar buttons
+        options.configOverwrite.toolbarButtons = [
+            "microphone", "camera", "desktop", "tileview", "hangup",
+        ];
+        // Hide all top bar elements
+        options.configOverwrite.conferenceInfo = { autoHide: [] };
+    }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
     if (displayName) meetApi.executeCommand("displayName", displayName);
@@ -332,6 +348,9 @@ function joinConference() { // event handler bound in HTML
             widgetApi.setAlwaysOnScreen(true);
             widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
         }
+
+        // Video rooms should start in tile mode
+        if (isVideoChannel) meetApi.executeCommand("setTileView", true);
     });
 
     meetApi.on("readyToClose", () => {
