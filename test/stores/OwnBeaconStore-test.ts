@@ -166,7 +166,7 @@ describe('OwnBeaconStore', () => {
         geolocation = mockGeolocation();
         mockClient.getVisibleRooms.mockReturnValue([]);
         mockClient.unstable_setLiveBeacon.mockClear().mockResolvedValue({ event_id: '1' });
-        mockClient.sendEvent.mockClear().mockResolvedValue({ event_id: '1' });
+        mockClient.sendEvent.mockReset().mockResolvedValue({ event_id: '1' });
         jest.spyOn(global.Date, 'now').mockReturnValue(now);
         jest.spyOn(OwnBeaconStore.instance, 'emit').mockRestore();
         jest.spyOn(logger, 'error').mockRestore();
@@ -696,7 +696,7 @@ describe('OwnBeaconStore', () => {
         });
     });
 
-    describe('sending positions', () => {
+    describe('publishing positions', () => {
         it('stops watching position when user has no more live beacons', async () => {
             // geolocation is only going to emit 1 position
             geolocation.watchPosition.mockImplementation(
@@ -822,6 +822,136 @@ describe('OwnBeaconStore', () => {
                 // then both live beacons get current position published
                 // after new beacon is added
                 expect(mockClient.sendEvent).toHaveBeenCalledTimes(3);
+            });
+        });
+
+        describe('when publishing position fails', () => {
+            beforeEach(() => {
+                geolocation.watchPosition.mockImplementation(
+                    watchPositionMockImplementation([0, 1000, 3000, 3000, 3000]),
+                );
+
+                // eat expected console error logs
+                jest.spyOn(logger, 'error').mockImplementation(() => { });
+            });
+
+            // we need to advance time and then flush promises
+            // individually for each call to sendEvent
+            // otherwise the sendEvent doesn't reject/resolve and update state
+            // before the next call
+            // advance and flush every 1000ms
+            // until given ms is 'elapsed'
+            const advanceAndFlushPromises = async (timeMs: number) => {
+                while (timeMs > 0) {
+                    jest.advanceTimersByTime(1000);
+                    await flushPromisesWithFakeTimers();
+                    timeMs -= 1000;
+                }
+            };
+
+            it('continues publishing positions after one publish error', async () => {
+                // fail to send first event, then succeed
+                mockClient.sendEvent.mockRejectedValueOnce(new Error('oups')).mockResolvedValue({ event_id: '1' });
+                makeRoomsWithStateEvents([
+                    alicesRoom1BeaconInfo,
+                ]);
+                const store = await makeOwnBeaconStore();
+                // wait for store to settle
+                await flushPromisesWithFakeTimers();
+
+                await advanceAndFlushPromises(50000);
+
+                // called for each position from watchPosition
+                expect(mockClient.sendEvent).toHaveBeenCalledTimes(5);
+                expect(store.hasWireError(alicesRoom1BeaconInfo.getType())).toBe(false);
+            });
+
+            it('continues publishing positions when a beacon fails intermittently', async () => {
+                // every second event rejects
+                // meaning this beacon has more errors than the threshold
+                // but they are not consecutive
+                mockClient.sendEvent
+                    .mockRejectedValueOnce(new Error('oups'))
+                    .mockResolvedValueOnce({ event_id: '1' })
+                    .mockRejectedValueOnce(new Error('oups'))
+                    .mockResolvedValueOnce({ event_id: '1' })
+                    .mockRejectedValueOnce(new Error('oups'));
+
+                makeRoomsWithStateEvents([
+                    alicesRoom1BeaconInfo,
+                ]);
+                const store = await makeOwnBeaconStore();
+                const emitSpy = jest.spyOn(store, 'emit');
+                // wait for store to settle
+                await flushPromisesWithFakeTimers();
+
+                await advanceAndFlushPromises(50000);
+
+                // called for each position from watchPosition
+                expect(mockClient.sendEvent).toHaveBeenCalledTimes(5);
+                expect(store.hasWireError(alicesRoom1BeaconInfo.getType())).toBe(false);
+                expect(emitSpy).not.toHaveBeenCalledWith(
+                    OwnBeaconStoreEvent.WireError, alicesRoom1BeaconInfo.getType(),
+                );
+            });
+
+            it('stops publishing positions when a beacon fails consistently', async () => {
+                // always fails to send events
+                mockClient.sendEvent.mockRejectedValue(new Error('oups'));
+                makeRoomsWithStateEvents([
+                    alicesRoom1BeaconInfo,
+                ]);
+                const store = await makeOwnBeaconStore();
+                const emitSpy = jest.spyOn(store, 'emit');
+                // wait for store to settle
+                await flushPromisesWithFakeTimers();
+
+                // 5 positions from watchPosition in this period
+                await advanceAndFlushPromises(50000);
+
+                // only two allowed failures
+                expect(mockClient.sendEvent).toHaveBeenCalledTimes(2);
+                expect(store.hasWireError(alicesRoom1BeaconInfo.getType())).toBe(true);
+                expect(emitSpy).toHaveBeenCalledWith(
+                    OwnBeaconStoreEvent.WireError, alicesRoom1BeaconInfo.getType(),
+                );
+            });
+
+            it('restarts publishing a beacon after resetting wire error', async () => {
+                // always fails to send events
+                mockClient.sendEvent.mockRejectedValue(new Error('oups'));
+                makeRoomsWithStateEvents([
+                    alicesRoom1BeaconInfo,
+                ]);
+                const store = await makeOwnBeaconStore();
+                const emitSpy = jest.spyOn(store, 'emit');
+                // wait for store to settle
+                await flushPromisesWithFakeTimers();
+
+                // 3 positions from watchPosition in this period
+                await advanceAndFlushPromises(4000);
+
+                // only two allowed failures
+                expect(mockClient.sendEvent).toHaveBeenCalledTimes(2);
+                expect(store.hasWireError(alicesRoom1BeaconInfo.getType())).toBe(true);
+                expect(emitSpy).toHaveBeenCalledWith(
+                    OwnBeaconStoreEvent.WireError, alicesRoom1BeaconInfo.getType(),
+                );
+
+                // reset emitSpy mock counts to asser on wireError again
+                emitSpy.mockClear();
+                store.resetWireError(alicesRoom1BeaconInfo.getType());
+
+                expect(store.hasWireError(alicesRoom1BeaconInfo.getType())).toBe(false);
+
+                // 2 more positions from watchPosition in this period
+                await advanceAndFlushPromises(10000);
+
+                // 2 from before, 2 new ones
+                expect(mockClient.sendEvent).toHaveBeenCalledTimes(4);
+                expect(emitSpy).toHaveBeenCalledWith(
+                    OwnBeaconStoreEvent.WireError, alicesRoom1BeaconInfo.getType(),
+                );
             });
         });
 

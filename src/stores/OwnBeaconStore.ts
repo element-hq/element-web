@@ -48,10 +48,13 @@ const isOwnBeacon = (beacon: Beacon, userId: string): boolean => beacon.beaconIn
 export enum OwnBeaconStoreEvent {
     LivenessChange = 'OwnBeaconStore.LivenessChange',
     MonitoringLivePosition = 'OwnBeaconStore.MonitoringLivePosition',
+    WireError = 'WireError',
 }
 
 const MOVING_UPDATE_INTERVAL = 2000;
 const STATIC_UPDATE_INTERVAL = 30000;
+
+const BAIL_AFTER_CONSECUTIVE_ERROR_COUNT = 2;
 
 type OwnBeaconStoreState = {
     beacons: Map<string, Beacon>;
@@ -65,9 +68,11 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     public readonly beacons = new Map<string, Beacon>();
     public readonly beaconsByRoomId = new Map<Room['roomId'], Set<string>>();
     /**
-     * Track over the wire errors for beacons
+     * Track over the wire errors for published positions
+     * Counts consecutive wire errors per beacon
+     * Reset on successful publish of location
      */
-    public readonly beaconWireErrors = new Map<string, Error>();
+    public readonly beaconWireErrorCounts = new Map<string, number>();
     private liveBeaconIds = [];
     private locationInterval: number;
     private geolocationError: GeolocationError | undefined;
@@ -106,7 +111,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         this.beacons.clear();
         this.beaconsByRoomId.clear();
         this.liveBeaconIds = [];
-        this.beaconWireErrors.clear();
+        this.beaconWireErrorCounts.clear();
     }
 
     protected async onReady(): Promise<void> {
@@ -123,6 +128,25 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
 
     public hasLiveBeacons(roomId?: string): boolean {
         return !!this.getLiveBeaconIds(roomId).length;
+    }
+
+    /**
+     * If a beacon has failed to publish position
+     * past the allowed consecutive failure count (BAIL_AFTER_CONSECUTIVE_ERROR_COUNT)
+     * Then consider it to have an error
+     */
+    public hasWireError(beaconId: string): boolean {
+        return this.beaconWireErrorCounts.get(beaconId) >= BAIL_AFTER_CONSECUTIVE_ERROR_COUNT;
+    }
+
+    public resetWireError(beaconId: string): void {
+        this.incrementBeaconWireErrorCount(beaconId, false);
+
+        // always publish to all live beacons together
+        // instead of just one that was changed
+        // to keep lastPublishedTimestamp simple
+        // and extra published locations don't hurt
+        this.publishCurrentLocationToBeacons();
     }
 
     public getLiveBeaconIds(roomId?: string): string[] {
@@ -201,6 +225,13 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     /**
      * State management
      */
+
+    /**
+     * Live beacon ids that do not have wire errors
+     */
+    private get healthyLiveBeaconIds() {
+        return this.liveBeaconIds.filter(beaconId => !this.hasWireError(beaconId));
+    }
 
     private initialiseBeaconState = () => {
         const userId = this.matrixClient.getUserId();
@@ -399,7 +430,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      */
     private publishLocationToBeacons = async (position: TimedGeoUri) => {
         this.lastPublishedPositionTimestamp = Date.now();
-        await Promise.all(this.liveBeaconIds.map(beaconId =>
+        await Promise.all(this.healthyLiveBeaconIds.map(beaconId =>
             this.sendLocationToBeacon(this.beacons.get(beaconId), position)),
         );
     };
@@ -413,9 +444,35 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         const content = makeBeaconContent(geoUri, timestamp, beacon.beaconInfoId);
         try {
             await this.matrixClient.sendEvent(beacon.roomId, M_BEACON.name, content);
+            this.incrementBeaconWireErrorCount(beacon.identifier, false);
         } catch (error) {
             logger.error(error);
-            this.beaconWireErrors.set(beacon.identifier, error);
+            this.incrementBeaconWireErrorCount(beacon.identifier, true);
+        }
+    };
+
+    /**
+     * Manage beacon wire error count
+     * - clear count for beacon when not error
+     * - increment count for beacon when is error
+     * - emit if beacon error count crossed threshold
+     */
+    private incrementBeaconWireErrorCount = (beaconId: string, isError: boolean): void => {
+        const hadError = this.hasWireError(beaconId);
+
+        if (isError) {
+            // increment error count
+            this.beaconWireErrorCounts.set(
+                beaconId,
+                (this.beaconWireErrorCounts.get(beaconId) ?? 0) + 1,
+            );
+        } else {
+            // clear any error count
+            this.beaconWireErrorCounts.delete(beaconId);
+        }
+
+        if (this.hasWireError(beaconId) !== hadError) {
+            this.emit(OwnBeaconStoreEvent.WireError, beaconId);
         }
     };
 }
