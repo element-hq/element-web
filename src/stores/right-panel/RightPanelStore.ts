@@ -249,6 +249,9 @@ export default class RightPanelStore extends ReadyWatchingStore {
     private filterValidCards(rightPanelForRoom?: IRightPanelForRoom) {
         if (!rightPanelForRoom?.history) return;
         rightPanelForRoom.history = rightPanelForRoom.history.filter((card) => this.isCardStateValid(card));
+        if (!rightPanelForRoom.history.length) {
+            rightPanelForRoom.isOpen = false;
+        }
     }
 
     private isCardStateValid(card: IRightPanelCard) {
@@ -259,7 +262,11 @@ export default class RightPanelStore extends ReadyWatchingStore {
         // or potentially other errors.
         // (A nicer fix could be to indicate, that the right panel is loading if there is missing state data and re-emit if the data is available)
         switch (card.phase) {
+            case RightPanelPhases.ThreadPanel:
+                if (!SettingsStore.getValue("feature_thread")) return false;
+                break;
             case RightPanelPhases.ThreadView:
+                if (!SettingsStore.getValue("feature_thread")) return false;
                 if (!card.state.threadHeadEvent) {
                     console.warn("removed card from right panel because of missing threadHeadEvent in card state");
                 }
