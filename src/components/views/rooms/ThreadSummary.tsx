@@ -90,17 +90,16 @@ export const ThreadMessagePreview = ({ thread, showDisplayname = false }: IPrevi
     }, [lastReply, replacingEventId]);
     if (!preview) return null;
 
-    const sender = thread.roomState.getSentinelMember(lastReply.getSender());
     return <>
         <MemberAvatar
-            member={sender}
+            member={lastReply.sender}
             fallbackUserId={lastReply.getSender()}
             width={24}
             height={24}
             className="mx_ThreadInfo_avatar"
         />
         { showDisplayname && <div className="mx_ThreadInfo_sender">
-            { sender?.name ?? lastReply.getSender() }
+            { lastReply.sender?.name ?? lastReply.getSender() }
         </div> }
         <div className="mx_ThreadInfo_content">
             <span className="mx_ThreadInfo_message-preview">
