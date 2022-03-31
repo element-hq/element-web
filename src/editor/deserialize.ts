@@ -218,7 +218,7 @@ function parseNode(n: Node, pc: PartCreator, mkListItem?: (li: Node) => Part[]):
                     return parts;
                 }
                 case "OL": {
-                    let counter = 1;
+                    let counter = (n as HTMLOListElement).start ?? 1;
                     const parts = parseChildren(n, pc, li => {
                         const parts = [pc.plain(`${counter}. `), ...parseChildren(li, pc)];
                         counter++;
