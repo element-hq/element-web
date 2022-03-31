@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 .mx_LeftPanelLiveShareWarning {
+    @mixin ButtonResetDefault;
     width: 100%;
     box-sizing: border-box;
 
@@ -28,4 +29,8 @@ limitations under the License.
     // panel backdrops overlay the whole sidepanel
     // go above to get hover for title
     z-index: 1;
+}
+
+.mx_LeftPanelLiveShareWarning__error {
+    background-color: $alert;
 }
