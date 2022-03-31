@@ -48,3 +48,13 @@ limitations under the License.
 .mx_RoomLiveShareWarning_spinner {
     margin-right: $spacing-16;
 }
+
+.mx_RoomLiveShareWarning_closeButton {
+    @mixin ButtonResetDefault;
+    margin-left: $spacing-16;
+}
+
+.mx_RoomLiveShareWarning_closeButtonIcon {
+    height: $font-18px;
+    padding: $spacing-4;
+}

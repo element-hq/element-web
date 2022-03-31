@@ -18,19 +18,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Room, Beacon } from 'matrix-js-sdk/src/matrix';
 
+import { formatDuration } from '../../../DateUtils';
 import { _t } from '../../../languageHandler';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../stores/OwnBeaconStore';
-import AccessibleButton from '../elements/AccessibleButton';
-import StyledLiveBeaconIcon from './StyledLiveBeaconIcon';
-import { formatDuration } from '../../../DateUtils';
-import { getBeaconMsUntilExpiry, sortBeaconsByLatestExpiry } from '../../../utils/beacon';
-import Spinner from '../elements/Spinner';
 import { useInterval } from '../../../hooks/useTimeout';
-
-interface Props {
-    roomId: Room['roomId'];
-}
+import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../stores/OwnBeaconStore';
+import { getBeaconMsUntilExpiry, sortBeaconsByLatestExpiry } from '../../../utils/beacon';
+import AccessibleButton from '../elements/AccessibleButton';
+import Spinner from '../elements/Spinner';
+import StyledLiveBeaconIcon from './StyledLiveBeaconIcon';
+import { Icon as CloseIcon } from '../../../../res/img/image-view/close.svg';
 
 const MINUTE_MS = 60000;
 const HOUR_MS = MINUTE_MS * 60;
@@ -72,24 +69,20 @@ const useMsRemaining = (beacon: Beacon): number => {
 type LiveBeaconsState = {
     beacon?: Beacon;
     onStopSharing?: () => void;
+    onResetWireError?: () => void;
     stoppingInProgress?: boolean;
     hasStopSharingError?: boolean;
+    hasWireError?: boolean;
 };
-const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
+const useLiveBeacons = (liveBeaconIds: string[], roomId: string): LiveBeaconsState => {
     const [stoppingInProgress, setStoppingInProgress] = useState(false);
     const [error, setError] = useState<Error>();
 
-    // do we have an active geolocation.watchPosition
-    const isMonitoringLiveLocation = useEventEmitterState(
+    const hasWireError = useEventEmitterState(
         OwnBeaconStore.instance,
-        OwnBeaconStoreEvent.MonitoringLivePosition,
-        () => OwnBeaconStore.instance.isMonitoringLiveLocation,
-    );
-
-    const liveBeaconIds = useEventEmitterState(
-        OwnBeaconStore.instance,
-        OwnBeaconStoreEvent.LivenessChange,
-        () => OwnBeaconStore.instance.getLiveBeaconIds(roomId),
+        OwnBeaconStoreEvent.WireError,
+        () =>
+            OwnBeaconStore.instance.hasWireErrors(roomId),
     );
 
     // reset stopping in progress on change in live ids
@@ -97,10 +90,6 @@ const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
         setStoppingInProgress(false);
         setError(undefined);
     }, [liveBeaconIds]);
-
-    if (!isMonitoringLiveLocation || !liveBeaconIds?.length) {
-        return {};
-    }
 
     // select the beacon with latest expiry to display expiry time
     const beacon = liveBeaconIds.map(beaconId => OwnBeaconStore.instance.getBeaconById(beaconId))
@@ -120,7 +109,18 @@ const useLiveBeacons = (roomId: Room['roomId']): LiveBeaconsState => {
         }
     };
 
-    return { onStopSharing, beacon, stoppingInProgress, hasStopSharingError: !!error };
+    const onResetWireError = () => {
+        liveBeaconIds.map(beaconId => OwnBeaconStore.instance.resetWireError(beaconId));
+    };
+
+    return {
+        onStopSharing,
+        onResetWireError,
+        beacon,
+        stoppingInProgress,
+        hasWireError,
+        hasStopSharingError: !!error,
+    };
 };
 
 const LiveTimeRemaining: React.FC<{ beacon: Beacon }> = ({ beacon }) => {
@@ -135,44 +135,103 @@ const LiveTimeRemaining: React.FC<{ beacon: Beacon }> = ({ beacon }) => {
     >{ liveTimeRemaining }</span>;
 };
 
-const RoomLiveShareWarning: React.FC<Props> = ({ roomId }) => {
+const getLabel = (hasWireError: boolean, hasStopSharingError: boolean): string => {
+    if (hasWireError) {
+        return _t('An error occured whilst sharing your live location, please try again');
+    }
+    if (hasStopSharingError) {
+        return _t('An error occurred while stopping your live location, please try again');
+    }
+    return _t('You are sharing your live location');
+};
+
+interface RoomLiveShareWarningInnerProps {
+    liveBeaconIds: string[];
+    roomId: Room['roomId'];
+}
+const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ liveBeaconIds, roomId }) => {
     const {
         onStopSharing,
+        onResetWireError,
         beacon,
         stoppingInProgress,
         hasStopSharingError,
-    } = useLiveBeacons(roomId);
+        hasWireError,
+    } = useLiveBeacons(liveBeaconIds, roomId);
 
     if (!beacon) {
         return null;
     }
 
+    const hasError = hasStopSharingError || hasWireError;
+
+    const onButtonClick = () => {
+        if (hasWireError) {
+            onResetWireError();
+        } else {
+            onStopSharing();
+        }
+    };
+
     return <div
         className={classNames('mx_RoomLiveShareWarning')}
     >
-        <StyledLiveBeaconIcon className="mx_RoomLiveShareWarning_icon" withError={hasStopSharingError} />
+        <StyledLiveBeaconIcon className="mx_RoomLiveShareWarning_icon" withError={hasError} />
+
         <span className="mx_RoomLiveShareWarning_label">
-            { hasStopSharingError ?
-                _t('An error occurred while stopping your live location, please try again') :
-                _t('You are sharing your live location')
-            }
+            { getLabel(hasWireError, hasStopSharingError) }
         </span>
 
         { stoppingInProgress &&
             <span className='mx_RoomLiveShareWarning_spinner'><Spinner h={16} w={16} /></span>
         }
-        { !stoppingInProgress && !hasStopSharingError && <LiveTimeRemaining beacon={beacon} /> }
+        { !stoppingInProgress && !hasError && <LiveTimeRemaining beacon={beacon} /> }
 
         <AccessibleButton
-            data-test-id='room-live-share-stop-sharing'
-            onClick={onStopSharing}
+            data-test-id='room-live-share-primary-button'
+            onClick={onButtonClick}
             kind='danger'
             element='button'
             disabled={stoppingInProgress}
         >
-            { hasStopSharingError ? _t('Retry') : _t('Stop sharing') }
+            { hasError ? _t('Retry') : _t('Stop sharing') }
         </AccessibleButton>
+        { hasWireError && <AccessibleButton
+            data-test-id='room-live-share-wire-error-close-button'
+            title={_t('Stop sharing and close')}
+            element='button'
+            className='mx_RoomLiveShareWarning_closeButton'
+            onClick={onStopSharing}
+        >
+            <CloseIcon className='mx_RoomLiveShareWarning_closeButtonIcon' />
+        </AccessibleButton> }
     </div>;
+};
+
+interface Props {
+    roomId: Room['roomId'];
+}
+const RoomLiveShareWarning: React.FC<Props> = ({ roomId }) => {
+    // do we have an active geolocation.watchPosition
+    const isMonitoringLiveLocation = useEventEmitterState(
+        OwnBeaconStore.instance,
+        OwnBeaconStoreEvent.MonitoringLivePosition,
+        () => OwnBeaconStore.instance.isMonitoringLiveLocation,
+    );
+
+    const liveBeaconIds = useEventEmitterState(
+        OwnBeaconStore.instance,
+        OwnBeaconStoreEvent.LivenessChange,
+        () => OwnBeaconStore.instance.getLiveBeaconIds(roomId),
+    );
+
+    if (!isMonitoringLiveLocation || !liveBeaconIds.length) {
+        return null;
+    }
+
+    // split into outer/inner to avoid watching various parts of live beacon state
+    // when there are none
+    return <RoomLiveShareWarningInner liveBeaconIds={liveBeaconIds} roomId={roomId} />;
 };
 
 export default RoomLiveShareWarning;
