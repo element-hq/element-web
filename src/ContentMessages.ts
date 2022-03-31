@@ -47,6 +47,7 @@ import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerform
 import { TimelineRenderingType } from "./contexts/RoomContext";
 import RoomViewStore from "./stores/RoomViewStore";
 import { addReplyToMessageContent } from "./utils/Reply";
+import { attachRelation } from "./components/views/rooms/SendMessageComposer";
 
 const MAX_WIDTH = 800;
 const MAX_HEIGHT = 600;
@@ -585,10 +586,7 @@ export default class ContentMessages {
             msgtype: "", // set later
         };
 
-        if (relation) {
-            content["m.relates_to"] = relation;
-        }
-
+        attachRelation(content, relation);
         if (replyToEvent) {
             addReplyToMessageContent(content, replyToEvent, {
                 includeLegacyFallback: false,

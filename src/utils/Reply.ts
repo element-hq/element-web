@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { IContent, IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import sanitizeHtml from "sanitize-html";
 import escapeHtml from "escape-html";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
@@ -22,7 +22,6 @@ import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import { PERMITTED_URL_SCHEMES } from "../HtmlUtils";
 import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
-import { RecursivePartial } from "../@types/common";
 import SettingsStore from "../settings/SettingsStore";
 
 export function getParentEventId(ev?: MatrixEvent): string | undefined {
@@ -144,16 +143,20 @@ export function getNestedReplyText(
     return { body, html };
 }
 
-export function makeReplyMixIn(ev?: MatrixEvent): RecursivePartial<IContent> {
+export function makeReplyMixIn(ev?: MatrixEvent): IEventRelation {
     if (!ev) return {};
 
-    return {
-        'm.relates_to': {
-            'm.in_reply_to': {
-                'event_id': ev.getId(),
-            },
+    const mixin: IEventRelation = {
+        'm.in_reply_to': {
+            'event_id': ev.getId(),
         },
     };
+
+    if (SettingsStore.getValue("feature_thread") && ev.threadRootId) {
+        mixin.is_falling_back = false;
+    }
+
+    return mixin;
 }
 
 export function shouldDisplayReply(event: MatrixEvent): boolean {
@@ -189,8 +192,10 @@ export function addReplyToMessageContent(
         includeLegacyFallback: true,
     },
 ): void {
-    const replyContent = makeReplyMixIn(replyToEvent);
-    Object.assign(content, replyContent);
+    content["m.relates_to"] = {
+        ...(content["m.relates_to"] || {}),
+        ...makeReplyMixIn(replyToEvent),
+    };
 
     if (opts.includeLegacyFallback) {
         // Part of Replies fallback support - prepend the text we're sending with the text we're replying to
