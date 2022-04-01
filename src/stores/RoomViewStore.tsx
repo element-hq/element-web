@@ -93,21 +93,12 @@ export class RoomViewStore extends Store<ActionPayload> {
     public static readonly instance = new RoomViewStore();
 
     private state = INITIAL_STATE; // initialize state
-    private forcedMatrixClient: MatrixClient;
 
     // Keep these out of state to avoid causing excessive/recursive updates
     private roomIdActivityListeners: Record<string, Listener[]> = {};
 
     public constructor() {
         super(dis);
-    }
-
-    private get matrixClient(): MatrixClient {
-        return this.forcedMatrixClient || MatrixClientPeg.get();
-    }
-
-    public useUnitTestClient(client: MatrixClient) {
-        this.forcedMatrixClient = client;
     }
 
     public addRoomListener(roomId: string, fn: Listener) {
@@ -214,7 +205,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     this.setState({ shouldPeek: false });
                 }
 
-                const cli = this.matrixClient;
+                const cli = MatrixClientPeg.get();
 
                 const updateMetrics = () => {
                     const room = cli.getRoom(payload.roomId);
@@ -290,7 +281,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     trigger: payload.metricsTrigger,
                     viaKeyboard: payload.metricsViaKeyboard,
                     isDM: !!DMRoomMap.shared().getUserIdForRoomId(payload.room_id),
-                    isSpace: this.matrixClient.getRoom(payload.room_id)?.isSpaceRoom(),
+                    isSpace: MatrixClientPeg.get().getRoom(payload.room_id)?.isSpaceRoom(),
                     activeSpace,
                 });
             }
@@ -349,7 +340,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     wasContextSwitch: payload.context_switch,
                 });
                 try {
-                    const result = await this.matrixClient.getRoomIdForAlias(payload.room_alias);
+                    const result = await MatrixClientPeg.get().getRoomIdForAlias(payload.room_alias);
                     storeRoomAliasInCache(payload.room_alias, result.room_id);
                     roomId = result.room_id;
                 } catch (err) {
@@ -386,7 +377,7 @@ export class RoomViewStore extends Store<ActionPayload> {
             joining: true,
         });
 
-        const cli = this.matrixClient;
+        const cli = MatrixClientPeg.get();
         // take a copy of roomAlias & roomId as they may change by the time the join is complete
         const { roomAlias, roomId } = this.state;
         const address = roomAlias || roomId;
@@ -418,7 +409,7 @@ export class RoomViewStore extends Store<ActionPayload> {
     }
 
     private getInvitingUserId(roomId: string): string {
-        const cli = this.matrixClient;
+        const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
         if (room && room.getMyMembership() === "invite") {
             const myMember = room.getMember(cli.getUserId());
@@ -443,7 +434,7 @@ export class RoomViewStore extends Store<ActionPayload> {
             // only provide a better error message for invites
             if (invitingUserId) {
                 // if the inviting user is on the same HS, there can only be one cause: they left.
-                if (invitingUserId.endsWith(`:${this.matrixClient.getDomain()}`)) {
+                if (invitingUserId.endsWith(`:${MatrixClientPeg.get().getDomain()}`)) {
                     description = _t("The person who invited you has already left.");
                 } else {
                     description = _t("The person who invited you has already left, or their server is offline.");

@@ -32,7 +32,6 @@ import { RightPanelPhases } from "../../../src/stores/right-panel/RightPanelStor
 import RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../src/stores/AsyncStore";
 import { WidgetLayoutStore } from "../../../src/stores/widgets/WidgetLayoutStore";
-import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 
 describe("RightPanel", () => {
     it("renders info from only one room during room changes", async () => {
@@ -76,7 +75,6 @@ describe("RightPanel", () => {
         // @ts-ignore
         await WidgetLayoutStore.instance.onReady();
         RightPanelStore.instance.useUnitTestClient(cli);
-        RoomViewStore.instance.useUnitTestClient(cli);
         // @ts-ignore
         await RightPanelStore.instance.onReady();
 

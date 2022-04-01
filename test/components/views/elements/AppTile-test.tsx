@@ -36,7 +36,6 @@ import WidgetStore, { IApp } from "../../../../src/stores/WidgetStore";
 import AppTile from "../../../../src/components/views/elements/AppTile";
 import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 import AppsDrawer from "../../../../src/components/views/rooms/AppsDrawer";
-import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
 
 describe("AppTile", () => {
     let cli;
@@ -109,7 +108,6 @@ describe("AppTile", () => {
         // @ts-ignore
         await WidgetLayoutStore.instance.onReady();
         RightPanelStore.instance.useUnitTestClient(cli);
-        RoomViewStore.instance.useUnitTestClient(cli);
         // @ts-ignore
         await RightPanelStore.instance.onReady();
     });
