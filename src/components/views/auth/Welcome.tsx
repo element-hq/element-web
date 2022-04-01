@@ -56,6 +56,7 @@ export default class Welcome extends React.PureComponent<IProps> {
                             "$riot:ssoUrl": "#/start_sso",
                             "$riot:casUrl": "#/start_cas",
                             "$matrixLogo": MATRIX_LOGO_HTML,
+                            "[matrix]": MATRIX_LOGO_HTML,
                         }}
                     />
                     <LanguageSelector />
