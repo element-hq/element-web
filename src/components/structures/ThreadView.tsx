@@ -50,7 +50,7 @@ import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import Measured from '../views/elements/Measured';
 import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
-import RoomViewStore from '../../stores/RoomViewStore';
+import { RoomViewStore } from '../../stores/RoomViewStore';
 
 interface IProps {
     room: Room;
@@ -110,7 +110,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         room.removeListener(ThreadEvent.New, this.onNewThread);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
 
-        const hasRoomChanged = RoomViewStore.getRoomId() !== roomId;
+        const hasRoomChanged = RoomViewStore.instance.getRoomId() !== roomId;
         if (this.props.isInitialEventHighlighted && !hasRoomChanged) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
