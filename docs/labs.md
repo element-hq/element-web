@@ -183,6 +183,6 @@ Threads can be access by clicking their summary below the root event on the room
 
 This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.
 
-## Voice & video rooms (`feature_voice_rooms`) [In Development]
+## Voice & video rooms (`feature_video_rooms`) [In Development]
 
-Enables support for creating and joining voice & video rooms, which are persistent voice chats that users can jump in and out of.
+Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
