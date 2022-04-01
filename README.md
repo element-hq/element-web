@@ -57,7 +57,7 @@ tracks lots of state for its child components which it passes into them for visu
 rendering via props.
 
 Good separation between the components is maintained by adopting various best
-practices that anyone working with the SDK needs to be be aware of and uphold:
+practices that anyone working with the SDK needs to be aware of and uphold:
 
   * Components are named with upper camel case (e.g. views/rooms/EventTile.js)
 
