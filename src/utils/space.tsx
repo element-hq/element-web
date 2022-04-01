@@ -165,10 +165,10 @@ export const bulkSpaceBehaviour = async (
     }
 };
 
-export function showSpacePreferences(space: Room, initialTabId?: SpacePreferenceTab) {
+export const showSpacePreferences = (space: Room, initialTabId?: SpacePreferenceTab) => {
     dis.dispatch<OpenSpacePreferencesPayload>({
         action: Action.OpenSpacePreferences,
         space,
         initialTabId,
     });
-}
+};
