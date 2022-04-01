@@ -238,6 +238,7 @@ const ThreadPanel: React.FC<IProps> = ({
                 />
                 { timelineSet && (
                     <TimelinePanel
+                        key={timelineSet.getFilter().filterId}
                         ref={timelinePanel}
                         showReadReceipts={false} // No RR support in thread's MVP
                         manageReadReceipts={false} // No RR support in thread's MVP
