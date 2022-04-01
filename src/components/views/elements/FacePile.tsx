@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { HTMLAttributes, ReactNode, useContext } from "react";
+import React, { FC, HTMLAttributes, ReactNode, useContext } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { sortBy } from "lodash";
@@ -26,48 +26,17 @@ import TextWithTooltip from "../elements/TextWithTooltip";
 import { useRoomMembers } from "../../../hooks/useRoomMembers";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
-interface IProps extends HTMLAttributes<HTMLSpanElement> {
-    faces: ReactNode[];
-    overflow: boolean;
-    tooltip?: ReactNode;
-    children?: ReactNode;
-}
-
-const FacePile = ({ faces, overflow, tooltip, children, ...props }: IProps) => {
-    const pileContents = <>
-        { overflow ? <span className="mx_FacePile_more" /> : null }
-        { faces }
-    </>;
-
-    return <div {...props} className="mx_FacePile">
-        { tooltip ? (
-            <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip} tooltipProps={{ yOffset: 32 }}>
-                { pileContents }
-            </TextWithTooltip>
-        ) : (
-            <div className="mx_FacePile_faces">
-                { pileContents }
-            </div>
-        ) }
-        { children }
-    </div>;
-};
-
-export default FacePile;
-
 const DEFAULT_NUM_FACES = 5;
 
-const isKnownMember = (member: RoomMember) => !!DMRoomMap.shared().getDMRoomsForUserId(member.userId)?.length;
-
-interface IRoomProps extends HTMLAttributes<HTMLSpanElement> {
+interface IProps extends HTMLAttributes<HTMLSpanElement> {
     room: Room;
     onlyKnownUsers?: boolean;
     numShown?: number;
 }
 
-export const RoomFacePile = (
-    { room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, ...props }: IRoomProps,
-) => {
+const isKnownMember = (member: RoomMember) => !!DMRoomMap.shared().getDMRoomsForUserId(member.userId)?.length;
+
+const FacePile: FC<IProps> = ({ room, onlyKnownUsers = true, numShown = DEFAULT_NUM_FACES, ...props }) => {
     const cli = useContext(MatrixClientContext);
     const isJoined = room.getMyMembership() === "join";
     let members = useRoomMembers(room);
@@ -89,8 +58,6 @@ export const RoomFacePile = (
     // We reverse the order of the shown faces in CSS to simplify their visual overlap,
     // reverse members in tooltip order to make the order between the two match up.
     const commaSeparatedMembers = shownMembers.map(m => m.rawDisplayName).reverse().join(", ");
-    const faces = shownMembers.map(m =>
-        <MemberAvatar key={m.userId} member={m} width={28} height={28} />);
 
     let tooltip: ReactNode;
     if (props.onClick) {
@@ -123,9 +90,16 @@ export const RoomFacePile = (
         }
     }
 
-    return <FacePile faces={faces} overflow={members.length > numShown} tooltip={tooltip}>
+    return <div {...props} className="mx_FacePile">
+        <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip} tooltipProps={{ yOffset: 32 }}>
+            { members.length > numShown ? <span className="mx_FacePile_face mx_FacePile_more" /> : null }
+            { shownMembers.map(m =>
+                <MemberAvatar key={m.userId} member={m} width={28} height={28} className="mx_FacePile_face" />) }
+        </TextWithTooltip>
         { onlyKnownUsers && <span className="mx_FacePile_summary">
             { _t("%(count)s people you know have already joined", { count: members.length }) }
         </span> }
-    </FacePile>;
+    </div>;
 };
+
+export default FacePile;

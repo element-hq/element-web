@@ -31,6 +31,7 @@ import { defer, IDeferred, QueryDict } from "matrix-js-sdk/src/utils";
 import { logger } from "matrix-js-sdk/src/logger";
 import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { RoomType } from "matrix-js-sdk/src/@types/event";
 
 // focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
 import 'focus-visible';
@@ -677,7 +678,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             }
             case 'view_create_room':
-                this.createRoom(payload.public, payload.defaultName);
+                this.createRoom(payload.public, payload.defaultName, payload.type);
 
                 // View the welcome or home page if we need something to look at
                 this.viewSomethingBehindModal();
@@ -994,8 +995,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.setPage(PageType.LegacyGroupView);
     }
 
-    private async createRoom(defaultPublic = false, defaultName?: string) {
+    private async createRoom(defaultPublic = false, defaultName?: string, type?: RoomType) {
         const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
+            type,
             defaultPublic,
             defaultName,
         });

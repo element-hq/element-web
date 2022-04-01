@@ -218,9 +218,9 @@ hr.mx_RoomView_myReadMarker {
     margin-right: calc($container-gap-width / 2);
     width: auto;
     height: 100%;
+    padding-top: 33px; // to match the right panel chat heading
 
-    background: none;
-    border: none;
+    border-radius: 8px;
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {

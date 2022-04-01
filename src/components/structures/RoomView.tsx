@@ -75,7 +75,7 @@ import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
 import { CHAT_EFFECTS } from '../../effects';
 import WidgetStore from "../../stores/WidgetStore";
-import { getVoiceChannel } from "../../utils/VoiceChannelUtils";
+import { getVideoChannel } from "../../utils/VideoChannelUtils";
 import AppTile from "../views/elements/AppTile";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
@@ -375,7 +375,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getMainSplitContentType = (room: Room) => {
-        if (SettingsStore.getValue("feature_voice_rooms") && room.isCallRoom()) {
+        if (SettingsStore.getValue("feature_video_rooms") && room.isCallRoom()) {
             return MainSplitContentType.Video;
         }
         if (WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
@@ -2140,7 +2140,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 </>;
                 break;
             case MainSplitContentType.Video: {
-                const app = getVoiceChannel(this.state.room.roomId);
+                const app = getVideoChannel(this.state.room.roomId);
                 if (!app) break;
                 mainSplitContentClassName = "mx_MainSplit_video";
                 mainSplitBody = <AppTile
@@ -2157,19 +2157,32 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const mainSplitContentClasses = classNames("mx_RoomView_body", mainSplitContentClassName);
 
         let excludedRightPanelPhaseButtons = [RightPanelPhases.Timeline];
+        let onCallPlaced = this.onCallPlaced;
         let onAppsClick = this.onAppsClick;
         let onForgetClick = this.onForgetClick;
         let onSearchClick = this.onSearchClick;
-        if (this.state.mainSplitContentType !== MainSplitContentType.Timeline) {
-            // Disable phase buttons and action button to have a simplified header
-            // and enable (not disable) the RightPanelPhases.Timeline button
-            excludedRightPanelPhaseButtons = [
-                RightPanelPhases.ThreadPanel,
-                RightPanelPhases.PinnedMessages,
-            ];
-            onAppsClick = null;
-            onForgetClick = null;
-            onSearchClick = null;
+
+        // Simplify the header for other main split types
+        switch (this.state.mainSplitContentType) {
+            case MainSplitContentType.MaximisedWidget:
+                excludedRightPanelPhaseButtons = [
+                    RightPanelPhases.ThreadPanel,
+                    RightPanelPhases.PinnedMessages,
+                ];
+                onAppsClick = null;
+                onForgetClick = null;
+                onSearchClick = null;
+                break;
+            case MainSplitContentType.Video:
+                excludedRightPanelPhaseButtons = [
+                    RightPanelPhases.ThreadPanel,
+                    RightPanelPhases.PinnedMessages,
+                    RightPanelPhases.NotificationPanel,
+                ];
+                onCallPlaced = null;
+                onAppsClick = null;
+                onForgetClick = null;
+                onSearchClick = null;
         }
 
         return (
@@ -2189,7 +2202,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
                             appsShown={this.state.showApps}
-                            onCallPlaced={this.onCallPlaced}
+                            onCallPlaced={onCallPlaced}
                             excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
                         />
                         <MainSplit panel={rightPanel} resizeNotifier={this.props.resizeNotifier}>

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { ComponentType, createRef, ReactComponentElement, RefObject } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomType } from "matrix-js-sdk/src/@types/event";
 import * as fbEmitter from "fbemitter";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 
@@ -222,8 +223,8 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                 showCreateRoom
                     ? (<>
                         <IconizedContextMenuOption
-                            label={_t("Create new room")}
-                            iconClassName="mx_RoomList_iconCreateNewRoom"
+                            label={_t("New room")}
+                            iconClassName="mx_RoomList_iconNewRoom"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -235,6 +236,19 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                             tooltip={canAddRooms ? undefined
                                 : _t("You do not have permissions to create new rooms in this space")}
                         />
+                        { SettingsStore.getValue("feature_video_rooms") && <IconizedContextMenuOption
+                            label={_t("New video room")}
+                            iconClassName="mx_RoomList_iconNewVideoRoom"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                closeMenu();
+                                showCreateNewRoom(activeSpace, RoomType.UnstableCall);
+                            }}
+                            disabled={!canAddRooms}
+                            tooltip={canAddRooms ? undefined
+                                : _t("You do not have permissions to create new rooms in this space")}
+                        /> }
                         <IconizedContextMenuOption
                             label={_t("Add existing room")}
                             iconClassName="mx_RoomList_iconAddExistingRoom"
@@ -254,17 +268,32 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
         </IconizedContextMenuOptionList>;
     } else if (menuDisplayed) {
         contextMenuContent = <IconizedContextMenuOptionList first>
-            { showCreateRoom && <IconizedContextMenuOption
-                label={_t("Create new room")}
-                iconClassName="mx_RoomList_iconCreateNewRoom"
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    closeMenu();
-                    defaultDispatcher.dispatch({ action: "view_create_room" });
-                    PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
-                }}
-            /> }
+            { showCreateRoom && <>
+                <IconizedContextMenuOption
+                    label={_t("New room")}
+                    iconClassName="mx_RoomList_iconNewRoom"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+                        defaultDispatcher.dispatch({ action: "view_create_room" });
+                        PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
+                    }}
+                />
+                { SettingsStore.getValue("feature_video_rooms") && <IconizedContextMenuOption
+                    label={_t("New video room")}
+                    iconClassName="mx_RoomList_iconNewVideoRoom"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+                        defaultDispatcher.dispatch({
+                            action: "view_create_room",
+                            type: RoomType.UnstableCall,
+                        });
+                    }}
+                /> }
+            </> }
             <IconizedContextMenuOption
                 label={_t("Explore public rooms")}
                 iconClassName="mx_RoomList_iconExplore"

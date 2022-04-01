@@ -36,6 +36,7 @@ import dis from './dispatcher/dispatcher';
 import DMRoomMap from './utils/DMRoomMap';
 import Modal from './Modal';
 import ActiveWidgetStore from './stores/ActiveWidgetStore';
+import VideoChannelStore from "./stores/VideoChannelStore";
 import PlatformPeg from "./PlatformPeg";
 import { sendLoginRequest } from "./Login";
 import * as StorageManager from './utils/StorageManager';
@@ -796,6 +797,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     IntegrationManagers.sharedInstance().startWatching();
     ActiveWidgetStore.instance.start();
     CallHandler.instance.start();
+    if (SettingsStore.getValue("feature_video_rooms")) VideoChannelStore.instance.start();
 
     // Start Mjolnir even though we haven't checked the feature flag yet. Starting
     // the thing just wastes CPU cycles, but should result in no actual functionality
@@ -909,6 +911,7 @@ export function stopMatrixClient(unsetClient = true): void {
     UserActivity.sharedInstance().stop();
     TypingStore.sharedInstance().reset();
     Presence.stop();
+    if (SettingsStore.getValue("feature_video_rooms")) VideoChannelStore.instance.stop();
     ActiveWidgetStore.instance.stop();
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();

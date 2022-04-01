@@ -36,7 +36,7 @@ export async function createRoom(session: ElementSession, roomName: string, encr
     const addRoomButton = await roomsSublist.$(".mx_RoomSublist_auxButton");
     await addRoomButton.click();
 
-    const createRoomButton = await session.query('.mx_AccessibleButton[aria-label="Create new room"]');
+    const createRoomButton = await session.query('.mx_AccessibleButton[aria-label="New room"]');
     await createRoomButton.click();
 
     const roomNameInput = await session.query('.mx_CreateRoomDialog_name input');

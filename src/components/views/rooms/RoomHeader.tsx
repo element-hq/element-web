@@ -206,6 +206,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         const buttons: JSX.Element[] = [];
 
         if (this.props.inRoom &&
+            this.props.onCallPlaced &&
             !this.context.tombstone &&
             SettingsStore.getValue("showCallButtonsInComposer")
         ) {
