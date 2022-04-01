@@ -59,14 +59,12 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { addReplyToMessageContent } from '../../../utils/Reply';
 
-export function attachRelation(
-    content: IContent,
-    relation?: IEventRelation,
-): void {
+// Merges favouring the given relation
+export function attachRelation(content: IContent, relation?: IEventRelation): void {
     if (relation) {
         content['m.relates_to'] = {
-            ...relation, // the composer can have a default
-            ...content['m.relates_to'],
+            ...(content['m.relates_to'] || {}),
+            ...relation,
         };
     }
 }
@@ -99,18 +97,12 @@ export function createMessageContent(
         content.formatted_body = formattedBody;
     }
 
+    attachRelation(content, relation);
     if (replyToEvent) {
         addReplyToMessageContent(content, replyToEvent, {
             permalinkCreator,
             includeLegacyFallback: includeReplyLegacyFallback,
         });
-    }
-
-    if (relation) {
-        content['m.relates_to'] = {
-            ...relation,
-            ...content['m.relates_to'],
-        };
     }
 
     return content;

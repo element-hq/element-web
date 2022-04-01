@@ -34,3 +34,7 @@ export const getBeaconExpiryTimestamp = (beacon: Beacon): number =>
 
 export const sortBeaconsByLatestExpiry = (left: Beacon, right: Beacon): number =>
     getBeaconExpiryTimestamp(right) - getBeaconExpiryTimestamp(left);
+
+// aka sort by timestamp descending
+export const sortBeaconsByLatestCreation = (left: Beacon, right: Beacon): number =>
+    right.beaconInfo.timestamp - left.beaconInfo.timestamp;

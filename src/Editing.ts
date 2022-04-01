@@ -14,23 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LeftPanelLiveShareWarning {
-    @mixin ButtonResetDefault;
-    width: 100%;
-    box-sizing: border-box;
+import { TimelineRenderingType } from "./contexts/RoomContext";
 
-    padding: $spacing-4;
-    text-align: center;
-
-    background-color: $accent;
-    color: #fff;
-    font-size: $font-10px;
-
-    // panel backdrops overlay the whole sidepanel
-    // go above to get hover for title
-    z-index: 1;
-}
-
-.mx_LeftPanelLiveShareWarning__error {
-    background-color: $alert;
-}
+export const editorRoomKey = (roomId: string, context: TimelineRenderingType) => `mx_edit_room_${roomId}_${context}`;
+export const editorStateKey = (eventId: string) => `mx_edit_state_${eventId}`;

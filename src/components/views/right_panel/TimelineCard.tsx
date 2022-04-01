@@ -219,6 +219,9 @@ export default class TimelineCard extends React.Component<IProps, IState> {
 
         const isUploading = ContentMessages.sharedInstance().getCurrentUploads(this.props.composerRelation).length > 0;
 
+        const myMembership = this.props.room.getMyMembership();
+        const showComposer = myMembership === "join";
+
         return (
             <RoomContext.Provider value={{
                 ...this.context,
@@ -268,15 +271,17 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                         <UploadBar room={this.props.room} relation={this.props.composerRelation} />
                     ) }
 
-                    <MessageComposer
-                        room={this.props.room}
-                        relation={this.props.composerRelation}
-                        resizeNotifier={this.props.resizeNotifier}
-                        replyToEvent={this.state.replyToEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                        e2eStatus={this.props.e2eStatus}
-                        compact={true}
-                    />
+                    { showComposer && (
+                        <MessageComposer
+                            room={this.props.room}
+                            relation={this.props.composerRelation}
+                            resizeNotifier={this.props.resizeNotifier}
+                            replyToEvent={this.state.replyToEvent}
+                            permalinkCreator={this.props.permalinkCreator}
+                            e2eStatus={this.props.e2eStatus}
+                            compact={true}
+                        />
+                    ) }
                 </BaseCard>
             </RoomContext.Provider>
         );

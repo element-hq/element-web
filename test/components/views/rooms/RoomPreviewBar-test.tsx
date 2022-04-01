@@ -107,7 +107,7 @@ describe('<RoomPreviewBar />', () => {
         const component = getComponent({ joining: true });
 
         expect(isSpinnerRendered(component)).toBeTruthy();
-        expect(getMessage(component).textContent).toEqual('Joining room …');
+        expect(getMessage(component).textContent).toEqual('Joining …');
     });
     it('renders rejecting message', () => {
         const component = getComponent({ rejecting: true });

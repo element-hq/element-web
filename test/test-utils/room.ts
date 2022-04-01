@@ -14,23 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_LeftPanelLiveShareWarning {
-    @mixin ButtonResetDefault;
-    width: 100%;
-    box-sizing: border-box;
+import {
+    EventType,
+} from "matrix-js-sdk/src/matrix";
 
-    padding: $spacing-4;
-    text-align: center;
+import { mkEvent } from "./test-utils";
 
-    background-color: $accent;
-    color: #fff;
-    font-size: $font-10px;
+export const makeMembershipEvent = (
+    roomId: string, userId: string, membership = 'join',
+) => mkEvent({
+    event: true,
+    type: EventType.RoomMember,
+    room: roomId,
+    user: userId,
+    skey: userId,
+    content: { membership },
+    ts: Date.now(),
+});
 
-    // panel backdrops overlay the whole sidepanel
-    // go above to get hover for title
-    z-index: 1;
-}
-
-.mx_LeftPanelLiveShareWarning__error {
-    background-color: $alert;
-}

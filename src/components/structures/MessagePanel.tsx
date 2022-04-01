@@ -53,6 +53,7 @@ import { Action } from '../../dispatcher/actions';
 import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { IReadReceiptInfo } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
+import { editorRoomKey } from "../../Editing";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -306,9 +307,10 @@ export default class MessagePanel extends React.Component<IProps, IState> {
 
         const pendingEditItem = this.pendingEditItem;
         if (!this.props.editState && this.props.room && pendingEditItem) {
+            const event = this.props.room.findEventById(pendingEditItem);
             defaultDispatcher.dispatch({
                 action: Action.EditEvent,
-                event: this.props.room.findEventById(pendingEditItem),
+                event: !event?.isRedacted() ? event : null,
                 timelineRenderingType: this.context.timelineRenderingType,
             });
         }
@@ -612,13 +614,15 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         if (!this.props.room) {
             return undefined;
         }
+
         try {
-            return localStorage.getItem(`mx_edit_room_${this.props.room.roomId}_${this.context.timelineRenderingType}`);
+            return localStorage.getItem(editorRoomKey(this.props.room.roomId, this.context.timelineRenderingType));
         } catch (err) {
             logger.error(err);
             return undefined;
         }
     }
+
     private getEventTiles(): ReactNode[] {
         let i;
 
@@ -721,10 +725,8 @@ export default class MessagePanel extends React.Component<IProps, IState> {
     ): ReactNode[] {
         const ret = [];
 
-        const isEditing = this.props.editState &&
-            this.props.editState.getEvent().getId() === mxEv.getId();
-        // local echoes have a fake date, which could even be yesterday. Treat them
-        // as 'today' for the date separators.
+        const isEditing = this.props.editState?.getEvent().getId() === mxEv.getId();
+        // local echoes have a fake date, which could even be yesterday. Treat them as 'today' for the date separators.
         let ts1 = mxEv.getTs();
         let eventDate = mxEv.getDate();
         if (mxEv.status) {

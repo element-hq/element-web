@@ -1,5 +1,5 @@
 /*
-Copyright 2015, 2016 OpenMarket Ltd
+Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -96,6 +96,14 @@ limitations under the License.
             margin: 4px;
         }
     }
+}
+
+// With maximised widgets, the panel fits in better when rounded
+.mx_MainSplit_maximisedWidget .mx_RoomPreviewBar_panel {
+    margin: $container-gap-width;
+    margin-right: calc($container-gap-width / 2); // Shared with right panel
+    margin-top: 0; // Already covered by apps drawer
+    border-radius: 8px;
 }
 
 .mx_RoomPreviewBar_dialog {
