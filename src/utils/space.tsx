@@ -66,10 +66,10 @@ export function showSpaceSettings(space: Room) {
 }
 
 export const showAddExistingRooms = (space: Room): void => {
-    dis.dispatch({
+    dis.dispatch<OpenAddExistingToSpaceDialogPayload>({
         action: Action.OpenAddToExistingSpaceDialog,
         space,
-    } as OpenAddExistingToSpaceDialogPayload);
+    });
 };
 
 export const showCreateNewRoom = async (space: Room): Promise<boolean> => {

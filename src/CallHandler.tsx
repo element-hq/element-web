@@ -1093,7 +1093,7 @@ export default class CallHandler extends EventEmitter {
      */
     public showTransferDialog(call: MatrixCall): void {
         call.setRemoteOnHold(true);
-        dis.dispatch({
+        dis.dispatch<OpenInviteDialogPayload>({
             action: Action.OpenInviteDialog,
             kind: KIND_CALL_TRANSFER,
             call,
@@ -1104,7 +1104,7 @@ export default class CallHandler extends EventEmitter {
                     call.setRemoteOnHold(false);
                 }
             },
-        } as OpenInviteDialogPayload);
+        });
     }
 
     private addCallForRoom(roomId: string, call: MatrixCall, changedRooms = false): void {

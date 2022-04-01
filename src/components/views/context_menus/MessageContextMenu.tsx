@@ -154,10 +154,10 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onReportEventClick = (): void => {
-        dis.dispatch({
+        dis.dispatch<OpenReportEventDialogPayload>({
             action: Action.OpenReportEventDialog,
             event: this.props.mxEvent,
-        } as OpenReportEventDialogPayload);
+        });
         this.closeMenu();
     };
 
@@ -178,11 +178,11 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onForwardClick = (): void => {
-        dis.dispatch({
+        dis.dispatch<OpenForwardDialogPayload>({
             action: Action.OpenForwardDialog,
             event: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
-        } as OpenForwardDialogPayload);
+        });
         this.closeMenu();
     };
 

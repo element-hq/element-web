@@ -157,11 +157,11 @@ export class RoomViewStore extends Store<ActionPayload> {
 
             // Fired so we can reduce dependency on event emitters to this store, which is relatively
             // central to the application and can easily cause import cycles.
-            dis.dispatch({
+            dis.dispatch<ActiveRoomChangedPayload>({
                 action: Action.ActiveRoomChanged,
                 oldRoomId: lastRoomId,
                 newRoomId: this.state.roomId,
-            } as ActiveRoomChangedPayload);
+            });
         }
 
         this.__emitChange();
