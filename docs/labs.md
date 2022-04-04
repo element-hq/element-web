@@ -186,3 +186,7 @@ This feature might work in degraded mode if the homeserver a user is connected t
 ## Voice & video rooms (`feature_voice_rooms`) [In Development]
 
 Enables support for creating and joining voice & video rooms, which are persistent voice chats that users can jump in and out of.
+
+## Rich text in room topics (`feature_html_topic`) [In Development]
+
+Enables rendering of MD / HTML in room topics.
