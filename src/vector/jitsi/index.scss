@@ -56,6 +56,10 @@ body, html {
     position: absolute;
     height: 100%;
     width: 100%;
+
+    // Hidden by default to avoid flashing the prejoin screen at the user when
+    // we're supposed to skip it anyways
+    visibility: hidden;
 }
 
 .joinConferenceFloating {
