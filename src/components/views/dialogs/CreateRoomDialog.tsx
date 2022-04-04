@@ -221,7 +221,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     });
 
     render() {
-        const isVideoRoom = this.props.type === RoomType.UnstableCall;
+        const isVideoRoom = this.props.type === RoomType.ElementVideo;
 
         let aliasField;
         if (this.state.joinRule === JoinRule.Public) {

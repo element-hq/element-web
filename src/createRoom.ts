@@ -129,7 +129,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         };
 
         // In video rooms, allow all users to send video member updates
-        if (opts.roomType === RoomType.UnstableCall) {
+        if (opts.roomType === RoomType.ElementVideo) {
             createOpts.power_level_content_override = {
                 events: {
                     [VIDEO_CHANNEL_MEMBER]: 0,
@@ -263,7 +263,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         }
     }).then(() => {
         // Set up video rooms with a Jitsi widget
-        if (opts.roomType === RoomType.UnstableCall) {
+        if (opts.roomType === RoomType.ElementVideo) {
             return addVideoChannel(roomId, createOpts.name);
         }
     }).then(function() {

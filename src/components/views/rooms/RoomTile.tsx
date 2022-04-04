@@ -123,7 +123,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
-        this.isVideoRoom = SettingsStore.getValue("feature_video_rooms") && this.props.room.isCallRoom();
+        this.isVideoRoom = SettingsStore.getValue("feature_video_rooms") && this.props.room.isElementVideoRoom();
     }
 
     private onRoomNameUpdate = (room: Room) => {

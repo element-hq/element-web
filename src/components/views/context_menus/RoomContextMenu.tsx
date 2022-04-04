@@ -105,7 +105,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
     }
 
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    const isVideoRoom = useFeatureEnabled("feature_video_rooms") && room.isCallRoom();
+    const isVideoRoom = useFeatureEnabled("feature_video_rooms") && room.isElementVideoRoom();
 
     let inviteOption: JSX.Element;
     if (room.canInvite(cli.getUserId()) && !isDm) {

@@ -73,7 +73,7 @@ describe("RoomTile", () => {
 
     describe("video rooms", () => {
         const room = mkRoom(cli, "!1:example.org");
-        room.isCallRoom.mockReturnValue(true);
+        room.isElementVideoRoom.mockReturnValue(true);
 
         it("tracks connection state", () => {
             const tile = mount(

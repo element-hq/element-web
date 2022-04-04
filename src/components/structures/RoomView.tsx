@@ -375,7 +375,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     };
 
     private getMainSplitContentType = (room: Room) => {
-        if (SettingsStore.getValue("feature_video_rooms") && room.isCallRoom()) {
+        if (SettingsStore.getValue("feature_video_rooms") && room.isElementVideoRoom()) {
             return MainSplitContentType.Video;
         }
         if (WidgetLayoutStore.instance.hasMaximisedWidget(room)) {

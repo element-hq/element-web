@@ -217,7 +217,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        showCreateNewRoom(activeSpace, RoomType.UnstableCall);
+                        showCreateNewRoom(activeSpace, RoomType.ElementVideo);
                         closePlusMenu();
                     }}
                 /> }
@@ -310,7 +310,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                         e.stopPropagation();
                         defaultDispatcher.dispatch({
                             action: "view_create_room",
-                            type: RoomType.UnstableCall,
+                            type: RoomType.ElementVideo,
                         });
                         closePlusMenu();
                     }}

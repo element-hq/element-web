@@ -269,7 +269,7 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const isRoomEncrypted = useIsEncrypted(cli, room);
     const roomContext = useContext(RoomContext);
     const e2eStatus = roomContext.e2eStatus;
-    const isVideoRoom = useFeatureEnabled("feature_video_rooms") && room.isCallRoom();
+    const isVideoRoom = useFeatureEnabled("feature_video_rooms") && room.isElementVideoRoom();
 
     const alias = room.getCanonicalAlias() || room.getAltAliases()[0] || "";
     const header = <React.Fragment>

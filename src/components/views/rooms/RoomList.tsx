@@ -243,7 +243,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 closeMenu();
-                                showCreateNewRoom(activeSpace, RoomType.UnstableCall);
+                                showCreateNewRoom(activeSpace, RoomType.ElementVideo);
                             }}
                             disabled={!canAddRooms}
                             tooltip={canAddRooms ? undefined
@@ -289,7 +289,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                         closeMenu();
                         defaultDispatcher.dispatch({
                             action: "view_create_room",
-                            type: RoomType.UnstableCall,
+                            type: RoomType.ElementVideo,
                         });
                     }}
                 /> }

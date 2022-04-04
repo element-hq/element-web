@@ -347,7 +347,7 @@ const SpaceLandingAddButton = ({ space }) => {
                             e.stopPropagation();
                             closeMenu();
 
-                            if (await showCreateNewRoom(space, RoomType.UnstableCall)) {
+                            if (await showCreateNewRoom(space, RoomType.ElementVideo)) {
                                 defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                             }
                         }}
