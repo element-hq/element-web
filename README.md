@@ -42,7 +42,7 @@ released version of Element:
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
 1. Configure the app by making a copy of the `config.sample.json` and renaming it as
-  `config.json` within the same directory. You can customize it. See the [configuration docs](docs/config.md) for details.
+  `config.json` within the same directory. You can also customize it. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
@@ -132,7 +132,7 @@ guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it alread
       environment](#setting-up-a-dev-environment) below). Alternatively, you
       can use <https://develop.element.io> - the continuous integration release of
       the develop branch.
-1. Configure the app by making a copy of the `config.sample.json` and renaming it as `config.json` within the same directory. You can customize it. See the [configuration docs](docs/config.md) for details.
+1. Configure the app by making a copy of the `config.sample.json` and renaming it as `config.json` within the same directory. You can also customize it. See the [configuration docs](docs/config.md) for details.
 1. `yarn dist` to build a tarball to deploy. Untaring this file will give
    a version-specific directory containing all the files that need to go on your
    web server.
@@ -314,7 +314,7 @@ The `matrix-js-sdk`, `matrix-react-sdk` and `element-web` folders should be at t
 
 
  Configure the app by making a copy of the `config.sample.json` and renaming it as
-  `config.json` within the same directory. You can customize it.
+  `config.json` within the same directory. You can also customize it.
   See the [configuration docs](docs/config.md) for details.
 
 Finally, build and start Element itself:
