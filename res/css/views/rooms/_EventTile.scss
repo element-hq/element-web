@@ -70,7 +70,7 @@ $left-gutter: 64px;
     }
 
     &[data-shape=ThreadsList][data-notification=total]::before {
-        background-color: $roomtile-default-badge-bg-color;
+        background-color: $room-icon-unread-color;
     }
 
     &[data-shape=ThreadsList][data-notification=highlight]::before {

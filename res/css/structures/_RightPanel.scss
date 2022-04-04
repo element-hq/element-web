@@ -93,7 +93,8 @@ limitations under the License.
     mask-position: center;
 }
 
-$dot-size: 7px;
+$dot-size: 8px;
+$dot-offset: -3px;
 $pulse-color: $alert;
 
 .mx_RightPanel_pinnedMessagesButton {
@@ -104,8 +105,8 @@ $pulse-color: $alert;
 }
 .mx_RightPanel_headerButton_unreadIndicator_bg {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: $dot-offset;
+    top: $dot-offset;
     margin: 4px;
     width: $dot-size;
     height: $dot-size;
@@ -117,8 +118,8 @@ $pulse-color: $alert;
 
 .mx_RightPanel_headerButton_unreadIndicator {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: $dot-offset;
+    top: $dot-offset;
     margin: 4px;
     width: $dot-size;
     height: $dot-size;
@@ -135,13 +136,13 @@ $pulse-color: $alert;
     }
 
     &.mx_Indicator_gray {
-        background: rgba($roomtile-default-badge-bg-color, 1);
-        box-shadow: rgba($roomtile-default-badge-bg-color, 1);
+        background: rgba($room-icon-unread-color, 1);
+        box-shadow: rgba($room-icon-unread-color, 1);
     }
 
     &.mx_Indicator_bold {
-        background: rgba($input-darker-fg-color, 1);
-        box-shadow: rgba($input-darker-fg-color, 1);
+        background: rgba($primary-content, 1);
+        box-shadow: rgba($primary-content, 1);
     }
 
     &::after {
@@ -197,7 +198,14 @@ $pulse-color: $alert;
     }
 }
 
-.mx_RightPanel_headerButton_highlight {
+.mx_RightPanel_headerButton_unread {
+    &::before {
+        background-color: $room-icon-unread-color !important;
+    }
+}
+
+.mx_RightPanel_headerButton_highlight,
+.mx_RightPanel_headerButton:hover {
     &::before {
         background-color: $accent !important;
     }
