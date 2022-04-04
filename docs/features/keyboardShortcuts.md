@@ -1,6 +1,6 @@
 # Keyboard shortcuts
 
-## Using the `KeyBindingManger`
+## Using the `KeyBindingManager`
 
 The `KeyBindingManager` (accessible using `getKeyBindingManager()`) is a class
 with several methods that allow you to get a `KeyBindingAction` based on a
