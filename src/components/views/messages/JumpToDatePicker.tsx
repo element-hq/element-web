@@ -77,7 +77,7 @@ const JumpToDatePicker: React.FC<IProps> = ({ ts, onDatePicked }: IProps) => {
             className="mx_JumpToDatePicker_form"
             onSubmit={onJumpToDateSubmit}
         >
-            <span className="mx_JumpToDatePicker_label">Jump to date</span>
+            <span className="mx_JumpToDatePicker_label">{ _t("Jump to date") }</span>
             <Field
                 componentClass={NativeOnChangeInput}
                 type="date"
