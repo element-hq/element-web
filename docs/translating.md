@@ -62,4 +62,4 @@ You can use inside the translation field "Review needed" checkbox. It will be sh
 
 ### Further reading
 
-The official Weblate doc provides some more in-deepth explanation on how to do translations and talks about do and don'ts. You can find it at: https://docs.weblate.org/en/latest/user/translating.html
+The official Weblate doc provides some more in-depth explanation on how to do translations and talks about do and don'ts. You can find it at: https://docs.weblate.org/en/latest/user/translating.html
