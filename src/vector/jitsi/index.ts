@@ -361,7 +361,7 @@ function joinConference() { // event handler bound in HTML
             // can cause the receiving side to instantly stop listening.
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
-            widgetApi.transport.send(ElementWidgetActions.HangupCall, {}).then(() =>
+            widgetApi.transport.send(ElementWidgetActions.HangupCall, {}).finally(() =>
                 widgetApi.setAlwaysOnScreen(false),
             );
         }
