@@ -41,8 +41,8 @@ released version of Element:
 1. Untar the tarball on your web server
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
-1. If desired, copy `config.sample.json` to `config.json` and edit it
-   as desired. See the [configuration docs](docs/config.md) for details.
+1. Configure the app by copying `config.sample.json` to `config.json` and
+   modifying it. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
@@ -122,7 +122,7 @@ Ensure you have the latest LTS version of Node.js installed.
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
 guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
 
-1. Install or update `node.js` so that your `node` is at least v14.x.
+1. Install or update `node.js` so that your `node` is at least the current recommended LTS.
 1. Install `yarn` if not present already.
 1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
 1. Switch to the element-web directory: `cd element-web`.
@@ -305,11 +305,19 @@ yarn install
 popd
 ```
 
-Finally, build and start Element itself:
+Clone the repo and switch to the `element-web` directory:
 
 ```bash
 git clone https://github.com/vector-im/element-web.git
 cd element-web
+```
+
+Configure the app by copying `config.sample.json` to `config.json` and
+modifying it. See the [configuration docs](docs/config.md) for details.
+
+Finally, build and start Element itself:
+
+```bash
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
@@ -329,9 +337,6 @@ Wait a few seconds for the initial build to finish; you should see something lik
    Remember, the command will not terminate since it runs the web server
    and rebuilds source files when they change. This development server also
    disables caching, so do NOT use it in production.
-
-Configure the app by copying `config.sample.json` to `config.json` and
-modifying it. See the [configuration docs](docs/config.md) for details.
 
 Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
 

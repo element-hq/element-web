@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.10.7",
+  "version": "1.10.8",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -51,7 +51,7 @@
     "lint:js": "eslint --max-warnings 0 src",
     "lint:js-fix": "eslint --fix src",
     "lint:types": "tsc --noEmit --jsx react",
-    "lint:style": "stylelint 'res/css/**/*.scss'",
+    "lint:style": "stylelint \"res/css/**/*.scss\"",
     "test": "jest"
   },
   "dependencies": {
@@ -87,7 +87,6 @@
     "@babel/preset-typescript": "^7.12.7",
     "@babel/register": "^7.12.10",
     "@babel/runtime": "^7.12.5",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "@principalstudio/html-webpack-inject-preload": "^1.2.7",
     "@sentry/webpack-plugin": "^1.18.1",
     "@svgr/webpack": "^5.5.0",
@@ -130,7 +129,7 @@
     "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "^1.2.0",
     "mini-css-extract-plugin": "^0.12.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "mkdirp": "^1.0.4",
     "modernizr": "^3.12.0",
     "node-fetch": "^2.6.7",
@@ -146,7 +145,6 @@
     "postcss-simple-vars": "^5.0.2",
     "postcss-strip-inline-comments": "^0.1.5",
     "raw-loader": "^4.0.2",
-    "react-refresh": "^0.10.0",
     "rimraf": "^3.0.2",
     "shell-escape": "^0.2.0",
     "simple-proxy-agent": "^1.1.0",

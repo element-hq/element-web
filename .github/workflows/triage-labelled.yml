@@ -1,4 +1,4 @@
-name: Move labelled issues to correct boards and columns
+name: Move labelled issues to correct projects
 
 on:
   issues:
@@ -11,12 +11,14 @@ jobs:
     if: >
         contains(github.event.issue.labels.*.name, 'A-Maths') || 
         contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+        contains(github.event.issue.labels.*.name, 'A-New-Search-Experience') ||
         contains(github.event.issue.labels.*.name, 'A-Threads') ||
         contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
         contains(github.event.issue.labels.*.name, 'Z-IA') ||
         contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
         contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
-        contains(github.event.issue.labels.*.name, 'A-Tags')
+        contains(github.event.issue.labels.*.name, 'A-Tags') ||
+        contains(github.event.issue.labels.*.name, 'A-Video-Rooms')
     steps:
       - uses: actions/github-script@v5
         with:
@@ -98,6 +100,7 @@ jobs:
     name: Delight issues to project board
     runs-on: ubuntu-latest
     if: >
+        contains(github.event.issue.labels.*.name, 'A-New-Search-Experience') ||
         contains(github.event.issue.labels.*.name, 'A-Spaces') ||
         contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
         contains(github.event.issue.labels.*.name, 'A-Subspaces') ||
