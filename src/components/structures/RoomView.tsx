@@ -944,6 +944,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         if (ev.getType() === "m.room.encryption") {
             this.updateE2EStatus(room);
+            this.updatePreviewUrlVisibility(room);
         }
 
         // ignore anything but real-time updates at the end of the room:
