@@ -29,6 +29,8 @@ import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import { setTheme } from "matrix-react-sdk/src/theme";
 import { logger } from "matrix-js-sdk/src/logger";
+import IlagModule from "@vector-im/element-web-ilag-module/lib/IlagModule";
+import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
@@ -155,6 +157,11 @@ export async function showIncompatibleBrowser(onAccept) {
         "../async-components/structures/CompatibilityView")).default;
     window.matrixChat = ReactDOM.render(<CompatibilityView onAccept={onAccept} />,
         document.getElementById('matrixchat'));
+}
+
+export async function loadModules() {
+    // TODO: @@ This should be an auto-generated file/function
+    ModuleRunner.instance.registerModule((api) => new IlagModule(api));
 }
 
 export const _t = languageHandler._t;
