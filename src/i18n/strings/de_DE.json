@@ -3708,5 +3708,18 @@
     "You are about to remove %(count)s messages by %(user)s. This will remove them permanently for everyone in the conversation. Do you wish to continue?|other": "Du bist gerade dabei, %(count)s Nachrichten von %(user)s Benutzern zu löschen. Die Nachrichten werden für niemanden mehr sichtbar sein. Willst du fortfahren?",
     "%(displayName)s's live location": "Aktueller Standort von %(displayName)s",
     "Currently removing messages in %(count)s rooms|one": "Entferne Nachrichten in %(count)s Raum",
-    "Currently removing messages in %(count)s rooms|other": "Entferne Nachrichten in %(count)s Räumen"
+    "Currently removing messages in %(count)s rooms|other": "Entferne Nachrichten in %(count)s Räumen",
+    "This will be a one-off transition, as threads are now part of the Matrix specification.": "Dies ist einmalig notwendig, da wir auf die offiziellen Threads der Matrix-Spezifikation umsteigen.",
+    "As we prepare for it, we need to make some changes: threads created before this point will be <strong>displayed as regular replies</strong>.": "Als Vorbereitung dazu, müssen wir ein paar Änderungen machen: Alle Threads, die du bis jetzt erstellt hast, werden als <strong>normale Antworten auf die Nachricht</strong> angezeigt werden.",
+    "We're getting closer to releasing a public Beta for Threads.": "Bald werden wir Threads als Beta-Version veröffentlichen.",
+    "Threads Approaching Beta 🎉": "Threads sind bald in der Beta 🎉",
+    "Stop sharing": "Nicht mehr teilen",
+    "You are sharing %(count)s live locations|one": "Du teilst deinen Live-Standort",
+    "You are sharing %(count)s live locations|other": "Du teilst %(count)s Live-Standort",
+    "%(timeRemaining)s left": "%(timeRemaining)s übrig",
+    "Share for %(duration)s": "Geteilt für %(duration)s",
+    "%(value)ss": "%(value)ss",
+    "%(value)sm": "%(value)smin",
+    "%(value)sh": "%(value)sh",
+    "%(value)sd": "%(value)sd"
 }
