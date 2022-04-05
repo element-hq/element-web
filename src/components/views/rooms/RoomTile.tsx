@@ -199,7 +199,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             this.onRoomPreviewChanged,
         );
         this.props.room.off(RoomEvent.Name, this.onRoomNameUpdate);
-        this.props.room.currentState.off(RoomStateEvent.Events, this.updateVoiceMembers);
+        this.props.room.currentState.off(RoomStateEvent.Events, this.updateVideoMembers);
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);

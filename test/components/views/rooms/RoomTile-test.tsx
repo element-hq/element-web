@@ -26,9 +26,8 @@ import {
     mockStateEventImplementation,
     mkRoom,
     mkEvent,
-    stubVoiceChannelStore,
+    stubVideoChannelStore,
 } from "../../../test-utils";
-import { stubVideoChannelStore } from "../../../test-utils/video";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";

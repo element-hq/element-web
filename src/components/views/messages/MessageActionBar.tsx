@@ -43,7 +43,7 @@ import { showThread } from "../../../dispatcher/dispatch-actions/threads";
 import { shouldDisplayReply } from '../../../utils/Reply';
 import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
-import { UserTab } from '../dialogs/UserSettingsDialog';
+import { UserTab } from '../dialogs/UserTab';
 import { Action } from '../../../dispatcher/actions';
 
 interface IOptionsButtonProps {
