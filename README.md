@@ -264,9 +264,6 @@ top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication
 apps using React.
 
-After creating a new component you must run `yarn reskindex` to regenerate
-the `component-index.js` for the app (used in future for skinning).
-
 Please note that Element is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
@@ -321,7 +318,6 @@ Finally, build and start Element itself:
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
-yarn reskindex
 yarn start
 ```
 
@@ -368,9 +364,6 @@ ___
 
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
-
-If you add or remove any components from the Element skin, you will need to rebuild
-the skin's index by running, `yarn reskindex`.
 
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
