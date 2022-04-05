@@ -37,7 +37,7 @@ import SdkConfig from '../../SdkConfig';
 import Modal from '../../Modal';
 import BetaFeedbackDialog from '../views/dialogs/BetaFeedbackDialog';
 import { Action } from '../../dispatcher/actions';
-import { UserTab } from '../views/dialogs/UserSettingsDialog';
+import { UserTab } from '../views/dialogs/UserTab';
 import dis from '../../dispatcher/dispatcher';
 
 interface IProps {

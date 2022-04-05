@@ -29,7 +29,6 @@ import { isContentActionable, canEditContent, editEvent } from '../../../utils/E
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import Toolbar from "../../../accessibility/Toolbar";
 import { RovingAccessibleTooltipButton, useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MessageContextMenu, { canCancel } from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -39,12 +38,12 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';
 import ReactionPicker from "../emojipicker/ReactionPicker";
-import { CardContext } from '../right_panel/BaseCard';
+import { CardContext } from '../right_panel/context';
 import { showThread } from "../../../dispatcher/dispatch-actions/threads";
 import { shouldDisplayReply } from '../../../utils/Reply';
 import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
-import { UserTab } from '../dialogs/UserSettingsDialog';
+import { UserTab } from '../dialogs/UserTab';
 import { Action } from '../../../dispatcher/actions';
 
 interface IOptionsButtonProps {
@@ -172,7 +171,6 @@ interface IMessageActionBarProps {
     ) => Relations;
 }
 
-@replaceableComponent("views.messages.MessageActionBar")
 export default class MessageActionBar extends React.PureComponent<IMessageActionBarProps> {
     public static contextType = RoomContext;
 

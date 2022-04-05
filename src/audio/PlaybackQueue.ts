@@ -25,7 +25,7 @@ import { MatrixClientPeg } from "../MatrixClientPeg";
 import { arrayFastClone } from "../utils/arrays";
 import { PlaybackManager } from "./PlaybackManager";
 import { isVoiceMessage } from "../utils/EventUtils";
-import RoomViewStore from "../stores/RoomViewStore";
+import { RoomViewStore } from "../stores/RoomViewStore";
 
 /**
  * Audio playback queue management for a given room. This keeps track of where the user
@@ -51,15 +51,15 @@ export class PlaybackQueue {
     constructor(private room: Room) {
         this.loadClocks();
 
-        RoomViewStore.addListener(() => {
-            if (RoomViewStore.getRoomId() === this.room.roomId) {
-                // Reset the state of the playbacks before they start mounting and enqueuing updates.
-                // We reset the entirety of the queue, including order, to ensure the user isn't left
-                // confused with what order the messages are playing in.
-                this.currentPlaybackId = null; // this in particular stops autoplay when the room is switched to
-                this.recentFullPlays = new Set<string>();
-                this.playbackIdOrder = [];
-            }
+        RoomViewStore.instance.addRoomListener(this.room.roomId, (isActive) => {
+            if (!isActive) return;
+
+            // Reset the state of the playbacks before they start mounting and enqueuing updates.
+            // We reset the entirety of the queue, including order, to ensure the user isn't left
+            // confused with what order the messages are playing in.
+            this.currentPlaybackId = null; // this in particular stops autoplay when the room is switched to
+            this.recentFullPlays = new Set<string>();
+            this.playbackIdOrder = [];
         });
     }
 

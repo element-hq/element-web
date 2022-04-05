@@ -20,24 +20,31 @@ import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
 
-import * as sdk from '../../../index';
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IMediaBody } from "./IMediaBody";
 import { IOperableEventTile } from "../context_menus/MessageContextMenu";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ReactAnyComponent } from "../../../@types/common";
 import { IBodyProps } from "./IBodyProps";
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
+import TextualBody from "./TextualBody";
+import MImageBody from "./MImageBody";
+import MFileBody from "./MFileBody";
+import MVoiceOrAudioBody from "./MVoiceOrAudioBody";
+import MVideoBody from "./MVideoBody";
+import MStickerBody from "./MStickerBody";
+import MPollBody from "./MPollBody";
+import MLocationBody from "./MLocationBody";
+import MjolnirBody from "./MjolnirBody";
 
 // onMessageAllowed is handled internally
-interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
+interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
     /* overrides for the msgtype-specific components, used by ReplyTile to override file rendering */
-    overrideBodyTypes?: Record<string, React.Component>;
-    overrideEventTypes?: Record<string, React.Component>;
+    overrideBodyTypes?: Record<string, typeof React.Component>;
+    overrideEventTypes?: Record<string, typeof React.Component>;
 
     // helper function to access relations for this event
     getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;
@@ -45,7 +52,6 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed"> {
     isSeeingThroughMessageHiddenForModeration?: boolean;
 }
 
-@replaceableComponent("views.messages.MessageEvent")
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
     private body: React.RefObject<React.Component | IOperableEventTile> = createRef();
     private mediaHelper: MediaEventHelper;
@@ -72,23 +78,25 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
     }
 
-    private get bodyTypes(): Record<string, React.Component> {
+    private get bodyTypes(): Record<string, typeof React.Component> {
         return {
-            [MsgType.Text]: sdk.getComponent('messages.TextualBody'),
-            [MsgType.Notice]: sdk.getComponent('messages.TextualBody'),
-            [MsgType.Emote]: sdk.getComponent('messages.TextualBody'),
-            [MsgType.Image]: sdk.getComponent('messages.MImageBody'),
-            [MsgType.File]: sdk.getComponent('messages.MFileBody'),
-            [MsgType.Audio]: sdk.getComponent('messages.MVoiceOrAudioBody'),
-            [MsgType.Video]: sdk.getComponent('messages.MVideoBody'),
+            [MsgType.Text]: TextualBody,
+            [MsgType.Notice]: TextualBody,
+            [MsgType.Emote]: TextualBody,
+            [MsgType.Image]: MImageBody,
+            [MsgType.File]: MFileBody,
+            [MsgType.Audio]: MVoiceOrAudioBody,
+            [MsgType.Video]: MVideoBody,
 
             ...(this.props.overrideBodyTypes || {}),
         };
     }
 
-    private get evTypes(): Record<string, React.Component> {
+    private get evTypes(): Record<string, typeof React.Component> {
         return {
-            [EventType.Sticker]: sdk.getComponent('messages.MStickerBody'),
+            [EventType.Sticker]: MStickerBody,
+            [M_POLL_START.name]: MPollBody,
+            [M_POLL_START.altName]: MPollBody,
 
             ...(this.props.overrideEventTypes || {}),
         };
@@ -110,7 +118,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
         const msgtype = content.msgtype;
-        let BodyType: ReactAnyComponent = RedactedBody;
+        let BodyType: typeof React.Component | ReactAnyComponent = RedactedBody;
         if (!this.props.mxEvent.isRedacted()) {
             // only resolve BodyType if event is not redacted
             if (type && this.evTypes[type]) {
@@ -125,17 +133,12 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                 BodyType = UnknownBody;
             }
 
-            // TODO: move to eventTypes when Polls spec stabilises
-            if (M_POLL_START.matches(type)) {
-                BodyType = sdk.getComponent('messages.MPollBody');
-            }
-
             // TODO: move to eventTypes when location sharing spec stabilises
             if (
                 M_LOCATION.matches(type) ||
                 (type === EventType.RoomMessage && msgtype === MsgType.Location)
             ) {
-                BodyType = sdk.getComponent('messages.MLocationBody');
+                BodyType = MLocationBody;
             }
         }
 
@@ -149,7 +152,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                 const serverBanned = Mjolnir.sharedInstance().isServerBanned(userDomain);
 
                 if (userBanned || serverBanned) {
-                    BodyType = sdk.getComponent('messages.MjolnirBody');
+                    BodyType = MjolnirBody;
                 }
             }
         }

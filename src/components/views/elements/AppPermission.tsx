@@ -24,7 +24,6 @@ import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
 import WidgetUtils from "../../../utils/WidgetUtils";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MemberAvatar from '../avatars/MemberAvatar';
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton from './AccessibleButton';
@@ -44,7 +43,6 @@ interface IState {
     widgetDomain: string;
 }
 
-@replaceableComponent("views.elements.AppPermission")
 export default class AppPermission extends React.Component<IProps, IState> {
     static defaultProps: Partial<IProps> = {
         onPermissionGranted: () => {},

@@ -20,7 +20,6 @@ import { createRef } from "react";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import DialPad from './DialPad';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
 import CallHandler from "../../../CallHandler";
 
@@ -32,7 +31,6 @@ interface IState {
     value: string;
 }
 
-@replaceableComponent("views.voip.DialPadModal")
 export default class DialpadModal extends React.PureComponent<IProps, IState> {
     private numberEntryFieldRef: React.RefObject<Field> = createRef();
 

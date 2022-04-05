@@ -21,13 +21,13 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import Analytics from '../../../Analytics';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import * as Lifecycle from '../../../Lifecycle';
 import { _t } from '../../../languageHandler';
 import InteractiveAuth, { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
 import { DEFAULT_PHASE, PasswordAuthEntry, SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
 
 interface IProps {
     onFinished: (success: boolean) => void;
@@ -46,7 +46,6 @@ interface IState {
     continueKind: string;
 }
 
-@replaceableComponent("views.dialogs.DeactivateAccountDialog")
 export default class DeactivateAccountDialog extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
@@ -124,7 +123,7 @@ export default class DeactivateAccountDialog extends React.Component<IProps, ISt
         MatrixClientPeg.get().deactivateAccount(auth, this.state.shouldErase).then(r => {
             // Deactivation worked - logout & close this dialog
             Analytics.trackEvent('Account', 'Deactivate Account');
-            Lifecycle.onLoggedOut();
+            defaultDispatcher.fire(Action.TriggerLogout);
             this.props.onFinished(true);
         }).catch(e => {
             logger.error(e);

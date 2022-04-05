@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 
 import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording } from "../../../audio/VoiceRecording";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { arrayFastResample, arraySeed } from "../../../utils/arrays";
 import Waveform from "./Waveform";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
@@ -33,7 +32,6 @@ interface IState {
 /**
  * A waveform which shows the waveform of a live recording
  */
-@replaceableComponent("views.audio_messages.LiveRecordingWaveform")
 export default class LiveRecordingWaveform extends React.PureComponent<IProps, IState> {
     public static defaultProps = {
         progress: 1,

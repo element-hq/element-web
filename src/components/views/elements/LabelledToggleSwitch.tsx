@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 
 import ToggleSwitch from "./ToggleSwitch";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // The value for the toggle switch
@@ -35,7 +34,6 @@ interface IProps {
     onChange(checked: boolean): void;
 }
 
-@replaceableComponent("views.elements.LabelledToggleSwitch")
 export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
     render() {
         // This is a minimal version of a SettingsFlag

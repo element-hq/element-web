@@ -18,7 +18,6 @@ import React, { ReactNode } from "react";
 
 import PlayPauseButton from "./PlayPauseButton";
 import PlaybackClock from "./PlaybackClock";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AudioPlayerBase, { IProps as IAudioPlayerBaseProps } from "./AudioPlayerBase";
 import SeekBar from "./SeekBar";
 import PlaybackWaveform from "./PlaybackWaveform";
@@ -30,7 +29,6 @@ interface IProps extends IAudioPlayerBaseProps {
     withWaveform?: boolean;
 }
 
-@replaceableComponent("views.audio_messages.RecordingPlayback")
 export default class RecordingPlayback extends AudioPlayerBase<IProps> {
     // This component is rendered in two ways: the composer and timeline. They have different
     // rendering properties (specifically the difference of a waveform or not).

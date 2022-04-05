@@ -20,7 +20,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t } from '../../languageHandler';
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import BaseCard from "../views/right_panel/BaseCard";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
 import { Layout } from "../../settings/enums/Layout";
@@ -38,7 +37,6 @@ interface IState {
 /*
  * Component which shows the global notification list using a TimelinePanel
  */
-@replaceableComponent("structures.NotificationPanel")
 export default class NotificationPanel extends React.PureComponent<IProps, IState> {
     static contextType = RoomContext;
 

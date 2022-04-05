@@ -17,7 +17,6 @@ limitations under the License.
 import React, { ReactNode } from "react";
 
 import PlayPauseButton from "./PlayPauseButton";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { formatBytes } from "../../../utils/FormattingUtils";
 import DurationClock from "./DurationClock";
 import { _t } from "../../../languageHandler";
@@ -25,7 +24,6 @@ import SeekBar from "./SeekBar";
 import PlaybackClock from "./PlaybackClock";
 import AudioPlayerBase from "./AudioPlayerBase";
 
-@replaceableComponent("views.audio_messages.AudioPlayer")
 export default class AudioPlayer extends AudioPlayerBase {
     protected renderFileSize(): string {
         const bytes = this.props.playback.sizeBytes;

@@ -57,7 +57,10 @@ BRANCH_ARRAY=(${head//:/ })
 TRY_ORG=$deforg
 TRY_BRANCH=${BRANCH_ARRAY[0]}
 if [[ "$head" == *":"* ]]; then
-    TRY_ORG=${BRANCH_ARRAY[0]}
+    # ... but only match that fork if it's a real fork
+    if [ "${BRANCH_ARRAY[0]}" != "matrix-org" ]; then
+        TRY_ORG=${BRANCH_ARRAY[0]}
+    fi
     TRY_BRANCH=${BRANCH_ARRAY[1]}
 fi
 clone ${TRY_ORG} $defrepo ${TRY_BRANCH}

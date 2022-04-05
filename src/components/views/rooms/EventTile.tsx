@@ -17,7 +17,7 @@ limitations under the License.
 
 import React, { createRef, forwardRef, MouseEvent, RefObject } from 'react';
 import classNames from "classnames";
-import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
+import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { EventStatus, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -25,27 +25,20 @@ import { Thread, ThreadEvent } from 'matrix-js-sdk/src/models/thread';
 import { logger } from "matrix-js-sdk/src/logger";
 import { NotificationCountType, Room, RoomEvent } from 'matrix-js-sdk/src/models/room';
 import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
-import { M_POLL_START } from "matrix-events-sdk";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { UserTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from '../../../languageHandler';
-import { hasText } from "../../../TextForEvent";
-import * as sdk from "../../../index";
 import dis from '../../../dispatcher/dispatcher';
 import { Layout } from "../../../settings/enums/Layout";
 import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { ALL_RULE_TYPES } from "../../../mjolnir/BanList";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { E2EState } from "./E2EIcon";
 import { toRem } from "../../../utils/units";
-import { WidgetType } from "../../../widgets/WidgetType";
 import RoomAvatar from "../avatars/RoomAvatar";
-import { WIDGET_LAYOUT_EVENT_TYPE } from "../../../stores/widgets/WidgetLayoutStore";
 import { objectHasDiff } from "../../../utils/objects";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from "../elements/Tooltip";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
@@ -61,9 +54,8 @@ import TooltipButton from '../elements/TooltipButton';
 import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
-import { getEventDisplayInfo } from '../../../utils/EventUtils';
+import { getEventDisplayInfo } from '../../../utils/EventRenderingUtils';
 import SettingsStore from "../../../settings/SettingsStore";
-import MKeyVerificationConclusion from "../messages/MKeyVerificationConclusion";
 import { showThread } from '../../../dispatcher/dispatch-actions/threads';
 import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewStore';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
@@ -82,122 +74,10 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { shouldDisplayReply } from '../../../utils/Reply';
 import PosthogTrackers from "../../../PosthogTrackers";
 import TileErrorBoundary from '../messages/TileErrorBoundary';
-import ThreadSummary, { ThreadMessagePreview } from './ThreadSummary';
+import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
+import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
-
-const eventTileTypes = {
-    [EventType.RoomMessage]: 'messages.MessageEvent',
-    [EventType.Sticker]: 'messages.MessageEvent',
-    [M_POLL_START.name]: 'messages.MessageEvent',
-    [M_POLL_START.altName]: 'messages.MessageEvent',
-    [EventType.KeyVerificationCancel]: 'messages.MKeyVerificationConclusion',
-    [EventType.KeyVerificationDone]: 'messages.MKeyVerificationConclusion',
-    [EventType.CallInvite]: 'messages.CallEvent',
-};
-
-const stateEventTileTypes = {
-    [EventType.RoomEncryption]: 'messages.EncryptionEvent',
-    [EventType.RoomCanonicalAlias]: 'messages.TextualEvent',
-    [EventType.RoomCreate]: 'messages.RoomCreate',
-    [EventType.RoomMember]: 'messages.TextualEvent',
-    [EventType.RoomName]: 'messages.TextualEvent',
-    [EventType.RoomAvatar]: 'messages.RoomAvatarEvent',
-    [EventType.RoomThirdPartyInvite]: 'messages.TextualEvent',
-    [EventType.RoomHistoryVisibility]: 'messages.TextualEvent',
-    [EventType.RoomTopic]: 'messages.TextualEvent',
-    [EventType.RoomPowerLevels]: 'messages.TextualEvent',
-    [EventType.RoomPinnedEvents]: 'messages.TextualEvent',
-    [EventType.RoomServerAcl]: 'messages.TextualEvent',
-    // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    'im.vector.modular.widgets': 'messages.TextualEvent',
-    [WIDGET_LAYOUT_EVENT_TYPE]: 'messages.TextualEvent',
-    [EventType.RoomTombstone]: 'messages.TextualEvent',
-    [EventType.RoomJoinRules]: 'messages.TextualEvent',
-    [EventType.RoomGuestAccess]: 'messages.TextualEvent',
-};
-
-const stateEventSingular = new Set([
-    EventType.RoomEncryption,
-    EventType.RoomCanonicalAlias,
-    EventType.RoomCreate,
-    EventType.RoomName,
-    EventType.RoomAvatar,
-    EventType.RoomHistoryVisibility,
-    EventType.RoomTopic,
-    EventType.RoomPowerLevels,
-    EventType.RoomPinnedEvents,
-    EventType.RoomServerAcl,
-    WIDGET_LAYOUT_EVENT_TYPE,
-    EventType.RoomTombstone,
-    EventType.RoomJoinRules,
-    EventType.RoomGuestAccess,
-]);
-
-// Add all the Mjolnir stuff to the renderer
-for (const evType of ALL_RULE_TYPES) {
-    stateEventTileTypes[evType] = 'messages.TextualEvent';
-}
-
-export function getHandlerTile(ev: MatrixEvent): string {
-    const type = ev.getType();
-
-    // don't show verification requests we're not involved in,
-    // not even when showing hidden events
-    if (type === EventType.RoomMessage) {
-        const content = ev.getContent();
-        if (content && content.msgtype === MsgType.KeyVerificationRequest) {
-            const me = MatrixClientPeg.get()?.getUserId();
-            if (ev.getSender() !== me && content.to !== me) {
-                return undefined;
-            } else {
-                return "messages.MKeyVerificationRequest";
-            }
-        }
-    }
-    // these events are sent by both parties during verification, but we only want to render one
-    // tile once the verification concludes, so filter out the one from the other party.
-    if (type === EventType.KeyVerificationDone) {
-        const me = MatrixClientPeg.get()?.getUserId();
-        if (ev.getSender() !== me) {
-            return undefined;
-        }
-    }
-
-    // sometimes MKeyVerificationConclusion declines to render. Jankily decline to render and
-    // fall back to showing hidden events, if we're viewing hidden events
-    // XXX: This is extremely a hack. Possibly these components should have an interface for
-    // declining to render?
-    if (type === EventType.KeyVerificationCancel || type === EventType.KeyVerificationDone) {
-        if (!MKeyVerificationConclusion.shouldRender(ev, ev.verificationRequest)) {
-            return;
-        }
-    }
-
-    // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    if (type === "im.vector.modular.widgets") {
-        let type = ev.getContent()['type'];
-        if (!type) {
-            // deleted/invalid widget - try the past widget type
-            type = ev.getPrevContent()['type'];
-        }
-
-        if (WidgetType.JITSI.matches(type)) {
-            return "messages.MJitsiWidgetEvent";
-        }
-    }
-
-    if (ev.isState()) {
-        if (stateEventSingular.has(type) && ev.getStateKey() !== "") return undefined;
-        return stateEventTileTypes[type];
-    }
-
-    if (ev.isRedacted()) {
-        return "messages.MessageEvent";
-    }
-
-    return eventTileTypes[type];
-}
 
 // Our component structure for EventTiles on the timeline is:
 //
@@ -347,7 +227,6 @@ interface IState {
 }
 
 // MUST be rendered within a RoomContext with a set timelineRenderingType
-@replaceableComponent("views.rooms.EventTile")
 export class UnwrappedEventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
@@ -1066,7 +945,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         const msgtype = this.props.mxEvent.getContent().msgtype;
         const eventType = this.props.mxEvent.getType() as EventType;
         const {
-            tileHandler,
+            hasRenderer,
             isBubbleMessage,
             isInfoMessage,
             isLeftAlignedBubbleMessage,
@@ -1077,7 +956,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
 
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
-        if (!tileHandler) {
+        if (!hasRenderer) {
             const { mxEvent } = this.props;
             logger.warn(`Event type not supported: type:${eventType} isState:${mxEvent.isState()}`);
             return <div className="mx_EventTile mx_EventTile_info mx_MNoticeBody">
@@ -1087,7 +966,6 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             </div>;
         }
 
-        const EventTileType = sdk.getComponent(tileHandler);
         const isProbablyMedia = MediaEventHelper.isEligible(this.props.mxEvent);
 
         const lineClasses = classNames("mx_EventTile_line", {
@@ -1168,7 +1046,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         } else if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
             avatarSize = 36;
             needsSenderProfile = true;
-        } else if (tileHandler === 'messages.RoomCreate' || isBubbleMessage) {
+        } else if (eventType === EventType.RoomCreate || isBubbleMessage) {
             avatarSize = 0;
             needsSenderProfile = false;
         } else if (isInfoMessage) {
@@ -1336,20 +1214,21 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             msgOption = readAvatars;
         }
 
-        const replyChain = haveTileForEvent(this.props.mxEvent) && shouldDisplayReply(this.props.mxEvent)
-            ? <ReplyChain
-                parentEv={this.props.mxEvent}
-                onHeightChanged={this.props.onHeightChanged}
-                ref={this.replyChain}
-                forExport={this.props.forExport}
-                permalinkCreator={this.props.permalinkCreator}
-                layout={this.props.layout}
-                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
-                isQuoteExpanded={isQuoteExpanded}
-                setQuoteExpanded={this.setQuoteExpanded}
-                getRelationsForEvent={this.props.getRelationsForEvent}
-            />
-            : null;
+        const replyChain =
+            (haveRendererForEvent(this.props.mxEvent) && shouldDisplayReply(this.props.mxEvent))
+                ? <ReplyChain
+                    parentEv={this.props.mxEvent}
+                    onHeightChanged={this.props.onHeightChanged}
+                    ref={this.replyChain}
+                    forExport={this.props.forExport}
+                    permalinkCreator={this.props.permalinkCreator}
+                    layout={this.props.layout}
+                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
+                    isQuoteExpanded={isQuoteExpanded}
+                    setQuoteExpanded={this.setQuoteExpanded}
+                    getRelationsForEvent={this.props.getRelationsForEvent}
+                />
+                : null;
 
         const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
 
@@ -1376,17 +1255,19 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                         </a>
                     </div>,
                     <div className={lineClasses} key="mx_EventTile_line">
-                        <EventTileType
-                            ref={this.tile}
-                            mxEvent={this.props.mxEvent}
-                            highlights={this.props.highlights}
-                            highlightLink={this.props.highlightLink}
-                            showUrlPreview={this.props.showUrlPreview}
-                            onHeightChanged={this.props.onHeightChanged}
-                            editState={this.props.editState}
-                            getRelationsForEvent={this.props.getRelationsForEvent}
-                            isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
-                        />
+                        { renderTile(TimelineRenderingType.Notification, {
+                            ...this.props,
+
+                            // overrides
+                            ref: this.tile,
+                            isSeeingThroughMessageHiddenForModeration,
+
+                            // appease TS
+                            highlights: this.props.highlights,
+                            highlightLink: this.props.highlightLink,
+                            onHeightChanged: this.props.onHeightChanged,
+                            permalinkCreator: this.props.permalinkCreator,
+                        }) }
                     </div>,
                 ]);
             }
@@ -1416,17 +1297,19 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                     </div>,
                     <div className={lineClasses} key="mx_EventTile_line">
                         { replyChain }
-                        <EventTileType ref={this.tile}
-                            mxEvent={this.props.mxEvent}
-                            highlights={this.props.highlights}
-                            highlightLink={this.props.highlightLink}
-                            showUrlPreview={this.props.showUrlPreview}
-                            onHeightChanged={this.props.onHeightChanged}
-                            editState={this.props.editState}
-                            replacingEventId={this.props.replacingEventId}
-                            getRelationsForEvent={this.props.getRelationsForEvent}
-                            isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
-                        />
+                        { renderTile(TimelineRenderingType.Thread, {
+                            ...this.props,
+
+                            // overrides
+                            ref: this.tile,
+                            isSeeingThroughMessageHiddenForModeration,
+
+                            // appease TS
+                            highlights: this.props.highlights,
+                            highlightLink: this.props.highlightLink,
+                            onHeightChanged: this.props.onHeightChanged,
+                            permalinkCreator: this.props.permalinkCreator,
+                        }) }
                         { actionBar }
                         <a href={permalink} onClick={this.onPermalinkClicked}>
                             { timestamp }
@@ -1500,16 +1383,19 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                     "data-scroll-tokens": scrollToken,
                 }, [
                     <div className={lineClasses} key="mx_EventTile_line">
-                        <EventTileType ref={this.tile}
-                            mxEvent={this.props.mxEvent}
-                            highlights={this.props.highlights}
-                            highlightLink={this.props.highlightLink}
-                            showUrlPreview={this.props.showUrlPreview}
-                            onHeightChanged={this.props.onHeightChanged}
-                            editState={this.props.editState}
-                            getRelationsForEvent={this.props.getRelationsForEvent}
-                            isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
-                        />
+                        { renderTile(TimelineRenderingType.File, {
+                            ...this.props,
+
+                            // overrides
+                            ref: this.tile,
+                            isSeeingThroughMessageHiddenForModeration,
+
+                            // appease TS
+                            highlights: this.props.highlights,
+                            highlightLink: this.props.highlightLink,
+                            onHeightChanged: this.props.onHeightChanged,
+                            permalinkCreator: this.props.permalinkCreator,
+                        }) }
                     </div>,
                     <a
                         className="mx_EventTile_senderDetailsLink"
@@ -1549,22 +1435,20 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                             { groupTimestamp }
                             { groupPadlock }
                             { replyChain }
-                            <EventTileType
-                                ref={this.tile}
-                                mxEvent={this.props.mxEvent}
-                                forExport={this.props.forExport}
-                                replacingEventId={this.props.replacingEventId}
-                                editState={this.props.editState}
-                                highlights={this.props.highlights}
-                                highlightLink={this.props.highlightLink}
-                                showUrlPreview={this.props.showUrlPreview}
-                                permalinkCreator={this.props.permalinkCreator}
-                                onHeightChanged={this.props.onHeightChanged}
-                                callEventGrouper={this.props.callEventGrouper}
-                                getRelationsForEvent={this.props.getRelationsForEvent}
-                                isSeeingThroughMessageHiddenForModeration={isSeeingThroughMessageHiddenForModeration}
-                                timestamp={bubbleTimestamp}
-                            />
+                            { renderTile(this.context.timelineRenderingType, {
+                                ...this.props,
+
+                                // overrides
+                                ref: this.tile,
+                                isSeeingThroughMessageHiddenForModeration,
+                                timestamp: bubbleTimestamp,
+
+                                // appease TS
+                                highlights: this.props.highlights,
+                                highlightLink: this.props.highlightLink,
+                                onHeightChanged: this.props.onHeightChanged,
+                                permalinkCreator: this.props.permalinkCreator,
+                            }) }
                             { keyRequestInfo }
                             { actionBar }
                             { this.props.layout === Layout.IRC && <>
@@ -1591,31 +1475,6 @@ const SafeEventTile = forwardRef((props: IProps, ref: RefObject<UnwrappedEventTi
     </TileErrorBoundary>;
 });
 export default SafeEventTile;
-
-// XXX this'll eventually be dynamic based on the fields once we have extensible event types
-const messageTypes = [EventType.RoomMessage, EventType.Sticker];
-function isMessageEvent(ev: MatrixEvent): boolean {
-    return (messageTypes.includes(ev.getType() as EventType)) || M_POLL_START.matches(ev.getType());
-}
-
-export function haveTileForEvent(e: MatrixEvent, showHiddenEvents?: boolean): boolean {
-    // Only show "Message deleted" tile for plain message events, encrypted events,
-    // and state events as they'll likely still contain enough keys to be relevant.
-    if (e.isRedacted() && !e.isEncrypted() && !isMessageEvent(e) && !e.isState()) return false;
-
-    // No tile for replacement events since they update the original tile
-    if (e.isRelation(RelationType.Replace)) return false;
-
-    const handler = getHandlerTile(e);
-    if (handler === undefined) return false;
-    if (handler === 'messages.TextualEvent') {
-        return hasText(e, showHiddenEvents);
-    } else if (handler === 'messages.RoomCreate') {
-        return Boolean(e.getContent()['predecessor']);
-    } else {
-        return true;
-    }
-}
 
 function E2ePadlockUndecryptable(props) {
     return (

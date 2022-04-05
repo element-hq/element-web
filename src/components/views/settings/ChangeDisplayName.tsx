@@ -18,10 +18,8 @@ import React from 'react';
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import EditableTextContainer from "../elements/EditableTextContainer";
 
-@replaceableComponent("views.settings.ChangeDisplayName")
 export default class ChangeDisplayName extends React.Component {
     private getDisplayName = async (): Promise<string> => {
         const cli = MatrixClientPeg.get();

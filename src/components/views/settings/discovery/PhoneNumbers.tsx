@@ -23,7 +23,6 @@ import { _t } from "../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../MatrixClientPeg";
 import Modal from '../../../../Modal';
 import AddThreepid from '../../../../AddThreepid';
-import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import Field from "../../elements/Field";
 import AccessibleButton from "../../elements/AccessibleButton";
@@ -260,7 +259,6 @@ interface IProps {
     msisdns: IThreepid[];
 }
 
-@replaceableComponent("views.settings.discovery.PhoneNumbers")
 export default class PhoneNumbers extends React.Component<IProps> {
     public render(): JSX.Element {
         let content;

@@ -19,7 +19,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DisambiguatedProfile from "./DisambiguatedProfile";
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
 import SettingsStore from "../../../settings/SettingsStore";
@@ -30,7 +29,6 @@ interface IProps {
     onClick?(): void;
 }
 
-@replaceableComponent("views.messages.SenderProfile")
 export default class SenderProfile extends React.PureComponent<IProps> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;

@@ -48,14 +48,13 @@ import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
 import MainSplit from './MainSplit';
 import RightPanel from './RightPanel';
-import RoomViewStore from '../../stores/RoomViewStore';
+import { RoomViewStore } from '../../stores/RoomViewStore';
 import RoomScrollStateStore, { ScrollState } from '../../stores/RoomScrollStateStore';
 import WidgetEchoStore from '../../stores/WidgetEchoStore';
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
-import { haveTileForEvent } from "../views/rooms/EventTile";
 import RoomContext, { TimelineRenderingType } from "../../contexts/RoomContext";
 import MatrixClientContext, { MatrixClientProps, withMatrixClientHOC } from "../../contexts/MatrixClientContext";
 import { E2EStatus, shieldStatusForRoom } from '../../utils/ShieldUtils';
@@ -86,7 +85,6 @@ import { getKeyBindingsManager } from '../../KeyBindingsManager';
 import { objectHasDiff } from "../../utils/objects";
 import SpaceRoomView from "./SpaceRoomView";
 import { IOpts } from "../../createRoom";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import EditorStateTransfer from "../../utils/EditorStateTransfer";
 import ErrorDialog from '../views/dialogs/ErrorDialog';
 import SearchResultTile from '../views/rooms/SearchResultTile';
@@ -109,6 +107,7 @@ import { DoAfterSyncPreparedPayload } from '../../dispatcher/payloads/DoAfterSyn
 import FileDropTarget from './FileDropTarget';
 import Measured from '../views/elements/Measured';
 import { FocusComposerPayload } from '../../dispatcher/payloads/FocusComposerPayload';
+import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 const DEBUG = false;
 let debuglog = function(msg: string) {};
@@ -220,7 +219,6 @@ export interface IRoomState {
     narrow: boolean;
 }
 
-@replaceableComponent("structures.RoomView")
 export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private readonly dispatcherRef: string;
     private readonly roomStoreToken: EventSubscription;
@@ -298,7 +296,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         context.on(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
         context.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         // Start listening for RoomViewStore updates
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
+        this.roomStoreToken = RoomViewStore.instance.addListener(this.onRoomViewStoreUpdate);
 
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
 
@@ -389,7 +387,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             return;
         }
 
-        if (!initial && this.state.roomId !== RoomViewStore.getRoomId()) {
+        if (!initial && this.state.roomId !== RoomViewStore.instance.getRoomId()) {
             // RoomView explicitly does not support changing what room
             // is being viewed: instead it should just be re-mounted when
             // switching rooms. Therefore, if the room ID changes, we
@@ -404,28 +402,28 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             return;
         }
 
-        const roomId = RoomViewStore.getRoomId();
+        const roomId = RoomViewStore.instance.getRoomId();
 
         const newState: Pick<IRoomState, any> = {
             roomId,
-            roomAlias: RoomViewStore.getRoomAlias(),
-            roomLoading: RoomViewStore.isRoomLoading(),
-            roomLoadError: RoomViewStore.getRoomLoadError(),
-            joining: RoomViewStore.isJoining(),
-            replyToEvent: RoomViewStore.getQuotingEvent(),
+            roomAlias: RoomViewStore.instance.getRoomAlias(),
+            roomLoading: RoomViewStore.instance.isRoomLoading(),
+            roomLoadError: RoomViewStore.instance.getRoomLoadError(),
+            joining: RoomViewStore.instance.isJoining(),
+            replyToEvent: RoomViewStore.instance.getQuotingEvent(),
             // we should only peek once we have a ready client
-            shouldPeek: this.state.matrixClientIsReady && RoomViewStore.shouldPeek(),
+            shouldPeek: this.state.matrixClientIsReady && RoomViewStore.instance.shouldPeek(),
             showReadReceipts: SettingsStore.getValue("showReadReceipts", roomId),
             showRedactions: SettingsStore.getValue("showRedactions", roomId),
             showJoinLeaves: SettingsStore.getValue("showJoinLeaves", roomId),
             showAvatarChanges: SettingsStore.getValue("showAvatarChanges", roomId),
             showDisplaynameChanges: SettingsStore.getValue("showDisplaynameChanges", roomId),
-            wasContextSwitch: RoomViewStore.getWasContextSwitch(),
+            wasContextSwitch: RoomViewStore.instance.getWasContextSwitch(),
             initialEventId: null, // default to clearing this, will get set later in the method if needed
             showRightPanel: RightPanelStore.instance.isOpenForRoom(roomId),
         };
 
-        const initialEventId = RoomViewStore.getInitialEventId();
+        const initialEventId = RoomViewStore.instance.getInitialEventId();
         if (initialEventId) {
             const room = this.context.getRoom(roomId);
             let initialEvent = room?.findEventById(initialEventId);
@@ -450,17 +448,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 showThread({
                     rootEvent: thread.rootEvent,
                     initialEvent,
-                    highlighted: RoomViewStore.isInitialEventHighlighted(),
+                    highlighted: RoomViewStore.instance.isInitialEventHighlighted(),
                 });
             } else {
                 newState.initialEventId = initialEventId;
-                newState.isInitialEventHighlighted = RoomViewStore.isInitialEventHighlighted();
+                newState.isInitialEventHighlighted = RoomViewStore.instance.isInitialEventHighlighted();
 
                 if (thread && initialEvent?.isThreadRoot) {
                     showThread({
                         rootEvent: thread.rootEvent,
                         initialEvent,
-                        highlighted: RoomViewStore.isInitialEventHighlighted(),
+                        highlighted: RoomViewStore.instance.isInitialEventHighlighted(),
                     });
                 }
             }
@@ -1454,7 +1452,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 continue;
             }
 
-            if (!haveTileForEvent(mxEv, this.state.showHiddenEventsInTimeline)) {
+            if (!haveRendererForEvent(mxEv, this.state.showHiddenEventsInTimeline)) {
                 // XXX: can this ever happen? It will make the result count
                 // not match the displayed count.
                 continue;

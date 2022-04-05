@@ -17,7 +17,6 @@ limitations under the License.
 import fs from "fs";
 import path from "path";
 
-import './skinned-sdk';
 import { blobIsAnimated, mayBeAnimated } from "../src/utils/Image";
 
 describe("Image", () => {

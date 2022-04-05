@@ -24,7 +24,6 @@ import { _t } from "../../languageHandler";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { canEditContent } from "../../utils/EventUtils";
 import { MatrixClientPeg } from '../../MatrixClientPeg';
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
 import BaseDialog from "../views/dialogs/BaseDialog";
 import { DevtoolsContext } from "../views/dialogs/devtools/BaseTool";
@@ -39,7 +38,6 @@ interface IState {
     isEditing: boolean;
 }
 
-@replaceableComponent("structures.ViewSource")
 export default class ViewSource extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

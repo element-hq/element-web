@@ -19,9 +19,6 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import AliasCustomisations from './customisations/Alias';
-import DMRoomMap from "./utils/DMRoomMap";
-import SpaceStore from "./stores/spaces/SpaceStore";
-import { _t } from "./languageHandler";
 
 /**
  * Given a room object, return the alias we should use for it,
@@ -156,49 +153,4 @@ function guessDMRoomTargetId(room: Room, myUserId: string): string {
 
     if (oldestUser === undefined) return myUserId;
     return oldestUser.userId;
-}
-
-export function spaceContextDetailsText(space: Room): string {
-    if (!space.isSpaceRoom()) return undefined;
-
-    const [parent, secondParent, ...otherParents] = SpaceStore.instance.getKnownParents(space.roomId);
-    if (secondParent && !otherParents?.length) {
-        // exactly 2 edge case for improved i18n
-        return _t("%(space1Name)s and %(space2Name)s", {
-            space1Name: space.client.getRoom(parent)?.name,
-            space2Name: space.client.getRoom(secondParent)?.name,
-        });
-    } else if (parent) {
-        return _t("%(spaceName)s and %(count)s others", {
-            spaceName: space.client.getRoom(parent)?.name,
-            count: otherParents.length,
-        });
-    }
-
-    return space.getCanonicalAlias();
-}
-
-export function roomContextDetailsText(room: Room): string {
-    if (room.isSpaceRoom()) return undefined;
-
-    const dmPartner = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    if (dmPartner) {
-        return dmPartner;
-    }
-
-    const [parent, secondParent, ...otherParents] = SpaceStore.instance.getKnownParents(room.roomId);
-    if (secondParent && !otherParents?.length) {
-        // exactly 2 edge case for improved i18n
-        return _t("%(space1Name)s and %(space2Name)s", {
-            space1Name: room.client.getRoom(parent)?.name,
-            space2Name: room.client.getRoom(secondParent)?.name,
-        });
-    } else if (parent) {
-        return _t("%(spaceName)s and %(count)s others", {
-            spaceName: room.client.getRoom(parent)?.name,
-            count: otherParents.length,
-        });
-    }
-
-    return room.getCanonicalAlias();
 }

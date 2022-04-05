@@ -26,7 +26,6 @@ import AccessibleButton from "../../elements/AccessibleButton";
 import AddThreepid from "../../../../AddThreepid";
 import CountryDropdown from "../../auth/CountryDropdown";
 import Modal from '../../../../Modal';
-import { replaceableComponent } from "../../../../utils/replaceableComponent";
 import ErrorDialog from "../../dialogs/ErrorDialog";
 import { PhoneNumberCountryDefinition } from "../../../../phonenumber";
 
@@ -136,7 +135,6 @@ interface IState {
     newPhoneNumberCode: string;
 }
 
-@replaceableComponent("views.settings.account.PhoneNumbers")
 export default class PhoneNumbers extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

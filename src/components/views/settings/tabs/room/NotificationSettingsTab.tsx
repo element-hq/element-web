@@ -23,7 +23,6 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from '../../../../../settings/SettingsStore';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
 import { EchoChamber } from '../../../../../stores/local-echo/EchoChamber';
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
@@ -31,7 +30,7 @@ import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { RoomNotifState } from '../../../../../RoomNotifs';
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { UserTab } from "../../../dialogs/UserSettingsDialog";
+import { UserTab } from "../../../dialogs/UserTab";
 
 interface IProps {
     roomId: string;
@@ -43,7 +42,6 @@ interface IState {
     uploadedFile: File;
 }
 
-@replaceableComponent("views.settings.tabs.room.NotificationsSettingsTab")
 export default class NotificationsSettingsTab extends React.Component<IProps, IState> {
     private readonly roomProps: RoomEchoChamber;
     private soundUpload = createRef<HTMLInputElement>();

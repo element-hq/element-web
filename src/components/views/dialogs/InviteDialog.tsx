@@ -34,11 +34,7 @@ import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
 import Modal from "../../../Modal";
 import { humanizeTime } from "../../../utils/humanize";
-import createRoom, {
-    canEncryptToAllUsers,
-    findDMForUser,
-    privateShouldBeEncrypted,
-} from "../../../createRoom";
+import createRoom, { canEncryptToAllUsers } from "../../../createRoom";
 import {
     IInviteResult,
     inviteMultipleToRoom,
@@ -49,7 +45,6 @@ import { DefaultTagID } from "../../../stores/room-list/models";
 import RoomListStore from "../../../stores/room-list/RoomListStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
@@ -69,6 +64,9 @@ import { ScreenName } from '../../../PosthogTrackers';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
+import { privateShouldBeEncrypted } from "../../../utils/rooms";
+import { findDMForUser } from "../../../utils/direct-messages";
+import { AnyInviteKind, KIND_CALL_TRANSFER, KIND_DM, KIND_INVITE, Member } from './InviteDialogTypes';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -79,42 +77,12 @@ interface IRecentUser {
     lastActive: number;
 }
 
-export const KIND_DM = "dm";
-export const KIND_INVITE = "invite";
-// NB. This dialog needs the 'mx_InviteDialog_transferWrapper' wrapper class to have the correct
-// padding on the bottom (because all modals have 24px padding on all sides), so this needs to
-// be passed when creating the modal
-export const KIND_CALL_TRANSFER = "call_transfer";
-
 const INITIAL_ROOMS_SHOWN = 3; // Number of rooms to show at first
 const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is clicked
 
 enum TabId {
     UserDirectory = 'users',
     DialPad = 'dialpad',
-}
-
-// This is the interface that is expected by various components in the Invite Dialog and RoomInvite.
-// It is a bit awkward because it also matches the RoomMember class from the js-sdk with some extra support
-// for 3PIDs/email addresses.
-export abstract class Member {
-    /**
-     * The display name of this Member. For users this should be their profile's display
-     * name or user ID if none set. For 3PIDs this should be the 3PID address (email).
-     */
-    public abstract get name(): string;
-
-    /**
-     * The ID of this Member. For users this should be their user ID. For 3PIDs this should
-     * be the 3PID address (email).
-     */
-    public abstract get userId(): string;
-
-    /**
-     * Gets the MXC URL of this Member's avatar. For users this should be their profile's
-     * avatar MXC URL or null if none set. For 3PIDs this should always be null.
-     */
-    public abstract getMxcAvatarUrl(): string;
 }
 
 class DirectoryMember extends Member {
@@ -355,7 +323,7 @@ interface IInviteDialogProps {
 
     // The kind of invite being performed. Assumed to be KIND_DM if
     // not provided.
-    kind: string;
+    kind: AnyInviteKind;
 
     // The room ID this dialog is for. Only required for KIND_INVITE.
     roomId: string;
@@ -387,7 +355,6 @@ interface IInviteDialogState {
     errorText: string;
 }
 
-@replaceableComponent("views.dialogs.InviteDialog")
 export default class InviteDialog extends React.PureComponent<IInviteDialogProps, IInviteDialogState> {
     static defaultProps = {
         kind: KIND_DM,

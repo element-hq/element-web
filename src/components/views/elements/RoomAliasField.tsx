@@ -18,7 +18,6 @@ import React, { createRef, KeyboardEventHandler } from "react";
 
 import { _t } from '../../../languageHandler';
 import withValidation from './Validation';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Field, { IValidateOpts } from "./Field";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
@@ -39,7 +38,6 @@ interface IState {
 }
 
 // Controlled form component wrapping Field for inputting a room alias scoped to a given domain
-@replaceableComponent("views.elements.RoomAliasField")
 export default class RoomAliasField extends React.PureComponent<IProps, IState> {
     static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;

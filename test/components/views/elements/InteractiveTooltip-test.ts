@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import '../../../skinned-sdk';
 import { Direction, mouseWithinRegion } from "../../../../src/components/views/elements/InteractiveTooltip";
 
 describe("InteractiveTooltip", () => {

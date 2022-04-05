@@ -17,14 +17,14 @@ limitations under the License.
 import React from 'react';
 import classNames from "classnames";
 
-import * as sdk from "../../../index";
 import SdkConfig from '../../../SdkConfig';
 import AuthPage from "./AuthPage";
 import { _td } from "../../../languageHandler";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import LanguageSelector from "./LanguageSelector";
+import EmbeddedPage from "../../structures/EmbeddedPage";
+import { MATRIX_LOGO_HTML } from "../../structures/static-page-vars";
 
 // translatable strings for Welcome pages
 _td("Sign in with SSO");
@@ -33,12 +33,8 @@ interface IProps {
 
 }
 
-@replaceableComponent("views.auth.Welcome")
 export default class Welcome extends React.PureComponent<IProps> {
     public render(): React.ReactNode {
-        // FIXME: Using an import will result in wrench-element-tests failures
-        const EmbeddedPage = sdk.getComponent("structures.EmbeddedPage");
-
         const pagesConfig = SdkConfig.getObject("embedded_pages");
         let pageUrl = null;
         if (pagesConfig) {
@@ -59,6 +55,8 @@ export default class Welcome extends React.PureComponent<IProps> {
                         replaceMap={{
                             "$riot:ssoUrl": "#/start_sso",
                             "$riot:casUrl": "#/start_cas",
+                            "$matrixLogo": MATRIX_LOGO_HTML,
+                            "[matrix]": MATRIX_LOGO_HTML,
                         }}
                     />
                     <LanguageSelector />

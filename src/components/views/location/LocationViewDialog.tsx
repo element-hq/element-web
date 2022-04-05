@@ -18,7 +18,6 @@ import React from 'react';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { ClientEvent, IClientWellKnown, MatrixClient } from 'matrix-js-sdk/src/client';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "../dialogs/BaseDialog";
 import { IDialogProps } from "../dialogs/IDialogProps";
 import { LocationBodyContent } from '../messages/MLocationBody';
@@ -34,7 +33,6 @@ interface IState {
     error: Error;
 }
 
-@replaceableComponent("views.location.LocationViewDialog")
 export default class LocationViewDialog extends React.Component<IProps, IState> {
     private coords: GeolocationCoordinates;
     private map?: maplibregl.Map;

@@ -22,7 +22,7 @@ import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "../dialogs/UserSettingsDialog";
+import { UserTab } from "../dialogs/UserTab";
 import AccessibleButton from "./AccessibleButton";
 
 export enum WarningKind {

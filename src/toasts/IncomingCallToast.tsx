@@ -21,7 +21,6 @@ import React from 'react';
 import { CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import classNames from 'classnames';
 
-import { replaceableComponent } from '../utils/replaceableComponent';
 import CallHandler, { CallHandlerEvent } from '../CallHandler';
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import { _t } from '../languageHandler';
@@ -39,7 +38,6 @@ interface IState {
     silenced: boolean;
 }
 
-@replaceableComponent("views.voip.IncomingCallToast")
 export default class IncomingCallToast extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

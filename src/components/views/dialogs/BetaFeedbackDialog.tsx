@@ -22,7 +22,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "./UserSettingsDialog";
+import { UserTab } from "./UserTab";
 import GenericFeatureFeedbackDialog from "./GenericFeatureFeedbackDialog";
 
 // XXX: Keep this around for re-use in future Betas

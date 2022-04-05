@@ -19,8 +19,8 @@ import { SERVICE_TYPES } from 'matrix-js-sdk/src/service-types';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
-import * as sdk from '.';
 import Modal from './Modal';
+import TermsDialog from "./components/views/dialogs/TermsDialog";
 
 export class TermsNotSignedError extends Error {}
 
@@ -189,8 +189,6 @@ export async function dialogTermsInteractionCallback(
     extraClassNames?: string,
 ): Promise<string[]> {
     logger.log("Terms that need agreement", policiesAndServicePairs);
-    // FIXME: Using an import will result in test failures
-    const TermsDialog = sdk.getComponent("views.dialogs.TermsDialog");
 
     const { finished } = Modal.createTrackedDialog<[boolean, string[]]>('Terms of Service', '', TermsDialog, {
         policiesAndServicePairs,

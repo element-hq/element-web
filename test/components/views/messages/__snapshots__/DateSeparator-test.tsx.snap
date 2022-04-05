@@ -3,6 +3,7 @@
 exports[`DateSeparator renders the date separator correctly 1`] = `
 <DateSeparator
   now="2021-12-17T08:09:00.000Z"
+  roomId="!unused:example.org"
   ts={1639728540000}
 >
   <h2
@@ -29,6 +30,7 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
 exports[`DateSeparator when feature_jump_to_date is enabled renders the date separator correctly 1`] = `
 <DateSeparator
   now="2021-12-17T08:09:00.000Z"
+  roomId="!unused:example.org"
   ts={1639728540000}
 >
   <h2

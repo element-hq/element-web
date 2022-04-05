@@ -16,8 +16,6 @@ limitations under the License.
 
 import React from 'react';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-
 interface IProps {
     element: React.ReactNode;
     // Function to be called when the parent window is resized
@@ -30,7 +28,6 @@ interface IProps {
  * This component can be used to display generic HTML content in a contextual
  * menu.
  */
-@replaceableComponent("views.context_menus.GenericElementContextMenu")
 export default class GenericElementContextMenu extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);

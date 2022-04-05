@@ -24,7 +24,6 @@ import { getHostingLink } from '../../../utils/HostingLink';
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from '../elements/AccessibleButton';
 import AvatarSetting from './AvatarSetting';
@@ -41,7 +40,6 @@ interface IState {
     enableProfileSave?: boolean;
 }
 
-@replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component<{}, IState> {
     private avatarUpload: React.RefObject<HTMLInputElement> = createRef();
 

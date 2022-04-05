@@ -27,7 +27,6 @@ import {
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { IExportOptions, ExportType, ExportFormat } from "../../src/utils/exportUtils/exportUtils";
-import '../skinned-sdk';
 import PlainTextExporter from "../../src/utils/exportUtils/PlainTextExport";
 import HTMLExporter from "../../src/utils/exportUtils/HtmlExport";
 import * as TestUtilsMatrix from '../test-utils';

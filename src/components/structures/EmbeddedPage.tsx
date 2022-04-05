@@ -37,7 +37,7 @@ interface IProps {
     // Whether to wrap the page in a scrollbar
     scrollbar?: boolean;
     // Map of keys to replace with values, e.g {$placeholder: "value"}
-    replaceMap?: Map<string, string>;
+    replaceMap?: Record<string, string>;
 }
 
 interface IState {
@@ -57,8 +57,7 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         };
     }
 
-    protected translate(s: string): string {
-        // default implementation - skins may wish to extend this
+    private translate(s: string): string {
         return sanitizeHtml(_t(s));
     }
 

@@ -17,7 +17,6 @@ limitations under the License.
 import React from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Playback } from "../../../audio/Playback";
 import InlineSpinner from '../elements/InlineSpinner';
 import { _t } from "../../../languageHandler";
@@ -35,7 +34,6 @@ interface IState {
     playback?: Playback;
 }
 
-@replaceableComponent("views.messages.MAudioBody")
 export default class MAudioBody extends React.PureComponent<IBodyProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

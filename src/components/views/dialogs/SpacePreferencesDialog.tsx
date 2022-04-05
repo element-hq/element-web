@@ -26,10 +26,7 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import RoomName from "../elements/RoomName";
-
-export enum SpacePreferenceTab {
-    Appearance = "SPACE_PREFERENCE_APPEARANCE_TAB",
-}
+import { SpacePreferenceTab } from "../../../dispatcher/payloads/OpenSpacePreferencesPayload";
 
 interface IProps extends IDialogProps {
     space: Room;

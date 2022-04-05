@@ -24,7 +24,6 @@ import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
 import { M_ASSET, LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 import { logger } from 'matrix-js-sdk/src/logger';
 
-import '../../../skinned-sdk';
 import LocationShareMenu from '../../../../src/components/views/location/LocationShareMenu';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import { ChevronFace } from '../../../../src/components/structures/ContextMenu';

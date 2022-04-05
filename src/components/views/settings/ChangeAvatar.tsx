@@ -23,7 +23,6 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from '../../../languageHandler';
 import Spinner from '../elements/Spinner';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import RoomAvatar from '../avatars/RoomAvatar';
 import BaseAvatar from '../avatars/BaseAvatar';
@@ -50,7 +49,6 @@ enum Phases {
     Error = "error",
 }
 
-@replaceableComponent("views.settings.ChangeAvatar")
 export default class ChangeAvatar extends React.Component<IProps, IState> {
     public static defaultProps = {
         showUploadSection: true,

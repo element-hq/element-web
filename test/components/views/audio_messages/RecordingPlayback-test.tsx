@@ -20,7 +20,6 @@ import { mocked } from 'jest-mock';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { act } from 'react-dom/test-utils';
 
-import '../../../skinned-sdk';
 import RecordingPlayback from '../../../../src/components/views/audio_messages/RecordingPlayback';
 import { Playback } from '../../../../src/audio/Playback';
 import RoomContext, { TimelineRenderingType } from '../../../../src/contexts/RoomContext';

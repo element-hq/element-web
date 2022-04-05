@@ -29,7 +29,6 @@ import MessageEvent from "../messages/MessageEvent";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { _t } from '../../../languageHandler';
 import { formatDate } from '../../../DateUtils';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
@@ -42,7 +41,6 @@ interface IProps {
 
 const AVATAR_SIZE = 24;
 
-@replaceableComponent("views.rooms.PinnedEventTile")
 export default class PinnedEventTile extends React.Component<IProps> {
     public static contextType = MatrixClientContext;
 

@@ -28,7 +28,6 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
 import * as Avatar from '../../../Avatar';
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { IOOBData } from '../../../stores/ThreepidInviteStore';
 
@@ -52,7 +51,6 @@ interface IState {
     urls: string[];
 }
 
-@replaceableComponent("views.avatars.RoomAvatar")
 export default class RoomAvatar extends React.Component<IProps, IState> {
     public static defaultProps = {
         width: 36,

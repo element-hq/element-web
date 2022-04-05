@@ -30,7 +30,6 @@ import AccessibleButton from '../elements/AccessibleButton';
 import QuestionDialog from '../dialogs/QuestionDialog';
 import RestoreKeyBackupDialog from '../dialogs/security/RestoreKeyBackupDialog';
 import { accessSecretStorage } from '../../../SecurityManager';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IState {
     loading: boolean;
@@ -45,7 +44,6 @@ interface IState {
     sessionsRemaining: number;
 }
 
-@replaceableComponent("views.settings.SecureBackupPanel")
 export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     private unmounted = false;
 

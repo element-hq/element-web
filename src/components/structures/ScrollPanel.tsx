@@ -19,7 +19,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
@@ -170,7 +169,6 @@ interface IPreventShrinkingState {
     offsetNode: HTMLElement;
 }
 
-@replaceableComponent("structures.ScrollPanel")
 export default class ScrollPanel extends React.Component<IProps> {
     static defaultProps = {
         stickyBottom: true,

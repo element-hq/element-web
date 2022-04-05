@@ -17,7 +17,6 @@ limitations under the License.
 import React, { HTMLProps } from "react";
 
 import { formatSeconds } from "../../../DateUtils";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 export interface IProps extends Pick<HTMLProps<HTMLSpanElement>, "aria-live"> {
     seconds: number;
@@ -27,7 +26,6 @@ export interface IProps extends Pick<HTMLProps<HTMLSpanElement>, "aria-live"> {
  * Simply converts seconds into minutes and seconds. Note that hours will not be
  * displayed, making it possible to see "82:29".
  */
-@replaceableComponent("views.audio_messages.Clock")
 export default class Clock extends React.Component<IProps> {
     public constructor(props) {
         super(props);

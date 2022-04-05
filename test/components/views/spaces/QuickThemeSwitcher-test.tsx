@@ -19,7 +19,6 @@ import { mount } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { act } from 'react-dom/test-utils';
 
-import '../../../skinned-sdk';
 import QuickThemeSwitcher from '../../../../src/components/views/spaces/QuickThemeSwitcher';
 import { getOrderedThemes } from '../../../../src/theme';
 import ThemeChoicePanel from '../../../../src/components/views/settings/ThemeChoicePanel';

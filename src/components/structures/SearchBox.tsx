@@ -20,7 +20,6 @@ import { throttle } from 'lodash';
 import classNames from 'classnames';
 
 import AccessibleButton from '../../components/views/elements/AccessibleButton';
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 
@@ -43,7 +42,6 @@ interface IState {
     blurred: boolean;
 }
 
-@replaceableComponent("structures.SearchBox")
 export default class SearchBox extends React.Component<IProps, IState> {
     private search = createRef<HTMLInputElement>();
 

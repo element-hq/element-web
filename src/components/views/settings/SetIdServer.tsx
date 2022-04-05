@@ -27,7 +27,6 @@ import IdentityAuthClient from "../../../IdentityAuthClient";
 import { abbreviateUrl, unabbreviateUrl } from "../../../utils/UrlUtils";
 import { getDefaultIdentityServerUrl, doesIdentityServerHaveTerms } from '../../../utils/IdentityServerUtils';
 import { timeout } from "../../../utils/promise";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ActionPayload } from '../../../dispatcher/payloads';
 import InlineSpinner from '../elements/InlineSpinner';
 import AccessibleButton from '../elements/AccessibleButton';
@@ -80,7 +79,6 @@ interface IState {
     checking: boolean;
 }
 
-@replaceableComponent("views.settings.SetIdServer")
 export default class SetIdServer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
 

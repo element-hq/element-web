@@ -27,7 +27,6 @@ import { ISSOFlow, LoginFlow, sendLoginRequest } from "../../../Login";
 import AuthPage from "../../views/auth/AuthPage";
 import { SSO_HOMESERVER_URL_KEY, SSO_ID_SERVER_URL_KEY } from "../../../BasePlatform";
 import SSOButtons from "../../views/elements/SSOButtons";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ConfirmWipeDeviceDialog from '../../views/dialogs/ConfirmWipeDeviceDialog';
 import Field from '../../views/elements/Field';
 import AccessibleButton from '../../views/elements/AccessibleButton';
@@ -70,7 +69,6 @@ interface IState {
     flows: LoginFlow[];
 }
 
-@replaceableComponent("structures.auth.SoftLogout")
 export default class SoftLogout extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);

@@ -11,6 +11,7 @@ package-lock.json
 /matrix-react-sdk-*.tgz
 
 /.idea
+# Legacy skinning file that some people might still have
 /src/component-index.js
 
 .DS_Store

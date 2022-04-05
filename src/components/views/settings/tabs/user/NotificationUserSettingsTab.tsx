@@ -17,10 +17,8 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from "../../../../../languageHandler";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import Notifications from "../../Notifications";
 
-@replaceableComponent("views.settings.tabs.user.NotificationUserSettingsTab")
 export default class NotificationUserSettingsTab extends React.Component {
     render() {
         return (

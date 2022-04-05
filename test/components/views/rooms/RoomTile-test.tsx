@@ -21,14 +21,13 @@ import { mocked } from "jest-mock";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import "../../../skinned-sdk";
 import {
     stubClient,
     mockStateEventImplementation,
     mkRoom,
     mkEvent,
+    stubVideoChannelStore,
 } from "../../../test-utils";
-import { stubVideoChannelStore } from "../../../test-utils/video";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";

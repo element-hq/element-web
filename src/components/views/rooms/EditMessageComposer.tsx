@@ -35,7 +35,6 @@ import BasicMessageComposer, { REGEX_EMOTICON } from "./BasicMessageComposer";
 import { CommandCategories } from '../../../SlashCommands';
 import { Action } from "../../../dispatcher/actions";
 import { getKeyBindingsManager } from '../../../KeyBindingsManager';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SendHistoryManager from '../../../SendHistoryManager';
 import { ActionPayload } from "../../../dispatcher/payloads";
 import AccessibleButton from '../elements/AccessibleButton';
@@ -123,7 +122,6 @@ interface IState {
     saveDisabled: boolean;
 }
 
-@replaceableComponent("views.rooms.EditMessageComposer")
 class EditMessageComposer extends React.Component<IEditMessageComposerProps, IState> {
     static contextType = RoomContext;
     context!: React.ContextType<typeof RoomContext>;

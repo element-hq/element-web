@@ -14,16 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/*
- * minimal-sdk.js
- *
- * Starts up the skin system with even less than `skinned-sdk`.
- */
+import { Optional } from "matrix-events-sdk";
+import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
-import * as sdk from "../src/index";
+import { ActionPayload } from "../payloads";
+import { Action } from "../actions";
+import {
+    AnyInviteKind,
+} from "../../components/views/dialogs/InviteDialogTypes";
 
-const components = {};
+export interface OpenInviteDialogPayload extends ActionPayload {
+    action: Action.OpenInviteDialog;
 
-sdk.loadSkin({ components });
+    kind: AnyInviteKind;
+    onFinishedCallback: Optional<(results: boolean[]) => void>;
 
-export default sdk;
+    call?: MatrixCall;
+    roomId?: string;
+
+    analyticsName: string;
+    className: string;
+}

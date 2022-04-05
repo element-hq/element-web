@@ -18,16 +18,14 @@ import React from "react";
 import { mount } from "enzyme";
 import { mocked } from "jest-mock";
 
-import sdk from "../../../skinned-sdk";
 import { formatFullDateNoTime } from "../../../../src/DateUtils";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { UIFeature } from "../../../../src/settings/UIFeature";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { getMockClientWithEventEmitter } from "../../../test-utils";
+import DateSeparator from "../../../../src/components/views/messages/DateSeparator";
 
 jest.mock("../../../../src/settings/SettingsStore");
-
-const DateSeparator = sdk.getComponent("views.messages.DateSeparator");
 
 describe("DateSeparator", () => {
     const HOUR_MS = 3600000;
@@ -38,6 +36,7 @@ describe("DateSeparator", () => {
     const defaultProps = {
         ts: nowMs,
         now,
+        roomId: "!unused:example.org",
     };
     const RealDate = global.Date;
     class MockDate extends Date {

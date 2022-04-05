@@ -25,11 +25,10 @@ import createRoom from "../../../../../createRoom";
 import Modal from "../../../../../Modal";
 import PlatformPeg from "../../../../../PlatformPeg";
 import UpdateCheckButton from "../../UpdateCheckButton";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import BugReportDialog from '../../../dialogs/BugReportDialog';
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
-import { UserTab } from "../../../dialogs/UserSettingsDialog";
+import { UserTab } from "../../../dialogs/UserTab";
 import dis from "../../../../../dispatcher/dispatcher";
 import CopyableText from "../../../elements/CopyableText";
 
@@ -42,7 +41,6 @@ interface IState {
     canUpdate: boolean;
 }
 
-@replaceableComponent("views.settings.tabs.user.HelpUserSettingsTab")
 export default class HelpUserSettingsTab extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);

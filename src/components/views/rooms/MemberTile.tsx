@@ -30,7 +30,6 @@ import dis from "../../../dispatcher/dispatcher";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { Action } from "../../../dispatcher/actions";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import EntityTile, { PowerStatus } from "./EntityTile";
 import MemberAvatar from "./../avatars/MemberAvatar";
 import DisambiguatedProfile from "../messages/DisambiguatedProfile";
@@ -47,7 +46,6 @@ interface IState {
     e2eStatus: string;
 }
 
-@replaceableComponent("views.rooms.MemberTile")
 export default class MemberTile extends React.Component<IProps, IState> {
     private userLastModifiedTime: number;
     private memberLastModifiedTime: number;

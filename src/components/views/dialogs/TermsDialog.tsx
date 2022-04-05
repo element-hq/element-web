@@ -19,7 +19,6 @@ import React from 'react';
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 
 import { _t, pickBestLanguage } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "./BaseDialog";
 
@@ -66,7 +65,6 @@ interface IState {
     agreedUrls: any;
 }
 
-@replaceableComponent("views.dialogs.TermsDialog")
 export default class TermsDialog extends React.PureComponent<ITermsDialogProps, IState> {
     constructor(props) {
         super(props);

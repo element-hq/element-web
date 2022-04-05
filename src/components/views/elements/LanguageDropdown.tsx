@@ -20,7 +20,6 @@ import React from 'react';
 import * as languageHandler from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from "./Spinner";
 import Dropdown from "./Dropdown";
 
@@ -42,7 +41,6 @@ interface IState {
     langs: string[];
 }
 
-@replaceableComponent("views.elements.LanguageDropdown")
 export default class LanguageDropdown extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

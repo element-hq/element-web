@@ -30,7 +30,6 @@ import Login, { ISSOFlow } from "../../../Login";
 import dis from "../../../dispatcher/dispatcher";
 import SSOButtons from "../../views/elements/SSOButtons";
 import ServerPicker from '../../views/elements/ServerPicker';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RegistrationForm from '../../views/auth/RegistrationForm';
 import AccessibleButton from '../../views/elements/AccessibleButton';
 import AuthBody from "../../views/auth/AuthBody";
@@ -110,7 +109,6 @@ interface IState {
     ssoFlow?: ISSOFlow;
 }
 
-@replaceableComponent("structures.auth.Registration")
 export default class Registration extends React.Component<IProps, IState> {
     loginLogic: Login;
 

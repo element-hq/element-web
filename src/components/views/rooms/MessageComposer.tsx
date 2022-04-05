@@ -35,7 +35,6 @@ import { aboveLeftOf, AboveLeftOf } from "../../structures/ContextMenu";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import ReplyPreview from "./ReplyPreview";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import VoiceRecordComposerTile from "./VoiceRecordComposerTile";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import { RecordingState, VoiceRecording } from "../../../audio/VoiceRecording";
@@ -91,7 +90,6 @@ interface IState {
     showPollsButton: boolean;
 }
 
-@replaceableComponent("views.rooms.MessageComposer")
 export default class MessageComposer extends React.Component<IProps, IState> {
     private dispatcherRef: string;
     private messageComposerInput = createRef<SendMessageComposerClass>();

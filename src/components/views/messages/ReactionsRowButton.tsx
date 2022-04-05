@@ -21,7 +21,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { _t } from '../../../languageHandler';
 import { formatCommaSeparatedList } from '../../../utils/FormattingUtils';
 import dis from "../../../dispatcher/dispatcher";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ReactionsRowButtonTooltip from "./ReactionsRowButtonTooltip";
 import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -46,7 +45,6 @@ interface IState {
     tooltipVisible: boolean;
 }
 
-@replaceableComponent("views.messages.ReactionsRowButton")
 export default class ReactionsRowButton extends React.PureComponent<IProps, IState> {
     static contextType = MatrixClientContext;
 

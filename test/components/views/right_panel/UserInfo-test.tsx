@@ -21,7 +21,6 @@ import { act } from "react-dom/test-utils";
 import { Room, User, MatrixClient } from 'matrix-js-sdk/src/matrix';
 import { Phase, VerificationRequest } from 'matrix-js-sdk/src/crypto/verification/request/VerificationRequest';
 
-import "../../../skinned-sdk";
 import UserInfo from '../../../../src/components/views/right_panel/UserInfo';
 import { RightPanelPhases } from '../../../../src/stores/right-panel/RightPanelStorePhases';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';

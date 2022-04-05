@@ -19,7 +19,6 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 
 interface IProps {
@@ -32,7 +31,6 @@ interface IProps {
     onFinished: (success: boolean) => void;
 }
 
-@replaceableComponent("views.dialogs.AskInviteAnywayDialog")
 export default class AskInviteAnywayDialog extends React.Component<IProps> {
     private onInviteClicked = (): void => {
         this.props.onInviteAnyways();

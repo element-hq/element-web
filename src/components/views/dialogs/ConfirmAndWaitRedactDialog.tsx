@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ConfirmRedactDialog from './ConfirmRedactDialog';
 import ErrorDialog from './ErrorDialog';
 import BaseDialog from "./BaseDialog";
@@ -45,7 +44,6 @@ interface IState {
  *
  * To avoid this, we keep the dialog open as long as /redact is in progress.
  */
-@replaceableComponent("views.dialogs.ConfirmAndWaitRedactDialog")
 export default class ConfirmAndWaitRedactDialog extends React.PureComponent<IProps, IState> {
     constructor(props) {
         super(props);

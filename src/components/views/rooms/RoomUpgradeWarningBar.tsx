@@ -21,7 +21,6 @@ import { RoomStateEvent } from 'matrix-js-sdk/src/models/room-state';
 
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomUpgradeDialog from '../dialogs/RoomUpgradeDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
@@ -34,7 +33,6 @@ interface IState {
     upgraded?: boolean;
 }
 
-@replaceableComponent("views.rooms.RoomUpgradeWarningBar")
 export default class RoomUpgradeWarningBar extends React.PureComponent<IProps, IState> {
     static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;

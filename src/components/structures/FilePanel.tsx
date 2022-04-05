@@ -29,7 +29,6 @@ import EventIndexPeg from "../../indexing/EventIndexPeg";
 import { _t } from '../../languageHandler';
 import DesktopBuildsNotice, { WarningKind } from "../views/elements/DesktopBuildsNotice";
 import BaseCard from "../views/right_panel/BaseCard";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import TimelinePanel from "./TimelinePanel";
 import Spinner from "../views/elements/Spinner";
@@ -51,7 +50,6 @@ interface IState {
 /*
  * Component which shows the filtered file using a TimelinePanel
  */
-@replaceableComponent("structures.FilePanel")
 class FilePanel extends React.Component<IProps, IState> {
     static contextType = RoomContext;
 

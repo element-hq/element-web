@@ -23,7 +23,6 @@ import { IDialogProps } from "./IDialogProps";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import SdkConfig from '../../../SdkConfig';
 import Markdown from '../../../Markdown';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import BaseDialog from "./BaseDialog";
@@ -89,7 +88,6 @@ type Moderation = {
  *    a well-formed state event `m.room.moderation.moderated_by`
  *    /`org.matrix.msc3215.room.moderation.moderated_by`?
  */
-@replaceableComponent("views.dialogs.ReportEventDialog")
 export default class ReportEventDialog extends React.Component<IProps, IState> {
     // If the room supports moderation, the moderation information.
     private moderation?: Moderation;

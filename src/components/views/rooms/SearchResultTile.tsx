@@ -22,12 +22,12 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import SettingsStore from "../../../settings/SettingsStore";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DateSeparator from "../messages/DateSeparator";
-import EventTile, { haveTileForEvent } from "./EventTile";
+import EventTile from "./EventTile";
 import { shouldFormContinuation } from "../../structures/MessagePanel";
 import { wantsDateSeparator } from "../../../DateUtils";
 import CallEventGrouper, { buildCallEventGroupers } from "../../structures/CallEventGrouper";
+import { haveRendererForEvent } from "../../../events/EventTileFactory";
 
 interface IProps {
     // a matrix-js-sdk SearchResult containing the details of this result
@@ -40,7 +40,6 @@ interface IProps {
     permalinkCreator?: RoomPermalinkCreator;
 }
 
-@replaceableComponent("views.rooms.SearchResultTile")
 export default class SearchResultTile extends React.Component<IProps> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
@@ -79,7 +78,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                 highlights = this.props.searchHighlights;
             }
 
-            if (haveTileForEvent(mxEv, this.context?.showHiddenEventsInTimeline)) {
+            if (haveRendererForEvent(mxEv, this.context?.showHiddenEventsInTimeline)) {
                 // do we need a date separator since the last event?
                 const prevEv = timeline[j - 1];
                 // is this a continuation of the previous message?

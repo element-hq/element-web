@@ -24,8 +24,7 @@ import SdkConfig from '../../../SdkConfig';
 import withValidation, { IFieldState } from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { IOpts, privateShouldBeEncrypted } from "../../../createRoom";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
+import { IOpts } from "../../../createRoom";
 import Field from "../elements/Field";
 import RoomAliasField from "../elements/RoomAliasField";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
@@ -35,6 +34,7 @@ import SpaceStore from "../../../stores/spaces/SpaceStore";
 import JoinRuleDropdown from "../elements/JoinRuleDropdown";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import { privateShouldBeEncrypted } from "../../../utils/rooms";
 
 interface IProps {
     type?: RoomType;
@@ -58,7 +58,6 @@ interface IState {
     canChangeEncryption: boolean;
 }
 
-@replaceableComponent("views.dialogs.CreateRoomDialog")
 export default class CreateRoomDialog extends React.Component<IProps, IState> {
     private readonly supportsRestricted: boolean;
     private nameField = createRef<Field>();

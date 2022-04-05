@@ -33,7 +33,7 @@ import { throttle } from "lodash";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
 
-// focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by _AccessibleButton.scss
+// focus-visible is a Polyfill for the :focus-visible CSS pseudo-attribute used by various components
 import 'focus-visible';
 // what-input helps improve keyboard accessibility
 import 'what-input';
@@ -84,19 +84,18 @@ import {
     UPDATE_STATUS_INDICATOR,
 } from "../../stores/notifications/RoomNotificationStateStore";
 import { SettingLevel } from "../../settings/SettingLevel";
-import { leaveRoomBehaviour } from "../../utils/membership";
 import ThreepidInviteStore, { IThreepidInvite, IThreepidInviteWireFormat } from "../../stores/ThreepidInviteStore";
 import { UIFeature } from "../../settings/UIFeature";
 import DialPadModal from "../views/voip/DialPadModal";
 import { showToast as showMobileGuideToast } from '../../toasts/MobileGuideToast';
 import { shouldUseLoginForWelcome } from "../../utils/pages";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import RoomListStore from "../../stores/room-list/RoomListStore";
 import { RoomUpdateCause } from "../../stores/room-list/models";
 import SecurityCustomisations from "../../customisations/Security";
 import Spinner from "../views/elements/Spinner";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
-import UserSettingsDialog, { UserTab } from '../views/dialogs/UserSettingsDialog';
+import UserSettingsDialog from '../views/dialogs/UserSettingsDialog';
+import { UserTab } from "../views/dialogs/UserTab";
 import CreateRoomDialog from '../views/dialogs/CreateRoomDialog';
 import RoomDirectory from './RoomDirectory';
 import KeySignatureUploadFailedDialog from "../views/dialogs/KeySignatureUploadFailedDialog";
@@ -131,6 +130,7 @@ import { ViewStartChatOrReusePayload } from '../../dispatcher/payloads/ViewStart
 import { IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import InfoDialog from '../views/dialogs/InfoDialog';
+import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -208,7 +208,6 @@ interface IState {
     forceTimeline?: boolean; // see props
 }
 
-@replaceableComponent("structures.MatrixChat")
 export default class MatrixChat extends React.PureComponent<IProps, IState> {
     static displayName = "MatrixChat";
 
@@ -2096,13 +2095,4 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             { view }
         </ErrorBoundary>;
     }
-}
-
-export function isLoggedIn(): boolean {
-    // JRS: Maybe we should move the step that writes this to the window out of
-    // `element-web` and into this file? Better yet, we should probably create a
-    // store to hold this state.
-    // See also https://github.com/vector-im/element-web/issues/15034.
-    const app = window.matrixChat;
-    return app && (app as MatrixChat).state.view === Views.LOGGED_IN;
 }

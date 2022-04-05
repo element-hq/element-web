@@ -19,7 +19,6 @@ import React from "react";
 import { _t, pickBestLanguage } from "../../../languageHandler";
 import { objectClone } from "../../../utils/objects";
 import StyledCheckbox from "../elements/StyledCheckbox";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 
 interface IProps {
@@ -40,7 +39,6 @@ interface Policy {
     name: string;
 }
 
-@replaceableComponent("views.terms.InlineTermsAgreement")
 export default class InlineTermsAgreement extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

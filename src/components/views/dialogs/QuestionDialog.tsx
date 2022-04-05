@@ -18,9 +18,10 @@ limitations under the License.
 import React from 'react';
 import classNames from "classnames";
 
-import * as sdk from '../../../index';
 import { _t } from '../../../languageHandler';
 import { IDialogProps } from "./IDialogProps";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps extends IDialogProps {
     title?: string;
@@ -58,10 +59,6 @@ export default class QuestionDialog extends React.Component<IProps> {
     };
 
     public render(): JSX.Element {
-        // Converting these to imports breaks wrench tests
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
-
         let primaryButtonClass = "";
         if (this.props.danger) {
             primaryButtonClass = "danger";

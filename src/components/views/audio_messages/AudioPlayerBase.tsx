@@ -19,7 +19,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { Playback, PlaybackState } from "../../../audio/Playback";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { _t } from "../../../languageHandler";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -39,7 +38,6 @@ interface IState {
     error?: boolean;
 }
 
-@replaceableComponent("views.audio_messages.AudioPlayerBase")
 export default abstract class AudioPlayerBase<T extends IProps = IProps> extends React.PureComponent<T, IState> {
     protected seekRef: RefObject<SeekBar> = createRef();
     protected playPauseRef: RefObject<PlayPauseButton> = createRef();

@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { mount } from 'enzyme';
 
-import '../../../skinned-sdk';
 import StyledLiveBeaconIcon from '../../../../src/components/views/beacon/StyledLiveBeaconIcon';
 
 describe('<StyledLiveBeaconIcon />', () => {

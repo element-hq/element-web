@@ -19,7 +19,6 @@ import React from 'react';
 import filesize from "filesize";
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { getBlobSafeMimeType } from '../../../utils/blobs';
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
@@ -31,7 +30,6 @@ interface IProps {
     onFinished: (uploadConfirmed: boolean, uploadAll?: boolean) => void;
 }
 
-@replaceableComponent("views.dialogs.UploadConfirmDialog")
 export default class UploadConfirmDialog extends React.Component<IProps> {
     private readonly objectUrl: string;
     private readonly mimeType: string;

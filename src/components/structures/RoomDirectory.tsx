@@ -31,7 +31,6 @@ import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/Di
 import Analytics from '../../Analytics';
 import NetworkDropdown, { ALL_ROOMS, Protocols } from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../customisations/Media";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
@@ -71,7 +70,6 @@ interface IState {
     filterString: string;
 }
 
-@replaceableComponent("structures.RoomDirectory")
 export default class RoomDirectory extends React.Component<IProps, IState> {
     private unmounted = false;
     private nextBatch: string = null;

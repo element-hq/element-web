@@ -17,7 +17,6 @@ limitations under the License.
 import React, { ChangeEvent, createRef } from 'react';
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "./AccessibleButton";
 
 interface IProps {
@@ -34,7 +33,6 @@ interface IState {
     value: string;
 }
 
-@replaceableComponent("views.elements.DirectorySearchBox")
 export default class DirectorySearchBox extends React.Component<IProps, IState> {
     private input = createRef<HTMLInputElement>();
 

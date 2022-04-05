@@ -24,7 +24,6 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RestoreKeyBackupDialog from './security/RestoreKeyBackupDialog';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import QuestionDialog from "./QuestionDialog";
 import BaseDialog from "./BaseDialog";
 import Spinner from "../elements/Spinner";
@@ -41,7 +40,6 @@ interface IState {
     error?: string;
 }
 
-@replaceableComponent("views.dialogs.LogoutDialog")
 export default class LogoutDialog extends React.Component<IProps, IState> {
     static defaultProps = {
         onFinished: function() {},

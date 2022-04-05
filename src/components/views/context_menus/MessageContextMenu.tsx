@@ -32,11 +32,8 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
 import { isContentActionable } from '../../../utils/EventUtils';
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { ReadPinsEventId } from "../right_panel/PinnedMessagesCard";
-import ForwardDialog from "../dialogs/ForwardDialog";
+import { ReadPinsEventId } from "../right_panel/types";
 import { Action } from "../../../dispatcher/actions";
-import ReportEventDialog from '../dialogs/ReportEventDialog';
 import ViewSource from '../../structures/ViewSource';
 import { createRedactEventDialog } from '../dialogs/ConfirmRedactDialog';
 import ShareDialog from '../dialogs/ShareDialog';
@@ -47,6 +44,8 @@ import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInse
 import EndPollDialog from '../dialogs/EndPollDialog';
 import { isPollEnded } from '../messages/MPollBody';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
+import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
 import { createMapSiteLink } from '../../../utils/location';
 
 export function canCancel(status: EventStatus): boolean {
@@ -87,7 +86,6 @@ interface IState {
     canPin: boolean;
 }
 
-@replaceableComponent("views.context_menus.MessageContextMenu")
 export default class MessageContextMenu extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
@@ -155,9 +153,10 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onReportEventClick = (): void => {
-        Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
-            mxEvent: this.props.mxEvent,
-        }, 'mx_Dialog_reportEvent');
+        dis.dispatch<OpenReportEventDialogPayload>({
+            action: Action.OpenReportEventDialog,
+            event: this.props.mxEvent,
+        });
         this.closeMenu();
     };
 
@@ -178,8 +177,8 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onForwardClick = (): void => {
-        Modal.createTrackedDialog('Forward Message', '', ForwardDialog, {
-            matrixClient: MatrixClientPeg.get(),
+        dis.dispatch<OpenForwardDialogPayload>({
+            action: Action.OpenForwardDialog,
             event: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
         });

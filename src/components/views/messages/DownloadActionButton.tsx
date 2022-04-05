@@ -22,7 +22,6 @@ import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
 import { _t, _td } from "../../../languageHandler";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { FileDownloader } from "../../../utils/FileDownloader";
 
 interface IProps {
@@ -40,7 +39,6 @@ interface IState {
     tooltip: string;
 }
 
-@replaceableComponent("views.messages.DownloadActionButton")
 export default class DownloadActionButton extends React.PureComponent<IProps, IState> {
     private downloader = new FileDownloader();
 

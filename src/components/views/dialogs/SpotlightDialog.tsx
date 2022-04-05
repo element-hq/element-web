@@ -53,19 +53,18 @@ import DMRoomMap from "../../../utils/DMRoomMap";
 import { mediaFromMxc } from "../../../customisations/Media";
 import BaseAvatar from "../avatars/BaseAvatar";
 import Spinner from "../elements/Spinner";
-import { roomContextDetailsText, spaceContextDetailsText } from "../../../Rooms";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { Action } from "../../../dispatcher/actions";
 import Modal from "../../../Modal";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import RoomViewStore from "../../../stores/RoomViewStore";
+import { RoomViewStore } from "../../../stores/RoomViewStore";
 import { showStartChatInviteDialog } from "../../../RoomInvite";
 import SettingsStore from "../../../settings/SettingsStore";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import NotificationBadge from "../rooms/NotificationBadge";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { BetaPill } from "../beta/BetaCard";
-import { UserTab } from "./UserSettingsDialog";
+import { UserTab } from "./UserTab";
 import BetaFeedbackDialog from "./BetaFeedbackDialog";
 import SdkConfig from "../../../SdkConfig";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -74,6 +73,7 @@ import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 import { getCachedRoomIDForAlias } from "../../../RoomAliasCache";
+import { roomContextDetailsText, spaceContextDetailsText } from "../../../utils/i18n-helpers";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -559,7 +559,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                 <h4>{ _t("Recently viewed") }</h4>
                 <div>
                     { BreadcrumbsStore.instance.rooms
-                        .filter(r => r.roomId !== RoomViewStore.getRoomId())
+                        .filter(r => r.roomId !== RoomViewStore.instance.getRoomId())
                         .map(room => (
                             <TooltipOption
                                 id={`mx_SpotlightDialog_button_recentlyViewed_${room.roomId}`}

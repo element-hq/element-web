@@ -25,7 +25,6 @@ import classNames from "classnames";
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import MessageComposer from '../views/rooms/MessageComposer';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
@@ -51,7 +50,7 @@ import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import Measured from '../views/elements/Measured';
 import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
-import RoomViewStore from '../../stores/RoomViewStore';
+import { RoomViewStore } from '../../stores/RoomViewStore';
 
 interface IProps {
     room: Room;
@@ -73,7 +72,6 @@ interface IState {
     narrow: boolean;
 }
 
-@replaceableComponent("structures.ThreadView")
 export default class ThreadView extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
@@ -112,7 +110,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         room.removeListener(ThreadEvent.New, this.onNewThread);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
 
-        const hasRoomChanged = RoomViewStore.getRoomId() !== roomId;
+        const hasRoomChanged = RoomViewStore.instance.getRoomId() !== roomId;
         if (this.props.isInitialEventHighlighted && !hasRoomChanged) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,

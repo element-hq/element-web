@@ -47,7 +47,6 @@ import { containsEmoji } from "../../../effects/utils";
 import { CHAT_EFFECTS } from '../../../effects';
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { getKeyBindingsManager } from '../../../KeyBindingsManager';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import { ActionPayload } from "../../../dispatcher/payloads";
@@ -139,7 +138,6 @@ interface ISendMessageComposerProps extends MatrixClientProps {
     toggleStickerPickerOpen: () => void;
 }
 
-@replaceableComponent("views.rooms.SendMessageComposer")
 export class SendMessageComposer extends React.Component<ISendMessageComposerProps> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

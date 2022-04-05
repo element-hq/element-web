@@ -33,11 +33,11 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import createRoom, { findDMForUser, privateShouldBeEncrypted } from '../../../createRoom';
+import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
-import RoomViewStore from "../../../stores/RoomViewStore";
+import { RoomViewStore } from "../../../stores/RoomViewStore";
 import MultiInviter from "../../../utils/MultiInviter";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import E2EIcon from "../rooms/E2EIcon";
@@ -49,7 +49,7 @@ import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { legacyVerifyUser, verifyDevice, verifyUser } from '../../../verification';
 import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "../dialogs/UserSettingsDialog";
+import { UserTab } from "../dialogs/UserTab";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import { E2EStatus } from "../../../utils/ShieldUtils";
@@ -79,6 +79,8 @@ import { useUserStatusMessage } from "../../../hooks/useUserStatusMessage";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { findDMForUser } from "../../../utils/direct-messages";
+import { privateShouldBeEncrypted } from "../../../utils/rooms";
 
 export interface IDevice {
     deviceId: string;
@@ -425,7 +427,7 @@ const UserOptionsSection: React.FC<{
         }
 
         if (canInvite && (member?.membership ?? 'leave') === 'leave' && shouldShowComponent(UIComponent.InviteUsers)) {
-            const roomId = member && member.roomId ? member.roomId : RoomViewStore.getRoomId();
+            const roomId = member && member.roomId ? member.roomId : RoomViewStore.instance.getRoomId();
             const onInviteUserButton = async (ev: ButtonEvent) => {
                 try {
                     // We use a MultiInviter to re-use the invite logic, even though we're only inviting one user.

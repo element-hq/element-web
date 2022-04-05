@@ -17,8 +17,6 @@ limitations under the License.
 import { mocked } from 'jest-mock';
 import { logger } from 'matrix-js-sdk/src/logger';
 
-import '../skinned-sdk'; // Must be first for skinning to work
-
 import { createAudioContext, decodeOgg } from '../../src/audio/compat';
 import { Playback, PlaybackState } from "../../src/audio/Playback";
 

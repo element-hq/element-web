@@ -20,7 +20,6 @@ import classNames from 'classnames';
 
 import { Alignment } from './Tooltip';
 import { _t } from "../../../languageHandler";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TooltipTarget from './TooltipTarget';
 
 export enum InfoTooltipKind {
@@ -35,7 +34,6 @@ interface ITooltipProps {
     kind?: InfoTooltipKind;
 }
 
-@replaceableComponent("views.elements.InfoTooltip")
 export default class InfoTooltip extends React.PureComponent<ITooltipProps> {
     constructor(props: ITooltipProps) {
         super(props);

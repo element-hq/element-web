@@ -27,7 +27,6 @@ import dis from '../../../dispatcher/dispatcher';
 import { _t } from '../../../languageHandler';
 import SdkConfig from "../../../SdkConfig";
 import IdentityAuthClient from '../../../IdentityAuthClient';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import InviteReason from "../elements/InviteReason";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import Spinner from "../elements/Spinner";
@@ -98,7 +97,6 @@ interface IState {
     threePidFetchError?: MatrixError;
 }
 
-@replaceableComponent("views.rooms.RoomPreviewBar")
 export default class RoomPreviewBar extends React.Component<IProps, IState> {
     static defaultProps = {
         onJoinClick() {},

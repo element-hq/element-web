@@ -20,7 +20,6 @@ import Dropdown from "../../views/elements/Dropdown";
 import PlatformPeg from "../../../PlatformPeg";
 import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from "./Spinner";
 
 function languageMatchesSearchQuery(query, language) {
@@ -40,7 +39,6 @@ interface SpellCheckLanguagesDropdownIState {
     languages: any;
 }
 
-@replaceableComponent("views.elements.SpellCheckLanguagesDropdown")
 export default class SpellCheckLanguagesDropdown extends React.Component<SpellCheckLanguagesDropdownIProps,
                                                                          SpellCheckLanguagesDropdownIState> {
     constructor(props) {

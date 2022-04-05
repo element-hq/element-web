@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventSubscription } from 'fbemitter';
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
+import { Optional } from "matrix-events-sdk";
 
 import defaultDispatcher from '../../dispatcher/dispatcher';
 import { pendingVerificationRequestForUser } from '../../verification';
@@ -31,7 +31,9 @@ import {
     IRightPanelCard,
     IRightPanelForRoom,
 } from './RightPanelStoreIPanelState';
-import RoomViewStore from '../RoomViewStore';
+import { ActionPayload } from "../../dispatcher/payloads";
+import { Action } from "../../dispatcher/actions";
+import { ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
 
 /**
  * A class for tracking the state of the right panel between layouts and
@@ -41,30 +43,32 @@ import RoomViewStore from '../RoomViewStore';
 */
 export default class RightPanelStore extends ReadyWatchingStore {
     private static internalInstance: RightPanelStore;
-    private viewedRoomId: string;
 
     private global?: IRightPanelForRoom = null;
     private byRoom: {
         [roomId: string]: IRightPanelForRoom;
     } = {};
-
-    private roomStoreToken: EventSubscription;
+    private viewedRoomId: Optional<string>;
 
     private constructor() {
         super(defaultDispatcher);
     }
 
     protected async onReady(): Promise<any> {
-        this.roomStoreToken = RoomViewStore.addListener(this.onRoomViewStoreUpdate);
         this.matrixClient.on(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
-        this.viewedRoomId = RoomViewStore.getRoomId();
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();
     }
 
     protected async onNotReady(): Promise<any> {
         this.matrixClient.off(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
-        this.roomStoreToken.remove();
+    }
+
+    protected onDispatcherAction(payload: ActionPayload) {
+        if (payload.action !== Action.ActiveRoomChanged) return;
+
+        const changePayload = <ActiveRoomChangedPayload>payload;
+        this.handleViewedRoomChange(changePayload.oldRoomId, changePayload.newRoomId);
     }
 
     // Getters
@@ -343,23 +347,20 @@ export default class RightPanelStore extends ReadyWatchingStore {
         }
     };
 
-    private onRoomViewStoreUpdate = () => {
-        const oldRoomId = this.viewedRoomId;
-        this.viewedRoomId = RoomViewStore.getRoomId();
+    private handleViewedRoomChange(oldRoomId: Optional<string>, newRoomId: Optional<string>) {
+        this.viewedRoomId = newRoomId;
         // load values from byRoomCache with the viewedRoomId.
         this.loadCacheFromSettings();
 
-        // if we're switching to a room, clear out any stale MemberInfo cards
+        // when we're switching to a room, clear out any stale MemberInfo cards
         // in order to fix https://github.com/vector-im/element-web/issues/21487
-        if (oldRoomId !== this.viewedRoomId) {
-            if (this.currentCard?.phase !== RightPanelPhases.EncryptionPanel) {
-                const panel = this.byRoom[this.viewedRoomId];
-                if (panel?.history) {
-                    panel.history = panel.history.filter(
-                        (card) => card.phase != RightPanelPhases.RoomMemberInfo &&
-                                  card.phase != RightPanelPhases.Room3pidMemberInfo,
-                    );
-                }
+        if (this.currentCard?.phase !== RightPanelPhases.EncryptionPanel) {
+            const panel = this.byRoom[this.viewedRoomId];
+            if (panel?.history) {
+                panel.history = panel.history.filter(
+                    (card) => card.phase != RightPanelPhases.RoomMemberInfo &&
+                        card.phase != RightPanelPhases.Room3pidMemberInfo,
+                );
             }
         }
 
@@ -381,7 +382,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
             };
         }
         this.emitAndUpdateSettings();
-    };
+    }
 
     private get isViewingRoom(): boolean {
         return !!this.viewedRoomId;

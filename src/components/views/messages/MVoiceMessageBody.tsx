@@ -16,14 +16,12 @@ limitations under the License.
 
 import React from "react";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import InlineSpinner from '../elements/InlineSpinner';
 import { _t } from "../../../languageHandler";
 import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import MAudioBody from "./MAudioBody";
 import MFileBody from "./MFileBody";
 
-@replaceableComponent("views.messages.MVoiceMessageBody")
 export default class MVoiceMessageBody extends MAudioBody {
     // A voice message is an audio file but rendered in a special way.
     public render() {

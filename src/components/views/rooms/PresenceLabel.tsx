@@ -18,7 +18,6 @@ import React from 'react';
 import { UnstableValue } from "matrix-js-sdk/src/NamespacedValue";
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 const BUSY_PRESENCE_NAME = new UnstableValue("busy", "org.matrix.msc3026.busy");
 
@@ -33,7 +32,6 @@ interface IProps {
     presenceState?: string;
 }
 
-@replaceableComponent("views.rooms.PresenceLabel")
 export default class PresenceLabel extends React.Component<IProps> {
     static defaultProps = {
         activeAgo: -1,
