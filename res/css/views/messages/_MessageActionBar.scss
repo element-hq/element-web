@@ -48,7 +48,7 @@ limitations under the License.
         cursor: initial;
     }
 
-    > * {
+    >* {
         white-space: nowrap;
         display: inline-block;
         position: relative;
@@ -100,6 +100,11 @@ limitations under the License.
 
 .mx_MessageActionBar_threadButton::after {
     mask-image: url('$(res)/img/element-icons/message/thread.svg');
+}
+
+.mx_MessageActionBar_threadButton .mx_Indicator {
+    background: $links;
+    animation-iteration-count: infinite;
 }
 
 .mx_MessageActionBar_editButton::after {

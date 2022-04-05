@@ -940,6 +940,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
 .mx_ThreadView {
     display: flex;
     flex-direction: column;
+    max-height: 100%;
 
     .mx_ThreadView_List {
         flex: 1;

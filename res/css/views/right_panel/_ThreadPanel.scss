@@ -17,6 +17,8 @@ limitations under the License.
 .mx_ThreadPanel {
     display: flex;
     flex-direction: column;
+    height: 100px;
+    overflow: visible;
 
     .mx_BaseCard_header {
         margin-bottom: 12px;
@@ -225,6 +227,20 @@ limitations under the License.
             display: none; // hide the hidden event expand button, not enough space, view source can still be used
         }
     }
+
+    .mx_BaseCard_footer {
+        text-align: left;
+        font-size: $font-12px;
+        align-items: center;
+        justify-content: end;
+        gap: 4px;
+        position: relative;
+        top: 2px;
+
+        .mx_AccessibleButton_kind_link_inline {
+            color: $secondary-content;
+        }
+    }
 }
 
 .mx_ThreadPanel_replies {
@@ -269,10 +285,10 @@ limitations under the License.
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: 48px;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 20px;
 
     h2 {

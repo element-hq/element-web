@@ -61,6 +61,7 @@ const UnreadIndicator = ({ color }: IUnreadIndicatorProps) => {
     }
 
     const classes = classNames({
+        "mx_Indicator": true,
         "mx_RightPanel_headerButton_unreadIndicator": true,
         "mx_Indicator_bold": color === NotificationColor.Bold,
         "mx_Indicator_gray": color === NotificationColor.Grey,
