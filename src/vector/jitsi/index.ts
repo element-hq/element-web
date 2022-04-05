@@ -129,11 +129,9 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
             .get("skip_built_in_welcome_screen") || isVideoChannel;
 
-        // If we're meant to skip our screen, skip to the part where we show Jitsi instead of us.
+        // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
-        if (skipOurWelcomeScreen) {
-            toggleConferenceVisibility(true);
-        }
+        toggleConferenceVisibility(skipOurWelcomeScreen);
 
         if (widgetApi) {
             await readyPromise;
