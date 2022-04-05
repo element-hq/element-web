@@ -76,7 +76,9 @@ a.mx_Pill {
 }
 
 .mx_Emoji {
-    font-size: 1.8rem;
+    // Should be 1.8rem for our default 1.4rem message bodies,
+    // and scale with the size of the surrounding text
+    font-size: calc(18 / 14 * 1em);
     vertical-align: bottom;
 }
 

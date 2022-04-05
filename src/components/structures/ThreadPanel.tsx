@@ -31,7 +31,14 @@ import { Layout } from '../../settings/enums/Layout';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import Measured from '../views/elements/Measured';
 import PosthogTrackers from "../../PosthogTrackers";
-import { ButtonEvent } from "../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
+import { BetaPill } from '../views/beta/BetaCard';
+import SdkConfig from '../../SdkConfig';
+import Modal from '../../Modal';
+import BetaFeedbackDialog from '../views/dialogs/BetaFeedbackDialog';
+import { Action } from '../../dispatcher/actions';
+import { UserTab } from '../views/dialogs/UserSettingsDialog';
+import dis from '../../dispatcher/dispatcher';
 
 interface IProps {
     roomId: string;
@@ -101,7 +108,7 @@ export const ThreadPanelHeader = ({ filterOption, setFilterOption, empty }: {
         isSelected={opt === value}
     />);
     const contextMenu = menuDisplayed ? <ContextMenu
-        top={100}
+        top={108}
         right={33}
         onFinished={closeMenu}
         chevronFace={ChevronFace.Top}
@@ -129,25 +136,44 @@ export const ThreadPanelHeader = ({ filterOption, setFilterOption, empty }: {
 };
 
 interface EmptyThreadIProps {
+    hasThreads: boolean;
     filterOption: ThreadFilterType;
     showAllThreadsCallback: () => void;
 }
 
-const EmptyThread: React.FC<EmptyThreadIProps> = ({ filterOption, showAllThreadsCallback }) => {
+const EmptyThread: React.FC<EmptyThreadIProps> = ({ hasThreads, filterOption, showAllThreadsCallback }) => {
+    let body: JSX.Element;
+    if (hasThreads) {
+        body = <>
+            <p>
+                { _t("Reply to an ongoing thread or use “%(replyInThread)s” "
+                    + "when hovering over a message to start a new one.", {
+                    replyInThread: _t("Reply in thread"),
+                }) }
+            </p>
+            <p>
+                { /* Always display that paragraph to prevent layout shift when hiding the button */ }
+                { (filterOption === ThreadFilterType.My)
+                    ? <button onClick={showAllThreadsCallback}>{ _t("Show all threads") }</button>
+                    : <>&nbsp;</>
+                }
+            </p>
+        </>;
+    } else {
+        body = <>
+            <p>{ _t("Threads help keep your conversations on-topic and easy to track.") }</p>
+            <p className="mx_ThreadPanel_empty_tip">
+                { _t('<b>Tip:</b> Use "Reply in thread" when hovering over a message.', {}, {
+                    b: sub => <b>{ sub }</b>,
+                }) }
+            </p>
+        </>;
+    }
+
     return <aside className="mx_ThreadPanel_empty">
         <div className="mx_ThreadPanel_largeIcon" />
         <h2>{ _t("Keep discussions organised with threads") }</h2>
-        <p>{ _t("Reply to an ongoing thread or use “%(replyInThread)s” "
-              + "when hovering over a message to start a new one.", { replyInThread: _t("Reply in thread") }) }
-        </p>
-        <p>
-            { /* Always display that paragraph to prevent layout shift
-                When hiding the button */ }
-            { filterOption === ThreadFilterType.My
-                ? <button onClick={showAllThreadsCallback}>{ _t("Show all threads") }</button>
-                : <>&nbsp;</>
-            }
-        </p>
+        { body }
     </aside>;
 };
 
@@ -214,6 +240,12 @@ const ThreadPanel: React.FC<IProps> = ({
         }
     }, [timelineSet, timelinePanel]);
 
+    const openFeedback = SdkConfig.get().bug_report_endpoint_url ? () => {
+        Modal.createTrackedDialog("Threads Feedback", "feature_thread", BetaFeedbackDialog, {
+            featureId: "feature_thread",
+        });
+    } : null;
+
     return (
         <RoomContext.Provider value={{
             ...roomContext,
@@ -227,6 +259,22 @@ const ThreadPanel: React.FC<IProps> = ({
                     setFilterOption={setFilterOption}
                     empty={threadCount === 0}
                 />}
+                footer={<>
+                    <BetaPill
+                        tooltipTitle={_t("Threads are a beta feature")}
+                        tooltipCaption={_t("Click for more info")}
+                        onClick={() => {
+                            dis.dispatch({
+                                action: Action.ViewUserSettings,
+                                initialTabId: UserTab.Labs,
+                            });
+                        }}
+                    />
+                    { openFeedback && _t("<a>Give feedback</a>", {}, {
+                        a: sub =>
+                            <AccessibleButton kind="link_inline" onClick={openFeedback}>{ sub }</AccessibleButton>,
+                    }) }
+                </>}
                 className="mx_ThreadPanel"
                 onClose={onClose}
                 withoutScrollContainer={true}
@@ -238,6 +286,7 @@ const ThreadPanel: React.FC<IProps> = ({
                 />
                 { timelineSet && (
                     <TimelinePanel
+                        key={timelineSet.getFilter().filterId}
                         ref={timelinePanel}
                         showReadReceipts={false} // No RR support in thread's MVP
                         manageReadReceipts={false} // No RR support in thread's MVP
@@ -246,6 +295,7 @@ const ThreadPanel: React.FC<IProps> = ({
                         timelineSet={timelineSet}
                         showUrlPreview={false} // No URL previews at the threads list level
                         empty={<EmptyThread
+                            hasThreads={room.threadsTimelineSets?.[0]?.getLiveTimeline().getEvents().length > 0}
                             filterOption={filterOption}
                             showAllThreadsCallback={() => setFilterOption(ThreadFilterType.All)}
                         />}

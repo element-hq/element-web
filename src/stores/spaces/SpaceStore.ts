@@ -1116,7 +1116,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             case Action.ViewRoom: {
                 // Don't auto-switch rooms when reacting to a context-switch or for new rooms being created
                 // as this is not helpful and can create loops of rooms/space switching
-                if (payload.context_switch || payload.justCreatedOpts) break;
+                const isSpace = payload.justCreatedOpts?.roomType === RoomType.Space;
+                if (payload.context_switch || (payload.justCreatedOpts && !isSpace)) break;
                 let roomId = payload.room_id;
 
                 if (payload.room_alias && !roomId) {

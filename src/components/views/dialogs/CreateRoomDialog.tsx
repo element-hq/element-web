@@ -21,14 +21,11 @@ import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule, Preset, Visibility } from "matrix-js-sdk/src/@types/partials";
 
 import SdkConfig from '../../../SdkConfig';
-import SettingsStore from "../../../settings/SettingsStore";
 import withValidation, { IFieldState } from '../elements/Validation';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { IOpts } from "../../../createRoom";
-import Heading from "../typography/Heading";
+import { IOpts, privateShouldBeEncrypted } from "../../../createRoom";
 import Field from "../elements/Field";
-import StyledRadioGroup from "../elements/StyledRadioGroup";
 import RoomAliasField from "../elements/RoomAliasField";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import DialogButtons from "../elements/DialogButtons";
@@ -40,6 +37,7 @@ import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
 
 interface IProps {
+    type?: RoomType;
     defaultPublic?: boolean;
     defaultName?: string;
     parentSpace?: Room;
@@ -48,7 +46,6 @@ interface IProps {
 }
 
 interface IState {
-    type?: RoomType;
     joinRule: JoinRule;
     isPublic: boolean;
     isEncrypted: boolean;
@@ -79,7 +76,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         }
 
         this.state = {
-            type: null,
             isPublic: this.props.defaultPublic || false,
             isEncrypted: this.props.defaultEncrypted ?? privateShouldBeEncrypted(),
             joinRule,
@@ -99,7 +95,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     private roomCreateOptions() {
         const opts: IOpts = {};
         const createOpts: IOpts["createOpts"] = opts.createOpts = {};
-        opts.roomType = this.state.type;
+        opts.roomType = this.props.type;
         createOpts.name = this.state.name;
 
         if (this.state.joinRule === JoinRule.Public) {
@@ -179,10 +175,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
         this.props.onFinished(false);
     };
 
-    private onTypeChange = (type: RoomType | "text") => {
-        this.setState({ type: type === "text" ? null : type });
-    };
-
     private onNameChange = (ev: ChangeEvent<HTMLInputElement>) => {
         this.setState({ name: ev.target.value });
     };
@@ -228,6 +220,8 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     });
 
     render() {
+        const isVideoRoom = this.props.type === RoomType.ElementVideo;
+
         let aliasField;
         if (this.state.joinRule === JoinRule.Public) {
             const domain = MatrixClientPeg.get().getDomain();
@@ -318,8 +312,12 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             );
         }
 
-        let title = _t("Create a room");
-        if (!this.props.parentSpace) {
+        let title;
+        if (isVideoRoom) {
+            title = _t("Create a video room");
+        } else if (this.props.parentSpace) {
+            title = _t("Create a room");
+        } else {
             title = this.state.joinRule === JoinRule.Public ? _t('Create a public room') : _t('Create a private room');
         }
 
@@ -332,20 +330,6 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             >
                 <form onSubmit={this.onOk} onKeyDown={this.onKeyDown}>
                     <div className="mx_Dialog_content">
-                        { SettingsStore.getValue("feature_voice_rooms") ? <>
-                            <Heading size="h3">{ _t("Room type") }</Heading>
-                            <StyledRadioGroup
-                                name="type"
-                                value={this.state.type ?? "text"}
-                                onChange={this.onTypeChange}
-                                definitions={[
-                                    { value: "text", label: _t("Text room") },
-                                    { value: RoomType.UnstableCall, label: _t("Voice & video room") },
-                                ]}
-                            />
-
-                            <Heading size="h3">{ _t("Room details") }</Heading>
-                        </> : null }
                         <Field
                             ref={this.nameField}
                             label={_t('Name')}
@@ -389,7 +373,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
                         </details>
                     </div>
                 </form>
-                <DialogButtons primaryButton={_t('Create Room')}
+                <DialogButtons primaryButton={isVideoRoom ? _t('Create video room') : _t('Create room')}
                     onPrimaryButtonClick={this.onOk}
                     onCancel={this.onCancel} />
             </BaseDialog>

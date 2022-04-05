@@ -90,27 +90,14 @@ limitations under the License.
             gap: 12px;
 
             .mx_IncomingCallToast_button {
-                height: 24px;
+                @mixin CallButton;
                 padding: 0px 8px;
                 flex-shrink: 0;
                 flex-grow: 1;
-                margin-right: 0;
                 font-size: $font-15px;
-                line-height: $font-24px;
 
                 span {
                     padding: 8px 0;
-                    display: flex;
-                    align-items: center;
-
-                    &::before {
-                        content: '';
-                        display: inline-block;
-                        background-color: $button-fg-color;
-                        mask-position: center;
-                        mask-repeat: no-repeat;
-                        margin-right: 8px;
-                    }
                 }
 
                 &.mx_IncomingCallToast_button_accept span::before {

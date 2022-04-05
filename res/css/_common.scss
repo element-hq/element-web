@@ -670,3 +670,25 @@ legend {
     line-height: inherit;
     cursor: pointer;
 }
+
+@define-mixin CallButton {
+    box-sizing: border-box;
+    font-weight: 600;
+    height: $font-24px;
+    line-height: $font-24px;
+    margin-right: 0;
+
+    span {
+        display: flex;
+        align-items: center;
+
+        &::before {
+            content: '';
+            display: inline-block;
+            background-color: $button-fg-color;
+            mask-position: center;
+            mask-repeat: no-repeat;
+            margin-right: 8px;
+        }
+    }
+}

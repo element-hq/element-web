@@ -22,26 +22,26 @@ import WidgetStore, { IApp } from "../stores/WidgetStore";
 import { WidgetType } from "../widgets/WidgetType";
 import WidgetUtils from "./WidgetUtils";
 
-export const VOICE_CHANNEL = "io.element.voice";
-export const VOICE_CHANNEL_MEMBER = "io.element.voice.member";
+export const VIDEO_CHANNEL = "io.element.video";
+export const VIDEO_CHANNEL_MEMBER = "io.element.video.member";
 
-export interface IVoiceChannelMemberContent {
+export interface IVideoChannelMemberContent {
     // Connected device IDs
     devices: string[];
 }
 
-export const getVoiceChannel = (roomId: string): IApp => {
+export const getVideoChannel = (roomId: string): IApp => {
     const apps = WidgetStore.instance.getApps(roomId);
-    return apps.find(app => WidgetType.JITSI.matches(app.type) && app.id === VOICE_CHANNEL);
+    return apps.find(app => WidgetType.JITSI.matches(app.type) && app.id === VIDEO_CHANNEL);
 };
 
-export const addVoiceChannel = async (roomId: string, roomName: string) => {
-    await WidgetUtils.addJitsiWidget(roomId, CallType.Voice, "Voice channel", VOICE_CHANNEL, roomName);
+export const addVideoChannel = async (roomId: string, roomName: string) => {
+    await WidgetUtils.addJitsiWidget(roomId, CallType.Video, "Video channel", VIDEO_CHANNEL, roomName);
 };
 
 export const getConnectedMembers = (state: RoomState): RoomMember[] =>
-    state.getStateEvents(VOICE_CHANNEL_MEMBER)
+    state.getStateEvents(VIDEO_CHANNEL_MEMBER)
         // Must have a device connected and still be joined to the room
-        .filter(e => e.getContent<IVoiceChannelMemberContent>().devices?.length)
+        .filter(e => e.getContent<IVideoChannelMemberContent>().devices?.length)
         .map(e => state.getMember(e.getStateKey()))
         .filter(member => member.membership === "join");

@@ -60,6 +60,7 @@ const UnreadIndicator = ({ color }: IUnreadIndicatorProps) => {
     }
 
     const classes = classNames({
+        "mx_Indicator": true,
         "mx_RightPanel_headerButton_unreadIndicator": true,
         "mx_Indicator_bold": color === NotificationColor.Bold,
         "mx_Indicator_gray": color === NotificationColor.Grey,
@@ -92,6 +93,7 @@ const PinnedMessagesHeaderButton = ({ room, isHighlighted, onClick }: IHeaderBut
         name="pinnedMessagesButton"
         title={_t("Pinned messages")}
         isHighlighted={isHighlighted}
+        isUnread={!!unreadIndicator}
         onClick={onClick}
         analytics={["Right Panel", "Pinned Messages Button", "click"]}
     >
@@ -241,6 +243,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                     title={_t("Threads")}
                     onClick={this.onThreadsPanelClicked}
                     isHighlighted={this.isPhase(RoomHeaderButtons.THREAD_PHASES)}
+                    isUnread={this.threadNotificationState.color > 0}
                     analytics={['Right Panel', 'Threads List Button', 'click']}>
                     <UnreadIndicator color={this.threadNotificationState.color} />
                 </HeaderButton>

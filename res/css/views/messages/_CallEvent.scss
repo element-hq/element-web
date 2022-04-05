@@ -147,30 +147,18 @@ limitations under the License.
             align-items: center;
             color: $secondary-content;
             margin-right: 16px;
-            gap: 8px;
+            gap: 12px; // See mx_IncomingCallToast_buttons
             min-width: max-content;
 
             .mx_CallEvent_content_button {
-                padding: 0px 12px;
+                @mixin CallButton;
+                padding: 0 12px;
 
-                span {
-                    padding: 1px 0;
-                    display: flex;
-                    align-items: center;
-
-                    &::before {
-                        content: '';
-                        display: inline-block;
-                        background-color: $button-fg-color;
-                        mask-position: center;
-                        mask-repeat: no-repeat;
-                        mask-size: 16px;
-                        width: 16px;
-                        height: 16px;
-                        margin-right: 8px;
-
-                        flex-shrink: 0;
-                    }
+                span::before {
+                    mask-size: 16px;
+                    width: 16px;
+                    height: 16px;
+                    flex-shrink: 0;
                 }
             }
 

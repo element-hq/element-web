@@ -1,5 +1,6 @@
 /*
 Copyright 2016 OpenMarket Ltd
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,16 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-const notifications = require('../../src/notifications');
+import { TweakName, PushRuleActionName, TweakHighlight, TweakSound } from "matrix-js-sdk/src/matrix";
 
-const ContentRules = notifications.ContentRules;
-const PushRuleVectorState = notifications.PushRuleVectorState;
+import { ContentRules, PushRuleVectorState } from "../../src/notifications";
 
 const NORMAL_RULE = {
     actions: [
-        "notify",
-        { set_tweak: "highlight", value: false },
+        PushRuleActionName.Notify,
+        { set_tweak: TweakName.Highlight, value: false } as TweakHighlight,
     ],
+    default: false,
     enabled: true,
     pattern: "vdh2",
     rule_id: "vdh2",
@@ -31,10 +32,11 @@ const NORMAL_RULE = {
 
 const LOUD_RULE = {
     actions: [
-        "notify",
-        { set_tweak: "highlight" },
-        { set_tweak: "sound", value: "default" },
+        PushRuleActionName.Notify,
+        { set_tweak: TweakName.Highlight } as TweakHighlight,
+        { set_tweak: TweakName.Sound, value: "default" } as TweakSound,
     ],
+    default: false,
     enabled: true,
     pattern: "vdh2",
     rule_id: "vdh2",
@@ -42,9 +44,9 @@ const LOUD_RULE = {
 
 const USERNAME_RULE = {
     actions: [
-        "notify",
-        { set_tweak: "sound", value: "default" },
-        { set_tweak: "highlight" },
+        PushRuleActionName.Notify,
+        { set_tweak: TweakName.Sound, value: "default" } as TweakSound,
+        { set_tweak: TweakName.Highlight } as TweakHighlight,
     ],
     default: true,
     enabled: true,

@@ -367,7 +367,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
         isSpaceRoom: jest.fn().mockReturnValue(false),
-        isCallRoom: jest.fn().mockReturnValue(false),
+        isElementVideoRoom: jest.fn().mockReturnValue(false),
         getUnreadNotificationCount: jest.fn(() => 0),
         getEventReadUpTo: jest.fn(() => null),
         getCanonicalAlias: jest.fn(),

@@ -43,9 +43,11 @@ $left-gutter: 64px;
             right: 0;
         }
     }
+
     .mx_EventTile_receiptSent::before {
         mask-image: url('$(res)/img/element-icons/circle-sent.svg');
     }
+
     .mx_EventTile_receiptSending::before {
         mask-image: url('$(res)/img/element-icons/circle-sending.svg');
     }
@@ -61,16 +63,16 @@ $left-gutter: 64px;
     &[data-shape=ThreadsList][data-notification]::before {
         content: "";
         position: absolute;
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        right: -16px;
-        top: 6px;
+        right: -25px; // center it in the gutter (16px margin + 4px padding + half 10px width)
+        top: 4px;
         left: auto;
     }
 
     &[data-shape=ThreadsList][data-notification=total]::before {
-        background-color: $roomtile-default-badge-bg-color;
+        background-color: $room-icon-unread-color;
     }
 
     &[data-shape=ThreadsList][data-notification=highlight]::before {
@@ -79,7 +81,6 @@ $left-gutter: 64px;
 
     .mx_ThreadInfo,
     .mx_ThreadSummaryIcon {
-        margin-right: 110px;
         margin-left: 64px;
     }
 
@@ -115,7 +116,8 @@ $left-gutter: 64px;
     .mx_DisambiguatedProfile {
         color: $primary-content;
         font-size: $font-14px;
-        display: inline-block; /* anti-zalgo, with overflow hidden */
+        display: inline-block;
+        /* anti-zalgo, with overflow hidden */
         overflow: hidden;
         padding-bottom: 0px;
         padding-top: 0px;
@@ -142,7 +144,8 @@ $left-gutter: 64px;
         clear: both;
     }
 
-    .mx_EventTile_line, .mx_EventTile_reply {
+    .mx_EventTile_line,
+    .mx_EventTile_reply {
         position: relative;
         padding-left: $left-gutter;
         border-radius: 8px;
@@ -308,11 +311,19 @@ $left-gutter: 64px;
 
 .mx_RoomView_timeline_rr_enabled {
     .mx_EventTile[data-layout=group] {
+
+        .mx_ThreadInfo,
+        .mx_ThreadSummaryIcon,
         .mx_EventTile_line {
             /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
             margin-right: 110px;
         }
+
+        .mx_ThreadInfo {
+            max-width: min(calc(100% - $left-gutter - 110px), 600px); // leave space on both left & right gutters
+        }
     }
+
     // on ELS we need the margin to allow interaction with the expand/collapse button which is normally in the RR gutter
 }
 
@@ -408,7 +419,8 @@ $left-gutter: 64px;
     background-repeat: no-repeat;
     background-size: contain;
 
-    &::before, &::after {
+    &::before,
+    &::after {
         content: "";
         display: block;
         position: absolute;
@@ -433,6 +445,7 @@ $left-gutter: 64px;
         mask-image: url('$(res)/img/e2e/warning.svg');
         background-color: $alert;
     }
+
     opacity: 1;
 }
 
@@ -441,6 +454,7 @@ $left-gutter: 64px;
         mask-image: url('$(res)/img/e2e/normal.svg');
         background-color: $header-panel-text-primary-color;
     }
+
     opacity: 1;
 }
 
@@ -479,7 +493,8 @@ $left-gutter: 64px;
     color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
     font-size: $font-14px;
 
-    pre, code {
+    pre,
+    code {
         font-family: $monospace-font-family !important;
         background-color: $codeblock-background-color;
     }
@@ -492,7 +507,7 @@ $left-gutter: 64px;
     pre code {
         white-space: pre; // we want code blocks to be scrollable and not wrap
 
-        > * {
+        >* {
             display: inline;
         }
     }
@@ -514,6 +529,7 @@ $left-gutter: 64px;
     float: left;
     margin: 0 0.5em 0 -1.5em;
     color: gray;
+
     & span {
         text-align: right;
         display: block;
@@ -547,18 +563,22 @@ $left-gutter: 64px;
     height: 19px;
     background-color: $message-action-bar-fg-color;
 }
+
 .mx_EventTile_buttonBottom {
     top: 33px;
 }
+
 .mx_EventTile_copyButton {
     mask-image: url($copy-button-url);
 }
+
 .mx_EventTile_collapseButton {
     mask-size: 75%;
     mask-position: center;
     mask-repeat: no-repeat;
     mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
 }
+
 .mx_EventTile_expandButton {
     mask-size: 75%;
     mask-position: center;
@@ -674,10 +694,13 @@ $left-gutter: 64px;
 }
 
 @media only screen and (max-width: 480px) {
-    .mx_EventTile_line, .mx_EventTile_reply {
+
+    .mx_EventTile_line,
+    .mx_EventTile_reply {
         padding-left: 0;
         margin-right: 0;
     }
+
     .mx_EventTile_content {
         margin-top: 10px;
         margin-right: 0;
@@ -692,23 +715,28 @@ $left-gutter: 64px;
     mask-position: center;
     height: 18px;
     min-width: 18px;
-    background-color: $secondary-content;
+    background-color: $secondary-content !important;
     mask-repeat: no-repeat;
     mask-size: contain;
 }
 
 .mx_ThreadSummaryIcon {
+    display: inline-block;
     font-size: $font-12px;
-    color: $secondary-content;
+    color: $secondary-content !important;
+    margin-top: 8px;
+    margin-bottom: 8px;
+
     &::before {
         vertical-align: middle;
-        margin-left: 8px;
+        margin-right: 8px;
+        margin-top: -2px;
     }
 }
 
 .mx_ThreadInfo {
     min-width: 267px;
-    max-width: min(calc(100% - $left-gutter - 64px), 600px); // leave space on both left & right gutters
+    max-width: min(calc(100% - $left-gutter), 600px); // leave space on both left & right gutters
     width: fit-content;
     height: 40px;
     position: relative;
@@ -756,7 +784,8 @@ $left-gutter: 64px;
         }
     }
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         cursor: pointer;
         border-color: $quinary-content;
 
@@ -782,6 +811,9 @@ $threadInfoLineHeight: calc(2 * $font-12px);
 .mx_ThreadInfo_sender {
     font-weight: $font-semi-bold;
     line-height: $threadInfoLineHeight;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .mx_ThreadInfo_content {
@@ -792,6 +824,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
     font-size: $font-12px;
     line-height: $threadInfoLineHeight;
     color: $secondary-content;
+    flex: 1;
 }
 
 .mx_ThreadInfo_avatar {
@@ -810,9 +843,10 @@ $threadInfoLineHeight: calc(2 * $font-12px);
 .mx_EventTile[data-shape=ThreadsList] {
     --topOffset: 20px;
     --leftOffset: 46px;
+    $borderRadius: 8px;
 
     margin: var(--topOffset) 16px var(--topOffset) 0;
-    border-radius: 8px;
+    border-radius: $borderRadius;
 
     display: flex;
     flex-flow: wrap;
@@ -847,6 +881,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
         &::after {
             content: unset;
         }
+
         margin-bottom: 0;
     }
 
@@ -857,7 +892,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
     padding-top: 0;
 
     .mx_EventTile_avatar {
-        top: -4px;
+        top: 0;
         left: 0;
     }
 
@@ -892,7 +927,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
         width: 100%;
         box-sizing: border-box;
         padding-left: var(--leftOffset) !important;
-        padding-bottom: 0;
+        border-radius: $borderRadius !important; // override 4px
     }
 
     .mx_MessageTimestamp {
@@ -905,6 +940,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
 .mx_ThreadView {
     display: flex;
     flex-direction: column;
+    max-height: 100%;
 
     .mx_ThreadView_List {
         flex: 1;
@@ -918,7 +954,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
     .mx_EventTile {
         display: flex;
         flex-direction: column;
-        padding-top: 0;
+        padding-top: 14px; // due to layout differences, this odd number matches the 18px padding-top of main tl events
 
         .mx_EventTile_line {
             padding-left: 0;
@@ -973,7 +1009,7 @@ $threadInfoLineHeight: calc(2 * $font-12px);
         .mx_UnknownBody,
         .mx_MPollBody,
         .mx_ReplyChain_wrapper {
-            margin-left: 36px;
+            margin-left: 48px;
             margin-right: 8px;
 
             .mx_EventTile_content,
@@ -997,16 +1033,17 @@ $threadInfoLineHeight: calc(2 * $font-12px);
         .mx_EventTile_senderDetails {
             display: flex;
             align-items: center;
-            gap: calc(6px + $selected-message-border-width);
+            gap: calc(14px + $selected-message-border-width);
 
             a {
                 flex: 1;
-                min-width: none;
+                min-width: unset;
                 max-width: 100%;
                 display: flex;
                 align-items: center;
 
                 .mx_DisambiguatedProfile {
+                    margin-left: 8px;
                     flex: 1;
                 }
             }
@@ -1025,5 +1062,14 @@ $threadInfoLineHeight: calc(2 * $font-12px);
 
     .mx_MessageComposer_sendMessage {
         margin-right: 0;
+    }
+
+    .mx_EditMessageComposer {
+        margin-left: 30px !important; // align start of first letter with that of the event body
+    }
+
+    .mx_EditMessageComposer_buttons {
+        padding-right: 11px; // align with right edge of input
+        margin-right: 0; // align with right edge of background
     }
 }

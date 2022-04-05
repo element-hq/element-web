@@ -21,8 +21,11 @@ limitations under the License.
 .mx_RoomList_iconPlus::before {
     mask-image: url('$(res)/img/element-icons/roomlist/plus-circle.svg');
 }
-.mx_RoomList_iconCreateNewRoom::before {
+.mx_RoomList_iconNewRoom::before {
     mask-image: url('$(res)/img/element-icons/roomlist/hash-plus.svg');
+}
+.mx_RoomList_iconNewVideoRoom::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/hash-video.svg');
 }
 .mx_RoomList_iconAddExistingRoom::before {
     mask-image: url('$(res)/img/element-icons/roomlist/hash.svg');

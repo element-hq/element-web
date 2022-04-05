@@ -103,8 +103,11 @@ limitations under the License.
 .mx_RoomListHeader_iconStartChat::before {
     mask-image: url('$(res)/img/element-icons/roomlist/member-plus.svg');
 }
-.mx_RoomListHeader_iconCreateRoom::before {
+.mx_RoomListHeader_iconNewRoom::before {
     mask-image: url('$(res)/img/element-icons/roomlist/hash-plus.svg');
+}
+.mx_RoomListHeader_iconNewVideoRoom::before {
+    mask-image: url('$(res)/img/element-icons/roomlist/hash-video.svg');
 }
 .mx_RoomListHeader_iconExplore::before {
     mask-image: url('$(res)/img/element-icons/roomlist/hash-search.svg');

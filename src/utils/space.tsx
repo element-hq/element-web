@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
@@ -72,12 +73,13 @@ export const showAddExistingRooms = (space: Room): void => {
     });
 };
 
-export const showCreateNewRoom = async (space: Room): Promise<boolean> => {
+export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<boolean> => {
     const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
         "Space Landing",
         "Create Room",
         CreateRoomDialog,
         {
+            type,
             defaultPublic: space.getJoinRule() === JoinRule.Public,
             parentSpace: space,
         },

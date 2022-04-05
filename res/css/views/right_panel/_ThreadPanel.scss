@@ -17,17 +17,22 @@ limitations under the License.
 .mx_ThreadPanel {
     display: flex;
     flex-direction: column;
+    height: 100px;
+    overflow: visible;
 
     .mx_BaseCard_header {
         margin-bottom: 12px;
+
         .mx_BaseCard_close,
         .mx_BaseCard_back {
             width: 24px;
             height: 24px;
         }
+
         .mx_BaseCard_back {
             left: -4px;
         }
+
         .mx_BaseCard_close {
             right: -4px;
         }
@@ -66,6 +71,7 @@ limitations under the License.
             --size: 24px;
             width: var(--size);
             height: var(--size);
+
             &::after {
                 mask-size: var(--size);
                 mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
@@ -99,11 +105,10 @@ limitations under the License.
     }
 
     .mx_AutoHideScrollbar {
-        background: #fff;
         background-color: $background;
         border-radius: 8px;
-        width: calc(100% - 16px);
-        padding-right: 16px;
+        width: calc(100% - 24px);
+        padding-right: 18px;
     }
 
     &.mx_ThreadView .mx_ThreadView_timelinePanelWrapper {
@@ -125,13 +130,15 @@ limitations under the License.
         padding-right: 0;
     }
 
-    .mx_EventTile, .mx_GenericEventListSummary {
+    .mx_EventTile,
+    .mx_GenericEventListSummary {
         // Account for scrollbar when hovering
         padding-top: 0;
 
         .mx_ThreadInfo {
             position: relative;
             padding-right: 11px;
+
             &::after {
                 content: '';
                 display: block;
@@ -156,6 +163,10 @@ limitations under the License.
     .mx_EventTile:not([data-layout=bubble]) {
         .mx_EventTile_e2eIcon {
             left: 8px;
+        }
+
+        &:hover .mx_EventTile_line {
+            box-shadow: unset !important; // don't show the verification left stroke in the thread list
         }
     }
 
@@ -190,10 +201,6 @@ limitations under the License.
         float: right;
     }
 
-    .mx_ThreadPanel_dropdown[aria-expanded=true]::before {
-        transform: rotate(180deg);
-    }
-
     .mx_MessageTimestamp {
         font-size: $font-12px;
         color: $secondary-content;
@@ -218,6 +225,20 @@ limitations under the License.
 
         .mx_ViewSourceEvent_toggle {
             display: none; // hide the hidden event expand button, not enough space, view source can still be used
+        }
+    }
+
+    .mx_BaseCard_footer {
+        text-align: left;
+        font-size: $font-12px;
+        align-items: center;
+        justify-content: end;
+        gap: 4px;
+        position: relative;
+        top: 2px;
+
+        .mx_AccessibleButton_kind_link_inline {
+            color: $secondary-content;
         }
     }
 }
@@ -264,32 +285,45 @@ limitations under the License.
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: 48px;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 20px;
 
     h2 {
         color: $primary-content;
-        font-weight: 600;
+        font-weight: $font-semi-bold;
         font-size: $font-18px;
+        margin-top: 24px;
+        margin-bottom: 10px;
     }
 
     p {
         font-size: $font-15px;
         color: $secondary-content;
+        margin: 10px 0;
     }
 
     button {
         border: none;
         background: none;
         color: $accent;
+        font-size: $font-15px;
 
         &:hover,
         &:active {
             text-decoration: underline;
             cursor: pointer;
+        }
+    }
+
+    .mx_ThreadPanel_empty_tip {
+        font-size: $font-12px;
+        line-height: $font-15px;
+
+        >b {
+            font-weight: $font-semi-bold;
         }
     }
 }
@@ -317,6 +351,7 @@ limitations under the License.
 .mx_ContextualMenu_wrapper.mx_ThreadPanel__header {
     .mx_ContextualMenu {
         position: initial;
+
         span:first-of-type {
             font-weight: $font-semi-bold;
             font-size: inherit;
@@ -336,6 +371,7 @@ limitations under the License.
         left: auto;
         right: 22px;
         border-bottom-color: $quinary-content;
+
         &::after {
             content: "";
             border: inherit;
@@ -357,10 +393,12 @@ limitations under the License.
         &:hover {
             background-color: $event-selected-color;
         }
+
         &[aria-checked="true"] {
             :first-child {
                 margin-left: -20px;
             }
+
             :first-child::before {
                 content: "";
                 width: 12px;
