@@ -148,8 +148,6 @@ $MinWidth: 240px;
     width: 50%;
     min-width: $MinWidth;
     border: $container-border-width solid $widget-menu-bar-bg-color;
-    border-left-width: 5px;
-    border-right-width: 5px;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;

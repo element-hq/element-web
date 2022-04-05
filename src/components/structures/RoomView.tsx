@@ -2100,6 +2100,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const mainClasses = classNames("mx_RoomView", {
             mx_RoomView_inCall: Boolean(activeCall),
+            mx_RoomView_immersive: this.state.mainSplitContentType === MainSplitContentType.Video,
         });
 
         const showChatEffects = SettingsStore.getValue('showChatEffects');

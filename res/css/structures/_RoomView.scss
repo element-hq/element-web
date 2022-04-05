@@ -213,14 +213,20 @@ hr.mx_RoomView_myReadMarker {
 }
 
 // Immersive widgets
-.mx_RoomView_body > .mx_AppTile {
-    margin: $container-gap-width;
-    margin-right: calc($container-gap-width / 2);
-    width: auto;
-    height: 100%;
-    padding-top: 33px; // to match the right panel chat heading
+.mx_RoomView_immersive {
+    .mx_RoomHeader_wrapper {
+        border: unset;
+    }
 
-    border-radius: 8px;
+    .mx_AppTile {
+        margin: $container-gap-width;
+        margin-right: calc($container-gap-width / 2);
+        width: auto;
+        height: 100%;
+        padding-top: 33px; // to match the right panel chat heading
+
+        border-radius: 8px;
+    }
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {
