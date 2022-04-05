@@ -77,6 +77,7 @@ limitations under the License.
 
     .mx_AccessibleButton_hasKind {
         &.mx_AccessibleButton_kind_link {
+            font-size: $font-14px;
             margin: 7px 18px;
 
             &.mx_SettingsTab_showAdvanced {
