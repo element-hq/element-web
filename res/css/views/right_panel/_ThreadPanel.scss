@@ -20,8 +20,8 @@ limitations under the License.
     height: 100px;
     overflow: visible;
 
-    &.mx_BaseCard {
-        padding-right: 0;
+    &:not(.mx_ThreadView).mx_BaseCard {
+        padding-right: 2px;
     }
 
     .mx_BaseCard_header {
@@ -48,7 +48,7 @@ limitations under the License.
     }
 
     .mx_ThreadPanel__header {
-        width: calc(100% - 30px);
+        width: calc(100% - 38px);
         height: 24px;
         display: flex;
         flex: 1;
@@ -118,7 +118,7 @@ limitations under the License.
     &.mx_ThreadView .mx_ThreadView_timelinePanelWrapper {
         /* the scrollbar is 8px wide, and we want a 12px gap with the side of the
         panel. Hence the magic number, 8+4=12 */
-        width: calc(100% - 4px);
+        width: calc(100% + 6px);
         padding-right: 4px;
         position: relative;
         min-height: 0; // don't displace the composer
@@ -184,7 +184,7 @@ limitations under the License.
     }
 
     .mx_ThreadPanel_dropdown {
-        padding: 3px 8px;
+        padding: 3px 4px 3px 8px;
         border-radius: 4px;
         line-height: 1.5;
         user-select: none;
@@ -294,7 +294,7 @@ limitations under the License.
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0;
+    right: 6px;
     padding: 20px;
 
     h2 {

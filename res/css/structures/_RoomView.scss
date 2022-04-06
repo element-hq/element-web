@@ -326,8 +326,8 @@ hr.mx_RoomView_myReadMarker {
 
 .mx_Indicator {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: -3px;
+    top: -3px;
     width: $dot-size;
     height: $dot-size;
     border-radius: 50%;
