@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import { MatrixEvent } from 'matrix-js-sdk/src/matrix';
 
 import { parseEvent } from "../../src/editor/deserialize";
 import { createPartCreator } from "./mock";
@@ -28,7 +29,7 @@ function htmlMessage(formattedBody, msgtype = "m.text") {
                 formatted_body: formattedBody,
             };
         },
-    };
+    } as unknown as MatrixEvent;
 }
 
 function textMessage(body, msgtype = "m.text") {
@@ -39,7 +40,7 @@ function textMessage(body, msgtype = "m.text") {
                 body,
             };
         },
-    };
+    } as unknown as MatrixEvent;
 }
 
 function mergeAdjacentParts(parts) {

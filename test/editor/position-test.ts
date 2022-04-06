@@ -37,7 +37,7 @@ describe('editor/position', function() {
     it('move first position forwards in empty model', function() {
         const model = new EditorModel([], createPartCreator(), createRenderer());
         const pos = model.positionForOffset(0, true);
-        const pos2 = pos.forwardsWhile(() => true);
+        const pos2 = pos.forwardsWhile(model, () => true);
         expect(pos).toBe(pos2);
     });
     it('move forwards within one part', function() {

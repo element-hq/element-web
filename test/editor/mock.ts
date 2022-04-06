@@ -1,5 +1,5 @@
 /*
-Copyright 2019 The Matrix.org Foundation C.I.C.
+Copyright 2019, 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { Room, MatrixClient } from "matrix-js-sdk/src/matrix";
+
+import AutocompleteWrapperModel from "../../src/editor/autocomplete";
 import { PartCreator } from "../../src/editor/parts";
 
 class MockAutoComplete {
+    public _updateCallback;
+    public _partCreator;
+    public _completions;
+    public _part;
+
     constructor(updateCallback, partCreator, completions) {
         this._updateCallback = updateCallback;
         this._partCreator = partCreator;
@@ -52,20 +60,21 @@ class MockAutoComplete {
 
 // MockClient & MockRoom are only used for avatars in room and user pills,
 // which is not tested
-class MockClient {
-    getRooms() { return []; }
-    getRoom() { return null; }
-}
-
 class MockRoom {
     getMember() { return null; }
 }
 
 export function createPartCreator(completions = []) {
     const autoCompleteCreator = (partCreator) => {
-        return (updateCallback) => new MockAutoComplete(updateCallback, partCreator, completions);
+        return (updateCallback) =>
+            new MockAutoComplete(updateCallback, partCreator, completions) as unknown as AutocompleteWrapperModel;
     };
-    return new PartCreator(new MockRoom(), new MockClient(), autoCompleteCreator);
+    const room = new MockRoom() as unknown as Room;
+    const client = {
+        getRooms: jest.fn().mockReturnValue([]),
+        getRoom: jest.fn().mockReturnValue(null),
+    } as unknown as MatrixClient;
+    return new PartCreator(room, client, autoCompleteCreator);
 }
 
 export function createRenderer() {

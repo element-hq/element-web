@@ -16,13 +16,14 @@ limitations under the License.
 
 import EditorModel from "../../src/editor/model";
 import { createPartCreator, createRenderer } from "./mock";
+import DocumentOffset from "../../src/editor/offset";
 
 describe('editor/model', function() {
     describe('plain text manipulation', function() {
         it('insert text into empty document', function() {
             const renderer = createRenderer();
             const model = new EditorModel([], createPartCreator(), renderer);
-            model.update("hello", "insertText", { offset: 5, atNodeEnd: true });
+            model.update("hello", "insertText", new DocumentOffset(5, true));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(0);
             expect(renderer.caret.offset).toBe(5);
@@ -34,7 +35,7 @@ describe('editor/model', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
-            model.update("hello world", "insertText", { offset: 11, atNodeEnd: true });
+            model.update("hello world", "insertText", new DocumentOffset(11, true));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(0);
             expect(renderer.caret.offset).toBe(11);
@@ -46,7 +47,7 @@ describe('editor/model', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("world")], pc, renderer);
-            model.update("hello world", "insertText", { offset: 6, atNodeEnd: false });
+            model.update("hello world", "insertText", new DocumentOffset(6, false));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(0);
             expect(renderer.caret.offset).toBe(6);
@@ -60,7 +61,7 @@ describe('editor/model', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
-            model.update("hello\n", "insertText", { offset: 6, atNodeEnd: true });
+            model.update("hello\n", "insertText", new DocumentOffset(6, true));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(1);
             expect(renderer.caret.offset).toBe(1);
@@ -74,7 +75,7 @@ describe('editor/model', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.plain("hello")], pc, renderer);
-            model.update("hello\n\n\nworld!", "insertText", { offset: 14, atNodeEnd: true });
+            model.update("hello\n\n\nworld!", "insertText", new DocumentOffset(14, true));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(4);
             expect(renderer.caret.offset).toBe(6);
@@ -99,7 +100,7 @@ describe('editor/model', function() {
                 pc.newline(),
                 pc.plain("world"),
             ], pc, renderer);
-            model.update("hello\nwarm\nworld", "insertText", { offset: 10, atNodeEnd: true });
+            model.update("hello\nwarm\nworld", "insertText", new DocumentOffset(10, true));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(2);
             expect(renderer.caret.offset).toBe(4);
@@ -124,7 +125,7 @@ describe('editor/model', function() {
                 pc.plain("try "),
                 pc.roomPill("#someroom"),
             ], pc, renderer);
-            model.update("try foo#someroom", "insertText", { offset: 7, atNodeEnd: false });
+            model.update("try foo#someroom", "insertText", new DocumentOffset(7, false));
             expect(renderer.caret.index).toBe(0);
             expect(renderer.caret.offset).toBe(7);
             expect(model.parts.length).toBe(2);
@@ -141,7 +142,7 @@ describe('editor/model', function() {
                 pc.roomPill("#someroom"),
                 pc.plain("?"),
             ], pc, renderer);
-            model.update("try #some perhapsroom?", "insertText", { offset: 17, atNodeEnd: false });
+            model.update("try #some perhapsroom?", "insertText", new DocumentOffset(17, false));
             expect(renderer.caret.index).toBe(2);
             expect(renderer.caret.offset).toBe(8);
             expect(model.parts.length).toBe(3);
@@ -156,7 +157,7 @@ describe('editor/model', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
-            model.update("#someroo", "deleteContentBackward", { offset: 8, atNodeEnd: true });
+            model.update("#someroo", "deleteContentBackward", new DocumentOffset(8, true));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(-1);
             expect(renderer.caret.offset).toBe(0);
@@ -166,7 +167,7 @@ describe('editor/model', function() {
             const renderer = createRenderer();
             const pc = createPartCreator();
             const model = new EditorModel([pc.roomPill("#someroom")], pc, renderer);
-            model.update("someroom", "deleteContentForward", { offset: 0, atNodeEnd: false });
+            model.update("someroom", "deleteContentForward", new DocumentOffset(0, false));
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(-1);
             expect(renderer.caret.offset).toBe(0);
@@ -179,7 +180,7 @@ describe('editor/model', function() {
             const pc = createPartCreator([{ resourceId: "@alice", label: "Alice" }]);
             const model = new EditorModel([pc.plain("hello ")], pc, renderer);
 
-            model.update("hello @a", "insertText", { offset: 8, atNodeEnd: true });
+            model.update("hello @a", "insertText", new DocumentOffset(8, true));
 
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(1);
@@ -190,6 +191,8 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("pill-candidate");
             expect(model.parts[1].text).toBe("@a");
 
+            // this is a hacky mock function
+            // @ts-ignore
             model.autoComplete.tryComplete(); // see MockAutoComplete
 
             expect(renderer.count).toBe(2);
@@ -207,7 +210,7 @@ describe('editor/model', function() {
             const pc = createPartCreator([{ resourceId: "#riot-dev" }]);
             const model = new EditorModel([pc.plain("hello ")], pc, renderer);
 
-            model.update("hello #r", "insertText", { offset: 8, atNodeEnd: true });
+            model.update("hello #r", "insertText", new DocumentOffset(8, true));
 
             expect(renderer.count).toBe(1);
             expect(renderer.caret.index).toBe(1);
@@ -218,6 +221,8 @@ describe('editor/model', function() {
             expect(model.parts[1].type).toBe("pill-candidate");
             expect(model.parts[1].text).toBe("#r");
 
+            // this is a hacky mock function
+            // @ts-ignore
             model.autoComplete.tryComplete(); // see MockAutoComplete
 
             expect(renderer.count).toBe(2);
@@ -235,9 +240,11 @@ describe('editor/model', function() {
             const pc = createPartCreator([{ resourceId: "#riot-dev" }]);
             const model = new EditorModel([pc.plain("hello ")], pc, renderer);
 
-            model.update("hello #r", "insertText", { offset: 8, atNodeEnd: true });
+            model.update("hello #r", "insertText", new DocumentOffset(8, true));
+            // this is a hacky mock function
+            // @ts-ignore
             model.autoComplete.tryComplete(); // see MockAutoComplete
-            model.update("hello #riot-dev!!", "insertText", { offset: 17, atNodeEnd: true });
+            model.update("hello #riot-dev!!", "insertText", new DocumentOffset(17, true));
 
             expect(renderer.count).toBe(3);
             expect(renderer.caret.index).toBe(2);
@@ -256,7 +263,7 @@ describe('editor/model', function() {
             const pc = createPartCreator([{ resourceId: "#define-room" }]);
             const model = new EditorModel([pc.plain("try ")], pc, renderer);
 
-            model.update("try #define", "insertFromPaste", { offset: 11, atNodeEnd: true });
+            model.update("try #define", "insertFromPaste", new DocumentOffset(11, true));
 
             expect(model.autoComplete).toBeFalsy();
             expect(renderer.caret.index).toBe(0);
@@ -271,7 +278,7 @@ describe('editor/model', function() {
             const pc = createPartCreator([{ resourceId: "#define-room" }]);
             const model = new EditorModel([pc.plain("try ")], pc, renderer);
 
-            model.update("try #define", "insertFromDrop", { offset: 11, atNodeEnd: true });
+            model.update("try #define", "insertFromDrop", new DocumentOffset(11, true));
 
             expect(model.autoComplete).toBeFalsy();
             expect(renderer.caret.index).toBe(0);
@@ -286,14 +293,14 @@ describe('editor/model', function() {
             const pc = createPartCreator([{ resourceId: "#room:server" }]);
             const model = new EditorModel([], pc, renderer);
 
-            model.update("#roo", "insertText", { offset: 4, atNodeEnd: true });
+            model.update("#roo", "insertText", new DocumentOffset(4, true));
 
             expect(renderer.count).toBe(1);
             expect(model.parts.length).toBe(1);
             expect(model.parts[0].type).toBe("pill-candidate");
             expect(model.parts[0].text).toBe("#roo");
 
-            model.update("#room:s", "insertText", { offset: 7, atNodeEnd: true });
+            model.update("#room:s", "insertText", new DocumentOffset(7, true));
 
             expect(renderer.count).toBe(2);
             expect(model.parts.length).toBe(1);
@@ -306,7 +313,7 @@ describe('editor/model', function() {
             const pc = createPartCreator([{ resourceId: "@alice", label: "Alice" }]);
             const model = new EditorModel([], pc, renderer);
 
-            model.update("foo@a", "insertText", { offset: 5, atNodeEnd: true });
+            model.update("foo@a", "insertText", new DocumentOffset(5, true));
 
             expect(renderer.count).toBe(1);
             expect(model.parts.length).toBe(1);
