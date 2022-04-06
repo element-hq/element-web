@@ -22,56 +22,6 @@ limitations under the License.
 
         border-radius: $timeline-image-border-radius;
     }
-
-    .mx_MLocationBody_markerBorder {
-        width: 31px;
-        height: 31px;
-        border-radius: 50%;
-        filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.2));
-        background-color: $accent;
-
-        // See _LocationPicker.scss
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .mx_BaseAvatar {
-            margin: 0;
-            line-height: 1;
-        }
-    }
-
-    .mx_MLocationBody_pointer {
-        position: absolute;
-        bottom: -3px;
-        left: 11px;
-        width: 9px;
-        height: 5px;
-
-        &::before {
-            mask-image: url('$(res)/img/location/pointer.svg');
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: 9px;
-            content: '';
-            display: inline-block;
-            width: 9px;
-            height: 5px;
-            position: absolute;
-            background-color: $accent;
-        }
-    }
-
-    .mx_MLocationBody_markerContents {
-        background-color: $location-marker-color;
-        margin: 0;
-        width: 31px;
-        height: 31px;
-        mask-repeat: no-repeat;
-        mask-size: 16px;
-        mask-position: center;
-        mask-image: url('$(res)/img/element-icons/location.svg');
-    }
 }
 
 /* In the timeline, we fit the width of the container */

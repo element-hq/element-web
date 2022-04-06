@@ -301,7 +301,7 @@ describe("LocationPicker", () => {
                 ));
 
                 // marker is set, icon not avatar
-                expect(wrapper.find('.mx_MLocationBody_markerIcon').length).toBeTruthy();
+                expect(wrapper.find('.mx_Marker_icon').length).toBeTruthy();
             });
 
             it('submits location', () => {
