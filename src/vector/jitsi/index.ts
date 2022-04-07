@@ -25,9 +25,9 @@ import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/Elemen
 import { logger } from "matrix-js-sdk/src/logger";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
+import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
 
 import { getVectorConfig } from "../getconfig";
-import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
 
 // We have to trick webpack into loading our CSS for us.
 require("./index.scss");
@@ -328,7 +328,7 @@ function joinConference() { // event handler bound in HTML
             disableNS: SettingsStore.getValue('Audio.disableNS'),
             disableAP: SettingsStore.getValue('Audio.disableAP'),
             disableAGC: SettingsStore.getValue('Audio.disableAGC'),
-            disableHPF: SettingsStore.getValue('Audio.disableHPF')
+            disableHPF: SettingsStore.getValue('Audio.disableHPF'),
         },
         configOverwrite: {
             startAudioOnly,
