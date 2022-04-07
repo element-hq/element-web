@@ -1,5 +1,8 @@
 # App load order
 
+**Dev note**: As of March 2022, the skin is no longer part of the app load order at all. The document's graphs have
+been kept untouched for posterity.
+
 Old slow flow:
 ![image](https://user-images.githubusercontent.com/2403652/73848963-00a2a080-4821-11ea-97d4-1200fc2638f3.png)
 

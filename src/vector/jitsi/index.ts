@@ -27,6 +27,7 @@ import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 
 import { getVectorConfig } from "../getconfig";
+import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
 
 // We have to trick webpack into loading our CSS for us.
 require("./index.scss");
@@ -129,11 +130,9 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
             .get("skip_built_in_welcome_screen") || isVideoChannel;
 
-        // If we're meant to skip our screen, skip to the part where we show Jitsi instead of us.
+        // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
-        if (skipOurWelcomeScreen) {
-            toggleConferenceVisibility(true);
-        }
+        toggleConferenceVisibility(skipOurWelcomeScreen);
 
         if (widgetApi) {
             await readyPromise;
@@ -283,6 +282,18 @@ function createJWTToken() {
     );
 }
 
+async function notifyHangup() {
+    if (widgetApi) {
+        // We send the hangup event before setAlwaysOnScreen, because the latter
+        // can cause the receiving side to instantly stop listening.
+        try {
+            await widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+        } finally {
+            await widgetApi.setAlwaysOnScreen(false);
+        }
+    }
+}
+
 function joinConference() { // event handler bound in HTML
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
@@ -313,6 +324,11 @@ function joinConference() { // event handler bound in HTML
             SHOW_WATERMARK_FOR_GUESTS: false,
             MAIN_TOOLBAR_BUTTONS: [],
             VIDEO_LAYOUT_FIT: "height",
+            disableAEC: SettingsStore.getValue('Audio.disableAEC'),
+            disableNS: SettingsStore.getValue('Audio.disableNS'),
+            disableAP: SettingsStore.getValue('Audio.disableAP'),
+            disableAGC: SettingsStore.getValue('Audio.disableAGC'),
+            disableHPF: SettingsStore.getValue('Audio.disableHPF')
         },
         configOverwrite: {
             startAudioOnly,
@@ -355,22 +371,21 @@ function joinConference() { // event handler bound in HTML
 
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
-
-        if (widgetApi) {
-            // We send the hangup event before setAlwaysOnScreen, because the latter
-            // can cause the receiving side to instantly stop listening.
-            // ignored promise because we don't care if it works
-            // noinspection JSIgnoredPromiseFromCall
-            widgetApi.transport.send(ElementWidgetActions.HangupCall, {}).then(() =>
-                widgetApi.setAlwaysOnScreen(false),
-            );
-        }
+        notifyHangup();
 
         document.getElementById("jitsiContainer").innerHTML = "";
         meetApi = null;
 
         if (skipOurWelcomeScreen) {
             skipToJitsiSplashScreen();
+        }
+    });
+
+    meetApi.on("errorOccurred", ({ error }) => {
+        if (error.isFatal) {
+            // We got disconnected. Since Jitsi Meet might send us back to the
+            // prejoin screen, we're forced to act as if we hung up entirely.
+            notifyHangup();
         }
     });
 

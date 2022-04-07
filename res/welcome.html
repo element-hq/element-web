@@ -173,7 +173,8 @@ we don't have an account and should hide them. No account == no guest account ei
         <img src="welcome/images/logo.svg" alt="" class="mx_Logo"/>
     </a>
     <h1 class="mx_Header_title">_t("Welcome to Element")</h1>
-    <h4 class="mx_Header_subtitle">_t("Decentralised, encrypted chat &amp; collaboration powered by [matrix]")</h4>
+    <!-- XXX: Our translations system isn't smart enough to recognize variables in the HTML, so we manually do it -->
+    <h4 class="mx_Header_subtitle">_t("Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo")</h4>
     <div class="mx_ButtonGroup">
         <div class="mx_ButtonRow">
             <a href="#/login" class="mx_ButtonParent mx_ButtonSignIn mx_Button_iconSignIn">
