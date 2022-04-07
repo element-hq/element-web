@@ -1175,12 +1175,33 @@ class TimelinePanel extends React.Component<IProps, IState> {
                                 "messagePanel didn't load");
                     return;
                 }
-                if (eventId) {
-                    this.messagePanel.current.scrollToEvent(eventId, pixelOffset,
-                        offsetBase);
-                } else {
-                    this.messagePanel.current.scrollToBottom();
-                }
+
+                const doScroll = () => {
+                    if (eventId) {
+                        debuglog("TimelinePanel scrolling to eventId " + eventId);
+                        this.messagePanel.current.scrollToEvent(
+                            eventId,
+                            pixelOffset,
+                            offsetBase,
+                        );
+                    } else {
+                        debuglog("TimelinePanel scrolling to bottom");
+                        this.messagePanel.current.scrollToBottom();
+                    }
+                };
+
+                // Ensure the correct scroll position pre render, if the messages have already been loaded to DOM, to
+                // avoid it jumping around
+                doScroll();
+
+                // Ensure the correct scroll position post render for correct behaviour.
+                //
+                // requestAnimationFrame runs our code immediately after the DOM update but before the next repaint.
+                //
+                // If the messages have just been loaded for the first time, this ensures we'll repeat setting the
+                // correct scroll position after React has re-rendered the TimelinePanel and MessagePanel and updated
+                // the DOM.
+                window.requestAnimationFrame(doScroll);
 
                 if (this.props.sendReadReceiptOnLoad) {
                     this.sendReadReceipt();
