@@ -13,10 +13,9 @@ DIST_VERSION=$TAG
 # for an appropriately tagged branch as well (heads/v1.2.3).
 if [[ $BRANCH != HEAD && ! $BRANCH =~ heads/v.+ ]]
 then
-    REACT_SHA=$(cd node_modules/matrix-react-sdk; git rev-parse --short=12 HEAD)
-    JSSDK_SHA=$(cd node_modules/matrix-js-sdk; git rev-parse --short=12 HEAD)
-    VECTOR_SHA=$(git rev-parse --short=12 HEAD) # use the ACTUAL SHA rather than assume develop
-    DIST_VERSION=$VECTOR_SHA-react-$REACT_SHA-js-$JSSDK_SHA
+    DIST_VERSION=`$(dirname $0)/get-version-from-git.sh`
 fi
 
+DIST_VERSION=`$(dirname $0)/normalize-version.sh ${DIST_VERSION}`
+VERSION=$DIST_VERSION yarn build
 echo $DIST_VERSION > /src/webapp/version

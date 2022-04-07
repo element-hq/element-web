@@ -1,40 +1,93 @@
+/* eslint-disable quote-props */
+
+const dotenv = require('dotenv');
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const webpack = require("webpack");
+const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const SentryCliPlugin = require("@sentry/webpack-plugin");
 
+dotenv.config();
 let ogImageUrl = process.env.RIOT_OG_IMAGE_URL;
 if (!ogImageUrl) ogImageUrl = 'https://app.element.io/themes/element/img/logos/opengraph.png';
 
-const additionalPlugins = [
-    // This is where you can put your customisation replacements.
-];
+if (!process.env.VERSION) {
+    console.warn("Unset VERSION variable - this may affect build output");
+    process.env.VERSION = "!!UNSET!!";
+}
+
+const cssThemes = {
+    // CSS themes
+    "theme-legacy-light": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
+    "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
+    "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
+    "theme-light-high-contrast":
+        "./node_modules/matrix-react-sdk/res/themes/light-high-contrast/css/light-high-contrast.scss",
+    "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
+    "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
+    "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+};
+
+function getActiveThemes() {
+    // Default to `light` theme when the MATRIX_THEMES environment variable is not defined.
+    const theme = process.env.MATRIX_THEMES ?? 'light';
+    const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
+    return themes;
+}
+
+// See docs/customisations.md
+let fileOverrides = {/* {[file: string]: string} */};
+try {
+    fileOverrides = require('./customisations.json');
+
+    // stringify the output so it appears in logs correctly, as large files can sometimes get
+    // represented as `<Object>` which is less than helpful.
+    console.log("Using customisations.json : " + JSON.stringify(fileOverrides, null, 4));
+} catch (e) {
+    // ignore - not important
+}
+const moduleReplacementPlugins = Object.entries(fileOverrides).map(([oldPath, newPath]) => {
+    return new webpack.NormalModuleReplacementPlugin(
+        // because the input is effectively defined by the person running the build, we don't
+        // need to do anything special to protect against regex overrunning, etc.
+        new RegExp(oldPath.replace(/\//g, '[\\/\\\\]').replace(/\./g, '\\.')),
+        path.resolve(__dirname, newPath),
+    );
+});
 
 module.exports = (env, argv) => {
-    let nodeEnv = argv.mode;
-    if (process.env.CI_PACKAGE) {
-        // Don't run minification for CI builds (this is only set for runs on develop)
-        // We override this via environment variable to avoid duplicating the scripts
-        // in `package.json` just for a different mode.
-        argv.mode = "development";
-
-        // More and more people are using nightly build as their main client
-        // Libraries like React have a development build that is useful
-        // when working on the app but adds significant runtime overhead
-        // We want to use the React production build but not compile the whole
-        // application to productions standards
-        nodeEnv = "production";
-    }
+    // Establish settings based on the environment and args.
+    //
+    // argv.mode is always set to "production" by yarn build
+    //      (called to build prod, nightly and develop.element.io)
+    // arg.mode is set to "delopment" by yarn start
+    //      (called by developers, runs the continuous reload script)
+    // process.env.CI_PACKAGE is set when yarn build is called from scripts/ci_package.sh
+    //      (called to build nightly and develop.element.io)
+    const nodeEnv = argv.mode;
+    const devMode = nodeEnv !== 'production';
+    const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
+    const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
+    const enableMinification = !devMode && !process.env.CI_PACKAGE;
 
     const development = {};
-    if (argv.mode === "production") {
-        development['devtool'] = 'nosources-source-map';
+    if (devMode) {
+        // High quality, embedded source maps for dev builds
+        development['devtool'] = "eval-source-map";
     } else {
-        // This makes the sourcemaps human readable for developers. We use eval-source-map
-        // because the plain source-map devtool ruins the alignment.
-        development['devtool'] = 'eval-source-map';
+        if (process.env.CI_PACKAGE) {
+            // High quality source maps in separate .map files which include the source. This doesn't bulk up the .js
+            // payload file size, which is nice for performance but also necessary to get the bundle to a small enough
+            // size that sentry will accept the upload.
+            development['devtool'] = 'source-map';
+        } else {
+            // High quality source maps in separate .map files which don't include the source
+            development['devtool'] = 'nosources-source-map';
+        }
     }
 
     // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
@@ -43,23 +96,35 @@ module.exports = (env, argv) => {
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
+    const ACTIVE_THEMES = getActiveThemes();
+    function getThemesImports() {
+        const imports = ACTIVE_THEMES.map((t, index) => {
+            const themeImportPath = cssThemes[`theme-${ t }`].replace('./node_modules/', '');
+            return themeImportPath;
+        });
+        const s = JSON.stringify(ACTIVE_THEMES);
+        return `
+            window.MX_insertedThemeStylesCounter = 0;
+            window.MX_DEV_ACTIVE_THEMES = (${ s });
+            ${ imports.map(i => `import("${ i }")`).join('\n') };
+        `;
+    }
+
     return {
         ...development,
+        node: {
+            // Mock out the NodeFS module: The opus decoder imports this wrongly.
+            fs: 'empty',
+            net: 'empty',
+            tls: 'empty',
+        },
 
         entry: {
             "bundle": "./src/vector/index.ts",
-            "indexeddb-worker": "./src/vector/indexeddb-worker.js",
-            "mobileguide": "./src/vector/mobile_guide/index.js",
+            "mobileguide": "./src/vector/mobile_guide/index.ts",
             "jitsi": "./src/vector/jitsi/index.ts",
-            "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.js",
-
-            // CSS themes
-            "theme-legacy": "./node_modules/matrix-react-sdk/res/themes/legacy-light/css/legacy-light.scss",
-            "theme-legacy-dark": "./node_modules/matrix-react-sdk/res/themes/legacy-dark/css/legacy-dark.scss",
-            "theme-light": "./node_modules/matrix-react-sdk/res/themes/light/css/light.scss",
-            "theme-dark": "./node_modules/matrix-react-sdk/res/themes/dark/css/dark.scss",
-            "theme-light-custom": "./node_modules/matrix-react-sdk/res/themes/light-custom/css/light-custom.scss",
-            "theme-dark-custom": "./node_modules/matrix-react-sdk/res/themes/dark-custom/css/dark-custom.scss",
+            "usercontent": "./node_modules/matrix-react-sdk/src/usercontent/index.ts",
+            ...(useHMR ? {} : cssThemes),
         },
 
         optimization: {
@@ -86,8 +151,8 @@ module.exports = (env, argv) => {
 
             // Minification is normally enabled by default for webpack in production mode, but
             // we use a CSS optimizer too and need to manage it ourselves.
-            minimize: argv.mode === 'production',
-            minimizer: argv.mode === 'production' ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
+            minimize: enableMinification,
+            minimizer: enableMinification ? [new TerserPlugin({}), new OptimizeCSSAssetsPlugin({})] : [],
 
             // Set the value of `process.env.NODE_ENV` for libraries like React
             // See also https://v4.webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -136,13 +201,25 @@ module.exports = (env, argv) => {
                 // overflows (https://github.com/webpack/webpack/issues/1721), and
                 // there is no need for webpack to parse them - they can just be
                 // included as-is.
-                /highlight\.js[\\\/]lib[\\\/]languages/,
+                /highlight\.js[\\/]lib[\\/]languages/,
 
                 // olm takes ages for webpack to process, and it's already heavily
                 // optimised, so there is little to gain by us uglifying it.
-                /olm[\\\/](javascript[\\\/])?olm\.js$/,
+                /olm[\\/](javascript[\\/])?olm\.js$/,
             ],
             rules: [
+                useHMR && {
+                    test: /devcss\.ts$/,
+                    loader: 'string-replace-loader',
+                    options: {
+                        search: '"use theming";',
+                        replace: getThemesImports(),
+                    },
+                },
+                {
+                    test: /\.worker\.ts$/,
+                    loader: "worker-loader",
+                },
                 {
                     test: /\.(ts|js)x?$/,
                     include: (f) => {
@@ -165,6 +242,9 @@ module.exports = (env, argv) => {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
+                        plugins: [
+                            useHMR && require.resolve('react-refresh/babel'),
+                        ].filter(Boolean),
                     },
                 },
                 {
@@ -208,7 +288,7 @@ module.exports = (env, argv) => {
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
-                                    require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
+                                    require('postcss-preset-env')({ stage: 3, browsers: 'last 2 versions' }),
                                 ],
                                 parser: "postcss-scss",
                                 "local-plugins": true,
@@ -219,7 +299,40 @@ module.exports = (env, argv) => {
                 {
                     test: /\.scss$/,
                     use: [
-                        MiniCssExtractPlugin.loader,
+                        /**
+                         * This code is hopeful that no .scss outside of our themes will be directly imported in any
+                         * of the JS/TS files.
+                         * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
+                         */
+                        useHMR ? {
+                            loader: 'style-loader',
+                            /**
+                             * If we refactor the `theme.js` in `matrix-react-sdk` a little bit,
+                             * we could try using `lazyStyleTag` here to add and remove styles on demand,
+                             * that would nicely resolve issues of race conditions for themes,
+                             * at least for development purposes.
+                             */
+                            options: {
+
+                                insert: function insertBeforeAt(element) {
+                                    const parent = document.querySelector('head');
+                                    // We're in iframe
+                                    if (!window.MX_DEV_ACTIVE_THEMES) {
+                                        parent.appendChild(element);
+                                        return;
+                                    }
+                                    // Properly disable all other instances of themes
+                                    element.disabled = true;
+                                    element.onload = () => {
+                                        element.disabled = true;
+                                    };
+                                    const theme = window.MX_DEV_ACTIVE_THEMES[window.MX_insertedThemeStylesCounter];
+                                    element.setAttribute('data-mx-theme', theme);
+                                    window.MX_insertedThemeStylesCounter++;
+                                    parent.appendChild(element);
+                                },
+                            },
+                        } : MiniCssExtractPlugin.loader,
                         {
                             loader: 'css-loader',
                             options: {
@@ -238,16 +351,14 @@ module.exports = (env, argv) => {
                                     require('postcss-import')(),
                                     require("postcss-mixins")(),
                                     require("postcss-simple-vars")(),
-                                    require("postcss-extend")(),
                                     require("postcss-nested")(),
                                     require("postcss-easings")(),
                                     require("postcss-strip-inline-comments")(),
                                     require("postcss-hexrgba")(),
-                                    require("postcss-calc")({warnWhenCannotResolve: true}),
 
                                     // It's important that this plugin is last otherwise we end
                                     // up with broken CSS.
-                                    require('postcss-preset-env')({stage: 3, browsers: 'last 2 versions'}),
+                                    require('postcss-preset-env')({ stage: 3, browsers: 'last 2 versions' }),
                                 ],
                                 parser: "postcss-scss",
                                 "local-plugins": true,
@@ -277,6 +388,63 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
+                    // Special case the recorder worklet as it can't end up HMR'd, but the worker-loader
+                    // isn't good enough for us. Note that the worklet-loader is listed as "do not use",
+                    // however it seems to work fine for our purposes.
+                    test: /RecorderWorklet\.ts$/,
+                    type: "javascript/auto",
+                    use: [ // executed last -> first, for some reason.
+                        {
+                            loader: "worklet-loader",
+                            options: {
+                                // Override name so we know what it is in the output.
+                                name: 'recorder-worklet.[hash:7].js',
+                            },
+                        },
+                        {
+                            // TS -> JS because the worklet-loader won't do this for us.
+                            loader: "babel-loader",
+                        },
+                    ],
+                },
+                {
+                    // This is from the same place as the encoderWorker above, but only needed
+                    // for Safari support.
+                    test: /decoderWorker\.min\.js$/,
+                    loader: "file-loader",
+                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    options: {
+                        // We deliberately override the name so it makes sense in debugging
+                        name: 'opus-decoderWorker.min.[hash:7].[ext]',
+                        outputPath: '.',
+                    },
+                },
+                {
+                    // This is from the same place as the encoderWorker above, but only needed
+                    // for Safari support.
+                    test: /decoderWorker\.min\.wasm$/,
+                    loader: "file-loader",
+                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    options: {
+                        // We deliberately don't change the name because the decoderWorker has this
+                        // hardcoded. This is here to avoid the default wasm rule from adding a hash.
+                        name: 'decoderWorker.min.wasm',
+                        outputPath: '.',
+                    },
+                },
+                {
+                    // This is from the same place as the encoderWorker above, but only needed
+                    // for Safari support.
+                    test: /waveWorker\.min\.js$/,
+                    loader: "file-loader",
+                    type: "javascript/auto", // https://github.com/webpack/webpack/issues/6725
+                    options: {
+                        // We deliberately override the name so it makes sense in debugging
+                        name: 'wave-encoderWorker.min.[hash:7].[ext]',
+                        outputPath: '.',
+                    },
+                },
+                {
                     // cache-bust languages.json file placed in
                     // element-web/webapp/i18n during build by copy-res.js
                     test: /\.*languages.json$/,
@@ -287,7 +455,71 @@ module.exports = (env, argv) => {
                     },
                 },
                 {
-                    test: /\.(gif|png|svg|ttf|woff|woff2|xml|ico)$/,
+                    test: /\.svg$/,
+                    issuer: /\.(js|ts|jsx|tsx|html)$/,
+                    use: [
+                        {
+                            loader: '@svgr/webpack',
+                            options: {
+                                namedExport: 'Icon',
+                                svgProps: {
+                                    role: 'presentation',
+                                    'aria-hidden': true,
+                                },
+                                // props set on the svg will override defaults
+                                expandProps: 'end',
+                                svgoConfig: {
+                                    plugins: {
+                                        // generates a viewbox if missing
+                                        removeDimensions: true,
+                                    },
+                                },
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(outputPath);
+                                },
+                            },
+                        },
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(outputPath);
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    test: /\.svg$/,
+                    issuer: /\.(scss|css)$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                esModule: false,
+                                name: '[name].[hash:7].[ext]',
+                                outputPath: getAssetOutputPath,
+                                publicPath: function (url, resourcePath) {
+                                    // CSS image usages end up in the `bundles/[hash]` output
+                                    // directory, so we adjust the final path to navigate up
+                                    // twice.
+                                    const outputPath = getAssetOutputPath(url, resourcePath);
+                                    return toPublicPath(path.join("../..", outputPath));
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    test: /\.(gif|png|ttf|woff|woff2|xml|ico)$/,
                     // Use a content-based hash in the name so that we can set a long cache
                     // lifetime for assets while still delivering changes quickly.
                     oneOf: [
@@ -323,13 +555,16 @@ module.exports = (env, argv) => {
                         },
                     ],
                 },
-            ],
+            ].filter(Boolean),
         },
 
         plugins: [
+            ...moduleReplacementPlugins,
+
             // This exports our CSS using the splitChunks and loaders above.
             new MiniCssExtractPlugin({
-                filename: 'bundles/[hash]/[name].css',
+                filename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
+                chunkFilename: useHMR ? "bundles/[name].css" : "bundles/[hash]/[name].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }),
 
@@ -342,8 +577,8 @@ module.exports = (env, argv) => {
                 // of the themes and which chunks we actually care about.
                 inject: false,
                 excludeChunks: ['mobileguide', 'usercontent', 'jitsi'],
-                minify: argv.mode === 'production',
-                vars: {
+                minify: false,
+                templateParameters: {
                     og_image_url: ogImageUrl,
                 },
             }),
@@ -352,7 +587,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './src/vector/jitsi/index.html',
                 filename: 'jitsi.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: ['jitsi'],
             }),
 
@@ -360,7 +595,7 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './src/vector/mobile_guide/index.html',
                 filename: 'mobile_guide/index.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: ['mobileguide'],
             }),
 
@@ -368,13 +603,13 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './src/vector/static/unable-to-load.html',
                 filename: 'static/unable-to-load.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: [],
             }),
             new HtmlWebpackPlugin({
                 template: './src/vector/static/incompatible-browser.html',
                 filename: 'static/incompatible-browser.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: [],
             }),
 
@@ -382,12 +617,23 @@ module.exports = (env, argv) => {
             new HtmlWebpackPlugin({
                 template: './node_modules/matrix-react-sdk/src/usercontent/index.html',
                 filename: 'usercontent/index.html',
-                minify: argv.mode === 'production',
+                minify: false,
                 chunks: ['usercontent'],
             }),
 
-            ...additionalPlugins,
-        ],
+            new HtmlWebpackInjectPreload({
+                files: [{ match: /.*Inter.*\.woff2$/ }],
+            }),
+            useHMR && new ReactRefreshWebpackPlugin(fullPageErrors ? undefined : { overlay: { entry: false } }),
+
+            // upload to sentry if sentry env is present
+            process.env.SENTRY_DSN &&
+                new SentryCliPlugin({
+                    release: process.env.VERSION,
+                    include: "./webapp/bundles",
+                }),
+            new webpack.EnvironmentPlugin(['VERSION']),
+        ].filter(Boolean),
 
         output: {
             path: path.join(__dirname, "webapp"),
@@ -406,17 +652,15 @@ module.exports = (env, argv) => {
         // configuration for the webpack-dev-server
         devServer: {
             // serve unwebpacked assets from webapp.
-            contentBase: './webapp',
+            contentBase: [
+                './webapp',
+            ],
 
             // Only output errors, warnings, or new compilations.
             // This hides the massive list of modules.
             stats: 'minimal',
-
-            // hot module replacement doesn't work (I think we'd need react-hot-reload?)
-            // so webpack-dev-server reloads the page on every update which is quite
-            // tedious in Riot since that can take a while.
-            hot: false,
-            inline: false,
+            hotOnly: true,
+            inline: true,
         },
     };
 };

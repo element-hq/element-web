@@ -16,23 +16,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import VectorBasePlatform from './VectorBasePlatform';
-import {UpdateCheckStatus} from "matrix-react-sdk/src/BasePlatform";
+import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import {_t} from 'matrix-react-sdk/src/languageHandler';
-import {Room} from "matrix-js-sdk/src/models/room";
-import {hideToast as hideUpdateToast, showToast as showUpdateToast} from "matrix-react-sdk/src/toasts/UpdateToast";
-import {Action} from "matrix-react-sdk/src/dispatcher/actions";
+import { _t } from 'matrix-react-sdk/src/languageHandler';
+import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
+import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { CheckUpdatesPayload } from 'matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload';
-
 import UAParser from 'ua-parser-js';
+import { logger } from "matrix-js-sdk/src/logger";
+
+import VectorBasePlatform from './VectorBasePlatform';
+import { parseQs } from "../url_utils";
+import { reloadPage } from "../routing";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
 export default class WebPlatform extends VectorBasePlatform {
-    private runningVersion: string = null;
-
     constructor() {
         super();
         // Register service worker if available on this platform
@@ -79,35 +79,14 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Room) {
-        const notifBody = {
-            body: msg,
-            tag: "vector",
-            silent: true, // we play our own sounds
-        };
-        if (avatarUrl) notifBody['icon'] = avatarUrl;
-        const notification = new window.Notification(title, notifBody);
-
-        notification.onclick = function() {
-            dis.dispatch({
-                action: 'view_room',
-                room_id: room.roomId,
-            });
-            window.focus();
-            notification.close();
-        };
-
-        return notification;
-    }
-
-    _getVersion(): Promise<string> {
+    private getMostRecentVersion(): Promise<string> {
         // We add a cachebuster to the request to make sure that we know about
         // the most recent version on the origin server. That might not
         // actually be the version we'd get on a reload (particularly in the
         // presence of intermediate caching proxies), but still: we're trying
         // to tell the user that there is a new version.
 
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             request(
                 {
                     method: "GET",
@@ -121,45 +100,87 @@ export default class WebPlatform extends VectorBasePlatform {
                         return;
                     }
 
-                    const ver = body.trim();
-                    resolve(ver);
+                    resolve(this.getNormalizedAppVersion(body.trim()));
                 },
             );
         });
     }
 
-    getAppVersion(): Promise<string> {
-        if (this.runningVersion !== null) {
-            return Promise.resolve(this.runningVersion);
+    getNormalizedAppVersion(version: string): string {
+        // if version looks like semver with leading v, strip it
+        // (matches scripts/normalize-version.sh)
+        const semVerRegex = new RegExp("^v[0-9]+.[0-9]+.[0-9]+(-.+)?$");
+        if (semVerRegex.test(version)) {
+            return version.substr(1);
         }
-        return this._getVersion();
+        return version;
+    }
+
+    getAppVersion(): Promise<string> {
+        return Promise.resolve(this.getNormalizedAppVersion(process.env.VERSION));
     }
 
     startUpdater() {
-        this.pollForUpdate();
-        setInterval(this.pollForUpdate, POKE_RATE_MS);
+        // Poll for an update immediately, and reload the page now if we're out of date
+        // already as we've just initialised an old version of the app somehow.
+        //
+        // Forcibly reloading the page aims to avoid users interacting at all with the old
+        // and potentially broken version of the app.
+        //
+        // Ideally, loading an old copy would be impossible with the
+        // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
+        console.log("startUpdater, current version is " + this.getNormalizedAppVersion(process.env.VERSION));
+        this.pollForUpdate((version: string, newVersion: string) => {
+            const query = parseQs(location);
+            if (query.updated === "1") {
+                console.log("Update reloaded but still on an old version, stopping");
+                // We just reloaded already and are still on the old version!
+                // Show the toast rather than reload in a loop.
+                showUpdateToast(version, newVersion);
+                return;
+            }
+
+            // Set updated=1 as a query param so we can detect that we've already done this once
+            // and reload the page.
+            let suffix = "updated=1";
+            if (window.location.search.length === 0) {
+                suffix = "?" + suffix;
+            } else {
+                suffix = "&" + suffix;
+            }
+
+            reloadPage(window.location.href + suffix);
+        });
+        setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
     }
 
     async canSelfUpdate(): Promise<boolean> {
         return true;
     }
 
-    pollForUpdate = () => {
-        return this._getVersion().then((ver) => {
-            if (this.runningVersion === null) {
-                this.runningVersion = ver;
-            } else if (this.runningVersion !== ver) {
-                if (this.shouldShowUpdate(ver)) {
-                    showUpdateToast(this.runningVersion, ver);
+    pollForUpdate = (
+        showUpdate: (currentVersion: string, mostRecentVersion: string) => void,
+        showNoUpdate?: () => void,
+    ) => {
+        return this.getMostRecentVersion().then((mostRecentVersion) => {
+            const currentVersion = this.getNormalizedAppVersion(process.env.VERSION);
+
+            if (currentVersion !== mostRecentVersion) {
+                if (this.shouldShowUpdate(mostRecentVersion)) {
+                    console.log("Update available to " + mostRecentVersion + ", will notify user");
+                    showUpdate(currentVersion, mostRecentVersion);
+                } else {
+                    console.log("Update available to " + mostRecentVersion + " but won't be shown");
                 }
                 return { status: UpdateCheckStatus.Ready };
             } else {
-                hideUpdateToast();
+                console.log("No update available, already on " + mostRecentVersion);
+                showNoUpdate?.();
             }
 
             return { status: UpdateCheckStatus.NotAvailable };
         }, (err) => {
-            console.error("Failed to poll for update", err);
+            logger.error("Failed to poll for update", err);
             return {
                 status: UpdateCheckStatus.Error,
                 detail: err.message || err.status ? err.status.toString() : 'Unknown Error',
@@ -169,7 +190,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     startUpdateCheck() {
         super.startUpdateCheck();
-        this.pollForUpdate().then((updateState) => {
+        this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...updateState,
@@ -178,7 +199,7 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     installUpdate() {
-        window.location.reload(true);
+        window.location.reload();
     }
 
     getDefaultDeviceDisplayName(): string {
@@ -212,8 +233,6 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     reload() {
-        // forceReload=false since we don't really need new HTML/JS files
-        // we just need to restart the JS runtime.
-        window.location.reload(false);
+        window.location.reload();
     }
 }

@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import * as sdk from 'matrix-react-sdk/src/index';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 export default class VectorAuthPage extends React.PureComponent {
-    static replaces = 'AuthPage'
+    static replaces = 'AuthPage';
 
     static welcomeBackgroundUrl;
 
@@ -27,14 +27,16 @@ export default class VectorAuthPage extends React.PureComponent {
     static getWelcomeBackgroundUrl() {
         if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
-        const brandingConfig = SdkConfig.get().branding;
+        const brandingConfig = SdkConfig.getObject("branding");
         VectorAuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
-        if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
-            if (Array.isArray(brandingConfig.welcomeBackgroundUrl)) {
-                const index = Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length);
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl[index];
+
+        const configuredUrl = brandingConfig?.get("welcome_background_url");
+        if (configuredUrl) {
+            if (Array.isArray(configuredUrl)) {
+                const index = Math.floor(Math.random() * configuredUrl.length);
+                VectorAuthPage.welcomeBackgroundUrl = configuredUrl[index];
             } else {
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl;
+                VectorAuthPage.welcomeBackgroundUrl = configuredUrl;
             }
         }
 
@@ -48,12 +50,12 @@ export default class VectorAuthPage extends React.PureComponent {
             background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
         };
 
-        const modalStyle = {
+        const modalStyle: CSSProperties = {
             position: 'relative',
             background: 'initial',
         };
 
-        const blurStyle = {
+        const blurStyle: CSSProperties = {
             position: 'absolute',
             top: 0,
             right: 0,
@@ -63,7 +65,7 @@ export default class VectorAuthPage extends React.PureComponent {
             background: pageStyle.background,
         };
 
-        const modalContentStyle = {
+        const modalContentStyle: CSSProperties = {
             display: 'flex',
             zIndex: 1,
             background: 'rgba(255, 255, 255, 0.59)',

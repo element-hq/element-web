@@ -12,6 +12,7 @@
     ],
     "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
+    "uisi_autorageshake_app": "element-auto-uisi",
     "showLabsSettings": false,
     "piwik": {
         "url": "https://piwik.riot.im/",
@@ -21,7 +22,8 @@
     "roomDirectory": {
         "servers": [
             "matrix.org",
-            "gitter.im"
+            "gitter.im",
+            "libera.chat"
         ]
     },
     "enable_presence_by_hs_url": {
@@ -47,5 +49,10 @@
       "privacyPolicyUrl": "https://element.io/privacy",
       "termsOfServiceUrl": "https://element.io/terms-of-service",
       "url": "https://ems.element.io/element-home/in-app-loader"
-    }
+    },
+    "posthog": {
+        "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
+        "apiHost": "https://posthog.hss.element.io"
+    },
+    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }

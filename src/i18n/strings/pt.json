@@ -27,5 +27,9 @@
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Por favor, instala <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, ou <safariLink>Safari</safariLink> para uma melhor experiência.",
     "Unsupported browser": "Browser não suportado",
     "Previous/next recently visited room or community": "Anterior/seguinte comunidade ou sala recentemente visitado",
-    "Open user settings": "Abrir definições do utilizador"
+    "Open user settings": "Abrir definições do utilizador",
+    "Failed to start": "Erro ao iniciar",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza funções avançadas que não são suportadas pelo teu atual browser.",
+    "Your browser can't run %(brand)s": "O teu browser não consegue executar %(brand)s",
+    "Use %(brand)s on mobile": "Usar %(brand)s no telemóvel"
 }

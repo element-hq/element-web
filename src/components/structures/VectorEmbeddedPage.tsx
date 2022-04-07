@@ -24,7 +24,7 @@ export default class VectorEmbeddedPage extends EmbeddedPage {
     static replaces = 'EmbeddedPage';
 
     // we're overriding the base component here, for Element-specific tweaks
-    translate(s) {
+    translate(s: string) {
         s = sanitizeHtml(_t(s));
         // ugly fix for https://github.com/vector-im/element-web/issues/4243
         // eslint-disable-next-line max-len

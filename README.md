@@ -30,14 +30,14 @@ and [element-ios](https://github.com/vector-im/element-ios).
 Getting Started
 ===============
 
-The easiest way to test Element is to just use the hosted copy at https://app.element.io.
-The `develop` branch is continuously deployed to https://develop.element.io
+The easiest way to test Element is to just use the hosted copy at <https://app.element.io>.
+The `develop` branch is continuously deployed to <https://develop.element.io>
 for those who like living dangerously.
 
 To host your own copy of Element, the quickest bet is to use a pre-built
 released version of Element:
 
-1. Download the latest version from https://github.com/vector-im/element-web/releases
+1. Download the latest version from <https://github.com/vector-im/element-web/releases>
 1. Untar the tarball on your web server
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
@@ -46,7 +46,7 @@ released version of Element:
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
-at https://packages.riot.im/element-release-key.asc.
+at <https://packages.riot.im/element-release-key.asc>.
 
 Note that for the security of your chats will need to serve Element
 over HTTPS. Major browsers also do not allow you to use VoIP/video
@@ -72,7 +72,7 @@ access to Element (or other apps) due to sharing the same domain.
 
 We have put some coarse mitigations into place to try to protect against this
 situation, but it's still not good practice to do it in the first place.  See
-https://github.com/vector-im/element-web/issues/1977 for more details.
+<https://github.com/vector-im/element-web/issues/1977> for more details.
 
 Configuration best practices
 ----------------------------
@@ -80,15 +80,15 @@ Configuration best practices
 Unless you have special requirements, you will want to add the following to
 your web server configuration when hosting Element Web:
 
-- The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
+* The `X-Frame-Options: SAMEORIGIN` header, to prevent Element Web from being
   framed and protect from [clickjacking][owasp-clickjacking].
-- The `frame-ancestors 'none'` directive to your `Content-Security-Policy`
+* The `frame-ancestors 'none'` directive to your `Content-Security-Policy`
   header, as the modern replacement for `X-Frame-Options` (though both should be
   included since not all browsers support it yet, see
   [this][owasp-clickjacking-csp]).
-- The `X-Content-Type-Options: nosniff` header, to [disable MIME
+* The `X-Content-Type-Options: nosniff` header, to [disable MIME
   sniffing][mime-sniffing].
-- The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
+* The `X-XSS-Protection: 1; mode=block;` header, for basic XSS protection in
   legacy browsers.
 
 [mime-sniffing]:
@@ -122,15 +122,15 @@ Ensure you have the latest LTS version of Node.js installed.
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
 guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
 
-1. Install or update `node.js` so that your `node` is at least v10.x.
+1. Install or update `node.js` so that your `node` is at least the current recommended LTS.
 1. Install `yarn` if not present already.
 1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
 1. Switch to the element-web directory: `cd element-web`.
 1. Install the prerequisites: `yarn install`.
-   *  If you're using the `develop` branch, then it is recommended to set up a
+   * If you're using the `develop` branch, then it is recommended to set up a
       proper development environment (see [Setting up a dev
       environment](#setting-up-a-dev-environment) below). Alternatively, you
-      can use https://develop.element.io - the continuous integration release of
+      can use <https://develop.element.io> - the continuous integration release of
       the develop branch.
 1. Configure the app by copying `config.sample.json` to `config.json` and
    modifying it. See the [configuration docs](docs/config.md) for details.
@@ -148,15 +148,16 @@ Running as a Desktop app
 ========================
 
 Element can also be run as a desktop app, wrapped in Electron. You can download a
-pre-built version from https://element.io/get-started or, if you prefer,
+pre-built version from <https://element.io/get-started> or, if you prefer,
 build it yourself.
 
-To build it yourself, follow the instructions at https://github.com/vector-im/element-desktop.
+To build it yourself, follow the instructions at <https://github.com/vector-im/element-desktop>.
 
 Many thanks to @aviraldg for the initial work on the Electron integration.
 
 Other options for running as a desktop app:
- * @asdf:matrix.org points out that you can use nativefier and it just works(tm)
+
+* @asdf:matrix.org points out that you can use nativefier and it just works(tm)
 
 ```bash
 yarn global add nativefier
@@ -171,6 +172,7 @@ Running from Docker
 
 The Docker image can be used to serve element-web as a web server. The easiest way to use
 it is to use the prebuilt image:
+
 ```bash
 docker run -p 80:80 vectorim/element-web
 ```
@@ -178,11 +180,13 @@ docker run -p 80:80 vectorim/element-web
 To supply your own custom `config.json`, map a volume to `/app/config.json`. For example,
 if your custom config was located at `/etc/element-web/config.json` then your Docker command
 would be:
+
 ```bash
 docker run -p 80:80 -v /etc/element-web/config.json:/app/config.json vectorim/element-web
 ```
 
 To build the image yourself:
+
 ```bash
 git clone https://github.com/vector-im/element-web.git element-web
 cd element-web
@@ -192,6 +196,7 @@ docker build .
 
 If you're building a custom branch, or want to use the develop branch, check out the appropriate
 element-web branch and then run:
+
 ```bash
 docker build -t \
     --build-arg USE_CUSTOM_SDKS=true \
@@ -224,6 +229,7 @@ Caching requirements
 ====================
 
 Element requires the following URLs not to be cached, when/if you are serving Element from your own webserver:
+
 ```
 /config.*.json
 /i18n
@@ -231,6 +237,11 @@ Element requires the following URLs not to be cached, when/if you are serving El
 /sites
 /index.html
 ```
+
+We also recommend that you force browsers to re-validate any cached copy of Element on page load by configuring your
+webserver to return `Cache-Control: no-cache` for `/`. This ensures the browser will fetch a new version of Element on
+the next page load after it's been deployed. Note that this is already configured for you in the nginx config of our
+Dockerfile.
 
 Development
 ===========
@@ -260,6 +271,10 @@ Please note that Element is intended to run correctly without access to the publ
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
 into Element itself.
+
+CSS hot-reload is available as an opt-in development feature. You can enable it
+by defining a `CSS_HOT_RELOAD` environment variable, in a `.env` file in the root
+of the repository. See `.env.example` for documentation and an example.
 
 Setting up a dev environment
 ============================
@@ -298,17 +313,19 @@ cd element-web
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
+yarn reskindex
 yarn start
 ```
 
-
 Wait a few seconds for the initial build to finish; you should see something like:
+
 ```
 [element-js] <s> [webpack.Progress] 100%
 [element-js]
 [element-js] ℹ ｢wdm｣:    1840 modules
 [element-js] ℹ ｢wdm｣: Compiled successfully.
 ```
+
    Remember, the command will not terminate since it runs the web server
    and rebuilds source files when they change. This development server also
    disables caching, so do NOT use it in production.
@@ -316,7 +333,7 @@ Wait a few seconds for the initial build to finish; you should see something lik
 Configure the app by copying `config.sample.json` to `config.json` and
 modifying it. See the [configuration docs](docs/config.md) for details.
 
-Open http://127.0.0.1:8080/ in your browser to see your newly built Element.
+Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
 
 **Note**: The build script uses inotify by default on Linux to monitor directories
 for changes. If the inotify limits are too low your build will fail silently or with
@@ -358,24 +375,15 @@ Running the tests
 -----------------
 
 There are a number of application-level tests in the `tests` directory; these
-are designed to run in a browser instance under the control of
-[karma](https://karma-runner.github.io). To run them:
+are designed to run with Jest and JSDOM. To run them
 
-* Make sure you have Chrome installed (a recent version, like 59)
-* Make sure you have `matrix-js-sdk` and `matrix-react-sdk` installed and
-  built, as above
-* `yarn test`
-
-The above will run the tests under Chrome in a `headless` mode.
-
-You can also tell karma to run the tests in a loop (every time the source
-changes), in an instance of Chrome on your desktop, with `yarn
-test-multi`. This also gives you the option of running the tests in 'debug'
-mode, which is useful for stepping through the tests in the developer tools.
+```
+yarn test
+```
 
 ### End-to-End tests
 
-See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) how to run the end-to-end tests.
+See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) for how to run the end-to-end tests.
 
 Translations
 ============
@@ -389,76 +397,6 @@ For a developer guide, see the [translating dev doc](docs/translating-dev.md).
 Triaging issues
 ===============
 
-We strive to completely cover all applicable issues with these core labels:
+Issues are triaged by community members and the Web App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
 
-1. __Type__ — Every issue is assigned a type:
-   - __[T-Defect](https://github.com/vector-im/element-web/labels/T-Defect):__
-     Bugs, crashes, hangs, vulnerabilities, or other reported problems
-   - __[T-Enhancement](https://github.com/vector-im/element-web/labels/T-Enhancement):__
-     New features, changes in functionality, performance boosts, user-facing
-     improvements
-   - __[T-Task](https://github.com/vector-im/element-web/labels/T-Task):__
-     Refactoring, enabling or disabling functionality, other engineering tasks
-   - __[T-Other](https://github.com/vector-im/element-web/labels/T-Other):__
-     Questions, user support, anything else
-
-2. __Severity__ — All issues labeled `T-Defect` are also assigned a severity:
-   * __[S-Critical](https://github.com/vector-im/element-web/labels/S-Critical):__
-     Prevents work, causes data loss, affects many users, and/or has no
-     workaround
-   * __[S-Major](https://github.com/vector-im/element-web/labels/S-Major):__
-     Severely degrades major functionality or product features, with no
-     satisfactory workaround
-   * __[S-Minor](https://github.com/vector-im/element-web/labels/S-Minor):__
-     Impairs non-critical functionality, or suitable workarounds exist
-   * __[S-Tolerable](https://github.com/vector-im/element-web/labels/S-Tolerable):__
-     Purely cosmetic or low / no impact to users
-
-3. __Priority__ — All issues which are not `T-Other` are assigned a priority:
-   * __[P1](https://github.com/vector-im/element-web/labels/P1):__ Next
-   * __[P2](https://github.com/vector-im/element-web/labels/P2):__ Later
-   * __[P3](https://github.com/vector-im/element-web/labels/P3):__ Eventually
-   * __[P4](https://github.com/vector-im/element-web/labels/P4):__ Interesting —
-     Not yet scheduled, will accept patches
-   * __[P5](https://github.com/vector-im/element-web/labels/P5):__ Dubious —
-     Will not schedule, would consider patches
-
-4. __Area__ — Most issues are assigned one or several "areas" using one of the
-   many `A-` prefixed labels, e.g. `A-Composer` or `A-Spaces`. Each area label
-   maps to a group of features or portion of the UI surface in the app.
-
-### Other common labels
-
-We have a handful of other labels which are added on an as-needed basis, and not expected to be exhaustive:
-
-* __Exceptions__ — Special flags for issues and pull requests:
-  * __[X-Needs-Info](https://github.com/vector-im/element-web/labels/X-Needs-Info):__
-    This issue is blocked pending further information from the reporter
-  * __[X-Regression](https://github.com/vector-im/element-web/labels/X-Regression):__
-    Denotes things breaking which previously worked
-  * __[X-Release-Blocker](https://github.com/vector-im/element-web/labels/X-Release-Blocker):__
-    Issues which must be resolved before making a release
-
-* __[Easy](https://github.com/vector-im/element-web/labels/Easy)__ / __[Help
-  Wanted](https://github.com/vector-im/element-web/labels/Help%20Wanted)__ —
-  Well-defined issues which are suitable for folks new to the codebase
-
-* __[A11y](https://github.com/vector-im/element-web/labels/A11y)__ /
-  __[Meta](https://github.com/vector-im/element-web/labels/Meta)__ /
-  __[I18n](https://github.com/vector-im/element-web/labels/I18n)__ /
-  __[Privacy](https://github.com/vector-im/element-web/labels/Privacy)__ /
-  __[Security](https://github.com/vector-im/element-web/labels/Security)__ —
-  Issues which fall under these conceptual themes (which apply to many software
-  projects and are not specific to Element)
-
-* __[Sponsored](https://github.com/vector-im/element-web/labels/Sponsored)__ —
-  Used internally by Element to denote issues with external funding
-
-### Ad hoc labels (`Z-`)
-
-We have reserved the `Z-` prefix for ad hoc labels.
-
-Any member of the core team is welcome to create labels beginning with `Z-` for
-any purpose, such as tracking personal areas of interest or providing a common
-way to label cross-repo initiatives. The prefix avoids interference with the
-project's main labels.
+We use [issue labels](https://github.com/vector-im/element-meta/wiki/Issue-labelling) to sort all incoming issues.

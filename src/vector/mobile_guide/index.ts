@@ -1,19 +1,23 @@
-import {getVectorConfig} from '../getconfig';
+import { logger } from "matrix-js-sdk/src/logger";
 
-function onBackToElementClick() {
+import { getVectorConfig } from '../getconfig';
+
+function onBackToElementClick(): void {
     // Cookie should expire in 4 hours
     document.cookie = 'element_mobile_redirect_to_guide=false;path=/;max-age=14400';
     window.location.href = '../';
 }
 
 // NEVER pass user-controlled content to this function! Hardcoded strings only please.
-function renderConfigError(message) {
+function renderConfigError(message: string): void {
     const contactMsg = "If this is unexpected, please contact your system administrator " +
         "or technical support representative.";
     message = `<h2>Error loading Element</h2><p>${message}</p><p>${contactMsg}</p>`;
 
     const toHide = document.getElementsByClassName("mx_HomePage_container");
-    const errorContainers = document.getElementsByClassName("mx_HomePage_errorContainer");
+    const errorContainers = document.getElementsByClassName(
+        "mx_HomePage_errorContainer",
+    ) as HTMLCollectionOf<HTMLDialogElement>;
 
     for (const e of toHide) {
         // We have to clear the content because .style.display='none'; doesn't work
@@ -26,7 +30,7 @@ function renderConfigError(message) {
     }
 }
 
-async function initPage() {
+async function initPage(): Promise<void> {
     document.getElementById('back_to_element_button').onclick = onBackToElementClick;
 
     const config = await getVectorConfig('..');
@@ -74,7 +78,7 @@ async function initPage() {
                 }
             }
         } catch (e) {
-            console.error(e);
+            logger.error(e);
             return renderConfigError("Unable to fetch homeserver configuration");
         }
     }
@@ -92,7 +96,7 @@ async function initPage() {
     if (isUrl && !isUrl.endsWith('/')) isUrl += '/';
 
     if (hsUrl !== 'https://matrix.org/') {
-        document.getElementById('configure_element_button').href =
+        (document.getElementById('configure_element_button') as HTMLAnchorElement).href =
             "https://mobile.element.io?hs_url=" + encodeURIComponent(hsUrl) +
             "&is_url=" + encodeURIComponent(isUrl);
         document.getElementById('step1_heading').innerHTML= '1: Install the app';

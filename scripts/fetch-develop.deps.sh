@@ -25,7 +25,8 @@ function clone() {
     if [ -n "$branch" ]
     then
         echo "Trying to use $org/$repo#$branch"
-        git clone git://github.com/$org/$repo.git $repo --branch $branch \
+        # Disable auth prompts: https://serverfault.com/a/665959
+        GIT_TERMINAL_PROMPT=0 git clone https://github.com/$org/$repo.git $repo --branch $branch \
             "${GIT_CLONE_ARGS[@]}"
         return $?
     fi
@@ -76,7 +77,7 @@ dodep matrix-org matrix-js-sdk
 
 pushd matrix-js-sdk
 yarn link
-yarn install
+yarn install --pure-lockfile
 popd
 
 yarn link matrix-js-sdk
@@ -90,7 +91,7 @@ dodep matrix-org matrix-react-sdk
 pushd matrix-react-sdk
 yarn link
 yarn link matrix-js-sdk
-yarn install
+yarn install --pure-lockfile
 yarn reskindex
 popd
 

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as qs from 'querystring';
+import { QueryDict, decodeParams } from "matrix-js-sdk/src/utils";
 
 // We want to support some name / value pairs in the fragment
 // so we're re-using query string like format
@@ -32,15 +32,15 @@ export function parseQsFromFragment(location: Location) {
 
     const result = {
         location: decodeURIComponent(hashparts[0]),
-        params: <qs.ParsedUrlQuery>{},
+        params: <QueryDict>{},
     };
 
     if (hashparts.length > 1) {
-        result.params = qs.parse(hashparts[1]);
+        result.params = decodeParams(hashparts[1]);
     }
     return result;
 }
 
-export function parseQs(location: Location) {
-    return qs.parse(location.search.substring(1));
+export function parseQs(location: Location): QueryDict {
+    return decodeParams(location.search.substring(1));
 }
