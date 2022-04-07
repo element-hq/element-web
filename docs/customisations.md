@@ -34,9 +34,9 @@ default, Element Web does *not* ship with this file to prevent conflicts.
 
 ### Custom components
 
-Instead of implementing skinning from the react-sdk, maintainers can use the above system to override components
-if they wish. Maintenance and API surface compatibility are left as a responsibility for the project - the layering
-in Element Web (including the react-sdk) do not make guarantees that properties/state machines won't change.
+Maintainers can use the above system to override components if they wish. Maintenance and API surface compatibility are
+left as a responsibility for the project - the layering in Element Web (including the react-sdk) do not make guarantees
+that properties/state machines won't change.
 
 ### Component visibility customisation
 

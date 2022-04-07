@@ -18,9 +18,7 @@ limitations under the License.
 
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import WebPlatform from '../../src/vector/platform/WebPlatform';
-import * as sdk from "matrix-react-sdk/src/index";
 import * as jssdk from "matrix-js-sdk/src/matrix";
-import "../skin-sdk";
 import "../jest-mocks";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -28,15 +26,12 @@ import ReactTestUtils from "react-dom/test-utils";
 import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
 import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import {sleep} from "../test-utils";
-import * as test_utils from "../test-utils";
 import MockHttpBackend from "matrix-mock-request";
 import "fake-indexeddb/auto";
 import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/structures/RoomView';
-
-
-const MatrixChat = sdk.getComponent('structures.MatrixChat');
-const RoomDirectory = sdk.getComponent('structures.RoomDirectory');
-const RoomPreviewBar = sdk.getComponent('rooms.RoomPreviewBar');
+import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
+import RoomDirectory from "matrix-react-sdk/src/components/structures/RoomDirectory";
+import RoomPreviewBar from "matrix-react-sdk/src/components/views/rooms/RoomPreviewBar";
 
 const HS_URL='http://localhost';
 const IS_URL='http://localhost';
