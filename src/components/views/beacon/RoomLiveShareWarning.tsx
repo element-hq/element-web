@@ -16,7 +16,12 @@ limitations under the License.
 
 import React, { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { Room, Beacon } from 'matrix-js-sdk/src/matrix';
+import {
+    Room,
+    Beacon,
+    BeaconEvent,
+    BeaconIdentifier,
+} from 'matrix-js-sdk/src/matrix';
 
 import { formatDuration } from '../../../DateUtils';
 import { _t } from '../../../languageHandler';
@@ -45,16 +50,22 @@ const getUpdateInterval = (ms: number) => {
     return 1000;
 };
 const useMsRemaining = (beacon: Beacon): number => {
-    const [msRemaining, setMsRemaining] = useState(() => getBeaconMsUntilExpiry(beacon));
+    const beaconInfo = useEventEmitterState(
+        beacon,
+        BeaconEvent.Update,
+        () => beacon.beaconInfo,
+    );
+
+    const [msRemaining, setMsRemaining] = useState(() => getBeaconMsUntilExpiry(beaconInfo));
 
     useEffect(() => {
-        setMsRemaining(getBeaconMsUntilExpiry(beacon));
-    }, [beacon]);
+        setMsRemaining(getBeaconMsUntilExpiry(beaconInfo));
+    }, [beaconInfo]);
 
     const updateMsRemaining = useCallback(() => {
-        const ms = getBeaconMsUntilExpiry(beacon);
+        const ms = getBeaconMsUntilExpiry(beaconInfo);
         setMsRemaining(ms);
-    }, [beacon]);
+    }, [beaconInfo]);
 
     useInterval(updateMsRemaining, getUpdateInterval(msRemaining));
 
@@ -74,7 +85,7 @@ type LiveBeaconsState = {
     hasStopSharingError?: boolean;
     hasWireError?: boolean;
 };
-const useLiveBeacons = (liveBeaconIds: string[], roomId: string): LiveBeaconsState => {
+const useLiveBeacons = (liveBeaconIds: BeaconIdentifier[], roomId: string): LiveBeaconsState => {
     const [stoppingInProgress, setStoppingInProgress] = useState(false);
     const [error, setError] = useState<Error>();
 

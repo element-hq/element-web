@@ -17,6 +17,7 @@ limitations under the License.
 import { debounce } from "lodash";
 import {
     Beacon,
+    BeaconIdentifier,
     BeaconEvent,
     MatrixEvent,
     Room,
@@ -58,22 +59,22 @@ const STATIC_UPDATE_INTERVAL = 30000;
 const BAIL_AFTER_CONSECUTIVE_ERROR_COUNT = 2;
 
 type OwnBeaconStoreState = {
-    beacons: Map<string, Beacon>;
+    beacons: Map<BeaconIdentifier, Beacon>;
     beaconWireErrors: Map<string, Beacon>;
-    beaconsByRoomId: Map<Room['roomId'], Set<string>>;
-    liveBeaconIds: string[];
+    beaconsByRoomId: Map<Room['roomId'], Set<BeaconIdentifier>>;
+    liveBeaconIds: BeaconIdentifier[];
 };
 export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     private static internalInstance = new OwnBeaconStore();
     // users beacons, keyed by event type
-    public readonly beacons = new Map<string, Beacon>();
-    public readonly beaconsByRoomId = new Map<Room['roomId'], Set<string>>();
+    public readonly beacons = new Map<BeaconIdentifier, Beacon>();
+    public readonly beaconsByRoomId = new Map<Room['roomId'], Set<BeaconIdentifier>>();
     /**
      * Track over the wire errors for published positions
      * Counts consecutive wire errors per beacon
      * Reset on successful publish of location
      */
-    public readonly beaconWireErrorCounts = new Map<string, number>();
+    public readonly beaconWireErrorCounts = new Map<BeaconIdentifier, number>();
     /**
      * ids of live beacons
      * ordered by creation time descending
@@ -108,6 +109,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     protected async onNotReady() {
         this.matrixClient.removeListener(BeaconEvent.LivenessChange, this.onBeaconLiveness);
         this.matrixClient.removeListener(BeaconEvent.New, this.onNewBeacon);
+        this.matrixClient.removeListener(BeaconEvent.Update, this.onUpdateBeacon);
         this.matrixClient.removeListener(RoomStateEvent.Members, this.onRoomStateMembers);
 
         this.beacons.forEach(beacon => beacon.destroy());
@@ -122,6 +124,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     protected async onReady(): Promise<void> {
         this.matrixClient.on(BeaconEvent.LivenessChange, this.onBeaconLiveness);
         this.matrixClient.on(BeaconEvent.New, this.onNewBeacon);
+        this.matrixClient.removeListener(BeaconEvent.Update, this.onUpdateBeacon);
         this.matrixClient.on(RoomStateEvent.Members, this.onRoomStateMembers);
 
         this.initialiseBeaconState();
@@ -177,8 +180,8 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         return this.beacons.get(beaconId);
     };
 
-    public stopBeacon = async (beaconInfoType: string): Promise<void> => {
-        const beacon = this.beacons.get(beaconInfoType);
+    public stopBeacon = async (beaconIdentifier: string): Promise<void> => {
+        const beacon = this.beacons.get(beaconIdentifier);
         // if no beacon, or beacon is already explicitly set isLive: false
         // do nothing
         if (!beacon?.beaconInfo?.live) {
@@ -197,6 +200,17 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             return;
         }
         this.addBeacon(beacon);
+        this.checkLiveness();
+    };
+
+    /**
+     * This will be called when a beacon is replaced
+     */
+    private onUpdateBeacon = (_event: MatrixEvent, beacon: Beacon): void => {
+        if (!isOwnBeacon(beacon, this.matrixClient.getUserId())) {
+            return;
+        }
+
         this.checkLiveness();
     };
 
@@ -439,7 +453,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             assetType,
             timestamp);
 
-        await this.matrixClient.unstable_setLiveBeacon(beacon.roomId, beacon.beaconInfoEventType, updateContent);
+        await this.matrixClient.unstable_setLiveBeacon(beacon.roomId, updateContent);
     };
 
     /**

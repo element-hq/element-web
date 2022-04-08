@@ -78,8 +78,7 @@ export const shareLiveLocation = (
                 description,
                 LocationAssetType.Self,
             ),
-            // use timestamp as unique suffix in interim
-            `${Date.now()}`);
+        );
     } catch (error) {
         handleShareError(error, openMenu, LocationShareType.Live);
     }

@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
-import { Room, Beacon, BeaconEvent } from 'matrix-js-sdk/src/matrix';
+import { Room, Beacon, BeaconEvent, getBeaconInfoIdentifier } from 'matrix-js-sdk/src/matrix';
 import { logger } from 'matrix-js-sdk/src/logger';
 
 import RoomLiveShareWarning from '../../../../src/components/views/beacon/RoomLiveShareWarning';
@@ -221,6 +221,25 @@ describe('<RoomLiveShareWarning />', () => {
             expect(getExpiryText(component)).toEqual('35m left');
         });
 
+        it('updates beacon time left when beacon updates', () => {
+            const component = getComponent({ roomId: room1Id });
+            expect(getExpiryText(component)).toEqual('1h left');
+
+            expect(getExpiryText(component)).toEqual('1h left');
+
+            act(() => {
+                const beacon = OwnBeaconStore.instance.getBeaconById(getBeaconInfoIdentifier(room1Beacon1));
+                const room1Beacon1Update = makeBeaconInfoEvent(aliceId, room1Id, {
+                    isLive: true,
+                    timeout: 3 * HOUR_MS,
+                }, '$0');
+                beacon.update(room1Beacon1Update);
+            });
+
+            // update to expiry of new beacon
+            expect(getExpiryText(component)).toEqual('3h left');
+        });
+
         it('clears expiry time interval on unmount', () => {
             const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
             const component = getComponent({ roomId: room1Id });
@@ -242,7 +261,7 @@ describe('<RoomLiveShareWarning />', () => {
                     component.setProps({});
                 });
 
-                expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledTimes(2);
+                expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalled();
                 expect(component.find('Spinner').length).toBeTruthy();
                 expect(findByTestId(component, 'room-live-share-primary-button').at(0).props().disabled).toBeTruthy();
             });
@@ -314,7 +333,7 @@ describe('<RoomLiveShareWarning />', () => {
                 // update mock and emit event
                 act(() => {
                     hasWireErrorsSpy.mockReturnValue(true);
-                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, room2Beacon1.getType());
+                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(room2Beacon1));
                 });
                 component.setProps({});
 
@@ -332,7 +351,7 @@ describe('<RoomLiveShareWarning />', () => {
                 // update mock and emit event
                 act(() => {
                     hasWireErrorsSpy.mockReturnValue(false);
-                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, room2Beacon1.getType());
+                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(room2Beacon1));
                 });
                 component.setProps({});
 
@@ -353,8 +372,7 @@ describe('<RoomLiveShareWarning />', () => {
                     findByTestId(component, 'room-live-share-primary-button').at(0).simulate('click');
                 });
 
-                expect(resetErrorSpy).toHaveBeenCalledWith(room2Beacon1.getType());
-                expect(resetErrorSpy).toHaveBeenCalledWith(room2Beacon2.getType());
+                expect(resetErrorSpy).toHaveBeenCalledWith(getBeaconInfoIdentifier(room2Beacon1));
             });
 
             it('clicking close button stops beacons', async () => {
@@ -367,8 +385,7 @@ describe('<RoomLiveShareWarning />', () => {
                     findByTestId(component, 'room-live-share-wire-error-close-button').at(0).simulate('click');
                 });
 
-                expect(stopBeaconSpy).toHaveBeenCalledWith(room2Beacon1.getType());
-                expect(stopBeaconSpy).toHaveBeenCalledWith(room2Beacon2.getType());
+                expect(stopBeaconSpy).toHaveBeenCalledWith(getBeaconInfoIdentifier(room2Beacon1));
             });
         });
     });

@@ -20,7 +20,6 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { mocked } from 'jest-mock';
 import { act } from 'react-dom/test-utils';
-import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
 import { M_ASSET, LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 import { logger } from 'matrix-js-sdk/src/logger';
 
@@ -310,16 +309,13 @@ describe('<LocationShareMenu />', () => {
             });
 
             expect(onFinished).toHaveBeenCalled();
-            const [eventRoomId, eventContent, eventTypeSuffix] = mockClient.unstable_createLiveBeacon.mock.calls[0];
+            const [eventRoomId, eventContent] = mockClient.unstable_createLiveBeacon.mock.calls[0];
             expect(eventRoomId).toEqual(defaultProps.roomId);
-            expect(eventTypeSuffix).toBeTruthy();
             expect(eventContent).toEqual(expect.objectContaining({
-                [M_BEACON_INFO.name]: {
-                    // default timeout
-                    timeout: DEFAULT_DURATION_MS,
-                    description: `Ernie's live location`,
-                    live: true,
-                },
+                // default timeout
+                timeout: DEFAULT_DURATION_MS,
+                description: `Ernie's live location`,
+                live: true,
                 [M_ASSET.name]: {
                     type: LocationAssetType.Self,
                 },

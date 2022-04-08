@@ -13,8 +13,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
   <RoomLiveShareWarningInner
     liveBeaconIds={
       Array [
-        "org.matrix.msc3489.beacon_info.@alice:server.org.3",
-        "org.matrix.msc3489.beacon_info.@alice:server.org.4",
+        "$room2:server.org_@alice:server.org",
       ]
     }
     roomId="$room2:server.org"
