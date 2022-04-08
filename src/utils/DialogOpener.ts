@@ -70,7 +70,7 @@ export class DialogOpener {
                 break;
             case Action.OpenReportEventDialog:
                 Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
-                    event: payload.event,
+                    mxEvent: payload.event,
                 }, 'mx_Dialog_reportEvent');
                 break;
             case Action.OpenTabbedIntegrationManagerDialog:

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { ensureDMExists } from "../../../createRoom";
@@ -213,7 +214,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
         try {
             const client = MatrixClientPeg.get();
             const ev = this.props.mxEvent;
-            if (this.moderation && this.state.nature != NonStandardValue.Admin) {
+            if (this.moderation && this.state.nature !== NonStandardValue.Admin) {
                 const nature: Nature = this.state.nature;
 
                 // Report to moderators through to the dedicated bot,
@@ -233,6 +234,7 @@ export default class ReportEventDialog extends React.Component<IProps, IState> {
             }
             this.props.onFinished(true);
         } catch (e) {
+            logger.error(e);
             this.setState({
                 busy: false,
                 err: e.message,
