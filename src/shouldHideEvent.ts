@@ -15,6 +15,7 @@
  */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType, RelationType } from "matrix-js-sdk/src/@types/event";
 
 import SettingsStore from "./settings/SettingsStore";
 import { IRoomState } from "./components/structures/RoomView";
@@ -29,7 +30,7 @@ interface IDiff {
 
 function memberEventDiff(ev: MatrixEvent): IDiff {
     const diff: IDiff = {
-        isMemberEvent: ev.getType() === 'm.room.member',
+        isMemberEvent: ev.getType() === EventType.RoomMember,
     };
 
     // If is not a Member Event then the other checks do not apply, so bail early.
@@ -67,7 +68,7 @@ export default function shouldHideEvent(ev: MatrixEvent, ctx?: IRoomState): bool
     if (ev.isRedacted() && !isEnabled('showRedactions') && !ev.getThread()) return true;
 
     // Hide replacement events since they update the original tile (if enabled)
-    if (ev.isRelation("m.replace")) return true;
+    if (ev.isRelation(RelationType.Replace)) return true;
 
     const eventDiff = memberEventDiff(ev);
 
