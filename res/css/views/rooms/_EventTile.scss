@@ -954,7 +954,6 @@ $threadInfoLineHeight: calc(2 * $font-12px);
     .mx_EventTile {
         display: flex;
         flex-direction: column;
-        padding-top: 14px; // due to layout differences, this odd number matches the 18px padding-top of main tl events
 
         .mx_EventTile_line {
             padding-left: 0;
@@ -970,6 +969,10 @@ $threadInfoLineHeight: calc(2 * $font-12px);
             padding-left: 0;
             padding-right: 0;
         }
+    }
+
+    .mx_EventTile:not([data-layout=bubble]) {
+        padding-top: 14px; // due to layout differences, this odd number matches the 18px padding-top of main tl events
     }
 
     .mx_EventTile[data-layout=bubble] {
