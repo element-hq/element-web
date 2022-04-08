@@ -18,6 +18,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { M_POLL_START } from "matrix-events-sdk";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
+import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 
 import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";
@@ -72,7 +73,8 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): 
         eventType !== EventType.RoomMessageEncrypted &&
         eventType !== EventType.Sticker &&
         eventType !== EventType.RoomCreate &&
-        !M_POLL_START.matches(eventType)
+        !M_POLL_START.matches(eventType) &&
+        !M_BEACON_INFO.matches(eventType)
     );
     // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
     const noBubbleEvent = (

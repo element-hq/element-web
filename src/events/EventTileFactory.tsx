@@ -19,6 +19,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { M_POLL_START, Optional } from "matrix-events-sdk";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 
 import EditorStateTransfer from "../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../utils/permalinks/Permalinks";
@@ -211,9 +212,17 @@ export function pickFactory(mxEvent: MatrixEvent, cli: MatrixClient, asHiddenEv?
 
     // Try and pick a state event factory, if we can.
     if (mxEvent.isState()) {
+        if (
+            M_BEACON_INFO.matches(evType) &&
+            SettingsStore.getValue("feature_location_share_live")
+        ) {
+            return MessageEventFactory;
+        }
+
         if (SINGULAR_STATE_EVENTS.has(evType) && mxEvent.getStateKey() !== '') {
             return noEventFactoryFactory(); // improper event type to render
         }
+
         return STATE_EVENT_TILE_TYPES[evType] ?? noEventFactoryFactory();
     }
 
