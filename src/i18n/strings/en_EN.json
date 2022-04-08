@@ -988,6 +988,8 @@
     "sends snowfall": "sends snowfall",
     "Sends the given message with a space themed effect": "Sends the given message with a space themed effect",
     "sends space invaders": "sends space invaders",
+    "Sends the given message with hearts": "Sends the given message with hearts",
+    "sends hearts": "sends hearts",
     "Server error": "Server error",
     "Command error": "Command error",
     "Server unavailable, overloaded, or something else went wrong.": "Server unavailable, overloaded, or something else went wrong.",
