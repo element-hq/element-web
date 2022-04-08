@@ -62,6 +62,8 @@ const INITIAL_STATE = {
     initialEventPixelOffset: null,
     // Whether to highlight the initial event
     isInitialEventHighlighted: false,
+    // whether to scroll `event_id` into view
+    initialEventScrollIntoView: true,
 
     // The room alias of the room (or null if not originally specified in view_room)
     roomAlias: null,
@@ -291,6 +293,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                 roomAlias: payload.room_alias,
                 initialEventId: payload.event_id,
                 isInitialEventHighlighted: payload.highlighted,
+                initialEventScrollIntoView: payload.scroll_into_view ?? true,
                 roomLoading: false,
                 roomLoadError: null,
                 // should peek by default
@@ -333,6 +336,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     initialEventId: null,
                     initialEventPixelOffset: null,
                     isInitialEventHighlighted: null,
+                    initialEventScrollIntoView: true,
                     roomAlias: payload.room_alias,
                     roomLoading: true,
                     roomLoadError: null,
@@ -473,6 +477,11 @@ export class RoomViewStore extends Store<ActionPayload> {
     // Whether to highlight the initial event
     public isInitialEventHighlighted() {
         return this.state.isInitialEventHighlighted;
+    }
+
+    // Whether to avoid jumping to the initial event
+    public initialEventScrollIntoView() {
+        return this.state.initialEventScrollIntoView;
     }
 
     // The room alias of the room (or null if not originally specified in view_room)

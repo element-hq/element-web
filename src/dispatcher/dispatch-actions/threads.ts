@@ -26,6 +26,7 @@ export const showThread = (props: {
     rootEvent: MatrixEvent;
     initialEvent?: MatrixEvent;
     highlighted?: boolean;
+    scroll_into_view?: boolean;
     push?: boolean;
 }) => {
     const push = props.push ?? false;
@@ -35,6 +36,7 @@ export const showThread = (props: {
             threadHeadEvent: props.rootEvent,
             initialEvent: props.initialEvent,
             isInitialEventHighlighted: props.highlighted,
+            initialEventScrollIntoView: props.scroll_into_view,
         },
     };
     if (push) {

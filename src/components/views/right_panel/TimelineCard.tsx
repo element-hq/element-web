@@ -146,19 +146,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         }
     };
 
-    private onUserScroll = (): void => {
-        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: this.props.room.roomId,
-                event_id: this.state.initialEventId,
-                highlighted: false,
-                replyingToEvent: this.state.replyToEvent,
-                metricsTrigger: undefined, // room doesn't change
-            });
-        }
-    };
-
     private onScroll = (): void => {
         const timelinePanel = this.timelinePanel.current;
         if (!timelinePanel) return;
@@ -169,6 +156,17 @@ export default class TimelineCard extends React.Component<IProps, IState> {
         } else {
             this.setState({
                 atEndOfLiveTimeline: false,
+            });
+        }
+
+        if (this.state.initialEventId && this.state.isInitialEventHighlighted) {
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: this.props.room.roomId,
+                event_id: this.state.initialEventId,
+                highlighted: false,
+                replyingToEvent: this.state.replyToEvent,
+                metricsTrigger: undefined, // room doesn't change
             });
         }
     };
@@ -263,7 +261,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                             resizeNotifier={this.props.resizeNotifier}
                             highlightedEventId={highlightedEventId}
                             onScroll={this.onScroll}
-                            onUserScroll={this.onUserScroll}
                         />
                     </div>
 

@@ -231,6 +231,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
                     mxEvent={cardState.threadHeadEvent}
                     initialEvent={cardState.initialEvent}
                     isInitialEventHighlighted={cardState.isInitialEventHighlighted}
+                    initialEventScrollIntoView={cardState.initialEventScrollIntoView}
                     permalinkCreator={this.props.permalinkCreator}
                     e2eStatus={this.props.e2eStatus}
                 />;

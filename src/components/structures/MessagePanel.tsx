@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, KeyboardEvent, ReactNode, SyntheticEvent, TransitionEvent } from 'react';
+import React, { createRef, KeyboardEvent, ReactNode, TransitionEvent } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { Room } from 'matrix-js-sdk/src/models/room';
@@ -169,9 +169,6 @@ interface IProps {
 
     // callback which is called when the panel is scrolled.
     onScroll?(event: Event): void;
-
-    // callback which is called when the user interacts with the room timeline
-    onUserScroll(event: SyntheticEvent): void;
 
     // callback which is called when more content is needed.
     onFillRequest?(backwards: boolean): Promise<boolean>;
@@ -1030,7 +1027,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
                     ref={this.scrollPanel}
                     className={classes}
                     onScroll={this.props.onScroll}
-                    onUserScroll={this.props.onUserScroll}
                     onFillRequest={this.props.onFillRequest}
                     onUnfillRequest={this.props.onUnfillRequest}
                     style={style}

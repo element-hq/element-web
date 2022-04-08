@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, CSSProperties, ReactNode, SyntheticEvent, KeyboardEvent } from "react";
+import React, { createRef, CSSProperties, ReactNode, KeyboardEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import Timer from '../../utils/Timer';
@@ -109,10 +109,6 @@ interface IProps {
     /* onScroll: a callback which is called whenever any scroll happens.
      */
     onScroll?(event: Event): void;
-
-    /* onUserScroll: callback which is called when the user interacts with the room timeline
-     */
-    onUserScroll?(event: SyntheticEvent): void;
 }
 
 /* This component implements an intelligent scrolling list.
@@ -593,28 +589,20 @@ export default class ScrollPanel extends React.Component<IProps> {
      * @param {object} ev the keyboard event
      */
     public handleScrollKey = (ev: KeyboardEvent) => {
-        let isScrolling = false;
         const roomAction = getKeyBindingsManager().getRoomAction(ev);
         switch (roomAction) {
             case KeyBindingAction.ScrollUp:
                 this.scrollRelative(-1);
-                isScrolling = true;
                 break;
             case KeyBindingAction.ScrollDown:
                 this.scrollRelative(1);
-                isScrolling = true;
                 break;
             case KeyBindingAction.JumpToFirstMessage:
                 this.scrollToTop();
-                isScrolling = true;
                 break;
             case KeyBindingAction.JumpToLatestMessage:
                 this.scrollToBottom();
-                isScrolling = true;
                 break;
-        }
-        if (isScrolling && this.props.onUserScroll) {
-            this.props.onUserScroll(ev);
         }
     };
 
@@ -965,7 +953,6 @@ export default class ScrollPanel extends React.Component<IProps> {
             <AutoHideScrollbar
                 wrappedRef={this.collectScroll}
                 onScroll={this.onScroll}
-                onWheel={this.props.onUserScroll}
                 className={`mx_ScrollPanel ${this.props.className}`}
                 style={this.props.style}
             >
