@@ -152,6 +152,7 @@
     "@types/react": "17.0.14",
     "@types/react-beautiful-dnd": "^13.0.0",
     "@types/react-dom": "17.0.9",
+    "@types/react-test-renderer": "^17.0.1",
     "@types/react-transition-group": "^4.4.0",
     "@types/sanitize-html": "^2.3.1",
     "@types/zxcvbn": "^4.4.0",
