@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export * from './findMapStyleUrl';
-export * from './isSelfLocation';
-export * from './locationEventGeoUri';
-export * from './LocationShareErrors';
-export * from './map';
-export * from './parseGeoUri';
+import { ILocationContent, LocationAssetType, M_ASSET } from "matrix-js-sdk/src/@types/location";
+
+export const isSelfLocation = (locationContent: ILocationContent): boolean => {
+    const asset = M_ASSET.findIn(locationContent) as { type: string };
+    const assetType = asset?.type ?? LocationAssetType.Self;
+    return assetType == LocationAssetType.Self;
+};

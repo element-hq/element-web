@@ -17,21 +17,11 @@ limitations under the License.
 import React from 'react';
 import { mount } from "enzyme";
 import { mocked } from 'jest-mock';
-import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
-import {
-    M_ASSET,
-    LocationAssetType,
-    ILocationContent,
-    M_LOCATION,
-    M_TIMESTAMP,
-} from "matrix-js-sdk/src/@types/location";
-import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
+import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
 import maplibregl from 'maplibre-gl';
 import { logger } from 'matrix-js-sdk/src/logger';
 
-import MLocationBody, {
-    isSelfLocation,
-} from "../../../../src/components/views/messages/MLocationBody";
+import MLocationBody from "../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
@@ -44,51 +34,6 @@ jest.mock("../../../../src/utils/WellKnownUtils", () => ({
 }));
 
 describe("MLocationBody", () => {
-    describe("isSelfLocation", () => {
-        it("Returns true for a full m.asset event", () => {
-            const content = makeLocationContent("", '0');
-            expect(isSelfLocation(content)).toBe(true);
-        });
-
-        it("Returns true for a missing m.asset", () => {
-            const content = {
-                body: "",
-                msgtype: "m.location",
-                geo_uri: "",
-                [M_LOCATION.name]: { uri: "" },
-                [TEXT_NODE_TYPE.name]: "",
-                [M_TIMESTAMP.name]: 0,
-                // Note: no m.asset!
-            };
-            expect(isSelfLocation(content as ILocationContent)).toBe(true);
-        });
-
-        it("Returns true for a missing m.asset type", () => {
-            const content = {
-                body: "",
-                msgtype: "m.location",
-                geo_uri: "",
-                [M_LOCATION.name]: { uri: "" },
-                [TEXT_NODE_TYPE.name]: "",
-                [M_TIMESTAMP.name]: 0,
-                [M_ASSET.name]: {
-                    // Note: no type!
-                },
-            };
-            expect(isSelfLocation(content as ILocationContent)).toBe(true);
-        });
-
-        it("Returns false for an unknown asset type", () => {
-            const content = makeLocationContent(
-                undefined, /* text */
-                "geo:foo",
-                0,
-                undefined, /* description */
-                "org.example.unknown" as unknown as LocationAssetType);
-            expect(isSelfLocation(content)).toBe(false);
-        });
-    });
-
     describe('<MLocationBody>', () => {
         describe('with error', () => {
             const mockClient = {

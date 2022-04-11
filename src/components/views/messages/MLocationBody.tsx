@@ -17,11 +17,6 @@ limitations under the License.
 import React from 'react';
 import maplibregl from 'maplibre-gl';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import {
-    M_ASSET,
-    LocationAssetType,
-    ILocationContent,
-} from 'matrix-js-sdk/src/@types/location';
 import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
 
 import { IBodyProps } from "./IBodyProps";
@@ -33,6 +28,7 @@ import {
     createMapWithCoords,
     getLocationShareErrorMessage,
     LocationShareError,
+    isSelfLocation,
 } from '../../../utils/location';
 import LocationViewDialog from '../location/LocationViewDialog';
 import TooltipTarget from '../elements/TooltipTarget';
@@ -130,12 +126,6 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
                 onClick={this.onClick}
             />;
     }
-}
-
-export function isSelfLocation(locationContent: ILocationContent): boolean {
-    const asset = M_ASSET.findIn(locationContent) as { type: string };
-    const assetType = asset?.type ?? LocationAssetType.Self;
-    return assetType == LocationAssetType.Self;
 }
 
 export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent, error: Error }> = ({ error, event }) => {
