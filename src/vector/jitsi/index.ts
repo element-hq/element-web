@@ -128,7 +128,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         startAudioOnly = qsParam('isAudioOnly', true) === "true";
         isVideoChannel = qsParam('isVideoChannel', true) === "true";
         disableAEC = qsParam('disableAEC', true) === "true";
-        disableNS = qsParam('disableNS', true) === "true"; 
+        disableNS = qsParam('disableNS', true) === "true";
         disableAP = qsParam('disableAP', true) === "true";
         disableAGC = qsParam('disableAGC', true) === "true";
         disableHPF = qsParam('disableHPF', true) === "true";
