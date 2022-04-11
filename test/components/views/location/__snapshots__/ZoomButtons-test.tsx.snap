@@ -9,6 +9,8 @@ exports[`<ZoomButtons /> renders buttons 1`] = `
       "_maxListeners": undefined,
       "addControl": [MockFunction],
       "removeControl": [MockFunction],
+      "setCenter": [MockFunction],
+      "setStyle": [MockFunction],
       "zoomIn": [MockFunction],
       "zoomOut": [MockFunction],
       Symbol(kCapture): false,

@@ -225,6 +225,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         return (
             <div className="mx_LocationPicker">
                 <div id="mx_LocationPicker_map" />
+
                 { this.props.shareType === LocationShareType.Pin && <div className="mx_LocationPicker_pinText">
                     <span>
                         { this.state.position ? _t("Click to move the pin") : _t("Click to drop a pin") }

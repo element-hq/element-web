@@ -6,6 +6,8 @@ class MockMap extends EventEmitter {
     removeControl = jest.fn();
     zoomIn = jest.fn();
     zoomOut = jest.fn();
+    setCenter = jest.fn();
+    setStyle = jest.fn();
 }
 const MockMapInstance = new MockMap();
 
