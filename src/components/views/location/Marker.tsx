@@ -33,9 +33,10 @@ interface Props {
 /**
  * Generic location marker
  */
-const Marker: React.FC<Props> = ({ id, roomMember, useMemberColor }) => {
+const Marker = React.forwardRef<HTMLDivElement, Props>(({ id, roomMember, useMemberColor }, ref) => {
     const memberColorClass = useMemberColor && roomMember ? getUserNameColorClass(roomMember.userId) : '';
     return <div
+        ref={ref}
         id={id}
         className={classNames("mx_Marker", memberColorClass, {
             "mx_Marker_defaultColor": !memberColorClass,
@@ -53,6 +54,6 @@ const Marker: React.FC<Props> = ({ id, roomMember, useMemberColor }) => {
             }
         </div>
     </div>;
-};
+});
 
 export default Marker;

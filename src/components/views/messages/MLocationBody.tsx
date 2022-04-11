@@ -30,7 +30,7 @@ import Modal from '../../../Modal';
 import {
     parseGeoUri,
     locationEventGeoUri,
-    createMap,
+    createMapWithCoords,
     getLocationShareErrorMessage,
     LocationShareError,
 } from '../../../utils/location';
@@ -75,7 +75,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
 
         this.context.on(ClientEvent.ClientWellKnown, this.updateStyleUrl);
 
-        this.map = createMap(
+        this.map = createMapWithCoords(
             this.coords,
             false,
             this.bodyId,
@@ -138,18 +138,6 @@ export function isSelfLocation(locationContent: ILocationContent): boolean {
     return assetType == LocationAssetType.Self;
 }
 
-interface ILocationBodyContentProps {
-    mxEvent: MatrixEvent;
-    bodyId: string;
-    markerId: string;
-    error: Error;
-    tooltip?: string;
-    onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    zoomButtons?: boolean;
-    onZoomIn?: () => void;
-    onZoomOut?: () => void;
-}
-
 export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent, error: Error }> = ({ error, event }) => {
     const errorType = error?.message as LocationShareError;
     const message = `${_t('Unable to load map')}: ${getLocationShareErrorMessage(errorType)}`;
@@ -167,8 +155,18 @@ export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent, error: 
     </div>;
 };
 
-export function LocationBodyContent(props: ILocationBodyContentProps):
-        React.ReactElement<HTMLDivElement> {
+interface LocationBodyContentProps {
+    mxEvent: MatrixEvent;
+    bodyId: string;
+    markerId: string;
+    error: Error;
+    tooltip?: string;
+    onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+    zoomButtons?: boolean;
+    onZoomIn?: () => void;
+    onZoomOut?: () => void;
+}
+export const LocationBodyContent: React.FC<LocationBodyContentProps> = (props) => {
     const mapDiv = <div
         id={props.bodyId}
         onClick={props.onClick}
@@ -200,7 +198,7 @@ export function LocationBodyContent(props: ILocationBodyContentProps):
                 : null
         }
     </div>;
-}
+};
 
 interface IZoomButtonsProps {
     onZoomIn: () => void;

@@ -16,10 +16,11 @@ const MockGeolocateInstance = new MockGeolocateControl();
 const MockMarker = {}
 MockMarker.setLngLat = jest.fn().mockReturnValue(MockMarker);
 MockMarker.addTo = jest.fn().mockReturnValue(MockMarker);
+MockMarker.remove = jest.fn().mockReturnValue(MockMarker);
 module.exports = {
     Map: jest.fn().mockReturnValue(MockMapInstance),
     GeolocateControl: jest.fn().mockReturnValue(MockGeolocateInstance),
     Marker: jest.fn().mockReturnValue(MockMarker),
     LngLat,
-    NavigationControl
+    NavigationControl,
 };

@@ -24,6 +24,46 @@ import { findMapStyleUrl } from "./findMapStyleUrl";
 import { LocationShareError } from "./LocationShareErrors";
 
 export const createMap = (
+    interactive: boolean,
+    bodyId: string,
+    onError: (error: Error) => void,
+): maplibregl.Map => {
+    try {
+        const styleUrl = findMapStyleUrl();
+
+        const map = new maplibregl.Map({
+            container: bodyId,
+            style: styleUrl,
+            zoom: 15,
+            interactive,
+        });
+
+        map.on('error', (e) => {
+            logger.error(
+                "Failed to load map: check map_style_url in config.json has a "
+                + "valid URL and API key",
+                e.error,
+            );
+            onError(new Error(LocationShareError.MapStyleUrlNotReachable));
+        });
+
+        return map;
+    } catch (e) {
+        logger.error("Failed to render map", e);
+        throw e;
+    }
+};
+
+export const createMarker = (coords: GeolocationCoordinates, element: HTMLElement): maplibregl.Marker => {
+    const marker = new maplibregl.Marker({
+        element,
+        anchor: 'bottom',
+        offset: [0, -1],
+    }).setLngLat({ lon: coords.longitude, lat: coords.latitude });
+    return marker;
+};
+
+export const createMapWithCoords = (
     coords: GeolocationCoordinates,
     interactive: boolean,
     bodyId: string,
@@ -31,24 +71,14 @@ export const createMap = (
     onError: (error: Error) => void,
 ): maplibregl.Map => {
     try {
-        const styleUrl = findMapStyleUrl();
+        const map = createMap(interactive, bodyId, onError);
+
         const coordinates = new maplibregl.LngLat(coords.longitude, coords.latitude);
+        // center on coordinates
+        map.setCenter(coordinates);
 
-        const map = new maplibregl.Map({
-            container: bodyId,
-            style: styleUrl,
-            center: coordinates,
-            zoom: 15,
-            interactive,
-        });
-
-        new maplibregl.Marker({
-            element: document.getElementById(markerId),
-            anchor: 'bottom',
-            offset: [0, -1],
-        })
-            .setLngLat(coordinates)
-            .addTo(map);
+        const marker = createMarker(coords, document.getElementById(markerId));
+        marker.addTo(map);
 
         map.on('error', (e) => {
             logger.error(
