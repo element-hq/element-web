@@ -25,7 +25,6 @@ import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/Elemen
 import { logger } from "matrix-js-sdk/src/logger";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
-import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
 
 import { getVectorConfig } from "../getconfig";
 
@@ -53,6 +52,11 @@ let openIdToken: IOpenIDCredentials;
 let roomName: string;
 let startAudioOnly: boolean;
 let isVideoChannel: boolean;
+let disableAEC: boolean;
+let disableNS: boolean;
+let disableAP: boolean;
+let disableAGC: boolean;
+let disableHPF: boolean;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -123,6 +127,11 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         roomName = qsParam('roomName', true);
         startAudioOnly = qsParam('isAudioOnly', true) === "true";
         isVideoChannel = qsParam('isVideoChannel', true) === "true";
+        disableAEC = qsParam('disableAEC', true) === "true";
+        disableNS = qsParam('disableNS', true) === "true"; 
+        disableAP = qsParam('disableAP', true) === "true";
+        disableAGC = qsParam('disableAGC', true) === "true";
+        disableHPF = qsParam('disableHPF', true) === "true";
 
         // We've reached the point where we have to wait for the config, so do that then parse it.
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
@@ -324,14 +333,14 @@ function joinConference() { // event handler bound in HTML
             SHOW_WATERMARK_FOR_GUESTS: false,
             MAIN_TOOLBAR_BUTTONS: [],
             VIDEO_LAYOUT_FIT: "height",
-            disableAEC: SettingsStore.getValue('feature_disableAEC'),
-            disableNS: SettingsStore.getValue('feature_disableNS'),
-            disableAP: SettingsStore.getValue('feature_disableAP'),
-            disableAGC: SettingsStore.getValue('feature_disableAGC'),
-            disableHPF: SettingsStore.getValue('feature_disableHPF'),
         },
         configOverwrite: {
             startAudioOnly,
+            disableAEC,
+            disableNS,
+            disableAP,
+            disableAGC,
+            disableHPF,
         } as any,
         jwt: jwt,
     };
