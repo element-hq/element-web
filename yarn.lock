@@ -8192,7 +8192,7 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-analytics-events@github:matrix-org/matrix-analytics-events#daad3faed54f0b1f1e026a7498b4653e4d01cd90":
+"matrix-analytics-events@github:matrix-org/matrix-analytics-events.git#daad3faed54f0b1f1e026a7498b4653e4d01cd90":
   version "0.0.1"
   resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/daad3faed54f0b1f1e026a7498b4653e4d01cd90"
 
@@ -8205,6 +8205,23 @@ matrix-js-sdk@17.0.0-rc.2:
   version "17.0.0-rc.2"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-17.0.0-rc.2.tgz#70368fcdfcbcc0de380cf83430d3d87c13701d71"
   integrity sha512-65n57XLOpp+Zfu2dxSBhcKP15AhkInsMAspPHt/QBHipq7cWoN98nAaK0V4fOdchRxCRIwlCldv7tTA3ukzqBw==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "^0.0.1-beta.7"
+    p-retry "^4.5.0"
+    qs "^6.9.6"
+    request "^2.88.2"
+    unhomoglyph "^1.0.6"
+
+matrix-js-sdk@17.0.0-rc.3:
+  version "17.0.0-rc.3"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-17.0.0-rc.3.tgz#dd1d9e5b74412e7d624e60f035754922a2a786e0"
+  integrity sha512-bcKiLEdo0yNx2FLOyxaGwe4aO86w04SM7O2ywOZ2UE6V2euTbv9I8b7HNFLQy6jftf5ZBDTH4z0cMjhmKGs9YQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
