@@ -317,16 +317,7 @@ function textForMessageEvent(ev: MatrixEvent): () => string | null {
         const senderDisplayName = ev.sender && ev.sender.name ? ev.sender.name : ev.getSender();
         let message = ev.getContent().body;
         if (ev.isRedacted()) {
-            message = _t("Message deleted");
-            const unsigned = ev.getUnsigned();
-            const redactedBecauseUserId = unsigned?.redacted_because?.sender;
-            if (redactedBecauseUserId && redactedBecauseUserId !== ev.getSender()) {
-                const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
-                const sender = room?.getMember(redactedBecauseUserId);
-                message = _t("Message deleted by %(name)s", {
-                    name: sender?.name || redactedBecauseUserId,
-                });
-            }
+            message = textForRedactedPollAndMessageEvent(ev);
         }
 
         if (SettingsStore.isEnabled("feature_extensible_events")) {
@@ -727,11 +718,38 @@ export function textForLocationEvent(event: MatrixEvent): () => string | null {
     });
 }
 
+function textForRedactedPollAndMessageEvent(ev: MatrixEvent): string {
+    let message = _t("Message deleted");
+    const unsigned = ev.getUnsigned();
+    const redactedBecauseUserId = unsigned?.redacted_because?.sender;
+    if (redactedBecauseUserId && redactedBecauseUserId !== ev.getSender()) {
+        const room = MatrixClientPeg.get().getRoom(ev.getRoomId());
+        const sender = room?.getMember(redactedBecauseUserId);
+        message = _t("Message deleted by %(name)s", {
+            name: sender?.name || redactedBecauseUserId,
+        });
+    }
+
+    return message;
+}
+
 function textForPollStartEvent(event: MatrixEvent): () => string | null {
-    return () => _t("%(senderName)s has started a poll - %(pollQuestion)s", {
-        senderName: getSenderName(event),
-        pollQuestion: (event.unstableExtensibleEvent as PollStartEvent)?.question?.text,
-    });
+    return () => {
+        let message = '';
+
+        if (event.isRedacted()) {
+            message = textForRedactedPollAndMessageEvent(event);
+            const senderDisplayName = event.sender?.name ?? event.getSender();
+            message = senderDisplayName + ': ' + message;
+        } else {
+            message = _t("%(senderName)s has started a poll - %(pollQuestion)s", {
+                senderName: getSenderName(event),
+                pollQuestion: (event.unstableExtensibleEvent as PollStartEvent)?.question?.text,
+            });
+        }
+
+        return message;
+    };
 }
 
 function textForPollEndEvent(event: MatrixEvent): () => string | null {

@@ -379,4 +379,64 @@ describe('TextForEvent', () => {
             expect(textForEvent(event)).toEqual(result);
         });
     });
+
+    describe("textForPollStartEvent()", () => {
+        let pollEvent;
+
+        beforeEach(() => {
+            pollEvent = new MatrixEvent({
+                type: 'org.matrix.msc3381.poll.start',
+                sender: '@a',
+                content: {
+                    'org.matrix.msc3381.poll.start': {
+                        answers: [
+                            { 'org.matrix.msc1767.text': 'option1' },
+                            { 'org.matrix.msc1767.text': 'option2' },
+                        ],
+                        question: {
+                            'body': 'Test poll name',
+                            'msgtype': 'm.text',
+                            'org.matrix.msc1767.text': 'Test poll name',
+                        },
+                    },
+                },
+            });
+        });
+
+        it("returns correct message for redacted poll start", () => {
+            pollEvent.makeRedacted(pollEvent);
+
+            expect(textForEvent(pollEvent)).toEqual('@a: Message deleted');
+        });
+
+        it("returns correct message for normal poll start", () => {
+            expect(textForEvent(pollEvent)).toEqual('@a has started a poll - ');
+        });
+    });
+
+    describe("textForMessageEvent()", () => {
+        let messageEvent;
+
+        beforeEach(() => {
+            messageEvent = new MatrixEvent({
+                type: 'm.room.message',
+                sender: '@a',
+                content: {
+                    'body': 'test message',
+                    'msgtype': 'm.text',
+                    'org.matrix.msc1767.text': 'test message',
+                },
+            });
+        });
+
+        it("returns correct message for redacted message", () => {
+            messageEvent.makeRedacted(messageEvent);
+
+            expect(textForEvent(messageEvent)).toEqual('@a: Message deleted');
+        });
+
+        it("returns correct message for normal message", () => {
+            expect(textForEvent(messageEvent)).toEqual('@a: test message');
+        });
+    });
 });
