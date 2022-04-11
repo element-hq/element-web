@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MBeaconBody /> renders a live beacon with basic stub 1`] = `
+<ForwardRef
+  highlightLink=""
+  highlights={Array []}
+  mediaEventHelper={Object {}}
+  mxEvent={
+    Object {
+      "content": Object {
+        "description": undefined,
+        "live": true,
+        "org.matrix.msc3488.asset": Object {
+          "type": "m.self",
+        },
+        "org.matrix.msc3488.ts": 1647270879403,
+        "timeout": 3600000,
+      },
+      "event_id": "$alice-room1-1",
+      "origin_server_ts": 1647270879403,
+      "room_id": "!room:server",
+      "sender": "@alice:server",
+      "state_key": "@alice:server",
+      "type": "org.matrix.msc3672.beacon_info",
+    }
+  }
+  onHeightChanged={[MockFunction]}
+  onMessageAllowed={[MockFunction]}
+  permalinkCreator={Object {}}
+>
+  <div
+    className="mx_MBeaconBody"
+  >
+    <code>
+      $alice-room1-1
+    </code>
+     
+    <span>
+      Beacon "
+      " 
+    </span>
+    <span
+      data-test-id="beacon-waiting-for-location"
+    >
+      Waiting for location
+    </span>
+  </div>
+</ForwardRef>
+`;

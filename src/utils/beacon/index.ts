@@ -16,3 +16,4 @@ limitations under the License.
 
 export * from './duration';
 export * from './geolocation';
+export * from './useBeacon';

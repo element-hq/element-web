@@ -10,6 +10,8 @@ exports[`<SmartMarker /> creates a marker on mount 1`] = `
       "_maxListeners": undefined,
       "addControl": [MockFunction],
       "removeControl": [MockFunction],
+      "zoomIn": [MockFunction],
+      "zoomOut": [MockFunction],
       Symbol(kCapture): false,
     }
   }
@@ -40,6 +42,8 @@ exports[`<SmartMarker /> removes marker on unmount 1`] = `
       "_maxListeners": undefined,
       "addControl": [MockFunction],
       "removeControl": [MockFunction],
+      "zoomIn": [MockFunction],
+      "zoomOut": [MockFunction],
       Symbol(kCapture): false,
     }
   }
