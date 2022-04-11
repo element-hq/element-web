@@ -145,7 +145,8 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    joinConference();
+                    const { audioDevice, videoDevice } = ev.detail.data;
+                    joinConference(audioDevice as string, videoDevice as string);
                     ack(ev);
                 },
             );
@@ -293,7 +294,8 @@ async function notifyHangup() {
     }
 }
 
-function joinConference() { // event handler bound in HTML
+// event handler bound in HTML
+function joinConference(audioDevice?: string, videoDevice?: string) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -318,6 +320,10 @@ function joinConference() { // event handler bound in HTML
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer"),
         roomName: conferenceId,
+        devices: {
+            audioInput: audioDevice,
+            videoInput: videoDevice,
+        },
         interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
@@ -326,6 +332,8 @@ function joinConference() { // event handler bound in HTML
         },
         configOverwrite: {
             startAudioOnly,
+            startWithAudioMuted: !audioDevice,
+            startWithVideoMuted: !videoDevice,
         } as any,
         jwt: jwt,
     };
