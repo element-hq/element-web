@@ -1024,7 +1024,7 @@ const PowerLevelEditor: React.FC<{
 
         const myUserId = cli.getUserId();
         const myPower = powerLevelEvent.getContent().users[myUserId];
-        if (myPower && parseInt(myPower) === powerLevel) {
+        if (myPower && parseInt(myPower) <= powerLevel && myUserId !== target) {
             const { finished } = Modal.createTrackedDialog('Promote to PL100 Warning', '', QuestionDialog, {
                 title: _t("Warning!"),
                 description:
@@ -1038,7 +1038,7 @@ const PowerLevelEditor: React.FC<{
 
             const [confirmed] = await finished;
             if (!confirmed) return;
-        } else if (myUserId === target) {
+        } else if (myUserId === target && myPower && parseInt(myPower) > powerLevel) {
             // If we are changing our own PL it can only ever be decreasing, which we cannot reverse.
             try {
                 if (!(await warnSelfDemote(room?.isSpaceRoom()))) return;
