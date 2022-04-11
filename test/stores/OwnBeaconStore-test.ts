@@ -20,6 +20,7 @@ import {
     BeaconEvent,
     getBeaconInfoIdentifier,
     MatrixEvent,
+    RelationType,
     RoomStateEvent,
     RoomMember,
 } from "matrix-js-sdk/src/matrix";
@@ -472,6 +473,14 @@ describe('OwnBeaconStore', () => {
             const expectedUpdateContent = {
                 ...prevEventContent,
                 live: false,
+                ["m.new_content"]: {
+                    ...prevEventContent,
+                    live: false,
+                },
+                ["m.relates_to"]: {
+                    event_id: alicesRoom1BeaconInfo.getId(),
+                    rel_type: RelationType.Replace,
+                },
             };
             expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledWith(
                 room1Id,
@@ -641,6 +650,14 @@ describe('OwnBeaconStore', () => {
             const expectedUpdateContent = {
                 ...prevEventContent,
                 live: false,
+                ["m.new_content"]: {
+                    ...prevEventContent,
+                    live: false,
+                },
+                ["m.relates_to"]: {
+                    event_id: alicesRoom1BeaconInfo.getId(),
+                    rel_type: RelationType.Replace,
+                },
             };
             expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledWith(
                 room1Id,
@@ -666,6 +683,14 @@ describe('OwnBeaconStore', () => {
             const expectedUpdateContent = {
                 ...prevEventContent,
                 live: false,
+                ["m.new_content"]: {
+                    ...prevEventContent,
+                    live: false,
+                },
+                ["m.relates_to"]: {
+                    event_id: alicesRoom1BeaconInfo.getId(),
+                    rel_type: RelationType.Replace,
+                },
             };
             expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledWith(
                 room1Id,

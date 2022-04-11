@@ -20,6 +20,7 @@ import {
     BeaconIdentifier,
     BeaconEvent,
     MatrixEvent,
+    RelationType,
     Room,
     RoomMember,
     RoomState,
@@ -447,11 +448,20 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             ...update,
         };
 
-        const updateContent = makeBeaconInfoContent(timeout,
+        const newContent = makeBeaconInfoContent(timeout,
             live,
             description,
             assetType,
-            timestamp);
+            timestamp,
+        );
+        const updateContent = {
+            ...newContent,
+            "m.new_content": newContent,
+            "m.relates_to": {
+                "rel_type": RelationType.Replace,
+                "event_id": beacon.beaconInfoId,
+            },
+        };
 
         await this.matrixClient.unstable_setLiveBeacon(beacon.roomId, updateContent);
     };
