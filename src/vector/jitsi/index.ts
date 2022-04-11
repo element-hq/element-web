@@ -94,6 +94,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             const parentOrigin = new URL(qsParam('parentUrl')).origin;
             widgetApi = new WidgetApi(qsParam("widgetId"), parentOrigin);
             widgetApi.requestCapabilities(VideoConferenceCapabilities);
+
             readyPromise = Promise.all([
                 new Promise<void>(resolve => {
                     widgetApi.once(`action:${ElementWidgetActions.ClientReady}`, ev => {
@@ -106,42 +107,6 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
                     widgetApi.once("ready", () => resolve());
                 }),
             ]);
-            widgetApi.start();
-        } else {
-            logger.warn("No parent URL or no widget ID - assuming no widget API is available");
-        }
-
-        // Populate the Jitsi params now
-        jitsiDomain = qsParam('conferenceDomain');
-        conferenceId = qsParam('conferenceId');
-        displayName = qsParam('displayName', true);
-        avatarUrl = qsParam('avatarUrl', true); // http not mxc
-        userId = qsParam('userId');
-        jitsiAuth = qsParam('auth', true);
-        roomId = qsParam('roomId', true);
-        roomName = qsParam('roomName', true);
-        startAudioOnly = qsParam('isAudioOnly', true) === "true";
-        isVideoChannel = qsParam('isVideoChannel', true) === "true";
-
-        // We've reached the point where we have to wait for the config, so do that then parse it.
-        const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
-        const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
-        skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") ?? false;
-
-        // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
-        // We don't set up the call yet though as this might lead to failure without the widget API.
-        toggleConferenceVisibility(skipOurWelcomeScreen);
-
-        if (widgetApi) {
-            await readyPromise;
-
-            // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
-            if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
-                // Request credentials, give callback to continue when received
-                openIdToken = await widgetApi.requestOpenIDConnectToken();
-                logger.log("Got OpenID Connect token");
-            }
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
@@ -204,6 +169,43 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
                     }
                 },
             );
+
+            widgetApi.start();
+        } else {
+            logger.warn("No parent URL or no widget ID - assuming no widget API is available");
+        }
+
+        // Populate the Jitsi params now
+        jitsiDomain = qsParam('conferenceDomain');
+        conferenceId = qsParam('conferenceId');
+        displayName = qsParam('displayName', true);
+        avatarUrl = qsParam('avatarUrl', true); // http not mxc
+        userId = qsParam('userId');
+        jitsiAuth = qsParam('auth', true);
+        roomId = qsParam('roomId', true);
+        roomName = qsParam('roomName', true);
+        startAudioOnly = qsParam('isAudioOnly', true) === "true";
+        isVideoChannel = qsParam('isVideoChannel', true) === "true";
+
+        // We've reached the point where we have to wait for the config, so do that then parse it.
+        const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
+        const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
+        skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
+            .get("skip_built_in_welcome_screen") ?? false;
+
+        // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
+        // We don't set up the call yet though as this might lead to failure without the widget API.
+        toggleConferenceVisibility(skipOurWelcomeScreen);
+
+        if (widgetApi) {
+            await readyPromise;
+
+            // See https://github.com/matrix-org/prosody-mod-auth-matrix-user-verification
+            if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
+                // Request credentials, give callback to continue when received
+                openIdToken = await widgetApi.requestOpenIDConnectToken();
+                logger.log("Got OpenID Connect token");
+            }
         }
 
         // Now that everything should be set up, skip to the Jitsi splash screen if needed
