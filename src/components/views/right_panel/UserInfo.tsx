@@ -1444,7 +1444,7 @@ const UserInfoHeader: React.FC<{
                 <div>
                     <h2>
                         { e2eIcon }
-                        <span title={displayName} aria-label={displayName}>
+                        <span title={displayName} aria-label={displayName} dir="auto">
                             { displayName }
                         </span>
                     </h2>

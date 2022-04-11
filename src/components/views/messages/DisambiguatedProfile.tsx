@@ -58,8 +58,8 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
         });
 
         return (
-            <div className="mx_DisambiguatedProfile" dir="auto" onClick={onClick}>
-                <span className={displayNameClasses}>
+            <div className="mx_DisambiguatedProfile" onClick={onClick}>
+                <span className={displayNameClasses} dir="auto">
                     { rawDisplayName }
                 </span>
                 { mxidElement }

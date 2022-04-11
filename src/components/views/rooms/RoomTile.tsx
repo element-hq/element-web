@@ -683,8 +683,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         const titleContainer = this.props.isMinimized ? null : (
             <div className="mx_RoomTile_titleContainer">
-                <div title={name} className={titleClasses} tabIndex={-1} dir="auto">
-                    { name }
+                <div title={name} className={titleClasses} tabIndex={-1}>
+                    <span dir="auto">
+                        { name }
+                    </span>
                 </div>
                 { subtitle }
             </div>

@@ -133,7 +133,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
             }
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <div className="mx_EntityTile_name" dir="auto">
+                    <div className="mx_EntityTile_name">
                         { name }
                     </div>
                     { presenceLabel }
@@ -142,7 +142,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
         } else if (this.props.subtextLabel) {
             nameEl = (
                 <div className="mx_EntityTile_details">
-                    <div className="mx_EntityTile_name" dir="auto">
+                    <div className="mx_EntityTile_name">
                         { name }
                     </div>
                     <span className="mx_EntityTile_subtext">{ this.props.subtextLabel }</span>
@@ -150,7 +150,7 @@ export default class EntityTile extends React.PureComponent<IProps, IState> {
             );
         } else {
             nameEl = (
-                <div className="mx_EntityTile_name" dir="auto">{ name }</div>
+                <div className="mx_EntityTile_name">{ name }</div>
             );
         }
 
