@@ -34,8 +34,13 @@ limitations under the License.
     padding: 0.5em 1em 0.5em 1em;
     word-wrap: break-word;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .mx_ViewSource_details {
     margin-top: 0.8em;
+}
+
+.mx_ViewSource_container {
+    max-width: calc(100% - 24px);
 }
