@@ -4,6 +4,8 @@ const { LngLat, NavigationControl } = require('maplibre-gl');
 class MockMap extends EventEmitter {
     addControl = jest.fn();
     removeControl = jest.fn();
+    zoomIn = jest.fn();
+    zoomOut = jest.fn();
 }
 const MockMapInstance = new MockMap();
 
