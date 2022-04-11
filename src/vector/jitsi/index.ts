@@ -127,7 +127,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
         const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
         skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") || isVideoChannel;
+            .get("skip_built_in_welcome_screen") ?? false;
 
         // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
@@ -332,9 +332,6 @@ function joinConference() { // event handler bound in HTML
 
     // Video channel widgets need some more tailored config options
     if (isVideoChannel) {
-        // Ensure that we start on Jitsi Meet's native prejoin screen, for
-        // deployments that skip straight to the conference by default
-        options.configOverwrite.prejoinConfig = { enabled: true };
         // Use a simplified set of toolbar buttons
         options.configOverwrite.toolbarButtons = [
             "microphone", "camera", "desktop", "tileview", "hangup",
