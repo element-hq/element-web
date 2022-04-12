@@ -12,30 +12,30 @@ cd `dirname $0`
 # This link seems to get eaten by the release process, so ensure it exists.
 yarn link matrix-js-sdk
 
-for i in matrix-js-sdk
-do
-    echo "Checking version of $i..."
-    depver=`cat package.json | jq -r .dependencies[\"$i\"]`
-    latestver=`yarn info -s $i dist-tags.next`
-    if [ "$depver" != "$latestver" ]
-    then
-        echo "The latest version of $i is $latestver but package.json depends on $depver."
-        echo -n "Type 'u' to auto-upgrade, 'c' to continue anyway, or 'a' to abort:"
-        read resp
-        if [ "$resp" != "u" ] && [ "$resp" != "c" ]
-        then
-            echo "Aborting."
-            exit 1
-        fi
-        if [ "$resp" == "u" ]
-        then
-            echo "Upgrading $i to $latestver..."
-            yarn add -E $i@$latestver
-            git add -u
-            git commit -m "Upgrade $i to $latestver"
-        fi
-    fi
-done
+# for i in matrix-js-sdk
+# do
+#     echo "Checking version of $i..."
+#     depver=`cat package.json | jq -r .dependencies[\"$i\"]`
+#     latestver=`yarn info -s $i dist-tags.next`
+#     if [ "$depver" != "$latestver" ]
+#     then
+#         echo "The latest version of $i is $latestver but package.json depends on $depver."
+#         echo -n "Type 'u' to auto-upgrade, 'c' to continue anyway, or 'a' to abort:"
+#         read resp
+#         if [ "$resp" != "u" ] && [ "$resp" != "c" ]
+#         then
+#             echo "Aborting."
+#             exit 1
+#         fi
+#         if [ "$resp" == "u" ]
+#         then
+#             echo "Upgrading $i to $latestver..."
+#             yarn add -E $i@$latestver
+#             git add -u
+#             git commit -m "Upgrade $i to $latestver"
+#         fi
+#     fi
+# done
 
 ./node_modules/matrix-js-sdk/release.sh -z "$@"
 
