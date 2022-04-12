@@ -14,63 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import {
     Room,
     Beacon,
-    BeaconEvent,
     BeaconIdentifier,
 } from 'matrix-js-sdk/src/matrix';
 
-import { formatDuration } from '../../../DateUtils';
 import { _t } from '../../../languageHandler';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import { useInterval } from '../../../hooks/useTimeout';
 import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../stores/OwnBeaconStore';
-import { getBeaconMsUntilExpiry, sortBeaconsByLatestExpiry } from '../../../utils/beacon';
+import { sortBeaconsByLatestExpiry } from '../../../utils/beacon';
 import AccessibleButton from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
 import StyledLiveBeaconIcon from './StyledLiveBeaconIcon';
 import { Icon as CloseIcon } from '../../../../res/img/image-view/close.svg';
-
-const MINUTE_MS = 60000;
-const HOUR_MS = MINUTE_MS * 60;
-
-const getUpdateInterval = (ms: number) => {
-    // every 10 mins when more than an hour
-    if (ms > HOUR_MS) {
-        return MINUTE_MS * 10;
-    }
-    // every minute when more than a minute
-    if (ms > MINUTE_MS) {
-        return MINUTE_MS;
-    }
-    // otherwise every second
-    return 1000;
-};
-const useMsRemaining = (beacon: Beacon): number => {
-    const beaconInfo = useEventEmitterState(
-        beacon,
-        BeaconEvent.Update,
-        () => beacon.beaconInfo,
-    );
-
-    const [msRemaining, setMsRemaining] = useState(() => getBeaconMsUntilExpiry(beaconInfo));
-
-    useEffect(() => {
-        setMsRemaining(getBeaconMsUntilExpiry(beaconInfo));
-    }, [beaconInfo]);
-
-    const updateMsRemaining = useCallback(() => {
-        const ms = getBeaconMsUntilExpiry(beaconInfo);
-        setMsRemaining(ms);
-    }, [beaconInfo]);
-
-    useInterval(updateMsRemaining, getUpdateInterval(msRemaining));
-
-    return msRemaining;
-};
+import LiveTimeRemaining from './LiveTimeRemaining';
 
 /**
  * It's technically possible to have multiple live beacons in one room
@@ -132,18 +92,6 @@ const useLiveBeacons = (liveBeaconIds: BeaconIdentifier[], roomId: string): Live
         hasWireError,
         hasStopSharingError: !!error,
     };
-};
-
-const LiveTimeRemaining: React.FC<{ beacon: Beacon }> = ({ beacon }) => {
-    const msRemaining = useMsRemaining(beacon);
-
-    const timeRemaining = formatDuration(msRemaining);
-    const liveTimeRemaining = _t(`%(timeRemaining)s left`, { timeRemaining });
-
-    return <span
-        data-test-id='room-live-share-expiry'
-        className="mx_RoomLiveShareWarning_expiry"
-    >{ liveTimeRemaining }</span>;
 };
 
 const getLabel = (hasWireError: boolean, hasStopSharingError: boolean): string => {
