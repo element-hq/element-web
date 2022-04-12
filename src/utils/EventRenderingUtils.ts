@@ -81,6 +81,7 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): 
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
         M_POLL_START.matches(eventType) ||
         M_LOCATION.matches(eventType) ||
+        M_BEACON_INFO.matches(eventType) ||
         (
             eventType === EventType.RoomMessage &&
             M_LOCATION.matches(msgtype)

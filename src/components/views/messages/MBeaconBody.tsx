@@ -14,16 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
-import { BeaconEvent, MatrixEvent } from 'matrix-js-sdk/src/matrix';
+import React, { useEffect, useState } from 'react';
+import { Beacon, BeaconEvent, MatrixEvent } from 'matrix-js-sdk/src/matrix';
 import { BeaconLocationState } from 'matrix-js-sdk/src/content-helpers';
+import { randomString } from 'matrix-js-sdk/src/randomstring';
 
-import { IBodyProps } from "./IBodyProps";
+import { Icon as LocationMarkerIcon } from '../../../../res/img/element-icons/location.svg';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { useBeacon } from '../../../utils/beacon';
+import { isSelfLocation } from '../../../utils/location';
+import { BeaconDisplayStatus, getBeaconDisplayStatus } from '../beacon/displayStatus';
+import Spinner from '../elements/Spinner';
+import Map from '../location/Map';
+import SmartMarker from '../location/SmartMarker';
+import { IBodyProps } from "./IBodyProps";
 
 const useBeaconState = (beaconInfoEvent: MatrixEvent): {
-    hasBeacon: boolean;
+    beacon?: Beacon;
     description?: string;
     latestLocationState?: BeaconLocationState;
     isLive?: boolean;
@@ -41,42 +48,71 @@ const useBeaconState = (beaconInfoEvent: MatrixEvent): {
         () => beacon?.latestLocationState);
 
     if (!beacon) {
-        return {
-            hasBeacon: false,
-        };
+        return {};
     }
 
     const { description } = beacon.beaconInfo;
 
     return {
-        hasBeacon: true,
+        beacon,
         description,
         isLive,
         latestLocationState,
     };
 };
 
-const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, ...rest }, ref) => {
+// multiple instances of same map might be in document
+// eg thread and main timeline, reply
+// maplibregl needs a unique id to attach the map instance to
+const useUniqueId = (eventId: string): string => {
+    const [id, setId] = useState(`${eventId}_${randomString(8)}`);
+
+    useEffect(() => {
+        setId(`${eventId}_${randomString(8)}`);
+    }, [eventId]);
+
+    return id;
+};
+
+const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) => {
     const {
-        hasBeacon,
         isLive,
-        description,
         latestLocationState,
     } = useBeaconState(mxEvent);
+    const mapId = useUniqueId(mxEvent.getId());
 
-    if (!hasBeacon || !isLive) {
-        // TODO stopped, error states
-        return <span ref={ref}>Beacon stopped or replaced</span>;
-    }
+    const [error, setError] = useState<Error>();
+
+    const displayStatus = getBeaconDisplayStatus(isLive, latestLocationState, error);
+
+    const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
 
     return (
-        // TODO nice map
         <div className='mx_MBeaconBody' ref={ref}>
-            <code>{ mxEvent.getId() }</code>&nbsp;
-            <span>Beacon "{ description }" </span>
-            { latestLocationState ?
-                <span>{ `${latestLocationState.uri} at ${latestLocationState.timestamp}` }</span> :
-                <span data-test-id='beacon-waiting-for-location'>Waiting for location</span> }
+            { displayStatus === BeaconDisplayStatus.Active ?
+                <Map
+                    id={mapId}
+                    centerGeoUri={latestLocationState.uri}
+                    onError={setError}
+                    className="mx_MBeaconBody_map"
+                >
+                    {
+                        ({ map }) =>
+                            <SmartMarker
+                                map={map}
+                                id={`${mapId}-marker`}
+                                geoUri={latestLocationState.uri}
+                                roomMember={markerRoomMember}
+                            />
+                    }
+                </Map>
+                : <div className='mx_MBeaconBody_map mx_MBeaconBody_mapFallback'>
+                    { displayStatus === BeaconDisplayStatus.Loading ?
+                        <Spinner h={32} w={32} /> :
+                        <LocationMarkerIcon className='mx_MBeaconBody_mapFallbackIcon' />
+                    }
+                </div>
+            }
         </div>
     );
 });

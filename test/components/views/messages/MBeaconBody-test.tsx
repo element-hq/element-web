@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
+import maplibregl from 'maplibre-gl';
 import {
     BeaconEvent,
     Room,
@@ -24,7 +25,7 @@ import {
 } from 'matrix-js-sdk/src/matrix';
 
 import MBeaconBody from '../../../../src/components/views/messages/MBeaconBody';
-import { findByTestId, getMockClientWithEventEmitter, makeBeaconEvent, makeBeaconInfoEvent } from '../../../test-utils';
+import { getMockClientWithEventEmitter, makeBeaconEvent, makeBeaconInfoEvent } from '../../../test-utils';
 import { RoomPermalinkCreator } from '../../../../src/utils/permalinks/Permalinks';
 import { MediaEventHelper } from '../../../../src/utils/MediaEventHelper';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
@@ -37,7 +38,13 @@ describe('<MBeaconBody />', () => {
     const roomId = '!room:server';
     const aliceId = '@alice:server';
 
+    const mockMap = new maplibregl.Map();
+    const mockMarker = new maplibregl.Marker();
+
     const mockClient = getMockClientWithEventEmitter({
+        getClientWellKnown: jest.fn().mockReturnValue({
+            "m.tile_server": { map_style_url: 'maps.com' },
+        }),
         getUserId: jest.fn().mockReturnValue(aliceId),
         getRoom: jest.fn(),
     });
@@ -58,6 +65,7 @@ describe('<MBeaconBody />', () => {
         { isLive: true },
         '$alice-room1-1',
     );
+
     const defaultProps = {
         mxEvent: defaultEvent,
         highlights: [],
@@ -68,21 +76,15 @@ describe('<MBeaconBody />', () => {
         permalinkCreator: {} as unknown as RoomPermalinkCreator,
         mediaEventHelper: {} as unknown as MediaEventHelper,
     };
+
     const getComponent = (props = {}) =>
         mount(<MBeaconBody {...defaultProps} {...props} />, {
             wrappingComponent: MatrixClientContext.Provider,
             wrappingComponentProps: { value: mockClient },
         });
 
-    it('renders a live beacon with basic stub', () => {
-        const beaconInfoEvent = makeBeaconInfoEvent(aliceId,
-            roomId,
-            { isLive: true },
-            '$alice-room1-1',
-        );
-        makeRoomWithStateEvents([beaconInfoEvent]);
-        const component = getComponent({ mxEvent: beaconInfoEvent });
-        expect(component).toMatchSnapshot();
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
     it('renders stopped beacon UI for an explicitly stopped beacon', () => {
@@ -93,7 +95,7 @@ describe('<MBeaconBody />', () => {
         );
         makeRoomWithStateEvents([beaconInfoEvent]);
         const component = getComponent({ mxEvent: beaconInfoEvent });
-        expect(component.text()).toEqual("Beacon stopped or replaced");
+        expect(component.find('Map').length).toBeFalsy();
     });
 
     it('renders stopped beacon UI for an expired beacon', () => {
@@ -105,7 +107,7 @@ describe('<MBeaconBody />', () => {
         );
         makeRoomWithStateEvents([beaconInfoEvent]);
         const component = getComponent({ mxEvent: beaconInfoEvent });
-        expect(component.text()).toEqual("Beacon stopped or replaced");
+        expect(component.find('Map').length).toBeFalsy();
     });
 
     it('renders stopped UI when a beacon event is not the latest beacon for a user', () => {
@@ -128,7 +130,7 @@ describe('<MBeaconBody />', () => {
 
         const component = getComponent({ mxEvent: aliceBeaconInfo1 });
         // beacon1 has been superceded by beacon2
-        expect(component.text()).toEqual("Beacon stopped or replaced");
+        expect(component.find('Map').length).toBeFalsy();
     });
 
     it('renders stopped UI when a beacon event is replaced', () => {
@@ -160,7 +162,7 @@ describe('<MBeaconBody />', () => {
         component.setProps({});
 
         // beacon1 has been superceded by beacon2
-        expect(component.text()).toEqual("Beacon stopped or replaced");
+        expect(component.find('Map').length).toBeFalsy();
     });
 
     describe('on liveness change', () => {
@@ -173,9 +175,9 @@ describe('<MBeaconBody />', () => {
             );
 
             const room = makeRoomWithStateEvents([aliceBeaconInfo]);
+            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
-            const beaconInstance = room.currentState.beacons.get(getBeaconInfoIdentifier(aliceBeaconInfo));
             act(() => {
                 // @ts-ignore cheat to force beacon to not live
                 beaconInstance._isLive = false;
@@ -185,7 +187,7 @@ describe('<MBeaconBody />', () => {
             component.setProps({});
 
             // stopped UI
-            expect(component.text()).toEqual("Beacon stopped or replaced");
+            expect(component.find('Map').length).toBeFalsy();
         });
     });
 
@@ -198,18 +200,17 @@ describe('<MBeaconBody />', () => {
         );
 
         const location1 = makeBeaconEvent(
-            aliceId, { beaconInfoId: aliceBeaconInfo.getId(), geoUri: 'geo:foo', timestamp: now + 1 },
+            aliceId, { beaconInfoId: aliceBeaconInfo.getId(), geoUri: 'geo:51,41', timestamp: now + 1 },
         );
         const location2 = makeBeaconEvent(
-            aliceId, { beaconInfoId: aliceBeaconInfo.getId(), geoUri: 'geo:bar', timestamp: now + 10000 },
+            aliceId, { beaconInfoId: aliceBeaconInfo.getId(), geoUri: 'geo:52,42', timestamp: now + 10000 },
         );
 
         it('renders a live beacon without a location correctly', () => {
             makeRoomWithStateEvents([aliceBeaconInfo]);
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
-            // loading map
-            expect(findByTestId(component, 'beacon-waiting-for-location').length).toBeTruthy();
+            expect(component.find('Spinner').length).toBeTruthy();
         });
 
         it('updates latest location', () => {
@@ -222,14 +223,16 @@ describe('<MBeaconBody />', () => {
                 component.setProps({});
             });
 
-            expect(component.text().includes('geo:foo')).toBeTruthy();
+            expect(mockMap.setCenter).toHaveBeenCalledWith({ lat: 51, lon: 41 });
+            expect(mockMarker.setLngLat).toHaveBeenCalledWith({ lat: 51, lon: 41 });
 
             act(() => {
                 beaconInstance.addLocations([location2]);
                 component.setProps({});
             });
 
-            expect(component.text().includes('geo:bar')).toBeTruthy();
+            expect(mockMap.setCenter).toHaveBeenCalledWith({ lat: 52, lon: 42 });
+            expect(mockMarker.setLngLat).toHaveBeenCalledWith({ lat: 52, lon: 42 });
         });
     });
 });
