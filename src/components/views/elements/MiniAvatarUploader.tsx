@@ -25,6 +25,7 @@ import { useTimeout } from "../../../hooks/useTimeout";
 import Analytics from "../../../Analytics";
 import { TranslatedString } from '../../../languageHandler';
 import RoomContext from "../../../contexts/RoomContext";
+import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 
 export const AVATAR_SIZE = 52;
 
@@ -62,6 +63,7 @@ const MiniAvatarUploader: React.FC<IProps> = ({ hasAvatar, hasAvatarLabel, noAva
             type="file"
             ref={uploadRef}
             className="mx_MiniAvatarUploader_input"
+            onClick={chromeFileInputFix}
             onChange={async (ev) => {
                 if (!ev.target.files?.length) return;
                 setBusy(true);

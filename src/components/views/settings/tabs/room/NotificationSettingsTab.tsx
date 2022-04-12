@@ -31,6 +31,7 @@ import { RoomNotifState } from '../../../../../RoomNotifs';
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { UserTab } from "../../../dialogs/UserTab";
+import { chromeFileInputFix } from "../../../../../utils/BrowserWorkarounds";
 
 interface IProps {
     roomId: string;
@@ -77,7 +78,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         this.soundUpload.current.click();
     };
 
-    private onSoundUploadChanged = (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    private onSoundUploadChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (!e.target.files || !e.target.files.length) {
             this.setState({
                 uploadedFile: null,
@@ -254,7 +255,14 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                         <h3>{ _t("Set a new custom sound") }</h3>
                         <div className="mx_SettingsFlag">
                             <form autoComplete="off" noValidate={true}>
-                                <input ref={this.soundUpload} className="mx_NotificationSound_soundUpload" type="file" onChange={this.onSoundUploadChanged} accept="audio/*" />
+                                <input
+                                    ref={this.soundUpload}
+                                    className="mx_NotificationSound_soundUpload"
+                                    type="file"
+                                    onClick={chromeFileInputFix}
+                                    onChange={this.onSoundUploadChanged}
+                                    accept="audio/*"
+                                />
                             </form>
 
                             { currentUploadedFile }

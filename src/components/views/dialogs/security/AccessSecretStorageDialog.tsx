@@ -30,6 +30,7 @@ import Modal from "../../../../Modal";
 import InteractiveAuthDialog from "../InteractiveAuthDialog";
 import DialogButtons from "../../elements/DialogButtons";
 import BaseDialog from "../BaseDialog";
+import { chromeFileInputFix } from "../../../../utils/BrowserWorkarounds";
 
 // Maximum acceptable size of a key file. It's 59 characters including the spaces we encode,
 // so this should be plenty and allow for people putting extra whitespace in the file because
@@ -403,6 +404,7 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                             <input type="file"
                                 className="mx_AccessSecretStorageDialog_recoveryKeyEntry_fileInput"
                                 ref={this.fileUpload}
+                                onClick={chromeFileInputFix}
                                 onChange={this.onRecoveryKeyFileChange}
                             />
                             <AccessibleButton kind="primary" onClick={this.onRecoveryKeyFileUploadClick}>

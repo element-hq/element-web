@@ -37,6 +37,7 @@ import ContentMessages from '../../../ContentMessages';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import RoomContext from '../../../contexts/RoomContext';
 import { useDispatcher } from "../../../hooks/useDispatcher";
+import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 
 interface IProps {
     addEmoji: (emoji: string) => boolean;
@@ -236,6 +237,7 @@ const UploadButtonContextProvider: React.FC<IUploadButtonProps> = ({ roomId, rel
             type="file"
             style={uploadInputStyle}
             multiple
+            onClick={chromeFileInputFix}
             onChange={onUploadFileInputChange}
         />
     </UploadButtonContext.Provider>;
