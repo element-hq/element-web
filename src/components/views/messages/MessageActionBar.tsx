@@ -232,8 +232,19 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Labs,
             });
+        } else if (this.props.mxEvent.isThreadRelation) {
+            showThread({
+                rootEvent: this.props.mxEvent.getThread().rootEvent,
+                initialEvent: this.props.mxEvent,
+                scroll_into_view: true,
+                highlighted: true,
+                push: isCard,
+            });
         } else {
-            showThread({ rootEvent: this.props.mxEvent, push: isCard });
+            showThread({
+                rootEvent: this.props.mxEvent,
+                push: isCard,
+            });
         }
     };
 
