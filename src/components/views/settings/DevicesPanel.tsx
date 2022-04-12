@@ -205,7 +205,9 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                     continueKind: "primary",
                 },
                 [SSOAuthEntry.PHASE_POSTAUTH]: {
-                    title: _t("Confirm signing out these devices"),
+                    title: _t("Confirm signing out these devices", {
+                        count: numDevices,
+                    }),
                     body: _t("Click the button below to confirm signing out these devices.", {
                         count: numDevices,
                     }),
