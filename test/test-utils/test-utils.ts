@@ -379,6 +379,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         getJoinRule: jest.fn().mockReturnValue("invite"),
         loadMembersIfNeeded: jest.fn(),
         client,
+        canInvite: jest.fn(),
     } as unknown as Room;
 }
 
