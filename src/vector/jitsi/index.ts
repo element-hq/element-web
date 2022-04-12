@@ -212,6 +212,13 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         }
 
         enableJoinButton(); // always enable the button
+
+        // Inform the client that we're ready to receive events
+        try {
+            await widgetApi?.transport.send(ElementWidgetActions.WidgetReady, {});
+        } catch (e) {
+            logger.error(e);
+        }
     } catch (e) {
         logger.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
