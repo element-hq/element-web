@@ -20,19 +20,19 @@ import uuidv4 = require('uuid/v4');
 import { RestSession } from "./session";
 import { Logger } from "../logger";
 
-/* no pun intented */
+/* no pun intended */
 export class RestRoom {
     constructor(readonly session: RestSession, readonly roomId: string, readonly log: Logger) {}
 
-    async talk(message: string): Promise<void> {
+    async talk(message: string): Promise<string> {
         this.log.step(`says "${message}" in ${this.roomId}`);
         const txId = uuidv4();
-        await this.session.put(`/rooms/${this.roomId}/send/m.room.message/${txId}`, {
+        const { event_id: eventId } = await this.session.put(`/rooms/${this.roomId}/send/m.room.message/${txId}`, {
             "msgtype": "m.text",
             "body": message,
         });
         this.log.done();
-        return txId;
+        return eventId;
     }
 
     async leave(): Promise<void> {
