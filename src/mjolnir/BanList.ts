@@ -29,15 +29,15 @@ export const ROOM_RULE_TYPES = [RULE_ROOM, "m.room.rule.room", "org.matrix.mjoln
 export const SERVER_RULE_TYPES = [RULE_SERVER, "m.room.rule.server", "org.matrix.mjolnir.rule.server"];
 export const ALL_RULE_TYPES = [...USER_RULE_TYPES, ...ROOM_RULE_TYPES, ...SERVER_RULE_TYPES];
 
-export function ruleTypeToStable(rule: string, unstable = true): string {
+export function ruleTypeToStable(rule: string): string {
     if (USER_RULE_TYPES.includes(rule)) {
-        return unstable ? USER_RULE_TYPES[USER_RULE_TYPES.length - 1] : RULE_USER;
+        return RULE_USER;
     }
     if (ROOM_RULE_TYPES.includes(rule)) {
-        return unstable ? ROOM_RULE_TYPES[ROOM_RULE_TYPES.length - 1] : RULE_ROOM;
+        return RULE_ROOM;
     }
     if (SERVER_RULE_TYPES.includes(rule)) {
-        return unstable ? SERVER_RULE_TYPES[SERVER_RULE_TYPES.length - 1] : RULE_SERVER;
+        return RULE_SERVER;
     }
     return null;
 }
@@ -68,19 +68,19 @@ export class BanList {
     }
 
     async banEntity(kind: string, entity: string, reason: string): Promise<any> {
-        await MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind, true), {
+        await MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind), {
             entity: entity,
             reason: reason,
             recommendation: recommendationToStable(RECOMMENDATION_BAN, true),
         }, "rule:" + entity);
-        this._rules.push(new ListRule(entity, RECOMMENDATION_BAN, reason, ruleTypeToStable(kind, false)));
+        this._rules.push(new ListRule(entity, RECOMMENDATION_BAN, reason, ruleTypeToStable(kind)));
     }
 
     async unbanEntity(kind: string, entity: string): Promise<any> {
         // Empty state event is effectively deleting it.
-        await MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind, true), {}, "rule:" + entity);
+        await MatrixClientPeg.get().sendStateEvent(this._roomId, ruleTypeToStable(kind), {}, "rule:" + entity);
         this._rules = this._rules.filter(r => {
-            if (r.kind !== ruleTypeToStable(kind, false)) return true;
+            if (r.kind !== ruleTypeToStable(kind)) return true;
             if (r.entity !== entity) return true;
             return false; // we just deleted this rule
         });
@@ -97,7 +97,7 @@ export class BanList {
             for (const ev of events) {
                 if (!ev.getStateKey()) continue;
 
-                const kind = ruleTypeToStable(eventType, false);
+                const kind = ruleTypeToStable(eventType);
 
                 const entity = ev.getContent()['entity'];
                 const recommendation = ev.getContent()['recommendation'];
