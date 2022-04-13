@@ -217,7 +217,7 @@ export async function fetchInitialEvent(
         initialEvent = null;
     }
 
-    if (initialEvent?.isThreadRelation) {
+    if (initialEvent?.isThreadRelation && client.supportsExperimentalThreads()) {
         try {
             const rootEventData = await client.fetchRoomEvent(roomId, initialEvent.threadRootId);
             const rootEvent = new MatrixEvent(rootEventData);

@@ -1395,15 +1395,17 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 return b.length - a.length;
             });
 
-            // Process all thread roots returned in this batch of search results
-            // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
-            for (const result of results.results) {
-                for (const event of result.context.getTimeline()) {
-                    const bundledRelationship = event
-                        .getServerAggregatedRelation<IThreadBundledRelationship>(THREAD_RELATION_TYPE.name);
-                    if (!bundledRelationship || event.getThread()) continue;
-                    const room = this.context.getRoom(event.getRoomId());
-                    event.setThread(room.findThreadForEvent(event) ?? room.createThread(event, [], true));
+            if (this.context.supportsExperimentalThreads()) {
+                // Process all thread roots returned in this batch of search results
+                // XXX: This won't work for results coming from Seshat which won't include the bundled relationship
+                for (const result of results.results) {
+                    for (const event of result.context.getTimeline()) {
+                        const bundledRelationship = event
+                            .getServerAggregatedRelation<IThreadBundledRelationship>(THREAD_RELATION_TYPE.name);
+                        if (!bundledRelationship || event.getThread()) continue;
+                        const room = this.context.getRoom(event.getRoomId());
+                        event.setThread(room.findThreadForEvent(event) ?? room.createThread(event, [], true));
+                    }
                 }
             }
 
