@@ -68,5 +68,11 @@ export const useBeacon = (beaconInfoEvent: MatrixEvent): Beacon | undefined => {
         }
     }, [beaconInstanceEventId, beaconInfoEvent]);
 
+    useEffect(() => {
+        if (beacon) {
+            beacon.monitorLiveness();
+        }
+    }, [beacon]);
+
     return beacon;
 };

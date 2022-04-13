@@ -98,6 +98,8 @@ $quaternary-content: #6F7882;
 $quinary-content: $quaternary-content;
 $system: #21262C;
 $background: $primary-bg-color;
+$overlay-background: rgba($background, 0.85);
+
 $panels: rgba($system, 0.9);
 $panel-base: #8D97A5; // This color is not intended for use in the app
 $panel-selected: rgba($panel-base, 0.3);

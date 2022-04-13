@@ -22,11 +22,19 @@ import { Icon as LiveLocationIcon } from '../../../../res/img/location/live-loca
 interface Props extends React.SVGProps<SVGSVGElement> {
     // use error styling when true
     withError?: boolean;
+    isIdle?: boolean;
 }
-const StyledLiveBeaconIcon: React.FC<Props> = ({ className, withError, ...props }) =>
+const StyledLiveBeaconIcon: React.FC<Props> = ({ className, withError, isIdle, ...props }) =>
     <LiveLocationIcon
         {...props}
-        className={classNames('mx_StyledLiveBeaconIcon', className, { 'mx_StyledLiveBeaconIcon_error': withError })}
+        className={classNames(
+            'mx_StyledLiveBeaconIcon',
+            className,
+            {
+                'mx_StyledLiveBeaconIcon_error': withError,
+                'mx_StyledLiveBeaconIcon_idle': isIdle,
+
+            })}
     />;
 
 export default StyledLiveBeaconIcon;

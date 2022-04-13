@@ -95,7 +95,7 @@ describe('<MBeaconBody />', () => {
         );
         makeRoomWithStateEvents([beaconInfoEvent]);
         const component = getComponent({ mxEvent: beaconInfoEvent });
-        expect(component.find('Map').length).toBeFalsy();
+        expect(component.text()).toEqual("Live location ended");
     });
 
     it('renders stopped beacon UI for an expired beacon', () => {
@@ -107,7 +107,7 @@ describe('<MBeaconBody />', () => {
         );
         makeRoomWithStateEvents([beaconInfoEvent]);
         const component = getComponent({ mxEvent: beaconInfoEvent });
-        expect(component.find('Map').length).toBeFalsy();
+        expect(component.text()).toEqual("Live location ended");
     });
 
     it('renders stopped UI when a beacon event is not the latest beacon for a user', () => {
@@ -130,7 +130,7 @@ describe('<MBeaconBody />', () => {
 
         const component = getComponent({ mxEvent: aliceBeaconInfo1 });
         // beacon1 has been superceded by beacon2
-        expect(component.find('Map').length).toBeFalsy();
+        expect(component.text()).toEqual("Live location ended");
     });
 
     it('renders stopped UI when a beacon event is replaced', () => {
@@ -162,7 +162,7 @@ describe('<MBeaconBody />', () => {
         component.setProps({});
 
         // beacon1 has been superceded by beacon2
-        expect(component.find('Map').length).toBeFalsy();
+        expect(component.text()).toEqual("Live location ended");
     });
 
     describe('on liveness change', () => {
@@ -187,7 +187,7 @@ describe('<MBeaconBody />', () => {
             component.setProps({});
 
             // stopped UI
-            expect(component.find('Map').length).toBeFalsy();
+            expect(component.text()).toEqual("Live location ended");
         });
     });
 
@@ -210,7 +210,7 @@ describe('<MBeaconBody />', () => {
             makeRoomWithStateEvents([aliceBeaconInfo]);
             const component = getComponent({ mxEvent: aliceBeaconInfo });
 
-            expect(component.find('Spinner').length).toBeTruthy();
+            expect(component.text()).toEqual("Loading live location...");
         });
 
         it('updates latest location', () => {

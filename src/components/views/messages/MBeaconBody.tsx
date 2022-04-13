@@ -27,7 +27,9 @@ import { BeaconDisplayStatus, getBeaconDisplayStatus } from '../beacon/displaySt
 import Spinner from '../elements/Spinner';
 import Map from '../location/Map';
 import SmartMarker from '../location/SmartMarker';
+import BeaconStatus from '../beacon/BeaconStatus';
 import { IBodyProps } from "./IBodyProps";
+import { _t } from '../../../languageHandler';
 
 const useBeaconState = (beaconInfoEvent: MatrixEvent): {
     beacon?: Beacon;
@@ -76,6 +78,7 @@ const useUniqueId = (eventId: string): string => {
 
 const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) => {
     const {
+        beacon,
         isLive,
         latestLocationState,
     } = useBeaconState(mxEvent);
@@ -113,6 +116,12 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) =>
                     }
                 </div>
             }
+            <BeaconStatus
+                className='mx_MBeaconBody_chin'
+                beacon={beacon}
+                displayStatus={displayStatus}
+                label={_t('View live location')}
+            />
         </div>
     );
 });
