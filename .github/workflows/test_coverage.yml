@@ -32,3 +32,4 @@ jobs:
         with:
           fail_ci_if_error: false
           verbose: true
+          override_commit: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
