@@ -762,7 +762,8 @@ $left-gutter: 64px;
         bottom: 0;
         width: 60px;
         box-sizing: border-box;
-        background: linear-gradient(270deg, $system 52.6%, transparent 100%);
+        // XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug
+        background: linear-gradient(270deg, $system 50%, $system-transparent 100%);
 
         opacity: 0;
         transform: translateX(60px);

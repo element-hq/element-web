@@ -150,6 +150,7 @@ $tertiary-content: $tertiary-fg-color;
 $quaternary-content: #6F7882;
 $quinary-content: $quaternary-content;
 $system: #F4F6FA;
+$system-transparent: rgba($system, 0.0); // XXX: workaround for Safari 15.3 linear-gradient bug
 $background: $primary-bg-color;
 $overlay-background: rgba($background, 0.85);
 

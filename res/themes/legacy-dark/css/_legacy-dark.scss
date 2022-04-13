@@ -1,5 +1,6 @@
 // Colors from Figma Compound https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=559%3A741
 $system: #21262C;
+$system-transparent: rgba($system, 0.0); // XXX: workaround for Safari 15.3 linear-gradient bug
 
 // unified palette
 // try to use these colors when possible
@@ -97,6 +98,7 @@ $tertiary-content: $tertiary-fg-color;
 $quaternary-content: #6F7882;
 $quinary-content: $quaternary-content;
 $system: #21262C;
+$system-transparent: rgba($system, 0.0); // XXX: workaround for Safari 15.3 linear-gradient bug
 $background: $primary-bg-color;
 $overlay-background: rgba($background, 0.85);
 

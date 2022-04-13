@@ -26,6 +26,8 @@ $secondary-content: var(--secondary-content, $secondary-content);
 $tertiary-content: var(--tertiary-content, $tertiary-content);
 $quaternary-content: var(--quaternary-content, $quaternary-content);
 $quinary-content: var(--quinary-content, $quinary-content);
+// XXX: workaround for Safari 15.3 linear-gradient bug https://github.com/vector-im/element-web/issues/21670
+$system-transparent: var(--system-transparent, rgba($system, 0.0));
 $system: var(--system, $system);
 $background: var(--background, $background);
 $panels: rgba($system, 0.9);

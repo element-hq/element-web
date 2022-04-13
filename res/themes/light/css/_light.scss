@@ -34,6 +34,7 @@ $quaternary-content: #c1c6cd;
 $quinary-content: #E3E8F0;
 
 $system: #F4F6FA;
+$system-transparent: rgba($system, 0.0); // XXX: workaround for Safari 15.3 linear-gradient bug
 $background: #ffffff;
 $overlay-background: rgba($background, 0.85);
 
