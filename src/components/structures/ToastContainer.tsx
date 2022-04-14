@@ -79,7 +79,7 @@ export default class ToastContainer extends React.Component<{}, IState> {
                 titleElement = (
                     <div className="mx_Toast_title">
                         <h2>{ title }</h2>
-                        <span>{ countIndicator }</span>
+                        <span className="mx_Toast_title_countIndicator">{ countIndicator }</span>
                     </div>
                 );
             }
