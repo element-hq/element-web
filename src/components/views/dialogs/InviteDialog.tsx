@@ -1,5 +1,5 @@
 /*
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ import classNames from 'classnames';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
-import { IInvite3PID } from "matrix-js-sdk/src/@types/requests";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from "../../../languageHandler";
@@ -30,11 +29,8 @@ import SdkConfig from "../../../SdkConfig";
 import * as Email from "../../../email";
 import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from "../../../utils/IdentityServerUtils";
 import { abbreviateUrl } from "../../../utils/UrlUtils";
-import dis from "../../../dispatcher/dispatcher";
 import IdentityAuthClient from "../../../IdentityAuthClient";
-import Modal from "../../../Modal";
 import { humanizeTime } from "../../../utils/humanize";
-import createRoom, { canEncryptToAllUsers } from "../../../createRoom";
 import {
     IInviteResult,
     inviteMultipleToRoom,
@@ -46,7 +42,6 @@ import RoomListStore from "../../../stores/room-list/RoomListStore";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import { mediaFromMxc } from "../../../customisations/Media";
-import { getAddressType } from "../../../UserAddress";
 import BaseAvatar from '../avatars/BaseAvatar';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import { compare, selectText } from '../../../utils/strings';
@@ -61,12 +56,12 @@ import CallHandler from "../../../CallHandler";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import CopyableText from "../elements/CopyableText";
 import { ScreenName } from '../../../PosthogTrackers';
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import { privateShouldBeEncrypted } from "../../../utils/rooms";
-import { findDMForUser } from "../../../utils/direct-messages";
-import { AnyInviteKind, KIND_CALL_TRANSFER, KIND_DM, KIND_INVITE, Member } from './InviteDialogTypes';
+import { DirectoryMember, IDMUserTileProps, Member, startDm, ThreepidMember } from "../../../utils/direct-messages";
+import { AnyInviteKind, KIND_CALL_TRANSFER, KIND_DM, KIND_INVITE } from './InviteDialogTypes';
+import Modal from '../../../Modal';
+import dis from "../../../dispatcher/dispatcher";
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */
@@ -83,67 +78,6 @@ const INCREMENT_ROOMS_SHOWN = 5; // Number of rooms to add when 'show more' is c
 enum TabId {
     UserDirectory = 'users',
     DialPad = 'dialpad',
-}
-
-class DirectoryMember extends Member {
-    private readonly _userId: string;
-    private readonly displayName?: string;
-    private readonly avatarUrl?: string;
-
-    // eslint-disable-next-line camelcase
-    constructor(userDirResult: { user_id: string, display_name?: string, avatar_url?: string }) {
-        super();
-        this._userId = userDirResult.user_id;
-        this.displayName = userDirResult.display_name;
-        this.avatarUrl = userDirResult.avatar_url;
-    }
-
-    // These next class members are for the Member interface
-    get name(): string {
-        return this.displayName || this._userId;
-    }
-
-    get userId(): string {
-        return this._userId;
-    }
-
-    getMxcAvatarUrl(): string {
-        return this.avatarUrl;
-    }
-}
-
-class ThreepidMember extends Member {
-    private readonly id: string;
-
-    constructor(id: string) {
-        super();
-        this.id = id;
-    }
-
-    // This is a getter that would be falsey on all other implementations. Until we have
-    // better type support in the react-sdk we can use this trick to determine the kind
-    // of 3PID we're dealing with, if any.
-    get isEmail(): boolean {
-        return this.id.includes('@');
-    }
-
-    // These next class members are for the Member interface
-    get name(): string {
-        return this.id;
-    }
-
-    get userId(): string {
-        return this.id;
-    }
-
-    getMxcAvatarUrl(): string {
-        return null;
-    }
-}
-
-interface IDMUserTileProps {
-    member: Member;
-    onRemove(member: Member): void;
 }
 
 class DMUserTile extends React.PureComponent<IDMUserTileProps> {
@@ -630,72 +564,10 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
 
     private startDm = async () => {
         this.setState({ busy: true });
-        const client = MatrixClientPeg.get();
-        const targets = this.convertFilter();
-        const targetIds = targets.map(t => t.userId);
-
-        // Check if there is already a DM with these people and reuse it if possible.
-        let existingRoom: Room;
-        if (targetIds.length === 1) {
-            existingRoom = findDMForUser(client, targetIds[0]);
-        } else {
-            existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
-        }
-        if (existingRoom) {
-            dis.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: existingRoom.roomId,
-                should_peek: false,
-                joining: false,
-                metricsTrigger: "MessageUser",
-            });
-            this.props.onFinished(true);
-            return;
-        }
-
-        const createRoomOptions = { inlineErrors: true } as any; // XXX: Type out `createRoomOptions`
-
-        if (privateShouldBeEncrypted()) {
-            // Check whether all users have uploaded device keys before.
-            // If so, enable encryption in the new room.
-            const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
-            if (!has3PidMembers) {
-                const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
-                if (allHaveDeviceKeys) {
-                    createRoomOptions.encryption = true;
-                }
-            }
-        }
-
-        // Check if it's a traditional DM and create the room if required.
-        // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
         try {
-            const isSelf = targetIds.length === 1 && targetIds[0] === client.getUserId();
-            if (targetIds.length === 1 && !isSelf) {
-                createRoomOptions.dmUserId = targetIds[0];
-            }
-
-            if (targetIds.length > 1) {
-                createRoomOptions.createOpts = targetIds.reduce(
-                    (roomOptions, address) => {
-                        const type = getAddressType(address);
-                        if (type === 'email') {
-                            const invite: IInvite3PID = {
-                                id_server: client.getIdentityServerUrl(true),
-                                medium: 'email',
-                                address,
-                            };
-                            roomOptions.invite_3pid.push(invite);
-                        } else if (type === 'mx-user-id') {
-                            roomOptions.invite.push(address);
-                        }
-                        return roomOptions;
-                    },
-                    { invite: [], invite_3pid: [] },
-                );
-            }
-
-            await createRoom(createRoomOptions);
+            const cli = MatrixClientPeg.get();
+            const targets = this.convertFilter();
+            await startDm(cli, targets);
             this.props.onFinished(true);
         } catch (err) {
             logger.error(err);
@@ -703,6 +575,8 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 busy: false,
                 errorText: _t("We couldn't create your DM."),
             });
+        } finally {
+            this.setState({ busy: false });
         }
     };
 

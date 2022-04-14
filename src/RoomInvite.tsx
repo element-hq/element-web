@@ -28,7 +28,8 @@ import InviteDialog from "./components/views/dialogs/InviteDialog";
 import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import { KIND_DM, KIND_INVITE, Member } from "./components/views/dialogs/InviteDialogTypes";
+import { KIND_DM, KIND_INVITE } from "./components/views/dialogs/InviteDialogTypes";
+import { Member } from "./utils/direct-messages";
 
 export interface IInviteResult {
     states: CompletionStates;
