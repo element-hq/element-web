@@ -178,7 +178,7 @@ function useHasCrossSigningKeys(cli: MatrixClient, member: User, canVerify: bool
     }, [cli, member, canVerify], undefined);
 }
 
-function DeviceItem({ userId, device }: {userId: string, device: IDevice}) {
+function DeviceItem({ userId, device }: { userId: string, device: IDevice }) {
     const cli = useContext(MatrixClientContext);
     const isMe = userId === cli.getUserId();
     const deviceTrust = cli.checkDeviceTrust(userId, device.deviceId);
@@ -239,7 +239,7 @@ function DeviceItem({ userId, device }: {userId: string, device: IDevice}) {
     }
 }
 
-function DevicesSection({ devices, userId, loading }: {devices: IDevice[], userId: string, loading: boolean}) {
+function DevicesSection({ devices, userId, loading }: { devices: IDevice[], userId: string, loading: boolean }) {
     const cli = useContext(MatrixClientContext);
     const userTrust = cli.checkUserTrust(userId);
 
@@ -653,7 +653,9 @@ const BanToggleButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBa
             room.isSpaceRoom() ? ConfirmSpaceUserActionDialog : ConfirmUserActionDialog,
             {
                 member,
-                action: isBanned ? _t("Unban") : _t("Ban"),
+                action: room.isSpaceRoom()
+                    ? (isBanned ? _t("Unban from space") : _t("Ban from space"))
+                    : (isBanned ? _t("Unban from room") : _t("Ban from room")),
                 title: isBanned
                     ? _t("Unban from %(roomName)s", { roomName: room.name })
                     : _t("Ban from %(roomName)s", { roomName: room.name }),
@@ -719,9 +721,13 @@ const BanToggleButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBa
         });
     };
 
-    let label = _t("Ban");
+    let label = room.isSpaceRoom()
+        ? _t("Ban from space")
+        : _t("Ban from room");
     if (isBanned) {
-        label = _t("Unban");
+        label = room.isSpaceRoom()
+            ? _t("Unban from space")
+            : _t("Unban from room");
     }
 
     const classes = classNames("mx_UserInfo_field", {
