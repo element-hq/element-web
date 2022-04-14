@@ -36,5 +36,6 @@
     "Use %(brand)s on mobile": "Mobilon használd ezt: %(brand)s",
     "Switch to space by number": "Tér váltás számmal",
     "Next recently visited room or community": "Következő nemrég meglátogatott szoba vagy közösség",
-    "Previous recently visited room or community": "Előző nemrég meglátogatott szoba vagy közösség"
+    "Previous recently visited room or community": "Előző nemrég meglátogatott szoba vagy közösség",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Elosztott, titkosított csevegés &amp; együttműködés ezzel: $matrixLogo"
 }
