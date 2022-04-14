@@ -151,6 +151,16 @@ export enum MessageModerationState {
     SEE_THROUGH_FOR_CURRENT_USER = "SEE_THROUGH_FOR_CURRENT_USER",
 }
 
+// This is lazily initialized and cached since getMessageModerationState needs it,
+// and is called on timeline rendering hot-paths
+let msc3531Enabled: boolean | null = null;
+const getMsc3531Enabled = (): boolean => {
+    if (msc3531Enabled === null) {
+        msc3531Enabled = SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation");
+    }
+    return msc3531Enabled;
+};
+
 /**
  * Determine whether a message should be displayed as hidden pending moderation.
  *
@@ -160,7 +170,7 @@ export enum MessageModerationState {
 export function getMessageModerationState(mxEvent: MatrixEvent, client?: MatrixClient): MessageModerationState {
     client = client ?? MatrixClientPeg.get(); // because param defaults don't do the correct thing
 
-    if (!SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
+    if (!getMsc3531Enabled()) {
         return MessageModerationState.VISIBLE_FOR_ALL;
     }
     const visibility = mxEvent.messageVisibility();

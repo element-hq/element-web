@@ -1214,21 +1214,24 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             msgOption = readAvatars;
         }
 
-        const replyChain =
-            (haveRendererForEvent(this.props.mxEvent) && shouldDisplayReply(this.props.mxEvent))
-                ? <ReplyChain
-                    parentEv={this.props.mxEvent}
-                    onHeightChanged={this.props.onHeightChanged}
-                    ref={this.replyChain}
-                    forExport={this.props.forExport}
-                    permalinkCreator={this.props.permalinkCreator}
-                    layout={this.props.layout}
-                    alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
-                    isQuoteExpanded={isQuoteExpanded}
-                    setQuoteExpanded={this.setQuoteExpanded}
-                    getRelationsForEvent={this.props.getRelationsForEvent}
-                />
-                : null;
+        let replyChain;
+        if (
+            haveRendererForEvent(this.props.mxEvent, this.context.showHiddenEvents) &&
+            shouldDisplayReply(this.props.mxEvent)
+        ) {
+            replyChain = <ReplyChain
+                parentEv={this.props.mxEvent}
+                onHeightChanged={this.props.onHeightChanged}
+                ref={this.replyChain}
+                forExport={this.props.forExport}
+                permalinkCreator={this.props.permalinkCreator}
+                layout={this.props.layout}
+                alwaysShowTimestamps={this.props.alwaysShowTimestamps || this.state.hover}
+                isQuoteExpanded={isQuoteExpanded}
+                setQuoteExpanded={this.setQuoteExpanded}
+                getRelationsForEvent={this.props.getRelationsForEvent}
+            />;
+        }
 
         const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
 
@@ -1267,7 +1270,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                             highlightLink: this.props.highlightLink,
                             onHeightChanged: this.props.onHeightChanged,
                             permalinkCreator: this.props.permalinkCreator,
-                        }) }
+                        }, this.context.showHiddenEvents) }
                     </div>,
                 ]);
             }
@@ -1309,7 +1312,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                             highlightLink: this.props.highlightLink,
                             onHeightChanged: this.props.onHeightChanged,
                             permalinkCreator: this.props.permalinkCreator,
-                        }) }
+                        }, this.context.showHiddenEvents) }
                         { actionBar }
                         <a href={permalink} onClick={this.onPermalinkClicked}>
                             { timestamp }
@@ -1395,7 +1398,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                             highlightLink: this.props.highlightLink,
                             onHeightChanged: this.props.onHeightChanged,
                             permalinkCreator: this.props.permalinkCreator,
-                        }) }
+                        }, this.context.showHiddenEvents) }
                     </div>,
                     <a
                         className="mx_EventTile_senderDetailsLink"
@@ -1448,7 +1451,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                                 highlightLink: this.props.highlightLink,
                                 onHeightChanged: this.props.onHeightChanged,
                                 permalinkCreator: this.props.permalinkCreator,
-                            }) }
+                            }, this.context.showHiddenEvents) }
                             { keyRequestInfo }
                             { actionBar }
                             { this.props.layout === Layout.IRC && <>

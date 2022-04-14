@@ -110,7 +110,9 @@ export default class ReplyTile extends React.PureComponent<IProps> {
         const msgType = mxEvent.getContent().msgtype;
         const evType = mxEvent.getType() as EventType;
 
-        const { hasRenderer, isInfoMessage, isSeeingThroughMessageHiddenForModeration } = getEventDisplayInfo(mxEvent);
+        const {
+            hasRenderer, isInfoMessage, isSeeingThroughMessageHiddenForModeration,
+        } = getEventDisplayInfo(mxEvent, false /* Replies are never hidden, so this should be fine */);
         // This shouldn't happen: the caller should check we support this type
         // before trying to instantiate us
         if (!hasRenderer) {
@@ -177,7 +179,7 @@ export default class ReplyTile extends React.PureComponent<IProps> {
                         highlightLink: this.props.highlightLink,
                         onHeightChanged: this.props.onHeightChanged,
                         permalinkCreator: this.props.permalinkCreator,
-                    }) }
+                    }, false /* showHiddenEvents shouldn't be relevant */) }
                 </a>
             </div>
         );

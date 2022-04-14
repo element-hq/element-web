@@ -78,7 +78,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                 highlights = this.props.searchHighlights;
             }
 
-            if (haveRendererForEvent(mxEv, this.context?.showHiddenEventsInTimeline)) {
+            if (haveRendererForEvent(mxEv, this.context?.showHiddenEvents)) {
                 // do we need a date separator since the last event?
                 const prevEv = timeline[j - 1];
                 // is this a continuation of the previous message?
@@ -87,7 +87,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                     shouldFormContinuation(
                         prevEv,
                         mxEv,
-                        this.context?.showHiddenEventsInTimeline,
+                        this.context?.showHiddenEvents,
                         threadsEnabled,
                         TimelineRenderingType.Search,
                     );
@@ -102,7 +102,7 @@ export default class SearchResultTile extends React.Component<IProps> {
                         !shouldFormContinuation(
                             mxEv,
                             nextEv,
-                            this.context?.showHiddenEventsInTimeline,
+                            this.context?.showHiddenEvents,
                             threadsEnabled,
                             TimelineRenderingType.Search,
                         )

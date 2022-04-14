@@ -407,7 +407,7 @@ export default class HTMLExporter extends Exporter {
                 total: events.length,
             }), false, true);
             if (this.cancelled) return this.cleanUp();
-            if (!haveRendererForEvent(event)) continue;
+            if (!haveRendererForEvent(event, false)) continue;
 
             content += this.needsDateSeparator(event, prevEvent) ? this.getDateSeparator(event) : "";
             const shouldBeJoined = !this.needsDateSeparator(event, prevEvent) &&

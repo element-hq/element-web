@@ -73,7 +73,7 @@ describe('<SendMessageComposer/>', () => {
         showTwelveHourTimestamps: false,
         readMarkerInViewThresholdMs: 3000,
         readMarkerOutOfViewThresholdMs: 30000,
-        showHiddenEventsInTimeline: false,
+        showHiddenEvents: false,
         showReadReceipts: true,
         showRedactions: true,
         showJoinLeaves: true,

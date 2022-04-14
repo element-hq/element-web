@@ -112,7 +112,7 @@ export default class PlainTextExporter extends Exporter {
                 total: events.length,
             }), false, true);
             if (this.cancelled) return this.cleanUp();
-            if (!haveRendererForEvent(event)) continue;
+            if (!haveRendererForEvent(event, false)) continue;
             const textForEvent = await this.plainTextForEvent(event);
             content += textForEvent && `${new Date(event.getTs()).toLocaleString()} - ${textForEvent}\n`;
         }

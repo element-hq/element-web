@@ -85,7 +85,7 @@ export default class JSONExporter extends Exporter {
                 total: events.length,
             }), false, true);
             if (this.cancelled) return this.cleanUp();
-            if (!haveRendererForEvent(event)) continue;
+            if (!haveRendererForEvent(event, false)) continue;
             this.messages.push(await this.getJSONString(event));
         }
         return this.createJSONString();

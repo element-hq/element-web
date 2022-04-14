@@ -48,7 +48,7 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
     }
 
     if (ev.isRedacted()) return false;
-    return haveRendererForEvent(ev);
+    return haveRendererForEvent(ev, false /* hidden messages should never trigger unread counts anyways */);
 }
 
 export function doesRoomHaveUnreadMessages(room: Room): boolean {

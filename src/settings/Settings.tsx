@@ -187,6 +187,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_msc3531_hide_messages_pending_moderation": {
         isFeature: true,
         labsGroup: LabGroup.Moderation,
+        // Requires a reload since this setting is cached in EventUtils
+        controller: new ReloadOnChangeController(),
         displayName: _td("Let moderators hide messages pending moderation."),
         supportedLevels: LEVELS_FEATURE,
         default: false,

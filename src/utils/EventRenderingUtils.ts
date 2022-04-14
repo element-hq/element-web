@@ -25,7 +25,7 @@ import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { getMessageModerationState, MessageModerationState } from "./EventUtils";
 
-export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): {
+export function getEventDisplayInfo(mxEvent: MatrixEvent, showHiddenEvents: boolean, hideEvent?: boolean): {
     isInfoMessage: boolean;
     hasRenderer: boolean;
     isBubbleMessage: boolean;
@@ -52,7 +52,7 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): 
     }
 
     // TODO: Thread a MatrixClient through to here
-    let factory = pickFactory(mxEvent, MatrixClientPeg.get());
+    let factory = pickFactory(mxEvent, MatrixClientPeg.get(), showHiddenEvents);
 
     // Info messages are basically information about commands processed on a room
     let isBubbleMessage = (
@@ -92,11 +92,11 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): 
     // source tile when there's no regular tile for an event and also for
     // replace relations (which otherwise would display as a confusing
     // duplicate of the thing they are replacing).
-    if (hideEvent || !haveRendererForEvent(mxEvent)) {
+    if (hideEvent || !haveRendererForEvent(mxEvent, showHiddenEvents)) {
         // forcefully ask for a factory for a hidden event (hidden event
         // setting is checked internally)
         // TODO: Thread a MatrixClient through to here
-        factory = pickFactory(mxEvent, MatrixClientPeg.get(), true);
+        factory = pickFactory(mxEvent, MatrixClientPeg.get(), showHiddenEvents, true);
         if (factory === JSONEventFactory) {
             isBubbleMessage = false;
             // Reuse info message avatar and sender profile styling

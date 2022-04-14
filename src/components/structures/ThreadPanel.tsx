@@ -250,7 +250,7 @@ const ThreadPanel: React.FC<IProps> = ({
         <RoomContext.Provider value={{
             ...roomContext,
             timelineRenderingType: TimelineRenderingType.ThreadsList,
-            showHiddenEventsInTimeline: true,
+            showHiddenEvents: true,
             narrow,
         }}>
             <BaseCard
