@@ -49,6 +49,7 @@ import dis from "../../dispatcher/dispatcher";
 import { tryTransformPermalinkToLocalHref } from "../../utils/permalinks/Permalinks";
 import SettingsStore from "../../settings/SettingsStore";
 import { RoomViewStore } from "../RoomViewStore";
+import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
 
 // TODO: Purge this from the universe
 
@@ -77,7 +78,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         // button if the widget says it supports screenshots.
         this.allowedCapabilities = new Set([...allowedCapabilities,
             MatrixCapabilities.Screenshots,
-            MatrixCapabilities.RequiresClient]);
+            ElementWidgetCapabilities.RequiresClient]);
 
         // Grant the permissions that are specific to given widget types
         if (WidgetType.JITSI.matches(this.forWidget.type) && forWidgetKind === WidgetKind.Room) {

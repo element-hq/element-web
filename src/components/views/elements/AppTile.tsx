@@ -49,6 +49,7 @@ import WidgetUtils from '../../../utils/WidgetUtils';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from '../../../dispatcher/actions';
+import { ElementWidgetCapabilities } from '../../../stores/widgets/ElementWidgetCapabilities';
 
 interface IProps {
     app: IApp;
@@ -430,7 +431,7 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private onWidgetCapabilitiesNotified = (): void => {
         this.setState({
-            requiresClient: this.sgWidget.widgetApi.hasCapability(MatrixCapabilities.RequiresClient),
+            requiresClient: this.sgWidget.widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient),
         });
     };
 
