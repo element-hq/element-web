@@ -55,14 +55,19 @@ limitations under the License.
         margin-right: 0;
     }
 
-    .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_line {
-        padding-left: 36px;
-        padding-right: 36px;
-    }
+    .mx_EventTile:not([data-layout="bubble"]) {
+        .mx_EventTile_line {
+            padding-left: 36px;
+            padding-right: 36px;
+        }
 
-    .mx_EventTile:not([data-layout="bubble"]) .mx_ReactionsRow {
-        padding-left: 36px;
-        padding-right: 36px;
+        .mx_ReactionsRow {
+            padding: 0;
+
+            // See margin setting of ReactionsRow on _EventTile.scss
+            margin-left: 36px;
+            margin-right: 8px;
+        }
     }
 
     .mx_EventTile:not([data-layout="bubble"]) .mx_ThreadInfo {
