@@ -158,22 +158,24 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                   }
                 }
               >
-                <ForwardRef
-                  id="mx_MLocationBody_$2_1f9acffa-marker"
-                >
-                  <div
-                    className="mx_Marker mx_Marker_defaultColor"
+                <span>
+                  <ForwardRef
                     id="mx_MLocationBody_$2_1f9acffa-marker"
                   >
                     <div
-                      className="mx_Marker_border"
+                      className="mx_Marker mx_Marker_defaultColor"
+                      id="mx_MLocationBody_$2_1f9acffa-marker"
                     >
                       <div
-                        className="mx_Marker_icon"
-                      />
+                        className="mx_Marker_border"
+                      >
+                        <div
+                          className="mx_Marker_icon"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </ForwardRef>
+                  </ForwardRef>
+                </span>
               </SmartMarker>
             </div>
           </Map>

@@ -20,6 +20,7 @@ import { RoomMember } from 'matrix-js-sdk/src/matrix';
 import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 
 import LocationViewDialog from '../../../../src/components/views/location/LocationViewDialog';
+import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
 import { getMockClientWithEventEmitter, makeLocationEvent } from '../../../test-utils';
 
 describe('<LocationViewDialog />', () => {
@@ -27,7 +28,7 @@ describe('<LocationViewDialog />', () => {
     const userId = '@user:server';
     const mockClient = getMockClientWithEventEmitter({
         getClientWellKnown: jest.fn().mockReturnValue({
-            "m.tile_server": { map_style_url: 'maps.com' },
+            [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
         }),
         isGuest: jest.fn().mockReturnValue(false),
     });

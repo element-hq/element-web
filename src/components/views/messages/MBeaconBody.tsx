@@ -23,6 +23,7 @@ import { Icon as LocationMarkerIcon } from '../../../../res/img/element-icons/lo
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { _t } from '../../../languageHandler';
+import Modal from '../../../Modal';
 import { useBeacon } from '../../../utils/beacon';
 import { isSelfLocation } from '../../../utils/location';
 import { BeaconDisplayStatus, getBeaconDisplayStatus } from '../beacon/displayStatus';
@@ -32,6 +33,7 @@ import Map from '../location/Map';
 import SmartMarker from '../location/SmartMarker';
 import OwnBeaconStatus from '../beacon/OwnBeaconStatus';
 import { IBodyProps } from "./IBodyProps";
+import BeaconViewDialog from '../beacon/BeaconViewDialog';
 
 const useBeaconState = (beaconInfoEvent: MatrixEvent): {
     beacon?: Beacon;
@@ -85,12 +87,30 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) =>
         latestLocationState,
     } = useBeaconState(mxEvent);
     const mapId = useUniqueId(mxEvent.getId());
-    const [error, setError] = useState<Error>();
+
     const matrixClient = useContext(MatrixClientContext);
+    const [error, setError] = useState<Error>();
     const displayStatus = getBeaconDisplayStatus(isLive, latestLocationState, error);
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
-
     const isOwnBeacon = beacon?.beaconInfoOwner === matrixClient.getUserId();
+
+    const onClick = () => {
+        if (displayStatus !== BeaconDisplayStatus.Active) {
+            return;
+        }
+        Modal.createTrackedDialog(
+            'Beacon View',
+            '',
+            BeaconViewDialog,
+            {
+                roomId: mxEvent.getRoomId(),
+                matrixClient,
+            },
+            "mx_BeaconViewDialog_wrapper",
+            false, // isPriority
+            true, // isStatic
+        );
+    };
 
     return (
         <div className='mx_MBeaconBody' ref={ref}>
@@ -99,6 +119,7 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) =>
                     id={mapId}
                     centerGeoUri={latestLocationState.uri}
                     onError={setError}
+                    onClick={onClick}
                     className="mx_MBeaconBody_map"
                 >
                     {

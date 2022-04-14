@@ -72,12 +72,21 @@ interface SmartMarkerProps {
 const SmartMarker: React.FC<SmartMarkerProps> = ({ id, map, geoUri, roomMember, useMemberColor }) => {
     const { onElementRef } = useMapMarker(map, geoUri);
 
-    return <Marker
-        ref={onElementRef}
-        id={id}
-        roomMember={roomMember}
-        useMemberColor={useMemberColor}
-    />;
+    return (
+        // maplibregl hijacks the Marker dom element
+        // and removes it from the dom when the maplibregl.Marker instance
+        // is removed
+        // wrap in a span so that react doesn't get confused
+        // when trying to unmount this component
+        <span>
+            <Marker
+                ref={onElementRef}
+                id={id}
+                roomMember={roomMember}
+                useMemberColor={useMemberColor}
+            />
+        </span>
+    );
 };
 
 export default SmartMarker;

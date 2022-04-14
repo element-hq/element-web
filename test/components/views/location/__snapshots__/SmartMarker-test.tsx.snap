@@ -18,19 +18,21 @@ exports[`<SmartMarker /> creates a marker on mount 1`] = `
     }
   }
 >
-  <ForwardRef>
-    <div
-      className="mx_Marker mx_Marker_defaultColor"
-    >
+  <span>
+    <ForwardRef>
       <div
-        className="mx_Marker_border"
+        className="mx_Marker mx_Marker_defaultColor"
       >
         <div
-          className="mx_Marker_icon"
-        />
+          className="mx_Marker_border"
+        >
+          <div
+            className="mx_Marker_icon"
+          />
+        </div>
       </div>
-    </div>
-  </ForwardRef>
+    </ForwardRef>
+  </span>
 </SmartMarker>
 `;
 
@@ -52,18 +54,20 @@ exports[`<SmartMarker /> removes marker on unmount 1`] = `
     }
   }
 >
-  <ForwardRef>
-    <div
-      className="mx_Marker mx_Marker_defaultColor"
-    >
+  <span>
+    <ForwardRef>
       <div
-        className="mx_Marker_border"
+        className="mx_Marker mx_Marker_defaultColor"
       >
         <div
-          className="mx_Marker_icon"
-        />
+          className="mx_Marker_border"
+        >
+          <div
+            className="mx_Marker_icon"
+          />
+        </div>
       </div>
-    </div>
-  </ForwardRef>
+    </ForwardRef>
+  </span>
 </SmartMarker>
 `;

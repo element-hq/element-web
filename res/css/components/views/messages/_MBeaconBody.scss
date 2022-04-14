@@ -27,6 +27,10 @@ limitations under the License.
     height: 100%;
     width: 100%;
     z-index: 0; // keeps the entire map under the message action bar
+
+    &:not(.mx_MBeaconBody_mapFallback) {
+        cursor: pointer;
+    }
 }
 
 .mx_MBeaconBody_mapFallback {

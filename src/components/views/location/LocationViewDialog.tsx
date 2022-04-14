@@ -34,6 +34,9 @@ interface IState {
     error: Error;
 }
 
+/**
+ * Dialog to view m.location events maximised
+ */
 export default class LocationViewDialog extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

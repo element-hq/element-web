@@ -24,6 +24,7 @@ import { logger } from 'matrix-js-sdk/src/logger';
 import Map from '../../../../src/components/views/location/Map';
 import { findByTestId, getMockClientWithEventEmitter } from '../../../test-utils';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
+import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
 
 describe('<Map />', () => {
     const defaultProps = {
@@ -34,7 +35,7 @@ describe('<Map />', () => {
     };
     const matrixClient = getMockClientWithEventEmitter({
         getClientWellKnown: jest.fn().mockReturnValue({
-            "m.tile_server": { map_style_url: 'maps.com' },
+            [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
         }),
     });
     const getComponent = (props = {}) =>
@@ -46,7 +47,7 @@ describe('<Map />', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         matrixClient.getClientWellKnown.mockReturnValue({
-            "m.tile_server": { map_style_url: 'maps.com' },
+            [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
         });
 
         jest.spyOn(logger, 'error').mockRestore();
@@ -65,7 +66,7 @@ describe('<Map />', () => {
 
             act(() => {
                 matrixClient.emit(ClientEvent.ClientWellKnown, {
-                    "m.tile_server": { map_style_url: 'new.maps.com' },
+                    [TILE_SERVER_WK_KEY.name]: { map_style_url: 'new.maps.com' },
                 });
             });
 
@@ -77,7 +78,7 @@ describe('<Map />', () => {
 
             act(() => {
                 matrixClient.emit(ClientEvent.ClientWellKnown, {
-                    "m.tile_server": { map_style_url: undefined },
+                    [TILE_SERVER_WK_KEY.name]: { map_style_url: undefined },
                 });
             });
 

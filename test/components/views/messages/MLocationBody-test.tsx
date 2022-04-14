@@ -28,6 +28,7 @@ import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalink
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
 import Modal from '../../../../src/Modal';
 import SdkConfig from "../../../../src/SdkConfig";
+import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
 import { makeLocationEvent } from "../../../test-utils/location";
 import { getMockClientWithEventEmitter } from '../../../test-utils';
 
@@ -37,7 +38,7 @@ describe("MLocationBody", () => {
         const userId = '@user:server';
         const mockClient = getMockClientWithEventEmitter({
             getClientWellKnown: jest.fn().mockReturnValue({
-                "m.tile_server": { map_style_url: 'maps.com' },
+                [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
             }),
             isGuest: jest.fn().mockReturnValue(false),
         });
@@ -78,7 +79,7 @@ describe("MLocationBody", () => {
             it('displays correct fallback content when map_style_url is misconfigured', () => {
                 const mockMap = new maplibregl.Map();
                 mockClient.getClientWellKnown.mockReturnValue({
-                    "m.tile_server": { map_style_url: 'bad-tile-server.com' },
+                    [TILE_SERVER_WK_KEY.name]: { map_style_url: 'bad-tile-server.com' },
                 });
                 const component = getComponent();
 
@@ -93,7 +94,7 @@ describe("MLocationBody", () => {
         describe('without error', () => {
             beforeEach(() => {
                 mockClient.getClientWellKnown.mockReturnValue({
-                    "m.tile_server": { map_style_url: 'maps.com' },
+                    [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
                 });
 
                 // MLocationBody uses random number for map id
