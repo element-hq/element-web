@@ -421,7 +421,7 @@
     "Sends a message as html, without interpreting it as markdown": "Sends a message as html, without interpreting it as markdown",
     "Upgrades a room to a new version": "Upgrades a room to a new version",
     "You do not have the required permissions to use this command.": "You do not have the required permissions to use this command.",
-    "Jump to the given date in the timeline (YYYY-MM-DD)": "Jump to the given date in the timeline (YYYY-MM-DD)",
+    "Jump to the given date in the timeline": "Jump to the given date in the timeline",
     "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.": "We were unable to understand the given date (%(inputDate)s). Try using the format YYYY-MM-DD.",
     "Changes your display nickname": "Changes your display nickname",
     "Changes your display nickname in the current room only": "Changes your display nickname in the current room only",
