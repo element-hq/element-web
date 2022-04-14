@@ -46,4 +46,4 @@ jobs:
                   path: |
                       cypress/screenshots
                       cypress/videos
-                      cypress/dockerlogs
+                      cypress/synapselogs
