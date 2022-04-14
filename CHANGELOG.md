@@ -1,3 +1,9 @@
+Changes in [3.42.4](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.42.4) (2022-04-14)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fixes around threads beta in degraded mode ([\#8319](https://github.com/matrix-org/matrix-react-sdk/pull/8319)). Fixes vector-im/element-web#21762.
+
 Changes in [3.42.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.42.3) (2022-04-12)
 =====================================================================================================
 
