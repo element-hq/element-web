@@ -56,7 +56,7 @@ export const createSpace = async (
                 events_default: 100,
                 invite: isPublic ? 0 : 50,
             },
-            room_alias_name: isPublic && alias ? alias.substr(1, alias.indexOf(":") - 1) : undefined,
+            room_alias_name: isPublic && alias ? alias.substring(1, alias.indexOf(":")) : undefined,
             topic,
             ...createOpts,
         },

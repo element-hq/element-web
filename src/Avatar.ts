@@ -57,7 +57,7 @@ function isValidHexColor(color: string): boolean {
     return typeof color === "string" &&
         (color.length === 7 || color.length === 9) &&
         color.charAt(0) === "#" &&
-        !color.substr(1).split("").some(c => isNaN(parseInt(c, 16)));
+        !color.slice(1).split("").some(c => isNaN(parseInt(c, 16)));
 }
 
 function urlForColor(color: string): string {

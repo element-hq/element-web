@@ -106,8 +106,8 @@ abstract class BasePart {
     }
 
     public split(offset: number): IBasePart {
-        const splitText = this.text.substr(offset);
-        this._text = this.text.substr(0, offset);
+        const splitText = this.text.slice(offset);
+        this._text = this.text.slice(0, offset);
         return new PlainPart(splitText);
     }
 
@@ -115,7 +115,7 @@ abstract class BasePart {
     // if the part would become invalid if it removed everything.
     public remove(offset: number, len: number): string | undefined {
         // validate
-        const strWithRemoval = this.text.substr(0, offset) + this.text.substr(offset + len);
+        const strWithRemoval = this.text.slice(0, offset) + this.text.slice(offset + len);
         for (let i = offset; i < (len + offset); ++i) {
             const chr = this.text.charAt(i);
             if (!this.acceptsRemoval(i, chr)) {
@@ -131,8 +131,8 @@ abstract class BasePart {
         for (let i = 0; i < str.length; ++i) {
             const chr = str.charAt(i);
             if (!this.acceptsInsertion(chr, offset + i, inputType)) {
-                this._text = this._text + str.substr(0, i);
-                return str.substr(i);
+                this._text = this._text + str.slice(0, i);
+                return str.slice(i);
             }
         }
         this._text = this._text + str;
@@ -147,8 +147,8 @@ abstract class BasePart {
                 return false;
             }
         }
-        const beforeInsert = this._text.substr(0, offset);
-        const afterInsert = this._text.substr(offset);
+        const beforeInsert = this._text.slice(0, offset);
+        const afterInsert = this._text.slice(offset);
         this._text = beforeInsert + str + afterInsert;
         return true;
     }
@@ -156,8 +156,8 @@ abstract class BasePart {
     public createAutoComplete(updateCallback: UpdateCallback): void {}
 
     protected trim(len: number): string {
-        const remaining = this._text.substr(len);
-        this._text = this._text.substr(0, len);
+        const remaining = this._text.slice(len);
+        this._text = this._text.slice(0, len);
         return remaining;
     }
 

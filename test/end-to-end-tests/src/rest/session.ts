@@ -42,7 +42,7 @@ export class RestSession {
     }
 
     userName(): string {
-        return this.credentials.userId.split(":")[0].substr(1);
+        return this.credentials.userId.split(":")[0].slice(1);
     }
 
     displayName(): string {

@@ -59,7 +59,7 @@ describe("PosthogAnalytics", () => {
                     const hexHash = shaHashes[message];
                     const bytes = [];
                     for (let c = 0; c < hexHash.length; c += 2) {
-                        bytes.push(parseInt(hexHash.substr(c, 2), 16));
+                        bytes.push(parseInt(hexHash.slice(c, c + 2), 16));
                     }
                     return bytes as unknown as ArrayBuffer;
                 },

@@ -55,7 +55,7 @@ const EffectsOverlay: FunctionComponent<IProps> = ({ roomWidth }) => {
         const onAction = (payload: { action: string }) => {
             const actionPrefix = 'effects.';
             if (payload.action.indexOf(actionPrefix) === 0) {
-                const effect = payload.action.substr(actionPrefix.length);
+                const effect = payload.action.slice(actionPrefix.length);
                 lazyLoadEffectModule(effect).then((module) => module?.start(canvasRef.current));
             }
         };

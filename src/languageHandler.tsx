@@ -290,7 +290,7 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
             matchFoundSomewhere = true;
 
             // The textual part before the first match
-            const head = inputText.substr(0, match.index);
+            const head = inputText.slice(0, match.index);
 
             const parts = [];
             // keep track of prevMatch
@@ -326,9 +326,9 @@ export function replaceByRegexes(text: string, mapping: IVariables | Tags): stri
                 let tail;
                 if (match) {
                     const startIndex = prevMatch.index + prevMatch[0].length;
-                    tail = inputText.substr(startIndex, match.index - startIndex);
+                    tail = inputText.slice(startIndex, match.index);
                 } else {
-                    tail = inputText.substr(prevMatch.index + prevMatch[0].length);
+                    tail = inputText.slice(prevMatch.index + prevMatch[0].length);
                 }
                 if (tail) {
                     parts.push(tail);
@@ -500,7 +500,7 @@ export function pickBestLanguage(langs: string[]): string {
 
     {
         // Failing that, a different dialect of the same language
-        const closeLangIndex = normalisedLangs.findIndex((l) => l.substr(0, 2) === currentLang.substr(0, 2));
+        const closeLangIndex = normalisedLangs.findIndex((l) => l.slice(0, 2) === currentLang.slice(0, 2));
         if (closeLangIndex > -1) return langs[closeLangIndex];
     }
 

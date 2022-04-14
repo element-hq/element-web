@@ -103,7 +103,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
             createOpts.preset = Preset.PublicChat;
             opts.guestAccess = false;
             const { alias } = this.state;
-            createOpts.room_alias_name = alias.substr(1, alias.indexOf(":") - 1);
+            createOpts.room_alias_name = alias.substring(1, alias.indexOf(":"));
         } else {
             // If we cannot change encryption we pass `true` for safety, the server should automatically do this for us.
             opts.encryption = this.state.canChangeEncryption ? this.state.isEncrypted : true;

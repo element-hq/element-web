@@ -230,7 +230,7 @@ export async function setTheme(theme?: string): Promise<void> {
     clearCustomTheme();
     let stylesheetName = theme;
     if (theme.startsWith("custom-")) {
-        const customTheme = getCustomTheme(theme.substr(7));
+        const customTheme = getCustomTheme(theme.slice(7));
         stylesheetName = customTheme.is_dark ? "dark-custom" : "light-custom";
         setCustomThemeVars(customTheme);
     }

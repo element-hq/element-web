@@ -364,7 +364,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private insertText(textToInsert: string, inputType = "insertText"): void {
         const sel = document.getSelection();
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
-        const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
+        const newText = text.slice(0, caret.offset) + textToInsert + text.slice(caret.offset);
         caret.offset += textToInsert.length;
         this.modifiedFlag = true;
         this.props.model.update(newText, inputType, caret);

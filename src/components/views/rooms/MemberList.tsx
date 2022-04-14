@@ -274,7 +274,7 @@ export default class MemberList extends React.Component<IProps, IState> {
 
             this.sortNames.set(
                 member,
-                (member.name[0] === '@' ? member.name.substr(1) : member.name).replace(SORT_REGEX, ""),
+                (member.name[0] === '@' ? member.name.slice(1) : member.name).replace(SORT_REGEX, ""),
             );
 
             // XXX: this user may have no lastPresenceTs value!

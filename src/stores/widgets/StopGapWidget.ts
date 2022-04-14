@@ -115,7 +115,7 @@ export class ElementWidget extends Widget {
 
         let theme = new ThemeWatcher().getEffectiveTheme();
         if (theme.startsWith("custom-")) {
-            const customTheme = getCustomTheme(theme.substr(7));
+            const customTheme = getCustomTheme(theme.slice(7));
             // Jitsi only understands light/dark
             theme = customTheme.is_dark ? "dark" : "light";
         }
