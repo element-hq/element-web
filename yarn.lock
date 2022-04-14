@@ -3001,11 +3001,6 @@ brorand@^1.0.1, brorand@^1.1.0:
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
 
-browser-encrypt-attachment@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/browser-encrypt-attachment/-/browser-encrypt-attachment-0.3.0.tgz#205a94caadf0dc7e81413941812f655bd190ff1c"
-  integrity sha1-IFqUyq3w3H6BQTlBgS9lW9GQ/xw=
-
 browser-process-hrtime@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/browser-process-hrtime/-/browser-process-hrtime-1.0.0.tgz#3c9b4b7d782c8121e56f10106d84c0d0ffc94626"
@@ -8173,14 +8168,19 @@ mathml-tag-names@^2.1.3:
   version "0.0.1"
   resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/daad3faed54f0b1f1e026a7498b4653e4d01cd90"
 
+matrix-encrypt-attachment@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/matrix-encrypt-attachment/-/matrix-encrypt-attachment-1.0.3.tgz#6e016587728c396549c833985f39cbf6c07ee97b"
+  integrity sha512-NwfoDY/yHL9Zo8KrY5GP8ymAoZJpEFKEK+IgJKdWf5xtsIFf7KIU2pbw8+Eq592j//nSDOC+/Ff4Fk8gVvDZpw==
+
 matrix-events-sdk@^0.0.1-beta.7:
   version "0.0.1-beta.7"
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "16.0.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/bdc3da1fac3cb454b409325b6a50cd869b3d5d57"
+  version "17.0.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/b58d09aa9a7a3578c43185becb41ab0b17ce0f98"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8203,8 +8203,8 @@ matrix-mock-request@^1.2.3:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.42.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/2520d8178401f91a786c7c5d44c216b3bd34085b"
+  version "3.42.3"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/7600182a35a7742820c5ab17988ef1b545c74759"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
@@ -8212,7 +8212,6 @@ matrix-mock-request@^1.2.3:
     "@types/geojson" "^7946.0.8"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
-    browser-encrypt-attachment "^0.3.0"
     browser-request "^0.3.3"
     cheerio "^1.0.0-rc.9"
     classnames "^2.2.6"
@@ -8241,6 +8240,7 @@ matrix-mock-request@^1.2.3:
     lodash "^4.17.20"
     maplibre-gl "^1.15.2"
     matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#daad3faed54f0b1f1e026a7498b4653e4d01cd90"
+    matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "^0.0.1-beta.7"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
     matrix-widget-api "^0.1.0-beta.18"
