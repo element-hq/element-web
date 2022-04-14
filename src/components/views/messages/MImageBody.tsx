@@ -364,10 +364,12 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         let infoWidth: number;
         let infoHeight: number;
+        let infoSvg = false;
 
         if (content.info?.w && content.info?.h) {
             infoWidth = content.info.w;
             infoHeight = content.info.h;
+            infoSvg = content.info.mimetype.startsWith("image/svg");
         } else {
             // Whilst the image loads, display nothing. We also don't display a blurhash image
             // because we don't really know what size of image we'll end up with.
@@ -449,6 +451,11 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             'mx_MImageBody_placeholder--blurhash': this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
         });
 
+        // many SVGs don't have an intrinsic size if used in <img> elements.
+        // due to this we have to set our desired width directly.
+        // this way if the image is forced to shrink, the height adapts appropriately.
+        const sizing = infoSvg ? { maxHeight, maxWidth, width: maxWidth } : { maxHeight, maxWidth };
+
         const thumbnail = (
             <div className="mx_MImageBody_thumbnail_container" style={{ maxHeight, maxWidth, aspectRatio: `${infoWidth}/${infoHeight}` }}>
                 <SwitchTransition mode="out-in">
@@ -463,7 +470,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                     </CSSTransition>
                 </SwitchTransition>
 
-                <div style={{ maxHeight, maxWidth }}>
+                <div style={sizing}>
                     { img }
                     { gifLabel }
                 </div>

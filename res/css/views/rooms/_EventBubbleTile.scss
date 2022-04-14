@@ -114,6 +114,11 @@ limitations under the License.
         padding-right: 48px;
     }
 
+    .mx_MImageBody_thumbnail_container {
+        min-height: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
+        min-width: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
+    }
+
     .mx_CallEvent {
         background-color: unset;
 
