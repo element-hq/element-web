@@ -347,6 +347,9 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
 
     // Video channel widgets need some more tailored config options
     if (isVideoChannel) {
+        // Ensure that we skip Jitsi Meet's native prejoin screen, for
+        // deployments that have it enabled
+        options.configOverwrite.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
         options.configOverwrite.toolbarButtons = [
             "microphone", "camera", "desktop", "tileview", "hangup",
