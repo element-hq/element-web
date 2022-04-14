@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<OwnBeaconStatus /> renders without a beacon instance 1`] = `
+<OwnBeaconStatus
+  displayStatus="Loading"
+>
+  <BeaconStatus
+    className="mx_MBeaconBody_chin"
+    displayLiveTimeRemaining={true}
+    displayStatus="Loading"
+    label="Live location enabled"
+  >
+    <div
+      className="mx_BeaconStatus mx_BeaconStatus_Loading mx_MBeaconBody_chin"
+    >
+      <StyledLiveBeaconIcon
+        className="mx_BeaconStatus_icon"
+        isIdle={true}
+        withError={false}
+      >
+        <div
+          className="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
+        />
+      </StyledLiveBeaconIcon>
+      <div
+        className="mx_BeaconStatus_description"
+      >
+        <span>
+          Loading live location...
+        </span>
+      </div>
+    </div>
+  </BeaconStatus>
+</OwnBeaconStatus>
+`;

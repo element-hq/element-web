@@ -1,43 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<BeaconStatus /> renders active state with stop button 1`] = `
-Array [
-  <AccessibleButton
-    className="mx_BeaconStatus_stopButton"
-    data-test-id="beacon-status-stop-beacon"
-    element="div"
-    kind="link"
-    onClick={[MockFunction]}
-    role="button"
-    tabIndex={0}
-  >
-    <div
-      className="mx_AccessibleButton mx_BeaconStatus_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-      data-test-id="beacon-status-stop-beacon"
-      onClick={[MockFunction]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      role="button"
-      tabIndex={0}
-    >
-      Stop
-    </div>
-  </AccessibleButton>,
-  <div
-    className="mx_AccessibleButton mx_BeaconStatus_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link"
-    data-test-id="beacon-status-stop-beacon"
-    onClick={[MockFunction]}
-    onKeyDown={[Function]}
-    onKeyUp={[Function]}
-    role="button"
-    tabIndex={0}
-  >
-    Stop
-  </div>,
-]
-`;
+exports[`<BeaconStatus /> active state renders with children 1`] = `null`;
 
-exports[`<BeaconStatus /> renders active state without stop buttons 1`] = `
+exports[`<BeaconStatus /> active state renders without children 1`] = `
 <BeaconStatus
   beacon={
     Beacon {
@@ -48,10 +13,8 @@ exports[`<BeaconStatus /> renders active state without stop buttons 1`] = `
         "timeout": 3600000,
         "timestamp": 123456789,
       },
-      "_events": Object {
-        "Beacon.update": [Function],
-      },
-      "_eventsCount": 1,
+      "_events": Object {},
+      "_eventsCount": 0,
       "_isLive": undefined,
       "_latestLocationState": undefined,
       "_maxListeners": undefined,
@@ -79,6 +42,7 @@ exports[`<BeaconStatus /> renders active state without stop buttons 1`] = `
     }
   }
   displayStatus="Active"
+  label="test label"
 >
   <div
     className="mx_BeaconStatus mx_BeaconStatus_Active"
@@ -93,9 +57,10 @@ exports[`<BeaconStatus /> renders active state without stop buttons 1`] = `
       />
     </StyledLiveBeaconIcon>
     <div
-      className="mx_BeaconStatus_activeDescription"
+      className="mx_BeaconStatus_description"
     >
-      <LiveTimeRemaining
+      test label
+      <BeaconExpiryTime
         beacon={
           Beacon {
             "_beaconInfo": Object {
@@ -105,10 +70,8 @@ exports[`<BeaconStatus /> renders active state without stop buttons 1`] = `
               "timeout": 3600000,
               "timestamp": 123456789,
             },
-            "_events": Object {
-              "Beacon.update": [Function],
-            },
-            "_eventsCount": 1,
+            "_events": Object {},
+            "_eventsCount": 0,
             "_isLive": undefined,
             "_latestLocationState": undefined,
             "_maxListeners": undefined,
@@ -137,12 +100,11 @@ exports[`<BeaconStatus /> renders active state without stop buttons 1`] = `
         }
       >
         <span
-          className="mx_LiveTimeRemaining"
-          data-test-id="room-live-share-expiry"
+          className="mx_BeaconStatus_expiryTime"
         >
-          1h left
+          Live until 11:17
         </span>
-      </LiveTimeRemaining>
+      </BeaconExpiryTime>
     </div>
   </div>
 </BeaconStatus>
@@ -151,6 +113,7 @@ exports[`<BeaconStatus /> renders active state without stop buttons 1`] = `
 exports[`<BeaconStatus /> renders loading state 1`] = `
 <BeaconStatus
   displayStatus="Loading"
+  label="test label"
 >
   <div
     className="mx_BeaconStatus mx_BeaconStatus_Loading"
@@ -164,9 +127,13 @@ exports[`<BeaconStatus /> renders loading state 1`] = `
         className="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
       />
     </StyledLiveBeaconIcon>
-    <span>
-      Loading live location...
-    </span>
+    <div
+      className="mx_BeaconStatus_description"
+    >
+      <span>
+        Loading live location...
+      </span>
+    </div>
   </div>
 </BeaconStatus>
 `;
@@ -174,6 +141,7 @@ exports[`<BeaconStatus /> renders loading state 1`] = `
 exports[`<BeaconStatus /> renders stopped state 1`] = `
 <BeaconStatus
   displayStatus="Stopped"
+  label="test label"
 >
   <div
     className="mx_BeaconStatus mx_BeaconStatus_Stopped"
@@ -187,9 +155,13 @@ exports[`<BeaconStatus /> renders stopped state 1`] = `
         className="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
       />
     </StyledLiveBeaconIcon>
-    <span>
-      Live location ended
-    </span>
+    <div
+      className="mx_BeaconStatus_description"
+    >
+      <span>
+        Live location ended
+      </span>
+    </div>
   </div>
 </BeaconStatus>
 `;

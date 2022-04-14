@@ -45,16 +45,17 @@ limitations under the License.
     margin-right: $spacing-8;
 }
 
-.mx_BeaconStatus_activeDescription {
+.mx_BeaconStatus_description {
     flex: 1;
     display: flex;
     flex-direction: column;
     line-height: $font-14px;
+
+    padding-right: $spacing-8;
+
+    // TODO handle text-overflow
 }
 
-.mx_BeaconStatus_stopButton {
-    // override button link_inline styles
-    color: $alert !important;
-    font-weight: $font-semi-bold !important;
-    text-transform: uppercase;
+.mx_BeaconStatus_expiryTime {
+    color: $secondary-content;
 }
