@@ -1,3 +1,9 @@
+Changes in [1.10.10](https://github.com/vector-im/element-web/releases/tag/v1.10.10) (2022-04-14)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Fixes around threads beta in degraded mode ([\#8319](https://github.com/matrix-org/matrix-react-sdk/pull/8319)). Fixes #21762.
+
 Changes in [1.10.9](https://github.com/vector-im/element-web/releases/tag/v1.10.9) (2022-04-12)
 ===============================================================================================
 
