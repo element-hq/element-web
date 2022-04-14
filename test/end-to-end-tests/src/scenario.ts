@@ -43,6 +43,7 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
             console.log(`running tests on ${await session.browser.version()} ...`);
             firstUser = false;
         }
+        // ported to cyprus (registration test)
         await signup(session, session.username, 'testsarefun!!!', session.hsUrl);
         return session;
     }

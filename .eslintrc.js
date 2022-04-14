@@ -92,6 +92,7 @@ module.exports = {
             files: [
                 "src/**/*.{ts,tsx}",
                 "test/**/*.{ts,tsx}",
+                "cypress/**/*.ts",
             ],
             extends: [
                 "plugin:matrix-org/typescript",
