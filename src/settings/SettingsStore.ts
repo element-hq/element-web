@@ -451,12 +451,13 @@ export default class SettingsStore {
             throw new Error("User cannot set " + settingName + " at " + level + " in " + roomId);
         }
 
+        if (setting.controller && !(await setting.controller.beforeChange(level, roomId, value))) {
+            return; // controller says no
+        }
+
         await handler.setValue(settingName, roomId, value);
 
-        const controller = setting.controller;
-        if (controller) {
-            controller.onChange(level, roomId, value);
-        }
+        setting.controller?.onChange(level, roomId, value);
     }
 
     /**
