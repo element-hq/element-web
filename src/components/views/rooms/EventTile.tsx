@@ -951,7 +951,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             isLeftAlignedBubbleMessage,
             noBubbleEvent,
             isSeeingThroughMessageHiddenForModeration,
-        } = getEventDisplayInfo(this.props.mxEvent, this.shouldHideEvent());
+        } = getEventDisplayInfo(this.props.mxEvent, this.context.showHiddenEvents, this.shouldHideEvent());
         const { isQuoteExpanded } = this.state;
 
         // This shouldn't happen: the caller should check we support this type
