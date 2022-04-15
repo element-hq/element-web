@@ -921,14 +921,9 @@ function useRoomPermissions(cli: MatrixClient, room: Room, user: RoomMember): IR
         canEdit: false,
         canInvite: false,
     });
-    const updateRoomPermissions = useCallback(() => {
-        if (!room) {
-            return;
-        }
 
-        const powerLevelEvent = room.currentState.getStateEvents("m.room.power_levels", "");
-        if (!powerLevelEvent) return;
-        const powerLevels = powerLevelEvent.getContent();
+    const updateRoomPermissions = useCallback(() => {
+        const powerLevels = room?.currentState.getStateEvents(EventType.RoomPowerLevels, "")?.getContent();
         if (!powerLevels) return;
 
         const me = room.getMember(cli.getUserId());
@@ -940,17 +935,14 @@ function useRoomPermissions(cli: MatrixClient, room: Room, user: RoomMember): IR
 
         let modifyLevelMax = -1;
         if (canAffectUser) {
-            const editPowerLevel = (
-                (powerLevels.events ? powerLevels.events["m.room.power_levels"] : null) ||
-                powerLevels.state_default
-            );
-            if (me.powerLevel >= editPowerLevel && (isMe || me.powerLevel > them.powerLevel)) {
+            const editPowerLevel = powerLevels.events?.[EventType.RoomPowerLevels] ?? powerLevels.state_default ?? 50;
+            if (me.powerLevel >= editPowerLevel) {
                 modifyLevelMax = me.powerLevel;
             }
         }
 
         setRoomPermissions({
-            canInvite: me.powerLevel >= powerLevels.invite,
+            canInvite: me.powerLevel >= (powerLevels.invite ?? 50),
             canEdit: modifyLevelMax >= 0,
             modifyLevelMax,
         });
