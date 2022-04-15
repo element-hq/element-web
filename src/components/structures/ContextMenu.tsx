@@ -429,7 +429,7 @@ export type AboveLeftOf = IPosition & {
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect,
 // and either above or below: wherever there is more space (maybe this should be aboveOrBelowLeftOf?)
 export const aboveLeftOf = (
-    elementRect: DOMRect,
+    elementRect: Pick<DOMRect, "right" | "top" | "bottom">,
     chevronFace = ChevronFace.None,
     vPadding = 0,
 ): AboveLeftOf => {

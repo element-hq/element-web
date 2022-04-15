@@ -414,6 +414,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Don't send read receipts"),
         default: false,
     },
+    "feature_message_right_click_context_menu": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        labsGroup: LabGroup.Rooms,
+        displayName: _td("Right-click message context menu"),
+        default: false,
+    },
     "feature_location_share_pin_drop": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

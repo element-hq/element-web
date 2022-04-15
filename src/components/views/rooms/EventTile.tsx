@@ -38,6 +38,8 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { E2EState } from "./E2EIcon";
 import { toRem } from "../../../utils/units";
 import RoomAvatar from "../avatars/RoomAvatar";
+import MessageContextMenu, { IEventTileOps } from "../context_menus/MessageContextMenu";
+import { aboveLeftOf } from '../../structures/ContextMenu';
 import { objectHasDiff } from "../../../utils/objects";
 import Tooltip from "../elements/Tooltip";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
@@ -47,6 +49,7 @@ import NotificationBadge from "./NotificationBadge";
 import CallEventGrouper from "../../structures/CallEventGrouper";
 import { ComposerInsertPayload } from "../../../dispatcher/payloads/ComposerInsertPayload";
 import { Action } from '../../../dispatcher/actions';
+import PlatformPeg from '../../../PlatformPeg';
 import MemberAvatar from '../avatars/MemberAvatar';
 import SenderProfile from '../messages/SenderProfile';
 import MessageTimestamp from '../messages/MessageTimestamp';
@@ -94,6 +97,10 @@ export interface IReadReceiptProps {
     userId: string;
     roomMember: RoomMember;
     ts: number;
+}
+
+export interface IEventTileType extends React.Component {
+    getEventTileOps?(): IEventTileOps;
 }
 
 interface IProps {
@@ -220,6 +227,13 @@ interface IState {
     reactions: Relations;
 
     hover: boolean;
+
+    // Position of the context menu
+    contextMenu?: {
+        position: Pick<DOMRect, "right" | "top" | "bottom">;
+        showPermalink?: boolean;
+    };
+
     isQuoteExpanded?: boolean;
 
     thread: Thread;
@@ -230,8 +244,7 @@ interface IState {
 export class UnwrappedEventTile extends React.Component<IProps, IState> {
     private suppressReadReceiptAnimation: boolean;
     private isListeningForReceipts: boolean;
-    // TODO: Types
-    private tile = React.createRef<unknown>();
+    private tile = React.createRef<IEventTileType>();
     private replyChain = React.createRef<ReplyChain>();
     private threadState: ThreadNotificationState;
 
@@ -264,6 +277,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             previouslyRequestedKeys: false,
             // The Relations model from the JS SDK for reactions to `mxEvent`
             reactions: this.getReactions(),
+            // Context menu position
+            contextMenu: null,
 
             hover: false,
 
@@ -898,10 +913,10 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
     private onActionBarFocusChange = (actionBarFocused: boolean) => {
         this.setState({ actionBarFocused });
     };
-    // TODO: Types
-    private getTile: () => any | null = () => this.tile.current;
 
-    private getReplyChain = () => this.replyChain.current;
+    private getTile: () => IEventTileType = () => this.tile.current;
+
+    private getReplyChain = (): ReplyChain => this.replyChain.current;
 
     private getReactions = () => {
         if (
@@ -923,6 +938,44 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         });
     };
 
+    private onContextMenu = (ev: React.MouseEvent): void => {
+        this.showContextMenu(ev);
+    };
+
+    private onTimestampContextMenu = (ev: React.MouseEvent): void => {
+        this.showContextMenu(ev, true);
+    };
+
+    private showContextMenu(ev: React.MouseEvent, showPermalink?: boolean): void {
+        if (!SettingsStore.getValue("feature_message_right_click_context_menu")) return;
+        // There is no way to copy non-PNG images into clipboard, so we can't
+        // have our own handling for copying images, so we leave it to the
+        // Electron layer (webcontents-handler.ts)
+        if (ev.target instanceof HTMLImageElement) return;
+        if (!PlatformPeg.get().allowOverridingNativeContextMenus()) return;
+        if (this.props.editState) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        this.setState({
+            contextMenu: {
+                position: {
+                    right: ev.clientX,
+                    top: ev.clientY,
+                    bottom: ev.clientY,
+                },
+                showPermalink: showPermalink,
+            },
+            actionBarFocused: true,
+        });
+    }
+
+    private onCloseMenu = (): void => {
+        this.setState({
+            contextMenu: null,
+            actionBarFocused: false,
+        });
+    };
+
     private setQuoteExpanded = (expanded: boolean) => {
         this.setState({
             isQuoteExpanded: expanded,
@@ -939,6 +992,29 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         if (this.props.callEventGrouper?.hangupReason === CallErrorCode.Replaced) return true;
 
         return false;
+    }
+
+    private renderContextMenu(): React.ReactFragment {
+        if (!this.state.contextMenu) return null;
+
+        const tile = this.getTile();
+        const replyChain = this.getReplyChain();
+        const eventTileOps = tile?.getEventTileOps ? tile.getEventTileOps() : undefined;
+        const collapseReplyChain = replyChain?.canCollapse() ? replyChain.collapse : undefined;
+
+        return (
+            <MessageContextMenu
+                {...aboveLeftOf(this.state.contextMenu.position)}
+                mxEvent={this.props.mxEvent}
+                permalinkCreator={this.props.permalinkCreator}
+                eventTileOps={eventTileOps}
+                collapseReplyChain={collapseReplyChain}
+                onFinished={this.onCloseMenu}
+                rightClick={true}
+                reactions={this.state.reactions}
+                showPermalink={this.state.contextMenu.showPermalink}
+            />
+        );
     }
 
     public render() {
@@ -1004,8 +1080,10 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             mx_EventTile_12hr: this.props.isTwelveHour,
             // Note: we keep the `sending` state class for tests, not for our styles
             mx_EventTile_sending: !isEditing && isSending,
-            mx_EventTile_highlight: this.shouldHighlight(),
-            mx_EventTile_selected: this.props.isSelectedEvent,
+            mx_EventTile_highlight: (this.context.timelineRenderingType === TimelineRenderingType.Notification
+                ? false
+                : this.shouldHighlight()),
+            mx_EventTile_selected: this.props.isSelectedEvent || this.state.contextMenu,
             mx_EventTile_continuation: isContinuation || eventType === EventType.CallInvite,
             mx_EventTile_last: this.props.last,
             mx_EventTile_lastInSection: this.props.lastInSection,
@@ -1126,7 +1204,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             && (this.props.alwaysShowTimestamps
             || this.props.last
             || this.state.hover
-            || this.state.actionBarFocused);
+            || this.state.actionBarFocused
+            || Boolean(this.state.contextMenu));
 
         // Thread panel shows the timestamp of the last reply in that thread
         const ts = this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList
@@ -1197,6 +1276,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             href={permalink}
             onClick={this.onPermalinkClicked}
             aria-label={formatTime(new Date(this.props.mxEvent.getTs()), this.props.isTwelveHour)}
+            onContextMenu={this.onTimestampContextMenu}
         >
             { timestamp }
         </a>;
@@ -1252,12 +1332,17 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                     </div>,
                     <div className="mx_EventTile_senderDetails" key="mx_EventTile_senderDetails">
                         { avatar }
-                        <a href={permalink} onClick={this.onPermalinkClicked}>
+                        <a
+                            href={permalink}
+                            onClick={this.onPermalinkClicked}
+                            onContextMenu={this.onTimestampContextMenu}
+                        >
                             { sender }
                             { timestamp }
                         </a>
                     </div>,
-                    <div className={lineClasses} key="mx_EventTile_line">
+                    <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        { this.renderContextMenu() }
                         { renderTile(TimelineRenderingType.Notification, {
                             ...this.props,
 
@@ -1298,7 +1383,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                         { avatar }
                         { sender }
                     </div>,
-                    <div className={lineClasses} key="mx_EventTile_line">
+                    <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        { this.renderContextMenu() }
                         { replyChain }
                         { renderTile(TimelineRenderingType.Thread, {
                             ...this.props,
@@ -1385,7 +1471,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                     "aria-atomic": true,
                     "data-scroll-tokens": scrollToken,
                 }, [
-                    <div className={lineClasses} key="mx_EventTile_line">
+                    <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                        { this.renderContextMenu() }
                         { renderTile(TimelineRenderingType.File, {
                             ...this.props,
 
@@ -1406,7 +1493,10 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                         href={permalink}
                         onClick={this.onPermalinkClicked}
                     >
-                        <div className="mx_EventTile_senderDetails">
+                        <div
+                            className="mx_EventTile_senderDetails"
+                            onContextMenu={this.onTimestampContextMenu}
+                        >
                             { sender }
                             { timestamp }
                         </div>
@@ -1434,7 +1524,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                         { sender }
                         { ircPadlock }
                         { avatar }
-                        <div className={lineClasses} key="mx_EventTile_line">
+                        <div className={lineClasses} key="mx_EventTile_line" onContextMenu={this.onContextMenu}>
+                            { this.renderContextMenu() }
                             { groupTimestamp }
                             { groupPadlock }
                             { replyChain }

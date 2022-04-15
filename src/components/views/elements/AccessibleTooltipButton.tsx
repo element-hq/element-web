@@ -23,7 +23,7 @@ import Tooltip, { Alignment } from './Tooltip';
 interface IProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
     tooltip?: React.ReactNode;
-    label?: React.ReactNode;
+    label?: string;
     tooltipClassName?: string;
     forceHide?: boolean;
     yOffset?: number;
