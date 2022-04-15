@@ -942,7 +942,7 @@ function useRoomPermissions(cli: MatrixClient, room: Room, user: RoomMember): IR
         }
 
         setRoomPermissions({
-            canInvite: me.powerLevel >= (powerLevels.invite ?? 50),
+            canInvite: me.powerLevel >= (powerLevels.invite ?? 0),
             canEdit: modifyLevelMax >= 0,
             modifyLevelMax,
         });

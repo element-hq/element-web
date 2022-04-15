@@ -262,7 +262,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             },
             "invite": {
                 desc: _t('Invite users'),
-                defaultValue: 50,
+                defaultValue: 0,
             },
             "state_default": {
                 desc: _t('Change settings'),
