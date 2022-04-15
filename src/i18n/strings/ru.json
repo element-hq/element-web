@@ -12,7 +12,7 @@
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Неверная конфигурация: можно указывать только один из следующих параметров: default_server_config, default_server_name или default_hs_url.",
     "Invalid configuration: no default server specified.": "Неверная конфигурация: сервер по умолчанию не указан.",
     "The message from the parser is: %(message)s": "Сообщение из парсера: %(message)s",
-    "Invalid JSON": "Нерабочий JSON",
+    "Invalid JSON": "Неверный JSON",
     "Go to your browser to complete Sign In": "Перейдите в браузер для завершения входа",
     "Open user settings": "Открыть настройки пользователя",
     "Missing indexeddb worker script!": "Отсутствует скрипт воркера для indexeddb!",
@@ -36,5 +36,6 @@
     "Use %(brand)s on mobile": "Воспользуйтесь %(brand)s на мобильном телефоне",
     "Switch to space by number": "Переключение на пространство по номеру",
     "Next recently visited room or community": "Следующая недавно посещенная комната или сообщество",
-    "Previous recently visited room or community": "Предыдущая недавно посещенная комната или сообщество"
+    "Previous recently visited room or community": "Предыдущая недавно посещенная комната или сообщество",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализованное, зашифрованное общение и сотрудничество на основе $matrixLogo"
 }

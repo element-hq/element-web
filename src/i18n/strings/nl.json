@@ -7,7 +7,7 @@
     "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentrale en versleutelde chat &amp; samenwerken dankzij [matrix]",
     "Sign In": "Inloggen",
     "Create Account": "Registreren",
-    "Explore rooms": "Kamers verkennen",
+    "Explore rooms": "Kamers ontdekken",
     "Unexpected error preparing the app. See console for details.": "Er is een onverwachte fout opgetreden bij het voorbereiden van de app. Zie de console voor details.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuratiefout: kan slechts één van default_server_config, default_server_name, of default_hs_url opgeven.",
     "Invalid configuration: no default server specified.": "Configuratie ongeldig: geen standaardserver opgegeven.",
@@ -36,5 +36,6 @@
     "Use %(brand)s on mobile": "Gebruik %(brand)s op uw mobiel",
     "Switch to space by number": "Wissel naar Space met nummer",
     "Next recently visited room or community": "Volgende recent bezochte kamer of community",
-    "Previous recently visited room or community": "Vorige recent bezochte kamer of community"
+    "Previous recently visited room or community": "Vorige recent bezochte kamer of community",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo"
 }
