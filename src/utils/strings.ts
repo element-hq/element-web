@@ -84,3 +84,11 @@ const collator = new Intl.Collator();
 export function compare(a: string, b: string): number {
     return collator.compare(a, b);
 }
+
+/**
+ * Returns text which has been selected by the user
+ * @returns the selected text
+ */
+export function getSelectedText(): string {
+    return window.getSelection().toString();
+}

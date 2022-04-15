@@ -37,7 +37,7 @@ import { ReadPinsEventId } from "../right_panel/types";
 import { Action } from "../../../dispatcher/actions";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { ButtonEvent } from '../elements/AccessibleButton';
-import { copyPlaintext } from '../../../utils/strings';
+import { copyPlaintext, getSelectedText } from '../../../utils/strings';
 import ContextMenu, { toRightOf } from '../../structures/ContextMenu';
 import ReactionPicker from '../emojipicker/ReactionPicker';
 import ViewSource from '../../structures/ViewSource';
@@ -53,10 +53,6 @@ import { GetRelationsForEvent } from "../rooms/EventTile";
 import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
 import { createMapSiteLink } from '../../../utils/location';
-
-export function canCancel(status: EventStatus): boolean {
-    return status === EventStatus.QUEUED || status === EventStatus.NOT_SENT || status === EventStatus.ENCRYPTING;
-}
 
 export interface IEventTileOps {
     isWidgetHidden(): boolean;
@@ -263,7 +259,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onCopyClick = (): void => {
-        copyPlaintext(this.getSelectedText());
+        copyPlaintext(getSelectedText());
         this.closeMenu();
     };
 
@@ -308,10 +304,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             const relation = e.getRelation();
             return relation?.rel_type === RelationType.Annotation && relation.event_id === eventId && filter(e);
         });
-    }
-
-    private getSelectedText(): string {
-        return window.getSelection().toString();
     }
 
     private getPermalink(): string {
@@ -539,7 +531,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        if (rightClick && this.getSelectedText()) {
+        if (rightClick && getSelectedText()) {
             copyButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconCopy"
