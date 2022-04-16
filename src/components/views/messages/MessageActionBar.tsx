@@ -482,8 +482,11 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         }
 
         // aria-live=off to not have this read out automatically as navigating around timeline, gets repetitive.
-        return <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
-            { toolbarOpts }
-        </Toolbar>;
+        return <React.Fragment>
+                {!mxEvent.isRedacted() ? 
+                <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
+                { toolbarOpts }
+                </Toolbar> : <React.Fragment/>}
+        </React.Fragment>;
     }
 }
