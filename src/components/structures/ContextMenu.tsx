@@ -450,9 +450,37 @@ export const aboveLeftOf = (
     return menuOptions;
 };
 
+// Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the right of elementRect,
+// and either above or below: wherever there is more space (maybe this should be aboveOrBelowRightOf?)
+export const aboveRightOf = (
+    elementRect: Pick<DOMRect, "left" | "top" | "bottom">,
+    chevronFace = ChevronFace.None,
+    vPadding = 0,
+): AboveLeftOf => {
+    const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
+
+    const buttonLeft = elementRect.left + window.pageXOffset;
+    const buttonBottom = elementRect.bottom + window.pageYOffset;
+    const buttonTop = elementRect.top + window.pageYOffset;
+    // Align the left edge of the menu to the left edge of the button
+    menuOptions.left = buttonLeft;
+    // Align the menu vertically on whichever side of the button has more space available.
+    if (buttonBottom < UIStore.instance.windowHeight / 2) {
+        menuOptions.top = buttonBottom + vPadding;
+    } else {
+        menuOptions.bottom = (UIStore.instance.windowHeight - buttonTop) + vPadding;
+    }
+
+    return menuOptions;
+};
+
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the left of elementRect
 // and always above elementRect
-export const alwaysAboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0) => {
+export const alwaysAboveLeftOf = (
+    elementRect: Pick<DOMRect, "right" | "bottom" | "top">,
+    chevronFace = ChevronFace.None,
+    vPadding = 0,
+) => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonRight = elementRect.right + window.pageXOffset;
@@ -472,7 +500,11 @@ export const alwaysAboveLeftOf = (elementRect: DOMRect, chevronFace = ChevronFac
 
 // Placement method for <ContextMenu /> to position context menu right-aligned and flowing to the right of elementRect
 // and always above elementRect
-export const alwaysAboveRightOf = (elementRect: DOMRect, chevronFace = ChevronFace.None, vPadding = 0) => {
+export const alwaysAboveRightOf = (
+    elementRect: Pick<DOMRect, "left" | "top">,
+    chevronFace = ChevronFace.None,
+    vPadding = 0,
+) => {
     const menuOptions: IPosition & { chevronFace: ChevronFace } = { chevronFace };
 
     const buttonLeft = elementRect.left + window.pageXOffset;

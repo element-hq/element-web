@@ -39,7 +39,7 @@ import { E2EState } from "./E2EIcon";
 import { toRem } from "../../../utils/units";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu, { IEventTileOps } from "../context_menus/MessageContextMenu";
-import { aboveLeftOf } from '../../structures/ContextMenu';
+import { aboveRightOf } from '../../structures/ContextMenu';
 import { objectHasDiff } from "../../../utils/objects";
 import Tooltip from "../elements/Tooltip";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
@@ -230,7 +230,7 @@ interface IState {
 
     // Position of the context menu
     contextMenu?: {
-        position: Pick<DOMRect, "right" | "top" | "bottom">;
+        position: Pick<DOMRect, "top" | "left" | "bottom">;
         showPermalink?: boolean;
     };
 
@@ -972,7 +972,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         this.setState({
             contextMenu: {
                 position: {
-                    right: ev.clientX,
+                    left: ev.clientX,
                     top: ev.clientY,
                     bottom: ev.clientY,
                 },
@@ -1017,7 +1017,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
 
         return (
             <MessageContextMenu
-                {...aboveLeftOf(this.state.contextMenu.position)}
+                {...aboveRightOf(this.state.contextMenu.position)}
                 mxEvent={this.props.mxEvent}
                 permalinkCreator={this.props.permalinkCreator}
                 eventTileOps={eventTileOps}
