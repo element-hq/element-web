@@ -43,6 +43,8 @@ function setDocumentRangeSelection(editor: HTMLDivElement, model: EditorModel, r
 }
 
 export function setCaretPosition(editor: HTMLDivElement, model: EditorModel, caretPosition: IPosition) {
+    if (model.isEmpty) return; // selection can't possibly be wrong, so avoid a reflow
+
     const range = document.createRange();
     const { node, offset } = getNodeAndOffsetForPosition(editor, model, caretPosition);
     range.setStart(node, offset);
