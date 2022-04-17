@@ -575,7 +575,9 @@ const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBas
             room.isSpaceRoom() ? ConfirmSpaceUserActionDialog : ConfirmUserActionDialog,
             {
                 member,
-                action: member.membership === "invite" ? _t("Disinvite") : _t("Remove from chat"),
+                action: room.isSpaceRoom() ?
+                    member.membership === "invite" ? _t("Disinvite from space") : _t("Remove from space")
+                    : member.membership === "invite" ? _t("Disinvite from room") : _t("Remove from room"),
                 title: member.membership === "invite"
                     ? _t("Disinvite from %(roomName)s", { roomName: room.name })
                     : _t("Remove from %(roomName)s", { roomName: room.name }),
@@ -618,7 +620,10 @@ const RoomKickButton = ({ room, member, startUpdating, stopUpdating }: Omit<IBas
         });
     };
 
-    const kickLabel = member.membership === "invite" ? _t("Disinvite") : _t("Remove from room");
+    const kickLabel = room.isSpaceRoom() ?
+        member.membership === "invite" ? _t("Disinvite from space") : _t("Remove from space")
+        : member.membership === "invite" ? _t("Disinvite from room") : _t("Remove from room");
+
     return <AccessibleButton className="mx_UserInfo_field mx_UserInfo_destructive" onClick={onKick}>
         { kickLabel }
     </AccessibleButton>;
