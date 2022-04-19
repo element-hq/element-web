@@ -18,13 +18,16 @@ limitations under the License.
 .mx_CopyableText {
     display: flex;
     justify-content: space-between;
-    border-radius: 5px;
-    border: solid 1px $light-fg-color;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding: 10px;
     width: max-content;
     max-width: 100%;
+
+    &.mx_CopyableText_border {
+        border-radius: 5px;
+        border: solid 1px $light-fg-color;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        padding: 10px;
+    }
 
     .mx_CopyableText_copyButton {
         flex-shrink: 0;

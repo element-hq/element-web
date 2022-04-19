@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { copyPlaintext } from "../../../utils/strings";
@@ -25,9 +26,10 @@ import AccessibleTooltipButton from "./AccessibleTooltipButton";
 interface IProps {
     children: React.ReactNode;
     getTextToCopy: () => string;
+    border?: boolean;
 }
 
-const CopyableText: React.FC<IProps> = ({ children, getTextToCopy }) => {
+const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border=true }) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent) => {
@@ -42,7 +44,11 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy }) => {
         }
     };
 
-    return <div className="mx_CopyableText">
+    const className = classNames("mx_CopyableText", {
+        mx_CopyableText_border: border,
+    });
+
+    return <div className={className}>
         { children }
         <AccessibleTooltipButton
             title={tooltip ?? _t("Copy")}

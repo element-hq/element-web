@@ -167,8 +167,16 @@ export default class ViewSource extends React.Component<IProps, IState> {
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
-                    <div>{ _t("Room ID: %(roomId)s", { roomId }) }</div>
-                    <div>{ _t("Event ID: %(eventId)s", { eventId }) }</div>
+                    <div>
+                        <CopyableText getTextToCopy={() => roomId} border={false}>
+                            { _t("Room ID: %(roomId)s", { roomId }) }
+                        </CopyableText>
+                    </div>
+                    <div>
+                        <CopyableText getTextToCopy={() => eventId} border={false}>
+                            { _t("Event ID: %(eventId)s", { eventId }) }
+                        </CopyableText>
+                    </div>
                     <div className="mx_ViewSource_separator" />
                     { isEditing ? this.editSourceContent() : this.viewSourceContent() }
                 </div>
