@@ -32,7 +32,7 @@ function escape(text: string): string {
 
 // Finds the length of the longest backtick sequence in the given text, used for
 // escaping backticks in code blocks
-function longestBacktickSequence(text: string): number {
+export function longestBacktickSequence(text: string): number {
     let length = 0;
     let currentLength = 0;
 
