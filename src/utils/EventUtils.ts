@@ -19,6 +19,7 @@ import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { M_POLL_START } from "matrix-events-sdk";
+import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
@@ -261,4 +262,22 @@ export function editEvent(
 
 export function canCancel(status: EventStatus): boolean {
     return status === EventStatus.QUEUED || status === EventStatus.NOT_SENT || status === EventStatus.ENCRYPTING;
+}
+
+export const isLocationEvent = (event: MatrixEvent): boolean => {
+    const eventType = event.getType();
+    return (
+        M_LOCATION.matches(eventType) ||
+        (
+            eventType === EventType.RoomMessage &&
+            M_LOCATION.matches(event.getContent().msgtype)
+        )
+    );
+};
+
+export function canForward(event: MatrixEvent): boolean {
+    return !(
+        isLocationEvent(event) ||
+        M_POLL_START.matches(event.getType())
+    );
 }

@@ -26,7 +26,6 @@ import { Mjolnir } from "../../../mjolnir/Mjolnir";
 import RedactedBody from "./RedactedBody";
 import UnknownBody from "./UnknownBody";
 import { IMediaBody } from "./IMediaBody";
-import { IOperableEventTile } from "../context_menus/MessageContextMenu";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { ReactAnyComponent } from "../../../@types/common";
 import { IBodyProps } from "./IBodyProps";
@@ -41,6 +40,7 @@ import MPollBody from "./MPollBody";
 import MLocationBody from "./MLocationBody";
 import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
+import { IEventTileOps } from "../rooms/EventTile";
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -52,6 +52,10 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
     getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;
 
     isSeeingThroughMessageHiddenForModeration?: boolean;
+}
+
+export interface IOperableEventTile {
+    getEventTileOps(): IEventTileOps;
 }
 
 export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {

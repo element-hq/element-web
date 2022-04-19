@@ -38,7 +38,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { E2EState } from "./E2EIcon";
 import { toRem } from "../../../utils/units";
 import RoomAvatar from "../avatars/RoomAvatar";
-import MessageContextMenu, { IEventTileOps } from "../context_menus/MessageContextMenu";
+import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from '../../structures/ContextMenu';
 import { objectHasDiff } from "../../../utils/objects";
 import Tooltip from "../elements/Tooltip";
@@ -97,6 +97,11 @@ export interface IReadReceiptProps {
     userId: string;
     roomMember: RoomMember;
     ts: number;
+}
+
+export interface IEventTileOps {
+    isWidgetHidden(): boolean;
+    unhideWidget(): void;
 }
 
 export interface IEventTileType extends React.Component {
