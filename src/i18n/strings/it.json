@@ -3829,5 +3829,17 @@
     "%(count)s participants|other": "%(count)s partecipanti",
     "New video room": "Nuova stanza video",
     "New room": "Nuova stanza",
-    "Video rooms (under active development)": "Stanze video (in sviluppo attivo)"
+    "Video rooms (under active development)": "Stanze video (in sviluppo attivo)",
+    "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.": "Le conversazioni aiutano a tenere le discussioni in tema e rintracciabili. <a>Maggiori info</a>.",
+    "<a>Give feedback</a>": "<a>Lascia feedback</a>",
+    "Threads are a beta feature": "Le conversazioni sono una funzionalità beta",
+    "<b>Tip:</b> Use \"Reply in thread\" when hovering over a message.": "<b>Consiglio:</b> usa \"Rispondi nella conversazione\" passando sopra un messaggio.",
+    "Threads help keep your conversations on-topic and easy to track.": "Le conversazioni ti aiutano a tenere le tue discussioni in tema e rintracciabili.",
+    "%(featureName)s Beta feedback": "Feedback %(featureName)s beta",
+    "Beta feature. Click to learn more.": "Funzionalità beta. Clicca per maggiori informazioni.",
+    "Beta feature": "Funzionalità beta",
+    "To leave, return to this page and use the “Leave the beta” button.": "Per uscire, torna in questa pagina e usa il pulsante \"Abbandona la beta\".",
+    "Use \"Reply in thread\" when hovering over a message.": "Usa \"Rispondi nella conversazione\" passando sopra un messaggio.",
+    "How can I start a thread?": "Come inizio una conversazione?",
+    "Keep discussions organised with threads.": "Tieni le discussioni organizzate in conversazioni."
 }
