@@ -19,6 +19,7 @@ import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import {
     MatrixClient,
+    MatrixEvent,
     Room,
     RoomMember,
     getBeaconInfoIdentifier,
@@ -30,6 +31,7 @@ import {
     getMockClientWithEventEmitter,
     makeBeaconEvent,
     makeBeaconInfoEvent,
+    makeRoomWithStateEvents,
 } from '../../../test-utils';
 import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
 
@@ -55,12 +57,9 @@ describe('<BeaconViewDialog />', () => {
 
     // make fresh rooms every time
     // as we update room state
-    const makeRoomWithStateEvents = (stateEvents = []): Room => {
-        const room1 = new Room(roomId, mockClient, aliceId);
-
-        room1.currentState.setStateEvents(stateEvents);
+    const setupRoom = (stateEvents: MatrixEvent[] = []): Room => {
+        const room1 = makeRoomWithStateEvents(stateEvents, { roomId, mockClient });
         jest.spyOn(room1, 'getMember').mockReturnValue(aliceMember);
-        mockClient.getRoom.mockReturnValue(room1);
 
         return room1;
     };
@@ -85,7 +84,7 @@ describe('<BeaconViewDialog />', () => {
         mount(<BeaconViewDialog {...defaultProps} {...props} />);
 
     it('renders a map with markers', () => {
-        const room = makeRoomWithStateEvents([defaultEvent]);
+        const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
         beacon.addLocations([location1]);
         const component = getComponent();
@@ -97,7 +96,7 @@ describe('<BeaconViewDialog />', () => {
     });
 
     it('updates markers on changes to beacons', () => {
-        const room = makeRoomWithStateEvents([defaultEvent]);
+        const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
         beacon.addLocations([location1]);
         const component = getComponent();
@@ -122,7 +121,7 @@ describe('<BeaconViewDialog />', () => {
 
     it('renders a fallback when no live beacons remain', () => {
         const onFinished = jest.fn();
-        const room = makeRoomWithStateEvents([defaultEvent]);
+        const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
         beacon.addLocations([location1]);
         const component = getComponent({ onFinished });

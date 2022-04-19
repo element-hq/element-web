@@ -22,12 +22,18 @@ import {
     Beacon,
     Room,
     RoomMember,
+    MatrixEvent,
     getBeaconInfoIdentifier,
 } from 'matrix-js-sdk/src/matrix';
 
 import BeaconMarker from '../../../../src/components/views/beacon/BeaconMarker';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
-import { getMockClientWithEventEmitter, makeBeaconEvent, makeBeaconInfoEvent } from '../../../test-utils';
+import {
+    getMockClientWithEventEmitter,
+    makeBeaconEvent,
+    makeBeaconInfoEvent,
+    makeRoomWithStateEvents,
+} from '../../../test-utils';
 import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
 
 describe('<BeaconMarker />', () => {
@@ -53,13 +59,9 @@ describe('<BeaconMarker />', () => {
 
     // make fresh rooms every time
     // as we update room state
-    const makeRoomWithStateEvents = (stateEvents = []): Room => {
-        const room1 = new Room(roomId, mockClient, aliceId);
-
-        room1.currentState.setStateEvents(stateEvents);
+    const setupRoom = (stateEvents: MatrixEvent[] = []): Room => {
+        const room1 = makeRoomWithStateEvents(stateEvents, { roomId, mockClient });
         jest.spyOn(room1, 'getMember').mockReturnValue(aliceMember);
-        mockClient.getRoom.mockReturnValue(room1);
-
         return room1;
     };
 
@@ -97,21 +99,21 @@ describe('<BeaconMarker />', () => {
     });
 
     it('renders nothing when beacon is not live', () => {
-        const room = makeRoomWithStateEvents([notLiveEvent]);
+        const room = setupRoom([notLiveEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(notLiveEvent));
         const component = getComponent({ beacon });
         expect(component.html()).toBe(null);
     });
 
     it('renders nothing when beacon has no location', () => {
-        const room = makeRoomWithStateEvents([defaultEvent]);
+        const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
         const component = getComponent({ beacon });
         expect(component.html()).toBe(null);
     });
 
     it('renders marker when beacon has location', () => {
-        const room = makeRoomWithStateEvents([defaultEvent]);
+        const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
         beacon.addLocations([location1]);
         const component = getComponent({ beacon });
@@ -119,7 +121,7 @@ describe('<BeaconMarker />', () => {
     });
 
     it('updates with new locations', () => {
-        const room = makeRoomWithStateEvents([defaultEvent]);
+        const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
         beacon.addLocations([location1]);
         const component = getComponent({ beacon });
