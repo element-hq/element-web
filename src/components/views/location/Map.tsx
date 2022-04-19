@@ -16,6 +16,7 @@ limitations under the License.
 
 import React, { ReactNode, useContext, useEffect } from 'react';
 import classNames from 'classnames';
+import maplibregl from 'maplibre-gl';
 import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/matrix';
 import { logger } from 'matrix-js-sdk/src/logger';
 
@@ -24,8 +25,9 @@ import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { parseGeoUri } from '../../../utils/location';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
 import { useMap } from '../../../utils/location/useMap';
+import { Bounds } from '../../../utils/beacon/bounds';
 
-const useMapWithStyle = ({ id, centerGeoUri, onError, interactive }) => {
+const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => {
     const bodyId = `mx_Map_${id}`;
 
     // style config
@@ -55,6 +57,20 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive }) => {
         }
     }, [map, centerGeoUri]);
 
+    useEffect(() => {
+        if (map && bounds) {
+            try {
+                const lngLatBounds = new maplibregl.LngLatBounds(
+                    [bounds.west, bounds.south],
+                    [bounds.east, bounds.north],
+                );
+                map.fitBounds(lngLatBounds, { padding: 100 });
+            } catch (error) {
+                logger.error('Invalid map bounds', error);
+            }
+        }
+    }, [map, bounds]);
+
     return {
         map,
         bodyId,
@@ -65,6 +81,7 @@ interface MapProps {
     id: string;
     interactive?: boolean;
     centerGeoUri?: string;
+    bounds?: Bounds;
     className?: string;
     onClick?: () => void;
     onError?: (error: Error) => void;
@@ -74,9 +91,15 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({
-    centerGeoUri, className, id, onError, onClick, children, interactive,
+    bounds,
+    centerGeoUri,
+    children,
+    className,
+    id,
+    interactive,
+    onError, onClick,
 }) => {
-    const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive });
+    const { map, bodyId } = useMapWithStyle({ centerGeoUri, onError, id, interactive, bounds });
 
     const onMapClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,

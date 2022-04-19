@@ -115,6 +115,38 @@ describe('<Map />', () => {
         });
     });
 
+    describe('map bounds', () => {
+        it('does not try to fit map bounds when no bounds provided', () => {
+            getComponent({ bounds: null });
+            expect(mockMap.fitBounds).not.toHaveBeenCalled();
+        });
+
+        it('fits map to bounds', () => {
+            const bounds = { north: 51, south: 50, east: 42, west: 41 };
+            getComponent({ bounds });
+            expect(mockMap.fitBounds).toHaveBeenCalledWith(new maplibregl.LngLatBounds([bounds.west, bounds.south],
+                [bounds.east, bounds.north]), { padding: 100 });
+        });
+
+        it('handles invalid bounds', () => {
+            const logSpy = jest.spyOn(logger, 'error').mockImplementation();
+            const bounds = { north: 'a', south: 'b', east: 42, west: 41 };
+            getComponent({ bounds });
+            expect(mockMap.fitBounds).not.toHaveBeenCalled();
+            expect(logSpy).toHaveBeenCalledWith('Invalid map bounds', new Error('Invalid LngLat object: (41, NaN)'));
+        });
+
+        it('updates map bounds when bounds prop changes', () => {
+            const component = getComponent({ centerGeoUri: 'geo:51,42' });
+
+            const bounds = { north: 51, south: 50, east: 42, west: 41 };
+            const bounds2 = { north: 53, south: 51, east: 45, west: 44 };
+            component.setProps({ bounds });
+            component.setProps({ bounds: bounds2 });
+            expect(mockMap.fitBounds).toHaveBeenCalledTimes(2);
+        });
+    });
+
     describe('children', () => {
         it('renders without children', () => {
             const component = getComponent({ children: null });

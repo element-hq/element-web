@@ -26,6 +26,7 @@ import {
 
 import BeaconViewDialog from '../../../../src/components/views/beacon/BeaconViewDialog';
 import {
+    findByTestId,
     getMockClientWithEventEmitter,
     makeBeaconEvent,
     makeBeaconInfoEvent,
@@ -117,5 +118,38 @@ describe('<BeaconViewDialog />', () => {
 
         // two markers now!
         expect(component.find('BeaconMarker').length).toEqual(2);
+    });
+
+    it('renders a fallback when no live beacons remain', () => {
+        const onFinished = jest.fn();
+        const room = makeRoomWithStateEvents([defaultEvent]);
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        beacon.addLocations([location1]);
+        const component = getComponent({ onFinished });
+        expect(component.find('BeaconMarker').length).toEqual(1);
+
+        // this will replace the defaultEvent
+        // leading to no more live beacons
+        const anotherBeaconEvent = makeBeaconInfoEvent(aliceId,
+            roomId,
+            { isLive: false },
+            '$bob-room1-1',
+        );
+
+        act(() => {
+            // emits RoomStateEvent.BeaconLiveness
+            room.currentState.setStateEvents([anotherBeaconEvent]);
+        });
+
+        component.setProps({});
+
+        // map placeholder
+        expect(findByTestId(component, 'beacon-view-dialog-map-fallback')).toMatchSnapshot();
+
+        act(() => {
+            findByTestId(component, 'beacon-view-dialog-fallback-close').at(0).simulate('click');
+        });
+
+        expect(onFinished).toHaveBeenCalled();
     });
 });

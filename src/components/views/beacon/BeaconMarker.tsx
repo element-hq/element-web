@@ -58,6 +58,7 @@ const BeaconMarker: React.FC<Props> = ({ map, beacon }) => {
         id={beacon.identifier}
         geoUri={geoUri}
         roomMember={markerRoomMember}
+        useMemberColor
     />;
 };
 

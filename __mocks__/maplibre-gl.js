@@ -1,5 +1,5 @@
 const EventEmitter = require("events");
-const { LngLat, NavigationControl } = require('maplibre-gl');
+const { LngLat, NavigationControl, LngLatBounds } = require('maplibre-gl');
 
 class MockMap extends EventEmitter {
     addControl = jest.fn();
@@ -8,6 +8,7 @@ class MockMap extends EventEmitter {
     zoomOut = jest.fn();
     setCenter = jest.fn();
     setStyle = jest.fn();
+    fitBounds = jest.fn();
 }
 const MockMapInstance = new MockMap();
 
@@ -24,5 +25,6 @@ module.exports = {
     GeolocateControl: jest.fn().mockReturnValue(MockGeolocateInstance),
     Marker: jest.fn().mockReturnValue(MockMarker),
     LngLat,
+    LngLatBounds,
     NavigationControl,
 };

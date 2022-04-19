@@ -24,6 +24,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
           "_eventsCount": 1,
           "_maxListeners": undefined,
           "addControl": [MockFunction],
+          "fitBounds": [MockFunction],
           "removeControl": [MockFunction],
           "setCenter": [MockFunction] {
             "calls": Array [
@@ -76,6 +77,7 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
           "_eventsCount": 1,
           "_maxListeners": undefined,
           "addControl": [MockFunction],
+          "fitBounds": [MockFunction],
           "removeControl": [MockFunction],
           "setCenter": [MockFunction] {
             "calls": Array [

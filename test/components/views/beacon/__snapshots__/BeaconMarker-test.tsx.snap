@@ -61,6 +61,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
       "_eventsCount": 0,
       "_maxListeners": undefined,
       "addControl": [MockFunction],
+      "fitBounds": [MockFunction],
       "removeControl": [MockFunction],
       "setCenter": [MockFunction],
       "setStyle": [MockFunction],
@@ -79,6 +80,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
         "_eventsCount": 0,
         "_maxListeners": undefined,
         "addControl": [MockFunction],
+        "fitBounds": [MockFunction],
         "removeControl": [MockFunction],
         "setCenter": [MockFunction],
         "setStyle": [MockFunction],
@@ -111,6 +113,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
         Symbol(kCapture): false,
       }
     }
+    useMemberColor={true}
   >
     <span>
       <ForwardRef
@@ -139,9 +142,10 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
             Symbol(kCapture): false,
           }
         }
+        useMemberColor={true}
       >
         <div
-          className="mx_Marker mx_Marker_defaultColor"
+          className="mx_Marker mx_Username_color4"
           id="!room:server_@alice:server"
         >
           <div
