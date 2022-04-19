@@ -19,6 +19,7 @@ import React, { ChangeEvent, FormEvent } from "react";
 import Field from "./Field";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "./AccessibleButton";
+import { Tag } from "./Tag";
 
 interface IProps {
     tags: string[];
@@ -80,10 +81,13 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
                 </AccessibleButton>
             </form>
             <div className='mx_TagComposer_tags'>
-                { this.props.tags.map((t, i) => (<div className='mx_TagComposer_tag' key={i}>
-                    <span>{ t }</span>
-                    <AccessibleButton onClick={this.onRemove.bind(this, t)} disabled={this.props.disabled} />
-                </div>)) }
+                { this.props.tags.map((t, i) => (
+                    <Tag
+                        label={t}
+                        key={t}
+                        onDeleteClick={this.onRemove.bind(this, t)}
+                        disabled={this.props.disabled} />
+                )) }
             </div>
         </div>;
     }
