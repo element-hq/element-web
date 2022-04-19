@@ -92,7 +92,7 @@ export async function redactThreadMessage(session: ElementSession): Promise<void
     session.log.done();
 
     await session.query(".mx_ThreadView .mx_RedactedBody");
-    await session.delay(200); // give the app a chance to settle
+    await session.delay(1000); // give the app a chance to settle
 
     session.log.endGroup();
 }
