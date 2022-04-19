@@ -36,5 +36,6 @@
     "Use %(brand)s on mobile": "Kasuta rakendust %(brand)s nutiseadmes",
     "Switch to space by number": "Vaata kogukonnakeskust tema numbri alusel",
     "Next recently visited room or community": "Järgmine hiljuti külastatud jututuba või kogukond",
-    "Previous recently visited room or community": "Eelmine hiljuti külastatud jututuba või kogukond"
+    "Previous recently visited room or community": "Eelmine hiljuti külastatud jututuba või kogukond",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo"
 }
