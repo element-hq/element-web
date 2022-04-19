@@ -115,7 +115,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         if (protocol.avatar_url) {
             const avatarUrl = mediaFromMxc(protocol.avatar_url).getSquareThumbnailHttp(64);
 
-            networkIcon = <BaseAvatar className="protocol-icon"
+            networkIcon = <BaseAvatar className="mx_RoomSettingsDialog_protocolIcon"
                 width={48}
                 height={48}
                 resizeMethod='crop'
@@ -124,7 +124,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
                 url={avatarUrl}
             />;
         } else {
-            networkIcon = <div className="noProtocolIcon" />;
+            networkIcon = <div className="mx_RoomSettingsDialog_noProtocolIcon" />;
         }
         let networkItem = null;
         if (network) {
@@ -146,19 +146,19 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         }
 
         const id = this.props.ev.getId();
-        return (<li key={id}>
-            <div className="column-icon">
+        return (<li key={id} className="mx_RoomSettingsDialog_BridgeList_listItem">
+            <div className="mx_RoomSettingsDialog_column_icon">
                 { networkIcon }
             </div>
-            <div className="column-data">
-                <h3>{ protocolName }</h3>
-                <p className="workspace-channel-details">
+            <div className="mx_RoomSettingsDialog_column_data">
+                <h3 className="mx_RoomSettingsDialog_column_data_protocolName">{ protocolName }</h3>
+                <p className="mx_RoomSettingsDialog_column_data_details mx_RoomSettingsDialog_workspace_channel_details">
                     { networkItem }
-                    <span className="channel">{ _t("Channel: <channelLink/>", {}, {
+                    <span className="mx_RoomSettingsDialog_channel">{ _t("Channel: <channelLink/>", {}, {
                         channelLink: () => channelLink,
                     }) }</span>
                 </p>
-                <ul className="metadata">
+                <ul className="mx_RoomSettingsDialog_column_data_metadata mx_RoomSettingsDialog_metadata">
                     { creator } { bot }
                 </ul>
             </div>
