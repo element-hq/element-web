@@ -133,7 +133,7 @@ export interface IBaseSetting<T extends SettingValueType = SettingValueType> {
     };
 
     // Optional description which will be shown as microCopy under SettingsFlags
-    description?: string;
+    description?: string | (() => ReactNode);
 
     // The supported levels are required. Preferably, use the preset arrays
     // at the top of this file to define this rather than a custom array.
@@ -610,6 +610,16 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td('Automatically replace plain text Emoji'),
         default: false,
+    },
+    "MessageComposerInput.useMarkdown": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td('Enable Markdown'),
+        description: () => _t(
+            "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.",
+            {},
+            { code: (sub) => <code>{ sub }</code> },
+        ),
+        default: true,
     },
     "VideoView.flipVideoHorizontally": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

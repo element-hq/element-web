@@ -41,4 +41,10 @@ limitations under the License.
     font-size: $font-12px;
     line-height: $font-15px;
     color: $secondary-content;
+
+    // Support code/pre elements in settings flag descriptions
+    pre, code {
+        font-family: $monospace-font-family !important;
+        background-color: $rte-code-bg-color;
+    }
 }

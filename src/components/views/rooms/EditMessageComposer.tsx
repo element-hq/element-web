@@ -95,7 +95,10 @@ function createEditContent(
         body: `${plainPrefix} * ${body}`,
     };
 
-    const formattedBody = htmlSerializeIfNeeded(model, { forceHTML: isReply });
+    const formattedBody = htmlSerializeIfNeeded(model, {
+        forceHTML: isReply,
+        useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
+    });
     if (formattedBody) {
         newContent.format = "org.matrix.custom.html";
         newContent.formatted_body = formattedBody;
@@ -404,7 +407,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
         } else {
             // otherwise, either restore serialized parts from localStorage or parse the body of the event
             const restoredParts = this.restoreStoredEditorState(partCreator);
-            parts = restoredParts || parseEvent(editState.getEvent(), partCreator);
+            parts = restoredParts || parseEvent(editState.getEvent(), partCreator, {
+                shouldEscape: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
+            });
             isRestored = !!restoredParts;
         }
         this.model = new EditorModel(parts, partCreator);

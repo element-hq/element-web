@@ -932,6 +932,8 @@
     "Use Ctrl + Enter to send a message": "Use Ctrl + Enter to send a message",
     "Surround selected text when typing special characters": "Surround selected text when typing special characters",
     "Automatically replace plain text Emoji": "Automatically replace plain text Emoji",
+    "Enable Markdown": "Enable Markdown",
+    "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.": "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.",
     "Mirror local video feed": "Mirror local video feed",
     "Match system theme": "Match system theme",
     "Use a system font": "Use a system font",

@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
+import { ReactNode } from "react";
 
 import DeviceSettingsHandler from "./handlers/DeviceSettingsHandler";
 import RoomDeviceSettingsHandler from "./handlers/RoomDeviceSettingsHandler";
@@ -257,9 +258,11 @@ export default class SettingsStore {
      * @param {string} settingName The setting to look up.
      * @return {String} The description for the setting, or null if not found.
      */
-    public static getDescription(settingName: string) {
-        if (!SETTINGS[settingName]?.description) return null;
-        return _t(SETTINGS[settingName].description);
+    public static getDescription(settingName: string): string | ReactNode {
+        const description = SETTINGS[settingName]?.description;
+        if (!description) return null;
+        if (typeof description !== 'string') return description();
+        return _t(description);
     }
 
     /**

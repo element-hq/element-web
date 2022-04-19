@@ -91,7 +91,10 @@ export function createMessageContent(
         msgtype: isEmote ? "m.emote" : "m.text",
         body: body,
     };
-    const formattedBody = htmlSerializeIfNeeded(model, { forceHTML: !!replyToEvent });
+    const formattedBody = htmlSerializeIfNeeded(model, {
+        forceHTML: !!replyToEvent,
+        useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
+    });
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
         content.formatted_body = formattedBody;

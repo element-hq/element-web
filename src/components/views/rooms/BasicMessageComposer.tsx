@@ -103,6 +103,7 @@ interface IProps {
 }
 
 interface IState {
+    useMarkdown: boolean;
     showPillAvatar: boolean;
     query?: string;
     showVisualBell?: boolean;
@@ -124,6 +125,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private lastCaret: DocumentOffset;
     private lastSelection: ReturnType<typeof cloneSelection>;
 
+    private readonly useMarkdownHandle: string;
     private readonly emoticonSettingHandle: string;
     private readonly shouldShowPillAvatarSettingHandle: string;
     private readonly surroundWithHandle: string;
@@ -133,10 +135,13 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         super(props);
         this.state = {
             showPillAvatar: SettingsStore.getValue("Pill.shouldShowPillAvatar"),
+            useMarkdown: SettingsStore.getValue("MessageComposerInput.useMarkdown"),
             surroundWith: SettingsStore.getValue("MessageComposerInput.surroundWith"),
             showVisualBell: false,
         };
 
+        this.useMarkdownHandle = SettingsStore.watchSetting('MessageComposerInput.useMarkdown', null,
+            this.configureUseMarkdown);
         this.emoticonSettingHandle = SettingsStore.watchSetting('MessageComposerInput.autoReplaceEmoji', null,
             this.configureEmoticonAutoReplace);
         this.configureEmoticonAutoReplace();
@@ -442,7 +447,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             }
         } else if (!selection.isCollapsed && !isEmpty) {
             this.hasTextSelected = true;
-            if (this.formatBarRef.current) {
+            if (this.formatBarRef.current && this.state.useMarkdown) {
                 const selectionRect = selection.getRangeAt(0).getBoundingClientRect();
                 this.formatBarRef.current.showAt(selectionRect);
             }
@@ -630,6 +635,14 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.setState({ completionIndex });
     };
 
+    private configureUseMarkdown = (): void => {
+        const useMarkdown = SettingsStore.getValue("MessageComposerInput.useMarkdown");
+        this.setState({ useMarkdown });
+        if (!useMarkdown && this.formatBarRef.current) {
+            this.formatBarRef.current.hide();
+        }
+    };
+
     private configureEmoticonAutoReplace = (): void => {
         this.props.model.setTransformCallback(this.transform);
     };
@@ -654,6 +667,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
         this.editorRef.current.removeEventListener("input", this.onInput, true);
         this.editorRef.current.removeEventListener("compositionstart", this.onCompositionStart, true);
         this.editorRef.current.removeEventListener("compositionend", this.onCompositionEnd, true);
+        SettingsStore.unwatchSetting(this.useMarkdownHandle);
         SettingsStore.unwatchSetting(this.emoticonSettingHandle);
         SettingsStore.unwatchSetting(this.shouldShowPillAvatarSettingHandle);
         SettingsStore.unwatchSetting(this.surroundWithHandle);
@@ -694,6 +708,10 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public onFormatAction = (action: Formatting): void => {
+        if (!this.state.useMarkdown) {
+            return;
+        }
+
         const range: Range = getRangeForSelection(this.editorRef.current, this.props.model, document.getSelection());
 
         this.historyManager.ensureLastChangesPushed(this.props.model);
