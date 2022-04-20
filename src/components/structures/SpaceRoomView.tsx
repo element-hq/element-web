@@ -58,7 +58,7 @@ import {
 } from "../../utils/space";
 import SpaceHierarchy, { showRoom } from "./SpaceHierarchy";
 import MemberAvatar from "../views/avatars/MemberAvatar";
-import FacePile from "../views/elements/FacePile";
+import RoomFacePile from "../views/elements/RoomFacePile";
 import {
     AddExistingToSpace,
     defaultDmsRenderer,
@@ -298,7 +298,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
                 </div>
             }
         </RoomTopic>
-        { space.getJoinRule() === "public" && <FacePile room={space} /> }
+        { space.getJoinRule() === "public" && <RoomFacePile room={space} /> }
         <div className="mx_SpaceRoomView_preview_joinButtons">
             { joinButtons }
         </div>
@@ -454,7 +454,7 @@ const SpaceLanding = ({ space }: { space: Room }) => {
         <div className="mx_SpaceRoomView_landing_infoBar">
             <SpaceInfo space={space} />
             <div className="mx_SpaceRoomView_landing_infoBar_interactive">
-                <FacePile room={space} onlyKnownUsers={false} numShown={7} onClick={onMembersClick} />
+                <RoomFacePile room={space} onlyKnownUsers={false} numShown={7} onClick={onMembersClick} />
                 { inviteButton }
                 { settingsButton }
             </div>

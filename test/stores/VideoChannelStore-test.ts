@@ -14,24 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { ClientWidgetApi, MatrixWidgetType } from "matrix-widget-api";
+import { mocked } from "jest-mock";
+import { Widget, ClientWidgetApi, MatrixWidgetType, IWidgetApiRequest } from "matrix-widget-api";
 
-import { stubClient, mkRoom } from "../test-utils";
+import { stubClient, setupAsyncStoreWithClient } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
-import WidgetStore from "../../src/stores/WidgetStore";
-import ActiveWidgetStore from "../../src/stores/ActiveWidgetStore";
+import WidgetStore, { IApp } from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
+import { ElementWidgetActions } from "../../src/stores/widgets/ElementWidgetActions";
 import VideoChannelStore, { VideoChannelEvent } from "../../src/stores/VideoChannelStore";
 import { VIDEO_CHANNEL } from "../../src/utils/VideoChannelUtils";
 
 describe("VideoChannelStore", () => {
-    stubClient();
-    mkRoom(MatrixClientPeg.get(), "!1:example.org");
+    const store = VideoChannelStore.instance;
 
-    const videoStore = VideoChannelStore.instance;
-    const widgetStore = ActiveWidgetStore.instance;
-
-    jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([{
+    const widget = { id: VIDEO_CHANNEL } as unknown as Widget;
+    const app = {
         id: VIDEO_CHANNEL,
         eventId: "$1:example.org",
         roomId: "!1:example.org",
@@ -40,43 +38,103 @@ describe("VideoChannelStore", () => {
         name: "Video channel",
         creatorUserId: "@alice:example.org",
         avatar_url: null,
-    }]);
-    jest.spyOn(WidgetMessagingStore.instance, "getMessagingForUid").mockReturnValue({
-        on: () => {},
-        off: () => {},
-        once: () => {},
-        transport: {
-            send: () => {},
-            reply: () => {},
-        },
-    } as unknown as ClientWidgetApi);
+    } as IApp;
 
+    // Set up mocks to simulate the remote end of the widget API
+    let messageSent: Promise<void>;
+    let messageSendMock: () => void;
+    let onMock: (action: string, listener: (ev: CustomEvent<IWidgetApiRequest>) => void) => void;
+    let onceMock: (action: string, listener: (ev: CustomEvent<IWidgetApiRequest>) => void) => void;
+    let messaging: ClientWidgetApi;
     beforeEach(() => {
-        videoStore.start();
+        stubClient();
+        const cli = MatrixClientPeg.get();
+        setupAsyncStoreWithClient(WidgetMessagingStore.instance, cli);
+        setupAsyncStoreWithClient(store, cli);
+
+        let resolveMessageSent: () => void;
+        messageSent = new Promise(resolve => resolveMessageSent = resolve);
+        messageSendMock = jest.fn().mockImplementation(() => resolveMessageSent());
+        onMock = jest.fn();
+        onceMock = jest.fn();
+
+        jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([app]);
+        messaging = {
+            on: onMock,
+            off: () => {},
+            stop: () => {},
+            once: onceMock,
+            transport: {
+                send: messageSendMock,
+                reply: () => {},
+            },
+        } as unknown as ClientWidgetApi;
     });
 
-    afterEach(() => {
-        videoStore.stop();
-        jest.clearAllMocks();
-    });
+    const widgetReady = () => {
+        // Tell the WidgetStore that the widget is ready
+        const [, ready] = mocked(onceMock).mock.calls.find(([action]) =>
+            action === `action:${ElementWidgetActions.WidgetReady}`,
+        );
+        ready({ detail: {} } as unknown as CustomEvent<IWidgetApiRequest>);
+    };
 
-    it("tracks connection state", async () => {
-        expect(videoStore.roomId).toBeFalsy();
-
+    const confirmConnect = async () => {
+        // Wait for the store to contact the widget API
+        await messageSent;
+        // Then, locate the callback that will confirm the join
+        const [, join] = mocked(onMock).mock.calls.find(([action]) =>
+            action === `action:${ElementWidgetActions.JoinCall}`,
+        );
+        // Confirm the join, and wait for the store to update
         const waitForConnect = new Promise<void>(resolve =>
-            videoStore.once(VideoChannelEvent.Connect, resolve),
+            store.once(VideoChannelEvent.Connect, resolve),
         );
-        widgetStore.setWidgetPersistence(VIDEO_CHANNEL, "!1:example.org", true);
+        join({ detail: {} } as unknown as CustomEvent<IWidgetApiRequest>);
         await waitForConnect;
+    };
 
-        expect(videoStore.roomId).toEqual("!1:example.org");
-
-        const waitForDisconnect = new Promise<void>(resolve =>
-            videoStore.once(VideoChannelEvent.Disconnect, resolve),
+    const confirmDisconnect = async () => {
+        // Locate the callback that will perform the hangup
+        const [, hangup] = mocked(onceMock).mock.calls.find(([action]) =>
+            action === `action:${ElementWidgetActions.HangupCall}`,
         );
-        widgetStore.setWidgetPersistence(VIDEO_CHANNEL, "!1:example.org", false);
-        await waitForDisconnect;
+        // Hangup and wait for the store, once again
+        const waitForHangup = new Promise<void>(resolve =>
+            store.once(VideoChannelEvent.Disconnect, resolve),
+        );
+        hangup({ detail: {} } as unknown as CustomEvent<IWidgetApiRequest>);
+        await waitForHangup;
+    };
 
-        expect(videoStore.roomId).toBeFalsy();
+    it("connects and disconnects", async () => {
+        WidgetMessagingStore.instance.storeMessaging(widget, "!1:example.org", messaging);
+        widgetReady();
+        expect(store.roomId).toBeFalsy();
+        expect(store.connected).toEqual(false);
+
+        store.connect("!1:example.org", null, null);
+        await confirmConnect();
+        expect(store.roomId).toEqual("!1:example.org");
+        expect(store.connected).toEqual(true);
+
+        store.disconnect();
+        await confirmDisconnect();
+        expect(store.roomId).toBeFalsy();
+        expect(store.connected).toEqual(false);
+        WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
+    });
+
+    it("waits for messaging when connecting", async () => {
+        store.connect("!1:example.org", null, null);
+        WidgetMessagingStore.instance.storeMessaging(widget, "!1:example.org", messaging);
+        widgetReady();
+        await confirmConnect();
+        expect(store.roomId).toEqual("!1:example.org");
+        expect(store.connected).toEqual(true);
+
+        store.disconnect();
+        await confirmDisconnect();
+        WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
     });
 });

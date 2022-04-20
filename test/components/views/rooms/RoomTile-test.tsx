@@ -18,33 +18,22 @@ import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { mocked } from "jest-mock";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import {
     stubClient,
     mockStateEventImplementation,
     mkRoom,
-    mkEvent,
+    mkVideoChannelMember,
     stubVideoChannelStore,
 } from "../../../test-utils";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
 import SettingsStore from "../../../../src/settings/SettingsStore";
 import { DefaultTagID } from "../../../../src/stores/room-list/models";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
-import { VIDEO_CHANNEL_MEMBER } from "../../../../src/utils/VideoChannelUtils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import PlatformPeg from "../../../../src/PlatformPeg";
 import BasePlatform from "../../../../src/BasePlatform";
-
-const mkVideoChannelMember = (userId: string, devices: string[]): MatrixEvent => mkEvent({
-    event: true,
-    type: VIDEO_CHANNEL_MEMBER,
-    room: "!1:example.org",
-    user: userId,
-    skey: userId,
-    content: { devices },
-});
 
 describe("RoomTile", () => {
     jest.spyOn(PlatformPeg, 'get')
@@ -84,6 +73,10 @@ describe("RoomTile", () => {
                 />,
             );
             expect(tile.find(".mx_RoomTile_videoIndicator").text()).toEqual("Video");
+
+            act(() => { store.startConnect("!1:example.org"); });
+            tile.update();
+            expect(tile.find(".mx_RoomTile_videoIndicator").text()).toEqual("Connecting...");
 
             act(() => { store.connect("!1:example.org"); });
             tile.update();

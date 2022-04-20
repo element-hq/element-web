@@ -61,6 +61,7 @@ import { RoomViewStore } from "../../../stores/RoomViewStore";
 
 enum VideoStatus {
     Disconnected,
+    Connecting,
     Connected,
 }
 
@@ -105,7 +106,16 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        const videoConnected = VideoChannelStore.instance.roomId === this.props.room.roomId;
+        let videoStatus;
+        if (VideoChannelStore.instance.roomId === this.props.room.roomId) {
+            if (VideoChannelStore.instance.connected) {
+                videoStatus = VideoStatus.Connected;
+            } else {
+                videoStatus = VideoStatus.Connecting;
+            }
+        } else {
+            videoStatus = VideoStatus.Disconnected;
+        }
 
         this.state = {
             selected: RoomViewStore.instance.getRoomId() === this.props.room.roomId,
@@ -113,9 +123,9 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             generalMenuPosition: null,
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: "",
-            videoStatus: videoConnected ? VideoStatus.Connected : VideoStatus.Disconnected,
+            videoStatus,
             videoMembers: getConnectedMembers(this.props.room.currentState),
-            jitsiParticipants: videoConnected ? VideoChannelStore.instance.participants : [],
+            jitsiParticipants: VideoChannelStore.instance.participants,
         };
         this.generatePreview();
 
@@ -185,8 +195,9 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.props.room.on(RoomEvent.Name, this.onRoomNameUpdate);
         this.props.room.currentState.on(RoomStateEvent.Events, this.updateVideoMembers);
 
-        VideoChannelStore.instance.on(VideoChannelEvent.Connect, this.updateVideoStatus);
-        VideoChannelStore.instance.on(VideoChannelEvent.Disconnect, this.updateVideoStatus);
+        VideoChannelStore.instance.on(VideoChannelEvent.Connect, this.onConnectVideo);
+        VideoChannelStore.instance.on(VideoChannelEvent.StartConnect, this.onStartConnectVideo);
+        VideoChannelStore.instance.on(VideoChannelEvent.Disconnect, this.onDisconnectVideo);
         if (VideoChannelStore.instance.roomId === this.props.room.roomId) {
             VideoChannelStore.instance.on(VideoChannelEvent.Participants, this.updateJitsiParticipants);
         }
@@ -204,8 +215,9 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
 
-        VideoChannelStore.instance.off(VideoChannelEvent.Connect, this.updateVideoStatus);
-        VideoChannelStore.instance.off(VideoChannelEvent.Disconnect, this.updateVideoStatus);
+        VideoChannelStore.instance.off(VideoChannelEvent.Connect, this.onConnectVideo);
+        VideoChannelStore.instance.off(VideoChannelEvent.StartConnect, this.onStartConnectVideo);
+        VideoChannelStore.instance.off(VideoChannelEvent.Disconnect, this.onDisconnectVideo);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -586,15 +598,37 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
     private updateVideoStatus = () => {
         if (VideoChannelStore.instance.roomId === this.props.room?.roomId) {
+            if (VideoChannelStore.instance.connected) {
+                this.onConnectVideo(this.props.room?.roomId);
+            } else {
+                this.onStartConnectVideo(this.props.room?.roomId);
+            }
+        } else {
+            this.onDisconnectVideo(this.props.room?.roomId);
+        }
+    };
+
+    private onConnectVideo = (roomId: string) => {
+        if (roomId === this.props.room?.roomId) {
             this.setState({ videoStatus: VideoStatus.Connected });
             VideoChannelStore.instance.on(VideoChannelEvent.Participants, this.updateJitsiParticipants);
-        } else {
+        }
+    };
+
+    private onStartConnectVideo = (roomId: string) => {
+        if (roomId === this.props.room?.roomId) {
+            this.setState({ videoStatus: VideoStatus.Connecting });
+        }
+    };
+
+    private onDisconnectVideo = (roomId: string) => {
+        if (roomId === this.props.room?.roomId) {
             this.setState({ videoStatus: VideoStatus.Disconnected });
             VideoChannelStore.instance.off(VideoChannelEvent.Participants, this.updateJitsiParticipants);
         }
     };
 
-    private updateJitsiParticipants = (participants: IJitsiParticipant[]) => {
+    private updateJitsiParticipants = (roomId: string, participants: IJitsiParticipant[]) => {
         this.setState({ jitsiParticipants: participants });
     };
 
@@ -634,6 +668,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                 case VideoStatus.Disconnected:
                     videoText = _t("Video");
                     videoActive = false;
+                    participantCount = this.state.videoMembers.length;
+                    break;
+                case VideoStatus.Connecting:
+                    videoText = _t("Connecting...");
+                    videoActive = true;
                     participantCount = this.state.videoMembers.length;
                     break;
                 case VideoStatus.Connected:

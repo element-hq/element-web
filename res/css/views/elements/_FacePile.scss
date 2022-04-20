@@ -20,7 +20,8 @@ limitations under the License.
         flex-direction: row-reverse;
         vertical-align: middle;
 
-        > .mx_FacePile_face + .mx_FacePile_face {
+        // Overlap the children
+        > * + * {
             margin-right: -8px;
         }
 

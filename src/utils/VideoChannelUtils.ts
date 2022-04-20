@@ -14,10 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { useState } from "react";
+import { throttle } from "lodash";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { RoomState } from "matrix-js-sdk/src/models/room-state";
+import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
+import { useTypedEventEmitter } from "../hooks/useEventEmitter";
 import WidgetStore, { IApp } from "../stores/WidgetStore";
 import { WidgetType } from "../widgets/WidgetType";
 import WidgetUtils from "./WidgetUtils";
@@ -45,3 +48,11 @@ export const getConnectedMembers = (state: RoomState): RoomMember[] =>
         .filter(e => e.getContent<IVideoChannelMemberContent>()?.devices?.length)
         .map(e => state.getMember(e.getStateKey()))
         .filter(member => member?.membership === "join");
+
+export const useConnectedMembers = (state: RoomState, throttleMs = 100) => {
+    const [members, setMembers] = useState<RoomMember[]>(getConnectedMembers(state));
+    useTypedEventEmitter(state, RoomStateEvent.Update, throttle(() => {
+        setMembers(getConnectedMembers(state));
+    }, throttleMs, { leading: true, trailing: true }));
+    return members;
+};

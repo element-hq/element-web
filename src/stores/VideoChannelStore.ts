@@ -14,23 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventEmitter } from "events";
-import { logger } from "matrix-js-sdk/src/logger";
+import EventEmitter from "events";
 import { ClientWidgetApi, IWidgetApiRequest } from "matrix-widget-api";
 
-import { MatrixClientPeg } from "../MatrixClientPeg";
+import defaultDispatcher from "../dispatcher/dispatcher";
+import { ActionPayload } from "../dispatcher/payloads";
 import { ElementWidgetActions } from "./widgets/ElementWidgetActions";
-import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
-import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "./ActiveWidgetStore";
+import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "./widgets/WidgetMessagingStore";
 import {
-    VIDEO_CHANNEL,
     VIDEO_CHANNEL_MEMBER,
     IVideoChannelMemberContent,
     getVideoChannel,
 } from "../utils/VideoChannelUtils";
+import { timeout } from "../utils/promise";
 import WidgetUtils from "../utils/WidgetUtils";
+import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 
 export enum VideoChannelEvent {
+    StartConnect = "start_connect",
     Connect = "connect",
     Disconnect = "disconnect",
     Participants = "participants",
@@ -43,10 +44,25 @@ export interface IJitsiParticipant {
     participantId: string;
 }
 
+const TIMEOUT_MS = 16000;
+
+// Wait until an event is emitted satisfying the given predicate
+const waitForEvent = async (emitter: EventEmitter, event: string, pred: (...args) => boolean = () => true) => {
+    let listener;
+    const wait = new Promise<void>(resolve => {
+        listener = (...args) => { if (pred(...args)) resolve(); };
+        emitter.on(event, listener);
+    });
+
+    const timedOut = await timeout(wait, false, TIMEOUT_MS) === false;
+    emitter.off(event, listener);
+    if (timedOut) throw new Error("Timed out");
+};
+
 /*
  * Holds information about the currently active video channel.
  */
-export default class VideoChannelStore extends EventEmitter {
+export default class VideoChannelStore extends AsyncStoreWithClient<null> {
     private static _instance: VideoChannelStore;
 
     public static get instance(): VideoChannelStore {
@@ -56,65 +72,121 @@ export default class VideoChannelStore extends EventEmitter {
         return VideoChannelStore._instance;
     }
 
-    private readonly cli = MatrixClientPeg.get();
+    private constructor() {
+        super(defaultDispatcher);
+    }
+
+    protected async onAction(payload: ActionPayload): Promise<void> {
+        // nothing to do
+    }
+
     private activeChannel: ClientWidgetApi;
+
     private _roomId: string;
-    private _participants: IJitsiParticipant[];
+    public get roomId(): string { return this._roomId; }
+    private set roomId(value: string) { this._roomId = value; }
 
-    public get roomId(): string {
-        return this._roomId;
-    }
+    private _connected = false;
+    public get connected(): boolean { return this._connected; }
+    private set connected(value: boolean) { this._connected = value; }
 
-    public get participants(): IJitsiParticipant[] {
-        return this._participants;
-    }
+    private _participants: IJitsiParticipant[] = [];
+    public get participants(): IJitsiParticipant[] { return this._participants; }
+    private set participants(value: IJitsiParticipant[]) { this._participants = value; }
 
-    public start = () => {
-        ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Update, this.onActiveWidgetUpdate);
-    };
+    public connect = async (roomId: string, audioDevice: MediaDeviceInfo, videoDevice: MediaDeviceInfo) => {
+        if (this.activeChannel) await this.disconnect();
 
-    public stop = () => {
-        ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Update, this.onActiveWidgetUpdate);
-    };
-
-    private setConnected = async (roomId: string) => {
         const jitsi = getVideoChannel(roomId);
         if (!jitsi) throw new Error(`No video channel in room ${roomId}`);
 
-        const messaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(jitsi));
-        if (!messaging) throw new Error(`Failed to bind video channel in room ${roomId}`);
+        const jitsiUid = WidgetUtils.getWidgetUid(jitsi);
+        const messagingStore = WidgetMessagingStore.instance;
+
+        let messaging = messagingStore.getMessagingForUid(jitsiUid);
+        if (!messaging) {
+            // The widget might still be initializing, so wait for it
+            try {
+                await waitForEvent(
+                    messagingStore,
+                    WidgetMessagingStoreEvent.StoreMessaging,
+                    (uid: string, widgetApi: ClientWidgetApi) => {
+                        if (uid === jitsiUid) {
+                            messaging = widgetApi;
+                            return true;
+                        }
+                        return false;
+                    },
+                );
+            } catch (e) {
+                throw new Error(`Failed to bind video channel in room ${roomId}: ${e}`);
+            }
+        }
+
+        if (!messagingStore.isWidgetReady(jitsiUid)) {
+            // Wait for the widget to be ready to receive our join event
+            try {
+                await waitForEvent(
+                    messagingStore,
+                    WidgetMessagingStoreEvent.WidgetReady,
+                    (uid: string) => uid === jitsiUid,
+                );
+            } catch (e) {
+                throw new Error(`Video channel in room ${roomId} never became ready: ${e}`);
+            }
+        }
 
         this.activeChannel = messaging;
-        this._roomId = roomId;
-        this._participants = [];
+        this.roomId = roomId;
+        // Participant data will come down the event pipeline quickly, so prepare in advance
+        messaging.on(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
 
-        this.activeChannel.once(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.activeChannel.on(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+        this.emit(VideoChannelEvent.StartConnect, roomId);
 
-        this.emit(VideoChannelEvent.Connect);
+        // Actually perform the join
+        const waitForJoin = waitForEvent(
+            messaging,
+            `action:${ElementWidgetActions.JoinCall}`,
+            (ev: CustomEvent<IWidgetApiRequest>) => {
+                this.ack(ev);
+                return true;
+            },
+        );
+        messaging.transport.send(ElementWidgetActions.JoinCall, {
+            audioDevice: audioDevice?.label,
+            videoDevice: videoDevice?.label,
+        });
+        try {
+            await waitForJoin;
+        } catch (e) {
+            // If it timed out, clean up our advance preparations
+            this.activeChannel = null;
+            this.roomId = null;
+            messaging.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+
+            this.emit(VideoChannelEvent.Disconnect, roomId);
+
+            throw new Error(`Failed to join call in room ${roomId}: ${e}`);
+        }
+
+        this.connected = true;
+        messaging.once(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+
+        this.emit(VideoChannelEvent.Connect, roomId);
 
         // Tell others that we're connected, by adding our device to room state
-        await this.updateDevices(devices => Array.from(new Set(devices).add(this.cli.getDeviceId())));
+        this.updateDevices(roomId, devices => Array.from(new Set(devices).add(this.matrixClient.getDeviceId())));
     };
 
-    private setDisconnected = async () => {
-        this.activeChannel.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.activeChannel.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+    public disconnect = async () => {
+        if (!this.activeChannel) throw new Error("Not connected to any video channel");
 
-        this.activeChannel = null;
-        this._participants = null;
-
+        const waitForDisconnect = waitForEvent(this, VideoChannelEvent.Disconnect);
+        this.activeChannel.transport.send(ElementWidgetActions.HangupCall, {});
         try {
-            // Tell others that we're disconnected, by removing our device from room state
-            await this.updateDevices(devices => {
-                const devicesSet = new Set(devices);
-                devicesSet.delete(this.cli.getDeviceId());
-                return Array.from(devicesSet);
-            });
-        } finally {
-            // Save this for last, since updateDevices needs the room ID
-            this._roomId = null;
-            this.emit(VideoChannelEvent.Disconnect);
+            await waitForDisconnect; // onHangup cleans up for us
+        } catch (e) {
+            throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
         }
     };
 
@@ -124,41 +196,41 @@ export default class VideoChannelStore extends EventEmitter {
         this.activeChannel.transport.reply(ev.detail, {});
     };
 
-    private updateDevices = async (fn: (devices: string[]) => string[]) => {
-        if (!this.roomId) {
-            logger.error("Tried to update devices while disconnected");
-            return;
-        }
-
-        const room = this.cli.getRoom(this.roomId);
-        const devicesState = room.currentState.getStateEvents(VIDEO_CHANNEL_MEMBER, this.cli.getUserId());
+    private updateDevices = async (roomId: string, fn: (devices: string[]) => string[]) => {
+        const room = this.matrixClient.getRoom(roomId);
+        const devicesState = room.currentState.getStateEvents(VIDEO_CHANNEL_MEMBER, this.matrixClient.getUserId());
         const devices = devicesState?.getContent<IVideoChannelMemberContent>()?.devices ?? [];
 
-        await this.cli.sendStateEvent(
-            this.roomId, VIDEO_CHANNEL_MEMBER, { devices: fn(devices) }, this.cli.getUserId(),
+        await this.matrixClient.sendStateEvent(
+            roomId, VIDEO_CHANNEL_MEMBER, { devices: fn(devices) }, this.matrixClient.getUserId(),
         );
     };
 
     private onHangup = async (ev: CustomEvent<IWidgetApiRequest>) => {
         this.ack(ev);
-        await this.setDisconnected();
+
+        this.activeChannel.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.activeChannel.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+
+        const roomId = this.roomId;
+        this.activeChannel = null;
+        this.roomId = null;
+        this.connected = false;
+        this.participants = [];
+
+        this.emit(VideoChannelEvent.Disconnect, roomId);
+
+        // Tell others that we're disconnected, by removing our device from room state
+        await this.updateDevices(roomId, devices => {
+            const devicesSet = new Set(devices);
+            devicesSet.delete(this.matrixClient.getDeviceId());
+            return Array.from(devicesSet);
+        });
     };
 
     private onParticipants = (ev: CustomEvent<IWidgetApiRequest>) => {
-        this._participants = ev.detail.data.participants as IJitsiParticipant[];
-        this.emit(VideoChannelEvent.Participants, ev.detail.data.participants);
+        this.participants = ev.detail.data.participants as IJitsiParticipant[];
+        this.emit(VideoChannelEvent.Participants, this.roomId, ev.detail.data.participants);
         this.ack(ev);
-    };
-
-    private onActiveWidgetUpdate = async () => {
-        if (this.activeChannel) {
-            // We got disconnected from the previous video channel, so clean up
-            await this.setDisconnected();
-        }
-
-        // If the new active widget is a video channel, that means we joined
-        if (ActiveWidgetStore.instance.getPersistentWidgetId() === VIDEO_CHANNEL) {
-            await this.setConnected(ActiveWidgetStore.instance.getPersistentRoomId());
-        }
     };
 }

@@ -211,21 +211,9 @@ hr.mx_RoomView_myReadMarker {
     opacity: 1;
 }
 
-// Immersive widgets
-.mx_RoomView_immersive {
-    .mx_RoomHeader_wrapper {
-        border: unset;
-    }
-
-    .mx_AppTile {
-        margin: $container-gap-width;
-        margin-right: calc($container-gap-width / 2);
-        width: auto;
-        height: 100%;
-        padding-top: 33px; // to match the right panel chat heading
-
-        border-radius: 8px;
-    }
+// Rooms with immersive content
+.mx_RoomView_immersive .mx_RoomHeader_wrapper {
+    border: unset;
 }
 
 .mx_RoomView_callStatusBar .mx_UploadBar_uploadProgressInner {

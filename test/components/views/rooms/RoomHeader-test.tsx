@@ -176,6 +176,7 @@ function render(room: Room, roomContext?: Partial<IRoomState>): ReactWrapper {
                 room={room}
                 inRoom={true}
                 onSearchClick={() => {}}
+                onInviteClick={null}
                 onForgetClick={() => {}}
                 onCallPlaced={(_type) => { }}
                 onAppsClick={() => {}}

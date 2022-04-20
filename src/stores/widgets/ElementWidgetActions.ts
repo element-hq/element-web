@@ -18,6 +18,7 @@ import { IWidgetApiRequest } from "matrix-widget-api";
 
 export enum ElementWidgetActions {
     ClientReady = "im.vector.ready",
+    WidgetReady = "io.element.widget_ready",
     JoinCall = "io.element.join",
     HangupCall = "im.vector.hangup",
     CallParticipants = "io.element.participants",
