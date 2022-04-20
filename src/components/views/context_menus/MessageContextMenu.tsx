@@ -397,16 +397,14 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
             );
         }
 
-        let viewSourceButton: JSX.Element;
-        if (SettingsStore.getValue("developerMode")) {
-            viewSourceButton = (
-                <IconizedContextMenuOption
-                    iconClassName="mx_MessageContextMenu_iconSource"
-                    label={_t("View source")}
-                    onClick={this.onViewSourceClick}
-                />
-            );
-        }
+        // This is specifically not behind the developerMode flag to give people insight into the Matrix
+        const viewSourceButton = (
+            <IconizedContextMenuOption
+                iconClassName="mx_MessageContextMenu_iconSource"
+                label={_t("View source")}
+                onClick={this.onViewSourceClick}
+            />
+        );
 
         let unhidePreviewButton: JSX.Element;
         if (eventTileOps?.isWidgetHidden()) {
