@@ -142,9 +142,9 @@ export default class WebPlatform extends VectorBasePlatform {
 
             // Set updated=1 as a query param so we can detect that we've already done this once
             // and reload the page.
-            const url = new URL(window.location);
+            const url = new URL(window.location.href);
             url.searchParams.set("updated", "1");
-            reloadPage(url.toString());
+            window.location.href = url.toString();
         });
         setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
     }
