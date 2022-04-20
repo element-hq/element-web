@@ -8,7 +8,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackInjectPreload = require('@principalstudio/html-webpack-inject-preload');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const SentryCliPlugin = require("@sentry/webpack-plugin");
 
 dotenv.config();
@@ -50,14 +49,24 @@ try {
 } catch (e) {
     // ignore - not important
 }
-const moduleReplacementPlugins = Object.entries(fileOverrides).map(([oldPath, newPath]) => {
-    return new webpack.NormalModuleReplacementPlugin(
-        // because the input is effectively defined by the person running the build, we don't
-        // need to do anything special to protect against regex overrunning, etc.
-        new RegExp(oldPath.replace(/\//g, '[\\/\\\\]').replace(/\./g, '\\.')),
-        path.resolve(__dirname, newPath),
-    );
-});
+
+function parseOverridesToReplacements(overrides) {
+    return Object.entries(overrides).map(([oldPath, newPath]) => {
+        return new webpack.NormalModuleReplacementPlugin(
+            // because the input is effectively defined by the person running the build, we don't
+            // need to do anything special to protect against regex overrunning, etc.
+            new RegExp(oldPath.replace(/\//g, '[\\/\\\\]').replace(/\./g, '\\.')),
+            path.resolve(__dirname, newPath),
+        );
+    });
+}
+
+const moduleReplacementPlugins = [
+    ...parseOverridesToReplacements(require('./components.json')),
+
+    // Allow customisations to override the default components too
+    ...parseOverridesToReplacements(fileOverrides),
+];
 
 module.exports = (env, argv) => {
     // Establish settings based on the environment and args.
@@ -242,9 +251,6 @@ module.exports = (env, argv) => {
                     loader: 'babel-loader',
                     options: {
                         cacheDirectory: true,
-                        plugins: [
-                            useHMR && require.resolve('react-refresh/babel'),
-                        ].filter(Boolean),
                     },
                 },
                 {
@@ -624,7 +630,6 @@ module.exports = (env, argv) => {
             new HtmlWebpackInjectPreload({
                 files: [{ match: /.*Inter.*\.woff2$/ }],
             }),
-            useHMR && new ReactRefreshWebpackPlugin(fullPageErrors ? undefined : { overlay: { entry: false } }),
 
             // upload to sentry if sentry env is present
             process.env.SENTRY_DSN &&

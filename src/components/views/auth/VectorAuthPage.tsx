@@ -15,16 +15,15 @@ limitations under the License.
 */
 
 import React, { CSSProperties } from 'react';
-import * as sdk from 'matrix-react-sdk/src/index';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
-export default class VectorAuthPage extends React.PureComponent {
-    static replaces = 'AuthPage';
+import VectorAuthFooter from "./VectorAuthFooter";
 
-    static welcomeBackgroundUrl;
+export default class VectorAuthPage extends React.PureComponent {
+    private static welcomeBackgroundUrl;
 
     // cache the url as a static to prevent it changing without refreshing
-    static getWelcomeBackgroundUrl() {
+    private static getWelcomeBackgroundUrl() {
         if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
         const brandingConfig = SdkConfig.getObject("branding");
@@ -43,9 +42,7 @@ export default class VectorAuthPage extends React.PureComponent {
         return VectorAuthPage.welcomeBackgroundUrl;
     }
 
-    render() {
-        const AuthFooter = sdk.getComponent('auth.AuthFooter');
-
+    public render() {
         const pageStyle = {
             background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
         };
@@ -80,7 +77,7 @@ export default class VectorAuthPage extends React.PureComponent {
                         { this.props.children }
                     </div>
                 </div>
-                <AuthFooter />
+                <VectorAuthFooter />
             </div>
         );
     }

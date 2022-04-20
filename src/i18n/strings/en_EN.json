@@ -26,7 +26,7 @@
     "Go to element.io": "Go to element.io",
     "Failed to start": "Failed to start",
     "Welcome to Element": "Welcome to Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentralised, encrypted chat &amp; collaboration powered by [matrix]",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo",
     "Sign In": "Sign In",
     "Create Account": "Create Account",
     "Explore rooms": "Explore rooms"

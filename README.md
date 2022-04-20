@@ -41,8 +41,8 @@ released version of Element:
 1. Untar the tarball on your web server
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
-1. If desired, copy `config.sample.json` to `config.json` and edit it
-   as desired. See the [configuration docs](docs/config.md) for details.
+1. Configure the app by copying `config.sample.json` to `config.json` and
+   modifying it. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
@@ -264,9 +264,6 @@ top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication
 apps using React.
 
-After creating a new component you must run `yarn reskindex` to regenerate
-the `component-index.js` for the app (used in future for skinning).
-
 Please note that Element is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
 hosted by external CDNs or servers but instead please package all dependencies
@@ -305,15 +302,22 @@ yarn install
 popd
 ```
 
-Finally, build and start Element itself:
+Clone the repo and switch to the `element-web` directory:
 
 ```bash
 git clone https://github.com/vector-im/element-web.git
 cd element-web
+```
+
+Configure the app by copying `config.sample.json` to `config.json` and
+modifying it. See the [configuration docs](docs/config.md) for details.
+
+Finally, build and start Element itself:
+
+```bash
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
-yarn reskindex
 yarn start
 ```
 
@@ -329,9 +333,6 @@ Wait a few seconds for the initial build to finish; you should see something lik
    Remember, the command will not terminate since it runs the web server
    and rebuilds source files when they change. This development server also
    disables caching, so do NOT use it in production.
-
-Configure the app by copying `config.sample.json` to `config.json` and
-modifying it. See the [configuration docs](docs/config.md) for details.
 
 Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
 
@@ -363,9 +364,6 @@ ___
 
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
-
-If you add or remove any components from the Element skin, you will need to rebuild
-the skin's index by running, `yarn reskindex`.
 
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
