@@ -24,7 +24,7 @@ import { ButtonEvent } from "./AccessibleButton";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 
 interface IProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     getTextToCopy: () => string;
     border?: boolean;
 }

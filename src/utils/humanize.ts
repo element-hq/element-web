@@ -30,7 +30,7 @@ const HOURS_1_DAY = 26;
  * @returns {string} The humanized time.
  */
 export function humanizeTime(timeMillis: number): string {
-    const now = (new Date()).getTime();
+    const now = Date.now();
     let msAgo = now - timeMillis;
     const minutes = Math.abs(Math.ceil(msAgo / 60000));
     const hours = Math.ceil(minutes / 60);

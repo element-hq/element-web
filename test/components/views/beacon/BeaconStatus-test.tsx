@@ -26,6 +26,7 @@ describe('<BeaconStatus />', () => {
     const defaultProps = {
         displayStatus: BeaconDisplayStatus.Loading,
         label: 'test label',
+        withIcon: true,
     };
     const getComponent = (props = {}) =>
         mount(<BeaconStatus {...defaultProps} {...props} />);
@@ -38,6 +39,11 @@ describe('<BeaconStatus />', () => {
     it('renders stopped state', () => {
         const component = getComponent({ displayStatus: BeaconDisplayStatus.Stopped });
         expect(component).toMatchSnapshot();
+    });
+
+    it('renders without icon', () => {
+        const component = getComponent({ withIcon: false, displayStatus: BeaconDisplayStatus.Stopped });
+        expect(component.find('StyledLiveBeaconIcon').length).toBeFalsy();
     });
 
     describe('active state', () => {

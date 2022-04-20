@@ -41,7 +41,6 @@ describe('<DialogSidebar />', () => {
         act(() => {
             findByTestId(component, 'dialog-sidebar-close').at(0).simulate('click');
         });
-
         expect(requestClose).toHaveBeenCalled();
     });
 });

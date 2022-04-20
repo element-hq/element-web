@@ -21,6 +21,9 @@ limitations under the License.
     height: 100%;
     width: 265px;
 
+    display: flex;
+    flex-direction: column;
+
     box-sizing: border-box;
     padding: $spacing-16;
 
@@ -34,7 +37,7 @@ limitations under the License.
     align-items: center;
     justify-content: space-between;
 
-    flex: 0;
+    flex: 0 0;
     margin-bottom: $spacing-16;
 
     color: $primary-content;

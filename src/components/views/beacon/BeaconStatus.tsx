@@ -28,6 +28,7 @@ import { formatTime } from '../../../DateUtils';
 interface Props {
     displayStatus: BeaconDisplayStatus;
     displayLiveTimeRemaining?: boolean;
+    withIcon?: boolean;
     beacon?: Beacon;
     label?: string;
 }
@@ -45,6 +46,7 @@ const BeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> =
         label,
         className,
         children,
+        withIcon,
         ...rest
     }) => {
         const isIdle = displayStatus === BeaconDisplayStatus.Loading ||
@@ -54,11 +56,11 @@ const BeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> =
             {...rest}
             className={classNames('mx_BeaconStatus', `mx_BeaconStatus_${displayStatus}`, className)}
         >
-            <StyledLiveBeaconIcon
+            { withIcon && <StyledLiveBeaconIcon
                 className='mx_BeaconStatus_icon'
                 withError={displayStatus === BeaconDisplayStatus.Error}
                 isIdle={isIdle}
-            />
+            /> }
             <div className='mx_BeaconStatus_description'>
 
                 { displayStatus === BeaconDisplayStatus.Loading && <span>{ _t('Loading live location...') }</span> }
@@ -68,7 +70,7 @@ const BeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> =
 
                 { displayStatus === BeaconDisplayStatus.Active && beacon && <>
                     <>
-                        { label }
+                        <span className='mx_BeaconStatus_label'>{ label }</span>
                         { displayLiveTimeRemaining ?
                             <LiveTimeRemaining beacon={beacon} /> :
                             <BeaconExpiryTime beacon={beacon} />

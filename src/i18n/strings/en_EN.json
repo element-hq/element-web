@@ -2913,6 +2913,7 @@
     "Click for more info": "Click for more info",
     "Beta": "Beta",
     "Join the beta": "Join the beta",
+    "Updated %(humanizedUpdateTime)s": "Updated %(humanizedUpdateTime)s",
     "Live until %(expiryTime)s": "Live until %(expiryTime)s",
     "Loading live location...": "Loading live location...",
     "Live location ended": "Live location ended",

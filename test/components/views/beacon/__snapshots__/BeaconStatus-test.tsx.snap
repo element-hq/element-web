@@ -43,6 +43,7 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
   }
   displayStatus="Active"
   label="test label"
+  withIcon={true}
 >
   <div
     className="mx_BeaconStatus mx_BeaconStatus_Active"
@@ -59,7 +60,11 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
     <div
       className="mx_BeaconStatus_description"
     >
-      test label
+      <span
+        className="mx_BeaconStatus_label"
+      >
+        test label
+      </span>
       <BeaconExpiryTime
         beacon={
           Beacon {
@@ -114,6 +119,7 @@ exports[`<BeaconStatus /> renders loading state 1`] = `
 <BeaconStatus
   displayStatus="Loading"
   label="test label"
+  withIcon={true}
 >
   <div
     className="mx_BeaconStatus mx_BeaconStatus_Loading"
@@ -142,6 +148,7 @@ exports[`<BeaconStatus /> renders stopped state 1`] = `
 <BeaconStatus
   displayStatus="Stopped"
   label="test label"
+  withIcon={true}
 >
   <div
     className="mx_BeaconStatus mx_BeaconStatus_Stopped"

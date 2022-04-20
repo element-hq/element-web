@@ -21,6 +21,7 @@ import { Icon as CloseIcon } from '../../../../res/img/image-view/close.svg';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import Heading from '../typography/Heading';
+import BeaconListItem from './BeaconListItem';
 
 interface Props {
     beacons: Beacon[];
@@ -41,8 +42,7 @@ const DialogSidebar: React.FC<Props> = ({ beacons, requestClose }) => {
             </AccessibleButton>
         </div>
         <ol className='mx_DialogSidebar_list'>
-            { /* TODO nice elements */ }
-            { beacons.map((beacon, index) => <li key={beacon.identifier}>{ index }</li>) }
+            { beacons.map((beacon) => <BeaconListItem key={beacon.identifier} beacon={beacon} />) }
         </ol>
     </div>;
 };

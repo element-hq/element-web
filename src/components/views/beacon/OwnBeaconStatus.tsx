@@ -54,6 +54,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
         displayStatus={ownDisplayStatus}
         label={_t('Live location enabled')}
         displayLiveTimeRemaining
+        withIcon
         {...rest}
     >
         { ownDisplayStatus === BeaconDisplayStatus.Active && <AccessibleButton

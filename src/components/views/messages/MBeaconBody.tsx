@@ -152,6 +152,7 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) =>
                     beacon={beacon}
                     displayStatus={displayStatus}
                     label={_t('View live location')}
+                    withIcon
                 />
             }
         </div>
