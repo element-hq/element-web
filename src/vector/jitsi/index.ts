@@ -127,7 +127,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
         const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
         skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") || isVideoChannel;
+            .get("skip_built_in_welcome_screen") ?? false;
 
         // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
@@ -145,7 +145,8 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    joinConference();
+                    const { audioDevice, videoDevice } = ev.detail.data;
+                    joinConference(audioDevice as string, videoDevice as string);
                     ack(ev);
                 },
             );
@@ -211,6 +212,13 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         }
 
         enableJoinButton(); // always enable the button
+
+        // Inform the client that we're ready to receive events
+        try {
+            await widgetApi?.transport.send(ElementWidgetActions.WidgetReady, {});
+        } catch (e) {
+            logger.error(e);
+        }
     } catch (e) {
         logger.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
@@ -293,7 +301,8 @@ async function notifyHangup() {
     }
 }
 
-function joinConference() { // event handler bound in HTML
+// event handler bound in HTML
+function joinConference(audioDevice?: string, videoDevice?: string) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -318,6 +327,10 @@ function joinConference() { // event handler bound in HTML
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer"),
         roomName: conferenceId,
+        devices: {
+            audioInput: audioDevice,
+            videoInput: videoDevice,
+        },
         interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
@@ -326,15 +339,17 @@ function joinConference() { // event handler bound in HTML
         },
         configOverwrite: {
             startAudioOnly,
+            startWithAudioMuted: !audioDevice,
+            startWithVideoMuted: !videoDevice,
         } as any,
         jwt: jwt,
     };
 
     // Video channel widgets need some more tailored config options
     if (isVideoChannel) {
-        // Ensure that we start on Jitsi Meet's native prejoin screen, for
-        // deployments that skip straight to the conference by default
-        options.configOverwrite.prejoinConfig = { enabled: true };
+        // Ensure that we skip Jitsi Meet's native prejoin screen, for
+        // deployments that have it enabled
+        options.configOverwrite.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
         options.configOverwrite.toolbarButtons = [
             "microphone", "camera", "desktop", "tileview", "hangup",
