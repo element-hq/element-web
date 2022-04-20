@@ -28,7 +28,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from './VectorBasePlatform';
 import { parseQs } from "../url_utils";
-import { reloadPage } from "../routing";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -142,14 +141,9 @@ export default class WebPlatform extends VectorBasePlatform {
 
             // Set updated=1 as a query param so we can detect that we've already done this once
             // and reload the page.
-            let suffix = "updated=1";
-            if (window.location.search.length === 0) {
-                suffix = "?" + suffix;
-            } else {
-                suffix = "&" + suffix;
-            }
-
-            reloadPage(window.location.href + suffix);
+            const url = new URL(window.location.href);
+            url.searchParams.set("updated", "1");
+            window.location.href = url.toString();
         });
         setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
     }
