@@ -154,7 +154,7 @@ limitations under the License.
 
     &[data-self=true] {
         .mx_EventTile_line {
-            float: right;
+            margin-inline-start: auto;
             border-bottom-left-radius: var(--cornerRadius);
 
             .mx_MImageBody .mx_MImageBody_thumbnail_container,
