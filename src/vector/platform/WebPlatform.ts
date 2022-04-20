@@ -28,7 +28,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from './VectorBasePlatform';
 import { parseQs } from "../url_utils";
-import { reloadPage } from "../routing";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
