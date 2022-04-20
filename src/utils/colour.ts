@@ -14,10 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { split } from 'lodash';
+
 export function textToHtmlRainbow(str: string): string {
     const frequency = (2 * Math.PI) / str.length;
 
-    return Array.from(str)
+    return split(str, '')
         .map((c, i) => {
             if (c === " ") {
                 return c;
