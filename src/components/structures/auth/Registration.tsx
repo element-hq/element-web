@@ -110,7 +110,9 @@ interface IState {
 }
 
 export default class Registration extends React.Component<IProps, IState> {
-    loginLogic: Login;
+    private readonly loginLogic: Login;
+    // `replaceClient` tracks latest serverConfig to spot when it changes under the async method which fetches flows
+    private latestServerConfig: ValidatedServerConfig;
 
     constructor(props) {
         super(props);
@@ -149,26 +151,28 @@ export default class Registration extends React.Component<IProps, IState> {
     }
 
     private async replaceClient(serverConfig: ValidatedServerConfig) {
+        this.latestServerConfig = serverConfig;
+        const { hsUrl, isUrl } = serverConfig;
+
         this.setState({
             errorText: null,
             serverDeadError: null,
             serverErrorIsFatal: false,
-            // busy while we do liveness check (we need to avoid trying to render
+            // busy while we do live-ness check (we need to avoid trying to render
             // the UI auth component while we don't have a matrix client)
             busy: true,
         });
 
         // Do a liveliness check on the URLs
         try {
-            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(
-                serverConfig.hsUrl,
-                serverConfig.isUrl,
-            );
+            await AutoDiscoveryUtils.validateServerConfigWithStaticUrls(hsUrl, isUrl);
+            if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             this.setState({
                 serverIsAlive: true,
                 serverErrorIsFatal: false,
             });
         } catch (e) {
+            if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             this.setState({
                 busy: false,
                 ...AutoDiscoveryUtils.authComponentStateForError(e, "register"),
@@ -178,7 +182,6 @@ export default class Registration extends React.Component<IProps, IState> {
             }
         }
 
-        const { hsUrl, isUrl } = serverConfig;
         const cli = createClient({
             baseUrl: hsUrl,
             idBaseUrl: isUrl,
@@ -190,8 +193,10 @@ export default class Registration extends React.Component<IProps, IState> {
         let ssoFlow: ISSOFlow;
         try {
             const loginFlows = await this.loginLogic.getFlows();
+            if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             ssoFlow = loginFlows.find(f => f.type === "m.login.sso" || f.type === "m.login.cas") as ISSOFlow;
         } catch (e) {
+            if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             logger.error("Failed to get login flows to check for SSO support", e);
         }
 
@@ -200,23 +205,19 @@ export default class Registration extends React.Component<IProps, IState> {
             ssoFlow,
             busy: false,
         });
-        const showGenericError = (e) => {
-            this.setState({
-                errorText: _t("Unable to query for supported registration methods."),
-                // add empty flows array to get rid of spinner
-                flows: [],
-            });
-        };
+
         try {
             // We do the first registration request ourselves to discover whether we need to
             // do SSO instead. If we've already started the UI Auth process though, we don't
             // need to.
             if (!this.state.doingUIAuth) {
                 await this.makeRegisterRequest(null);
+                if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
                 // This should never succeed since we specified no auth object.
                 logger.log("Expecting 401 from register request but got success!");
             }
         } catch (e) {
+            if (serverConfig !== this.latestServerConfig) return; // discard, serverConfig changed from under us
             if (e.httpStatus === 401) {
                 this.setState({
                     flows: e.data.flows,
@@ -239,16 +240,20 @@ export default class Registration extends React.Component<IProps, IState> {
                 }
             } else {
                 logger.log("Unable to query for supported registration methods.", e);
-                showGenericError(e);
+                this.setState({
+                    errorText: _t("Unable to query for supported registration methods."),
+                    // add empty flows array to get rid of spinner
+                    flows: [],
+                });
             }
         }
     }
 
-    private onFormSubmit = async (formVals): Promise<void> => {
+    private onFormSubmit = async (formVals: Record<string, string>): Promise<void> => {
         this.setState({
             errorText: "",
             busy: true,
-            formVals: formVals,
+            formVals,
             doingUIAuth: true,
         });
     };
