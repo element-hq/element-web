@@ -25,4 +25,8 @@ describe('<Heading />', () => {
     it('renders h3 with correct attributes', () => {
         expect(getComponent({ size: 'h3' })).toMatchSnapshot();
     });
+
+    it('renders h4 with correct attributes', () => {
+        expect(getComponent({ size: 'h4' })).toMatchSnapshot();
+    });
 });

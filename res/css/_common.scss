@@ -692,3 +692,9 @@ legend {
         }
     }
 }
+
+@define-mixin ListResetDefault {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import {
     Beacon,
@@ -22,6 +22,7 @@ import {
 } from 'matrix-js-sdk/src/matrix';
 import maplibregl from 'maplibre-gl';
 
+import { Icon as LiveLocationIcon } from '../../../../res/img/location/live-location.svg';
 import { useLiveBeacons } from '../../../utils/beacon/useLiveBeacons';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import BaseDialog from "../dialogs/BaseDialog";
@@ -34,6 +35,7 @@ import { getGeoUri } from '../../../utils/beacon';
 import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
+import DialogSidebar from './DialogSidebar';
 
 interface IProps extends IDialogProps {
     roomId: Room['roomId'];
@@ -63,6 +65,8 @@ const BeaconViewDialog: React.FC<IProps> = ({
     onFinished,
 }) => {
     const liveBeacons = useLiveBeacons(roomId, matrixClient);
+
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const bounds = getBeaconBounds(liveBeacons);
     const centerGeoUri = focusBeacon?.latestLocationState?.uri || getBoundsCenter(bounds);
@@ -107,6 +111,18 @@ const BeaconViewDialog: React.FC<IProps> = ({
                             { _t('Close') }
                         </AccessibleButton>
                     </div>
+                }
+                { isSidebarOpen ?
+                    <DialogSidebar beacons={liveBeacons} requestClose={() => setSidebarOpen(false)} /> :
+                    <AccessibleButton
+                        kind='primary'
+                        onClick={() => setSidebarOpen(true)}
+                        data-test-id='beacon-view-dialog-open-sidebar'
+                        className='mx_BeaconViewDialog_viewListButton'
+                    >
+                        <LiveLocationIcon height={12} />&nbsp;
+                        { _t('View list') }
+                    </AccessibleButton>
                 }
             </MatrixClientContext.Provider>
         </BaseDialog>

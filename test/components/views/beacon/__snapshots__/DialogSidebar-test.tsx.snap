@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DialogSidebar /> renders sidebar correctly 1`] = `
+<DialogSidebar
+  beacons={Array []}
+  requestClose={[MockFunction]}
+>
+  <div
+    className="mx_DialogSidebar"
+  >
+    <div
+      className="mx_DialogSidebar_header"
+    >
+      <Heading
+        size="h4"
+      >
+        <h4
+          className="mx_Heading_h4"
+        >
+          View List
+        </h4>
+      </Heading>
+      <AccessibleButton
+        className="mx_DialogSidebar_closeButton"
+        data-test-id="dialog-sidebar-close"
+        element="div"
+        onClick={[MockFunction]}
+        role="button"
+        tabIndex={0}
+        title="Close sidebar"
+      >
+        <div
+          className="mx_AccessibleButton mx_DialogSidebar_closeButton"
+          data-test-id="dialog-sidebar-close"
+          onClick={[MockFunction]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          role="button"
+          tabIndex={0}
+          title="Close sidebar"
+        >
+          <div
+            className="mx_DialogSidebar_closeButtonIcon"
+          />
+        </div>
+      </AccessibleButton>
+    </div>
+    <ol
+      className="mx_DialogSidebar_list"
+    />
+  </div>
+</DialogSidebar>
+`;

@@ -151,4 +151,43 @@ describe('<BeaconViewDialog />', () => {
 
         expect(onFinished).toHaveBeenCalled();
     });
+
+    describe('sidebar', () => {
+        it('opens sidebar on view list button click', () => {
+            const room = setupRoom([defaultEvent]);
+            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+            beacon.addLocations([location1]);
+            const component = getComponent();
+
+            act(() => {
+                findByTestId(component, 'beacon-view-dialog-open-sidebar').at(0).simulate('click');
+                component.setProps({});
+            });
+
+            expect(component.find('DialogSidebar').length).toBeTruthy();
+        });
+
+        it('closes sidebar on close button click', () => {
+            const room = setupRoom([defaultEvent]);
+            const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+            beacon.addLocations([location1]);
+            const component = getComponent();
+
+            // open the sidebar
+            act(() => {
+                findByTestId(component, 'beacon-view-dialog-open-sidebar').at(0).simulate('click');
+                component.setProps({});
+            });
+
+            expect(component.find('DialogSidebar').length).toBeTruthy();
+
+            // now close it
+            act(() => {
+                findByTestId(component, 'dialog-sidebar-close').at(0).simulate('click');
+                component.setProps({});
+            });
+
+            expect(component.find('DialogSidebar').length).toBeFalsy();
+        });
+    });
 });

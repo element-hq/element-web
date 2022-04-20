@@ -17,7 +17,7 @@ limitations under the License.
 import React, { HTMLAttributes } from 'react';
 import classNames from 'classnames';
 
-type Size = 'h1' | 'h2' | 'h3';
+type Size = 'h1' | 'h2' | 'h3' | 'h4';
 interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
     size: Size;
 }

@@ -32,3 +32,14 @@ exports[`<Heading /> renders h3 with correct attributes 1`] = `
   </div>
 </h3>
 `;
+
+exports[`<Heading /> renders h4 with correct attributes 1`] = `
+<h4
+  class="mx_Heading_h4 test"
+  data-test-id="test"
+>
+  <div>
+    test
+  </div>
+</h4>
+`;
