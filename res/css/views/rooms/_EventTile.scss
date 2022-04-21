@@ -223,12 +223,6 @@ $left-gutter: 64px;
         overflow-y: hidden;
     }
 
-    &.mx_EventTile_selected .mx_EventTile_line,
-    &:hover .mx_EventTile_line {
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
-    }
-
     &:hover.mx_EventTile_verified .mx_EventTile_line {
         box-shadow: inset calc(50px + $selected-message-border-width) 0 0 -50px $e2e-verified-color;
     }
