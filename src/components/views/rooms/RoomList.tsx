@@ -616,11 +616,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     public focus(): void {
         // focus the first focusable element in this aria treeview widget
         const treeItems = this.treeRef.current?.querySelectorAll<HTMLElement>('[role="treeitem"]');
-        if (treeItems) {
-            return;
-        }
-        [...treeItems]
-            .find(e => e.offsetParent !== null)?.focus();
+        if (!treeItems) return;
+        [...treeItems].find(e => e.offsetParent !== null)?.focus();
     }
 
     public render() {
