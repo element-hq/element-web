@@ -125,7 +125,7 @@ describe('<Map />', () => {
             const bounds = { north: 51, south: 50, east: 42, west: 41 };
             getComponent({ bounds });
             expect(mockMap.fitBounds).toHaveBeenCalledWith(new maplibregl.LngLatBounds([bounds.west, bounds.south],
-                [bounds.east, bounds.north]), { padding: 100 });
+                [bounds.east, bounds.north]), { padding: 100, maxZoom: 15 });
         });
 
         it('handles invalid bounds', () => {

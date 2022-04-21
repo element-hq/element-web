@@ -24,6 +24,7 @@ import {
     RoomMember,
     getBeaconInfoIdentifier,
 } from 'matrix-js-sdk/src/matrix';
+import maplibregl from 'maplibre-gl';
 
 import BeaconViewDialog from '../../../../src/components/views/beacon/BeaconViewDialog';
 import {
@@ -58,6 +59,8 @@ describe('<BeaconViewDialog />', () => {
         getVisibleRooms: jest.fn().mockReturnValue([]),
     });
 
+    const mockMap = new maplibregl.Map();
+
     // make fresh rooms every time
     // as we update room state
     const setupRoom = (stateEvents: MatrixEvent[] = []): Room => {
@@ -88,6 +91,8 @@ describe('<BeaconViewDialog />', () => {
 
     beforeEach(() => {
         jest.spyOn(OwnBeaconStore.instance, 'getLiveBeaconIds').mockRestore();
+
+        jest.clearAllMocks();
     });
 
     it('renders a map with markers', () => {
@@ -149,6 +154,31 @@ describe('<BeaconViewDialog />', () => {
 
         // two markers now!
         expect(component.find('BeaconMarker').length).toEqual(2);
+    });
+
+    it('does not update bounds or center on changing beacons', () => {
+        const room = setupRoom([defaultEvent]);
+        const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        beacon.addLocations([location1]);
+        const component = getComponent();
+        expect(component.find('BeaconMarker').length).toEqual(1);
+
+        const anotherBeaconEvent = makeBeaconInfoEvent(bobId,
+            roomId,
+            { isLive: true },
+            '$bob-room1-1',
+        );
+
+        act(() => {
+            // emits RoomStateEvent.BeaconLiveness
+            room.currentState.setStateEvents([anotherBeaconEvent]);
+        });
+
+        component.setProps({});
+
+        // two markers now!
+        expect(mockMap.setCenter).toHaveBeenCalledTimes(1);
+        expect(mockMap.fitBounds).toHaveBeenCalledTimes(1);
     });
 
     it('renders a fallback when no live beacons remain', () => {
