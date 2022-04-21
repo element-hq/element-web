@@ -18,6 +18,8 @@ import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { mocked } from "jest-mock";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import {
@@ -26,6 +28,7 @@ import {
     mkRoom,
     mkVideoChannelMember,
     stubVideoChannelStore,
+    StubVideoChannelStore,
 } from "../../../test-utils";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -39,9 +42,8 @@ describe("RoomTile", () => {
     jest.spyOn(PlatformPeg, 'get')
         .mockReturnValue({ overrideBrowserShortcuts: () => false } as unknown as BasePlatform);
 
-    let cli;
-    let store;
-
+    let cli: MatrixClient;
+    let store: StubVideoChannelStore;
     beforeEach(() => {
         const realGetValue = SettingsStore.getValue;
         SettingsStore.getValue = <T, >(name: string, roomId?: string): T => {
@@ -52,7 +54,7 @@ describe("RoomTile", () => {
         };
 
         stubClient();
-        cli = mocked(MatrixClientPeg.get());
+        cli = MatrixClientPeg.get();
         store = stubVideoChannelStore();
         DMRoomMap.makeShared();
     });
@@ -60,8 +62,11 @@ describe("RoomTile", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("video rooms", () => {
-        const room = mkRoom(cli, "!1:example.org");
-        room.isElementVideoRoom.mockReturnValue(true);
+        let room: Room;
+        beforeEach(() => {
+            room = mkRoom(cli, "!1:example.org");
+            mocked(room.isElementVideoRoom).mockReturnValue(true);
+        });
 
         it("tracks connection state", () => {
             const tile = mount(
@@ -97,7 +102,7 @@ describe("RoomTile", () => {
                 mkVideoChannelMember("@chris:example.org", ["device 1"]),
             ]));
 
-            mocked(room.currentState).getMember.mockImplementation(userId => ({
+            mocked(room).getMember.mockImplementation(userId => ({
                 userId,
                 membership: userId === "@chris:example.org" ? "leave" : "join",
                 name: userId,
@@ -117,8 +122,36 @@ describe("RoomTile", () => {
             );
 
             // Only Alice should display as connected
-            const participants = tile.find(".mx_RoomTile_videoParticipants");
-            expect(participants.text()).toEqual("1");
+            expect(tile.find(".mx_RoomTile_videoParticipants").text()).toEqual("1");
+        });
+
+        it("reflects local echo in connected members", () => {
+            mocked(room.currentState).getStateEvents.mockImplementation(mockStateEventImplementation([
+                // Make the remote echo claim that we're connected, while leaving the store disconnected
+                mkVideoChannelMember(cli.getUserId(), [cli.getDeviceId()]),
+            ]));
+
+            mocked(room).getMember.mockImplementation(userId => ({
+                userId,
+                membership: "join",
+                name: userId,
+                rawDisplayName: userId,
+                roomId: "!1:example.org",
+                getAvatarUrl: () => {},
+                getMxcAvatarUrl: () => {},
+            }) as unknown as RoomMember);
+
+            const tile = mount(
+                <RoomTile
+                    room={room}
+                    showMessagePreview={false}
+                    isMinimized={false}
+                    tag={DefaultTagID.Untagged}
+                />,
+            );
+
+            // Because of our local echo, we should still appear as disconnected
+            expect(tile.find(".mx_RoomTile_videoParticipants").exists()).toEqual(false);
         });
     });
 });

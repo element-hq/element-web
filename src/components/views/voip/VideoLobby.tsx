@@ -110,7 +110,7 @@ const MAX_FACES = 8;
 const VideoLobby: FC<{ room: Room }> = ({ room }) => {
     const [connecting, setConnecting] = useState(false);
     const me = useMemo(() => room.getMember(room.myUserId), [room]);
-    const connectedMembers = useConnectedMembers(room.currentState);
+    const connectedMembers = useConnectedMembers(room, false);
     const videoRef = useRef<HTMLVideoElement>();
 
     const devices = useAsyncMemo(async () => {
@@ -172,12 +172,12 @@ const VideoLobby: FC<{ room: Room }> = ({ room }) => {
     };
 
     let facePile;
-    if (connectedMembers.length) {
-        const shownMembers = connectedMembers.slice(0, MAX_FACES);
-        const overflow = connectedMembers.length > shownMembers.length;
+    if (connectedMembers.size) {
+        const shownMembers = [...connectedMembers].slice(0, MAX_FACES);
+        const overflow = connectedMembers.size > shownMembers.length;
 
         facePile = <div className="mx_VideoLobby_connectedMembers">
-            { _t("%(count)s people connected", { count: connectedMembers.length }) }
+            { _t("%(count)s people connected", { count: connectedMembers.size }) }
             <FacePile members={shownMembers} faceSize={24} overflow={overflow} />
         </div>;
     }

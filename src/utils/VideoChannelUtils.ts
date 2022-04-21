@@ -17,7 +17,8 @@ limitations under the License.
 import { useState } from "react";
 import { throttle } from "lodash";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import { useTypedEventEmitter } from "../hooks/useEventEmitter";
@@ -42,17 +43,32 @@ export const addVideoChannel = async (roomId: string, roomName: string) => {
     await WidgetUtils.addJitsiWidget(roomId, CallType.Video, "Video channel", VIDEO_CHANNEL, roomName);
 };
 
-export const getConnectedMembers = (state: RoomState): RoomMember[] =>
-    state.getStateEvents(VIDEO_CHANNEL_MEMBER)
-        // Must have a device connected and still be joined to the room
-        .filter(e => e.getContent<IVideoChannelMemberContent>()?.devices?.length)
-        .map(e => state.getMember(e.getStateKey()))
-        .filter(member => member?.membership === "join");
+export const getConnectedMembers = (room: Room, connectedLocalEcho: boolean): Set<RoomMember> => {
+    const members = new Set<RoomMember>();
 
-export const useConnectedMembers = (state: RoomState, throttleMs = 100) => {
-    const [members, setMembers] = useState<RoomMember[]>(getConnectedMembers(state));
-    useTypedEventEmitter(state, RoomStateEvent.Update, throttle(() => {
-        setMembers(getConnectedMembers(state));
+    for (const e of room.currentState.getStateEvents(VIDEO_CHANNEL_MEMBER)) {
+        const member = room.getMember(e.getStateKey());
+        let devices = e.getContent<IVideoChannelMemberContent>()?.devices ?? [];
+
+        // Apply local echo for the disconnected case
+        if (!connectedLocalEcho && member?.userId === room.client.getUserId()) {
+            devices = devices.filter(d => d !== room.client.getDeviceId());
+        }
+        // Must have a device connected and still be joined to the room
+        if (devices.length && member?.membership === "join") members.add(member);
+    }
+
+    // Apply local echo for the connected case
+    if (connectedLocalEcho) members.add(room.getMember(room.client.getUserId()));
+    return members;
+};
+
+export const useConnectedMembers = (
+    room: Room, connectedLocalEcho: boolean, throttleMs = 100,
+): Set<RoomMember> => {
+    const [members, setMembers] = useState<Set<RoomMember>>(getConnectedMembers(room, connectedLocalEcho));
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, throttle(() => {
+        setMembers(getConnectedMembers(room, connectedLocalEcho));
     }, throttleMs, { leading: true, trailing: true }));
     return members;
 };

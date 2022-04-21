@@ -21,7 +21,7 @@ import { mkEvent } from "./test-utils";
 import { VIDEO_CHANNEL_MEMBER } from "../../src/utils/VideoChannelUtils";
 import VideoChannelStore, { VideoChannelEvent, IJitsiParticipant } from "../../src/stores/VideoChannelStore";
 
-class StubVideoChannelStore extends EventEmitter {
+export class StubVideoChannelStore extends EventEmitter {
     private _roomId: string;
     public get roomId(): string { return this._roomId; }
     private _connected: boolean;

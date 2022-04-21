@@ -18,11 +18,14 @@ import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { mocked } from "jest-mock";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
 import {
     stubClient,
     stubVideoChannelStore,
+    StubVideoChannelStore,
     mkRoom,
     mkVideoChannelMember,
     mockStateEventImplementation,
@@ -33,7 +36,6 @@ import MemberAvatar from "../../../../src/components/views/avatars/MemberAvatar"
 import VideoLobby from "../../../../src/components/views/voip/VideoLobby";
 
 describe("VideoLobby", () => {
-    stubClient();
     Object.defineProperty(navigator, "mediaDevices", {
         value: {
             enumerateDevices: jest.fn(),
@@ -42,17 +44,15 @@ describe("VideoLobby", () => {
     });
     jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(async () => {});
 
-    const cli = MatrixClientPeg.get();
-    const room = mkRoom(cli, "!1:example.org");
-
-    let store;
+    let cli: MatrixClient;
+    let store: StubVideoChannelStore;
+    let room: Room;
     beforeEach(() => {
+        stubClient();
+        cli = MatrixClientPeg.get();
         store = stubVideoChannelStore();
+        room = mkRoom(cli, "!1:example.org");
         mocked(navigator.mediaDevices.enumerateDevices).mockResolvedValue([]);
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
     });
 
     describe("connected members", () => {
@@ -75,7 +75,7 @@ describe("VideoLobby", () => {
                 mkVideoChannelMember("@chris:example.org", ["device 1"]),
             ]));
 
-            mocked(room.currentState).getMember.mockImplementation(userId => ({
+            mocked(room).getMember.mockImplementation(userId => ({
                 userId,
                 membership: userId === "@chris:example.org" ? "leave" : "join",
                 name: userId,
@@ -94,6 +94,31 @@ describe("VideoLobby", () => {
             const memberText = lobby.find(".mx_VideoLobby_connectedMembers").children().at(0).text();
             expect(memberText).toEqual("1 person connected");
             expect(lobby.find(FacePile).find(MemberAvatar).props().member.userId).toEqual("@alice:example.org");
+        });
+
+        it("doesn't include remote echo of this device being connected", async () => {
+            mocked(room.currentState).getStateEvents.mockImplementation(mockStateEventImplementation([
+                // Make the remote echo claim that we're connected, while leaving the store disconnected
+                mkVideoChannelMember(cli.getUserId(), [cli.getDeviceId()]),
+            ]));
+
+            mocked(room).getMember.mockImplementation(userId => ({
+                userId,
+                membership: "join",
+                name: userId,
+                rawDisplayName: userId,
+                roomId: "!1:example.org",
+                getAvatarUrl: () => {},
+                getMxcAvatarUrl: () => {},
+            }) as unknown as RoomMember);
+
+            const lobby = mount(<VideoLobby room={room} />);
+            // Wait for state to settle
+            await act(() => Promise.resolve());
+            lobby.update();
+
+            // Because of our local echo, we should still appear as disconnected
+            expect(lobby.find(".mx_VideoLobby_connectedMembers").exists()).toEqual(false);
         });
     });
 
