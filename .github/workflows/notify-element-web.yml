@@ -8,7 +8,6 @@ jobs:
   notify-element-web:
     name: "Notify Element Web"
     runs-on: ubuntu-latest
-    environment: develop
     steps:
       - name: Notify element-web repo that a new SDK build is on develop
         uses: peter-evans/repository-dispatch@v1
