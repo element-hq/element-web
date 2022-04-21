@@ -1,5 +1,5 @@
 /*
-Copyright 2018 The Matrix.org Foundation C.I.C.
+Copyright 2018, 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,9 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IInstance } from "matrix-js-sdk/src/client";
+import { IInstance, IProtocol } from "matrix-js-sdk/src/client";
 
-import { Protocols } from "../components/views/directory/NetworkDropdown";
+// XXX: We would ideally use a symbol here but we can't since we save this value to localStorage
+export const ALL_ROOMS = "ALL_ROOMS";
+
+export type Protocols = Record<string, IProtocol>;
 
 // Find a protocol 'instance' with a given instance_id
 // in the supplied protocols dict

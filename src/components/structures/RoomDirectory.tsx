@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { IFieldType, IInstance, IProtocol, IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
+import { IFieldType, IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
 import { Visibility } from "matrix-js-sdk/src/@types/partials";
 import { IRoomDirectoryOptions } from "matrix-js-sdk/src/@types/requests";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -28,7 +28,7 @@ import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
-import NetworkDropdown, { ALL_ROOMS, Protocols } from "../views/directory/NetworkDropdown";
+import NetworkDropdown from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
@@ -39,10 +39,11 @@ import DirectorySearchBox from "../views/elements/DirectorySearchBox";
 import ScrollPanel from "./ScrollPanel";
 import Spinner from "../views/elements/Spinner";
 import { getDisplayAliasForAliasSet } from "../../Rooms";
-import { Action } from "../../dispatcher/actions";
 import PosthogTrackers from "../../PosthogTrackers";
-import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { PublicRoomTile } from "../views/rooms/PublicRoomTile";
+import { getFieldsForThirdPartyLocation, joinRoomByAlias, showRoom } from "../../utils/rooms";
+import { GenericError } from "../../utils/error";
+import { ALL_ROOMS, Protocols } from "../../utils/DirectoryUtils";
 
 const LAST_SERVER_KEY = "mx_last_room_directory_server";
 const LAST_INSTANCE_KEY = "mx_last_room_directory_instance";
@@ -350,44 +351,23 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     };
 
     private onJoinFromSearchClick = (alias: string) => {
-        // If we don't have a particular instance id selected, just show that rooms alias
-        if (!this.state.instanceId || this.state.instanceId === ALL_ROOMS) {
-            // If the user specified an alias without a domain, add on whichever server is selected
-            // in the dropdown
-            if (alias.indexOf(':') == -1) {
-                alias = alias + ':' + this.state.roomServer;
-            }
-            this.showRoomAlias(alias, true);
-        } else {
-            // This is a 3rd party protocol. Let's see if we can join it
-            const protocolName = protocolNameForInstanceId(this.protocols, this.state.instanceId);
-            const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
-            const fields = protocolName
-                ? this.getFieldsForThirdPartyLocation(alias, this.protocols[protocolName], instance)
-                : null;
-            if (!fields) {
-                const brand = SdkConfig.get().brand;
-                Modal.createTrackedDialog('Unable to join network', '', ErrorDialog, {
-                    title: _t('Unable to join network'),
-                    description: _t('%(brand)s does not know how to join a room on this network', { brand }),
-                });
-                return;
-            }
-            MatrixClientPeg.get().getThirdpartyLocation(protocolName, fields).then((resp) => {
-                if (resp.length > 0 && resp[0].alias) {
-                    this.showRoomAlias(resp[0].alias, true);
-                } else {
-                    Modal.createTrackedDialog('Room not found', '', ErrorDialog, {
-                        title: _t('Room not found'),
-                        description: _t('Couldn\'t find a matching Matrix room'),
-                    });
-                }
-            }, (e) => {
-                Modal.createTrackedDialog('Fetching third party location failed', '', ErrorDialog, {
-                    title: _t('Fetching third party location failed'),
-                    description: _t('Unable to look up room ID from server'),
-                });
+        const cli = MatrixClientPeg.get();
+        try {
+            joinRoomByAlias(cli, alias, {
+                instanceId: this.state.instanceId,
+                roomServer: this.state.roomServer,
+                protocols: this.protocols,
+                metricsTrigger: "RoomDirectory",
             });
+        } catch (e) {
+            if (e instanceof GenericError) {
+                Modal.createTrackedDialog(e.message, '', ErrorDialog, {
+                    title: e.message,
+                    description: e.description,
+                });
+            } else {
+                throw e;
+            }
         }
     };
 
@@ -401,55 +381,18 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         PosthogTrackers.trackInteraction("WebRoomDirectoryCreateRoomButton", ev);
     };
 
-    private showRoomAlias(alias: string, autoJoin = false) {
-        this.showRoom(null, alias, autoJoin);
-    }
-
-    private showRoom = (room: IPublicRoomsChunkRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) => {
+    private onRoomClick = (room: IPublicRoomsChunkRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) => {
         this.onFinished();
-        const payload: ViewRoomPayload = {
-            action: Action.ViewRoom,
-            auto_join: autoJoin,
-            should_peek: shouldPeek,
+        const cli = MatrixClientPeg.get();
+        showRoom(cli, room, {
+            roomAlias,
+            autoJoin,
+            shouldPeek,
+            roomServer: this.state.roomServer,
             metricsTrigger: "RoomDirectory",
-        };
-        if (room) {
-            // Don't let the user view a room they won't be able to either
-            // peek or join: fail earlier so they don't have to click back
-            // to the directory.
-            if (MatrixClientPeg.get().isGuest()) {
-                if (!room.world_readable && !room.guest_can_join) {
-                    dis.dispatch({ action: 'require_registration' });
-                    return;
-                }
-            }
-
-            if (!roomAlias) {
-                roomAlias = getDisplayAliasForRoom(room);
-            }
-
-            payload.oob_data = {
-                avatarUrl: room.avatar_url,
-                // XXX: This logic is duplicated from the JS SDK which
-                // would normally decide what the name is.
-                name: room.name || roomAlias || _t('Unnamed room'),
-            };
-
-            if (this.state.roomServer) {
-                payload.via_servers = [this.state.roomServer];
-            }
-        }
-        // It's not really possible to join Matrix rooms by ID because the HS has no way to know
-        // which servers to start querying. However, there's no other way to join rooms in
-        // this list without aliases at present, so if roomAlias isn't set here we have no
-        // choice but to supply the ID.
-        if (roomAlias) {
-            payload.room_alias = roomAlias;
-        } else {
-            payload.room_id = room.room_id;
-        }
-        dis.dispatch(payload);
+        });
     };
+
     private stringLooksLikeId(s: string, fieldType: IFieldType) {
         let pat = /^#[^\s]+:[^\s]/;
         if (fieldType && fieldType.regexp) {
@@ -459,27 +402,11 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         return pat.test(s);
     }
 
-    private getFieldsForThirdPartyLocation(userInput: string, protocol: IProtocol, instance: IInstance) {
-        // make an object with the fields specified by that protocol. We
-        // require that the values of all but the last field come from the
-        // instance. The last is the user input.
-        const requiredFields = protocol.location_fields;
-        if (!requiredFields) return null;
-        const fields = {};
-        for (let i = 0; i < requiredFields.length - 1; ++i) {
-            const thisField = requiredFields[i];
-            if (instance.fields[thisField] === undefined) return null;
-            fields[thisField] = instance.fields[thisField];
-        }
-        fields[requiredFields[requiredFields.length - 1]] = userInput;
-        return fields;
-    }
-
     private onFinished = () => {
         this.props.onFinished(false);
     };
 
-    render() {
+    public render() {
         let content;
         if (this.state.error) {
             content = this.state.error;
@@ -491,7 +418,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     <PublicRoomTile
                         key={room.room_id}
                         room={room}
-                        showRoom={this.showRoom}
+                        showRoom={this.onRoomClick}
                         removeFromDirectory={this.removeFromDirectory}
                     />,
                 );
@@ -571,7 +498,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             let showJoinButton = this.stringLooksLikeId(this.state.filterString, instanceExpectedFieldType);
             if (protocolName) {
                 const instance = instanceForInstanceId(this.protocols, this.state.instanceId);
-                if (this.getFieldsForThirdPartyLocation(
+                if (getFieldsForThirdPartyLocation(
                     this.state.filterString,
                     this.protocols[protocolName],
                     instance,
