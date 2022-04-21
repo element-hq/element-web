@@ -1,15 +1,18 @@
 name: Notify element-web
 on:
-    push:
-        branches: [develop]
+  push:
+    branches: [ develop ]
+  repository_dispatch:
+    types: [ upstream-sdk-notify ]
 jobs:
-    notify-element-web:
-        runs-on: ubuntu-latest
-        environment: develop
-        steps:
-            -   name: Notify element-web repo that a new SDK build is on develop
-                uses: peter-evans/repository-dispatch@v1
-                with:
-                    token: ${{ secrets.ELEMENT_WEB_NOTIFY_TOKEN }}
-                    repository: vector-im/element-web
-                    event-type: element-web-notify
+  notify-element-web:
+    name: "Notify Element Web"
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - name: Notify element-web repo that a new SDK build is on develop
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.ELEMENT_BOT_TOKEN }}
+          repository: vector-im/element-web
+          event-type: element-web-notify

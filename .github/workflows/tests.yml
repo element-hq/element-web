@@ -1,10 +1,13 @@
-name: Test coverage
+name: Tests
 on:
-  pull_request: {}
+  pull_request: { }
   push:
-    branches: [develop, main, master]
+    branches: [ develop, master ]
+  repository_dispatch:
+    types: [ upstream-sdk-notify ]
 jobs:
-  test-coverage:
+  jest:
+    name: Jest with Codecov
     runs-on: ubuntu-latest
     env:
       # This must be set for fetchdep.sh to get the right branch
@@ -19,13 +22,15 @@ jobs:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
 
       - name: Yarn cache
-        uses: c-hive/gha-yarn-cache@v2
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
 
       - name: Install Deps
         run: "./scripts/ci/install-deps.sh --ignore-scripts"
 
       - name: Run tests with coverage
-        run: "yarn install && yarn coverage"
+        run: "yarn coverage"
 
       - name: Upload coverage
         uses: codecov/codecov-action@v2
