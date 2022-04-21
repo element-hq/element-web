@@ -82,7 +82,7 @@ export function canEditContent(mxEvent: MatrixEvent): boolean {
         M_POLL_START.matches(mxEvent.getType()) ||
         (
             (msgtype === MsgType.Text || msgtype === MsgType.Emote) &&
-            body &&
+            !!body &&
             typeof body === 'string'
         )
     );
