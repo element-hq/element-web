@@ -5,24 +5,13 @@ exports[`<OwnBeaconStatus /> renders without a beacon instance 1`] = `
   displayStatus="Loading"
 >
   <BeaconStatus
-    className="mx_MBeaconBody_chin"
     displayLiveTimeRemaining={true}
     displayStatus="Loading"
     label="Live location enabled"
-    withIcon={true}
   >
     <div
-      className="mx_BeaconStatus mx_BeaconStatus_Loading mx_MBeaconBody_chin"
+      className="mx_BeaconStatus mx_BeaconStatus_Loading"
     >
-      <StyledLiveBeaconIcon
-        className="mx_BeaconStatus_icon"
-        isIdle={true}
-        withError={false}
-      >
-        <div
-          className="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
-        />
-      </StyledLiveBeaconIcon>
       <div
         className="mx_BeaconStatus_description"
       >

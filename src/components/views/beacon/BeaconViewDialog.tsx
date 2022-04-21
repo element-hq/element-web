@@ -36,6 +36,7 @@ import { Icon as LocationIcon } from '../../../../res/img/element-icons/location
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import DialogSidebar from './DialogSidebar';
+import DialogOwnBeaconStatus from './DialogOwnBeaconStatus';
 
 interface IProps extends IDialogProps {
     roomId: Room['roomId'];
@@ -124,6 +125,7 @@ const BeaconViewDialog: React.FC<IProps> = ({
                         { _t('View list') }
                     </AccessibleButton>
                 }
+                <DialogOwnBeaconStatus roomId={roomId} />
             </MatrixClientContext.Provider>
         </BaseDialog>
     );
