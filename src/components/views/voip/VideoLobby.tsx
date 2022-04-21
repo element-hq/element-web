@@ -21,7 +21,6 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import { _t } from "../../../languageHandler";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import { useStateToggle } from "../../../hooks/useStateToggle";
 import { useConnectedMembers } from "../../../utils/VideoChannelUtils";
 import VideoChannelStore from "../../../stores/VideoChannelStore";
 import IconizedContextMenu, {
@@ -108,6 +107,7 @@ const DeviceButton: FC<IDeviceButtonProps> = ({
 const MAX_FACES = 8;
 
 const VideoLobby: FC<{ room: Room }> = ({ room }) => {
+    const store = VideoChannelStore.instance;
     const [connecting, setConnecting] = useState(false);
     const me = useMemo(() => room.getMember(room.myUserId), [room]);
     const connectedMembers = useConnectedMembers(room, false);
@@ -130,8 +130,16 @@ const VideoLobby: FC<{ room: Room }> = ({ room }) => {
     const audioDevice = selectedAudioDevice ?? audioDevices[0];
     const videoDevice = selectedVideoDevice ?? videoDevices[0];
 
-    const [audioActive, toggleAudio] = useStateToggle(true);
-    const [videoActive, toggleVideo] = useStateToggle(true);
+    const [audioActive, setAudioActive] = useState(!store.audioMuted);
+    const [videoActive, setVideoActive] = useState(!store.videoMuted);
+    const toggleAudio = () => {
+        store.audioMuted = audioActive;
+        setAudioActive(!audioActive);
+    };
+    const toggleVideo = () => {
+        store.videoMuted = videoActive;
+        setVideoActive(!videoActive);
+    };
 
     const videoStream = useAsyncMemo(async () => {
         if (videoDevice && videoActive) {
@@ -162,7 +170,7 @@ const VideoLobby: FC<{ room: Room }> = ({ room }) => {
     const connect = async () => {
         setConnecting(true);
         try {
-            await VideoChannelStore.instance.connect(
+            await store.connect(
                 room.roomId, audioActive ? audioDevice : null, videoActive ? videoDevice : null,
             );
         } catch (e) {

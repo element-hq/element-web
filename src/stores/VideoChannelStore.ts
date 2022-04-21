@@ -94,6 +94,20 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
     public get participants(): IJitsiParticipant[] { return this._participants; }
     private set participants(value: IJitsiParticipant[]) { this._participants = value; }
 
+    private _audioMuted = localStorage.getItem("mx_audioMuted") === "true";
+    public get audioMuted(): boolean { return this._audioMuted; }
+    public set audioMuted(value: boolean) {
+        this._audioMuted = value;
+        localStorage.setItem("mx_audioMuted", value.toString());
+    }
+
+    private _videoMuted = localStorage.getItem("mx_videoMuted") === "true";
+    public get videoMuted(): boolean { return this._videoMuted; }
+    public set videoMuted(value: boolean) {
+        this._videoMuted = value;
+        localStorage.setItem("mx_videoMuted", value.toString());
+    }
+
     public connect = async (roomId: string, audioDevice: MediaDeviceInfo, videoDevice: MediaDeviceInfo) => {
         if (this.activeChannel) await this.disconnect();
 
@@ -136,10 +150,14 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             }
         }
 
+        // Participant data and mute state will come down the event pipeline quickly, so prepare in advance
         this.activeChannel = messaging;
         this.roomId = roomId;
-        // Participant data will come down the event pipeline quickly, so prepare in advance
         messaging.on(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+        messaging.on(`action:${ElementWidgetActions.MuteAudio}`, this.onMuteAudio);
+        messaging.on(`action:${ElementWidgetActions.UnmuteAudio}`, this.onUnmuteAudio);
+        messaging.on(`action:${ElementWidgetActions.MuteVideo}`, this.onMuteVideo);
+        messaging.on(`action:${ElementWidgetActions.UnmuteVideo}`, this.onUnmuteVideo);
 
         this.emit(VideoChannelEvent.StartConnect, roomId);
 
@@ -163,6 +181,10 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             this.activeChannel = null;
             this.roomId = null;
             messaging.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+            messaging.off(`action:${ElementWidgetActions.MuteAudio}`, this.onMuteAudio);
+            messaging.off(`action:${ElementWidgetActions.UnmuteAudio}`, this.onUnmuteAudio);
+            messaging.off(`action:${ElementWidgetActions.MuteVideo}`, this.onMuteVideo);
+            messaging.off(`action:${ElementWidgetActions.UnmuteVideo}`, this.onUnmuteVideo);
 
             this.emit(VideoChannelEvent.Disconnect, roomId);
 
@@ -236,6 +258,26 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
     private onParticipants = (ev: CustomEvent<IWidgetApiRequest>) => {
         this.participants = ev.detail.data.participants as IJitsiParticipant[];
         this.emit(VideoChannelEvent.Participants, this.roomId, ev.detail.data.participants);
+        this.ack(ev);
+    };
+
+    private onMuteAudio = (ev: CustomEvent<IWidgetApiRequest>) => {
+        this.audioMuted = true;
+        this.ack(ev);
+    };
+
+    private onUnmuteAudio = (ev: CustomEvent<IWidgetApiRequest>) => {
+        this.audioMuted = false;
+        this.ack(ev);
+    };
+
+    private onMuteVideo = (ev: CustomEvent<IWidgetApiRequest>) => {
+        this.videoMuted = true;
+        this.ack(ev);
+    };
+
+    private onUnmuteVideo = (ev: CustomEvent<IWidgetApiRequest>) => {
+        this.videoMuted = false;
         this.ack(ev);
     };
 }
