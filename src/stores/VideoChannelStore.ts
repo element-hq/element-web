@@ -171,6 +171,7 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
 
         this.connected = true;
         messaging.once(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        window.addEventListener("beforeunload", this.setDisconnected);
 
         this.emit(VideoChannelEvent.Connect, roomId);
 
@@ -188,6 +189,27 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         } catch (e) {
             throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
         }
+    };
+
+    public setDisconnected = async () => {
+        this.activeChannel.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.activeChannel.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+        window.removeEventListener("beforeunload", this.setDisconnected);
+
+        const roomId = this.roomId;
+        this.activeChannel = null;
+        this.roomId = null;
+        this.connected = false;
+        this.participants = [];
+
+        this.emit(VideoChannelEvent.Disconnect, roomId);
+
+        // Tell others that we're disconnected, by removing our device from room state
+        await this.updateDevices(roomId, devices => {
+            const devicesSet = new Set(devices);
+            devicesSet.delete(this.matrixClient.getDeviceId());
+            return Array.from(devicesSet);
+        });
     };
 
     private ack = (ev: CustomEvent<IWidgetApiRequest>) => {
@@ -208,24 +230,7 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
 
     private onHangup = async (ev: CustomEvent<IWidgetApiRequest>) => {
         this.ack(ev);
-
-        this.activeChannel.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
-        this.activeChannel.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
-
-        const roomId = this.roomId;
-        this.activeChannel = null;
-        this.roomId = null;
-        this.connected = false;
-        this.participants = [];
-
-        this.emit(VideoChannelEvent.Disconnect, roomId);
-
-        // Tell others that we're disconnected, by removing our device from room state
-        await this.updateDevices(roomId, devices => {
-            const devicesSet = new Set(devices);
-            devicesSet.delete(this.matrixClient.getDeviceId());
-            return Array.from(devicesSet);
-        });
+        await this.setDisconnected();
     };
 
     private onParticipants = (ev: CustomEvent<IWidgetApiRequest>) => {

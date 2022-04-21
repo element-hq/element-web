@@ -131,6 +131,7 @@ import { IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import InfoDialog from '../views/dialogs/InfoDialog';
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
+import VideoChannelStore from "../../stores/VideoChannelStore";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -576,6 +577,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case 'logout':
                 CallHandler.instance.hangupAllCalls();
+                if (VideoChannelStore.instance.connected) VideoChannelStore.instance.setDisconnected();
                 Lifecycle.logout();
                 break;
             case 'require_registration':
