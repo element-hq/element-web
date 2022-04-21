@@ -44,6 +44,8 @@ class WrappedMessagePanel extends React.Component {
     callEventGroupers = new Map();
 
     render() {
+        const { showHiddenEvents, ...props } = this.props;
+
         const roomContext = {
             room,
             roomId: room.roomId,
@@ -54,13 +56,14 @@ class WrappedMessagePanel extends React.Component {
             showJoinLeaves: false,
             showAvatarChanges: false,
             showDisplaynameChanges: true,
+            showHiddenEvents,
         };
 
         return <MatrixClientContext.Provider value={client}>
             <RoomContext.Provider value={roomContext}>
                 <MessagePanel
                     room={room}
-                    {...this.props}
+                    {...props}
                     resizeNotifier={this.resizeNotifier}
                     callEventGroupers={this.callEventGroupers}
                 />
@@ -632,6 +635,40 @@ describe('MessagePanel', function() {
 
         expect(settingsSpy).not.toHaveBeenCalledWith("showHiddenEventsInTimeline");
         settingsSpy.mockRestore();
+    });
+
+    it("should group hidden event reactions into an event list summary", () => {
+        const events = [
+            TestUtilsMatrix.mkEvent({
+                event: true,
+                type: "m.reaction",
+                room: "!room:id",
+                user: "@user:id",
+                content: {},
+                ts: 1,
+            }),
+            TestUtilsMatrix.mkEvent({
+                event: true,
+                type: "m.reaction",
+                room: "!room:id",
+                user: "@user:id",
+                content: {},
+                ts: 2,
+            }),
+            TestUtilsMatrix.mkEvent({
+                event: true,
+                type: "m.reaction",
+                room: "!room:id",
+                user: "@user:id",
+                content: {},
+                ts: 3,
+            }),
+        ];
+        const res = mount(<WrappedMessagePanel showHiddenEvents={true} events={events} />);
+
+        const els = res.find("EventListSummary");
+        expect(els.length).toEqual(1);
+        expect(els.prop("events").length).toEqual(3);
     });
 });
 

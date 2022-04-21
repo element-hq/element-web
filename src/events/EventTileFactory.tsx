@@ -393,6 +393,8 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
         return hasText(mxEvent, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES[EventType.RoomCreate]) {
         return Boolean(mxEvent.getContent()['predecessor']);
+    } else if (handler === JSONEventFactory) {
+        return false;
     } else {
         return true;
     }

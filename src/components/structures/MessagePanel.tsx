@@ -452,14 +452,6 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
     }
 
-    /* check the scroll state and send out pagination requests if necessary.
-     */
-    public checkFillState(): void {
-        if (this.scrollPanel.current) {
-            this.scrollPanel.current.checkFillState();
-        }
-    }
-
     private isUnmounting = (): boolean => {
         return !this.isMounted;
     };
