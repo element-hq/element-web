@@ -70,6 +70,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
     constructor() {
         super(defaultDispatcher);
         this.setMaxListeners(20); // RoomList + LeftPanel + 8xRoomSubList + spares
+        this.algorithm.start();
     }
 
     private setupWatchers() {
@@ -96,6 +97,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 
         this.algorithm.off(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.off(FILTER_CHANGED, this.onAlgorithmListUpdated);
+        this.algorithm.stop();
         this.algorithm = new Algorithm();
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmListUpdated);
@@ -479,8 +481,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         }
     }
 
-    private onAlgorithmListUpdated = () => {
+    private onAlgorithmListUpdated = (forceUpdate: boolean) => {
         this.updateFn.mark();
+        if (forceUpdate) this.updateFn.trigger();
     };
 
     private onAlgorithmFilterUpdated = () => {
