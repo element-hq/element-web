@@ -22,19 +22,17 @@ import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
 const DEBUG_SCROLL = false;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See getExcessHeight.
 const UNPAGINATION_PADDING = 6000;
-// The number of milliseconds to debounce calls to onUnfillRequest, to prevent
-// many scroll events causing many unfilling requests.
+// The number of milliseconds to debounce calls to onUnfillRequest,
+// to prevent many scroll events causing many unfilling requests.
 const UNFILL_REQUEST_DEBOUNCE_MS = 200;
-// _updateHeight makes the height a ceiled multiple of this so we
-// don't have to update the height too often. It also allows the user
-// to scroll past the pagination spinner a bit so they don't feel blocked so
+// updateHeight makes the height a ceiled multiple of this so we don't have to update the height too often.
+// It also allows the user to scroll past the pagination spinner a bit so they don't feel blocked so
 // much while the content loads.
 const PAGE_SIZE = 400;
 
@@ -193,24 +191,20 @@ export default class ScrollPanel extends React.Component<IProps> {
     private preventShrinkingState: IPreventShrinkingState;
     private unfillDebouncer: number;
     private bottomGrowth: number;
-    private pages: number;
+    private minListHeight: number;
     private heightUpdateInProgress: boolean;
     private divScroll: HTMLDivElement;
 
     constructor(props, context) {
         super(props, context);
 
-        if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.on("middlePanelResizedNoisy", this.onResize);
-        }
+        this.props.resizeNotifier?.on("middlePanelResizedNoisy", this.onResize);
 
         this.resetScrollState();
     }
 
     componentDidMount() {
         this.checkScroll();
-
-        UIStore.instance.on(UI_EVENTS.Resize, this.onUiResize);
     }
 
     componentDidUpdate() {
@@ -230,11 +224,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         // (We could use isMounted(), but facebook have deprecated that.)
         this.unmounted = true;
 
-        if (this.props.resizeNotifier) {
-            this.props.resizeNotifier.removeListener("middlePanelResizedNoisy", this.onResize);
-        }
-
-        UIStore.instance.off(UI_EVENTS.Resize, this.onUiResize);
+        this.props.resizeNotifier?.removeListener("middlePanelResizedNoisy", this.onResize);
     }
 
     private onScroll = ev => {
@@ -546,7 +536,7 @@ export default class ScrollPanel extends React.Component<IProps> {
             stuckAtBottom: this.props.startAtBottom,
         };
         this.bottomGrowth = 0;
-        this.pages = 0;
+        this.minListHeight = 0;
         this.scrollTimeout = new Timer(100);
         this.heightUpdateInProgress = false;
     };
@@ -721,17 +711,6 @@ export default class ScrollPanel extends React.Component<IProps> {
         }
     }
 
-    private onUiResize = () => {
-        this.setDataScrollbar();
-    };
-
-    private setDataScrollbar(contentHeight = this.getMessagesHeight()) {
-        const sn = this.getScrollNode();
-        const minHeight = sn.clientHeight;
-        const displayScrollbar = contentHeight > minHeight;
-        sn.dataset.scrollbar = displayScrollbar.toString();
-    }
-
     // need a better name that also indicates this will change scrollTop? Rebalance height? Reveal content?
     private async updateHeight(): Promise<void> {
         // wait until user has stopped scrolling
@@ -750,10 +729,13 @@ export default class ScrollPanel extends React.Component<IProps> {
         const sn = this.getScrollNode();
         const itemlist = this.itemlist.current;
         const contentHeight = this.getMessagesHeight();
-        const minHeight = sn.clientHeight;
-        const height = Math.max(minHeight, contentHeight);
-        this.pages = Math.ceil(height / PAGE_SIZE);
-        this.setDataScrollbar(contentHeight);
+        // Only round to the nearest page when we're basing the height off the content, not off the scrollNode height
+        // otherwise it'll cause too much overscroll which makes it possible to entirely scroll content off-screen.
+        if (contentHeight < sn.clientHeight - PAGE_SIZE) {
+            this.minListHeight = sn.clientHeight;
+        } else {
+            this.minListHeight = Math.ceil(contentHeight / PAGE_SIZE) * PAGE_SIZE;
+        }
         this.bottomGrowth = 0;
         const newHeight = `${this.getListHeight()}px`;
 
@@ -822,7 +804,7 @@ export default class ScrollPanel extends React.Component<IProps> {
     }
 
     private getListHeight(): number {
-        return this.bottomGrowth + (this.pages * PAGE_SIZE);
+        return this.bottomGrowth + this.minListHeight;
     }
 
     private getMessagesHeight(): number {
