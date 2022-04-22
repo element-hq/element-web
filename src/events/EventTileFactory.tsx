@@ -19,7 +19,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { M_POLL_START, Optional } from "matrix-events-sdk";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 
 import EditorStateTransfer from "../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../utils/permalinks/Permalinks";
@@ -44,6 +43,7 @@ import { getMessageModerationState, MessageModerationState } from "../utils/Even
 import HiddenBody from "../components/views/messages/HiddenBody";
 import SettingsStore from "../settings/SettingsStore";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
+import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps {
@@ -219,7 +219,9 @@ export function pickFactory(
     // Try and pick a state event factory, if we can.
     if (mxEvent.isState()) {
         if (
-            M_BEACON_INFO.matches(evType) &&
+            shouldDisplayAsBeaconTile(mxEvent) &&
+            // settings store access here temporarily during labs
+            // only hit when a beacon_info event is hit
             SettingsStore.getValue("feature_location_share_live")
         ) {
             return MessageEventFactory;
