@@ -144,14 +144,16 @@ export async function showError(title: string, messages?: string[]) {
     const ErrorView = (await import(
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView")).default;
-    window.matrixChat = createRoot(document.getElementById('matrixchat')).render(<ErrorView title={title} messages={messages} />);
+        const root = createRoot(document.getElementById('matrixchat'));
+    window.matrixChat = root.render(<ErrorView title={title} messages={messages} />);
 }
 
 export async function showIncompatibleBrowser(onAccept) {
     const CompatibilityView = (await import(
         /* webpackChunkName: "compatibility-view" */
         "../async-components/structures/CompatibilityView")).default;
-    window.matrixChat = createRoot(document.getElementById('matrixchat')).render(<CompatibilityView onAccept={onAccept} />);
+        const root = createRoot(document.getElementById('matrixchat'));
+    window.matrixChat = root.render(<CompatibilityView onAccept={onAccept} />);
 }
 
 export const _t = languageHandler._t;
