@@ -22,6 +22,7 @@ import WebPlatform from '../../src/vector/platform/WebPlatform';
 import "../jest-mocks";
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ReactTestUtils from 'react-dom/test-utils';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
 import * as jssdk from 'matrix-js-sdk/src/matrix';
@@ -145,7 +146,7 @@ describe('loading:', function() {
         const params = parseQs(windowLocation);
 
         tokenLoginCompletePromise = new Promise(resolve => {
-            matrixChat = ReactDOM.render(
+            matrixChat = createRoot(parentDiv).render(
                 <MatrixChat
                     onNewScreen={onNewScreen}
                     config={config}
@@ -156,8 +157,7 @@ describe('loading:', function() {
                     onTokenLoginCompleted={resolve}
                     initialScreenAfterLogin={getScreenFromLocation(windowLocation)}
                     makeRegistrationUrl={() => {throw new Error('Not implemented');}}
-                />, parentDiv,
-            );
+                />);
         });
     }
 

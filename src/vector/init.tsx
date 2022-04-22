@@ -21,7 +21,7 @@ limitations under the License.
 // @ts-ignore
 import olmWasmPath from "@matrix-org/olm/olm.wasm";
 import Olm from '@matrix-org/olm';
-import * as ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import * as React from "react";
 import * as languageHandler from "matrix-react-sdk/src/languageHandler";
 import SettingsStore from "matrix-react-sdk/src/settings/SettingsStore";
@@ -137,24 +137,21 @@ export async function loadApp(fragParams: {}) {
         /* webpackChunkName: "element-web-app" */
         /* webpackPreload: true */
         "./app");
-    window.matrixChat = ReactDOM.render(await module.loadApp(fragParams),
-        document.getElementById('matrixchat'));
+    window.matrixChat = createRoot(document.getElementById('matrixchat')).render(await module.loadApp(fragParams));
 }
 
 export async function showError(title: string, messages?: string[]) {
     const ErrorView = (await import(
         /* webpackChunkName: "error-view" */
         "../async-components/structures/ErrorView")).default;
-    window.matrixChat = ReactDOM.render(<ErrorView title={title} messages={messages} />,
-        document.getElementById('matrixchat'));
+    window.matrixChat = createRoot(document.getElementById('matrixchat')).render(<ErrorView title={title} messages={messages} />);
 }
 
 export async function showIncompatibleBrowser(onAccept) {
     const CompatibilityView = (await import(
         /* webpackChunkName: "compatibility-view" */
         "../async-components/structures/CompatibilityView")).default;
-    window.matrixChat = ReactDOM.render(<CompatibilityView onAccept={onAccept} />,
-        document.getElementById('matrixchat'));
+    window.matrixChat = createRoot(document.getElementById('matrixchat')).render(<CompatibilityView onAccept={onAccept} />);
 }
 
 export const _t = languageHandler._t;

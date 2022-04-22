@@ -67,7 +67,7 @@
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", () => {
                 try {
-                    ReactDOM.render(React.createElement(Decoder.BundlePicker), document.getElementById("main"))
+                    createRoot(document.getElementById("main")).render(React.createElement(Decoder.BundlePicker))
                 } catch (e) {
                     const n = document.createElement("div");
                     n.innerText = `Error starting: ${e.message}`;

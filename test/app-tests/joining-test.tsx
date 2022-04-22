@@ -21,7 +21,8 @@ import WebPlatform from '../../src/vector/platform/WebPlatform';
 import * as jssdk from "matrix-js-sdk/src/matrix";
 import "../jest-mocks";
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ReactTestUtils from "react-dom/test-utils";
 import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
 import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
@@ -106,7 +107,7 @@ describe('joining a room', function() {
                     }}
                 />
             );
-            matrixChat = ReactDOM.render(mc, parentDiv);
+            matrixChat = createRoot(parentDiv).render(mc);
 
             let roomView;
 
