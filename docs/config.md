@@ -1,7 +1,8 @@
 # Configuration
 
-You can configure the app by making a copy of the `config.sample.json` and renaming it as `config.json` within the same directory. You can also customize it. The possible options are described here. If you run into issues, please visit [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org)
-on Matrix.
+You can configure the app by making a copy of the `config.sample.json` and renaming it as
+`config.json`. The possible options are described here. If you run into issues, please visit
+[#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) on Matrix.
 
 For a good example of a production-tuned config, see https://app.element.io/config.json
 
