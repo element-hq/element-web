@@ -57,7 +57,7 @@ describe('joining a room', function() {
 
         afterEach(function() {
             if (parentDiv) {
-                ReactDOM.unmountComponentAtNode(parentDiv);
+                createRoot(parentDiv).unmount();
                 parentDiv.remove();
                 parentDiv = null;
             }
