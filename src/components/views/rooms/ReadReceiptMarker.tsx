@@ -19,15 +19,13 @@ import React, { createRef, RefObject } from 'react';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import { _t } from '../../../languageHandler';
-import { formatDate } from '../../../DateUtils';
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
 import MemberAvatar from '../avatars/MemberAvatar';
 
 export interface IReadReceiptInfo {
     top?: number;
-    left?: number;
+    right?: number;
     parent?: Element;
 }
 
@@ -40,7 +38,7 @@ interface IProps {
 
     // number of pixels to offset the avatar from the right of its parent;
     // typically a negative value.
-    leftOffset?: number;
+    offset: number;
 
     // true to hide the avatar (it will still be animated)
     hidden?: boolean;
@@ -56,9 +54,6 @@ interface IProps {
     // are being unmounted.
     checkUnmounting?: () => boolean;
 
-    // callback for clicks on this RR
-    onClick?: (e: React.MouseEvent) => void;
-
     // Timestamp when the receipt was read
     timestamp?: number;
 
@@ -73,15 +68,11 @@ interface IState {
 
 interface IReadReceiptMarkerStyle {
     top: number;
-    left: number;
+    right: number;
 }
 
 export default class ReadReceiptMarker extends React.PureComponent<IProps, IState> {
     private avatar: React.RefObject<HTMLDivElement | HTMLImageElement | HTMLSpanElement> = createRef();
-
-    static defaultProps = {
-        leftOffset: 0,
-    };
 
     constructor(props: IProps) {
         super(props);
@@ -112,7 +103,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
         const avatarNode = this.avatar.current;
         rrInfo.top = avatarNode.offsetTop;
-        rrInfo.left = avatarNode.offsetLeft;
+        rrInfo.right = avatarNode.getBoundingClientRect().right - avatarNode.offsetParent.getBoundingClientRect().right;
         rrInfo.parent = avatarNode.offsetParent;
     }
 
@@ -125,9 +116,9 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
     }
 
     public componentDidUpdate(prevProps: IProps): void {
-        const differentLeftOffset = prevProps.leftOffset !== this.props.leftOffset;
+        const differentOffset = prevProps.offset !== this.props.offset;
         const visibilityChanged = prevProps.hidden !== this.props.hidden;
-        if (differentLeftOffset || visibilityChanged) {
+        if (differentOffset || visibilityChanged) {
             this.animateMarker();
         }
     }
@@ -157,13 +148,13 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
 
         const startStyles = [];
 
-        if (oldInfo && oldInfo.left) {
+        if (oldInfo && oldInfo.right) {
             // start at the old height and in the old h pos
             startStyles.push({ top: startTopOffset+"px",
-                left: toPx(oldInfo.left) });
+                right: toPx(oldInfo.right) });
         }
 
-        startStyles.push({ top: startTopOffset+'px', left: '0' });
+        startStyles.push({ top: startTopOffset+'px', right: '0' });
 
         this.setState({
             suppressDisplay: false,
@@ -177,28 +168,9 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
         }
 
         const style = {
-            left: toPx(this.props.leftOffset),
+            right: toPx(this.props.offset),
             top: '0px',
         };
-
-        let title;
-        if (this.props.timestamp) {
-            const dateString = formatDate(new Date(this.props.timestamp), this.props.showTwelveHour);
-            if (!this.props.member || this.props.fallbackUserId === this.props.member.rawDisplayName) {
-                title = _t(
-                    "Seen by %(userName)s at %(dateTime)s",
-                    { userName: this.props.fallbackUserId,
-                        dateTime: dateString },
-                );
-            } else {
-                title = _t(
-                    "Seen by %(displayName)s (%(userName)s) at %(dateTime)s",
-                    { displayName: this.props.member.rawDisplayName,
-                        userName: this.props.fallbackUserId,
-                        dateTime: dateString },
-                );
-            }
-        }
 
         return (
             <NodeAnimator startStyles={this.state.startStyles}>
@@ -211,9 +183,9 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
                     height={14}
                     resizeMethod="crop"
                     style={style}
-                    title={title}
-                    onClick={this.props.onClick}
                     inputRef={this.avatar as RefObject<HTMLImageElement>}
+                    hideTitle
+                    tabIndex={-1}
                 />
             </NodeAnimator>
         );

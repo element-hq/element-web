@@ -447,7 +447,7 @@ limitations under the License.
         }
     }
 
-    .mx_EventTile_readAvatars {
+    .mx_ReadReceiptGroup {
         position: absolute;
         right: -78px; // as close to right gutter without clipping as possible
         bottom: 0;
@@ -585,8 +585,8 @@ limitations under the License.
             right: 127px; // align with that of right-column bubbles
         }
 
-        .mx_EventTile_readAvatars {
-            right: -18px; // match alignment to RRs of chat bubbles
+        .mx_ReadReceiptGroup {
+            right: -14px; // match alignment to RRs of chat bubbles
         }
 
         &::before {

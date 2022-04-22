@@ -82,6 +82,7 @@ export interface IProps extends IPosition {
     // whether this context menu should be focus managed. If false it must handle itself
     managed?: boolean;
     wrapperClassName?: string;
+    menuClassName?: string;
 
     // If true, this context menu will be mounted as a child to the parent container. Otherwise
     // it will be mounted to a container at the root of the DOM.
@@ -319,7 +320,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
             'mx_ContextualMenu_withChevron_bottom': chevronFace === ChevronFace.Bottom,
             'mx_ContextualMenu_rightAligned': this.props.rightAligned === true,
             'mx_ContextualMenu_bottomAligned': this.props.bottomAligned === true,
-        });
+        }, this.props.menuClassName);
 
         const menuStyle: CSSProperties = {};
         if (props.menuWidth) {

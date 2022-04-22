@@ -45,6 +45,7 @@ interface IProps {
     onClick?: React.MouseEventHandler;
     inputRef?: React.RefObject<HTMLImageElement & HTMLSpanElement>;
     className?: string;
+    tabIndex?: number;
 }
 
 const calculateUrls = (url, urls, lowBandwidth) => {

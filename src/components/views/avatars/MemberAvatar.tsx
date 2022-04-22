@@ -43,6 +43,7 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     title?: string;
     style?: any;
     forceHistorical?: boolean; // true to deny `feature_use_only_current_profiles` usage. Default false.
+    hideTitle?: boolean;
 }
 
 interface IState {
@@ -124,7 +125,7 @@ export default class MemberAvatar extends React.PureComponent<IProps, IState> {
             <BaseAvatar
                 {...otherProps}
                 name={this.state.name}
-                title={this.state.title}
+                title={this.props.hideTitle ? undefined : this.state.title}
                 idName={userId}
                 url={this.state.imageUrl}
                 onClick={onClick}

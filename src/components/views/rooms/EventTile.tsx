@@ -36,12 +36,11 @@ import { formatTime } from "../../../DateUtils";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { E2EState } from "./E2EIcon";
-import { toRem } from "../../../utils/units";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MessageContextMenu from "../context_menus/MessageContextMenu";
 import { aboveRightOf } from '../../structures/ContextMenu';
 import { objectHasDiff } from "../../../utils/objects";
-import Tooltip from "../elements/Tooltip";
+import Tooltip, { Alignment } from "../elements/Tooltip";
 import EditorStateTransfer from "../../../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import { StaticNotificationState } from "../../../stores/notifications/StaticNotificationState";
@@ -54,7 +53,7 @@ import MemberAvatar from '../avatars/MemberAvatar';
 import SenderProfile from '../messages/SenderProfile';
 import MessageTimestamp from '../messages/MessageTimestamp';
 import TooltipButton from '../elements/TooltipButton';
-import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
+import { IReadReceiptInfo } from "./ReadReceiptMarker";
 import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventRenderingUtils';
@@ -79,6 +78,8 @@ import PosthogTrackers from "../../../PosthogTrackers";
 import TileErrorBoundary from '../messages/TileErrorBoundary';
 import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../events/EventTileFactory";
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
+import { ReadReceiptGroup } from './ReadReceiptGroup';
+import { useTooltip } from "../../../utils/useTooltip";
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
 
@@ -221,9 +222,6 @@ interface IProps {
 interface IState {
     // Whether the action bar is focused.
     actionBarFocused: boolean;
-    // Whether all read receipts are being displayed. If not, only display
-    // a truncation of them.
-    allReadAvatars: boolean;
     // Whether the event's sender has been verified.
     verified: string;
     // Whether onRequestKeysClick has been called since mounting.
@@ -273,9 +271,6 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         this.state = {
             // Whether the action bar is focused.
             actionBarFocused: false,
-            // Whether all read receipts are being displayed. If not, only display
-            // a truncation of them.
-            allReadAvatars: false,
             // Whether the event's sender has been verified.
             verified: null,
             // Whether onRequestKeysClick has been called since mounting.
@@ -729,108 +724,6 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         }
 
         return actions.tweaks.highlight;
-    }
-
-    private toggleAllReadAvatars = () => {
-        this.setState({
-            allReadAvatars: !this.state.allReadAvatars,
-        });
-    };
-
-    private getReadAvatars() {
-        if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
-            return <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
-        }
-
-        const MAX_READ_AVATARS = this.props.layout == Layout.Bubble
-            ? 2
-            : 5;
-
-        // return early if there are no read receipts
-        if (!this.props.readReceipts || this.props.readReceipts.length === 0) {
-            // We currently must include `mx_EventTile_readAvatars` in the DOM
-            // of all events, as it is the positioned parent of the animated
-            // read receipts. We can't let it unmount when a receipt moves
-            // events, so for now we mount it for all events. Without it, the
-            // animation will start from the top of the timeline (because it
-            // lost its container).
-            // See also https://github.com/vector-im/element-web/issues/17561
-            return (
-                <div className="mx_EventTile_msgOption">
-                    <span className="mx_EventTile_readAvatars" />
-                </div>
-            );
-        }
-
-        const avatars = [];
-        const receiptOffset = 15;
-        let left = 0;
-
-        const receipts = this.props.readReceipts;
-
-        for (let i = 0; i < receipts.length; ++i) {
-            const receipt = receipts[i];
-
-            let hidden = true;
-            if ((i < MAX_READ_AVATARS) || this.state.allReadAvatars) {
-                hidden = false;
-            }
-            // TODO: we keep the extra read avatars in the dom to make animation simpler
-            // we could optimise this to reduce the dom size.
-
-            // If hidden, set offset equal to the offset of the final visible avatar or
-            // else set it proportional to index
-            left = (hidden ? MAX_READ_AVATARS - 1 : i) * -receiptOffset;
-
-            const userId = receipt.userId;
-            let readReceiptInfo: IReadReceiptInfo;
-
-            if (this.props.readReceiptMap) {
-                readReceiptInfo = this.props.readReceiptMap[userId];
-                if (!readReceiptInfo) {
-                    readReceiptInfo = {};
-                    this.props.readReceiptMap[userId] = readReceiptInfo;
-                }
-            }
-
-            // add to the start so the most recent is on the end (ie. ends up rightmost)
-            avatars.unshift(
-                <ReadReceiptMarker
-                    key={userId}
-                    member={receipt.roomMember}
-                    fallbackUserId={userId}
-                    leftOffset={left}
-                    hidden={hidden}
-                    readReceiptInfo={readReceiptInfo}
-                    checkUnmounting={this.props.checkUnmounting}
-                    suppressAnimation={this.suppressReadReceiptAnimation}
-                    onClick={this.toggleAllReadAvatars}
-                    timestamp={receipt.ts}
-                    showTwelveHour={this.props.isTwelveHour}
-                />,
-            );
-        }
-
-        let remText: JSX.Element;
-        if (!this.state.allReadAvatars) {
-            const remainder = receipts.length - MAX_READ_AVATARS;
-            if (remainder > 0) {
-                remText = <span className="mx_EventTile_readAvatarRemainder"
-                    onClick={this.toggleAllReadAvatars}
-                    style={{ right: "calc(" + toRem(-left) + " + " + receiptOffset + "px)" }}
-                    aria-live="off">{ remainder }+
-                </span>;
-            }
-        }
-
-        return (
-            <div className="mx_EventTile_msgOption">
-                <span className="mx_EventTile_readAvatars">
-                    { remText }
-                    { avatars }
-                </span>
-            </div>
-        );
     }
 
     private onSenderProfileClick = () => {
@@ -1308,8 +1201,17 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
 
         let msgOption;
         if (this.props.showReadReceipts) {
-            const readAvatars = this.getReadAvatars();
-            msgOption = readAvatars;
+            if (this.shouldShowSentReceipt || this.shouldShowSendingReceipt) {
+                msgOption = <SentReceipt messageState={this.props.mxEvent.getAssociatedStatus()} />;
+            } else {
+                msgOption = <ReadReceiptGroup
+                    readReceipts={this.props.readReceipts ?? []}
+                    readReceiptMap={this.props.readReceiptMap ?? {}}
+                    checkUnmounting={this.props.checkUnmounting}
+                    suppressAnimation={this.suppressReadReceiptAnimation}
+                    isTwelveHour={this.props.isTwelveHour}
+                />;
+            }
         }
 
         let replyChain;
@@ -1674,66 +1576,51 @@ interface ISentReceiptProps {
     messageState: string; // TODO: Types for message sending state
 }
 
-interface ISentReceiptState {
-    hover: boolean;
-}
+function SentReceipt({ messageState }: ISentReceiptProps) {
+    const isSent = !messageState || messageState === 'sent';
+    const isFailed = messageState === 'not_sent';
+    const receiptClasses = classNames({
+        'mx_EventTile_receiptSent': isSent,
+        'mx_EventTile_receiptSending': !isSent && !isFailed,
+    });
 
-class SentReceipt extends React.PureComponent<ISentReceiptProps, ISentReceiptState> {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            hover: false,
-        };
-    }
-
-    onHoverStart = () => {
-        this.setState({ hover: true });
-    };
-
-    onHoverEnd = () => {
-        this.setState({ hover: false });
-    };
-
-    render() {
-        const isSent = !this.props.messageState || this.props.messageState === 'sent';
-        const isFailed = this.props.messageState === 'not_sent';
-        const receiptClasses = classNames({
-            'mx_EventTile_receiptSent': isSent,
-            'mx_EventTile_receiptSending': !isSent && !isFailed,
-        });
-
-        let nonCssBadge = null;
-        if (isFailed) {
-            nonCssBadge = <NotificationBadge
-                notification={StaticNotificationState.RED_EXCLAMATION}
-            />;
-        }
-
-        let tooltip = null;
-        if (this.state.hover) {
-            let label = _t("Sending your message...");
-            if (this.props.messageState === 'encrypting') {
-                label = _t("Encrypting your message...");
-            } else if (isSent) {
-                label = _t("Your message was sent");
-            } else if (isFailed) {
-                label = _t("Failed to send");
-            }
-            // The yOffset is somewhat arbitrary - it just brings the tooltip down to be more associated
-            // with the read receipt.
-            tooltip = <Tooltip className="mx_EventTile_readAvatars_receiptTooltip" label={label} yOffset={3} />;
-        }
-
-        return (
-            <div className="mx_EventTile_msgOption">
-                <span className="mx_EventTile_readAvatars">
-                    <span className={receiptClasses} onMouseEnter={this.onHoverStart} onMouseLeave={this.onHoverEnd}>
-                        { nonCssBadge }
-                        { tooltip }
-                    </span>
-                </span>
-            </div>
+    let nonCssBadge = null;
+    if (isFailed) {
+        nonCssBadge = (
+            <NotificationBadge notification={StaticNotificationState.RED_EXCLAMATION} />
         );
     }
+
+    let label = _t("Sending your message...");
+    if (messageState === 'encrypting') {
+        label = _t("Encrypting your message...");
+    } else if (isSent) {
+        label = _t("Your message was sent");
+    } else if (isFailed) {
+        label = _t("Failed to send");
+    }
+    const [{ showTooltip, hideTooltip }, tooltip] = useTooltip({
+        label: label,
+        alignment: Alignment.TopRight,
+    });
+
+    return (
+        <div className="mx_EventTile_msgOption">
+            <div className="mx_ReadReceiptGroup">
+                <div
+                    className="mx_ReadReceiptGroup_button"
+                    onMouseOver={showTooltip}
+                    onMouseLeave={hideTooltip}
+                    onFocus={showTooltip}
+                    onBlur={hideTooltip}>
+                    <span className="mx_ReadReceiptGroup_container">
+                        <span className={receiptClasses}>
+                            { nonCssBadge }
+                        </span>
+                    </span>
+                </div>
+                { tooltip }
+            </div>
+        </div>
+    );
 }
