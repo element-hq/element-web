@@ -25,6 +25,7 @@ import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
 import QuestionDialog from "../dialogs/QuestionDialog";
 import SdkConfig from "../../../SdkConfig";
+import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
 
 export enum LocationShareType {
     Own = 'Own',
@@ -70,7 +71,7 @@ export const shareLiveLocation = (
 ): ShareLocationFn => async ({ timeout }) => {
     const description = _t(`%(displayName)s's live location`, { displayName });
     try {
-        await client.unstable_createLiveBeacon(
+        await OwnBeaconStore.instance.createLiveBeacon(
             roomId,
             makeBeaconInfoContent(
                 timeout ?? DEFAULT_LIVE_DURATION,

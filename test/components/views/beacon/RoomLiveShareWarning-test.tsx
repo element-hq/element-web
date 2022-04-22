@@ -93,10 +93,20 @@ describe('<RoomLiveShareWarning />', () => {
         return component;
     };
 
+    const localStorageSpy = jest.spyOn(localStorage.__proto__, 'getItem').mockReturnValue(undefined);
+
     beforeEach(() => {
         mockGeolocation();
         jest.spyOn(global.Date, 'now').mockReturnValue(now);
         mockClient.unstable_setLiveBeacon.mockReset().mockResolvedValue({ event_id: '1' });
+
+        // assume all beacons were created on this device
+        localStorageSpy.mockReturnValue(JSON.stringify([
+            room1Beacon1.getId(),
+            room2Beacon1.getId(),
+            room2Beacon2.getId(),
+            room3Beacon1.getId(),
+        ]));
     });
 
     afterEach(async () => {
@@ -106,6 +116,7 @@ describe('<RoomLiveShareWarning />', () => {
 
     afterAll(() => {
         jest.spyOn(global.Date, 'now').mockRestore();
+        localStorageSpy.mockRestore();
     });
 
     const getExpiryText = wrapper => findByTestId(wrapper, 'room-live-share-expiry').text();

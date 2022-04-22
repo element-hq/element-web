@@ -29,9 +29,15 @@ import { ChevronFace } from '../../../../src/components/structures/ContextMenu';
 import SettingsStore from '../../../../src/settings/SettingsStore';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import { LocationShareType } from '../../../../src/components/views/location/shareLocation';
-import { findByTagAndTestId, flushPromises } from '../../../test-utils';
+import {
+    findByTagAndTestId,
+    flushPromises,
+    getMockClientWithEventEmitter,
+    setupAsyncStoreWithClient,
+} from '../../../test-utils';
 import Modal from '../../../../src/Modal';
 import { DEFAULT_DURATION_MS } from '../../../../src/components/views/location/LiveDurationDropdown';
+import { OwnBeaconStore } from '../../../../src/stores/OwnBeaconStore';
 
 jest.mock('../../../../src/utils/location/findMapStyleUrl', () => ({
     findMapStyleUrl: jest.fn().mockReturnValue('test'),
@@ -57,17 +63,15 @@ jest.mock('../../../../src/Modal', () => ({
 
 describe('<LocationShareMenu />', () => {
     const userId = '@ernie:server.org';
-    const mockClient = {
-        on: jest.fn(),
-        off: jest.fn(),
-        removeListener: jest.fn(),
+    const mockClient = getMockClientWithEventEmitter({
         getUserId: jest.fn().mockReturnValue(userId),
         getClientWellKnown: jest.fn().mockResolvedValue({
             map_style_url: 'maps.com',
         }),
         sendMessage: jest.fn(),
-        unstable_createLiveBeacon: jest.fn().mockResolvedValue({}),
-    };
+        unstable_createLiveBeacon: jest.fn().mockResolvedValue({ event_id: '1' }),
+        getVisibleRooms: jest.fn().mockReturnValue([]),
+    });
 
     const defaultProps = {
         menuPosition: {
@@ -90,19 +94,28 @@ describe('<LocationShareMenu />', () => {
         type: 'geolocate',
     };
 
+    const makeOwnBeaconStore = async () => {
+        const store = OwnBeaconStore.instance;
+
+        await setupAsyncStoreWithClient(store, mockClient);
+        return store;
+    };
+
     const getComponent = (props = {}) =>
         mount(<LocationShareMenu {...defaultProps} {...props} />, {
             wrappingComponent: MatrixClientContext.Provider,
             wrappingComponentProps: { value: mockClient },
         });
 
-    beforeEach(() => {
+    beforeEach(async () => {
         jest.spyOn(logger, 'error').mockRestore();
         mocked(SettingsStore).getValue.mockReturnValue(false);
         mockClient.sendMessage.mockClear();
-        mockClient.unstable_createLiveBeacon.mockClear().mockResolvedValue(undefined);
+        mockClient.unstable_createLiveBeacon.mockClear().mockResolvedValue({ event_id: '1' });
         jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient as unknown as MatrixClient);
         mocked(Modal).createTrackedDialog.mockClear();
+
+        await makeOwnBeaconStore();
     });
 
     const getShareTypeOption = (component: ReactWrapper, shareType: LocationShareType) =>
