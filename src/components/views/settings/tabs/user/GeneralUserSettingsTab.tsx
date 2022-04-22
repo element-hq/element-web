@@ -260,14 +260,17 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
         });
     };
 
-    private onPasswordChanged = (): void => {
+    private onPasswordChanged = ({ didLogoutOutOtherDevices }: { didLogoutOutOtherDevices: boolean }): void => {
+        let description = _t("Your password was successfully changed.");
+        if (didLogoutOutOtherDevices) {
+            description += " " + _t(
+                "You will not receive push notifications on other devices until you sign back in to them.",
+            );
+        }
         // TODO: Figure out a design that doesn't involve replacing the current dialog
         Modal.createTrackedDialog('Password changed', '', ErrorDialog, {
             title: _t("Success"),
-            description: _t(
-                "Your password was successfully changed. You will not receive " +
-                "push notifications on other sessions until you log back in to them",
-            ) + ".",
+            description,
         });
     };
 
