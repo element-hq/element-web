@@ -33,3 +33,10 @@ limitations under the License.
     align-items: center;
     justify-content: center;
 }
+
+.mx_MStickerBody_placeholder {
+    // centering
+    position: absolute;
+    left: calc(50% - 40px);
+    top: calc(50% - 40px);
+}

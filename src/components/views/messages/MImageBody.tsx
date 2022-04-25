@@ -138,7 +138,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     };
 
-    private onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
+    protected onImageEnter = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: true });
 
         if (!this.state.showImage || !this.state.isAnimated || SettingsStore.getValue("autoplayGifs")) {
@@ -148,7 +148,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         imgElement.src = this.state.contentUrl;
     };
 
-    private onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
+    protected onImageLeave = (e: React.MouseEvent<HTMLImageElement>): void => {
         this.setState({ hover: false });
 
         if (!this.state.showImage || !this.state.isAnimated || SettingsStore.getValue("autoplayGifs")) {
