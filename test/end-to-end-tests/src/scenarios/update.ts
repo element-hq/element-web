@@ -19,6 +19,8 @@ import { strict as assert } from 'assert';
 
 import { ElementSession } from "../session";
 
+const NEW_VERSION = "some-new-version";
+
 async function mockVersionHTTPResponse(session: ElementSession) {
     // Mock the HTTP response to return a new version to trigger auto-update behaviour
     await session.page.setRequestInterception(true);
@@ -29,7 +31,7 @@ async function mockVersionHTTPResponse(session: ElementSession) {
             request.respond({
                 contentType: "text/html",
                 status: 200,
-                body: "some-new-version",
+                body: NEW_VERSION,
             });
         } else {
             request.continue();
@@ -43,5 +45,5 @@ export async function updateScenarios(session: ElementSession) {
     await session.goto(session.url('/'));
     await session.waitForReload();
     const newUrl = new URL(session.page.url());
-    assert.equal(newUrl.searchParams.get("updated"), "1");
+    assert.equal(newUrl.searchParams.get("updated"), NEW_VERSION);
 }
