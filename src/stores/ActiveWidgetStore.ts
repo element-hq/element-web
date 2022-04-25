@@ -23,19 +23,25 @@ import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetMessagingStore } from "./widgets/WidgetMessagingStore";
 
 export enum ActiveWidgetStoreEvent {
-    Update = "update",
+    // Indicates a change in the currently persistent widget
+    Persistence = "persistence",
+    // Indicate changes in the currently docked widgets
+    Dock = "dock",
+    Undock = "undock",
 }
 
 /**
  * Stores information about the widgets active in the app right now:
  *  * What widget is set to remain always-on-screen, if any
  *    Only one widget may be 'always on screen' at any one time.
- *  * Negotiated capabilities for active apps
+ *  * Reference counts to keep track of whether a widget is kept docked or alive
+ *    by any components
  */
 export default class ActiveWidgetStore extends EventEmitter {
     private static internalInstance: ActiveWidgetStore;
     private persistentWidgetId: string;
     private persistentRoomId: string;
+    private dockedWidgetsByUid = new Map<string, number>();
 
     public static get instance(): ActiveWidgetStore {
         if (!ActiveWidgetStore.internalInstance) {
@@ -79,7 +85,7 @@ export default class ActiveWidgetStore extends EventEmitter {
             this.persistentWidgetId = widgetId;
             this.persistentRoomId = roomId;
         }
-        this.emit(ActiveWidgetStoreEvent.Update);
+        this.emit(ActiveWidgetStoreEvent.Persistence);
     }
 
     public getWidgetPersistence(widgetId: string, roomId: string): boolean {
@@ -92,6 +98,34 @@ export default class ActiveWidgetStore extends EventEmitter {
 
     public getPersistentRoomId(): string {
         return this.persistentRoomId;
+    }
+
+    // Registers the given widget as being docked somewhere in the UI (not a PiP),
+    // to allow its lifecycle to be tracked.
+    public dockWidget(widgetId: string, roomId: string): void {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+        const refs = this.dockedWidgetsByUid.get(uid) ?? 0;
+        this.dockedWidgetsByUid.set(uid, refs + 1);
+        if (refs === 0) this.emit(ActiveWidgetStoreEvent.Dock);
+    }
+
+    public undockWidget(widgetId: string, roomId: string): void {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+        const refs = this.dockedWidgetsByUid.get(uid);
+        if (refs) this.dockedWidgetsByUid.set(uid, refs - 1);
+        if (refs === 1) this.emit(ActiveWidgetStoreEvent.Undock);
+    }
+
+    // Determines whether the given widget is docked anywhere in the UI (not a PiP)
+    public isDocked(widgetId: string, roomId: string): boolean {
+        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
+        const refs = this.dockedWidgetsByUid.get(uid) ?? 0;
+        return refs > 0;
+    }
+
+    // Determines whether the given widget is being kept alive in the UI, including PiPs
+    public isLive(widgetId: string, roomId: string): boolean {
+        return this.isDocked(widgetId, roomId) || this.getWidgetPersistence(widgetId, roomId);
     }
 }
 

@@ -33,6 +33,7 @@ import { RightPanelPhases } from "../../../../src/stores/right-panel/RightPanelS
 import RightPanelStore from "../../../../src/stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../../src/stores/AsyncStore";
 import WidgetStore, { IApp } from "../../../../src/stores/WidgetStore";
+import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import AppTile from "../../../../src/components/views/elements/AppTile";
 import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 import AppsDrawer from "../../../../src/components/views/rooms/AppsDrawer";
@@ -116,26 +117,6 @@ describe("AppTile", () => {
         jest.spyOn(SettingsStore, "getValue").mockRestore();
     });
 
-    it("tracks live tiles correctly", () => {
-        expect(AppTile.isLive("1", "r1")).toEqual(false);
-
-        // Try removing the tile before it gets added
-        AppTile.removeLiveTile("1", "r1");
-        expect(AppTile.isLive("1", "r1")).toEqual(false);
-
-        AppTile.addLiveTile("1", "r1");
-        expect(AppTile.isLive("1", "r1")).toEqual(true);
-
-        AppTile.addLiveTile("1", "r1");
-        expect(AppTile.isLive("1", "r1")).toEqual(true);
-
-        AppTile.removeLiveTile("1", "r1");
-        expect(AppTile.isLive("1", "r1")).toEqual(true);
-
-        AppTile.removeLiveTile("1", "r1");
-        expect(AppTile.isLive("1", "r1")).toEqual(false);
-    });
-
     it("destroys non-persisted right panel widget on room change", async () => {
         // Set up right panel state
         const realGetValue = SettingsStore.getValue;
@@ -170,7 +151,7 @@ describe("AppTile", () => {
         });
         await rpsUpdated;
 
-        expect(AppTile.isLive("1", "r1")).toBe(true);
+        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
 
         // We want to verify that as we change to room 2, we should close the
         // right panel and destroy the widget.
@@ -190,7 +171,7 @@ describe("AppTile", () => {
         </MatrixClientContext.Provider>);
 
         expect(endWidgetActions.mock.calls.length).toBe(1);
-        expect(AppTile.isLive("1", "r1")).toBe(false);
+        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(false);
 
         mockSettings.mockRestore();
     });
@@ -231,8 +212,8 @@ describe("AppTile", () => {
         });
         await rpsUpdated1;
 
-        expect(AppTile.isLive("1", "r1")).toBe(true);
-        expect(AppTile.isLive("1", "r2")).toBe(false);
+        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
+        expect(ActiveWidgetStore.instance.isLive("1", "r2")).toBe(false);
 
         jest.spyOn(SettingsStore, "getValue").mockImplementation((name, roomId) => {
             if (name === "RightPanel.phases") {
@@ -266,8 +247,8 @@ describe("AppTile", () => {
         </MatrixClientContext.Provider>);
         await rpsUpdated2;
 
-        expect(AppTile.isLive("1", "r1")).toBe(false);
-        expect(AppTile.isLive("1", "r2")).toBe(true);
+        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(false);
+        expect(ActiveWidgetStore.instance.isLive("1", "r2")).toBe(true);
     });
 
     it("preserves non-persisted widget on container move", async () => {
@@ -300,7 +281,7 @@ describe("AppTile", () => {
             />
         </MatrixClientContext.Provider>);
 
-        expect(AppTile.isLive("1", "r1")).toBe(true);
+        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
 
         // We want to verify that as we move the widget to the center container,
         // the widget frame remains running.
@@ -316,7 +297,7 @@ describe("AppTile", () => {
         });
 
         expect(endWidgetActions.mock.calls.length).toBe(0);
-        expect(AppTile.isLive("1", "r1")).toBe(true);
+        expect(ActiveWidgetStore.instance.isLive("1", "r1")).toBe(true);
     });
 
     afterAll(async () => {

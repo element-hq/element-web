@@ -117,30 +117,6 @@ export default class AppTile extends React.Component<IProps, IState> {
         showLayoutButtons: true,
     };
 
-    // We track a count of all "live" `AppTile`s for a given widget UID.
-    // For this purpose, an `AppTile` is considered live from the time it is
-    // constructed until it is unmounted. This is used to aid logic around when
-    // to tear down the widget iframe. See `componentWillUnmount` for details.
-    private static liveTilesByUid = new Map<string, number>();
-
-    public static addLiveTile(widgetId: string, roomId: string): void {
-        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
-        const refs = this.liveTilesByUid.get(uid) ?? 0;
-        this.liveTilesByUid.set(uid, refs + 1);
-    }
-
-    public static removeLiveTile(widgetId: string, roomId: string): void {
-        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
-        const refs = this.liveTilesByUid.get(uid);
-        if (refs) this.liveTilesByUid.set(uid, refs - 1);
-    }
-
-    public static isLive(widgetId: string, roomId: string): boolean {
-        const uid = WidgetUtils.calcWidgetUid(widgetId, roomId);
-        const refs = this.liveTilesByUid.get(uid) ?? 0;
-        return refs > 0;
-    }
-
     private contextMenuButton = createRef<any>();
     private iframe: HTMLIFrameElement; // ref to the iframe (callback style)
     private allowedWidgetsWatchRef: string;
@@ -152,7 +128,10 @@ export default class AppTile extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        AppTile.addLiveTile(this.props.app.id, this.props.app.roomId);
+        // Tiles in miniMode are floating, and therefore not docked
+        if (!this.props.miniMode) {
+            ActiveWidgetStore.instance.dockWidget(this.props.app.id, this.props.app.roomId);
+        }
 
         // The key used for PersistedElement
         this.persistKey = getPersistKey(WidgetUtils.getWidgetUid(this.props.app));
@@ -284,27 +263,14 @@ export default class AppTile extends React.Component<IProps, IState> {
     public componentWillUnmount(): void {
         this.unmounted = true;
 
-        // It might seem simplest to always tear down the widget itself here,
-        // and indeed that would be a bit easier to reason about... however, we
-        // support moving widgets between containers (e.g. top <-> center).
-        // During such a move, this component will unmount from the old
-        // container and remount in the new container. By keeping the widget
-        // iframe loaded across this transition, the widget doesn't notice that
-        // anything happened, which improves overall widget UX. During this kind
-        // of movement between containers, the new `AppTile` for the new
-        // container is constructed before the old one unmounts. By counting the
-        // mounted `AppTile`s for each widget, we know to only tear down the
-        // widget iframe when the last the `AppTile` unmounts.
-        AppTile.removeLiveTile(this.props.app.id, this.props.app.roomId);
+        if (!this.props.miniMode) {
+            ActiveWidgetStore.instance.undockWidget(this.props.app.id, this.props.app.roomId);
+        }
 
-        // We also support a separate "persistence" mode where a single widget
-        // can request to be "sticky" and follow you across rooms in a PIP
-        // container.
-        const isActiveWidget = ActiveWidgetStore.instance.getWidgetPersistence(
-            this.props.app.id, this.props.app.roomId,
-        );
-
-        if (!AppTile.isLive(this.props.app.id, this.props.app.roomId) && !isActiveWidget) {
+        // Only tear down the widget if no other component is keeping it alive,
+        // because we support moving widgets between containers, in which case
+        // another component will keep it loaded throughout the transition
+        if (!ActiveWidgetStore.instance.isLive(this.props.app.id, this.props.app.roomId)) {
             this.endWidgetActions();
         }
 
