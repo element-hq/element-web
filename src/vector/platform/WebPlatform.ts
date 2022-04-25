@@ -131,7 +131,7 @@ export default class WebPlatform extends VectorBasePlatform {
         console.log("startUpdater, current version is " + this.getNormalizedAppVersion(process.env.VERSION));
         this.pollForUpdate((version: string, newVersion: string) => {
             const query = parseQs(location);
-            if (query.updated === "1") {
+            if (query.updated) {
                 console.log("Update reloaded but still on an old version, stopping");
                 // We just reloaded already and are still on the old version!
                 // Show the toast rather than reload in a loop.
@@ -139,10 +139,10 @@ export default class WebPlatform extends VectorBasePlatform {
                 return;
             }
 
-            // Set updated=1 as a query param so we can detect that we've already done this once
-            // and reload the page.
+            // Set updated as a cachebusting query param and reload the page.
             const url = new URL(window.location.href);
-            url.searchParams.set("updated", "1");
+            url.searchParams.set("updated", newVersion);
+            console.log("Update reloading to " + url.toString());
             window.location.href = url.toString();
         });
         setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
