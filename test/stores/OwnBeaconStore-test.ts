@@ -987,9 +987,9 @@ describe('OwnBeaconStore', () => {
 
                 // called for each position from watchPosition
                 expect(mockClient.sendEvent).toHaveBeenCalledTimes(5);
-                expect(store.beaconHasWireError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(false);
-                expect(store.getLiveBeaconIdsWithWireError()).toEqual([]);
-                expect(store.hasWireErrors()).toBe(false);
+                expect(store.beaconHasLocationPublishError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(false);
+                expect(store.getLiveBeaconIdsWithLocationPublishError()).toEqual([]);
+                expect(store.hasLocationPublishErrors()).toBe(false);
             });
 
             it('continues publishing positions when a beacon fails intermittently', async () => {
@@ -1015,10 +1015,10 @@ describe('OwnBeaconStore', () => {
 
                 // called for each position from watchPosition
                 expect(mockClient.sendEvent).toHaveBeenCalledTimes(5);
-                expect(store.beaconHasWireError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(false);
-                expect(store.hasWireErrors()).toBe(false);
+                expect(store.beaconHasLocationPublishError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(false);
+                expect(store.hasLocationPublishErrors()).toBe(false);
                 expect(emitSpy).not.toHaveBeenCalledWith(
-                    OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
+                    OwnBeaconStoreEvent.LocationPublishError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
                 );
             });
 
@@ -1038,20 +1038,20 @@ describe('OwnBeaconStore', () => {
 
                 // only two allowed failures
                 expect(mockClient.sendEvent).toHaveBeenCalledTimes(2);
-                expect(store.beaconHasWireError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(true);
-                expect(store.getLiveBeaconIdsWithWireError()).toEqual(
+                expect(store.beaconHasLocationPublishError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(true);
+                expect(store.getLiveBeaconIdsWithLocationPublishError()).toEqual(
                     [getBeaconInfoIdentifier(alicesRoom1BeaconInfo)],
                 );
-                expect(store.getLiveBeaconIdsWithWireError(room1Id)).toEqual(
+                expect(store.getLiveBeaconIdsWithLocationPublishError(room1Id)).toEqual(
                     [getBeaconInfoIdentifier(alicesRoom1BeaconInfo)],
                 );
-                expect(store.hasWireErrors()).toBe(true);
+                expect(store.hasLocationPublishErrors()).toBe(true);
                 expect(emitSpy).toHaveBeenCalledWith(
-                    OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
+                    OwnBeaconStoreEvent.LocationPublishError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
                 );
             });
 
-            it('restarts publishing a beacon after resetting wire error', async () => {
+            it('restarts publishing a beacon after resetting location publish error', async () => {
                 // always fails to send events
                 mockClient.sendEvent.mockRejectedValue(new Error('oups'));
                 makeRoomsWithStateEvents([
@@ -1067,18 +1067,18 @@ describe('OwnBeaconStore', () => {
 
                 // only two allowed failures
                 expect(mockClient.sendEvent).toHaveBeenCalledTimes(2);
-                expect(store.beaconHasWireError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(true);
-                expect(store.hasWireErrors()).toBe(true);
-                expect(store.hasWireErrors(room1Id)).toBe(true);
+                expect(store.beaconHasLocationPublishError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(true);
+                expect(store.hasLocationPublishErrors()).toBe(true);
+                expect(store.hasLocationPublishErrors(room1Id)).toBe(true);
                 expect(emitSpy).toHaveBeenCalledWith(
-                    OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
+                    OwnBeaconStoreEvent.LocationPublishError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
                 );
 
-                // reset emitSpy mock counts to asser on wireError again
+                // reset emitSpy mock counts to assert on locationPublishError again
                 emitSpy.mockClear();
-                store.resetWireError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo));
+                store.resetLocationPublishError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo));
 
-                expect(store.beaconHasWireError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(false);
+                expect(store.beaconHasLocationPublishError(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBe(false);
 
                 // 2 more positions from watchPosition in this period
                 await advanceAndFlushPromises(10000);
@@ -1086,7 +1086,7 @@ describe('OwnBeaconStore', () => {
                 // 2 from before, 2 new ones
                 expect(mockClient.sendEvent).toHaveBeenCalledTimes(4);
                 expect(emitSpy).toHaveBeenCalledWith(
-                    OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
+                    OwnBeaconStoreEvent.LocationPublishError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo),
                 );
             });
         });

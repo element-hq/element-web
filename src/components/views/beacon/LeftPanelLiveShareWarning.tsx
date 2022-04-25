@@ -53,10 +53,10 @@ const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
         () => OwnBeaconStore.instance.isMonitoringLiveLocation,
     );
 
-    const beaconIdsWithWireError = useEventEmitterState(
+    const beaconIdsWithLocationPublishError = useEventEmitterState(
         OwnBeaconStore.instance,
-        OwnBeaconStoreEvent.WireError,
-        () => OwnBeaconStore.instance.getLiveBeaconIdsWithWireError(),
+        OwnBeaconStoreEvent.LocationPublishError,
+        () => OwnBeaconStore.instance.getLiveBeaconIdsWithLocationPublishError(),
     );
 
     const liveBeaconIds = useEventEmitterState(
@@ -65,13 +65,13 @@ const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
         () => OwnBeaconStore.instance.getLiveBeaconIds(),
     );
 
-    const hasWireErrors = !!beaconIdsWithWireError.length;
+    const hasLocationPublishErrors = !!beaconIdsWithLocationPublishError.length;
 
     if (!isMonitoringLiveLocation) {
         return null;
     }
 
-    const relevantBeaconRoomId = chooseBestBeaconRoomId(liveBeaconIds, beaconIdsWithWireError);
+    const relevantBeaconRoomId = chooseBestBeaconRoomId(liveBeaconIds, beaconIdsWithLocationPublishError);
 
     const onWarningClick = relevantBeaconRoomId ? () => {
         dispatcher.dispatch<ViewRoomPayload>({
@@ -81,14 +81,14 @@ const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
         });
     } : undefined;
 
-    const label = hasWireErrors ?
+    const label = hasLocationPublishErrors ?
         _t('An error occured whilst sharing your live location') :
         _t('You are sharing your live location');
 
     return <AccessibleButton
         className={classNames('mx_LeftPanelLiveShareWarning', {
             'mx_LeftPanelLiveShareWarning__minimized': isMinimized,
-            'mx_LeftPanelLiveShareWarning__error': hasWireErrors,
+            'mx_LeftPanelLiveShareWarning__error': hasLocationPublishErrors,
         })}
         title={isMinimized ? label : undefined}
         onClick={onWarningClick}

@@ -94,12 +94,12 @@ describe('<OwnBeaconStatus />', () => {
             expect(component.find('AccessibleButton').length).toBeFalsy();
         });
 
-        describe('with wire error', () => {
+        describe('with location publish error', () => {
             it('renders in error mode', () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 mocked(useOwnLiveBeacons).mockReturnValue({
-                    hasWireError: true,
-                    onResetWireError: jest.fn(),
+                    hasLocationPublishError: true,
+                    onResetLocationPublishError: jest.fn(),
                 });
                 const component = getComponent({ displayStatus, beacon: defaultBeacon });
                 expect(component.text()).toContain('Live location error');
@@ -107,19 +107,19 @@ describe('<OwnBeaconStatus />', () => {
                 expect(findByTestId(component, 'beacon-status-reset-wire-error').length).toBeTruthy();
             });
 
-            it('retry button resets wire error', () => {
+            it('retry button resets location publish error', () => {
                 const displayStatus = BeaconDisplayStatus.Active;
-                const onResetWireError = jest.fn();
+                const onResetLocationPublishError = jest.fn();
                 mocked(useOwnLiveBeacons).mockReturnValue({
-                    hasWireError: true,
-                    onResetWireError,
+                    hasLocationPublishError: true,
+                    onResetLocationPublishError,
                 });
                 const component = getComponent({ displayStatus, beacon: defaultBeacon });
                 act(() => {
                     findByTestId(component, 'beacon-status-reset-wire-error').at(0).simulate('click');
                 });
 
-                expect(onResetWireError).toHaveBeenCalled();
+                expect(onResetLocationPublishError).toHaveBeenCalled();
             });
         });
 
@@ -127,7 +127,7 @@ describe('<OwnBeaconStatus />', () => {
             it('renders in error mode', () => {
                 const displayStatus = BeaconDisplayStatus.Active;
                 mocked(useOwnLiveBeacons).mockReturnValue({
-                    hasWireError: false,
+                    hasLocationPublishError: false,
                     hasStopSharingError: true,
                     onStopSharing: jest.fn(),
                 });

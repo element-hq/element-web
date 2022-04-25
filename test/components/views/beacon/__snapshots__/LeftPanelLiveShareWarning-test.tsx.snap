@@ -52,7 +52,7 @@ exports[`<LeftPanelLiveShareWarning /> when user has live location monitor rende
 </LeftPanelLiveShareWarning>
 `;
 
-exports[`<LeftPanelLiveShareWarning /> when user has live location monitor renders wire error 1`] = `
+exports[`<LeftPanelLiveShareWarning /> when user has live location monitor renders location publish error 1`] = `
 <LeftPanelLiveShareWarning>
   <AccessibleButton
     className="mx_LeftPanelLiveShareWarning mx_LeftPanelLiveShareWarning__error"

@@ -24,10 +24,10 @@ import { sortBeaconsByLatestExpiry } from "./duration";
 type LiveBeaconsState = {
     beacon?: Beacon;
     onStopSharing?: () => void;
-    onResetWireError?: () => void;
+    onResetLocationPublishError?: () => void;
     stoppingInProgress?: boolean;
     hasStopSharingError?: boolean;
-    hasWireError?: boolean;
+    hasLocationPublishError?: boolean;
 };
 
 /**
@@ -41,11 +41,11 @@ export const useOwnLiveBeacons = (liveBeaconIds: BeaconIdentifier[]): LiveBeacon
     const [stoppingInProgress, setStoppingInProgress] = useState(false);
     const [error, setError] = useState<Error>();
 
-    const hasWireError = useEventEmitterState(
+    const hasLocationPublishError = useEventEmitterState(
         OwnBeaconStore.instance,
-        OwnBeaconStoreEvent.WireError,
+        OwnBeaconStoreEvent.LocationPublishError,
         () =>
-            liveBeaconIds.some(OwnBeaconStore.instance.beaconHasWireError),
+            liveBeaconIds.some(OwnBeaconStore.instance.beaconHasLocationPublishError),
     );
 
     // reset stopping in progress on change in live ids
@@ -72,16 +72,16 @@ export const useOwnLiveBeacons = (liveBeaconIds: BeaconIdentifier[]): LiveBeacon
         }
     };
 
-    const onResetWireError = () => {
-        liveBeaconIds.map(beaconId => OwnBeaconStore.instance.resetWireError(beaconId));
+    const onResetLocationPublishError = () => {
+        liveBeaconIds.map(beaconId => OwnBeaconStore.instance.resetLocationPublishError(beaconId));
     };
 
     return {
         onStopSharing,
-        onResetWireError,
+        onResetLocationPublishError,
         beacon,
         stoppingInProgress,
-        hasWireError,
+        hasLocationPublishError,
         hasStopSharingError: !!error,
     };
 };
