@@ -188,7 +188,7 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
         label: (
             <>
                 <div className="mx_Tooltip_title">
-                    { roomMember.name ?? userId }
+                    { roomMember.rawDisplayName ?? userId }
                 </div>
                 <div className="mx_Tooltip_sub">
                     { userId }
@@ -212,7 +212,8 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
             onMouseLeave={hideTooltip}
             onFocus={showTooltip}
             onBlur={hideTooltip}
-            onWheel={hideTooltip}>
+            onWheel={hideTooltip}
+        >
             <MemberAvatar
                 member={roomMember}
                 fallbackUserId={userId}
@@ -220,7 +221,9 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
                 height={24}
                 aria-hidden="true"
                 aria-live="off"
-                resizeMethod="crop" />
+                resizeMethod="crop"
+                hideTitle
+            />
             <div className="mx_ReadReceiptGroup_name">
                 <p>{ roomMember.name }</p>
                 <p className="mx_ReadReceiptGroup_secondary">
