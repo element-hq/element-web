@@ -281,6 +281,9 @@ export default class MVideoBody extends React.PureComponent<IBodyProps, IState> 
                         src={contentUrl}
                         title={content.body}
                         controls
+                        // Disable downloading as it doesn't work with e2ee video,
+                        // users should use the dedicated Download button in the Message Action Bar
+                        controlsList="nodownload"
                         preload={preload}
                         muted={autoplay}
                         autoPlay={autoplay}
