@@ -1,2 +1,3 @@
 src/vector/modernizr.js
+# Legacy skinning file that some people might still have
 src/component-index.js

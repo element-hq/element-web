@@ -281,6 +281,18 @@ function createJWTToken() {
     );
 }
 
+async function notifyHangup() {
+    if (widgetApi) {
+        // We send the hangup event before setAlwaysOnScreen, because the latter
+        // can cause the receiving side to instantly stop listening.
+        try {
+            await widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+        } finally {
+            await widgetApi.setAlwaysOnScreen(false);
+        }
+    }
+}
+
 function joinConference() { // event handler bound in HTML
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
@@ -353,22 +365,21 @@ function joinConference() { // event handler bound in HTML
 
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
-
-        if (widgetApi) {
-            // We send the hangup event before setAlwaysOnScreen, because the latter
-            // can cause the receiving side to instantly stop listening.
-            // ignored promise because we don't care if it works
-            // noinspection JSIgnoredPromiseFromCall
-            widgetApi.transport.send(ElementWidgetActions.HangupCall, {}).finally(() =>
-                widgetApi.setAlwaysOnScreen(false),
-            );
-        }
+        notifyHangup();
 
         document.getElementById("jitsiContainer").innerHTML = "";
         meetApi = null;
 
         if (skipOurWelcomeScreen) {
             skipToJitsiSplashScreen();
+        }
+    });
+
+    meetApi.on("errorOccurred", ({ error }) => {
+        if (error.isFatal) {
+            // We got disconnected. Since Jitsi Meet might send us back to the
+            // prejoin screen, we're forced to act as if we hung up entirely.
+            notifyHangup();
         }
     });
 

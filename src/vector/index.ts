@@ -110,7 +110,6 @@ async function start() {
         preparePlatform,
         loadOlm,
         loadConfig,
-        loadSkin,
         loadLanguage,
         loadTheme,
         loadApp,
@@ -160,10 +159,9 @@ async function start() {
         const loadLanguagePromise = loadLanguage();
         // as quickly as we possibly can, set a default theme...
         const loadThemePromise = loadTheme();
-        const loadSkinPromise = loadSkin();
 
         // await things settling so that any errors we have to render have features like i18n running
-        await settled(loadSkinPromise, loadThemePromise, loadLanguagePromise);
+        await settled(loadThemePromise, loadLanguagePromise);
 
         let acceptBrowser = supportedBrowser;
         if (!acceptBrowser && window.localStorage) {
@@ -211,7 +209,6 @@ async function start() {
         // assert things started successfully
         // ##################################
         await loadOlmPromise;
-        await loadSkinPromise;
         await loadThemePromise;
         await loadLanguagePromise;
 
