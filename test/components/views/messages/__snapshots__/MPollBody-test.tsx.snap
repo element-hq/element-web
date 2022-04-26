@@ -3,6 +3,9 @@
 exports[`MPollBody renders a finished poll 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
+  highlightLink="unused"
+  highlights={Array []}
+  mediaEventHelper={null}
   mxEvent={
     Object {
       "content": Object {
@@ -41,6 +44,9 @@ exports[`MPollBody renders a finished poll 1`] = `
       "type": "org.matrix.msc3381.poll.start",
     }
   }
+  onHeightChanged={[Function]}
+  onMessageAllowed={[Function]}
+  permalinkCreator={null}
 >
   <div
     className="mx_MPollBody"
@@ -312,6 +318,9 @@ exports[`MPollBody renders a finished poll 1`] = `
 exports[`MPollBody renders a finished poll with multiple winners 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
+  highlightLink="unused"
+  highlights={Array []}
+  mediaEventHelper={null}
   mxEvent={
     Object {
       "content": Object {
@@ -350,6 +359,9 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
       "type": "org.matrix.msc3381.poll.start",
     }
   }
+  onHeightChanged={[Function]}
+  onMessageAllowed={[Function]}
+  permalinkCreator={null}
 >
   <div
     className="mx_MPollBody"
@@ -621,6 +633,9 @@ exports[`MPollBody renders a finished poll with multiple winners 1`] = `
 exports[`MPollBody renders a finished poll with no votes 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
+  highlightLink="unused"
+  highlights={Array []}
+  mediaEventHelper={null}
   mxEvent={
     Object {
       "content": Object {
@@ -659,6 +674,9 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
       "type": "org.matrix.msc3381.poll.start",
     }
   }
+  onHeightChanged={[Function]}
+  onMessageAllowed={[Function]}
+  permalinkCreator={null}
 >
   <div
     className="mx_MPollBody"
@@ -930,6 +948,9 @@ exports[`MPollBody renders a finished poll with no votes 1`] = `
 exports[`MPollBody renders a poll that I have not voted in 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
+  highlightLink="unused"
+  highlights={Array []}
+  mediaEventHelper={null}
   mxEvent={
     Object {
       "content": Object {
@@ -968,6 +989,9 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
       "type": "org.matrix.msc3381.poll.start",
     }
   }
+  onHeightChanged={[Function]}
+  onMessageAllowed={[Function]}
+  permalinkCreator={null}
 >
   <div
     className="mx_MPollBody"
@@ -1339,6 +1363,9 @@ exports[`MPollBody renders a poll that I have not voted in 1`] = `
 exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
+  highlightLink="unused"
+  highlights={Array []}
+  mediaEventHelper={null}
   mxEvent={
     Object {
       "content": Object {
@@ -1377,6 +1404,9 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
       "type": "org.matrix.msc3381.poll.start",
     }
   }
+  onHeightChanged={[Function]}
+  onMessageAllowed={[Function]}
+  permalinkCreator={null}
 >
   <div
     className="mx_MPollBody"
@@ -1756,6 +1786,9 @@ exports[`MPollBody renders a poll with local, non-local and invalid votes 1`] = 
 exports[`MPollBody renders a poll with no votes 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
+  highlightLink="unused"
+  highlights={Array []}
+  mediaEventHelper={null}
   mxEvent={
     Object {
       "content": Object {
@@ -1794,6 +1827,9 @@ exports[`MPollBody renders a poll with no votes 1`] = `
       "type": "org.matrix.msc3381.poll.start",
     }
   }
+  onHeightChanged={[Function]}
+  onMessageAllowed={[Function]}
+  permalinkCreator={null}
 >
   <div
     className="mx_MPollBody"
@@ -2165,6 +2201,9 @@ exports[`MPollBody renders a poll with no votes 1`] = `
 exports[`MPollBody renders a poll with only non-local votes 1`] = `
 <MPollBody
   getRelationsForEvent={[Function]}
+  highlightLink="unused"
+  highlights={Array []}
+  mediaEventHelper={null}
   mxEvent={
     Object {
       "content": Object {
@@ -2203,6 +2242,9 @@ exports[`MPollBody renders a poll with only non-local votes 1`] = `
       "type": "org.matrix.msc3381.poll.start",
     }
   }
+  onHeightChanged={[Function]}
+  onMessageAllowed={[Function]}
+  permalinkCreator={null}
 >
   <div
     className="mx_MPollBody"

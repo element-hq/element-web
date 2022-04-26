@@ -19,7 +19,6 @@ import { mount, ReactWrapper } from "enzyme";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import '../../../skinned-sdk'; // Must be first for skinning to work
 import { createTestClient, mkEvent, mkStubRoom, stubClient } from "../../../test-utils";
 import MessageComposer from "../../../../src/components/views/rooms/MessageComposer";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";

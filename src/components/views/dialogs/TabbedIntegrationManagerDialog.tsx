@@ -22,7 +22,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { dialogTermsInteractionCallback, TermsNotSignedError } from "../../../Terms";
 import * as ScalarMessaging from "../../../ScalarMessaging";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IntegrationManagerInstance } from "../../../integrations/IntegrationManagerInstance";
 import ScalarAuthClient from "../../../ScalarAuthClient";
 import AccessibleButton from "../elements/AccessibleButton";
@@ -55,7 +54,6 @@ interface IState {
     currentScalarClient: ScalarAuthClient;
 }
 
-@replaceableComponent("views.dialogs.TabbedIntegrationManagerDialog")
 export default class TabbedIntegrationManagerDialog extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

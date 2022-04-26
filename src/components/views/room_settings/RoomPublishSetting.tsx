@@ -20,7 +20,6 @@ import { Visibility } from "matrix-js-sdk/src/@types/partials";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import DirectoryCustomisations from '../../../customisations/Directory';
 
 interface IProps {
@@ -33,7 +32,6 @@ interface IState {
     isRoomPublished: boolean;
 }
 
-@replaceableComponent("views.room_settings.RoomPublishSetting")
 export default class RoomPublishSetting extends React.PureComponent<IProps, IState> {
     constructor(props, context) {
         super(props, context);

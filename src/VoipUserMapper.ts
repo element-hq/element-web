@@ -18,10 +18,12 @@ import { Room } from 'matrix-js-sdk/src/models/room';
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 
-import { ensureVirtualRoomExists, findDMForUser } from './createRoom';
+import { ensureVirtualRoomExists } from './createRoom';
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import DMRoomMap from "./utils/DMRoomMap";
-import CallHandler, { VIRTUAL_ROOM_EVENT_TYPE } from './CallHandler';
+import CallHandler from './CallHandler';
+import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
+import { findDMForUser } from "./utils/direct-messages";
 
 // Functions for mapping virtual users & rooms. Currently the only lookup
 // is sip virtual: there could be others in the future.

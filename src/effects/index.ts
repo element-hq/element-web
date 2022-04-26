@@ -21,6 +21,7 @@ import { FireworksOptions } from "./fireworks";
 import { RainfallOptions } from "./rainfall";
 import { SnowfallOptions } from "./snowfall";
 import { SpaceInvadersOptions } from "./spaceinvaders";
+import { HeartOptions } from "./hearts";
 
 /**
  * This configuration defines room effects that can be triggered by custom message types and emojis
@@ -85,5 +86,15 @@ export const CHAT_EFFECTS: Array<Effect<{ [key: string]: any }>> = [
             gravity: 0.01,
         },
     } as Effect<SpaceInvadersOptions>,
+    {
+        emojis: ["💝"],
+        msgType: "io.element.effect.hearts",
+        command: "hearts",
+        description: () => _td("Sends the given message with hearts"),
+        fallbackMessage: () => _t("sends hearts") + " 💝",
+        options: {
+            maxCount: 120,
+            gravity: 3.2,
+        },
+    } as Effect<HeartOptions>,
 ];
-

@@ -23,7 +23,6 @@ import classNames from 'classnames';
 
 import Analytics from '../../../Analytics';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ButtonEvent } from "../elements/AccessibleButton";
 
 interface IProps {
@@ -42,7 +41,6 @@ interface IProps {
 }
 
 // TODO: replace this, the composer buttons and the right panel buttons with a unified representation
-@replaceableComponent("views.right_panel.HeaderButton")
 export default class HeaderButton extends React.Component<IProps> {
     private onClick = (ev: ButtonEvent) => {
         Analytics.trackEvent(...this.props.analytics);

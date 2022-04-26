@@ -1,5 +1,3 @@
-import '../../../skinned-sdk';
-
 import React, { ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import { MatrixClient } from 'matrix-js-sdk/src/matrix';

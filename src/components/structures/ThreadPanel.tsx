@@ -37,7 +37,7 @@ import SdkConfig from '../../SdkConfig';
 import Modal from '../../Modal';
 import BetaFeedbackDialog from '../views/dialogs/BetaFeedbackDialog';
 import { Action } from '../../dispatcher/actions';
-import { UserTab } from '../views/dialogs/UserSettingsDialog';
+import { UserTab } from '../views/dialogs/UserTab';
 import dis from '../../dispatcher/dispatcher';
 
 interface IProps {
@@ -163,7 +163,9 @@ const EmptyThread: React.FC<EmptyThreadIProps> = ({ hasThreads, filterOption, sh
         body = <>
             <p>{ _t("Threads help keep your conversations on-topic and easy to track.") }</p>
             <p className="mx_ThreadPanel_empty_tip">
-                { _t('<b>Tip:</b> Use "Reply in thread" when hovering over a message.', {}, {
+                { _t('<b>Tip:</b> Use “%(replyInThread)s” when hovering over a message.', {
+                    replyInThread: _t("Reply in thread"),
+                }, {
                     b: sub => <b>{ sub }</b>,
                 }) }
             </p>
@@ -250,7 +252,7 @@ const ThreadPanel: React.FC<IProps> = ({
         <RoomContext.Provider value={{
             ...roomContext,
             timelineRenderingType: TimelineRenderingType.ThreadsList,
-            showHiddenEventsInTimeline: true,
+            showHiddenEvents: true,
             narrow,
         }}>
             <BaseCard

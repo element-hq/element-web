@@ -20,7 +20,6 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import Modal from '../../../Modal';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import ErrorDialog from './ErrorDialog';
 import TextInputDialog from "./TextInputDialog";
 
@@ -31,7 +30,6 @@ interface IProps {
 /*
  * A dialog for confirming a redaction.
  */
-@replaceableComponent("views.dialogs.ConfirmRedactDialog")
 export default class ConfirmRedactDialog extends React.Component<IProps> {
     render() {
         return (

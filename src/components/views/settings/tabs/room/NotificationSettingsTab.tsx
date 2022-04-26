@@ -23,7 +23,6 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import Notifier from "../../../../../Notifier";
 import SettingsStore from '../../../../../settings/SettingsStore';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { RoomEchoChamber } from "../../../../../stores/local-echo/RoomEchoChamber";
 import { EchoChamber } from '../../../../../stores/local-echo/EchoChamber';
 import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
@@ -31,7 +30,8 @@ import StyledRadioGroup from "../../../elements/StyledRadioGroup";
 import { RoomNotifState } from '../../../../../RoomNotifs';
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
-import { UserTab } from "../../../dialogs/UserSettingsDialog";
+import { UserTab } from "../../../dialogs/UserTab";
+import { chromeFileInputFix } from "../../../../../utils/BrowserWorkarounds";
 
 interface IProps {
     roomId: string;
@@ -43,7 +43,6 @@ interface IState {
     uploadedFile: File;
 }
 
-@replaceableComponent("views.settings.tabs.room.NotificationsSettingsTab")
 export default class NotificationsSettingsTab extends React.Component<IProps, IState> {
     private readonly roomProps: RoomEchoChamber;
     private soundUpload = createRef<HTMLInputElement>();
@@ -79,7 +78,7 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
         this.soundUpload.current.click();
     };
 
-    private onSoundUploadChanged = (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    private onSoundUploadChanged = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (!e.target.files || !e.target.files.length) {
             this.setState({
                 uploadedFile: null,
@@ -256,7 +255,14 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                         <h3>{ _t("Set a new custom sound") }</h3>
                         <div className="mx_SettingsFlag">
                             <form autoComplete="off" noValidate={true}>
-                                <input ref={this.soundUpload} className="mx_NotificationSound_soundUpload" type="file" onChange={this.onSoundUploadChanged} accept="audio/*" />
+                                <input
+                                    ref={this.soundUpload}
+                                    className="mx_NotificationSound_soundUpload"
+                                    type="file"
+                                    onClick={chromeFileInputFix}
+                                    onChange={this.onSoundUploadChanged}
+                                    accept="audio/*"
+                                />
                             </form>
 
                             { currentUploadedFile }

@@ -27,7 +27,6 @@ import { Action } from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
 import AccessibleButton from "../views/elements/AccessibleButton";
 import { IUpload } from "../../models/IUpload";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 
 interface IProps {
@@ -40,7 +39,6 @@ interface IState {
     uploadsHere: IUpload[];
 }
 
-@replaceableComponent("structures.UploadBar")
 export default class UploadBar extends React.Component<IProps, IState> {
     static contextType = MatrixClientContext;
 

@@ -30,6 +30,8 @@ import { stickerScenarios } from './scenarios/sticker';
 import { userViewScenarios } from "./scenarios/user-view";
 import { ssoCustomisationScenarios } from "./scenarios/sso-customisations";
 import { updateScenarios } from "./scenarios/update";
+import { threadsScenarios } from "./scenarios/threads";
+import { enableThreads } from "./usecases/threads";
 
 export async function scenario(createSession: (s: string) => Promise<ElementSession>,
     restCreator: RestSessionCreator): Promise<void> {
@@ -41,12 +43,19 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
             console.log(`running tests on ${await session.browser.version()} ...`);
             firstUser = false;
         }
+        // ported to cyprus (registration test)
         await signup(session, session.username, 'testsarefun!!!', session.hsUrl);
         return session;
     }
 
     const alice = await createUser("alice");
     const bob = await createUser("bob");
+
+    // Enable threads for Alice & Bob before going any further as it requires refreshing the app
+    // which otherwise loses all performance ticks.
+    console.log("Enabling threads: ");
+    await enableThreads(alice);
+    await enableThreads(bob);
 
     await toastScenarios(alice, bob);
     await userViewScenarios(alice, bob);
@@ -55,6 +64,7 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
     console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);
     await lazyLoadingScenarios(alice, bob, charlies);
+    await threadsScenarios(alice, bob);
     // do spaces scenarios last as the rest of the alice/bob tests may get confused by spaces
     await spacesScenarios(alice, bob);
 

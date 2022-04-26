@@ -20,7 +20,6 @@ import { User } from 'matrix-js-sdk/src/models/user';
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import EncryptionPanel from "../right_panel/EncryptionPanel";
 
@@ -35,7 +34,6 @@ interface IState {
     verificationRequest: VerificationRequest;
 }
 
-@replaceableComponent("views.dialogs.VerificationRequestDialog")
 export default class VerificationRequestDialog extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);

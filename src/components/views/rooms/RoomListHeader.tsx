@@ -140,6 +140,15 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         }
     });
 
+    const canShowMainMenu = activeSpace || spaceKey === MetaSpace.Home;
+
+    useEffect(() => {
+        if (mainMenuDisplayed && !canShowMainMenu) {
+            // Space changed under us and we no longer has a main menu to draw
+            closeMainMenu();
+        }
+    }, [closeMainMenu, canShowMainMenu, mainMenuDisplayed]);
+
     // we pass null for the queryLength to inhibit the metrics hook for when there is no filterCondition
     useWebSearchMetrics(count, filterCondition ? filterCondition.search.length : null, false);
 
@@ -168,7 +177,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
     const canShowPlusMenu = canCreateRooms || canExploreRooms || activeSpace;
 
     let contextMenu: JSX.Element;
-    if (mainMenuDisplayed) {
+    if (mainMenuDisplayed && mainMenuHandle.current) {
         let ContextMenuComponent;
         if (activeSpace) {
             ContextMenuComponent = SpaceContextMenu;
@@ -364,7 +373,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         .join("\n");
 
     let contextMenuButton: JSX.Element = <div className="mx_RoomListHeader_contextLessTitle">{ title }</div>;
-    if (activeSpace || spaceKey === MetaSpace.Home) {
+    if (canShowMainMenu) {
         contextMenuButton = <ContextMenuTooltipButton
             inputRef={mainMenuHandle}
             onClick={openMainMenu}

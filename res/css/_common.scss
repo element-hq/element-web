@@ -254,7 +254,7 @@ legend {
 }
 
 // These are magic constants which are excluded from tinting, to let themes
-// (which only have CSS, unlike skins) tell the app what their non-tinted
+// (which only have CSS) tell the app what their non-tinted
 // colourscheme is by inspecting the stylesheet DOM.
 //
 // They are not used for layout!!

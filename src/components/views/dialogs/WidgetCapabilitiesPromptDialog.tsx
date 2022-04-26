@@ -32,7 +32,6 @@ import StyledCheckbox from "../elements/StyledCheckbox";
 import DialogButtons from "../elements/DialogButtons";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import { CapabilityText } from "../../../widgets/CapabilityText";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends IDialogProps {
     requestedCapabilities: Set<Capability>;
@@ -50,7 +49,6 @@ interface IState {
     rememberSelection: boolean;
 }
 
-@replaceableComponent("views.dialogs.WidgetCapabilitiesPromptDialog")
 export default class WidgetCapabilitiesPromptDialog extends React.PureComponent<IProps, IState> {
     private eventPermissionsMap = new Map<Capability, WidgetEventCapability>();
 

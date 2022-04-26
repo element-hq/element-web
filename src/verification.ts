@@ -22,13 +22,13 @@ import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
 import Modal from './Modal';
 import { RightPanelPhases } from "./stores/right-panel/RightPanelStorePhases";
-import { findDMForUser } from './createRoom';
 import { accessSecretStorage } from './SecurityManager';
 import UntrustedDeviceDialog from "./components/views/dialogs/UntrustedDeviceDialog";
 import { IDevice } from "./components/views/right_panel/UserInfo";
 import ManualDeviceKeyVerificationDialog from "./components/views/dialogs/ManualDeviceKeyVerificationDialog";
 import RightPanelStore from "./stores/right-panel/RightPanelStore";
 import { IRightPanelCardState } from "./stores/right-panel/RightPanelStoreIPanelState";
+import { findDMForUser } from "./utils/direct-messages";
 
 async function enable4SIfNeeded() {
     const cli = MatrixClientPeg.get();

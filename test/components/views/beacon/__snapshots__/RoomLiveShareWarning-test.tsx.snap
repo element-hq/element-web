@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with one live beacon in room 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">You are sharing your live location</span><span data-test-id=\\"room-live-share-expiry\\" class=\\"mx_RoomLiveShareWarning_expiry\\">1h left</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Stop sharing</button></div>"`;
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with one live beacon in room 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">You are sharing your live location</span><span data-test-id=\\"room-live-share-expiry\\" class=\\"mx_LiveTimeRemaining\\">1h left</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Stop sharing</button></div>"`;
 
-exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with two live beacons in room 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">You are sharing your live location</span><span data-test-id=\\"room-live-share-expiry\\" class=\\"mx_RoomLiveShareWarning_expiry\\">12h left</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Stop sharing</button></div>"`;
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available renders correctly with two live beacons in room 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">You are sharing your live location</span><span data-test-id=\\"room-live-share-expiry\\" class=\\"mx_LiveTimeRemaining\\">12h left</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Stop sharing</button></div>"`;
 
-exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available stopping beacons displays error when stop sharing fails 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon mx_StyledLiveBeaconIcon_error\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">An error occurred while stopping your live location, please try again</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Retry</button></div>"`;
+exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available stopping beacons displays error when stop sharing fails 1`] = `"<div class=\\"mx_RoomLiveShareWarning\\"><div class=\\"mx_StyledLiveBeaconIcon mx_RoomLiveShareWarning_icon mx_StyledLiveBeaconIcon_error\\"></div><span class=\\"mx_RoomLiveShareWarning_label\\">An error occurred while stopping your live location, please try again</span><button data-test-id=\\"room-live-share-primary-button\\" role=\\"button\\" tabindex=\\"0\\" class=\\"mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger\\">Retry</button></div>"`;
 
 exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is available with wire errors displays wire error when mounted with wire errors 1`] = `
 <RoomLiveShareWarning
@@ -13,8 +13,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
   <RoomLiveShareWarningInner
     liveBeaconIds={
       Array [
-        "org.matrix.msc3489.beacon_info.@alice:server.org.3",
-        "org.matrix.msc3489.beacon_info.@alice:server.org.4",
+        "$room2:server.org_@alice:server.org",
       ]
     }
     roomId="$room2:server.org"
@@ -36,6 +35,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
         An error occured whilst sharing your live location, please try again
       </span>
       <AccessibleButton
+        className="mx_RoomLiveShareWarning_stopButton"
         data-test-id="room-live-share-primary-button"
         disabled={false}
         element="button"
@@ -45,7 +45,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
         tabIndex={0}
       >
         <button
-          className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
+          className="mx_AccessibleButton mx_RoomLiveShareWarning_stopButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger"
           data-test-id="room-live-share-primary-button"
           onClick={[Function]}
           onKeyDown={[Function]}

@@ -43,7 +43,6 @@ import AutocompleteWrapperModel from "../../../editor/autocomplete";
 import DocumentPosition from '../../../editor/position';
 import { ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from '../../../KeyBindingsManager';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from '../../../accessibility/KeyboardShortcuts';
 import { _t } from "../../../languageHandler";
 
@@ -112,7 +111,6 @@ interface IState {
     surroundWith: boolean;
 }
 
-@replaceableComponent("views.rooms.BasicMessageEditor")
 export default class BasicMessageEditor extends React.Component<IProps, IState> {
     public readonly editorRef = createRef<HTMLDivElement>();
     private autocompleteRef = createRef<Autocomplete>();
@@ -366,7 +364,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     private insertText(textToInsert: string, inputType = "insertText"): void {
         const sel = document.getSelection();
         const { caret, text } = getCaretOffsetAndText(this.editorRef.current, sel);
-        const newText = text.substr(0, caret.offset) + textToInsert + text.substr(caret.offset);
+        const newText = text.slice(0, caret.offset) + textToInsert + text.slice(caret.offset);
         caret.offset += textToInsert.length;
         this.modifiedFlag = true;
         this.props.model.update(newText, inputType, caret);

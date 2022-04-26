@@ -19,7 +19,6 @@ import React from 'react';
 import { _t } from '../../../languageHandler';
 import { SetupEncryptionStore, Phase } from '../../../stores/SetupEncryptionStore';
 import SetupEncryptionBody from "./SetupEncryptionBody";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from '../../views/elements/AccessibleButton';
 import CompleteSecurityBody from "../../views/auth/CompleteSecurityBody";
 import AuthPage from "../../views/auth/AuthPage";
@@ -33,7 +32,6 @@ interface IState {
     lostKeys: boolean;
 }
 
-@replaceableComponent("structures.auth.CompleteSecurity")
 export default class CompleteSecurity extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

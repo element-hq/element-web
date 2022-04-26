@@ -21,7 +21,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { formatFullDateNoTime } from '../../../DateUtils';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
 import { Action } from '../../../dispatcher/actions';
@@ -61,7 +60,6 @@ interface IState {
     jumpToDateEnabled: boolean;
 }
 
-@replaceableComponent("views.messages.DateSeparator")
 export default class DateSeparator extends React.Component<IProps, IState> {
     private settingWatcherRef = null;
 

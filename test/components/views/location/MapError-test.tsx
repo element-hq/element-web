@@ -17,7 +17,6 @@ limitations under the License.
 import React from 'react';
 import { mount } from 'enzyme';
 
-import '../../../skinned-sdk';
 import { MapError } from '../../../../src/components/views/location/MapError';
 import { LocationShareError } from '../../../../src/utils/location';
 

@@ -26,7 +26,6 @@ import ErrorDialog from "../dialogs/ErrorDialog";
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
 import RoomPublishSetting from "./RoomPublishSetting";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import RoomAliasField from "../elements/RoomAliasField";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import SettingsFieldset from "../settings/SettingsFieldset";
@@ -95,7 +94,6 @@ interface IState {
     newAltAlias?: string;
 }
 
-@replaceableComponent("views.room_settings.AliasSettings")
 export default class AliasSettings extends React.Component<IProps, IState> {
     public static contextType = MatrixClientContext;
     context: ContextType<typeof MatrixClientContext>;

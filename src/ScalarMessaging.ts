@@ -241,7 +241,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';
 import WidgetUtils from './utils/WidgetUtils';
-import RoomViewStore from './stores/RoomViewStore';
+import { RoomViewStore } from './stores/RoomViewStore';
 import { _t } from './languageHandler';
 import { IntegrationManagers } from "./integrations/IntegrationManagers";
 import { WidgetType } from "./widgets/WidgetType";
@@ -638,7 +638,7 @@ const onMessage = function(event: MessageEvent<any>): void {
         }
     }
 
-    if (roomId !== RoomViewStore.getRoomId()) {
+    if (roomId !== RoomViewStore.instance.getRoomId()) {
         sendError(event, _t('Room %(roomId)s not visible', { roomId: roomId }));
         return;
     }

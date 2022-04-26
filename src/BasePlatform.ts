@@ -146,6 +146,13 @@ export default abstract class BasePlatform {
     }
 
     /**
+     * Returns true if platform allows overriding native context menus
+     */
+    public allowOverridingNativeContextMenus(): boolean {
+        return false;
+    }
+
+    /**
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
      * @returns {boolean} whether the platform supports displaying notifications

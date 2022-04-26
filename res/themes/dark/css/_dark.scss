@@ -7,7 +7,9 @@ $quaternary-content: #6F7882;
 $quinary-content: #394049;
 
 $system: #21262C;
+$system-transparent: rgba($system, 0.0); // XXX: workaround for Safari 15.3 linear-gradient bug
 $background: #15191E;
+$overlay-background: rgba($background, 0.85);
 
 $panel-base: #8D97A5; // This color is not intended for use in the app
 $panels: rgba($system, 0.9);

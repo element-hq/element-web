@@ -23,7 +23,6 @@ import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
 import HomePage from "./HomePage";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
@@ -41,7 +40,6 @@ interface IState {
     member?: RoomMember;
 }
 
-@replaceableComponent("structures.UserView")
 export default class UserView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

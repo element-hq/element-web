@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ZoomButtons /> renders buttons 1`] = `
+<ZoomButtons
+  map={
+    MockMap {
+      "_events": Object {},
+      "_eventsCount": 0,
+      "_maxListeners": undefined,
+      "addControl": [MockFunction],
+      "fitBounds": [MockFunction],
+      "removeControl": [MockFunction],
+      "setCenter": [MockFunction],
+      "setStyle": [MockFunction],
+      "zoomIn": [MockFunction],
+      "zoomOut": [MockFunction],
+      Symbol(kCapture): false,
+    }
+  }
+>
+  <div
+    className="mx_ZoomButtons"
+  >
+    <AccessibleButton
+      className="mx_ZoomButtons_button"
+      data-test-id="map-zoom-in-button"
+      element="div"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Zoom in"
+    >
+      <div
+        className="mx_AccessibleButton mx_ZoomButtons_button"
+        data-test-id="map-zoom-in-button"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        role="button"
+        tabIndex={0}
+        title="Zoom in"
+      >
+        <div
+          className="mx_ZoomButtons_icon"
+        />
+      </div>
+    </AccessibleButton>
+    <AccessibleButton
+      className="mx_ZoomButtons_button"
+      data-test-id="map-zoom-out-button"
+      element="div"
+      onClick={[Function]}
+      role="button"
+      tabIndex={0}
+      title="Zoom out"
+    >
+      <div
+        className="mx_AccessibleButton mx_ZoomButtons_button"
+        data-test-id="map-zoom-out-button"
+        onClick={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        role="button"
+        tabIndex={0}
+        title="Zoom out"
+      >
+        <div
+          className="mx_ZoomButtons_icon"
+        />
+      </div>
+    </AccessibleButton>
+  </div>
+</ZoomButtons>
+`;

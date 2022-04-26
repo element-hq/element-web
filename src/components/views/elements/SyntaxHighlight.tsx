@@ -17,14 +17,11 @@ limitations under the License.
 import React from 'react';
 import hljs from 'highlight.js';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-
 interface IProps {
     language?: string;
     children: string;
 }
 
-@replaceableComponent("views.elements.SyntaxHighlight")
 export default class SyntaxHighlight extends React.PureComponent<IProps> {
     public render(): JSX.Element {
         const { children: content, language } = this.props;

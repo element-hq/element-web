@@ -187,6 +187,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_msc3531_hide_messages_pending_moderation": {
         isFeature: true,
         labsGroup: LabGroup.Moderation,
+        // Requires a reload since this setting is cached in EventUtils
+        controller: new ReloadOnChangeController(),
         displayName: _td("Let moderators hide messages pending moderation."),
         supportedLevels: LEVELS_FEATURE,
         default: false,
@@ -240,9 +242,17 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             disclaimer: () =>
                 SdkConfig.get().bug_report_endpoint_url && <>
                     <h4>{ _t("How can I start a thread?") }</h4>
-                    <p>{ _t("Use \"Reply in thread\" when hovering over a message.") }</p>
+                    <p>
+                        { _t("Use “%(replyInThread)s” when hovering over a message.", {
+                            replyInThread: _t("Reply in thread"),
+                        }) }
+                    </p>
                     <h4>{ _t("How can I leave the beta?") }</h4>
-                    <p>{ _t("To leave, return to this page and use the “Leave the beta” button.") }</p>
+                    <p>
+                        { _t("To leave, return to this page and use the “%(leaveTheBeta)s” button.", {
+                            leaveTheBeta: _t("Leave the beta"),
+                        }) }
+                    </p>
                 </>,
             feedbackLabel: "thread-feedback",
             feedbackSubheading: _td("Thank you for trying the beta, " +
@@ -410,6 +420,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_hidden_read_receipts": {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Don't send read receipts"),
+        default: false,
+    },
+    "feature_message_right_click_context_menu": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        labsGroup: LabGroup.Rooms,
+        displayName: _td("Right-click message context menu"),
         default: false,
     },
     "feature_location_share_pin_drop": {

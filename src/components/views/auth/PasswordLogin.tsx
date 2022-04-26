@@ -24,7 +24,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import withValidation, { IValidationResult } from "../elements/Validation";
 import Field from "../elements/Field";
 import CountryDropdown from "./CountryDropdown";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import EmailField from "./EmailField";
 
 // For validating phone numbers without country codes
@@ -66,7 +65,6 @@ enum LoginField {
  * A pure UI component which displays a username/password form.
  * The email/username/phone fields are fully-controlled, the password field is not.
  */
-@replaceableComponent("views.auth.PasswordLogin")
 export default class PasswordLogin extends React.PureComponent<IProps, IState> {
     static defaultProps = {
         onUsernameChanged: function() {},

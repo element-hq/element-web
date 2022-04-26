@@ -24,7 +24,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import { formatBytes, formatCountLong } from "../../../utils/FormattingUtils";
 import EventIndexPeg from "../../../indexing/EventIndexPeg";
 import { SettingLevel } from "../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SeshatResetDialog from '../dialogs/SeshatResetDialog';
 import InlineSpinner from '../elements/InlineSpinner';
 
@@ -35,7 +34,6 @@ interface IState {
     eventIndexingEnabled: boolean;
 }
 
-@replaceableComponent("views.settings.EventIndexPanel")
 export default class EventIndexPanel extends React.Component<{}, IState> {
     constructor(props) {
         super(props);

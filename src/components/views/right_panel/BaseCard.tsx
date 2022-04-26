@@ -22,8 +22,8 @@ import { _t } from "../../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
 import { backLabelForPhase } from '../../../stores/right-panel/RightPanelStorePhases';
+import { CardContext } from './context';
 
-export const CardContext = React.createContext({ isCard: false });
 interface IProps {
     header?: ReactNode;
     footer?: ReactNode;

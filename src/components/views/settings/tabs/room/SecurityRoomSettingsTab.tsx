@@ -1,5 +1,5 @@
 /*
-Copyright 2019-2021 The Matrix.org Foundation C.I.C.
+Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,13 @@ limitations under the License.
 */
 
 import React from 'react';
-import { GuestAccess, HistoryVisibility, JoinRule, RestrictedAllowType } from "matrix-js-sdk/src/@types/partials";
+import { GuestAccess, HistoryVisibility, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../../../languageHandler";
-import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
 import QuestionDialog from "../../../dialogs/QuestionDialog";
@@ -30,7 +29,6 @@ import StyledRadioGroup from '../../../elements/StyledRadioGroup';
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { UIFeature } from "../../../../../settings/UIFeature";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import createRoom, { IOpts } from '../../../../../createRoom';
@@ -40,6 +38,7 @@ import ErrorDialog from "../../../dialogs/ErrorDialog";
 import SettingsFieldset from '../../SettingsFieldset';
 import ExternalLink from '../../../elements/ExternalLink';
 import PosthogTrackers from "../../../../../PosthogTrackers";
+import MatrixClientContext from "../../../../../contexts/MatrixClientContext";
 
 interface IProps {
     roomId: string;
@@ -47,7 +46,6 @@ interface IProps {
 }
 
 interface IState {
-    restrictedAllowRoomIds?: string[];
     guestAccess: GuestAccess;
     history: HistoryVisibility;
     hasAliases: boolean;
@@ -55,54 +53,34 @@ interface IState {
     showAdvancedSection: boolean;
 }
 
-@replaceableComponent("views.settings.tabs.room.SecurityRoomSettingsTab")
 export default class SecurityRoomSettingsTab extends React.Component<IProps, IState> {
-    constructor(props) {
-        super(props);
+    static contextType = MatrixClientContext;
+    public context!: React.ContextType<typeof MatrixClientContext>;
+
+    constructor(props, context) {
+        super(props, context);
+
+        const state = context.getRoom(this.props.roomId).currentState;
 
         this.state = {
-            guestAccess: GuestAccess.Forbidden,
-            history: HistoryVisibility.Shared,
-            hasAliases: false,
-            encrypted: false,
+            guestAccess: this.pullContentPropertyFromEvent<GuestAccess>(
+                state.getStateEvents(EventType.RoomGuestAccess, ""),
+                'guest_access',
+                GuestAccess.Forbidden,
+            ),
+            history: this.pullContentPropertyFromEvent<HistoryVisibility>(
+                state.getStateEvents(EventType.RoomHistoryVisibility, ""),
+                'history_visibility',
+                HistoryVisibility.Shared,
+            ),
+            hasAliases: false, // async loaded in componentDidMount
+            encrypted: context.isRoomEncrypted(this.props.roomId),
             showAdvancedSection: false,
         };
     }
 
-    // TODO: [REACT-WARNING] Move this to constructor
-    UNSAFE_componentWillMount() { // eslint-disable-line
-        const cli = MatrixClientPeg.get();
-        cli.on(RoomStateEvent.Events, this.onStateEvent);
-
-        const room = cli.getRoom(this.props.roomId);
-        const state = room.currentState;
-
-        const joinRuleEvent = state.getStateEvents(EventType.RoomJoinRules, "");
-        const joinRule: JoinRule = this.pullContentPropertyFromEvent<JoinRule>(
-            joinRuleEvent,
-            'join_rule',
-            JoinRule.Invite,
-        );
-        const restrictedAllowRoomIds = joinRule === JoinRule.Restricted
-            ? joinRuleEvent?.getContent().allow
-                ?.filter(a => a.type === RestrictedAllowType.RoomMembership)
-                ?.map(a => a.room_id)
-            : undefined;
-
-        const guestAccess: GuestAccess = this.pullContentPropertyFromEvent<GuestAccess>(
-            state.getStateEvents(EventType.RoomGuestAccess, ""),
-            'guest_access',
-            GuestAccess.Forbidden,
-        );
-        const history: HistoryVisibility = this.pullContentPropertyFromEvent<HistoryVisibility>(
-            state.getStateEvents(EventType.RoomHistoryVisibility, ""),
-            'history_visibility',
-            HistoryVisibility.Shared,
-        );
-
-        const encrypted = MatrixClientPeg.get().isRoomEncrypted(this.props.roomId);
-        this.setState({ restrictedAllowRoomIds, guestAccess, history, encrypted });
-
+    componentDidMount() {
+        this.context.on(RoomStateEvent.Events, this.onStateEvent);
         this.hasAliases().then(hasAliases => this.setState({ hasAliases }));
     }
 
@@ -111,7 +89,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     componentWillUnmount() {
-        MatrixClientPeg.get().removeListener(RoomStateEvent.Events, this.onStateEvent);
+        this.context.removeListener(RoomStateEvent.Events, this.onStateEvent);
     }
 
     private onStateEvent = (e: MatrixEvent) => {
@@ -125,7 +103,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     };
 
     private onEncryptionChange = async () => {
-        if (MatrixClientPeg.get().getRoom(this.props.roomId)?.getJoinRule() === JoinRule.Public) {
+        if (this.context.getRoom(this.props.roomId)?.getJoinRule() === JoinRule.Public) {
             const dialog = Modal.createTrackedDialog('Confirm Public Encrypted Room', '', QuestionDialog, {
                 title: _t('Are you sure you want to add encryption to this public room?'),
                 description: <div>
@@ -180,7 +158,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
                 const beforeEncrypted = this.state.encrypted;
                 this.setState({ encrypted: true });
-                MatrixClientPeg.get().sendStateEvent(
+                this.context.sendStateEvent(
                     this.props.roomId, EventType.RoomEncryption,
                     { algorithm: "m.megolm.v1.aes-sha2" },
                 ).catch((e) => {
@@ -198,8 +176,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
         this.setState({ guestAccess });
 
-        const client = MatrixClientPeg.get();
-        client.sendStateEvent(this.props.roomId, EventType.RoomGuestAccess, {
+        this.context.sendStateEvent(this.props.roomId, EventType.RoomGuestAccess, {
             guest_access: guestAccess,
         }, "").catch((e) => {
             logger.error(e);
@@ -229,7 +206,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (beforeHistory === history) return;
 
         this.setState({ history: history });
-        MatrixClientPeg.get().sendStateEvent(this.props.roomId, EventType.RoomHistoryVisibility, {
+        this.context.sendStateEvent(this.props.roomId, EventType.RoomHistoryVisibility, {
             history_visibility: history,
         }, "").catch((e) => {
             logger.error(e);
@@ -238,11 +215,11 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     };
 
     private updateBlacklistDevicesFlag = (checked: boolean) => {
-        MatrixClientPeg.get().getRoom(this.props.roomId).setBlacklistUnverifiedDevices(checked);
+        this.context.getRoom(this.props.roomId).setBlacklistUnverifiedDevices(checked);
     };
 
     private async hasAliases(): Promise<boolean> {
-        const cli = MatrixClientPeg.get();
+        const cli = this.context;
         if (await cli.doesServerSupportUnstableFeature("org.matrix.msc2432")) {
             const response = await cli.unstableGetLocalAliases(this.props.roomId);
             const localAliases = response.aliases;
@@ -256,7 +233,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     private renderJoinRule() {
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const room = client.getRoom(this.props.roomId);
 
         let aliasWarning = null;
@@ -335,7 +312,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
             return null;
         }
 
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const history = this.state.history;
         const state = client.getRoom(this.props.roomId).currentState;
         const canChangeHistory = state.mayClientSendStateEvent(EventType.RoomHistoryVisibility, client);
@@ -382,7 +359,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     };
 
     private renderAdvanced() {
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const guestAccess = this.state.guestAccess;
         const state = client.getRoom(this.props.roomId).currentState;
         const canSetGuestAccess = state.mayClientSendStateEvent(EventType.RoomGuestAccess, client);
@@ -402,7 +379,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
     }
 
     render() {
-        const client = MatrixClientPeg.get();
+        const client = this.context;
         const room = client.getRoom(this.props.roomId);
         const isEncrypted = this.state.encrypted;
         const hasEncryptionPermission = room.currentState.mayClientSendStateEvent(EventType.RoomEncryption, client);

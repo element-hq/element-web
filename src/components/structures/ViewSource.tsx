@@ -24,12 +24,12 @@ import { _t } from "../../languageHandler";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { canEditContent } from "../../utils/EventUtils";
 import { MatrixClientPeg } from '../../MatrixClientPeg';
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
 import BaseDialog from "../views/dialogs/BaseDialog";
 import { DevtoolsContext } from "../views/dialogs/devtools/BaseTool";
 import { StateEventEditor } from "../views/dialogs/devtools/RoomState";
 import { stringify, TimelineEventEditor } from "../views/dialogs/devtools/Event";
+import CopyableText from "../views/elements/CopyableText";
 
 interface IProps extends IDialogProps {
     mxEvent: MatrixEvent; // the MatrixEvent associated with the context menu
@@ -39,7 +39,6 @@ interface IState {
     isEditing: boolean;
 }
 
-@replaceableComponent("structures.ViewSource")
 export default class ViewSource extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -65,29 +64,58 @@ export default class ViewSource extends React.Component<IProps, IState> {
         // @ts-ignore
         const decryptedEventSource = mxEvent.clearEvent; // FIXME: clearEvent is private
         const originalEventSource = mxEvent.event;
-
+        const copyOriginalFunc = (): string => {
+            return stringify(originalEventSource);
+        };
         if (isEncrypted) {
+            const copyDecryptedFunc = (): string => {
+                return stringify(decryptedEventSource);
+            };
             return (
                 <>
                     <details open className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">{ _t("Decrypted event source") }</span>
+                            <span className="mx_ViewSource_heading">
+                                { _t("Decrypted event source") }
+                            </span>
                         </summary>
-                        <SyntaxHighlight language="json">{ stringify(decryptedEventSource) }</SyntaxHighlight>
+                        <div className="mx_ViewSource_container">
+                            <CopyableText getTextToCopy={copyDecryptedFunc}>
+                                <SyntaxHighlight language="json">
+                                    { stringify(decryptedEventSource) }
+                                </SyntaxHighlight>
+                            </CopyableText>
+                        </div>
                     </details>
                     <details className="mx_ViewSource_details">
                         <summary>
-                            <span className="mx_ViewSource_heading">{ _t("Original event source") }</span>
+                            <span className="mx_ViewSource_heading">
+                                { _t("Original event source") }
+                            </span>
                         </summary>
-                        <SyntaxHighlight language="json">{ stringify(originalEventSource) }</SyntaxHighlight>
+                        <div className="mx_ViewSource_container">
+                            <CopyableText getTextToCopy={copyOriginalFunc}>
+                                <SyntaxHighlight language="json">
+                                    { stringify(originalEventSource) }
+                                </SyntaxHighlight>
+                            </CopyableText>
+                        </div>
                     </details>
                 </>
             );
         } else {
             return (
                 <>
-                    <div className="mx_ViewSource_heading">{ _t("Original event source") }</div>
-                    <SyntaxHighlight language="json">{ stringify(originalEventSource) }</SyntaxHighlight>
+                    <div className="mx_ViewSource_heading">
+                        { _t("Original event source") }
+                    </div>
+                    <div className="mx_ViewSource_container">
+                        <CopyableText getTextToCopy={copyOriginalFunc}>
+                            <SyntaxHighlight language="json">
+                                { stringify(originalEventSource) }
+                            </SyntaxHighlight>
+                        </CopyableText>
+                    </div>
                 </>
             );
         }
@@ -139,8 +167,16 @@ export default class ViewSource extends React.Component<IProps, IState> {
         return (
             <BaseDialog className="mx_ViewSource" onFinished={this.props.onFinished} title={_t("View Source")}>
                 <div>
-                    <div>{ _t("Room ID: %(roomId)s", { roomId }) }</div>
-                    <div>{ _t("Event ID: %(eventId)s", { eventId }) }</div>
+                    <div>
+                        <CopyableText getTextToCopy={() => roomId} border={false}>
+                            { _t("Room ID: %(roomId)s", { roomId }) }
+                        </CopyableText>
+                    </div>
+                    <div>
+                        <CopyableText getTextToCopy={() => eventId} border={false}>
+                            { _t("Event ID: %(eventId)s", { eventId }) }
+                        </CopyableText>
+                    </div>
                     <div className="mx_ViewSource_separator" />
                     { isEditing ? this.editSourceContent() : this.viewSourceContent() }
                 </div>

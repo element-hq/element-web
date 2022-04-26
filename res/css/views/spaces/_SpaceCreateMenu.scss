@@ -93,10 +93,6 @@ $spacePanelWidth: 68px;
             width: min-content;
         }
 
-        .mx_AccessibleButton_kind_link {
-            font-size: inherit;
-        }
-
         .mx_AccessibleButton_disabled {
             cursor: not-allowed;
         }
@@ -118,7 +114,5 @@ $spacePanelWidth: 68px;
     .mx_AccessibleButton_kind_link {
         color: $accent;
         position: relative;
-        font-size: inherit;
-        line-height: inherit;
     }
 }

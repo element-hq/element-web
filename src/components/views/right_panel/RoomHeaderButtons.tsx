@@ -29,7 +29,6 @@ import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePha
 import { Action } from "../../../dispatcher/actions";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { useSettingValue } from "../../../hooks/useSettings";
 import { useReadPinnedEvents, usePinnedEvents } from './PinnedMessagesCard';
 import { showThreadPanel } from "../../../dispatcher/dispatch-actions/threads";
@@ -127,7 +126,6 @@ interface IProps {
     excludedRightPanelPhaseButtons?: Array<RightPanelPhases>;
 }
 
-@replaceableComponent("views.right_panel.RoomHeaderButtons")
 export default class RoomHeaderButtons extends HeaderButtons<IProps> {
     private static readonly THREAD_PHASES = [
         RightPanelPhases.ThreadPanel,

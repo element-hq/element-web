@@ -39,6 +39,7 @@ limitations under the License.
         overflow: hidden;
         position: relative; // offset parent for jump to bottom button
         flex: 1;
+        border-radius: 8px;
     }
 
     .mx_AutoHideScrollbar {
@@ -54,29 +55,61 @@ limitations under the License.
         margin-right: 0;
     }
 
-    .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_line {
-        padding-left: 36px;
-        padding-right: 36px;
+    .mx_EventTile:not([data-layout="bubble"]) {
+        .mx_EventTile_line {
+            padding-left: 36px;
+            padding-right: 36px;
+        }
+
+        .mx_ReactionsRow {
+            padding: 0;
+
+            // See margin setting of ReactionsRow on _EventTile.scss
+            margin-left: 36px;
+            margin-right: 8px;
+        }
+
+        .mx_ThreadInfo {
+            margin-left: 36px;
+            margin-right: 0;
+            max-width: min(calc(100% - 36px), 600px);
+        }
+
+        .mx_EventTile_avatar {
+            top: 12px;
+            left: -3px;
+        }
+
+        .mx_MessageTimestamp {
+            right: -4px;
+            left: auto;
+        }
+
+        .mx_EventTile_msgOption {
+            margin-right: 2px;
+        }
+
+        &.mx_EventTile_info {
+            .mx_EventTile_line {
+                padding-left: 36px;
+            }
+
+            .mx_EventTile_avatar {
+                left: 18px;
+            }
+        }
     }
 
-    .mx_EventTile:not([data-layout="bubble"]) .mx_ReactionsRow {
-        padding-left: 36px;
-        padding-right: 36px;
-    }
+    .mx_GroupLayout {
+        .mx_EventTile {
+            > .mx_DisambiguatedProfile {
+                margin-left: 36px;
+            }
 
-    .mx_EventTile:not([data-layout="bubble"]) .mx_ThreadInfo {
-        margin-left: 36px;
-        margin-right: 0;
-        max-width: min(calc(100% - 36px), 600px);
-    }
-
-    .mx_GroupLayout .mx_EventTile > .mx_DisambiguatedProfile {
-        margin-left: 36px;
-    }
-
-    .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_avatar {
-        top: 12px;
-        left: -3px;
+            .mx_EventTile_line {
+                padding-bottom: 8px;
+            }
+        }
     }
 
     .mx_CallEvent_wrapper {
@@ -87,34 +120,13 @@ limitations under the License.
         }
     }
 
-    .mx_EventTile:not([data-layout="bubble"]) .mx_MessageTimestamp {
-        right: -4px;
-        left: auto;
-    }
-
-    .mx_EventTile:not([data-layout="bubble"]) .mx_EventTile_msgOption {
-        margin-right: 2px;
-    }
-
     .mx_GenericEventListSummary:not([data-layout=bubble]) .mx_EventTile_line,
     .mx_GenericEventListSummary:not([data-layout=bubble]) > .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
         padding-left: 36px;
     }
 
-    .mx_GroupLayout .mx_EventTile .mx_EventTile_line {
-        padding-bottom: 8px;
-    }
-
     .mx_EventTile_readAvatars {
         top: -10px;
-    }
-
-    .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_line {
-        padding-left: 36px;
-    }
-
-    .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_avatar {
-        left: 18px;
     }
 
     .mx_WhoIsTypingTile {
@@ -123,5 +135,13 @@ limitations under the License.
 
     .mx_WhoIsTypingTile_avatars {
         flex-basis: 48px; // 12 (padding on message list) + 36 (padding on event lines)
+    }
+
+    &.mx_BaseCard {
+        // For a chat timeline on the right panel when the widget is maximised
+        // TODO: rename ThreadPanel
+        &.mx_ThreadPanel {
+            padding-right: 8px; // .mx_RightPanel padding
+        }
     }
 }

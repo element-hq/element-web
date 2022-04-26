@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "../../skinned-sdk";
 import { MatrixClient, MatrixEvent } from 'matrix-js-sdk/src/matrix';
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { CallState } from "matrix-js-sdk/src/webrtc/call";

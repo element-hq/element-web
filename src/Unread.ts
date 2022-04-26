@@ -20,7 +20,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
-import { haveTileForEvent } from "./components/views/rooms/EventTile";
+import { haveRendererForEvent } from "./events/EventTileFactory";
 import SettingsStore from "./settings/SettingsStore";
 import { RoomNotificationStateStore } from "./stores/notifications/RoomNotificationStateStore";
 
@@ -48,7 +48,7 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
     }
 
     if (ev.isRedacted()) return false;
-    return haveTileForEvent(ev);
+    return haveRendererForEvent(ev, false /* hidden messages should never trigger unread counts anyways */);
 }
 
 export function doesRoomHaveUnreadMessages(room: Room): boolean {

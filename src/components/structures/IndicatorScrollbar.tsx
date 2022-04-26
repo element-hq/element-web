@@ -17,7 +17,6 @@ limitations under the License.
 import React, { ComponentProps, createRef } from "react";
 
 import AutoHideScrollbar from "./AutoHideScrollbar";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
 interface IProps extends Omit<ComponentProps<typeof AutoHideScrollbar>, "onWheel"> {
@@ -40,7 +39,6 @@ interface IState {
     rightIndicatorOffset: string;
 }
 
-@replaceableComponent("structures.IndicatorScrollbar")
 export default class IndicatorScrollbar extends React.Component<IProps, IState> {
     private autoHideScrollbar = createRef<AutoHideScrollbar>();
     private scrollElement: HTMLDivElement;

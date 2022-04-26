@@ -53,6 +53,7 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     tabIndex?: number;
     disabled?: boolean;
     className?: string;
+    triggerOnMouseDown?: boolean;
     onClick(e?: ButtonEvent): void | Promise<void>;
 }
 
@@ -78,13 +79,18 @@ export default function AccessibleButton({
     className,
     onKeyDown,
     onKeyUp,
+    triggerOnMouseDown,
     ...restProps
 }: IProps) {
     const newProps: IAccessibleButtonProps = restProps;
     if (disabled) {
         newProps["aria-disabled"] = true;
     } else {
-        newProps.onClick = onClick;
+        if (triggerOnMouseDown) {
+            newProps.onMouseDown = onClick;
+        } else {
+            newProps.onClick = onClick;
+        }
         // We need to consume enter onKeyDown and space onKeyUp
         // otherwise we are risking also activating other keyboard focusable elements
         // that might receive focus as a result of the AccessibleButtonClick action

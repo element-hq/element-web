@@ -33,3 +33,8 @@ limitations under the License.
     background-color: $alert;
     border-color: $alert;
 }
+
+.mx_StyledLiveBeaconIcon.mx_StyledLiveBeaconIcon_idle {
+    background-color: $quaternary-content;
+    border-color: $quaternary-content;
+}

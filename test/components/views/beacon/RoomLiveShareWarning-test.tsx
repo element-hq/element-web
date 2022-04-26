@@ -17,10 +17,9 @@ limitations under the License.
 import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
-import { Room, Beacon, BeaconEvent } from 'matrix-js-sdk/src/matrix';
+import { Room, Beacon, BeaconEvent, getBeaconInfoIdentifier } from 'matrix-js-sdk/src/matrix';
 import { logger } from 'matrix-js-sdk/src/logger';
 
-import '../../../skinned-sdk';
 import RoomLiveShareWarning from '../../../../src/components/views/beacon/RoomLiveShareWarning';
 import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../../src/stores/OwnBeaconStore';
 import {
@@ -101,7 +100,7 @@ describe('<RoomLiveShareWarning />', () => {
     });
 
     afterEach(async () => {
-        jest.spyOn(OwnBeaconStore.instance, 'hasWireErrors').mockRestore();
+        jest.spyOn(OwnBeaconStore.instance, 'beaconHasWireError').mockRestore();
         await resetAsyncStoreWithClient(OwnBeaconStore.instance);
     });
 
@@ -222,6 +221,25 @@ describe('<RoomLiveShareWarning />', () => {
             expect(getExpiryText(component)).toEqual('35m left');
         });
 
+        it('updates beacon time left when beacon updates', () => {
+            const component = getComponent({ roomId: room1Id });
+            expect(getExpiryText(component)).toEqual('1h left');
+
+            expect(getExpiryText(component)).toEqual('1h left');
+
+            act(() => {
+                const beacon = OwnBeaconStore.instance.getBeaconById(getBeaconInfoIdentifier(room1Beacon1));
+                const room1Beacon1Update = makeBeaconInfoEvent(aliceId, room1Id, {
+                    isLive: true,
+                    timeout: 3 * HOUR_MS,
+                }, '$0');
+                beacon.update(room1Beacon1Update);
+            });
+
+            // update to expiry of new beacon
+            expect(getExpiryText(component)).toEqual('3h left');
+        });
+
         it('clears expiry time interval on unmount', () => {
             const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
             const component = getComponent({ roomId: room1Id });
@@ -243,7 +261,7 @@ describe('<RoomLiveShareWarning />', () => {
                     component.setProps({});
                 });
 
-                expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledTimes(2);
+                expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalled();
                 expect(component.find('Spinner').length).toBeTruthy();
                 expect(findByTestId(component, 'room-live-share-primary-button').at(0).props().disabled).toBeTruthy();
             });
@@ -301,21 +319,25 @@ describe('<RoomLiveShareWarning />', () => {
 
         describe('with wire errors', () => {
             it('displays wire error when mounted with wire errors', async () => {
-                const hasWireErrorsSpy = jest.spyOn(OwnBeaconStore.instance, 'hasWireErrors').mockReturnValue(true);
+                const wireErrorSpy = jest.spyOn(OwnBeaconStore.instance, 'beaconHasWireError')
+                    .mockReturnValue(true);
                 const component = getComponent({ roomId: room2Id });
 
                 expect(component).toMatchSnapshot();
-                expect(hasWireErrorsSpy).toHaveBeenCalledWith(room2Id);
+                expect(wireErrorSpy).toHaveBeenCalledWith(
+                    getBeaconInfoIdentifier(room2Beacon1), 0, [getBeaconInfoIdentifier(room2Beacon1)],
+                );
             });
 
             it('displays wire error when wireError event is emitted and beacons have errors', async () => {
-                const hasWireErrorsSpy = jest.spyOn(OwnBeaconStore.instance, 'hasWireErrors').mockReturnValue(false);
+                const wireErrorSpy = jest.spyOn(OwnBeaconStore.instance, 'beaconHasWireError')
+                    .mockReturnValue(false);
                 const component = getComponent({ roomId: room2Id });
 
                 // update mock and emit event
                 act(() => {
-                    hasWireErrorsSpy.mockReturnValue(true);
-                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, room2Beacon1.getType());
+                    wireErrorSpy.mockReturnValue(true);
+                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(room2Beacon1));
                 });
                 component.setProps({});
 
@@ -327,13 +349,14 @@ describe('<RoomLiveShareWarning />', () => {
             });
 
             it('stops displaying wire error when errors are cleared', async () => {
-                const hasWireErrorsSpy = jest.spyOn(OwnBeaconStore.instance, 'hasWireErrors').mockReturnValue(true);
+                const wireErrorSpy = jest.spyOn(OwnBeaconStore.instance, 'beaconHasWireError')
+                    .mockReturnValue(true);
                 const component = getComponent({ roomId: room2Id });
 
                 // update mock and emit event
                 act(() => {
-                    hasWireErrorsSpy.mockReturnValue(false);
-                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, room2Beacon1.getType());
+                    wireErrorSpy.mockReturnValue(false);
+                    OwnBeaconStore.instance.emit(OwnBeaconStoreEvent.WireError, getBeaconInfoIdentifier(room2Beacon1));
                 });
                 component.setProps({});
 
@@ -345,7 +368,7 @@ describe('<RoomLiveShareWarning />', () => {
             });
 
             it('clicking retry button resets wire errors', async () => {
-                jest.spyOn(OwnBeaconStore.instance, 'hasWireErrors').mockReturnValue(true);
+                jest.spyOn(OwnBeaconStore.instance, 'beaconHasWireError').mockReturnValue(true);
                 const resetErrorSpy = jest.spyOn(OwnBeaconStore.instance, 'resetWireError');
 
                 const component = getComponent({ roomId: room2Id });
@@ -354,12 +377,11 @@ describe('<RoomLiveShareWarning />', () => {
                     findByTestId(component, 'room-live-share-primary-button').at(0).simulate('click');
                 });
 
-                expect(resetErrorSpy).toHaveBeenCalledWith(room2Beacon1.getType());
-                expect(resetErrorSpy).toHaveBeenCalledWith(room2Beacon2.getType());
+                expect(resetErrorSpy).toHaveBeenCalledWith(getBeaconInfoIdentifier(room2Beacon1));
             });
 
             it('clicking close button stops beacons', async () => {
-                jest.spyOn(OwnBeaconStore.instance, 'hasWireErrors').mockReturnValue(true);
+                jest.spyOn(OwnBeaconStore.instance, 'beaconHasWireError').mockReturnValue(true);
                 const stopBeaconSpy = jest.spyOn(OwnBeaconStore.instance, 'stopBeacon');
 
                 const component = getComponent({ roomId: room2Id });
@@ -368,8 +390,7 @@ describe('<RoomLiveShareWarning />', () => {
                     findByTestId(component, 'room-live-share-wire-error-close-button').at(0).simulate('click');
                 });
 
-                expect(stopBeaconSpy).toHaveBeenCalledWith(room2Beacon1.getType());
-                expect(stopBeaconSpy).toHaveBeenCalledWith(room2Beacon2.getType());
+                expect(stopBeaconSpy).toHaveBeenCalledWith(getBeaconInfoIdentifier(room2Beacon1));
             });
         });
     });

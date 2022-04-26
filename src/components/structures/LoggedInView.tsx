@@ -52,7 +52,6 @@ import HostSignupContainer from '../views/host_signup/HostSignupContainer';
 import { getKeyBindingsManager } from '../../KeyBindingsManager';
 import { IOpts } from "../../createRoom";
 import SpacePanel from "../views/spaces/SpacePanel";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import CallHandler, { CallHandlerEvent } from '../../CallHandler';
 import AudioFeedArrayForCall from '../views/voip/AudioFeedArrayForCall';
 import { OwnProfileStore } from '../../stores/OwnProfileStore';
@@ -63,7 +62,7 @@ import ToastContainer from './ToastContainer';
 import UserView from "./UserView";
 import BackdropPanel from "./BackdropPanel";
 import { mediaFromMxc } from "../../customisations/Media";
-import { UserTab } from "../views/dialogs/UserSettingsDialog";
+import { UserTab } from "../views/dialogs/UserTab";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
 import RightPanelStore from '../../stores/right-panel/RightPanelStore';
 import { TimelineRenderingType } from "../../contexts/RoomContext";
@@ -127,7 +126,6 @@ interface IState {
  *
  * Components mounted below us can access the matrix client via the react context.
  */
-@replaceableComponent("structures.LoggedInView")
 class LoggedInView extends React.Component<IProps, IState> {
     static displayName = 'LoggedInView';
 

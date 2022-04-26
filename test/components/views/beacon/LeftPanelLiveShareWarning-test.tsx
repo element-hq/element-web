@@ -20,7 +20,6 @@ import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { Beacon } from 'matrix-js-sdk/src/matrix';
 
-import '../../../skinned-sdk';
 import LeftPanelLiveShareWarning from '../../../../src/components/views/beacon/LeftPanelLiveShareWarning';
 import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../../src/stores/OwnBeaconStore';
 import { flushPromises, makeBeaconInfoEvent } from '../../../test-utils';

@@ -33,8 +33,6 @@ const DEFAULT_INFO_CONTENT_PROPS: InfoContentProps = {
     timeout: 3600000,
 };
 
-let count = 1;
-
 /**
  * Create an m.beacon_info event
  * all required properties are mocked
@@ -45,7 +43,6 @@ export const makeBeaconInfoEvent = (
     roomId: string,
     contentProps: Partial<InfoContentProps> = {},
     eventId?: string,
-    eventTypeSuffix?: string,
 ): MatrixEvent => {
     const {
         timeout,
@@ -58,11 +55,14 @@ export const makeBeaconInfoEvent = (
         ...contentProps,
     };
     const event = new MatrixEvent({
-        type: `${M_BEACON_INFO.name}.${sender}.${eventTypeSuffix || ++count}`,
+        type: M_BEACON_INFO.name,
         room_id: roomId,
         state_key: sender,
+        sender,
         content: makeBeaconInfoContent(timeout, isLive, description, assetType, timestamp),
     });
+
+    event.event.origin_server_ts = Date.now();
 
     // live beacons use the beacon_info event id
     // set or default this

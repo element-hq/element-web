@@ -1,5 +1,5 @@
 /*
-Copyright 2019 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2019 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventType, EVENT_VISIBILITY_CHANGE_TYPE, MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
-import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
+import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 
 import { MatrixClientPeg } from '../MatrixClientPeg';
 import shouldHideEvent from "../shouldHideEvent";
-import { getHandlerTile, GetRelationsForEvent, haveTileForEvent } from "../components/views/rooms/EventTile";
+import { GetRelationsForEvent } from "../components/views/rooms/EventTile";
 import SettingsStore from "../settings/SettingsStore";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { TimelineRenderingType } from "../contexts/RoomContext";
@@ -134,7 +134,7 @@ export function findEditableEvent({
 /**
  * How we should render a message depending on its moderation state.
  */
-enum MessageModerationState {
+export enum MessageModerationState {
     /**
      * The message is visible to all.
      */
@@ -152,14 +152,26 @@ enum MessageModerationState {
     SEE_THROUGH_FOR_CURRENT_USER = "SEE_THROUGH_FOR_CURRENT_USER",
 }
 
+// This is lazily initialized and cached since getMessageModerationState needs it,
+// and is called on timeline rendering hot-paths
+let msc3531Enabled: boolean | null = null;
+const getMsc3531Enabled = (): boolean => {
+    if (msc3531Enabled === null) {
+        msc3531Enabled = SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation");
+    }
+    return msc3531Enabled;
+};
+
 /**
  * Determine whether a message should be displayed as hidden pending moderation.
  *
  * If MSC3531 is deactivated in settings, all messages are considered visible
  * to all.
  */
-export function getMessageModerationState(mxEvent: MatrixEvent): MessageModerationState {
-    if (!SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
+export function getMessageModerationState(mxEvent: MatrixEvent, client?: MatrixClient): MessageModerationState {
+    client = client ?? MatrixClientPeg.get(); // because param defaults don't do the correct thing
+
+    if (!getMsc3531Enabled()) {
         return MessageModerationState.VISIBLE_FOR_ALL;
     }
     const visibility = mxEvent.messageVisibility();
@@ -171,7 +183,6 @@ export function getMessageModerationState(mxEvent: MatrixEvent): MessageModerati
     // pending moderation. However, if we're the author or a moderator,
     // we still need to display it.
 
-    const client = MatrixClientPeg.get();
     if (mxEvent.sender?.userId === client.getUserId()) {
         // We're the author, show the message.
         return MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER;
@@ -192,92 +203,6 @@ export function getMessageModerationState(mxEvent: MatrixEvent): MessageModerati
     }
     // For everybody else, hide the message.
     return MessageModerationState.HIDDEN_TO_CURRENT_USER;
-}
-
-export function getEventDisplayInfo(mxEvent: MatrixEvent, hideEvent?: boolean): {
-    isInfoMessage: boolean;
-    tileHandler: string;
-    isBubbleMessage: boolean;
-    isLeftAlignedBubbleMessage: boolean;
-    noBubbleEvent: boolean;
-    isSeeingThroughMessageHiddenForModeration: boolean;
-} {
-    const content = mxEvent.getContent();
-    const msgtype = content.msgtype;
-    const eventType = mxEvent.getType();
-
-    let isSeeingThroughMessageHiddenForModeration = false;
-    let tileHandler;
-    if (SettingsStore.getValue("feature_msc3531_hide_messages_pending_moderation")) {
-        switch (getMessageModerationState(mxEvent)) {
-            case MessageModerationState.VISIBLE_FOR_ALL:
-                // Default behavior, nothing to do.
-                break;
-            case MessageModerationState.HIDDEN_TO_CURRENT_USER:
-                // Hide message.
-                tileHandler = "messages.HiddenBody";
-                break;
-            case MessageModerationState.SEE_THROUGH_FOR_CURRENT_USER:
-                // Show message with a marker.
-                isSeeingThroughMessageHiddenForModeration = true;
-                break;
-        }
-    }
-    if (!tileHandler) {
-        tileHandler = getHandlerTile(mxEvent);
-    }
-
-    // Info messages are basically information about commands processed on a room
-    let isBubbleMessage = (
-        eventType.startsWith("m.key.verification") ||
-        (eventType === EventType.RoomMessage && msgtype?.startsWith("m.key.verification")) ||
-        (eventType === EventType.RoomCreate) ||
-        (eventType === EventType.RoomEncryption) ||
-        (tileHandler === "messages.MJitsiWidgetEvent")
-    );
-    const isLeftAlignedBubbleMessage = (
-        !isBubbleMessage &&
-        eventType === EventType.CallInvite
-    );
-    let isInfoMessage = (
-        !isBubbleMessage &&
-        !isLeftAlignedBubbleMessage &&
-        eventType !== EventType.RoomMessage &&
-        eventType !== EventType.RoomMessageEncrypted &&
-        eventType !== EventType.Sticker &&
-        eventType !== EventType.RoomCreate &&
-        !M_POLL_START.matches(eventType)
-    );
-    // Some non-info messages want to be rendered in the appropriate bubble column but without the bubble background
-    const noBubbleEvent = (
-        (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
-        M_POLL_START.matches(eventType) ||
-        M_LOCATION.matches(eventType) ||
-        (
-            eventType === EventType.RoomMessage &&
-            M_LOCATION.matches(msgtype)
-        )
-    );
-
-    // If we're showing hidden events in the timeline, we should use the
-    // source tile when there's no regular tile for an event and also for
-    // replace relations (which otherwise would display as a confusing
-    // duplicate of the thing they are replacing).
-    if ((hideEvent || !haveTileForEvent(mxEvent)) && SettingsStore.getValue("showHiddenEventsInTimeline")) {
-        tileHandler = "messages.ViewSourceEvent";
-        isBubbleMessage = false;
-        // Reuse info message avatar and sender profile styling
-        isInfoMessage = true;
-    }
-
-    return {
-        tileHandler,
-        isInfoMessage,
-        isBubbleMessage,
-        isLeftAlignedBubbleMessage,
-        noBubbleEvent,
-        isSeeingThroughMessageHiddenForModeration,
-    };
 }
 
 export function isVoiceMessage(mxEvent: MatrixEvent): boolean {
@@ -303,7 +228,7 @@ export async function fetchInitialEvent(
         initialEvent = null;
     }
 
-    if (initialEvent?.isThreadRelation) {
+    if (initialEvent?.isThreadRelation && client.supportsExperimentalThreads()) {
         try {
             const rootEventData = await client.fetchRoomEvent(roomId, initialEvent.threadRootId);
             const rootEvent = new MatrixEvent(rootEventData);
@@ -333,4 +258,26 @@ export function editEvent(
             timelineRenderingType: timelineRenderingType,
         });
     }
+}
+
+export function canCancel(status: EventStatus): boolean {
+    return status === EventStatus.QUEUED || status === EventStatus.NOT_SENT || status === EventStatus.ENCRYPTING;
+}
+
+export const isLocationEvent = (event: MatrixEvent): boolean => {
+    const eventType = event.getType();
+    return (
+        M_LOCATION.matches(eventType) ||
+        (
+            eventType === EventType.RoomMessage &&
+            M_LOCATION.matches(event.getContent().msgtype)
+        )
+    );
+};
+
+export function canForward(event: MatrixEvent): boolean {
+    return !(
+        isLocationEvent(event) ||
+        M_POLL_START.matches(event.getType())
+    );
 }

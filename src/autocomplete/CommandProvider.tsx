@@ -55,7 +55,7 @@ export default class CommandProvider extends AutocompleteProvider {
         // check if the full match differs from the first word (i.e. returns false if the command has args)
         if (command[0] !== command[1]) {
             // The input looks like a command with arguments, perform exact match
-            const name = command[1].substr(1); // strip leading `/`
+            const name = command[1].slice(1); // strip leading `/`
             if (CommandMap.has(name) && CommandMap.get(name).isEnabled()) {
                 // some commands, namely `me` don't suit having the usage shown whilst typing their arguments
                 if (CommandMap.get(name).hideCompletionAfterSpace) return [];

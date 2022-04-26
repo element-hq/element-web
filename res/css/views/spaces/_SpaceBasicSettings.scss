@@ -65,6 +65,7 @@ limitations under the License.
             display: inline-block;
             margin: auto 18px;
             color: #368bd6;
+            font-size: $font-14px; // See _SpaceSettingsDialog.scss
         }
 
         > .mx_SpaceBasicSettings_avatar_remove {

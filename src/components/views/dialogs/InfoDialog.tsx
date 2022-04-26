@@ -19,8 +19,9 @@ import React, { ReactNode, KeyboardEvent } from 'react';
 import classNames from "classnames";
 
 import { _t } from '../../../languageHandler';
-import * as sdk from '../../../index';
 import { IDialogProps } from "./IDialogProps";
+import BaseDialog from "./BaseDialog";
+import DialogButtons from "../elements/DialogButtons";
 
 interface IProps extends IDialogProps {
     title?: string;
@@ -44,9 +45,6 @@ export default class InfoDialog extends React.Component<IProps> {
     };
 
     render() {
-        // FIXME: Using a regular import will break the app
-        const BaseDialog = sdk.getComponent('views.dialogs.BaseDialog');
-        const DialogButtons = sdk.getComponent('views.elements.DialogButtons');
         return (
             <BaseDialog
                 className="mx_InfoDialog"

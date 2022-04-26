@@ -28,7 +28,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import getEntryComponentForLoginType, { IStageComponent } from '../views/auth/InteractiveAuthEntryComponents';
 import Spinner from "../views/elements/Spinner";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
@@ -89,7 +88,6 @@ interface IState {
     submitButtonEnabled: boolean;
 }
 
-@replaceableComponent("structures.InteractiveAuthComponent")
 export default class InteractiveAuthComponent extends React.Component<IProps, IState> {
     private readonly authLogic: InteractiveAuth;
     private readonly intervalId: number = null;

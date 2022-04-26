@@ -22,7 +22,6 @@ import { _t, _td } from '../../../languageHandler';
 import { PendingActionSpinner } from "../right_panel/EncryptionInfo";
 import AccessibleButton from "../elements/AccessibleButton";
 import { fixupColorFonts } from '../../../utils/FontManager';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     pending?: boolean;
@@ -44,7 +43,6 @@ function capFirst(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-@replaceableComponent("views.verification.VerificationShowSas")
 export default class VerificationShowSas extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

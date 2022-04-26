@@ -39,18 +39,16 @@ limitations under the License.
     font-size: $font-15px;
 }
 
-.mx_RoomLiveShareWarning_expiry {
-    color: $secondary-content;
-    font-size: $font-12px;
-    margin-right: $spacing-16;
-}
-
 .mx_RoomLiveShareWarning_spinner {
     margin-right: $spacing-16;
 }
 
 .mx_RoomLiveShareWarning_closeButton {
     @mixin ButtonResetDefault;
+    margin-left: $spacing-16;
+}
+
+.mx_RoomLiveShareWarning_stopButton {
     margin-left: $spacing-16;
 }
 

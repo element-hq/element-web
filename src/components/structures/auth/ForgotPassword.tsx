@@ -28,7 +28,6 @@ import AuthPage from "../../views/auth/AuthPage";
 import ServerPicker from "../../views/elements/ServerPicker";
 import EmailField from "../../views/auth/EmailField";
 import PassphraseField from '../../views/auth/PassphraseField';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { PASSWORD_MIN_SCORE } from '../../views/auth/RegistrationForm';
 import InlineSpinner from '../../views/elements/InlineSpinner';
 import Spinner from "../../views/elements/Spinner";
@@ -81,7 +80,6 @@ enum ForgotPasswordField {
     PasswordConfirm = 'field_password_confirm',
 }
 
-@replaceableComponent("structures.auth.ForgotPassword")
 export default class ForgotPassword extends React.Component<IProps, IState> {
     private reset: PasswordReset;
 
@@ -224,8 +222,10 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     }
 
     private onInputChanged = (stateKey: string, ev: React.FormEvent<HTMLInputElement>) => {
+        let value = ev.currentTarget.value;
+        if (stateKey === "email") value = value.trim();
         this.setState({
-            [stateKey]: ev.currentTarget.value,
+            [stateKey]: value,
         } as any);
     };
 

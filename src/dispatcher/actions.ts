@@ -259,4 +259,57 @@ export enum Action {
      * Fired when clicking user name from group view
      */
     ViewStartChatOrReuse = "view_start_chat_or_reuse",
+
+    /**
+     * Fired when the user's active room changed, possibly from/to a non-room view.
+     * Payload: ActiveRoomChangedPayload
+     */
+    ActiveRoomChanged = "active_room_changed",
+
+    /**
+     * Fired when the forward dialog needs to be opened.
+     * Payload: OpenForwardDialogPayload
+     */
+    OpenForwardDialog = "open_forward_dialog",
+
+    /**
+     * Fired when the "report event" dialog needs to be opened.
+     * Payload: OpenReportEventDialogPayload.
+     */
+    OpenReportEventDialog = "open_report_event_dialog",
+
+    /**
+     * Fired when the tabbed integration manager dialog needs to be opened.
+     * Payload: OpenTabbedIntegrationManagerDialogPayload
+     */
+    OpenTabbedIntegrationManagerDialog = "open_tabbed_imanager_dialog",
+
+    /**
+     * Fired when something within the application has determined that a logout,
+     * or logout-like behaviour, needs to happen. Specifically meant to target
+     * storage deletion rather than calling the logout API.
+     *
+     * No payload.
+     */
+    TriggerLogout = "trigger_logout",
+
+    /**
+     * Opens the user's preferences for the given space. Used with a OpenSpacePreferencesPayload.
+     */
+    OpenSpacePreferences = "open_space_preferences",
+
+    /**
+     * Opens the settings for the given space. Used with a OpenSpaceSettingsPayload.
+     */
+    OpenSpaceSettings = "open_space_settings",
+
+    /**
+     * Opens the invite dialog. Used with a OpenInviteDialogPayload.
+     */
+    OpenInviteDialog = "open_invite_dialog",
+
+    /**
+     * Opens a dialog to add an existing object to a space. Used with a OpenAddExistingToSpaceDialogPayload.
+     */
+    OpenAddToExistingSpaceDialog = "open_add_to_existing_space_dialog",
 }

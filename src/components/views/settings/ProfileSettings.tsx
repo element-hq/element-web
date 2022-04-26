@@ -24,12 +24,12 @@ import { getHostingLink } from '../../../utils/HostingLink';
 import { OwnProfileStore } from "../../../stores/OwnProfileStore";
 import Modal from "../../../Modal";
 import ErrorDialog from "../dialogs/ErrorDialog";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from '../elements/AccessibleButton';
 import AvatarSetting from './AvatarSetting';
 import ExternalLink from '../elements/ExternalLink';
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
+import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 
 interface IState {
     userId?: string;
@@ -41,7 +41,6 @@ interface IState {
     enableProfileSave?: boolean;
 }
 
-@replaceableComponent("views.settings.ProfileSettings")
 export default class ProfileSettings extends React.Component<{}, IState> {
     private avatarUpload: React.RefObject<HTMLInputElement> = createRef();
 
@@ -190,6 +189,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                     type="file"
                     ref={this.avatarUpload}
                     className="mx_ProfileSettings_avatarUpload"
+                    onClick={chromeFileInputFix}
                     onChange={this.onAvatarChanged}
                     accept="image/*"
                 />

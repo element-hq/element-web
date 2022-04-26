@@ -17,7 +17,6 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType, RoomCreateTypeField, RoomType } from "matrix-js-sdk/src/@types/event";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
 import {
@@ -28,18 +27,14 @@ import {
     Visibility,
 } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import Modal from './Modal';
 import { _t } from './languageHandler';
 import dis from "./dispatcher/dispatcher";
 import * as Rooms from "./Rooms";
-import DMRoomMap from "./utils/DMRoomMap";
 import { getAddressType } from "./UserAddress";
-import { getE2EEWellKnown } from "./utils/WellKnownUtils";
-import { isJoinedOrNearlyJoined } from "./utils/membership";
-import { VIRTUAL_ROOM_EVENT_TYPE } from "./CallHandler";
+import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
 import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
 import { VIDEO_CHANNEL_MEMBER, addVideoChannel } from "./utils/VideoChannelUtils";
@@ -47,6 +42,9 @@ import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { findDMForUser } from "./utils/direct-messages";
+import { privateShouldBeEncrypted } from "./utils/rooms";
+import { waitForMember } from "./utils/membership";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -128,11 +126,14 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
             [RoomCreateTypeField]: opts.roomType,
         };
 
-        // In video rooms, allow all users to send video member updates
+        // Video rooms require custom power levels
         if (opts.roomType === RoomType.ElementVideo) {
             createOpts.power_level_content_override = {
                 events: {
+                    // Allow all users to send video member updates
                     [VIDEO_CHANNEL_MEMBER]: 0,
+                    // Make widgets immutable, even to admins
+                    "im.vector.modular.widgets": 200,
                     // Annoyingly, we have to reiterate all the defaults here
                     [EventType.RoomName]: 50,
                     [EventType.RoomAvatar]: 50,
@@ -142,6 +143,10 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                     [EventType.RoomTombstone]: 100,
                     [EventType.RoomServerAcl]: 100,
                     [EventType.RoomEncryption]: 100,
+                },
+                users: {
+                    // Temporarily give ourselves the power to set up a widget
+                    [client.getUserId()]: 200,
                 },
             };
         }
@@ -261,10 +266,15 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         if (opts.parentSpace) {
             return SpaceStore.instance.addRoomToSpace(opts.parentSpace, roomId, [client.getDomain()], opts.suggested);
         }
-    }).then(() => {
-        // Set up video rooms with a Jitsi widget
+    }).then(async () => {
         if (opts.roomType === RoomType.ElementVideo) {
-            return addVideoChannel(roomId, createOpts.name);
+            // Set up video rooms with a Jitsi widget
+            await addVideoChannel(roomId, createOpts.name);
+
+            // Reset our power level back to admin so that the widget becomes immutable
+            const room = client.getRoom(roomId);
+            const plEvent = room?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
+            await client.setPowerLevel(roomId, client.getUserId(), 100, plEvent);
         }
     }).then(function() {
         // NB createRoom doesn't block on the client seeing the echo that the
@@ -310,55 +320,6 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
             description,
         });
         return null;
-    });
-}
-
-export function findDMForUser(client: MatrixClient, userId: string): Room {
-    const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const rooms = roomIds.map(id => client.getRoom(id));
-    const suitableDMRooms = rooms.filter(r => {
-        // Validate that we are joined and the other person is also joined. We'll also make sure
-        // that the room also looks like a DM (until we have canonical DMs to tell us). For now,
-        // a DM is a room of two people that contains those two people exactly. This does mean
-        // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
-        // canonical DMs to solve.
-        if (r && r.getMyMembership() === "join") {
-            const members = r.currentState.getMembers();
-            const joinedMembers = members.filter(m => isJoinedOrNearlyJoined(m.membership));
-            const otherMember = joinedMembers.find(m => m.userId === userId);
-            return otherMember && joinedMembers.length === 2;
-        }
-        return false;
-    }).sort((r1, r2) => {
-        return r2.getLastActiveTimestamp() -
-            r1.getLastActiveTimestamp();
-    });
-    if (suitableDMRooms.length) {
-        return suitableDMRooms[0];
-    }
-}
-
-/*
- * Try to ensure the user is already in the megolm session before continuing
- * NOTE: this assumes you've just created the room and there's not been an opportunity
- * for other code to run, so we shouldn't miss RoomState.newMember when it comes by.
- */
-export async function waitForMember(client: MatrixClient, roomId: string, userId: string, opts = { timeout: 1500 }) {
-    const { timeout } = opts;
-    let handler;
-    return new Promise((resolve) => {
-        handler = function(_, __, member: RoomMember) { // eslint-disable-line @typescript-eslint/naming-convention
-            if (member.userId !== userId) return;
-            if (member.roomId !== roomId) return;
-            resolve(true);
-        };
-        client.on(RoomStateEvent.NewMember, handler);
-
-        /* We don't want to hang if this goes wrong, so we proceed and hope the other
-           user is already in the megolm session */
-        setTimeout(resolve, timeout, false);
-    }).finally(() => {
-        client.removeListener(RoomStateEvent.NewMember, handler);
     });
 }
 
@@ -423,13 +384,4 @@ export async function ensureDMExists(client: MatrixClient, userId: string): Prom
         await waitForMember(client, roomId, userId);
     }
     return roomId;
-}
-
-export function privateShouldBeEncrypted(): boolean {
-    const e2eeWellKnown = getE2EEWellKnown();
-    if (e2eeWellKnown) {
-        const defaultDisabled = e2eeWellKnown["default"] === false;
-        return !defaultDisabled;
-    }
-    return true;
 }

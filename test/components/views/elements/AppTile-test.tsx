@@ -20,8 +20,6 @@ import { jest } from "@jest/globals";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixWidgetType } from "matrix-widget-api";
 
-// We can't use the usual `skinned-sdk`, as it stubs out the RightPanel
-import "../../../minimal-sdk";
 import RightPanel from "../../../../src/components/structures/RightPanel";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import ResizeNotifier from "../../../../src/utils/ResizeNotifier";

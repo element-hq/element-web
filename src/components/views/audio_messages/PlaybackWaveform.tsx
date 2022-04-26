@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { arraySeed, arrayTrimFill } from "../../../utils/arrays";
 import Waveform from "./Waveform";
 import { Playback, PLAYBACK_WAVEFORM_SAMPLES } from "../../../audio/Playback";
@@ -34,7 +33,6 @@ interface IState {
 /**
  * A waveform which shows the waveform of a previously recorded recording
  */
-@replaceableComponent("views.audio_messages.PlaybackWaveform")
 export default class PlaybackWaveform extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);

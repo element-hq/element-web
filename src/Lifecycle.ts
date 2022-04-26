@@ -60,9 +60,18 @@ import SessionRestoreErrorDialog from "./components/views/dialogs/SessionRestore
 import StorageEvictedDialog from "./components/views/dialogs/StorageEvictedDialog";
 import { setSentryUser } from "./sentry";
 import SdkConfig from "./SdkConfig";
+import { DialogOpener } from "./utils/DialogOpener";
+import { Action } from "./dispatcher/actions";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
+
+dis.register((payload) => {
+    if (payload.action === Action.TriggerLogout) {
+        // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
+        onLoggedOut();
+    }
+});
 
 interface ILoadSessionOpts {
     enableGuest?: boolean;
@@ -791,6 +800,7 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
     TypingStore.sharedInstance().reset();
     ToastStore.sharedInstance().reset();
 
+    DialogOpener.instance.prepare();
     Notifier.start();
     UserActivity.sharedInstance().start();
     DMRoomMap.makeShared().start();
@@ -865,8 +875,9 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
     Analytics.disable();
 
     if (window.localStorage) {
-        // try to save any 3pid invites from being obliterated
+        // try to save any 3pid invites from being obliterated and registration time
         const pendingInvites = ThreepidInviteStore.instance.getWireInvites();
+        const registrationTime = window.localStorage.getItem("mx_registration_time");
 
         window.localStorage.clear();
 
@@ -876,13 +887,17 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
             logger.error("idbDelete failed for account:mx_access_token", e);
         }
 
-        // now restore those invites
+        // now restore those invites and registration time
         if (!opts?.deleteEverything) {
             pendingInvites.forEach(i => {
                 const roomId = i.roomId;
                 delete i.roomId; // delete to avoid confusing the store
                 ThreepidInviteStore.instance.storeInvite(roomId, i);
             });
+
+            if (registrationTime) {
+                window.localStorage.setItem("mx_registration_time", registrationTime);
+            }
         }
     }
 

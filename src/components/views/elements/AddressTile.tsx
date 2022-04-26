@@ -19,7 +19,6 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import { IUserAddress } from '../../../UserAddress';
 import BaseAvatar from '../avatars/BaseAvatar';
@@ -33,7 +32,6 @@ interface IProps {
     showAddress?: boolean;
 }
 
-@replaceableComponent("views.elements.AddressTile")
 export default class AddressTile extends React.Component<IProps> {
     static defaultProps: Partial<IProps> = {
         canDismiss: false,

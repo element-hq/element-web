@@ -21,9 +21,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 import Exporter from "./Exporter";
 import { formatFullDateNoDay } from "../../DateUtils";
 import { _t } from "../../languageHandler";
-import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { ExportType, IExportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
+import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 export default class PlainTextExporter extends Exporter {
     protected totalSize: number;
@@ -112,7 +112,7 @@ export default class PlainTextExporter extends Exporter {
                 total: events.length,
             }), false, true);
             if (this.cancelled) return this.cleanUp();
-            if (!haveTileForEvent(event)) continue;
+            if (!haveRendererForEvent(event, false)) continue;
             const textForEvent = await this.plainTextForEvent(event);
             content += textForEvent && `${new Date(event.getTs()).toLocaleString()} - ${textForEvent}\n`;
         }

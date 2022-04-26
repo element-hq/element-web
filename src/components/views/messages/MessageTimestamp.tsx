@@ -18,7 +18,6 @@ limitations under the License.
 import React from 'react';
 
 import { formatFullDate, formatTime, formatFullTime, formatRelativeTime } from '../../../DateUtils';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     ts: number;
@@ -28,7 +27,6 @@ interface IProps {
     showRelative?: boolean;
 }
 
-@replaceableComponent("views.messages.MessageTimestamp")
 export default class MessageTimestamp extends React.Component<IProps> {
     public render() {
         const date = new Date(this.props.ts);

@@ -17,6 +17,7 @@ limitations under the License.
 import Range from "./range";
 import { Part, Type } from "./parts";
 import { Formatting } from "../components/views/rooms/MessageComposerFormatBar";
+import { longestBacktickSequence } from './deserialize';
 
 /**
  * Some common queries and transformations on the editor model
@@ -181,12 +182,12 @@ export function formatRangeAsCode(range: Range): void {
 
     const hasBlockFormatting = (range.length > 0)
         && range.text.startsWith("```")
-        && range.text.endsWith("```");
+        && range.text.endsWith("```")
+        && range.text.includes('\n');
 
     const needsBlockFormatting = parts.some(p => p.type === Type.Newline);
 
     if (hasBlockFormatting) {
-        // Remove previously pushed backticks and new lines
         parts.shift();
         parts.pop();
         if (parts[0]?.text === "\n" && parts[parts.length - 1]?.text === "\n") {
@@ -205,7 +206,10 @@ export function formatRangeAsCode(range: Range): void {
             parts.push(partCreator.newline());
         }
     } else {
-        toggleInlineFormat(range, "`");
+        const fenceLen = longestBacktickSequence(range.text);
+        const hasInlineFormatting = range.text.startsWith("`") && range.text.endsWith("`");
+        //if it's already formatted untoggle based on fenceLen which returns the max. num of backtick within a text else increase the fence backticks with a factor of 1.
+        toggleInlineFormat(range, "`".repeat(hasInlineFormatting ? fenceLen : fenceLen + 1));
         return;
     }
 
@@ -240,6 +244,7 @@ export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix
     // compute paragraph [start, end] indexes
     const paragraphIndexes = [];
     let startIndex = 0;
+
     // start at i=2 because we look at i and up to two parts behind to detect paragraph breaks at their end
     for (let i = 2; i < parts.length; i++) {
         // paragraph breaks can be denoted in a multitude of ways,
@@ -281,7 +286,7 @@ export function toggleInlineFormat(range: Range, prefix: string, suffix = prefix
         if (isFormatted) {
             // remove prefix and suffix formatting string
             const partWithoutPrefix = parts[base].serialize();
-            partWithoutPrefix.text = partWithoutPrefix.text.substr(prefix.length);
+            partWithoutPrefix.text = partWithoutPrefix.text.slice(prefix.length);
             parts[base] = partCreator.deserializePart(partWithoutPrefix);
 
             const partWithoutSuffix = parts[index - 1].serialize();

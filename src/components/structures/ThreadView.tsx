@@ -25,7 +25,6 @@ import classNames from "classnames";
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import MessageComposer from '../views/rooms/MessageComposer';
 import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
@@ -51,7 +50,7 @@ import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import Measured from '../views/elements/Measured';
 import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
-import RoomViewStore from '../../stores/RoomViewStore';
+import { RoomViewStore } from '../../stores/RoomViewStore';
 
 interface IProps {
     room: Room;
@@ -62,6 +61,7 @@ interface IProps {
     e2eStatus?: E2EStatus;
     initialEvent?: MatrixEvent;
     isInitialEventHighlighted?: boolean;
+    initialEventScrollIntoView?: boolean;
 }
 
 interface IState {
@@ -73,7 +73,6 @@ interface IState {
     narrow: boolean;
 }
 
-@replaceableComponent("structures.ThreadView")
 export default class ThreadView extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
@@ -112,7 +111,7 @@ export default class ThreadView extends React.Component<IProps, IState> {
         room.removeListener(ThreadEvent.New, this.onNewThread);
         SettingsStore.unwatchSetting(this.layoutWatcherRef);
 
-        const hasRoomChanged = RoomViewStore.getRoomId() !== roomId;
+        const hasRoomChanged = RoomViewStore.instance.getRoomId() !== roomId;
         if (this.props.isInitialEventHighlighted && !hasRoomChanged) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
@@ -217,13 +216,15 @@ export default class ThreadView extends React.Component<IProps, IState> {
         }
     };
 
-    private resetHighlightedEvent = (): void => {
-        if (this.props.initialEvent && this.props.isInitialEventHighlighted) {
+    private resetJumpToEvent = (event?: string): void => {
+        if (this.props.initialEvent && this.props.initialEventScrollIntoView &&
+            event === this.props.initialEvent?.getId()) {
             dis.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: this.props.room.roomId,
                 event_id: this.props.initialEvent?.getId(),
-                highlighted: false,
+                highlighted: this.props.isInitialEventHighlighted,
+                scroll_into_view: false,
                 replyingToEvent: this.state.replyToEvent,
                 metricsTrigger: undefined, // room doesn't change
             });
@@ -374,7 +375,8 @@ export default class ThreadView extends React.Component<IProps, IState> {
                             editState={this.state.editState}
                             eventId={this.props.initialEvent?.getId()}
                             highlightedEventId={highlightedEventId}
-                            onUserScroll={this.resetHighlightedEvent}
+                            eventScrollIntoView={this.props.initialEventScrollIntoView}
+                            onEventScrolledIntoView={this.resetJumpToEvent}
                             onPaginationRequest={this.onPaginationRequest}
                         />
                     </div> }

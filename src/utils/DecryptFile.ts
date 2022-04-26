@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 // Pull in the encryption lib so that we can decrypt attachments.
-import encrypt from 'browser-encrypt-attachment';
+import encrypt from 'matrix-encrypt-attachment';
 
 import { mediaFromContent } from "../customisations/Media";
 import { IEncryptedFile, IMediaEventInfo } from "../customisations/models/IMediaEventContent";
@@ -24,7 +24,7 @@ import { getBlobSafeMimeType } from "./blobs";
 /**
  * Decrypt a file attached to a matrix event.
  * @param {IEncryptedFile} file The encrypted file information taken from the matrix event.
- *   This passed to [link]{@link https://github.com/matrix-org/browser-encrypt-attachments}
+ *   This passed to [link]{@link https://github.com/matrix-org/matrix-encrypt-attachment}
  *   as the encryption info object, so will also have the those keys in addition to
  *   the keys below.
  * @param {IMediaEventInfo} info The info parameter taken from the matrix event.

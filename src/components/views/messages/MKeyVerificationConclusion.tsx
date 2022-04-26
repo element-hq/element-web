@@ -28,7 +28,6 @@ import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
 import { getNameForEventRoom, userLabelForEventRoom } from '../../../utils/KeyVerificationStateObserver';
 import EventTileBubble from "./EventTileBubble";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     /* the MatrixEvent to show */
@@ -36,7 +35,6 @@ interface IProps {
     timestamp?: JSX.Element;
 }
 
-@replaceableComponent("views.messages.MKeyVerificationConclusion")
 export default class MKeyVerificationConclusion extends React.Component<IProps> {
     constructor(props: IProps) {
         super(props);

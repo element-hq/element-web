@@ -19,7 +19,6 @@ import React from 'react';
 import AccessibleButton from './AccessibleButton';
 import dis from '../../../dispatcher/dispatcher';
 import Analytics from '../../../Analytics';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Tooltip from './Tooltip';
 
 interface IProps {
@@ -37,7 +36,6 @@ interface IState {
     showTooltip: boolean;
 }
 
-@replaceableComponent("views.elements.ActionButton")
 export default class ActionButton extends React.Component<IProps, IState> {
     static defaultProps: Partial<IProps> = {
         size: "25",

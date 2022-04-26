@@ -90,6 +90,22 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/room/pin.svg');
     }
 
+    .mx_MessageContextMenu_iconCopy::before {
+        mask-image: url($copy-button-url);
+    }
+
+    .mx_MessageContextMenu_iconEdit::before {
+        mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
+    }
+
+    .mx_MessageContextMenu_iconReply::before {
+        mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
+    }
+
+    .mx_MessageContextMenu_iconReact::before {
+        mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
+    }
+
     .mx_MessageContextMenu_iconViewInRoom::before {
         mask-image: url('$(res)/img/element-icons/view-in-room.svg');
     }

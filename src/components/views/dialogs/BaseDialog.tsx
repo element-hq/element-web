@@ -25,7 +25,6 @@ import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from "../../../languageHandler";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Heading from '../typography/Heading';
 import { IDialogProps } from "./IDialogProps";
 import { PosthogScreenTracker, ScreenName } from "../../../PosthogTrackers";
@@ -81,7 +80,6 @@ interface IProps extends IDialogProps {
  * Includes a div for the title, and a keypress handler which cancels the
  * dialog on escape.
  */
-@replaceableComponent("views.dialogs.BaseDialog")
 export default class BaseDialog extends React.Component<IProps> {
     private matrixClient: MatrixClient;
 

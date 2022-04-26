@@ -25,7 +25,6 @@ import { _t, _td } from "../../../../../languageHandler";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import AccessibleButton from "../../../elements/AccessibleButton";
 import Modal from "../../../../../Modal";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import { compare } from "../../../../../utils/strings";
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 import PowerSelector from "../../../elements/PowerSelector";
@@ -120,7 +119,6 @@ interface IProps {
     roomId: string;
 }
 
-@replaceableComponent("views.settings.tabs.room.RolesRoomSettingsTab")
 export default class RolesRoomSettingsTab extends React.Component<IProps> {
     componentDidMount() {
         MatrixClientPeg.get().on(RoomStateEvent.Update, this.onRoomStateUpdate);
@@ -264,7 +262,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
             },
             "invite": {
                 desc: _t('Invite users'),
-                defaultValue: 50,
+                defaultValue: 0,
             },
             "state_default": {
                 desc: _t('Change settings'),

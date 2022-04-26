@@ -19,7 +19,7 @@ limitations under the License.
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { IUploadOpts } from "matrix-js-sdk/src/@types/requests";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
-import encrypt from "browser-encrypt-attachment";
+import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
 import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -28,7 +28,6 @@ import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { IEncryptedFile, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
 import dis from './dispatcher/dispatcher';
-import * as sdk from './index';
 import { _t } from './languageHandler';
 import Modal from './Modal';
 import Spinner from "./components/views/elements/Spinner";
@@ -41,26 +40,22 @@ import {
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
 import { IUpload } from "./models/IUpload";
-import { BlurhashEncoder } from "./BlurhashEncoder";
 import SettingsStore from "./settings/SettingsStore";
 import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerformanceMetrics";
 import { TimelineRenderingType } from "./contexts/RoomContext";
-import RoomViewStore from "./stores/RoomViewStore";
+import { RoomViewStore } from "./stores/RoomViewStore";
 import { addReplyToMessageContent } from "./utils/Reply";
+import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import UploadFailureDialog from "./components/views/dialogs/UploadFailureDialog";
+import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
+import { createThumbnail } from "./utils/image-media";
 import { attachRelation } from "./components/views/rooms/SendMessageComposer";
-
-const MAX_WIDTH = 800;
-const MAX_HEIGHT = 600;
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
 const PHYS_HIDPI = [0x00, 0x00, 0x16, 0x25, 0x00, 0x00, 0x16, 0x25, 0x01];
 
-export const BLURHASH_FIELD = "xyz.amorgan.blurhash"; // MSC2448
-
 export class UploadCanceledError extends Error {}
-
-type ThumbnailableElement = HTMLImageElement | HTMLVideoElement;
 
 interface IMediaConfig {
     "m.upload.size"?: number;
@@ -75,103 +70,6 @@ interface IContent {
     };
     file?: string;
     url?: string;
-}
-
-interface IThumbnail {
-    info: {
-        // eslint-disable-next-line camelcase
-        thumbnail_info: {
-            w: number;
-            h: number;
-            mimetype: string;
-            size: number;
-        };
-        w: number;
-        h: number;
-        [BLURHASH_FIELD]: string;
-    };
-    thumbnail: Blob;
-}
-
-/**
- * Create a thumbnail for a image DOM element.
- * The image will be smaller than MAX_WIDTH and MAX_HEIGHT.
- * The thumbnail will have the same aspect ratio as the original.
- * Draws the element into a canvas using CanvasRenderingContext2D.drawImage
- * Then calls Canvas.toBlob to get a blob object for the image data.
- *
- * Since it needs to calculate the dimensions of the source image and the
- * thumbnailed image it returns an info object filled out with information
- * about the original image and the thumbnail.
- *
- * @param {HTMLElement} element The element to thumbnail.
- * @param {number} inputWidth The width of the image in the input element.
- * @param {number} inputHeight the width of the image in the input element.
- * @param {string} mimeType The mimeType to save the blob as.
- * @param {boolean} calculateBlurhash Whether to calculate a blurhash of the given image too.
- * @return {Promise} A promise that resolves with an object with an info key
- *  and a thumbnail key.
- */
-export async function createThumbnail(
-    element: ThumbnailableElement,
-    inputWidth: number,
-    inputHeight: number,
-    mimeType: string,
-    calculateBlurhash = true,
-): Promise<IThumbnail> {
-    let targetWidth = inputWidth;
-    let targetHeight = inputHeight;
-    if (targetHeight > MAX_HEIGHT) {
-        targetWidth = Math.floor(targetWidth * (MAX_HEIGHT / targetHeight));
-        targetHeight = MAX_HEIGHT;
-    }
-    if (targetWidth > MAX_WIDTH) {
-        targetHeight = Math.floor(targetHeight * (MAX_WIDTH / targetWidth));
-        targetWidth = MAX_WIDTH;
-    }
-
-    let canvas: HTMLCanvasElement | OffscreenCanvas;
-    let context: CanvasRenderingContext2D;
-    try {
-        canvas = new window.OffscreenCanvas(targetWidth, targetHeight);
-        context = canvas.getContext("2d");
-    } catch (e) {
-        // Fallback support for other browsers (Safari and Firefox for now)
-        canvas = document.createElement("canvas");
-        (canvas as HTMLCanvasElement).width = targetWidth;
-        (canvas as HTMLCanvasElement).height = targetHeight;
-        context = canvas.getContext("2d");
-    }
-
-    context.drawImage(element, 0, 0, targetWidth, targetHeight);
-
-    let thumbnailPromise: Promise<Blob>;
-
-    if (window.OffscreenCanvas) {
-        thumbnailPromise = (canvas as OffscreenCanvas).convertToBlob({ type: mimeType });
-    } else {
-        thumbnailPromise = new Promise<Blob>(resolve => (canvas as HTMLCanvasElement).toBlob(resolve, mimeType));
-    }
-
-    const imageData = context.getImageData(0, 0, targetWidth, targetHeight);
-    // thumbnailPromise and blurhash promise are being awaited concurrently
-    const blurhash = calculateBlurhash ? await BlurhashEncoder.instance.getBlurhash(imageData) : undefined;
-    const thumbnail = await thumbnailPromise;
-
-    return {
-        info: {
-            thumbnail_info: {
-                w: targetWidth,
-                h: targetHeight,
-                mimetype: thumbnail.type,
-                size: thumbnail.size,
-            },
-            w: inputWidth,
-            h: inputHeight,
-            [BLURHASH_FIELD]: blurhash,
-        },
-        thumbnail,
-    };
 }
 
 /**
@@ -472,7 +370,7 @@ export default class ContentMessages {
             return;
         }
 
-        const replyToEvent = RoomViewStore.getQuotingEvent();
+        const replyToEvent = RoomViewStore.instance.getQuotingEvent();
         if (!this.mediaConfig) { // hot-path optimization to not flash a spinner if we don't need to
             const modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
             await this.ensureMediaConfigFetched(matrixClient);
@@ -491,8 +389,6 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
-            // FIXME: Using an import will result in Element crashing
-            const UploadFailureDialog = sdk.getComponent("dialogs.UploadFailureDialog");
             const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
                 badFiles: tooBigFiles,
                 totalFiles: files.length,
@@ -509,8 +405,6 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                // FIXME: Using an import will result in Element crashing
-                const UploadConfirmDialog = sdk.getComponent("dialogs.UploadConfirmDialog");
                 const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
                     '', UploadConfirmDialog, {
                         file,
@@ -689,8 +583,6 @@ export default class ContentMessages {
                         { fileName: upload.fileName },
                     );
                 }
-                // FIXME: Using an import will result in Element crashing
-                const ErrorDialog = sdk.getComponent("dialogs.ErrorDialog");
                 Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
                     title: _t('Upload Failed'),
                     description: desc,

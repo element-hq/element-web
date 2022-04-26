@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SmartMarker /> creates a marker on mount 1`] = `
+<SmartMarker
+  geoUri="geo:43.2,54.6"
+  map={
+    MockMap {
+      "_events": Object {},
+      "_eventsCount": 0,
+      "_maxListeners": undefined,
+      "addControl": [MockFunction],
+      "fitBounds": [MockFunction],
+      "removeControl": [MockFunction],
+      "setCenter": [MockFunction],
+      "setStyle": [MockFunction],
+      "zoomIn": [MockFunction],
+      "zoomOut": [MockFunction],
+      Symbol(kCapture): false,
+    }
+  }
+>
+  <span>
+    <ForwardRef>
+      <div
+        className="mx_Marker mx_Marker_defaultColor"
+      >
+        <div
+          className="mx_Marker_border"
+        >
+          <div
+            className="mx_Marker_icon"
+          />
+        </div>
+      </div>
+    </ForwardRef>
+  </span>
+</SmartMarker>
+`;
+
+exports[`<SmartMarker /> removes marker on unmount 1`] = `
+<SmartMarker
+  geoUri="geo:43.2,54.6"
+  map={
+    MockMap {
+      "_events": Object {},
+      "_eventsCount": 0,
+      "_maxListeners": undefined,
+      "addControl": [MockFunction],
+      "fitBounds": [MockFunction],
+      "removeControl": [MockFunction],
+      "setCenter": [MockFunction],
+      "setStyle": [MockFunction],
+      "zoomIn": [MockFunction],
+      "zoomOut": [MockFunction],
+      Symbol(kCapture): false,
+    }
+  }
+>
+  <span>
+    <ForwardRef>
+      <div
+        className="mx_Marker mx_Marker_defaultColor"
+      >
+        <div
+          className="mx_Marker_border"
+        >
+          <div
+            className="mx_Marker_icon"
+          />
+        </div>
+      </div>
+    </ForwardRef>
+  </span>
+</SmartMarker>
+`;

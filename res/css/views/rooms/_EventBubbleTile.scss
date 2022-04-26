@@ -114,6 +114,11 @@ limitations under the License.
         padding-right: 48px;
     }
 
+    .mx_MImageBody_thumbnail_container {
+        min-height: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
+        min-width: calc(1.8rem + var(--gutterSize) + var(--gutterSize));
+    }
+
     .mx_CallEvent {
         background-color: unset;
 
@@ -130,7 +135,8 @@ limitations under the License.
             .mx_MImageBody::before,
             .mx_MVideoBody .mx_MVideoBody_container,
             .mx_MediaBody,
-            .mx_MLocationBody_map {
+            .mx_MLocationBody_map,
+            .mx_MBeaconBody {
                 border-bottom-right-radius: var(--cornerRadius) !important;
             }
         }
@@ -155,7 +161,8 @@ limitations under the License.
             .mx_MImageBody::before,
             .mx_MVideoBody .mx_MVideoBody_container,
             .mx_MediaBody,
-            .mx_MLocationBody_map {
+            .mx_MLocationBody_map,
+            .mx_MBeaconBody {
                 border-bottom-left-radius: var(--cornerRadius) !important;
             }
         }
@@ -300,7 +307,8 @@ limitations under the License.
         .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
-        .mx_MLocationBody_map {
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
             border-top-left-radius: 0;
         }
     }
@@ -311,7 +319,8 @@ limitations under the License.
         .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
-        .mx_MLocationBody_map {
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
             border-bottom-left-radius: var(--cornerRadius);
         }
     }
@@ -323,7 +332,8 @@ limitations under the License.
         .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
-        .mx_MLocationBody_map {
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
             border-top-right-radius: 0;
         }
     }
@@ -334,7 +344,8 @@ limitations under the License.
         .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MImageBody::before,
         .mx_MediaBody,
-        .mx_MLocationBody_map {
+        .mx_MLocationBody_map,
+        .mx_MBeaconBody {
             border-bottom-right-radius: var(--cornerRadius);
         }
     }

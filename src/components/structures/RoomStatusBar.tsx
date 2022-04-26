@@ -24,7 +24,6 @@ import Resend from '../../Resend';
 import dis from '../../dispatcher/dispatcher';
 import { messageForResourceLimitError } from '../../utils/ErrorUtils';
 import { Action } from "../../dispatcher/actions";
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import NotificationBadge from "../views/rooms/NotificationBadge";
 import { StaticNotificationState } from "../../stores/notifications/StaticNotificationState";
 import AccessibleButton from "../views/elements/AccessibleButton";
@@ -82,7 +81,6 @@ interface IState {
     isResending: boolean;
 }
 
-@replaceableComponent("structures.RoomStatusBar")
 export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
     private unmounted = false;
     public static contextType = MatrixClientContext;

@@ -166,9 +166,6 @@ export class RoomPermalinkCreator {
         // updates, but they were on member events which can be very numerous, so the incremental
         // updates ended up being much slower than a full update. We now have the batch state update
         // event, so we just update in full, but on each batch of updates.
-        // A full update takes about 120ms for me on Matrix HQ, which still feels like way too long
-        // to be spending worrying about how we might generate a permalink, but it's better than
-        // multiple seconds.
         this.updateAllowedServers();
         this.updateHighestPlUser();
         this.updatePopulationMap();
@@ -241,24 +238,27 @@ export class RoomPermalinkCreator {
     }
 
     private updateServerCandidates = () => {
-        let candidates = [];
+        const candidates = new Set<string>();
         if (this.highestPlUserId) {
-            candidates.push(getServerName(this.highestPlUserId));
+            candidates.add(getServerName(this.highestPlUserId));
         }
 
         const serversByPopulation = Object.keys(this.populationMap)
-            .sort((a, b) => this.populationMap[b] - this.populationMap[a])
-            .filter(a => {
-                return !candidates.includes(a) &&
-                    !isHostnameIpAddress(a) &&
-                    !isHostInRegex(a, this.bannedHostsRegexps) &&
-                    isHostInRegex(a, this.allowedHostsRegexps);
-            });
+            .sort((a, b) => this.populationMap[b] - this.populationMap[a]);
 
-        const remainingServers = serversByPopulation.slice(0, MAX_SERVER_CANDIDATES - candidates.length);
-        candidates = candidates.concat(remainingServers);
+        for (let i = 0; i < serversByPopulation.length && candidates.size < MAX_SERVER_CANDIDATES; i++) {
+            const server = serversByPopulation[i];
+            if (
+                !candidates.has(server) &&
+                !isHostnameIpAddress(server) &&
+                !isHostInRegex(server, this.bannedHostsRegexps) &&
+                isHostInRegex(server, this.allowedHostsRegexps)
+            ) {
+                candidates.add(server);
+            }
+        }
 
-        this._serverCandidates = candidates;
+        this._serverCandidates = [...candidates];
     };
 }
 
@@ -447,12 +447,12 @@ function getHostnameFromMatrixDomain(domain: string): string {
     return new URL(`https://${domain}`).hostname;
 }
 
-function isHostInRegex(hostname: string, regexps: RegExp[]) {
+function isHostInRegex(hostname: string, regexps: RegExp[]): boolean {
     hostname = getHostnameFromMatrixDomain(hostname);
     if (!hostname) return true; // assumed
     if (regexps.length > 0 && !regexps[0].test) throw new Error(regexps[0].toString());
 
-    return regexps.filter(h => h.test(hostname)).length > 0;
+    return regexps.some(h => h.test(hostname));
 }
 
 function isHostnameIpAddress(hostname: string): boolean {

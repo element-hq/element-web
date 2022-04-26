@@ -23,7 +23,6 @@ import { EventType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import EmojiPicker from "./EmojiPicker";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import dis from "../../../dispatcher/dispatcher";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { Action } from '../../../dispatcher/actions';
 import RoomContext from "../../../contexts/RoomContext";
 import { FocusComposerPayload } from '../../../dispatcher/payloads/FocusComposerPayload';
@@ -38,7 +37,6 @@ interface IState {
     selectedEmojis: Set<string>;
 }
 
-@replaceableComponent("views.emojipicker.ReactionPicker")
 class ReactionPicker extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;

@@ -19,24 +19,20 @@ import maplibregl, { MapMouseEvent } from 'maplibre-gl';
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
-import classNames from 'classnames';
 
-import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import Modal from '../../../Modal';
 import SdkConfig from '../../../SdkConfig';
 import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
-import { getUserNameColorClass } from '../../../utils/FormattingUtils';
 import { GenericPosition, genericPositionFromGeolocation, getGeoUri } from '../../../utils/beacon';
 import { LocationShareError, findMapStyleUrl } from '../../../utils/location';
-import MemberAvatar from '../avatars/MemberAvatar';
 import ErrorDialog from '../dialogs/ErrorDialog';
 import AccessibleButton from '../elements/AccessibleButton';
 import { MapError } from './MapError';
 import LiveDurationDropdown, { DEFAULT_DURATION_MS } from './LiveDurationDropdown';
 import { LocationShareType, ShareLocationFn } from './shareLocation';
+import Marker from './Marker';
 
 export interface ILocationPickerProps {
     sender: RoomMember;
@@ -54,7 +50,6 @@ interface IState {
 const isSharingOwnLocation = (shareType: LocationShareType): boolean =>
     shareType === LocationShareType.Own || shareType === LocationShareType.Live;
 
-@replaceableComponent("views.location.LocationPicker")
 class LocationPicker extends React.Component<ILocationPickerProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
@@ -227,11 +222,10 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
             </div>;
         }
 
-        const userColorClass = getUserNameColorClass(this.props.sender.userId);
-
         return (
             <div className="mx_LocationPicker">
                 <div id="mx_LocationPicker_map" />
+
                 { this.props.shareType === LocationShareType.Pin && <div className="mx_LocationPicker_pinText">
                     <span>
                         { this.state.position ? _t("Click to move the pin") : _t("Click to drop a pin") }
@@ -258,13 +252,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                         </AccessibleButton>
                     </form>
                 </div>
-                <div className={classNames(
-                    "mx_MLocationBody_marker",
-                    `mx_MLocationBody_marker-${this.props.shareType}`,
-                    userColorClass,
-                )}
-                id={this.getMarkerId()}
-                >
+                <div id={this.getMarkerId()}>
                     { /*
                     maplibregl hijacks the div above to style the marker
                     it must be in the dom when the map is initialised
@@ -273,22 +261,11 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                     so hide the internal visible elements
                     */ }
 
-                    { !!this.marker && <>
-                        <div className="mx_MLocationBody_markerBorder">
-                            { isSharingOwnLocation(this.props.shareType) ?
-                                <MemberAvatar
-                                    member={this.props.sender}
-                                    width={27}
-                                    height={27}
-                                    viewUserOnClick={false}
-                                />
-                                : <LocationIcon className="mx_MLocationBody_markerIcon" />
-                            }
-                        </div>
-                        <div
-                            className="mx_MLocationBody_pointer"
-                        />
-                    </> }
+                    { !!this.marker && <Marker
+                        roomMember={isSharingOwnLocation(this.props.shareType) ? this.props.sender : undefined}
+                        useMemberColor={this.props.shareType === LocationShareType.Live}
+                    />
+                    }
                 </div>
             </div>
         );

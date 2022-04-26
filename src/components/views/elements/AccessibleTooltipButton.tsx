@@ -19,12 +19,11 @@ import React, { SyntheticEvent } from 'react';
 
 import AccessibleButton from "./AccessibleButton";
 import Tooltip, { Alignment } from './Tooltip';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps extends React.ComponentProps<typeof AccessibleButton> {
     title: string;
     tooltip?: React.ReactNode;
-    label?: React.ReactNode;
+    label?: string;
     tooltipClassName?: string;
     forceHide?: boolean;
     yOffset?: number;
@@ -36,7 +35,6 @@ interface IState {
     hover: boolean;
 }
 
-@replaceableComponent("views.elements.AccessibleTooltipButton")
 export default class AccessibleTooltipButton extends React.PureComponent<IProps, IState> {
     constructor(props: IProps) {
         super(props);

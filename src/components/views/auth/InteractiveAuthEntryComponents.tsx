@@ -24,7 +24,6 @@ import { _t } from '../../../languageHandler';
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton from "../elements/AccessibleButton";
 import Spinner from "../elements/Spinner";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { LocalisedPolicy, Policies } from '../../../Terms';
 import Field from '../elements/Field';
 import CaptchaForm from "./CaptchaForm";
@@ -93,7 +92,6 @@ interface IPasswordAuthEntryState {
     password: string;
 }
 
-@replaceableComponent("views.auth.PasswordAuthEntry")
 export class PasswordAuthEntry extends React.Component<IAuthEntryProps, IPasswordAuthEntryState> {
     static LOGIN_TYPE = AuthType.Password;
 
@@ -191,7 +189,6 @@ interface IRecaptchaAuthEntryProps extends IAuthEntryProps {
 }
 /* eslint-enable camelcase */
 
-@replaceableComponent("views.auth.RecaptchaAuthEntry")
 export class RecaptchaAuthEntry extends React.Component<IRecaptchaAuthEntryProps> {
     static LOGIN_TYPE = AuthType.Recaptcha;
 
@@ -262,7 +259,6 @@ interface ITermsAuthEntryState {
     errorText?: string;
 }
 
-@replaceableComponent("views.auth.TermsAuthEntry")
 export class TermsAuthEntry extends React.Component<ITermsAuthEntryProps, ITermsAuthEntryState> {
     static LOGIN_TYPE = AuthType.Terms;
 
@@ -409,7 +405,6 @@ interface IEmailIdentityAuthEntryProps extends IAuthEntryProps {
     };
 }
 
-@replaceableComponent("views.auth.EmailIdentityAuthEntry")
 export class EmailIdentityAuthEntry extends React.Component<IEmailIdentityAuthEntryProps> {
     static LOGIN_TYPE = AuthType.Email;
 
@@ -472,7 +467,6 @@ interface IMsisdnAuthEntryState {
     errorText: string;
 }
 
-@replaceableComponent("views.auth.MsisdnAuthEntry")
 export class MsisdnAuthEntry extends React.Component<IMsisdnAuthEntryProps, IMsisdnAuthEntryState> {
     static LOGIN_TYPE = AuthType.Msisdn;
 
@@ -623,7 +617,6 @@ interface ISSOAuthEntryState {
     attemptFailed: boolean;
 }
 
-@replaceableComponent("views.auth.SSOAuthEntry")
 export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEntryState> {
     static LOGIN_TYPE = AuthType.Sso;
     static UNSTABLE_LOGIN_TYPE = AuthType.SsoUnstable;
@@ -743,7 +736,6 @@ export class SSOAuthEntry extends React.Component<ISSOAuthEntryProps, ISSOAuthEn
     }
 }
 
-@replaceableComponent("views.auth.FallbackAuthEntry")
 export class FallbackAuthEntry extends React.Component<IAuthEntryProps> {
     private popupWindow: Window;
     private fallbackButton = createRef<HTMLButtonElement>();

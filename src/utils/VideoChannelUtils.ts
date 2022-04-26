@@ -42,6 +42,6 @@ export const addVideoChannel = async (roomId: string, roomName: string) => {
 export const getConnectedMembers = (state: RoomState): RoomMember[] =>
     state.getStateEvents(VIDEO_CHANNEL_MEMBER)
         // Must have a device connected and still be joined to the room
-        .filter(e => e.getContent<IVideoChannelMemberContent>().devices?.length)
+        .filter(e => e.getContent<IVideoChannelMemberContent>()?.devices?.length)
         .map(e => state.getMember(e.getStateKey()))
-        .filter(member => member.membership === "join");
+        .filter(member => member?.membership === "join");

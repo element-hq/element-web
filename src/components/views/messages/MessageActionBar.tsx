@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useContext, useEffect } from 'react';
 import { EventStatus, MatrixEvent, MatrixEventEvent } from 'matrix-js-sdk/src/models/event';
 import classNames from 'classnames';
 import { MsgType, RelationType } from 'matrix-js-sdk/src/@types/event';
@@ -26,12 +26,11 @@ import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
 import ContextMenu, { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
-import { isContentActionable, canEditContent, editEvent } from '../../../utils/EventUtils';
+import { isContentActionable, canEditContent, editEvent, canCancel } from '../../../utils/EventUtils';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import Toolbar from "../../../accessibility/Toolbar";
 import { RovingAccessibleTooltipButton, useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-import MessageContextMenu, { canCancel } from "../context_menus/MessageContextMenu";
+import MessageContextMenu from "../context_menus/MessageContextMenu";
 import Resend from "../../../Resend";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -40,13 +39,14 @@ import SettingsStore from '../../../settings/SettingsStore';
 import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';
 import ReactionPicker from "../emojipicker/ReactionPicker";
-import { CardContext } from '../right_panel/BaseCard';
+import { CardContext } from '../right_panel/context';
 import { showThread } from "../../../dispatcher/dispatch-actions/threads";
 import { shouldDisplayReply } from '../../../utils/Reply';
 import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
-import { UserTab } from '../dialogs/UserSettingsDialog';
+import { UserTab } from '../dialogs/UserTab';
 import { Action } from '../../../dispatcher/actions';
+import SdkConfig from "../../../SdkConfig";
 
 interface IOptionsButtonProps {
     mxEvent: MatrixEvent;
@@ -156,6 +156,81 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
     </React.Fragment>;
 };
 
+interface IReplyInThreadButton {
+    mxEvent: MatrixEvent;
+}
+
+const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
+    const context = useContext(CardContext);
+
+    const relationType = mxEvent?.getRelation()?.rel_type;
+    const hasARelation = !!relationType && relationType !== RelationType.Thread;
+    const firstTimeSeeingThreads = !localStorage.getItem("mx_seen_feature_thread");
+    const threadsEnabled = SettingsStore.getValue("feature_thread");
+
+    if (!threadsEnabled && !Thread.hasServerSideSupport) {
+        // hide the prompt if the user would only have degraded mode
+        return null;
+    }
+
+    const onClick = (): void => {
+        if (firstTimeSeeingThreads) {
+            localStorage.setItem("mx_seen_feature_thread", "true");
+        }
+
+        if (!SettingsStore.getValue("feature_thread")) {
+            dis.dispatch({
+                action: Action.ViewUserSettings,
+                initialTabId: UserTab.Labs,
+            });
+        } else if (mxEvent.isThreadRelation) {
+            showThread({
+                rootEvent: mxEvent.getThread().rootEvent,
+                initialEvent: mxEvent,
+                scroll_into_view: true,
+                highlighted: true,
+                push: context.isCard,
+            });
+        } else {
+            showThread({
+                rootEvent: mxEvent,
+                push: context.isCard,
+            });
+        }
+    };
+
+    return <RovingAccessibleTooltipButton
+        className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
+
+        disabled={hasARelation}
+        tooltip={<>
+            <div className="mx_Tooltip_title">
+                { !hasARelation
+                    ? _t("Reply in thread")
+                    : _t("Can't create a thread from an event with an existing relation") }
+            </div>
+            { !hasARelation && (
+                <div className="mx_Tooltip_sub">
+                    { SettingsStore.getValue("feature_thread")
+                        ? _t("Beta feature")
+                        : _t("Beta feature. Click to learn more.")
+                    }
+                </div>
+            ) }
+        </>}
+
+        title={!hasARelation
+            ? _t("Reply in thread")
+            : _t("Can't create a thread from an event with an existing relation")}
+
+        onClick={onClick}
+    >
+        { firstTimeSeeingThreads && !threadsEnabled && (
+            <div className="mx_Indicator" />
+        ) }
+    </RovingAccessibleTooltipButton>;
+};
+
 interface IMessageActionBarProps {
     mxEvent: MatrixEvent;
     reactions?: Relations;
@@ -173,7 +248,6 @@ interface IMessageActionBarProps {
     ) => Relations;
 }
 
-@replaceableComponent("views.messages.MessageActionBar")
 export default class MessageActionBar extends React.PureComponent<IMessageActionBarProps> {
     public static contextType = RoomContext;
 
@@ -225,21 +299,6 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         });
     };
 
-    private onThreadClick = (isCard: boolean): void => {
-        if (localStorage.getItem("mx_seen_feature_thread") === null) {
-            localStorage.setItem("mx_seen_feature_thread", "true");
-        }
-
-        if (!SettingsStore.getValue("feature_thread")) {
-            dis.dispatch({
-                action: Action.ViewUserSettings,
-                initialTabId: UserTab.Labs,
-            });
-        } else {
-            showThread({ rootEvent: this.props.mxEvent, push: isCard });
-        }
-    };
-
     private onEditClick = (): void => {
         editEvent(this.props.mxEvent, this.context.timelineRenderingType, this.props.getRelationsForEvent);
     };
@@ -252,6 +311,15 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
         if (!SettingsStore.getValue("feature_thread") && !Thread.hasServerSideSupport) {
             // hide the prompt if the user would only have degraded mode
             return null;
+        }
+
+        if (!SettingsStore.getBetaInfo("feature_thread") &&
+            !SettingsStore.getValue("feature_thread") &&
+            !SdkConfig.get("show_labs_settings")
+        ) {
+            // Hide the beta prompt if there is no UI to enable it,
+            // e.g if config.json disables it and doesn't enable show labs flags
+            return false;
         }
 
         const inNotThreadTimeline = this.context.timelineRenderingType !== TimelineRenderingType.Thread;
@@ -316,44 +384,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             key="cancel"
         />;
 
-        const relationType = this.props.mxEvent?.getRelation()?.rel_type;
-        const hasARelation = !!relationType && relationType !== RelationType.Thread;
-        const firstTimeSeeingThreads = localStorage.getItem("mx_seen_feature_thread") === null &&
-            !SettingsStore.getValue("feature_thread");
-        const threadTooltipButton = <CardContext.Consumer key="thread">
-            { context =>
-                <RovingAccessibleTooltipButton
-                    className="mx_MessageActionBar_maskButton mx_MessageActionBar_threadButton"
-
-                    disabled={hasARelation}
-                    tooltip={<>
-                        <div className="mx_Tooltip_title">
-                            { !hasARelation
-                                ? _t("Reply in thread")
-                                : _t("Can't create a thread from an event with an existing relation") }
-                        </div>
-                        { !hasARelation && (
-                            <div className="mx_Tooltip_sub">
-                                { SettingsStore.getValue("feature_thread")
-                                    ? _t("Beta feature")
-                                    : _t("Beta feature. Click to learn more.")
-                                }
-                            </div>
-                        ) }
-                    </>}
-
-                    title={!hasARelation
-                        ? _t("Reply in thread")
-                        : _t("Can't create a thread from an event with an existing relation")}
-
-                    onClick={this.onThreadClick.bind(null, context.isCard)}
-                >
-                    { firstTimeSeeingThreads && (
-                        <div className="mx_Indicator" />
-                    ) }
-                </RovingAccessibleTooltipButton>
-            }
-        </CardContext.Consumer>;
+        const threadTooltipButton = <ReplyInThreadButton mxEvent={this.props.mxEvent} />;
 
         // We show a different toolbar for failed events, so detect that first.
         const mxEvent = this.props.mxEvent;

@@ -165,6 +165,10 @@ limitations under the License.
         }
     }
 
+    .mx_GenericEventListSummary > .mx_EventTile_line {
+        padding-left: 30px !important; // Override main timeline styling - align summary text with message text
+    }
+
     .mx_EventTile:not([data-layout=bubble]) {
         .mx_EventTile_e2eIcon {
             left: 8px;
@@ -212,19 +216,21 @@ limitations under the License.
     }
 
     // handling for hidden events (e.g reactions) in the thread view
-    &.mx_ThreadView .mx_GenericEventListSummary_unstyledList .mx_EventTile_info {
+    &.mx_ThreadView .mx_EventTile_info {
+        padding-top: 0 !important; // override main timeline padding
+
         .mx_EventTile_line {
             padding-left: 0 !important; // override main timeline padding
 
             .mx_EventTile_content {
-                margin-left: 54px; // align with text
-                width: calc(100% - 54px - 8px); // match width of parent
+                margin-left: 48px; // align with text
+                width: calc(100% - 48px - 8px); // match width of parent
             }
         }
 
         .mx_EventTile_avatar {
             position: absolute;
-            left: 36px !important; // override main timeline positioning
+            left: 30px !important; // override main timeline positioning
             z-index: 9; // position above the hover styling
         }
 
@@ -237,7 +243,7 @@ limitations under the License.
         text-align: left;
         font-size: $font-12px;
         align-items: center;
-        justify-content: end;
+        justify-content: flex-end;
         gap: 4px;
         position: relative;
         top: 2px;

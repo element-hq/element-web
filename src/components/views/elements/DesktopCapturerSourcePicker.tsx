@@ -21,7 +21,6 @@ import { _t } from '../../../languageHandler';
 import BaseDialog from "..//dialogs/BaseDialog";
 import DialogButtons from "./DialogButtons";
 import AccessibleButton from './AccessibleButton';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TabbedView, { Tab, TabLocation } from '../../structures/TabbedView';
 import PlatformPeg from "../../../PlatformPeg";
 
@@ -90,7 +89,6 @@ export interface PickerIProps {
     onFinished(sourceId: string): void;
 }
 
-@replaceableComponent("views.elements.DesktopCapturerSourcePicker")
 export default class DesktopCapturerSourcePicker extends React.Component<
     PickerIProps,
     PickerIState

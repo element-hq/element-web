@@ -17,14 +17,13 @@ limitations under the License.
 import React from "react";
 import { mount } from "enzyme";
 
-import sdk from "../../../skinned-sdk";
 import { mkEvent, mkStubRoom } from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import * as languageHandler from "../../../../src/languageHandler";
 import * as TestUtils from "../../../test-utils";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
+import _TextualBody from "../../../../src/components/views/messages/TextualBody";
 
-const _TextualBody = sdk.getComponent("views.messages.TextualBody");
 const TextualBody = TestUtils.wrapInMatrixClientContext(_TextualBody);
 
 describe("<TextualBody />", () => {

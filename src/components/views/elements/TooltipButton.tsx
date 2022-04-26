@@ -17,14 +17,12 @@ limitations under the License.
 
 import React from 'react';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import TooltipTarget from './TooltipTarget';
 
 interface IProps {
     helpText: React.ReactNode | string;
 }
 
-@replaceableComponent("views.elements.TooltipButton")
 export default class TooltipButton extends React.Component<IProps> {
     constructor(props) {
         super(props);

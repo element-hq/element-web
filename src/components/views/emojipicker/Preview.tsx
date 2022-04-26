@@ -18,13 +18,11 @@ limitations under the License.
 import React from 'react';
 
 import { IEmoji } from "../../../emoji";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     emoji: IEmoji;
 }
 
-@replaceableComponent("views.emojipicker.Preview")
 class Preview extends React.PureComponent<IProps> {
     render() {
         const { unicode, label, shortcodes: [shortcode] } = this.props.emoji;

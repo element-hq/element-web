@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from 'react';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from "./Spinner";
 import EditableText from "./EditableText";
 
@@ -56,7 +55,6 @@ interface IState {
  * similarly asynchronous way. If this is not provided, the initial value is
  * taken from the 'initialValue' property.
  */
-@replaceableComponent("views.elements.EditableTextContainer")
 export default class EditableTextContainer extends React.Component<IProps, IState> {
     private unmounted = false;
     public static defaultProps: Partial<IProps> = {

@@ -22,7 +22,7 @@ import { MatrixClientPeg } from '../MatrixClientPeg';
 const CALL_BEHAVIOUR_WK_KEY = "io.element.call_behaviour";
 const E2EE_WK_KEY = "io.element.e2ee";
 const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
-const TILE_SERVER_WK_KEY = new UnstableValue(
+export const TILE_SERVER_WK_KEY = new UnstableValue(
     "m.tile_server", "org.matrix.msc3488.tile_server");
 
 /* eslint-disable camelcase */

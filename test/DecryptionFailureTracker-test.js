@@ -16,7 +16,6 @@ limitations under the License.
 
 import { MatrixEvent } from 'matrix-js-sdk/src/matrix';
 
-import './skinned-sdk'; // Must be first for skinning to work
 import { DecryptionFailureTracker } from '../src/DecryptionFailureTracker';
 
 class MockDecryptionError extends Error {

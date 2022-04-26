@@ -25,7 +25,6 @@ import { _t } from "../../../languageHandler";
 import { IUpload, RecordingState, VoiceRecording } from "../../../audio/VoiceRecording";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
 import { VoiceRecordingStore } from "../../../stores/VoiceRecordingStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
@@ -52,7 +51,6 @@ interface IState {
 /**
  * Container tile for rendering the voice message recorder in the composer.
  */
-@replaceableComponent("views.rooms.VoiceRecordComposerTile")
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
     public constructor(props) {
         super(props);

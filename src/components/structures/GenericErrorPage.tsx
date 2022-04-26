@@ -16,14 +16,11 @@ limitations under the License.
 
 import React from 'react';
 
-import { replaceableComponent } from "../../utils/replaceableComponent";
-
 interface IProps {
     title: React.ReactNode;
     message: React.ReactNode;
 }
 
-@replaceableComponent("structures.GenericErrorPage")
 export default class GenericErrorPage extends React.PureComponent<IProps> {
     render() {
         return <div className='mx_GenericErrorPage'>

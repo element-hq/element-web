@@ -131,8 +131,11 @@ export class ElementSession {
         await input.type(text);
     }
 
-    public query(selector: string, timeout: number = DEFAULT_TIMEOUT,
-        hidden = false): Promise<puppeteer.ElementHandle> {
+    public query(
+        selector: string,
+        timeout: number = DEFAULT_TIMEOUT,
+        hidden = false,
+    ): Promise<puppeteer.ElementHandle> {
         return this.page.waitForSelector(selector, { visible: true, timeout, hidden });
     }
 

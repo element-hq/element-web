@@ -15,97 +15,48 @@ limitations under the License.
 */
 
 import React from 'react';
-import maplibregl from 'maplibre-gl';
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import {
-    M_ASSET,
-    LocationAssetType,
-    ILocationContent,
-} from 'matrix-js-sdk/src/@types/location';
-import { ClientEvent, IClientWellKnown } from 'matrix-js-sdk/src/client';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
-import { IBodyProps } from "./IBodyProps";
 import { _t } from '../../../languageHandler';
-import MemberAvatar from '../avatars/MemberAvatar';
 import Modal from '../../../Modal';
 import {
-    parseGeoUri,
     locationEventGeoUri,
-    createMap,
     getLocationShareErrorMessage,
     LocationShareError,
+    isSelfLocation,
 } from '../../../utils/location';
-import LocationViewDialog from '../location/LocationViewDialog';
+import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import TooltipTarget from '../elements/TooltipTarget';
 import { Alignment } from '../elements/Tooltip';
-import AccessibleButton from '../elements/AccessibleButton';
-import { tileServerFromWellKnown } from '../../../utils/WellKnownUtils';
-import MatrixClientContext from '../../../contexts/MatrixClientContext';
+import LocationViewDialog from '../location/LocationViewDialog';
+import Map from '../location/Map';
+import SmartMarker from '../location/SmartMarker';
+import { IBodyProps } from "./IBodyProps";
 
 interface IState {
     error: Error;
 }
 
-@replaceableComponent("views.messages.MLocationBody")
 export default class MLocationBody extends React.Component<IBodyProps, IState> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
-    private coords: GeolocationCoordinates;
-    private bodyId: string;
-    private markerId: string;
-    private map?: maplibregl.Map = null;
+    private mapId: string;
 
     constructor(props: IBodyProps) {
         super(props);
 
         const randomString = Math.random().toString(16).slice(2, 10);
+        // multiple instances of same map might be in document
+        // eg thread and main timeline, reply
         const idSuffix = `${props.mxEvent.getId()}_${randomString}`;
-        this.bodyId = `mx_MLocationBody_${idSuffix}`;
-        this.markerId = `mx_MLocationBody_marker_${idSuffix}`;
-        this.coords = parseGeoUri(locationEventGeoUri(this.props.mxEvent));
+        this.mapId = `mx_MLocationBody_${idSuffix}`;
 
         this.state = {
             error: undefined,
         };
     }
 
-    componentDidMount() {
-        if (this.state.error) {
-            return;
-        }
-
-        this.context.on(ClientEvent.ClientWellKnown, this.updateStyleUrl);
-
-        this.map = createMap(
-            this.coords,
-            false,
-            this.bodyId,
-            this.markerId,
-            (e: Error) => this.setState({ error: e }),
-        );
-    }
-
-    componentWillUnmount() {
-        this.context.off(ClientEvent.ClientWellKnown, this.updateStyleUrl);
-    }
-
-    private updateStyleUrl = (clientWellKnown: IClientWellKnown) => {
-        const style = tileServerFromWellKnown(clientWellKnown)?.["map_style_url"];
-        if (style) {
-            this.map?.setStyle(style);
-        }
-    };
-
-    private onClick = (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    ) => {
-        // Don't open map if we clicked the attribution button
-        const target = event.target as Element;
-        if (target.classList.contains("maplibregl-ctrl-attrib-button")) {
-            return;
-        }
-
+    private onClick = () => {
         Modal.createTrackedDialog(
             'Location View',
             '',
@@ -120,36 +71,21 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
         );
     };
 
+    private onError = (error) => {
+        this.setState({ error });
+    };
+
     render(): React.ReactElement<HTMLDivElement> {
         return this.state.error ?
             <LocationBodyFallbackContent error={this.state.error} event={this.props.mxEvent} /> :
             <LocationBodyContent
                 mxEvent={this.props.mxEvent}
-                bodyId={this.bodyId}
-                markerId={this.markerId}
-                error={this.state.error}
+                mapId={this.mapId}
+                onError={this.onError}
                 tooltip={_t("Expand map")}
                 onClick={this.onClick}
             />;
     }
-}
-
-export function isSelfLocation(locationContent: ILocationContent): boolean {
-    const asset = M_ASSET.findIn(locationContent) as { type: string };
-    const assetType = asset?.type ?? LocationAssetType.Self;
-    return assetType == LocationAssetType.Self;
-}
-
-interface ILocationBodyContentProps {
-    mxEvent: MatrixEvent;
-    bodyId: string;
-    markerId: string;
-    error: Error;
-    tooltip?: string;
-    onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-    zoomButtons?: boolean;
-    onZoomIn?: () => void;
-    onZoomOut?: () => void;
 }
 
 export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent, error: Error }> = ({ error, event }) => {
@@ -169,75 +105,54 @@ export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent, error: 
     </div>;
 };
 
-export function LocationBodyContent(props: ILocationBodyContentProps):
-        React.ReactElement<HTMLDivElement> {
-    const mapDiv = <div
-        id={props.bodyId}
-        onClick={props.onClick}
-        className="mx_MLocationBody_map"
-    />;
+interface LocationBodyContentProps {
+    mxEvent: MatrixEvent;
+    mapId: string;
+    tooltip?: string;
+    onError: (error: Error) => void;
+    onClick?: () => void;
+}
+export const LocationBodyContent: React.FC<LocationBodyContentProps> = ({
+    mxEvent,
+    mapId,
+    tooltip,
+    onError,
+    onClick,
+}) => {
+    // only pass member to marker when should render avatar marker
+    const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
+    const geoUri = locationEventGeoUri(mxEvent);
 
-    const markerContents = (
-        isSelfLocation(props.mxEvent.getContent())
-            ? <MemberAvatar
-                member={props.mxEvent.sender}
-                width={27}
-                height={27}
-                viewUserOnClick={false}
-            />
-            : <div className="mx_MLocationBody_markerContents" />
-    );
+    const mapElement = (<Map
+        id={mapId}
+        centerGeoUri={geoUri}
+        onClick={onClick}
+        onError={onError}
+        className="mx_MLocationBody_map"
+    >
+        {
+            ({ map }) =>
+                <SmartMarker
+                    map={map}
+                    id={`${mapId}-marker`}
+                    geoUri={geoUri}
+                    roomMember={markerRoomMember}
+                />
+        }
+    </Map>);
 
     return <div className="mx_MLocationBody">
         {
-            props.tooltip
+            tooltip
                 ? <TooltipTarget
-                    label={props.tooltip}
+                    label={tooltip}
                     alignment={Alignment.InnerBottom}
                     maxParentWidth={450}
                 >
-                    { mapDiv }
+                    { mapElement }
                 </TooltipTarget>
-                : mapDiv
-        }
-        <div className="mx_MLocationBody_marker" id={props.markerId}>
-            <div className="mx_MLocationBody_markerBorder">
-                { markerContents }
-            </div>
-            <div
-                className="mx_MLocationBody_pointer"
-            />
-        </div>
-        {
-            props.zoomButtons
-                ? <ZoomButtons
-                    onZoomIn={props.onZoomIn}
-                    onZoomOut={props.onZoomOut}
-                />
-                : null
+                : mapElement
         }
     </div>;
-}
-
-interface IZoomButtonsProps {
-    onZoomIn: () => void;
-    onZoomOut: () => void;
-}
-
-function ZoomButtons(props: IZoomButtonsProps): React.ReactElement<HTMLDivElement> {
-    return <div className="mx_MLocationBody_zoomButtons">
-        <AccessibleButton
-            onClick={props.onZoomIn}
-            title={_t("Zoom in")}
-        >
-            <div className="mx_MLocationBody_zoomButton mx_MLocationBody_plusButton" />
-        </AccessibleButton>
-        <AccessibleButton
-            onClick={props.onZoomOut}
-            title={_t("Zoom out")}
-        >
-            <div className="mx_MLocationBody_zoomButton mx_MLocationBody_minusButton" />
-        </AccessibleButton>
-    </div>;
-}
+};
 

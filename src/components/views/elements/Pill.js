@@ -20,16 +20,15 @@ import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import PropTypes from 'prop-types';
 import { logger } from "matrix-js-sdk/src/logger";
 
-import * as sdk from '../../../index';
 import dis from '../../../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { getPrimaryPermalinkEntity, parsePermalink } from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
 import Tooltip from './Tooltip';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
+import RoomAvatar from "../avatars/RoomAvatar";
+import MemberAvatar from "../avatars/MemberAvatar";
 
-@replaceableComponent("views.elements.Pill")
 class Pill extends React.Component {
     static roomNotifPos(text) {
         return text.indexOf("@room");
@@ -183,9 +182,6 @@ class Pill extends React.Component {
     };
 
     render() {
-        const MemberAvatar = sdk.getComponent('avatars.MemberAvatar');
-        const RoomAvatar = sdk.getComponent('avatars.RoomAvatar');
-
         const resource = this.state.resourceId;
 
         let avatar = null;

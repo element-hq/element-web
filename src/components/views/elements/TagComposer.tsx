@@ -16,10 +16,10 @@ limitations under the License.
 
 import React, { ChangeEvent, FormEvent } from "react";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Field from "./Field";
 import { _t } from "../../../languageHandler";
 import AccessibleButton from "./AccessibleButton";
+import { Tag } from "./Tag";
 
 interface IProps {
     tags: string[];
@@ -38,7 +38,6 @@ interface IState {
  * A simple, controlled, composer for entering string tags. Contains a simple
  * input, add button, and per-tag remove button.
  */
-@replaceableComponent("views.elements.TagComposer")
 export default class TagComposer extends React.PureComponent<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
@@ -82,10 +81,13 @@ export default class TagComposer extends React.PureComponent<IProps, IState> {
                 </AccessibleButton>
             </form>
             <div className='mx_TagComposer_tags'>
-                { this.props.tags.map((t, i) => (<div className='mx_TagComposer_tag' key={i}>
-                    <span>{ t }</span>
-                    <AccessibleButton onClick={this.onRemove.bind(this, t)} disabled={this.props.disabled} />
-                </div>)) }
+                { this.props.tags.map((t, i) => (
+                    <Tag
+                        label={t}
+                        key={t}
+                        onDeleteClick={this.onRemove.bind(this, t)}
+                        disabled={this.props.disabled} />
+                )) }
             </div>
         </div>;
     }

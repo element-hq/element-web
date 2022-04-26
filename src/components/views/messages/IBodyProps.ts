@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import React, { LegacyRef } from "react";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Relations } from "matrix-js-sdk/src/models/relations";
 
@@ -52,4 +53,6 @@ export interface IBodyProps {
 
     // helper function to access relations for this event
     getRelationsForEvent?: (eventId: string, relationType: string, eventType: string) => Relations;
+
+    ref?: React.RefObject<any> | LegacyRef<any>;
 }

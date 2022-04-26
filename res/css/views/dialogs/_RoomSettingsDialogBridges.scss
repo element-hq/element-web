@@ -22,84 +22,99 @@ limitations under the License.
         margin: 0;
         padding: 0;
     }
-}
 
-.mx_RoomSettingsDialog_BridgeList li {
-    list-style-type: none;
-    padding: 5px;
-    margin-bottom: 8px;
-    border-width: 1px 1px;
-    border-color: $primary-hairline-color;
-    border-style: solid;
-    border-radius: 5px;
+    li {
+        list-style-type: none;
 
-    .column-icon {
-        float: left;
-        padding-right: 10px;
+        &.mx_RoomSettingsDialog_BridgeList_listItem {
+            display: flex;
+            flex-wrap: wrap;
+            gap: $spacing-8;
+            padding: 5px;
+            margin-bottom: $spacing-8;
 
-        * {
+            // border-style around each bridge list item
+            border-width: 1px 1px;
+            border-color: $primary-hairline-color;
+            border-style: solid;
             border-radius: 5px;
-            border: 1px solid $input-darker-bg-color;
-        }
 
-        .noProtocolIcon {
-            width: 48px;
-            height: 48px;
-            background: $input-darker-bg-color;
-            border-radius: 5px;
-        }
+            .mx_RoomSettingsDialog_column_icon {
+                .mx_RoomSettingsDialog_protocolIcon,
+                .mx_RoomSettingsDialog_protocolIcon span,
+                .mx_RoomSettingsDialog_noProtocolIcon {
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    border: 1px solid $input-darker-bg-color;
+                }
 
-        .protocol-icon {
-            float: left;
-            margin-right: 5px;
-            img {
-                border-radius: 5px;
-                border-width: 1px 1px;
-                border-color: $primary-hairline-color;
+                .mx_RoomSettingsDialog_noProtocolIcon,
+                .mx_RoomSettingsDialog_protocolIcon img {
+                    border-radius: 5px;
+                }
+
+                .mx_RoomSettingsDialog_noProtocolIcon {
+                    width: 48px;
+                    height: 48px;
+                    background: $input-darker-bg-color;
+                }
+
+                .mx_RoomSettingsDialog_protocolIcon {
+                    img {
+                        border-width: 1px 1px;
+                        border-color: $primary-hairline-color;
+                    }
+
+                    span {
+                        /* Correct letter placement */
+                        left: auto;
+                    }
+                }
             }
-            span {
-                /* Correct letter placement */
-                left: auto;
-            }
-        }
-    }
 
-    .column-data {
-        display: inline-block;
-        width: 85%;
+            .mx_RoomSettingsDialog_column_data {
+                display: inline-block;
+                width: 85%;
 
-        > h3 {
-            margin-top: 0px;
-            margin-bottom: 0px;
-            font-size: 16pt;
-            color: $primary-content;
-        }
+                .mx_RoomSettingsDialog_column_data_details,
+                .mx_RoomSettingsDialog_column_data_metadata,
+                .mx_RoomSettingsDialog_column_data_metadata li,
+                .mx_RoomSettingsDialog_column_data_protocolName {
+                    margin-bottom: 0;
+                }
 
-        > * {
-            margin-top: 4px;
-            margin-bottom: 0;
-        }
+                .mx_RoomSettingsDialog_column_data_details,
+                .mx_RoomSettingsDialog_column_data_metadata {
+                    margin-top: $spacing-4;
+                }
 
-        .workspace-channel-details {
-            color: $primary-content;
-            font-weight: 600;
+                .mx_RoomSettingsDialog_column_data_metadata li {
+                    margin-top: $spacing-8;
+                }
 
-            .channel {
-                margin-left: 5px;
-            }
-        }
+                .mx_RoomSettingsDialog_column_data_protocolName {
+                    margin-top: 0;
+                    font-size: 16pt;
+                    color: $primary-content;
+                }
 
-        .metadata {
-            color: $muted-fg-color;
-            margin-bottom: 0;
-            overflow-y: visible;
-            text-overflow: ellipsis;
-            white-space: normal;
-            padding: 0;
+                .mx_RoomSettingsDialog_workspace_channel_details {
+                    color: $primary-content;
+                    font-weight: $font-semi-bold;
 
-            > li {
-                padding: 0;
-                border: 0;
+                    .mx_RoomSettingsDialog_channel {
+                        margin-inline-start: 5px;
+                    }
+                }
+
+                .mx_RoomSettingsDialog_metadata {
+                    color: $muted-fg-color;
+                    margin-bottom: 0;
+                    overflow-y: visible;
+                    text-overflow: ellipsis;
+                    white-space: normal;
+                    padding: 0;
+                }
             }
         }
     }

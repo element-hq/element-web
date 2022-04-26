@@ -36,7 +36,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import BaseCard from "../right_panel/BaseCard";
 import RoomAvatar from "../avatars/RoomAvatar";
 import RoomName from "../elements/RoomName";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import SettingsStore from "../../../settings/SettingsStore";
 import TruncatedList from '../elements/TruncatedList';
 import Spinner from "../elements/Spinner";
@@ -74,7 +73,6 @@ interface IState {
     truncateAtInvited: number;
 }
 
-@replaceableComponent("views.rooms.MemberList")
 export default class MemberList extends React.Component<IProps, IState> {
     private showPresence = true;
     private mounted = false;
@@ -276,7 +274,7 @@ export default class MemberList extends React.Component<IProps, IState> {
 
             this.sortNames.set(
                 member,
-                (member.name[0] === '@' ? member.name.substr(1) : member.name).replace(SORT_REGEX, ""),
+                (member.name[0] === '@' ? member.name.slice(1) : member.name).replace(SORT_REGEX, ""),
             );
 
             // XXX: this user may have no lastPresenceTs value!

@@ -108,6 +108,8 @@ export function createTestClient(): MatrixClient {
         getRoomHierarchy: jest.fn().mockReturnValue({
             rooms: [],
         }),
+        createRoom: jest.fn().mockResolvedValue({ room_id: "!1:example.org" }),
+        setPowerLevel: jest.fn().mockResolvedValue(undefined),
 
         // Used by various internal bits we aren't concerned with (yet)
         sessionStore: {
@@ -135,6 +137,7 @@ export function createTestClient(): MatrixClient {
         setPushRuleActions: jest.fn().mockResolvedValue(undefined),
         relations: jest.fn().mockRejectedValue(undefined),
         isCryptoEnabled: jest.fn().mockReturnValue(false),
+        downloadKeys: jest.fn(),
         fetchRoomEvent: jest.fn(),
     } as unknown as MatrixClient;
 }
@@ -376,6 +379,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         getJoinRule: jest.fn().mockReturnValue("invite"),
         loadMembersIfNeeded: jest.fn(),
         client,
+        canInvite: jest.fn(),
     } as unknown as Room;
 }
 

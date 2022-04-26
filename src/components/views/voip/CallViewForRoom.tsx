@@ -21,7 +21,6 @@ import { Resizable } from "re-resizable";
 import CallHandler, { CallHandlerEvent } from '../../../CallHandler';
 import CallView from './CallView';
 import ResizeNotifier from "../../../utils/ResizeNotifier";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IProps {
     // What room we should display the call for
@@ -40,7 +39,6 @@ interface IState {
  * Wrapper for CallView that always display the call in a given room,
  * or nothing if there is no call in that room.
  */
-@replaceableComponent("views.voip.CallViewForRoom")
 export default class CallViewForRoom extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);

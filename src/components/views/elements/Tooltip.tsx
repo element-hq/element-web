@@ -21,7 +21,6 @@ import React, { CSSProperties } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import UIStore from "../../../stores/UIStore";
 
 const MIN_TOOLTIP_HEIGHT = 25;
@@ -55,7 +54,6 @@ export interface ITooltipProps {
         maxParentWidth?: number;
 }
 
-@replaceableComponent("views.elements.Tooltip")
 export default class Tooltip extends React.Component<ITooltipProps> {
     private tooltipContainer: HTMLElement;
     private parent: Element;

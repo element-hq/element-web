@@ -34,6 +34,7 @@ export interface IRightPanelCardState {
     threadHeadEvent?: MatrixEvent;
     initialEvent?: MatrixEvent;
     isInitialEventHighlighted?: boolean;
+    initialEventScrollIntoView?: boolean;
 }
 
 export interface IRightPanelCardStateStored {
@@ -47,6 +48,7 @@ export interface IRightPanelCardStateStored {
     threadHeadEventId?: string;
     initialEventId?: string;
     isInitialEventHighlighted?: boolean;
+    initialEventScrollIntoView?: boolean;
 }
 
 export interface IRightPanelCard {
@@ -87,6 +89,7 @@ export function convertCardToStore(panelState: IRightPanelCard): IRightPanelCard
         widgetId: state.widgetId,
         spaceId: state.spaceId,
         isInitialEventHighlighted: state.isInitialEventHighlighted,
+        initialEventScrollIntoView: state.initialEventScrollIntoView,
         threadHeadEventId: !!state?.threadHeadEvent?.getId() ?
             panelState.state.threadHeadEvent.getId() : undefined,
         memberInfoEventId: !!state?.memberInfoEvent?.getId() ?
@@ -106,6 +109,7 @@ function convertStoreToCard(panelStateStore: IRightPanelCardStored, room: Room):
         widgetId: stateStored.widgetId,
         spaceId: stateStored.spaceId,
         isInitialEventHighlighted: stateStored.isInitialEventHighlighted,
+        initialEventScrollIntoView: stateStored.initialEventScrollIntoView,
         threadHeadEvent: !!stateStored?.threadHeadEventId ?
             room.findEventById(stateStored.threadHeadEventId) : undefined,
         memberInfoEvent: !!stateStored?.memberInfoEventId ?

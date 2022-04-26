@@ -19,7 +19,6 @@ import React from "react";
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
 interface IItemProps {
     index?: number;
@@ -107,7 +106,6 @@ interface IProps {
     onNewItemChanged?(item: string): void;
 }
 
-@replaceableComponent("views.elements.EditableItemList")
 export default class EditableItemList<P = {}> extends React.PureComponent<IProps & P> {
     protected onItemAdded = (e) => {
         e.stopPropagation();

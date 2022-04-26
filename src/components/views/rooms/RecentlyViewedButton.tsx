@@ -23,10 +23,10 @@ import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
 import InteractiveTooltip, { Direction } from "../elements/InteractiveTooltip";
-import { roomContextDetailsText } from "../../../Rooms";
 import { Action } from "../../../dispatcher/actions";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { roomContextDetailsText } from "../../../utils/i18n-helpers";
 
 const RecentlyViewedButton = () => {
     const tooltipRef = useRef<InteractiveTooltip>();

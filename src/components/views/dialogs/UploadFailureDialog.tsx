@@ -19,7 +19,6 @@ import React from 'react';
 
 import { _t } from '../../../languageHandler';
 import ContentMessages from '../../../ContentMessages';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 import { IDialogProps } from "./IDialogProps";
@@ -35,7 +34,6 @@ interface IProps extends IDialogProps {
  * them. This is named fairly generically but the only thing we check right now is
  * the size of the file.
  */
-@replaceableComponent("views.dialogs.UploadFailureDialog")
 export default class UploadFailureDialog extends React.Component<IProps> {
     private onCancelClick = (): void => {
         this.props.onFinished(false);

@@ -26,7 +26,6 @@ import AccessibleButton from "../../../elements/AccessibleButton";
 import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import Modal from "../../../../../Modal";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
-import { replaceableComponent } from "../../../../../utils/replaceableComponent";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import ErrorDialog from '../../../dialogs/ErrorDialog';
 
@@ -46,7 +45,6 @@ interface IState extends Record<MediaDeviceKindEnum, string> {
     mediaDevices: IMediaDevices;
 }
 
-@replaceableComponent("views.settings.tabs.user.VoiceUserSettingsTab")
 export default class VoiceUserSettingsTab extends React.Component<{}, IState> {
     constructor(props: {}) {
         super(props);

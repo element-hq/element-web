@@ -24,18 +24,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
-import { linkifyAndSanitizeHtml } from '../../HtmlUtils';
 import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
 import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
 import NetworkDropdown, { ALL_ROOMS, Protocols } from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
-import { replaceableComponent } from "../../utils/replaceableComponent";
-import { mediaFromMxc } from "../../customisations/Media";
 import { IDialogProps } from "../views/dialogs/IDialogProps";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import BaseAvatar from "../views/avatars/BaseAvatar";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import QuestionDialog from "../views/dialogs/QuestionDialog";
 import BaseDialog from "../views/dialogs/BaseDialog";
@@ -46,9 +42,7 @@ import { getDisplayAliasForAliasSet } from "../../Rooms";
 import { Action } from "../../dispatcher/actions";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
-
-const MAX_NAME_LENGTH = 80;
-const MAX_TOPIC_LENGTH = 800;
+import { PublicRoomTile } from "../views/rooms/PublicRoomTile";
 
 const LAST_SERVER_KEY = "mx_last_room_directory_server";
 const LAST_INSTANCE_KEY = "mx_last_room_directory_instance";
@@ -71,7 +65,6 @@ interface IState {
     filterString: string;
 }
 
-@replaceableComponent("structures.RoomDirectory")
 export default class RoomDirectory extends React.Component<IProps, IState> {
     private unmounted = false;
     private nextBatch: string = null;
@@ -251,7 +244,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
      * HS admins to do this through the RoomSettings interface, but
      * this needs SPEC-417.
      */
-    private removeFromDirectory(room: IPublicRoomsChunkRoom) {
+    private removeFromDirectory = (room: IPublicRoomsChunkRoom) => {
         const alias = getDisplayAliasForRoom(room);
         const name = room.name || alias || _t('Unnamed room');
 
@@ -291,14 +284,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                 });
             },
         });
-    }
-
-    private onRoomClicked = (room: IPublicRoomsChunkRoom, ev: React.MouseEvent) => {
-        // If room was shift-clicked, remove it from the room directory
-        if (ev.shiftKey) {
-            ev.preventDefault();
-            this.removeFromDirectory(room);
-        }
     };
 
     private onOptionChange = (server: string, instanceId?: string) => {
@@ -406,21 +391,6 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         }
     };
 
-    private onPreviewClick = (ev: ButtonEvent, room: IPublicRoomsChunkRoom) => {
-        this.showRoom(room, null, false, true);
-        ev.stopPropagation();
-    };
-
-    private onViewClick = (ev: ButtonEvent, room: IPublicRoomsChunkRoom) => {
-        this.showRoom(room);
-        ev.stopPropagation();
-    };
-
-    private onJoinClick = (ev: ButtonEvent, room: IPublicRoomsChunkRoom) => {
-        this.showRoom(room, null, true);
-        ev.stopPropagation();
-    };
-
     private onCreateRoomClick = (ev: ButtonEvent) => {
         this.onFinished();
         dis.dispatch({
@@ -435,7 +405,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         this.showRoom(null, alias, autoJoin);
     }
 
-    private showRoom(room: IPublicRoomsChunkRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) {
+    private showRoom = (room: IPublicRoomsChunkRoom, roomAlias?: string, autoJoin = false, shouldPeek = false) => {
         this.onFinished();
         const payload: ViewRoomPayload = {
             action: Action.ViewRoom,
@@ -479,112 +449,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             payload.room_id = room.room_id;
         }
         dis.dispatch(payload);
-    }
-
-    private createRoomCells(room: IPublicRoomsChunkRoom) {
-        const client = MatrixClientPeg.get();
-        const clientRoom = client.getRoom(room.room_id);
-        const hasJoinedRoom = clientRoom && clientRoom.getMyMembership() === "join";
-        const isGuest = client.isGuest();
-        let previewButton;
-        let joinOrViewButton;
-
-        // Element Web currently does not allow guests to join rooms, so we
-        // instead show them preview buttons for all rooms. If the room is not
-        // world readable, a modal will appear asking you to register first. If
-        // it is readable, the preview appears as normal.
-        if (!hasJoinedRoom && (room.world_readable || isGuest)) {
-            previewButton = (
-                <AccessibleButton kind="secondary" onClick={(ev) => this.onPreviewClick(ev, room)}>
-                    { _t("Preview") }
-                </AccessibleButton>
-            );
-        }
-        if (hasJoinedRoom) {
-            joinOrViewButton = (
-                <AccessibleButton kind="secondary" onClick={(ev) => this.onViewClick(ev, room)}>
-                    { _t("View") }
-                </AccessibleButton>
-            );
-        } else if (!isGuest) {
-            joinOrViewButton = (
-                <AccessibleButton kind="primary" onClick={(ev) => this.onJoinClick(ev, room)}>
-                    { _t("Join") }
-                </AccessibleButton>
-            );
-        }
-
-        let name = room.name || getDisplayAliasForRoom(room) || _t('Unnamed room');
-        if (name.length > MAX_NAME_LENGTH) {
-            name = `${name.substring(0, MAX_NAME_LENGTH)}...`;
-        }
-
-        let topic = room.topic || '';
-        // Additional truncation based on line numbers is done via CSS,
-        // but to ensure that the DOM is not polluted with a huge string
-        // we give it a hard limit before rendering.
-        if (topic.length > MAX_TOPIC_LENGTH) {
-            topic = `${topic.substring(0, MAX_TOPIC_LENGTH)}...`;
-        }
-        topic = linkifyAndSanitizeHtml(topic);
-        let avatarUrl = null;
-        if (room.avatar_url) avatarUrl = mediaFromMxc(room.avatar_url).getSquareThumbnailHttp(32);
-
-        // We use onMouseDown instead of onClick, so that we can avoid text getting selected
-        return <div
-            key={room.room_id}
-            role="listitem"
-            className="mx_RoomDirectory_listItem"
-        >
-            <div
-                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                className="mx_RoomDirectory_roomAvatar"
-            >
-                <BaseAvatar
-                    width={32}
-                    height={32}
-                    resizeMethod='crop'
-                    name={name}
-                    idName={name}
-                    url={avatarUrl}
-                />
-            </div>
-            <div
-                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                className="mx_RoomDirectory_roomDescription"
-            >
-                <div className="mx_RoomDirectory_name">
-                    { name }
-                </div>&nbsp;
-                <div
-                    className="mx_RoomDirectory_topic"
-                    dangerouslySetInnerHTML={{ __html: topic }}
-                />
-                <div className="mx_RoomDirectory_alias">
-                    { getDisplayAliasForRoom(room) }
-                </div>
-            </div>
-            <div
-                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                className="mx_RoomDirectory_roomMemberCount"
-            >
-                { room.num_joined_members }
-            </div>
-            <div
-                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                className="mx_RoomDirectory_preview"
-            >
-                { previewButton }
-            </div>
-            <div
-                onMouseDown={(ev) => this.onRoomClicked(room, ev)}
-                className="mx_RoomDirectory_join"
-            >
-                { joinOrViewButton }
-            </div>
-        </div>;
-    }
-
+    };
     private stringLooksLikeId(s: string, fieldType: IFieldType) {
         let pat = /^#[^\s]+:[^\s]/;
         if (fieldType && fieldType.regexp) {
@@ -622,7 +487,14 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
             content = <Spinner />;
         } else {
             const cells = (this.state.publicRooms || [])
-                .reduce((cells, room) => cells.concat(this.createRoomCells(room)), []);
+                .map(room =>
+                    <PublicRoomTile
+                        key={room.room_id}
+                        room={room}
+                        showRoom={this.showRoom}
+                        removeFromDirectory={this.removeFromDirectory}
+                    />,
+                );
             // we still show the scrollpanel, at least for now, because
             // otherwise we don't fetch more because we don't get a fill
             // request from the scrollpanel because there isn't one

@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import '../skinned-sdk'; // Must be first for skinning to work
-import RoomViewStore from '../../src/stores/RoomViewStore';
+import { RoomViewStore } from '../../src/stores/RoomViewStore';
 import { Action } from '../../src/dispatcher/actions';
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import * as testUtils from '../test-utils';
 
-const dispatch = testUtils.getDispatchForStore(RoomViewStore);
+const dispatch = testUtils.getDispatchForStore(RoomViewStore.instance);
 
 jest.mock('../../src/utils/DMRoomMap', () => {
     const mock = {
@@ -42,7 +41,7 @@ describe('RoomViewStore', function() {
         peg.get().off = jest.fn();
 
         // Reset the state of the store
-        RoomViewStore.reset();
+        RoomViewStore.instance.reset();
     });
 
     it('can be used to view a room by ID and join', function(done) {
@@ -53,16 +52,16 @@ describe('RoomViewStore', function() {
 
         dispatch({ action: Action.ViewRoom, room_id: '!randomcharacters:aser.ver' });
         dispatch({ action: 'join_room' });
-        expect(RoomViewStore.isJoining()).toBe(true);
+        expect(RoomViewStore.instance.isJoining()).toBe(true);
     });
 
     it('can be used to view a room by alias and join', function(done) {
-        const token = RoomViewStore.addListener(() => {
+        const token = RoomViewStore.instance.addListener(() => {
             // Wait until the room alias has resolved and the room ID is
-            if (!RoomViewStore.isRoomLoading()) {
-                expect(RoomViewStore.getRoomId()).toBe("!randomcharacters:aser.ver");
+            if (!RoomViewStore.instance.isRoomLoading()) {
+                expect(RoomViewStore.instance.getRoomId()).toBe("!randomcharacters:aser.ver");
                 dispatch({ action: 'join_room' });
-                expect(RoomViewStore.isJoining()).toBe(true);
+                expect(RoomViewStore.instance.isJoining()).toBe(true);
             }
         });
 

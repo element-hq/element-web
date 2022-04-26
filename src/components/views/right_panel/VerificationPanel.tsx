@@ -33,7 +33,6 @@ import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import E2EIcon, { E2EState } from "../rooms/E2EIcon";
 import Spinner from "../elements/Spinner";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from "../elements/AccessibleButton";
 import VerificationShowSas from "../verification/VerificationShowSas";
 
@@ -54,7 +53,6 @@ interface IState {
     reciprocateQREvent?: ReciprocateQRCode["reciprocateQREvent"];
 }
 
-@replaceableComponent("views.right_panel.VerificationPanel")
 export default class VerificationPanel extends React.PureComponent<IProps, IState> {
     private hasVerifier: boolean;
 

@@ -16,108 +16,53 @@ limitations under the License.
 
 import React from 'react';
 import { mount } from "enzyme";
-import { mocked } from 'jest-mock';
-import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
-import {
-    M_ASSET,
-    LocationAssetType,
-    ILocationContent,
-    M_LOCATION,
-    M_TIMESTAMP,
-} from "matrix-js-sdk/src/@types/location";
-import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
+import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
+import { RoomMember } from 'matrix-js-sdk/src/matrix';
 import maplibregl from 'maplibre-gl';
 import { logger } from 'matrix-js-sdk/src/logger';
+import { act } from 'react-dom/test-utils';
 
-import sdk from "../../../skinned-sdk";
-import MLocationBody, {
-    isSelfLocation,
-} from "../../../../src/components/views/messages/MLocationBody";
+import MLocationBody from "../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { MediaEventHelper } from "../../../../src/utils/MediaEventHelper";
-import { getTileServerWellKnown } from "../../../../src/utils/WellKnownUtils";
+import Modal from '../../../../src/Modal';
 import SdkConfig from "../../../../src/SdkConfig";
+import { TILE_SERVER_WK_KEY } from '../../../../src/utils/WellKnownUtils';
 import { makeLocationEvent } from "../../../test-utils/location";
-
-jest.mock("../../../../src/utils/WellKnownUtils", () => ({
-    getTileServerWellKnown: jest.fn(),
-}));
-
-sdk.getComponent("views.messages.MLocationBody");
+import { getMockClientWithEventEmitter } from '../../../test-utils';
 
 describe("MLocationBody", () => {
-    describe("isSelfLocation", () => {
-        it("Returns true for a full m.asset event", () => {
-            const content = makeLocationContent("", '0');
-            expect(isSelfLocation(content)).toBe(true);
-        });
-
-        it("Returns true for a missing m.asset", () => {
-            const content = {
-                body: "",
-                msgtype: "m.location",
-                geo_uri: "",
-                [M_LOCATION.name]: { uri: "" },
-                [TEXT_NODE_TYPE.name]: "",
-                [M_TIMESTAMP.name]: 0,
-                // Note: no m.asset!
-            };
-            expect(isSelfLocation(content as ILocationContent)).toBe(true);
-        });
-
-        it("Returns true for a missing m.asset type", () => {
-            const content = {
-                body: "",
-                msgtype: "m.location",
-                geo_uri: "",
-                [M_LOCATION.name]: { uri: "" },
-                [TEXT_NODE_TYPE.name]: "",
-                [M_TIMESTAMP.name]: 0,
-                [M_ASSET.name]: {
-                    // Note: no type!
-                },
-            };
-            expect(isSelfLocation(content as ILocationContent)).toBe(true);
-        });
-
-        it("Returns false for an unknown asset type", () => {
-            const content = makeLocationContent(
-                undefined, /* text */
-                "geo:foo",
-                0,
-                undefined, /* description */
-                "org.example.unknown" as unknown as LocationAssetType);
-            expect(isSelfLocation(content)).toBe(false);
-        });
-    });
-
     describe('<MLocationBody>', () => {
+        const roomId = '!room:server';
+        const userId = '@user:server';
+        const mockClient = getMockClientWithEventEmitter({
+            getClientWellKnown: jest.fn().mockReturnValue({
+                [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
+            }),
+            isGuest: jest.fn().mockReturnValue(false),
+        });
+        const defaultEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Pin);
+        const defaultProps = {
+            mxEvent: defaultEvent,
+            highlights: [],
+            highlightLink: '',
+            onHeightChanged: jest.fn(),
+            onMessageAllowed: jest.fn(),
+            permalinkCreator: {} as RoomPermalinkCreator,
+            mediaEventHelper: {} as MediaEventHelper,
+        };
+        const getComponent = (props = {}) => mount(<MLocationBody {...defaultProps} {...props} />, {
+            wrappingComponent: MatrixClientContext.Provider,
+            wrappingComponentProps: { value: mockClient },
+        });
         describe('with error', () => {
-            const mockClient = {
-                on: jest.fn(),
-                off: jest.fn(),
-            };
-            const defaultEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Pin);
-            const defaultProps = {
-                mxEvent: defaultEvent,
-                highlights: [],
-                highlightLink: '',
-                onHeightChanged: jest.fn(),
-                onMessageAllowed: jest.fn(),
-                permalinkCreator: {} as RoomPermalinkCreator,
-                mediaEventHelper: {} as MediaEventHelper,
-            };
-            const getComponent = (props = {}) => mount(<MLocationBody {...defaultProps} {...props} />, {
-                wrappingComponent: MatrixClientContext.Provider,
-                wrappingComponentProps: { value: mockClient },
-            });
             let sdkConfigSpy;
 
             beforeEach(() => {
                 // eat expected errors to keep console clean
                 jest.spyOn(logger, 'error').mockImplementation(() => { });
-                mocked(getTileServerWellKnown).mockReturnValue({});
+                mockClient.getClientWellKnown.mockReturnValue({});
                 sdkConfigSpy = jest.spyOn(SdkConfig, 'get').mockReturnValue({});
             });
 
@@ -133,7 +78,9 @@ describe("MLocationBody", () => {
 
             it('displays correct fallback content when map_style_url is misconfigured', () => {
                 const mockMap = new maplibregl.Map();
-                mocked(getTileServerWellKnown).mockReturnValue({ map_style_url: 'bad-tile-server.com' });
+                mockClient.getClientWellKnown.mockReturnValue({
+                    [TILE_SERVER_WK_KEY.name]: { map_style_url: 'bad-tile-server.com' },
+                });
                 const component = getComponent();
 
                 // simulate error initialising map in maplibregl
@@ -141,6 +88,70 @@ describe("MLocationBody", () => {
                 mockMap.emit('error', { status: 404 });
                 component.setProps({});
                 expect(component.find(".mx_EventTile_body")).toMatchSnapshot();
+            });
+        });
+
+        describe('without error', () => {
+            beforeEach(() => {
+                mockClient.getClientWellKnown.mockReturnValue({
+                    [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
+                });
+
+                // MLocationBody uses random number for map id
+                // stabilise for test
+                jest.spyOn(global.Math, 'random').mockReturnValue(0.123456);
+            });
+
+            afterAll(() => {
+                jest.spyOn(global.Math, 'random').mockRestore();
+            });
+
+            it('renders map correctly', () => {
+                const mockMap = new maplibregl.Map();
+                const component = getComponent();
+
+                expect(component).toMatchSnapshot();
+                // map was centered
+                expect(mockMap.setCenter).toHaveBeenCalledWith({
+                    lat: 51.5076, lon: -0.1276,
+                });
+            });
+
+            it('opens map dialog on click', () => {
+                const modalSpy = jest.spyOn(Modal, 'createTrackedDialog').mockReturnValue(undefined);
+                const component = getComponent();
+
+                act(() => {
+                    component.find('Map').at(0).simulate('click');
+                });
+
+                expect(modalSpy).toHaveBeenCalled();
+            });
+
+            it('renders marker correctly for a non-self share', () => {
+                const mockMap = new maplibregl.Map();
+                const component = getComponent();
+
+                expect(component.find('SmartMarker').at(0).props()).toEqual(
+                    expect.objectContaining({
+                        map: mockMap,
+                        geoUri: 'geo:51.5076,-0.1276',
+                        roomMember: undefined,
+                    }),
+                );
+            });
+
+            it('renders marker correctly for a self share', () => {
+                const selfShareEvent = makeLocationEvent("geo:51.5076,-0.1276", LocationAssetType.Self);
+                const member = new RoomMember(roomId, userId);
+                // @ts-ignore cheat assignment to property
+                selfShareEvent.sender = member;
+                const component = getComponent({ mxEvent: selfShareEvent });
+
+                // render self locations with user avatars
+                expect(component.find('SmartMarker').at(0).props()['roomMember']).toEqual(
+                    member,
+                );
             });
         });
     });

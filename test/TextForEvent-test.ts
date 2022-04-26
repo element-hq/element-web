@@ -1,7 +1,6 @@
-import './skinned-sdk';
-
 import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import TestRenderer from 'react-test-renderer';
+import { ReactElement } from "react";
 
 import { getSenderName, textForEvent } from "../src/TextForEvent";
 import SettingsStore from "../src/settings/SettingsStore";
@@ -82,7 +81,7 @@ describe('TextForEvent', () => {
         it("mentions message when a single message was pinned, with no previously pinned messages", () => {
             const event = mockPinnedEvent(['message-1']);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true));
+            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -92,7 +91,7 @@ describe('TextForEvent', () => {
         it("mentions message when a single message was pinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(['message-1', 'message-2', 'message-3'], ['message-1', 'message-2']);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true));
+            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com pinned a message to this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -102,7 +101,7 @@ describe('TextForEvent', () => {
         it("mentions message when a single message was unpinned, with a single message previously pinned", () => {
             const event = mockPinnedEvent([], ['message-1']);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true));
+            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -112,7 +111,7 @@ describe('TextForEvent', () => {
         it("mentions message when a single message was unpinned, with multiple previously pinned messages", () => {
             const event = mockPinnedEvent(['message-2'], ['message-1', 'message-2']);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true));
+            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com unpinned a message from this room. See all pinned messages.";
             expect(plainText).toBe(expectedText);
@@ -122,7 +121,7 @@ describe('TextForEvent', () => {
         it("shows generic text when multiple messages were pinned", () => {
             const event = mockPinnedEvent(['message-1', 'message-2', 'message-3'], ['message-1']);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true));
+            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
@@ -132,7 +131,7 @@ describe('TextForEvent', () => {
         it("shows generic text when multiple messages were unpinned", () => {
             const event = mockPinnedEvent(['message-3'], ['message-1', 'message-2', 'message-3']);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true));
+            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
@@ -142,7 +141,7 @@ describe('TextForEvent', () => {
         it("shows generic text when one message was pinned, and another unpinned", () => {
             const event = mockPinnedEvent(['message-2'], ['message-1']);
             const plainText = textForEvent(event);
-            const component = TestRenderer.create(textForEvent(event, true));
+            const component = TestRenderer.create(textForEvent(event, true) as ReactElement);
 
             const expectedText = "@foo:example.com changed the pinned messages for the room.";
             expect(plainText).toBe(expectedText);
@@ -378,6 +377,66 @@ describe('TextForEvent', () => {
         it.each(testCases)('returns correct message when %s', (_d, { result, ...eventProps }) => {
             const event = mockEvent(eventProps);
             expect(textForEvent(event)).toEqual(result);
+        });
+    });
+
+    describe("textForPollStartEvent()", () => {
+        let pollEvent;
+
+        beforeEach(() => {
+            pollEvent = new MatrixEvent({
+                type: 'org.matrix.msc3381.poll.start',
+                sender: '@a',
+                content: {
+                    'org.matrix.msc3381.poll.start': {
+                        answers: [
+                            { 'org.matrix.msc1767.text': 'option1' },
+                            { 'org.matrix.msc1767.text': 'option2' },
+                        ],
+                        question: {
+                            'body': 'Test poll name',
+                            'msgtype': 'm.text',
+                            'org.matrix.msc1767.text': 'Test poll name',
+                        },
+                    },
+                },
+            });
+        });
+
+        it("returns correct message for redacted poll start", () => {
+            pollEvent.makeRedacted(pollEvent);
+
+            expect(textForEvent(pollEvent)).toEqual('@a: Message deleted');
+        });
+
+        it("returns correct message for normal poll start", () => {
+            expect(textForEvent(pollEvent)).toEqual('@a has started a poll - ');
+        });
+    });
+
+    describe("textForMessageEvent()", () => {
+        let messageEvent;
+
+        beforeEach(() => {
+            messageEvent = new MatrixEvent({
+                type: 'm.room.message',
+                sender: '@a',
+                content: {
+                    'body': 'test message',
+                    'msgtype': 'm.text',
+                    'org.matrix.msc1767.text': 'test message',
+                },
+            });
+        });
+
+        it("returns correct message for redacted message", () => {
+            messageEvent.makeRedacted(messageEvent);
+
+            expect(textForEvent(messageEvent)).toEqual('@a: Message deleted');
+        });
+
+        it("returns correct message for normal message", () => {
+            expect(textForEvent(messageEvent)).toEqual('@a: test message');
         });
     });
 });

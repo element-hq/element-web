@@ -1,0 +1,65 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_MBeaconBody {
+    position: relative;
+    height: 220px;
+    width: 325px;
+
+    border-radius: $timeline-image-border-radius;
+    overflow: hidden;
+}
+
+.mx_MBeaconBody_map {
+    height: 100%;
+    width: 100%;
+    z-index: 0; // keeps the entire map under the message action bar
+
+    &:not(.mx_MBeaconBody_mapFallback) {
+        cursor: pointer;
+    }
+}
+
+.mx_MBeaconBody_mapFallback {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // pushes spinner/icon up
+    // to appear more centered with the footer
+    padding-bottom: 50px;
+
+    background: url('$(res)/img/location/map.svg');
+    background-size: cover;
+}
+
+.mx_MBeaconBody_mapFallbackIcon {
+    width: 65px;
+    color: $quaternary-content;
+}
+
+.mx_MBeaconBody_chin {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: $overlay-background;
+}
+
+.mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MBeaconBody {
+    max-width: 100%;
+    width: 450px;
+}

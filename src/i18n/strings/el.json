@@ -2129,7 +2129,7 @@
     "Collapse reply thread": "Σύμπτυξη νήματος απάντησης",
     "Show preview": "Εμφάνιση προεπισκόπησης",
     "View source": "Προβολή πηγής",
-    "Forward": "Εμπρός",
+    "Forward": "Προώθηση",
     "Open in OpenStreetMap": "Άνοιγμα στο OpenStreetMap",
     "Not a valid Security Key": "Μη έγκυρο Κλειδί Ασφαλείας",
     "This looks like a valid Security Key!": "Αυτό φαίνεται να είναι ένα έγκυρο Κλειδί Ασφαλείας!",
@@ -3443,5 +3443,11 @@
     "An error occured whilst sharing your live location": "Παρουσιάστηκε σφάλμα κατά την κοινή χρήση της τρέχουσας τοποθεσίας σας",
     "Force complete": "Εξαναγκασμός ολοκλήρωσης",
     "Close dialog or context menu": "Κλείσιμο διαλόγου ή μενού περιβάλλοντος",
-    "Stop sharing and close": "Σταματήστε την κοινή χρήση και κλείστε"
+    "Stop sharing and close": "Σταματήστε την κοινή χρήση και κλείστε",
+    "Video rooms (under active development)": "Βίντεο δωμάτια (υπό ανάπτυξη)",
+    "To leave, return to this page and use the “Leave the beta” button.": "Για να αποχωρήσετε, επιστρέψτε σε αυτήν τη σελίδα και χρησιμοποιήστε το κουμπί \"Αποχώρηση από την έκδοση beta\".",
+    "Use \"Reply in thread\" when hovering over a message.": "Χρησιμοποιήστε την \"Απάντηση στο νήμα\" όταν τοποθετείτε το δείκτη του ποντικιού πάνω από ένα μήνυμα.",
+    "How can I start a thread?": "Πώς μπορώ να ξεκινήσω ένα νήμα;",
+    "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.": "Τα νήματα βοηθούν στην καλύτερη οργάνωση των συζητήσεων και στην εύκολη παρακολούθηση. <a>Μάθετε περισσότερα</a>.",
+    "Keep discussions organised with threads.": "Διατηρήστε τις συζητήσεις οργανωμένες σε νήματα."
 }

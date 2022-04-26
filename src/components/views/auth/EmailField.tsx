@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { PureComponent, RefCallback, RefObject } from "react";
 
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Field, { IInputProps } from "../elements/Field";
 import { _t, _td } from "../../../languageHandler";
 import withValidation, { IFieldState, IValidationResult } from "../elements/Validation";
@@ -39,7 +38,6 @@ interface IProps extends Omit<IInputProps, "onValidate"> {
     onValidate?(result: IValidationResult): void;
 }
 
-@replaceableComponent("views.auth.EmailField")
 class EmailField extends PureComponent<IProps> {
     static defaultProps = {
         label: _td("Email"),

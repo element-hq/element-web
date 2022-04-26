@@ -24,7 +24,6 @@ import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import * as FormattingUtils from '../../../utils/FormattingUtils';
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import QuestionDialog from "./QuestionDialog";
 import { IDialogProps } from "./IDialogProps";
 
@@ -33,7 +32,6 @@ interface IProps extends IDialogProps {
     device: DeviceInfo;
 }
 
-@replaceableComponent("views.dialogs.ManualDeviceKeyVerificationDialog")
 export default class ManualDeviceKeyVerificationDialog extends React.Component<IProps> {
     private onLegacyFinished = (confirm: boolean): void => {
         if (confirm) {

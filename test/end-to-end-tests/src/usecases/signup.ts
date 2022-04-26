@@ -19,8 +19,12 @@ import { strict as assert } from 'assert';
 
 import { ElementSession } from "../session";
 
-export async function signup(session: ElementSession, username: string, password: string,
-    homeserver: string): Promise<void> {
+export async function signup(
+    session: ElementSession,
+    username: string,
+    password: string,
+    homeserver: string,
+): Promise<void> {
     session.log.step("signs up");
     await session.goto(session.url('/#/register'));
     // change the homeserver by clicking the advanced section

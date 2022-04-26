@@ -48,49 +48,10 @@ limitations under the License.
             background-color: $dialog-close-external-color;
         }
     }
+}
 
-    .mx_MLocationBody {
-        position: absolute;
-
-        .mx_MLocationBody_map {
-            width: 80vw;
-            height: 80vh;
-        }
-
-        .mx_MLocationBody_zoomButtons {
-            position: absolute;
-            display: grid;
-            grid-template-columns: auto;
-            grid-row-gap: 8px;
-
-            right: 24px;
-            bottom: 48px;
-
-            .mx_AccessibleButton {
-                background-color: $background;
-                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
-                border-radius: 4px;
-                width: 24px;
-                height: 24px;
-
-                .mx_MLocationBody_zoomButton {
-                    background-color: $primary-content;
-                    margin: 4px;
-                    width: 16px;
-                    height: 16px;
-                    mask-repeat: no-repeat;
-                    mask-size: contain;
-                    mask-position: center;
-                }
-
-                .mx_MLocationBody_plusButton {
-                    mask-image: url('$(res)/img/element-icons/plus-button.svg');
-                }
-
-                .mx_MLocationBody_minusButton {
-                    mask-image: url('$(res)/img/element-icons/minus-button.svg');
-                }
-            }
-        }
-    }
+.mx_LocationViewDialog_map {
+    width: 80vw;
+    height: 80vh;
+    border-radius: 8px;
 }

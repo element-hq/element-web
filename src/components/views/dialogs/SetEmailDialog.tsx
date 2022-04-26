@@ -22,7 +22,6 @@ import * as Email from '../../../email';
 import AddThreepid from '../../../AddThreepid';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import Spinner from "../elements/Spinner";
 import ErrorDialog from "./ErrorDialog";
 import QuestionDialog from "./QuestionDialog";
@@ -44,7 +43,6 @@ interface IState {
  *
  * On success, `onFinished(true)` is called.
  */
-@replaceableComponent("views.dialogs.SetEmailDialog")
 export default class SetEmailDialog extends React.Component<IProps, IState> {
     private addThreepid: AddThreepid;
 

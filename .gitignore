@@ -11,6 +11,7 @@ package-lock.json
 /matrix-react-sdk-*.tgz
 
 /.idea
+# Legacy skinning file that some people might still have
 /src/component-index.js
 
 .DS_Store
@@ -18,3 +19,11 @@ package-lock.json
 
 .vscode
 .vscode/
+
+/cypress/videos
+/cypress/downloads
+/cypress/screenshots
+/cypress/synapselogs
+# These could have files in them but don't currently
+# Cypress will still auto-create them though...
+/cypress/fixtures

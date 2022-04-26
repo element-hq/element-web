@@ -39,6 +39,7 @@ limitations under the License.
         justify-content: center;
         font-size: $font-14px;
         border: none; // override default <button /> styles
+        word-break: keep-all; // prevent button text in Chinese/Japanese/Korean (CJK) from being collapsed
 
         &.mx_AccessibleButton_kind_primary_sm,
         &.mx_AccessibleButton_kind_danger_sm,
@@ -130,14 +131,20 @@ limitations under the License.
         }
     }
 
-    &.mx_AccessibleButton_kind_link {
+    &.mx_AccessibleButton_kind_link,
+    &.mx_AccessibleButton_kind_link_inline {
         color: $accent;
+        font-size: inherit;
+        font-weight: normal;
+        line-height: inherit;
+    }
+
+    &.mx_AccessibleButton_kind_link {
         padding: 0;
     }
 
     &.mx_AccessibleButton_kind_link_inline {
-        color: $accent;
-        font-size: inherit;
+        display: inline;
         padding: 0 2px;
     }
 

@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BeaconStatus /> active state renders with children 1`] = `null`;
+
+exports[`<BeaconStatus /> active state renders without children 1`] = `
+<BeaconStatus
+  beacon={
+    Beacon {
+      "_beaconInfo": Object {
+        "assetType": "m.self",
+        "description": undefined,
+        "live": undefined,
+        "timeout": 3600000,
+        "timestamp": 123456789,
+      },
+      "_events": Object {},
+      "_eventsCount": 0,
+      "_isLive": undefined,
+      "_latestLocationState": undefined,
+      "_maxListeners": undefined,
+      "clearLatestLocation": [Function],
+      "livenessWatchInterval": undefined,
+      "roomId": "!room:server",
+      "rootEvent": Object {
+        "content": Object {
+          "description": undefined,
+          "live": undefined,
+          "org.matrix.msc3488.asset": Object {
+            "type": "m.self",
+          },
+          "org.matrix.msc3488.ts": 123456789,
+          "timeout": 3600000,
+        },
+        "event_id": "$1",
+        "origin_server_ts": 123456789,
+        "room_id": "!room:server",
+        "sender": "@user:server",
+        "state_key": "@user:server",
+        "type": "org.matrix.msc3672.beacon_info",
+      },
+      Symbol(kCapture): false,
+    }
+  }
+  displayStatus="Active"
+  label="test label"
+>
+  <div
+    className="mx_BeaconStatus mx_BeaconStatus_Active"
+  >
+    <StyledLiveBeaconIcon
+      className="mx_BeaconStatus_icon"
+      isIdle={false}
+      withError={false}
+    >
+      <div
+        className="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon"
+      />
+    </StyledLiveBeaconIcon>
+    <div
+      className="mx_BeaconStatus_description"
+    >
+      test label
+      <BeaconExpiryTime
+        beacon={
+          Beacon {
+            "_beaconInfo": Object {
+              "assetType": "m.self",
+              "description": undefined,
+              "live": undefined,
+              "timeout": 3600000,
+              "timestamp": 123456789,
+            },
+            "_events": Object {},
+            "_eventsCount": 0,
+            "_isLive": undefined,
+            "_latestLocationState": undefined,
+            "_maxListeners": undefined,
+            "clearLatestLocation": [Function],
+            "livenessWatchInterval": undefined,
+            "roomId": "!room:server",
+            "rootEvent": Object {
+              "content": Object {
+                "description": undefined,
+                "live": undefined,
+                "org.matrix.msc3488.asset": Object {
+                  "type": "m.self",
+                },
+                "org.matrix.msc3488.ts": 123456789,
+                "timeout": 3600000,
+              },
+              "event_id": "$1",
+              "origin_server_ts": 123456789,
+              "room_id": "!room:server",
+              "sender": "@user:server",
+              "state_key": "@user:server",
+              "type": "org.matrix.msc3672.beacon_info",
+            },
+            Symbol(kCapture): false,
+          }
+        }
+      >
+        <span
+          className="mx_BeaconStatus_expiryTime"
+        >
+          Live until 11:17
+        </span>
+      </BeaconExpiryTime>
+    </div>
+  </div>
+</BeaconStatus>
+`;
+
+exports[`<BeaconStatus /> renders loading state 1`] = `
+<BeaconStatus
+  displayStatus="Loading"
+  label="test label"
+>
+  <div
+    className="mx_BeaconStatus mx_BeaconStatus_Loading"
+  >
+    <StyledLiveBeaconIcon
+      className="mx_BeaconStatus_icon"
+      isIdle={true}
+      withError={false}
+    >
+      <div
+        className="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
+      />
+    </StyledLiveBeaconIcon>
+    <div
+      className="mx_BeaconStatus_description"
+    >
+      <span>
+        Loading live location...
+      </span>
+    </div>
+  </div>
+</BeaconStatus>
+`;
+
+exports[`<BeaconStatus /> renders stopped state 1`] = `
+<BeaconStatus
+  displayStatus="Stopped"
+  label="test label"
+>
+  <div
+    className="mx_BeaconStatus mx_BeaconStatus_Stopped"
+  >
+    <StyledLiveBeaconIcon
+      className="mx_BeaconStatus_icon"
+      isIdle={true}
+      withError={false}
+    >
+      <div
+        className="mx_StyledLiveBeaconIcon mx_BeaconStatus_icon mx_StyledLiveBeaconIcon_idle"
+      />
+    </StyledLiveBeaconIcon>
+    <div
+      className="mx_BeaconStatus_description"
+    >
+      <span>
+        Live location ended
+      </span>
+    </div>
+  </div>
+</BeaconStatus>
+`;

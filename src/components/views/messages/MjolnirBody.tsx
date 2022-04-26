@@ -18,7 +18,6 @@ import React from 'react';
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from '../elements/AccessibleButton';
 
 interface IProps {
@@ -26,7 +25,6 @@ interface IProps {
     onMessageAllowed: () => void;
 }
 
-@replaceableComponent("views.messages.MjolnirBody")
 export default class MjolnirBody extends React.Component<IProps> {
     private onAllowClick = (e: React.MouseEvent): void => {
         e.preventDefault();

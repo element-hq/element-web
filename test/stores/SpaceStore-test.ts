@@ -21,7 +21,6 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { defer } from "matrix-js-sdk/src/utils";
 import { ClientEvent, RoomEvent, MatrixEvent } from 'matrix-js-sdk/src/matrix';
 
-import "../skinned-sdk"; // Must be first for skinning to work
 import SpaceStore from "../../src/stores/spaces/SpaceStore";
 import {
     MetaSpace,

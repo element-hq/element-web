@@ -24,7 +24,6 @@ import dis from '../../../dispatcher/dispatcher';
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import { IRightPanelCardState } from '../../../stores/right-panel/RightPanelStoreIPanelState';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 import { NotificationColor } from '../../../stores/notifications/NotificationColor';
 
@@ -40,7 +39,6 @@ interface IState {
 
 interface IProps {}
 
-@replaceableComponent("views.right_panel.HeaderButtons")
 export default abstract class HeaderButtons<P = {}> extends React.Component<IProps & P, IState> {
     private unmounted = false;
     private dispatcherRef: string;

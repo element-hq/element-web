@@ -251,7 +251,8 @@ $activeBorderColor: $primary-content;
             margin-top: auto;
             margin-bottom: auto;
             display: none;
-            position: relative;
+            position: absolute;
+            right: 4px;
 
             &::before {
                 top: 3px;
@@ -324,6 +325,16 @@ $activeBorderColor: $primary-content;
     .mx_SpaceButton_hasMenuOpen {
         &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_menuButton {
             display: block;
+        }
+    }
+
+    .mx_SpaceItem:not(.mx_SpaceItem_new) {
+        .mx_SpaceButton:hover,
+        .mx_SpaceButton:focus-within,
+        .mx_SpaceButton_hasMenuOpen {
+            &:not(.mx_SpaceButton_narrow):not(.mx_SpaceButton_invite) .mx_SpaceButton_name {
+                max-width: calc(100% - 56px);
+            }
         }
     }
 

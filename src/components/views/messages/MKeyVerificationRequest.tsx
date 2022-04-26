@@ -24,7 +24,6 @@ import { _t } from '../../../languageHandler';
 import { getNameForEventRoom, userLabelForEventRoom } from '../../../utils/KeyVerificationStateObserver';
 import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePhases';
 import EventTileBubble from "./EventTileBubble";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import AccessibleButton from '../elements/AccessibleButton';
 import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
 
@@ -33,7 +32,6 @@ interface IProps {
     timestamp?: JSX.Element;
 }
 
-@replaceableComponent("views.messages.MKeyVerificationRequest")
 export default class MKeyVerificationRequest extends React.Component<IProps> {
     public componentDidMount() {
         const request = this.props.mxEvent.verificationRequest;

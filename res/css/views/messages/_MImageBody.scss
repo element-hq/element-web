@@ -38,6 +38,12 @@ $timeline-image-border-radius: 8px;
     // Necessary for the border radius to apply correctly to the placeholder
     overflow: hidden;
     contain: paint;
+
+    min-height: $font-44px;
+    min-width: $font-44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mx_MImageBody_thumbnail {

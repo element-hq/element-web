@@ -32,7 +32,7 @@ function escape(text: string): string {
 
 // Finds the length of the longest backtick sequence in the given text, used for
 // escaping backticks in code blocks
-function longestBacktickSequence(text: string): number {
+export function longestBacktickSequence(text: string): number {
     let length = 0;
     let currentLength = 0;
 
@@ -97,7 +97,7 @@ function parseCodeBlock(n: Node, pc: PartCreator): Part[] {
     if (n.firstChild?.nodeName === "CODE") {
         for (const className of (n.firstChild as HTMLElement).classList) {
             if (className.startsWith("language-") && !className.startsWith("language-_")) {
-                language = className.substr("language-".length);
+                language = className.slice("language-".length);
                 break;
             }
         }
@@ -118,7 +118,7 @@ function parseCodeBlock(n: Node, pc: PartCreator): Part[] {
 }
 
 function parseHeader(n: Node, pc: PartCreator): Part[] {
-    const depth = parseInt(n.nodeName.substr(1), 10);
+    const depth = parseInt(n.nodeName.slice(1), 10);
     const prefix = pc.plain("#".repeat(depth) + " ");
     return [prefix, ...parseChildren(n, pc)];
 }

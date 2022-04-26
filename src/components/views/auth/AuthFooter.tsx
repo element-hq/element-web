@@ -19,9 +19,7 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from '../../../languageHandler';
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 
-@replaceableComponent("views.auth.AuthFooter")
 export default class AuthFooter extends React.Component {
     public render(): React.ReactNode {
         return (

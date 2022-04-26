@@ -23,7 +23,6 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { mocked } from 'jest-mock';
 import { logger } from 'matrix-js-sdk/src/logger';
 
-import "../../../skinned-sdk"; // Must be first for skinning to work
 import LocationPicker from "../../../../src/components/views/location/LocationPicker";
 import { LocationShareType } from "../../../../src/components/views/location/shareLocation";
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
@@ -284,7 +283,7 @@ describe("LocationPicker", () => {
                 });
 
                 // marker not added
-                expect(wrapper.find('.mx_MLocationBody_markerBorder').length).toBeFalsy();
+                expect(wrapper.find('Marker').length).toBeFalsy();
             });
 
             it('sets position on click event', () => {
@@ -302,7 +301,7 @@ describe("LocationPicker", () => {
                 ));
 
                 // marker is set, icon not avatar
-                expect(wrapper.find('.mx_MLocationBody_markerIcon').length).toBeTruthy();
+                expect(wrapper.find('.mx_Marker_icon').length).toBeTruthy();
             });
 
             it('submits location', () => {

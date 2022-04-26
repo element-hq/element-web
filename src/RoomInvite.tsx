@@ -24,10 +24,12 @@ import { MatrixClientPeg } from './MatrixClientPeg';
 import MultiInviter, { CompletionStates } from './utils/MultiInviter';
 import Modal from './Modal';
 import { _t } from './languageHandler';
-import InviteDialog, { KIND_DM, KIND_INVITE, Member } from "./components/views/dialogs/InviteDialog";
+import InviteDialog from "./components/views/dialogs/InviteDialog";
 import BaseAvatar from "./components/views/avatars/BaseAvatar";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
+import { KIND_DM, KIND_INVITE } from "./components/views/dialogs/InviteDialogTypes";
+import { Member } from "./utils/direct-messages";
 
 export interface IInviteResult {
     states: CompletionStates;

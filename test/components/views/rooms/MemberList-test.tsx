@@ -14,8 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import "../../../skinned-sdk";
-
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
@@ -201,8 +199,8 @@ describe('MemberList', () => {
             }
 
             if (!groupChange) {
-                const nameA = memberA.name[0] === '@' ? memberA.name.substr(1) : memberA.name;
-                const nameB = memberB.name[0] === '@' ? memberB.name.substr(1) : memberB.name;
+                const nameA = memberA.name[0] === '@' ? memberA.name.slice(1) : memberA.name;
+                const nameB = memberB.name[0] === '@' ? memberB.name.slice(1) : memberB.name;
                 const nameCompare = compare(nameB, nameA);
                 console.log("Comparing name");
                 expect(nameCompare).toBeGreaterThanOrEqual(0);

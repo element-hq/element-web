@@ -19,7 +19,6 @@ import React from 'react';
 import * as Roles from '../../../Roles';
 import { _t } from '../../../languageHandler';
 import Field from "./Field";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 
@@ -55,7 +54,6 @@ interface IState {
     customLevel?: number;
 }
 
-@replaceableComponent("views.elements.PowerSelector")
 export default class PowerSelector extends React.Component<IProps, IState> {
     public static defaultProps: Partial<IProps> = {
         maxValue: Infinity,

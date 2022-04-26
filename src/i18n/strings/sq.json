@@ -3820,5 +3820,17 @@
     "%(count)s participants|other": "%(count)s pjesëmarrës",
     "New video room": "Dhomë e re me video",
     "New room": "Dhomë e re",
-    "Video rooms (under active development)": "Dhoma me video (nën zhvillim aktiv)"
+    "Video rooms (under active development)": "Dhoma me video (nën zhvillim aktiv)",
+    "<a>Give feedback</a>": "<a>Jepni përshtypjet</a>",
+    "Threads are a beta feature": "Rrjedhat janë një veçori beta",
+    "<b>Tip:</b> Use \"Reply in thread\" when hovering over a message.": "<b>Ndihmëz:</b> Përdorni “Përgjigjuni në rrjedhë”, teksa kaloni kursorin sipër një mesazhi.",
+    "Threads help keep your conversations on-topic and easy to track.": "Rrjedhat ndihmojnë që të mbahen bisedat tuaja brenda temës dhe të ndiqen kollaj.",
+    "%(featureName)s Beta feedback": "Përshtypje për %(featureName)s Beta",
+    "Beta feature. Click to learn more.": "Veçori në version beta. Klikoni për të mësuar më tepër.",
+    "Beta feature": "Veçori në version beta",
+    "To leave, return to this page and use the “Leave the beta” button.": "Për ta braktisur, kthehuni te kjo faqe dhe përdorni butonin “Braktise beta-n”.",
+    "Use \"Reply in thread\" when hovering over a message.": "Përdorni “Përgjigjuni në rrjedhë”, teksa kaloni kursorin sipër një mesazhi.",
+    "How can I start a thread?": "Si mund të nis një rrjedhë?",
+    "Threads help keep conversations on-topic and easy to track. <a>Learn more</a>.": "Rrjedhat ndihmojnë që të mbahen bisedat tuaja brenda temës dhe të ndiqen kollaj. <a>Mësoni më tepër</a>.",
+    "Keep discussions organised with threads.": "Mbajini diskutimet të sistemuara në rrjedha."
 }

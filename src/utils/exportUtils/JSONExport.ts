@@ -21,9 +21,9 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import Exporter from "./Exporter";
 import { formatFullDateNoDay, formatFullDateNoDayNoTime } from "../../DateUtils";
-import { haveTileForEvent } from "../../components/views/rooms/EventTile";
 import { ExportType, IExportOptions } from "./exportUtils";
 import { _t } from "../../languageHandler";
+import { haveRendererForEvent } from "../../events/EventTileFactory";
 
 export default class JSONExporter extends Exporter {
     protected totalSize = 0;
@@ -85,7 +85,7 @@ export default class JSONExporter extends Exporter {
                 total: events.length,
             }), false, true);
             if (this.cancelled) return this.cleanUp();
-            if (!haveTileForEvent(event)) continue;
+            if (!haveRendererForEvent(event, false)) continue;
             this.messages.push(await this.getJSONString(event));
         }
         return this.createJSONString();

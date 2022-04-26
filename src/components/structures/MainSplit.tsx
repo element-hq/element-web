@@ -19,7 +19,6 @@ import React from 'react';
 import { NumberSize, Resizable } from 're-resizable';
 import { Direction } from "re-resizable/lib/resizer";
 
-import { replaceableComponent } from "../../utils/replaceableComponent";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 
 interface IProps {
@@ -28,7 +27,6 @@ interface IProps {
     panel?: JSX.Element;
 }
 
-@replaceableComponent("structures.MainSplit")
 export default class MainSplit extends React.Component<IProps> {
     private onResizeStart = (): void => {
         this.props.resizeNotifier.startResizing();

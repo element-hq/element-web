@@ -1,0 +1,49 @@
+# Produce a build of element-web with this version of react-sdk
+# and any matching branches of element-web and js-sdk, output it
+# as an artifact and run integration tests.
+name: Element Web - Build and Test
+on:
+    pull_request:
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+          # This must be set for fetchdep.sh to get the right branch
+          PR_NUMBER: ${{github.event.number}}
+        steps:
+            - uses: actions/checkout@v2
+            - name: Build
+              run: scripts/ci/layered.sh && cd element-web && cp element.io/develop/config.json config.json && CI_PACKAGE=true yarn build
+            - name: Upload Artifact
+              uses: actions/upload-artifact@v2
+              with:
+                  name: previewbuild
+                  path: element-web/webapp
+                  # We'll only use this in a triggered job, then we're done with it
+                  retention-days: 1
+    cypress:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Download build
+              uses: actions/download-artifact@v3
+              with:
+                  name: previewbuild
+                  path: webapp
+            - name: Run Cypress tests
+              uses: cypress-io/github-action@v2
+              with:
+                # The built in Electron runner seems to grind to a halt trying
+                # to run the tests, so use chrome.
+                browser: chrome
+                start: npx serve -p 8080 webapp
+            - name: Upload Artifact
+              if: failure()
+              uses: actions/upload-artifact@v2
+              with:
+                  name: cypress-results
+                  path: |
+                      cypress/screenshots
+                      cypress/videos
+                      cypress/synapselogs

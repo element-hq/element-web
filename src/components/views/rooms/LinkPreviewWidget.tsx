@@ -23,7 +23,6 @@ import { linkifyElement } from '../../../HtmlUtils';
 import SettingsStore from "../../../settings/SettingsStore";
 import Modal from "../../../Modal";
 import * as ImageUtils from "../../../ImageUtils";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { mediaFromMxc } from "../../../customisations/Media";
 import ImageView from '../elements/ImageView';
 
@@ -33,7 +32,6 @@ interface IProps {
     mxEvent: MatrixEvent; // the Event associated with the preview
 }
 
-@replaceableComponent("views.rooms.LinkPreviewWidget")
 export default class LinkPreviewWidget extends React.Component<IProps> {
     private readonly description = createRef<HTMLDivElement>();
     private image = createRef<HTMLImageElement>();

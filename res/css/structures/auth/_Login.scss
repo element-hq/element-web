@@ -88,13 +88,12 @@ limitations under the License.
 div.mx_AccessibleButton_kind_link.mx_Login_forgot {
     display: block;
     margin: 0 auto;
-    // style it as a link
-    font-size: inherit;
 
     &.mx_AccessibleButton_disabled {
         cursor: not-allowed;
     }
 }
+
 .mx_Login_spinner {
     display: flex;
     justify-content: center;

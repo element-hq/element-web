@@ -32,7 +32,6 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { _t } from "../../../languageHandler";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import DMRoomMap from "../../../utils/DMRoomMap";
-import { replaceableComponent } from "../../../utils/replaceableComponent";
 import { IOOBData } from "../../../stores/ThreepidInviteStore";
 import TooltipTarget from "../elements/TooltipTarget";
 
@@ -78,7 +77,6 @@ function tooltipText(variant: Icon) {
     }
 }
 
-@replaceableComponent("views.avatars.DecoratedRoomAvatar")
 export default class DecoratedRoomAvatar extends React.PureComponent<IProps, IState> {
     private _dmUser: User;
     private isUnmounted = false;
