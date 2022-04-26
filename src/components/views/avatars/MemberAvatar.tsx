@@ -30,7 +30,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 
 interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | "idName" | "url"> {
-    member: RoomMember;
+    member: RoomMember | null;
     fallbackUserId?: string;
     width: number;
     height: number;

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { PropsWithChildren, useRef } from "react";
+import { User } from "matrix-js-sdk/src/matrix";
 
 import ReadReceiptMarker, { IReadReceiptInfo } from "./ReadReceiptMarker";
 import { IReadReceiptProps } from "./EventTile";
@@ -188,7 +189,7 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
         label: (
             <>
                 <div className="mx_Tooltip_title">
-                    { roomMember.rawDisplayName ?? userId }
+                    { roomMember?.rawDisplayName ?? userId }
                 </div>
                 <div className="mx_Tooltip_sub">
                     { userId }
@@ -203,7 +204,11 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
             onClick={() => {
                 dis.dispatch({
                     action: Action.ViewUser,
-                    member: roomMember,
+                    // XXX: We should be using a real member object and not assuming what the receiver wants.
+                    // The ViewUser action leads to the RightPanelStore, and RightPanelStoreIPanelState defines the
+                    // member property of IRightPanelCardState as `RoomMember | User`, so we’re fine for now, but we
+                    // should definitely clean this up later
+                    member: roomMember ?? { userId } as User,
                     push: false,
                 });
                 onAfterClick?.();
@@ -225,7 +230,7 @@ function ReadReceiptPerson({ userId, roomMember, ts, isTwelveHour, onAfterClick 
                 hideTitle
             />
             <div className="mx_ReadReceiptGroup_name">
-                <p>{ roomMember.name }</p>
+                <p>{ roomMember?.name ?? userId }</p>
                 <p className="mx_ReadReceiptGroup_secondary">
                     { formatDate(new Date(ts), isTwelveHour) }
                 </p>

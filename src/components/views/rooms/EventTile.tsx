@@ -96,7 +96,7 @@ export type GetRelationsForEvent = (eventId: string, relationType: string, event
 
 export interface IReadReceiptProps {
     userId: string;
-    roomMember: RoomMember;
+    roomMember: RoomMember | null;
     ts: number;
 }
 

@@ -31,7 +31,7 @@ export interface IReadReceiptInfo {
 
 interface IProps {
     // the RoomMember to show the RR for
-    member?: RoomMember;
+    member?: RoomMember | null;
     // userId to fallback the avatar to
     // if the member hasn't been loaded yet
     fallbackUserId: string;
