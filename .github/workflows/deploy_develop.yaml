@@ -1,5 +1,6 @@
 name: Trigger deployment to develop.element.io
 on:
+  pull_request: { } # TEMP
   push:
     branches: [ develop ]
   repository_dispatch:
