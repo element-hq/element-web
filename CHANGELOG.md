@@ -1,11 +1,11 @@
-Changes in [1.10.11-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.10.11-rc.1) (2022-04-19)
-===========================================================================================================
+Changes in [1.10.11](https://github.com/vector-im/element-web/releases/tag/v1.10.11) (2022-04-26)
+=================================================================================================
 
 ## ✨ Features
  * Handle forced disconnects from Jitsi ([\#21697](https://github.com/vector-im/element-web/pull/21697)). Fixes #21517.
  * Improve performance of switching to rooms with lots of servers and ACLs ([\#8347](https://github.com/matrix-org/matrix-react-sdk/pull/8347)).
  * Avoid a reflow when setting caret position on an empty composer ([\#8348](https://github.com/matrix-org/matrix-react-sdk/pull/8348)).
- * Add message right-click context menu as a labs feature ([\#5672](https://github.com/matrix-org/matrix-react-sdk/pull/5672)). Contributed by @SimonBrandner.
+ * Add message right-click context menu as a labs feature ([\#5672](https://github.com/matrix-org/matrix-react-sdk/pull/5672)).
  * Live location sharing - basic maximised beacon map ([\#8310](https://github.com/matrix-org/matrix-react-sdk/pull/8310)).
  * Live location sharing - render users own beacons in timeline ([\#8296](https://github.com/matrix-org/matrix-react-sdk/pull/8296)).
  * Improve Threads beta around degraded mode ([\#8318](https://github.com/matrix-org/matrix-react-sdk/pull/8318)).
