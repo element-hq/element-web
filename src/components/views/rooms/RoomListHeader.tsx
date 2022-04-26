@@ -297,6 +297,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                         e.preventDefault();
                         e.stopPropagation();
                         defaultDispatcher.dispatch({ action: "view_create_chat" });
+                        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuCreateChatItem", e);
                         closePlusMenu();
                     }}
                 />
@@ -335,6 +336,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                         e.preventDefault();
                         e.stopPropagation();
                         defaultDispatcher.dispatch({ action: Action.ViewRoomDirectory });
+                        PosthogTrackers.trackInteraction("WebRoomListHeaderPlusMenuExploreRoomsItem", e);
                         closePlusMenu();
                     }}
                 />

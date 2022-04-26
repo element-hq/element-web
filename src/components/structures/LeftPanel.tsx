@@ -43,6 +43,8 @@ import SettingsStore from "../../settings/SettingsStore";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { shouldShowComponent } from "../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../settings/UIFeature";
+import { ButtonEvent } from "../views/elements/AccessibleButton";
+import PosthogTrackers from "../../PosthogTrackers";
 
 interface IProps {
     isMinimized: boolean;
@@ -116,8 +118,9 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         dis.fire(Action.OpenDialPad);
     };
 
-    private onExplore = () => {
+    private onExplore = (ev: ButtonEvent) => {
         dis.fire(Action.ViewRoomDirectory);
+        PosthogTrackers.trackInteraction("WebLeftPanelExploreRoomsButton", ev);
     };
 
     private refreshStickyHeaders = () => {
