@@ -22,6 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import NodeAnimator from "../../../NodeAnimator";
 import { toPx } from "../../../utils/units";
 import MemberAvatar from '../avatars/MemberAvatar';
+import { READ_AVATAR_SIZE } from "./ReadReceiptGroup";
 
 export interface IReadReceiptInfo {
     top?: number;
@@ -101,10 +102,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             return;
         }
 
-        const avatarNode = this.avatar.current;
-        rrInfo.top = avatarNode.offsetTop;
-        rrInfo.right = avatarNode.getBoundingClientRect().right - avatarNode.offsetParent.getBoundingClientRect().right;
-        rrInfo.parent = avatarNode.offsetParent;
+        this.buildReadReceiptInfo(rrInfo);
     }
 
     public componentDidMount(): void {
@@ -123,42 +121,85 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
         }
     }
 
-    private animateMarker(): void {
-        // treat new RRs as though they were off the top of the screen
-        let oldTop = -15;
-
-        const oldInfo = this.props.readReceiptInfo;
-        if (oldInfo && oldInfo.parent) {
-            oldTop = oldInfo.top + oldInfo.parent.getBoundingClientRect().top;
-        }
-
-        const newElement = this.avatar.current;
-        let startTopOffset;
-        if (!newElement.offsetParent) {
+    private buildReadReceiptInfo(target: IReadReceiptInfo = {}): IReadReceiptInfo {
+        const element = this.avatar.current;
+        // this is the mx_ReadReceiptsGroup_container
+        const horizontalContainer = element.offsetParent;
+        if (!horizontalContainer || !(horizontalContainer instanceof HTMLElement)) {
             // this seems to happen sometimes for reasons I don't understand
             // the docs for `offsetParent` say it may be null if `display` is
             // `none`, but I can't see why that would happen.
             logger.warn(
-                `ReadReceiptMarker for ${this.props.fallbackUserId} in has no offsetParent`,
+                `ReadReceiptMarker for ${this.props.fallbackUserId} has no valid horizontalContainer`,
             );
-            startTopOffset = 0;
-        } else {
-            startTopOffset = oldTop - newElement.offsetParent.getBoundingClientRect().top;
+
+            target.top = 0;
+            target.right = 0;
+            target.parent = null;
+            return;
         }
+        // this is the mx_ReadReceiptsGroup
+        const verticalContainer = horizontalContainer.offsetParent;
+        if (!verticalContainer || !(verticalContainer instanceof HTMLElement)) {
+            // this seems to happen sometimes for reasons I don't understand
+            // the docs for `offsetParent` say it may be null if `display` is
+            // `none`, but I can't see why that would happen.
+            logger.warn(
+                `ReadReceiptMarker for ${this.props.fallbackUserId} has no valid verticalContainer`,
+            );
+
+            target.top = 0;
+            target.right = 0;
+            target.parent = null;
+            return;
+        }
+
+        target.top = element.offsetTop;
+        target.right = element.getBoundingClientRect().right - horizontalContainer.getBoundingClientRect().right;
+        target.parent = verticalContainer;
+        return target;
+    }
+
+    private readReceiptPosition(info: IReadReceiptInfo): number {
+        if (!info.parent) {
+            // this seems to happen sometimes for reasons I don't understand
+            // the docs for `offsetParent` say it may be null if `display` is
+            // `none`, but I can't see why that would happen.
+            logger.warn(
+                `ReadReceiptMarker for ${this.props.fallbackUserId} has no offsetParent`,
+            );
+            return 0;
+        }
+
+        return info.top + info.parent.getBoundingClientRect().top;
+    }
+
+    private animateMarker(): void {
+        const oldInfo = this.props.readReceiptInfo;
+        const newInfo = this.buildReadReceiptInfo();
+
+        const newPosition = this.readReceiptPosition(newInfo);
+        const oldPosition = oldInfo
+            // start at the old height and in the old h pos
+            ? this.readReceiptPosition(oldInfo)
+            // treat new RRs as though they were off the top of the screen
+            : -READ_AVATAR_SIZE;
 
         const startStyles = [];
-
         if (oldInfo && oldInfo.right) {
-            // start at the old height and in the old h pos
-            startStyles.push({ top: startTopOffset+"px",
-                right: toPx(oldInfo.right) });
+            startStyles.push({
+                top: oldPosition - newPosition,
+                right: oldInfo.right,
+            });
         }
-
-        startStyles.push({ top: startTopOffset+'px', right: '0' });
+        startStyles.push({
+            top: oldPosition - newPosition,
+            right: 0,
+        });
 
         this.setState({
             suppressDisplay: false,
-            startStyles: startStyles,
+            startStyles,
         });
     }
 
