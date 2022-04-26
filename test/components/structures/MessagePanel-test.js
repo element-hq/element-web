@@ -674,6 +674,20 @@ describe('MessagePanel', function() {
 
 describe("shouldFormContinuation", () => {
     it("does not form continuations from thread roots", () => {
+        const message1 = TestUtilsMatrix.mkMessage({
+            event: true,
+            room: "!room:id",
+            user: "@user:id",
+            msg: "Here is a message in the main timeline",
+        });
+
+        const message2 = TestUtilsMatrix.mkMessage({
+            event: true,
+            room: "!room:id",
+            user: "@user:id",
+            msg: "And here's another message in the main timeline",
+        });
+
         const threadRoot = TestUtilsMatrix.mkMessage({
             event: true,
             room: "!room:id",
@@ -682,14 +696,15 @@ describe("shouldFormContinuation", () => {
         });
         jest.spyOn(threadRoot, "isThreadRoot", "get").mockReturnValue(true);
 
-        const message = TestUtilsMatrix.mkMessage({
+        const message3 = TestUtilsMatrix.mkMessage({
             event: true,
             room: "!room:id",
             user: "@user:id",
-            msg: "And here's another message in the main timeline",
+            msg: "And here's another message in the main timeline after the thread root",
         });
 
-        expect(shouldFormContinuation(threadRoot, message, false, true)).toEqual(false);
-        expect(shouldFormContinuation(message, threadRoot, false, true)).toEqual(true);
+        expect(shouldFormContinuation(message1, message2, false, true)).toEqual(true);
+        expect(shouldFormContinuation(message2, threadRoot, false, true)).toEqual(false);
+        expect(shouldFormContinuation(threadRoot, message3, false, true)).toEqual(false);
     });
 });

@@ -92,9 +92,13 @@ export function shouldFormContinuation(
         mxEvent.sender.name !== prevEvent.sender.name ||
         mxEvent.sender.getMxcAvatarUrl() !== prevEvent.sender.getMxcAvatarUrl()) return false;
 
-    // Thread summaries in the main timeline should break up a continuation
-    if (threadsEnabled && prevEvent.isThreadRoot &&
-        timelineRenderingType !== TimelineRenderingType.Thread) return false;
+    // Thread summaries in the main timeline should break up a continuation on both sides
+    if (threadsEnabled &&
+        (mxEvent.isThreadRoot || prevEvent.isThreadRoot) &&
+        timelineRenderingType !== TimelineRenderingType.Thread
+    ) {
+        return false;
+    }
 
     // if we don't have tile for previous event then it was shown by showHiddenEvents and has no SenderProfile
     if (!haveRendererForEvent(prevEvent, showHiddenEvents)) return false;
