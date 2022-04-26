@@ -1,0 +1,16 @@
+name: Trigger deployment to develop.element.io
+on:
+  push:
+    branches: [ develop ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke deployment hook
+        uses: distributhor/workflow-webhook@v2
+        env:
+          webhook_url: https://test.tun.bit.ovh
+          webhook_secret: FooBar
+          data: '{ "tarball_url": "foobar" }'
