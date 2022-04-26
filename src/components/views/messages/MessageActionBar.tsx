@@ -308,6 +308,11 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
     ];
 
     private get showReplyInThreadAction(): boolean {
+        if (!SettingsStore.getValue("feature_thread") && !Thread.hasServerSideSupport) {
+            // hide the prompt if the user would only have degraded mode
+            return null;
+        }
+
         if (!SettingsStore.getBetaInfo("feature_thread") &&
             !SettingsStore.getValue("feature_thread") &&
             !SdkConfig.get("show_labs_settings")
