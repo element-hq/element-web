@@ -433,7 +433,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Location sharing - pin drop (under active development)"),
+        displayName: _td("Location sharing - pin drop"),
         default: false,
     },
     "feature_location_share_live": {
@@ -441,8 +441,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         labsGroup: LabGroup.Messaging,
         supportedLevels: LEVELS_FEATURE,
         displayName: _td(
-            `Live location sharing - share current location ` +
-            `(active development, and temporarily, locations persist in room history)`,
+            "Live Location Sharing (temporary implementation: locations persist in room history)",
         ),
         default: false,
     },
