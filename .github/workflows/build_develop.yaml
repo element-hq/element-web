@@ -12,7 +12,7 @@ jobs:
     environment: develop
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/build
+      - uses: ./.github/workflows/build.yml
         secrets:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
