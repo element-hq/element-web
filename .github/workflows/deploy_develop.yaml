@@ -11,7 +11,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: deploy_develop
+    environment: develop
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
     steps:
       - name: Find Artifact ID
@@ -48,8 +48,8 @@ jobs:
       - name: Notify the redeploy script
         uses: distributhor/workflow-webhook@v2
         env:
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
-          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          webhook_url: ${{ secrets.DEVELOP_DEPLOY_WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.DEVELOP_DEPLOY_WEBHOOK_SECRET }}
           data: '{"url": "${{ steps.find_artifact.outputs.result }}"}'
 
       - name: Update deployment status
