@@ -47,18 +47,6 @@ jobs:
     runs-on: ubuntu-latest
     #    if: github.event_name == 'push' && github.ref == 'develop'
     steps:
-      - name: Create Deployment ID
-        uses: altinukshini/deployment-action@v1.2.6
-        id: deployment
-        with:
-          token: "${{ github.token }}"
-          environment_url: https://develop.element.io
-          environment: Develop
-          initial_status: in_progress
-          pr: true
-          pr_id: ${{ github.event.pull_request.number }}
-          ref: ${{ github.head_ref }}
-
       - name: Find Artifact ID
         uses: actions/github-script@v3.1.0
         id: find_artifact
@@ -75,28 +63,45 @@ jobs:
             })[0];
             return matchArtifact.id;
 
-      # TODO
-      - name: Invoke deployment hook
-        uses: distributhor/workflow-webhook@v2
+      - name: Create Deployment
+        uses: avakar/create-deployment@v1
+        id: deployment
         env:
-          webhook_url: https://test.tun.bit.ovh
-          webhook_secret: FooBar
-          data: '{ "artifact_id": "${{steps.find_artifact.outputs.result}}" }'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          environment: Develop
+          initial_status: in_progress
+          ref: ${{ github.head_ref }}
+          transient_environment: true
+          auto_merge: false
+          task: deploy
+          payload: '{"artifact_id": "${{ steps.find_artifact.outputs.result }}"}'
+
+      # TODO
+#      - name: Invoke deployment hook
+#        uses: distributhor/workflow-webhook@v2
+#        env:
+#          webhook_url: https://test.tun.bit.ovh
+#          webhook_secret: FooBar
+#          data: '{ "artifact_id": "${{steps.find_artifact.outputs.result}}" }'
 
       - name: Update deployment status (success)
         if: success()
-        uses: altinukshini/deployment-status@v1.0.1
+        uses: avakar/set-deployment-status@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: "${{ github.token }}"
+          environment: Develop
           environment_url: https://develop.element.io
           state: "success"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          pr: true
-          pr_id: ${{ github.event.pull_request.number }}
+          auto_inactive: true
       - name: Update deployment status (failure)
         if: failure()
         uses: altinukshini/deployment-status@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: "${{ github.token }}"
           state: "failure"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          environment: Develop
