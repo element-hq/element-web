@@ -1,0 +1,42 @@
+name: Build
+on:
+  pull_request: { }
+  push:
+    branches: [ master, develop ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    env:
+      # This must be set for fetchdep.sh to get the right branch
+      PR_NUMBER: ${{github.event.number}}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install SDKs
+        run: "./scripts/fetch-develop.deps.sh --depth 1"
+
+      - name: Install Dependencies
+        run: "yarn install"
+
+      - name: Build & Package
+        run: "./scripts/ci_package.sh"
+
+      - name: Upload webpack-stats.json
+        uses: actions/upload-artifact@v2
+        with:
+          path: webpack-state.json
+          retention-days: 28
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: previewbuild
+          path: dist/*.tar.gz
+          retention-days: ${{ github.ref == 'develop' && 1 || 28 }}

@@ -1,0 +1,29 @@
+name: Test
+on:
+  pull_request: { }
+  push:
+    branches: [ master, develop ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    env:
+      # This must be set for fetchdep.sh to get the right branch
+      PR_NUMBER: ${{github.event.number}}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install SDKs
+        run: "./scripts/fetch-develop.deps.sh --depth 1"
+
+      - name: Install Dependencies
+        run: "yarn install"
+
+      - name: Run Tests
+        run: "yarn test"

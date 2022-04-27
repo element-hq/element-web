@@ -1,17 +1,60 @@
-name: Trigger deployment to develop.element.io
+name: Deploy develop.element.io
+concurrency: develop_deploy
 on:
-  pull_request: { } # TEMP
-  push:
-    branches: [ develop ]
-  repository_dispatch:
-    types: [ element-web-notify ]
+  workflow_run:
+    workflows: [ "Build" ]
+    types:
+      - completed
 jobs:
-  trigger:
+  deploy:
     runs-on: ubuntu-latest
+#    if: github.ref == 'develop'
     steps:
+      - name: Create Deployment ID
+        uses: altinukshini/deployment-action@releases/v1
+        id: deployment
+        with:
+          token: "${{ github.token }}"
+          target_url: https://develop.element.io
+          environment: production
+
+      - name: Find Artifact ID
+        uses: actions/github-script@v3.1.0
+        id: find_artifact
+        with:
+          result-encoding: string
+          script: |
+            var artifacts = await github.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: ${{github.event.workflow_run.id }},
+            });
+            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "previewbuild"
+            })[0];
+            return matchArtifact.id;
+
+      # TODO
       - name: Invoke deployment hook
         uses: distributhor/workflow-webhook@v2
         env:
           webhook_url: https://test.tun.bit.ovh
           webhook_secret: FooBar
-          data: '{ "tarball_url": "foobar" }'
+          data: '{ "artifact_id": "${{steps.find_artifact.outputs.result}}" }'
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: altinukshini/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          target_url: https://develop.element.io
+          state: "success"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: altinukshini/deployment-status@releases/v1
+        with:
+          token: "${{ github.token }}"
+          target_url: https://develop.element.io
+          state: "failure"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}

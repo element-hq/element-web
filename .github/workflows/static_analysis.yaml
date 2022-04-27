@@ -1,0 +1,80 @@
+name: Static Analysis
+on:
+  pull_request: { }
+  push:
+    branches: [ develop, master ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+jobs:
+  ts_lint:
+    name: "Typescript Syntax Check"
+    runs-on: ubuntu-latest
+    env:
+      # This must be set for fetchdep.sh to get the right branch
+      PR_NUMBER: ${{github.event.number}}
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install SDKs
+        run: "./scripts/fetch-develop.deps.sh --depth 1"
+
+      - name: Install Dependencies
+        run: "yarn install"
+
+      - name: Typecheck
+        run: "yarn run lint:types"
+
+  i18n_lint:
+    name: "i18n Diff Check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      # Does not need branch matching as only analyses this layer
+      - name: Install Deps
+        run: "yarn install"
+
+      - name: i18n Check
+        run: "yarn run diff-i18n"
+
+  js_lint:
+    name: "ESLint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      # Does not need branch matching as only analyses this layer
+      - name: Install Deps
+        run: "yarn install"
+
+      - name: Run Linter
+        run: "yarn run lint:js"
+
+  style_lint:
+    name: "Style Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      # Does not need branch matching as only analyses this layer
+      - name: Install Deps
+        run: "yarn install"
+
+      - name: Run Linter
+        run: "yarn run lint:style"
