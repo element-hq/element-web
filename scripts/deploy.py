@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-#
+
 # download and unpack a element-web tarball.
-#
+
 # Allows `bundles` to be extracted to a common directory, and a link to
 # config.json to be added.
 
