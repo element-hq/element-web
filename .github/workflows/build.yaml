@@ -18,13 +18,13 @@ on:
         required: true
       SENTRY_URL:
         required: true
+env:
+  # This must be set for fetchdep.sh to get the right branch
+  PR_NUMBER: ${{ github.event.pull_requests.number }}
 jobs:
   build:
     name: "Build"
     runs-on: ubuntu-latest
-    env:
-      # This must be set for fetchdep.sh to get the right branch
-      PR_NUMBER: ${{github.event.number}}
     steps:
       - uses: actions/checkout@v2
 
