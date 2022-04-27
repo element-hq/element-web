@@ -98,7 +98,7 @@ jobs:
           auto_inactive: true
       - name: Update deployment status (failure)
         if: failure()
-        uses: altinukshini/deployment-status@v1.0.1
+        uses: avakar/set-deployment-status@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
