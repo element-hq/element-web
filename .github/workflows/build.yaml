@@ -20,7 +20,7 @@ on:
         required: true
 env:
   # This must be set for fetchdep.sh to get the right branch
-  PR_NUMBER: ${{ github.event.pull_requests.number }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
   build:
     name: "Build"

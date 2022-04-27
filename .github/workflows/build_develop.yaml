@@ -6,14 +6,14 @@ on:
     branches: [ develop ]
   repository_dispatch:
     types: [ element-web-notify ]
+env:
+  # This must be set for fetchdep.sh to get the right branch
+  PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
   build:
     name: "Build"
     environment: develop
     runs-on: ubuntu-latest
-    env:
-      # This must be set for fetchdep.sh to get the right branch
-      PR_NUMBER: ${{github.event.number}}
     steps:
       - uses: ./.github/workflows/build
         secrets:
