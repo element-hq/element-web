@@ -23,14 +23,23 @@ jobs:
           cache: 'yarn'
 
       - name: Fetch layered build
-        run: scripts/ci/layered.sh
+        id: layered_build
+        run: |
+          scripts/ci/layered.sh
+          JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
+          REACT_SHA=$(git rev-parse --short=12 HEAD)
+          VECTOR_SHA=$(git -C element-web rev-parse --short=12 HEAD)
+          echo "::set-output name=VERSION::$VECTOR_SHA-react-$REACT_SHA-js-$JSSDK_SHA"
 
       - name: Copy config
         run: cp element.io/develop/config.json config.json
         working-directory: ./element-web
 
       - name: Build
-        run: CI_PACKAGE=true yarn build
+        env:
+          CI_PACKAGE: true
+          VERSION: "${{ steps.layered_build.outputs.VERSION }}"
+        run: yarn build
         working-directory: ./element-web
 
       - name: Upload Artifact
