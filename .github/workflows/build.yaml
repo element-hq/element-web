@@ -28,12 +28,6 @@ jobs:
       - name: Build & Package
         run: "./scripts/ci_package.sh"
 
-      - name: Upload webpack-stats.json
-        uses: actions/upload-artifact@v2
-        with:
-          path: webpack-stats.json
-          retention-days: 28
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:

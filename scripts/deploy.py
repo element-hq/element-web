@@ -23,8 +23,10 @@ except ImportError:
     # python2
     from urllib import urlretrieve
 
+
 class DeployException(Exception):
     pass
+
 
 def create_relative_symlink(linkname, target):
     relpath = os.path.relpath(target, os.path.dirname(linkname))
@@ -57,9 +59,10 @@ def move_bundles(source, dest):
         else:
             renames[os.path.join(source, f)] = dst
 
-    for (src, dst) in renames.iteritems():
+    for (src, dst) in renames.items():
         print ("Move %s -> %s" % (src, dst))
         os.rename(src, dst)
+
 
 class Deployer:
     def __init__(self):
@@ -100,7 +103,7 @@ class Deployer:
         print ("Extracted into: %s" % extracted_dir)
 
         if self.symlink_paths:
-            for link_path, file_path in self.symlink_paths.iteritems():
+            for link_path, file_path in self.symlink_paths.items():
                 create_relative_symlink(
                     target=file_path,
                     linkname=os.path.join(extracted_dir, link_path)
@@ -138,6 +141,7 @@ class Deployer:
         urlretrieve(url, local_filename)
         print ("Done")
         return local_filename
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Deploy a Riot build on a web server.")

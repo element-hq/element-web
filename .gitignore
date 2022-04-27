@@ -23,3 +23,5 @@ electron/pub
 .vscode
 .vscode/
 .env
+/scripts/extracted/
+/scripts/latest

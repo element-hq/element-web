@@ -1,45 +1,40 @@
 #!/usr/bin/env python
-#
+
 # auto-deploy script for https://develop.element.io
-#
-# Listens for buildkite webhook pokes (https://buildkite.com/docs/apis/webhooks)
-# When it gets one, downloads the artifact from buildkite
-# and deploys it as the new version.
-#
+
+# Listens for Github Action webhook pokes (https://github.com/marketplace/actions/workflow-webhook-action)
+# When it gets one: downloads the artifact from github actions and deploys it as the new version.
+
 # Requires the following python packages:
 #
-#   - requests
 #   - flask
-#
+#   - python-github-webhook
+
 from __future__ import print_function
-import json, requests, tarfile, argparse, os, errno
+import argparse
+import os
+import errno
 import time
 import traceback
-from urlparse import urljoin
-import glob
-import re
-import shutil
-import threading
-from Queue import Queue
 
-from flask import Flask, jsonify, request, abort
+import glob
+from io import BytesIO
+from urllib.request import urlopen
+from zipfile import ZipFile
+
+from github_webhook import Webhook
+from flask import Flask, abort
 
 from deploy import Deployer, DeployException
 
 app = Flask(__name__)
+webhook = Webhook(app, endpoint="/")
 
-deployer = None
-arg_extract_path = None
-arg_symlink = None
-arg_webhook_token = None
-arg_api_token = None
 
-workQueue = Queue()
-
-def create_symlink(source, linkname):
+def create_symlink(source: str, linkname: str):
     try:
         os.symlink(source, linkname)
-    except OSError, e:
+    except OSError as e:
         if e.errno == errno.EEXIST:
             # atomic modification
             os.symlink(source, linkname + ".tmp")
@@ -47,118 +42,43 @@ def create_symlink(source, linkname):
         else:
             raise e
 
-def req_headers():
-    return {
-        "Authorization": "Bearer %s" % (arg_api_token,),
-    }
 
-# Buildkite considers a poke to have failed if it has to wait more than 10s for
-# data (any data, not just the initial response) and it normally takes longer than
-# that to download an artifact from buildkite. Apparently there is no way in flask
-# to finish the response and then keep doing stuff, so instead this has to involve
-# threading. Sigh.
-def worker_thread():
-    while True:
-        toDeploy = workQueue.get()
-        deploy_buildkite_artifact(*toDeploy)
-
-@app.route("/", methods=["POST"])
-def on_receive_buildkite_poke():
-    got_webhook_token = request.headers.get('X-Buildkite-Token')
-    if got_webhook_token != arg_webbook_token:
-        print("Denying request with incorrect webhook token: %s" % (got_webhook_token,))
-        abort(400, "Incorrect webhook token")
+@webhook.hook(event_type="workflow_run")
+def on_deployment(payload: dict):
+    repository = payload.get("repository")
+    if repository is None:
+        abort(400, "No 'repository' specified")
         return
 
-    required_api_prefix = None
-    if arg_buildkite_org is not None:
-        required_api_prefix = 'https://api.buildkite.com/v2/organizations/%s' % (arg_buildkite_org,)
-
-    incoming_json = request.get_json()
-    if not incoming_json:
-        abort(400, "No JSON provided!")
-        return
-    print("Incoming JSON: %s" % (incoming_json,))
-
-    event = incoming_json.get("event")
-    if event is None:
-        abort(400, "No 'event' specified")
+    workflow = payload.get("workflow")
+    if repository is None:
+        abort(400, "No 'workflow' specified")
         return
 
-    if event == 'ping':
-        print("Got ping request - responding")
-        return jsonify({'response': 'pong!'})
-
-    if event != 'build.finished':
-        print("Rejecting '%s' event")
-        abort(400, "Unrecognised event")
+    request_id = payload.get("requestID")
+    if request_id is None:
+        abort(400, "No 'request_id' specified")
         return
 
-    build_obj = incoming_json.get("build")
-    if build_obj is None:
-        abort(400, "No 'build' object")
+    if arg_github_org is not None and not repository.startswith(arg_github_org):
+        print("Denying poke for repository with incorrect prefix: %s" % (repository,))
+        abort(400, "Invalid repository")
         return
 
-    build_url = build_obj.get('url')
-    if build_url is None:
-        abort(400, "build has no url")
+    if arg_github_workflow is not None and workflow != arg_github_workflow:
+        print("Denying poke for incorrect workflow: %s" % (workflow,))
+        abort(400, "Incorrect workflow")
         return
 
-    if required_api_prefix is not None and not build_url.startswith(required_api_prefix):
-        print("Denying poke for build url with incorrect prefix: %s" % (build_url,))
-        abort(400, "Invalid build url")
+    artifact_url = payload.get("data", {}).get("url")
+    if artifact_url is None:
+        abort(400, "No 'data.url' specified")
         return
 
-    build_num = build_obj.get('number')
-    if build_num is None:
-        abort(400, "build has no number")
-        return
+    deploy_artifact(artifact_url, request_id)
 
-    pipeline_obj = incoming_json.get("pipeline")
-    if pipeline_obj is None:
-        abort(400, "No 'pipeline' object")
-        return
 
-    pipeline_name = pipeline_obj.get('name')
-    if pipeline_name is None:
-        abort(400, "pipeline has no name")
-        return
-
-    artifacts_url = build_url + "/artifacts"
-    artifacts_resp = requests.get(artifacts_url, headers=req_headers())
-    artifacts_resp.raise_for_status()
-    artifacts_array = artifacts_resp.json()
-    
-    artifact_to_deploy = None
-    for artifact in artifacts_array:
-        if re.match(r"dist/.*.tar.gz", artifact['path']):
-            artifact_to_deploy = artifact
-    if artifact_to_deploy is None:
-        print("No suitable artifacts found")
-        return jsonify({})
-
-    # double paranoia check: make sure the artifact is on the right org too
-    if required_api_prefix is not None and not artifact_to_deploy['url'].startswith(required_api_prefix):
-        print("Denying poke for build url with incorrect prefix: %s" % (artifact_to_deploy['url'],))
-        abort(400, "Refusing to deploy artifact from URL %s", artifact_to_deploy['url'])
-        return
-
-    # there's no point building up a queue of things to deploy, so if there are any pending jobs,
-    # remove them
-    while not workQueue.empty():
-        try:
-            workQueue.get(False)
-        except:
-            pass
-    workQueue.put([artifact_to_deploy, pipeline_name, build_num])
-
-    return jsonify({})
-
-def deploy_buildkite_artifact(artifact, pipeline_name, build_num):
-    artifact_response = requests.get(artifact['url'], headers=req_headers())
-    artifact_response.raise_for_status()
-    artifact_obj = artifact_response.json()
-
+def deploy_artifact(artifact_url: str, request_id: str):
     # we extract into a directory based on the build number. This avoids the
     # problem of multiple builds building the same git version and thus having
     # the same tarball name. That would lead to two potential problems:
@@ -166,58 +86,42 @@ def deploy_buildkite_artifact(artifact, pipeline_name, build_num):
     #       a good deploy with a bad one
     #   (b) we'll be overwriting the live deployment, which means people might
     #       see half-written files.
-    build_dir = os.path.join(arg_extract_path, "%s-#%s" % (pipeline_name, build_num))
-    try:
-        extracted_dir = deploy_tarball(artifact_obj, build_dir)
-    except DeployException as e:
-        traceback.print_exc()
-        abort(400, e.message)
+    build_dir = os.path.join(arg_extract_path, "gha-%s" % (request_id,))
 
-    create_symlink(source=extracted_dir, linkname=arg_symlink)
-
-def deploy_tarball(artifact, build_dir):
-    """Download a tarball from jenkins and unpack it
-
-    Returns:
-        (str) the path to the unpacked deployment
-    """
     if os.path.exists(build_dir):
-        raise DeployException(
-            "Not deploying. We have previously deployed this build."
-        )
+        # We have already deployed this, nop
+        return
     os.mkdir(build_dir)
 
-    print("Fetching artifact %s -> %s..." % (artifact['download_url'], artifact['filename']))
-
-    # Download the tarball here as buildkite needs auth to do this
-    # we don't pgp-sign buildkite artifacts, relying on HTTPS and buildkite
-    # not being evil. If that's not good enough for you, don't use develop.element.io.
-    resp = requests.get(artifact['download_url'], stream=True, headers=req_headers())
-    resp.raise_for_status()
-    with open(artifact['filename'], 'wb') as ofp:
-        shutil.copyfileobj(resp.raw, ofp)
-    print("...download complete. Deploying...")
-
-    # we rely on the fact that flask only serves one request at a time to
-    # ensure that we do not overwrite a tarball from a concurrent request.
-
-    return deployer.deploy(artifact['filename'], build_dir)
+    try:
+        with urlopen(artifact_url) as f:
+            with ZipFile(BytesIO(f.read()), "r") as z:
+                name = next((x for x in z.namelist() if x.endswith(".tar.gz")))
+                z.extract(name, build_dir)
+        extracted_dir = deployer.deploy(os.path.join(build_dir, name), build_dir)
+        create_symlink(source=extracted_dir, linkname=arg_symlink)
+    except DeployException as e:
+        traceback.print_exc()
+        abort(400, str(e))
+    finally:
+        if deployer.should_clean:
+            os.remove(os.path.join(build_dir, name))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser("Runs a Vector redeployment server.")
+    parser = argparse.ArgumentParser("Runs an Element redeployment server.")
     parser.add_argument(
         "-p", "--port", dest="port", default=4000, type=int, help=(
-            "The port to listen on for requests from Jenkins."
+            "The port to listen on for redeployment requests."
         )
     )
     parser.add_argument(
-        "-e", "--extract", dest="extract", default="./extracted", help=(
+        "-e", "--extract", dest="extract", default="./extracted", type=str, help=(
             "The location to extract .tar.gz files to."
         )
     )
     parser.add_argument(
-        "-b", "--bundles-dir", dest="bundles_dir", help=(
+        "-b", "--bundles-dir", dest="bundles_dir", type=str, help=(
             "A directory to move the contents of the 'bundles' directory to. A \
             symlink to the bundles directory will also be written inside the \
             extracted tarball. Example: './bundles'."
@@ -229,7 +133,7 @@ if __name__ == "__main__":
         )
     )
     parser.add_argument(
-        "-s", "--symlink", dest="symlink", default="./latest", help=(
+        "-s", "--symlink", dest="symlink", default="./latest", type=str, help=(
             "Write a symlink to this location pointing to the extracted tarball. \
             New builds will keep overwriting this symlink. The symlink will point \
             to the /vector directory INSIDE the tarball."
@@ -238,71 +142,65 @@ if __name__ == "__main__":
 
     # --include ../../config.json ./localhost.json homepages/*
     parser.add_argument(
-        "--include", nargs='*', default='./config*.json', help=(
+        "--include", nargs='*', default='./config*.json', type=str, help=(
             "Symlink these files into the root of the deployed tarball. \
              Useful for config files and home pages. Supports glob syntax. \
              (Default: '%(default)s')"
         )
     )
     parser.add_argument(
-        "--test", dest="tarball_uri", help=(
-            "Don't start an HTTP listener. Instead download a build from Jenkins \
-            immediately."
+        "--test", dest="tarball_uri", type=str, help=(
+            "Don't start an HTTP listener. Instead download a build from this URL immediately."
         ),
     )
 
     parser.add_argument(
-        "--webhook-token", dest="webhook_token", help=(
-            "Only accept pokes with this buildkite token."
-        ), required=True,
-    )
-
-    parser.add_argument(
-        "--api-token", dest="api_token", help=(
-            "API access token for buildkite. Require read_artifacts scope."
+        "--webhook-token", dest="webhook_token", type=str, help=(
+            "Only accept pokes signed with this github token."
         ), required=True,
     )
 
     # We require a matching webhook token, but because we take everything else
     # about what to deploy from the poke body, we can be a little more paranoid
-    # and only accept builds / artifacts from a specific buildkite org
+    # and only accept builds / artifacts from a specific github org
     parser.add_argument(
-        "--org", dest="buildkite_org", help=(
-            "Lock down to this buildkite org"
+        "--org", dest="github_org", type=str, help=(
+            "Lock down to this github org"
+        )
+    )
+    # Optional matching workflow name
+    parser.add_argument(
+        "--workflow", dest="github_workflow", type=str, help=(
+            "Lock down to this github workflow"
         )
     )
 
     args = parser.parse_args()
     arg_extract_path = args.extract
     arg_symlink = args.symlink
-    arg_webbook_token = args.webhook_token
-    arg_api_token = args.api_token
-    arg_buildkite_org = args.buildkite_org
+    arg_github_org = args.github_org
+    arg_github_workflow = args.github_workflow
 
     if not os.path.isdir(arg_extract_path):
         os.mkdir(arg_extract_path)
+
+    webhook.secret = args.webhook_token
 
     deployer = Deployer()
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
 
-    for include in args.include:
+    for include in args.include.split(" "):
         deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
 
-    if args.tarball_uri is not None:
-        build_dir = os.path.join(arg_extract_path, "test-%i" % (time.time()))
-        deploy_tarball(args.tarball_uri, build_dir)
-    else:
-        print(
-            "Listening on port %s. Extracting to %s%s. Symlinking to %s. Include files: %s" %
-            (args.port,
-             arg_extract_path,
-             " (clean after)" if deployer.should_clean else "",
-             arg_symlink,
-             deployer.symlink_paths,
-            )
+    print(
+        "Listening on port %s. Extracting to %s%s. Symlinking to %s. Include files: %s" %
+        (args.port,
+         arg_extract_path,
+         " (clean after)" if deployer.should_clean else "",
+         arg_symlink,
+         deployer.symlink_paths,
         )
-        fred = threading.Thread(target=worker_thread)
-        fred.daemon = True
-        fred.start()
-        app.run(port=args.port, debug=False)
+    )
+
+    app.run(port=args.port, debug=False)

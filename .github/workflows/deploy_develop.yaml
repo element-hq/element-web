@@ -1,7 +1,8 @@
 # Triggers after the Build has finished,
 # because artifacts are not externally available
 # until the end of their workflow.
-name: Build
+name: Deploy develop.element.io
+concurrency: deploy_develop
 on:
   workflow_run:
     workflows: [ "Build" ]
@@ -9,8 +10,8 @@ on:
       - completed
 jobs:
   deploy:
-    needs: build
     runs-on: ubuntu-latest
+    environment: deploy_develop
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
     steps:
       - name: Find Artifact ID
@@ -19,47 +20,45 @@ jobs:
         with:
           result-encoding: string
           script: |
-            var artifacts = await github.actions.listWorkflowRunArtifacts({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               run_id: ${{github.run_id }},
+            const artifacts = await github.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: ${{ github.event.workflow_run.id }},
             });
-            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "previewbuild"
+            const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+                return artifact.name == "previewbuild"
             })[0];
-            return matchArtifact.id;
+            const download = await github.actions.downloadArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: matchArtifact.id,
+                archive_format: 'zip',
+            });
+            return download.url;
 
       - name: Create Deployment
-        uses: avakar/create-deployment@v1.0.2
+        uses: bobheadxi/deployments@v1
         id: deployment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          environment: Develop
-          initial_status: in_progress
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: Develop
           ref: ${{ github.head_ref }}
-          transient_environment: false
-          auto_merge: false
-          task: deploy
-          payload: '{"artifact_id": "${{ steps.find_artifact.outputs.result }}"}'
 
-      - name: Update deployment status (success)
-        if: success()
-        uses: avakar/set-deployment-status@v1.1.0
+      - name: Notify the redeploy script
+        uses: distributhor/workflow-webhook@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          webhook_url: ${{ secrets.WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.WEBHOOK_SECRET }}
+          data: '{"url": "${{ steps.find_artifact.outputs.result }}"}'
+
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v1
+        if: always()
         with:
-          environment: Develop
-          environment_url: https://develop.element.io
-          state: "success"
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          env: ${{ steps.deployment.outputs.env }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          auto_inactive: true
-      - name: Update deployment status (failure)
-        if: failure()
-        uses: avakar/set-deployment-status@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          state: "failure"
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          environment: Develop
+          env_url: https://develop.element.io
