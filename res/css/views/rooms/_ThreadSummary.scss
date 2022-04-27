@@ -1,0 +1,117 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+$left-gutter: 64px; // From _EventTile.scss
+$threadSummaryLineHeight: calc(2 * $font-12px);
+
+.mx_ThreadSummary {
+    min-width: 267px;
+    max-width: min(calc(100% - $left-gutter), 600px); // leave space on both left & right gutters
+    width: fit-content;
+    height: 40px;
+    position: relative;
+    background-color: $system;
+    padding-left: $spacing-12;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    padding-right: $spacing-16;
+    margin-top: $spacing-8;
+    font-size: $font-12px;
+    color: $secondary-content;
+    box-sizing: border-box;
+    justify-content: flex-start;
+    clear: both;
+    overflow: hidden;
+    border: 1px solid $system; // always render a border so the hover effect doesn't require a re-layout
+
+    .mx_ThreadSummary_chevron {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 60px;
+        box-sizing: border-box;
+        // XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug
+        background: linear-gradient(270deg, $system 50%, $system-transparent 100%);
+
+        opacity: 0;
+        transform: translateX(60px);
+        transition: all .1s ease-in-out;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: $spacing-12;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            mask-image: url('$(res)/img/compound/chevron-right-12px.svg');
+            mask-position: center;
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            background-color: $secondary-content;
+        }
+    }
+
+    &:hover,
+    &:focus {
+        cursor: pointer;
+        border-color: $quinary-content;
+
+        .mx_ThreadSummary_chevron {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    &::before {
+        align-self: center; // v-align the threads icon
+    }
+}
+
+// XXX: these classes are re-used outside of the component
+.mx_ThreadSummary_threads-amount {
+    font-weight: $font-semi-bold;
+    position: relative;
+    padding: 0 $spacing-12 0 $spacing-8;
+    white-space: nowrap;
+    line-height: $threadSummaryLineHeight;
+}
+
+.mx_ThreadSummary_sender {
+    font-weight: $font-semi-bold;
+    line-height: $threadSummaryLineHeight;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.mx_ThreadSummary_content {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-left: $spacing-4;
+    font-size: $font-12px;
+    line-height: $threadSummaryLineHeight;
+    color: $secondary-content;
+    flex: 1;
+}
+
+.mx_ThreadSummary_avatar {
+    margin-right: $spacing-8;
+}

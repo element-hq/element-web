@@ -48,7 +48,7 @@ const ThreadSummary = ({ mxEvent, thread }: IProps) => {
 
     return (
         <AccessibleButton
-            className="mx_ThreadInfo"
+            className="mx_ThreadSummary"
             onClick={(ev: ButtonEvent) => {
                 showThread({
                     rootEvent: mxEvent,
@@ -58,11 +58,11 @@ const ThreadSummary = ({ mxEvent, thread }: IProps) => {
             }}
             aria-label={_t("Open thread")}
         >
-            <span className="mx_ThreadInfo_threads-amount">
+            <span className="mx_ThreadSummary_threads-amount">
                 { countSection }
             </span>
             <ThreadMessagePreview thread={thread} showDisplayname={!roomContext.narrow} />
-            <div className="mx_ThreadInfo_chevron" />
+            <div className="mx_ThreadSummary_chevron" />
         </AccessibleButton>
     );
 };
@@ -96,13 +96,13 @@ export const ThreadMessagePreview = ({ thread, showDisplayname = false }: IPrevi
             fallbackUserId={lastReply.getSender()}
             width={24}
             height={24}
-            className="mx_ThreadInfo_avatar"
+            className="mx_ThreadSummary_avatar"
         />
-        { showDisplayname && <div className="mx_ThreadInfo_sender">
+        { showDisplayname && <div className="mx_ThreadSummary_sender">
             { lastReply.sender?.name ?? lastReply.getSender() }
         </div> }
-        <div className="mx_ThreadInfo_content">
-            <span className="mx_ThreadInfo_message-preview">
+        <div className="mx_ThreadSummary_content">
+            <span className="mx_ThreadSummary_message-preview">
                 { preview }
             </span>
         </div>

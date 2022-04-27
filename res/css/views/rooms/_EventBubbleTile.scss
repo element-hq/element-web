@@ -37,7 +37,7 @@ limitations under the License.
     margin-left: 49px;
     font-size: $font-14px;
 
-    .mx_ThreadInfo {
+    .mx_ThreadSummary {
         clear: both;
         width: fit-content;
     }
@@ -172,7 +172,7 @@ limitations under the License.
             margin-right: 32px;
         }
 
-        .mx_ThreadInfo {
+        .mx_ThreadSummary {
             float: right;
             margin-right: calc(-1 * var(--gutterSize));
         }

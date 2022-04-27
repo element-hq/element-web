@@ -140,7 +140,7 @@ limitations under the License.
         // Account for scrollbar when hovering
         padding-top: 0;
 
-        .mx_ThreadInfo {
+        .mx_ThreadSummary {
             position: relative;
             padding-right: 11px;
 
@@ -257,28 +257,14 @@ limitations under the License.
 
 .mx_ThreadPanel_replies {
     margin-top: 8px;
-}
+    display: flex;
+    align-items: center;
+    position: relative;
 
-.mx_ThreadPanel_repliesSummary {
-    &::before {
-        content: "";
-        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
-        mask-position: center;
-        display: inline-block;
-        height: 18px;
-        min-width: 18px;
-        background-color: currentColor;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        margin-right: 8px;
-        vertical-align: middle;
+    .mx_ThreadSummary_threads-amount {
+        color: $secondary-content;
+        font-size: $font-12px;
     }
-
-    color: $secondary-content;
-    font-weight: 600;
-    float: left;
-    margin-right: 12px;
-    font-size: $font-12px;
 }
 
 .mx_ThreadPanel_viewInRoom::before {

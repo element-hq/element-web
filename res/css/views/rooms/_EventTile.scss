@@ -77,7 +77,7 @@ $left-gutter: 64px;
         background-color: $alert;
     }
 
-    .mx_ThreadInfo,
+    .mx_ThreadSummary,
     .mx_ThreadSummaryIcon {
         margin-left: 64px;
     }
@@ -304,7 +304,7 @@ $left-gutter: 64px;
 .mx_RoomView_timeline_rr_enabled {
     .mx_EventTile[data-layout=group] {
 
-        .mx_ThreadInfo,
+        .mx_ThreadSummary,
         .mx_ThreadSummaryIcon,
         .mx_EventTile_line {
             /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
@@ -312,7 +312,7 @@ $left-gutter: 64px;
             min-height: $font-14px;
         }
 
-        .mx_ThreadInfo {
+        .mx_ThreadSummary {
             max-width: min(calc(100% - $left-gutter - 110px), 600px); // leave space on both left & right gutters
         }
     }
@@ -680,8 +680,9 @@ $left-gutter: 64px;
     }
 }
 
+.mx_ThreadPanel_replies::before,
 .mx_ThreadSummaryIcon::before,
-.mx_ThreadInfo::before {
+.mx_ThreadSummary::before {
     content: "";
     display: inline-block;
     mask-image: url('$(res)/img/element-icons/thread-summary.svg');
@@ -707,111 +708,10 @@ $left-gutter: 64px;
     }
 }
 
-.mx_ThreadInfo {
-    min-width: 267px;
-    max-width: min(calc(100% - $left-gutter), 600px); // leave space on both left & right gutters
-    width: fit-content;
-    height: 40px;
-    position: relative;
-    background-color: $system;
-    padding-left: 12px;
-    display: flex;
-    align-items: center;
-    border-radius: 8px;
-    padding-right: 16px;
-    margin-top: 8px;
-    font-size: $font-12px;
-    color: $secondary-content;
-    box-sizing: border-box;
-    justify-content: flex-start;
-    clear: both;
-    overflow: hidden;
-    border: 1px solid $system; // always render a border so the hover effect doesn't require a re-layout
-
-    .mx_ThreadInfo_chevron {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 60px;
-        box-sizing: border-box;
-        // XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug
-        background: linear-gradient(270deg, $system 50%, $system-transparent 100%);
-
-        opacity: 0;
-        transform: translateX(60px);
-        transition: all .1s ease-in-out;
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: 12px;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            mask-image: url('$(res)/img/compound/chevron-right-12px.svg');
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background-color: $secondary-content;
-        }
-    }
-
-    &:hover,
-    &:focus {
-        cursor: pointer;
-        border-color: $quinary-content;
-
-        .mx_ThreadInfo_chevron {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    &::before {
-        align-self: center; // v-align the threads icon
-    }
-}
-
-.mx_MessagePanel_narrow .mx_ThreadInfo {
+.mx_MessagePanel_narrow .mx_ThreadSummary {
     min-width: initial;
     max-width: initial;
     width: initial;
-}
-
-$threadInfoLineHeight: calc(2 * $font-12px);
-
-.mx_ThreadInfo_sender {
-    font-weight: $font-semi-bold;
-    line-height: $threadInfoLineHeight;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
-
-.mx_ThreadInfo_content {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    margin-left: 4px;
-    font-size: $font-12px;
-    line-height: $threadInfoLineHeight;
-    color: $secondary-content;
-    flex: 1;
-}
-
-.mx_ThreadInfo_avatar {
-    float: left;
-    margin-right: 8px;
-}
-
-.mx_ThreadInfo_threads-amount {
-    font-weight: $font-semi-bold;
-    position: relative;
-    padding: 0 12px 0 8px;
-    white-space: nowrap;
-    line-height: $threadInfoLineHeight;
 }
 
 .mx_EventTile[data-shape=ThreadsList] {
