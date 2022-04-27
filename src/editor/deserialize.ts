@@ -16,12 +16,14 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MsgType } from "matrix-js-sdk/src/@types/event";
 
 import { checkBlockNode } from "../HtmlUtils";
 import { getPrimaryPermalinkEntity } from "../utils/permalinks/Permalinks";
 import { Part, PartCreator, Type } from "./parts";
 import SdkConfig from "../SdkConfig";
 import { textToHtmlRainbow } from "../utils/colour";
+import { stripPlainReply } from "../utils/Reply";
 
 const LIST_TYPES = ["UL", "OL", "LI"];
 
@@ -288,7 +290,7 @@ export function parsePlainTextMessage(
 export function parseEvent(event: MatrixEvent, pc: PartCreator, opts: IParseOptions = { shouldEscape: true }) {
     const content = event.getContent();
     let parts: Part[];
-    const isEmote = content.msgtype === "m.emote";
+    const isEmote = content.msgtype === MsgType.Emote;
     let isRainbow = false;
 
     if (content.format === "org.matrix.custom.html") {
@@ -297,7 +299,11 @@ export function parseEvent(event: MatrixEvent, pc: PartCreator, opts: IParseOpti
             isRainbow = true;
         }
     } else {
-        parts = parsePlainTextMessage(content.body || "", pc, opts);
+        let body = content.body || "";
+        if (event.replyEventId) {
+            body = stripPlainReply(body);
+        }
+        parts = parsePlainTextMessage(body, pc, opts);
     }
 
     if (isEmote && isRainbow) {

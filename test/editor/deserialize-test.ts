@@ -20,7 +20,7 @@ import { createPartCreator } from "./mock";
 
 const FOUR_SPACES = " ".repeat(4);
 
-function htmlMessage(formattedBody, msgtype = "m.text") {
+function htmlMessage(formattedBody: string, msgtype = "m.text") {
     return {
         getContent() {
             return {
@@ -32,7 +32,7 @@ function htmlMessage(formattedBody, msgtype = "m.text") {
     } as unknown as MatrixEvent;
 }
 
-function textMessage(body, msgtype = "m.text") {
+function textMessage(body: string, msgtype = "m.text") {
     return {
         getContent() {
             return {
@@ -40,6 +40,13 @@ function textMessage(body, msgtype = "m.text") {
                 body,
             };
         },
+    } as unknown as MatrixEvent;
+}
+
+function textMessageReply(body: string, msgtype = "m.text") {
+    return {
+        ...textMessage(body, msgtype),
+        replyEventId: "!foo:bar",
     } as unknown as MatrixEvent;
 }
 
@@ -402,6 +409,15 @@ describe('editor/deserialize', function() {
             expect(parts[0]).toStrictEqual({
                 type: "plain",
                 text: "> <del>no formatting here</del>",
+            });
+        });
+        it("it strips plaintext replies", () => {
+            const body = "> Sender: foo\n\nMessage";
+            const parts = normalize(parseEvent(textMessageReply(body), createPartCreator(), { shouldEscape: false }));
+            expect(parts.length).toBe(1);
+            expect(parts[0]).toStrictEqual({
+                type: "plain",
+                text: "Message",
             });
         });
     });
