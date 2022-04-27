@@ -11,21 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
     steps:
-      - name: "🔍 Read PR details"
+      - name: "🔍 Read PR number"
         id: readctx
-        # we need to find the PR number that corresponds to the branch, which we do by searching the GH API
+        # We need to find the PR number that corresponds to the branch, which we do by searching the GH API
         # The workflow_run event includes a list of pull requests, but it doesn't get populated for
         # forked PRs: https://docs.github.com/en/rest/reference/checks#create-a-check-run
         run: |
           head_branch='${{github.event.workflow_run.head_repository.owner.login}}:${{github.event.workflow_run.head_branch}}'
           echo "Head branch: $head_branch"
-          head_ref='${{github.event.workflow_run.head_sha}}'
-          echo "Head ref: $head_ref"
           pulls_uri="https://api.github.com/repos/${{ github.repository }}/pulls?head=$(jq -Rr '@uri' <<<$head_branch)"
-          pr_number = $(curl -s -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' "$pulls_uri" | jq -r .[] | .number)
+          pr_number=$(curl -s -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' "$pulls_uri" |
+               jq -r '.[] | .number')
           echo "PR number: $pr_number"
           echo "::set-output name=prnumber::$pr_number"
-          echo "::set-output name=headref::$head_ref"
 
       - name: Create Deployment ID
         uses: altinukshini/deployment-action@v1.2.6
@@ -37,7 +35,7 @@ jobs:
           transient_environment: true
           environment: Netlify
           initial_status: in_progress
-          ref: ${{ steps.readctx.outputs.headref }}
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       # There's a 'download artifact' action but it hasn't been updated for the
       # workflow_run action (https://github.com/actions/download-artifact/issues/60)
