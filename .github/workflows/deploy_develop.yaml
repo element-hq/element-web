@@ -5,14 +5,14 @@ name: Deploy develop.element.io
 concurrency: deploy_develop
 on:
   workflow_run:
-    workflows: [ "Build" ]
+    workflows: [ "Build and upload sourcemaps to Sentry" ]
     types:
       - completed
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: develop
-    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
       - name: Find Artifact ID
         uses: actions/github-script@v3.1.0
