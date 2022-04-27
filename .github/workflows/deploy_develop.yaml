@@ -11,12 +11,13 @@ jobs:
 #    if: github.ref == 'develop'
     steps:
       - name: Create Deployment ID
-        uses: altinukshini/deployment-action@releases/v1
+        uses: altinukshini/deployment-action@releases/v1.2.6
         id: deployment
         with:
           token: "${{ github.token }}"
           target_url: https://develop.element.io
-          environment: production
+          ref: ${{ github.ref }}"
+          environment: "develop"
 
       - name: Find Artifact ID
         uses: actions/github-script@v3.1.0
@@ -55,6 +56,5 @@ jobs:
         uses: altinukshini/deployment-status@releases/v1
         with:
           token: "${{ github.token }}"
-          target_url: https://develop.element.io
           state: "failure"
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
