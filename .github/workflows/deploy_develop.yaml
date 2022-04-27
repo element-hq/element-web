@@ -1,0 +1,65 @@
+# Triggers after the Build has finished,
+# because artifacts are not externally available
+# until the end of their workflow.
+name: Build
+on:
+  workflow_run:
+    workflows: [ "Build" ]
+    types:
+      - completed
+jobs:
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+    steps:
+      - name: Find Artifact ID
+        uses: actions/github-script@v3.1.0
+        id: find_artifact
+        with:
+          result-encoding: string
+          script: |
+            var artifacts = await github.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: ${{github.run_id }},
+            });
+            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "previewbuild"
+            })[0];
+            return matchArtifact.id;
+
+      - name: Create Deployment
+        uses: avakar/create-deployment@v1.0.2
+        id: deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          environment: Develop
+          initial_status: in_progress
+          ref: ${{ github.head_ref }}
+          transient_environment: false
+          auto_merge: false
+          task: deploy
+          payload: '{"artifact_id": "${{ steps.find_artifact.outputs.result }}"}'
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: avakar/set-deployment-status@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          environment: Develop
+          environment_url: https://develop.element.io
+          state: "success"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          auto_inactive: true
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: avakar/set-deployment-status@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          state: "failure"
+          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+          environment: Develop
