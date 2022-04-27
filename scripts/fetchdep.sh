@@ -29,7 +29,7 @@ getPRInfo() {
     if [ -n "$number" ]; then
         echo "Getting info about a PR with number $number"
 
-        apiEndpoint="https://api.github.com/repos/matrix-org/matrix-react-sdk/pulls/"
+        apiEndpoint="https://api.github.com/repos/${REPOSITORY:-"vector-im/element-web"}/pulls/"
         apiEndpoint+=$number
 
         head=$(curl $apiEndpoint | jq -r '.head.label')

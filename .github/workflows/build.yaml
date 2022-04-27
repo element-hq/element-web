@@ -19,7 +19,8 @@ on:
       SENTRY_URL:
         required: true
 env:
-  # This must be set for fetchdep.sh to get the right branch
+  # These must be set for fetchdep.sh to get the right branch
+  REPOSITORY: ${{ github.repository }}
   PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
   build:
