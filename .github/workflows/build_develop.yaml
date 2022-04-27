@@ -1,0 +1,24 @@
+# Separate to the main build workflow for access to the develop
+# secrets environment, reuses the build workflow for heavy lifting.
+name: Build and upload sourcemaps to Sentry
+on:
+  push:
+    branches: [ develop ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+jobs:
+  build:
+    name: "Build"
+    environment: develop
+    runs-on: ubuntu-latest
+    env:
+      # This must be set for fetchdep.sh to get the right branch
+      PR_NUMBER: ${{github.event.number}}
+    steps:
+      - uses: ./.github/workflows/build
+        secrets:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_ORG: sentry
+          SENTRY_PROJECT: riot-web

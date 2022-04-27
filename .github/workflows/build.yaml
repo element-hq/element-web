@@ -2,9 +2,22 @@ name: Build
 on:
   pull_request: { }
   push:
-    branches: [ master, develop ]
-  repository_dispatch:
-    types: [ element-web-notify ]
+    branches: [ master ]
+  workflow_call:
+    inputs:
+      SENTRY_ORG:
+        required: true
+        type: string
+      SENTRY_PROJECT:
+        required: true
+        type: string
+    secrets:
+      SENTRY_AUTH_TOKEN:
+        required: true
+      SENTRY_DSN:
+        required: true
+      SENTRY_URL:
+        required: true
 jobs:
   build:
     name: "Build"
@@ -24,6 +37,12 @@ jobs:
 
       - name: Build & Package
         run: "./scripts/ci_package.sh"
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_ORG: ${{ inputs.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ inputs.SENTRY_PROJECT }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
