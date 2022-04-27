@@ -1,4 +1,7 @@
-name: Upload Sentry Sourcemaps
+# We cannot reuse the build from the main Builder workflow
+# due to needing to inject SENTRY_ env vars into ci_package.sh
+# For security we harbor the secrets in a develop-only environment.
+name: Sentry Sourcemaps
 on:
   push:
     branches:
@@ -6,18 +9,23 @@ on:
   repository_dispatch:
     types: [ element-web-notify ]
 jobs:
-  upload-sentry-sourcemaps:
+  upload:
+    name: Upload
     runs-on: ubuntu-latest
     environment: develop
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+
+      - uses: actions/setup-node@v3
         with:
           node-version: '14'
           cache: 'yarn'
-      - run: ./scripts/fetch-develop.deps.sh --depth 1
-      - run: yarn install
-      - run: ./scripts/ci_package.sh
+
+      - name: Install Dependencies
+        run: "./scripts/layered.sh"
+
+      - name: Build & Package
+        run: "./scripts/ci_package.sh"
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}

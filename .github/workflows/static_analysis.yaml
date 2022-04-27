@@ -19,11 +19,8 @@ jobs:
         with:
           cache: 'yarn'
 
-      - name: Install SDKs
-        run: "./scripts/fetch-develop.deps.sh --depth 1"
-
       - name: Install Dependencies
-        run: "yarn install"
+        run: "./scripts/layered.sh"
 
       - name: Typecheck
         run: "yarn run lint:types"
