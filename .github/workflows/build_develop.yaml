@@ -1,6 +1,6 @@
 # Separate to the main build workflow for access to develop
 # environment secrets, largely similar to build.yaml.
-name: Build and upload sourcemaps to Sentry
+name: Build develop
 on:
   push:
     branches: [ develop ]
@@ -8,8 +8,9 @@ on:
     types: [ element-web-notify ]
 jobs:
   build:
-    name: "Build Develop"
+    name: "Build & Upload source maps to Sentry"
     runs-on: ubuntu-latest
+    environment: develop
     steps:
       - uses: actions/checkout@v2
 

@@ -5,7 +5,7 @@ name: Deploy develop.element.io
 concurrency: deploy_develop
 on:
   workflow_run:
-    workflows: [ "Build and upload sourcemaps to Sentry" ]
+    workflows: [ "Build develop" ]
     types:
       - completed
 jobs:
