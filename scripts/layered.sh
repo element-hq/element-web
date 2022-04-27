@@ -18,13 +18,6 @@ yarn link
 yarn install --pure-lockfile
 popd
 
-# Now set up the react-sdk
-scripts/fetchdep.sh matrix-org matrix-react-sdk
-pushd matrix-react-sdk
-yarn link
-yarn install --pure-lockfile
-popd
-
 # Also set up matrix-analytics-events so we get the latest from
 # the main branch or a branch with matching name
 scripts/fetchdep.sh matrix-org matrix-analytics-events main
@@ -33,8 +26,16 @@ yarn link
 yarn install --pure-lockfile
 popd
 
+# Now set up the react-sdk
+scripts/fetchdep.sh matrix-org matrix-react-sdk
+pushd matrix-react-sdk
+yarn link
+yarn link matrix-js-sdk
+yarn link matrix-analytics-events
+yarn install --pure-lockfile
+popd
+
 # Finally, set up element-web
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
-yarn link matrix-analytics-events
 yarn install --pure-lockfile
