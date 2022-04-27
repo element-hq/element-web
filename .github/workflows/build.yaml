@@ -3,21 +3,7 @@ on:
   pull_request: { }
   push:
     branches: [ master ]
-  workflow_call:
-    inputs:
-      SENTRY_ORG:
-        required: true
-        type: string
-      SENTRY_PROJECT:
-        required: true
-        type: string
-    secrets:
-      SENTRY_AUTH_TOKEN:
-        required: true
-      SENTRY_DSN:
-        required: true
-      SENTRY_URL:
-        required: true
+# develop pushes and repository_dispatch handled in build_develop.yaml
 env:
   # These must be set for fetchdep.sh to get the right branch
   REPOSITORY: ${{ github.repository }}
@@ -38,16 +24,10 @@ jobs:
 
       - name: Build & Package
         run: "./scripts/ci_package.sh"
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_ORG: ${{ inputs.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ inputs.SENTRY_PROJECT }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: previewbuild
           path: dist/*.tar.gz
-          retention-days: ${{ github.ref == 'develop' && 1 || 28 }}
+          retention-days: 28

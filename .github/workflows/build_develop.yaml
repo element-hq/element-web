@@ -1,5 +1,5 @@
-# Separate to the main build workflow for access to the develop
-# secrets environment, reuses the build workflow for heavy lifting.
+# Separate to the main build workflow for access to develop
+# environment secrets, largely similar to build.yaml.
 name: Build and upload sourcemaps to Sentry
 on:
   push:
@@ -8,14 +8,30 @@ on:
     types: [ element-web-notify ]
 jobs:
   build:
-    name: "Build"
-    environment: develop
+    name: "Build Develop"
     runs-on: ubuntu-latest
     steps:
-      - uses: ./.github/workflows/build.yaml
-        secrets:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: "./scripts/layered.sh"
+
+      - name: Build, Package & Upload sourcemaps
+        run: "./scripts/ci_package.sh"
+        env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: sentry
           SENTRY_PROJECT: riot-web
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: previewbuild
+          path: dist/*.tar.gz
+          retention-days: 1
