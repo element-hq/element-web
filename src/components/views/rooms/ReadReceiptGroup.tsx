@@ -31,7 +31,11 @@ import { useTooltip } from "../../../utils/useTooltip";
 import { _t } from "../../../languageHandler";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 
-const MAX_READ_AVATARS = 3;
+// #20547 Design specified that we should show the three latest read receipts
+const MAX_READ_AVATARS_PLUS_N = 3;
+// #21935 If we’ve got just 4, don’t show +1, just show all of them
+const MAX_READ_AVATARS = MAX_READ_AVATARS_PLUS_N + 1;
+
 const READ_AVATAR_OFFSET = 10;
 export const READ_AVATAR_SIZE = 16;
 
@@ -43,14 +47,24 @@ interface Props {
     isTwelveHour: boolean;
 }
 
-// Design specified that we should show the three latest read receipts
-function determineAvatarPosition(index, count): [boolean, number] {
-    const firstVisible = Math.max(0, count - MAX_READ_AVATARS);
+interface IAvatarPosition {
+    hidden: boolean;
+    position: number;
+}
+
+function determineAvatarPosition(index: number, count: number, max: number): IAvatarPosition {
+    const firstVisible = Math.max(0, count - max);
 
     if (index >= firstVisible) {
-        return [false, index - firstVisible];
+        return {
+            hidden: false,
+            position: index - firstVisible,
+        };
     } else {
-        return [true, 0];
+        return {
+            hidden: true,
+            position: 0,
+        };
     }
 }
 
@@ -83,8 +97,13 @@ export function ReadReceiptGroup(
         );
     }
 
+    // If we are above MAX_READ_AVATARS, we’ll have to remove a few to have space for the +n count.
+    const maxAvatars = readReceipts.length > MAX_READ_AVATARS
+        ? MAX_READ_AVATARS_PLUS_N
+        : MAX_READ_AVATARS;
+
     const avatars = readReceipts.map((receipt, index) => {
-        const [hidden, position] = determineAvatarPosition(index, readReceipts.length);
+        const { hidden, position } = determineAvatarPosition(index, readReceipts.length, maxAvatars);
 
         const userId = receipt.userId;
         let readReceiptInfo: IReadReceiptInfo;
@@ -114,7 +133,7 @@ export function ReadReceiptGroup(
     });
 
     let remText: JSX.Element;
-    const remainder = readReceipts.length - MAX_READ_AVATARS;
+    const remainder = readReceipts.length - maxAvatars;
     if (remainder > 0) {
         remText = (
             <span className="mx_ReadReceiptGroup_remainder" aria-live="off">
@@ -163,7 +182,7 @@ export function ReadReceiptGroup(
                     <span
                         className="mx_ReadReceiptGroup_container"
                         style={{
-                            width: Math.min(MAX_READ_AVATARS, readReceipts.length) * READ_AVATAR_OFFSET +
+                            width: Math.min(maxAvatars, readReceipts.length) * READ_AVATAR_OFFSET +
                                 READ_AVATAR_SIZE - READ_AVATAR_OFFSET,
                         }}
                     >
