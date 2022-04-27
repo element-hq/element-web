@@ -378,12 +378,14 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         if (isVideoChannel) meetApi.executeCommand("setTileView", true);
     });
 
+    meetApi.on("videoConferenceLeft", () => {
+        notifyHangup();
+        meetApi = null;
+    });
+
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
-        notifyHangup();
-
         document.getElementById("jitsiContainer").innerHTML = "";
-        meetApi = null;
 
         if (skipOurWelcomeScreen) {
             skipToJitsiSplashScreen();
@@ -404,8 +406,17 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
     });
 
     meetApi.on("videoMuteStatusChanged", ({ muted }) => {
-        const action = muted ? ElementWidgetActions.MuteVideo : ElementWidgetActions.UnmuteVideo;
-        widgetApi.transport.send(action, {});
+        if (muted) {
+            // Jitsi Meet always sends a "video muted" event directly before
+            // hanging up, which we need to ignore by padding the timeout here,
+            // otherwise the React SDK will mistakenly think the user turned off
+            // their video by hand
+            setTimeout(() => {
+                if (meetApi) widgetApi.transport.send(ElementWidgetActions.MuteVideo, {});
+            }, 200);
+        } else {
+            widgetApi.transport.send(ElementWidgetActions.UnmuteVideo, {});
+        }
     });
 
     ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach(event => {
