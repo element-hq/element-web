@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LocationShareMenu /> with live location disabled goes to labs flag screen after live options is clicked 1`] = `
+<div
+  className="mx_EnableLiveShare"
+  data-test-id="location-picker-enable-live-share"
+>
+  <StyledLiveBeaconIcon
+    className="mx_EnableLiveShare_icon"
+  >
+    <div
+      className="mx_StyledLiveBeaconIcon mx_EnableLiveShare_icon"
+    />
+  </StyledLiveBeaconIcon>
+  <Heading
+    className="mx_EnableLiveShare_heading"
+    size="h3"
+  >
+    <h3
+      className="mx_Heading_h3 mx_EnableLiveShare_heading"
+    >
+      Live location sharing
+    </h3>
+  </Heading>
+  <p
+    className="mx_EnableLiveShare_description"
+  >
+    Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.
+  </p>
+  <LabelledToggleSwitch
+    data-test-id="enable-live-share-toggle"
+    label="Enable live location sharing"
+    onChange={[Function]}
+    value={false}
+  >
+    <div
+      className="mx_SettingsFlag "
+    >
+      <span
+        className="mx_SettingsFlag_label"
+      >
+        Enable live location sharing
+      </span>
+      <_default
+        aria-label="Enable live location sharing"
+        checked={false}
+        onChange={[Function]}
+      >
+        <AccessibleButton
+          aria-checked={false}
+          aria-disabled={false}
+          aria-label="Enable live location sharing"
+          className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
+          element="div"
+          onClick={[Function]}
+          role="switch"
+          tabIndex={0}
+        >
+          <div
+            aria-checked={false}
+            aria-disabled={false}
+            aria-label="Enable live location sharing"
+            className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            role="switch"
+            tabIndex={0}
+          >
+            <div
+              className="mx_ToggleSwitch_ball"
+            />
+          </div>
+        </AccessibleButton>
+      </_default>
+    </div>
+  </LabelledToggleSwitch>
+  <AccessibleButton
+    className="mx_EnableLiveShare_button"
+    data-test-id="enable-live-share-submit"
+    disabled={true}
+    element="button"
+    kind="primary"
+    onClick={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    <button
+      aria-disabled={true}
+      className="mx_AccessibleButton mx_EnableLiveShare_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
+      data-test-id="enable-live-share-submit"
+      role="button"
+      tabIndex={0}
+    >
+      OK
+    </button>
+  </AccessibleButton>
+</div>
+`;
