@@ -163,8 +163,8 @@ describe('geolocation utilities', () => {
 
             const [, , options] = geolocation.watchPosition.mock.calls[0];
             expect(options).toEqual({
-                maximumAge: 2000,
-                timeout: 5000,
+                maximumAge: 60000,
+                timeout: 10000,
             });
         });
 

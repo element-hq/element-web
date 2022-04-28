@@ -32,8 +32,8 @@ export enum GeolocationError {
 }
 
 const GeolocationOptions = {
-    timeout: 5000,
-    maximumAge: 2000,
+    timeout: 10000,
+    maximumAge: 60000,
 };
 
 const isGeolocationPositionError = (error: unknown): error is GeolocationPositionError =>
