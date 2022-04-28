@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import classNames from 'classnames';
 import { Room } from 'matrix-js-sdk/src/matrix';
 
 import { _t } from '../../../languageHandler';
@@ -67,7 +66,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
     };
 
     return <div
-        className={classNames('mx_RoomLiveShareWarning')}
+        className='mx_RoomLiveShareWarning'
     >
         <StyledLiveBeaconIcon className="mx_RoomLiveShareWarning_icon" withError={hasError} />
 

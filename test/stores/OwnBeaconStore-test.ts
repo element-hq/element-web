@@ -765,6 +765,64 @@ describe('OwnBeaconStore', () => {
             );
         });
 
+        it('records error when stopping beacon event fails to send', async () => {
+            jest.spyOn(logger, 'error').mockImplementation(() => {});
+            makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+            const emitSpy = jest.spyOn(store, 'emit');
+            const error = new Error('oups');
+            mockClient.unstable_setLiveBeacon.mockRejectedValue(error);
+
+            await expect(store.stopBeacon(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).rejects.toEqual(error);
+
+            expect(store.beaconUpdateErrors.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toEqual(error);
+            expect(emitSpy).toHaveBeenCalledWith(
+                OwnBeaconStoreEvent.BeaconUpdateError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo), true,
+            );
+        });
+
+        it('clears previous error and emits when stopping beacon works on retry', async () => {
+            jest.spyOn(logger, 'error').mockImplementation(() => {});
+            makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+            const emitSpy = jest.spyOn(store, 'emit');
+            const error = new Error('oups');
+            mockClient.unstable_setLiveBeacon.mockRejectedValueOnce(error);
+
+            await expect(store.stopBeacon(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).rejects.toEqual(error);
+            expect(store.beaconUpdateErrors.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toEqual(error);
+
+            await store.stopBeacon(getBeaconInfoIdentifier(alicesRoom1BeaconInfo));
+
+            // error cleared
+            expect(store.beaconUpdateErrors.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBeFalsy();
+
+            // emit called for error clearing
+            expect(emitSpy).toHaveBeenCalledWith(
+                OwnBeaconStoreEvent.BeaconUpdateError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo), false,
+            );
+        });
+
+        it('does not emit BeaconUpdateError when stopping succeeds and beacon did not have errors', async () => {
+            jest.spyOn(logger, 'error').mockImplementation(() => {});
+            makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+            const emitSpy = jest.spyOn(store, 'emit');
+            // error cleared
+            expect(store.beaconUpdateErrors.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toBeFalsy();
+
+            // emit called for error clearing
+            expect(emitSpy).not.toHaveBeenCalledWith(
+                OwnBeaconStoreEvent.BeaconUpdateError, getBeaconInfoIdentifier(alicesRoom1BeaconInfo), false,
+            );
+        });
+
         it('updates beacon to live:false when it is expired but live property is true', async () => {
             makeRoomsWithStateEvents([
                 alicesRoom1BeaconInfo,
@@ -1051,6 +1109,31 @@ describe('OwnBeaconStore', () => {
                 );
             });
 
+            it('stops publishing positions when a beacon has a stopping error', async () => {
+                // reject stopping beacon
+                const error = new Error('oups');
+                mockClient.unstable_setLiveBeacon.mockRejectedValue(error);
+                makeRoomsWithStateEvents([
+                    alicesRoom1BeaconInfo,
+                ]);
+                const store = await makeOwnBeaconStore();
+                // wait for store to settle
+                await flushPromisesWithFakeTimers();
+
+                // 2 positions from watchPosition in this period
+                await advanceAndFlushPromises(5000);
+
+                // attempt to stop the beacon
+                await expect(store.stopBeacon(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).rejects.toEqual(error);
+                expect(store.beaconUpdateErrors.get(getBeaconInfoIdentifier(alicesRoom1BeaconInfo))).toEqual(error);
+
+                // 2 more positions in this period
+                await advanceAndFlushPromises(50000);
+
+                // only two positions pre-stopping were sent
+                expect(mockClient.sendEvent).toHaveBeenCalledTimes(3);
+            });
+
             it('restarts publishing a beacon after resetting location publish error', async () => {
                 // always fails to send events
                 mockClient.sendEvent.mockRejectedValue(new Error('oups'));
@@ -1265,22 +1348,6 @@ describe('OwnBeaconStore', () => {
 
             // didn't throw, no error log
             expect(loggerErrorSpy).not.toHaveBeenCalled();
-        });
-
-        it('stops live beacons for room after creating new beacon', async () => {
-            // room1 already has a beacon
-            makeRoomsWithStateEvents([
-                alicesRoom1BeaconInfo,
-            ]);
-            // but it was not created on this device
-            localStorageGetSpy.mockReturnValue(undefined);
-
-            const store = await makeOwnBeaconStore();
-            const content = makeBeaconInfoContent(100);
-            await store.createLiveBeacon(room1Id, content);
-
-            // update beacon called
-            expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalled();
         });
     });
 });

@@ -51,6 +51,7 @@ export enum OwnBeaconStoreEvent {
     LivenessChange = 'OwnBeaconStore.LivenessChange',
     MonitoringLivePosition = 'OwnBeaconStore.MonitoringLivePosition',
     LocationPublishError = 'LocationPublishError',
+    BeaconUpdateError = 'BeaconUpdateError',
 }
 
 const MOVING_UPDATE_INTERVAL = 2000;
@@ -61,6 +62,7 @@ const BAIL_AFTER_CONSECUTIVE_ERROR_COUNT = 2;
 type OwnBeaconStoreState = {
     beacons: Map<BeaconIdentifier, Beacon>;
     beaconLocationPublishErrorCounts: Map<BeaconIdentifier, number>;
+    beaconUpdateErrors: Map<BeaconIdentifier, Error>;
     beaconsByRoomId: Map<Room['roomId'], Set<BeaconIdentifier>>;
     liveBeaconIds: BeaconIdentifier[];
 };
@@ -99,6 +101,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * Reset on successful publish of location
      */
     public readonly beaconLocationPublishErrorCounts = new Map<BeaconIdentifier, number>();
+    public readonly beaconUpdateErrors = new Map<BeaconIdentifier, Error>();
     /**
      * ids of live beacons
      * ordered by creation time descending
@@ -144,6 +147,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         this.beaconsByRoomId.clear();
         this.liveBeaconIds = [];
         this.beaconLocationPublishErrorCounts.clear();
+        this.beaconUpdateErrors.clear();
     }
 
     protected async onReady(): Promise<void> {
@@ -215,7 +219,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         }
 
         await this.updateBeaconEvent(beacon, { live: false });
-
         // prune from local store
         removeLocallyCreateBeaconEventId(beacon.beaconInfoId);
     };
@@ -300,7 +303,10 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * Live beacon ids that do not have wire errors
      */
     private get healthyLiveBeaconIds() {
-        return this.liveBeaconIds.filter(beaconId => !this.beaconHasLocationPublishError(beaconId));
+        return this.liveBeaconIds.filter(beaconId =>
+            !this.beaconHasLocationPublishError(beaconId) &&
+            !this.beaconUpdateErrors.has(beaconId),
+        );
     }
 
     private initialiseBeaconState = () => {
@@ -393,19 +399,6 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         );
 
         storeLocallyCreateBeaconEventId(event_id);
-
-        // try to stop any other live beacons
-        // in this room
-        this.beaconsByRoomId.get(roomId)?.forEach(beaconId => {
-            if (this.getBeaconById(beaconId)?.isLive) {
-                try {
-                    // don't await, this is best effort
-                    this.stopBeacon(beaconId);
-                } catch (error) {
-                    logger.error('Failed to stop live beacons', error);
-                }
-            }
-        });
     };
 
     /**
@@ -510,6 +503,11 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * MatrixClient api
      */
 
+    /**
+     * Updates beacon with provided content update
+     * Records error in beaconUpdateErrors
+     * rethrows
+     */
     private updateBeaconEvent = async (beacon: Beacon, update: Partial<BeaconInfoState>): Promise<void> => {
         const { description, timeout, timestamp, live, assetType } = {
             ...beacon.beaconInfo,
@@ -523,7 +521,21 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
             timestamp,
         );
 
-        await this.matrixClient.unstable_setLiveBeacon(beacon.roomId, updateContent);
+        try {
+            await this.matrixClient.unstable_setLiveBeacon(beacon.roomId, updateContent);
+            // cleanup any errors
+            const hadError = this.beaconUpdateErrors.has(beacon.identifier);
+            if (hadError) {
+                this.beaconUpdateErrors.delete(beacon.identifier);
+                this.emit(OwnBeaconStoreEvent.BeaconUpdateError, beacon.identifier, false);
+            }
+        } catch (error) {
+            logger.error('Failed to update beacon', error);
+            this.beaconUpdateErrors.set(beacon.identifier, error);
+            this.emit(OwnBeaconStoreEvent.BeaconUpdateError, beacon.identifier, true);
+
+            throw error;
+        }
     };
 
     /**

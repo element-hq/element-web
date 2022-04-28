@@ -16,6 +16,7 @@ limitations under the License.
 
 import classNames from 'classnames';
 import React from 'react';
+import { BeaconIdentifier, Room } from 'matrix-js-sdk/src/matrix';
 
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { _t } from '../../../languageHandler';
@@ -34,16 +35,30 @@ interface Props {
  * Choose the most relevant beacon
  * and get its roomId
  */
-const chooseBestBeaconRoomId = (liveBeaconIds, errorBeaconIds): string | undefined => {
+const chooseBestBeaconRoomId = (
+    liveBeaconIds: BeaconIdentifier[],
+    updateErrorBeaconIds: BeaconIdentifier[],
+    locationErrorBeaconIds: BeaconIdentifier[],
+): Room['roomId'] | undefined => {
     // both lists are ordered by creation timestamp in store
     // so select latest beacon
-    const beaconId = errorBeaconIds?.[0] ?? liveBeaconIds?.[0];
+    const beaconId = updateErrorBeaconIds?.[0] ?? locationErrorBeaconIds?.[0] ?? liveBeaconIds?.[0];
     if (!beaconId) {
         return undefined;
     }
     const beacon = OwnBeaconStore.instance.getBeaconById(beaconId);
 
     return beacon?.roomId;
+};
+
+const getLabel = (hasStoppingErrors: boolean, hasLocationErrors: boolean): string => {
+    if (hasStoppingErrors) {
+        return _t('An error occurred while stopping your live location');
+    }
+    if (hasLocationErrors) {
+        return _t('An error occured whilst sharing your live location');
+    }
+    return _t('You are sharing your live location');
 };
 
 const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
@@ -59,6 +74,14 @@ const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
         () => OwnBeaconStore.instance.getLiveBeaconIdsWithLocationPublishError(),
     );
 
+    const beaconIdsWithStoppingError = useEventEmitterState(
+        OwnBeaconStore.instance,
+        OwnBeaconStoreEvent.BeaconUpdateError,
+        () => OwnBeaconStore.instance.getLiveBeaconIds().filter(
+            beaconId => OwnBeaconStore.instance.beaconUpdateErrors.has(beaconId),
+        ),
+    );
+
     const liveBeaconIds = useEventEmitterState(
         OwnBeaconStore.instance,
         OwnBeaconStoreEvent.LivenessChange,
@@ -66,12 +89,15 @@ const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
     );
 
     const hasLocationPublishErrors = !!beaconIdsWithLocationPublishError.length;
+    const hasStoppingErrors = !!beaconIdsWithStoppingError.length;
 
     if (!isMonitoringLiveLocation) {
         return null;
     }
 
-    const relevantBeaconRoomId = chooseBestBeaconRoomId(liveBeaconIds, beaconIdsWithLocationPublishError);
+    const relevantBeaconRoomId = chooseBestBeaconRoomId(
+        liveBeaconIds, beaconIdsWithStoppingError, beaconIdsWithLocationPublishError,
+    );
 
     const onWarningClick = relevantBeaconRoomId ? () => {
         dispatcher.dispatch<ViewRoomPayload>({
@@ -81,14 +107,12 @@ const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
         });
     } : undefined;
 
-    const label = hasLocationPublishErrors ?
-        _t('An error occured whilst sharing your live location') :
-        _t('You are sharing your live location');
+    const label = getLabel(hasStoppingErrors, hasLocationPublishErrors);
 
     return <AccessibleButton
         className={classNames('mx_LeftPanelLiveShareWarning', {
             'mx_LeftPanelLiveShareWarning__minimized': isMinimized,
-            'mx_LeftPanelLiveShareWarning__error': hasLocationPublishErrors,
+            'mx_LeftPanelLiveShareWarning__error': hasLocationPublishErrors || hasStoppingErrors,
         })}
         title={isMinimized ? label : undefined}
         onClick={onWarningClick}
