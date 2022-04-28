@@ -731,7 +731,7 @@ export default class ScrollPanel extends React.Component<IProps> {
         const contentHeight = this.getMessagesHeight();
         // Only round to the nearest page when we're basing the height off the content, not off the scrollNode height
         // otherwise it'll cause too much overscroll which makes it possible to entirely scroll content off-screen.
-        if (contentHeight < sn.clientHeight - PAGE_SIZE) {
+        if (contentHeight < sn.clientHeight) {
             this.minListHeight = sn.clientHeight;
         } else {
             this.minListHeight = Math.ceil(contentHeight / PAGE_SIZE) * PAGE_SIZE;
