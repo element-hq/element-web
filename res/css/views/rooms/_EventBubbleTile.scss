@@ -562,6 +562,17 @@ limitations under the License.
         padding-top: 0;
     }
 
+    .mx_EventTile {
+        &.mx_EventTile_info {
+            .mx_EventTile_line {
+                // Avoid overflow of event info by cancelling width settings
+                width: 100%;
+                min-width: 0;
+                max-width: 100%;
+            }
+        }
+    }
+
     &::after {
         content: "";
         clear: both;
@@ -585,7 +596,7 @@ limitations under the License.
         margin-right: 0;
 
         .mx_MessageActionBar {
-            right: 127px; // align with that of right-column bubbles
+            right: 48px; // align with that of right-column bubbles
         }
 
         .mx_ReadReceiptGroup {
