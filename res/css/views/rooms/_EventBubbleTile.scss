@@ -449,8 +449,11 @@ limitations under the License.
 
     .mx_ReadReceiptGroup {
         position: absolute;
-        right: -78px; // as close to right gutter without clipping as possible
-        bottom: 0;
+        // as close to right gutter without clipping as possible
+        right: -78px;
+        // (EventTileLine.line-height - ReadReceiptGroup.height) / 2
+        // this centers the ReadReceiptGroup if we’ve got a single line
+        bottom: calc(($font-18px - 24px) / 2);
         top: auto;
     }
 
@@ -586,7 +589,7 @@ limitations under the License.
         }
 
         .mx_ReadReceiptGroup {
-            right: -14px; // match alignment to RRs of chat bubbles
+            right: -18px; // match alignment to RRs of chat bubbles
         }
 
         &::before {
