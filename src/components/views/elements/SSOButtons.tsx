@@ -18,6 +18,7 @@ import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Signup } from "matrix-analytics-events/types/typescript/Signup";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";
@@ -25,6 +26,7 @@ import { _t } from "../../../languageHandler";
 import { IdentityProviderBrand, IIdentityProvider, ISSOFlow } from "../../../Login";
 import AccessibleTooltipButton from "./AccessibleTooltipButton";
 import { mediaFromMxc } from "../../../customisations/Media";
+import { PosthogAnalytics } from "../../../PosthogAnalytics";
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
     idp: IIdentityProvider;
@@ -50,6 +52,26 @@ const getIcon = (brand: IdentityProviderBrand | string) => {
     }
 };
 
+const getAuthenticationType = (brand: IdentityProviderBrand | string): Signup["authenticationType"] => {
+    switch (brand) {
+        case IdentityProviderBrand.Apple:
+            return "Apple";
+        case IdentityProviderBrand.Facebook:
+            return "Facebook";
+        case IdentityProviderBrand.Github:
+            return "GitHub";
+        case IdentityProviderBrand.Gitlab:
+            return "GitLab";
+        case IdentityProviderBrand.Google:
+            return "Google";
+        // Not supported on the analytics SDK at the moment.
+        // case IdentityProviderBrand.Twitter:
+        //     return "Twitter";
+        default:
+            return "SSO";
+    }
+};
+
 const SSOButton: React.FC<ISSOButtonProps> = ({
     matrixClient,
     loginType,
@@ -62,6 +84,8 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     const label = idp ? _t("Continue with %(provider)s", { provider: idp.name }) : _t("Sign in with single sign-on");
 
     const onClick = () => {
+        const authenticationType = getAuthenticationType(idp.brand);
+        PosthogAnalytics.instance.setAuthenticationType(authenticationType);
         PlatformPeg.get().startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id);
     };
 
