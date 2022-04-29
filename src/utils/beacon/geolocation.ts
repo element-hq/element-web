@@ -114,7 +114,8 @@ export const getGeoUri = (position: GenericPosition): string => {
 };
 
 export const mapGeolocationPositionToTimedGeo = (position: GeolocationPosition): TimedGeoUri => {
-    return { timestamp: position.timestamp, geoUri: getGeoUri(genericPositionFromGeolocation(position)) };
+    const genericPosition = genericPositionFromGeolocation(position);
+    return { timestamp: genericPosition.timestamp, geoUri: getGeoUri(genericPosition) };
 };
 
 /**

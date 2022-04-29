@@ -37,7 +37,6 @@ import {
 } from "../test-utils";
 import {
     makeBeaconInfoEvent,
-    makeGeolocationPosition,
     mockGeolocation,
     watchPositionMockImplementation,
 } from "../test-utils/beacon";
@@ -70,7 +69,6 @@ describe('OwnBeaconStore', () => {
     const room2Id = '$room2:server.org';
 
     // returned by default geolocation mocks
-    const defaultLocation = makeGeolocationPosition({});
     const defaultLocationUri = 'geo:54.001927,-8.253491;u=1';
 
     // beacon_info events
@@ -245,7 +243,7 @@ describe('OwnBeaconStore', () => {
             expect(mockClient.sendEvent).not.toHaveBeenCalled();
         });
 
-        it('does geolocation and sends location immediatley when user has live beacons', async () => {
+        it('does geolocation and sends location immediately when user has live beacons', async () => {
             localStorageGetSpy.mockReturnValue(JSON.stringify([
                 alicesRoom1BeaconInfo.getId(),
                 alicesRoom2BeaconInfo.getId(),
@@ -261,12 +259,12 @@ describe('OwnBeaconStore', () => {
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 room1Id,
                 M_BEACON.name,
-                makeBeaconContent(defaultLocationUri, defaultLocation.timestamp, alicesRoom1BeaconInfo.getId()),
+                makeBeaconContent(defaultLocationUri, now, alicesRoom1BeaconInfo.getId()),
             );
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 room2Id,
                 M_BEACON.name,
-                makeBeaconContent(defaultLocationUri, defaultLocation.timestamp, alicesRoom2BeaconInfo.getId()),
+                makeBeaconContent(defaultLocationUri, now, alicesRoom2BeaconInfo.getId()),
             );
         });
     });

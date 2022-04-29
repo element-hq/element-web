@@ -34,11 +34,16 @@ describe('geolocation utilities', () => {
     let geolocation;
     const defaultPosition = makeGeolocationPosition({});
 
+    // 14.03.2022 16:15
+    const now = 1647270879403;
+
     beforeEach(() => {
         geolocation = mockGeolocation();
+        jest.spyOn(Date, 'now').mockReturnValue(now);
     });
 
     afterEach(() => {
+        jest.spyOn(Date, 'now').mockRestore();
         jest.spyOn(logger, 'error').mockRestore();
     });
 
@@ -136,7 +141,7 @@ describe('geolocation utilities', () => {
     describe('mapGeolocationPositionToTimedGeo()', () => {
         it('maps geolocation position correctly', () => {
             expect(mapGeolocationPositionToTimedGeo(defaultPosition)).toEqual({
-                timestamp: 1647256791840, geoUri: 'geo:54.001927,-8.253491;u=1',
+                timestamp: now, geoUri: 'geo:54.001927,-8.253491;u=1',
             });
         });
     });
