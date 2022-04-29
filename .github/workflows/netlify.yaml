@@ -25,40 +25,40 @@ jobs:
           echo "PR number: $pr_number"
           echo "::set-output name=prnumber::$pr_number"
 
-      - name: Create Deployment ID
-        uses: altinukshini/deployment-action@v1.2.6
+      - name: Create Deployment
+        uses: bobheadxi/deployments@v1
         id: deployment
         with:
-          token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-          pr: true
-          pr_id: ${{ steps.readctx.outputs.prnumber }}
-          transient_environment: true
-          environment: Netlify
-          initial_status: in_progress
+          step: start
+          token: ${{ secrets.GITHUB_TOKEN }}
+          env: Netlify
           ref: ${{ github.event.workflow_run.head_sha }}
+          desc: |
+            Do you trust the author of this PR? Maybe this build will steal your keys or give you malware.
+            Exercise caution. Use test accounts.
 
-      # There's a 'download artifact' action but it hasn't been updated for the
+      # There's a 'download artifact' action, but it hasn't been updated for the
       # workflow_run action (https://github.com/actions/download-artifact/issues/60)
       # so instead we get this mess:
       - name: 'Download artifact'
         uses: actions/github-script@v3.1.0
         with:
           script: |
-            var artifacts = await github.actions.listWorkflowRunArtifacts({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               run_id: ${{github.event.workflow_run.id }},
+            const artifacts = await github.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: ${{ github.event.workflow_run.id }},
             });
-            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-              return artifact.name == "previewbuild"
+            const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+                return artifact.name == "previewbuild"
             })[0];
-            var download = await github.actions.downloadArtifact({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               artifact_id: matchArtifact.id,
-               archive_format: 'zip',
+            const download = await github.actions.downloadArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: matchArtifact.id,
+                archive_format: 'zip',
             });
-            var fs = require('fs');
+            const fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/previewbuild.zip', Buffer.from(download.data));
 
       - name: Extract Artifacts
@@ -79,25 +79,16 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 1
 
-      - name: Update deployment status (success)
-        if: success()
-        uses: altinukshini/deployment-status@v1.0.1
+      - name: Update deployment status
+        uses: bobheadxi/deployments@v1
+        if: always()
         with:
-          token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-          environment_url: ${{ steps.netlify.outputs.deploy-url }}
-          state: "success"
+          step: finish
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          env: ${{ steps.deployment.outputs.env }}
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          pr: true
-          pr_id: ${{ steps.readctx.outputs.prnumber }}
-          description: |
+          env_url: ${{ steps.netlify.outputs.deploy-url }}
+          desc: |
             Do you trust the author of this PR? Maybe this build will steal your keys or give you malware.
             Exercise caution. Use test accounts.
-      - name: Update deployment status (failure)
-        if: failure()
-        uses: altinukshini/deployment-status@v1.0.1
-        with:
-          token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
-          state: "failure"
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-          pr: true
-          pr_id: ${{ steps.readctx.outputs.prnumber }}

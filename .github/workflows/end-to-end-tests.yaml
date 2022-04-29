@@ -9,12 +9,13 @@ on:
     branches: [ develop ]
   repository_dispatch:
     types: [ upstream-sdk-notify ]
+env:
+  # These must be set for fetchdep.sh to get the right branch
+  REPOSITORY: ${{ github.repository }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
   end-to-end:
     runs-on: ubuntu-latest
-    env:
-      # This must be set for fetchdep.sh to get the right branch
-      PR_NUMBER: ${{github.event.number}}
     container: vectorim/element-web-ci-e2etests-env:latest
     steps:
       - name: Checkout code

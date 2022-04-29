@@ -5,13 +5,14 @@ on:
     branches: [ develop, master ]
   repository_dispatch:
     types: [ upstream-sdk-notify ]
+env:
+  # These must be set for fetchdep.sh to get the right branch
+  REPOSITORY: ${{ github.repository }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
   jest:
     name: Jest with Codecov
     runs-on: ubuntu-latest
-    env:
-      # This must be set for fetchdep.sh to get the right branch
-      PR_NUMBER: ${{github.event.number}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
