@@ -844,6 +844,12 @@ $left-gutter: 64px;
             padding-left: 0;
             padding-right: 0;
         }
+
+        .mx_ReplyChain {
+            .mx_MLocationBody {
+                margin-top: 6px; // See: https://github.com/matrix-org/matrix-react-sdk/pull/8442
+            }
+        }
     }
 
     .mx_EventTile:not([data-layout=bubble]) {
@@ -883,10 +889,12 @@ $left-gutter: 64px;
         width: 100%;
 
         .mx_EventTile_content,
+        .mx_EventTile_body,
         .mx_HiddenBody,
         .mx_RedactedBody,
         .mx_UnknownBody,
         .mx_MPollBody,
+        .mx_MLocationBody,
         .mx_ReplyChain_wrapper,
         .mx_ReactionsRow {
             margin-left: $spacing-start;
@@ -897,6 +905,13 @@ $left-gutter: 64px;
             .mx_RedactedBody,
             .mx_MImageBody {
                 margin: 0;
+            }
+        }
+
+        .mx_ReplyChain_wrapper {
+            .mx_MLocationBody {
+                margin-inline-start: 0;
+                margin-inline-end: 0;
             }
         }
 
