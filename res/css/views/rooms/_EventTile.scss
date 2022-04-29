@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 $left-gutter: 64px;
+$threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
 .mx_EventTile {
     flex-shrink: 0;
@@ -683,15 +684,8 @@ $left-gutter: 64px;
 .mx_ThreadPanel_replies::before,
 .mx_ThreadSummaryIcon::before,
 .mx_ThreadSummary::before {
-    content: "";
-    display: inline-block;
-    mask-image: url('$(res)/img/element-icons/thread-summary.svg');
-    mask-position: center;
-    height: 18px;
-    min-width: 18px;
+    @mixin ThreadInfoIcon;
     background-color: $secondary-content !important;
-    mask-repeat: no-repeat;
-    mask-size: contain;
 }
 
 .mx_ThreadSummaryIcon {
@@ -715,28 +709,33 @@ $left-gutter: 64px;
 }
 
 .mx_EventTile[data-shape=ThreadsList] {
-    --topOffset: 20px;
-    --leftOffset: 46px;
+    --topOffset: $spacing-12;
+    --leftOffset: 48px;
     $borderRadius: 8px;
+    $padding: $spacing-8;
+    $hrHeight: 1px;
 
-    margin: var(--topOffset) 16px var(--topOffset) 0;
+    margin: calc(var(--topOffset) + $hrHeight) 0 var(--topOffset); // include the height of horizontal line
+    padding: $padding $spacing-24 $padding $padding;
     border-radius: $borderRadius;
 
     display: flex;
     flex-flow: wrap;
     align-items: center;
 
-    &:hover {
+    &:hover,
+    // To cancel "&.mx_EventTile:hover .mx_EventTile_line"
+    &:not([data-layout=bubble]):hover .mx_EventTile_line {
         background-color: $system;
     }
 
     &::after {
         content: "";
         position: absolute;
-        left: var(--leftOffset);
-        right: 0;
-        height: 1px;
-        bottom: calc(-1 * var(--topOffset));
+        left: calc(var(--leftOffset) + $padding);
+        right: $spacing-24; // 24px: 32px - 8px (right padding)
+        height: $hrHeight;
+        bottom: calc(-1 * var(--topOffset) - $hrHeight); // exclude the height of horizontal line
         background-color: $quinary-content;
         pointer-events: none; // disable the message action bar on hover
     }
@@ -764,22 +763,15 @@ $left-gutter: 64px;
         margin-top: 0;
     }
 
-    padding-top: 0;
-
     .mx_EventTile_avatar {
-        top: 0;
-        left: 0;
+        top: $padding;
+        left: $padding;
     }
 
     .mx_DisambiguatedProfile {
-        margin-left: var(--leftOffset) !important;
-        flex: 1;
         margin-right: 12px;
-
         display: inline-flex;
-        // not a fan of the magic number here, but I just tweaked
-        // the hardcoded value of the current implementation
-        max-width: calc(100% - 96px);
+        flex: 1;
     }
 
     .mx_DisambiguatedProfile_displayName,
@@ -801,14 +793,17 @@ $left-gutter: 64px;
     .mx_EventTile_line {
         width: 100%;
         box-sizing: border-box;
-        padding-left: var(--leftOffset) !important;
         border-radius: $borderRadius !important; // override 4px
     }
 
+    .mx_DisambiguatedProfile,
+    .mx_EventTile_line {
+        padding-inline-start: var(--leftOffset);
+    }
+
     .mx_MessageTimestamp {
-        position: initial !important;
         max-width: 80px;
-        width: auto !important;
+        width: auto;
     }
 }
 
@@ -831,6 +826,8 @@ $left-gutter: 64px;
         flex-direction: column;
 
         .mx_EventTile_line {
+            padding-top: 2px;
+            padding-bottom: 2px;
             padding-left: 0;
             order: 10 !important;
         }
@@ -850,10 +847,10 @@ $left-gutter: 64px;
                 margin-top: 6px; // See: https://github.com/matrix-org/matrix-react-sdk/pull/8442
             }
         }
-    }
 
-    .mx_EventTile:not([data-layout=bubble]) {
-        padding-top: 14px; // due to layout differences, this odd number matches the 18px padding-top of main tl events
+        &:not([data-layout=bubble]) {
+            padding-top: $spacing-16;
+        }
     }
 
     .mx_EventTile[data-layout=bubble] {
@@ -885,7 +882,7 @@ $left-gutter: 64px;
     }
 
     .mx_EventTile[data-layout=group] {
-        $spacing-start: 48px;
+        $spacing-start: 56px; // 56px: 64px - 8px (padding)
         width: 100%;
 
         .mx_EventTile_content,
@@ -916,14 +913,14 @@ $left-gutter: 64px;
         }
 
         .mx_MessageTimestamp {
-            top: 2px !important;
-            width: auto;
+            top: 2px; // Align with mx_EventTile_content
         }
 
         .mx_EventTile_senderDetails {
             display: flex;
             align-items: center;
-            gap: calc(14px + $selected-message-border-width);
+            gap: $spacing-16; // gap between the avatar and the sender ID
+            padding-inline-start: $spacing-8;
 
             a {
                 flex: 1;
@@ -965,5 +962,14 @@ $left-gutter: 64px;
     .mx_EditMessageComposer_buttons {
         padding-right: 11px; // align with right edge of input
         margin-right: 0; // align with right edge of background
+    }
+
+    .mx_GroupLayout {
+        .mx_EventTile {
+            .mx_EventTile_line {
+                padding-top: 2px;
+                padding-bottom: 2px;
+            }
+        }
     }
 }

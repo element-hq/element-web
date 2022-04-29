@@ -85,12 +85,8 @@ $threadSummaryLineHeight: calc(2 * $font-12px);
 }
 
 // XXX: these classes are re-used outside of the component
-.mx_ThreadSummary_threads-amount {
-    font-weight: $font-semi-bold;
-    position: relative;
-    padding: 0 $spacing-12 0 $spacing-8;
-    white-space: nowrap;
-    line-height: $threadSummaryLineHeight;
+.mx_ThreadSummary_ThreadsAmount {
+    @mixin ThreadsAmount;
 }
 
 .mx_ThreadSummary_sender {
@@ -113,5 +109,5 @@ $threadSummaryLineHeight: calc(2 * $font-12px);
 }
 
 .mx_ThreadSummary_avatar {
-    margin-right: $spacing-8;
+    margin-inline-end: $spacing-8;
 }

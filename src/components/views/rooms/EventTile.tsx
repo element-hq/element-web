@@ -517,7 +517,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         }
 
         return <div className="mx_ThreadPanel_replies">
-            <span className="mx_ThreadSummary_threads-amount">
+            <span className="mx_ThreadPanel_ThreadsAmount">
                 { this.state.thread.length }
             </span>
             <ThreadMessagePreview thread={this.state.thread} />
@@ -1030,8 +1030,10 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         if (this.context.timelineRenderingType === TimelineRenderingType.Notification) {
             avatarSize = 24;
             needsSenderProfile = true;
-        } else if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList) {
-            avatarSize = 36;
+        } else if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList ||
+            (this.context.timelineRenderingType === TimelineRenderingType.Thread && !this.props.continuation)
+        ) {
+            avatarSize = 32;
             needsSenderProfile = true;
         } else if (eventType === EventType.RoomCreate || isBubbleMessage) {
             avatarSize = 0;

@@ -20,10 +20,6 @@ limitations under the License.
     height: 100px;
     overflow: visible;
 
-    &:not(.mx_ThreadView).mx_BaseCard {
-        padding-right: 2px;
-    }
-
     .mx_BaseCard_header {
         margin-bottom: 12px;
 
@@ -111,15 +107,37 @@ limitations under the License.
     .mx_AutoHideScrollbar {
         background-color: $background;
         border-radius: 8px;
-        width: calc(100% - 24px);
-        padding-right: 18px;
+        padding-inline-end: 0;
+        overflow-y: scroll; // set gap between the thread tile and the right border
+    }
+
+    // Override _GroupLayout.scss for the thread panel
+    .mx_GroupLayout {
+        .mx_EventTile {
+            .mx_MessageActionBar {
+                right: 0;
+                top: -36px; // 2px above EventTile
+                z-index: 10; // See _EventTile.scss
+            }
+
+            &[data-shape=ThreadsList] {
+                > .mx_DisambiguatedProfile {
+                    margin-inline-start: 0;
+                }
+
+                .mx_MessageTimestamp {
+                    position: initial;
+                    width: auto;
+                }
+
+                .mx_EventTile_line {
+                    padding-bottom: 0; // Override mx_EventTile_line on _GroupLayout.scss
+                }
+            }
+        }
     }
 
     &.mx_ThreadView .mx_ThreadView_timelinePanelWrapper {
-        /* the scrollbar is 8px wide, and we want a 12px gap with the side of the
-        panel. Hence the magic number, 8+4=12 */
-        width: calc(100% + 6px);
-        padding-right: 4px;
         position: relative;
         min-height: 0; // don't displace the composer
         flex-grow: 1;
@@ -129,9 +147,15 @@ limitations under the License.
         }
     }
 
+    .mx_RoomView_messagePanel { // To avoid the rule from being applied to .mx_ThreadPanel_empty
+        .mx_RoomView_messageListWrapper {
+            width: calc(100% + 6px); // 8px - 2px
+        }
+    }
+
     .mx_RoomView_MessageList {
-        padding-left: 12px;
-        padding-right: 0;
+        padding-inline-start: $spacing-8;
+        padding-inline-end: $spacing-8;
         content-visibility: visible;
     }
 
@@ -256,14 +280,14 @@ limitations under the License.
 }
 
 .mx_ThreadPanel_replies {
-    margin-top: 8px;
+    margin-top: $spacing-8;
     display: flex;
     align-items: center;
     position: relative;
 
-    .mx_ThreadSummary_threads-amount {
-        color: $secondary-content;
-        font-size: $font-12px;
+    .mx_ThreadPanel_ThreadsAmount {
+        @mixin ThreadsAmount;
+        font-size: $font-12px; // Same font size as the counter on the main panel
     }
 }
 
@@ -286,7 +310,6 @@ limitations under the License.
     top: 0;
     bottom: 0;
     left: 0;
-    right: 6px;
     padding: 20px;
 
     h2 {
