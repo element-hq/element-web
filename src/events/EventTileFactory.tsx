@@ -41,7 +41,6 @@ import MJitsiWidgetEvent from "../components/views/messages/MJitsiWidgetEvent";
 import { hasText } from "../TextForEvent";
 import { getMessageModerationState, MessageModerationState } from "../utils/EventUtils";
 import HiddenBody from "../components/views/messages/HiddenBody";
-import SettingsStore from "../settings/SettingsStore";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 
@@ -218,12 +217,7 @@ export function pickFactory(
 
     // Try and pick a state event factory, if we can.
     if (mxEvent.isState()) {
-        if (
-            shouldDisplayAsBeaconTile(mxEvent) &&
-            // settings store access here temporarily during labs
-            // only hit when a beacon_info event is hit
-            SettingsStore.getValue("feature_location_share_live")
-        ) {
+        if (shouldDisplayAsBeaconTile(mxEvent)) {
             return MessageEventFactory;
         }
 
