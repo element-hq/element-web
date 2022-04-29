@@ -31,6 +31,10 @@ export class ThreadNotificationState extends NotificationState implements IDestr
         super();
         this.thread.on(ThreadEvent.NewReply, this.handleNewThreadReply);
         this.thread.on(ThreadEvent.ViewThread, this.resetThreadNotification);
+        if (this.thread.replyToEvent) {
+            // Process the current tip event
+            this.handleNewThreadReply(this.thread, this.thread.replyToEvent);
+        }
     }
 
     public destroy(): void {
