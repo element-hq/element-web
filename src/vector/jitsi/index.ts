@@ -331,6 +331,10 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             audioInput: audioDevice,
             videoInput: videoDevice,
         },
+        userInfo: {
+            displayName,
+            email: userId,
+        },
         interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
@@ -338,6 +342,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             VIDEO_LAYOUT_FIT: "height",
         },
         configOverwrite: {
+            subject: roomName,
             startAudioOnly,
             startWithAudioMuted: !audioDevice,
             startWithVideoMuted: !videoDevice,
@@ -359,14 +364,12 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
-    if (displayName) meetApi.executeCommand("displayName", displayName);
-    if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
-    if (userId) meetApi.executeCommand("email", userId);
-    if (roomName) meetApi.executeCommand("subject", roomName);
 
     // fires once when user joins the conference
     // (regardless of video on or off)
     meetApi.on("videoConferenceJoined", () => {
+        if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
+
         if (widgetApi) {
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
