@@ -155,6 +155,7 @@ $activeBorderColor: $primary-content;
             border-radius: 12px;
             padding: 4px;
             width: calc(100% - 32px);
+            min-width: 0;
         }
 
         .mx_SpaceButton_name {
@@ -274,6 +275,7 @@ $activeBorderColor: $primary-content;
         display: flex;
         flex-direction: column;
         max-width: 250px;
+        min-width: 0;
         flex-grow: 1;
 
         .mx_BaseAvatar:not(.mx_UserMenu_userAvatar_BaseAvatar) .mx_BaseAvatar_initial {
