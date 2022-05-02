@@ -1043,7 +1043,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
     /* return true if the content is fully scrolled down and we are
      * at the end of the live timeline.
      */
-    public isAtEndOfLiveTimeline = (): boolean => {
+    public isAtEndOfLiveTimeline = (): boolean | undefined => {
         return this.messagePanel.current?.isAtBottom()
             && this.timelineWindow
             && !this.timelineWindow.canPaginate(EventTimeline.FORWARDS);

@@ -41,8 +41,6 @@ const RoomContext = createContext<IRoomState>({
     isPeeking: false,
     showRightPanel: true,
     joining: false,
-    atEndOfLiveTimeline: true,
-    atEndOfLiveTimelineInit: false,
     showTopUnreadMessagesBar: false,
     statusBarVisible: false,
     canReact: false,

@@ -179,9 +179,7 @@ export interface IRoomState {
     // this is true if we are fully scrolled-down, and are looking at
     // the end of the live timeline. It has the effect of hiding the
     // 'scroll to bottom' knob, among a couple of other things.
-    atEndOfLiveTimeline: boolean;
-    // used by componentDidUpdate to avoid unnecessary checks
-    atEndOfLiveTimelineInit: boolean;
+    atEndOfLiveTimeline?: boolean;
     showTopUnreadMessagesBar: boolean;
     statusBarVisible: boolean;
     // We load this later by asking the js-sdk to suggest a version for us.
@@ -257,8 +255,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             isPeeking: false,
             showRightPanel: false,
             joining: false,
-            atEndOfLiveTimeline: true,
-            atEndOfLiveTimelineInit: false,
             showTopUnreadMessagesBar: false,
             statusBarVisible: false,
             canReact: false,
@@ -692,9 +688,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // in render() prevents the ref from being set on first mount, so we try and
         // catch the messagePanel when it does mount. Because we only want the ref once,
         // we use a boolean flag to avoid duplicate work.
-        if (this.messagePanel && !this.state.atEndOfLiveTimelineInit) {
+        if (this.messagePanel && this.state.atEndOfLiveTimeline === undefined) {
             this.setState({
-                atEndOfLiveTimelineInit: true,
                 atEndOfLiveTimeline: this.messagePanel.isAtEndOfLiveTimeline(),
             });
         }
@@ -2102,7 +2097,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
         let jumpToBottom;
         // Do not show JumpToBottomButton if we have search results showing, it makes no sense
-        if (!this.state.atEndOfLiveTimeline && !this.state.searchResults) {
+        if (this.state.atEndOfLiveTimeline === false && !this.state.searchResults) {
             jumpToBottom = (<JumpToBottomButton
                 highlight={this.state.room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0}
                 numUnreadMessages={this.state.numUnreadMessages}

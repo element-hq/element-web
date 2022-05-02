@@ -216,7 +216,6 @@ function createRoomState(room: Room, narrow: boolean): IRoomState {
         showRightPanel: true,
         joining: false,
         atEndOfLiveTimeline: true,
-        atEndOfLiveTimelineInit: false,
         showTopUnreadMessagesBar: false,
         statusBarVisible: false,
         canReact: false,
