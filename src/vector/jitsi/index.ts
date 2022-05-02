@@ -331,6 +331,10 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             audioInput: audioDevice,
             videoInput: videoDevice,
         },
+        userInfo: {
+            displayName,
+            email: userId,
+        },
         interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
@@ -338,6 +342,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             VIDEO_LAYOUT_FIT: "height",
         },
         configOverwrite: {
+            subject: roomName,
             startAudioOnly,
             startWithAudioMuted: !audioDevice,
             startWithVideoMuted: !videoDevice,
@@ -359,14 +364,12 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
-    if (displayName) meetApi.executeCommand("displayName", displayName);
-    if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
-    if (userId) meetApi.executeCommand("email", userId);
-    if (roomName) meetApi.executeCommand("subject", roomName);
 
     // fires once when user joins the conference
     // (regardless of video on or off)
     meetApi.on("videoConferenceJoined", () => {
+        if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
+
         if (widgetApi) {
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
@@ -378,12 +381,14 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         if (isVideoChannel) meetApi.executeCommand("setTileView", true);
     });
 
+    meetApi.on("videoConferenceLeft", () => {
+        notifyHangup();
+        meetApi = null;
+    });
+
     meetApi.on("readyToClose", () => {
         switchVisibleContainers();
-        notifyHangup();
-
         document.getElementById("jitsiContainer").innerHTML = "";
-        meetApi = null;
 
         if (skipOurWelcomeScreen) {
             skipToJitsiSplashScreen();
@@ -404,8 +409,17 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
     });
 
     meetApi.on("videoMuteStatusChanged", ({ muted }) => {
-        const action = muted ? ElementWidgetActions.MuteVideo : ElementWidgetActions.UnmuteVideo;
-        widgetApi.transport.send(action, {});
+        if (muted) {
+            // Jitsi Meet always sends a "video muted" event directly before
+            // hanging up, which we need to ignore by padding the timeout here,
+            // otherwise the React SDK will mistakenly think the user turned off
+            // their video by hand
+            setTimeout(() => {
+                if (meetApi) widgetApi.transport.send(ElementWidgetActions.MuteVideo, {});
+            }, 200);
+        } else {
+            widgetApi.transport.send(ElementWidgetActions.UnmuteVideo, {});
+        }
     });
 
     ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach(event => {

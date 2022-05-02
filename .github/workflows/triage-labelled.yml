@@ -103,7 +103,9 @@ jobs:
         contains(github.event.issue.labels.*.name, 'A-Spaces') ||
         contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
         contains(github.event.issue.labels.*.name, 'A-Subspaces') ||
-        contains(github.event.issue.labels.*.name, 'Z-IA')
+        contains(github.event.issue.labels.*.name, 'Team: Delight') ||
+        contains(github.event.issue.labels.*.name, 'Z-IA') ||
+        contains(github.event.issue.labels.*.name, 'Z-NewUserJourney')
     steps:
       - uses: octokit/graphql-action@v2.x
         with:
