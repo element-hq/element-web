@@ -78,6 +78,7 @@ export default class SearchBar extends React.Component<IProps, IState> {
     }
 
     private onSearch = (): void => {
+        if (!this.searchTerm.current.value.trim()) return;
         this.props.onSearch(this.searchTerm.current.value, this.state.scope);
     };
 
