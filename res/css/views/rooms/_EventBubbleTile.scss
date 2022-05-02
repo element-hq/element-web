@@ -406,6 +406,7 @@ limitations under the License.
 
     .mx_MPollBody {
         width: 550px; // to prevent timestamp overlapping summary text
+        max-width: 100%; // prevent overflowing a reply tile
 
         .mx_MPollBody_totalVotes {
             // align summary text with corner timestamp
