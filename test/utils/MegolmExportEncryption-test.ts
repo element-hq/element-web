@@ -20,7 +20,8 @@ import { Crypto } from "@peculiar/webcrypto";
 
 const webCrypto = new Crypto();
 
-function getRandomValues(buf) {
+function getRandomValues<T extends ArrayBufferView>(buf: T): T {
+    // @ts-ignore fussy generics
     return nodeCrypto.randomFillSync(buf);
 }
 
@@ -64,7 +65,7 @@ const TEST_VECTORS=[
     ],
 ];
 
-function stringToArray(s) {
+function stringToArray(s: string): ArrayBufferLike {
     return new TextEncoder().encode(s).buffer;
 }
 
@@ -72,7 +73,10 @@ describe('MegolmExportEncryption', function() {
     let MegolmExportEncryption;
 
     beforeAll(() => {
-        window.crypto = { subtle: webCrypto.subtle, getRandomValues };
+        window.crypto = {
+            subtle: webCrypto.subtle,
+            getRandomValues,
+        };
         MegolmExportEncryption = require("../../src/utils/MegolmExportEncryption");
     });
 
