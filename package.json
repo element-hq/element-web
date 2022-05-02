@@ -184,6 +184,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-mock": "^27.5.1",
     "jest-raw-loader": "^1.0.1",
+    "jest-sonar-reporter": "^2.0.0",
     "matrix-mock-request": "^1.2.3",
     "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "^1.2.0",
@@ -233,9 +234,14 @@
       "<rootDir>/src/**/*.{js,ts,tsx}"
     ],
     "coverageReporters": [
-      "text",
-      "json"
-    ]
+      "text-summary",
+      "lcov"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "sonar56x": true
   },
   "typings": "./lib/index.d.ts"
 }
