@@ -21,39 +21,51 @@ import SettingsHandler from "./SettingsHandler";
  * by caching the values and listening for localStorage updates from other tabs.
  */
 export default abstract class AbstractLocalStorageSettingsHandler extends SettingsHandler {
-    private itemCache = new Map<string, any>();
-    private objectCache = new Map<string, object>();
+    // Shared cache between all subclass instances
+    private static itemCache = new Map<string, any>();
+    private static objectCache = new Map<string, object>();
+    private static storageListenerBound = false;
+
+    private static onStorageEvent = (e: StorageEvent) => {
+        if (e.key === null) {
+            AbstractLocalStorageSettingsHandler.clear();
+        } else {
+            AbstractLocalStorageSettingsHandler.itemCache.delete(e.key);
+            AbstractLocalStorageSettingsHandler.objectCache.delete(e.key);
+        }
+    };
+
+    // Expose the clear event for Lifecycle to call, the storage listener only fires for changes from other tabs
+    public static clear() {
+        AbstractLocalStorageSettingsHandler.itemCache.clear();
+        AbstractLocalStorageSettingsHandler.objectCache.clear();
+    }
 
     protected constructor() {
         super();
 
-        // Listen for storage changes from other tabs to bust the cache
-        window.addEventListener("storage", (e: StorageEvent) => {
-            if (e.key === null) {
-                this.itemCache.clear();
-                this.objectCache.clear();
-            } else {
-                this.itemCache.delete(e.key);
-                this.objectCache.delete(e.key);
-            }
-        });
+        if (!AbstractLocalStorageSettingsHandler.storageListenerBound) {
+            AbstractLocalStorageSettingsHandler.storageListenerBound = true;
+            // Listen for storage changes from other tabs to bust the cache
+            window.addEventListener("storage", AbstractLocalStorageSettingsHandler.onStorageEvent);
+        }
     }
 
     protected getItem(key: string): any {
-        if (!this.itemCache.has(key)) {
+        if (!AbstractLocalStorageSettingsHandler.itemCache.has(key)) {
             const value = localStorage.getItem(key);
-            this.itemCache.set(key, value);
+            AbstractLocalStorageSettingsHandler.itemCache.set(key, value);
             return value;
         }
 
-        return this.itemCache.get(key);
+        return AbstractLocalStorageSettingsHandler.itemCache.get(key);
     }
 
     protected getObject<T extends object>(key: string): T | null {
-        if (!this.objectCache.has(key)) {
+        if (!AbstractLocalStorageSettingsHandler.objectCache.has(key)) {
             try {
                 const value = JSON.parse(localStorage.getItem(key));
-                this.objectCache.set(key, value);
+                AbstractLocalStorageSettingsHandler.objectCache.set(key, value);
                 return value;
             } catch (err) {
                 console.error("Failed to parse localStorage object", err);
@@ -61,24 +73,24 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
             }
         }
 
-        return this.objectCache.get(key) as T;
+        return AbstractLocalStorageSettingsHandler.objectCache.get(key) as T;
     }
 
     protected setItem(key: string, value: any): void {
-        this.itemCache.set(key, value);
+        AbstractLocalStorageSettingsHandler.itemCache.set(key, value);
         localStorage.setItem(key, value);
     }
 
     protected setObject(key: string, value: object): void {
-        this.objectCache.set(key, value);
+        AbstractLocalStorageSettingsHandler.objectCache.set(key, value);
         localStorage.setItem(key, JSON.stringify(value));
     }
 
     // handles both items and objects
     protected removeItem(key: string): void {
         localStorage.removeItem(key);
-        this.itemCache.delete(key);
-        this.objectCache.delete(key);
+        AbstractLocalStorageSettingsHandler.itemCache.delete(key);
+        AbstractLocalStorageSettingsHandler.objectCache.delete(key);
     }
 
     public isSupported(): boolean {
