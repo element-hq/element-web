@@ -1,16 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 set -ex
 
-TAG=$(git describe --tags)
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-DIST_VERSION=$TAG
+DIST_VERSION=$(git describe --abbrev=0 --tags)
 
 # If the branch comes out as HEAD then we're probably checked out to a tag, so if the thing is *not*
 # coming out as HEAD then we're on a branch. When we're on a branch, we want to resolve ourselves to
 # a few SHAs rather than a version.
 # Docker Hub doesn't always check out the tag and sometimes checks out the branch, so we should look
 # for an appropriately tagged branch as well (heads/v1.2.3).
+if [[ $USE_CUSTOM_SDKS == false ]] && [[ $BRANCH == 'master' ]]
 if [[ $BRANCH != HEAD && ! $BRANCH =~ heads/v.+ ]]
 then
     DIST_VERSION=`$(dirname $0)/get-version-from-git.sh`

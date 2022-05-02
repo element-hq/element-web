@@ -1,0 +1,10 @@
+name: Dockerhub
+on:
+  push:
+    branches: [ master ]
+  # Instead of pushing develop "live" we push it periodically due to dockerhub rate limits
+  schedule:
+    – cron: "0 */4 * * *"
+concurrency: ${{ github.ref }}
+jobs:
+
