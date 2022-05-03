@@ -87,7 +87,7 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
                 positionOptions: {
                     enableHighAccuracy: true,
                 },
-                trackUserLocation: true,
+                trackUserLocation: false,
             });
 
             this.map.addControl(this.geolocate);
