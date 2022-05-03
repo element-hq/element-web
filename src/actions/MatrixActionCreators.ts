@@ -282,7 +282,8 @@ function addMatrixClientListener(
     const listener: Listener = (...args) => {
         const payload = actionCreator(matrixClient, ...args);
         if (payload) {
-            dis.dispatch(payload, true);
+            // Consumers shouldn't have to worry about calling js-sdk methods mid-dispatch, so make this dispatch async
+            dis.dispatch(payload, false);
         }
     };
     matrixClient.on(eventName, listener);
