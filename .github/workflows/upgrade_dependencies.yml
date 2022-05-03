@@ -4,3 +4,5 @@ on:
 jobs:
   upgrade:
     uses: matrix-org/matrix-js-sdk/.github/workflows/upgrade_dependencies.yml@develop
+    secrets:
+      ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
