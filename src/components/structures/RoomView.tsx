@@ -1398,7 +1398,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             .getServerAggregatedRelation<IThreadBundledRelationship>(THREAD_RELATION_TYPE.name);
                         if (!bundledRelationship || event.getThread()) continue;
                         const room = this.context.getRoom(event.getRoomId());
-                        event.setThread(room.findThreadForEvent(event) ?? room.createThread(event, [], true));
+                        const thread = room.findThreadForEvent(event);
+                        if (thread) {
+                            event.setThread(thread);
+                        } else {
+                            room.createThread(event.getId(), event, [], true);
+                        }
                     }
                 }
             }

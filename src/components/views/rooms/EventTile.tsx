@@ -499,16 +499,18 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             return null;
         }
 
+        let thread = this.props.mxEvent.getThread();
         /**
          * Accessing the threads value through the room due to a race condition
          * that will be solved when there are proper backend support for threads
          * We currently have no reliable way to discover than an event is a thread
          * when we are at the sync stage
          */
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const thread = room?.threads?.get(this.props.mxEvent.getId());
-
-        return thread || null;
+        if (!thread) {
+            const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
+            thread = room?.findThreadForEvent(this.props.mxEvent);
+        }
+        return thread ?? null;
     }
 
     private renderThreadPanelSummary(): JSX.Element | null {

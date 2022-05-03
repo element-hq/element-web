@@ -191,7 +191,6 @@ const ThreadPanel: React.FC<IProps> = ({
 
     const [filterOption, setFilterOption] = useState<ThreadFilterType>(ThreadFilterType.All);
     const [room, setRoom] = useState<Room | null>(null);
-    const [threadCount, setThreadCount] = useState<number>(0);
     const [timelineSet, setTimelineSet] = useState<EventTimelineSet | null>(null);
     const [narrow, setNarrow] = useState<boolean>(false);
 
@@ -206,23 +205,13 @@ const ThreadPanel: React.FC<IProps> = ({
     }, [mxClient, roomId]);
 
     useEffect(() => {
-        function onNewThread(): void {
-            setThreadCount(room.threads.size);
-        }
-
         function refreshTimeline() {
-            if (timelineSet) timelinePanel.current.refreshTimeline();
+            timelinePanel?.current.refreshTimeline();
         }
 
-        if (room) {
-            setThreadCount(room.threads.size);
-
-            room.on(ThreadEvent.New, onNewThread);
-            room.on(ThreadEvent.Update, refreshTimeline);
-        }
+        room?.on(ThreadEvent.Update, refreshTimeline);
 
         return () => {
-            room?.removeListener(ThreadEvent.New, onNewThread);
             room?.removeListener(ThreadEvent.Update, refreshTimeline);
         };
     }, [room, mxClient, timelineSet]);
@@ -260,7 +249,7 @@ const ThreadPanel: React.FC<IProps> = ({
                 header={<ThreadPanelHeader
                     filterOption={filterOption}
                     setFilterOption={setFilterOption}
-                    empty={threadCount === 0}
+                    empty={!timelineSet?.getLiveTimeline()?.getEvents().length}
                 />}
                 footer={<>
                     <BetaPill

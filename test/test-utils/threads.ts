@@ -92,5 +92,5 @@ export const makeThreadEvents = ({
 
 export const makeThread = (client: MatrixClient, room: Room, props: MakeThreadEventsProps): Thread => {
     const { rootEvent, events } = makeThreadEvents(props);
-    return new Thread(rootEvent, { initialEvents: events, room, client });
+    return new Thread(rootEvent.getId(), rootEvent, { initialEvents: events, room, client });
 };

@@ -217,7 +217,8 @@ export function isVoiceMessage(mxEvent: MatrixEvent): boolean {
 export async function fetchInitialEvent(
     client: MatrixClient,
     roomId: string,
-    eventId: string): Promise<MatrixEvent | null> {
+    eventId: string,
+): Promise<MatrixEvent | null> {
     let initialEvent: MatrixEvent;
 
     try {
@@ -228,14 +229,13 @@ export async function fetchInitialEvent(
         initialEvent = null;
     }
 
-    if (initialEvent?.isThreadRelation && client.supportsExperimentalThreads()) {
+    if (initialEvent?.isThreadRelation && client.supportsExperimentalThreads() && !initialEvent.getThread()) {
+        const threadId = initialEvent.threadRootId;
+        const room = client.getRoom(roomId);
         try {
-            const rootEventData = await client.fetchRoomEvent(roomId, initialEvent.threadRootId);
-            const rootEvent = new MatrixEvent(rootEventData);
-            const room = client.getRoom(roomId);
-            room.createThread(rootEvent, [rootEvent], true);
+            room.createThread(threadId, room.findEventById(threadId), [initialEvent], true);
         } catch (e) {
-            logger.warn("Could not find root event: " + initialEvent.threadRootId);
+            logger.warn("Could not find root event: " + threadId);
         }
     }
 

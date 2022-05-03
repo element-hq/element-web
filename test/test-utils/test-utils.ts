@@ -381,6 +381,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         client,
         myUserId: client?.getUserId(),
         canInvite: jest.fn(),
+        getThreads: jest.fn().mockReturnValue([]),
     } as unknown as Room;
 }
 
