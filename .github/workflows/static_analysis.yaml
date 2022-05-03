@@ -45,7 +45,7 @@ jobs:
             src/i18n/strings/en_EN.json
 
       - name: "Assert only en_EN was modified"
-        if: github.event_name == 'pull_request' && steps.changed_files.outputs.any_modified
+        if: github.event_name == 'pull_request' && steps.changed_files.outputs.any_modified == 'true'
         run: |
           echo "You can only modify en_EN.json, do not touch any of the other i18n files as Weblate will be confused"
           exit 1
