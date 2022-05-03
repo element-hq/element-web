@@ -27,10 +27,28 @@ jobs:
         run: "yarn run lint:types"
 
   i18n_lint:
-    name: "i18n Diff Check"
+    name: "i18n Check"
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
     steps:
       - uses: actions/checkout@v2
+
+      - name: "Get modified files"
+        id: changed_files
+        if: github.event_name == "pull_request"
+        uses: tj-actions/changed-files@v19
+        with:
+          files: |
+            src/i18n/strings/*
+          files_ignore: |
+            src/i18n/strings/en_EN.json
+
+      - name: "Assert only en_EN was modified"
+        if: github.event_name == "pull_request" && steps.changed_files.outputs.any_modified
+        run: |
+          echo "You can only modify en_EN.json, do not touch any of the other i18n files as Weblate will be confused"
+          exit 1
 
       - uses: actions/setup-node@v3
         with:
