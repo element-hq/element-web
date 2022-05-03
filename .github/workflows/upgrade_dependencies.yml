@@ -1,0 +1,7 @@
+name: Upgrade Dependencies
+on:
+  workflow_dispatch: { }
+jobs:
+  upgrade:
+    uses: t3chguy/matrix-js-sdk/.github/workflows/upgrade_dependencies.yml@develop
+    
