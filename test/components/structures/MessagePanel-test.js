@@ -34,6 +34,11 @@ import * as TestUtilsMatrix from "../../test-utils";
 import EventListSummary from "../../../src/components/views/elements/EventListSummary";
 import GenericEventListSummary from "../../../src/components/views/elements/GenericEventListSummary";
 import DateSeparator from "../../../src/components/views/messages/DateSeparator";
+import { makeBeaconInfoEvent } from '../../test-utils';
+
+jest.mock('../../../src/utils/beacon', () => ({
+    useBeacon: jest.fn(),
+}));
 
 let client;
 const room = new Matrix.Room("!roomId:server_name");
@@ -479,6 +484,27 @@ describe('MessagePanel', function() {
         // every event except for the room creation, room encryption, and Bob's
         // invite event should be in the event summary
         expect(summaryEventTiles.length).toEqual(tiles.length - 3);
+    });
+
+    it('should not collapse beacons as part of creation events', function() {
+        const [creationEvent] = mkCreationEvents();
+        const beaconInfoEvent = makeBeaconInfoEvent(
+            creationEvent.getSender(),
+            creationEvent.getRoomId(),
+            { isLive: true },
+        );
+        const combinedEvents = [creationEvent, beaconInfoEvent];
+        TestUtilsMatrix.upsertRoomStateEvents(room, combinedEvents);
+        const res = mount(
+            <WrappedMessagePanel className="cls" events={combinedEvents} />,
+        );
+
+        const summaryTiles = res.find(GenericEventListSummary);
+        const summaryTile = summaryTiles.at(0);
+
+        const summaryEventTiles = summaryTile.find(UnwrappedEventTile);
+        // nothing in the summary
+        expect(summaryEventTiles.length).toEqual(0);
     });
 
     it('should hide read-marker at the end of creation event summary', function() {
