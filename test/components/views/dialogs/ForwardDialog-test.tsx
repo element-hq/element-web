@@ -17,32 +17,59 @@ limitations under the License.
 import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
+import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
 
-import * as TestUtils from "../../../test-utils";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import ForwardDialog from "../../../../src/components/views/dialogs/ForwardDialog";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
-import ForwardDialog from "../../../../src/components/views/dialogs/ForwardDialog";
+import {
+    getMockClientWithEventEmitter,
+    mkEvent,
+    mkMessage,
+    mkStubRoom,
+} from "../../../test-utils";
 
 describe("ForwardDialog", () => {
     const sourceRoom = "!111111111111111111:example.org";
-    const defaultMessage = TestUtils.mkMessage({
+    const aliceId = "@alice:example.org";
+    const defaultMessage = mkMessage({
         room: sourceRoom,
-        user: "@alice:example.org",
+        user: aliceId,
         msg: "Hello world!",
         event: true,
     });
-    const defaultRooms = ["a", "A", "b"].map(name => TestUtils.mkStubRoom(name, name));
+    const accountDataEvent = new MatrixEvent({
+        type: EventType.Direct,
+        sender: aliceId,
+        content: {},
+    });
+    const mockClient = getMockClientWithEventEmitter({
+        getUserId: jest.fn().mockReturnValue(aliceId),
+        isGuest: jest.fn().mockReturnValue(false),
+        getVisibleRooms: jest.fn().mockReturnValue([]),
+        getRoom: jest.fn(),
+        getAccountData: jest.fn().mockReturnValue(accountDataEvent),
+        getPushActionsForEvent: jest.fn(),
+        mxcUrlToHttp: jest.fn().mockReturnValue(''),
+        isRoomEncrypted: jest.fn().mockReturnValue(false),
+        getProfileInfo: jest.fn().mockResolvedValue({
+            displayname: 'Alice',
+        }),
+        decryptEventIfNeeded: jest.fn(),
+        sendEvent: jest.fn(),
+    });
+    const defaultRooms = ["a", "A", "b"].map(name => mkStubRoom(name, name, mockClient));
 
     const mountForwardDialog = async (message = defaultMessage, rooms = defaultRooms) => {
-        const client = MatrixClientPeg.get();
-        client.getVisibleRooms = jest.fn().mockReturnValue(rooms);
+        mockClient.getVisibleRooms.mockReturnValue(rooms);
+        mockClient.getRoom.mockImplementation(roomId => rooms.find(room => room.roomId === roomId));
 
         let wrapper;
         await act(async () => {
             wrapper = mount(
                 <ForwardDialog
-                    matrixClient={client}
+                    matrixClient={mockClient}
                     event={message}
                     permalinkCreator={new RoomPermalinkCreator(undefined, sourceRoom)}
                     onFinished={jest.fn()}
@@ -57,9 +84,14 @@ describe("ForwardDialog", () => {
     };
 
     beforeEach(() => {
-        TestUtils.stubClient();
         DMRoomMap.makeShared();
-        MatrixClientPeg.get().getUserId = jest.fn().mockReturnValue("@bob:example.org");
+        jest.clearAllMocks();
+        mockClient.getUserId.mockReturnValue("@bob:example.org");
+        mockClient.sendEvent.mockReset();
+    });
+
+    afterAll(() => {
+        jest.spyOn(MatrixClientPeg, 'get').mockRestore();
     });
 
     it("shows a preview with us as the sender", async () => {
@@ -91,7 +123,7 @@ describe("ForwardDialog", () => {
         // Make sendEvent require manual resolution so we can see the sending state
         let finishSend;
         let cancelSend;
-        MatrixClientPeg.get().sendEvent = jest.fn(() => new Promise((resolve, reject) => {
+        mockClient.sendEvent.mockImplementation(() => new Promise((resolve, reject) => {
             finishSend = resolve;
             cancelSend = reject;
         }));
@@ -135,7 +167,7 @@ describe("ForwardDialog", () => {
     });
 
     it("can render replies", async () => {
-        const replyMessage = TestUtils.mkEvent({
+        const replyMessage = mkEvent({
             type: "m.room.message",
             room: "!111111111111111111:example.org",
             user: "@alice:example.org",
@@ -156,9 +188,9 @@ describe("ForwardDialog", () => {
     });
 
     it("disables buttons for rooms without send permissions", async () => {
-        const readOnlyRoom = TestUtils.mkStubRoom("a", "a");
+        const readOnlyRoom = mkStubRoom("a", "a", mockClient);
         readOnlyRoom.maySendMessage = jest.fn().mockReturnValue(false);
-        const rooms = [readOnlyRoom, TestUtils.mkStubRoom("b", "b")];
+        const rooms = [readOnlyRoom, mkStubRoom("b", "b", mockClient)];
 
         const wrapper = await mountForwardDialog(undefined, rooms);
 
