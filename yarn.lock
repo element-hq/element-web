@@ -6416,20 +6416,20 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.2.4.tgz#eca284f75d2965079309dc0ad9255abb2ebc1632"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-linkify-element@^4.0.0-beta.4:
-  version "4.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.0.0-beta.5.tgz#aa4c852e2aa09740719a99a87c1b384d7db00993"
-  integrity sha512-trBkxpinGJbM5ATj3rcoS2MkLK6tbhip5oeU4uNk/jq9IdQvK5zvgD718xBGP5j0tI4sBwCksaAjAjFC7P+q9g==
+linkify-element@4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkify-element/-/linkify-element-4.0.0-beta.4.tgz#31bb5dff7430c4debc34030466bd8f3e297793a7"
+  integrity sha512-dsu5qxk6MhQHxXUlPjul33JknQPx7Iv/N8zisH4JtV31qVk0qZg/5gn10Hr76GlMuixcdcxVvGHNfVcvbut13w==
 
-linkify-string@^4.0.0-beta.4:
-  version "4.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.0.0-beta.5.tgz#248d1158170624987289685d2815ad78face966c"
-  integrity sha512-jKMjtTMGImAVkvcraaLF/Tbs8tnSnubHeTcA9d8hAmsYjLbsvVJnd575+FyrXikpAKX1uWF3CbigvUIz47oX0A==
+linkify-string@4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkify-string/-/linkify-string-4.0.0-beta.4.tgz#0982509bc6ce81c554bff8d7121057193b84ea32"
+  integrity sha512-1U90tclSloCMAhbcuu4S+BN7ZisZkFB6ggKS1ofdYy1bmtgxdXGDppVUV+qRp5rcAudla7K0LBgOiwCQ0WzrYQ==
 
-linkifyjs@^4.0.0-beta.4:
-  version "4.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.0.0-beta.5.tgz#71a2182f2a921ce8000357effe22ad4b13729fb2"
-  integrity sha512-j0YWN/Qd9XuReN4QdU/aMNFtfzBzyi1e07FkxEyeRjfxMKpfmMAofNT80q1vgQ4/U0WUZ/73nBOEpjdyfoUhGw==
+linkifyjs@4.0.0-beta.4:
+  version "4.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-4.0.0-beta.4.tgz#8a03e7a999ed0b578a14d690585a32706525c45e"
+  integrity sha512-j8IUYMqyTT0aDrrkA5kf4hn6QurSKjGiQbqjNr4qc8dwEXIniCGp0JrdXmsGcTOEyhKG03GyRnJjp3NDTBBPDQ==
 
 listr2@^3.8.3:
   version "3.14.0"
