@@ -2,7 +2,7 @@
 
 exports[`MLocationBody <MLocationBody> with error displays correct fallback content when map_style_url is misconfigured 1`] = `
 <div
-  className="mx_EventTile_body"
+  className="mx_EventTile_body mx_MLocationBody"
 >
   <span
     className="mx_EventTile_tileError"
@@ -16,7 +16,7 @@ exports[`MLocationBody <MLocationBody> with error displays correct fallback cont
 
 exports[`MLocationBody <MLocationBody> with error displays correct fallback content without error style when map_style_url is not configured 1`] = `
 <div
-  className="mx_EventTile_body"
+  className="mx_EventTile_body mx_MLocationBody"
 >
   <span
     className=""

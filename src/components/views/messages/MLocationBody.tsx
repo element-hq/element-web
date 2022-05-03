@@ -96,7 +96,7 @@ export const LocationBodyFallbackContent: React.FC<{ event: MatrixEvent, error: 
         (_t('Shared their location: ') + event.getContent()?.body) :
         (_t('Shared a location: ') + event.getContent()?.body);
 
-    return <div className="mx_EventTile_body">
+    return <div className="mx_EventTile_body mx_MLocationBody">
         <span className={errorType !== LocationShareError.MapStyleUrlNotConfigured ? "mx_EventTile_tileError" : ''}>
             { message }
         </span>
