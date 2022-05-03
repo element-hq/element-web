@@ -380,11 +380,11 @@ export default class ContentMessages {
         const tooBigFiles = [];
         const okFiles = [];
 
-        for (let i = 0; i < files.length; ++i) {
-            if (this.isFileSizeAcceptable(files[i])) {
-                okFiles.push(files[i]);
+        for (const file of files) {
+            if (this.isFileSizeAcceptable(file)) {
+                okFiles.push(file);
             } else {
-                tooBigFiles.push(files[i]);
+                tooBigFiles.push(file);
             }
         }
 
@@ -450,13 +450,7 @@ export default class ContentMessages {
     }
 
     public cancelUpload(promise: Promise<any>, matrixClient: MatrixClient): void {
-        let upload: IUpload;
-        for (let i = 0; i < this.inprogress.length; ++i) {
-            if (this.inprogress[i].promise === promise) {
-                upload = this.inprogress[i];
-                break;
-            }
-        }
+        const upload = this.inprogress.find(item => item.promise === promise);
         if (upload) {
             upload.canceled = true;
             matrixClient.cancelUpload(upload.promise);

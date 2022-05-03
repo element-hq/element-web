@@ -18,7 +18,7 @@ import React from "react";
 
 import { ALTERNATE_KEY_NAME, KEY_ICON } from "../../../accessibility/KeyboardShortcuts";
 import { KeyCombo } from "../../../KeyBindingsManager";
-import { isMac, Key } from "../../../Keyboard";
+import { IS_MAC, Key } from "../../../Keyboard";
 import { _t } from "../../../languageHandler";
 
 interface IKeyboardKeyProps {
@@ -45,7 +45,7 @@ export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value }) =>
 
     const modifiersElement = [];
     if (value.ctrlOrCmdKey) {
-        modifiersElement.push(<KeyboardKey key="ctrlOrCmdKey" name={isMac ? Key.META : Key.CONTROL} />);
+        modifiersElement.push(<KeyboardKey key="ctrlOrCmdKey" name={IS_MAC ? Key.META : Key.CONTROL} />);
     } else if (value.ctrlKey) {
         modifiersElement.push(<KeyboardKey key="ctrlKey" name={Key.CONTROL} />);
     } else if (value.metaKey) {

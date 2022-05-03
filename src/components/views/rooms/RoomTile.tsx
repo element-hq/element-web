@@ -24,7 +24,6 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
-import dis from '../../../dispatcher/dispatcher';
 import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -90,8 +89,8 @@ const messagePreviewId = (roomId: string) => `mx_RoomTile_messagePreview_${roomI
 
 export const contextMenuBelow = (elementRect: PartialDOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
-    const left = elementRect.left + window.pageXOffset - 9;
-    const top = elementRect.bottom + window.pageYOffset + 17;
+    const left = elementRect.left + window.scrollX - 9;
+    const top = elementRect.bottom + window.scrollY + 17;
     const chevronFace = ChevronFace.None;
     return { left, top, chevronFace };
 };
@@ -260,7 +259,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         const action = getKeyBindingsManager().getAccessibilityAction(ev);
 
-        dis.dispatch<ViewRoomPayload>({
+        defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             show_room_tile: true, // make sure the room is visible in the list
             room_id: this.props.room.roomId,
@@ -321,7 +320,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             const isApplied = RoomListStore.instance.getTagsForRoom(this.props.room).includes(tagId);
             const removeTag = isApplied ? tagId : inverseTag;
             const addTag = isApplied ? null : tagId;
-            dis.dispatch(RoomListActions.tagRoom(
+            defaultDispatcher.dispatch(RoomListActions.tagRoom(
                 MatrixClientPeg.get(),
                 this.props.room,
                 removeTag,
@@ -346,7 +345,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: 'leave_room',
             room_id: this.props.room.roomId,
         });
@@ -359,7 +358,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: 'forget_room',
             room_id: this.props.room.roomId,
         });
@@ -370,7 +369,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: 'open_room_settings',
             room_id: this.props.room.roomId,
         });
@@ -383,7 +382,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: 'copy_room',
             room_id: this.props.room.roomId,
         });
@@ -394,7 +393,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: 'view_invite',
             roomId: this.props.room.roomId,
         });

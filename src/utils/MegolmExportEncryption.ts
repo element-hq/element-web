@@ -261,7 +261,7 @@ async function deriveKeys(salt: Uint8Array, iterations: number, password: string
         throw friendlyError('subtleCrypto.importKey failed for HMAC key: ' + e, cryptoFailMsg());
     });
 
-    return await Promise.all([aesProm, hmacProm]);
+    return Promise.all([aesProm, hmacProm]);
 }
 
 const HEADER_LINE = '-----BEGIN MEGOLM SESSION DATA-----';

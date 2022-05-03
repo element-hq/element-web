@@ -59,8 +59,8 @@ export default class AutocompleteWrapperModel {
         return ac && ac.countCompletions() > 0;
     }
 
-    public async confirmCompletion(): Promise<void> {
-        await this.getAutocompleterComponent().onConfirmCompletion();
+    public confirmCompletion(): void {
+        this.getAutocompleterComponent().onConfirmCompletion();
         this.updateCallback({ close: true });
     }
 

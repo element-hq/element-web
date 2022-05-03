@@ -30,7 +30,7 @@ export default class ResizeItem<C extends IConfig = IConfig> {
     ) {
         this.reverse = resizer.isReverseResizeHandle(handle);
         if (container) {
-            this.domNode = <HTMLElement>(container);
+            this.domNode = container;
         } else {
             this.domNode = <HTMLElement>(this.reverse ? handle.nextElementSibling : handle.previousElementSibling);
         }

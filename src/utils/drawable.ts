@@ -23,7 +23,7 @@ export async function getDrawable(url: string): Promise<CanvasImageSource> {
     if ('createImageBitmap' in window) {
         const response = await fetch(url);
         const blob = await response.blob();
-        return await createImageBitmap(blob);
+        return createImageBitmap(blob);
     } else {
         return new Promise<HTMLImageElement>((resolve, reject) => {
             const img = document.createElement("img");

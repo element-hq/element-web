@@ -125,7 +125,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
 
         await EventIndexPeg.initEventIndex();
         await EventIndexPeg.get().addInitialCheckpoints();
-        await EventIndexPeg.get().startCrawler();
+        EventIndexPeg.get().startCrawler();
         await SettingsStore.setValue('enableEventIndexing', null, SettingLevel.DEVICE, true);
         await this.updateState();
     };

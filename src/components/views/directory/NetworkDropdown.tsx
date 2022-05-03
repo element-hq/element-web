@@ -19,7 +19,7 @@ import React, { useEffect, useState } from "react";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { instanceForInstanceId } from '../../../utils/DirectoryUtils';
+import { instanceForInstanceId, ALL_ROOMS, Protocols } from '../../../utils/DirectoryUtils';
 import ContextMenu, {
     ChevronFace,
     ContextMenuButton,
@@ -41,7 +41,6 @@ import UIStore from "../../../stores/UIStore";
 import { compare } from "../../../utils/strings";
 import { SnakedObject } from "../../../utils/SnakedObject";
 import { IConfigOptions } from "../../../IConfigOptions";
-import { ALL_ROOMS, Protocols } from "../../../utils/DirectoryUtils";
 
 const SETTING_NAME = "room_directory_servers";
 

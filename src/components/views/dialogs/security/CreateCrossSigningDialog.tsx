@@ -93,7 +93,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
 
     private doBootstrapUIAuth = async (makeRequest: (authData: any) => void): Promise<void> => {
         if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
-            await makeRequest({
+            makeRequest({
                 type: 'm.login.password',
                 identifier: {
                     type: 'm.id.user',
@@ -106,7 +106,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
             });
         } else if (this.props.tokenLogin) {
             // We are hoping the grace period is active
-            await makeRequest({});
+            makeRequest({});
         } else {
             const dialogAesthetics = {
                 [SSOAuthEntry.PHASE_PREAUTH]: {

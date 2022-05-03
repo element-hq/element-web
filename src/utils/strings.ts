@@ -24,7 +24,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 export async function copyPlaintext(text: string): Promise<boolean> {
     try {
-        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+        if (navigator?.clipboard?.writeText) {
             await navigator.clipboard.writeText(text);
             return true;
         } else {

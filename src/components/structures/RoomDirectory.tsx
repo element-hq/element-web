@@ -26,7 +26,7 @@ import dis from "../../dispatcher/dispatcher";
 import Modal from "../../Modal";
 import { _t } from '../../languageHandler';
 import SdkConfig from '../../SdkConfig';
-import { instanceForInstanceId, protocolNameForInstanceId } from '../../utils/DirectoryUtils';
+import { instanceForInstanceId, protocolNameForInstanceId, ALL_ROOMS, Protocols } from '../../utils/DirectoryUtils';
 import Analytics from '../../Analytics';
 import NetworkDropdown from "../views/directory/NetworkDropdown";
 import SettingsStore from "../../settings/SettingsStore";
@@ -43,7 +43,6 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { PublicRoomTile } from "../views/rooms/PublicRoomTile";
 import { getFieldsForThirdPartyLocation, joinRoomByAlias, showRoom } from "../../utils/rooms";
 import { GenericError } from "../../utils/error";
-import { ALL_ROOMS, Protocols } from "../../utils/DirectoryUtils";
 
 const LAST_SERVER_KEY = "mx_last_room_directory_server";
 const LAST_INSTANCE_KEY = "mx_last_room_directory_instance";

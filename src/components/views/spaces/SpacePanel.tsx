@@ -63,7 +63,7 @@ import QuickSettingsButton from "./QuickSettingsButton";
 import { useSettingValue } from "../../../hooks/useSettings";
 import UserMenu from "../../structures/UserMenu";
 import IndicatorScrollbar from "../../structures/IndicatorScrollbar";
-import { isMac, Key } from "../../../Keyboard";
+import { IS_MAC, Key } from "../../../Keyboard";
 import { useDispatcher } from "../../../hooks/useDispatcher";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { ActionPayload } from "../../../dispatcher/payloads";
@@ -365,7 +365,7 @@ const SpacePanel = () => {
                                         { isPanelCollapsed ? _t("Expand") : _t("Collapse") }
                                     </div>
                                     <div className="mx_Tooltip_sub">
-                                        { isMac
+                                        { IS_MAC
                                             ? "⌘ + ⇧ + D"
                                             : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " + " +
                                               _t(ALTERNATE_KEY_NAME[Key.SHIFT]) + " + D"

@@ -36,7 +36,6 @@ import classNames from "classnames";
 import { sortBy, uniqBy } from "lodash";
 import { GuestAccess, HistoryVisibility } from "matrix-js-sdk/src/@types/partials";
 
-import dis from "../../dispatcher/dispatcher";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
@@ -330,13 +329,13 @@ export const showRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
     // fail earlier so they don't have to click back to the directory.
     if (cli.isGuest()) {
         if (!room.world_readable && !room.guest_can_join) {
-            dis.dispatch({ action: "require_registration" });
+            defaultDispatcher.dispatch({ action: "require_registration" });
             return;
         }
     }
 
     const roomAlias = getDisplayAliasForRoom(room) || undefined;
-    dis.dispatch<ViewRoomPayload>({
+    defaultDispatcher.dispatch<ViewRoomPayload>({
         action: Action.ViewRoom,
         should_peek: true,
         room_alias: roomAlias,
@@ -356,7 +355,7 @@ export const joinRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
     // Don't let the user view a room they won't be able to either peek or join:
     // fail earlier so they don't have to click back to the directory.
     if (cli.isGuest()) {
-        dis.dispatch({ action: "require_registration" });
+        defaultDispatcher.dispatch({ action: "require_registration" });
         return;
     }
 
@@ -365,7 +364,7 @@ export const joinRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
     });
 
     prom.then(() => {
-        dis.dispatch<JoinRoomReadyPayload>({
+        defaultDispatcher.dispatch<JoinRoomReadyPayload>({
             action: Action.JoinRoomReady,
             roomId,
             metricsTrigger: "SpaceHierarchy",
@@ -569,7 +568,7 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
     const selectedRelations = Array.from(selected.keys()).flatMap(parentId => {
         return [
             ...selected.get(parentId).values(),
-        ].map(childId => [parentId, childId]) as [string, string][];
+        ].map(childId => [parentId, childId]);
     });
 
     const selectionAllSuggested = selectedRelations.every(([parentId, childId]) => {

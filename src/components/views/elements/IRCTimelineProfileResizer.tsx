@@ -44,7 +44,7 @@ export default class IRCTimelineProfileResizer extends React.Component<IProps, I
 
     componentDidMount() {
         this.setState({
-            IRCLayoutRoot: document.querySelector(".mx_IRCLayout") as HTMLElement,
+            IRCLayoutRoot: document.querySelector(".mx_IRCLayout"),
         }, () => this.updateCSSWidth(this.state.width));
     }
 

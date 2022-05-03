@@ -28,7 +28,6 @@ import AccessibleButton from "../elements/AccessibleButton";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../elements/MiniAvatarUploader";
 import RoomAvatar from "../avatars/RoomAvatar";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import dis from "../../../dispatcher/dispatcher";
 import { ViewUserPayload } from "../../../dispatcher/payloads/ViewUserPayload";
 import { Action } from "../../../dispatcher/actions";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
@@ -87,7 +86,7 @@ const NewRoomIntro = () => {
         const canAddTopic = inRoom && room.currentState.maySendStateEvent(EventType.RoomTopic, cli.getUserId());
 
         const onTopicClick = () => {
-            dis.dispatch({
+            defaultDispatcher.dispatch({
                 action: "open_room_settings",
                 room_id: roomId,
             }, true);
@@ -150,7 +149,7 @@ const NewRoomIntro = () => {
                     className="mx_NewRoomIntro_inviteButton"
                     kind="primary_outline"
                     onClick={() => {
-                        dis.dispatch({ action: "view_invite", roomId });
+                        defaultDispatcher.dispatch({ action: "view_invite", roomId });
                     }}
                 >
                     { _t("Invite to just this room") }
@@ -162,7 +161,7 @@ const NewRoomIntro = () => {
                     className="mx_NewRoomIntro_inviteButton"
                     kind="primary"
                     onClick={() => {
-                        dis.dispatch({ action: "view_invite", roomId });
+                        defaultDispatcher.dispatch({ action: "view_invite", roomId });
                     }}
                 >
                     { _t("Invite to this room") }
@@ -192,7 +191,7 @@ const NewRoomIntro = () => {
 
     function openRoomSettings(event) {
         event.preventDefault();
-        dis.dispatch({
+        defaultDispatcher.dispatch({
             action: "open_room_settings",
             initial_tab_id: ROOM_SECURITY_TAB,
         });

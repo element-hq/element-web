@@ -16,8 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomType } from "matrix-js-sdk/src/@types/event";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { RoomType, EventType } from "matrix-js-sdk/src/@types/event";
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 
 import { calculateRoomVia } from "./permalinks/Permalinks";
@@ -38,7 +37,6 @@ import { shouldShowComponent } from "../customisations/helpers/UIComponents";
 import { UIComponent } from "../settings/UIFeature";
 import { OpenSpacePreferencesPayload, SpacePreferenceTab } from "../dispatcher/payloads/OpenSpacePreferencesPayload";
 import { OpenSpaceSettingsPayload } from "../dispatcher/payloads/OpenSpaceSettingsPayload";
-import dis from "../dispatcher/dispatcher";
 import { OpenAddExistingToSpaceDialogPayload } from "../dispatcher/payloads/OpenAddExistingToSpaceDialogPayload";
 
 export const shouldShowSpaceSettings = (space: Room) => {
@@ -60,14 +58,14 @@ export const makeSpaceParentEvent = (room: Room, canonical = false) => ({
 });
 
 export function showSpaceSettings(space: Room) {
-    dis.dispatch<OpenSpaceSettingsPayload>({
+    defaultDispatcher.dispatch<OpenSpaceSettingsPayload>({
         action: Action.OpenSpaceSettings,
         space,
     });
 }
 
 export const showAddExistingRooms = (space: Room): void => {
-    dis.dispatch<OpenAddExistingToSpaceDialogPayload>({
+    defaultDispatcher.dispatch<OpenAddExistingToSpaceDialogPayload>({
         action: Action.OpenAddToExistingSpaceDialog,
         space,
     });
@@ -168,7 +166,7 @@ export const bulkSpaceBehaviour = async (
 };
 
 export const showSpacePreferences = (space: Room, initialTabId?: SpacePreferenceTab) => {
-    dis.dispatch<OpenSpacePreferencesPayload>({
+    defaultDispatcher.dispatch<OpenSpacePreferencesPayload>({
         action: Action.OpenSpacePreferences,
         space,
         initialTabId,

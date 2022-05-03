@@ -196,7 +196,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         try {
             // stop any noises which might be happening
-            await PlaybackManager.instance.pauseAllExcept(null);
+            PlaybackManager.instance.pauseAllExcept(null);
 
             const recorder = VoiceRecordingStore.instance.startRecording(this.props.room.roomId);
             await recorder.start();

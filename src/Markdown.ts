@@ -305,7 +305,6 @@ export default class Markdown {
         renderer.html_inline = function(node: commonmark.Node) {
             if (isAllowedHtmlTag(node)) {
                 this.lit(node.literal);
-                return;
             } else {
                 this.lit(escape(node.literal));
             }

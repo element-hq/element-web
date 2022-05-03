@@ -524,7 +524,7 @@ export async function getLogsForReport() {
     if (global.mx_rage_store) {
         // flush most recent logs
         await global.mx_rage_store.flush();
-        return await global.mx_rage_store.consume();
+        return global.mx_rage_store.consume();
     } else {
         return [{
             lines: global.mx_rage_logger.flush(true),

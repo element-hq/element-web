@@ -32,7 +32,7 @@ import SystemFontController from './controllers/SystemFontController';
 import UseSystemFontController from './controllers/UseSystemFontController';
 import { SettingLevel } from "./SettingLevel";
 import SettingController from "./controllers/SettingController";
-import { isMac } from '../Keyboard';
+import { IS_MAC } from '../Keyboard';
 import UIFeatureController from "./controllers/UIFeatureController";
 import { UIFeature } from "./UIFeature";
 import { OrderedMultiController } from "./controllers/OrderedMultiController";
@@ -592,12 +592,12 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "ctrlFForSearch": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: isMac ? _td("Use Command + F to search timeline") : _td("Use Ctrl + F to search timeline"),
+        displayName: IS_MAC ? _td("Use Command + F to search timeline") : _td("Use Ctrl + F to search timeline"),
         default: false,
     },
     "MessageComposerInput.ctrlEnterToSend": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
-        displayName: isMac ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
+        displayName: IS_MAC ? _td("Use Command + Enter to send a message") : _td("Use Ctrl + Enter to send a message"),
         default: false,
     },
     "MessageComposerInput.surroundWith": {

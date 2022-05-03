@@ -60,7 +60,7 @@ export class FontWatcher implements IWatcher {
         if (fontSize !== size) {
             SettingsStore.setValue("baseFontSize", null, SettingLevel.DEVICE, fontSize);
         }
-        (<HTMLElement>document.querySelector(":root")).style.fontSize = toPx(fontSize);
+        document.querySelector<HTMLElement>(":root").style.fontSize = toPx(fontSize);
     };
 
     private setSystemFont = ({ useSystemFont, font }) => {

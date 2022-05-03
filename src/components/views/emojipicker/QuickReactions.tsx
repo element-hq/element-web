@@ -72,7 +72,7 @@ class QuickReactions extends React.Component<IProps, IState> {
                     }
                 </h2>
                 <ul className="mx_EmojiPicker_list" aria-label={_t("Quick Reactions")}>
-                    { QUICK_REACTIONS.map(emoji => ((
+                    { QUICK_REACTIONS.map(emoji => (
                         <Emoji
                             key={emoji.hexcode}
                             emoji={emoji}
@@ -81,7 +81,7 @@ class QuickReactions extends React.Component<IProps, IState> {
                             onMouseLeave={this.onMouseLeave}
                             selectedEmojis={this.props.selectedEmojis}
                         />
-                    ))) }
+                    )) }
                 </ul>
             </section>
         );

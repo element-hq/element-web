@@ -732,7 +732,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 const newPath = new Set(parentPath).add(spaceId);
 
                 childSpaces.forEach(childSpace => {
-                    traverseSpace(childSpace.roomId, newPath) ?? [];
+                    traverseSpace(childSpace.roomId, newPath);
                 });
                 hiddenChildren.get(spaceId)?.forEach(roomId => {
                     roomIds.add(roomId);
@@ -1076,7 +1076,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         });
 
         const enabledMetaSpaces = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-        this._enabledMetaSpaces = metaSpaceOrder.filter(k => enabledMetaSpaces[k]) as MetaSpace[];
+        this._enabledMetaSpaces = metaSpaceOrder.filter(k => enabledMetaSpaces[k]);
 
         this._allRoomsInHome = SettingsStore.getValue("Spaces.allRoomsInHome");
         this.sendUserProperties();
@@ -1169,8 +1169,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
             }
 
             case Action.SettingUpdated: {
-                const settingUpdatedPayload = payload as SettingUpdatedPayload;
-                switch (settingUpdatedPayload.settingName) {
+                switch (payload.settingName) {
                     case "Spaces.allRoomsInHome": {
                         const newValue = SettingsStore.getValue("Spaces.allRoomsInHome");
                         if (this.allRoomsInHome !== newValue) {
@@ -1186,7 +1185,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                     case "Spaces.enabledMetaSpaces": {
                         const newValue = SettingsStore.getValue("Spaces.enabledMetaSpaces");
-                        const enabledMetaSpaces = metaSpaceOrder.filter(k => newValue[k]) as MetaSpace[];
+                        const enabledMetaSpaces = metaSpaceOrder.filter(k => newValue[k]);
                         if (arrayHasDiff(this._enabledMetaSpaces, enabledMetaSpaces)) {
                             const hadPeopleOrHomeEnabled = this.enabledMetaSpaces.some(s => {
                                 return s === MetaSpace.Home || s === MetaSpace.People;
@@ -1217,9 +1216,9 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                     case "Spaces.showPeopleInSpace":
                         // getSpaceFilteredUserIds will return the appropriate value
-                        this.emit(settingUpdatedPayload.roomId);
+                        this.emit(payload.roomId);
                         if (!this.enabledMetaSpaces.some(s => s === MetaSpace.Home || s === MetaSpace.People)) {
-                            this.updateNotificationStates([settingUpdatedPayload.roomId]);
+                            this.updateNotificationStates([payload.roomId]);
                         }
                         break;
                 }

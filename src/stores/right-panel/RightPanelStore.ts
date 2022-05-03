@@ -141,7 +141,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
             const hist = this.byRoom[rId]?.history ?? [];
             hist[hist.length - 1].state = cardState;
             this.emitAndUpdateSettings();
-            return;
         } else if (targetPhase !== this.currentCard?.phase) {
             // Set right panel and erase history.
             this.show();

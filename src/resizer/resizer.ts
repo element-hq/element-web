@@ -195,11 +195,11 @@ export default class Resizer<C extends IConfig = IConfig> {
         return { sizer, distributor };
     }
 
-    private getResizeHandles() {
+    private getResizeHandles(): HTMLElement[] {
         if (this?.config?.handler) {
             return [this.config.handler];
         }
         if (!this.container?.children) return [];
-        return Array.from(this.container.querySelectorAll(`.${this.classNames.handle}`)) as HTMLElement[];
+        return Array.from(this.container.querySelectorAll(`.${this.classNames.handle}`));
     }
 }

@@ -28,7 +28,7 @@ import { NameFilterCondition } from "../../stores/room-list/filters/NameFilterCo
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import { isMac, Key } from "../../Keyboard";
+import { IS_MAC, Key } from "../../Keyboard";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
 import SpotlightDialog from "../views/dialogs/SpotlightDialog";
@@ -206,7 +206,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
         );
 
         let shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt">
-            { isMac ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K" }
+            { IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K" }
         </div>;
 
         if (this.props.isMinimized) {

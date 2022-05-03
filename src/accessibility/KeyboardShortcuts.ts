@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 import { _td } from "../languageHandler";
-import { isMac, Key } from "../Keyboard";
+import { IS_MAC, Key } from "../Keyboard";
 import { IBaseSetting } from "../settings/Settings";
 import IncompatibleController from "../settings/controllers/IncompatibleController";
 import { KeyCombo } from "../KeyBindingsManager";
@@ -200,7 +200,7 @@ export const KEY_ICON: Record<string, string> = {
     [Key.ARROW_LEFT]: "←",
     [Key.ARROW_RIGHT]: "→",
 };
-if (isMac) {
+if (IS_MAC) {
     KEY_ICON[Key.META] = "⌘";
     KEY_ICON[Key.ALT] = "⌥";
 }
@@ -528,8 +528,8 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     [KeyBindingAction.GoToHome]: {
         default: {
             ctrlOrCmdKey: true,
-            altKey: !isMac,
-            shiftKey: isMac,
+            altKey: !IS_MAC,
+            shiftKey: IS_MAC,
             key: Key.H,
         },
         displayName: _td("Go to Home View"),
@@ -621,25 +621,25 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     },
     [KeyBindingAction.EditRedo]: {
         default: {
-            key: isMac ? Key.Z : Key.Y,
+            key: IS_MAC ? Key.Z : Key.Y,
             ctrlOrCmdKey: true,
-            shiftKey: isMac,
+            shiftKey: IS_MAC,
         },
         displayName: _td("Redo edit"),
     },
     [KeyBindingAction.PreviousVisitedRoomOrSpace]: {
         default: {
-            metaKey: isMac,
-            altKey: !isMac,
-            key: isMac ? Key.SQUARE_BRACKET_LEFT : Key.ARROW_LEFT,
+            metaKey: IS_MAC,
+            altKey: !IS_MAC,
+            key: IS_MAC ? Key.SQUARE_BRACKET_LEFT : Key.ARROW_LEFT,
         },
         displayName: _td("Previous recently visited room or space"),
     },
     [KeyBindingAction.NextVisitedRoomOrSpace]: {
         default: {
-            metaKey: isMac,
-            altKey: !isMac,
-            key: isMac ? Key.SQUARE_BRACKET_RIGHT : Key.ARROW_RIGHT,
+            metaKey: IS_MAC,
+            altKey: !IS_MAC,
+            key: IS_MAC ? Key.SQUARE_BRACKET_RIGHT : Key.ARROW_RIGHT,
         },
         displayName: _td("Next recently visited room or space"),
     },

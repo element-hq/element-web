@@ -80,7 +80,9 @@ export const useOwnLiveBeacons = (liveBeaconIds: BeaconIdentifier[]): LiveBeacon
     };
 
     const onResetLocationPublishError = () => {
-        liveBeaconIds.map(beaconId => OwnBeaconStore.instance.resetLocationPublishError(beaconId));
+        liveBeaconIds.forEach(beaconId => {
+            OwnBeaconStore.instance.resetLocationPublishError(beaconId);
+        });
     };
 
     return {

@@ -83,9 +83,11 @@ async function confirmToDismiss(): Promise<boolean> {
     return !sure;
 }
 
+type KeyParams = { passphrase: string, recoveryKey: string };
+
 function makeInputToKey(
     keyInfo: ISecretStorageKeyInfo,
-): (keyParams: { passphrase: string, recoveryKey: string }) => Promise<Uint8Array> {
+): (keyParams: KeyParams) => Promise<Uint8Array> {
     return async ({ passphrase, recoveryKey }) => {
         if (passphrase) {
             return deriveKey(
@@ -101,11 +103,10 @@ function makeInputToKey(
 
 async function getSecretStorageKey(
     { keys: keyInfos }: { keys: Record<string, ISecretStorageKeyInfo> },
-    ssssItemName,
 ): Promise<[string, Uint8Array]> {
     const cli = MatrixClientPeg.get();
     let keyId = await cli.getDefaultSecretStorageKeyId();
-    let keyInfo;
+    let keyInfo: ISecretStorageKeyInfo;
     if (keyId) {
         // use the default SSSS key if set
         keyInfo = keyInfos[keyId];
@@ -154,9 +155,9 @@ async function getSecretStorageKey(
         /* props= */
         {
             keyInfo,
-            checkPrivateKey: async (input) => {
+            checkPrivateKey: async (input: KeyParams) => {
                 const key = await inputToKey(input);
-                return await MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo);
+                return MatrixClientPeg.get().checkSecretStorageKey(key, keyInfo);
             },
         },
         /* className= */ null,
@@ -171,11 +172,11 @@ async function getSecretStorageKey(
             },
         },
     );
-    const [input] = await finished;
-    if (!input) {
+    const [keyParams] = await finished;
+    if (!keyParams) {
         throw new AccessCancelledError();
     }
-    const key = await inputToKey(input);
+    const key = await inputToKey(keyParams);
 
     // Save to cache to avoid future prompts in the current session
     cacheSecretStorageKey(keyId, keyInfo, key);

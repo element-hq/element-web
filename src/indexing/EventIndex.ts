@@ -173,7 +173,6 @@ export default class EventIndex extends EventEmitter {
             // A sync was done, presumably we queued up some live events,
             // commit them now.
             await indexManager.commitLiveEvents();
-            return;
         }
     };
 
@@ -650,7 +649,6 @@ export default class EventIndex extends EventEmitter {
         this.removeListeners();
         this.stopCrawler();
         await indexManager.closeEventIndex();
-        return;
     }
 
     /**

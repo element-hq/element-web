@@ -138,7 +138,8 @@ export default class MessageEditHistoryDialog extends React.PureComponent<IProps
                     isBaseEvent={isBaseEvent}
                     mxEvent={e}
                     isTwelveHour={this.state.isTwelveHour}
-                />));
+                />
+            ));
             lastEvent = e;
         });
         return nodes;

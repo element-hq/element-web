@@ -37,8 +37,8 @@ interface IProps {
 
 const contextMenuBelow = (elementRect: DOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
-    const left = elementRect.left + window.pageXOffset + elementRect.width;
-    const top = elementRect.bottom + window.pageYOffset;
+    const left = elementRect.left + window.scrollX + elementRect.width;
+    const top = elementRect.bottom + window.scrollY;
     const chevronFace = ChevronFace.None;
     return { left, top, chevronFace };
 };

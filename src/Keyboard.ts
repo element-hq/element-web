@@ -74,10 +74,10 @@ export const Key = {
     Z: "z",
 };
 
-export const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+export const IS_MAC = navigator.platform.toUpperCase().includes('MAC');
 
 export function isOnlyCtrlOrCmdKeyEvent(ev) {
-    if (isMac) {
+    if (IS_MAC) {
         return ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey;
     } else {
         return ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
@@ -85,7 +85,7 @@ export function isOnlyCtrlOrCmdKeyEvent(ev) {
 }
 
 export function isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) {
-    if (isMac) {
+    if (IS_MAC) {
         return ev.metaKey && !ev.altKey && !ev.ctrlKey;
     } else {
         return ev.ctrlKey && !ev.altKey && !ev.metaKey;

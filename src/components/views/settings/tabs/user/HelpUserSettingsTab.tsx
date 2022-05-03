@@ -148,7 +148,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         <a href="https://mozilla.org" rel="noreferrer noopener" target="_blank">
                             Mozilla Foundation
                         </a> used under the terms of&nbsp;
-                        <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">Apache 2.0</a>.
+                        <a href="https://www.apache.org/licenses/LICENSE-2.0" rel="noreferrer noopener" target="_blank">Apache 2.0</a>.
                     </li>
                     <li>
                         The <a href="https://twemoji.twitter.com/" rel="noreferrer noopener" target="_blank">

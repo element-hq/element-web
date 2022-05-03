@@ -60,8 +60,8 @@ import { UIComponent } from "../../../settings/UIFeature";
 
 const contextMenuBelow = (elementRect: DOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
-    const left = elementRect.left + window.pageXOffset;
-    const top = elementRect.bottom + window.pageYOffset + 12;
+    const left = elementRect.left + window.scrollX;
+    const top = elementRect.bottom + window.scrollY + 12;
     const chevronFace = ChevronFace.None;
     return { left, top, chevronFace };
 };

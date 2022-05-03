@@ -367,16 +367,16 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", onFinished }) => 
                 );
             }
 
-            const otherResult = (result as IResult);
+            // IResult case
             return (
                 <Option
-                    id={`mx_SpotlightDialog_button_result_${otherResult.name}`}
-                    key={otherResult.name}
-                    onClick={otherResult.onClick}
+                    id={`mx_SpotlightDialog_button_result_${result.name}`}
+                    key={result.name}
+                    onClick={result.onClick}
                 >
-                    { otherResult.avatar }
-                    { otherResult.name }
-                    { otherResult.description }
+                    { result.avatar }
+                    { result.name }
+                    { result.description }
                 </Option>
             );
         };

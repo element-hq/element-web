@@ -136,7 +136,8 @@ export const getCurrentPosition = async (): Promise<GeolocationPosition> => {
 export type ClearWatchCallback = () => void;
 export const watchPosition = (
     onWatchPosition: PositionCallback,
-    onWatchPositionError: (error: GeolocationError) => void): ClearWatchCallback => {
+    onWatchPositionError: (error: GeolocationError) => void,
+): ClearWatchCallback => {
     try {
         const onError = (error) => onWatchPositionError(mapGeolocationError(error));
         const watchId = getGeolocation().watchPosition(onWatchPosition, onError, GeolocationOptions);

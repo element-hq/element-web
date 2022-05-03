@@ -84,8 +84,8 @@ export async function createThumbnail(
     } catch (e) {
         // Fallback support for other browsers (Safari and Firefox for now)
         canvas = document.createElement("canvas");
-        (canvas as HTMLCanvasElement).width = targetWidth;
-        (canvas as HTMLCanvasElement).height = targetHeight;
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
         context = canvas.getContext("2d");
     }
 

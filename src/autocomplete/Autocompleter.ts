@@ -95,7 +95,7 @@ export default class Autocompleter {
         */
         // list of results from each provider, each being a list of completions or null if it times out
         const completionsList: ICompletion[][] = await Promise.all(this.providers.map(async provider => {
-            return await timeout(
+            return timeout(
                 provider.getCompletions(query, selection, force, limit),
                 null,
                 PROVIDER_COMPLETION_TIMEOUT,

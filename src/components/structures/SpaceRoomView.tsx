@@ -36,7 +36,6 @@ import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 import withValidation from "../views/elements/Validation";
 import * as Email from "../../email";
 import defaultDispatcher from "../../dispatcher/dispatcher";
-import dis from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import MainSplit from './MainSplit';
@@ -204,7 +203,7 @@ const SpacePreview = ({ space, onJoinButtonClicked, onRejectButtonClicked }: ISp
             <AccessibleButton
                 kind="danger_outline"
                 onClick={() => {
-                    dis.dispatch({
+                    defaultDispatcher.dispatch({
                         action: "leave_room",
                         room_id: space.roomId,
                     });
@@ -316,8 +315,8 @@ const SpaceLandingAddButton = ({ space }) => {
     if (menuDisplayed) {
         const rect = handle.current.getBoundingClientRect();
         contextMenu = <IconizedContextMenu
-            left={rect.left + window.pageXOffset + 0}
-            top={rect.bottom + window.pageYOffset + 8}
+            left={rect.left + window.scrollX + 0}
+            top={rect.bottom + window.scrollY + 8}
             chevronFace={ChevronFace.None}
             onFinished={closeMenu}
             className="mx_RoomTile_contextMenu"

@@ -123,9 +123,6 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     // used if we tear it down & recreate it with a different store
     private currentClientCreds: IMatrixClientCreds;
 
-    constructor() {
-    }
-
     public get(): MatrixClient {
         return this.matrixClient;
     }

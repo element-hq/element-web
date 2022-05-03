@@ -418,10 +418,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         this.stopPollingLocation();
 
         try {
-            this.clearPositionWatch = await watchPosition(
-                this.onWatchedPosition,
-                this.onGeolocationError,
-            );
+            this.clearPositionWatch = watchPosition(this.onWatchedPosition, this.onGeolocationError);
         } catch (error) {
             this.onGeolocationError(error?.message);
             // don't set locationInterval if geolocation failed to setup

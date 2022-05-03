@@ -32,7 +32,7 @@ import { parseEvent, parsePlainTextMessage } from '../../../editor/deserialize';
 import { renderModel } from '../../../editor/render';
 import TypingStore from "../../../stores/TypingStore";
 import SettingsStore from "../../../settings/SettingsStore";
-import { Key } from "../../../Keyboard";
+import { IS_MAC, Key } from "../../../Keyboard";
 import { EMOTICON_TO_EMOJI } from "../../../emoji";
 import { CommandCategories, CommandMap, parseCommandString } from "../../../SlashCommands";
 import Range from "../../../editor/range";
@@ -49,8 +49,6 @@ import { _t } from "../../../languageHandler";
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s|:^$');
 export const REGEX_EMOTICON = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')$');
-
-const IS_MAC = navigator.platform.indexOf("Mac") !== -1;
 
 const SURROUND_WITH_CHARACTERS = ["\"", "_", "`", "'", "*", "~", "$"];
 const SURROUND_WITH_DOUBLE_CHARACTERS = new Map([

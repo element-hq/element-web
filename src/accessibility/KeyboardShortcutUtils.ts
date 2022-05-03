@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { KeyCombo } from "../KeyBindingsManager";
-import { isMac, Key } from "../Keyboard";
+import { IS_MAC, Key } from "../Keyboard";
 import { _t, _td } from "../languageHandler";
 import PlatformPeg from "../PlatformPeg";
 import SettingsStore from "../settings/SettingsStore";
@@ -96,7 +96,7 @@ export const getKeyboardShortcuts = (): IKeyboardShortcuts => {
 
     return Object.keys(KEYBOARD_SHORTCUTS).filter((k: KeyBindingAction) => {
         if (KEYBOARD_SHORTCUTS[k]?.controller?.settingDisabled) return false;
-        if (MAC_ONLY_SHORTCUTS.includes(k) && !isMac) return false;
+        if (MAC_ONLY_SHORTCUTS.includes(k) && !IS_MAC) return false;
         if (DESKTOP_SHORTCUTS.includes(k) && !overrideBrowserShortcuts) return false;
 
         return true;

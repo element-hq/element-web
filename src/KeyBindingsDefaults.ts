@@ -15,14 +15,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { isMac, Key } from "./Keyboard";
+import { IS_MAC, Key } from "./Keyboard";
 import SettingsStore from "./settings/SettingsStore";
 import SdkConfig from "./SdkConfig";
-import {
-    IKeyBindingsProvider,
-    KeyBinding,
-    KeyCombo,
-} from "./KeyBindingsManager";
+import { IKeyBindingsProvider, KeyBinding } from "./KeyBindingsManager";
 import {
     CATEGORIES,
     CategoryName,
@@ -31,13 +27,10 @@ import {
 import { getKeyboardShortcuts } from "./accessibility/KeyboardShortcutUtils";
 
 export const getBindingsByCategory = (category: CategoryName): KeyBinding[] => {
-    return CATEGORIES[category].settingNames.reduce((bindings, name) => {
-        const value = getKeyboardShortcuts()[name]?.default;
-        if (value) {
-            bindings.push({
-                action: name as KeyBindingAction,
-                keyCombo: value as KeyCombo,
-            });
+    return CATEGORIES[category].settingNames.reduce((bindings, action) => {
+        const keyCombo = getKeyboardShortcuts()[action]?.default;
+        if (keyCombo) {
+            bindings.push({ action, keyCombo });
         }
         return bindings;
     }, []);
@@ -81,7 +74,7 @@ const messageComposerBindings = (): KeyBinding[] => {
                 shiftKey: true,
             },
         });
-        if (isMac) {
+        if (IS_MAC) {
             bindings.push({
                 action: KeyBindingAction.NewLine,
                 keyCombo: {

@@ -352,10 +352,10 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         const targetRect = this.target.getBoundingClientRect();
 
         if (this.props.direction === Direction.Left) {
-            const targetLeft = targetRect.left + window.pageXOffset;
+            const targetLeft = targetRect.left + window.scrollX;
             return !contentRect || (targetLeft - contentRect.width > MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
         } else {
-            const targetRight = targetRect.right + window.pageXOffset;
+            const targetRight = targetRect.right + window.scrollX;
             const spaceOnRight = UIStore.instance.windowWidth - targetRight;
             return contentRect && (spaceOnRight - contentRect.width < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
         }
@@ -366,10 +366,10 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         const targetRect = this.target.getBoundingClientRect();
 
         if (this.props.direction === Direction.Top) {
-            const targetTop = targetRect.top + window.pageYOffset;
+            const targetTop = targetRect.top + window.scrollY;
             return !contentRect || (targetTop - contentRect.height > MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
         } else {
-            const targetBottom = targetRect.bottom + window.pageYOffset;
+            const targetBottom = targetRect.bottom + window.scrollY;
             const spaceBelow = UIStore.instance.windowHeight - targetBottom;
             return contentRect && (spaceBelow - contentRect.height < MIN_SAFE_DISTANCE_TO_WINDOW_EDGE);
         }
@@ -429,10 +429,10 @@ export default class InteractiveTooltip extends React.Component<IProps, IState> 
         const targetRect = this.target.getBoundingClientRect();
 
         // The window X and Y offsets are to adjust position when zoomed in to page
-        const targetLeft = targetRect.left + window.pageXOffset;
-        const targetRight = targetRect.right + window.pageXOffset;
-        const targetBottom = targetRect.bottom + window.pageYOffset;
-        const targetTop = targetRect.top + window.pageYOffset;
+        const targetLeft = targetRect.left + window.scrollX;
+        const targetRight = targetRect.right + window.scrollX;
+        const targetBottom = targetRect.bottom + window.scrollY;
+        const targetTop = targetRect.top + window.scrollY;
 
         // Place the tooltip above the target by default. If we find that the
         // tooltip content would extend past the safe area towards the window

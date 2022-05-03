@@ -16,6 +16,7 @@
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { ResizeMethod } from "matrix-js-sdk/src/@types/partials";
+import { Optional } from "matrix-events-sdk";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { IMediaEventContent, IPreparedMedia, prepEventContentAsMedia } from "./models/IMediaEventContent";
@@ -60,7 +61,7 @@ export class Media {
      * The MXC URI of the thumbnail media, if a thumbnail is recorded. Null/undefined
      * otherwise.
      */
-    public get thumbnailMxc(): string | undefined | null {
+    public get thumbnailMxc(): Optional<string> {
         return this.prepared.thumbnail?.mxc;
     }
 

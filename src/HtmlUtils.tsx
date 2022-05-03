@@ -27,13 +27,17 @@ import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
 
-import { _linkifyElement, _linkifyString } from './linkify-matrix';
+import {
+    _linkifyElement,
+    _linkifyString,
+    ELEMENT_URL_PATTERN,
+    options as linkifyMatrixOptions,
+} from './linkify-matrix';
 import { IExtendedSanitizeOptions } from './@types/sanitize-html';
 import SettingsStore from './settings/SettingsStore';
 import { tryTransformPermalinkToLocalHref } from "./utils/permalinks/Permalinks";
 import { getEmojiFromUnicode } from "./emoji";
 import { mediaFromMxc } from "./customisations/Media";
-import { ELEMENT_URL_PATTERN, options as linkifyMatrixOptions } from './linkify-matrix';
 import { stripHTMLReply, stripPlainReply } from './utils/Reply';
 
 // Anything outside the basic multilingual plane will be a surrogate pair
@@ -45,10 +49,10 @@ const SURROGATE_PAIR_PATTERN = /([\ud800-\udbff])([\udc00-\udfff])/;
 const SYMBOL_PATTERN = /([\u2100-\u2bff])/;
 
 // Regex pattern for Zero-Width joiner unicode characters
-const ZWJ_REGEX = new RegExp("\u200D|\u2003", "g");
+const ZWJ_REGEX = /[\u200D\u2003]/g;
 
 // Regex pattern for whitespace characters
-const WHITESPACE_REGEX = new RegExp("\\s", "g");
+const WHITESPACE_REGEX = /\s/g;
 
 const BIGEMOJI_REGEX = new RegExp(`^(${EMOJIBASE_REGEX.source})+$`, 'i');
 
