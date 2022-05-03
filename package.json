@@ -91,7 +91,7 @@
     "matrix-analytics-events": "github:matrix-org/matrix-analytics-events.git#4aef17b56798639906f26a8739043a3c5c5fde7e",
     "matrix-encrypt-attachment": "^1.0.3",
     "matrix-events-sdk": "^0.0.1-beta.7",
-    "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+    "matrix-js-sdk": "17.2.0-rc.1",
     "matrix-widget-api": "^0.1.0-beta.18",
     "minimist": "^1.2.5",
     "opus-recorder": "^8.0.3",
