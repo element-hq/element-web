@@ -8,6 +8,7 @@ jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -17,7 +18,6 @@ jobs:
       # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
       - name: Download Coverage Report
         uses: actions/github-script@v3.1.0
-        if: github.event.workflow_run.conclusion == 'success'
         with:
           script: |
             const artifacts = await github.actions.listWorkflowRunArtifacts({
@@ -36,9 +36,9 @@ jobs:
             });
             const fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/coverage.zip', Buffer.from(download.data));
+
       - name: Extract Coverage Report
         run: unzip -d coverage coverage.zip && rm coverage.zip
-        if: github.event.workflow_run.conclusion == 'success'
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
