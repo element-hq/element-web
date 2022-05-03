@@ -96,7 +96,11 @@ limitations under the License.
         line-height: $font-18px;
     }
 
-    > .mx_DisambiguatedProfile {
+    // inside mx_RoomView_MessageList, outside of mx_ReplyTile
+    // (on the main panel and the chat panel with a maximized widget)
+    > .mx_DisambiguatedProfile,
+    // inside a thread, outside of mx_ReplyTile
+    .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
         position: relative;
         top: -2px;
         left: 2px;
