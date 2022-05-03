@@ -216,6 +216,26 @@ describe("<TextualBody />", () => {
                 '</span></span></span>');
         });
 
+        it("linkification is not applied to code blocks", () => {
+            const ev = mkEvent({
+                type: "m.room.message",
+                room: "room_id",
+                user: "sender",
+                content: {
+                    body: "Visit `https://matrix.org/`\n```\nhttps://matrix.org/\n```",
+                    msgtype: "m.text",
+                    format: "org.matrix.custom.html",
+                    formatted_body: "<p>Visit <code>https://matrix.org/</code></p>\n<pre>https://matrix.org/\n</pre>\n",
+                },
+                event: true,
+            });
+
+            const wrapper = getComponent({ mxEvent: ev }, matrixClient);
+            expect(wrapper.text()).toBe("Visit https://matrix.org/\n1https://matrix.org/\n\n");
+            const content = wrapper.find(".mx_EventTile_body");
+            expect(content.html()).toMatchSnapshot();
+        });
+
         // If pills were rendered within a Portal/same shadow DOM then it'd be easier to test
         it("pills get injected correctly into the DOM", () => {
             const ev = mkEvent({

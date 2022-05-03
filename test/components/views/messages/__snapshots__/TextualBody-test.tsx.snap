@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<TextualBody /> renders formatted m.text correctly linkification is not applied to code blocks 1`] = `
+"<span class=\\"mx_EventTile_body markdown-body\\" dir=\\"auto\\"><p>Visit <code>https://matrix.org/</code></p>
+<div class=\\"mx_EventTile_pre_container\\"><pre class=\\"mx_EventTile_collapsedCodeBlock\\"><span class=\\"mx_EventTile_lineNumbers\\"><span>1</span></span><code>https://matrix.org/
+</code><span></span></pre><span class=\\"mx_EventTile_button mx_EventTile_copyButton \\"></span></div>
+</span>"
+`;
+
 exports[`<TextualBody /> renders formatted m.text correctly pills do not appear in code blocks 1`] = `
 "<span class=\\"mx_EventTile_body markdown-body\\" dir=\\"auto\\"><p><code>@room</code></p>
 <div class=\\"mx_EventTile_pre_container\\"><pre class=\\"mx_EventTile_collapsedCodeBlock\\"><span class=\\"mx_EventTile_lineNumbers\\"><span>1</span></span><code>@room
