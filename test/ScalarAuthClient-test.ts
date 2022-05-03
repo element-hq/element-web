@@ -19,6 +19,8 @@ import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import { stubClient } from './test-utils';
 
 describe('ScalarAuthClient', function() {
+    const apiUrl = 'test.com/api';
+    const uiUrl = 'test.com/app';
     beforeEach(function() {
         window.localStorage.getItem = jest.fn((arg) => {
             if (arg === "mx_scalar_token") return "brokentoken";
@@ -27,15 +29,17 @@ describe('ScalarAuthClient', function() {
     });
 
     it('should request a new token if the old one fails', async function() {
-        const sac = new ScalarAuthClient();
+        const sac = new ScalarAuthClient(apiUrl, uiUrl);
 
-        sac.getAccountName = jest.fn((arg) => {
+        // @ts-ignore unhappy with Promise calls
+        jest.spyOn(sac, 'getAccountName').mockImplementation((arg: string) => {
             switch (arg) {
                 case "brokentoken":
                     return Promise.reject({
                         message: "Invalid token",
                     });
                 case "wokentoken":
+                default:
                     return Promise.resolve(MatrixClientPeg.get().getUserId());
             }
         });
@@ -49,6 +53,8 @@ describe('ScalarAuthClient', function() {
         await sac.connect();
 
         expect(sac.exchangeForScalarToken).toBeCalledWith('this is your openid token');
+        expect(sac.hasCredentials).toBeTruthy();
+        // @ts-ignore private property
         expect(sac.scalarToken).toEqual('wokentoken');
     });
 });
