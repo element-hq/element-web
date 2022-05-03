@@ -51,8 +51,8 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => 
             try {
                 const coords = parseGeoUri(centerGeoUri);
                 map.setCenter({ lon: coords.longitude, lat: coords.latitude });
-            } catch (error) {
-                logger.error('Could not set map center', centerGeoUri);
+            } catch (_error) {
+                logger.error('Could not set map center');
             }
         }
     }, [map, centerGeoUri]);
@@ -65,8 +65,8 @@ const useMapWithStyle = ({ id, centerGeoUri, onError, interactive, bounds }) => 
                     [bounds.east, bounds.north],
                 );
                 map.fitBounds(lngLatBounds, { padding: 100, maxZoom: 15 });
-            } catch (error) {
-                logger.error('Invalid map bounds', error);
+            } catch (_error) {
+                logger.error('Invalid map bounds');
             }
         }
     }, [map, bounds]);
