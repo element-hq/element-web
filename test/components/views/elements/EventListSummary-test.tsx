@@ -1,16 +1,21 @@
 import React from 'react';
-import ReactTestUtils from 'react-dom/test-utils';
-import ShallowRenderer from "react-test-renderer/shallow";
+import { mount, ReactWrapper } from 'enzyme';
+import { MatrixEvent, RoomMember } from 'matrix-js-sdk/src/matrix';
 
-import * as testUtils from '../../../test-utils';
-import _EventListSummary from "../../../../src/components/views/elements/EventListSummary";
-
-// Give ELS a matrixClient in its child context
-const EventListSummary = testUtils.wrapInMatrixClientContext(_EventListSummary);
+import {
+    getMockClientWithEventEmitter,
+    mkMembership,
+    mockClientMethodsUser,
+    unmockClientPeg,
+} from '../../../test-utils';
+import EventListSummary from "../../../../src/components/views/elements/EventListSummary";
+import { Layout } from '../../../../src/settings/enums/Layout';
+import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 
 describe('EventListSummary', function() {
+    const roomId = '!room:server.org';
     // Generate dummy event tiles for use in simulating an expanded MELS
-    const generateTiles = (events) => {
+    const generateTiles = (events: MatrixEvent[]) => {
         return events.map((e) => {
             return (
                 <div key={e.getId()} className="event_tile">
@@ -35,22 +40,28 @@ describe('EventListSummary', function() {
      * Optional. Defaults to `parameters.userId`.
      * @returns {MatrixEvent} the event created.
      */
-    const generateMembershipEvent = (eventId, parameters) => {
-        const e = testUtils.mkMembership({
+    interface MembershipEventParams {
+        senderId?: string;
+        userId: string;
+        membership: string;
+        prevMembership?: string;
+    }
+    const generateMembershipEvent = (
+        eventId: string, { senderId, userId, membership, prevMembership }: MembershipEventParams,
+    ): MatrixEvent => {
+        const member = new RoomMember(roomId, userId);
+        // Use localpart as display name;
+        member.name = userId.match(/@([^:]*):/)[1];
+        jest.spyOn(member, 'getAvatarUrl').mockReturnValue('avatar.jpeg');
+        jest.spyOn(member, 'getMxcAvatarUrl').mockReturnValue('mxc://avatar.url/image.png');
+        const e = mkMembership({
             event: true,
-            user: parameters.senderId || parameters.userId,
-            skey: parameters.userId,
-            mship: parameters.membership,
-            prevMship: parameters.prevMembership,
-            target: {
-                // Use localpart as display name
-                name: parameters.userId.match(/@([^:]*):/)[1],
-                userId: parameters.userId,
-                getAvatarUrl: () => {
-                    return "avatar.jpeg";
-                },
-                getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
-            },
+            room: roomId,
+            user: senderId || userId,
+            skey: userId,
+            mship: membership,
+            prevMship: prevMembership,
+            target: member,
         });
         // Override random event ID to allow for equality tests against tiles from
         // generateTiles
@@ -59,7 +70,7 @@ describe('EventListSummary', function() {
     };
 
     // Generate mock MatrixEvents from the array of parameters
-    const generateEvents = (parameters) => {
+    const generateEvents = (parameters: MembershipEventParams[]) => {
         const res = [];
         for (let i = 0; i < parameters.length; i++) {
             res.push(generateMembershipEvent(`event${i}`, parameters[i]));
@@ -83,8 +94,28 @@ describe('EventListSummary', function() {
         return eventsForUsers;
     };
 
+    const mockClient = getMockClientWithEventEmitter({
+        ...mockClientMethodsUser(),
+    });
+
+    const defaultProps = {
+        layout: Layout.Bubble,
+        events: [],
+        children: [],
+    };
+    const renderComponent = (props = {}): ReactWrapper => {
+        return mount(<MatrixClientContext.Provider value={mockClient}>
+            <EventListSummary {...defaultProps} {...props} />
+        </MatrixClientContext.Provider>,
+        );
+    };
+
     beforeEach(function() {
-        testUtils.stubClient();
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        unmockClientPeg();
     });
 
     it('renders expanded events if there are less than props.threshold', function() {
@@ -99,12 +130,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const renderer = new ShallowRenderer();
-        renderer.render(<EventListSummary {...props} />);
-        const wrapper = renderer.getRenderOutput(); // matrix cli context wrapper
-        const result = wrapper.props.children;
+        const wrapper = renderComponent(props); // matrix cli context wrapper
 
-        expect(result.props.children).toEqual([
+        expect(wrapper.find('GenericEventListSummary').props().children).toEqual([
             <div className="event_tile" key="event0">Expanded membership</div>,
         ]);
     });
@@ -122,12 +150,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const renderer = new ShallowRenderer();
-        renderer.render(<EventListSummary {...props} />);
-        const wrapper = renderer.getRenderOutput(); // matrix cli context wrapper
-        const result = wrapper.props.children;
+        const wrapper = renderComponent(props); // matrix cli context wrapper
 
-        expect(result.props.children).toEqual([
+        expect(wrapper.find('GenericEventListSummary').props().children).toEqual([
             <div className="event_tile" key="event0">Expanded membership</div>,
             <div className="event_tile" key="event1">Expanded membership</div>,
         ]);
@@ -147,13 +172,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe("user_1 joined and left and joined");
     });
@@ -183,13 +204,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe("user_1 joined and left 7 times");
     });
@@ -231,13 +248,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1 was unbanned, joined and left 7 times and was invited",
@@ -283,13 +296,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1 was unbanned, joined and left 2 times, was banned, " +
@@ -342,13 +351,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1 and one other were unbanned, joined and left 2 times and were banned",
@@ -380,13 +385,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_0 and 19 others were unbanned, joined and left 2 times and were banned",
@@ -430,13 +431,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_2 was unbanned and joined and left 2 times, user_1 was unbanned, " +
@@ -504,13 +501,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1 was invited, was banned, joined, rejected their invitation, left, " +
@@ -551,13 +544,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1 and one other rejected their invitations and " +
@@ -586,13 +575,9 @@ describe('EventListSummary', function() {
             threshold: 1, // threshold = 1 to force collapse
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1 rejected their invitation 2 times",
@@ -614,13 +599,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1 and user_2 joined 2 times",
@@ -641,13 +622,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_1, user_2 and one other joined",
@@ -666,13 +643,9 @@ describe('EventListSummary', function() {
             threshold: 3,
         };
 
-        const instance = ReactTestUtils.renderIntoDocument(
-            <EventListSummary {...props} />,
-        );
-        const summary = ReactTestUtils.findRenderedDOMComponentWithClass(
-            instance, "mx_GenericEventListSummary_summary",
-        );
-        const summaryText = summary.textContent;
+        const wrapper = renderComponent(props);
+        const summary = wrapper.find(".mx_GenericEventListSummary_summary");
+        const summaryText = summary.text();
 
         expect(summaryText).toBe(
             "user_0, user_1 and 18 others joined",

@@ -57,7 +57,7 @@ describe('<UserInfo />', () => {
         isRoomEncrypted: jest.fn().mockReturnValue(false),
         doesServerSupportUnstableFeature: jest.fn().mockReturnValue(false),
         mxcUrlToHttp: jest.fn().mockReturnValue('mock-mxcUrlToHttp'),
-        removeListerner: jest.fn(),
+        removeListener: jest.fn(),
         currentState: {
             on: jest.fn(),
         },
