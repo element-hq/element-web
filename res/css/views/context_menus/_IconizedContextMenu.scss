@@ -25,6 +25,11 @@ limitations under the License.
             padding-right: 20px;
         }
 
+        .mx_IconizedContextMenu_optionList_label {
+            font-size: $font-15px;
+            font-weight: $font-semi-bold;
+        }
+
         // the notFirst class is for cases where the optionList might be under a header of sorts.
         &:nth-child(n + 2), .mx_IconizedContextMenu_optionList_notFirst {
             // This is a bit of a hack when we could just use a simple border-top property,

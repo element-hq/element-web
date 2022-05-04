@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from "react";
+import React, { createRef, useState } from "react";
 import classNames from "classnames";
 import { MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 
@@ -26,10 +26,14 @@ import DialpadContextMenu from "../../context_menus/DialpadContextMenu";
 import { Alignment } from "../../elements/Tooltip";
 import {
     alwaysAboveLeftOf,
+    alwaysAboveRightOf,
     ChevronFace,
     ContextMenuTooltipButton,
+    useContextMenu,
 } from '../../../structures/ContextMenu';
 import { _t } from "../../../../languageHandler";
+import DeviceContextMenu from "../../context_menus/DeviceContextMenu";
+import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
 
 // Height of the header duplicated from CSS because we need to subtract it from our max
 // height to get the max height of the video
@@ -39,15 +43,22 @@ const TOOLTIP_Y_OFFSET = -24;
 
 const CONTROLS_HIDE_DELAY = 2000;
 
-interface IButtonProps {
+interface IButtonProps extends Omit<React.ComponentProps<typeof AccessibleTooltipButton>, "title"> {
     state: boolean;
     className: string;
-    onLabel: string;
-    offLabel: string;
-    onClick: () => void;
+    onLabel?: string;
+    offLabel?: string;
+    onClick: (event: React.MouseEvent) => void;
 }
 
-const CallViewToggleButton: React.FC<IButtonProps> = ({ state: isOn, className, onLabel, offLabel, onClick }) => {
+const CallViewToggleButton: React.FC<IButtonProps> = ({
+    children,
+    state: isOn,
+    className,
+    onLabel,
+    offLabel,
+    ...props
+}) => {
     const classes = classNames("mx_CallViewButtons_button", className, {
         mx_CallViewButtons_button_on: isOn,
         mx_CallViewButtons_button_off: !isOn,
@@ -56,11 +67,48 @@ const CallViewToggleButton: React.FC<IButtonProps> = ({ state: isOn, className, 
     return (
         <AccessibleTooltipButton
             className={classes}
-            onClick={onClick}
             title={isOn ? onLabel : offLabel}
             alignment={Alignment.Top}
             yOffset={TOOLTIP_Y_OFFSET}
-        />
+            {...props}
+        >
+            { children }
+        </AccessibleTooltipButton>
+    );
+};
+
+interface IDropdownButtonProps extends IButtonProps {
+    deviceKinds: MediaDeviceKindEnum[];
+}
+
+const CallViewDropdownButton: React.FC<IDropdownButtonProps> = ({ state, deviceKinds, ...props }) => {
+    const [menuDisplayed, buttonRef, openMenu, closeMenu] = useContextMenu();
+    const [hoveringDropdown, setHoveringDropdown] = useState(false);
+
+    const classes = classNames("mx_CallViewButtons_button", "mx_CallViewButtons_dropdownButton", {
+        mx_CallViewButtons_dropdownButton_collapsed: !menuDisplayed,
+    });
+
+    const onClick = (event: React.MouseEvent): void => {
+        event.stopPropagation();
+        openMenu();
+    };
+
+    return (
+        <CallViewToggleButton inputRef={buttonRef} forceHide={menuDisplayed || hoveringDropdown} state={state} {...props}>
+            <CallViewToggleButton
+                className={classes}
+                onClick={onClick}
+                onHover={(hovering) => setHoveringDropdown(hovering)}
+                state={state}
+            />
+            { menuDisplayed && <DeviceContextMenu
+                {...alwaysAboveRightOf(buttonRef.current?.getBoundingClientRect())}
+
+                onFinished={closeMenu}
+                deviceKinds={deviceKinds}
+            /> }
+        </CallViewToggleButton>
     );
 };
 
@@ -221,19 +269,21 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
                     alignment={Alignment.Top}
                     yOffset={TOOLTIP_Y_OFFSET}
                 /> }
-                <CallViewToggleButton
+                <CallViewDropdownButton
                     state={!this.props.buttonsState.micMuted}
                     className="mx_CallViewButtons_button_mic"
                     onLabel={_t("Mute the microphone")}
                     offLabel={_t("Unmute the microphone")}
                     onClick={this.props.handlers.onMicMuteClick}
+                    deviceKinds={[MediaDeviceKindEnum.AudioInput, MediaDeviceKindEnum.AudioOutput]}
                 />
-                { this.props.buttonsVisibility.vidMute && <CallViewToggleButton
+                { this.props.buttonsVisibility.vidMute && <CallViewDropdownButton
                     state={!this.props.buttonsState.vidMuted}
                     className="mx_CallViewButtons_button_vid"
                     onLabel={_t("Stop the camera")}
                     offLabel={_t("Start the camera")}
                     onClick={this.props.handlers.onVidMuteClick}
+                    deviceKinds={[MediaDeviceKindEnum.VideoInput]}
                 /> }
                 { this.props.buttonsVisibility.screensharing && <CallViewToggleButton
                     state={this.props.buttonsState.screensharing}

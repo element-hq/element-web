@@ -46,6 +46,10 @@ limitations under the License.
         justify-content: center;
         align-items: center;
 
+        position: relative;
+
+        box-shadow: 0px 4px 4px 0px #00000026; // Same on both themes
+
         &::before {
             content: '';
             display: inline-block;
@@ -58,6 +62,25 @@ limitations under the License.
 
             height: 24px;
             width: 24px;
+        }
+
+        &.mx_CallViewButtons_dropdownButton {
+            width: 16px;
+            height: 16px;
+
+            position: absolute;
+            right: 0;
+            bottom: 0;
+
+            &::before {
+                width: 14px;
+                height: 14px;
+                mask-image: url('$(res)/img/element-icons/message/chevron-up.svg');
+            }
+
+            &.mx_CallViewButtons_dropdownButton_collapsed::before {
+                transform: rotate(180deg);
+            }
         }
 
         // State buttons

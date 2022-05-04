@@ -72,12 +72,12 @@ export default class MediaDeviceHandler extends EventEmitter {
     /**
      * Retrieves devices from the SettingsStore and tells the js-sdk to use them
      */
-    public static loadDevices(): void {
+    public static async loadDevices(): Promise<void> {
         const audioDeviceId = SettingsStore.getValue("webrtc_audioinput");
         const videoDeviceId = SettingsStore.getValue("webrtc_videoinput");
 
-        MatrixClientPeg.get().getMediaHandler().setAudioInput(audioDeviceId);
-        MatrixClientPeg.get().getMediaHandler().setVideoInput(videoDeviceId);
+        await MatrixClientPeg.get().getMediaHandler().setAudioInput(audioDeviceId);
+        await MatrixClientPeg.get().getMediaHandler().setVideoInput(videoDeviceId);
     }
 
     public setAudioOutput(deviceId: string): void {
@@ -90,9 +90,9 @@ export default class MediaDeviceHandler extends EventEmitter {
      * need to be ended and started again for this change to take effect
      * @param {string} deviceId
      */
-    public setAudioInput(deviceId: string): void {
+    public async setAudioInput(deviceId: string): Promise<void> {
         SettingsStore.setValue("webrtc_audioinput", null, SettingLevel.DEVICE, deviceId);
-        MatrixClientPeg.get().getMediaHandler().setAudioInput(deviceId);
+        return MatrixClientPeg.get().getMediaHandler().setAudioInput(deviceId);
     }
 
     /**
@@ -100,16 +100,16 @@ export default class MediaDeviceHandler extends EventEmitter {
      * need to be ended and started again for this change to take effect
      * @param {string} deviceId
      */
-    public setVideoInput(deviceId: string): void {
+    public async setVideoInput(deviceId: string): Promise<void> {
         SettingsStore.setValue("webrtc_videoinput", null, SettingLevel.DEVICE, deviceId);
-        MatrixClientPeg.get().getMediaHandler().setVideoInput(deviceId);
+        return MatrixClientPeg.get().getMediaHandler().setVideoInput(deviceId);
     }
 
-    public setDevice(deviceId: string, kind: MediaDeviceKindEnum): void {
+    public async setDevice(deviceId: string, kind: MediaDeviceKindEnum): Promise<void> {
         switch (kind) {
             case MediaDeviceKindEnum.AudioOutput: this.setAudioOutput(deviceId); break;
-            case MediaDeviceKindEnum.AudioInput: this.setAudioInput(deviceId); break;
-            case MediaDeviceKindEnum.VideoInput: this.setVideoInput(deviceId); break;
+            case MediaDeviceKindEnum.AudioInput: await this.setAudioInput(deviceId); break;
+            case MediaDeviceKindEnum.VideoInput: await this.setVideoInput(deviceId); break;
         }
     }
 
@@ -123,5 +123,18 @@ export default class MediaDeviceHandler extends EventEmitter {
 
     public static getVideoInput(): string {
         return SettingsStore.getValueAt(SettingLevel.DEVICE, "webrtc_videoinput");
+    }
+
+    /**
+     * Returns the current set deviceId for a device kind
+     * @param {MediaDeviceKindEnum} kind of the device that will be returned
+     * @returns {string} the deviceId
+     */
+    public static getDevice(kind: MediaDeviceKindEnum): string {
+        switch (kind) {
+            case MediaDeviceKindEnum.AudioOutput: return this.getAudioOutput();
+            case MediaDeviceKindEnum.AudioInput: return this.getAudioInput();
+            case MediaDeviceKindEnum.VideoInput: return this.getVideoInput();
+        }
     }
 }
