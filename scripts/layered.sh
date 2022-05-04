@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 # Creates a layered environment with the full repo for the app and SDKs cloned
 # and linked. This gives an element-web dev environment ready to build with
 # matching branches of react-sdk's dependencies so that changes can be tested
@@ -13,6 +15,9 @@
 
 # Install dependencies, as we'll be using fetchdep.sh from matrix-react-sdk
 yarn install --pure-lockfile
+
+# Pass appropriate repo to fetchdep.sh
+export REPOSITORY=vector-im/element-web
 
 # Set up the js-sdk first
 node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-js-sdk
