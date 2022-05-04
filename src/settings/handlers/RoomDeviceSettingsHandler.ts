@@ -69,7 +69,7 @@ export default class RoomDeviceSettingsHandler extends AbstractLocalStorageSetti
     }
 
     private read(key: string): any {
-        return this.getItem(key);
+        return this.getObject(key);
     }
 
     private getKey(settingName: string, roomId: string): string {
