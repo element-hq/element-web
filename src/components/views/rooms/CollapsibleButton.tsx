@@ -20,27 +20,27 @@ import classNames from 'classnames';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { MenuItem } from "../../structures/ContextMenu";
 import { OverflowMenuContext } from './MessageComposerButtons';
+import { IconizedContextMenuOption } from '../context_menus/IconizedContextMenu';
 
 interface ICollapsibleButtonProps extends ComponentProps<typeof MenuItem> {
     title: string;
+    iconClassName: string;
 }
 
-export const CollapsibleButton = ({ title, children, className, ...props }: ICollapsibleButtonProps) => {
+export const CollapsibleButton = ({ title, children, className, iconClassName, ...props }: ICollapsibleButtonProps) => {
     const inOverflowMenu = !!useContext(OverflowMenuContext);
     if (inOverflowMenu) {
-        return <MenuItem
+        return <IconizedContextMenuOption
             {...props}
-            className={classNames("mx_CallContextMenu_item", className)}
-        >
-            { title }
-            { children }
-        </MenuItem>;
+            iconClassName={iconClassName}
+            label={title}
+        />;
     }
 
     return <AccessibleTooltipButton
         {...props}
         title={title}
-        className={className}
+        className={classNames(className, iconClassName)}
     >
         { children }
     </AccessibleTooltipButton>;
