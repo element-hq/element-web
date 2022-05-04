@@ -39,6 +39,7 @@ import BetaFeedbackDialog from '../views/dialogs/BetaFeedbackDialog';
 import { Action } from '../../dispatcher/actions';
 import { UserTab } from '../views/dialogs/UserTab';
 import dis from '../../dispatcher/dispatcher';
+import Spinner from "../views/elements/Spinner";
 
 interface IProps {
     roomId: string;
@@ -301,7 +302,9 @@ const ThreadPanel: React.FC<IProps> = ({
                         permalinkCreator={permalinkCreator}
                         disableGrouping={true}
                     />
-                    : <div className="mx_AutoHideScrollbar" />
+                    : <div className="mx_AutoHideScrollbar">
+                        <Spinner />
+                    </div>
                 }
             </BaseCard>
         </RoomContext.Provider>

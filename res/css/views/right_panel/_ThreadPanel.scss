@@ -104,11 +104,13 @@ limitations under the License.
         }
     }
 
-    .mx_AutoHideScrollbar {
+    .mx_AutoHideScrollbar,
+    .mx_RoomView_messagePanelSpinner {
         background-color: $background;
         border-radius: 8px;
         padding-inline-end: 0;
         overflow-y: scroll; // set gap between the thread tile and the right border
+        height: 100%;
     }
 
     // Override _GroupLayout.scss for the thread panel
