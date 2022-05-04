@@ -1,5 +1,6 @@
 /*
-Copyright 2015, 2016, 2019 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016, 2019, 2020, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,7 +40,8 @@ interface IProps {
     // due to a change in video metadata
     onResize?: (e: Event) => void;
 
-    primary: boolean;
+    primary?: boolean;
+    secondary?: boolean;
 }
 
 interface IState {
@@ -178,9 +180,11 @@ export default class VideoFeed extends React.PureComponent<IProps, IState> {
     };
 
     render() {
-        const { pipMode, primary, feed } = this.props;
+        const { pipMode, primary, secondary, feed } = this.props;
 
         const wrapperClasses = classnames("mx_VideoFeed", {
+            mx_VideoFeed_primary: primary,
+            mx_VideoFeed_secondary: secondary,
             mx_VideoFeed_voice: this.state.videoMuted,
         });
         const micIconClasses = classnames("mx_VideoFeed_mic", {

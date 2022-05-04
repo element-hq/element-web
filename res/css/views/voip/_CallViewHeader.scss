@@ -1,5 +1,6 @@
 /*
 Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,8 +20,9 @@ limitations under the License.
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: left;
+    justify-content: space-between;
     flex-shrink: 0;
+    width: 100%;
 
     &.mx_CallViewHeader_pip {
         cursor: pointer;

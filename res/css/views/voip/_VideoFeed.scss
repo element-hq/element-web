@@ -1,5 +1,6 @@
 /*
-Copyright 2015, 2016, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2015, 2016, 2020, 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,15 +21,32 @@ limitations under the License.
     box-sizing: border-box;
     border: transparent 2px solid;
     display: flex;
+    border-radius: 4px;
+
+    &.mx_VideoFeed_secondary {
+        position: absolute;
+        right: 24px;
+        bottom: 72px;
+        width: 20%;
+    }
 
     &.mx_VideoFeed_voice {
         background-color: $inverted-bg-color;
-        aspect-ratio: 16 / 9;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:not(.mx_VideoFeed_primary) {
+            aspect-ratio: 16 / 9;
+        }
     }
 
     .mx_VideoFeed_video {
+        height: 100%;
         width: 100%;
-        background-color: transparent;
+        border-radius: 4px;
+        background-color: #000000;
 
         &.mx_VideoFeed_video_mirror {
             transform: scale(-1, 1);
@@ -37,6 +55,8 @@ limitations under the License.
 
     .mx_VideoFeed_mic {
         position: absolute;
+        left: 6px;
+        bottom: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
