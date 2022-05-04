@@ -10,6 +10,9 @@ defbranch="$3"
 
 rm -r "$defrepo" || true
 
+PR_ORG=${PR_ORG:-"matrix-org"}
+PR_REPO=${PR_REPO:-"matrix-react-sdk"}
+
 # A function that clones a branch of a repo based on the org, repo and branch
 clone() {
     org=$1
@@ -29,8 +32,7 @@ getPRInfo() {
     if [ -n "$number" ]; then
         echo "Getting info about a PR with number $number"
 
-        apiEndpoint="https://api.github.com/repos/${REPOSITORY:-"matrix-org/matrix-react-sdk"}/pulls/"
-        apiEndpoint+=$number
+        apiEndpoint="https://api.github.com/repos/$PR_ORG/$PR_REPO/pulls/$number"
 
         head=$(curl $apiEndpoint | jq -r '.head.label')
     fi
@@ -58,7 +60,7 @@ TRY_ORG=$deforg
 TRY_BRANCH=${BRANCH_ARRAY[0]}
 if [[ "$head" == *":"* ]]; then
     # ... but only match that fork if it's a real fork
-    if [ "${BRANCH_ARRAY[0]}" != "matrix-org" ]; then
+    if [ "${BRANCH_ARRAY[0]}" != "$PR_ORG" ]; then
         TRY_ORG=${BRANCH_ARRAY[0]}
     fi
     TRY_BRANCH=${BRANCH_ARRAY[1]}
