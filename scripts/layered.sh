@@ -17,7 +17,8 @@ set -x
 yarn install --pure-lockfile
 
 # Pass appropriate repo to fetchdep.sh
-export REPOSITORY=vector-im/element-web
+export PR_ORG=vector-im
+export PR_REPO=element-web
 
 # Set up the js-sdk first
 node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-js-sdk
