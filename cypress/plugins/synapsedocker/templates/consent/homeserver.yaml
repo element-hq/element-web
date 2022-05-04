@@ -1,6 +1,6 @@
 server_name: "localhost"
 pid_file: /data/homeserver.pid
-public_baseurl: http://localhost:5005/
+public_baseurl: "{{PUBLIC_BASEURL}}"
 listeners:
   - port: 8008
     tls: false

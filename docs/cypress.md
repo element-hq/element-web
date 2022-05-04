@@ -9,7 +9,7 @@ It aims to cover:
 
 ## Running the Tests
 Our Cypress tests run automatically as part of our CI along with our other tests,
-on every pull request and on every merge to develop.
+on every pull request and on every merge to develop & master.
 
 However the Cypress tests are run, an element-web must be running on
 http://localhost:8080 (this is configured in `cypress.json`) - this is what will
@@ -53,17 +53,17 @@ Synapse can be launched with different configurations in order to test element
 in different configurations. `cypress/plugins/synapsedocker/templates` contains
 template configuration files for each different configuration.
 
-Each test suite can then launch whatever Syanpse instances it needs it whatever
+Each test suite can then launch whatever Synapse instances it needs it whatever
 configurations.
 
 Note that although tests should stop the Synapse instances after running and the
 plugin also stop any remaining instances after all tests have run, it is possible
 to be left with some stray containers if, for example, you terminate a test such
 that the `after()` does not run and also exit Cypress uncleanly. All the containers
-it starts are prefixed so they are easy to recognise. They can be removed safely.
+it starts are prefixed, so they are easy to recognise. They can be removed safely.
 
-After each test run, logs from the Syanpse instances are saved in `cypress/synapselogs`
-with each instance in a separate directory named after it's ID. These logs are removed
+After each test run, logs from the Synapse instances are saved in `cypress/synapselogs`
+with each instance in a separate directory named after its ID. These logs are removed
 at the start of each test run.
 
 ## Writing Tests
@@ -73,23 +73,29 @@ https://docs.cypress.io/guides/references/best-practices .
 
 ### Getting a Synapse
 The key difference is in starting Synapse instances.  Tests use this plugin via
-`cy.task()` to provide a Synapse instance to log into:
+`cy.startSynapse()` to provide a Synapse instance to log into:
 
-```
-cy.task<SynapseInstance>("synapseStart", "consent").then(result => {
-    synapseId = result.synapseId;
-    synapsePort = result.port;
+```javascript
+cy.startSynapse("consent").then(result => {
+    synapse = result;
 });
 ```
 
 This returns an object with information about the Synapse instance, including what port
 it was started on and the ID that needs to be passed to shut it down again. It also
 returns the registration shared secret (`registrationSecret`) that can be used to
-register users via the REST API.
+register users via the REST API. The Synapse has been ensured ready to go by awaiting
+its internal health-check.
 
 Synapse instances should be reasonably cheap to start (you may see the first one take a
 while as it pulls the Docker image), so it's generally expected that tests will start a
-Synapse instance for each test suite, ie. in `before()`, and then tear it down in `after()`.
+Synapse instance for each test suite, i.e. in `before()`, and then tear it down in `after()`.
+
+To later destroy your Synapse you should call `stopSynapse`, passing the SynapseInstance
+object you received when starting it.
+```javascript
+cy.stopSynapse(synapse);
+```
 
 ### Synapse Config Templates
 When a Synapse instance is started, it's given a config generated from one of the config
@@ -100,6 +106,7 @@ in these templates:
    * `REGISTRATION_SECRET`: The secret used to register users via the REST API.
    * `MACAROON_SECRET_KEY`: Generated each time for security
    * `FORM_SECRET`: Generated each time for security
+   * `PUBLIC_BASEURL`: The localhost url + port combination the synapse is accessible at
  * `localhost.signing.key`: A signing key is auto-generated and saved to this file.
    Config templates should not contain a signing key and instead assume that one will exist
    in this file.
@@ -108,24 +115,18 @@ All other files in the template are copied recursively to `/data/`, so the file 
 in a template can be referenced in the config as `/data/foo.html`.
 
 ### Logging In
-This doesn't quite exist yet. Most tests will just want to start with the client in a 'logged in'
-state, so we should provide an easy way to start a test with element in this state. The
-`registrationSecret` provided when starting a Synapse can be used to create a user (porting
-the code from https://github.com/matrix-org/matrix-react-sdk/blob/develop/test/end-to-end-tests/src/rest/creator.ts#L49).
-We'd then need to log in as this user. Ways of doing this would be:
+There exists a basic utility to start the app with a random user already logged in:
+```javascript
+cy.initTestUser(synapse, "Jeff");
+```
+It takes the SynapseInstance you received from `startSynapse` and a display name for your test user.
+This custom command will register a random userId using the registrationSecret with a random password
+and the given display name. The returned Chainable will contain details about the credentials for if
+they are needed for User-Interactive Auth or similar but localStorage will already be seeded with them
+and the app loaded (path `/`).
 
-1. Fill in the login form. This isn't ideal as it's effectively testing the login process in each
-   test, and will just be slower.
-1. Mint an access token using https://matrix-org.github.io/synapse/develop/admin_api/user_admin_api.html#login-as-a-user
-   then inject this into element-web. This would probably be fastest, although also relies on correctly
-   setting up localstorage
-1. Mint a login token, inject the Homeserver URL into localstorage and then load element, passing the login
-   token as a URL parameter. This is a supported way of logging in to element-web, but there's no API
-   on Synapse to make such a token currently. It would be fairly easy to add a synapse-specific admin API
-   to do so. We should write tests for token login (and the rest of SSO) at some point anyway though.
-
-If we make this as a convenience API, it can easily be swapped out later: we could start with option 1
-and then switch later.
+The internals of how this custom command run may be swapped out later,
+but the signature can be maintained for simpler maintenance.
 
 ### Joining a Room
 Many tests will also want to start with the client in a room, ready to send & receive messages. Best
@@ -141,9 +142,9 @@ This section mostly summarises general good Cypress testing practice, and should
 already familiar with Cypress.
 
 1. Test a well-isolated unit of functionality. The more specific, the easier it will be to tell what's
-   wrong when they fail. 
+   wrong when they fail.
 1. Don't depend on state from other tests: any given test should be able to run in isolation.
-1. Try to avoid driving the UI for anything other than the UI you're trying to test. eg. if you're
+1. Try to avoid driving the UI for anything other than the UI you're trying to test. e.g. if you're
    testing that the user can send a reaction to a message, it's best to send a message using a REST
    API, then react to it using the UI, rather than using the element-web UI to send the message.
 1. Avoid explicit waits. `cy.get()` will implicitly wait for the specified element to appear and

@@ -16,6 +16,8 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
+import * as crypto from 'crypto';
+
 import Chainable = Cypress.Chainable;
 import AUTWindow = Cypress.AUTWindow;
 import { SynapseInstance } from "../plugins/synapsedocker";
@@ -29,12 +31,27 @@ declare global {
              * @param template path to template within cypress/plugins/synapsedocker/template/ directory.
              */
             startSynapse(template: string): Chainable<SynapseInstance>;
+
             /**
              * Custom command wrapping task:synapseStop whilst preventing uncaught exceptions
              * for if Synapse stopping races with the app's background sync loop.
              * @param synapse the synapse instance returned by startSynapse
              */
             stopSynapse(synapse: SynapseInstance): Chainable<AUTWindow>;
+
+            /**
+             * Register a user on the given Synapse using the shared registration secret.
+             * @param synapse the synapse instance returned by startSynapse
+             * @param username the username of the user to register
+             * @param password the password of the user to register
+             * @param displayName optional display name to set on the newly registered user
+             */
+            registerUser(
+                synapse: SynapseInstance,
+                username: string,
+                password: string,
+                displayName?: string,
+            ): Chainable<Credentials>;
         }
     }
 }
@@ -51,5 +68,54 @@ function stopSynapse(synapse: SynapseInstance): Chainable<AUTWindow> {
     });
 }
 
+interface Credentials {
+    accessToken: string;
+    userId: string;
+    deviceId: string;
+    homeServer: string;
+}
+
+function registerUser(
+    synapse: SynapseInstance,
+    username: string,
+    password: string,
+    displayName?: string,
+): Chainable<Credentials> {
+    const url = `${synapse.baseUrl}/_synapse/admin/v1/register`;
+    return cy.then(() => {
+        // get a nonce
+        return cy.request<{ nonce: string }>({ url });
+    }).then(response => {
+        const { nonce } = response.body;
+        const mac = crypto.createHmac('sha1', synapse.registrationSecret).update(
+            `${nonce}\0${username}\0${password}\0notadmin`,
+        ).digest('hex');
+
+        return cy.request<{
+            access_token: string;
+            user_id: string;
+            home_server: string;
+            device_id: string;
+        }>({
+            url,
+            method: "POST",
+            body: {
+                nonce,
+                username,
+                password,
+                mac,
+                admin: false,
+                displayname: displayName,
+            },
+        });
+    }).then(response => ({
+        homeServer: response.body.home_server,
+        accessToken: response.body.access_token,
+        userId: response.body.user_id,
+        deviceId: response.body.device_id,
+    }));
+}
+
 Cypress.Commands.add("startSynapse", startSynapse);
 Cypress.Commands.add("stopSynapse", stopSynapse);
+Cypress.Commands.add("registerUser", registerUser);

@@ -22,10 +22,10 @@ describe("Registration", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
+        cy.visit("/#/register");
         cy.startSynapse("consent").then(data => {
             synapse = data;
         });
-        cy.visit("/#/register");
     });
 
     afterEach(() => {
@@ -34,14 +34,16 @@ describe("Registration", () => {
 
     it("registers an account and lands on the home screen", () => {
         cy.get(".mx_ServerPicker_change", { timeout: 15000 }).click();
-        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(`http://localhost:${synapse.port}`);
+        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);
         cy.get(".mx_ServerPickerDialog_continue").click();
         // wait for the dialog to go away
         cy.get('.mx_ServerPickerDialog').should('not.exist');
+
         cy.get("#mx_RegistrationForm_username").type("alice");
         cy.get("#mx_RegistrationForm_password").type("totally a great password");
         cy.get("#mx_RegistrationForm_passwordConfirm").type("totally a great password");
         cy.get(".mx_Login_submit").click();
+
         cy.get(".mx_RegistrationEmailPromptDialog button.mx_Dialog_primary").click();
         cy.get(".mx_InteractiveAuthEntryComponents_termsPolicy input").click();
         cy.get(".mx_InteractiveAuthEntryComponents_termsSubmit").click();
