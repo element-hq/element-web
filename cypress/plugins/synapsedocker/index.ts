@@ -22,6 +22,9 @@ import * as crypto from "crypto";
 import * as childProcess from "child_process";
 import * as fse from "fs-extra";
 
+import PluginEvents = Cypress.PluginEvents;
+import PluginConfigOptions = Cypress.PluginConfigOptions;
+
 // A cypress plugins to add command to start & stop synapses in
 // docker with preset templates.
 
@@ -130,7 +133,7 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
     return synapses.get(synapseId);
 }
 
-async function synapseStop(id) {
+async function synapseStop(id: string): Promise<void> {
     const synCfg = synapses.get(id);
 
     if (!synCfg) throw new Error("Unknown synapse ID");
@@ -186,10 +189,10 @@ async function synapseStop(id) {
 /**
  * @type {Cypress.PluginConfig}
  */
-// eslint-disable-next-line no-unused-vars
-export function synapseDocker(on, config) {
+export function synapseDocker(on: PluginEvents, config: PluginConfigOptions) {
     on("task", {
-        synapseStart, synapseStop,
+        synapseStart,
+        synapseStop,
     });
 
     on("after:spec", async (spec) => {
@@ -197,7 +200,7 @@ export function synapseDocker(on, config) {
         // This is on the theory that we should avoid re-using synapse
         // instances between spec runs: they should be cheap enough to
         // start that we can have a separate one for each spec run or even
-        // test. If we accidentally re-use synapses, we could inadvertantly
+        // test. If we accidentally re-use synapses, we could inadvertently
         // make our tests depend on each other.
         for (const synId of synapses.keys()) {
             console.warn(`Cleaning up synapse ID ${synId} after ${spec.name}`);

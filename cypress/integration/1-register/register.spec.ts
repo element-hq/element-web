@@ -16,27 +16,25 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import { SynapseInstance } from "../../plugins/synapsedocker/index";
+import { SynapseInstance } from "../../plugins/synapsedocker";
 
 describe("Registration", () => {
-    let synapseId;
-    let synapsePort;
+    let synapse: SynapseInstance;
 
     beforeEach(() => {
-        cy.task<SynapseInstance>("synapseStart", "consent").then(result => {
-            synapseId = result.synapseId;
-            synapsePort = result.port;
+        cy.startSynapse("consent").then(data => {
+            synapse = data;
         });
         cy.visit("/#/register");
     });
 
     afterEach(() => {
-        cy.task("synapseStop", synapseId);
+        cy.stopSynapse(synapse);
     });
 
     it("registers an account and lands on the home screen", () => {
         cy.get(".mx_ServerPicker_change", { timeout: 15000 }).click();
-        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(`http://localhost:${synapsePort}`);
+        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(`http://localhost:${synapse.port}`);
         cy.get(".mx_ServerPickerDialog_continue").click();
         // wait for the dialog to go away
         cy.get('.mx_ServerPickerDialog').should('not.exist');
