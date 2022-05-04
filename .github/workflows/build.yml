@@ -1,0 +1,26 @@
+name: Build and Package
+on:
+  pull_request: { }
+  push:
+    branches: [ master ]
+# develop pushes and repository_dispatch handled in build_develop.yaml
+env:
+  # These must be set for fetchdep.sh to get the right branch
+  REPOSITORY: ${{ github.repository }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: "./scripts/layered.sh"
+
+      - name: Build & Package
+        run: "./scripts/ci_package.sh"
