@@ -402,8 +402,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
     }
 
     private setupNotificationListener = (thread: Thread): void => {
-        const room = MatrixClientPeg.get().getRoom(this.props.mxEvent.getRoomId());
-        const notifications = RoomNotificationStateStore.instance.getThreadsRoomState(room);
+        const notifications = RoomNotificationStateStore.instance.getThreadsRoomState(thread.room);
 
         this.threadState = notifications.getThreadRoomState(thread);
 
