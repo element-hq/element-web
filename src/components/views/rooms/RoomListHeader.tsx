@@ -222,7 +222,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                 />
                 { videoRoomsEnabled && <IconizedContextMenuOption
                     iconClassName="mx_RoomListHeader_iconNewVideoRoom"
-                    label={_t("New video room")}
+                    label={_t("Video room")}
                     onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -313,7 +313,7 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                     }}
                 />
                 { videoRoomsEnabled && <IconizedContextMenuOption
-                    label={_t("New video room")}
+                    label={_t("Video room")}
                     iconClassName="mx_RoomListHeader_iconNewVideoRoom"
                     onClick={(e) => {
                         e.preventDefault();

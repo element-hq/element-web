@@ -24,8 +24,7 @@ limitations under the License.
     margin-right: calc($container-gap-width / 2);
 
     background-color: $header-panel-bg-color;
-    padding-top: 33px; // to match the right panel chat heading
-    border: 8px solid $header-panel-bg-color;
+    padding: 8px;
     border-radius: 8px;
 
     .mx_AppTile {

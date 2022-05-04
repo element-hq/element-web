@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { useContext } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 
 import { IProps as IContextMenuProps } from "../../structures/ContextMenu";
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from "./IconizedContextMenu";
@@ -136,6 +136,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
     const hasPermissionToAddSpaceChild = space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
     const canAddRooms = hasPermissionToAddSpaceChild && shouldShowComponent(UIComponent.CreateRooms);
+    const canAddVideoRooms = canAddRooms && SettingsStore.getValue("feature_video_rooms");
     const canAddSubSpaces = hasPermissionToAddSpaceChild && shouldShowComponent(UIComponent.CreateSpaces);
 
     let newRoomSection: JSX.Element;
@@ -146,6 +147,14 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 
             PosthogTrackers.trackInteraction("WebSpaceContextMenuNewRoomItem", ev);
             showCreateNewRoom(space);
+            onFinished();
+        };
+
+        const onNewVideoRoomClick = (ev: ButtonEvent) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            showCreateNewRoom(space, RoomType.ElementVideo);
             onFinished();
         };
 
@@ -167,6 +176,14 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
                     iconClassName="mx_SpacePanel_iconPlus"
                     label={_t("Room")}
                     onClick={onNewRoomClick}
+                />
+            }
+            { canAddVideoRooms &&
+                <IconizedContextMenuOption
+                    data-test-id='new-video-room-option'
+                    iconClassName="mx_SpacePanel_iconPlus"
+                    label={_t("Video room")}
+                    onClick={onNewVideoRoomClick}
                 />
             }
             { canAddSubSpaces &&

@@ -132,8 +132,6 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 events: {
                     // Allow all users to send video member updates
                     [VIDEO_CHANNEL_MEMBER]: 0,
-                    // Make widgets immutable, even to admins
-                    "im.vector.modular.widgets": 200,
                     // Annoyingly, we have to reiterate all the defaults here
                     [EventType.RoomName]: 50,
                     [EventType.RoomAvatar]: 50,
@@ -143,10 +141,6 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                     [EventType.RoomTombstone]: 100,
                     [EventType.RoomServerAcl]: 100,
                     [EventType.RoomEncryption]: 100,
-                },
-                users: {
-                    // Temporarily give ourselves the power to set up a widget
-                    [client.getUserId()]: 200,
                 },
             };
         }
@@ -270,11 +264,6 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         if (opts.roomType === RoomType.ElementVideo) {
             // Set up video rooms with a Jitsi widget
             await addVideoChannel(roomId, createOpts.name);
-
-            // Reset our power level back to admin so that the widget becomes immutable
-            const room = client.getRoom(roomId);
-            const plEvent = room?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-            await client.setPowerLevel(roomId, client.getUserId(), 100, plEvent);
         }
     }).then(function() {
         // NB createRoom doesn't block on the client seeing the echo that the

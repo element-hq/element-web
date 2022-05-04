@@ -20,28 +20,47 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
-import { getVideoChannel } from "../../utils/VideoChannelUtils";
-import WidgetStore from "../../stores/WidgetStore";
+import WidgetUtils from "../../utils/WidgetUtils";
+import { addVideoChannel, getVideoChannel } from "../../utils/VideoChannelUtils";
+import WidgetStore, { IApp } from "../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import VideoChannelStore, { VideoChannelEvent } from "../../stores/VideoChannelStore";
 import AppTile from "../views/elements/AppTile";
 import VideoLobby from "../views/voip/VideoLobby";
 
-const VideoRoomView: FC<{ room: Room, resizing: boolean }> = ({ room, resizing }) => {
+interface IProps {
+    room: Room;
+    resizing: boolean;
+}
+
+const VideoRoomView: FC<IProps> = ({ room, resizing }) => {
     const cli = useContext(MatrixClientContext);
     const store = VideoChannelStore.instance;
 
     // In case we mount before the WidgetStore knows about our Jitsi widget
+    const [widgetStoreReady, setWidgetStoreReady] = useState(Boolean(WidgetStore.instance.matrixClient));
     const [widgetLoaded, setWidgetLoaded] = useState(false);
     useEventEmitter(WidgetStore.instance, UPDATE_EVENT, (roomId: string) => {
-        if (roomId === null || roomId === room.roomId) setWidgetLoaded(true);
+        if (roomId === null) setWidgetStoreReady(true);
+        if (roomId === null || roomId === room.roomId) {
+            setWidgetLoaded(Boolean(getVideoChannel(room.roomId)));
+        }
     });
 
-    const app = useMemo(() => {
-        const app = getVideoChannel(room.roomId);
-        if (!app) logger.warn(`No video channel for room ${room.roomId}`);
-        return app;
-    }, [room, widgetLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+    const app: IApp = useMemo(() => {
+        if (widgetStoreReady) {
+            const app = getVideoChannel(room.roomId);
+            if (!app) {
+                logger.warn(`No video channel for room ${room.roomId}`);
+                // Since widgets in video rooms are mutable, we'll take this opportunity to
+                // reinstate the Jitsi widget in case another client removed it
+                if (WidgetUtils.canUserModifyWidgets(room.roomId)) {
+                    addVideoChannel(room.roomId, room.name);
+                }
+            }
+            return app;
+        }
+    }, [room, widgetStoreReady, widgetLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const [connected, setConnected] = useState(store.connected && store.roomId === room.roomId);
     useEventEmitter(store, VideoChannelEvent.Connect, () => setConnected(store.roomId === room.roomId));

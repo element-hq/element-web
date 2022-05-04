@@ -239,7 +239,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                                 : _t("You do not have permissions to create new rooms in this space")}
                         />
                         { SettingsStore.getValue("feature_video_rooms") && <IconizedContextMenuOption
-                            label={_t("New video room")}
+                            label={_t("Video room")}
                             iconClassName="mx_RoomList_iconNewVideoRoom"
                             onClick={(e) => {
                                 e.preventDefault();
@@ -283,7 +283,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                     }}
                 />
                 { SettingsStore.getValue("feature_video_rooms") && <IconizedContextMenuOption
-                    label={_t("New video room")}
+                    label={_t("Video room")}
                     iconClassName="mx_RoomList_iconNewVideoRoom"
                     onClick={(e) => {
                         e.preventDefault();

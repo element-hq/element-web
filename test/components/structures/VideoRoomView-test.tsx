@@ -17,9 +17,17 @@ limitations under the License.
 import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixWidgetType } from "matrix-widget-api";
 
-import { stubClient, stubVideoChannelStore, mkRoom, wrapInMatrixClientContext } from "../../test-utils";
+import {
+    stubClient,
+    stubVideoChannelStore,
+    StubVideoChannelStore,
+    mkRoom,
+    wrapInMatrixClientContext,
+} from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { VIDEO_CHANNEL } from "../../../src/utils/VideoChannelUtils";
 import WidgetStore from "../../../src/stores/WidgetStore";
@@ -30,7 +38,6 @@ import AppTile from "../../../src/components/views/elements/AppTile";
 const VideoRoomView = wrapInMatrixClientContext(_VideoRoomView);
 
 describe("VideoRoomView", () => {
-    stubClient();
     jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([{
         id: VIDEO_CHANNEL,
         eventId: "$1:example.org",
@@ -45,22 +52,22 @@ describe("VideoRoomView", () => {
         value: { enumerateDevices: () => [] },
     });
 
-    const cli = MatrixClientPeg.get();
-    const room = mkRoom(cli, "!1:example.org");
+    let cli: MatrixClient;
+    let room: Room;
+    let store: StubVideoChannelStore;
 
-    let store;
     beforeEach(() => {
+        stubClient();
+        cli = MatrixClientPeg.get();
+        jest.spyOn(WidgetStore.instance, "matrixClient", "get").mockReturnValue(cli);
         store = stubVideoChannelStore();
-    });
-
-    afterEach(() => {
-        jest.clearAllMocks();
+        room = mkRoom(cli, "!1:example.org");
     });
 
     it("shows lobby and keeps widget loaded when disconnected", async () => {
         const view = mount(<VideoRoomView room={room} resizing={false} />);
         // Wait for state to settle
-        await act(async () => Promise.resolve());
+        await act(() => Promise.resolve());
 
         expect(view.find(VideoLobby).exists()).toEqual(true);
         expect(view.find(AppTile).exists()).toEqual(true);
@@ -70,7 +77,7 @@ describe("VideoRoomView", () => {
         store.connect("!1:example.org");
         const view = mount(<VideoRoomView room={room} resizing={false} />);
         // Wait for state to settle
-        await act(async () => Promise.resolve());
+        await act(() => Promise.resolve());
 
         expect(view.find(VideoLobby).exists()).toEqual(false);
         expect(view.find(AppTile).exists()).toEqual(true);

@@ -65,6 +65,7 @@ import ScrollPanel from "./ScrollPanel";
 import TimelinePanel from "./TimelinePanel";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import RoomPreviewBar from "../views/rooms/RoomPreviewBar";
+import RoomPreviewCard from "../views/rooms/RoomPreviewCard";
 import SearchBar, { SearchScope } from "../views/rooms/SearchBar";
 import RoomUpgradeWarningBar from "../views/rooms/RoomUpgradeWarningBar";
 import AuxPanel from "../views/rooms/AuxPanel";
@@ -1831,6 +1832,21 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         }
 
         const myMembership = this.state.room.getMyMembership();
+        if (
+            this.state.room.isElementVideoRoom() &&
+            !(SettingsStore.getValue("feature_video_rooms") && myMembership === "join")
+        ) {
+            return <ErrorBoundary>
+                <div className="mx_MainSplit">
+                    <RoomPreviewCard
+                        room={this.state.room}
+                        onJoinButtonClicked={this.onJoinButtonClicked}
+                        onRejectButtonClicked={this.onRejectButtonClicked}
+                    />
+                </div>;
+            </ErrorBoundary>;
+        }
+
         // SpaceRoomView handles invites itself
         if (myMembership === "invite" && !this.state.room.isSpaceRoom()) {
             if (this.state.joining || this.state.rejecting) {
