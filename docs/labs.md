@@ -108,8 +108,9 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 
 ## Message preview tweaks
 
-To enable message previews for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
-To enable message previews for reactions in DMs, enable `feature_roomlist_preview_reactions_dms`, ignored when it is enabled for all rooms.
+To enable message previews in the left panel for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
+
+To enable message previews for reactions in DMs only, enable `feature_roomlist_preview_reactions_dms`. This is ignored when it is enabled for all rooms.
 
 ## Dehydrated devices (`feature_dehydration`)
 
