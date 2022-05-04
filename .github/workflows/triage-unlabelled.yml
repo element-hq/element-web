@@ -2,15 +2,15 @@ name: Move unlabelled from needs info columns to triaged
 
 on:
   issues:
-    types: [unlabeled]
+    types: [ unlabeled ]
 
 jobs:
   Move_Unabeled_Issue_On_Project_Board:
     name: Move no longer X-Needs-Info issues to Triaged
     runs-on: ubuntu-latest
     if: >
-        ${{
-        !contains(github.event.issue.labels.*.name, 'X-Needs-Info') }}
+      ${{
+      !contains(github.event.issue.labels.*.name, 'X-Needs-Info') }}
     env:
       BOARD_NAME: "Issue triage"
       OWNER: ${{ github.repository_owner }}
@@ -38,18 +38,18 @@ jobs:
     name: Remove Z-Labs label when features behind labs flags are removed
     runs-on: ubuntu-latest
     if: >
-        !(contains(github.event.issue.labels.*.name, 'A-Maths') || 
-        contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
-        contains(github.event.issue.labels.*.name, 'A-Threads') ||
-        contains(github.event.issue.labels.*.name, 'A-Polls') ||
-        contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
-        contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
-        contains(github.event.issue.labels.*.name, 'Z-IA') ||
-        contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
-        contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
-        contains(github.event.issue.labels.*.name, 'A-Tags') ||
-        contains(github.event.issue.labels.*.name, 'A-Video-Rooms')) &&
-        contains(github.event.issue.labels.*.name, 'Z-Labs')
+      !(contains(github.event.issue.labels.*.name, 'A-Maths') ||
+      contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
+      contains(github.event.issue.labels.*.name, 'A-Threads') ||
+      contains(github.event.issue.labels.*.name, 'A-Polls') ||
+      contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+      contains(github.event.issue.labels.*.name, 'A-Message-Bubbles') ||
+      contains(github.event.issue.labels.*.name, 'Z-IA') ||
+      contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
+      contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
+      contains(github.event.issue.labels.*.name, 'A-Tags') ||
+      contains(github.event.issue.labels.*.name, 'A-Video-Rooms')) &&
+      contains(github.event.issue.labels.*.name, 'Z-Labs')
     steps:
       - uses: actions/github-script@v5
         with:
