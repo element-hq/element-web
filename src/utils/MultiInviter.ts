@@ -168,10 +168,19 @@ export default class MultiInviter {
             }
 
             if (!ignoreProfile && SettingsStore.getValue("promptBeforeInviteUnknownUsers", this.roomId)) {
-                const profile = await this.matrixClient.getProfileInfo(addr);
-                if (!profile) {
-                    // noinspection ExceptionCaughtLocallyJS
-                    throw new Error("User has no profile");
+                try {
+                    await this.matrixClient.getProfileInfo(addr);
+                } catch (err) {
+                    // The error handling during the invitation process covers any API.
+                    // Some errors must to me mapped from profile API errors to more specific ones to avoid collisions.
+                    switch (err.errcode) {
+                        case 'M_FORBIDDEN':
+                            throw new MatrixError({ errcode: 'M_PROFILE_UNDISCLOSED' });
+                        case 'M_NOT_FOUND':
+                            throw new MatrixError({ errcode: 'M_USER_NOT_FOUND' });
+                        default:
+                            throw err;
+                    }
                 }
             }
 
