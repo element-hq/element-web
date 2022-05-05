@@ -58,7 +58,6 @@ limitations under the License.
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
-        max-width: calc(100% - 1ch);
         text-decoration: none !important; // To override .markdown-body
     }
 }
