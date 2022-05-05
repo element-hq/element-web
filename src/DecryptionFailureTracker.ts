@@ -31,18 +31,19 @@ export class DecryptionFailure {
 
 type ErrorCode = "OlmKeysNotSentError" | "OlmIndexError" | "UnknownError" | "OlmUnspecifiedError";
 
-type TrackingFn = (count: number, trackedErrCode: ErrorCode) => void;
+type TrackingFn = (count: number, trackedErrCode: ErrorCode, rawError: string) => void;
 
 export type ErrCodeMapFn = (errcode: string) => ErrorCode;
 
 export class DecryptionFailureTracker {
-    private static internalInstance = new DecryptionFailureTracker((total, errorCode) => {
+    private static internalInstance = new DecryptionFailureTracker((total, errorCode, rawError) => {
         Analytics.trackEvent('E2E', 'Decryption failure', errorCode, String(total));
         for (let i = 0; i < total; i++) {
             PosthogAnalytics.instance.trackEvent<ErrorEvent>({
                 eventName: "Error",
                 domain: "E2EE",
                 name: errorCode,
+                context: `mxc_crypto_error_type_${rawError}`,
             });
         }
     }, (errorCode) => {
@@ -236,7 +237,7 @@ export class DecryptionFailureTracker {
             if (this.failureCounts[errorCode] > 0) {
                 const trackedErrorCode = this.errorCodeMapFn(errorCode);
 
-                this.fn(this.failureCounts[errorCode], trackedErrorCode);
+                this.fn(this.failureCounts[errorCode], trackedErrorCode, errorCode);
                 this.failureCounts[errorCode] = 0;
             }
         }
