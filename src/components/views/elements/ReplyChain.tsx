@@ -31,7 +31,7 @@ import { getUserNameColorClass } from "../../../utils/FormattingUtils";
 import { Action } from "../../../dispatcher/actions";
 import Spinner from './Spinner';
 import ReplyTile from "../rooms/ReplyTile";
-import Pill from './Pill';
+import Pill, { PillType } from './Pill';
 import { ButtonEvent } from './AccessibleButton';
 import { getParentEventId, shouldDisplayReply } from '../../../utils/Reply';
 import RoomContext from "../../../contexts/RoomContext";
@@ -223,7 +223,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
                         ),
                         'pill': (
                             <Pill
-                                type={Pill.TYPE_USER_MENTION}
+                                type={PillType.UserMention}
                                 room={room}
                                 url={makeUserPermalink(ev.getSender())}
                                 shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}

@@ -13,67 +13,82 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import React from 'react';
 import classNames from 'classnames';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
-import PropTypes from 'prop-types';
 import { logger } from "matrix-js-sdk/src/logger";
+import { MatrixClient } from 'matrix-js-sdk/src/client';
 
 import dis from '../../../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { getPrimaryPermalinkEntity, parsePermalink } from "../../../utils/permalinks/Permalinks";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { Action } from "../../../dispatcher/actions";
-import Tooltip from './Tooltip';
-import RoomAvatar from "../avatars/RoomAvatar";
-import MemberAvatar from "../avatars/MemberAvatar";
+import Tooltip, { Alignment } from './Tooltip';
+import RoomAvatar from '../avatars/RoomAvatar';
+import MemberAvatar from '../avatars/MemberAvatar';
 
-class Pill extends React.Component {
-    static roomNotifPos(text) {
+export enum PillType {
+    UserMention = 'TYPE_USER_MENTION',
+    RoomMention = 'TYPE_ROOM_MENTION',
+    AtRoomMention = 'TYPE_AT_ROOM_MENTION', // '@room' mention
+}
+
+interface IProps {
+    // The Type of this Pill. If url is given, this is auto-detected.
+    type?: PillType;
+    // The URL to pillify (no validation is done)
+    url?: string;
+    // Whether the pill is in a message
+    inMessage?: boolean;
+    // The room in which this pill is being rendered
+    room?: Room;
+    // Whether to include an avatar in the pill
+    shouldShowPillAvatar?: boolean;
+}
+
+interface IState {
+    // ID/alias of the room/user
+    resourceId: string;
+    // Type of pill
+    pillType: string;
+    // The member related to the user pill
+    member?: RoomMember;
+    // The room related to the room pill
+    room?: Room;
+    // Is the user hovering the pill
+    hover: boolean;
+}
+
+export default class Pill extends React.Component<IProps, IState> {
+    private unmounted = true;
+    private matrixClient: MatrixClient;
+
+    public static roomNotifPos(text: string): number {
         return text.indexOf("@room");
     }
 
-    static roomNotifLen() {
+    public static roomNotifLen(): number {
         return "@room".length;
     }
 
-    static TYPE_USER_MENTION = 'TYPE_USER_MENTION';
-    static TYPE_ROOM_MENTION = 'TYPE_ROOM_MENTION';
-    static TYPE_AT_ROOM_MENTION = 'TYPE_AT_ROOM_MENTION'; // '@room' mention
+    constructor(props: IProps) {
+        super(props);
 
-    static propTypes = {
-        // The Type of this Pill. If url is given, this is auto-detected.
-        type: PropTypes.string,
-        // The URL to pillify (no validation is done)
-        url: PropTypes.string,
-        // Whether the pill is in a message
-        inMessage: PropTypes.bool,
-        // The room in which this pill is being rendered
-        room: PropTypes.instanceOf(Room),
-        // Whether to include an avatar in the pill
-        shouldShowPillAvatar: PropTypes.bool,
-        // Whether to render this pill as if it were highlit by a selection
-        isSelected: PropTypes.bool,
-    };
-
-    state = {
-        // ID/alias of the room/user
-        resourceId: null,
-        // Type of pill
-        pillType: null,
-
-        // The member related to the user pill
-        member: null,
-        // The room related to the room pill
-        room: null,
-        // Is the user hovering the pill
-        hover: false,
-    };
+        this.state = {
+            resourceId: null,
+            pillType: null,
+            member: null,
+            room: null,
+            hover: false,
+        };
+    }
 
     // TODO: [REACT-WARNING] Replace with appropriate lifecycle event
-    // eslint-disable-next-line camelcase
-    async UNSAFE_componentWillReceiveProps(nextProps) {
+    // eslint-disable-next-line camelcase, @typescript-eslint/naming-convention
+    public async UNSAFE_componentWillReceiveProps(nextProps: IProps): Promise<void> {
         let resourceId;
         let prefix;
 
@@ -89,28 +104,28 @@ class Pill extends React.Component {
         }
 
         const pillType = this.props.type || {
-            '@': Pill.TYPE_USER_MENTION,
-            '#': Pill.TYPE_ROOM_MENTION,
-            '!': Pill.TYPE_ROOM_MENTION,
+            '@': PillType.UserMention,
+            '#': PillType.RoomMention,
+            '!': PillType.RoomMention,
         }[prefix];
 
         let member;
         let room;
         switch (pillType) {
-            case Pill.TYPE_AT_ROOM_MENTION: {
+            case PillType.AtRoomMention: {
                 room = nextProps.room;
             }
                 break;
-            case Pill.TYPE_USER_MENTION: {
+            case PillType.UserMention: {
                 const localMember = nextProps.room ? nextProps.room.getMember(resourceId) : undefined;
                 member = localMember;
                 if (!localMember) {
                     member = new RoomMember(null, resourceId);
                     this.doProfileLookup(resourceId, member);
                 }
-                break;
             }
-            case Pill.TYPE_ROOM_MENTION: {
+                break;
+            case PillType.RoomMention: {
                 const localRoom = resourceId[0] === '#' ?
                     MatrixClientPeg.get().getRooms().find((r) => {
                         return r.getCanonicalAlias() === resourceId ||
@@ -122,39 +137,39 @@ class Pill extends React.Component {
                     // a room avatar and name.
                     // this.doRoomProfileLookup(resourceId, member);
                 }
-                break;
             }
+                break;
         }
         this.setState({ resourceId, pillType, member, room });
     }
 
-    componentDidMount() {
-        this._unmounted = false;
-        this._matrixClient = MatrixClientPeg.get();
+    public componentDidMount(): void {
+        this.unmounted = false;
+        this.matrixClient = MatrixClientPeg.get();
 
         // eslint-disable-next-line new-cap
         this.UNSAFE_componentWillReceiveProps(this.props); // HACK: We shouldn't be calling lifecycle functions ourselves.
     }
 
-    componentWillUnmount() {
-        this._unmounted = true;
+    public componentWillUnmount(): void {
+        this.unmounted = true;
     }
 
-    onMouseOver = () => {
+    private onMouseOver = (): void => {
         this.setState({
             hover: true,
         });
     };
 
-    onMouseLeave = () => {
+    private onMouseLeave = (): void => {
         this.setState({
             hover: false,
         });
     };
 
-    doProfileLookup(userId, member) {
+    private doProfileLookup(userId: string, member): void {
         MatrixClientPeg.get().getProfileInfo(userId).then((resp) => {
-            if (this._unmounted) {
+            if (this.unmounted) {
                 return;
             }
             member.name = resp.displayname;
@@ -173,7 +188,7 @@ class Pill extends React.Component {
         });
     }
 
-    onUserPillClicked = (e) => {
+    private onUserPillClicked = (e): void => {
         e.preventDefault();
         dis.dispatch({
             action: Action.ViewUser,
@@ -181,7 +196,7 @@ class Pill extends React.Component {
         });
     };
 
-    render() {
+    public render(): JSX.Element {
         const resource = this.state.resourceId;
 
         let avatar = null;
@@ -191,7 +206,7 @@ class Pill extends React.Component {
         let href = this.props.url;
         let onClick;
         switch (this.state.pillType) {
-            case Pill.TYPE_AT_ROOM_MENTION: {
+            case PillType.AtRoomMention: {
                 const room = this.props.room;
                 if (room) {
                     linkText = "@room";
@@ -200,9 +215,9 @@ class Pill extends React.Component {
                     }
                     pillClass = 'mx_AtRoomPill';
                 }
-                break;
             }
-            case Pill.TYPE_USER_MENTION: {
+                break;
+            case PillType.UserMention: {
                 // If this user is not a member of this room, default to the empty member
                 const member = this.state.member;
                 if (member) {
@@ -216,9 +231,9 @@ class Pill extends React.Component {
                     href = null;
                     onClick = this.onUserPillClicked;
                 }
-                break;
             }
-            case Pill.TYPE_ROOM_MENTION: {
+                break;
+            case PillType.RoomMention: {
                 const room = this.state.room;
                 if (room) {
                     linkText = room.name || resource;
@@ -226,31 +241,27 @@ class Pill extends React.Component {
                         avatar = <RoomAvatar room={room} width={16} height={16} aria-hidden="true" />;
                     }
                 }
-                pillClass = 'mx_RoomPill';
-                break;
+                pillClass = room?.isSpaceRoom() ? "mx_SpacePill" : "mx_RoomPill";
             }
+                break;
         }
 
         const classes = classNames("mx_Pill", pillClass, {
             "mx_UserPill_me": userId === MatrixClientPeg.get().getUserId(),
-            "mx_UserPill_selected": this.props.isSelected,
         });
 
         if (this.state.pillType) {
-            const { yOffset } = this.props;
-
             let tip;
             if (this.state.hover && resource) {
-                tip = <Tooltip label={resource} yOffset={yOffset} />;
+                tip = <Tooltip label={resource} alignment={Alignment.Right} />;
             }
 
-            return <MatrixClientContext.Provider value={this._matrixClient}>
+            return <MatrixClientContext.Provider value={this.matrixClient}>
                 { this.props.inMessage ?
                     <a
                         className={classes}
                         href={href}
                         onClick={onClick}
-                        data-offset-key={this.props.offsetKey}
                         onMouseOver={this.onMouseOver}
                         onMouseLeave={this.onMouseLeave}
                     >
@@ -260,7 +271,6 @@ class Pill extends React.Component {
                     </a> :
                     <span
                         className={classes}
-                        data-offset-key={this.props.offsetKey}
                         onMouseOver={this.onMouseOver}
                         onMouseLeave={this.onMouseLeave}
                     >
@@ -275,5 +285,3 @@ class Pill extends React.Component {
         }
     }
 }
-
-export default Pill;

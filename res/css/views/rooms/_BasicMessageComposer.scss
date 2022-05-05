@@ -51,9 +51,15 @@ limitations under the License.
         }
 
         &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
-            span.mx_UserPill, span.mx_RoomPill {
-                position: relative;
+            span.mx_UserPill, span.mx_RoomPill, span.mx_SpacePill {
                 user-select: all;
+                position: relative;
+                cursor: unset; // We don't want indicate clickability
+
+                &:hover {
+                    // We don't want indicate clickability | To override the overriding of .markdown-body
+                    background-color: $pill-bg-color !important;
+                }
 
                 // avatar psuedo element
                 &::before {
@@ -71,14 +77,6 @@ limitations under the License.
                     line-height: $font-16px;
                     font-size: $font-10-4px;
                 }
-            }
-
-            span.mx_UserPill {
-                cursor: pointer;
-            }
-
-            span.mx_RoomPill {
-                cursor: default;
             }
         }
 

@@ -21,7 +21,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from "../../../languageHandler";
-import Pill from "../elements/Pill";
+import Pill, { PillType } from "../elements/Pill";
 import { makeUserPermalink } from "../../../utils/permalinks/Permalinks";
 import BaseAvatar from "../avatars/BaseAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
@@ -93,7 +93,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
         if (content.creator) {
             creator = <li>{ _t("This bridge was provisioned by <user />.", {}, {
                 user: () => <Pill
-                    type={Pill.TYPE_USER_MENTION}
+                    type={PillType.UserMention}
                     room={this.props.room}
                     url={makeUserPermalink(content.creator)}
                     shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
@@ -103,7 +103,7 @@ export default class BridgeTile extends React.PureComponent<IProps> {
 
         const bot = <li>{ _t("This bridge is managed by <user />.", {}, {
             user: () => <Pill
-                type={Pill.TYPE_USER_MENTION}
+                type={PillType.UserMention}
                 room={this.props.room}
                 url={makeUserPermalink(content.bridgebot)}
                 shouldShowPillAvatar={SettingsStore.getValue("Pill.shouldShowPillAvatar")}
