@@ -19,50 +19,39 @@ import React from 'react';
 
 import { _t } from '../../../../languageHandler';
 import RoomAvatar from '../../avatars/RoomAvatar';
-import dis from '../../../../dispatcher/dispatcher';
-import { Action } from '../../../../dispatcher/actions';
 import AccessibleTooltipButton from '../../elements/AccessibleTooltipButton';
-import { ViewRoomPayload } from "../../../../dispatcher/payloads/ViewRoomPayload";
 
-interface CallViewHeaderProps {
-    pipMode: boolean;
-    callRooms?: Room[];
-    onPipMouseDown: (event: React.MouseEvent<Element, MouseEvent>) => void;
+interface CallControlsProps {
+    onExpand?: () => void;
+    onPin?: () => void;
+    onMaximize?: () => void;
 }
 
-const onFullscreenClick = () => {
-    dis.dispatch({
-        action: 'video_fullscreen',
-        fullscreen: true,
-    });
-};
-
-const onExpandClick = (roomId: string) => {
-    dis.dispatch<ViewRoomPayload>({
-        action: Action.ViewRoom,
-        room_id: roomId,
-        metricsTrigger: "WebFloatingCallWindow",
-    });
-};
-
-type CallControlsProps = Pick<CallViewHeaderProps, 'pipMode'> & {
-    roomId: string;
-};
-const CallViewHeaderControls: React.FC<CallControlsProps> = ({ pipMode = false, roomId }) => {
+const CallViewHeaderControls: React.FC<CallControlsProps> = ({ onExpand, onPin, onMaximize }) => {
     return <div className="mx_CallViewHeader_controls">
-        { !pipMode && <AccessibleTooltipButton
+        { onMaximize && <AccessibleTooltipButton
             className="mx_CallViewHeader_button mx_CallViewHeader_button_fullscreen"
-            onClick={onFullscreenClick}
+            onClick={onMaximize}
             title={_t("Fill Screen")}
         /> }
-        { pipMode && <AccessibleTooltipButton
+        { onPin && <AccessibleTooltipButton
+            className="mx_CallViewHeader_button mx_CallViewHeader_button_pin"
+            onClick={onPin}
+            title={_t("Pin")}
+        /> }
+        { onExpand && <AccessibleTooltipButton
             className="mx_CallViewHeader_button mx_CallViewHeader_button_expand"
-            onClick={() => onExpandClick(roomId)}
+            onClick={onExpand}
             title={_t("Return to call")}
         /> }
     </div>;
 };
-const SecondaryCallInfo: React.FC<{ callRoom: Room }> = ({ callRoom }) => {
+
+interface ISecondaryCallInfoProps {
+    callRoom: Room;
+}
+
+const SecondaryCallInfo: React.FC<ISecondaryCallInfoProps> = ({ callRoom }) => {
     return <span className="mx_CallViewHeader_secondaryCallInfo">
         <RoomAvatar room={callRoom} height={16} width={16} />
         <span className="mx_CallView_secondaryCall_roomName">
@@ -71,19 +60,31 @@ const SecondaryCallInfo: React.FC<{ callRoom: Room }> = ({ callRoom }) => {
     </span>;
 };
 
+interface CallViewHeaderProps {
+    pipMode: boolean;
+    callRooms?: Room[];
+    onPipMouseDown: (event: React.MouseEvent<Element, MouseEvent>) => void;
+    onExpand?: () => void;
+    onPin?: () => void;
+    onMaximize?: () => void;
+}
+
 const CallViewHeader: React.FC<CallViewHeaderProps> = ({
     pipMode = false,
     callRooms = [],
     onPipMouseDown,
+    onExpand,
+    onPin,
+    onMaximize,
 }) => {
     const [callRoom, onHoldCallRoom] = callRooms;
-    const { roomId, name: callRoomName } = callRoom;
+    const callRoomName = callRoom.name;
 
     if (!pipMode) {
         return <div className="mx_CallViewHeader">
             <div className="mx_CallViewHeader_icon" />
             <span className="mx_CallViewHeader_text">{ _t("Call") }</span>
-            <CallViewHeaderControls roomId={roomId} pipMode={pipMode} />
+            <CallViewHeaderControls onMaximize={onMaximize} />
         </div>;
     }
     return (
@@ -96,7 +97,7 @@ const CallViewHeader: React.FC<CallViewHeaderProps> = ({
                 <div className="mx_CallViewHeader_roomName">{ callRoomName }</div>
                 { onHoldCallRoom && <SecondaryCallInfo callRoom={onHoldCallRoom} /> }
             </div>
-            <CallViewHeaderControls roomId={roomId} pipMode={pipMode} />
+            <CallViewHeaderControls onExpand={onExpand} onPin={onPin} onMaximize={onMaximize} />
         </div>
     );
 };

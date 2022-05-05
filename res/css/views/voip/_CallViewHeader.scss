@@ -45,6 +45,8 @@ limitations under the License.
 
 .mx_CallViewHeader_controls {
     margin-left: auto;
+    display: flex;
+    gap: 5px;
 }
 
 .mx_CallViewHeader_button {
@@ -63,17 +65,23 @@ limitations under the License.
         mask-size: contain;
         mask-position: center;
     }
-}
 
-.mx_CallViewHeader_button_fullscreen {
-    &::before {
-        mask-image: url('$(res)/img/element-icons/call/fullscreen.svg');
+    &.mx_CallViewHeader_button_fullscreen {
+        &::before {
+            mask-image: url('$(res)/img/element-icons/call/fullscreen.svg');
+        }
     }
-}
 
-.mx_CallViewHeader_button_expand {
-    &::before {
-        mask-image: url('$(res)/img/element-icons/call/expand.svg');
+    &.mx_CallViewHeader_button_pin {
+        &::before {
+            mask-image: url('$(res)/img/element-icons/room/pin-upright.svg');
+        }
+    }
+
+    &.mx_CallViewHeader_button_expand {
+        &::before {
+            mask-image: url('$(res)/img/element-icons/call/expand.svg');
+        }
     }
 }
 
