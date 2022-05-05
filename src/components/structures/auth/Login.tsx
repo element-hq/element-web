@@ -222,7 +222,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                             "This homeserver has hit its Monthly Active User limit.",
                         ),
                         'hs_blocked': _td(
-                            "This homeserver has been blocked by it's administrator.",
+                            "This homeserver has been blocked by its administrator.",
                         ),
                         '': _td(
                             "This homeserver has exceeded one of its resource limits.",

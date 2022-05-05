@@ -223,7 +223,7 @@ export default class RoomStatusBar extends React.PureComponent<IProps, IState> {
                         "Please <a>contact your service administrator</a> to continue using the service.",
                     ),
                     'hs_disabled': _td(
-                        "Your message wasn't sent because this homeserver has been blocked by it's administrator. " +
+                        "Your message wasn't sent because this homeserver has been blocked by its administrator. " +
                         "Please <a>contact your service administrator</a> to continue using the service.",
                     ),
                     '': _td(
