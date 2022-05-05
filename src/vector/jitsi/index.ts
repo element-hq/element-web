@@ -301,6 +301,15 @@ async function notifyHangup() {
     }
 }
 
+function closeConference() {
+    switchVisibleContainers();
+    document.getElementById("jitsiContainer").innerHTML = "";
+
+    if (skipOurWelcomeScreen) {
+        skipToJitsiSplashScreen();
+    }
+}
+
 // event handler bound in HTML
 function joinConference(audioDevice?: string, videoDevice?: string) {
     let jwt;
@@ -386,20 +395,15 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         meetApi = null;
     });
 
-    meetApi.on("readyToClose", () => {
-        switchVisibleContainers();
-        document.getElementById("jitsiContainer").innerHTML = "";
-
-        if (skipOurWelcomeScreen) {
-            skipToJitsiSplashScreen();
-        }
-    });
+    meetApi.on("readyToClose", closeConference);
 
     meetApi.on("errorOccurred", ({ error }) => {
         if (error.isFatal) {
             // We got disconnected. Since Jitsi Meet might send us back to the
             // prejoin screen, we're forced to act as if we hung up entirely.
             notifyHangup();
+            meetApi = null;
+            closeConference();
         }
     });
 
