@@ -44,7 +44,6 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import BaseAvatar from '../views/avatars/BaseAvatar';
 import { SettingLevel } from "../../settings/SettingLevel";
 import IconizedContextMenu, {
-    IconizedContextMenuCheckbox,
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../views/context_menus/IconizedContextMenu";
@@ -53,7 +52,6 @@ import HostSignupAction from "./HostSignupAction";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { SettingUpdatedPayload } from "../../dispatcher/payloads/SettingUpdatedPayload";
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
@@ -122,7 +120,6 @@ interface IState {
     isDarkTheme: boolean;
     isHighContrast: boolean;
     selectedSpace?: Room;
-    dndEnabled: boolean;
 }
 
 const toRightOf = (rect: PartialDOMRect) => {
@@ -154,19 +151,11 @@ export default class UserMenu extends React.Component<IProps, IState> {
             contextMenuPosition: null,
             isDarkTheme: this.isUserOnDarkTheme(),
             isHighContrast: this.isUserOnHighContrastTheme(),
-            dndEnabled: this.doNotDisturb,
             selectedSpace: SpaceStore.instance.activeSpaceRoom,
         };
 
         OwnProfileStore.instance.on(UPDATE_EVENT, this.onProfileUpdate);
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdate);
-
-        SettingsStore.monitorSetting("feature_dnd", null);
-        SettingsStore.monitorSetting("doNotDisturb", null);
-    }
-
-    private get doNotDisturb(): boolean {
-        return SettingsStore.getValue("doNotDisturb");
     }
 
     private get hasHomePage(): boolean {
@@ -239,20 +228,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     if (this.buttonRef.current) this.buttonRef.current.click();
                 }
                 break;
-
-            case Action.SettingUpdated: {
-                const settingUpdatedPayload = payload as SettingUpdatedPayload;
-                switch (settingUpdatedPayload.settingName) {
-                    case "feature_dnd":
-                    case "doNotDisturb": {
-                        const dndEnabled = this.doNotDisturb;
-                        if (this.state.dndEnabled !== dndEnabled) {
-                            this.setState({ dndEnabled });
-                        }
-                        break;
-                    }
-                }
-            }
         }
     };
 
@@ -348,12 +323,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
-    private onDndToggle = (ev: ButtonEvent) => {
-        ev.stopPropagation();
-        const current = SettingsStore.getValue("doNotDisturb");
-        SettingsStore.setValue("doNotDisturb", null, SettingLevel.DEVICE, !current);
-    };
-
     private renderContextMenu = (): React.ReactNode => {
         if (!this.state.contextMenuPosition) return null;
 
@@ -405,19 +374,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
             customStatusSection = <CustomStatusSection />;
         }
 
-        let dndButton: JSX.Element;
-        if (SettingsStore.getValue("feature_dnd")) {
-            dndButton = (
-                <IconizedContextMenuCheckbox
-                    iconClassName={this.state.dndEnabled ? "mx_UserMenu_iconDnd" : "mx_UserMenu_iconDndOff"}
-                    label={_t("Do not disturb")}
-                    onClick={this.onDndToggle}
-                    active={this.state.dndEnabled}
-                    words
-                />
-            );
-        }
-
         let feedbackButton;
         if (SettingsStore.getValue(UIFeature.Feedback)) {
             feedbackButton = <IconizedContextMenuOption
@@ -430,7 +386,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         let primaryOptionList = (
             <IconizedContextMenuOptionList>
                 { homeButton }
-                { dndButton }
                 <IconizedContextMenuOption
                     iconClassName="mx_UserMenu_iconBell"
                     label={_t("Notifications")}
@@ -515,11 +470,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
         const displayName = OwnProfileStore.instance.displayName || userId;
         const avatarUrl = OwnProfileStore.instance.getHttpAvatarUrl(avatarSize);
 
-        let badge: JSX.Element;
-        if (this.state.dndEnabled) {
-            badge = <div className="mx_UserMenu_dndBadge" />;
-        }
-
         let name: JSX.Element;
         if (!this.props.isPanelCollapsed) {
             name = <div className="mx_UserMenu_name">
@@ -534,9 +484,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 label={_t("User menu")}
                 isExpanded={!!this.state.contextMenuPosition}
                 onContextMenu={this.onContextMenu}
-                className={classNames({
-                    mx_UserMenu_cutout: badge,
-                })}
             >
                 <div className="mx_UserMenu_userAvatar">
                     <BaseAvatar
@@ -548,7 +495,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                         resizeMethod="crop"
                         className="mx_UserMenu_userAvatar_BaseAvatar"
                     />
-                    { badge }
                 </div>
                 { name }
 

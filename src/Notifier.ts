@@ -408,10 +408,6 @@ export const Notifier = {
                 // don't bother notifying as user was recently active in this room
                 return;
             }
-            if (SettingsStore.getValue("doNotDisturb")) {
-                // Don't bother the user if they didn't ask to be bothered
-                return;
-            }
 
             if (this.isEnabled()) {
                 this._displayPopupNotification(ev, room);
