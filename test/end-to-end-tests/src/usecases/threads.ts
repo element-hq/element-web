@@ -21,7 +21,6 @@ import { ElementSession } from "../session";
 export async function enableThreads(session: ElementSession): Promise<void> {
     session.log.step(`enables threads`);
     await session.page.evaluate(() => {
-        window.localStorage.setItem("mx_seen_feature_thread_experimental", "1"); // inhibit dialog
         window["mxSettingsStore"].setValue("feature_thread", null, "device", true);
     });
     session.log.done();

@@ -129,7 +129,6 @@ import { DoAfterSyncPreparedPayload } from '../../dispatcher/payloads/DoAfterSyn
 import { ViewStartChatOrReusePayload } from '../../dispatcher/payloads/ViewStartChatOrReusePayload';
 import { IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
-import InfoDialog from '../views/dialogs/InfoDialog';
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 import VideoChannelStore from "../../stores/VideoChannelStore";
 
@@ -1410,36 +1409,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             if (Notifier.shouldShowPrompt() && !MatrixClientPeg.userRegisteredWithinLastHours(24)) {
                 showNotificationsToast(false);
-            }
-
-            if (!localStorage.getItem("mx_seen_feature_thread_experimental")) {
-                setTimeout(() => {
-                    if (SettingsStore.getValue("feature_thread") && SdkConfig.get("show_labs_settings")) {
-                        Modal.createDialog(InfoDialog, {
-                            title: _t("Threads Approaching Beta 🎉"),
-                            description: <>
-                                <p>
-                                    { _t("We're getting closer to releasing a public Beta for Threads.") }
-                                </p>
-                                <p>
-                                    { _t("As we prepare for it, we need to make some changes: threads created "
-                                       + "before this point will be <strong>displayed as regular replies</strong>.",
-                                    {}, {
-                                        "strong": sub => <strong>{ sub }</strong>,
-                                    }) }
-                                </p>
-                                <p>
-                                    { _t("This will be a one-off transition, as threads are now part "
-                                       + "of the Matrix specification.") }
-                                </p>
-                            </>,
-                            button: _t("Got it"),
-                            onFinished: () => {
-                                localStorage.setItem("mx_seen_feature_thread_experimental", "true");
-                            },
-                        });
-                    }
-                }, 1 * 60 * 1000); // show after 1 minute to not overload user on launch
             }
 
             if (!localStorage.getItem("mx_seen_feature_spotlight_toast")) {
