@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, useContext, useRef, useState } from "react";
+import React, { createRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import classNames from "classnames";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import defaultDispatcher from "../../dispatcher/dispatcher";
@@ -32,9 +31,7 @@ import LogoutDialog from "../views/dialogs/LogoutDialog";
 import SettingsStore from "../../settings/SettingsStore";
 import { findHighContrastTheme, getCustomTheme, isHighContrastTheme } from "../../theme";
 import {
-    RovingAccessibleButton,
     RovingAccessibleTooltipButton,
-    useRovingTabIndex,
 } from "../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import SdkConfig from "../../SdkConfig";
@@ -51,63 +48,9 @@ import { UIFeature } from "../../settings/UIFeature";
 import HostSignupAction from "./HostSignupAction";
 import SpaceStore from "../../stores/spaces/SpaceStore";
 import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
-import MatrixClientContext from "../../contexts/MatrixClientContext";
 import UserIdentifierCustomisations from "../../customisations/UserIdentifier";
 import PosthogTrackers from "../../PosthogTrackers";
 import { ViewHomePagePayload } from "../../dispatcher/payloads/ViewHomePagePayload";
-
-const CustomStatusSection = () => {
-    const cli = useContext(MatrixClientContext);
-    const setStatus = cli.getUser(cli.getUserId()).unstable_statusMessage || "";
-    const [value, setValue] = useState(setStatus);
-
-    const ref = useRef<HTMLInputElement>(null);
-    const [onFocus, isActive] = useRovingTabIndex(ref);
-
-    const classes = classNames({
-        'mx_UserMenu_CustomStatusSection_field': true,
-        'mx_UserMenu_CustomStatusSection_field_hasQuery': value,
-    });
-
-    let details: JSX.Element;
-    if (value !== setStatus) {
-        details = <>
-            <p>{ _t("Your status will be shown to people you have a DM with.") }</p>
-
-            <RovingAccessibleButton
-                onClick={() => cli._unstable_setStatusMessage(value)}
-                kind="primary_outline"
-            >
-                { value ? _t("Set status") : _t("Clear status") }
-            </RovingAccessibleButton>
-        </>;
-    }
-
-    return <form className="mx_UserMenu_CustomStatusSection">
-        <div className={classes}>
-            <input
-                type="text"
-                value={value}
-                className="mx_UserMenu_CustomStatusSection_input"
-                onChange={e => setValue(e.target.value)}
-                placeholder={_t("Set a new status")}
-                autoComplete="off"
-                onFocus={onFocus}
-                ref={ref}
-                tabIndex={isActive ? 0 : -1}
-            />
-            <AccessibleButton
-                // The clear button is only for mouse users
-                tabIndex={-1}
-                title={_t("Clear")}
-                className="mx_UserMenu_CustomStatusSection_clear"
-                onClick={() => setValue("")}
-            />
-        </div>
-
-        { details }
-    </form>;
-};
 
 interface IProps {
     isPanelCollapsed: boolean;
@@ -369,11 +312,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
             );
         }
 
-        let customStatusSection: JSX.Element;
-        if (SettingsStore.getValue("feature_custom_status")) {
-            customStatusSection = <CustomStatusSection />;
-        }
-
         let feedbackButton;
         if (SettingsStore.getValue(UIFeature.Feedback)) {
             feedbackButton = <IconizedContextMenuOption
@@ -457,7 +395,6 @@ export default class UserMenu extends React.Component<IProps, IState> {
                     />
                 </RovingAccessibleTooltipButton>
             </div>
-            { customStatusSection }
             { topSection }
             { primaryOptionList }
         </IconizedContextMenu>;

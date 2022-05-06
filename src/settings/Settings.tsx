@@ -23,7 +23,6 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
 import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
@@ -254,14 +253,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             requiresRefresh: true,
         },
 
-    },
-    "feature_custom_status": {
-        isFeature: true,
-        labsGroup: LabGroup.Profile,
-        displayName: _td("Custom user status messages"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-        controller: new CustomStatusController(),
     },
     "feature_video_rooms": {
         isFeature: true,

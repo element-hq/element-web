@@ -75,7 +75,6 @@ import { UIComponent } from "../../../settings/UIFeature";
 import { TimelineRenderingType } from "../../../contexts/RoomContext";
 import RightPanelStore from '../../../stores/right-panel/RightPanelStore';
 import { IRightPanelCardState } from '../../../stores/right-panel/RightPanelStoreIPanelState';
-import { useUserStatusMessage } from "../../../hooks/useUserStatusMessage";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
@@ -1411,7 +1410,6 @@ const UserInfoHeader: React.FC<{
     roomId?: string;
 }> = ({ member, e2eStatus, roomId }) => {
     const cli = useContext(MatrixClientContext);
-    const statusMessage = useUserStatusMessage(member);
 
     const onMemberAvatarClick = useCallback(() => {
         const avatarUrl = (member as RoomMember).getMxcAvatarUrl
@@ -1472,11 +1470,6 @@ const UserInfoHeader: React.FC<{
         );
     }
 
-    let statusLabel = null;
-    if (statusMessage) {
-        statusLabel = <span className="mx_UserInfo_statusMessage">{ statusMessage }</span>;
-    }
-
     let e2eIcon;
     if (e2eStatus) {
         e2eIcon = <E2EIcon size={18} status={e2eStatus} isUser={true} />;
@@ -1499,7 +1492,6 @@ const UserInfoHeader: React.FC<{
                 <div>{ UserIdentifierCustomisations.getDisplayUserIdentifier(member.userId, { roomId, withDisplayName: true }) }</div>
                 <div className="mx_UserInfo_profileStatus">
                     { presenceLabel }
-                    { statusLabel }
                 </div>
             </div>
         </div>
