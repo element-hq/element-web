@@ -34,11 +34,6 @@ date from the calendar.
 
 Also adds the `/jumptodate 2022-01-31` slash command.
 
-## Custom status (`feature_custom_status`)
-
-An experimental approach for supporting custom status messages across DMs. To set a status, click on
-your avatar next to the message composer.
-
 ## Render simple counters in room header (`feature_state_counters`)
 
 Allows rendering of labelled counters above the message list.
@@ -61,10 +56,6 @@ Once enabled, send a custom state event to a room to set values:
 ```
 
 That's it. Now should see your new counter under the header.
-
-## Multiple integration managers (`feature_many_integration_managers`)
-
-Exposes a way to access all the integration managers known to Element. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
 
 ## New ways to ignore people (`feature_mjolnir`)
 
@@ -116,11 +107,6 @@ To enable message previews for reactions in DMs only, enable `feature_roomlist_p
 
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
-
-## Do not disturb (`feature_dnd`)
-
-Enables UI for turning on "do not disturb" mode for the current device. When DND mode is engaged, popups
-and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 ## Hidden read receipts (`feature_hidden_read_receipts`)
 
