@@ -28,6 +28,7 @@ import { debounce } from 'lodash';
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
@@ -862,14 +863,14 @@ class TimelinePanel extends React.Component<IProps, IState> {
             MatrixClientPeg.get().setRoomReadMarkers(
                 roomId,
                 this.state.readMarkerEventId,
-                lastReadEvent, // Could be null, in which case no RR is sent
-                { hidden: hiddenRR },
+                hiddenRR ? null : lastReadEvent, // Could be null, in which case no RR is sent
+                lastReadEvent, // Could be null, in which case no private RR is sent
             ).catch((e) => {
                 // /read_markers API is not implemented on this HS, fallback to just RR
                 if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
                     return MatrixClientPeg.get().sendReadReceipt(
                         lastReadEvent,
-                        {},
+                        hiddenRR ? ReceiptType.ReadPrivate : ReceiptType.Read,
                     ).catch((e) => {
                         logger.error(e);
                         this.lastRRSentEventId = undefined;

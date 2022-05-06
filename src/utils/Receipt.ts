@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 /**
@@ -29,9 +30,8 @@ export function findReadReceiptFromUserId(receiptEvent: MatrixEvent, userId: str
     const receiptKeys = Object.keys(receiptEvent.getContent());
     for (let i = 0; i < receiptKeys.length; ++i) {
         const rcpt = receiptEvent.getContent()[receiptKeys[i]];
-        if (rcpt['m.read'] && rcpt['m.read'][userId]) {
-            return rcpt;
-        }
+        if (rcpt[ReceiptType.Read]?.[userId]) return rcpt;
+        if (rcpt[ReceiptType.ReadPrivate]?.[userId]) return rcpt;
     }
 
     return null;

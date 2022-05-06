@@ -16,6 +16,7 @@ limitations under the License.
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 
 /**
  * Determines if a read receipt update event includes the client's own user.
@@ -26,8 +27,12 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 export function readReceiptChangeIsFor(event: MatrixEvent, client: MatrixClient): boolean {
     const myUserId = client.getUserId();
     for (const eventId of Object.keys(event.getContent())) {
-        const receiptUsers = Object.keys(event.getContent()[eventId]['m.read'] || {});
-        if (receiptUsers.includes(myUserId)) {
+        const readReceiptUsers = Object.keys(event.getContent()[eventId][ReceiptType.Read] || {});
+        if (readReceiptUsers.includes(myUserId)) {
+            return true;
+        }
+        const readPrivateReceiptUsers = Object.keys(event.getContent()[eventId][ReceiptType.ReadPrivate] || {});
+        if (readPrivateReceiptUsers.includes(myUserId)) {
             return true;
         }
     }
