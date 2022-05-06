@@ -9,8 +9,9 @@ If you're not sure where to start, make sure you read
 sections of the README.
 
 Maybe you've got something specific you'd like to work on? If so, make sure you
-create an issue and discuss it with the developers before you put a lot of time
-into it.
+create an issue and
+[discuss it with the developers](https://matrix.to/#/#element-dev:matrix.org)
+before you put a lot of time into it.
 
 If you're looking for inspiration on where to start, keep reading!
 
