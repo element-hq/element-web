@@ -1,3 +1,9 @@
+Changes in [3.44.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.44.0-rc.2) (2022-05-06)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * [Release] Fix reading of cached room device setting values ([\#8495](https://github.com/matrix-org/matrix-react-sdk/pull/8495)).
+
 Changes in [3.44.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.44.0-rc.1) (2022-05-03)
 ===============================================================================================================
 
