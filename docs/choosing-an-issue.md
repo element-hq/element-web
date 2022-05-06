@@ -19,8 +19,8 @@ If you're looking for inspiration on where to start, keep reading!
 
 All the issues for Element Web live in the
 [element-web](https://github.com/vector-im/element-web) repository, including
-issues that actually need fixing in `matrix-react-sdk` or `matrix-js-sdk` or one
-of the related repos.
+issues that actually need fixing in `matrix-react-sdk` or one of the related
+repos.
 
 The first place to look is for
 [issues tagges with "good first issue"](https://github.com/vector-im/element-web/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
