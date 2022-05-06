@@ -25,30 +25,31 @@ limitations under the License.
 
     .mx_ReplyPreview_section {
         border-bottom: 1px solid $primary-hairline-color;
+        display: flex;
+        flex-flow: column;
+        row-gap: $spacing-8;
+        padding: $spacing-8 $spacing-8 0 $spacing-8;
 
         .mx_ReplyPreview_header {
-            margin: 8px;
+            display: flex;
+            justify-content: space-between;
+            column-gap: 8px;
+
             color: $primary-content;
             font-weight: 400;
             opacity: 0.4;
-        }
 
-        .mx_ReplyPreview_tile {
-            margin: 0 8px;
-        }
-
-        .mx_ReplyPreview_title {
-            float: left;
-        }
-
-        .mx_ReplyPreview_cancel {
-            float: right;
-            cursor: pointer;
-            display: flex;
-        }
-
-        .mx_ReplyPreview_clear {
-            clear: both;
+            .mx_ReplyPreview_header_cancel {
+                background-color: $primary-content;
+                mask: url('$(res)/img/cancel.svg');
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: 18px;
+                width: 18px;
+                height: 18px;
+                min-width: 18px;
+                min-height: 18px;
+            }
         }
     }
 }

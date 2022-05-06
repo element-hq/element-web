@@ -22,6 +22,7 @@ import { _t } from '../../../languageHandler';
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import ReplyTile from './ReplyTile';
 import RoomContext, { TimelineRenderingType } from '../../../contexts/RoomContext';
+import AccessibleButton from "../elements/AccessibleButton";
 
 function cancelQuoting(context: TimelineRenderingType) {
     dis.dispatch({
@@ -44,25 +45,17 @@ export default class ReplyPreview extends React.Component<IProps> {
 
         return <div className="mx_ReplyPreview">
             <div className="mx_ReplyPreview_section">
-                <div className="mx_ReplyPreview_header mx_ReplyPreview_title">
-                    { _t('Replying') }
-                </div>
-                <div className="mx_ReplyPreview_header mx_ReplyPreview_cancel">
-                    <img
-                        className="mx_filterFlipColor"
-                        src={require("../../../../res/img/cancel.svg").default}
-                        width="18"
-                        height="18"
+                <div className="mx_ReplyPreview_header">
+                    <span>{ _t('Replying') }</span>
+                    <AccessibleButton
+                        className="mx_ReplyPreview_header_cancel"
                         onClick={() => cancelQuoting(this.context.timelineRenderingType)}
                     />
                 </div>
-                <div className="mx_ReplyPreview_clear" />
-                <div className="mx_ReplyPreview_tile">
-                    <ReplyTile
-                        mxEvent={this.props.replyToEvent}
-                        permalinkCreator={this.props.permalinkCreator}
-                    />
-                </div>
+                <ReplyTile
+                    mxEvent={this.props.replyToEvent}
+                    permalinkCreator={this.props.permalinkCreator}
+                />
             </div>
         </div>;
     }
