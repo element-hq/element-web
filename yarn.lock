@@ -4010,10 +4010,10 @@ eslint-plugin-jsx-a11y@^6.5.1:
     language-tags "^1.0.5"
     minimatch "^3.0.4"
 
-eslint-plugin-matrix-org@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.4.0.tgz#de2d2db1cd471d637728133ce9a2b921690e5cd1"
-  integrity sha512-yVkNwtc33qtrQB4PPzpU+PUdFzdkENPan3JF4zhtAQJRUYXyvKEXnYSrXLUWYRXoYFxs9LbyI2CnhJL/RnHJaQ==
+eslint-plugin-matrix-org@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.5.2.tgz#eb355b1a81906ea814235d0b224e8162db7cbbf4"
+  integrity sha512-qJbyxp9cOi35Qpn3WCBqohCJaMSVp3ntOJ3WbjpREbCQdyrFze6MJAayl7GNidbNsdP7ejHTi0PtZzyKLcfLzQ==
 
 eslint-plugin-react-hooks@^4.3.0:
   version "4.5.0"
