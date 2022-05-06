@@ -560,12 +560,8 @@ export default class WidgetUtils {
     }
 
     static editWidget(room: Room, app: IApp): void {
-        // TODO: Open the right manager for the widget
-        if (SettingsStore.getValue("feature_many_integration_managers")) {
-            IntegrationManagers.sharedInstance().openAll(room, 'type_' + app.type, app.id);
-        } else {
-            IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
-        }
+        // noinspection JSIgnoredPromiseFromCall
+        IntegrationManagers.sharedInstance().getPrimaryManager().open(room, 'type_' + app.type, app.id);
     }
 
     static isManagedByManager(app) {

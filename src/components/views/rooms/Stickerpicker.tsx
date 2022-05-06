@@ -26,7 +26,6 @@ import AccessibleButton from '../elements/AccessibleButton';
 import WidgetUtils, { IWidgetEvent } from '../../../utils/WidgetUtils';
 import PersistedElement from "../elements/PersistedElement";
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
-import SettingsStore from "../../../settings/SettingsStore";
 import ContextMenu, { ChevronFace } from "../../structures/ContextMenu";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { WidgetMessagingStore } from "../../../stores/widgets/WidgetMessagingStore";
@@ -339,20 +338,12 @@ export default class Stickerpicker extends React.PureComponent<IProps, IState> {
      * Launch the integration manager on the stickers integration page
      */
     private launchManageIntegrations = (): void => {
-        // TODO: Open the right integration manager for the widget
-        if (SettingsStore.getValue("feature_many_integration_managers")) {
-            IntegrationManagers.sharedInstance().openAll(
-                this.props.room,
-                `type_${WidgetType.STICKERPICKER.preferred}`,
-                this.state.widgetId,
-            );
-        } else {
-            IntegrationManagers.sharedInstance().getPrimaryManager().open(
-                this.props.room,
-                `type_${WidgetType.STICKERPICKER.preferred}`,
-                this.state.widgetId,
-            );
-        }
+        // noinspection JSIgnoredPromiseFromCall
+        IntegrationManagers.sharedInstance().getPrimaryManager().open(
+            this.props.room,
+            `type_${WidgetType.STICKERPICKER.preferred}`,
+            this.state.widgetId,
+        );
     };
 
     public render(): JSX.Element {

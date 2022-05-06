@@ -23,7 +23,6 @@ import ForwardDialog from "../components/views/dialogs/ForwardDialog";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import { Action } from "../dispatcher/actions";
 import ReportEventDialog from "../components/views/dialogs/ReportEventDialog";
-import TabbedIntegrationManagerDialog from "../components/views/dialogs/TabbedIntegrationManagerDialog";
 import SpacePreferencesDialog from "../components/views/dialogs/SpacePreferencesDialog";
 import SpaceSettingsDialog from "../components/views/dialogs/SpaceSettingsDialog";
 import InviteDialog from "../components/views/dialogs/InviteDialog";
@@ -72,17 +71,6 @@ export class DialogOpener {
                 Modal.createTrackedDialog('Report Event', '', ReportEventDialog, {
                     mxEvent: payload.event,
                 }, 'mx_Dialog_reportEvent');
-                break;
-            case Action.OpenTabbedIntegrationManagerDialog:
-                Modal.createTrackedDialog(
-                    'Tabbed Integration Manager', '', TabbedIntegrationManagerDialog,
-                    {
-                        room: payload.room,
-                        screen: payload.screen,
-                        integrationId: payload.integrationId,
-                    },
-                    'mx_TabbedIntegrationManagerDialog',
-                );
                 break;
             case Action.OpenSpacePreferences:
                 Modal.createTrackedDialog("Space preferences", "", SpacePreferencesDialog, {

@@ -270,13 +270,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_many_integration_managers": {
-        isFeature: true,
-        labsGroup: LabGroup.Experimental,
-        displayName: _td("Multiple integration managers (requires manual setup)"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_mjolnir": {
         isFeature: true,
         labsGroup: LabGroup.Moderation,

@@ -207,11 +207,8 @@ const AppsSection: React.FC<IAppsSectionProps> = ({ room }) => {
         if (!managers.hasManager()) {
             managers.openNoManagerDialog();
         } else {
-            if (SettingsStore.getValue("feature_many_integration_managers")) {
-                managers.openAll(room);
-            } else {
-                managers.getPrimaryManager().open(room);
-            }
+            // noinspection JSIgnoredPromiseFromCall
+            managers.getPrimaryManager().open(room);
         }
     };
 
