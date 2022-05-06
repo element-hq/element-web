@@ -61,13 +61,11 @@ const READ_RECEIPT_INTERVAL_MS = 500;
 
 const READ_MARKER_DEBOUNCE_MS = 100;
 
-const DEBUG = false;
-
-let debuglog = function(...s: any[]) {};
-if (DEBUG) {
-    // using bind means that we get to keep useful line numbers in the console
-    debuglog = logger.log.bind(console, "TimelinePanel debuglog:");
-}
+const debuglog = (...args: any[]) => {
+    if (SettingsStore.getValue("debug_timeline_panel")) {
+        logger.log.call(console, "TimelinePanel debuglog:", ...args);
+    }
+};
 
 interface IProps {
     // The js-sdk EventTimelineSet object for the timeline sequence we are

@@ -17,13 +17,12 @@ limitations under the License.
 import React, { createRef, CSSProperties, ReactNode, KeyboardEvent } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import SettingsStore from '../../settings/SettingsStore';
 import Timer from '../../utils/Timer';
 import AutoHideScrollbar from "./AutoHideScrollbar";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
-
-const DEBUG_SCROLL = false;
 
 // The amount of extra scroll distance to allow prior to unfilling.
 // See getExcessHeight.
@@ -36,13 +35,11 @@ const UNFILL_REQUEST_DEBOUNCE_MS = 200;
 // much while the content loads.
 const PAGE_SIZE = 400;
 
-let debuglog;
-if (DEBUG_SCROLL) {
-    // using bind means that we get to keep useful line numbers in the console
-    debuglog = logger.log.bind(console, "ScrollPanel debuglog:");
-} else {
-    debuglog = function() {};
-}
+const debuglog = (...args: any[]) => {
+    if (SettingsStore.getValue("debug_scroll_panel")) {
+        logger.log.call(console, "ScrollPanel debuglog:", ...args);
+    }
+};
 
 interface IProps {
     /* stickyBottom: if set to true, then once the user hits the bottom of
