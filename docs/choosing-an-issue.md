@@ -23,7 +23,7 @@ issues that actually need fixing in `matrix-react-sdk` or one of the related
 repos.
 
 The first place to look is for
-[issues tagges with "good first issue"](https://github.com/vector-im/element-web/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
+[issues tagged with "good first issue"](https://github.com/vector-im/element-web/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 Look through that list and find something that catches your interest. If there
 is nothing, there, try gently asking in
