@@ -15,7 +15,10 @@ limitations under the License.
 */
 
 .mx_MLocationBody {
+    max-width: 100%;
+
     .mx_MLocationBody_map {
+        max-width: 100%;
         width: 450px;
         height: 300px;
         z-index: 0; // keeps the entire map under the message action bar
@@ -27,15 +30,11 @@ limitations under the License.
 
 /* In the timeline, we fit the width of the container */
 .mx_EventTile_line .mx_MLocationBody .mx_MLocationBody_map {
-    width: 100%;
     max-width: 450px;
+    width: 100%;
 }
 
-.mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MLocationBody {
+.mx_EventTile[data-layout="bubble"] .mx_EventTile_line .mx_MLocationBody .mx_MLocationBody_map {
     max-width: 100%;
-
-    .mx_MLocationBody_map {
-        max-width: 100%;
-        width: 450px;
-    }
+    width: 450px;
 }
