@@ -225,7 +225,7 @@ export default class Pill extends React.Component<IProps, IState> {
                     member.rawDisplayName = member.rawDisplayName || '';
                     linkText = member.rawDisplayName;
                     if (this.props.shouldShowPillAvatar) {
-                        avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" />;
+                        avatar = <MemberAvatar member={member} width={16} height={16} aria-hidden="true" hideTitle />;
                     }
                     pillClass = 'mx_UserPill';
                     href = null;
