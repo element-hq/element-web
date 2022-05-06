@@ -704,7 +704,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
 .mx_MessagePanel_narrow .mx_ThreadSummary {
     min-width: initial;
-    max-width: initial;
+    max-width: 100%; // prevent overflow
     width: initial;
 }
 
