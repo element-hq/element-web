@@ -358,20 +358,12 @@ export class StopGapWidget extends EventEmitter {
                     const integType = data?.integType;
                     const integId = <string>data?.integId;
 
-                    // TODO: Open the right integration manager for the widget
-                    if (SettingsStore.getValue("feature_many_integration_managers")) {
-                        IntegrationManagers.sharedInstance().openAll(
-                            MatrixClientPeg.get().getRoom(RoomViewStore.instance.getRoomId()),
-                            `type_${integType}`,
-                            integId,
-                        );
-                    } else {
-                        IntegrationManagers.sharedInstance().getPrimaryManager().open(
-                            MatrixClientPeg.get().getRoom(RoomViewStore.instance.getRoomId()),
-                            `type_${integType}`,
-                            integId,
-                        );
-                    }
+                    // noinspection JSIgnoredPromiseFromCall
+                    IntegrationManagers.sharedInstance().getPrimaryManager().open(
+                        MatrixClientPeg.get().getRoom(RoomViewStore.instance.getRoomId()),
+                        `type_${integType}`,
+                        integId,
+                    );
                 },
             );
         }

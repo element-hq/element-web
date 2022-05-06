@@ -19,7 +19,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import type { Room } from "matrix-js-sdk/src/models/room";
 import SdkConfig from '../SdkConfig';
 import Modal from '../Modal';
 import { IntegrationManagerInstance, Kind } from "./IntegrationManagerInstance";
@@ -27,13 +26,7 @@ import IntegrationsImpossibleDialog from "../components/views/dialogs/Integratio
 import IntegrationsDisabledDialog from "../components/views/dialogs/IntegrationsDisabledDialog";
 import WidgetUtils from "../utils/WidgetUtils";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import SettingsStore from "../settings/SettingsStore";
 import { compare } from "../utils/strings";
-import defaultDispatcher from "../dispatcher/dispatcher";
-import {
-    OpenTabbedIntegrationManagerDialogPayload,
-} from "../dispatcher/payloads/OpenTabbedIntegrationManagerDialogPayload";
-import { Action } from "../dispatcher/actions";
 
 const KIND_PREFERENCE = [
     // Ordered: first is most preferred, last is least preferred.
@@ -179,23 +172,6 @@ export class IntegrationManagers {
 
     openNoManagerDialog(): void {
         Modal.createTrackedDialog('Integrations impossible', '', IntegrationsImpossibleDialog);
-    }
-
-    openAll(room: Room = null, screen: string = null, integrationId: string = null): void {
-        if (!SettingsStore.getValue("integrationProvisioning")) {
-            return this.showDisabledDialog();
-        }
-
-        if (this.managers.length === 0) {
-            return this.openNoManagerDialog();
-        }
-
-        defaultDispatcher.dispatch(<OpenTabbedIntegrationManagerDialogPayload>{
-            action: Action.OpenTabbedIntegrationManagerDialog,
-            room,
-            screen,
-            integrationId,
-        });
     }
 
     showDisabledDialog(): void {

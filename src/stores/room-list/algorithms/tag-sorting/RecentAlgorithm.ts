@@ -32,9 +32,6 @@ export function shouldCauseReorder(event: MatrixEvent): boolean {
     // Never ignore membership changes
     if (type === EventType.RoomMember && prevContent.membership !== content.membership) return true;
 
-    // Ignore status changes
-    // XXX: This should be an enum
-    if (type === "im.vector.user_status") return false;
     // Ignore display name changes
     if (type === EventType.RoomMember && prevContent.displayname !== content.displayname) return false;
     // Ignore avatar changes

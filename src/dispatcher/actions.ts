@@ -279,12 +279,6 @@ export enum Action {
     OpenReportEventDialog = "open_report_event_dialog",
 
     /**
-     * Fired when the tabbed integration manager dialog needs to be opened.
-     * Payload: OpenTabbedIntegrationManagerDialogPayload
-     */
-    OpenTabbedIntegrationManagerDialog = "open_tabbed_imanager_dialog",
-
-    /**
      * Fired when something within the application has determined that a logout,
      * or logout-like behaviour, needs to happen. Specifically meant to target
      * storage deletion rather than calling the logout API.

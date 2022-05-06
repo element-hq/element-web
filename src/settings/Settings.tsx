@@ -23,7 +23,6 @@ import {
     NotificationBodyEnabledController,
     NotificationsEnabledController,
 } from "./controllers/NotificationControllers";
-import CustomStatusController from "./controllers/CustomStatusController";
 import ThemeController from './controllers/ThemeController';
 import PushToMatrixClientController from './controllers/PushToMatrixClientController';
 import ReloadOnChangeController from "./controllers/ReloadOnChangeController";
@@ -201,13 +200,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
-    "feature_dnd": {
-        isFeature: true,
-        labsGroup: LabGroup.Profile,
-        displayName: _td("Show options to enable 'Do not disturb' mode"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
     "feature_latex_maths": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
@@ -262,14 +254,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         },
 
     },
-    "feature_custom_status": {
-        isFeature: true,
-        labsGroup: LabGroup.Profile,
-        displayName: _td("Custom user status messages"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-        controller: new CustomStatusController(),
-    },
     "feature_video_rooms": {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
@@ -283,13 +267,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         isFeature: true,
         labsGroup: LabGroup.Rooms,
         displayName: _td("Render simple counters in room header"),
-        supportedLevels: LEVELS_FEATURE,
-        default: false,
-    },
-    "feature_many_integration_managers": {
-        isFeature: true,
-        labsGroup: LabGroup.Experimental,
-        displayName: _td("Multiple integration managers (requires manual setup)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
@@ -343,11 +320,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_FEATURE,
         displayName: _td("Show current avatar and name for users in message history"),
         default: false,
-    },
-    "doNotDisturb": {
-        supportedLevels: [SettingLevel.DEVICE],
-        default: false,
-        controller: new IncompatibleController("feature_dnd", false, false),
     },
     "mjolnirRooms": {
         supportedLevels: [SettingLevel.ACCOUNT],
