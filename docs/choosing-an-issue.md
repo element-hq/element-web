@@ -3,8 +3,10 @@
 So you want to contribute to Element Web? That is awesome!
 
 If you're not sure where to start, make sure you read
-[CONTRIBUTING.md](../CONTRIBUTING.md), and the "Setting up a dev environment"
-section of [README.md](../README.md).
+[CONTRIBUTING.md](../CONTRIBUTING.md), and the
+[Development](../README.md#development) and
+[Setting up a dev environment](../README.md#setting-up-a-dev-environment)
+sections of the README.
 
 Maybe you've got something specific you'd like to work on? If so, make sure you
 create an issue and discuss it withe the developers before you put a lot of time
