@@ -101,6 +101,7 @@ const DevtoolsDialog: React.FC<IProps> = ({ roomId, onFinished }) => {
                 <h3>{ _t("Options") }</h3>
                 <SettingsFlag name="developerMode" level={SettingLevel.ACCOUNT} />
                 <SettingsFlag name="showHiddenEventsInTimeline" level={SettingLevel.DEVICE} />
+                <SettingsFlag name="enableWidgetScreenshots" level={SettingLevel.ACCOUNT} />
             </div>
         </BaseTool>;
     }
