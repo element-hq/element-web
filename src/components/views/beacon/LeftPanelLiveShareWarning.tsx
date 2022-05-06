@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import classNames from 'classnames';
-import React from 'react';
-import { BeaconIdentifier, Room } from 'matrix-js-sdk/src/matrix';
+import React, { useEffect } from 'react';
+import { Beacon, BeaconIdentifier, Room } from 'matrix-js-sdk/src/matrix';
 
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { _t } from '../../../languageHandler';
@@ -61,6 +61,25 @@ const getLabel = (hasStoppingErrors: boolean, hasLocationErrors: boolean): strin
     return _t('You are sharing your live location');
 };
 
+const useLivenessMonitor = (liveBeaconIds: BeaconIdentifier[], beacons: Map<BeaconIdentifier, Beacon>): void => {
+    useEffect(() => {
+        // chromium sets the minimum timer interval to 1000ms
+        // for inactive tabs
+        // refresh beacon monitors when the tab becomes active again
+        const onPageVisibilityChanged = () => {
+            if (document.visibilityState === 'visible') {
+                liveBeaconIds.map(identifier => beacons.get(identifier)?.monitorLiveness());
+            }
+        };
+        if (liveBeaconIds.length) {
+            document.addEventListener("visibilitychange", onPageVisibilityChanged);
+        }
+        () => {
+            document.removeEventListener("visibilitychange", onPageVisibilityChanged);
+        };
+    }, [liveBeaconIds, beacons]);
+};
+
 const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
     const isMonitoringLiveLocation = useEventEmitterState(
         OwnBeaconStore.instance,
@@ -90,6 +109,8 @@ const LeftPanelLiveShareWarning: React.FC<Props> = ({ isMinimized }) => {
 
     const hasLocationPublishErrors = !!beaconIdsWithLocationPublishError.length;
     const hasStoppingErrors = !!beaconIdsWithStoppingError.length;
+
+    useLivenessMonitor(liveBeaconIds, OwnBeaconStore.instance.beacons);
 
     if (!isMonitoringLiveLocation) {
         return null;
