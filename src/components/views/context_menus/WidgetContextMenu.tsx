@@ -110,7 +110,8 @@ const WidgetContextMenu: React.FC<IProps> = ({
     }
 
     let snapshotButton;
-    if (widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
+    const screenshotsEnabled = SettingsStore.getValue("enableWidgetScreenshots");
+    if (screenshotsEnabled && widgetMessaging?.hasCapability(MatrixCapabilities.Screenshots)) {
         const onSnapshotClick = () => {
             widgetMessaging?.takeScreenshot().then(data => {
                 dis.dispatch({

@@ -17,7 +17,7 @@ limitations under the License.
 
 import * as url from "url";
 import { base32 } from "rfc4648";
-import { Capability, IWidget, IWidgetData, MatrixCapabilities } from "matrix-widget-api";
+import { IWidget, IWidgetData } from "matrix-widget-api";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -494,21 +494,6 @@ export default class WidgetUtils {
         app.name = app.name || app.type;
 
         return app as IApp;
-    }
-
-    static getCapWhitelistForAppTypeInRoomId(appType: string, roomId: string): Capability[] {
-        const enableScreenshots = SettingsStore.getValue("enableWidgetScreenshots", roomId);
-
-        const capWhitelist = enableScreenshots ? [MatrixCapabilities.Screenshots] : [];
-
-        // Obviously anyone that can add a widget can claim it's a jitsi widget,
-        // so this doesn't really offer much over the set of domains we load
-        // widgets from at all, but it probably makes sense for sanity.
-        if (WidgetType.JITSI.matches(appType)) {
-            capWhitelist.push(MatrixCapabilities.AlwaysOnScreen);
-        }
-
-        return capWhitelist;
     }
 
     static getLocalJitsiWrapperUrl(opts: {forLocalRender?: boolean, auth?: string} = {}) {

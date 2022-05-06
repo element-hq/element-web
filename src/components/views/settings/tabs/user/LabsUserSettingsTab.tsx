@@ -92,14 +92,6 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                 );
             });
 
-            groups.getOrCreate(LabGroup.Widgets, []).push(
-                <SettingsFlag
-                    key="enableWidgetScreenshots"
-                    name="enableWidgetScreenshots"
-                    level={SettingLevel.ACCOUNT}
-                />,
-            );
-
             groups.getOrCreate(LabGroup.Experimental, []).push(
                 <SettingsFlag
                     key="lowBandwidth"
