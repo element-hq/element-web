@@ -1,3 +1,9 @@
+Changes in [1.10.12-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.10.12-rc.2) (2022-05-06)
+===========================================================================================================
+
+## 🐛 Bug Fixes
+ * [Release] Fix reading of cached room device setting values ([\#8495](https://github.com/matrix-org/matrix-react-sdk/pull/8495)).
+
 Changes in [1.10.12-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.10.12-rc.1) (2022-05-03)
 ===========================================================================================================
 
