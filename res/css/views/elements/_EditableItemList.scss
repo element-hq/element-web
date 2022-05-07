@@ -25,14 +25,12 @@ limitations under the License.
 }
 
 .mx_EditableItem_delete {
+    @mixin customisedCancelButton;
     order: 3;
     margin-right: 5px;
-    cursor: pointer;
     vertical-align: middle;
     width: 14px;
     height: 14px;
-    mask-image: url('$(res)/img/feather-customised/cancel.svg');
-    mask-repeat: no-repeat;
     background-color: $alert;
     mask-size: 100%;
 }
