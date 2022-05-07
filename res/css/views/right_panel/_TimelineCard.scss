@@ -52,31 +52,39 @@ limitations under the License.
     }
 
     .mx_EventTile:not([data-layout="bubble"]) {
+        $left-gutter: 36px;
+
         .mx_EventTile_line {
-            padding-left: 36px;
-            padding-right: 36px;
+            padding-inline-start: $left-gutter;
+            padding-inline-end: 36px;
+        }
+
+        .mx_DisambiguatedProfile,
+        .mx_ReactionsRow,
+        .mx_ThreadSummary {
+            margin-inline-start: $left-gutter;
         }
 
         .mx_ReactionsRow {
             padding: 0;
 
             // See margin setting of ReactionsRow on _EventTile.scss
-            margin-left: 36px;
             margin-right: 8px;
         }
 
         .mx_ThreadSummary {
-            margin-left: 36px;
             margin-right: 0;
             max-width: min(calc(100% - 36px), 600px);
         }
 
         .mx_EventTile_avatar {
+            position: absolute; // for IRC layout
             top: 12px;
             left: -3px;
         }
 
         .mx_MessageTimestamp {
+            position: absolute; // for modern layout and IRC layout
             right: -4px;
             left: auto;
         }
@@ -87,7 +95,7 @@ limitations under the License.
 
         &.mx_EventTile_info {
             .mx_EventTile_line {
-                padding-left: 36px;
+                padding-left: $left-gutter;
             }
 
             .mx_EventTile_avatar {

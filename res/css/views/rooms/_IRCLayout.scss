@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 $icon-width: 14px;
-$timestamp-width: 45px;
 $right-padding: 5px;
 $irc-line-height: $font-18px;
 
@@ -28,7 +27,7 @@ $irc-line-height: $font-18px;
         // timestamps are links which shouldn't be underlined
         > a {
             text-decoration: none;
-            min-width: 45px;
+            min-width: $MessageTimestamp_width;
         }
 
         display: flex;
@@ -85,7 +84,6 @@ $irc-line-height: $font-18px;
 
         .mx_MessageTimestamp {
             font-size: $font-10px;
-            width: $timestamp-width;
             text-align: right;
         }
 
@@ -141,7 +139,7 @@ $irc-line-height: $font-18px;
 
     .mx_GenericEventListSummary {
         > .mx_EventTile_line {
-            padding-left: calc(var(--name-width) + $icon-width + $timestamp-width + 3 * $right-padding); // 15 px of padding
+            padding-left: calc(var(--name-width) + $icon-width + $MessageTimestamp_width + 3 * $right-padding); // 15 px of padding
         }
 
         .mx_GenericEventListSummary_avatars {

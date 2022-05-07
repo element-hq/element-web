@@ -30,8 +30,7 @@ $left-gutter: 64px;
         }
 
         .mx_MessageTimestamp {
-            position: absolute;
-            width: $MessageTimestamp_width;
+            position: absolute; // for modern layout
         }
 
         .mx_EventTile_line, .mx_EventTile_reply {
