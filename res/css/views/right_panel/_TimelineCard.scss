@@ -43,7 +43,8 @@ limitations under the License.
     }
 
     .mx_NewRoomIntro {
-        margin-left: 36px;
+        margin-inline-start: 36px; // TODO: Use a variable
+        margin-inline-end: 36px; // TODO: Use a variable
     }
 
     .mx_EventTile_content {
