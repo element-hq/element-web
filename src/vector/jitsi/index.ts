@@ -127,7 +127,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
         const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
         skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") || isVideoChannel;
+            .get("skip_built_in_welcome_screen") ?? false;
 
         // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
@@ -145,7 +145,8 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    joinConference();
+                    const { audioDevice, videoDevice } = ev.detail.data;
+                    joinConference(audioDevice as string, videoDevice as string);
                     ack(ev);
                 },
             );
@@ -211,6 +212,13 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         }
 
         enableJoinButton(); // always enable the button
+
+        // Inform the client that we're ready to receive events
+        try {
+            await widgetApi?.transport.send(ElementWidgetActions.WidgetReady, {});
+        } catch (e) {
+            logger.error(e);
+        }
     } catch (e) {
         logger.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
@@ -293,7 +301,17 @@ async function notifyHangup() {
     }
 }
 
-function joinConference() { // event handler bound in HTML
+function closeConference() {
+    switchVisibleContainers();
+    document.getElementById("jitsiContainer").innerHTML = "";
+
+    if (skipOurWelcomeScreen) {
+        skipToJitsiSplashScreen();
+    }
+}
+
+// event handler bound in HTML
+function joinConference(audioDevice?: string, videoDevice?: string) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -318,6 +336,14 @@ function joinConference() { // event handler bound in HTML
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer"),
         roomName: conferenceId,
+        devices: {
+            audioInput: audioDevice,
+            videoInput: videoDevice,
+        },
+        userInfo: {
+            displayName,
+            email: userId,
+        },
         interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
@@ -325,16 +351,19 @@ function joinConference() { // event handler bound in HTML
             VIDEO_LAYOUT_FIT: "height",
         },
         configOverwrite: {
+            subject: roomName,
             startAudioOnly,
+            startWithAudioMuted: !audioDevice,
+            startWithVideoMuted: !videoDevice,
         } as any,
         jwt: jwt,
     };
 
     // Video channel widgets need some more tailored config options
     if (isVideoChannel) {
-        // Ensure that we start on Jitsi Meet's native prejoin screen, for
-        // deployments that skip straight to the conference by default
-        options.configOverwrite.prejoinConfig = { enabled: true };
+        // Ensure that we skip Jitsi Meet's native prejoin screen, for
+        // deployments that have it enabled
+        options.configOverwrite.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
         options.configOverwrite.toolbarButtons = [
             "microphone", "camera", "desktop", "tileview", "hangup",
@@ -344,14 +373,12 @@ function joinConference() { // event handler bound in HTML
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
-    if (displayName) meetApi.executeCommand("displayName", displayName);
-    if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
-    if (userId) meetApi.executeCommand("email", userId);
-    if (roomName) meetApi.executeCommand("subject", roomName);
 
     // fires once when user joins the conference
     // (regardless of video on or off)
     meetApi.on("videoConferenceJoined", () => {
+        if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
+
         if (widgetApi) {
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
@@ -363,23 +390,20 @@ function joinConference() { // event handler bound in HTML
         if (isVideoChannel) meetApi.executeCommand("setTileView", true);
     });
 
-    meetApi.on("readyToClose", () => {
-        switchVisibleContainers();
+    meetApi.on("videoConferenceLeft", () => {
         notifyHangup();
-
-        document.getElementById("jitsiContainer").innerHTML = "";
         meetApi = null;
-
-        if (skipOurWelcomeScreen) {
-            skipToJitsiSplashScreen();
-        }
     });
+
+    meetApi.on("readyToClose", closeConference);
 
     meetApi.on("errorOccurred", ({ error }) => {
         if (error.isFatal) {
             // We got disconnected. Since Jitsi Meet might send us back to the
             // prejoin screen, we're forced to act as if we hung up entirely.
             notifyHangup();
+            meetApi = null;
+            closeConference();
         }
     });
 
@@ -389,8 +413,17 @@ function joinConference() { // event handler bound in HTML
     });
 
     meetApi.on("videoMuteStatusChanged", ({ muted }) => {
-        const action = muted ? ElementWidgetActions.MuteVideo : ElementWidgetActions.UnmuteVideo;
-        widgetApi.transport.send(action, {});
+        if (muted) {
+            // Jitsi Meet always sends a "video muted" event directly before
+            // hanging up, which we need to ignore by padding the timeout here,
+            // otherwise the React SDK will mistakenly think the user turned off
+            // their video by hand
+            setTimeout(() => {
+                if (meetApi) widgetApi.transport.send(ElementWidgetActions.MuteVideo, {});
+            }, 200);
+        } else {
+            widgetApi.transport.send(ElementWidgetActions.UnmuteVideo, {});
+        }
     });
 
     ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach(event => {

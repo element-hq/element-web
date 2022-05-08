@@ -35,5 +35,6 @@
     "Missing indexeddb worker script!": "Indexeddb worker kodu eksik!",
     "Use %(brand)s on mobile": "Mobilde %(brand)s kullan",
     "Switch to space by number": "Sayı ile belirtilen alana geç",
-    "Previous recently visited room or community": "En son ziyaret edilen oda veya topluluk"
+    "Previous recently visited room or community": "En son ziyaret edilen oda veya topluluk",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo tarafından merkeziyetsiz, şifrelenmiş sohbet &amp; iş birliği"
 }
