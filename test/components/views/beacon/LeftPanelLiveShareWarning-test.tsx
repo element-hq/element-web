@@ -168,7 +168,7 @@ describe('<LeftPanelLiveShareWarning />', () => {
             const component = getComponent();
             // error mode
             expect(component.find('.mx_LeftPanelLiveShareWarning').at(0).text()).toEqual(
-                'An error occured whilst sharing your live location',
+                'An error occurred whilst sharing your live location',
             );
 
             act(() => {

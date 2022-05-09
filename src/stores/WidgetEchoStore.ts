@@ -44,9 +44,9 @@ class WidgetEchoStore extends EventEmitter {
     }
 
     /**
-     * Gets the widgets for a room, substracting those that are pending deletion.
+     * Gets the widgets for a room, subtracting those that are pending deletion.
      * Widgets that are pending addition are not included, since widgets are
-     * represted as MatrixEvents, so to do this we'd have to create fake MatrixEvents,
+     * represented as MatrixEvents, so to do this we'd have to create fake MatrixEvents,
      * and we don't really need the actual widget events anyway since we just want to
      * show a spinner / prevent widgets being added twice.
      *

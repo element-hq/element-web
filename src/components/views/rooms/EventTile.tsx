@@ -212,7 +212,7 @@ interface IProps {
     // whether or not to display thread info
     showThreadInfo?: boolean;
 
-    // if specified and `true`, the message his behing
+    // if specified and `true`, the message is being
     // hidden for moderation from other users but is
     // displayed to the current user either because they're
     // the author or they are a moderator

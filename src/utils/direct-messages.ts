@@ -175,7 +175,7 @@ export class ThreepidMember extends Member {
         this.id = id;
     }
 
-    // This is a getter that would be falsey on all other implementations. Until we have
+    // This is a getter that would be falsy on all other implementations. Until we have
     // better type support in the react-sdk we can use this trick to determine the kind
     // of 3PID we're dealing with, if any.
     get isEmail(): boolean {

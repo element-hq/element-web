@@ -359,7 +359,7 @@ describe('<RoomLiveShareWarning />', () => {
 
                     // renders wire error ui
                     expect(component.find('.mx_RoomLiveShareWarning_label').text()).toEqual(
-                        'An error occured whilst sharing your live location, please try again',
+                        'An error occurred whilst sharing your live location, please try again',
                     );
                     expect(findByTestId(component, 'room-live-share-wire-error-close-button').length).toBeTruthy();
                 });

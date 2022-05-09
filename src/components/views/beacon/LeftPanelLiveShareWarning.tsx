@@ -56,7 +56,7 @@ const getLabel = (hasStoppingErrors: boolean, hasLocationErrors: boolean): strin
         return _t('An error occurred while stopping your live location');
     }
     if (hasLocationErrors) {
-        return _t('An error occured whilst sharing your live location');
+        return _t('An error occurred whilst sharing your live location');
     }
     return _t('You are sharing your live location');
 };

@@ -43,7 +43,7 @@ import {
     TimedGeoUri,
     watchPosition,
 } from "../utils/beacon";
-import { getCurrentPosition } from "../utils/beacon/geolocation";
+import { getCurrentPosition } from "../utils/beacon";
 
 const isOwnBeacon = (beacon: Beacon, userId: string): boolean => beacon.beaconInfoOwner === userId;
 
@@ -456,7 +456,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
     private onWatchedPosition = (position: GeolocationPosition) => {
         const timedGeoPosition = mapGeolocationPositionToTimedGeo(position);
 
-        // if this is our first position, publish immediateley
+        // if this is our first position, publish immediately
         if (!this.lastPublishedPositionTimestamp) {
             this.publishLocationToBeacons(timedGeoPosition);
         } else {

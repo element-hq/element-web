@@ -96,7 +96,7 @@ export default function AccessibleButton({
         // that might receive focus as a result of the AccessibleButtonClick action
         // It's because we are using html buttons at a few places e.g. inside dialogs
         // And divs which we report as role button to assistive technologies.
-        // Browsers handle space and enter keypresses differently and we are only adjusting to the
+        // Browsers handle space and enter key presses differently and we are only adjusting to the
         // inconsistencies here
         newProps.onKeyDown = (e) => {
             const action = getKeyBindingsManager().getAccessibilityAction(e);

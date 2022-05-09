@@ -25,7 +25,7 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { _t } from '../../../languageHandler';
 import dis from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
-import { IDialogProps } from "../dialogs/IDialogProps";
+import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "../dialogs/BaseDialog";
 import InfoDialog from "../dialogs/InfoDialog";
 import DialogButtons from "../elements/DialogButtons";

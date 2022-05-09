@@ -29,7 +29,7 @@ interface IProps extends IDialogProps {
         error: string;
     }>>;
     source: string;
-    continuation: () => void;
+    continuation: () => Promise<void>;
 }
 
 const KeySignatureUploadFailedDialog: React.FC<IProps> = ({

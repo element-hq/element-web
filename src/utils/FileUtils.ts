@@ -64,7 +64,7 @@ export function presentableTextForFile(
         // big a file they are downloading.
         // The content.info also contains a MIME-type but we don't display
         // it since it is "ugly", users generally aren't aware what it
-        // means and the type of the attachment can usually be inferrered
+        // means and the type of the attachment can usually be inferred
         // from the file extension.
         text += ' (' + filesize(content.info.size) + ')';
     }

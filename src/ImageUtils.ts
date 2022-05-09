@@ -25,7 +25,7 @@ limitations under the License.
  * reflect the actual height the scaled thumbnail occupies.
  *
  * This is very useful for calculating how much height a thumbnail will actually
- * consume in the timeline, when performing scroll offset calcuations
+ * consume in the timeline, when performing scroll offset calculations
  * (e.g. scroll locking)
  */
 export function thumbHeight(fullWidth: number, fullHeight: number, thumbWidth: number, thumbHeight: number) {

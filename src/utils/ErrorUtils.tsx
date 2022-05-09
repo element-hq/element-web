@@ -25,7 +25,7 @@ import { _t, _td, Tags, TranslatedString } from '../languageHandler';
  *
  * @param {string} limitType The limit_type from the error
  * @param {string} adminContact The admin_contact from the error
- * @param {Object} strings Translateable string for different
+ * @param {Object} strings Translatable string for different
  *     limit_type. Must include at least the empty string key
  *     which is the default. Strings may include an 'a' tag
  *     for the admin contact link.

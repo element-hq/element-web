@@ -67,7 +67,7 @@ export class EventIndexPeg {
     /**
      * Initialize the event index.
      *
-     * @returns {boolean} True if the event index was succesfully initialized,
+     * @returns {boolean} True if the event index was successfully initialized,
      * false otherwise.
      */
     async initEventIndex() {
@@ -118,7 +118,7 @@ export class EventIndexPeg {
     }
 
     /**
-     * Check if event indexing support is installed for the platfrom.
+     * Check if event indexing support is installed for the platform.
      *
      * Event indexing might require additional optional modules to be installed,
      * this tells us if those are installed. Note that this should only be

@@ -100,7 +100,7 @@ export default class ThemeWatcher {
         // itself completely redundant since we just override the result here and we're
         // now effectively just using the ThemeController as a place to store the static
         // variable. The system theme setting probably ought to have an equivalent
-        // controller that honours the same flag, although probablt better would be to
+        // controller that honours the same flag, although probably better would be to
         // have the theme logic in one place rather than split between however many
         // different places.
         if (ThemeController.isLogin) return 'light';

@@ -504,7 +504,7 @@ export class RoomViewStore extends Store<ActionPayload> {
     // since we should still consider a join to be in progress until the room
     // & member events come down the sync.
     //
-    // This flag remains true after the room has been sucessfully joined,
+    // This flag remains true after the room has been successfully joined,
     // (this store doesn't listen for the appropriate member events)
     // so you should always observe the joined state from the member event
     // if a room object is present.
