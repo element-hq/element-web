@@ -71,13 +71,6 @@ export function onNewScreen(screen: string, replaceLast = false) {
     }
 }
 
-// reload the page to a different url
-export function reloadPage(newUrl: string) {
-    console.log("reloadPage to " + newUrl);
-    window.removeEventListener('hashchange', onHashChange);
-    window.location.href = newUrl;
-}
-
 export function init() {
     window.addEventListener('hashchange', onHashChange);
 }
