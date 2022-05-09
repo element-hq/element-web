@@ -38,3 +38,7 @@ limitations under the License.
     max-width: 100%;
     width: 450px;
 }
+
+.mx_DisambiguatedProfile ~ .mx_MLocationBody {
+    margin-top: 6px; // See: https://github.com/matrix-org/matrix-react-sdk/pull/8442
+}

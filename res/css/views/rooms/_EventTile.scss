@@ -855,12 +855,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             padding-right: 0;
         }
 
-        .mx_ReplyChain {
-            .mx_MLocationBody {
-                margin-top: 6px; // See: https://github.com/matrix-org/matrix-react-sdk/pull/8442
-            }
-        }
-
         &:not([data-layout=bubble]) {
             padding-top: $spacing-16;
         }
