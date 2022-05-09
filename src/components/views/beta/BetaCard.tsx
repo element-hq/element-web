@@ -60,7 +60,6 @@ export const BetaPill = ({
                 </div>
             </div>}
             onClick={onClick}
-            yOffset={-10}
         >
             { _t("Beta") }
         </AccessibleTooltipButton>;

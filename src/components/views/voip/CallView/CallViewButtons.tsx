@@ -39,8 +39,6 @@ import { MediaDeviceKindEnum } from "../../../../MediaDeviceHandler";
 // height to get the max height of the video
 const CONTEXT_MENU_VPADDING = 8; // How far the context menu sits above the button (px)
 
-const TOOLTIP_Y_OFFSET = -24;
-
 const CONTROLS_HIDE_DELAY = 2000;
 
 interface IButtonProps extends Omit<React.ComponentProps<typeof AccessibleTooltipButton>, "title"> {
@@ -69,7 +67,6 @@ const CallViewToggleButton: React.FC<IButtonProps> = ({
             className={classes}
             title={isOn ? onLabel : offLabel}
             alignment={Alignment.Top}
-            yOffset={TOOLTIP_Y_OFFSET}
             {...props}
         >
             { children }
@@ -267,7 +264,6 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
                     isExpanded={this.state.showDialpad}
                     title={_t("Dialpad")}
                     alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
                 /> }
                 <CallViewDropdownButton
                     state={!this.props.buttonsState.micMuted}
@@ -306,14 +302,12 @@ export default class CallViewButtons extends React.Component<IProps, IState> {
                     isExpanded={this.state.showMoreMenu}
                     title={_t("More")}
                     alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
                 /> }
                 <AccessibleTooltipButton
                     className="mx_CallViewButtons_button mx_CallViewButtons_button_hangup"
                     onClick={this.props.handlers.onHangupClick}
                     title={_t("Hangup")}
                     alignment={Alignment.Top}
-                    yOffset={TOOLTIP_Y_OFFSET}
                 />
             </div>
         );

@@ -136,7 +136,6 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
             className="mx_ForwardList_roomButton"
             onClick={jumpToRoom}
             title={_t("Open room")}
-            yOffset={-20}
             alignment={Alignment.Top}
         >
             <DecoratedRoomAvatar room={room} avatarSize={32} />
@@ -151,7 +150,6 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
             onClick={send}
             disabled={disabled}
             title={title}
-            yOffset={-20}
             alignment={Alignment.Top}
         >
             <div className="mx_ForwardList_sendLabel">{ _t("Send") }</div>

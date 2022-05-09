@@ -23,8 +23,6 @@ import classNames from 'classnames';
 
 import UIStore from "../../../stores/UIStore";
 
-const MIN_TOOLTIP_HEIGHT = 25;
-
 export enum Alignment {
     Natural, // Pick left or right
     Left,
@@ -33,7 +31,6 @@ export enum Alignment {
     Bottom, // Centered
     InnerBottom, // Inside the target, at the bottom
     TopRight, // On top of the target, right aligned
-    TopCenter, // On top of the target, center aligned
 }
 
 export interface ITooltipProps {
@@ -48,7 +45,6 @@ export interface ITooltipProps {
         // the react element to put into the tooltip
         label: React.ReactNode;
         alignment?: Alignment; // defaults to Natural
-        yOffset?: number;
         // id describing tooltip
         // used to associate tooltip with target for a11y
         id?: string;
@@ -66,7 +62,6 @@ export default class Tooltip extends React.Component<ITooltipProps> {
 
     public static readonly defaultProps = {
         visible: true,
-        yOffset: 0,
         alignment: Alignment.Natural,
     };
 
@@ -102,50 +97,49 @@ export default class Tooltip extends React.Component<ITooltipProps> {
     // positioned, also taking into account any window zoom
     private updatePosition(style: CSSProperties) {
         const parentBox = this.parent.getBoundingClientRect();
-        let offset = 0;
-        if (parentBox.height > MIN_TOOLTIP_HEIGHT) {
-            offset = Math.floor((parentBox.height - MIN_TOOLTIP_HEIGHT) / 2);
-        } else {
-            // The tooltip is larger than the parent height: figure out what offset
-            // we need so that we're still centered.
-            offset = Math.floor(parentBox.height - MIN_TOOLTIP_HEIGHT);
-        }
         const width = UIStore.instance.windowWidth;
+        const spacing = 6;
         const parentWidth = (
             this.props.maxParentWidth
                 ? Math.min(parentBox.width, this.props.maxParentWidth)
                 : parentBox.width
         );
-        const baseTop = (parentBox.top - 2 + this.props.yOffset) + window.scrollY;
-        const top = baseTop + offset;
+        const baseTop = parentBox.top + window.scrollY;
+        const centerTop = parentBox.top + window.scrollY + (parentBox.height / 2);
         const right = width - parentBox.left - window.scrollX;
         const left = parentBox.right + window.scrollX;
         const horizontalCenter = (
             parentBox.left - window.scrollX + (parentWidth / 2)
         );
+
         switch (this.props.alignment) {
             case Alignment.Natural:
                 if (parentBox.right > width / 2) {
-                    style.right = right;
-                    style.top = top;
+                    style.right = right + spacing;
+                    style.top = centerTop;
+                    style.transform = "translateY(-50%)";
                     break;
                 }
                 // fall through to Right
             case Alignment.Right:
-                style.left = left;
-                style.top = top;
+                style.left = left + spacing;
+                style.top = centerTop;
+                style.transform = "translateY(-50%)";
                 break;
             case Alignment.Left:
-                style.right = right;
-                style.top = top;
+                style.right = right + spacing;
+                style.top = centerTop;
+                style.transform = "translateY(-50%)";
                 break;
             case Alignment.Top:
-                style.top = baseTop - 16;
+                style.top = baseTop - spacing;
                 style.left = horizontalCenter;
+                style.transform = "translate(-50%, -100%)";
                 break;
             case Alignment.Bottom:
-                style.top = baseTop + parentBox.height;
+                style.top = baseTop + parentBox.height + spacing;
                 style.left = horizontalCenter;
+                style.transform = "translate(-50%)";
                 break;
             case Alignment.InnerBottom:
                 style.top = baseTop + parentBox.height - 50;
@@ -153,14 +147,10 @@ export default class Tooltip extends React.Component<ITooltipProps> {
                 style.transform = "translate(-50%)";
                 break;
             case Alignment.TopRight:
-                style.top = baseTop - 5;
+                style.top = baseTop - spacing;
                 style.right = width - parentBox.right - window.scrollX;
-                style.transform = "translate(5px, -100%)";
+                style.transform = "translateY(-100%)";
                 break;
-            case Alignment.TopCenter:
-                style.top = baseTop - 5;
-                style.left = horizontalCenter;
-                style.transform = "translate(-50%, -100%)";
         }
 
         return style;

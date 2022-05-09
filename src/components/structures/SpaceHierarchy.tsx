@@ -64,6 +64,7 @@ import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
+import { Alignment } from "../views/elements/Tooltip";
 
 interface IProps {
     space: Room;
@@ -583,7 +584,7 @@ const ManageButtons = ({ hierarchy, selected, setSelected, setError }: IManageBu
         Button = AccessibleTooltipButton;
         props = {
             tooltip: _t("Select a room below first"),
-            yOffset: -40,
+            alignment: Alignment.Top,
         };
     }
 

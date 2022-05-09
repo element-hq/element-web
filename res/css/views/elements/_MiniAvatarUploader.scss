@@ -25,7 +25,9 @@ limitations under the License.
         z-index: unset;
         width: max-content;
         left: 72px;
-        top: 0;
+        // top edge starting at 50 % of parent - 50 % of itself -> centered vertically
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .mx_MiniAvatarUploader_indicator {

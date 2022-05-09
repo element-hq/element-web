@@ -34,7 +34,6 @@ const TooltipTarget: React.FC<IProps> = ({
     id,
     label,
     alignment,
-    yOffset,
     tooltipClassName,
     maxParentWidth,
     ...rest
@@ -51,7 +50,6 @@ const TooltipTarget: React.FC<IProps> = ({
         className={className}
         tooltipClassName={tooltipClassName}
         label={label}
-        yOffset={yOffset}
         alignment={alignment}
         visible={isVisible}
         maxParentWidth={maxParentWidth}

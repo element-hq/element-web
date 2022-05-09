@@ -30,7 +30,6 @@ describe('<TooltipTarget />', () => {
         "className": 'test className',
         "tooltipClassName": 'test tooltipClassName',
         "label": 'test label',
-        "yOffset": 1,
         "alignment": Alignment.Left,
         "id": 'test id',
         'data-test-id': 'test',
@@ -64,13 +63,17 @@ describe('<TooltipTarget />', () => {
         expect(getVisibleTooltip()).toBeFalsy();
     });
 
-    it('displays tooltip on mouseover', () => {
-        const wrapper = getComponent();
-        act(() => {
-            Simulate.mouseOver(wrapper);
-        });
-        expect(getVisibleTooltip()).toMatchSnapshot();
-    });
+    for (const alignment in Alignment) {
+        if (isNaN(Number(alignment))) {
+            it(`displays ${alignment} aligned tooltip on mouseover`, () => {
+                const wrapper = getComponent({ alignment: Alignment[alignment] });
+                act(() => {
+                    Simulate.mouseOver(wrapper);
+                });
+                expect(getVisibleTooltip()).toMatchSnapshot();
+            });
+        }
+    }
 
     it('hides tooltip on mouseleave', () => {
         const wrapper = getComponent();

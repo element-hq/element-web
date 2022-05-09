@@ -51,7 +51,7 @@ const FacePile: FC<IProps> = ({ members, faceSize, overflow, tooltip, children, 
 
     return <div {...props} className="mx_FacePile">
         { tooltip ? (
-            <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip} tooltipProps={{ yOffset: 32 }}>
+            <TextWithTooltip class="mx_FacePile_faces" tooltip={tooltip}>
                 { pileContents }
             </TextWithTooltip>
         ) : (

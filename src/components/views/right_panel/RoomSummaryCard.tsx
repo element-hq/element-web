@@ -166,7 +166,6 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             title={openTitle}
             forceHide={!(isPinned || isMaximised)}
             disabled={isPinned || isMaximised}
-            yOffset={-48}
         >
             <WidgetAvatar app={app} />
             <span>{ name }</span>
@@ -178,7 +177,6 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             isExpanded={menuDisplayed}
             onClick={openMenu}
             title={_t("Options")}
-            yOffset={-24}
         /> }
 
         <AccessibleTooltipButton
@@ -186,13 +184,11 @@ const AppRow: React.FC<IAppRowProps> = ({ app, room }) => {
             onClick={togglePin}
             title={pinTitle}
             disabled={cannotPin}
-            yOffset={-24}
         />
         <AccessibleTooltipButton
             className="mx_RoomSummaryCard_app_maximiseToggle"
             onClick={toggleMaximised}
             title={maximiseTitle}
-            yOffset={-24}
         />
 
         { contextMenu }

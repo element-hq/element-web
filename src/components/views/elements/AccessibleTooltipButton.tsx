@@ -26,7 +26,6 @@ interface IProps extends React.ComponentProps<typeof AccessibleButton> {
     label?: string;
     tooltipClassName?: string;
     forceHide?: boolean;
-    yOffset?: number;
     alignment?: Alignment;
     onHover?: (hovering: boolean) => void;
     onHideTooltip?(ev: SyntheticEvent): void;
@@ -76,13 +75,12 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
 
     render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { title, tooltip, children, tooltipClassName, forceHide, yOffset, alignment, onHideTooltip,
+        const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip,
             ...props } = this.props;
 
         const tip = this.state.hover && <Tooltip
             tooltipClassName={tooltipClassName}
             label={tooltip || title}
-            yOffset={yOffset}
             alignment={alignment}
         />;
         return (
