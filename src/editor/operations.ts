@@ -216,7 +216,7 @@ export function formatRangeAsCode(range: Range): void {
     replaceRangeAndExpandSelection(range, parts);
 }
 
-export function formatRangeAsLink(range: Range) {
+export function formatRangeAsLink(range: Range, text?: string) {
     const { model } = range;
     const { partCreator } = model;
     const linkRegex = /\[(.*?)\]\(.*?\)/g;
@@ -229,7 +229,7 @@ export function formatRangeAsLink(range: Range) {
         replaceRangeAndAutoAdjustCaret(range, newParts, true, prefixLength, suffixLength);
     } else {
         // We set offset to -1 here so that the caret lands between the brackets
-        replaceRangeAndMoveCaret(range, [partCreator.plain("[" + range.text + "]" + "()")], -1);
+        replaceRangeAndMoveCaret(range, [partCreator.plain("[" + range.text + "]" + "(" + (text ?? "") + ")")], -1);
     }
 }
 
