@@ -17,7 +17,11 @@ limitations under the License.
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import ReactDOM from 'react-dom';
-import { MatrixClient, Room, RoomMember } from 'matrix-js-sdk/src/matrix';
+import {
+    PendingEventOrdering,
+    Room,
+    RoomMember,
+} from 'matrix-js-sdk/src/matrix';
 
 import * as TestUtils from '../../../test-utils';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
@@ -29,6 +33,8 @@ import RoomListLayoutStore from "../../../../src/stores/room-list/RoomListLayout
 import RoomList from "../../../../src/components/views/rooms/RoomList";
 import RoomSublist from "../../../../src/components/views/rooms/RoomSublist";
 import RoomTile from "../../../../src/components/views/rooms/RoomTile";
+import { getMockClientWithEventEmitter, mockClientMethodsUser } from '../../../test-utils';
+import ResizeNotifier from '../../../../src/utils/ResizeNotifier';
 
 function generateRoomId() {
     return '!' + Math.random().toString().slice(2, 10) + ':domain';
@@ -38,7 +44,7 @@ describe('RoomList', () => {
     function createRoom(opts) {
         const room = new Room(generateRoomId(), MatrixClientPeg.get(), client.getUserId(), {
             // The room list now uses getPendingEvents(), so we need a detached ordering.
-            pendingEventOrdering: "detached",
+            pendingEventOrdering: PendingEventOrdering.Detached,
         });
         if (opts) {
             Object.assign(room, opts);
@@ -47,25 +53,38 @@ describe('RoomList', () => {
     }
 
     let parentDiv = null;
-    let client = null;
     let root = null;
     const myUserId = '@me:domain';
 
     const movingRoomId = '!someroomid';
-    let movingRoom;
-    let otherRoom;
+    let movingRoom: Room | undefined;
+    let otherRoom: Room | undefined;
 
-    let myMember;
-    let myOtherMember;
+    let myMember: RoomMember | undefined;
+    let myOtherMember: RoomMember | undefined;
+
+    const client = getMockClientWithEventEmitter({
+        ...mockClientMethodsUser(myUserId),
+        getRooms: jest.fn(),
+        getVisibleRooms: jest.fn(),
+        getRoom: jest.fn(),
+    });
+
+    const defaultProps = {
+        onKeyDown: jest.fn(),
+        onFocus: jest.fn(),
+        onBlur: jest.fn(),
+        onResize: jest.fn(),
+        resizeNotifier: {} as unknown as ResizeNotifier,
+        isMinimized: false,
+        activeSpace: '',
+    };
 
     beforeEach(async function(done) {
         RoomListStoreClass.TEST_MODE = true;
+        jest.clearAllMocks();
 
-        TestUtils.stubClient();
-        client = MatrixClientPeg.get();
         client.credentials = { userId: myUserId };
-        //revert this to prototype method as the test-utils monkey-patches this to return a hardcoded value
-        client.getUserId = MatrixClient.prototype.getUserId;
 
         DMRoomMap.makeShared();
 
@@ -74,7 +93,7 @@ describe('RoomList', () => {
 
         const WrappedRoomList = TestUtils.wrapInMatrixClientContext(RoomList);
         root = ReactDOM.render(
-            <WrappedRoomList searchFilter="" onResize={() => {}} />,
+            <WrappedRoomList {...defaultProps} />,
             parentDiv,
         );
         ReactTestUtils.findRenderedComponentWithType(root, RoomList);
@@ -99,7 +118,7 @@ describe('RoomList', () => {
         }[userId]);
 
         // Mock the matrix client
-        client.getRooms = () => [
+        const mockRooms = [
             movingRoom,
             otherRoom,
             createRoom({ tags: { 'm.favourite': { order: 0.1 } }, name: 'Some other room' }),
@@ -107,14 +126,15 @@ describe('RoomList', () => {
             createRoom({ tags: { 'm.lowpriority': {} }, name: 'Some unimportant room' }),
             createRoom({ tags: { 'custom.tag': {} }, name: 'Some room customly tagged' }),
         ];
-        client.getVisibleRooms = client.getRooms;
+        client.getRooms.mockReturnValue(mockRooms);
+        client.getVisibleRooms.mockReturnValue(mockRooms);
 
         const roomMap = {};
         client.getRooms().forEach((r) => {
             roomMap[r.roomId] = r;
         });
 
-        client.getRoom = (roomId) => roomMap[roomId];
+        client.getRoom.mockImplementation((roomId) => roomMap[roomId]);
 
         // Now that everything has been set up, prepare and update the store
         await RoomListStore.instance.makeReady(client);
@@ -171,6 +191,7 @@ describe('RoomList', () => {
             movingRoom.tags = { [oldTagId]: {} };
         } else if (oldTagId === DefaultTagID.DM) {
             // Mock inverse m.direct
+            // @ts-ignore forcing private property
             DMRoomMap.shared().roomToUser = {
                 [movingRoom.roomId]: '@someotheruser:domain',
             };
