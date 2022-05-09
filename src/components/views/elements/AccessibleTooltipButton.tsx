@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, FocusEvent } from 'react';
 
 import AccessibleButton from "./AccessibleButton";
 import Tooltip, { Alignment } from './Tooltip';
@@ -68,6 +68,12 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         this.props.onHideTooltip?.(ev);
     };
 
+    private onFocus = (ev: FocusEvent) => {
+        // We only show the tooltip if focus arrived here from some other
+        // element, to avoid leaving tooltips hanging around when a modal closes
+        if (ev.relatedTarget) this.showTooltip();
+    };
+
     render() {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { title, tooltip, children, tooltipClassName, forceHide, yOffset, alignment, onHideTooltip,
@@ -84,7 +90,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
                 {...props}
                 onMouseOver={this.showTooltip}
                 onMouseLeave={this.hideTooltip}
-                onFocus={this.showTooltip}
+                onFocus={this.onFocus}
                 onBlur={this.hideTooltip}
                 aria-label={title}
             >
