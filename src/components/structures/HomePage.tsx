@@ -75,6 +75,8 @@ const UserWelcomeTop = () => {
             hasAvatarLabel={_tDom("Great, that'll help people know it's you")}
             noAvatarLabel={_tDom("Add a photo so people know it's you.")}
             setAvatarUrl={url => cli.setAvatarUrl(url)}
+            isUserAvatar
+            onClick={ev => PosthogTrackers.trackInteraction("WebHomeMiniAvatarUploadButton", ev)}
         >
             <BaseAvatar
                 idName={userId}
@@ -100,7 +102,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     }
 
     let introSection;
-    if (justRegistered) {
+    if (justRegistered || !!OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE)) {
         introSection = <UserWelcomeTop />;
     } else {
         const brandingConfig = SdkConfig.getObject("branding");
