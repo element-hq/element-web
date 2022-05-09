@@ -21,7 +21,7 @@ import {
     VideoConferenceCapabilities,
     WidgetApi,
 } from "matrix-widget-api";
-import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
+import { ElementWidgetActions, IJitsiDevices } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
@@ -145,8 +145,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    const { audioOutput, audioInput, videoInput } = ev.detail.data;
-                    joinConference(audioOutput as string, audioInput as string, videoInput as string);
+                    joinConference(ev.detail.data as unknown as IJitsiDevices);
                     ack(ev);
                 },
             );
@@ -311,7 +310,7 @@ function closeConference() {
 }
 
 // event handler bound in HTML
-function joinConference(audioOutput?: string, audioInput?: string, videoInput?: string) {
+function joinConference(devices?: IJitsiDevices) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -336,7 +335,7 @@ function joinConference(audioOutput?: string, audioInput?: string, videoInput?: 
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer"),
         roomName: conferenceId,
-        devices: { audioOutput, audioInput, videoInput },
+        devices,
         userInfo: {
             displayName,
             email: userId,
@@ -350,8 +349,8 @@ function joinConference(audioOutput?: string, audioInput?: string, videoInput?: 
         configOverwrite: {
             subject: roomName,
             startAudioOnly,
-            startWithAudioMuted: !audioInput,
-            startWithVideoMuted: !videoInput,
+            startWithAudioMuted: !devices?.audioInput,
+            startWithVideoMuted: !devices?.videoInput,
         } as any,
         jwt: jwt,
     };
