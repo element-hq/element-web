@@ -68,13 +68,13 @@ const useLivenessMonitor = (liveBeaconIds: BeaconIdentifier[], beacons: Map<Beac
         // refresh beacon monitors when the tab becomes active again
         const onPageVisibilityChanged = () => {
             if (document.visibilityState === 'visible') {
-                liveBeaconIds.map(identifier => beacons.get(identifier)?.monitorLiveness());
+                liveBeaconIds.forEach(identifier => beacons.get(identifier)?.monitorLiveness());
             }
         };
         if (liveBeaconIds.length) {
             document.addEventListener("visibilitychange", onPageVisibilityChanged);
         }
-        () => {
+        return () => {
             document.removeEventListener("visibilitychange", onPageVisibilityChanged);
         };
     }, [liveBeaconIds, beacons]);
