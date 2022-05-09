@@ -355,8 +355,8 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         configOverwrite: {
             subject: roomName,
             startAudioOnly,
-            startWithAudioMuted: !audioDevice,
-            startWithVideoMuted: !videoDevice,
+            startWithAudioMuted: audioDevice == null,
+            startWithVideoMuted: videoDevice == null,
         } as any,
         jwt: jwt,
     };
