@@ -306,4 +306,11 @@ export enum Action {
      * Opens a dialog to add an existing object to a space. Used with a OpenAddExistingToSpaceDialogPayload.
      */
     OpenAddToExistingSpaceDialog = "open_add_to_existing_space_dialog",
+
+    /**
+     * Let components know that they should log any useful debugging information
+     * because we're probably about to send bug report which includes all of the
+     * logs. Fires with no payload.
+     */
+    DumpDebugLogs = "dump_debug_logs",
 }

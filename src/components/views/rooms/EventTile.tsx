@@ -1292,6 +1292,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                     "data-has-reply": !!replyChain,
                     "data-layout": this.props.layout,
                     "data-self": isOwnEvent,
+                    "data-event-id": this.props.mxEvent.getId(),
                     "onMouseEnter": () => this.setState({ hover: true }),
                     "onMouseLeave": () => this.setState({ hover: false }),
                 }, [
@@ -1438,6 +1439,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                         "data-scroll-tokens": scrollToken,
                         "data-layout": this.props.layout,
                         "data-self": isOwnEvent,
+                        "data-event-id": this.props.mxEvent.getId(),
                         "data-has-reply": !!replyChain,
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
