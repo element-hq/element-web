@@ -42,6 +42,15 @@ declare global {
 }
 
 Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: string): Chainable<UserCredentials> => {
+    // XXX: work around Cypress not clearing IDB between tests
+    cy.window().then(win => {
+        win.indexedDB.databases().then(databases => {
+            databases.forEach(database => {
+                win.indexedDB.deleteDatabase(database.name);
+            });
+        });
+    });
+
     const username = Cypress._.uniqueId("userId_");
     const password = Cypress._.uniqueId("password_");
     return cy.registerUser(synapse, username, password, displayName).then(() => {
@@ -64,7 +73,7 @@ Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: str
             },
         });
     }).then(response => {
-        return cy.window().then(win => {
+        cy.window().then(win => {
             // Seed the localStorage with the required credentials
             win.localStorage.setItem("mx_hs_url", synapse.baseUrl);
             win.localStorage.setItem("mx_user_id", response.body.user_id);
@@ -73,14 +82,17 @@ Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: str
             win.localStorage.setItem("mx_is_guest", "false");
             win.localStorage.setItem("mx_has_pickle_key", "false");
             win.localStorage.setItem("mx_has_access_token", "true");
-
-            return cy.visit("/").then(() => ({
-                password,
-                accessToken: response.body.access_token,
-                userId: response.body.user_id,
-                deviceId: response.body.device_id,
-                homeServer: response.body.home_server,
-            }));
         });
+
+        return cy.visit("/").then(() => {
+            // wait for the app to load
+            return cy.get(".mx_MatrixChat", { timeout: 15000 });
+        }).then(() => ({
+            password,
+            accessToken: response.body.access_token,
+            userId: response.body.user_id,
+            deviceId: response.body.device_id,
+            homeServer: response.body.home_server,
+        }));
     });
 });

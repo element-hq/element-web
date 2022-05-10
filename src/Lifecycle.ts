@@ -665,7 +665,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
     }
 
     if (credentials.pickleKey) {
-        let encryptedAccessToken;
+        let encryptedAccessToken: IEncryptedPayload;
         try {
             // try to encrypt the access token using the pickle key
             const encrKey = await pickleKeyToAesKey(credentials.pickleKey);

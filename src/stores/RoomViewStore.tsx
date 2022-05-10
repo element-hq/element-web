@@ -407,7 +407,7 @@ export class RoomViewStore extends Store<ActionPayload> {
             dis.dispatch({
                 action: Action.JoinRoomError,
                 roomId,
-                err: err,
+                err,
             });
         }
     }

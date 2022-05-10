@@ -1197,6 +1197,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
     private scrollIntoView(eventId?: string, pixelOffset?: number, offsetBase?: number): void {
         const doScroll = () => {
+            if (!this.messagePanel.current) return;
             if (eventId) {
                 debuglog("TimelinePanel scrolling to eventId " + eventId +
                     " at position " + (offsetBase * 100) + "% + " + pixelOffset);

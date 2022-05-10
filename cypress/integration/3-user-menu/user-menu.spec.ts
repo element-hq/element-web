@@ -19,12 +19,12 @@ limitations under the License.
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import type { UserCredentials } from "../../support/login";
 
-describe("UserMenu", () => {
+describe("User Menu", () => {
     let synapse: SynapseInstance;
     let user: UserCredentials;
 
     beforeEach(() => {
-        cy.startSynapse("consent").then(data => {
+        cy.startSynapse("default").then(data => {
             synapse = data;
 
             cy.initTestUser(synapse, "Jeff").then(credentials => {
@@ -38,8 +38,10 @@ describe("UserMenu", () => {
     });
 
     it("should contain our name & userId", () => {
-        cy.get('[aria-label="User menu"]', { timeout: 15000 }).click();
-        cy.get(".mx_UserMenu_contextMenu_displayName").should("contain", "Jeff");
-        cy.get(".mx_UserMenu_contextMenu_userId").should("contain", user.userId);
+        cy.get('[aria-label="User menu"]').click();
+        cy.get(".mx_ContextualMenu").within(() => {
+            cy.get(".mx_UserMenu_contextMenu_displayName").should("contain", "Jeff");
+            cy.get(".mx_UserMenu_contextMenu_userId").should("contain", user.userId);
+        });
     });
 });

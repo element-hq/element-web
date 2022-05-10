@@ -51,6 +51,7 @@ import { ConsoleLogger, IndexedDBLogStore } from "../rageshake/rageshake";
 import ActiveWidgetStore from "../stores/ActiveWidgetStore";
 import AutoRageshakeStore from "../stores/AutoRageshakeStore";
 import { IConfigOptions } from "../IConfigOptions";
+import { MatrixDispatcher } from "../dispatcher/dispatcher";
 
 /* eslint-disable @typescript-eslint/naming-convention */
 
@@ -109,6 +110,7 @@ declare global {
         mxSendSentryReport: (userText: string, issueUrl: string, error: Error) => Promise<void>;
         mxLoginWithAccessToken: (hsUrl: string, accessToken: string) => Promise<void>;
         mxAutoRageshakeStore?: AutoRageshakeStore;
+        mxDispatcher: MatrixDispatcher;
     }
 
     interface Electron {
