@@ -269,6 +269,10 @@ $selected-color: $room-highlight-color;
 }
 // ********************
 
+body {
+    color-scheme: dark;
+}
+
 // Nasty hacks to apply a filter to arbitrary monochrome artwork to make it
 // better match the theme.  Typically applied to dark grey 'off' buttons or
 // light grey 'on' buttons.
