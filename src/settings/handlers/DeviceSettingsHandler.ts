@@ -43,17 +43,11 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
 
         // Special case notifications
         if (settingName === "notificationsEnabled") {
-            const value = this.getItem("notifications_enabled");
-            if (typeof(value) === "string") return value === "true";
-            return null; // wrong type or otherwise not set
+            return this.getBoolean("notifications_enabled");
         } else if (settingName === "notificationBodyEnabled") {
-            const value = this.getItem("notifications_body_enabled");
-            if (typeof(value) === "string") return value === "true";
-            return null; // wrong type or otherwise not set
+            return this.getBoolean("notifications_body_enabled");
         } else if (settingName === "audioNotificationsEnabled") {
-            const value = this.getItem("audio_notifications_enabled");
-            if (typeof(value) === "string") return value === "true";
-            return null; // wrong type or otherwise not set
+            return this.getBoolean("audio_notifications_enabled");
         }
 
         const settings = this.getSettings() || {};
@@ -68,15 +62,15 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
 
         // Special case notifications
         if (settingName === "notificationsEnabled") {
-            this.setItem("notifications_enabled", newValue);
+            this.setBoolean("notifications_enabled", newValue);
             this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         } else if (settingName === "notificationBodyEnabled") {
-            this.setItem("notifications_body_enabled", newValue);
+            this.setBoolean("notifications_body_enabled", newValue);
             this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         } else if (settingName === "audioNotificationsEnabled") {
-            this.setItem("audio_notifications_enabled", newValue);
+            this.setBoolean("audio_notifications_enabled", newValue);
             this.watchers.notifyUpdate(settingName, null, SettingLevel.DEVICE, newValue);
             return Promise.resolve();
         }
@@ -126,15 +120,11 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
             return false;
         }
 
-        const value = this.getItem("mx_labs_feature_" + featureName);
-        if (value === "true") return true;
-        if (value === "false") return false;
-        // Try to read the next config level for the feature.
-        return null;
+        return this.getBoolean("mx_labs_feature_" + featureName);
     }
 
     private writeFeature(featureName: string, enabled: boolean | null) {
-        this.setItem("mx_labs_feature_" + featureName, `${enabled}`);
+        this.setBoolean("mx_labs_feature_" + featureName, enabled);
         this.watchers.notifyUpdate(featureName, null, SettingLevel.DEVICE, enabled);
     }
 }

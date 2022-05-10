@@ -13,7 +13,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import { IPushRule, IPushRules, RuleId, IPusher } from 'matrix-js-sdk/src/matrix';
 import { IThreepid, ThreepidMedium } from 'matrix-js-sdk/src/@types/threepids';
 import { act } from 'react-dom/test-utils';
@@ -23,16 +23,11 @@ import SettingsStore from "../../../../src/settings/SettingsStore";
 import { StandardActions } from '../../../../src/notifications/StandardActions';
 import { getMockClientWithEventEmitter } from '../../../test-utils';
 
-jest.mock('../../../../src/settings/SettingsStore', () => ({
-    monitorSetting: jest.fn(),
-    getValue: jest.fn(),
-    setValue: jest.fn(),
-}));
-
 // don't pollute test output with error logs from mock rejections
 jest.mock("matrix-js-sdk/src/logger");
 
-jest.useRealTimers();
+// Avoid indirectly importing any eagerly created stores that would require extra setup
+jest.mock("../../../../src/Notifier");
 
 const masterRule = {
     actions: ["dont_notify"],
@@ -81,9 +76,6 @@ describe('<Notifications />', () => {
         mockClient.getPushers.mockClear().mockResolvedValue({ pushers: [] });
         mockClient.getThreePids.mockClear().mockResolvedValue({ threepids: [] });
         mockClient.setPusher.mockClear().mockResolvedValue({});
-
-        (SettingsStore.getValue as jest.Mock).mockClear().mockReturnValue(true);
-        (SettingsStore.setValue as jest.Mock).mockClear().mockResolvedValue(true);
     });
 
     it('renders spinner while loading', () => {
@@ -91,11 +83,6 @@ describe('<Notifications />', () => {
         expect(component.find('.mx_Spinner').length).toBeTruthy();
     });
 
-    it('renders error message when fetching push rules fails', async () => {
-        mockClient.getPushRules.mockRejectedValue({});
-        const component = await getComponentAndWait();
-        expect(findByTestId(component, 'error-message').length).toBeTruthy();
-    });
     it('renders error message when fetching push rules fails', async () => {
         mockClient.getPushRules.mockRejectedValue({});
         const component = await getComponentAndWait();
@@ -221,17 +208,24 @@ describe('<Notifications />', () => {
             });
         });
 
-        it('sets settings value on toggle click', async () => {
+        it('toggles and sets settings correctly', async () => {
             const component = await getComponentAndWait();
+            let audioNotifsToggle: ReactWrapper;
 
-            const audioNotifsToggle = findByTestId(component, 'notif-setting-audioNotificationsEnabled')
-                .find('div[role="switch"]');
+            const update = () => {
+                audioNotifsToggle = findByTestId(component, 'notif-setting-audioNotificationsEnabled')
+                    .find('div[role="switch"]');
+            };
+            update();
 
-            await act(async () => {
-                audioNotifsToggle.simulate('click');
-            });
+            expect(audioNotifsToggle.getDOMNode<HTMLElement>().getAttribute("aria-checked")).toEqual("true");
+            expect(SettingsStore.getValue("audioNotificationsEnabled")).toEqual(true);
 
-            expect(SettingsStore.setValue).toHaveBeenCalledWith('audioNotificationsEnabled', null, "device", false);
+            act(() => { audioNotifsToggle.simulate('click'); });
+            update();
+
+            expect(audioNotifsToggle.getDOMNode<HTMLElement>().getAttribute("aria-checked")).toEqual("false");
+            expect(SettingsStore.getValue("audioNotificationsEnabled")).toEqual(false);
         });
     });
 

@@ -22,7 +22,7 @@ import SettingsHandler from "./SettingsHandler";
  */
 export default abstract class AbstractLocalStorageSettingsHandler extends SettingsHandler {
     // Shared cache between all subclass instances
-    private static itemCache = new Map<string, any>();
+    private static itemCache = new Map<string, string>();
     private static objectCache = new Map<string, object>();
     private static storageListenerBound = false;
 
@@ -51,7 +51,7 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
         }
     }
 
-    protected getItem(key: string): any {
+    protected getItem(key: string): string {
         if (!AbstractLocalStorageSettingsHandler.itemCache.has(key)) {
             const value = localStorage.getItem(key);
             AbstractLocalStorageSettingsHandler.itemCache.set(key, value);
@@ -59,6 +59,14 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
         }
 
         return AbstractLocalStorageSettingsHandler.itemCache.get(key);
+    }
+
+    protected getBoolean(key: string): boolean | null {
+        const item = this.getItem(key);
+        if (item === "true") return true;
+        if (item === "false") return false;
+        // Fall back to the next config level
+        return null;
     }
 
     protected getObject<T extends object>(key: string): T | null {
@@ -76,9 +84,13 @@ export default abstract class AbstractLocalStorageSettingsHandler extends Settin
         return AbstractLocalStorageSettingsHandler.objectCache.get(key) as T;
     }
 
-    protected setItem(key: string, value: any): void {
+    protected setItem(key: string, value: string): void {
         AbstractLocalStorageSettingsHandler.itemCache.set(key, value);
         localStorage.setItem(key, value);
+    }
+
+    protected setBoolean(key: string, value: boolean | null): void {
+        this.setItem(key, `${value}`);
     }
 
     protected setObject(key: string, value: object): void {
