@@ -20,6 +20,7 @@ import { Relations } from 'matrix-js-sdk/src/models/relations';
 import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
 import { M_LOCATION } from 'matrix-js-sdk/src/@types/location';
 import { M_POLL_START } from "matrix-events-sdk";
+import { MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 
 import SettingsStore from "../../../settings/SettingsStore";
 import { Mjolnir } from "../../../mjolnir/Mjolnir";
@@ -73,7 +74,12 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
     }
 
+    public componentDidMount(): void {
+        this.props.mxEvent.addListener(MatrixEventEvent.Decrypted, this.onDecrypted);
+    }
+
     public componentWillUnmount() {
+        this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.mediaHelper?.destroy();
     }
 
@@ -117,6 +123,14 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     public getMediaHelper() {
         return this.mediaHelper;
     }
+
+    private onDecrypted = (): void => {
+        // Recheck MediaEventHelper eligibility as it can change when the event gets decrypted
+        if (MediaEventHelper.isEligible(this.props.mxEvent)) {
+            this.mediaHelper?.destroy();
+            this.mediaHelper = new MediaEventHelper(this.props.mxEvent);
+        }
+    };
 
     private onTileUpdate = () => {
         this.forceUpdate();
