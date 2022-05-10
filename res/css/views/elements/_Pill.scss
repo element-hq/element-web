@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_Pill {
-    padding: $font-1px 0.4em $font-1px 0;
+    padding: $font-1px 0.4em $font-1px 0.4em;
     line-height: $font-17px;
     border-radius: $font-16px;
     vertical-align: text-top;
@@ -47,6 +47,7 @@ limitations under the License.
     }
 
     .mx_BaseAvatar {
+        margin-left: -0.3em; // Otherwise the gap is too large
         position: relative;
         display: inline-flex;
         align-items: center;
