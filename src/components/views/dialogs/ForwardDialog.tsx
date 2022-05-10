@@ -21,6 +21,8 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { ILocationContent, LocationAssetType, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
+import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -47,6 +49,8 @@ import { Action } from "../../../dispatcher/actions";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { ButtonEvent } from "../elements/AccessibleButton";
 import { roomContextDetailsText } from "../../../utils/i18n-helpers";
+import { isLocationEvent } from "../../../utils/EventUtils";
+import { isSelfLocation, locationEventGeoUri } from "../../../utils/location";
 
 const AVATAR_SIZE = 30;
 
@@ -156,6 +160,34 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
     </div>;
 };
 
+const getStrippedEventContent = (event: MatrixEvent): IContent => {
+    const {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
+        // We're taking a shallow copy here to avoid https://github.com/vector-im/element-web/issues/10924
+        ...content
+    } = event.getContent();
+
+    // self location shares should have their description removed
+    // and become 'pin' share type
+    if (isLocationEvent(event) && isSelfLocation(content as ILocationContent)) {
+        const timestamp = M_TIMESTAMP.findIn<number>(content);
+        const geoUri = locationEventGeoUri(event);
+        return {
+            ...content,
+            ...makeLocationContent(
+                undefined, // text
+                geoUri,
+                timestamp || Date.now(),
+                undefined, // description
+                LocationAssetType.Pin,
+            ),
+        };
+    }
+
+    return content;
+};
+
 const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCreator, onFinished }) => {
     const userId = cli.getUserId();
     const [profileInfo, setProfileInfo] = useState<any>({});
@@ -163,12 +195,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         cli.getProfileInfo(userId).then(info => setProfileInfo(info));
     }, [cli, userId]);
 
-    const {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
-        // We're taking a shallow copy here to avoid https://github.com/vector-im/element-web/issues/10924
-        ...content
-    } = event.getContent();
+    const content = getStrippedEventContent(event);
 
     // For the message preview we fake the sender as ourselves
     const mockEvent = new MatrixEvent({

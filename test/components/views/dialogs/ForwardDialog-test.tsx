@@ -18,6 +18,9 @@ import React from "react";
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
+import { ReactWrapper } from "enzyme";
+import { LocationAssetType, M_ASSET, M_LOCATION, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
+import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import ForwardDialog from "../../../../src/components/views/dialogs/ForwardDialog";
@@ -25,10 +28,13 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import {
     getMockClientWithEventEmitter,
+    makeLegacyLocationEvent,
+    makeLocationEvent,
     mkEvent,
     mkMessage,
     mkStubRoom,
 } from "../../../test-utils";
+import { TILE_SERVER_WK_KEY } from "../../../../src/utils/WellKnownUtils";
 
 describe("ForwardDialog", () => {
     const sourceRoom = "!111111111111111111:example.org";
@@ -58,6 +64,9 @@ describe("ForwardDialog", () => {
         }),
         decryptEventIfNeeded: jest.fn(),
         sendEvent: jest.fn(),
+        getClientWellKnown: jest.fn().mockReturnValue({
+            [TILE_SERVER_WK_KEY.name]: { map_style_url: 'maps.com' },
+        }),
     });
     const defaultRooms = ["a", "A", "b"].map(name => mkStubRoom(name, name, mockClient));
 
@@ -198,5 +207,94 @@ describe("ForwardDialog", () => {
         expect(firstButton.prop("disabled")).toBe(true);
         const secondButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").last();
         expect(secondButton.prop("disabled")).toBe(false);
+    });
+
+    describe('Location events', () => {
+        // 14.03.2022 16:15
+        const now = 1647270879403;
+        const roomId = "a";
+        const geoUri = "geo:51.5076,-0.1276";
+        const legacyLocationEvent = makeLegacyLocationEvent(geoUri);
+        const modernLocationEvent = makeLocationEvent(geoUri);
+        const pinDropLocationEvent = makeLocationEvent(geoUri, LocationAssetType.Pin);
+
+        beforeEach(() => {
+            // legacy events will default timestamp to Date.now()
+            // mock a stable now for easy assertion
+            jest.spyOn(Date, 'now').mockReturnValue(now);
+        });
+
+        afterAll(() => {
+            jest.spyOn(Date, 'now').mockRestore();
+        });
+
+        const sendToFirstRoom = (wrapper: ReactWrapper): void =>
+            act(() => {
+                const sendToFirstRoomButton = wrapper.find("AccessibleButton.mx_ForwardList_sendButton").first();
+                sendToFirstRoomButton.simulate("click");
+            });
+
+        it('converts legacy location events to pin drop shares', async () => {
+            const wrapper = await mountForwardDialog(legacyLocationEvent);
+
+            expect(wrapper.find('MLocationBody').length).toBeTruthy();
+            sendToFirstRoom(wrapper);
+
+            // text and description from original event are removed
+            // text gets new default message from event values
+            // timestamp is defaulted to now
+            const text = `Location ${geoUri} at ${new Date(now).toISOString()}`;
+            const expectedStrippedContent = {
+                ...modernLocationEvent.getContent(),
+                body: text,
+                [TEXT_NODE_TYPE.name]: text,
+                [M_TIMESTAMP.name]: now,
+                [M_ASSET.name]: { type: LocationAssetType.Pin },
+                [M_LOCATION.name]: {
+                    uri: geoUri,
+                    description: undefined,
+                },
+            };
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(
+                roomId, legacyLocationEvent.getType(), expectedStrippedContent,
+            );
+        });
+
+        it('removes personal information from static self location shares', async () => {
+            const wrapper = await mountForwardDialog(modernLocationEvent);
+
+            expect(wrapper.find('MLocationBody').length).toBeTruthy();
+            sendToFirstRoom(wrapper);
+
+            const timestamp = M_TIMESTAMP.findIn<number>(modernLocationEvent.getContent());
+            // text and description from original event are removed
+            // text gets new default message from event values
+            const text = `Location ${geoUri} at ${new Date(timestamp).toISOString()}`;
+            const expectedStrippedContent = {
+                ...modernLocationEvent.getContent(),
+                body: text,
+                [TEXT_NODE_TYPE.name]: text,
+                [M_ASSET.name]: { type: LocationAssetType.Pin },
+                [M_LOCATION.name]: {
+                    uri: geoUri,
+                    description: undefined,
+                },
+            };
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(
+                roomId, modernLocationEvent.getType(), expectedStrippedContent,
+            );
+        });
+
+        it('forwards pin drop event', async () => {
+            const wrapper = await mountForwardDialog(pinDropLocationEvent);
+
+            expect(wrapper.find('MLocationBody').length).toBeTruthy();
+
+            sendToFirstRoom(wrapper);
+
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(
+                roomId, pinDropLocationEvent.getType(), pinDropLocationEvent.getContent(),
+            );
+        });
     });
 });

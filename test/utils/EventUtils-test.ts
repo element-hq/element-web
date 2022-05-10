@@ -315,11 +315,11 @@ describe('EventUtils', () => {
     });
 
     describe('canForward()', () => {
-        it('returns false for a location event', () => {
+        it('returns true for a location event', () => {
             const event = new MatrixEvent({
                 type: M_LOCATION.name,
             });
-            expect(canForward(event)).toBe(false);
+            expect(canForward(event)).toBe(true);
         });
         it('returns false for a poll event', () => {
             const event = makePollStartEvent('Who?', userId);

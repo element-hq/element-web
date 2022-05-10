@@ -277,7 +277,6 @@ export const isLocationEvent = (event: MatrixEvent): boolean => {
 
 export function canForward(event: MatrixEvent): boolean {
     return !(
-        isLocationEvent(event) ||
         M_POLL_START.matches(event.getType())
     );
 }
