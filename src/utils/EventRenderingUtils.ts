@@ -17,13 +17,12 @@ limitations under the License.
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType, MsgType } from "matrix-js-sdk/src/@types/event";
 import { M_POLL_START } from "matrix-events-sdk";
-import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 
 import SettingsStore from "../settings/SettingsStore";
 import { haveRendererForEvent, JitsiEventFactory, JSONEventFactory, pickFactory } from "../events/EventTileFactory";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { getMessageModerationState, MessageModerationState } from "./EventUtils";
+import { getMessageModerationState, isLocationEvent, MessageModerationState } from "./EventUtils";
 
 export function getEventDisplayInfo(mxEvent: MatrixEvent, showHiddenEvents: boolean, hideEvent?: boolean): {
     isInfoMessage: boolean;
@@ -80,12 +79,8 @@ export function getEventDisplayInfo(mxEvent: MatrixEvent, showHiddenEvents: bool
     const noBubbleEvent = (
         (eventType === EventType.RoomMessage && msgtype === MsgType.Emote) ||
         M_POLL_START.matches(eventType) ||
-        M_LOCATION.matches(eventType) ||
         M_BEACON_INFO.matches(eventType) ||
-        (
-            eventType === EventType.RoomMessage &&
-            M_LOCATION.matches(msgtype)
-        )
+        isLocationEvent(mxEvent)
     );
 
     // If we're showing hidden events in the timeline, we should use the

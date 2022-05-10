@@ -29,7 +29,6 @@ import {
     M_POLL_END,
     PollStartEvent,
 } from "matrix-events-sdk";
-import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 
 import { _t } from './languageHandler';
 import * as Roles from './Roles';
@@ -46,6 +45,7 @@ import AccessibleButton from './components/views/elements/AccessibleButton';
 import RightPanelStore from './stores/right-panel/RightPanelStore';
 import UserIdentifierCustomisations from './customisations/UserIdentifier';
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
+import { isLocationEvent } from './utils/EventUtils';
 
 export function getSenderName(event: MatrixEvent): string {
     return event.sender?.name ?? event.getSender() ?? _t("Someone");
@@ -305,11 +305,7 @@ function textForServerACLEvent(ev: MatrixEvent): () => string | null {
 }
 
 function textForMessageEvent(ev: MatrixEvent): () => string | null {
-    const type = ev.getType();
-    const content = ev.getContent();
-    const msgtype = content.msgtype;
-
-    if (M_LOCATION.matches(type) || M_LOCATION.matches(msgtype)) {
+    if (isLocationEvent(ev)) {
         return textForLocationEvent(ev);
     }
 
