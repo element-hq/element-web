@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import { mount } from "enzyme";
 
-import DesktopBuildsNotice from "../../../../src/components/views/elements/DesktopBuildsNotice";
+import SearchWarning from "../../../../src/components/views/elements/SearchWarning";
 import { PosthogScreenTracker } from "../../../../src/PosthogTrackers";
 import SearchBar, { SearchScope } from "../../../../src/components/views/rooms/SearchBar";
 import { KeyBindingAction } from "../../../../src/accessibility/KeyboardShortcuts";
@@ -39,8 +39,8 @@ jest.mock("../../../../src/KeyBindingsManager", () => ({
         { getAccessibilityAction: jest.fn(() => mockCurrentEvent) })),
 }));
 
-/** mock out DesktopBuildsNotice component so it doesn't affect the result of our test */
-jest.mock('../../../../src/components/views/elements/DesktopBuildsNotice', () => ({
+/** mock out SearchWarning component so it doesn't affect the result of our test */
+jest.mock('../../../../src/components/views/elements/SearchWarning', () => ({
     __esModule: true,
     WarningKind: {
         get Search() { // eslint-disable-line @typescript-eslint/naming-convention
@@ -73,13 +73,13 @@ describe("SearchBar", () => {
 
     it("must render child components and pass necessary props", () => {
         const postHogScreenTracker = wrapper.find(PosthogScreenTracker);
-        const desktopBuildNotice = wrapper.find(DesktopBuildsNotice);
+        const searchWarning = wrapper.find(SearchWarning);
 
         expect(postHogScreenTracker.length).toBe(1);
-        expect(desktopBuildNotice.length).toBe(1);
+        expect(searchWarning.length).toBe(1);
         expect(postHogScreenTracker.props().screenName).toEqual("RoomSearch");
-        expect(desktopBuildNotice.props().isRoomEncrypted).toEqual(searchProps.isRoomEncrypted);
-        expect(desktopBuildNotice.props().kind).toEqual(mockWarningKind);
+        expect(searchWarning.props().isRoomEncrypted).toEqual(searchProps.isRoomEncrypted);
+        expect(searchWarning.props().kind).toEqual(mockWarningKind);
     });
 
     it("must not search when input value is empty", () => {

@@ -35,28 +35,30 @@ interface IProps {
     kind: WarningKind;
 }
 
-export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
+export default function SearchWarning({ isRoomEncrypted, kind }: IProps) {
     if (!isRoomEncrypted) return null;
     if (EventIndexPeg.get()) return null;
 
     if (EventIndexPeg.error) {
-        return <>
-            { _t("Message search initialisation failed, check <a>your settings</a> for more information", {}, {
-                a: sub => (
-                    <AccessibleButton
-                        kind="link_inline"
-                        onClick={(evt) => {
-                            evt.preventDefault();
-                            dis.dispatch({
-                                action: Action.ViewUserSettings,
-                                initialTabId: UserTab.Security,
-                            });
-                        }}
-                    >
-                        { sub }
-                    </AccessibleButton>),
-            }) }
-        </>;
+        return (
+            <div className="mx_SearchWarning">
+                { _t("Message search initialisation failed, check <a>your settings</a> for more information", {}, {
+                    a: sub => (
+                        <AccessibleButton
+                            kind="link_inline"
+                            onClick={(evt) => {
+                                evt.preventDefault();
+                                dis.dispatch({
+                                    action: Action.ViewUserSettings,
+                                    initialTabId: UserTab.Security,
+                                });
+                            }}
+                        >
+                            { sub }
+                        </AccessibleButton>),
+                }) }
+            </div>
+        );
     }
 
     const brand = SdkConfig.get("brand");
@@ -97,7 +99,7 @@ export default function DesktopBuildsNotice({ isRoomEncrypted, kind }: IProps) {
     }
 
     return (
-        <div className="mx_DesktopBuildsNotice">
+        <div className="mx_SearchWarning">
             { logo }
             <span>{ text }</span>
         </div>
