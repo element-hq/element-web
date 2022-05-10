@@ -37,7 +37,7 @@ export function formatRange(range: Range, action: Formatting): void {
         range.trim();
     }
 
-    // Edgecase when just selecting whitespace or new line.
+    // Edge case when just selecting whitespace or new line.
     // There should be no reason to format whitespace, so we can just return.
     if (range.length === 0) {
         return;
@@ -216,20 +216,18 @@ export function formatRangeAsCode(range: Range): void {
     replaceRangeAndExpandSelection(range, parts);
 }
 
-export function formatRangeAsLink(range: Range) {
+export function formatRangeAsLink(range: Range, text?: string) {
     const { model } = range;
     const { partCreator } = model;
-    const linkRegex = /\[(.*?)\]\(.*?\)/g;
+    const linkRegex = /\[(.*?)]\(.*?\)/g;
     const isFormattedAsLink = linkRegex.test(range.text);
     if (isFormattedAsLink) {
         const linkDescription = range.text.replace(linkRegex, "$1");
         const newParts = [partCreator.plain(linkDescription)];
-        const prefixLength = 1;
-        const suffixLength = range.length - (linkDescription.length + 2);
-        replaceRangeAndAutoAdjustCaret(range, newParts, true, prefixLength, suffixLength);
+        replaceRangeAndMoveCaret(range, newParts, 0);
     } else {
         // We set offset to -1 here so that the caret lands between the brackets
-        replaceRangeAndMoveCaret(range, [partCreator.plain("[" + range.text + "]" + "()")], -1);
+        replaceRangeAndMoveCaret(range, [partCreator.plain("[" + range.text + "]" + "(" + (text ?? "") + ")")], -1);
     }
 }
 

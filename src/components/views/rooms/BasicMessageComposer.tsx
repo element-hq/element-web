@@ -24,10 +24,11 @@ import { logger } from "matrix-js-sdk/src/logger";
 import EditorModel from '../../../editor/model';
 import HistoryManager from '../../../editor/history';
 import { Caret, setSelection } from '../../../editor/caret';
-import { formatRange, replaceRangeAndMoveCaret, toggleInlineFormat } from '../../../editor/operations';
+import { formatRange, formatRangeAsLink, replaceRangeAndMoveCaret, toggleInlineFormat }
+    from '../../../editor/operations';
 import { getCaretOffsetAndText, getRangeForSelection } from '../../../editor/dom';
 import Autocomplete, { generateCompletionDomId } from '../rooms/Autocomplete';
-import { getAutoCompleteCreator, Type } from '../../../editor/parts';
+import { getAutoCompleteCreator, Part, Type } from '../../../editor/parts';
 import { parseEvent, parsePlainTextMessage } from '../../../editor/deserialize';
 import { renderModel } from '../../../editor/render';
 import TypingStore from "../../../stores/TypingStore";
@@ -45,6 +46,7 @@ import { ICompletion } from "../../../autocomplete/Autocompleter";
 import { getKeyBindingsManager } from '../../../KeyBindingsManager';
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from '../../../accessibility/KeyboardShortcuts';
 import { _t } from "../../../languageHandler";
+import { linkify } from '../../../linkify-matrix';
 
 // matches emoticons which follow the start of a line or whitespace
 const REGEX_EMOTICON_WHITESPACE = new RegExp('(?:^|\\s)(' + EMOTICON_REGEX.source + ')\\s|:^$');
@@ -90,7 +92,7 @@ function selectionEquals(a: Partial<Selection>, b: Selection): boolean {
 interface IProps {
     model: EditorModel;
     room: Room;
-    threadId: string;
+    threadId?: string;
     placeholder?: string;
     label?: string;
     initialCaret?: DocumentOffset;
@@ -331,26 +333,32 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
 
     private onPaste = (event: ClipboardEvent<HTMLDivElement>): boolean => {
         event.preventDefault(); // we always handle the paste ourselves
-        if (this.props.onPaste && this.props.onPaste(event, this.props.model)) {
+        if (this.props.onPaste?.(event, this.props.model)) {
             // to prevent double handling, allow props.onPaste to skip internal onPaste
             return true;
         }
 
         const { model } = this.props;
         const { partCreator } = model;
+        const plainText = event.clipboardData.getData("text/plain");
         const partsText = event.clipboardData.getData("application/x-element-composer");
-        let parts;
+
+        let parts: Part[];
         if (partsText) {
             const serializedTextParts = JSON.parse(partsText);
-            const deserializedParts = serializedTextParts.map(p => partCreator.deserializePart(p));
-            parts = deserializedParts;
+            parts = serializedTextParts.map(p => partCreator.deserializePart(p));
         } else {
-            const text = event.clipboardData.getData("text/plain");
-            parts = parsePlainTextMessage(text, partCreator, { shouldEscape: false });
+            parts = parsePlainTextMessage(plainText, partCreator, { shouldEscape: false });
         }
+
         this.modifiedFlag = true;
         const range = getRangeForSelection(this.editorRef.current, model, document.getSelection());
-        replaceRangeAndMoveCaret(range, parts);
+
+        if (plainText && range.length > 0 && linkify.test(plainText)) {
+            formatRangeAsLink(range, plainText);
+        } else {
+            replaceRangeAndMoveCaret(range, parts);
+        }
     };
 
     private onInput = (event: Partial<InputEvent>): void => {

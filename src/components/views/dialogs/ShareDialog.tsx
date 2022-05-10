@@ -52,7 +52,7 @@ const socials = [
     }, {
         name: 'Reddit',
         img: require("../../../../res/img/social/reddit.png"),
-        url: (url) => `http://www.reddit.com/submit?url=${url}`,
+        url: (url) => `https://www.reddit.com/submit?url=${url}`,
     }, {
         name: 'email',
         img: require("../../../../res/img/social/email-1.png"),

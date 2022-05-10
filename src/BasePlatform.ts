@@ -237,7 +237,7 @@ export default abstract class BasePlatform {
     }
 
     /**
-     * Restarts the application, without neccessarily reloading
+     * Restarts the application, without necessarily reloading
      * any application code
      */
     abstract reload();

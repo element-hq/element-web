@@ -187,7 +187,7 @@ const transformTags: IExtendedSanitizeOptions["transformTags"] = { // custom to 
                 delete attribs.target;
             }
         } else {
-            // Delete the href attrib if it is falsey
+            // Delete the href attrib if it is falsy
             delete attribs.href;
         }
 

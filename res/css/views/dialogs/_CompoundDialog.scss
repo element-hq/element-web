@@ -38,14 +38,9 @@ limitations under the License.
         }
 
         .mx_CompoundDialog_cancelButton {
-            mask: url('$(res)/img/feather-customised/cancel.svg');
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: cover;
+            @mixin customisedCancelButton;
             width: 20px;
             height: 20px;
-            background-color: $dialog-close-fg-color;
-            cursor: pointer;
 
             // Align with middle of title, 34px from right edge
             position: absolute;

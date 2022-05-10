@@ -34,7 +34,7 @@ const keyMap = new EnhancedMap<Object, EnhancedMap<string, unknown>>();
  * second call comes through late. There are various functions named "forget"
  * to have the cache be cleared of a result.
  *
- * Singleflights in our usecase are tied to an instance of something, combined
+ * Singleflights in our use case are tied to an instance of something, combined
  * with a string key to differentiate between multiple possible actions. This
  * means that a "save" key will be scoped to the instance which defined it and
  * not leak between other instances. This is done to avoid having to concatenate

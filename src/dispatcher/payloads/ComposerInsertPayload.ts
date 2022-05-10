@@ -28,7 +28,7 @@ export enum ComposerType {
 interface IBaseComposerInsertPayload extends ActionPayload {
     action: Action.ComposerInsert;
     timelineRenderingType: TimelineRenderingType;
-    composerType?: ComposerType; // falsey if should be re-dispatched to the correct composer
+    composerType?: ComposerType; // falsy if should be re-dispatched to the correct composer
 }
 
 interface IComposerInsertMentionPayload extends IBaseComposerInsertPayload {

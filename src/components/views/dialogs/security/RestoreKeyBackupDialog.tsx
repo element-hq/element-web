@@ -44,7 +44,7 @@ enum ProgressState {
 }
 
 interface IProps extends IDialogProps {
-    // if false, will close the dialog as soon as the restore completes succesfully
+    // if false, will close the dialog as soon as the restore completes successfully
     // default: true
     showSummary?: boolean;
     // If specified, gather the key from the user but then call the function with the backup

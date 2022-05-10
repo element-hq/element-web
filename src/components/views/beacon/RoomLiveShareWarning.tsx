@@ -29,7 +29,7 @@ import LiveTimeRemaining from './LiveTimeRemaining';
 
 const getLabel = (hasLocationPublishError: boolean, hasStopSharingError: boolean): string => {
     if (hasLocationPublishError) {
-        return _t('An error occured whilst sharing your live location, please try again');
+        return _t('An error occurred whilst sharing your live location, please try again');
     }
     if (hasStopSharingError) {
         return _t('An error occurred while stopping your live location, please try again');

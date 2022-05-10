@@ -596,7 +596,7 @@ export default class EventIndex extends EventEmitter {
                     continue;
                 }
 
-                // If all events were already indexed we assume that we catched
+                // If all events were already indexed we assume that we caught
                 // up with our index and don't need to crawl the room further.
                 // Let us delete the checkpoint in that case, otherwise push
                 // the new checkpoint to be used by the crawler.
@@ -612,7 +612,7 @@ export default class EventIndex extends EventEmitter {
                     this.crawlerCheckpoints.push(newCheckpoint);
                 }
             } catch (e) {
-                logger.log("EventIndex: Error durring a crawl", e);
+                logger.log("EventIndex: Error during a crawl", e);
                 // An error occurred, put the checkpoint back so we
                 // can retry.
                 this.crawlerCheckpoints.push(checkpoint);
@@ -797,7 +797,7 @@ export default class EventIndex extends EventEmitter {
         // to get our events in the BACKWARDS direction but populate them in the
         // forwards direction.
         // This needs to happen because a fill request might come with an
-        // exisitng timeline e.g. if you close and re-open the FilePanel.
+        // existing timeline e.g. if you close and re-open the FilePanel.
         if (fromEvent === null) {
             matrixEvents.reverse();
             direction = direction == EventTimeline.BACKWARDS ? EventTimeline.FORWARDS: EventTimeline.BACKWARDS;

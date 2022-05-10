@@ -91,7 +91,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
     /**
      * Gets the widget messaging class for a given widget UID.
      * @param {string} widgetUid The widget UID.
-     * @returns {ClientWidgetApi} The widget API, or a falsey value if not found.
+     * @returns {ClientWidgetApi} The widget API, or a falsy value if not found.
      */
     public getMessagingForUid(widgetUid: string): ClientWidgetApi {
         return this.widgetMap.get(widgetUid);

@@ -132,7 +132,7 @@ export const VectorPushRulesDefinitions = {
     }),
 
     // Messages just sent to a group chat room
-    // 1:1 room messages are catched by the .m.rule.room_one_to_one rule if any defined
+    // 1:1 room messages are caught by the .m.rule.room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
     ".m.rule.message": new VectorPushRuleDefinition({
         description: _td("Messages in group chats"), // passed through _t() translation in src/components/views/settings/Notifications.js
@@ -144,7 +144,7 @@ export const VectorPushRulesDefinitions = {
     }),
 
     // Encrypted messages just sent to a group chat room
-    // Encrypted 1:1 room messages are catched by the .m.rule.encrypted_room_one_to_one rule if any defined
+    // Encrypted 1:1 room messages are caught by the .m.rule.encrypted_room_one_to_one rule if any defined
     // By opposition, all other room messages are from group chat rooms.
     ".m.rule.encrypted": new VectorPushRuleDefinition({
         description: _td("Encrypted messages in group chats"), // passed through _t() translation in src/components/views/settings/Notifications.js

@@ -142,7 +142,7 @@ export default class DMRoomMap {
     /**
      * Gets the DM room which the given IDs share, if any.
      * @param {string[]} ids The identifiers (user IDs and email addresses) to look for.
-     * @returns {Room} The DM room which all IDs given share, or falsey if no common room.
+     * @returns {Room} The DM room which all IDs given share, or falsy if no common room.
      */
     public getDMRoomForIdentifiers(ids: string[]): Room {
         // TODO: [Canonical DMs] Handle lookups for email addresses.

@@ -57,7 +57,7 @@ interface IProps {
     // which bypasses permission prompts as it was added explicitly by that user
     room?: Room;
     threadId?: string | null;
-    // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer continer.
+    // Specifying 'fullWidth' as true will render the app tile to fill the width of the app drawer container.
     // This should be set to true when there is only one widget in the app drawer, otherwise it should be false.
     fullWidth?: boolean;
     // Optional. If set, renders a smaller view of the widget
@@ -288,7 +288,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     private setupSgListeners() {
         this.sgWidget.on("preparing", this.onWidgetPreparing);
         this.sgWidget.on("ready", this.onWidgetReady);
-        // emits when the capabilites have been setup or changed
+        // emits when the capabilities have been set up or changed
         this.sgWidget.on("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
     }
 
@@ -543,7 +543,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         const sandboxFlags = "allow-forms allow-popups allow-popups-to-escape-sandbox " +
             "allow-same-origin allow-scripts allow-presentation allow-downloads";
 
-        // Additional iframe feature pemissions
+        // Additional iframe feature permissions
         // (see - https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes and https://wicg.github.io/feature-policy/)
         const iframeFeatures = "microphone; camera; encrypted-media; autoplay; display-capture; clipboard-write;";
 

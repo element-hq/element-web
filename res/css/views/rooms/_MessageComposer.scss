@@ -178,12 +178,6 @@ limitations under the License.
     }
 }
 
-.mx_ContextualMenu {
-    .mx_MessageComposer_button {
-        padding-left: calc(var(--size) + 6px);
-    }
-}
-
 .mx_MessageComposer_button {
     --size: 26px;
     position: relative;
@@ -192,20 +186,16 @@ limitations under the License.
     line-height: var(--size);
     width: auto;
     padding-left: var(--size);
+    border-radius: 50%;
+    margin-right: 6px;
 
-    &:not(.mx_CallContextMenu_item) {
-        border-radius: 50%;
-        margin-right: 6px;
-
-        &:last-child {
-            margin-right: auto;
-        }
+    &:last-child {
+        margin-right: auto;
     }
 
     &::before {
         content: '';
         position: absolute;
-
         top: 3px;
         left: 3px;
         height: 20px;
@@ -398,19 +388,4 @@ limitations under the License.
     .mx_MessageComposer_e2eIcon {
         left: 0;
     }
-}
-
-.mx_MessageComposer_Menu .mx_CallContextMenu_item {
-    display: flex;
-    align-items: center;
-    max-width: unset;
-    margin: 7px 7px 7px 16px; // space out the buttons
-}
-
-.mx_MessageComposer_Menu .mx_ContextualMenu {
-    min-width: 150px;
-    width: max-content;
-    padding: 5px 10px 5px 0;
-    box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.25);
-    border-radius: 8px;
 }

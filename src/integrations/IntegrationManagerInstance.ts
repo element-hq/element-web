@@ -75,7 +75,7 @@ export class IntegrationManagerInstance {
         client.setTermsInteractionCallback((policyInfo, agreedUrls) => {
             // To avoid visual glitching of two modals stacking briefly, we customise the
             // terms dialog sizing when it will appear for the integration manager so that
-            // it gets the same basic size as the IM's own modal.
+            // it gets the same basic size as the integration manager's own modal.
             return dialogTermsInteractionCallback(
                 policyInfo, agreedUrls, 'mx_TermsDialog_forIntegrationManager',
             );

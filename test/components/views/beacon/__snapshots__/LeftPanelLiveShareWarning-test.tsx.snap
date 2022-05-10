@@ -69,7 +69,7 @@ exports[`<LeftPanelLiveShareWarning /> when user has live location monitor rende
       role="button"
       tabIndex={0}
     >
-      An error occured whilst sharing your live location
+      An error occurred whilst sharing your live location
     </div>
   </AccessibleButton>
 </LeftPanelLiveShareWarning>

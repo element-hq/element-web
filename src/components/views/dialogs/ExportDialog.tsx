@@ -263,7 +263,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
         else onFinished(false);
     };
 
-    const confirmCanel = async () => {
+    const confirmCancel = async () => {
         await exporter?.cancelExport();
         setExportCancelled(true);
         setExporting(false);
@@ -346,7 +346,7 @@ const ExportDialog: React.FC<IProps> = ({ room, onFinished }) => {
                     hasCancel={true}
                     cancelButton={_t("Continue")}
                     onCancel={() => setCancelWarning(false)}
-                    onPrimaryButtonClick={confirmCanel}
+                    onPrimaryButtonClick={confirmCancel}
                 />
             </BaseDialog>
         );

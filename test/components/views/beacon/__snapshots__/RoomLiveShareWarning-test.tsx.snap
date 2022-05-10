@@ -32,7 +32,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
       <span
         className="mx_RoomLiveShareWarning_label"
       >
-        An error occured whilst sharing your live location, please try again
+        An error occurred whilst sharing your live location, please try again
       </span>
       <AccessibleButton
         className="mx_RoomLiveShareWarning_stopButton"

@@ -53,7 +53,7 @@ export default class ErrorBoundary extends React.PureComponent<{}, IState> {
         // in their own `console.error` invocation.
         logger.error(error);
         logger.error(
-            "The above error occured while React was rendering the following components:",
+            "The above error occurred while React was rendering the following components:",
             componentStack,
         );
     }

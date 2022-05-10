@@ -91,7 +91,7 @@ export default abstract class BaseEventIndexManager {
      *
      * @param {MatrixEvent} ev The event that should be added to the index.
      * @param {IMatrixProfile} profile The profile of the event sender at the
-     * time of the event receival.
+     * time the event was received.
      *
      * @return {Promise} A promise that will resolve when the was queued up for
      * addition.

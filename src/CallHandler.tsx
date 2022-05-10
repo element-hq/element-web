@@ -948,7 +948,7 @@ export default class CallHandler extends EventEmitter {
     ): Promise<void> {
         if (consultFirst) {
             // if we're consulting, we just start by placing a call to the transfer
-            // target (passing the transferee so the actual tranfer can happen later)
+            // target (passing the transferee so the actual transfer can happen later)
             this.dialNumber(destination, call);
             return;
         }

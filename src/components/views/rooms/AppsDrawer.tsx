@@ -49,7 +49,7 @@ interface IState {
     // @ts-ignore - TS wants a string key, but we know better
     apps: {[id: Container]: IApp[]};
     resizingVertical: boolean; // true when changing the height of the apps drawer
-    resizingHorizontal: boolean; // true when chagning the distribution of the width between widgets
+    resizingHorizontal: boolean; // true when changing the distribution of the width between widgets
     resizing: boolean;
 }
 
@@ -259,7 +259,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
             mx_AppsDrawer_2apps: apps.length === 2,
             mx_AppsDrawer_3apps: apps.length === 3,
         });
-        const appConatiners =
+        const appContainers =
             <div className="mx_AppsContainer" ref={this.collectResizer}>
                 { apps.map((app, i) => {
                     if (i < 1) return app;
@@ -272,7 +272,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
 
         let drawer;
         if (widgetIsMaxmised) {
-            drawer = appConatiners;
+            drawer = appContainers;
         } else {
             drawer = <PersistentVResizer
                 room={this.props.room}
@@ -282,7 +282,7 @@ export default class AppsDrawer extends React.Component<IProps, IState> {
                 handleWrapperClass="mx_AppsContainer_resizerHandleContainer"
                 className="mx_AppsContainer_resizer"
                 resizeNotifier={this.props.resizeNotifier}>
-                { appConatiners }
+                { appContainers }
             </PersistentVResizer>;
         }
 

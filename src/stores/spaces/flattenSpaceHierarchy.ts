@@ -38,7 +38,7 @@ const traverseSpaceDescendants = (
 };
 
 /**
- * Helper function to traverse space heirachy and flatten
+ * Helper function to traverse space hierarchy and flatten
  * @param spaceEntityMap ie map of rooms or dm userIds
  * @param spaceDescendantMap map of spaces and their children
  * @returns set of all rooms

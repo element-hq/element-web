@@ -58,7 +58,6 @@ export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition,
 
     const className = classNames(
         "mx_MessageComposer_button",
-        "mx_MessageComposer_location",
         {
             "mx_MessageComposer_button_highlight": menuDisplayed,
         },
@@ -67,6 +66,7 @@ export const LocationButton: React.FC<IProps> = ({ roomId, sender, menuPosition,
     return <React.Fragment>
         <CollapsibleButton
             className={className}
+            iconClassName="mx_MessageComposer_location"
             onClick={openMenu}
             title={_t("Location")}
         />

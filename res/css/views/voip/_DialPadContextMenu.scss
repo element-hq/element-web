@@ -35,15 +35,10 @@ limitations under the License.
 }
 
 .mx_DialPadContextMenu_cancel {
+    @mixin customisedCancelButton;
     float: right;
-    mask: url('$(res)/img/feather-customised/cancel.svg');
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: cover;
     width: 14px;
     height: 14px;
-    background-color: $dialog-close-fg-color;
-    cursor: pointer;
 }
 
 .mx_DialPadContextMenu_header:focus-within {

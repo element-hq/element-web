@@ -50,6 +50,12 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_EventTile_receiptSending::before {
         mask-image: url('$(res)/img/element-icons/circle-sending.svg');
     }
+
+    &[data-layout=group] {
+        .mx_EventTile_line {
+            line-height: var(--GroupLayout-EventTile-line-height);
+        }
+    }
 }
 
 .mx_EventTile:not([data-layout=bubble]) {
@@ -263,8 +269,15 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 }
 
-.mx_GenericEventListSummary:not([data-layout=bubble]) .mx_EventTile_line {
-    padding-left: $left-gutter;
+.mx_GenericEventListSummary:not([data-layout=bubble]) {
+    .mx_EventTile_line {
+        padding-left: $left-gutter;
+        line-height: normal;
+
+        .mx_RedactedBody {
+            line-height: 1; // remove spacing between lines
+        }
+    }
 }
 
 .mx_EventTile:not([data-layout=bubble]).mx_EventTile_info .mx_EventTile_line,
@@ -840,12 +853,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             order: 999;
             padding-left: 0;
             padding-right: 0;
-        }
-
-        .mx_ReplyChain {
-            .mx_MLocationBody {
-                margin-top: 6px; // See: https://github.com/matrix-org/matrix-react-sdk/pull/8442
-            }
         }
 
         &:not([data-layout=bubble]) {

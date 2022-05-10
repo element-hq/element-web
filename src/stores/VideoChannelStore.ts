@@ -159,6 +159,10 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         messaging.on(`action:${ElementWidgetActions.UnmuteAudio}`, this.onUnmuteAudio);
         messaging.on(`action:${ElementWidgetActions.MuteVideo}`, this.onMuteVideo);
         messaging.on(`action:${ElementWidgetActions.UnmuteVideo}`, this.onUnmuteVideo);
+        // Empirically, it's possible for Jitsi Meet to crash instantly at startup,
+        // sending a hangup event that races with the rest of this method, so we also
+        // need to add the hangup listener now rather than later
+        messaging.once(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
 
         this.emit(VideoChannelEvent.StartConnect, roomId);
 
@@ -186,6 +190,7 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             messaging.off(`action:${ElementWidgetActions.UnmuteAudio}`, this.onUnmuteAudio);
             messaging.off(`action:${ElementWidgetActions.MuteVideo}`, this.onMuteVideo);
             messaging.off(`action:${ElementWidgetActions.UnmuteVideo}`, this.onUnmuteVideo);
+            messaging.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
 
             this.emit(VideoChannelEvent.Disconnect, roomId);
 
@@ -193,7 +198,6 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         }
 
         this.connected = true;
-        messaging.once(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.matrixClient.getRoom(roomId).on(RoomEvent.MyMembership, this.onMyMembership);
         window.addEventListener("beforeunload", this.setDisconnected);
 
@@ -258,6 +262,9 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
 
     private onHangup = async (ev: CustomEvent<IWidgetApiRequest>) => {
         this.ack(ev);
+        // In case this hangup is caused by Jitsi Meet crashing at startup,
+        // wait for the connection event in order to avoid racing
+        if (!this.connected) await waitForEvent(this, VideoChannelEvent.Connect);
         await this.setDisconnected();
     };
 

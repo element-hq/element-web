@@ -167,7 +167,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
             await this.matrixClient.getEventTimeline(this.room.getUnfilteredTimelineSet(), eventId);
         } catch (e) {
             // if it fails catch the error and return early, there's no point trying to find the event in this case.
-            // Return null as it is falsey and thus should be treated as an error (as the event cannot be resolved).
+            // Return null as it is falsy and thus should be treated as an error (as the event cannot be resolved).
             return null;
         }
         return this.room.findEventById(eventId);

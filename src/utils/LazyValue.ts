@@ -29,7 +29,7 @@ export class LazyValue<T> {
      * Whether or not a cached value is present.
      */
     public get present(): boolean {
-        // we use a tracking variable just in case the final value is falsey
+        // we use a tracking variable just in case the final value is falsy
         return this.done;
     }
 

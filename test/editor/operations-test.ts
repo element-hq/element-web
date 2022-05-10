@@ -17,21 +17,88 @@ limitations under the License.
 import EditorModel from "../../src/editor/model";
 import { createPartCreator, createRenderer } from "./mock";
 import {
-    toggleInlineFormat,
-    selectRangeOfWordAtCaret,
     formatRange,
     formatRangeAsCode,
+    formatRangeAsLink,
+    selectRangeOfWordAtCaret,
+    toggleInlineFormat,
 } from "../../src/editor/operations";
 import { Formatting } from "../../src/components/views/rooms/MessageComposerFormatBar";
 import { longestBacktickSequence } from '../../src/editor/deserialize';
 
 const SERIALIZED_NEWLINE = { "text": "\n", "type": "newline" };
 
-describe('editor/operations: formatting operations', () => {
-    describe('toggleInlineFormat', () => {
-        it('works for words', () => {
-            const renderer = createRenderer();
-            const pc = createPartCreator();
+describe("editor/operations: formatting operations", () => {
+    const renderer = createRenderer();
+    const pc = createPartCreator();
+
+    describe("formatRange", () => {
+        it.each([
+            [Formatting.Bold, "hello **world**!"],
+        ])("should correctly wrap format %s", (formatting: Formatting, expected: string) => {
+            const model = new EditorModel([
+                pc.plain("hello world!"),
+            ], pc, renderer);
+
+            const range = model.startRange(model.positionForOffset(6, false),
+                model.positionForOffset(11, false));  // around "world"
+
+            expect(range.parts[0].text).toBe("world");
+            expect(model.serializeParts()).toEqual([{ "text": "hello world!", "type": "plain" }]);
+            formatRange(range, formatting);
+            expect(model.serializeParts()).toEqual([{ "text": expected, "type": "plain" }]);
+        });
+
+        it("should apply to word range is within if length 0", () => {
+            const model = new EditorModel([
+                pc.plain("hello world!"),
+            ], pc, renderer);
+
+            const range = model.startRange(model.positionForOffset(6, false));
+
+            expect(model.serializeParts()).toEqual([{ "text": "hello world!", "type": "plain" }]);
+            formatRange(range, Formatting.Bold);
+            expect(model.serializeParts()).toEqual([{ "text": "hello **world!**", "type": "plain" }]);
+        });
+
+        it("should do nothing for a range with length 0 at initialisation", () => {
+            const model = new EditorModel([
+                pc.plain("hello world!"),
+            ], pc, renderer);
+
+            const range = model.startRange(model.positionForOffset(6, false));
+            range.setWasEmpty(false);
+
+            expect(model.serializeParts()).toEqual([{ "text": "hello world!", "type": "plain" }]);
+            formatRange(range, Formatting.Bold);
+            expect(model.serializeParts()).toEqual([{ "text": "hello world!", "type": "plain" }]);
+        });
+    });
+
+    describe("formatRangeAsLink", () => {
+        it.each([
+            // Caret is denoted by | in the expectation string
+            ["testing", "[testing](|)", ""],
+            ["testing", "[testing](foobar|)", "foobar"],
+            ["[testing]()", "testing|", ""],
+            ["[testing](foobar)", "testing|", ""],
+        ])("converts %s -> %s", (input: string, expectation: string, text: string) => {
+            const model = new EditorModel([
+                pc.plain(`foo ${input} bar`),
+            ], pc, renderer);
+
+            const range = model.startRange(model.positionForOffset(4, false),
+                model.positionForOffset(4 + input.length, false));  // around input
+
+            expect(range.parts[0].text).toBe(input);
+            formatRangeAsLink(range, text);
+            expect(renderer.caret.offset).toBe(4 + expectation.indexOf("|"));
+            expect(model.parts[0].text).toBe("foo " + expectation.replace("|", "") + " bar");
+        });
+    });
+
+    describe("toggleInlineFormat", () => {
+        it("works for words", () => {
             const model = new EditorModel([
                 pc.plain("hello world!"),
             ], pc, renderer);

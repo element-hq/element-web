@@ -274,7 +274,7 @@ export function makeUserPermalink(userId: string): string {
 
 export function makeRoomPermalink(roomId: string): string {
     if (!roomId) {
-        throw new Error("can't permalink a falsey roomId");
+        throw new Error("can't permalink a falsy roomId");
     }
 
     // If the roomId isn't actually a room ID, don't try to list the servers.
