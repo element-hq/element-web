@@ -153,6 +153,11 @@ limitations under the License.
             right: -100px; // to make sure it doesn't overflow to the left or cover sender profile
         }
 
+        .mx_ThreadSummary {
+            margin-inline-start: calc(-1 * var(--gutterSize));
+            margin-inline-end: auto;
+        }
+
         --backgroundColor: $eventbubble-others-bg;
     }
 
@@ -177,8 +182,8 @@ limitations under the License.
         }
 
         .mx_ThreadSummary {
-            float: right;
-            margin-right: calc(-1 * var(--gutterSize));
+            margin-inline-start: auto;
+            margin-inline-end: calc(-1 * var(--gutterSize));
         }
 
         .mx_DisambiguatedProfile {
