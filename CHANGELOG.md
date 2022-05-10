@@ -1,11 +1,5 @@
-Changes in [3.44.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.44.0-rc.2) (2022-05-06)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * [Release] Fix reading of cached room device setting values ([\#8495](https://github.com/matrix-org/matrix-react-sdk/pull/8495)).
-
-Changes in [3.44.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.44.0-rc.1) (2022-05-03)
-===============================================================================================================
+Changes in [3.44.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.44.0) (2022-05-10)
+=====================================================================================================
 
 ## ✨ Features
  * Made the location map change the cursor to a pointer so it looks like it's clickable (https ([\#8451](https://github.com/matrix-org/matrix-react-sdk/pull/8451)). Fixes vector-im/element-web#21991. Contributed by @Odyssey346.
@@ -29,10 +23,11 @@ Changes in [3.44.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Bring `View Source` back from behind developer mode ([\#8369](https://github.com/matrix-org/matrix-react-sdk/pull/8369)). Fixes vector-im/element-web#21771.
 
 ## 🐛 Bug Fixes
+ * Fix race conditions around threads ([\#8448](https://github.com/matrix-org/matrix-react-sdk/pull/8448)). Fixes vector-im/element-web#21627.
+ * Fix reading of cached room device setting values ([\#8495](https://github.com/matrix-org/matrix-react-sdk/pull/8495)).
  * Fix issue with dispatch happening mid-dispatch due to js-sdk emit ([\#8473](https://github.com/matrix-org/matrix-react-sdk/pull/8473)). Fixes vector-im/element-web#22019.
  * Match MSC behaviour for threads when disabled (thread-aware mode) ([\#8476](https://github.com/matrix-org/matrix-react-sdk/pull/8476)). Fixes vector-im/element-web#22033.
  * Specify position of DisambiguatedProfile inside a thread on bubble message layout ([\#8452](https://github.com/matrix-org/matrix-react-sdk/pull/8452)). Fixes vector-im/element-web#21998. Contributed by @luixxiul.
- * Fix race conditions around threads ([\#8448](https://github.com/matrix-org/matrix-react-sdk/pull/8448)).
  * Location sharing: do not trackuserlocation in location picker ([\#8466](https://github.com/matrix-org/matrix-react-sdk/pull/8466)). Fixes vector-im/element-web#22013.
  * fix text and map indent in thread view ([\#8462](https://github.com/matrix-org/matrix-react-sdk/pull/8462)). Fixes vector-im/element-web#21997.
  * Live location sharing: don't group beacon info with room creation summary ([\#8468](https://github.com/matrix-org/matrix-react-sdk/pull/8468)).
@@ -75,6 +70,7 @@ Changes in [3.44.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Fix UnknownBody error message unalignment ([\#8346](https://github.com/matrix-org/matrix-react-sdk/pull/8346)). Fixes vector-im/element-web#21828. Contributed by @luixxiul.
  * Use -webkit-line-clamp for the room header topic overflow ([\#8367](https://github.com/matrix-org/matrix-react-sdk/pull/8367)). Fixes vector-im/element-web#21852. Contributed by @luixxiul.
  * Fix issue with ServerInfo crashing the modal ([\#8364](https://github.com/matrix-org/matrix-react-sdk/pull/8364)).
+ * Fixes around threads beta in degraded mode ([\#8319](https://github.com/matrix-org/matrix-react-sdk/pull/8319)). Fixes vector-im/element-web#21762.
 
 Changes in [3.43.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.43.0) (2022-04-26)
 =====================================================================================================
