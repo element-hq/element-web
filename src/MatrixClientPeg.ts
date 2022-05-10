@@ -49,6 +49,12 @@ export interface IMatrixClientCreds {
     freshLogin?: boolean;
 }
 
+/**
+ * Holds the current instance of the `MatrixClient` to use across the codebase.
+ * Looking for an `MatrixClient`? Just look for the `MatrixClientPeg` on the peg
+ * board. "Peg" is the literal meaning of something you hang something on. So
+ * you'll find a `MatrixClient` hanging on the `MatrixClientPeg`.
+ */
 export interface IMatrixClientPeg {
     opts: IStartClientOpts;
 
@@ -311,6 +317,10 @@ class MatrixClientPegClass implements IMatrixClientPeg {
     }
 }
 
+/**
+ * Note: You should be using a React context with access to a client rather than
+ * using this, as in a multi-account world this will not exist!
+ */
 export const MatrixClientPeg: IMatrixClientPeg = new MatrixClientPegClass();
 
 if (!window.mxMatrixClientPeg) {

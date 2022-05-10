@@ -29,6 +29,12 @@ import { SettingLevel } from "../settings/SettingLevel";
 
 const INDEX_VERSION = 1;
 
+/**
+ * Holds the current instance of the `EventIndex` to use across the codebase.
+ * Looking for an `EventIndex`? Just look for the `EventIndexPeg` on the peg
+ * board. "Peg" is the literal meaning of something you hang something on. So
+ * you'll find a `EventIndex` hanging on the `EventIndexPeg`.
+ */
 export class EventIndexPeg {
     public index: EventIndex = null;
     public error: Error = null;
