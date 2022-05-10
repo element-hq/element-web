@@ -95,7 +95,8 @@ instance. As of writing those settings are not fully documented, however a few a
       }
    }
    ```
-   These values will take priority over the hardcoded defaults for the settings.
+   These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
+   [Settings.tsx](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
