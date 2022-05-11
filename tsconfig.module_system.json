@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "declaration": false,
+    "outDir": "./lib/module_system",
+    "lib": [
+      "es2019"
+    ]
+  },
+  "include": [
+    "./module_system/**/*.ts"
+  ]
+}
