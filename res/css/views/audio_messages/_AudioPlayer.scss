@@ -58,10 +58,10 @@ limitations under the License.
         }
 
         .mx_Clock {
-            width: $font-42px; // we're not using a monospace font, so fake it
             min-width: $font-42px; // for flexbox
-            padding-left: 4px; // isolate from seek bar
-            text-align: right;
+            padding-left: $spacing-4; // isolate from seek bar
+            text-align: justify;
+            white-space: nowrap;
         }
     }
 }
