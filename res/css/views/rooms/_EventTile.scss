@@ -737,9 +737,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     align-items: center;
 
     &:hover,
-    // To cancel "&.mx_EventTile:hover .mx_EventTile_line"
+    // Override .mx_EventTile:not([data-layout=bubble]).mx_EventTile:hover .mx_EventTile_line
     &:not([data-layout=bubble]):hover .mx_EventTile_line {
         background-color: $system;
+    }
+
+    &:not([data-layout=bubble]):hover .mx_EventTile_line {
+        box-shadow: none; // don't show the verification left stroke in the thread list
     }
 
     &::after {
