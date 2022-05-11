@@ -35,7 +35,6 @@ const RoomContext = createContext<IRoomState>({
     shouldPeek: true,
     membersLoaded: false,
     numUnreadMessages: 0,
-    guestsCanJoin: false,
     canPeek: false,
     showApps: false,
     isPeeking: false,
