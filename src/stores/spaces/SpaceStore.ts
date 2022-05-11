@@ -803,8 +803,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
         this.updateNotificationStates(notificationStatesToUpdate);
     };
 
-    private switchSpaceIfNeeded = () => {
-        const roomId = RoomViewStore.instance.getRoomId();
+    private switchSpaceIfNeeded = (roomId = RoomViewStore.instance.getRoomId()) => {
         if (!this.isRoomInSpace(this.activeSpace, roomId) && !this.matrixClient.getRoom(roomId)?.isSpaceRoom()) {
             this.switchToRelatedSpace(roomId);
         }
@@ -856,7 +855,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 
                 // if the room currently being viewed was just joined then switch to its related space
                 if (newMembership === "join" && room.roomId === RoomViewStore.instance.getRoomId()) {
-                    this.switchToRelatedSpace(room.roomId);
+                    this.switchSpaceIfNeeded(room.roomId);
                 }
             }
             return;
@@ -1131,8 +1130,8 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                     // Don't context switch when navigating to the space room
                     // as it will cause you to end up in the wrong room
                     this.setActiveSpace(room.roomId, false);
-                } else if (!this.isRoomInSpace(this.activeSpace, roomId)) {
-                    this.switchToRelatedSpace(roomId);
+                } else {
+                    this.switchSpaceIfNeeded(roomId);
                 }
 
                 // Persist last viewed room from a space

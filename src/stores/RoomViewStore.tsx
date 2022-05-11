@@ -25,6 +25,8 @@ import { JoinedRoom as JoinedRoomEvent } from "matrix-analytics-events/types/typ
 import { JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { ClientEvent } from "matrix-js-sdk/src/client";
+import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { Optional } from "matrix-events-sdk";
 
 import dis from '../dispatcher/dispatcher';
 import { MatrixClientPeg } from '../MatrixClientPeg';
@@ -53,30 +55,30 @@ const INITIAL_STATE = {
     // Whether we're joining the currently viewed room (see isJoining())
     joining: false,
     // Any error that has occurred during joining
-    joinError: null,
+    joinError: null as Error,
     // The room ID of the room currently being viewed
-    roomId: null,
+    roomId: null as string,
 
     // The event to scroll to when the room is first viewed
-    initialEventId: null,
-    initialEventPixelOffset: null,
+    initialEventId: null as string,
+    initialEventPixelOffset: null as number,
     // Whether to highlight the initial event
     isInitialEventHighlighted: false,
     // whether to scroll `event_id` into view
     initialEventScrollIntoView: true,
 
     // The room alias of the room (or null if not originally specified in view_room)
-    roomAlias: null,
+    roomAlias: null as string,
     // Whether the current room is loading
     roomLoading: false,
     // Any error that has occurred during loading
-    roomLoadError: null,
+    roomLoadError: null as MatrixError,
 
-    replyingToEvent: null,
+    replyingToEvent: null as MatrixEvent,
 
     shouldPeek: false,
 
-    viaServers: [],
+    viaServers: [] as string[],
 
     wasContextSwitch: false,
 };
@@ -103,12 +105,12 @@ export class RoomViewStore extends Store<ActionPayload> {
         super(dis);
     }
 
-    public addRoomListener(roomId: string, fn: Listener) {
+    public addRoomListener(roomId: string, fn: Listener): void {
         if (!this.roomIdActivityListeners[roomId]) this.roomIdActivityListeners[roomId] = [];
         this.roomIdActivityListeners[roomId].push(fn);
     }
 
-    public removeRoomListener(roomId: string, fn: Listener) {
+    public removeRoomListener(roomId: string, fn: Listener): void {
         if (this.roomIdActivityListeners[roomId]) {
             const i = this.roomIdActivityListeners[roomId].indexOf(fn);
             if (i > -1) {
@@ -119,7 +121,7 @@ export class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private emitForRoom(roomId: string, isActive: boolean) {
+    private emitForRoom(roomId: string, isActive: boolean): void {
         if (!this.roomIdActivityListeners[roomId]) return;
 
         for (const fn of this.roomIdActivityListeners[roomId]) {
@@ -127,7 +129,7 @@ export class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private setState(newState: Partial<typeof INITIAL_STATE>) {
+    private setState(newState: Partial<typeof INITIAL_STATE>): void {
         // If values haven't changed, there's nothing to do.
         // This only tries a shallow comparison, so unchanged objects will slip
         // through, but that's probably okay for now.
@@ -160,7 +162,7 @@ export class RoomViewStore extends Store<ActionPayload> {
         this.__emitChange();
     }
 
-    protected __onDispatch(payload) { // eslint-disable-line @typescript-eslint/naming-convention
+    protected __onDispatch(payload): void { // eslint-disable-line @typescript-eslint/naming-convention
         switch (payload.action) {
             // view_room:
             //      - room_alias:   '#somealias:matrix.org'
@@ -367,7 +369,7 @@ export class RoomViewStore extends Store<ActionPayload> {
         }
     }
 
-    private viewRoomError(payload: ViewRoomErrorPayload) {
+    private viewRoomError(payload: ViewRoomErrorPayload): void {
         this.setState({
             roomId: payload.room_id,
             roomAlias: payload.room_alias,
@@ -376,7 +378,7 @@ export class RoomViewStore extends Store<ActionPayload> {
         });
     }
 
-    private async joinRoom(payload: JoinRoomPayload) {
+    private async joinRoom(payload: JoinRoomPayload): Promise<void> {
         this.setState({
             joining: true,
         });
@@ -415,14 +417,14 @@ export class RoomViewStore extends Store<ActionPayload> {
     private getInvitingUserId(roomId: string): string {
         const cli = MatrixClientPeg.get();
         const room = cli.getRoom(roomId);
-        if (room && room.getMyMembership() === "invite") {
+        if (room?.getMyMembership() === "invite") {
             const myMember = room.getMember(cli.getUserId());
             const inviteEvent = myMember ? myMember.events.member : null;
             return inviteEvent && inviteEvent.getSender();
         }
     }
 
-    public showJoinRoomError(err: MatrixError, roomId: string) {
+    public showJoinRoomError(err: MatrixError, roomId: string): void {
         let description: ReactNode = err.message ? err.message : JSON.stringify(err);
         logger.log("Failed to join room:", description);
 
@@ -452,7 +454,7 @@ export class RoomViewStore extends Store<ActionPayload> {
         });
     }
 
-    private joinRoomError(payload: JoinRoomErrorPayload) {
+    private joinRoomError(payload: JoinRoomErrorPayload): void {
         this.setState({
             joining: false,
             joinError: payload.err,
@@ -460,42 +462,42 @@ export class RoomViewStore extends Store<ActionPayload> {
         this.showJoinRoomError(payload.err, payload.roomId);
     }
 
-    public reset() {
+    public reset(): void {
         this.state = Object.assign({}, INITIAL_STATE);
     }
 
     // The room ID of the room currently being viewed
-    public getRoomId() {
+    public getRoomId(): Optional<string> {
         return this.state.roomId;
     }
 
     // The event to scroll to when the room is first viewed
-    public getInitialEventId() {
+    public getInitialEventId(): Optional<string> {
         return this.state.initialEventId;
     }
 
     // Whether to highlight the initial event
-    public isInitialEventHighlighted() {
+    public isInitialEventHighlighted(): boolean {
         return this.state.isInitialEventHighlighted;
     }
 
     // Whether to avoid jumping to the initial event
-    public initialEventScrollIntoView() {
+    public initialEventScrollIntoView(): boolean {
         return this.state.initialEventScrollIntoView;
     }
 
     // The room alias of the room (or null if not originally specified in view_room)
-    public getRoomAlias() {
+    public getRoomAlias(): Optional<string> {
         return this.state.roomAlias;
     }
 
     // Whether the current room is loading (true whilst resolving an alias)
-    public isRoomLoading() {
+    public isRoomLoading(): boolean {
         return this.state.roomLoading;
     }
 
     // Any error that has occurred during loading
-    public getRoomLoadError() {
+    public getRoomLoadError(): Optional<MatrixError> {
         return this.state.roomLoadError;
     }
 
@@ -522,25 +524,25 @@ export class RoomViewStore extends Store<ActionPayload> {
     //         // show join prompt
     //     }
     // }
-    public isJoining() {
+    public isJoining(): boolean {
         return this.state.joining;
     }
 
     // Any error that has occurred during joining
-    public getJoinError() {
+    public getJoinError(): Optional<Error> {
         return this.state.joinError;
     }
 
     // The mxEvent if one is currently being replied to/quoted
-    public getQuotingEvent() {
+    public getQuotingEvent(): Optional<MatrixEvent> {
         return this.state.replyingToEvent;
     }
 
-    public shouldPeek() {
+    public shouldPeek(): boolean {
         return this.state.shouldPeek;
     }
 
-    public getWasContextSwitch() {
+    public getWasContextSwitch(): boolean {
         return this.state.wasContextSwitch;
     }
 }
