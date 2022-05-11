@@ -455,13 +455,12 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         if (this.state.error) {
             content = <div>
                 <p>{ _t("Unable to create key backup") }</p>
-                <div className="mx_Dialog_buttons">
-                    <DialogButtons primaryButton={_t('Retry')}
-                        onPrimaryButtonClick={this.createBackup}
-                        hasCancel={true}
-                        onCancel={this.onCancel}
-                    />
-                </div>
+                <DialogButtons
+                    primaryButton={_t('Retry')}
+                    onPrimaryButtonClick={this.createBackup}
+                    hasCancel={true}
+                    onCancel={this.onCancel}
+                />
             </div>;
         } else {
             switch (this.state.phase) {

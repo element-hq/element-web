@@ -245,19 +245,23 @@ Array [
               <div
                 class="mx_Dialog_buttons"
               >
-                <button
-                  data-test-id="dialog-cancel-button"
-                  type="button"
+                <span
+                  class="mx_Dialog_buttons_row"
                 >
-                  Cancel
-                </button>
-                <button
-                  class="mx_Dialog_primary"
-                  data-test-id="dialog-primary-button"
-                  type="button"
-                >
-                  Export
-                </button>
+                  <button
+                    data-test-id="dialog-cancel-button"
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    class="mx_Dialog_primary"
+                    data-test-id="dialog-primary-button"
+                    type="button"
+                  >
+                    Export
+                  </button>
+                </span>
               </div>
             </div>
           }
@@ -466,19 +470,23 @@ Array [
                 <div
                   class="mx_Dialog_buttons"
                 >
-                  <button
-                    data-test-id="dialog-cancel-button"
-                    type="button"
+                  <span
+                    class="mx_Dialog_buttons_row"
                   >
-                    Cancel
-                  </button>
-                  <button
-                    class="mx_Dialog_primary"
-                    data-test-id="dialog-primary-button"
-                    type="button"
-                  >
-                    Export
-                  </button>
+                    <button
+                      data-test-id="dialog-cancel-button"
+                      type="button"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      class="mx_Dialog_primary"
+                      data-test-id="dialog-primary-button"
+                      type="button"
+                    >
+                      Export
+                    </button>
+                  </span>
                 </div>
               </div>
             }
@@ -815,22 +823,26 @@ Array [
             <div
               className="mx_Dialog_buttons"
             >
-              <button
-                data-test-id="dialog-cancel-button"
-                disabled={false}
-                onClick={[Function]}
-                type="button"
+              <span
+                className="mx_Dialog_buttons_row"
               >
-                Cancel
-              </button>
-              <button
-                className="mx_Dialog_primary"
-                data-test-id="dialog-primary-button"
-                onClick={[Function]}
-                type="button"
-              >
-                Export
-              </button>
+                <button
+                  data-test-id="dialog-cancel-button"
+                  disabled={false}
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  className="mx_Dialog_primary"
+                  data-test-id="dialog-primary-button"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Export
+                </button>
+              </span>
             </div>
           </DialogButtons>
         </div>
@@ -1086,19 +1098,23 @@ Array [
             <div
               class="mx_Dialog_buttons"
             >
-              <button
-                data-test-id="dialog-cancel-button"
-                type="button"
+              <span
+                class="mx_Dialog_buttons_row"
               >
-                Cancel
-              </button>
-              <button
-                class="mx_Dialog_primary"
-                data-test-id="dialog-primary-button"
-                type="button"
-              >
-                Export
-              </button>
+                <button
+                  data-test-id="dialog-cancel-button"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="mx_Dialog_primary"
+                  data-test-id="dialog-primary-button"
+                  type="button"
+                >
+                  Export
+                </button>
+              </span>
             </div>
           </div>
         }
@@ -1307,19 +1323,23 @@ Array [
               <div
                 class="mx_Dialog_buttons"
               >
-                <button
-                  data-test-id="dialog-cancel-button"
-                  type="button"
+                <span
+                  class="mx_Dialog_buttons_row"
                 >
-                  Cancel
-                </button>
-                <button
-                  class="mx_Dialog_primary"
-                  data-test-id="dialog-primary-button"
-                  type="button"
-                >
-                  Export
-                </button>
+                  <button
+                    data-test-id="dialog-cancel-button"
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    class="mx_Dialog_primary"
+                    data-test-id="dialog-primary-button"
+                    type="button"
+                  >
+                    Export
+                  </button>
+                </span>
               </div>
             </div>
           }
@@ -1656,22 +1676,26 @@ Array [
           <div
             className="mx_Dialog_buttons"
           >
-            <button
-              data-test-id="dialog-cancel-button"
-              disabled={false}
-              onClick={[Function]}
-              type="button"
+            <span
+              className="mx_Dialog_buttons_row"
             >
-              Cancel
-            </button>
-            <button
-              className="mx_Dialog_primary"
-              data-test-id="dialog-primary-button"
-              onClick={[Function]}
-              type="button"
-            >
-              Export
-            </button>
+              <button
+                data-test-id="dialog-cancel-button"
+                disabled={false}
+                onClick={[Function]}
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                className="mx_Dialog_primary"
+                data-test-id="dialog-primary-button"
+                onClick={[Function]}
+                type="button"
+              >
+                Export
+              </button>
+            </span>
           </div>
         </DialogButtons>
       </div>
@@ -1914,19 +1938,23 @@ Array [
           <div
             class="mx_Dialog_buttons"
           >
-            <button
-              data-test-id="dialog-cancel-button"
-              type="button"
+            <span
+              class="mx_Dialog_buttons_row"
             >
-              Cancel
-            </button>
-            <button
-              class="mx_Dialog_primary"
-              data-test-id="dialog-primary-button"
-              type="button"
-            >
-              Export
-            </button>
+              <button
+                data-test-id="dialog-cancel-button"
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                class="mx_Dialog_primary"
+                data-test-id="dialog-primary-button"
+                type="button"
+              >
+                Export
+              </button>
+            </span>
           </div>
         </div>
       }
@@ -2135,19 +2163,23 @@ Array [
             <div
               class="mx_Dialog_buttons"
             >
-              <button
-                data-test-id="dialog-cancel-button"
-                type="button"
+              <span
+                class="mx_Dialog_buttons_row"
               >
-                Cancel
-              </button>
-              <button
-                class="mx_Dialog_primary"
-                data-test-id="dialog-primary-button"
-                type="button"
-              >
-                Export
-              </button>
+                <button
+                  data-test-id="dialog-cancel-button"
+                  type="button"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="mx_Dialog_primary"
+                  data-test-id="dialog-primary-button"
+                  type="button"
+                >
+                  Export
+                </button>
+              </span>
             </div>
           </div>
         }
@@ -2484,22 +2516,26 @@ Array [
         <div
           className="mx_Dialog_buttons"
         >
-          <button
-            data-test-id="dialog-cancel-button"
-            disabled={false}
-            onClick={[Function]}
-            type="button"
+          <span
+            className="mx_Dialog_buttons_row"
           >
-            Cancel
-          </button>
-          <button
-            className="mx_Dialog_primary"
-            data-test-id="dialog-primary-button"
-            onClick={[Function]}
-            type="button"
-          >
-            Export
-          </button>
+            <button
+              data-test-id="dialog-cancel-button"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              className="mx_Dialog_primary"
+              data-test-id="dialog-primary-button"
+              onClick={[Function]}
+              type="button"
+            >
+              Export
+            </button>
+          </span>
         </div>
       </DialogButtons>
     </div>
@@ -2833,22 +2869,26 @@ Array [
       <div
         className="mx_Dialog_buttons"
       >
-        <button
-          data-test-id="dialog-cancel-button"
-          disabled={false}
-          onClick={[Function]}
-          type="button"
+        <span
+          className="mx_Dialog_buttons_row"
         >
-          Cancel
-        </button>
-        <button
-          className="mx_Dialog_primary"
-          data-test-id="dialog-primary-button"
-          onClick={[Function]}
-          type="button"
-        >
-          Export
-        </button>
+          <button
+            data-test-id="dialog-cancel-button"
+            disabled={false}
+            onClick={[Function]}
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            className="mx_Dialog_primary"
+            data-test-id="dialog-primary-button"
+            onClick={[Function]}
+            type="button"
+          >
+            Export
+          </button>
+        </span>
       </div>
     </DialogButtons>
   </div>,

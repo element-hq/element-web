@@ -100,17 +100,19 @@ export default class DialogButtons extends React.Component<IProps> {
         return (
             <div className="mx_Dialog_buttons">
                 { additive }
-                { cancelButton }
-                { this.props.children }
-                <button type={this.props.primaryIsSubmit ? 'submit' : 'button'}
-                    data-test-id="dialog-primary-button"
-                    className={primaryButtonClassName}
-                    onClick={this.props.onPrimaryButtonClick}
-                    autoFocus={this.props.focus}
-                    disabled={this.props.disabled || this.props.primaryDisabled}
-                >
-                    { this.props.primaryButton }
-                </button>
+                <span className="mx_Dialog_buttons_row">
+                    { cancelButton }
+                    { this.props.children }
+                    <button type={this.props.primaryIsSubmit ? 'submit' : 'button'}
+                        data-test-id="dialog-primary-button"
+                        className={primaryButtonClassName}
+                        onClick={this.props.onPrimaryButtonClick}
+                        autoFocus={this.props.focus}
+                        disabled={this.props.disabled || this.props.primaryDisabled}
+                    >
+                        { this.props.primaryButton }
+                    </button>
+                </span>
             </div>
         );
     }

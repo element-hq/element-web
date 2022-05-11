@@ -20,6 +20,7 @@ limitations under the License.
 @import "./_font-sizes.scss";
 @import "./_font-weights.scss";
 @import "./_animations.scss";
+@import "./_spacing.scss";
 @import url("maplibre-gl/dist/maplibre-gl.css");
 
 $hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
@@ -414,12 +415,29 @@ legend {
 }
 
 .mx_Dialog_buttons {
-    margin-top: 20px;
+    margin-top: $spacing-20;
+    margin-inline-start: auto;
     text-align: right;
 
     .mx_Dialog_buttons_additive {
         // The consumer is responsible for positioning their elements.
         float: left;
+    }
+}
+
+.mx_Dialog_buttons_row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    text-align: initial;
+    margin-inline-start: auto;
+
+    // default gap among elements
+    column-gap: $spacing-8; // See margin-right below inside the button style
+    row-gap: 5px; // See margin-bottom below inside the button style
+
+    button {
+        margin: 0 !important; // override the margin settings
     }
 }
 
