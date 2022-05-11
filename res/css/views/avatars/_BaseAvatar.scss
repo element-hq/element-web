@@ -47,6 +47,7 @@ limitations under the License.
 
 .mx_BaseAvatar_image {
     object-fit: cover;
+    aspect-ratio: 1;
     border-radius: 125px;
     vertical-align: top;
     background-color: $background;
