@@ -100,7 +100,7 @@ export class SetupEncryptionStore extends EventEmitter {
 
     public async fetchKeyInfo(): Promise<void> {
         const cli = MatrixClientPeg.get();
-        const keys = await cli.isSecretStored('m.cross_signing.master', false);
+        const keys = await cli.isSecretStored('m.cross_signing.master');
         if (keys === null || Object.keys(keys).length === 0) {
             this.keyId = null;
             this.keyInfo = null;
