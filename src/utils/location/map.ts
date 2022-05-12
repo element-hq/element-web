@@ -63,39 +63,6 @@ export const createMarker = (coords: GeolocationCoordinates, element: HTMLElemen
     return marker;
 };
 
-export const createMapWithCoords = (
-    coords: GeolocationCoordinates,
-    interactive: boolean,
-    bodyId: string,
-    markerId: string,
-    onError: (error: Error) => void,
-): maplibregl.Map => {
-    try {
-        const map = createMap(interactive, bodyId, onError);
-
-        const coordinates = new maplibregl.LngLat(coords.longitude, coords.latitude);
-        // center on coordinates
-        map.setCenter(coordinates);
-
-        const marker = createMarker(coords, document.getElementById(markerId));
-        marker.addTo(map);
-
-        map.on('error', (e) => {
-            logger.error(
-                "Failed to load map: check map_style_url in config.json has a "
-                + "valid URL and API key",
-                e.error,
-            );
-            onError(new Error(LocationShareError.MapStyleUrlNotReachable));
-        });
-
-        return map;
-    } catch (e) {
-        logger.error("Failed to render map", e);
-        onError(e);
-    }
-};
-
 const makeLink = (coords: GeolocationCoordinates): string => {
     return (
         "https://www.openstreetmap.org/" +
