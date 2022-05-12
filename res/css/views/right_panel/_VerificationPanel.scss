@@ -23,7 +23,31 @@ limitations under the License.
     }
 }
 
-.mx_UserInfo {
+.mx_UserInfo.mx_BaseCard {
+    .mx_UserInfo_container:not(.mx_UserInfo_separator) {
+
+        > div > p {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .mx_VerificationPanel_verifyByEmojiButton,
+        .mx_UserInfo_wideButton {
+            width: fit-content;
+        }
+
+        .mx_EncryptionInfo_spinner,
+        .mx_VerificationShowSas {
+            margin-inline-start: auto;
+            margin-inline-end: auto;
+        }
+
+        .mx_Spinner,
+        .mx_VerificationShowSas {
+            align-items: center;
+        }
+    }
+
     .mx_EncryptionPanel_cancel {
         @mixin customisedCancelButton;
         width: 14px;
