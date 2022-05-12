@@ -121,15 +121,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
     &.mx_EventTile_continuation {
         padding-top: 0px !important;
-
-        &.mx_EventTile_isEditing {
-            padding-top: 5px !important;
-            margin-top: -5px;
-        }
-    }
-
-    &.mx_EventTile_isEditing {
-        background-color: $header-panel-bg-color;
     }
 
     .mx_DisambiguatedProfile {
@@ -177,6 +168,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     /* this is used for the tile for the event which is selected via the URL.
      * TODO: ultimately we probably want some transition on here.
      */
+    &.mx_EventTile_isEditing > .mx_EventTile_line,
     &.mx_EventTile_selected > .mx_EventTile_line {
         box-shadow: inset calc(50px + $selected-message-border-width) 0 0 -50px $accent;
         background-color: $event-selected-color;
