@@ -1456,25 +1456,24 @@ class TimelinePanel extends React.Component<IProps, IState> {
      * such events were found, then it returns 0.
      */
     private checkForPreJoinUISI(events: MatrixEvent[]): number {
+        const cli = MatrixClientPeg.get();
         const room = this.props.timelineSet.room;
 
         const isThreadTimeline = [TimelineRenderingType.Thread, TimelineRenderingType.ThreadsList]
             .includes(this.context.timelineRenderingType);
-        if (events.length === 0
-            || !room
-            || !MatrixClientPeg.get().isRoomEncrypted(room.roomId)
-            || isThreadTimeline) {
+        if (events.length === 0 || !room || !cli.isRoomEncrypted(room.roomId) || isThreadTimeline) {
+            logger.info("checkForPreJoinUISI: showing all messages, skipping check");
             return 0;
         }
 
-        const userId = MatrixClientPeg.get().credentials.userId;
+        const userId = cli.credentials.userId;
 
         // get the user's membership at the last event by getting the timeline
         // that the event belongs to, and traversing the timeline looking for
         // that event, while keeping track of the user's membership
-        let i;
+        let i = events.length - 1;
         let userMembership = "leave";
-        for (i = events.length - 1; i >= 0; i--) {
+        for (; i >= 0; i--) {
             const timeline = room.getTimelineForEvent(events[i].getId());
             if (!timeline) {
                 // Somehow, it seems to be possible for live events to not have
@@ -1486,18 +1485,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 );
                 continue;
             }
-            const userMembershipEvent =
-                    timeline.getState(EventTimeline.FORWARDS).getMember(userId);
-            userMembership = userMembershipEvent ? userMembershipEvent.membership : "leave";
+
+            userMembership = timeline.getState(EventTimeline.FORWARDS).getMember(userId)?.membership ?? "leave";
             const timelineEvents = timeline.getEvents();
             for (let j = timelineEvents.length - 1; j >= 0; j--) {
                 const event = timelineEvents[j];
                 if (event.getId() === events[i].getId()) {
                     break;
-                } else if (event.getStateKey() === userId
-                    && event.getType() === "m.room.member") {
-                    const prevContent = event.getPrevContent();
-                    userMembership = prevContent.membership || "leave";
+                } else if (event.getStateKey() === userId && event.getType() === EventType.RoomMember) {
+                    userMembership = event.getPrevContent().membership || "leave";
                 }
             }
             break;
@@ -1507,19 +1503,18 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // one that was sent when the user wasn't in the room
         for (; i >= 0; i--) {
             const event = events[i];
-            if (event.getStateKey() === userId
-                && event.getType() === "m.room.member") {
-                const prevContent = event.getPrevContent();
-                userMembership = prevContent.membership || "leave";
-            } else if (userMembership === "leave" &&
-                       (event.isDecryptionFailure() || event.isBeingDecrypted())) {
-                // reached an undecryptable message when the user wasn't in
-                // the room -- don't try to load any more
+            if (event.getStateKey() === userId && event.getType() === EventType.RoomMember) {
+                userMembership = event.getPrevContent().membership || "leave";
+            } else if (userMembership === "leave" && (event.isDecryptionFailure() || event.isBeingDecrypted())) {
+                // reached an undecryptable message when the user wasn't in the room -- don't try to load any more
                 // Note: for now, we assume that events that are being decrypted are
-                // not decryptable
+                // not decryptable - we will be called once more when it is decrypted.
+                logger.info("checkForPreJoinUISI: reached a pre-join UISI at index ", i);
                 return i + 1;
             }
         }
+
+        logger.info("checkForPreJoinUISI: did not find pre-join UISI");
         return 0;
     }
 
