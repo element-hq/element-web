@@ -28,12 +28,6 @@ limitations under the License.
 .mx_ProfileSettings_controls {
     flex-grow: 1;
     margin-right: 54px;
-
-    // We put the header under the controls with some minor styling to cheat
-    // alignment of the field with the avatar
-    .mx_SettingsTab_subheading {
-        margin-top: 0;
-    }
 }
 
 .mx_ProfileSettings_controls .mx_Field #profileTopic {
