@@ -1032,6 +1032,11 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         if (this.context.timelineRenderingType === TimelineRenderingType.Notification) {
             avatarSize = 24;
             needsSenderProfile = true;
+        } else if (isInfoMessage) {
+            // a small avatar, with no sender profile, for
+            // joins/parts/etc
+            avatarSize = 14;
+            needsSenderProfile = false;
         } else if (this.context.timelineRenderingType === TimelineRenderingType.ThreadsList ||
             (this.context.timelineRenderingType === TimelineRenderingType.Thread && !this.props.continuation)
         ) {
@@ -1039,11 +1044,6 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             needsSenderProfile = true;
         } else if (eventType === EventType.RoomCreate || isBubbleMessage) {
             avatarSize = 0;
-            needsSenderProfile = false;
-        } else if (isInfoMessage) {
-            // a small avatar, with no sender profile, for
-            // joins/parts/etc
-            avatarSize = 14;
             needsSenderProfile = false;
         } else if (this.props.layout == Layout.IRC) {
             avatarSize = 14;
