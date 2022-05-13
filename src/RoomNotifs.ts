@@ -17,7 +17,13 @@ limitations under the License.
 
 import { PushProcessor } from 'matrix-js-sdk/src/pushprocessor';
 import { NotificationCountType, Room } from "matrix-js-sdk/src/models/room";
-import { ConditionKind, IPushRule, PushRuleActionName, PushRuleKind } from "matrix-js-sdk/src/@types/PushRules";
+import {
+    ConditionKind,
+    IPushRule,
+    PushRuleActionName,
+    PushRuleKind,
+    TweakName,
+} from "matrix-js-sdk/src/@types/PushRules";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 
 import { MatrixClientPeg } from './MatrixClientPeg';
@@ -144,13 +150,13 @@ function setRoomNotifsStateMuted(roomId: string): Promise<any> {
     promises.push(cli.addPushRule('global', PushRuleKind.Override, roomId, {
         conditions: [
             {
-                kind: 'event_match',
+                kind: ConditionKind.EventMatch,
                 key: 'room_id',
                 pattern: roomId,
             },
         ],
         actions: [
-            'dont_notify',
+            PushRuleActionName.DontNotify,
         ],
     }));
 
@@ -174,7 +180,7 @@ function setRoomNotifsStateUnmuted(roomId: string, newState: RoomNotifState): Pr
     } else if (newState === RoomNotifState.MentionsOnly) {
         promises.push(cli.addPushRule('global', PushRuleKind.RoomSpecific, roomId, {
             actions: [
-                'dont_notify',
+                PushRuleActionName.DontNotify,
             ],
         }));
         // https://matrix.org/jira/browse/SPEC-400
@@ -182,9 +188,9 @@ function setRoomNotifsStateUnmuted(roomId: string, newState: RoomNotifState): Pr
     } else if (newState === RoomNotifState.AllMessagesLoud) {
         promises.push(cli.addPushRule('global', PushRuleKind.RoomSpecific, roomId, {
             actions: [
-                'notify',
+                PushRuleActionName.Notify,
                 {
-                    set_tweak: 'sound',
+                    set_tweak: TweakName.Sound,
                     value: 'default',
                 },
             ],

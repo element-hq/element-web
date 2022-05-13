@@ -79,7 +79,7 @@ describe("RoomNotifs test", () => {
             rule_id: "!roomId:server",
             enabled: true,
             default: false,
-            actions: [{ set_tweak: TweakName.Sound }],
+            actions: [{ set_tweak: TweakName.Sound, value: "default" }],
         });
         expect(getRoomNotifsState("!roomId:server")).toBe(RoomNotifState.AllMessagesLoud);
     });
