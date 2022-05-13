@@ -20,7 +20,7 @@ limitations under the License.
     flex-direction: column;
     font-size: $font-14px;
     // fixed line height to prevent emoji from being taller than text
-    line-height: calc(1.2 * $font-14px);
+    line-height: $font-18px;
     justify-content: center;
     margin-right: 6px;
     // don't grow wider than available space
