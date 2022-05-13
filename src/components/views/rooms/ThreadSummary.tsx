@@ -104,7 +104,7 @@ export const ThreadMessagePreview = ({ thread, showDisplayname = false }: IPrevi
         { showDisplayname && <div className="mx_ThreadSummary_sender">
             { lastReply.sender?.name ?? lastReply.getSender() }
         </div> }
-        <div className="mx_ThreadSummary_content">
+        <div className="mx_ThreadSummary_content" title={preview}>
             <span className="mx_ThreadSummary_message-preview">
                 { preview }
             </span>
