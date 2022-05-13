@@ -19,8 +19,10 @@ limitations under the License.
     opacity: 0.6;
     font-size: $font-12px;
     width: 100%;
+    overflow-x: auto; // Cancel overflow setting of .mx_EventTile_content
 
-    pre, code {
+    pre,
+    code {
         flex: 1;
     }
 
