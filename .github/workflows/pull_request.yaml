@@ -1,0 +1,25 @@
+name: Pull Request
+on:
+  pull_request_target:
+    types: [ opened, edited, labeled, unlabeled, synchronize ]
+jobs:
+  changelog:
+    name: Preview Changelog
+    if: github.event.action != 'synchronize'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: matrix-org/allchange@main
+        with:
+          ghToken: ${{ secrets.GITHUB_TOKEN }}
+
+  enforce-label:
+    name: Enforce Labels
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: yogevbd/enforce-label-action@2.1.0
+        with:
+          REQUIRED_LABELS_ANY: "T-Defect,T-Enhancement,T-Task"
+          BANNED_LABELS: "X-Blocked"
+          BANNED_LABELS_DESCRIPTION: "Preventing merge whilst PR is marked blocked!"
