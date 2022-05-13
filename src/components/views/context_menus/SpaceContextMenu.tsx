@@ -182,7 +182,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
                 <IconizedContextMenuOption
                     data-test-id='new-video-room-option'
                     iconClassName="mx_SpacePanel_iconPlus"
-                    label={_t("Video room")}
+                    label={_t("New video room")}
                     onClick={onNewVideoRoomClick}
                 />
             }

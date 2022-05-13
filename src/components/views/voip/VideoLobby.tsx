@@ -185,7 +185,7 @@ const VideoLobby: FC<{ room: Room }> = ({ room }) => {
         const overflow = connectedMembers.size > shownMembers.length;
 
         facePile = <div className="mx_VideoLobby_connectedMembers">
-            { _t("%(count)s people connected", { count: connectedMembers.size }) }
+            { _t("%(count)s people joined", { count: connectedMembers.size }) }
             <FacePile members={shownMembers} faceSize={24} overflow={overflow} />
         </div>;
     }
@@ -232,7 +232,7 @@ const VideoLobby: FC<{ room: Room }> = ({ room }) => {
             disabled={connecting}
             onClick={connect}
         >
-            { _t("Connect now") }
+            { _t("Join") }
         </AccessibleButton>
     </div>;
 };

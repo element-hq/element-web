@@ -81,11 +81,11 @@ describe("RoomTile", () => {
 
             act(() => { store.startConnect("!1:example.org"); });
             tile.update();
-            expect(tile.find(".mx_RoomTile_videoIndicator").text()).toEqual("Connecting...");
+            expect(tile.find(".mx_RoomTile_videoIndicator").text()).toEqual("Joining…");
 
             act(() => { store.connect("!1:example.org"); });
             tile.update();
-            expect(tile.find(".mx_RoomTile_videoIndicator").text()).toEqual("Connected");
+            expect(tile.find(".mx_RoomTile_videoIndicator").text()).toEqual("Joined");
 
             act(() => { store.disconnect(); });
             tile.update();

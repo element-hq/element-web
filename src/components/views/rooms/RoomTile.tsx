@@ -678,12 +678,12 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
                     participantCount = this.state.videoMembers.size;
                     break;
                 case VideoStatus.Connecting:
-                    videoText = _t("Connecting...");
+                    videoText = _t("Joining…");
                     videoActive = true;
                     participantCount = this.state.videoMembers.size;
                     break;
                 case VideoStatus.Connected:
-                    videoText = _t("Connected");
+                    videoText = _t("Joined");
                     videoActive = true;
                     participantCount = this.state.jitsiParticipants.length;
             }
