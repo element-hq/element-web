@@ -2370,6 +2370,8 @@
     "Including %(commaSeparatedMembers)s": "Including %(commaSeparatedMembers)s",
     "%(count)s people you know have already joined|other": "%(count)s people you know have already joined",
     "%(count)s people you know have already joined|one": "%(count)s person you know has already joined",
+    "Edit topic": "Edit topic",
+    "Click to read topic": "Click to read topic",
     "Message search initialisation failed, check <a>your settings</a> for more information": "Message search initialisation failed, check <a>your settings</a> for more information",
     "Use the <a>Desktop app</a> to see all encrypted files": "Use the <a>Desktop app</a> to see all encrypted files",
     "Use the <a>Desktop app</a> to search encrypted messages": "Use the <a>Desktop app</a> to search encrypted messages",

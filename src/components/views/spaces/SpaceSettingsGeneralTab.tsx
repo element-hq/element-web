@@ -25,8 +25,8 @@ import AccessibleButton from "../elements/AccessibleButton";
 import SpaceBasicSettings from "./SpaceBasicSettings";
 import { avatarUrlForRoom } from "../../../Avatar";
 import { IDialogProps } from "../dialogs/IDialogProps";
-import { getTopic } from "../elements/RoomTopic";
 import { leaveSpace } from "../../../utils/leave-behaviour";
+import { getTopic } from "../../../hooks/room/useTopic";
 
 interface IProps extends IDialogProps {
     matrixClient: MatrixClient;

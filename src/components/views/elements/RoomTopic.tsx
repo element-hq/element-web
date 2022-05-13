@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,35 +14,87 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
-import { EventType } from "matrix-js-sdk/src/@types/event";
+import React, { useCallback, useContext, useEffect, useRef } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import classNames from "classnames";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
-import { useTypedEventEmitter } from "../../../hooks/useEventEmitter";
 import { linkifyElement } from "../../../HtmlUtils";
+import { useTopic } from "../../../hooks/room/useTopic";
+import useHover from "../../../hooks/useHover";
+import Tooltip, { Alignment } from "./Tooltip";
+import { _t } from "../../../languageHandler";
+import dis from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import Modal from "../../../Modal";
+import InfoDialog from "../dialogs/InfoDialog";
+import { useDispatcher } from "../../../hooks/useDispatcher";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import AccessibleButton from "./AccessibleButton";
+import { Linkify } from "./Linkify";
 
-interface IProps {
+interface IProps extends React.HTMLProps<HTMLDivElement> {
     room?: Room;
-    children?(topic: string, ref: (element: HTMLElement) => void): JSX.Element;
 }
 
-export const getTopic = room => room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
+export default function RoomTopic({
+    room,
+    ...props
+}: IProps) {
+    const client = useContext(MatrixClientContext);
+    const ref = useRef<HTMLDivElement>();
+    const hovered = useHover(ref);
 
-const RoomTopic = ({ room, children }: IProps): JSX.Element => {
-    const [topic, setTopic] = useState(getTopic(room));
-    useTypedEventEmitter(room.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
-        if (ev.getType() !== EventType.RoomTopic) return;
-        setTopic(getTopic(room));
+    const topic = useTopic(room);
+
+    const onClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        props.onClick?.(e);
+        const target = e.target as HTMLElement;
+        if (target.tagName.toUpperCase() === "A") {
+            return;
+        }
+
+        dis.fire(Action.ShowRoomTopic);
+    }, [props]);
+
+    useDispatcher(dis, (payload) => {
+        if (payload.action === Action.ShowRoomTopic) {
+            const canSetTopic = room.currentState.maySendStateEvent(EventType.RoomTopic, client.getUserId());
+
+            const modal = Modal.createDialog(InfoDialog, {
+                title: room.name,
+                description: <div>
+                    <Linkify as="p">{ topic }</Linkify>
+                    { canSetTopic && <AccessibleButton
+                        kind="primary_outline"
+                        onClick={() => {
+                            modal.close();
+                            dis.dispatch({ action: "open_room_settings" });
+                        }}>
+                        { _t("Edit topic") }
+                    </AccessibleButton> }
+                </div>,
+                hasCloseButton: true,
+                button: false,
+            });
+        }
     });
+
     useEffect(() => {
-        setTopic(getTopic(room));
-    }, [room]);
+        linkifyElement(ref.current);
+    }, [topic]);
 
-    const ref = e => e && linkifyElement(e);
-    if (children) return children(topic, ref);
-    return <span ref={ref}>{ topic }</span>;
-};
+    const className = classNames(props.className, "mx_RoomTopic");
 
-export default RoomTopic;
+    return <div {...props}
+        ref={ref}
+        onClick={onClick}
+        dir="auto"
+        className={className}
+    >
+        { topic }
+        { hovered && (
+            <Tooltip label={_t("Click to read topic")} alignment={Alignment.Bottom} />
+        ) }
+    </div>;
+}

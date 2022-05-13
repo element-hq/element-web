@@ -140,6 +140,10 @@ limitations under the License.
     cursor: pointer;
 }
 
+.mx_RoomTopic {
+    position: relative;
+}
+
 .mx_RoomHeader_topic {
     $lineHeight: $font-16px;
     $lines: 2;
@@ -209,6 +213,7 @@ limitations under the License.
 .mx_RoomHeader_appsButton::before {
     mask-image: url('$(res)/img/element-icons/room/apps.svg');
 }
+
 .mx_RoomHeader_appsButton_highlight::before {
     background-color: $accent;
 }
@@ -239,6 +244,7 @@ limitations under the License.
         padding: 0;
         margin: 0;
     }
+
     .mx_RoomHeader {
         overflow: hidden;
     }

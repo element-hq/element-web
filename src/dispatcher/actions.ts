@@ -313,4 +313,9 @@ export enum Action {
      * logs. Fires with no payload.
      */
     DumpDebugLogs = "dump_debug_logs",
+
+    /**
+     * Show current room topic
+     */
+    ShowRoomTopic = "show_room_topic"
 }
