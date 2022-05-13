@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import { RoomMember } from 'matrix-js-sdk/src/matrix';
 
@@ -64,12 +64,13 @@ interface SmartMarkerProps {
     roomMember?: RoomMember;
     // use member text color as background
     useMemberColor?: boolean;
+    tooltip?: ReactNode;
 }
 
 /**
  * Generic location marker
  */
-const SmartMarker: React.FC<SmartMarkerProps> = ({ id, map, geoUri, roomMember, useMemberColor }) => {
+const SmartMarker: React.FC<SmartMarkerProps> = ({ id, map, geoUri, roomMember, useMemberColor, tooltip }) => {
     const { onElementRef } = useMapMarker(map, geoUri);
 
     return (
@@ -84,6 +85,7 @@ const SmartMarker: React.FC<SmartMarkerProps> = ({ id, map, geoUri, roomMember, 
                 id={id}
                 roomMember={roomMember}
                 useMemberColor={useMemberColor}
+                tooltip={tooltip}
             />
         </span>
     );

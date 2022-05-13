@@ -57,13 +57,15 @@ exports[`<LocationViewDialog /> renders map correctly 1`] = `
             className="mx_Marker mx_Marker_defaultColor"
             id="mx_LocationViewDialog_$2-marker"
           >
-            <div
-              className="mx_Marker_border"
-            >
+            <OptionalTooltip>
               <div
-                className="mx_Marker_icon"
-              />
-            </div>
+                className="mx_Marker_border"
+              >
+                <div
+                  className="mx_Marker_icon"
+                />
+              </div>
+            </OptionalTooltip>
           </div>
         </ForwardRef>
       </span>

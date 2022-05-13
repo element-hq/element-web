@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 import { RoomMember } from 'matrix-js-sdk/src/matrix';
 
@@ -28,12 +28,39 @@ interface Props {
     roomMember?: RoomMember;
     // use member text color as background
     useMemberColor?: boolean;
+    tooltip?: ReactNode;
 }
+
+/**
+ * Wrap with tooltip handlers when
+ * tooltip is truthy
+ */
+const OptionalTooltip: React.FC<{
+    tooltip?: ReactNode; children: ReactNode;
+}> = ({ tooltip, children }) => {
+    const [isVisible, setIsVisible] = useState(false);
+    if (!tooltip) {
+        return <>{ children }</>;
+    }
+
+    const show = () => setIsVisible(true);
+    const hide = () => setIsVisible(false);
+    const toggleVisibility = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        // stop map from zooming in on click
+        e.stopPropagation();
+        setIsVisible(!isVisible);
+    };
+
+    return <div onMouseEnter={show} onClick={toggleVisibility} onMouseLeave={hide}>
+        { children }
+        { isVisible && tooltip }
+    </div>;
+};
 
 /**
  * Generic location marker
  */
-const Marker = React.forwardRef<HTMLDivElement, Props>(({ id, roomMember, useMemberColor }, ref) => {
+const Marker = React.forwardRef<HTMLDivElement, Props>(({ id, roomMember, useMemberColor, tooltip }, ref) => {
     const memberColorClass = useMemberColor && roomMember ? getUserNameColorClass(roomMember.userId) : '';
     return <div
         ref={ref}
@@ -42,17 +69,21 @@ const Marker = React.forwardRef<HTMLDivElement, Props>(({ id, roomMember, useMem
             "mx_Marker_defaultColor": !memberColorClass,
         })}
     >
-        <div className="mx_Marker_border">
-            { roomMember ?
-                <MemberAvatar
-                    member={roomMember}
-                    width={36}
-                    height={36}
-                    viewUserOnClick={false}
-                />
-                : <LocationIcon className="mx_Marker_icon" />
-            }
-        </div>
+        <OptionalTooltip tooltip={tooltip}>
+            <div className="mx_Marker_border">
+                { roomMember ?
+                    <MemberAvatar
+                        member={roomMember}
+                        width={36}
+                        height={36}
+                        viewUserOnClick={false}
+                        // no mxid on hover when marker has tooltip
+                        hideTitle={!!tooltip}
+                    />
+                    : <LocationIcon className="mx_Marker_icon" />
+                }
+            </div>
+        </OptionalTooltip>
     </div>;
 });
 

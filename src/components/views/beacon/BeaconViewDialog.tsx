@@ -37,6 +37,7 @@ import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import DialogSidebar from './DialogSidebar';
 import DialogOwnBeaconStatus from './DialogOwnBeaconStatus';
+import BeaconStatusTooltip from './BeaconStatusTooltip';
 
 interface IProps extends IDialogProps {
     roomId: Room['roomId'];
@@ -103,6 +104,7 @@ const BeaconViewDialog: React.FC<IProps> = ({
                                     key={beacon.identifier}
                                     map={map}
                                     beacon={beacon}
+                                    tooltip={<BeaconStatusTooltip beacon={beacon} />}
                                 />) }
                                 <ZoomButtons map={map} />
                             </>

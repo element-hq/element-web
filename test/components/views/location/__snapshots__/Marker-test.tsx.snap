@@ -8,13 +8,15 @@ exports[`<Marker /> renders with location icon when no room member 1`] = `
     className="mx_Marker mx_Marker_defaultColor"
     id="abc123"
   >
-    <div
-      className="mx_Marker_border"
-    >
+    <OptionalTooltip>
       <div
-        className="mx_Marker_icon"
-      />
-    </div>
+        className="mx_Marker_border"
+      >
+        <div
+          className="mx_Marker_icon"
+        />
+      </div>
+    </OptionalTooltip>
   </div>
 </ForwardRef>
 `;

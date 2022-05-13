@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import maplibregl from 'maplibre-gl';
 import {
     Beacon,
@@ -29,12 +29,13 @@ import SmartMarker from '../location/SmartMarker';
 interface Props {
     map: maplibregl.Map;
     beacon: Beacon;
+    tooltip?: ReactNode;
 }
 
 /**
  * Updates a map SmartMarker with latest location from given beacon
  */
-const BeaconMarker: React.FC<Props> = ({ map, beacon }) => {
+const BeaconMarker: React.FC<Props> = ({ map, beacon, tooltip }) => {
     const latestLocationState = useEventEmitterState(
         beacon,
         BeaconEvent.LocationUpdate,
@@ -58,6 +59,7 @@ const BeaconMarker: React.FC<Props> = ({ map, beacon }) => {
         id={beacon.identifier}
         geoUri={geoUri}
         roomMember={markerRoomMember}
+        tooltip={tooltip}
         useMemberColor
     />;
 };

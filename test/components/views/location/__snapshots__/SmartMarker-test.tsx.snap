@@ -24,13 +24,15 @@ exports[`<SmartMarker /> creates a marker on mount 1`] = `
       <div
         className="mx_Marker mx_Marker_defaultColor"
       >
-        <div
-          className="mx_Marker_border"
-        >
+        <OptionalTooltip>
           <div
-            className="mx_Marker_icon"
-          />
-        </div>
+            className="mx_Marker_border"
+          >
+            <div
+              className="mx_Marker_icon"
+            />
+          </div>
+        </OptionalTooltip>
       </div>
     </ForwardRef>
   </span>
@@ -61,13 +63,15 @@ exports[`<SmartMarker /> removes marker on unmount 1`] = `
       <div
         className="mx_Marker mx_Marker_defaultColor"
       >
-        <div
-          className="mx_Marker_border"
-        >
+        <OptionalTooltip>
           <div
-            className="mx_Marker_icon"
-          />
-        </div>
+            className="mx_Marker_border"
+          >
+            <div
+              className="mx_Marker_icon"
+            />
+          </div>
+        </OptionalTooltip>
       </div>
     </ForwardRef>
   </span>

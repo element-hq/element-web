@@ -46,14 +46,15 @@ limitations under the License.
 }
 
 .mx_BeaconStatus_description {
-    flex: 1;
+    flex: 1 1 0;
     display: flex;
     flex-direction: column;
     line-height: $font-14px;
 
     padding-right: $spacing-8;
 
-    // TODO handle text-overflow
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .mx_BeaconStatus_expiryTime {
@@ -62,4 +63,6 @@ limitations under the License.
 
 .mx_BeaconStatus_label {
     margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

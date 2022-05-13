@@ -148,83 +148,86 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
           className="mx_Marker mx_Username_color4"
           id="!room:server_@alice:server"
         >
-          <div
-            className="mx_Marker_border"
-          >
-            <MemberAvatar
-              height={36}
-              member={
-                RoomMember {
-                  "_events": Object {},
-                  "_eventsCount": 0,
-                  "_isOutOfBand": false,
-                  "_maxListeners": undefined,
-                  "_modified": 1647270879403,
-                  "_requestedProfileInfo": undefined,
-                  "disambiguate": false,
-                  "events": Object {
-                    "member": null,
-                  },
-                  "membership": null,
-                  "name": "@alice:server",
-                  "powerLevel": 0,
-                  "powerLevelNorm": 0,
-                  "rawDisplayName": "@alice:server",
-                  "roomId": "!room:server",
-                  "typing": false,
-                  "user": null,
-                  "userId": "@alice:server",
-                  Symbol(kCapture): false,
-                }
-              }
-              resizeMethod="crop"
-              viewUserOnClick={false}
-              width={36}
+          <OptionalTooltip>
+            <div
+              className="mx_Marker_border"
             >
-              <BaseAvatar
+              <MemberAvatar
                 height={36}
-                idName="@alice:server"
-                name="@alice:server"
+                hideTitle={false}
+                member={
+                  RoomMember {
+                    "_events": Object {},
+                    "_eventsCount": 0,
+                    "_isOutOfBand": false,
+                    "_maxListeners": undefined,
+                    "_modified": 1647270879403,
+                    "_requestedProfileInfo": undefined,
+                    "disambiguate": false,
+                    "events": Object {
+                      "member": null,
+                    },
+                    "membership": null,
+                    "name": "@alice:server",
+                    "powerLevel": 0,
+                    "powerLevelNorm": 0,
+                    "rawDisplayName": "@alice:server",
+                    "roomId": "!room:server",
+                    "typing": false,
+                    "user": null,
+                    "userId": "@alice:server",
+                    Symbol(kCapture): false,
+                  }
+                }
                 resizeMethod="crop"
-                title="@alice:server"
-                url={null}
+                viewUserOnClick={false}
                 width={36}
               >
-                <span
-                  className="mx_BaseAvatar"
-                  role="presentation"
+                <BaseAvatar
+                  height={36}
+                  idName="@alice:server"
+                  name="@alice:server"
+                  resizeMethod="crop"
+                  title="@alice:server"
+                  url={null}
+                  width={36}
                 >
                   <span
-                    aria-hidden="true"
-                    className="mx_BaseAvatar_initial"
-                    style={
-                      Object {
-                        "fontSize": "23.400000000000002px",
-                        "lineHeight": "36px",
-                        "width": "36px",
-                      }
-                    }
+                    className="mx_BaseAvatar"
+                    role="presentation"
                   >
-                    A
-                  </span>
-                  <img
-                    alt=""
-                    aria-hidden="true"
-                    className="mx_BaseAvatar_image"
-                    onError={[Function]}
-                    src="data:image/png;base64,00"
-                    style={
-                      Object {
-                        "height": "36px",
-                        "width": "36px",
+                    <span
+                      aria-hidden="true"
+                      className="mx_BaseAvatar_initial"
+                      style={
+                        Object {
+                          "fontSize": "23.400000000000002px",
+                          "lineHeight": "36px",
+                          "width": "36px",
+                        }
                       }
-                    }
-                    title="@alice:server"
-                  />
-                </span>
-              </BaseAvatar>
-            </MemberAvatar>
-          </div>
+                    >
+                      A
+                    </span>
+                    <img
+                      alt=""
+                      aria-hidden="true"
+                      className="mx_BaseAvatar_image"
+                      onError={[Function]}
+                      src="data:image/png;base64,00"
+                      style={
+                        Object {
+                          "height": "36px",
+                          "width": "36px",
+                        }
+                      }
+                      title="@alice:server"
+                    />
+                  </span>
+                </BaseAvatar>
+              </MemberAvatar>
+            </div>
+          </OptionalTooltip>
         </div>
       </ForwardRef>
     </span>
