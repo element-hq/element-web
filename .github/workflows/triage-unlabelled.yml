@@ -20,7 +20,6 @@ jobs:
       - name: Check if issue is already in "${{ env.BOARD_NAME }}"
         run: |
           json=$(curl -s -H 'Content-Type: application/json' -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{"query": "query($issue: Int!, $owner: String!, $repo: String!) { repository(owner: $owner, name: $repo) { issue(number: $issue) { projectCards { nodes { project { name } isArchived } } } } } ", "variables" : "{ \"issue\": '${ISSUE}', \"owner\": \"'${OWNER}'\", \"repo\": \"'${REPO}'\" }" }' https://api.github.com/graphql)
-          echo $json
           if echo $json | jq '.data.repository.issue.projectCards.nodes | length'; then
             if [[ $(echo $json | jq '.data.repository.issue.projectCards.nodes[0].project.name') =~ "${BOARD_NAME}" ]]; then
               if [[ $(echo $json | jq '.data.repository.issue.projectCards.nodes[0].isArchived') == 'true' ]]; then
