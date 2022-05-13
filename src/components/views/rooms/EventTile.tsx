@@ -1235,7 +1235,8 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             />;
         }
 
-        const isOwnEvent = this.props.mxEvent?.sender?.userId === MatrixClientPeg.get().getUserId();
+        // Use `getSender()` because searched events might not have a proper `sender`.
+        const isOwnEvent = this.props.mxEvent?.getSender() === MatrixClientPeg.get().getUserId();
 
         switch (this.context.timelineRenderingType) {
             case TimelineRenderingType.Notification: {
