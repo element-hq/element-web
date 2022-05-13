@@ -14,12 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import classNames from "classnames";
+import React, { PropsWithChildren } from 'react';
 
-export default class AuthBody extends React.PureComponent {
-    public render(): React.ReactNode {
-        return <div className="mx_AuthBody">
-            { this.props.children }
-        </div>;
-    }
+interface Props {
+    flex?: boolean;
+}
+
+export default function AuthBody({ flex, children }: PropsWithChildren<Props>) {
+    return <div className={classNames("mx_AuthBody", { "mx_AuthBody_flex": flex })}>
+        { children }
+    </div>;
 }

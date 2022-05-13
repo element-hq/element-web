@@ -24,6 +24,11 @@ limitations under the License.
     padding: 25px 60px;
     box-sizing: border-box;
 
+    &.mx_AuthBody_flex {
+        display: flex;
+        flex-direction: column;
+    }
+
     h2 {
         font-size: $font-24px;
         font-weight: 600;
@@ -139,7 +144,6 @@ limitations under the License.
 .mx_AuthBody_changeFlow {
     display: block;
     text-align: center;
-    width: 100%;
 
     > a {
         font-weight: $font-semi-bold;

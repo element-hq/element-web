@@ -269,6 +269,7 @@ export default class InteractiveAuthComponent extends React.Component<IProps, IS
                 setEmailSid={this.setEmailSid}
                 showContinue={!this.props.continueIsManaged}
                 onPhaseChange={this.onPhaseChange}
+                requestEmailToken={this.authLogic.requestEmailToken}
                 continueText={this.props.continueText}
                 continueKind={this.props.continueKind}
                 onCancel={this.onStageCancel}

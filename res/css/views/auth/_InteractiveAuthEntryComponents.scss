@@ -14,35 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_InteractiveAuthEntryComponents_emailWrapper {
-    padding-right: 100px;
-    position: relative;
-    margin-top: 32px;
-    margin-bottom: 32px;
-
-    &::before, &::after {
-        position: absolute;
-        width: 116px;
-        height: 116px;
-        content: "";
-        right: -10px;
-    }
-
-    &::before {
-        background-color: rgba(244, 246, 250, 0.91);
-        border-radius: 50%;
-        top: -20px;
-    }
-
-    &::after {
-        background-image: url('$(res)/img/element-icons/email-prompt.svg');
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        top: -25px;
-    }
-}
-
 .mx_InteractiveAuthEntryComponents_msisdnWrapper {
     text-align: center;
 }
@@ -101,5 +72,23 @@ limitations under the License.
 
     .mx_AccessibleButton {
         margin-left: 5px;
+    }
+}
+
+.mx_InteractiveAuthEntryComponents_emailWrapper {
+    // "Resend" button/link
+    .mx_AccessibleButton_kind_link_inline {
+        // We need this to be an inline-block so positioning works correctly
+        display: inline-block !important;
+
+        // Spinner as end adornment of the "resend" button/link
+        .mx_Spinner {
+            // Spinners are usually block elements, but we need it as inline element
+            display: inline-flex !important;
+            // Spinners by default fill all available width, but we don't want that
+            width: auto !important;
+            // We need to center the spinner relative to the button/link
+            vertical-align: middle !important;
+        }
     }
 }
