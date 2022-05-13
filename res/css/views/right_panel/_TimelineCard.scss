@@ -57,6 +57,12 @@ limitations under the License.
         .mx_EventTile_line {
             padding-inline-start: $left-gutter;
             padding-inline-end: 36px;
+            padding-top: var(--BaseCard_EventTile_line-padding-block);
+            padding-bottom: var(--BaseCard_EventTile_line-padding-block);
+
+            .mx_EventTile_e2eIcon {
+                inset-inline-start: 8px;
+            }
         }
 
         .mx_DisambiguatedProfile,
@@ -108,10 +114,6 @@ limitations under the License.
         .mx_EventTile {
             > .mx_DisambiguatedProfile {
                 margin-left: 36px;
-            }
-
-            .mx_EventTile_line {
-                padding-bottom: 8px;
             }
         }
     }

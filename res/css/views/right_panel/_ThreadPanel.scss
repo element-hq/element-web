@@ -201,12 +201,6 @@ limitations under the License.
         }
     }
 
-    .mx_EventTile:not([data-layout=bubble]) {
-        .mx_EventTile_e2eIcon {
-            left: 8px;
-        }
-    }
-
     .mx_MessageComposer {
         background-color: $background;
         border-radius: 8px;

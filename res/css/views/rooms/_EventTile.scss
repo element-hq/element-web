@@ -869,6 +869,11 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
         &:not([data-layout=bubble]) {
             padding-top: $spacing-16;
+
+            .mx_EventTile_line {
+                padding-top: var(--BaseCard_EventTile_line-padding-block);
+                padding-bottom: var(--BaseCard_EventTile_line-padding-block);
+            }
         }
     }
 
@@ -979,14 +984,5 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_EditMessageComposer_buttons {
         padding-right: 11px; // align with right edge of input
         margin-right: 0; // align with right edge of background
-    }
-
-    .mx_GroupLayout {
-        .mx_EventTile {
-            .mx_EventTile_line {
-                padding-top: 2px;
-                padding-bottom: 2px;
-            }
-        }
     }
 }
