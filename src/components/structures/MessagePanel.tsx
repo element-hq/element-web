@@ -56,6 +56,7 @@ import { getEventDisplayInfo } from "../../utils/EventRenderingUtils";
 import { IReadReceiptInfo } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
+import { hasThreadSummary } from "../../utils/EventUtils";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -96,7 +97,7 @@ export function shouldFormContinuation(
 
     // Thread summaries in the main timeline should break up a continuation on both sides
     if (threadsEnabled &&
-        (mxEvent.isThreadRoot || prevEvent.isThreadRoot) &&
+        (hasThreadSummary(mxEvent) || hasThreadSummary(prevEvent)) &&
         timelineRenderingType !== TimelineRenderingType.Thread
     ) {
         return false;

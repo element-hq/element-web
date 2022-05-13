@@ -280,3 +280,7 @@ export function canForward(event: MatrixEvent): boolean {
         M_POLL_START.matches(event.getType())
     );
 }
+
+export function hasThreadSummary(event: MatrixEvent): boolean {
+    return event.isThreadRoot && event.getThread()?.length && !!event.getThread().replyToEvent;
+}
