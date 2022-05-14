@@ -239,6 +239,15 @@ limitations under the License.
 
     &.mx_ThreadView .mx_EventTile {
         // handling for hidden events (e.g reactions) in the thread view
+
+        &:not([data-layout=bubble]) {
+            &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
+            &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
+            &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
+                padding-inline-start: 0; // Override
+            }
+        }
+
         &.mx_EventTile_info {
             padding-top: 0;
 
@@ -263,7 +272,6 @@ limitations under the License.
                 }
 
                 .mx_EventTile_avatar {
-                    top: 0; // Align with hidden event content
                     left: calc($MessageTimestamp_width + 14px - 4px); // 14px: avatar width, 4px: align with text
                     z-index: 9; // position above the hover styling
                 }
@@ -271,12 +279,15 @@ limitations under the License.
 
             &[data-layout=bubble] {
                 .mx_EventTile_avatar {
-                    left: 30px;
+                    inset-inline-start: 0;
                 }
             }
 
             .mx_EventTile_avatar {
                 position: absolute;
+                top: 1.5px; // Align with hidden event content
+                margin-top: 0;
+                margin-bottom: 0;
                 width: 14px; // avatar img size
                 height: 14px; // avatar img size
             }
