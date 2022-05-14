@@ -960,9 +960,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
     };
 
     private onRoomAccountData = (ev: MatrixEvent, room: Room, lastEv?: MatrixEvent) => {
-        if (!room.isSpaceRoom()) return;
-
-        if (ev.getType() === EventType.SpaceOrder) {
+        if (room.isSpaceRoom() && ev.getType() === EventType.SpaceOrder) {
             this.spaceOrderLocalEchoMap.delete(room.roomId); // clear any local echo
             const order = ev.getContent()?.order;
             const lastOrder = lastEv?.getContent()?.order;
