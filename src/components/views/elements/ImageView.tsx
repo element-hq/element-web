@@ -535,6 +535,15 @@ export default class ImageView extends React.Component<IProps, IState> {
             );
         }
 
+        let title: JSX.Element;
+        if (this.props.mxEvent?.getContent()) {
+            title = (
+                <div className="mx_ImageView_title">
+                    { presentableTextForFile(this.props.mxEvent?.getContent(), _t("Image"), true) }
+                </div>
+            );
+        }
+
         return (
             <FocusLock
                 returnFocus={true}
@@ -547,9 +556,7 @@ export default class ImageView extends React.Component<IProps, IState> {
             >
                 <div className="mx_ImageView_panel">
                     { info }
-                    <div className="mx_ImageView_title">
-                        { presentableTextForFile(this.props.mxEvent.getContent(), _t("Image"), true) }
-                    </div>
+                    { title }
                     <div className="mx_ImageView_toolbar">
                         { zoomOutButton }
                         { zoomInButton }
