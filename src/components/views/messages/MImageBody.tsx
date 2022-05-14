@@ -37,6 +37,7 @@ import { ImageSize, suggestedSize as suggestedImageSize } from "../../../setting
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { blobIsAnimated, mayBeAnimated } from '../../../utils/Image';
+import { presentableTextForFile } from "../../../utils/FileUtils";
 
 enum Placeholder {
     NoImage,
@@ -446,6 +447,21 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
             gifLabel = <p className="mx_MImageBody_gifLabel">GIF</p>;
         }
 
+        let banner: JSX.Element;
+        const isTimeline = [
+            TimelineRenderingType.Room,
+            TimelineRenderingType.Search,
+            TimelineRenderingType.Thread,
+            TimelineRenderingType.Notification,
+        ].includes(this.context.timelineRenderingType);
+        if (this.state.showImage && this.state.hover && isTimeline) {
+            banner = (
+                <span className="mx_MImageBody_banner">
+                    { presentableTextForFile(content, _t("Image"), true, true) }
+                </span>
+            );
+        }
+
         const classes = classNames({
             'mx_MImageBody_placeholder': true,
             'mx_MImageBody_placeholder--blurhash': this.props.mxEvent.getContent().info?.[BLURHASH_FIELD],
@@ -473,6 +489,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
                 <div style={sizing}>
                     { img }
                     { gifLabel }
+                    { banner }
                 </div>
 
                 { /* HACK: This div fills out space while the image loads, to prevent scroll jumps */ }

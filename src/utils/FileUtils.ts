@@ -37,7 +37,7 @@ export function presentableTextForFile(
     shortened = false,
 ): string {
     let text = fallbackText;
-    if (content.body && content.body.length > 0) {
+    if (content.body?.length > 0) {
         // The content body should be the name of the file including a
         // file extension.
         text = content.body;
@@ -58,7 +58,7 @@ export function presentableTextForFile(
         text = `${fileName}...${extension}`;
     }
 
-    if (content.info && content.info.size && withSize) {
+    if (content.info?.size && withSize) {
         // If we know the size of the file then add it as human readable
         // string to the end of the link text so that the user knows how
         // big a file they are downloading.

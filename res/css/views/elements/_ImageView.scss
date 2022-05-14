@@ -79,6 +79,11 @@ $button-gap: 24px;
     font-weight: bold;
 }
 
+.mx_ImageView_title {
+    color: $lightbox-fg-color;
+    font-size: $font-12px;
+}
+
 .mx_ImageView_toolbar {
     padding-right: 16px;
     pointer-events: initial;

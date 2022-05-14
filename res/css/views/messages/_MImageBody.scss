@@ -17,6 +17,28 @@ limitations under the License.
 
 $timeline-image-border-radius: 8px;
 
+.mx_MImageBody_banner {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    padding: 4px;
+    border-radius: $timeline-image-border-radius;
+    font-size: $font-15px;
+
+    pointer-events: none; // let the cursor go through to the media underneath
+
+    // Trying to match the width of the image is surprisingly difficult, so arbitrarily break it off early.
+    max-width: min(100%, 350px);
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    // Hardcoded colours because it's the same on all themes
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+}
+
 .mx_MImageBody_placeholder {
     // Position the placeholder on top of the thumbnail, so that the reveal animation can work
     position: absolute;
