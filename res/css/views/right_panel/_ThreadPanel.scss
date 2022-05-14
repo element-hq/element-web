@@ -258,8 +258,12 @@ limitations under the License.
             }
 
             &:not([data-layout=bubble]) {
+                .mx_MessageTimestamp {
+                    top: 2px; // Align with avatar
+                }
+
                 .mx_EventTile_avatar {
-                    top: 1.5px;
+                    top: 0; // Align with hidden event content
                     left: calc($MessageTimestamp_width + 14px - 4px); // 14px: avatar width, 4px: align with text
                     z-index: 9; // position above the hover styling
                 }

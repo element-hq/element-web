@@ -20,6 +20,7 @@ limitations under the License.
     font-size: $font-12px;
     width: 100%;
     overflow-x: auto; // Cancel overflow setting of .mx_EventTile_content
+    line-height: normal; // Align with avatar and E2E icon
 
     pre,
     code {
