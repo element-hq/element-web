@@ -29,6 +29,8 @@ limitations under the License.
     user-select: none;
 
     &.mx_RoomAvatar_isSpaceRoom {
+        mask-image: unset !important; // override mx_DecoratedRoomAvatar_cutout
+
         &.mx_BaseAvatar_image, .mx_BaseAvatar_image {
             border-radius: 8px;
         }
