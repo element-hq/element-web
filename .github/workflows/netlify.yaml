@@ -50,7 +50,7 @@ jobs:
           # These don't work because we're in workflow_run
           enable-pull-request-comment: false
           enable-commit-comment: false
-          alias: pr${{ needs.prbuild.outputs.pr_id }}
+          alias: pr${{ needs.prdetails.outputs.pr_id }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
