@@ -8,7 +8,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
     <div
       className="mx_SettingsTab_heading"
     >
-      missing translation: en|Keyboard
+      Keyboard
     </div>
     <KeyboardShortcutSection
       category={
@@ -30,7 +30,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
         <div
           className="mx_SettingsTab_subheading"
         >
-          missing translation: en|Composer
+          Composer
         </div>
         <div>
            
@@ -59,7 +59,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   >
                     <kbd>
                        
-                      missing translation: en|Ctrl
+                      Ctrl
                        
                     </kbd>
                     +
@@ -103,7 +103,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   >
                     <kbd>
                        
-                      missing translation: en|Ctrl
+                      Ctrl
                        
                     </kbd>
                     +
@@ -145,7 +145,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
         <div
           className="mx_SettingsTab_subheading"
         >
-          missing translation: en|Navigation
+          Navigation
         </div>
         <div>
            
@@ -173,7 +173,7 @@ exports[`KeyboardUserSettingsTab renders list of keyboard shortcuts 1`] = `
                   >
                     <kbd>
                        
-                      missing translation: en|Enter
+                      Enter
                        
                     </kbd>
                   </KeyboardKey>

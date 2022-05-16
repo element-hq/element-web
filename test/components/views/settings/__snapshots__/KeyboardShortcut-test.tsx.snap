@@ -32,7 +32,7 @@ exports[`KeyboardShortcut doesn't render same modifier twice 1`] = `
     >
       <kbd>
          
-        missing translation: en|Ctrl
+        Ctrl
          
       </kbd>
       +
@@ -70,7 +70,7 @@ exports[`KeyboardShortcut doesn't render same modifier twice 2`] = `
     >
       <kbd>
          
-        missing translation: en|Ctrl
+        Ctrl
          
       </kbd>
       +
@@ -95,7 +95,7 @@ exports[`KeyboardShortcut renders alternative key name 1`] = `
 >
   <kbd>
      
-    missing translation: en|Page Down
+    Page Down
      
   </kbd>
   +

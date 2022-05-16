@@ -27,6 +27,10 @@ import {
 import { stubClient } from '../test-utils';
 
 describe('languageHandler', function() {
+    /*
+      See /__mocks__/browser-request.js/ for how we are stubbing out translations
+      to provide fixture data for these tests
+     */
     const basicString = 'Rooms';
     const selfClosingTagSub = 'Accept <policyLink /> to continue:';
     const textInTagSub = '<a>Upgrade</a> to your own domain';
@@ -35,6 +39,7 @@ describe('languageHandler', function() {
 
     type TestCase = [string, string, Record<string, unknown>, Record<string, unknown>, TranslatedString];
     const testCasesEn: TestCase[] = [
+        // description of the test case, translationString, variables, tags, expected result
         ['translates a basic string', basicString, {}, undefined, 'Rooms'],
         [
             'handles plurals when count is 0',
@@ -215,6 +220,19 @@ describe('languageHandler', function() {
                     },
                 );
             });
+        });
+    });
+
+    describe('when languages dont load', () => {
+        it('_t', async () => {
+            const STRING_NOT_IN_THE_DICTIONARY = "a string that isn't in the translations dictionary";
+            expect(_t(STRING_NOT_IN_THE_DICTIONARY, {}, undefined)).toEqual(STRING_NOT_IN_THE_DICTIONARY);
+        });
+
+        it('_tDom', async () => {
+            const STRING_NOT_IN_THE_DICTIONARY = "a string that isn't in the translations dictionary";
+            expect(_tDom(STRING_NOT_IN_THE_DICTIONARY, {}, undefined)).toEqual(
+                <span lang="en">{ STRING_NOT_IN_THE_DICTIONARY }</span>);
         });
     });
 });
