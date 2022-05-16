@@ -31,12 +31,16 @@ import { CallHangupEvent } from "./previews/CallHangupEvent";
 import { StickerEventPreview } from "./previews/StickerEventPreview";
 import { ReactionEventPreview } from "./previews/ReactionEventPreview";
 import { UPDATE_EVENT } from "../AsyncStore";
+import { IPreview } from "./previews/IPreview";
 
 // Emitted event for when a room's preview has changed. First argument will the room for which
 // the change happened.
 const ROOM_PREVIEW_CHANGED = "room_preview_changed";
 
-const PREVIEWS = {
+const PREVIEWS: Record<string, {
+    isState: boolean;
+    previewer: IPreview;
+}> = {
     'm.room.message': {
         isState: false,
         previewer: new MessageEventPreview(),
@@ -122,10 +126,7 @@ export class MessagePreviewStore extends AsyncStoreWithClient<IState> {
 
     public generatePreviewForEvent(event: MatrixEvent): string {
         const previewDef = PREVIEWS[event.getType()];
-        // TODO: Handle case where we don't have
-        if (!previewDef) return '';
-        const previewText = previewDef.previewer.getTextFor(event, null, true);
-        return previewText ?? '';
+        return previewDef?.previewer.getTextFor(event, null, true) ?? "";
     }
 
     private async generatePreview(room: Room, tagId?: TagID) {

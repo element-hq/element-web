@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { MsgType, RelationType } from "matrix-js-sdk/src/@types/event";
 
 import { IPreview } from "./IPreview";
 import { TagID } from "../models";
@@ -27,16 +28,17 @@ export class MessageEventPreview implements IPreview {
     public getTextFor(event: MatrixEvent, tagId?: TagID, isThread?: boolean): string {
         let eventContent = event.getContent();
 
-        if (event.isRelation("m.replace")) {
+        if (event.isRelation(RelationType.Replace)) {
             // It's an edit, generate the preview on the new text
             eventContent = event.getContent()['m.new_content'];
         }
 
-        if (!eventContent || !eventContent['body']) return null; // invalid for our purposes
+        if (!eventContent?.['body']) return null; // invalid for our purposes
 
-        let body = (eventContent['body'] || '').trim();
-        const msgtype = eventContent['msgtype'];
-        if (!body || !msgtype) return null; // invalid event, no preview
+        let body = eventContent['body'].trim();
+        if (!body) return null; // invalid event, no preview
+        // A msgtype is actually required in the spec but the app is a bit softer on this requirement
+        const msgtype = eventContent['msgtype'] ?? MsgType.Text;
 
         const hasHtml = eventContent.format === "org.matrix.custom.html" && eventContent.formatted_body;
         if (hasHtml) {
@@ -62,7 +64,7 @@ export class MessageEventPreview implements IPreview {
 
         body = sanitizeForTranslation(body);
 
-        if (msgtype === 'm.emote') {
+        if (msgtype === MsgType.Emote) {
             return _t("* %(senderName)s %(emote)s", { senderName: getSenderName(event), emote: body });
         }
 
