@@ -4,44 +4,34 @@ on:
     workflows: [ "Tests" ]
     types:
       - completed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
+  prdetails:
+    name: ℹ️ PR Details
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+    uses: matrix-org/matrix-js-sdk/.github/workflows/pr_details.yml@develop
+    with:
+      owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+      branch: ${{ github.event.workflow_run.head_branch }}
+
   sonarqube:
-    name: SonarQube
-    runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
-      # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
-      # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
-      - name: Download Coverage Report
-        uses: actions/github-script@v3.1.0
-        with:
-          script: |
-            const artifacts = await github.actions.listWorkflowRunArtifacts({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: ${{ github.event.workflow_run.id }},
-            });
-            const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
-                return artifact.name == "coverage"
-            })[0];
-            const download = await github.actions.downloadArtifact({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                artifact_id: matchArtifact.id,
-                archive_format: 'zip',
-            });
-            const fs = require('fs');
-            fs.writeFileSync('${{github.workspace}}/coverage.zip', Buffer.from(download.data));
-
-      - name: Extract Coverage Report
-        run: unzip -d coverage coverage.zip && rm coverage.zip
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    name: 🩻 SonarQube
+    needs: prdetails
+    # Only wait for prdetails if it isn't skipped
+    if: |
+      always() &&
+      (needs.prdetails.result == 'success' || needs.prdetails.result == 'skipped') &&
+      github.event.workflow_run.conclusion == 'success'
+    uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
+    with:
+      repo: ${{ github.event.workflow_run.head_repository.full_name }}
+      pr_id: ${{ needs.prdetails.outputs.pr_id }}
+      head_branch: ${{ needs.prdetails.outputs.head_branch || github.event.workflow_run.head_branch }}
+      base_branch: ${{ needs.prdetails.outputs.base_branch }}
+      revision: ${{ github.event.workflow_run.head_sha }}
+      coverage_workflow_name: tests.yml
+      coverage_run_id: ${{ github.event.workflow_run.id }}
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
