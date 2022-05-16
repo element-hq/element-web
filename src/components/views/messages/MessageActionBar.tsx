@@ -384,7 +384,7 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
             key="cancel"
         />;
 
-        const threadTooltipButton = <ReplyInThreadButton mxEvent={this.props.mxEvent} />;
+        const threadTooltipButton = <ReplyInThreadButton mxEvent={this.props.mxEvent} key="reply_thread" />;
 
         // We show a different toolbar for failed events, so detect that first.
         const mxEvent = this.props.mxEvent;
