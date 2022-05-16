@@ -74,7 +74,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             if (!optional && vals.length !== 1) {
                 throw new Error(`Expected singular ${name} in query string`);
             }
-            return <string>vals[0];
+            return vals[0];
         };
 
         // If we have these params, expect a widget API to be available (ie. to be in an iframe
