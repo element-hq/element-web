@@ -1,0 +1,37 @@
+name: SonarQube
+on:
+  workflow_run:
+    workflows: [ "Tests" ]
+    types:
+      - completed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  prdetails:
+    name: ℹ️ PR Details
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+    uses: matrix-org/matrix-js-sdk/.github/workflows/pr_details.yml@develop
+    with:
+      owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+      branch: ${{ github.event.workflow_run.head_branch }}
+
+  sonarqube:
+    name: 🩻 SonarQube
+    needs: prdetails
+    # Only wait for prdetails if it isn't skipped
+    if: |
+      always() &&
+      (needs.prdetails.result == 'success' || needs.prdetails.result == 'skipped') &&
+      github.event.workflow_run.conclusion == 'success'
+    uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
+    with:
+      repo: ${{ github.event.workflow_run.head_repository.full_name }}
+      pr_id: ${{ needs.prdetails.outputs.pr_id }}
+      head_branch: ${{ needs.prdetails.outputs.head_branch || github.event.workflow_run.head_branch }}
+      base_branch: ${{ needs.prdetails.outputs.base_branch }}
+      revision: ${{ github.event.workflow_run.head_sha }}
+      coverage_workflow_name: tests.yml
+      coverage_run_id: ${{ github.event.workflow_run.id }}
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -49,7 +49,8 @@
     "lint:js-fix": "eslint --fix src",
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint \"res/css/**/*.scss\"",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "yarn test --coverage"
   },
   "dependencies": {
     "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
