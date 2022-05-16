@@ -16,11 +16,14 @@ limitations under the License.
 */
 
 .mx_MessageActionBar {
+    --MessageActionBar-size-button: 28px;
+    --MessageActionBar-size-box: 32px; // 28px + 2px (margin) * 2
+
     position: absolute;
     visibility: hidden;
     cursor: pointer;
     display: flex;
-    height: 32px;
+    height: var(--MessageActionBar-size-box);
     line-height: $font-24px;
     border-radius: 8px;
     background: $background;
@@ -64,8 +67,8 @@ limitations under the License.
 }
 
 .mx_MessageActionBar_maskButton {
-    width: 28px;
-    height: 28px;
+    width: var(--MessageActionBar-size-button);
+    height: var(--MessageActionBar-size-button);
 
     &:disabled,
     &[disabled] {
