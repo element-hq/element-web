@@ -17,7 +17,7 @@ limitations under the License.
 import { mocked } from "jest-mock";
 import { Widget, ClientWidgetApi, MatrixWidgetType, IWidgetApiRequest } from "matrix-widget-api";
 
-import { stubClient, setupAsyncStoreWithClient } from "../test-utils";
+import { stubClient, setupAsyncStoreWithClient, mkRoom } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import WidgetStore, { IApp } from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
@@ -51,6 +51,7 @@ describe("VideoChannelStore", () => {
         const cli = MatrixClientPeg.get();
         setupAsyncStoreWithClient(WidgetMessagingStore.instance, cli);
         setupAsyncStoreWithClient(store, cli);
+        mocked(cli).getRoom.mockReturnValue(mkRoom(cli, "!1:example.org"));
 
         let resolveMessageSent: () => void;
         messageSent = new Promise(resolve => resolveMessageSent = resolve);

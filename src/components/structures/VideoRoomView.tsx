@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { FC, useContext, useState, useMemo } from "react";
+import React, { FC, useContext, useState, useMemo, useEffect } from "react";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
 import WidgetUtils from "../../utils/WidgetUtils";
-import { addVideoChannel, getVideoChannel } from "../../utils/VideoChannelUtils";
+import { addVideoChannel, getVideoChannel, fixStuckDevices } from "../../utils/VideoChannelUtils";
 import WidgetStore, { IApp } from "../../stores/WidgetStore";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import VideoChannelStore, { VideoChannelEvent } from "../../stores/VideoChannelStore";
@@ -61,6 +61,12 @@ const VideoRoomView: FC<IProps> = ({ room, resizing }) => {
             return app;
         }
     }, [room, widgetStoreReady, widgetLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // We'll also take this opportunity to fix any stuck devices.
+    // The linter thinks that store.connected should be a dependency, but we explicitly
+    // *only* want this to happen at mount to avoid racing with normal device updates.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { fixStuckDevices(room, store.connected); }, [room]);
 
     const [connected, setConnected] = useState(store.connected && store.roomId === room.roomId);
     useEventEmitter(store, VideoChannelEvent.Connect, () => setConnected(store.roomId === room.roomId));
