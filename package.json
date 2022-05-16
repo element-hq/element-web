@@ -120,6 +120,7 @@
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-raw-loader": "^1.0.1",
+    "jest-sonar-reporter": "^2.0.0",
     "json-loader": "^0.5.7",
     "loader-utils": "^1.4.0",
     "matrix-mock-request": "^1.2.3",
@@ -191,6 +192,15 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
       "/node_modules/(?!matrix-react-sdk).+$"
-    ]
+    ],
+    "coverageReporters": [
+      "text-summary",
+      "lcov"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "sonar56x": true
   }
 }
