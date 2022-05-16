@@ -74,7 +74,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             if (!optional && vals.length !== 1) {
                 throw new Error(`Expected singular ${name} in query string`);
             }
-            return <string>vals[0];
+            return vals[0];
         };
 
         // If we have these params, expect a widget API to be available (ie. to be in an iframe
@@ -241,7 +241,9 @@ function switchVisibleContainers() {
 
 function toggleConferenceVisibility(inConference: boolean) {
     document.getElementById("jitsiContainer").style.visibility = inConference ? 'unset' : 'hidden';
-    document.getElementById("joinButtonContainer").style.visibility = inConference ? 'hidden' : 'unset';
+    // Video rooms have a separate UI for joining, so they should never show our join button
+    document.getElementById("joinButtonContainer").style.visibility =
+        (inConference || isVideoChannel) ? 'hidden' : 'unset';
 }
 
 function skipToJitsiSplashScreen() {
@@ -301,6 +303,15 @@ async function notifyHangup() {
     }
 }
 
+function closeConference() {
+    switchVisibleContainers();
+    document.getElementById("jitsiContainer").innerHTML = "";
+
+    if (skipOurWelcomeScreen) {
+        skipToJitsiSplashScreen();
+    }
+}
+
 // event handler bound in HTML
 function joinConference(audioDevice?: string, videoDevice?: string) {
     let jwt;
@@ -344,8 +355,8 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         configOverwrite: {
             subject: roomName,
             startAudioOnly,
-            startWithAudioMuted: !audioDevice,
-            startWithVideoMuted: !videoDevice,
+            startWithAudioMuted: audioDevice == null,
+            startWithVideoMuted: videoDevice == null,
         } as any,
         jwt: jwt,
     };
@@ -386,20 +397,15 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         meetApi = null;
     });
 
-    meetApi.on("readyToClose", () => {
-        switchVisibleContainers();
-        document.getElementById("jitsiContainer").innerHTML = "";
-
-        if (skipOurWelcomeScreen) {
-            skipToJitsiSplashScreen();
-        }
-    });
+    meetApi.on("readyToClose", closeConference);
 
     meetApi.on("errorOccurred", ({ error }) => {
         if (error.isFatal) {
             // We got disconnected. Since Jitsi Meet might send us back to the
             // prejoin screen, we're forced to act as if we hung up entirely.
             notifyHangup();
+            meetApi = null;
+            closeConference();
         }
     });
 

@@ -1,3 +1,12 @@
+[![Chat](https://img.shields.io/matrix/element-web:matrix.org)](https://matrix.to/#/#element-web:matrix.org)
+![Tests](https://github.com/vector-im/element-web/actions/workflows/tests.yaml/badge.svg)
+![Static Analysis](https://github.com/vector-im/element-web/actions/workflows/static_analysis.yaml/badge.svg)
+[![Weblate](https://translate.element.io/widgets/element-web/-/element-web/svg-badge.svg)](https://translate.element.io/engage/element-web/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=coverage)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
+
 Element
 =======
 
@@ -250,10 +259,11 @@ Before attempting to develop on Element you **must** read the [developer guide
 for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
 also defines the design, architecture and style for Element too.
 
-Before starting work on a feature, it's best to ensure your plan aligns well
-with our vision for Element. Please chat with the team in
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
-start so we can ensure it's something we'd be willing to merge.
+Read the [Choosing an issue](docs/choosing-an-issue.md) page for some guidance
+about where to start. Before starting work on a feature, it's best to ensure
+your plan aligns well with our vision for Element. Please chat with the team in
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before
+you start so we can ensure it's something we'd be willing to merge.
 
 You should also familiarise yourself with the ["Here be Dragons" guide
 ](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
