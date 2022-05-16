@@ -14,31 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useLayoutEffect, useRef } from "react";
+import { useState } from "react";
 
-import { linkifyElement } from "../../../HtmlUtils";
+export default function useFocus(
+): [boolean, {onFocus: () => void, onBlur: () => void}] {
+    const [focused, setFocused] = useState(false);
 
-interface Props {
-    as?: string;
-    children: React.ReactNode;
-    onClick?: (ev: MouseEvent) => void;
+    const props = {
+        onFocus: () => setFocused(true),
+        onBlur: () => setFocused(false),
+    };
+
+    return [focused, props];
 }
-
-export function Linkify({
-    as = "div",
-    children,
-    onClick,
-}: Props): JSX.Element {
-    const ref = useRef();
-
-    useLayoutEffect(() => {
-        linkifyElement(ref.current);
-    }, [children]);
-
-    return React.createElement(as, {
-        children,
-        ref,
-        onClick,
-    });
-}
-

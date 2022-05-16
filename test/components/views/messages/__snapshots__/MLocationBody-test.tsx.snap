@@ -95,6 +95,7 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
           onBlur={[Function]}
           onFocus={[Function]}
           onMouseLeave={[Function]}
+          onMouseMove={[Function]}
           onMouseOver={[Function]}
           tabIndex={0}
         >

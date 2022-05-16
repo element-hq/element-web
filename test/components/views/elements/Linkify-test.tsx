@@ -22,7 +22,23 @@ describe("Linkify", () => {
         const wrapper = mount(<Linkify>
             https://perdu.com
         </Linkify>);
-        expect(wrapper.html()).toBe('<div><a href="https://perdu.com">https://perdu.com</a></div>');
+        expect(wrapper.html()).toBe(
+            "<div><a href=\"https://perdu.com\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">"+
+            "https://perdu.com" +
+            "</a></div>",
+        );
+    });
+
+    it("correctly linkifies a room alias", () => {
+        const wrapper = mount(<Linkify>
+            #element-web:matrix.org
+        </Linkify>);
+        expect(wrapper.html()).toBe(
+            "<div>" +
+            "<a href=\"https://matrix.to/#/#element-web:matrix.org\" class=\"linkified\" rel=\"noreferrer noopener\">" +
+            "#element-web:matrix.org" +
+            "</a></div>",
+        );
     });
 
     it("changes the root tag name", () => {
@@ -55,10 +71,20 @@ describe("Linkify", () => {
 
         const wrapper = mount(<DummyTest />);
 
-        expect(wrapper.html()).toBe('<div><div><a href="https://perdu.com">https://perdu.com</a></div></div>');
+        expect(wrapper.html()).toBe(
+            "<div><div>" +
+            "<a href=\"https://perdu.com\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">" +
+            "https://perdu.com" +
+            "</a></div></div>",
+        );
 
         wrapper.find('div').at(0).simulate('click');
 
-        expect(wrapper.html()).toBe('<div><div><a href="https://matrix.org">https://matrix.org</a></div></div>');
+        expect(wrapper.html()).toBe(
+            "<div><div>" +
+            "<a href=\"https://matrix.org\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">" +
+            "https://matrix.org" +
+            "</a></div></div>",
+        );
     });
 });

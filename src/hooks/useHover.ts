@@ -14,29 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function useHover(ref: React.MutableRefObject<HTMLElement>) {
+export default function useHover(
+    ignoreHover?: (ev: React.MouseEvent) => boolean,
+): [boolean, { onMouseOver: () => void, onMouseLeave: () => void, onMouseMove: (ev: React.MouseEvent) => void }] {
     const [hovered, setHoverState] = useState(false);
 
-    const handleMouseOver = () => setHoverState(true);
-    const handleMouseOut = () => setHoverState(false);
-
-    useEffect(
-        () => {
-            const node = ref.current;
-            if (node) {
-                node.addEventListener("mouseover", handleMouseOver);
-                node.addEventListener("mouseout", handleMouseOut);
-
-                return () => {
-                    node.removeEventListener("mouseover", handleMouseOver);
-                    node.removeEventListener("mouseout", handleMouseOut);
-                };
-            }
+    const props = {
+        onMouseOver: () => setHoverState(true),
+        onMouseLeave: () => setHoverState(false),
+        onMouseMove: (ev: React.MouseEvent): void => {
+            setHoverState(!ignoreHover(ev));
         },
-        [ref],
-    );
+    };
 
-    return hovered;
+    return [hovered, props];
 }
