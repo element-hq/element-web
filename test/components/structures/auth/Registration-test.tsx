@@ -1,5 +1,6 @@
 /*
 Copyright 2019 New Vector Ltd
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { createClient } from 'matrix-js-sdk/src/matrix';
+import { mocked } from 'jest-mock';
 
 import SdkConfig, { DEFAULTS } from '../../../../src/SdkConfig';
 import { createTestClient, mkServerConfig } from "../../../test-utils";
@@ -37,7 +39,7 @@ describe('Registration', function() {
         });
         parentDiv = document.createElement('div');
         document.body.appendChild(parentDiv);
-        createClient.mockImplementation(() => createTestClient());
+        mocked(createClient).mockImplementation(() => createTestClient());
     });
 
     afterEach(function() {
@@ -46,14 +48,18 @@ describe('Registration', function() {
         SdkConfig.unset(); // we touch the config, so clean up
     });
 
+    const defaultProps = {
+        defaultDeviceDisplayName: 'test-device-display-name',
+        serverConfig: mkServerConfig("https://matrix.org", "https://vector.im"),
+        makeRegistrationUrl: jest.fn(),
+        onLoggedIn: jest.fn(),
+        onLoginClick: jest.fn(),
+        onServerConfigChange: jest.fn(),
+    };
     function render() {
-        return ReactDOM.render(<Registration
-            serverConfig={mkServerConfig("https://matrix.org", "https://vector.im")}
-            makeRegistrationUrl={() => {}}
-            onLoggedIn={() => {}}
-            onLoginClick={() => {}}
-            onServerConfigChange={() => {}}
-        />, parentDiv);
+        return ReactDOM.render<typeof Registration>(<Registration
+            {...defaultProps}
+        />, parentDiv) as React.Component<typeof Registration>;
     }
 
     it('should show server picker', async function() {
