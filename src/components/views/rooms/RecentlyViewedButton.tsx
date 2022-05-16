@@ -27,6 +27,7 @@ import { Action } from "../../../dispatcher/actions";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { roomContextDetailsText } from "../../../utils/i18n-helpers";
+import RoomAvatar from "../avatars/RoomAvatar";
 
 const RecentlyViewedButton = () => {
     const tooltipRef = useRef<InteractiveTooltip>();
@@ -50,7 +51,10 @@ const RecentlyViewedButton = () => {
                         tooltipRef.current?.hideTooltip();
                     }}
                 >
-                    <DecoratedRoomAvatar room={crumb} avatarSize={24} tooltipProps={{ tabIndex: -1 }} />
+                    { crumb.isSpaceRoom()
+                        ? <RoomAvatar room={crumb} width={24} height={24} />
+                        : <DecoratedRoomAvatar room={crumb} avatarSize={24} tooltipProps={{ tabIndex: -1 }} />
+                    }
                     <span className="mx_RecentlyViewedButton_entry_label">
                         <div>{ crumb.name }</div>
                         { contextDetails && <div className="mx_RecentlyViewedButton_entry_spaces">
