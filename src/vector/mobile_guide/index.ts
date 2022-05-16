@@ -17,7 +17,7 @@ function renderConfigError(message: string): void {
     const toHide = document.getElementsByClassName("mx_HomePage_container");
     const errorContainers = document.getElementsByClassName(
         "mx_HomePage_errorContainer",
-    ) as HTMLCollectionOf<HTMLDialogElement>;
+    ) as HTMLCollectionOf<HTMLDivElement>;
 
     for (const e of toHide) {
         // We have to clear the content because .style.display='none'; doesn't work
