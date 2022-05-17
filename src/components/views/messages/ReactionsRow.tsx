@@ -165,11 +165,6 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             return null;
         }
 
-        const cli = this.context.room.client;
-        const room = cli.getRoom(mxEvent.getRoomId());
-        const isPeeking = room.getMyMembership() !== "join";
-        const canReact = !isPeeking && this.context.canReact;
-
         let items = reactions.getSortedAnnotationsByKey().map(([content, events]) => {
             const count = events.size;
             if (!count) {
@@ -188,7 +183,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 mxEvent={mxEvent}
                 reactionEvents={events}
                 myReactionEvent={myReactionEvent}
-                disabled={!canReact}
+                disabled={!this.context.canReact}
             />;
         }).filter(item => !!item);
 
@@ -197,7 +192,7 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
         // Show the first MAX_ITEMS if there are MAX_ITEMS + 1 or more items.
         // The "+ 1" ensure that the "show all" reveals something that takes up
         // more space than the button itself.
-        let showAllButton;
+        let showAllButton: JSX.Element;
         if ((items.length > MAX_ITEMS_WHEN_LIMITED + 1) && !showAll) {
             items = items.slice(0, MAX_ITEMS_WHEN_LIMITED);
             showAllButton = <AccessibleButton
@@ -209,8 +204,8 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
             </AccessibleButton>;
         }
 
-        let addReactionButton;
-        if (room.getMyMembership() === "join" && this.context.canReact) {
+        let addReactionButton: JSX.Element;
+        if (this.context.canReact) {
             addReactionButton = <ReactButton mxEvent={mxEvent} reactions={reactions} />;
         }
 
