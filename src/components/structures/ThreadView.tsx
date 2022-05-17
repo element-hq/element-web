@@ -22,6 +22,7 @@ import { TimelineWindow } from 'matrix-js-sdk/src/timeline-window';
 import { Direction } from 'matrix-js-sdk/src/models/event-timeline';
 import { IRelationsRequestOpts } from 'matrix-js-sdk/src/@types/requests';
 import classNames from "classnames";
+import { logger } from 'matrix-js-sdk/src/logger';
 
 import BaseCard from "../views/right_panel/BaseCard";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
@@ -305,6 +306,14 @@ export default class ThreadView extends React.Component<IProps, IState> {
 
         let timeline: JSX.Element;
         if (this.state.thread) {
+            if (this.props.initialEvent && this.props.initialEvent.getRoomId() !== this.state.thread.roomId) {
+                logger.warn("ThreadView attempting to render TimelinePanel with mismatched initialEvent",
+                    this.state.thread.roomId,
+                    this.props.initialEvent.getRoomId(),
+                    this.props.initialEvent.getId(),
+                );
+            }
+
             timeline = <>
                 <FileDropTarget parent={this.card.current} onFileDrop={this.onFileDrop} />
                 <TimelinePanel

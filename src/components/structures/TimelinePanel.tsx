@@ -29,6 +29,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 import { Thread } from 'matrix-js-sdk/src/models/thread';
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
+import { MatrixError } from 'matrix-js-sdk/src/http-api';
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
@@ -1263,9 +1264,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
      * @param {boolean?} scrollIntoView whether to scroll the event into view.
      */
     private loadTimeline(eventId?: string, pixelOffset?: number, offsetBase?: number, scrollIntoView = true): void {
-        this.timelineWindow = new TimelineWindow(
-            MatrixClientPeg.get(), this.props.timelineSet,
-            { windowLimit: this.props.timelineCap });
+        const cli = MatrixClientPeg.get();
+        this.timelineWindow = new TimelineWindow(cli, this.props.timelineSet, { windowLimit: this.props.timelineCap });
 
         const onLoaded = () => {
             if (this.unmounted) return;
@@ -1290,8 +1290,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                     // we're in a setState callback, and we know
                     // timelineLoading is now false, so render() should have
                     // mounted the message panel.
-                    logger.log("can't initialise scroll state because " +
-                                "messagePanel didn't load");
+                    logger.log("can't initialise scroll state because messagePanel didn't load");
                     return;
                 }
 
@@ -1305,15 +1304,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
             });
         };
 
-        const onError = (error) => {
+        const onError = (error: MatrixError) => {
             if (this.unmounted) return;
 
             this.setState({ timelineLoading: false });
-            logger.error(
-                `Error loading timeline panel at ${eventId}: ${error}`,
-            );
+            logger.error(`Error loading timeline panel at ${this.props.timelineSet.room?.roomId}/${eventId}: ${error}`);
 
-            let onFinished;
+            let onFinished: () => void;
 
             // if we were given an event ID, then when the user closes the
             // dialog, let's jump to the end of the timeline. If we weren't,
@@ -1329,22 +1326,24 @@ class TimelinePanel extends React.Component<IProps, IState> {
                     });
                 };
             }
-            let message;
+
+            let description: string;
             if (error.errcode == 'M_FORBIDDEN') {
-                message = _t(
+                description = _t(
                     "Tried to load a specific point in this room's timeline, but you " +
                     "do not have permission to view the message in question.",
                 );
             } else {
-                message = _t(
+                description = _t(
                     "Tried to load a specific point in this room's timeline, but was " +
                     "unable to find it.",
                 );
             }
+
             Modal.createTrackedDialog('Failed to load timeline position', '', ErrorDialog, {
                 title: _t("Failed to load timeline position"),
-                description: message,
-                onFinished: onFinished,
+                description,
+                onFinished,
             });
         };
 
