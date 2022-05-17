@@ -33,5 +33,6 @@ jobs:
       revision: ${{ github.event.workflow_run.head_sha }}
       coverage_workflow_name: tests.yml
       coverage_run_id: ${{ github.event.workflow_run.id }}
+      upstream_repo: matrix-org/matrix-react-sdk
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
