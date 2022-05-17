@@ -129,14 +129,12 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             // this seems to happen sometimes for reasons I don't understand
             // the docs for `offsetParent` say it may be null if `display` is
             // `none`, but I can't see why that would happen.
-            logger.warn(
-                `ReadReceiptMarker for ${this.props.fallbackUserId} has no valid horizontalContainer`,
-            );
+            logger.warn(`ReadReceiptMarker for ${this.props.fallbackUserId} has no valid horizontalContainer`);
 
             target.top = 0;
             target.right = 0;
             target.parent = null;
-            return;
+            return target;
         }
         // this is the mx_ReadReceiptsGroup
         const verticalContainer = horizontalContainer.offsetParent;
@@ -144,14 +142,12 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             // this seems to happen sometimes for reasons I don't understand
             // the docs for `offsetParent` say it may be null if `display` is
             // `none`, but I can't see why that would happen.
-            logger.warn(
-                `ReadReceiptMarker for ${this.props.fallbackUserId} has no valid verticalContainer`,
-            );
+            logger.warn(`ReadReceiptMarker for ${this.props.fallbackUserId} has no valid verticalContainer`);
 
             target.top = 0;
             target.right = 0;
             target.parent = null;
-            return;
+            return target;
         }
 
         target.top = element.offsetTop;
@@ -165,9 +161,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             // this seems to happen sometimes for reasons I don't understand
             // the docs for `offsetParent` say it may be null if `display` is
             // `none`, but I can't see why that would happen.
-            logger.warn(
-                `ReadReceiptMarker for ${this.props.fallbackUserId} has no offsetParent`,
-            );
+            logger.warn(`ReadReceiptMarker for ${this.props.fallbackUserId} has no offsetParent`);
             return 0;
         }
 
@@ -186,7 +180,7 @@ export default class ReadReceiptMarker extends React.PureComponent<IProps, IStat
             : -READ_AVATAR_SIZE;
 
         const startStyles = [];
-        if (oldInfo && oldInfo.right) {
+        if (oldInfo?.right) {
             startStyles.push({
                 top: oldPosition - newPosition,
                 right: oldInfo.right,
