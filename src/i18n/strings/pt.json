@@ -438,5 +438,8 @@
     "Sign In": "Iniciar sessão",
     "Create Account": "Criar conta",
     "Not a valid identity server (status code %(code)s)": "Servidor de Identidade inválido (código de status %(code)s)",
-    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS"
+    "Identity server URL must be HTTPS": "O link do servidor de identidade deve começar com HTTPS",
+    "Comment": "Comente",
+    "Confirm": "Confirme",
+    "Use Single Sign On to continue": "Use Single Sign On para continuar"
 }

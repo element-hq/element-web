@@ -3419,5 +3419,22 @@
     "To leave, return to this page and use the “%(leaveTheBeta)s” button.": "Pour quitter, revenez à cette page et utilisez le bouton « %(leaveTheBeta)s ».",
     "Use “%(replyInThread)s” when hovering over a message.": "Utilisez « %(replyInThread)s » en survolant un message.",
     "Live Location Sharing (temporary implementation: locations persist in room history)": "Partage de position en continu (implémentation temporaire : les positions restent dans l’historique du salon)",
-    "Location sharing - pin drop": "Partage de position – choix du marqueur"
+    "Location sharing - pin drop": "Partage de position – choix du marqueur",
+    "%(members)s and more": "%(members)s et plus",
+    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Votre message n’a pas été envoyé car ce serveur d’accueil a été bloqué par son administrateur. Veuillez <a>contacter l’administrateur de votre service</a> pour continuer à l’utiliser.",
+    "An error occurred while stopping your live location": "Une erreur s’est produite lors de l’arrêt de votre position en continu",
+    "Cameras": "Caméras",
+    "Output devices": "Périphériques de sortie",
+    "Input devices": "Périphériques d’entrée",
+    "Open room": "Ouvrir le salon",
+    "Enable live location sharing": "Activer le partage de position en continu",
+    "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "Attention : c'est une fonctionnalité expérimentale qui utilise une implémentation temporaire. Cela implique que vous ne pourrez pas supprimer votre historique de positions, et les utilisateurs avancés pourront voir votre historique de positions même après avoir arrêter le partage de votre position en continu dans ce salon.",
+    "Live location sharing": "Partage de position en continu",
+    "Show Labs settings": "Afficher les réglages des expérimentations",
+    "To join, please enable video rooms in Labs first": "Pour rejoindre, veuillez d’abord activer les salons vision dans la section Expérimental",
+    "To view, please enable video rooms in Labs first": "Pour afficher, veuillez d’abord activer les salons vision dans la section Expérimental",
+    "To view %(roomName)s, you need an invite": "Pour afficher %(roomName)s, vous avez besoin d’une invitation",
+    "Private room": "Salon privé",
+    "Video room": "Salon visio",
+    "%(members)s and %(last)s": "%(members)s et %(last)s"
 }

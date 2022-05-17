@@ -3425,5 +3425,16 @@
     "Live Location Sharing (temporary implementation: locations persist in room history)": "Compartición en directo da Localización (implementación temporal: as localizacións permanecen no historial da sala)",
     "Location sharing - pin drop": "Compartición da localización - Pór marca",
     "%(members)s and %(last)s": "%(members)s e %(last)s",
-    "%(members)s and more": "%(members)s e máis"
+    "%(members)s and more": "%(members)s e máis",
+    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "A mensaxe non se enviou porque este servidor de inicio foi bloqueado pola súa administración. <a>Contacta coa túa administración</a> para continuar utilizando este servizo.",
+    "Cameras": "Cámaras",
+    "Output devices": "Dispositivos de saída",
+    "Input devices": "Dispositivos de entrada",
+    "Open room": "Abrir sala",
+    "Show Labs settings": "Mostrar axustes en Labs",
+    "To join, please enable video rooms in Labs first": "Para unirte, primeiro activa as salas de vídeo en Labs",
+    "To view, please enable video rooms in Labs first": "Para ver, primeiro activa as salas de vídeo en Labs",
+    "To view %(roomName)s, you need an invite": "Para ver %(roomName)s, precisas un convite",
+    "Private room": "Sala privada",
+    "Video room": "Sala de vídeo"
 }

@@ -3424,5 +3424,16 @@
     "and %(count)s others...|one": "ແລະ ອີກອັນນຶ່ງ...",
     "and %(count)s others...|other": "ແລະ %(count)s ຜູ້ອຶ່ນ...",
     "%(members)s and %(last)s": "%(members)s ແລະ %(last)s",
-    "%(members)s and more": "%(members)s ແລະອື່ນໆ"
+    "%(members)s and more": "%(members)s ແລະອື່ນໆ",
+    "Open room": "ເປີດຫ້ອງ",
+    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "ຂໍ້ຄວາມທ່ານຍັງບໍ່ໄດ້ຖືກສົ່ງໄປຍ້ອນວ່າສູນບັນຊາການນີ້ຖືກໂຈະໂດຍຜູ້ຄຸ້ມຄອງລະບົບ. ກະລຸນາ <a> ຕິດຕໍ່ຜູ້ຄຸ້ມຄອງລະບົບຂອງທ່ານ</a>ເພື່ອສືບຕໍ່ນຳໃຊ້ບໍລິການ.",
+    "Cameras": "ກ້ອງ",
+    "Output devices": "ອຸປະກອນຂາອອກ",
+    "Input devices": "ອຸປະກອນຂາເຂົ້າ",
+    "Show Labs settings": "ໂຊການຕັ້ງຄ່າສູນທົດລອງ",
+    "To join, please enable video rooms in Labs first": "ເພື່ອເຂົ້າຮ່ວມ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
+    "To view, please enable video rooms in Labs first": "ເພື່ອເບິ່ງ, ທ່ານຕ້ອງເປີດຫ້ອງວີດີໂອໃນສູນທົດລອງກ່ອນ",
+    "To view %(roomName)s, you need an invite": "ເພື່ອເບິ່ງ %(roomName)s, ທ່ານຕ້ອງມີບັດເຊີນ",
+    "Private room": "ຫ້ອງສ່ວນຕົວ",
+    "Video room": "ຫ້ອງວີດີໂອ"
 }

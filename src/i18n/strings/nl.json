@@ -3423,5 +3423,18 @@
     "Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.": "Let op: dit is een labfunctie met een tijdelijke implementatie. Dit betekent dat u uw locatiegeschiedenis niet kunt verwijderen en dat geavanceerde gebruikers uw locatiegeschiedenis kunnen zien, zelfs nadat u stopt met het delen van uw live locatie met deze ruimte.",
     "Live location sharing": "Live locatie delen",
     "Live Location Sharing (temporary implementation: locations persist in room history)": "Live Locatie delen (tijdelijke implementatie: locaties blijven bestaan in kamergeschiedenis)",
-    "Location sharing - pin drop": "Locatie delen - pin neerzetten"
+    "Location sharing - pin drop": "Locatie delen - pin neerzetten",
+    "Your message wasn't sent because this homeserver has been blocked by its administrator. Please <a>contact your service administrator</a> to continue using the service.": "Uw bericht is niet verzonden omdat deze server is geblokkeerd door de beheerder. Neem <a>contact op met uw servicebeheerder</a> om de service te blijven gebruiken.",
+    "Cameras": "Camera's",
+    "Output devices": "Uitvoerapparaten",
+    "Input devices": "Invoer apparaten",
+    "Private room": "Privé kamer",
+    "To view, please enable video rooms in Labs first": "Schakel eerst videokamers in Labs in om te bekijken",
+    "To join, please enable video rooms in Labs first": "Schakel eerst videokamers in Labs in om deel te nemen",
+    "Open room": "Open kamer",
+    "Show Labs settings": "Lab instellingen weergeven",
+    "To view %(roomName)s, you need an invite": "Om %(roomName)s te bekijken, heeft u een uitnodiging nodig",
+    "Video room": "Video kamer",
+    "%(members)s and %(last)s": "%(members)s en %(last)s",
+    "%(members)s and more": "%(members)s en meer"
 }
