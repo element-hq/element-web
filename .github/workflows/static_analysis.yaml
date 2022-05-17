@@ -36,7 +36,7 @@ jobs:
 
       - name: "Get modified files"
         id: changed_files
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'RiotTranslateBot'
         uses: tj-actions/changed-files@v19
         with:
           files: |
@@ -46,7 +46,7 @@ jobs:
       - name: "Assert only en_EN was modified"
         if: |
           github.event_name == 'pull_request' &&
-          github.actor != 'RiotTranslateBot' &&
+          github.event.pull_request.user.login != 'RiotTranslateBot' &&
           steps.changed_files.outputs.any_modified == 'true'
         run: |
           echo "You can only modify en_EN.json, do not touch any of the other i18n files as Weblate will be confused"
