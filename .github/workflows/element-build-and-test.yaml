@@ -67,14 +67,20 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v2
         with:
-          # The built in Electron runner seems to grind to a halt trying
+          # The built-in Electron runner seems to grind to a halt trying
           # to run the tests, so use chrome.
           browser: chrome
           start: npx serve -p 8080 webapp
           record: true
+          command-prefix: 'yarn percy exec --'
         env:
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass the Percy token as an environment variable
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          # Use existing chromium rather than downloading another
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
           # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

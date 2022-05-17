@@ -6,6 +6,7 @@ It aims to cover:
  * How to run the tests yourself
  * How the tests work
  * How to write great Cypress tests
+ * Visual testing
 
 ## Running the Tests
 Our Cypress tests run automatically as part of our CI along with our other tests,
@@ -166,3 +167,14 @@ already familiar with Cypress.
 
 This is a small selection - the Cypress best practices guide, linked above, has more good advice, and we
 should generally try to adhere to them.
+
+## Percy Visual Testing
+We also support visual testing via Percy, this extracts the DOM from Cypress and renders it using custom renderers
+for Safari, Firefox, Chrome & Edge, allowing us to spot visual regressions before they become release regressions.
+Right now we run it as part of the standard Pull Request CI automation but due to only having 25k screenshots/month,
+and each `cy.percySnapshot()` call results in 8 screenshots (4 browsers, 2 sizes) this could quickly be exhausted and
+at that point we would likely run it on a CRON interval or before releases.
+
+To record a snapshot use `cy.percySnapshot()`, you may have to pass `percyCSS` into the 2nd argument to hide certain
+elements which contain dynamic/generated data to avoid them cause false positives in the Percy screenshot diffs.
+

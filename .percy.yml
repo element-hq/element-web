@@ -1,0 +1,5 @@
+version: 2
+snapshot:
+  widths:
+    - 1024
+    - 1920

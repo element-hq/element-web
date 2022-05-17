@@ -2,6 +2,7 @@
 ![Tests](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/tests.yml/badge.svg)
 ![Static Analysis](https://github.com/matrix-org/matrix-react-sdk/actions/workflows/static_analysis.yaml/badge.svg)
 [![matrix-react-sdk](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/ppvnzg/develop&style=flat&logo=cypress)](https://dashboard.cypress.io/projects/ppvnzg/runs)
+[![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/dfde73bd/matrix-react-sdk)
 [![Weblate](https://translate.element.io/widgets/element-web/-/matrix-react-sdk/svg-badge.svg)](https://translate.element.io/engage/element-web/)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=matrix-react-sdk&metric=coverage)](https://sonarcloud.io/summary/new_code?id=matrix-react-sdk)
