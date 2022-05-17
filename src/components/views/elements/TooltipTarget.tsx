@@ -43,7 +43,7 @@ const TooltipTarget: React.FC<IProps> = ({
     ...rest
 }) => {
     const [isFocused, focusProps] = useFocus();
-    const [isHovering, hoverProps] = useHover(ignoreHover);
+    const [isHovering, hoverProps] = useHover(ignoreHover || (() => false));
 
     // No need to fill up the DOM with hidden tooltip elements. Only add the
     // tooltip when we're hovering over the item (performance)
