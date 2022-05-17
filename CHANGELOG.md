@@ -1,4 +1,4 @@
-Changes in [3.45.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.45.0-rc.1) (2022-05-17)
+Changes in [3.45.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.45.0-rc.2) (2022-05-17)
 ===============================================================================================================
 
 ## ✨ Features
