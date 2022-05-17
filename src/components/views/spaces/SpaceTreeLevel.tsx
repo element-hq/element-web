@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, ComponentType, createRef, InputHTMLAttributes, LegacyRef } from "react";
+import React, { MouseEvent, ComponentProps, ComponentType, createRef, InputHTMLAttributes, LegacyRef } from "react";
 import classNames from "classnames";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
@@ -84,9 +84,15 @@ export const SpaceButton: React.FC<IButtonProps> = ({
             ariaLabel = _t("Jump to first invite.");
         }
 
+        const jumpToNotification = (ev: MouseEvent) => {
+            ev.stopPropagation();
+            ev.preventDefault();
+            SpaceStore.instance.setActiveRoomInSpace(spaceKey ?? space.roomId);
+        };
+
         notifBadge = <div className="mx_SpacePanel_badgeContainer">
             <NotificationBadge
-                onClick={() => SpaceStore.instance.setActiveRoomInSpace(spaceKey ?? space.roomId)}
+                onClick={jumpToNotification}
                 forceCount={false}
                 notification={notificationState}
                 aria-label={ariaLabel}
