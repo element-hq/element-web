@@ -556,27 +556,13 @@ function getLangsJson(): Promise<object> {
     });
 }
 
-function weblateToCounterpart(inTrs: object): object {
-    const outTrs = {};
-
-    for (const key of Object.keys(inTrs)) {
-        const keyParts = key.split('|', 2);
-        if (keyParts.length === 2) {
-            let obj = outTrs[keyParts[0]];
-            if (obj === undefined) {
-                obj = {};
-                outTrs[keyParts[0]] = obj;
-            }
-            obj[keyParts[1]] = inTrs[key];
-        } else {
-            outTrs[key] = inTrs[key];
-        }
-    }
-
-    return outTrs;
+interface ICounterpartTranslation {
+    [key: string]: string | {
+        [pluralisation: string]: string;
+    };
 }
 
-async function getLanguageRetry(langPath: string, num = 3): Promise<object> {
+async function getLanguageRetry(langPath: string, num = 3): Promise<ICounterpartTranslation> {
     return retry(() => getLanguage(langPath), num, e => {
         logger.log("Failed to load i18n", langPath);
         logger.error(e);
@@ -584,7 +570,7 @@ async function getLanguageRetry(langPath: string, num = 3): Promise<object> {
     });
 }
 
-function getLanguage(langPath: string): Promise<object> {
+function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
     return new Promise((resolve, reject) => {
         request(
             { method: "GET", url: langPath },
@@ -597,7 +583,7 @@ function getLanguage(langPath: string): Promise<object> {
                     reject(new Error(`Failed to load ${langPath}, got ${response.status}`));
                     return;
                 }
-                resolve(weblateToCounterpart(JSON.parse(body)));
+                resolve(JSON.parse(body));
             },
         );
     });
