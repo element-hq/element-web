@@ -303,7 +303,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
      * Return true if platform supports multi-language
      * spell-checking, otherwise false.
      */
-    supportsMultiLanguageSpellCheck(): boolean {
+    supportsSpellCheckSettings(): boolean {
         return true;
     }
 
