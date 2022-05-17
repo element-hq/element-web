@@ -49,9 +49,11 @@ describe("Login", () => {
 
             cy.get("#mx_LoginForm_username").type(username);
             cy.get("#mx_LoginForm_password").type(password);
+            cy.startMeasuring("from-submit-to-home");
             cy.get(".mx_Login_submit").click();
 
             cy.url().should('contain', '/#/home');
+            cy.stopMeasuring("from-submit-to-home");
         });
     });
 });

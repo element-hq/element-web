@@ -42,11 +42,15 @@ describe("Registration", () => {
         cy.get("#mx_RegistrationForm_username").type("alice");
         cy.get("#mx_RegistrationForm_password").type("totally a great password");
         cy.get("#mx_RegistrationForm_passwordConfirm").type("totally a great password");
+        cy.startMeasuring("create-account");
         cy.get(".mx_Login_submit").click();
 
         cy.get(".mx_RegistrationEmailPromptDialog button.mx_Dialog_primary").click();
+        cy.stopMeasuring("create-account");
         cy.get(".mx_InteractiveAuthEntryComponents_termsPolicy input").click();
+        cy.startMeasuring("from-submit-to-home");
         cy.get(".mx_InteractiveAuthEntryComponents_termsSubmit").click();
         cy.url().should('contain', '/#/home');
+        cy.stopMeasuring("from-submit-to-home");
     });
 });

@@ -63,7 +63,7 @@ function startSynapse(template: string): Chainable<SynapseInstance> {
 function stopSynapse(synapse?: SynapseInstance): Chainable<AUTWindow> {
     if (!synapse) return;
     // Navigate away from app to stop the background network requests which will race with Synapse shutting down
-    return cy.window().then((win) => {
+    return cy.window({ log: false }).then((win) => {
         win.location.href = 'about:blank';
         cy.task("synapseStop", synapse.synapseId);
     });

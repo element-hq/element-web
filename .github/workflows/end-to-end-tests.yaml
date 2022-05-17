@@ -40,20 +40,18 @@ jobs:
             test/end-to-end-tests/synapse/installations/consent/homeserver.log
             retention-days: 14
 
-      - name: Download previous benchmark data
-        uses: actions/cache@v1
-        with:
-          path: ./cache
-          key: ${{ runner.os }}-benchmark
-
       - name: Store benchmark result
+        if: github.ref == 'refs/heads/develop'
         uses: matrix-org/github-action-benchmark@jsperfentry-1
         with:
           tool: 'jsperformanceentry'
           output-file-path: test/end-to-end-tests/performance-entries.json
+          # This is the default dashboard path. It's included here anyway to
+          # make the difference from the Cypress variant in
+          # `element-build-and-test.yaml` more obvious.
+          # The dashboard is available at https://matrix-org.github.io/matrix-react-sdk/dev/bench/
+          benchmark-data-dir-path: dev/bench
           fail-on-alert: false
           comment-on-alert: false
-          # Only temporary to monitor where failures occur
-          alert-comment-cc-users: '@gsouquet'
           github-token: ${{ secrets.DEPLOY_GH_PAGES }}
           auto-push: ${{ github.ref == 'refs/heads/develop' }}

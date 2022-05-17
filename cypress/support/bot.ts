@@ -40,7 +40,7 @@ Cypress.Commands.add("getBot", (synapse: SynapseInstance, displayName?: string):
     const username = Cypress._.uniqueId("userId_");
     const password = Cypress._.uniqueId("password_");
     return cy.registerUser(synapse, username, password, displayName).then(credentials => {
-        return cy.window().then(win => {
+        return cy.window({ log: false }).then(win => {
             const cli = new win.matrixcs.MatrixClient({
                 baseUrl: synapse.baseUrl,
                 userId: credentials.userId,

@@ -88,6 +88,20 @@ jobs:
             cypress/videos
             cypress/synapselogs
 
+      - name: Store benchmark result
+        if: github.ref == 'refs/heads/develop'
+        uses: matrix-org/github-action-benchmark@jsperfentry-1
+        with:
+          name: Cypress measurements
+          tool: 'jsperformanceentry'
+          output-file-path: cypress/performance/measurements.json
+          # The dashboard is available at https://matrix-org.github.io/matrix-react-sdk/cypress/bench/
+          benchmark-data-dir-path: cypress/bench
+          fail-on-alert: false
+          comment-on-alert: false
+          github-token: ${{ secrets.DEPLOY_GH_PAGES }}
+          auto-push: ${{ github.ref == 'refs/heads/develop' }}
+
   app-tests:
     name: Element Web Integration Tests
     runs-on: ubuntu-latest

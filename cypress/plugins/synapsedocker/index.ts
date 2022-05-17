@@ -201,7 +201,7 @@ async function synapseStop(id: string): Promise<void> {
     synapses.delete(id);
 
     console.log(`Stopped synapse id ${id}.`);
-    // cypres deliberately fails if you return 'undefined', so
+    // cypress deliberately fails if you return 'undefined', so
     // return null to signal all is well and we've handled the task.
     return null;
 }

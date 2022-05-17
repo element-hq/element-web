@@ -46,11 +46,11 @@ declare global {
 }
 
 Cypress.Commands.add("getClient", (): Chainable<MatrixClient | undefined> => {
-    return cy.window().then(win => win.mxMatrixClientPeg.matrixClient);
+    return cy.window({ log: false }).then(win => win.mxMatrixClientPeg.matrixClient);
 });
 
 Cypress.Commands.add("createRoom", (options: ICreateRoomOpts): Chainable<string> => {
-    return cy.window().then(async win => {
+    return cy.window({ log: false }).then(async win => {
         const cli = win.mxMatrixClientPeg.matrixClient;
         const resp = await cli.createRoom(options);
         const roomId = resp.room_id;
