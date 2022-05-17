@@ -51,6 +51,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         mask-image: url('$(res)/img/element-icons/circle-sending.svg');
     }
 
+    .mx_EventTile_content {
+        &.mx_EditMessageComposer {
+            // Make sure the formatting bar is visible
+            overflow: visible;
+        }
+    }
+
     &[data-layout=group] {
         .mx_EventTile_line {
             line-height: var(--GroupLayout-EventTile-line-height);

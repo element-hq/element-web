@@ -18,11 +18,10 @@ limitations under the License.
 .mx_EditMessageComposer {
     display: flex;
     flex-direction: column;
+    max-width: 100%; // disable overflow
+    width: auto;
     gap: 5px;
     padding: 3px;
-
-    // Make sure the formatting bar is visible
-    overflow: visible !important; // override mx_EventTile_content
 
     .mx_BasicMessageComposer_input {
         border-radius: 4px;
@@ -38,12 +37,15 @@ limitations under the License.
 
     .mx_EditMessageComposer_buttons {
         display: flex;
-        flex-direction: row;
+        flex-flow: row wrap-reverse; // display "Save" over "Cancel"
         justify-content: flex-end;
         gap: 5px;
+        margin-inline-start: auto;
 
         .mx_AccessibleButton {
-            padding: 5px 40px;
+            flex: 1;
+            box-sizing: border-box;
+            min-width: 100px; // magic number to align the edge of the button with the input area
         }
     }
 }
