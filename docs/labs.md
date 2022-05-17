@@ -108,10 +108,6 @@ To enable message previews for reactions in DMs only, enable `feature_roomlist_p
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Hidden read receipts (`feature_hidden_read_receipts`)
-
-Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
-
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
 Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
