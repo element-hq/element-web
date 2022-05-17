@@ -401,14 +401,14 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         room?.on(ThreadEvent.New, this.onNewThread);
     }
 
-    private setupNotificationListener = (thread: Thread): void => {
+    private setupNotificationListener(thread: Thread): void {
         const notifications = RoomNotificationStateStore.instance.getThreadsRoomState(thread.room);
 
         this.threadState = notifications.getThreadRoomState(thread);
 
         this.threadState.on(NotificationStateEvents.Update, this.onThreadStateUpdate);
         this.onThreadStateUpdate();
-    };
+    }
 
     private onThreadStateUpdate = (): void => {
         let threadNotification = null;
