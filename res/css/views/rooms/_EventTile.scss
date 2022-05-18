@@ -982,9 +982,4 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_EditMessageComposer {
         margin-left: 30px !important; // align start of first letter with that of the event body
     }
-
-    .mx_EditMessageComposer_buttons {
-        padding-right: 11px; // align with right edge of input
-        margin-right: 0; // align with right edge of background
-    }
 }
