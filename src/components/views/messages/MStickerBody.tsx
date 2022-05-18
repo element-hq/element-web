@@ -19,6 +19,7 @@ import React from 'react';
 import MImageBody from './MImageBody';
 import { BLURHASH_FIELD } from "../../../utils/image-media";
 import Tooltip from "../elements/Tooltip";
+import { IMediaEventContent } from "../../../customisations/models/IMediaEventContent";
 
 export default class MStickerBody extends MImageBody {
     // Mostly empty to prevent default behaviour of MImageBody
@@ -68,5 +69,9 @@ export default class MStickerBody extends MImageBody {
     // Don't show "Download this_file.png ..."
     protected getFileBody() {
         return null;
+    }
+
+    protected getBanner(content: IMediaEventContent): JSX.Element {
+        return null; // we don't need a banner, we have a tooltip
     }
 }

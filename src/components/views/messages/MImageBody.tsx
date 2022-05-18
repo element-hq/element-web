@@ -355,6 +355,22 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
     }
 
+    protected getBanner(content: IMediaEventContent): JSX.Element {
+        // Hide it for the threads list & the file panel where we show it as text anyway.
+        if ([
+            TimelineRenderingType.ThreadsList,
+            TimelineRenderingType.File,
+        ].includes(this.context.timelineRenderingType)) {
+            return null;
+        }
+
+        return (
+            <span className="mx_MImageBody_banner">
+                { presentableTextForFile(content, _t("Image"), true, true) }
+            </span>
+        );
+    }
+
     protected messageContent(
         contentUrl: string,
         thumbUrl: string,
@@ -448,18 +464,8 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         }
 
         let banner: JSX.Element;
-        const isTimeline = [
-            TimelineRenderingType.Room,
-            TimelineRenderingType.Search,
-            TimelineRenderingType.Thread,
-            TimelineRenderingType.Notification,
-        ].includes(this.context.timelineRenderingType);
-        if (this.state.showImage && this.state.hover && isTimeline) {
-            banner = (
-                <span className="mx_MImageBody_banner">
-                    { presentableTextForFile(content, _t("Image"), true, true) }
-                </span>
-            );
+        if (this.state.showImage && this.state.hover) {
+            banner = this.getBanner(content);
         }
 
         const classes = classNames({

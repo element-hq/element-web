@@ -40,6 +40,10 @@ export default class MImageReplyBody extends MImageBody {
         return presentableTextForFile(this.props.mxEvent.getContent(), sticker ? _t("Sticker") : _t("Image"), !sticker);
     }
 
+    protected getBanner(content: IMediaEventContent): JSX.Element {
+        return null; // we don't need a banner, nor have space for one
+    }
+
     render() {
         if (this.state.error) {
             return super.render();
