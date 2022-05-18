@@ -23,7 +23,6 @@ import {
 } from "matrix-widget-api";
 import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
-import { log as logToRageshake } from "matrix-react-sdk/src/rageshake/rageshake";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 
