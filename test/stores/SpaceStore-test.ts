@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { EventEmitter } from "events";
 import { mocked } from 'jest-mock';
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
@@ -1220,5 +1221,27 @@ describe("SpaceStore", () => {
         expect(SpaceStore.instance.invitedSpaces).toStrictEqual([]);
         expect(SpaceStore.instance.spacePanelSpaces.map(r => r.roomId)).toStrictEqual([rootSpace.roomId]);
         await prom;
+    });
+
+    it("correctly emits events for metaspace changes during onReady", async () => {
+        // similar to useEventEmitterState, but for use inside of tests
+        function testEventEmitterState(
+            emitter: EventEmitter | undefined,
+            eventName: string | symbol,
+            callback: (...args: any[]) => void,
+        ): () => void {
+            callback();
+            emitter.addListener(eventName, callback);
+            return () => emitter.removeListener(eventName, callback);
+        }
+
+        let metaSpaces;
+        const removeListener = testEventEmitterState(store, UPDATE_TOP_LEVEL_SPACES, () => {
+            metaSpaces = store.enabledMetaSpaces;
+        });
+        expect(metaSpaces).toEqual(store.enabledMetaSpaces);
+        await run();
+        expect(metaSpaces).toEqual(store.enabledMetaSpaces);
+        removeListener();
     });
 });
