@@ -439,5 +439,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
     });
 
     // Patch logs into rageshakes
-    meetApi.on("log", ({ logLevel, args }) => parent?.mx_rage_logger?.log(logLevel, ...args));
+    meetApi.on("log", ({ logLevel, args }) =>
+        (parent as unknown as typeof global).mx_rage_logger?.log(logLevel, ...args),
+    );
 }
