@@ -23,6 +23,7 @@ import {
 } from "matrix-widget-api";
 import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
+import { log as logToRageshake } from "matrix-react-sdk/src/rageshake/rageshake";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 
@@ -357,6 +358,8 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             startAudioOnly,
             startWithAudioMuted: audioDevice == null,
             startWithVideoMuted: videoDevice == null,
+            // Request all log levels for inclusion in rageshakes
+            apiLogLevels: ["warn", "log", "error", "info", "debug"],
         } as any,
         jwt: jwt,
     };
@@ -411,7 +414,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
 
     meetApi.on("audioMuteStatusChanged", ({ muted }) => {
         const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
-        widgetApi.transport.send(action, {});
+        widgetApi?.transport.send(action, {});
     });
 
     meetApi.on("videoMuteStatusChanged", ({ muted }) => {
@@ -421,10 +424,10 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             // otherwise the React SDK will mistakenly think the user turned off
             // their video by hand
             setTimeout(() => {
-                if (meetApi) widgetApi.transport.send(ElementWidgetActions.MuteVideo, {});
+                if (meetApi) widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
             }, 200);
         } else {
-            widgetApi.transport.send(ElementWidgetActions.UnmuteVideo, {});
+            widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
         }
     });
 
@@ -435,4 +438,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             });
         });
     });
+
+    // Patch logs into rageshakes
+    meetApi.on("log", ({ logLevel, args }) => parent?.mx_rage_logger?.log(logLevel, ...args));
 }
