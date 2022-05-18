@@ -301,15 +301,107 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     padding-left: calc($left-gutter + 20px); // override padding-left $left-gutter
 }
 
-/* all the overflow-y: hidden; are to trap Zalgos -
-   but they introduce an implicit overflow-x: auto.
-   so make that explicitly hidden too to avoid random
-   horizontal scrollbars occasionally appearing, like in
-   https://github.com/vector-im/vector-web/issues/1154 */
 .mx_EventTile_content {
+    /*
+    all the overflow-y: hidden; are to trap Zalgos -
+    but they introduce an implicit overflow-x: auto.
+    so make that explicitly hidden too to avoid random
+    horizontal scrollbars occasionally appearing, like in
+    https://github.com/vector-im/vector-web/issues/1154
+    */
     overflow-y: hidden;
     overflow-x: hidden;
     margin-right: 34px;
+
+    .mx_EventTile_edited,
+    .mx_EventTile_pendingModeration {
+        user-select: none;
+        font-size: $font-12px;
+        color: $roomtopic-color;
+        display: inline-block;
+        margin-left: 9px;
+    }
+
+    .mx_EventTile_edited {
+        cursor: pointer;
+    }
+
+    .markdown-body {
+        font-family: inherit !important;
+        white-space: normal !important;
+        line-height: inherit !important;
+        color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
+        font-size: $font-14px;
+
+        pre,
+        code {
+            font-family: $monospace-font-family !important;
+            background-color: $codeblock-background-color;
+        }
+
+        code {
+            white-space: pre-wrap; // don't collapse spaces in inline code blocks
+        }
+
+        pre {
+            // have to use overlay rather than auto otherwise Linux and Windows
+            // Chrome gets very confused about vertical spacing:
+            // https://github.com/vector-im/vector-web/issues/754
+            overflow-x: overlay;
+            overflow-y: visible;
+
+            &::-webkit-scrollbar-corner {
+                background: transparent;
+            }
+
+            code {
+                white-space: pre; // we want code blocks to be scrollable and not wrap
+
+                > * {
+                    display: inline;
+                }
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: inherit !important;
+            color: inherit;
+        }
+
+        /* Make h1 and h2 the same size as h3. */
+        h1,
+        h2 {
+            font-size: 1.5em;
+            border-bottom: none !important; // override GFM
+        }
+
+        a {
+            color: $accent-alt;
+        }
+
+        blockquote {
+            border-left: 2px solid $blockquote-bar-color;
+            border-radius: 2px;
+            padding: 0 10px;
+        }
+
+        /*
+        // actually, removing the Italic TTF provides
+        // better results seemingly
+
+        // compensate for Nunito italics being terrible
+        // https://github.com/google/fonts/issues/1726
+        em {
+            transform: skewX(-14deg);
+            display: inline-block;
+        }
+        */
+    }
 }
 
 /* Spoiler stuff */
@@ -384,23 +476,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_Emoji {
         font-size: inherit !important;
     }
-}
-
-.mx_EventTile_content .mx_EventTile_edited {
-    user-select: none;
-    font-size: $font-12px;
-    color: $roomtopic-color;
-    display: inline-block;
-    margin-left: 9px;
-    cursor: pointer;
-}
-
-.mx_EventTile_content .mx_EventTile_pendingModeration {
-    user-select: none;
-    font-size: $font-12px;
-    color: $roomtopic-color;
-    display: inline-block;
-    margin-left: 9px;
 }
 
 .mx_EventTile_e2eIcon {
@@ -479,45 +554,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 }
 
-.mx_EventTile_content .markdown-body {
-    font-family: inherit !important;
-    white-space: normal !important;
-    line-height: inherit !important;
-    color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
-    font-size: $font-14px;
-
-    pre,
-    code {
-        font-family: $monospace-font-family !important;
-        background-color: $codeblock-background-color;
-    }
-
-    // this selector wrongly applies to code blocks too but we will unset it in the next one
-    code {
-        white-space: pre-wrap; // don't collapse spaces in inline code blocks
-    }
-
-    pre code {
-        white-space: pre; // we want code blocks to be scrollable and not wrap
-
-        >* {
-            display: inline;
-        }
-    }
-
-    pre {
-        // have to use overlay rather than auto otherwise Linux and Windows
-        // Chrome gets very confused about vertical spacing:
-        // https://github.com/vector-im/vector-web/issues/754
-        overflow-x: overlay;
-        overflow-y: visible;
-
-        &::-webkit-scrollbar-corner {
-            background: transparent;
-        }
-    }
-}
-
 .mx_EventTile_lineNumbers {
     float: left;
     margin: 0 0.5em 0 -1.5em;
@@ -587,45 +623,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 .mx_EventTile_body .mx_EventTile_pre_container:hover .mx_EventTile_expandButton {
     visibility: visible;
 }
-
-.mx_EventTile_content .markdown-body h1,
-.mx_EventTile_content .markdown-body h2,
-.mx_EventTile_content .markdown-body h3,
-.mx_EventTile_content .markdown-body h4,
-.mx_EventTile_content .markdown-body h5,
-.mx_EventTile_content .markdown-body h6 {
-    font-family: inherit !important;
-    color: inherit;
-}
-
-/* Make h1 and h2 the same size as h3. */
-.mx_EventTile_content .markdown-body h1,
-.mx_EventTile_content .markdown-body h2 {
-    font-size: 1.5em;
-    border-bottom: none !important; // override GFM
-}
-
-.mx_EventTile_content .markdown-body a {
-    color: $accent-alt;
-}
-
-.mx_EventTile_content .markdown-body blockquote {
-    border-left: 2px solid $blockquote-bar-color;
-    border-radius: 2px;
-    padding: 0 10px;
-}
-
-/*
-// actually, removing the Italic TTF provides
-// better results seemingly
-
-// compensate for Nunito italics being terrible
-// https://github.com/google/fonts/issues/1726
-.mx_EventTile_content .markdown-body em {
-    transform: skewX(-14deg);
-    display: inline-block;
-}
-*/
 
 /* end of overrides */
 
