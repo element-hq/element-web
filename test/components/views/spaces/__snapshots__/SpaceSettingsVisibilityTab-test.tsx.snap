@@ -100,7 +100,7 @@ exports[`<SpaceSettingsVisibilityTab /> renders container 1`] = `
       class="mx_SettingsTab_toggleWithDescription"
     >
       <div
-        class="mx_SettingsFlag "
+        class="mx_SettingsFlag"
       >
         <span
           class="mx_SettingsFlag_label"

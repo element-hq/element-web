@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`] = `
+<LabelledCheckbox
+  byline="this is a byline"
+  label="Hello world"
+  onChange={[MockFunction]}
+  value={true}
+>
+  <label
+    className="mx_LabelledCheckbox"
+  >
+    <StyledCheckbox
+      checked={true}
+      className=""
+      onChange={[Function]}
+    >
+      <span
+        className="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+      >
+        <input
+          checked={true}
+          id="checkbox_abdefghi"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          htmlFor="checkbox_abdefghi"
+        >
+          <div
+            className="mx_Checkbox_background"
+          >
+            <div
+              className="mx_Checkbox_checkmark"
+            />
+          </div>
+          <div />
+        </label>
+      </span>
+    </StyledCheckbox>
+    <div
+      className="mx_LabelledCheckbox_labels"
+    >
+      <span
+        className="mx_LabelledCheckbox_label"
+      >
+        Hello world
+      </span>
+      <span
+        className="mx_LabelledCheckbox_byline"
+      >
+        this is a byline
+      </span>
+    </div>
+  </label>
+</LabelledCheckbox>
+`;
+
+exports[`<LabelledCheckbox /> should render with byline of null 1`] = `
+<LabelledCheckbox
+  byline={null}
+  label="Hello world"
+  onChange={[MockFunction]}
+  value={true}
+>
+  <label
+    className="mx_LabelledCheckbox"
+  >
+    <StyledCheckbox
+      checked={true}
+      className=""
+      onChange={[Function]}
+    >
+      <span
+        className="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+      >
+        <input
+          checked={true}
+          id="checkbox_abdefghi"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          htmlFor="checkbox_abdefghi"
+        >
+          <div
+            className="mx_Checkbox_background"
+          >
+            <div
+              className="mx_Checkbox_checkmark"
+            />
+          </div>
+          <div />
+        </label>
+      </span>
+    </StyledCheckbox>
+    <div
+      className="mx_LabelledCheckbox_labels"
+    >
+      <span
+        className="mx_LabelledCheckbox_label"
+      >
+        Hello world
+      </span>
+    </div>
+  </label>
+</LabelledCheckbox>
+`;

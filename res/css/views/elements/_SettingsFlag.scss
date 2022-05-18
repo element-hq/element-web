@@ -24,6 +24,19 @@ limitations under the License.
     .mx_ToggleSwitch {
         flex: 0 0 auto;
     }
+
+    &.mx_SettingsFlag_toggleInFront {
+        .mx_ToggleSwitch {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .mx_SettingsFlag_label {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
 }
 
 .mx_SettingsFlag_label {

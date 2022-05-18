@@ -10,7 +10,7 @@ exports[`<Notifications /> main notification switches email switches renders ema
   value={false}
 >
   <div
-    className="mx_SettingsFlag "
+    className="mx_SettingsFlag"
   >
     <span
       className="mx_SettingsFlag_label"
@@ -67,7 +67,7 @@ exports[`<Notifications /> main notification switches renders only enable notifi
       value={false}
     >
       <div
-        className="mx_SettingsFlag "
+        className="mx_SettingsFlag"
       >
         <span
           className="mx_SettingsFlag_label"

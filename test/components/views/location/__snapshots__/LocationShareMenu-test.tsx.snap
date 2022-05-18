@@ -34,7 +34,7 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
     value={false}
   >
     <div
-      className="mx_SettingsFlag "
+      className="mx_SettingsFlag"
     >
       <span
         className="mx_SettingsFlag_label"
