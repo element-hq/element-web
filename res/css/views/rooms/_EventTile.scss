@@ -839,6 +839,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
 .mx_ThreadView {
     --ThreadView_group_spacing-start: 56px; // 56px: 64px - 8px (padding)
+    --ThreadView_group_spacing-end: 8px; // same as padding
 
     display: flex;
     flex-direction: column;
@@ -882,26 +883,26 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
                 padding-bottom: var(--BaseCard_EventTile_line-padding-block);
             }
         }
-    }
 
-    .mx_EventTile[data-layout=bubble] {
-        margin-left: 36px;
-        margin-right: 36px;
-
-        .mx_EventTile_line.mx_EventTile_mediaLine {
-            padding: 0 !important;
-            max-width: 100%;
-
-            .mx_MFileBody {
-                width: 100%;
-            }
-        }
-
-        &[data-self=true] {
-            align-items: flex-end;
+        &[data-layout=bubble] {
+            margin-inline-start: var(--BaseCard_EventTile-spacing-horizontal);
+            margin-inline-end: var(--BaseCard_EventTile-spacing-horizontal);
 
             .mx_EventTile_line.mx_EventTile_mediaLine {
-                margin: 0 -13px 0 0; // align with normal messages
+                padding: 0 !important;
+                max-width: 100%;
+
+                .mx_MFileBody {
+                    width: 100%;
+                }
+            }
+
+            &[data-self=true] {
+                align-items: flex-end;
+
+                .mx_EventTile_line.mx_EventTile_mediaLine {
+                    margin: 0 -13px 0 0; // align with normal messages
+                }
             }
         }
     }
@@ -918,7 +919,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         .mx_ReplyChain_wrapper,
         .mx_ReactionsRow {
             margin-inline-start: var(--ThreadView_group_spacing-start);
-            margin-right: 8px;
+            margin-inline-end: var(--ThreadView_group_spacing-end);
 
             .mx_EventTile_content,
             .mx_HiddenBody,
@@ -965,7 +966,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     .mx_EventTile_mediaLine {
-        padding-left: 36px;
+        padding-inline-start: var(--BaseCard_EventTile-spacing-horizontal);
         padding-right: 50px;
 
         .mx_MImageBody {
