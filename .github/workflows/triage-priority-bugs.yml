@@ -2,7 +2,7 @@ name: Move P1 bugs to boards
 
 on:
   issues:
-    types: [ labeled, unlabeled ]
+    types: [labeled, unlabeled]
 
 jobs:
   p1_issues_to_team_workboard:
@@ -12,10 +12,7 @@ jobs:
        !contains(github.event.issue.labels.*.name, 'A-E2EE-Cross-Signing') &&
        !contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') &&
        !contains(github.event.issue.labels.*.name, 'A-E2EE-Key-Backup') &&
-       !contains(github.event.issue.labels.*.name, 'A-E2EE-SAS-Verification') &&
-       !contains(github.event.issue.labels.*.name, 'A-Spaces') &&
-       !contains(github.event.issue.labels.*.name, 'A-Spaces-Settings') &&
-       !contains(github.event.issue.labels.*.name, 'A-Subspaces')) &&
+       !contains(github.event.issue.labels.*.name, 'A-E2EE-SAS-Verification')) &&
       (contains(github.event.issue.labels.*.name, 'T-Defect') &&
        contains(github.event.issue.labels.*.name, 'S-Critical') &&
        (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
