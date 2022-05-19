@@ -360,6 +360,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         electron.send('loudNotification');
     }
 
+    needsUrlTooltips(): boolean {
+        return true;
+    }
+
     async getAppVersion(): Promise<string> {
         return this.ipcCall('getAppVersion');
     }
