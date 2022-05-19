@@ -148,6 +148,7 @@ Request:
    can configure/lay out the widget in different ways. All widgets must have a type.
  - `name` (String) is an optional human-readable string about the widget.
  - `data` (Object) is some optional data about the widget, and can contain arbitrary key/value pairs.
+ - `avatar_url` (String) is some optional mxc: URI pointing to the avatar of the widget.
 Response:
 {
     success: true
@@ -319,6 +320,7 @@ function setWidget(event: MessageEvent<any>, roomId: string): void {
     const widgetUrl = event.data.url;
     const widgetName = event.data.name; // optional
     const widgetData = event.data.data; // optional
+    const widgetAvatarUrl = event.data.avatar_url; // optional
     const userWidget = event.data.userWidget;
 
     // both adding/removing widgets need these checks
@@ -335,6 +337,14 @@ function setWidget(event: MessageEvent<any>, roomId: string): void {
         }
         if (widgetData !== undefined && !(widgetData instanceof Object)) {
             sendError(event, _t("Unable to create widget."), new Error("Optional field 'data' must be an Object."));
+            return;
+        }
+        if (widgetAvatarUrl !== undefined && typeof widgetAvatarUrl !== 'string') {
+            sendError(
+                event,
+                _t("Unable to create widget."),
+                new Error("Optional field 'avatar_url' must be a string."),
+            );
             return;
         }
         if (typeof widgetType !== 'string') {
@@ -364,13 +374,14 @@ function setWidget(event: MessageEvent<any>, roomId: string): void {
         if (!roomId) {
             sendError(event, _t('Missing roomId.'), null);
         }
-        WidgetUtils.setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData).then(() => {
-            sendResponse(event, {
-                success: true,
+        WidgetUtils.setRoomWidget(roomId, widgetId, widgetType, widgetUrl, widgetName, widgetData, widgetAvatarUrl)
+            .then(() => {
+                sendResponse(event, {
+                    success: true,
+                });
+            }, (err) => {
+                sendError(event, _t('Failed to send request.'), err);
             });
-        }, (err) => {
-            sendError(event, _t('Failed to send request.'), err);
-        });
     }
 }
 

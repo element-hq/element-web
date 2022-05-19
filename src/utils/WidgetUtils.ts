@@ -286,6 +286,7 @@ export default class WidgetUtils {
         widgetUrl?: string,
         widgetName?: string,
         widgetData?: object,
+        widgetAvatarUrl?: string,
     ) {
         let content;
 
@@ -299,6 +300,7 @@ export default class WidgetUtils {
                 url: widgetUrl,
                 name: widgetName,
                 data: widgetData,
+                avatar_url: widgetAvatarUrl,
             };
         } else {
             content = {};
