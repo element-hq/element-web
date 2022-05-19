@@ -39,41 +39,7 @@ jobs:
 
   i18n_lint:
     name: "i18n Check"
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: "Get modified files"
-        id: changed_files
-        if: github.event_name == 'pull_request' && github.actor != 'RiotTranslateBot'
-        uses: tj-actions/changed-files@v19
-        with:
-          files: |
-            src/i18n/strings/*
-          files_ignore: |
-            src/i18n/strings/en_EN.json
-
-      - name: "Assert only en_EN was modified"
-        if: |
-          github.event_name == 'pull_request' &&
-          github.actor != 'RiotTranslateBot' &&
-          steps.changed_files.outputs.any_modified == 'true'
-        run: |
-          echo "You can only modify en_EN.json, do not touch any of the other i18n files as Weblate will be confused"
-          exit 1
-
-      - uses: actions/setup-node@v3
-        with:
-          cache: 'yarn'
-
-      # Does not need branch matching as only analyses this layer
-      - name: Install Deps
-        run: "yarn install"
-
-      - name: i18n Check
-        run: "yarn run diff-i18n"
+    uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
 
   js_lint:
     name: "ESLint"
