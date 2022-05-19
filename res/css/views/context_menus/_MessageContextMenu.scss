@@ -109,4 +109,8 @@ limitations under the License.
     .mx_MessageContextMenu_iconViewInRoom::before {
         mask-image: url('$(res)/img/element-icons/view-in-room.svg');
     }
+
+    .mx_MessageContextMenu_jumpToEvent::before {
+        mask-image: url('$(res)/img/element-icons/left-arrow.svg');
+    }
 }
