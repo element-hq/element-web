@@ -360,7 +360,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         electron.send('loudNotification');
     }
 
-    needsUrlTooltips(): boolean {
+    public needsUrlTooltips(): boolean {
         return true;
     }
 
