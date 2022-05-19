@@ -328,7 +328,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Room, ev?: MatrixEvent): Notification {
+    public displayNotification(title: string, msg: string, avatarUrl: string, room: Room, ev?: MatrixEvent): Notification {
         // GNOME notification spec parses HTML tags for styling...
         // Electron Docs state all supported linux notification systems follow this markup spec
         // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
@@ -515,7 +515,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipcCall('getAvailableSpellCheckLanguages');
     }
 
-    getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+    protected getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
         url.searchParams.set("element-desktop-ssoid", this.ssoID);
