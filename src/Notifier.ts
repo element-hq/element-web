@@ -95,9 +95,6 @@ export const Notifier = {
         if (!plaf.supportsNotifications() || !plaf.maySendNotifications()) {
             return;
         }
-        if (global.document.hasFocus()) {
-            return;
-        }
 
         let msg = this.notificationMessageForEvent(ev);
         if (!msg) return;
