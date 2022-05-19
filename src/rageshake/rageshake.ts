@@ -81,7 +81,7 @@ export class ConsoleLogger {
         this.originalFunctions[fnName](...args);
     }
 
-    private log(level: string, ...args: (Error | DOMException | object | string)[]): void {
+    public log(level: string, ...args: (Error | DOMException | object | string)[]): void {
         // We don't know what locale the user may be running so use ISO strings
         const ts = new Date().toISOString();
 
