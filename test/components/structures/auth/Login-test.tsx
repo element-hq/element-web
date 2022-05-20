@@ -146,4 +146,19 @@ describe('Login', function() {
         const ssoButtons = ReactTestUtils.scryRenderedDOMComponentsWithClass(root, "mx_SSOButton");
         expect(ssoButtons.length).toBe(3);
     });
+
+    it("should show single SSO button if identity_providers is null", async () => {
+        mockClient.loginFlows.mockResolvedValue({
+            flows: [{
+                "type": "m.login.sso",
+            }],
+        });
+
+        const root = render();
+
+        await flushPromises();
+
+        const ssoButtons = ReactTestUtils.scryRenderedDOMComponentsWithClass(root, "mx_SSOButton");
+        expect(ssoButtons.length).toBe(1);
+    });
 });

@@ -51,7 +51,7 @@ export interface IIdentityProvider {
 export interface ISSOFlow {
     type: "m.login.sso" | "m.login.cas";
     // eslint-disable-next-line camelcase
-    identity_providers: IIdentityProvider[];
+    identity_providers?: IIdentityProvider[];
 }
 
 export type LoginFlow = ISSOFlow | IPasswordFlow;
