@@ -124,7 +124,8 @@ export class RoomNotificationStateStore extends AsyncStoreWithClient<IState> {
         if (this.globalState.symbol !== globalState.symbol ||
             this.globalState.count !== globalState.count ||
             this.globalState.color !== globalState.color ||
-            this.globalState.numUnreadStates !== globalState.numUnreadStates
+            this.globalState.numUnreadStates !== globalState.numUnreadStates ||
+            state !== prevState
         ) {
             this._globalState = globalState;
             this.emit(UPDATE_STATUS_INDICATOR, globalState, state, prevState, data);
