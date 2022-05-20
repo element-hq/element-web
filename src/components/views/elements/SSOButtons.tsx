@@ -29,7 +29,7 @@ import { mediaFromMxc } from "../../../customisations/Media";
 import { PosthogAnalytics } from "../../../PosthogAnalytics";
 
 interface ISSOButtonProps extends Omit<IProps, "flow"> {
-    idp: IIdentityProvider;
+    idp?: IIdentityProvider;
     mini?: boolean;
 }
 
@@ -84,7 +84,7 @@ const SSOButton: React.FC<ISSOButtonProps> = ({
     const label = idp ? _t("Continue with %(provider)s", { provider: idp.name }) : _t("Sign in with single sign-on");
 
     const onClick = () => {
-        const authenticationType = getAuthenticationType(idp.brand);
+        const authenticationType = getAuthenticationType(idp?.brand ?? "");
         PosthogAnalytics.instance.setAuthenticationType(authenticationType);
         PlatformPeg.get().startSingleSignOn(matrixClient, loginType, fragmentAfterLogin, idp?.id);
     };
