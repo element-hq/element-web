@@ -1,3 +1,9 @@
+Changes in [3.45.0-rc.3](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.45.0-rc.3) (2022-05-20)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix crash on null idp for SSO buttons ([\#8650](https://github.com/matrix-org/matrix-react-sdk/pull/8650)).
+
 Changes in [3.45.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.45.0-rc.2) (2022-05-17)
 ===============================================================================================================
 
