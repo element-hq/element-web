@@ -31,6 +31,17 @@ import Spinner from "../views/elements/Spinner";
 
 export const ERROR_USER_CANCELLED = new Error("User cancelled auth session");
 
+type InteractiveAuthCallbackSuccess = (
+    success: true,
+    response: IAuthData,
+    extra?: { emailSid?: string, clientSecret?: string }
+) => void;
+type InteractiveAuthCallbackFailure = (
+    success: false,
+    response: IAuthData | Error,
+) => void;
+export type InteractiveAuthCallback = InteractiveAuthCallbackSuccess & InteractiveAuthCallbackFailure;
+
 interface IProps {
     // matrix client to use for UI auth requests
     matrixClient: MatrixClient;
@@ -66,11 +77,7 @@ interface IProps {
     //            the auth session.
     //      * clientSecret {string} The client secret used in auth
     //            sessions with the ID server.
-    onAuthFinished(
-        status: boolean,
-        result: IAuthData | Error,
-        extra?: { emailSid?: string, clientSecret?: string },
-    ): void;
+    onAuthFinished: InteractiveAuthCallback;
     // As js-sdk interactive-auth
     requestEmailToken?(email: string, secret: string, attempt: number, session: string): Promise<{ sid: string }>;
     // Called when the stage changes, or the stage's phase changes. First

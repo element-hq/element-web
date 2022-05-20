@@ -3232,7 +3232,6 @@
     "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).": "Your new account (%(newAccountId)s) is registered, but you're already logged into a different account (%(loggedInUserId)s).",
     "Continue with previous account": "Continue with previous account",
     "<a>Log in</a> to your new account.": "<a>Log in</a> to your new account.",
-    "You can now close this window or <a>log in</a> to your new account.": "You can now close this window or <a>log in</a> to your new account.",
     "Registration Successful": "Registration Successful",
     "Create account": "Create account",
     "Host account on": "Host account on",

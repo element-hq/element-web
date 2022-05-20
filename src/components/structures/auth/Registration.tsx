@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { createClient } from 'matrix-js-sdk/src/matrix';
+import { AuthType, createClient } from 'matrix-js-sdk/src/matrix';
 import React, { Fragment, ReactNode } from 'react';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import classNames from "classnames";
@@ -34,10 +34,17 @@ import RegistrationForm from '../../views/auth/RegistrationForm';
 import AccessibleButton from '../../views/elements/AccessibleButton';
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
-import InteractiveAuth from "../InteractiveAuth";
+import InteractiveAuth, { InteractiveAuthCallback } from "../InteractiveAuth";
 import Spinner from "../../views/elements/Spinner";
 import { AuthHeaderDisplay } from './header/AuthHeaderDisplay';
 import { AuthHeaderProvider } from './header/AuthHeaderProvider';
+import SettingsStore from '../../../settings/SettingsStore';
+
+const debuglog = (...args: any[]) => {
+    if (SettingsStore.getValue("debug_registration")) {
+        logger.log.call(console, "Registration debuglog:", ...args);
+    }
+};
 
 interface IProps {
     serverConfig: ValidatedServerConfig;
@@ -287,9 +294,10 @@ export default class Registration extends React.Component<IProps, IState> {
         );
     };
 
-    private onUIAuthFinished = async (success: boolean, response: any) => {
+    private onUIAuthFinished: InteractiveAuthCallback = async (success, response) => {
+        debuglog("Registration: ui authentication finished: ", { success, response });
         if (!success) {
-            let errorText = response.message || response.toString();
+            let errorText: ReactNode = response.message || response.toString();
             // can we give a better error message?
             if (response.errcode === 'M_RESOURCE_LIMIT_EXCEEDED') {
                 const errorTop = messageForResourceLimitError(
@@ -312,10 +320,10 @@ export default class Registration extends React.Component<IProps, IState> {
                     <p>{ errorTop }</p>
                     <p>{ errorDetail }</p>
                 </div>;
-            } else if (response.required_stages && response.required_stages.indexOf('m.login.msisdn') > -1) {
+            } else if (response.required_stages && response.required_stages.includes(AuthType.Msisdn)) {
                 let msisdnAvailable = false;
                 for (const flow of response.available_flows) {
-                    msisdnAvailable = msisdnAvailable || flow.stages.includes('m.login.msisdn');
+                    msisdnAvailable = msisdnAvailable || flow.stages.includes(AuthType.Msisdn);
                 }
                 if (!msisdnAvailable) {
                     errorText = _t('This server does not support authentication with a phone number.');
@@ -351,14 +359,31 @@ export default class Registration extends React.Component<IProps, IState> {
         // starting the registration process. This isn't perfect since it's possible
         // the user had a separate guest session they didn't actually mean to replace.
         const [sessionOwner, sessionIsGuest] = await Lifecycle.getStoredSessionOwner();
-        if (sessionOwner && !sessionIsGuest && sessionOwner !== response.userId) {
+        if (sessionOwner && !sessionIsGuest && sessionOwner !== response.user_id) {
             logger.log(
-                `Found a session for ${sessionOwner} but ${response.userId} has just registered.`,
+                `Found a session for ${sessionOwner} but ${response.user_id} has just registered.`,
             );
             newState.differentLoggedInUserId = sessionOwner;
         }
 
-        if (response.access_token) {
+        // if we don't have an email at all, only one client can be involved in this flow, and we can directly log in.
+        //
+        // if we've got an email, it needs to be verified. in that case, two clients can be involved in this flow, the
+        // original client starting the process and the client that submitted the verification token. After the token
+        // has been submitted, it can not be used again.
+        //
+        // we can distinguish them based on whether the client has form values saved (if so, it's the one that started
+        // the registration), or whether it doesn't have any form values saved (in which case it's the client that
+        // verified the email address)
+        //
+        // as the client that started registration may be gone by the time we've verified the email, and only the client
+        // that verified the email is guaranteed to exist, we'll always do the login in that client.
+        const hasEmail = Boolean(this.state.formVals.email);
+        const hasAccessToken = Boolean(response.access_token);
+        debuglog("Registration: ui auth finished:", { hasEmail, hasAccessToken });
+        if (!hasEmail && hasAccessToken) {
+            // we'll only try logging in if we either have no email to verify at all or we're the client that verified
+            // the email, not the client that started the registration flow
             await this.props.onLoggedIn({
                 userId: response.user_id,
                 deviceId: response.device_id,
@@ -416,26 +441,17 @@ export default class Registration extends React.Component<IProps, IState> {
     };
 
     private makeRegisterRequest = auth => {
-        // We inhibit login if we're trying to register with an email address: this
-        // avoids a lot of complex race conditions that can occur if we try to log
-        // the user in one one or both of the tabs they might end up with after
-        // clicking the email link.
-        let inhibitLogin = Boolean(this.state.formVals.email);
-
-        // Only send inhibitLogin if we're sending username / pw params
-        // (Since we need to send no params at all to use the ones saved in the
-        // session).
-        if (!this.state.formVals.password) inhibitLogin = null;
-
         const registerParams = {
             username: this.state.formVals.username,
             password: this.state.formVals.password,
             initial_device_display_name: this.props.defaultDeviceDisplayName,
             auth: undefined,
+            // we still want to avoid the race conditions involved with multiple clients handling registration, but
+            // we'll handle these after we've received the access_token in onUIAuthFinished
             inhibit_login: undefined,
         };
         if (auth) registerParams.auth = auth;
-        if (inhibitLogin !== undefined && inhibitLogin !== null) registerParams.inhibit_login = inhibitLogin;
+        debuglog("Registration: sending registration request:", auth);
         return this.state.matrixClient.registerRequest(registerParams);
     };
 
@@ -597,22 +613,22 @@ export default class Registration extends React.Component<IProps, IState> {
                         { _t("Continue with previous account") }
                     </AccessibleButton></p>
                 </div>;
-            } else if (this.state.formVals.password) {
-                // We're the client that started the registration
+            } else {
+                // regardless of whether we're the client that started the registration or not, we should
+                // try our credentials anyway
                 regDoneText = <h3>{ _t(
                     "<a>Log in</a> to your new account.", {},
                     {
-                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{ sub }</a>,
-                    },
-                ) }</h3>;
-            } else {
-                // We're not the original client: the user probably got to us by clicking the
-                // email validation link. We can't offer a 'go straight to your account' link
-                // as we don't have the original creds.
-                regDoneText = <h3>{ _t(
-                    "You can now close this window or <a>log in</a> to your new account.", {},
-                    {
-                        a: (sub) => <a href="#/login" onClick={this.onLoginClickWithCheck}>{ sub }</a>,
+                        a: (sub) => <AccessibleButton
+                            element="span"
+                            className="mx_linkButton"
+                            onClick={async event => {
+                                const sessionLoaded = await this.onLoginClickWithCheck(event);
+                                if (sessionLoaded) {
+                                    dis.dispatch({ action: "view_home_page" });
+                                }
+                            }}
+                        >{ sub }</AccessibleButton>,
                     },
                 ) }</h3>;
             }

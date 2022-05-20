@@ -22,7 +22,7 @@ import { IAuthData } from "matrix-js-sdk/src/interactive-auth";
 
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
-import InteractiveAuth, { ERROR_USER_CANCELLED } from "../../structures/InteractiveAuth";
+import InteractiveAuth, { ERROR_USER_CANCELLED, InteractiveAuthCallback } from "../../structures/InteractiveAuth";
 import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
 import BaseDialog from "./BaseDialog";
 import { IDialogProps } from "./IDialogProps";
@@ -117,7 +117,7 @@ export default class InteractiveAuthDialog extends React.Component<IProps, IStat
         };
     }
 
-    private onAuthFinished = (success: boolean, result: Error): void => {
+    private onAuthFinished: InteractiveAuthCallback = (success, result): void => {
         if (success) {
             this.props.onFinished(true, result);
         } else {
