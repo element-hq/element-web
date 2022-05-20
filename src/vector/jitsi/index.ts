@@ -156,6 +156,15 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
                     ack(ev);
                 },
             );
+            widgetApi.on(`action:${ElementWidgetActions.ForceHangupCall}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    meetApi?.dispose();
+                    notifyHangup();
+                    meetApi = null;
+                    closeConference();
+                    ack(ev);
+                },
+            );
             widgetApi.on(`action:${ElementWidgetActions.MuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
                     ack(ev);
