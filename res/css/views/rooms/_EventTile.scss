@@ -881,6 +881,12 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             .mx_EventTile_line {
                 padding-top: var(--BaseCard_EventTile_line-padding-block);
                 padding-bottom: var(--BaseCard_EventTile_line-padding-block);
+
+                .mx_EventTile_content {
+                    &.mx_EditMessageComposer {
+                        padding-inline-start: 0; // align start of first letter with that of the event body
+                    }
+                }
             }
         }
 
@@ -977,9 +983,5 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
     .mx_MessageComposer_sendMessage {
         margin-right: 0;
-    }
-
-    .mx_EditMessageComposer {
-        margin-left: 30px !important; // align start of first letter with that of the event body
     }
 }
