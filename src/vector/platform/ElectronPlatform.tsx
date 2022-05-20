@@ -414,16 +414,16 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
-    public supportsDisableHardwareAcceleration(): boolean {
+    public supportsHardwareAcceleration(): boolean {
         return true;
     }
 
-    public async getDisableHardwareAcceleration(): Promise<boolean> {
-        return this.ipcCall('getDisableHardwareAcceleration');
+    public async getHardwareAccelerationEnabled(): Promise<boolean> {
+        return this.ipcCall('getHardwareAccelerationEnabled');
     }
 
-    public async setDisableHardwareAcceleration(enabled: boolean): Promise<void> {
-        return this.ipcCall('setDisableHardwareAcceleration', enabled);
+    public async setHardwareAccelerationEnabled(enabled: boolean): Promise<void> {
+        return this.ipcCall('setHardwareAccelerationEnabled', enabled);
     }
 
     async canSelfUpdate(): Promise<boolean> {
