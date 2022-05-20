@@ -414,7 +414,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
-    public supportsHardwareAcceleration(): boolean {
+    public supportsTogglingHardwareAcceleration(): boolean {
         return true;
     }
 
