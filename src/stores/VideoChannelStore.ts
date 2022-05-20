@@ -190,6 +190,11 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             messaging.off(`action:${ElementWidgetActions.UnmuteVideo}`, this.onUnmuteVideo);
             messaging.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
 
+            if (messaging.transport.ready) {
+                // The messaging still exists, which means Jitsi might still be going in the background
+                messaging.transport.send(ElementWidgetActions.ForceHangupCall, {});
+            }
+
             this.emit(VideoChannelEvent.Disconnect, roomId);
 
             throw new Error(`Failed to join call in room ${roomId}: ${e}`);
