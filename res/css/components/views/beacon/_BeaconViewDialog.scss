@@ -59,23 +59,6 @@ limitations under the License.
     border-radius: 8px;
 }
 
-.mx_BeaconViewDialog_mapFallback {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    background: url('$(res)/img/location/map.svg');
-    background-size: cover;
-}
-
-.mx_BeaconViewDialog_mapFallbackIcon {
-    width: 65px;
-    margin-bottom: $spacing-16;
-    color: $quaternary-content;
-}
-
 .mx_BeaconViewDialog_mapFallbackMessage {
     color: $secondary-content;
     margin-bottom: $spacing-16;

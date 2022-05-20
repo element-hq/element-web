@@ -19,7 +19,6 @@ import { Beacon, BeaconEvent, MatrixEvent } from 'matrix-js-sdk/src/matrix';
 import { BeaconLocationState } from 'matrix-js-sdk/src/content-helpers';
 import { randomString } from 'matrix-js-sdk/src/randomstring';
 
-import { Icon as LocationMarkerIcon } from '../../../../res/img/element-icons/location.svg';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { _t } from '../../../languageHandler';
@@ -28,8 +27,8 @@ import { useBeacon } from '../../../utils/beacon';
 import { isSelfLocation } from '../../../utils/location';
 import { BeaconDisplayStatus, getBeaconDisplayStatus } from '../beacon/displayStatus';
 import BeaconStatus from '../beacon/BeaconStatus';
-import Spinner from '../elements/Spinner';
 import Map from '../location/Map';
+import MapFallback from '../location/MapFallback';
 import SmartMarker from '../location/SmartMarker';
 import OwnBeaconStatus from '../beacon/OwnBeaconStatus';
 import BeaconViewDialog from '../beacon/BeaconViewDialog';
@@ -134,12 +133,10 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) =>
                             />
                     }
                 </Map>
-                : <div className='mx_MBeaconBody_map mx_MBeaconBody_mapFallback'>
-                    { displayStatus === BeaconDisplayStatus.Loading ?
-                        <Spinner h={32} w={32} /> :
-                        <LocationMarkerIcon className='mx_MBeaconBody_mapFallbackIcon' />
-                    }
-                </div>
+                : <MapFallback
+                    isLoading={displayStatus === BeaconDisplayStatus.Loading}
+                    className='mx_MBeaconBody_map mx_MBeaconBody_mapFallback'
+                />
             }
             { isOwnBeacon ?
                 <OwnBeaconStatus

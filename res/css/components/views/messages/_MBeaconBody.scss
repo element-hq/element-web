@@ -26,30 +26,17 @@ limitations under the License.
 .mx_MBeaconBody_map {
     height: 100%;
     width: 100%;
-    z-index: 0; // keeps the entire map under the message action bar
+    z-index: 0; // keeps the entire map under the message action bars
 
-    &:not(.mx_MBeaconBody_mapFallback) {
-        cursor: pointer;
-    }
+    cursor: pointer;
 }
 
 .mx_MBeaconBody_mapFallback {
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
     // pushes spinner/icon up
     // to appear more centered with the footer
     padding-bottom: 50px;
 
-    background: url('$(res)/img/location/map.svg');
-    background-size: cover;
-}
-
-.mx_MBeaconBody_mapFallbackIcon {
-    width: 65px;
-    color: $quaternary-content;
+    cursor: default;
 }
 
 .mx_MBeaconBody_chin {

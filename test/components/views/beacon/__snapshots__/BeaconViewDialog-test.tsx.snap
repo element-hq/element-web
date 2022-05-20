@@ -1,37 +1,83 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<BeaconViewDialog /> renders a fallback when no live beacons remain 1`] = `
-<div
-  className="mx_BeaconViewDialog_map mx_BeaconViewDialog_mapFallback"
-  data-test-id="beacon-view-dialog-map-fallback"
->
-  <div
-    className="mx_BeaconViewDialog_mapFallbackIcon"
-  />
-  <span
-    className="mx_BeaconViewDialog_mapFallbackMessage"
-  >
-    No live locations
-  </span>
-  <AccessibleButton
-    data-test-id="beacon-view-dialog-fallback-close"
-    element="div"
-    kind="primary"
-    onClick={[MockFunction]}
-    role="button"
-    tabIndex={0}
+Array [
+  <MapFallback
+    className="mx_BeaconViewDialog_map"
+    data-test-id="beacon-view-dialog-map-fallback"
   >
     <div
-      className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+      className="mx_MapFallback mx_BeaconViewDialog_map"
+      data-test-id="beacon-view-dialog-map-fallback"
+    >
+      <div
+        className="mx_MapFallback_bg"
+      />
+      <div
+        className="mx_MapFallback_icon"
+      />
+      <span
+        className="mx_BeaconViewDialog_mapFallbackMessage"
+      >
+        No live locations
+      </span>
+      <AccessibleButton
+        data-test-id="beacon-view-dialog-fallback-close"
+        element="div"
+        kind="primary"
+        onClick={[MockFunction]}
+        role="button"
+        tabIndex={0}
+      >
+        <div
+          className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+          data-test-id="beacon-view-dialog-fallback-close"
+          onClick={[MockFunction]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          role="button"
+          tabIndex={0}
+        >
+          Close
+        </div>
+      </AccessibleButton>
+    </div>
+  </MapFallback>,
+  <div
+    className="mx_MapFallback mx_BeaconViewDialog_map"
+    data-test-id="beacon-view-dialog-map-fallback"
+  >
+    <div
+      className="mx_MapFallback_bg"
+    />
+    <div
+      className="mx_MapFallback_icon"
+    />
+    <span
+      className="mx_BeaconViewDialog_mapFallbackMessage"
+    >
+      No live locations
+    </span>
+    <AccessibleButton
       data-test-id="beacon-view-dialog-fallback-close"
+      element="div"
+      kind="primary"
       onClick={[MockFunction]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
       role="button"
       tabIndex={0}
     >
-      Close
-    </div>
-  </AccessibleButton>
-</div>
+      <div
+        className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+        data-test-id="beacon-view-dialog-fallback-close"
+        onClick={[MockFunction]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        role="button"
+        tabIndex={0}
+      >
+        Close
+      </div>
+    </AccessibleButton>
+  </div>,
+]
 `;

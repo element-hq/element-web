@@ -32,12 +32,12 @@ import ZoomButtons from '../location/ZoomButtons';
 import BeaconMarker from './BeaconMarker';
 import { Bounds, getBeaconBounds } from '../../../utils/beacon/bounds';
 import { getGeoUri } from '../../../utils/beacon';
-import { Icon as LocationIcon } from '../../../../res/img/element-icons/location.svg';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from '../elements/AccessibleButton';
 import DialogSidebar from './DialogSidebar';
 import DialogOwnBeaconStatus from './DialogOwnBeaconStatus';
 import BeaconStatusTooltip from './BeaconStatusTooltip';
+import MapFallback from '../location/MapFallback';
 
 interface IProps extends IDialogProps {
     roomId: Room['roomId'];
@@ -110,11 +110,10 @@ const BeaconViewDialog: React.FC<IProps> = ({
                             </>
                     }
                 </Map> :
-                    <div
+                    <MapFallback
                         data-test-id='beacon-view-dialog-map-fallback'
-                        className='mx_BeaconViewDialog_map mx_BeaconViewDialog_mapFallback'
+                        className='mx_BeaconViewDialog_map'
                     >
-                        <LocationIcon className='mx_BeaconViewDialog_mapFallbackIcon' />
                         <span className='mx_BeaconViewDialog_mapFallbackMessage'>{ _t('No live locations') }</span>
                         <AccessibleButton
                             kind='primary'
@@ -123,7 +122,7 @@ const BeaconViewDialog: React.FC<IProps> = ({
                         >
                             { _t('Close') }
                         </AccessibleButton>
-                    </div>
+                    </MapFallback>
                 }
                 { isSidebarOpen ?
                     <DialogSidebar beacons={liveBeacons} requestClose={() => setSidebarOpen(false)} /> :
