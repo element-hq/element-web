@@ -895,7 +895,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             margin-inline-end: var(--BaseCard_EventTile-spacing-horizontal);
 
             .mx_EventTile_line.mx_EventTile_mediaLine {
-                padding: 0 !important;
+                padding: 0;
                 max-width: 100%;
 
                 .mx_MFileBody {
@@ -907,7 +907,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
                 align-items: flex-end;
 
                 .mx_EventTile_line.mx_EventTile_mediaLine {
-                    margin: 0 -13px 0 0; // align with normal messages
+                    margin: 0 var(--EventBubbleTile_line-margin-inline-end) 0 0; // align with normal messages
                 }
             }
         }
@@ -933,6 +933,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             .mx_MImageBody {
                 margin: 0;
             }
+        }
+
+        .mx_MFileBody,
+        .mx_MImageBody {
+            display: block; // Apply margin to span element
+            margin-inline-start: var(--ThreadView_group_spacing-start);
+            margin-inline-end: var(--ThreadView_group_spacing-end);
         }
 
         .mx_ReplyChain_wrapper {
@@ -964,20 +971,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
                     flex: 1;
                 }
             }
-        }
-
-        .mx_EventTile_mediaLine {
-            padding-inline-start: var(--ThreadView_group_spacing-start);
-        }
-    }
-
-    .mx_EventTile_mediaLine {
-        padding-inline-start: var(--BaseCard_EventTile-spacing-horizontal);
-        padding-right: 50px;
-
-        .mx_MImageBody {
-            margin: 0;
-            padding: 0;
         }
     }
 

@@ -243,10 +243,12 @@ limitations under the License.
     }
 
     .mx_EventTile_line {
+        --EventBubbleTile_line-margin-inline-end: -12px;
+
         position: relative;
         display: flex;
         gap: 5px;
-        margin: 0 -12px 0 -9px;
+        margin: 0 var(--EventBubbleTile_line-margin-inline-end) 0 -9px;
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
