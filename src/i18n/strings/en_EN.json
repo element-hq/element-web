@@ -1765,6 +1765,7 @@
     "%(members)s and %(last)s": "%(members)s and %(last)s",
     "Seen by %(count)s people|other": "Seen by %(count)s people",
     "Seen by %(count)s people|one": "Seen by %(count)s person",
+    "Read receipts": "Read receipts",
     "Recently viewed": "Recently viewed",
     "Replying": "Replying",
     "Room %(name)s": "Room %(name)s",

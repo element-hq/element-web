@@ -199,10 +199,12 @@ export function ReadReceiptGroup(
 
     return (
         <div className="mx_EventTile_msgOption">
-            <div className="mx_ReadReceiptGroup">
+            <div className="mx_ReadReceiptGroup" role="group" aria-label={_t("Read receipts")}>
                 <AccessibleButton
                     className="mx_ReadReceiptGroup_button"
                     inputRef={button}
+                    aria-label={tooltipText}
+                    aria-haspopup="true"
                     onClick={openMenu}
                     onMouseOver={showTooltip}
                     onMouseLeave={hideTooltip}
