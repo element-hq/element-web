@@ -105,6 +105,25 @@ limitations under the License.
         }
     }
 
+    .mx_EventTile,
+    .mx_GenericEventListSummary {
+        .mx_ThreadSummary {
+            position: relative;
+            padding-right: 11px;
+
+            &::after {
+                content: '';
+                display: block;
+                position: absolute;
+                left: 0;
+                bottom: -16px;
+                height: 1px;
+                width: 100%;
+                border-bottom: 1px solid $message-action-bar-border-color;
+            }
+        }
+    }
+
     .mx_CallEvent_wrapper {
         justify-content: center;
         margin: auto 5px;

@@ -176,22 +176,6 @@ limitations under the License.
         // Account for scrollbar when hovering
         padding-top: 0;
 
-        .mx_ThreadSummary {
-            position: relative;
-            padding-right: 11px;
-
-            &::after {
-                content: '';
-                display: block;
-                position: absolute;
-                left: 0;
-                bottom: -16px;
-                height: 1px;
-                width: 100%;
-                border-bottom: 1px solid $message-action-bar-border-color;
-            }
-        }
-
         .mx_DateSeparator {
             display: none;
         }
