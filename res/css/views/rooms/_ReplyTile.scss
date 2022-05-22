@@ -111,10 +111,5 @@ limitations under the License.
         display: inline-block; // anti-zalgo, with overflow hidden
         padding: 0;
         margin: 0;
-
-        // truncate long display names
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
     }
 }

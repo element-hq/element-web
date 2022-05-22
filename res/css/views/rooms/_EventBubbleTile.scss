@@ -117,6 +117,24 @@ limitations under the License.
         line-height: $font-18px;
     }
 
+    // other users profile on bubble layout
+    > .mx_DisambiguatedProfile {
+        white-space: normal; // display mxid
+
+        .mx_DisambiguatedProfile_displayName {
+            white-space: nowrap; // truncate long display names
+            margin-inline-end: 5px;
+
+            // For RTL displayName
+            unicode-bidi: embed;
+            direction: ltr;
+        }
+
+        .mx_DisambiguatedProfile_mxid {
+            margin-inline-start: 0; // Align mxid with truncated displayName inside mx_EventTile[data-layout=bubble]
+        }
+    }
+
     // inside mx_RoomView_MessageList, outside of mx_ReplyTile
     // (on the main panel and the chat panel with a maximized widget)
     > .mx_DisambiguatedProfile,

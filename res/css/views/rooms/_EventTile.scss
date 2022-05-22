@@ -138,14 +138,9 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         color: $primary-content;
         font-size: $font-14px;
         display: inline-block;
-        /* anti-zalgo, with overflow hidden */
-        overflow: hidden;
         padding-bottom: 0px;
         padding-top: 0px;
         margin: 0px;
-        /* the next three lines, along with overflow hidden, truncate long display names */
-        white-space: nowrap;
-        text-overflow: ellipsis;
         max-width: calc(100% - $left-gutter);
     }
 
@@ -440,10 +435,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     // on ELS we need the margin to allow interaction with the expand/collapse button which is normally in the RR gutter
-}
-
-.mx_DisambiguatedProfile {
-    cursor: pointer;
 }
 
 .mx_EventTile_bubbleContainer {
