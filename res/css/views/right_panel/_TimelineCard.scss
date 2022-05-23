@@ -52,6 +52,7 @@ limitations under the License.
     }
 
     .mx_EventTile:not([data-layout="bubble"]) {
+        &.mx_EventTile_info .mx_EventTile_line,
         .mx_EventTile_line {
             padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-horizontal);
 
@@ -95,10 +96,6 @@ limitations under the License.
         }
 
         &.mx_EventTile_info {
-            .mx_EventTile_line {
-                padding-left: var(--BaseCard_EventTile-spacing-horizontal);
-            }
-
             .mx_EventTile_avatar {
                 left: 18px;
             }
