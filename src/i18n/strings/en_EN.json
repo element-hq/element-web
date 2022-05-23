@@ -1500,6 +1500,7 @@
     "Warn before quitting": "Warn before quitting",
     "Always show the window menu bar": "Always show the window menu bar",
     "Show tray icon and minimise window to it on close": "Show tray icon and minimise window to it on close",
+    "Enable hardware acceleration (restart %(appName)s to take effect)": "Enable hardware acceleration (restart %(appName)s to take effect)",
     "Preferences": "Preferences",
     "Room list": "Room list",
     "Keyboard shortcuts": "Keyboard shortcuts",

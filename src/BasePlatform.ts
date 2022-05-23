@@ -291,6 +291,18 @@ export default abstract class BasePlatform {
         throw new Error("Unimplemented");
     }
 
+    public supportsTogglingHardwareAcceleration(): boolean {
+        return false;
+    }
+
+    public async getHardwareAccelerationEnabled(): Promise<boolean> {
+        return true;
+    }
+
+    public async setHardwareAccelerationEnabled(enabled: boolean): Promise<void> {
+        throw new Error("Unimplemented");
+    }
+
     /**
      * Get our platform specific EventIndexManager.
      *

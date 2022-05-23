@@ -29,6 +29,7 @@ import dis from "../../../../../dispatcher/dispatcher";
 import { UserTab } from "../../../dialogs/UserTab";
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
+import SdkConfig from "../../../../../SdkConfig";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -43,6 +44,8 @@ interface IState {
     alwaysShowMenuBar: boolean;
     minimizeToTraySupported: boolean;
     minimizeToTray: boolean;
+    togglingHardwareAccelerationSupported: boolean;
+    enableHardwareAcceleration: boolean;
     autocompleteDelay: string;
     readMarkerInViewThresholdMs: string;
     readMarkerOutOfViewThresholdMs: string;
@@ -117,6 +120,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             alwaysShowMenuBarSupported: false,
             minimizeToTray: true,
             minimizeToTraySupported: false,
+            enableHardwareAcceleration: true,
+            togglingHardwareAccelerationSupported: false,
             autocompleteDelay:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
             readMarkerInViewThresholdMs:
@@ -153,6 +158,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             minimizeToTray = await platform.getMinimizeToTrayEnabled();
         }
 
+        const togglingHardwareAccelerationSupported = platform.supportsTogglingHardwareAcceleration();
+        let enableHardwareAcceleration = true;
+        if (togglingHardwareAccelerationSupported) {
+            enableHardwareAcceleration = await platform.getHardwareAccelerationEnabled();
+        }
+
         this.setState({
             autoLaunch,
             autoLaunchSupported,
@@ -162,6 +173,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             alwaysShowMenuBar,
             minimizeToTraySupported,
             minimizeToTray,
+            togglingHardwareAccelerationSupported,
+            enableHardwareAcceleration,
         });
     }
 
@@ -179,6 +192,11 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
 
     private onMinimizeToTrayChange = (checked: boolean) => {
         PlatformPeg.get().setMinimizeToTrayEnabled(checked).then(() => this.setState({ minimizeToTray: checked }));
+    };
+
+    private onHardwareAccelerationChange = (checked: boolean) => {
+        PlatformPeg.get().setHardwareAccelerationEnabled(checked).then(
+            () => this.setState({ enableHardwareAcceleration: checked }));
     };
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -246,6 +264,17 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                 label={_t('Show tray icon and minimise window to it on close')} />;
         }
 
+        let hardwareAccelerationOption = null;
+        if (this.state.togglingHardwareAccelerationSupported) {
+            const appName = SdkConfig.get().brand;
+            hardwareAccelerationOption = <LabelledToggleSwitch
+                value={this.state.enableHardwareAcceleration}
+                onChange={this.onHardwareAccelerationChange}
+                label={_t('Enable hardware acceleration (restart %(appName)s to take effect)', {
+                    appName,
+                })} />;
+        }
+
         return (
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Preferences") }</div>
@@ -303,6 +332,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     <span className="mx_SettingsTab_subheading">{ _t("General") }</span>
                     { this.renderGroup(PreferencesUserSettingsTab.GENERAL_SETTINGS) }
                     { minimizeToTrayOption }
+                    { hardwareAccelerationOption }
                     { autoHideMenuOption }
                     { autoLaunchOption }
                     { warnBeforeExitOption }
