@@ -17,7 +17,23 @@ limitations under the License.
 import { ReactWrapper } from "enzyme";
 import EventEmitter from "events";
 
+import { ActionPayload } from "../../src/dispatcher/payloads";
+import defaultDispatcher from "../../src/dispatcher/dispatcher";
+import { DispatcherAction } from "../../src/dispatcher/actions";
+
 export const emitPromise = (e: EventEmitter, k: string | symbol) => new Promise(r => e.once(k, r));
+
+export function untilDispatch(waitForAction: DispatcherAction): Promise<ActionPayload> {
+    let dispatchHandle: string;
+    return new Promise<ActionPayload>(resolve => {
+        dispatchHandle = defaultDispatcher.register(payload => {
+            if (payload.action === waitForAction) {
+                defaultDispatcher.unregister(dispatchHandle);
+                resolve(payload);
+            }
+        });
+    });
+}
 
 const findByAttr = (attr: string) => (component: ReactWrapper, value: string) => component.find(`[${attr}="${value}"]`);
 export const findByTestId = findByAttr('data-test-id');

@@ -21,12 +21,10 @@ import EventEmitter from 'events';
 import CallHandler, {
     CallHandlerEvent, PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED, PROTOCOL_SIP_NATIVE, PROTOCOL_SIP_VIRTUAL,
 } from '../src/CallHandler';
-import { stubClient, mkStubRoom } from './test-utils';
+import { stubClient, mkStubRoom, untilDispatch } from './test-utils';
 import { MatrixClientPeg } from '../src/MatrixClientPeg';
-import dis from '../src/dispatcher/dispatcher';
 import DMRoomMap from '../src/utils/DMRoomMap';
 import SdkConfig from '../src/SdkConfig';
-import { ActionPayload } from '../src/dispatcher/payloads';
 import { Action } from "../src/dispatcher/actions";
 
 // The Matrix IDs that the user sees when talking to Alice & Bob
@@ -93,18 +91,6 @@ class FakeCall extends EventEmitter {
     placeVoiceCall() {
         this.emit(CallEvent.State, CallState.Connected, null);
     }
-}
-
-function untilDispatch(waitForAction: string): Promise<ActionPayload> {
-    let dispatchHandle;
-    return new Promise<ActionPayload>(resolve => {
-        dispatchHandle = dis.register(payload => {
-            if (payload.action === waitForAction) {
-                dis.unregister(dispatchHandle);
-                resolve(payload);
-            }
-        });
-    });
 }
 
 function untilCallHandlerEvent(callHandler: CallHandler, event: CallHandlerEvent): Promise<void> {

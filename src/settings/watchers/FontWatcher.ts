@@ -64,6 +64,20 @@ export class FontWatcher implements IWatcher {
     };
 
     private setSystemFont = ({ useSystemFont, font }) => {
-        document.body.style.fontFamily = useSystemFont ? font : "";
+        if (useSystemFont) {
+            // Make sure that fonts with spaces in their names get interpreted properly
+            document.body.style.fontFamily = font
+                .split(',')
+                .map(font => {
+                    font = font.trim();
+                    if (!font.startsWith('"') && !font.endsWith('"')) {
+                        font = `"${font}"`;
+                    }
+                    return font;
+                })
+                .join(',');
+        } else {
+            document.body.style.fontFamily = "";
+        }
     };
 }
