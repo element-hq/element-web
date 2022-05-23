@@ -30,7 +30,7 @@ limitations under the License.
         top: 0;
         border-radius: 4px;
         background-color: $dark-panel-bg-color;
-        margin: 9px;
+        margin: 9px; // TODO: Use a variable
         z-index: 1; // render on top of the right panel
 
         div {
@@ -47,11 +47,24 @@ limitations under the License.
     h2 {
         font-size: $font-18px;
         font-weight: 600;
-        margin: 18px 0 0 0;
+        margin: 18px 0 0 0; // TODO: Use a variable
     }
 
     .mx_UserInfo_container {
-        padding: 8px 16px;
+        padding: $spacing-8 $spacing-16;
+
+        &:not(.mx_UserInfo_separator) {
+            padding-top: $spacing-16;
+            padding-bottom: 0;
+
+            > :not(h3) {
+                margin-inline-start: $spacing-8;
+                display: flex;
+                flex-flow: column;
+                align-items: flex-start;
+                row-gap: $spacing-8;
+            }
+        }
 
         .mx_UserInfo_container_verifyButton {
             margin-top: $spacing-8;
@@ -65,7 +78,7 @@ limitations under the License.
     .mx_UserInfo_memberDetailsContainer {
         padding-top: 0;
         padding-bottom: 0;
-        margin-bottom: 8px;
+        margin-bottom: $spacing-8;
     }
 
     .mx_RoomTile_titleContainer {
@@ -81,52 +94,54 @@ limitations under the License.
     }
 
     .mx_UserInfo_avatar {
-        margin: 24px 32px 0 32px;
-    }
+        margin: $spacing-24 $spacing-32 0 $spacing-32;
 
-    .mx_UserInfo_avatar > div {
-        max-width: 30vh;
-        margin: 0 auto;
-        transition: 0.5s;
-    }
+        .mx_UserInfo_avatar_transition {
+            max-width: 30vh;
+            margin: 0 auto;
+            transition: 0.5s;
 
-    .mx_UserInfo_avatar > div > div {
-        /* use padding-top instead of height to make this element square,
-        as the % in padding is a % of the width (including margin,
-        that's why we had to put the margin to center on a parent div),
-        and not a % of the parent height. */
-        padding-top: 100%;
-        position: relative;
-    }
+            .mx_UserInfo_avatar_transition_child {
+                /* use padding-top instead of height to make this element square,
+                as the % in padding is a % of the width (including margin,
+                that's why we had to put the margin to center on a parent div),
+                and not a % of the parent height. */
+                padding-top: 100%;
+                position: relative;
 
-    .mx_UserInfo_avatar > div > div * {
-        border-radius: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100% !important;
-        height: 100% !important;
-    }
+                .mx_BaseAvatar,
+                .mx_BaseAvatar_initial,
+                .mx_BaseAvatar_image {
+                    border-radius: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100% !important;
+                    height: 100% !important;
+                }
 
-    .mx_UserInfo_avatar .mx_BaseAvatar_initial {
-        z-index: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+                .mx_BaseAvatar {
+                    &.mx_BaseAvatar_image {
+                        cursor: zoom-in;
+                    }
 
-        // override the calculated sizes so that the letter isn't HUGE
-        font-size: 6rem !important;
-        width: 100% !important;
-        transition: font-size 0.5s;
-    }
+                    .mx_BaseAvatar_initial {
+                        z-index: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
 
-    .mx_UserInfo_avatar .mx_BaseAvatar {
-        .mx_BaseAvatar_initial + .mx_BaseAvatar_image {
-            cursor: default;
-        }
+                        // override the calculated sizes so that the letter isn't HUGE
+                        font-size: 6rem !important;
+                        width: 100% !important;
+                        transition: font-size 0.5s;
 
-        &.mx_BaseAvatar_image {
-            cursor: zoom-in;
+                        & + .mx_BaseAvatar_image {
+                            cursor: default;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -135,11 +150,11 @@ limitations under the License.
         color: $tertiary-content;
         font-weight: 600;
         font-size: $font-12px;
-        margin: 4px 0;
+        margin: $spacing-4 0;
     }
 
     p {
-        margin: 5px 0;
+        margin: 5px 0; // TODO: Use a variable
     }
 
     .mx_UserInfo_profile {
@@ -165,34 +180,36 @@ limitations under the License.
             }
 
             .mx_E2EIcon {
-                margin-top: 3px; // visual vertical centering to the top line of text
-                margin-right: 4px; // margin from displyname
+                margin-top: 3px; // visual vertical centering to the top line of text. TODO: Use a variable
+                margin-inline-end: $spacing-4; // margin from displayName
                 min-width: 18px; // convince flexbox to not collapse it
             }
         }
 
         .mx_UserInfo_profileStatus {
-            margin-top: 12px;
+            margin-top: $spacing-12;
         }
     }
 
-    .mx_UserInfo_memberDetails .mx_UserInfo_profileField {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        margin: 6px 0;
-
-        .mx_UserInfo_roleDescription {
+    .mx_UserInfo_memberDetails {
+        .mx_UserInfo_profileField {
             display: flex;
             justify-content: center;
             align-items: center;
-            // try to make it the same height as the dropdown
-            margin: 11px 0 12px 0;
-        }
 
-        .mx_Field {
-            margin: 0;
+            margin: 6px 0; // TODO: Use a variable
+
+            .mx_UserInfo_roleDescription {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                // try to make it the same height as the dropdown
+                margin: 11px 0 12px 0;
+            }
+
+            .mx_Field {
+                margin: 0;
+            }
         }
     }
 
@@ -222,19 +239,6 @@ limitations under the License.
 
     .mx_AutoHideScrollbar {
         flex: 1 1 0;
-    }
-
-    .mx_UserInfo_container:not(.mx_UserInfo_separator) {
-        padding-top: 16px;
-        padding-bottom: 0;
-
-        > :not(h3) {
-            margin-inline-start: $spacing-8;
-            display: flex;
-            flex-flow: column;
-            align-items: flex-start;
-            row-gap: $spacing-8;
-        }
     }
 
     .mx_UserInfo_devices {
@@ -272,17 +276,24 @@ limitations under the License.
         .mx_UserInfo_expand {
             column-gap: 5px; // cf: mx_UserInfo_device_name
             margin-bottom: 11px;
+            align-items: initial; // Cancel the default property
         }
     }
-}
 
-.mx_UserInfo.mx_UserInfo_smallAvatar {
-    .mx_UserInfo_avatar > div {
-        max-width: 72px;
-        margin: 0 auto;
-    }
+    &.mx_UserInfo_smallAvatar {
+        .mx_UserInfo_avatar {
+            .mx_UserInfo_avatar_transition {
+                max-width: 72px;
+                margin: 0 auto;
+            }
 
-    .mx_UserInfo_avatar .mx_BaseAvatar_initial {
-        font-size: 40px !important; // override the other override because here the avatar is smaller
+            .mx_UserInfo_avatar_transition_child {
+                .mx_BaseAvatar {
+                    .mx_BaseAvatar_initial {
+                        font-size: 40px !important; // override the other override because here the avatar is smaller
+                    }
+                }
+            }
+        }
     }
 }

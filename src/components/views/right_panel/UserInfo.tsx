@@ -1428,8 +1428,8 @@ const UserInfoHeader: React.FC<{
 
     const avatarElement = (
         <div className="mx_UserInfo_avatar">
-            <div>
-                <div>
+            <div className="mx_UserInfo_avatar_transition">
+                <div className="mx_UserInfo_avatar_transition_child">
                     <MemberAvatar
                         key={member.userId} // to instantly blank the avatar when UserInfo changes members
                         member={member as RoomMember}
