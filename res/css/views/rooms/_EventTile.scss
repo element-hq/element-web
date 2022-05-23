@@ -58,6 +58,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         }
     }
 
+    .mx_MImageBody {
+        .mx_MImageBody_thumbnail_container {
+            display: flex;
+            align-items: center; // on every layout
+        }
+    }
+
     &[data-layout=group] {
         .mx_EventTile_line {
             line-height: var(--GroupLayout-EventTile-line-height);
@@ -265,6 +272,12 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
     .mx_MImageBody {
         margin-right: 34px;
+
+        .mx_MImageBody_thumbnail_container {
+            justify-content: flex-start;
+            min-height: $font-44px;
+            min-width: $font-44px;
+        }
     }
 
     .mx_EventTile_e2eIcon {

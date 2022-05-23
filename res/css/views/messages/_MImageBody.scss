@@ -62,12 +62,6 @@ $timeline-image-border-radius: 8px;
         overflow: hidden;
         contain: paint;
 
-        min-height: $font-44px;
-        min-width: $font-44px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
         // Override inline max-width value to avoid overflow
         max-width: 100% !important;
 
