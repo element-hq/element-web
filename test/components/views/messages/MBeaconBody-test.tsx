@@ -79,6 +79,11 @@ describe('<MBeaconBody />', () => {
         });
 
     const modalSpy = jest.spyOn(Modal, 'createTrackedDialog').mockReturnValue(undefined);
+
+    beforeAll(() => {
+        maplibregl.AttributionControl = jest.fn();
+    });
+
     beforeEach(() => {
         jest.clearAllMocks();
     });

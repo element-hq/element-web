@@ -44,6 +44,10 @@ describe('<Map />', () => {
             wrappingComponentProps: { value: matrixClient },
         });
 
+    beforeAll(() => {
+        maplibregl.AttributionControl = jest.fn();
+    });
+
     beforeEach(() => {
         jest.clearAllMocks();
         matrixClient.getClientWellKnown.mockReturnValue({

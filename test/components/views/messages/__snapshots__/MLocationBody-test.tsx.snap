@@ -124,7 +124,20 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                     },
                     "_eventsCount": 1,
                     "_maxListeners": undefined,
-                    "addControl": [MockFunction],
+                    "addControl": [MockFunction] {
+                      "calls": Array [
+                        Array [
+                          mockConstructor {},
+                          "top-right",
+                        ],
+                      ],
+                      "results": Array [
+                        Object {
+                          "type": "return",
+                          "value": undefined,
+                        },
+                      ],
+                    },
                     "fitBounds": [MockFunction],
                     "removeControl": [MockFunction],
                     "setCenter": [MockFunction] {
@@ -135,18 +148,8 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                             "lon": -0.1276,
                           },
                         ],
-                        Array [
-                          Object {
-                            "lat": 51.5076,
-                            "lon": -0.1276,
-                          },
-                        ],
                       ],
                       "results": Array [
-                        Object {
-                          "type": "return",
-                          "value": undefined,
-                        },
                         Object {
                           "type": "return",
                           "value": undefined,

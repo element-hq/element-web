@@ -36,7 +36,9 @@ export const createMap = (
             style: styleUrl,
             zoom: 15,
             interactive,
+            attributionControl: false,
         });
+        map.addControl(new maplibregl.AttributionControl(), 'top-right');
 
         map.on('error', (e) => {
             logger.error(

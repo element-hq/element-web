@@ -56,6 +56,15 @@ describe("MLocationBody", () => {
             wrappingComponent: MatrixClientContext.Provider,
             wrappingComponentProps: { value: mockClient },
         });
+
+        beforeAll(() => {
+            maplibregl.AttributionControl = jest.fn();
+        });
+
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+
         describe('with error', () => {
             let sdkConfigSpy;
 

@@ -89,6 +89,10 @@ describe('<BeaconViewDialog />', () => {
     const getComponent = (props = {}) =>
         mount(<BeaconViewDialog {...defaultProps} {...props} />);
 
+    beforeAll(() => {
+        maplibregl.AttributionControl = jest.fn();
+    });
+
     beforeEach(() => {
         jest.spyOn(OwnBeaconStore.instance, 'getLiveBeaconIds').mockRestore();
 
