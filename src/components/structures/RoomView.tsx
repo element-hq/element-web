@@ -883,6 +883,8 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 if (payload.composerType) break;
 
                 let timelineRenderingType: TimelineRenderingType = payload.timelineRenderingType;
+                // ThreadView handles Action.ComposerInsert itself due to it having its own editState
+                if (timelineRenderingType === TimelineRenderingType.Thread) break;
                 if (this.state.timelineRenderingType === TimelineRenderingType.Search &&
                     payload.timelineRenderingType === TimelineRenderingType.Search
                 ) {

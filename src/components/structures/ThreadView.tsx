@@ -53,6 +53,7 @@ import PosthogTrackers from "../../PosthogTrackers";
 import { ButtonEvent } from "../views/elements/AccessibleButton";
 import { RoomViewStore } from '../../stores/RoomViewStore';
 import Spinner from "../views/elements/Spinner";
+import { ComposerInsertPayload, ComposerType } from "../../dispatcher/payloads/ComposerInsertPayload";
 
 interface IProps {
     room: Room;
@@ -136,6 +137,18 @@ export default class ThreadView extends React.Component<IProps, IState> {
             this.setupThread(payload.event);
         }
         switch (payload.action) {
+            case Action.ComposerInsert: {
+                if (payload.composerType) break;
+                if (payload.timelineRenderingType !== TimelineRenderingType.Thread) break;
+
+                // re-dispatch to the correct composer
+                dis.dispatch<ComposerInsertPayload>({
+                    ...(payload as ComposerInsertPayload),
+                    composerType: this.state.editState ? ComposerType.Edit : ComposerType.Send,
+                });
+                break;
+            }
+
             case Action.EditEvent:
                 // Quit early if it's not a thread context
                 if (payload.timelineRenderingType !== TimelineRenderingType.Thread) return;
