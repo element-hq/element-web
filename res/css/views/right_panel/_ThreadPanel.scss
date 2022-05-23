@@ -15,32 +15,38 @@ limitations under the License.
 */
 
 .mx_ThreadPanel {
+    --ThreadPanel_header-button-size: 24px;
+
     display: flex;
     flex-direction: column;
     height: 100px;
     overflow: visible;
 
     .mx_BaseCard_header {
-        margin-bottom: 12px;
+        margin-bottom: $spacing-12;
 
         .mx_BaseCard_close,
         .mx_BaseCard_back {
-            width: 24px;
-            height: 24px;
+            width: var(--ThreadPanel_header-button-size);
+            height: var(--ThreadPanel_header-button-size);
         }
 
         .mx_BaseCard_back {
-            left: -4px;
+            margin-inline-start: calc(var(--BaseCard_header_button-margin) - 4px);
         }
 
         .mx_BaseCard_close {
-            right: -4px;
+            margin-inline-end: calc(var(--BaseCard_header_button-margin) - 4px);
         }
     }
 
     .mx_BaseCard_back ~ .mx_ThreadPanel__header {
         width: calc(100% - 60px);
-        margin-left: 30px;
+        margin-inline-start: var(--ThreadPanel_header-button-size);
+
+        span {
+            margin-inline-start: 6px;
+        }
     }
 
     .mx_ThreadPanel__header {
@@ -68,39 +74,13 @@ limitations under the License.
         }
 
         .mx_MessageActionBar_maskButton {
-            --size: 24px;
-            width: var(--size);
-            height: var(--size);
+            width: var(--ThreadPanel_header-button-size);
+            height: var(--ThreadPanel_header-button-size);
 
             &::after {
-                mask-size: var(--size);
+                mask-size: var(--ThreadPanel_header-button-size);
                 mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
             }
-        }
-    }
-
-    .mx_ThreadPanel_button {
-        width: 20px;
-        height: 20px;
-        margin-top: -3px;
-        margin-bottom: auto;
-        position: relative;
-
-        &::before {
-            top: 2px;
-            left: 2px;
-            content: '';
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            mask-position: center;
-            mask-size: contain;
-            mask-repeat: no-repeat;
-            background: $primary-content;
-        }
-
-        &.mx_ThreadPanel_OptionsButton::before {
-            mask-image: url('$(res)/img/element-icons/context-menu.svg');
         }
     }
 
