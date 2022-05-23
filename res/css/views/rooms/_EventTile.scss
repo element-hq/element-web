@@ -863,20 +863,21 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         flex-direction: column;
 
         .mx_EventTile_line {
-            padding-top: 2px;
-            padding-bottom: 2px;
-            padding-left: 0;
-            order: 10 !important;
+            padding-top: var(--BaseCard_EventTile_line-padding-block);
+            padding-bottom: var(--BaseCard_EventTile_line-padding-block);
+        }
+
+        .mx_EventTile_line,
+        .mx_ReactionsRow {
+            padding-inline-start: 0; // Cancel inherited padding value for event message and reactions row
+        }
+
+        .mx_ReactionsRow {
+            padding-inline-end: 0;
         }
 
         .mx_MessageTimestamp {
             font-size: $font-10px;
-        }
-
-        .mx_ReactionsRow {
-            order: 999;
-            padding-left: 0;
-            padding-right: 0;
         }
 
         &:not([data-layout=bubble]) {
