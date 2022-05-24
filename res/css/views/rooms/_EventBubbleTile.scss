@@ -284,29 +284,37 @@ limitations under the License.
             z-index: 3; // above media and location share maps
         }
 
-        &.mx_EventTile_mediaLine .mx_MVoiceMessageBody {
-            // allow the event to be collapsed, this causes the waveform to get cropped
-            min-width: 0;
-        }
-
-        // we put the timestamps for media (other than stickers) atop the media
-        // for images we also apply a linear gradient and change the timestamp colour to aid readability
-        &.mx_EventTile_mediaLine.mx_EventTile_image {
-            .mx_MessageTimestamp {
-                color: #ffffff; // regardless of theme, always visible on the below gradient
+        &.mx_EventTile_mediaLine {
+            // TODO: Use a common class name instead
+            .mx_MFileBody,
+            .mx_MAudioBody {
+                max-width: 100%; // avoid overflow
             }
 
-            // linear gradient to make the timestamp more visible
-            .mx_MImageBody::before {
-                content: "";
-                position: absolute;
-                background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
-                z-index: 1;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                pointer-events: none;
+            .mx_MVoiceMessageBody {
+                // allow the event to be collapsed, this causes the waveform to get cropped
+                min-width: 0;
+            }
+
+            // we put the timestamps for media (other than stickers) atop the media
+            // for images we also apply a linear gradient and change the timestamp colour to aid readability
+            &.mx_EventTile_image {
+                .mx_MessageTimestamp {
+                    color: #ffffff; // regardless of theme, always visible on the below gradient
+                }
+
+                // linear gradient to make the timestamp more visible
+                .mx_MImageBody::before {
+                    content: "";
+                    position: absolute;
+                    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
+                    z-index: 1;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    pointer-events: none;
+                }
             }
         }
 
