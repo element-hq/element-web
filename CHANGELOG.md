@@ -1,11 +1,5 @@
-Changes in [1.10.13-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.10.13-rc.2) (2022-05-20)
-===========================================================================================================
-
-## 🐛 Bug Fixes
- * Fix crash on null idp for SSO buttons ([\#8650](https://github.com/matrix-org/matrix-react-sdk/pull/8650)).
-
-Changes in [1.10.13-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.10.13-rc.1) (2022-05-17)
-===========================================================================================================
+Changes in [1.10.13](https://github.com/vector-im/element-web/releases/tag/v1.10.13) (2022-05-24)
+=================================================================================================
 
 ## ✨ Features
  * Go to space landing page when clicking on a selected space ([\#6442](https://github.com/matrix-org/matrix-react-sdk/pull/6442)). Fixes #20296.
