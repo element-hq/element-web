@@ -1,0 +1,84 @@
+# Triggers after the layered build has finished, taking the artifact and running cypress on it
+name: Run Cypress tests
+on:
+  workflow_run:
+    workflows: [ "Element Web - Build" ]
+    types:
+      - completed
+jobs:
+  prdetails:
+    name: ℹ️ PR Details
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+    uses: matrix-org/matrix-js-sdk/.github/workflows/pr_details.yml@develop
+    with:
+      owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+      branch: ${{ github.event.workflow_run.head_branch }}
+
+  cypress:
+    name: "Cypress End to End Tests"
+    needs: prdetails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
+      # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
+      - name: 📥 Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: element-build-and-test.yaml
+          run_id: ${{ github.event.workflow_run.id }}
+          name: previewbuild
+          path: webapp
+
+      - name: Resolve command-prefix for Percy
+        id: percy
+        if: |
+          contains(fromJSON(needs.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
+          || github.ref == 'refs/heads/develop'
+        run: |
+          echo "::set-output name=command-prefix::yarn percy exec --"
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          # The built-in Electron runner seems to grind to a halt trying
+          # to run the tests, so use chrome.
+          browser: chrome
+          start: npx serve -p 8080 webapp
+          record: true
+          command-prefix: ${{ steps.percy.outputs.command-prefix }}
+        env:
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass the Percy token as an environment variable
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          # Use existing chromium rather than downloading another
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Artifact
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress-results
+          path: |
+            cypress/screenshots
+            cypress/videos
+            cypress/synapselogs
+
+      - name: Store benchmark result
+        if: github.ref == 'refs/heads/develop'
+        uses: matrix-org/github-action-benchmark@jsperfentry-1
+        with:
+          name: Cypress measurements
+          tool: 'jsperformanceentry'
+          output-file-path: cypress/performance/measurements.json
+          # The dashboard is available at https://matrix-org.github.io/matrix-react-sdk/cypress/bench/
+          benchmark-data-dir-path: cypress/bench
+          fail-on-alert: false
+          comment-on-alert: false
+          github-token: ${{ secrets.DEPLOY_GH_PAGES }}
+          auto-push: ${{ github.ref == 'refs/heads/develop' }}

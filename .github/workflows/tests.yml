@@ -35,3 +35,16 @@ jobs:
           path: |
             coverage
             !coverage/lcov-report
+
+  app-tests:
+    name: Element Web Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Run tests
+        run: "./scripts/ci/app-tests.sh"
