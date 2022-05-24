@@ -24,6 +24,8 @@ limitations under the License.
 }
 
 .mx_CallViewButtons {
+    --CallViewButtons_dropdownButton-size: 16px;
+
     position: absolute;
     display: flex;
     justify-content: center;
@@ -65,8 +67,8 @@ limitations under the License.
         }
 
         &.mx_CallViewButtons_dropdownButton {
-            width: 16px;
-            height: 16px;
+            width: var(--CallViewButtons_dropdownButton-size);
+            height: var(--CallViewButtons_dropdownButton-size);
 
             position: absolute;
             right: 0;
