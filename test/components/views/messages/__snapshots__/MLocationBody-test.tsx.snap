@@ -58,7 +58,7 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
   permalinkCreator={Object {}}
 >
   <LocationBodyContent
-    mapId="mx_MLocationBody_$2_1f9acffa"
+    mapId="mx_MLocationBody_$2_HHHHHHHH"
     mxEvent={
       Object {
         "content": Object {
@@ -102,18 +102,18 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
           <Map
             centerGeoUri="geo:51.5076,-0.1276"
             className="mx_MLocationBody_map"
-            id="mx_MLocationBody_$2_1f9acffa"
+            id="mx_MLocationBody_$2_HHHHHHHH"
             onClick={[Function]}
             onError={[Function]}
           >
             <div
               className="mx_Map mx_MLocationBody_map"
-              id="mx_Map_mx_MLocationBody_$2_1f9acffa"
+              id="mx_Map_mx_MLocationBody_$2_HHHHHHHH"
               onClick={[Function]}
             >
               <SmartMarker
                 geoUri="geo:51.5076,-0.1276"
-                id="mx_MLocationBody_$2_1f9acffa-marker"
+                id="mx_MLocationBody_$2_HHHHHHHH-marker"
                 map={
                   MockMap {
                     "_events": Object {
@@ -165,11 +165,11 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
               >
                 <span>
                   <ForwardRef
-                    id="mx_MLocationBody_$2_1f9acffa-marker"
+                    id="mx_MLocationBody_$2_HHHHHHHH-marker"
                   >
                     <div
                       className="mx_Marker mx_Marker_defaultColor"
-                      id="mx_MLocationBody_$2_1f9acffa-marker"
+                      id="mx_MLocationBody_$2_HHHHHHHH-marker"
                     >
                       <OptionalTooltip>
                         <div

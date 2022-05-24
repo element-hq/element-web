@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
+import { randomString } from 'matrix-js-sdk/src/randomstring';
 
 import { getCurrentLanguage, _t, _td, IVariables } from './languageHandler';
 import PlatformPeg from './PlatformPeg';
@@ -155,9 +156,9 @@ const LAST_VISIT_TS_KEY = "mx_Riot_Analytics_lvts";
 
 function getUid(): string {
     try {
-        let data = localStorage && localStorage.getItem(UID_KEY);
+        let data = localStorage?.getItem(UID_KEY);
         if (!data && localStorage) {
-            localStorage.setItem(UID_KEY, data = [...Array(16)].map(() => Math.random().toString(16)[2]).join(''));
+            localStorage.setItem(UID_KEY, data = randomString(16));
         }
         return data;
     } catch (e) {
