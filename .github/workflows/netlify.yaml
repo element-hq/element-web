@@ -3,7 +3,7 @@
 name: Upload Preview Build to Netlify
 on:
   workflow_run:
-    workflows: [ "Element Web - Build" ]
+    workflows: [ "Element Web - Build and Test" ]
     types:
       - completed
 jobs:
