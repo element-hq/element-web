@@ -27,6 +27,7 @@ import {
 import { ElementWidgetActions } from "matrix-react-sdk/src/stores/widgets/ElementWidgetActions";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
+import { _t, setLanguage } from "matrix-react-sdk/src/languageHandler";
 import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 
 import { getVectorConfig } from "../getconfig";
@@ -56,6 +57,7 @@ let roomName: string;
 let startAudioOnly: boolean;
 let isVideoChannel: boolean;
 let supportsScreensharing: boolean;
+let language: string;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -85,6 +87,7 @@ const setupCompleted = (async () => {
         const parentUrl = qsParam('parentUrl', true);
         const widgetId = qsParam('widgetId', true);
         const theme = qsParam('theme', true);
+        language = qsParam('language', true) ?? 'en';
 
         if (theme) {
             document.body.classList.add(`theme-${theme.replace(" ", "_")}`);
@@ -177,6 +180,8 @@ const setupCompleted = (async () => {
             logger.warn("No parent URL or no widget ID - assuming no widget API is available");
         }
 
+        await applyTranslation(language);
+
         // Populate the Jitsi params now
         jitsiDomain = qsParam('conferenceDomain');
         conferenceId = qsParam('conferenceId');
@@ -219,9 +224,16 @@ const setupCompleted = (async () => {
         enableJoinButton(); // always enable the button
     } catch (e) {
         logger.error("Error setting up Jitsi widget", e);
-        document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
+        document.getElementById("widgetActionContainer").innerText = _t("Failed to load Jitsi widget");
     }
 })();
+
+async function applyTranslation(language: string) {
+    await setLanguage(language);
+
+    document.getElementById("joinButton").textContent = _t("Join Conference");
+    document.querySelector(".joinConferencePrompt > h2").textContent = _t("Jitsi Video Conference");
+}
 
 function enableJoinButton() {
     document.getElementById("joinButton").onclick = () => joinConference();
@@ -321,7 +333,7 @@ function joinConference(audioInput?: string | null, videoInput?: string | null) 
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
             // We've failing to get a token, don't try to init conference
             logger.warn('Expected to have an OpenID credential, cannot initialize widget.');
-            document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
+            document.getElementById("widgetActionContainer").innerText = _t("Failed to load Jitsi widget");
             return;
         }
         jwt = createJWTToken();
@@ -367,6 +379,7 @@ function joinConference(audioInput?: string | null, videoInput?: string | null) 
             apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
+        lang: language,
     };
 
     // Video channel widgets need some more tailored config options
