@@ -136,14 +136,40 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             }
         }
 
+        // Now that we got the messaging, we need a way to ensure that it doesn't get stopped
+        const dontStopMessaging = new Promise<void>((resolve, reject) => {
+            const listener = (uid: string) => {
+                if (uid === jitsiUid) {
+                    cleanup();
+                    reject(new Error("Messaging stopped"));
+                }
+            };
+            const done = () => {
+                cleanup();
+                resolve();
+            };
+            const cleanup = () => {
+                messagingStore.off(WidgetMessagingStoreEvent.StopMessaging, listener);
+                this.off(VideoChannelEvent.Connect, done);
+                this.off(VideoChannelEvent.Disconnect, done);
+            };
+
+            messagingStore.on(WidgetMessagingStoreEvent.StopMessaging, listener);
+            this.on(VideoChannelEvent.Connect, done);
+            this.on(VideoChannelEvent.Disconnect, done);
+        });
+
         if (!messagingStore.isWidgetReady(jitsiUid)) {
             // Wait for the widget to be ready to receive our join event
             try {
-                await waitForEvent(
-                    messagingStore,
-                    WidgetMessagingStoreEvent.WidgetReady,
-                    (uid: string) => uid === jitsiUid,
-                );
+                await Promise.race([
+                    waitForEvent(
+                        messagingStore,
+                        WidgetMessagingStoreEvent.WidgetReady,
+                        (uid: string) => uid === jitsiUid,
+                    ),
+                    dontStopMessaging,
+                ]);
             } catch (e) {
                 throw new Error(`Video channel in room ${roomId} never became ready: ${e}`);
             }
@@ -178,11 +204,12 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             videoDevice: videoDevice?.label,
         });
         try {
-            await waitForJoin;
+            await Promise.race([waitForJoin, dontStopMessaging]);
         } catch (e) {
             // If it timed out, clean up our advance preparations
             this.activeChannel = null;
             this.roomId = null;
+
             messaging.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
             messaging.off(`action:${ElementWidgetActions.MuteAudio}`, this.onMuteAudio);
             messaging.off(`action:${ElementWidgetActions.UnmuteAudio}`, this.onUnmuteAudio);

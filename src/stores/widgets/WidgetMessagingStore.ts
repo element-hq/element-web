@@ -25,6 +25,7 @@ import WidgetUtils from "../../utils/WidgetUtils";
 
 export enum WidgetMessagingStoreEvent {
     StoreMessaging = "store_messaging",
+    StopMessaging = "stop_messaging",
     WidgetReady = "widget_ready",
 }
 
@@ -71,9 +72,7 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
     }
 
     public stopMessaging(widget: Widget, roomId: string) {
-        const uid = WidgetUtils.calcWidgetUid(widget.id, roomId);
-        this.widgetMap.remove(uid)?.stop();
-        this.readyWidgets.delete(uid);
+        this.stopMessagingByUid(WidgetUtils.calcWidgetUid(widget.id, roomId));
     }
 
     public getMessaging(widget: Widget, roomId: string): ClientWidgetApi {
@@ -86,6 +85,8 @@ export class WidgetMessagingStore extends AsyncStoreWithClient<unknown> {
      */
     public stopMessagingByUid(widgetUid: string) {
         this.widgetMap.remove(widgetUid)?.stop();
+        this.readyWidgets.delete(widgetUid);
+        this.emit(WidgetMessagingStoreEvent.StopMessaging, widgetUid);
     }
 
     /**

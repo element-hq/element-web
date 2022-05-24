@@ -114,28 +114,46 @@ describe("VideoChannelStore", () => {
         expect(store.roomId).toBeFalsy();
         expect(store.connected).toEqual(false);
 
-        store.connect("!1:example.org", null, null);
+        const connectPromise = store.connect("!1:example.org", null, null);
         await confirmConnect();
+        await expect(connectPromise).resolves.toBeUndefined();
         expect(store.roomId).toEqual("!1:example.org");
         expect(store.connected).toEqual(true);
 
-        store.disconnect();
+        const disconnectPromise = store.disconnect();
         await confirmDisconnect();
+        await expect(disconnectPromise).resolves.toBeUndefined();
         expect(store.roomId).toBeFalsy();
         expect(store.connected).toEqual(false);
         WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
     });
 
     it("waits for messaging when connecting", async () => {
-        store.connect("!1:example.org", null, null);
+        const connectPromise = store.connect("!1:example.org", null, null);
         WidgetMessagingStore.instance.storeMessaging(widget, "!1:example.org", messaging);
         widgetReady();
         await confirmConnect();
+        await expect(connectPromise).resolves.toBeUndefined();
         expect(store.roomId).toEqual("!1:example.org");
         expect(store.connected).toEqual(true);
 
         store.disconnect();
         await confirmDisconnect();
         WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
+    });
+
+    it("rejects if the widget's messaging gets stopped mid-connect", async () => {
+        WidgetMessagingStore.instance.storeMessaging(widget, "!1:example.org", messaging);
+        widgetReady();
+        expect(store.roomId).toBeFalsy();
+        expect(store.connected).toEqual(false);
+
+        const connectPromise = store.connect("!1:example.org", null, null);
+        // Wait for the store to contact the widget API, then stop the messaging
+        await messageSent;
+        WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
+        await expect(connectPromise).rejects.toBeDefined();
+        expect(store.roomId).toBeFalsy();
+        expect(store.connected).toEqual(false);
     });
 });
