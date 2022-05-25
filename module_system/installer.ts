@@ -58,9 +58,8 @@ export function installer(config: BuildConfig): void {
 
     try {
         // Install the modules with yarn
-        for (const ref of config.modules) {
-            callYarnAdd(ref);
-        }
+        let yarnAddRef = config.modules.join(" ");
+        callYarnAdd(yarnAddRef); // install them all at once
 
         // Grab the optional dependencies again and exclude what was there already. Everything
         // else must be a module, we assume.
