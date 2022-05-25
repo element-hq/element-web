@@ -79,25 +79,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     font-size: $font-14px;
     position: relative;
 
-    &[data-shape=ThreadsList][data-notification]::before {
-        content: "";
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        right: -25px; // center it in the gutter (16px margin + 4px padding + half 10px width)
-        top: 4px;
-        left: auto;
-    }
-
-    &[data-shape=ThreadsList][data-notification=total]::before {
-        background-color: $room-icon-unread-color;
-    }
-
-    &[data-shape=ThreadsList][data-notification=highlight]::before {
-        background-color: $alert;
-    }
-
     .mx_ThreadSummary,
     .mx_ThreadSummaryIcon {
         margin-left: 64px;
@@ -780,12 +761,23 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     &::before {
         content: "";
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        /* enough to cover all sibling elements */
-        z-index: 10;
+        inset: 0;
+    }
+
+    // Display notification dot
+    &[data-notification]::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        inset: 14px 8px auto auto; // 14px: align the dot with the timestamp row
+    }
+
+    &[data-notification=total]::before {
+        background-color: $room-icon-unread-color;
+    }
+
+    &[data-notification=highlight]::before {
+        background-color: $alert;
     }
 
     &:last-child {
