@@ -220,16 +220,9 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
 
     private async hasAliases(): Promise<boolean> {
         const cli = this.context;
-        if (await cli.doesServerSupportUnstableFeature("org.matrix.msc2432")) {
-            const response = await cli.unstableGetLocalAliases(this.props.roomId);
-            const localAliases = response.aliases;
-            return Array.isArray(localAliases) && localAliases.length !== 0;
-        } else {
-            const room = cli.getRoom(this.props.roomId);
-            const aliasEvents = room.currentState.getStateEvents(EventType.RoomAliases) || [];
-            const hasAliases = !!aliasEvents.find((ev) => (ev.getContent().aliases || []).length > 0);
-            return hasAliases;
-        }
+        const response = await cli.getLocalAliases(this.props.roomId);
+        const localAliases = response.aliases;
+        return Array.isArray(localAliases) && localAliases.length !== 0;
     }
 
     private renderJoinRule() {

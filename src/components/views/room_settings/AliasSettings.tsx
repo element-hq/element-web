@@ -139,12 +139,11 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         this.setState({ localAliasesLoading: true });
         try {
             const mxClient = this.context;
+
             let localAliases = [];
-            if (await mxClient.doesServerSupportUnstableFeature("org.matrix.msc2432")) {
-                const response = await mxClient.unstableGetLocalAliases(this.props.roomId);
-                if (Array.isArray(response.aliases)) {
-                    localAliases = response.aliases;
-                }
+            const response = await mxClient.getLocalAliases(this.props.roomId);
+            if (Array.isArray(response?.aliases)) {
+                localAliases = response.aliases;
             }
             this.setState({ localAliases });
 
