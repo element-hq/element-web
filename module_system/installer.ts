@@ -69,7 +69,7 @@ export function installer(config: BuildConfig): void {
 
         // Ensure all the modules are compatible. We check them all and report at the end to
         // try and save the user some time debugging this sort of failure.
-        const ourApiVersion = findDepVersionInPackageJson(moduleApiDepName, pkgJsonStr);
+        const ourApiVersion = getTopLevelDependencyVersion(moduleApiDepName);
         const incompatibleNames: string[] = [];
         for (const moduleName of installedModules) {
             const modApiVersion = getModuleApiVersionFor(moduleName);
@@ -151,6 +151,29 @@ function findDepVersionInPackageJson(dep: string, pkgJsonStr: string): string {
     return packages[dep];
 }
 
+function getTopLevelDependencyVersion(dep: string): string {
+    const dependencyTree = JSON.parse(child_process.execSync(`npm list ${dep} --depth=0 --json`, {
+        env: process.env,
+        stdio: ['inherit', 'pipe', 'pipe'],
+    }).toString('utf-8'));
+
+    /*
+        What a dependency tree looks like:
+        {
+          "version": "1.10.13",
+          "name": "element-web",
+          "dependencies": {
+            "@matrix-org/react-sdk-module-api": {
+              "version": "0.0.1",
+              "resolved": "file:../../../matrix-react-sdk-module-api"
+            }
+          }
+        }
+     */
+
+    return dependencyTree["dependencies"][dep]["version"];
+}
+
 function getModuleApiVersionFor(moduleName: string): string {
     // We'll just pretend that this isn't highly problematic...
     // Yarn is fairly stable in putting modules in a flat hierarchy, at least.
@@ -160,7 +183,7 @@ function getModuleApiVersionFor(moduleName: string): string {
 
 function isModuleVersionCompatible(ourApiVersion: string, moduleApiVersion: string): boolean {
     if (!moduleApiVersion) return false;
-    return semver.satisfies(moduleApiVersion, ourApiVersion);
+    return semver.satisfies(ourApiVersion, moduleApiVersion);
 }
 
 function writeModulesTs(content: string) {
