@@ -1,8 +1,10 @@
-// XXX: check this?
-/* Nunito lacks combining diacritics, so these will fall through
-   to the next font.  Helevetica's diacritics however do not combine
+/* Nunito and Inter lacks combining diacritics, so these will fall through
+   to the next font. Helevetica's diacritics sometimes do not combine
    nicely (on OSX, at least) and result in a huge horizontal mess.
-   Arial empirically gets it right, hence prioritising Arial here. */
+   Arial empirically gets it right, hence prioritising Arial here.
+   We also include STIXGeneral explicitly to support a wider range
+   of combining diacritics (Chrome fails without it, as per
+   https://bugs.chromium.org/p/chromium/issues/detail?id=1328898) */
 /* We fall through to Twemoji for emoji rather than falling through
    to native Emoji fonts (if any) to ensure cross-browser consistency */
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
@@ -12,6 +14,7 @@ $font-family: 'Inter',
 'Twemoji',
 'Apple Color Emoji',
 'Segoe UI Emoji',
+'STIXGeneral',
 'Arial',
 'Helvetica',
 sans-serif,
@@ -21,6 +24,7 @@ $monospace-font-family: 'Inconsolata',
 'Twemoji',
 'Apple Color Emoji',
 'Segoe UI Emoji',
+'STIXGeneral',
 'Courier',
 monospace,
 'Noto Color Emoji';

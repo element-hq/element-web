@@ -1,16 +1,18 @@
-// XXX: check this?
 /* Nunito lacks combining diacritics, so these will fall through
-   to the next font.  Helevetica's diacritics however do not combine
+   to the next font.  Helevetica's diacritics sometimes do not combine
    nicely (on OSX, at least) and result in a huge horizontal mess.
-   Arial empirically gets it right, hence prioritising Arial here. */
+   Arial empirically gets it right, hence prioritising Arial here.
+   We also include STIXGeneral explicitly to support a wider range
+   of combining diacritics (Chrome fails without it, as per
+   https://bugs.chromium.org/p/chromium/issues/detail?id=1328898) */
 /* We fall through to Twemoji for emoji rather than falling through
    to native Emoji fonts (if any) to ensure cross-browser consistency */
 /* Noto Color Emoji contains digits, in fixed-width, therefore causing
    digits in flowed text to stand out.
    TODO: Consider putting all emoji fonts to the end rather than the front. */
-$font-family: 'Nunito', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Arial', 'Helvetica', sans-serif, 'Noto Color Emoji';
+$font-family: 'Nunito', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'STIXGeneral', 'Arial', 'Helvetica', sans-serif, 'Noto Color Emoji';
 
-$monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Courier', monospace, 'Noto Color Emoji';
+$monospace-font-family: 'Inconsolata', 'Twemoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'STIXGeneral', 'Courier', monospace, 'Noto Color Emoji';
 
 // unified palette
 // try to use these colors when possible
