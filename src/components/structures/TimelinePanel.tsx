@@ -408,7 +408,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // matrix-js-sdk.
         let serializedEventIdsFromTimelineSets: { [key: string]: string[] }[];
         let serializedEventIdsFromThreadsTimelineSets: { [key: string]: string[] }[];
-        const serializedThreadsMap: { [key: string]: string[] } = {};
+        const serializedThreadsMap: { [key: string]: any } = {};
         if (room) {
             const timelineSets = room.getTimelineSets();
             const threadsTimelineSets = room.threadsTimelineSets;
@@ -419,7 +419,15 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
             // Serialize all threads in the room from theadId -> event IDs in the thread
             room.getThreads().forEach((thread) => {
-                serializedThreadsMap[thread.id] = thread.events.map(ev => ev.getId());
+                serializedThreadsMap[thread.id] = {
+                    events: thread.events.map(ev => ev.getId()),
+                    numTimelines: thread.timelineSet.getTimelines().length,
+                    liveTimeline: thread.timelineSet.getLiveTimeline().getEvents().length,
+                    prevTimeline: thread.timelineSet.getLiveTimeline().getNeighbouringTimeline(Direction.Backward)
+                        ?.getEvents().length,
+                    nextTimeline: thread.timelineSet.getLiveTimeline().getNeighbouringTimeline(Direction.Forward)
+                        ?.getEvents().length,
+                };
             });
         }
 
