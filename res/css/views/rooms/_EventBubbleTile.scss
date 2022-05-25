@@ -493,17 +493,22 @@ limitations under the License.
             "shield body" auto
             "shield link" auto
             / auto  1fr;
+
         .mx_EventTile_e2eIcon {
             grid-area: shield;
         }
+
         .mx_UnknownBody {
             grid-area: body;
         }
+
         .mx_EventTile_keyRequestInfo {
             grid-area: link;
         }
+
         .mx_ReplyChain_wrapper {
             grid-area: reply;
+            min-width: 0; // Prevent a grid blowout due to nowrap displayName
         }
     }
 
