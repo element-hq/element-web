@@ -2,7 +2,7 @@
 #
 # Script to perform a release of matrix-react-sdk.
 #
-# Requires githib-changelog-generator; to install, do 
+# Requires githib-changelog-generator; to install, do
 #   pip install git+https://github.com/matrix-org/github-changelog-generator.git
 
 set -e
@@ -37,7 +37,7 @@ do
     fi
 done
 
-./node_modules/matrix-js-sdk/release.sh -z "$@"
+./node_modules/matrix-js-sdk/release.sh "$@"
 
 release="${1#v}"
 prerelease=0
