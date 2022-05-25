@@ -111,8 +111,10 @@ limitations under the License.
 
     .mx_DisambiguatedProfile,
     .mx_EventTile_line {
+        --EventBubbleTile_line-max-width: 70%;
+
         width: fit-content;
-        max-width: var(--EventBubbleTile_line-max-width);
+        max-width: var(--EventBubbleTile_line-max-width); // Align message bubble and displayName
         line-height: $font-18px; // fixed line height to prevent emoji from being taller than text
     }
 
@@ -264,7 +266,6 @@ limitations under the License.
 
     .mx_EventTile_line {
         --EventBubbleTile_line-margin-inline-end: -12px;
-        --EventBubbleTile_line-max-width: 70%;
 
         position: relative;
         display: flex;
