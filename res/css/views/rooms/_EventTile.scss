@@ -901,8 +901,9 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             margin-inline-end: var(--BaseCard_EventTile-spacing-horizontal);
 
             .mx_EventTile_line.mx_EventTile_mediaLine {
-                padding: 0;
-                max-width: 100%;
+                padding-block: 0;
+                padding-inline-start: 0;
+                max-width: var(--EventBubbleTile_line-max-width);
             }
 
             &[data-self=true] {
