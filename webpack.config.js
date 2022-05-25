@@ -34,8 +34,7 @@ const cssThemes = {
 function getActiveThemes() {
     // Default to `light` theme when the MATRIX_THEMES environment variable is not defined.
     const theme = process.env.MATRIX_THEMES ?? 'light';
-    const themes = theme.split(',').filter(x => x).map(x => x.trim()).filter(x => x);
-    return themes;
+    return theme.split(',').map(x => x.trim()).filter(Boolean);
 }
 
 // See docs/customisations.md
@@ -80,7 +79,6 @@ module.exports = (env, argv) => {
     const nodeEnv = argv.mode;
     const devMode = nodeEnv !== 'production';
     const useHMR = process.env.CSS_HOT_RELOAD === '1' && devMode;
-    const fullPageErrors = process.env.FULL_PAGE_ERRORS === '1' && devMode;
     const enableMinification = !devMode && !process.env.CI_PACKAGE;
 
     const development = {};
@@ -99,17 +97,16 @@ module.exports = (env, argv) => {
         }
     }
 
-    // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early so we
+    // Resolve the directories for the react-sdk and js-sdk for later use. We resolve these early, so we
     // don't have to call them over and over. We also resolve to the package.json instead of the src
-    // directory so we don't have to rely on a index.js or similar file existing.
+    // directory, so we don't have to rely on an index.js or similar file existing.
     const reactSdkSrcDir = path.resolve(require.resolve("matrix-react-sdk/package.json"), '..', 'src');
     const jsSdkSrcDir = path.resolve(require.resolve("matrix-js-sdk/package.json"), '..', 'src');
 
     const ACTIVE_THEMES = getActiveThemes();
     function getThemesImports() {
-        const imports = ACTIVE_THEMES.map((t, index) => {
-            const themeImportPath = cssThemes[`theme-${ t }`].replace('./node_modules/', '');
-            return themeImportPath;
+        const imports = ACTIVE_THEMES.map((t) => {
+            return cssThemes[`theme-${ t }`].replace('./node_modules/', ''); // theme import path
         });
         const s = JSON.stringify(ACTIVE_THEMES);
         return `
@@ -483,7 +480,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function(url, resourcePath) {
                                     const outputPath = getAssetOutputPath(url, resourcePath);
                                     return toPublicPath(outputPath);
                                 },
@@ -495,13 +492,13 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function(url, resourcePath) {
                                     const outputPath = getAssetOutputPath(url, resourcePath);
                                     return toPublicPath(outputPath);
                                 },
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.svg$/,
@@ -513,7 +510,7 @@ module.exports = (env, argv) => {
                                 esModule: false,
                                 name: '[name].[hash:7].[ext]',
                                 outputPath: getAssetOutputPath,
-                                publicPath: function (url, resourcePath) {
+                                publicPath: function(url, resourcePath) {
                                     // CSS image usages end up in the `bundles/[hash]` output
                                     // directory, so we adjust the final path to navigate up
                                     // twice.
@@ -522,7 +519,7 @@ module.exports = (env, argv) => {
                                 },
                             },
                         },
-                    ]
+                    ],
                 },
                 {
                     test: /\.(gif|png|ttf|woff|woff2|xml|ico)$/,

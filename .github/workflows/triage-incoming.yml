@@ -2,7 +2,7 @@ name: Move new issues into Issue triage board
 
 on:
   issues:
-    types: [opened]
+    types: [ opened ]
 
 jobs:
   automate-project-columns:
