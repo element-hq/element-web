@@ -90,9 +90,9 @@ export default class RoomListActions {
                 return Rooms.guessAndSetDMRoom(
                     room, newTag === DefaultTagID.DM,
                 ).catch((err) => {
-                    logger.error("Failed to set direct chat tag " + err);
-                    Modal.createTrackedDialog('Failed to set direct chat tag', '', ErrorDialog, {
-                        title: _t('Failed to set direct chat tag'),
+                    logger.error("Failed to set DM tag " + err);
+                    Modal.createTrackedDialog('Failed to set direct message tag', '', ErrorDialog, {
+                        title: _t('Failed to set direct message tag'),
                         description: ((err && err.message) ? err.message : _t('Operation failed')),
                     });
                 });

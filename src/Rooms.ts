@@ -51,7 +51,7 @@ export function looksLikeDirectMessageRoom(room: Room, myUserId: string): boolea
     if (myMembership == "join" || myMembership === "ban" || (me && me.isKicked())) {
         // Used to split rooms via tags
         const tagNames = Object.keys(room.tags);
-        // Used for 1:1 direct chats
+        // Used for 1:1 direct messages
         // Show 1:1 chats in separate "Direct Messages" section as long as they haven't
         // been moved to a different tag section
         const totalMemberCount = room.currentState.getJoinedMemberCount() +

@@ -3352,7 +3352,7 @@
     "Indexed rooms:": "Indexed rooms:",
     "%(doneRooms)s out of %(totalRooms)s": "%(doneRooms)s out of %(totalRooms)s",
     "Message downloading sleep time(ms)": "Message downloading sleep time(ms)",
-    "Failed to set direct chat tag": "Failed to set direct chat tag",
+    "Failed to set direct message tag": "Failed to set direct message tag",
     "Failed to remove tag %(tagName)s from room": "Failed to remove tag %(tagName)s from room",
     "Failed to add tag %(tagName)s to room": "Failed to add tag %(tagName)s to room",
     "Page Up": "Page Up",
