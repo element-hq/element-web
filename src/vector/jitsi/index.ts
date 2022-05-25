@@ -366,8 +366,12 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             startAudioOnly,
             startWithAudioMuted: audioDevice == null,
             startWithVideoMuted: videoDevice == null,
-            // Request all log levels for inclusion in rageshakes
-            apiLogLevels: ["warn", "log", "error", "info", "debug"],
+            // Request some log levels for inclusion in rageshakes
+            // Ideally we would capture all possible log levels, but this can
+            // cause Jitsi Meet to try to post various circular data structures
+            // back over the iframe API, and therefore end up crashing
+            // https://github.com/jitsi/jitsi-meet/issues/11585
+            apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
     };
