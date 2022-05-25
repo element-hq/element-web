@@ -93,6 +93,7 @@ abstract class BasePart {
         this._text = text;
     }
 
+    // chr can also be a grapheme cluster
     protected acceptsInsertion(chr: string, offset: number, inputType: string): boolean {
         return true;
     }
@@ -128,14 +129,20 @@ abstract class BasePart {
     // append str, returns the remaining string if a character was rejected.
     public appendUntilRejected(str: string, inputType: string): string | undefined {
         const offset = this.text.length;
-        for (let i = 0; i < str.length; ++i) {
-            const chr = str.charAt(i);
-            if (!this.acceptsInsertion(chr, offset + i, inputType)) {
-                this._text = this._text + str.slice(0, i);
-                return str.slice(i);
+        // Take a copy as we will be taking chunks off the start of the string as we process them
+        // To only need to grapheme split the bits of the string we're working on.
+        let buffer = str;
+        while (buffer) {
+            // We use lodash's grapheme splitter to avoid breaking apart compound emojis
+            const [char] = split(buffer, "", 2);
+            if (!this.acceptsInsertion(char, offset + str.length - buffer.length, inputType)) {
+                break;
             }
+            buffer = buffer.slice(char.length);
         }
-        this._text = this._text + str;
+
+        this._text += str.slice(0, str.length - buffer.length);
+        return buffer || undefined;
     }
 
     // inserts str at offset if all the characters in str were accepted, otherwise don't do anything
@@ -361,7 +368,7 @@ class NewlinePart extends BasePart implements IBasePart {
     }
 }
 
-class EmojiPart extends BasePart implements IBasePart {
+export class EmojiPart extends BasePart implements IBasePart {
     protected acceptsInsertion(chr: string, offset: number): boolean {
         return EMOJIBASE_REGEX.test(chr);
     }
@@ -555,7 +562,8 @@ export class PartCreator {
             case "\n":
                 return new NewlinePart();
             default:
-                if (EMOJIBASE_REGEX.test(input[0])) {
+                // We use lodash's grapheme splitter to avoid breaking apart compound emojis
+                if (EMOJIBASE_REGEX.test(split(input, "", 2)[0])) {
                     return new EmojiPart();
                 }
                 return new PlainPart();
