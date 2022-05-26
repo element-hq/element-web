@@ -317,5 +317,15 @@ export enum Action {
     /**
      * Show current room topic
      */
-    ShowRoomTopic = "show_room_topic"
+    ShowRoomTopic = "show_room_topic",
+
+    /**
+     * Fired when the client was logged out. No additional payload information required.
+     */
+    OnLoggedOut = "on_logged_out",
+
+    /**
+     * Fired when the client was logged in. No additional payload information required.
+     */
+    OnLoggedIn = "on_logged_in",
 }

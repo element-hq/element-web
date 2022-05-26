@@ -632,7 +632,7 @@ async function doSetLoggedIn(
         logger.warn("No local storage available: can't persist session!");
     }
 
-    dis.dispatch({ action: 'on_logged_in' });
+    dis.fire(Action.OnLoggedIn);
 
     await startMatrixClient(/*startSyncing=*/!softLogout);
     return client;
@@ -857,15 +857,15 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
  */
 export async function onLoggedOut(): Promise<void> {
     _isLoggingOut = false;
-    // Ensure that we dispatch a view change **before** stopping the client so
+    // Ensure that we dispatch a view change **before** stopping the client,
     // so that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
-    dis.dispatch({ action: 'on_logged_out' }, true);
+    dis.fire(Action.OnLoggedOut, true);
     stopMatrixClient();
     await clearStorage({ deleteEverything: true });
     LifecycleCustomisations.onLoggedOutAndStorageCleared?.();
 
-    // Do this last so we can make sure all storage has been cleared and all
+    // Do this last, so we can make sure all storage has been cleared and all
     // customisations got the memo.
     if (SdkConfig.get().logout_redirect_url) {
         logger.log("Redirecting to external provider to finish logout");

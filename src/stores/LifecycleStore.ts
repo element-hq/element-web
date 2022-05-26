@@ -71,7 +71,7 @@ class LifecycleStore extends Store<ActionPayload> {
                 break;
             }
             case 'on_client_not_viable':
-            case 'on_logged_out':
+            case Action.OnLoggedOut:
                 this.reset();
                 break;
         }

@@ -743,7 +743,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case Action.OpenDialPad:
                 Modal.createTrackedDialog('Dial pad', '', DialPadModal, {}, "mx_Dialog_dialPadWrapper");
                 break;
-            case 'on_logged_in':
+            case Action.OnLoggedIn:
                 if (
                     // Skip this handling for token login as that always calls onLoggedIn itself
                     !this.tokenLogin &&
@@ -759,7 +759,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'on_client_not_viable':
                 this.onSoftLogout();
                 break;
-            case 'on_logged_out':
+            case Action.OnLoggedOut:
                 this.onLoggedOut();
                 break;
             case 'will_start_client':
