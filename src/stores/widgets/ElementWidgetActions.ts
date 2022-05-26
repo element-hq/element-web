@@ -36,6 +36,12 @@ export enum ElementWidgetActions {
     ViewRoom = "io.element.view_room",
 }
 
+export interface IHangupCallApiRequest extends IWidgetApiRequest {
+    data: {
+        errorMessage?: string;
+    };
+}
+
 /**
  * @deprecated Use MSC2931 instead
  */

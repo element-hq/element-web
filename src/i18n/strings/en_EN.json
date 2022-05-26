@@ -831,6 +831,8 @@
     "The person who invited you has already left.": "The person who invited you has already left.",
     "The person who invited you has already left, or their server is offline.": "The person who invited you has already left, or their server is offline.",
     "Failed to join": "Failed to join",
+    "Connection lost": "Connection lost",
+    "You were disconnected from the call. (Error: %(message)s)": "You were disconnected from the call. (Error: %(message)s)",
     "All rooms": "All rooms",
     "Home": "Home",
     "Favourites": "Favourites",

@@ -37,6 +37,7 @@ import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent } from "matrix-js-sdk/src/client";
 
+import { _t } from "../../languageHandler";
 import { StopGapWidgetDriver } from "./StopGapWidgetDriver";
 import { WidgetMessagingStore } from "./WidgetMessagingStore";
 import { RoomViewStore } from "../RoomViewStore";
@@ -50,7 +51,7 @@ import ActiveWidgetStore from "../ActiveWidgetStore";
 import { objectShallowClone } from "../../utils/objects";
 import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
-import { ElementWidgetActions, IViewRoomApiRequest } from "./ElementWidgetActions";
+import { ElementWidgetActions, IHangupCallApiRequest, IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
@@ -60,6 +61,8 @@ import { getUserLanguage } from "../../languageHandler";
 import { WidgetVariableCustomisations } from "../../customisations/WidgetVariables";
 import { arrayFastClone } from "../../utils/arrays";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
+import Modal from "../../Modal";
+import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 
 // TODO: Destroy all of this code
 
@@ -364,6 +367,21 @@ export class StopGapWidget extends EventEmitter {
                         `type_${integType}`,
                         integId,
                     );
+                },
+            );
+        }
+
+        if (WidgetType.JITSI.matches(this.mockWidget.type)) {
+            this.messaging.on(`action:${ElementWidgetActions.HangupCall}`,
+                (ev: CustomEvent<IHangupCallApiRequest>) => {
+                    if (ev.detail.data?.errorMessage) {
+                        Modal.createTrackedDialog("Connection lost", "", ErrorDialog, {
+                            title: _t("Connection lost"),
+                            description: _t("You were disconnected from the call. (Error: %(message)s)", {
+                                message: ev.detail.data.errorMessage,
+                            }),
+                        });
+                    }
                 },
             );
         }
