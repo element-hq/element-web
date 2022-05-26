@@ -35,6 +35,7 @@ const INCLUDE_LANGS = [
     {'value': 'ja', 'label': '日本語'},
     {'value': 'kab', 'label': 'Taqbaylit'},
     {'value': 'ko', 'label': '한국어'},
+    {'value': 'lo', 'label': 'ລາວ'},
     {'value': 'lt', 'label': 'Lietuvių'},
     {'value': 'lv', 'label': 'Latviešu'},
     {'value': 'nb_NO', 'label': 'Norwegian Bokmål'},
