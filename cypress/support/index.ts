@@ -27,3 +27,4 @@ import "./settings";
 import "./bot";
 import "./clipboard";
 import "./util";
+import "./app";

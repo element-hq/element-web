@@ -168,7 +168,7 @@ export async function loadSession(opts: ILoadSessionOpts = {}): Promise<boolean>
  * Gets the user ID of the persisted session, if one exists. This does not validate
  * that the user's credentials still work, just that they exist and that a user ID
  * is associated with them. The session is not loaded.
- * @returns {[String, bool]} The persisted session's owner and whether the stored
+ * @returns {[string, boolean]} The persisted session's owner and whether the stored
  *     session is for a guest user, if an owner exists. If there is no stored session,
  *     return [null, null].
  */
@@ -494,7 +494,7 @@ async function handleLoadSessionFailure(e: Error): Promise<boolean> {
  * Also stops the old MatrixClient and clears old credentials/etc out of
  * storage before starting the new client.
  *
- * @param {MatrixClientCreds} credentials The credentials to use
+ * @param {IMatrixClientCreds} credentials The credentials to use
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
@@ -525,7 +525,7 @@ export async function setLoggedIn(credentials: IMatrixClientCreds): Promise<Matr
  * If the credentials belong to a different user from the session already stored,
  * the old session will be cleared automatically.
  *
- * @param {MatrixClientCreds} credentials The credentials to use
+ * @param {IMatrixClientCreds} credentials The credentials to use
  *
  * @returns {Promise} promise which resolves to the new MatrixClient once it has been started
  */
@@ -731,7 +731,7 @@ export function logout(): void {
     if (MatrixClientPeg.get().isGuest()) {
         // logout doesn't work for guest sessions
         // Also we sometimes want to re-log in a guest session if we abort the login.
-        // defer until next tick because it calls a synchronous dispatch and we are likely here from a dispatch.
+        // defer until next tick because it calls a synchronous dispatch, and we are likely here from a dispatch.
         setImmediate(() => onLoggedOut());
         return;
     }
@@ -739,19 +739,17 @@ export function logout(): void {
     _isLoggingOut = true;
     const client = MatrixClientPeg.get();
     PlatformPeg.get().destroyPickleKey(client.getUserId(), client.getDeviceId());
-    client.logout().then(onLoggedOut,
-        (err) => {
-            // Just throwing an error here is going to be very unhelpful
-            // if you're trying to log out because your server's down and
-            // you want to log into a different server, so just forget the
-            // access token. It's annoying that this will leave the access
-            // token still valid, but we should fix this by having access
-            // tokens expire (and if you really think you've been compromised,
-            // change your password).
-            logger.log("Failed to call logout API: token will not be invalidated");
-            onLoggedOut();
-        },
-    );
+    client.logout(undefined, true).then(onLoggedOut, (err) => {
+        // Just throwing an error here is going to be very unhelpful
+        // if you're trying to log out because your server's down and
+        // you want to log into a different server, so just forget the
+        // access token. It's annoying that this will leave the access
+        // token still valid, but we should fix this by having access
+        // tokens expire (and if you really think you've been compromised,
+        // change your password).
+        logger.warn("Failed to call logout API: token will not be invalidated", err);
+        onLoggedOut();
+    });
 }
 
 export function softLogout(): void {
@@ -856,9 +854,8 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
  * storage. Used after a session has been logged out.
  */
 export async function onLoggedOut(): Promise<void> {
-    _isLoggingOut = false;
     // Ensure that we dispatch a view change **before** stopping the client,
-    // so that React components unmount first. This avoids React soft crashes
+    // that React components unmount first. This avoids React soft crashes
     // that can occur when components try to use a null client.
     dis.fire(Action.OnLoggedOut, true);
     stopMatrixClient();
@@ -869,8 +866,13 @@ export async function onLoggedOut(): Promise<void> {
     // customisations got the memo.
     if (SdkConfig.get().logout_redirect_url) {
         logger.log("Redirecting to external provider to finish logout");
-        window.location.href = SdkConfig.get().logout_redirect_url;
+        // XXX: Defer this so that it doesn't race with MatrixChat unmounting the world by going to /#/login
+        setTimeout(() => {
+            window.location.href = SdkConfig.get().logout_redirect_url;
+        }, 100);
     }
+    // Do this last to prevent racing `stopMatrixClient` and `on_logged_out` with MatrixChat handling Session.logged_out
+    _isLoggingOut = false;
 }
 
 /**
@@ -908,9 +910,7 @@ async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void
         }
     }
 
-    if (window.sessionStorage) {
-        window.sessionStorage.clear();
-    }
+    window.sessionStorage?.clear();
 
     // create a temporary client to clear out the persistent stores.
     const cli = createMatrixClient({
@@ -937,7 +937,7 @@ export function stopMatrixClient(unsetClient = true): void {
     IntegrationManagers.sharedInstance().stopWatching();
     Mjolnir.sharedInstance().stop();
     DeviceListener.sharedInstance().stop();
-    if (DMRoomMap.shared()) DMRoomMap.shared().stop();
+    DMRoomMap.shared()?.stop();
     EventIndexPeg.stop();
     const cli = MatrixClientPeg.get();
     if (cli) {

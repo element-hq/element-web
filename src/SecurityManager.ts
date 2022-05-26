@@ -257,7 +257,7 @@ async function onSecretRequested(
     if (userId !== client.getUserId()) {
         return;
     }
-    if (!deviceTrust || !deviceTrust.isVerified()) {
+    if (!deviceTrust?.isVerified()) {
         logger.log(`Ignoring secret request from untrusted device ${deviceId}`);
         return;
     }
@@ -296,7 +296,7 @@ export const crossSigningCallbacks: ICryptoCallbacks = {
 };
 
 export async function promptForBackupPassphrase(): Promise<Uint8Array> {
-    let key;
+    let key: Uint8Array;
 
     const { finished } = Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
         showSummary: false, keyCallback: k => key = k,

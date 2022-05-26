@@ -39,7 +39,7 @@ describe("User Menu", () => {
 
     it("should contain our name & userId", () => {
         cy.get('[aria-label="User menu"]').click();
-        cy.get(".mx_ContextualMenu").within(() => {
+        cy.get(".mx_UserMenu_contextMenu").within(() => {
             cy.get(".mx_UserMenu_contextMenu_displayName").should("contain", "Jeff");
             cy.get(".mx_UserMenu_contextMenu_userId").should("contain", user.userId);
         });

@@ -18,6 +18,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { ClientEvent, EventType, RoomStateEvent } from "matrix-js-sdk/src/matrix";
+import { SyncState } from "matrix-js-sdk/src/sync";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from "./dispatcher/dispatcher";
@@ -58,13 +59,15 @@ export default class DeviceListener {
     private ourDeviceIdsAtStart: Set<string> = null;
     // The set of device IDs we're currently displaying toasts for
     private displayingToastsForDeviceIds = new Set<string>();
+    private running = false;
 
-    static sharedInstance() {
+    public static sharedInstance() {
         if (!window.mxDeviceListener) window.mxDeviceListener = new DeviceListener();
         return window.mxDeviceListener;
     }
 
-    start() {
+    public start() {
+        this.running = true;
         MatrixClientPeg.get().on(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
         MatrixClientPeg.get().on(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
         MatrixClientPeg.get().on(CryptoEvent.DeviceVerificationChanged, this.onDeviceVerificationChanged);
@@ -77,7 +80,8 @@ export default class DeviceListener {
         this.recheck();
     }
 
-    stop() {
+    public stop() {
+        this.running = false;
         if (MatrixClientPeg.get()) {
             MatrixClientPeg.get().removeListener(CryptoEvent.WillUpdateDevices, this.onWillUpdateDevices);
             MatrixClientPeg.get().removeListener(CryptoEvent.DevicesUpdated, this.onDevicesUpdated);
@@ -109,7 +113,7 @@ export default class DeviceListener {
      *
      * @param {String[]} deviceIds List of device IDs to dismiss notifications for
      */
-    async dismissUnverifiedSessions(deviceIds: Iterable<string>) {
+    public async dismissUnverifiedSessions(deviceIds: Iterable<string>) {
         logger.log("Dismissing unverified sessions: " + Array.from(deviceIds).join(','));
         for (const d of deviceIds) {
             this.dismissed.add(d);
@@ -118,7 +122,7 @@ export default class DeviceListener {
         this.recheck();
     }
 
-    dismissEncryptionSetup() {
+    public dismissEncryptionSetup() {
         this.dismissedThisDeviceToast = true;
         this.recheck();
     }
@@ -179,8 +183,10 @@ export default class DeviceListener {
         }
     };
 
-    private onSync = (state, prevState) => {
-        if (state === 'PREPARED' && prevState === null) this.recheck();
+    private onSync = (state: SyncState, prevState?: SyncState) => {
+        if (state === 'PREPARED' && prevState === null) {
+            this.recheck();
+        }
     };
 
     private onRoomStateEvents = (ev: MatrixEvent) => {
@@ -217,6 +223,7 @@ export default class DeviceListener {
     }
 
     private async recheck() {
+        if (!this.running) return; // we have been stopped
         const cli = MatrixClientPeg.get();
 
         if (!(await cli.doesServerSupportUnstableFeature("org.matrix.e2e_cross_signing"))) return;

@@ -28,7 +28,7 @@ export const range = function(start: number, amount: number, step = 1): Array<nu
     return r;
 };
 
-export const delay = function(ms): Promise<void> {
+export const delay = function(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
@@ -43,17 +43,6 @@ export const measureStop = function(session: ElementSession, name: string): Prom
         window.mxPerformanceMonitor.stop(_name);
     }, name);
 };
-
-// TODO: Proper types on `config` - for some reason won't accept an import of ConfigOptions.
-export async function applyConfigChange(session: ElementSession, config: any): Promise<void> {
-    await session.page.evaluate((_config) => {
-        // note: we can't *set* the object because the window version is effectively a pointer.
-        for (const [k, v] of Object.entries(_config)) {
-            // @ts-ignore - for some reason it's not picking up on global.d.ts types.
-            window.mxReactSdkConfig[k] = v;
-        }
-    }, config);
-}
 
 export async function serializeLog(msg: ConsoleMessage): Promise<string> {
     // 9 characters padding is somewhat arbitrary ("warning".length + some)
