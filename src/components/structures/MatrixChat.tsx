@@ -131,6 +131,7 @@ import { IConfigOptions } from "../../IConfigOptions";
 import { SnakedObject } from "../../utils/SnakedObject";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 import VideoChannelStore from "../../stores/VideoChannelStore";
+import { IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -651,6 +652,20 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             case 'view_user_info':
                 this.viewUser(payload.userId, payload.subAction);
                 break;
+            case "MatrixActions.RoomState.events": {
+                const event = (payload as IRoomStateEventsActionPayload).event;
+                if (event.getType() === EventType.RoomCanonicalAlias &&
+                    event.getRoomId() === this.state.currentRoomId
+                ) {
+                    // re-view the current room so we can update alias/id in the URL properly
+                    this.viewRoom({
+                        action: Action.ViewRoom,
+                        room_id: this.state.currentRoomId,
+                        metricsTrigger: undefined, // room doesn't change
+                    });
+                }
+                break;
+            }
             case Action.ViewRoom: {
                 // Takes either a room ID or room alias: if switching to a room the client is already
                 // known to be in (eg. user clicks on a room in the recents panel), supply the ID
@@ -891,9 +906,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
             // Store this as the ID of the last room accessed. This is so that we can
             // persist which room is being stored across refreshes and browser quits.
-            if (localStorage) {
-                localStorage.setItem('mx_last_room_id', room.roomId);
-            }
+            localStorage?.setItem('mx_last_room_id', room.roomId);
         }
 
         // If we are redirecting to a Room Alias and it is for the room we already showing then replace history item

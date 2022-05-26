@@ -16,7 +16,6 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import "./client"; // XXX: without an (any) import here, types break down
 import Chainable = Cypress.Chainable;
 
 declare global {
@@ -99,3 +98,6 @@ Cypress.Commands.add("leaveBeta", (name: string): Chainable<JQuery<HTMLElement>>
         return cy.get(".mx_BetaCard_buttons").contains("Leave the beta").click();
     });
 });
+
+// Needed to make this file a module
+export { };

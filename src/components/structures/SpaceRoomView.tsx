@@ -60,7 +60,7 @@ import {
     defaultDmsRenderer,
     defaultRoomsRenderer,
 } from "../views/dialogs/AddExistingToSpaceDialog";
-import AccessibleButton from "../views/elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
 import ErrorBoundary from "../views/elements/ErrorBoundary";
 import Field from "../views/elements/Field";
@@ -295,7 +295,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         />;
     });
 
-    const onNextClick = async (ev) => {
+    const onNextClick = async (ev: ButtonEvent) => {
         ev.preventDefault();
         if (busy) return;
         setError("");
@@ -326,7 +326,7 @@ const SpaceSetupFirstRooms = ({ space, title, description, onFinished }) => {
         setBusy(false);
     };
 
-    let onClick = (ev) => {
+    let onClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         onFinished();
     };

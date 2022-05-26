@@ -18,6 +18,7 @@ import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { IRoomTimelineData } from "matrix-js-sdk/src/models/event-timeline-set";
+import { RoomState, RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 
 import dis from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
@@ -176,6 +177,21 @@ export interface IRoomTimelineActionPayload extends Pick<ActionPayload, "action"
 }
 
 /**
+ * @typedef IRoomStateEventsActionPayload
+ * @type {Object}
+ * @property {string} action 'MatrixActions.RoomState.events'.
+ * @property {MatrixEvent} event the state event received
+ * @property {RoomState} state the room state into which the event was applied
+ * @property {MatrixEvent | null} lastStateEvent the previous value for this (event-type, state-key) tuple in room state
+ */
+export interface IRoomStateEventsActionPayload extends Pick<ActionPayload, "action"> {
+    action: 'MatrixActions.RoomState.events';
+    event: MatrixEvent;
+    state: RoomState;
+    lastStateEvent: MatrixEvent | null;
+}
+
+/**
  * Create a MatrixActions.Room.timeline action that represents a
  * MatrixClient `Room.timeline` matrix event, emitted when an event
  * is added to or removed from a timeline of a room.
@@ -207,6 +223,31 @@ function createRoomTimelineAction(
         isLiveEvent: data.liveEvent,
         isLiveUnfilteredRoomTimelineEvent: room && data.timeline.getTimelineSet() === room.getUnfilteredTimelineSet(),
         room,
+    };
+}
+
+/**
+ * Create a MatrixActions.Room.timeline action that represents a
+ * MatrixClient `Room.timeline` matrix event, emitted when an event
+ * is added to or removed from a timeline of a room.
+ *
+ * @param {MatrixClient} matrixClient the matrix client.
+ * @param {MatrixEvent} event the state event received
+ * @param {RoomState} state the room state into which the event was applied
+ * @param {MatrixEvent | null} lastStateEvent the previous value for this (event-type, state-key) tuple in room state
+ * @returns {IRoomStateEventsActionPayload} an action of type `MatrixActions.RoomState.events`.
+ */
+function createRoomStateEventsAction(
+    matrixClient: MatrixClient,
+    event: MatrixEvent,
+    state: RoomState,
+    lastStateEvent: MatrixEvent | null,
+): IRoomStateEventsActionPayload {
+    return {
+        action: 'MatrixActions.RoomState.events',
+        event,
+        state,
+        lastStateEvent,
     };
 }
 
@@ -312,6 +353,7 @@ export default {
         addMatrixClientListener(matrixClient, RoomEvent.Timeline, createRoomTimelineAction);
         addMatrixClientListener(matrixClient, RoomEvent.MyMembership, createSelfMembershipAction);
         addMatrixClientListener(matrixClient, MatrixEventEvent.Decrypted, createEventDecryptedAction);
+        addMatrixClientListener(matrixClient, RoomStateEvent.Events, createRoomStateEventsAction);
     },
 
     /**

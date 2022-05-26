@@ -36,6 +36,12 @@ declare global {
              */
             createRoom(options: ICreateRoomOpts): Chainable<string>;
             /**
+             * Create a space with given options.
+             * @param options the options to apply when creating the space
+             * @return the ID of the newly created space (room)
+             */
+            createSpace(options: ICreateRoomOpts): Chainable<string>;
+            /**
              * Invites the given user to the given room.
              * @param roomId the id of the room to invite to
              * @param userId the id of the user to invite
@@ -68,6 +74,15 @@ Cypress.Commands.add("createRoom", (options: ICreateRoomOpts): Chainable<string>
         }
 
         return roomId;
+    });
+});
+
+Cypress.Commands.add("createSpace", (options: ICreateRoomOpts): Chainable<string> => {
+    return cy.createRoom({
+        ...options,
+        creation_content: {
+            "type": "m.space",
+        },
     });
 });
 

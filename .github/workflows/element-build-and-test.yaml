@@ -71,6 +71,7 @@ jobs:
           # to run the tests, so use chrome.
           browser: chrome
           start: npx serve -p 8080 webapp
+          wait-on: 'http://localhost:8080'
           record: true
           command-prefix: 'yarn percy exec --'
         env:
@@ -83,6 +84,8 @@ jobs:
           PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
           # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # make Node's os.tmpdir() return something where we actually have permissions
+          TMPDIR: ${{ runner.temp }}
 
       - name: Upload Artifact
         if: failure()

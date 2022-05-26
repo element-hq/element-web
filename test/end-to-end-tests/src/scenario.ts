@@ -24,7 +24,6 @@ import { e2eEncryptionScenarios } from './scenarios/e2e-encryption';
 import { ElementSession } from "./session";
 import { RestSessionCreator } from "./rest/creator";
 import { RestMultiSession } from "./rest/multi";
-import { spacesScenarios } from './scenarios/spaces';
 import { RestSession } from "./rest/session";
 import { stickerScenarios } from './scenarios/sticker';
 import { userViewScenarios } from "./scenarios/user-view";
@@ -56,8 +55,6 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
     console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);
     await lazyLoadingScenarios(alice, bob, charlies);
-    // do spaces scenarios last as the rest of the alice/bob tests may get confused by spaces
-    await spacesScenarios(alice, bob);
 
     // we spawn another session for stickers, partially because it involves injecting
     // a custom sticker picker widget for the account, although mostly because for these

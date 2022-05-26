@@ -524,8 +524,13 @@ export const useRoomHierarchy = (space: Room): {
         setRooms(hierarchy.rooms);
     }, [error, hierarchy]);
 
-    const loading = hierarchy?.loading ?? true;
-    return { loading, rooms, hierarchy, loadMore, error };
+    return {
+        loading: hierarchy?.loading ?? true,
+        rooms,
+        hierarchy: hierarchy?.root === space ? hierarchy : undefined,
+        loadMore,
+        error,
+    };
 };
 
 const useIntersectionObserver = (callback: () => void) => {

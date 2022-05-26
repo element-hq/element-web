@@ -1137,15 +1137,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!this.state.room || this.state.room.roomId !== state.roomId) return;
 
         switch (ev.getType()) {
-            case EventType.RoomCanonicalAlias:
-                // re-view the room so MatrixChat can manage the alias in the URL properly
-                dis.dispatch<ViewRoomPayload>({
-                    action: Action.ViewRoom,
-                    room_id: this.state.room.roomId,
-                    metricsTrigger: undefined, // room doesn't change
-                });
-                break;
-
             case EventType.RoomTombstone:
                 this.setState({ tombstone: this.getRoomTombstone() });
                 break;

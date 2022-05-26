@@ -87,8 +87,8 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
 
         // Wait for message to send, get its ID and save as @threadId
-        cy.get(".mx_RoomView_body .mx_EventTile").contains("Hello Mr. Bot")
-            .closest(".mx_EventTile[data-scroll-tokens]").invoke("attr", "data-scroll-tokens").as("threadId");
+        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+            .invoke("attr", "data-scroll-tokens").as("threadId");
 
         // Bot starts thread
         cy.get<string>("@threadId").then(threadId => {
@@ -111,7 +111,7 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should("contain", "Test");
 
         // User reacts to message instead
-        cy.get(".mx_ThreadView .mx_EventTile").contains("Hello there").closest(".mx_EventTile_line")
+        cy.get(".mx_ThreadView .mx_EventTile").contains(".mx_EventTile_line", "Hello there")
             .find('[aria-label="React"]').click({ force: true }); // Cypress has no ability to hover
         cy.get(".mx_EmojiPicker").within(() => {
             cy.get('input[type="text"]').type("wave");
@@ -119,7 +119,7 @@ describe("Threads", () => {
         });
 
         // User redacts their prior response
-        cy.get(".mx_ThreadView .mx_EventTile").contains("Test").closest(".mx_EventTile_line")
+        cy.get(".mx_ThreadView .mx_EventTile").contains(".mx_EventTile_line", "Test")
             .find('[aria-label="Options"]').click({ force: true }); // Cypress has no ability to hover
         cy.get(".mx_IconizedContextMenu").within(() => {
             cy.get('[role="menuitem"]').contains("Remove").click();
@@ -166,7 +166,7 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should("contain", "Great!");
 
         // User edits & asserts
-        cy.get(".mx_ThreadView .mx_EventTile_last").contains("Great!").closest(".mx_EventTile_line").within(() => {
+        cy.get(".mx_ThreadView .mx_EventTile_last").contains(".mx_EventTile_line", "Great!").within(() => {
             cy.get('[aria-label="Edit"]').click({ force: true }); // Cypress has no ability to hover
             cy.get(".mx_BasicMessageComposer_input").type(" How about yourself?{enter}");
         });

@@ -66,9 +66,6 @@ async function cfgDirFromTemplate(template: string): Promise<SynapseConfig> {
     }
     const tempDir = await fse.mkdtemp(path.join(os.tmpdir(), 'react-sdk-synapsedocker-'));
 
-    // change permissions on the temp directory so the docker container can see its contents
-    await fse.chmod(tempDir, 0o777);
-
     // copy the contents of the template dir, omitting homeserver.yaml as we'll template that
     console.log(`Copy ${templateDir} -> ${tempDir}`);
     await fse.copy(templateDir, tempDir, { filter: f => path.basename(f) !== 'homeserver.yaml' });
@@ -113,6 +110,7 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
     console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
 
     const containerName = `react-sdk-cypress-synapse-${crypto.randomBytes(4).toString("hex")}`;
+    const userInfo = os.userInfo();
 
     const synapseId = await new Promise<string>((resolve, reject) => {
         childProcess.execFile('docker', [
@@ -121,6 +119,8 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
             "-d",
             "-v", `${synCfg.configDir}:/data`,
             "-p", `${synCfg.port}:8008/tcp`,
+            // We run the docker container as our uid:gid otherwise cleaning it up its media_store can be difficult
+            "-u", `${userInfo.uid}:${userInfo.gid}`,
             "matrixdotorg/synapse:develop",
             "run",
         ], (err, stdout) => {
@@ -128,8 +128,6 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
             resolve(stdout.trim());
         });
     });
-
-    synapses.set(synapseId, { synapseId, ...synCfg });
 
     console.log(`Started synapse with id ${synapseId} on port ${synCfg.port}.`);
 
@@ -150,7 +148,9 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
         });
     });
 
-    return synapses.get(synapseId);
+    const synapse: SynapseInstance = { synapseId, ...synCfg };
+    synapses.set(synapseId, synapse);
+    return synapse;
 }
 
 async function synapseStop(id: string): Promise<void> {
