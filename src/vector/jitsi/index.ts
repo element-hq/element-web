@@ -74,7 +74,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             if (!optional && vals.length !== 1) {
                 throw new Error(`Expected singular ${name} in query string`);
             }
-            return <string>vals[0];
+            return vals[0];
         };
 
         // If we have these params, expect a widget API to be available (ie. to be in an iframe
@@ -153,6 +153,15 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             widgetApi.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     meetApi?.executeCommand('hangup');
+                    ack(ev);
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.ForceHangupCall}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    meetApi?.dispose();
+                    notifyHangup();
+                    meetApi = null;
+                    closeConference();
                     ack(ev);
                 },
             );
@@ -291,12 +300,12 @@ function createJWTToken() {
     );
 }
 
-async function notifyHangup() {
+async function notifyHangup(errorMessage?: string) {
     if (widgetApi) {
         // We send the hangup event before setAlwaysOnScreen, because the latter
         // can cause the receiving side to instantly stop listening.
         try {
-            await widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+            await widgetApi.transport.send(ElementWidgetActions.HangupCall, { errorMessage });
         } finally {
             await widgetApi.setAlwaysOnScreen(false);
         }
@@ -357,6 +366,12 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             startAudioOnly,
             startWithAudioMuted: audioDevice == null,
             startWithVideoMuted: videoDevice == null,
+            // Request some log levels for inclusion in rageshakes
+            // Ideally we would capture all possible log levels, but this can
+            // cause Jitsi Meet to try to post various circular data structures
+            // back over the iframe API, and therefore end up crashing
+            // https://github.com/jitsi/jitsi-meet/issues/11585
+            apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
     };
@@ -403,7 +418,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         if (error.isFatal) {
             // We got disconnected. Since Jitsi Meet might send us back to the
             // prejoin screen, we're forced to act as if we hung up entirely.
-            notifyHangup();
+            notifyHangup(error.message);
             meetApi = null;
             closeConference();
         }
@@ -411,7 +426,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
 
     meetApi.on("audioMuteStatusChanged", ({ muted }) => {
         const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
-        widgetApi.transport.send(action, {});
+        widgetApi?.transport.send(action, {});
     });
 
     meetApi.on("videoMuteStatusChanged", ({ muted }) => {
@@ -421,10 +436,10 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             // otherwise the React SDK will mistakenly think the user turned off
             // their video by hand
             setTimeout(() => {
-                if (meetApi) widgetApi.transport.send(ElementWidgetActions.MuteVideo, {});
+                if (meetApi) widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
             }, 200);
         } else {
-            widgetApi.transport.send(ElementWidgetActions.UnmuteVideo, {});
+            widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
         }
     });
 
@@ -435,4 +450,9 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             });
         });
     });
+
+    // Patch logs into rageshakes
+    meetApi.on("log", ({ logLevel, args }) =>
+        (parent as unknown as typeof global).mx_rage_logger?.log(logLevel, ...args),
+    );
 }

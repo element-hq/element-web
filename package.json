@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.10.12",
+  "version": "1.10.13",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -49,7 +49,8 @@
     "lint:js-fix": "eslint --fix src",
     "lint:types": "tsc --noEmit --jsx react",
     "lint:style": "stylelint \"res/css/**/*.scss\"",
-    "test": "jest"
+    "test": "jest",
+    "coverage": "yarn test --coverage"
   },
   "dependencies": {
     "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
@@ -119,6 +120,7 @@
     "jest": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "jest-raw-loader": "^1.0.1",
+    "jest-sonar-reporter": "^2.0.0",
     "json-loader": "^0.5.7",
     "loader-utils": "^1.4.0",
     "matrix-mock-request": "^1.2.3",
@@ -190,6 +192,15 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
       "/node_modules/(?!matrix-react-sdk).+$"
-    ]
+    ],
+    "coverageReporters": [
+      "text-summary",
+      "lcov"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "sonar56x": true
   }
 }
