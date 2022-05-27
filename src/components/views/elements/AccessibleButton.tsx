@@ -85,6 +85,7 @@ export default function AccessibleButton({
     const newProps: IAccessibleButtonProps = restProps;
     if (disabled) {
         newProps["aria-disabled"] = true;
+        newProps["disabled"] = true;
     } else {
         if (triggerOnMouseDown) {
             newProps.onMouseDown = onClick;

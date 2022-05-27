@@ -186,6 +186,28 @@ describe("LocationPicker", () => {
                     expect(wrapper.find('MemberAvatar').length).toBeTruthy();
                 });
 
+                it('disables submit button until geolocation completes', () => {
+                    const onChoose = jest.fn();
+                    const wrapper = getComponent({ shareType, onChoose });
+
+                    // submit button is enabled when position is truthy
+                    expect(findByTestId(wrapper, 'location-picker-submit-button').at(0).props().disabled).toBeTruthy();
+                    act(() => {
+                        findByTestId(wrapper, 'location-picker-submit-button').at(0).simulate('click');
+                    });
+                    // nothing happens on button click
+                    expect(onChoose).not.toHaveBeenCalled();
+
+                    act(() => {
+                        // @ts-ignore
+                        mocked(mockGeolocate).emit('geolocate', mockGeolocationPosition);
+                        wrapper.setProps({});
+                    });
+
+                    // submit button is enabled when position is truthy
+                    expect(findByTestId(wrapper, 'location-picker-submit-button').at(0).props().disabled).toBeFalsy();
+                });
+
                 it('submits location', () => {
                     const onChoose = jest.fn();
                     const wrapper = getComponent({ onChoose, shareType });

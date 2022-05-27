@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AccessibleButton /> renders a button element 1`] = `
+<AccessibleButton
+  element="button"
+  onClick={[MockFunction]}
+  role="button"
+  tabIndex={0}
+>
+  <button
+    className="mx_AccessibleButton"
+    onClick={[MockFunction]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    i am a button
+  </button>
+</AccessibleButton>
+`;
+
+exports[`<AccessibleButton /> renders div with role button by default 1`] = `
+<AccessibleButton
+  element="div"
+  onClick={[MockFunction]}
+  role="button"
+  tabIndex={0}
+>
+  <div
+    className="mx_AccessibleButton"
+    onClick={[MockFunction]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    i am a button
+  </div>
+</AccessibleButton>
+`;
+
+exports[`<AccessibleButton /> renders with correct classes when button has kind 1`] = `
+<AccessibleButton
+  element="div"
+  kind="primary"
+  onClick={[MockFunction]}
+  role="button"
+  tabIndex={0}
+>
+  <div
+    className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary"
+    onClick={[MockFunction]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    i am a button
+  </div>
+</AccessibleButton>
+`;

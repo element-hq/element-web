@@ -89,6 +89,7 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
       aria-disabled={true}
       className="mx_AccessibleButton mx_EnableLiveShare_button mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary mx_AccessibleButton_disabled"
       data-test-id="enable-live-share-submit"
+      disabled={true}
       role="button"
       tabIndex={0}
     >

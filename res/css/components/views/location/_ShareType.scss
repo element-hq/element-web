@@ -63,14 +63,6 @@ limitations under the License.
     &:hover, &:focus {
         border-color: $accent;
     }
-
-    // this style is only during active development
-    // when lab is enabled but feature not fully implemented
-    // pin drop option will be disabled
-    &.mx_AccessibleButton_disabled {
-        pointer-events: none;
-        opacity: 0.4;
-    }
 }
 
 .mx_ShareType_option-icon {
