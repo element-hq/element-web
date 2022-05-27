@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unitTest version="1">
+  <file path="/Users/kerry/code/element-web/test/unit-tests/vector/platform/WebPlatform-test.ts">
+    <testCase name="WebPlatform returns human readable name" duration="0"/>
+    <testCase name="WebPlatform notification support supportsNotifications returns false when platform does not support notifications" duration="0"/>
+    <testCase name="WebPlatform notification support supportsNotifications returns true when platform supports notifications" duration="0"/>
+    <testCase name="WebPlatform notification support maySendNotifications returns true when notification permissions are not granted" duration="0"/>
+    <testCase name="WebPlatform notification support maySendNotifications returns true when notification permissions are granted" duration="0"/>
+    <testCase name="WebPlatform notification support requests notification permissions and returns result " duration="0"/>
+    <testCase name="WebPlatform pollForUpdate() getAppVersion returns normalized app version" duration="0"/>
+    <testCase name="WebPlatform pollForUpdate() pollForUpdate() should return not available and call showNoUpdate when current version matches most recent version" duration="2"/>
+    <testCase name="WebPlatform pollForUpdate() pollForUpdate() should strip v prefix from versions before comparing" duration="0"/>
+    <testCase name="WebPlatform pollForUpdate() pollForUpdate() should return ready and call showUpdate when current version differs from most recent version" duration="1"/>
+    <testCase name="WebPlatform pollForUpdate() pollForUpdate() should return ready without showing update when user registered in last 24" duration="1"/>
+    <testCase name="WebPlatform pollForUpdate() pollForUpdate() should return error when version check fails" duration="3"/>
+  </file>
+</unitTest>
