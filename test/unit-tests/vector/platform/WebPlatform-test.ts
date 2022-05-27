@@ -72,11 +72,12 @@ describe('WebPlatform', () => {
 
     });
 
-    fdescribe('pollForUpdate()', () => {
+    describe('app version', () => {
         const envVersion = process.env.VERSION;
         const prodVersion = '1.10.13';
 
-        const setRequestMockImplementation = (err?, response?, body?) => request.mockImplementation((opts, callback) => callback(err, response, body));
+        const setRequestMockImplementation = (err?: unknown, response?: { status: number }, body?: string) =>
+            request.mockImplementation((_opts, callback) => callback(err, response, body));
 
         beforeEach(() => {
             jest.spyOn(MatrixClientPeg, 'userRegisteredWithinLastHours').mockReturnValue(false);
@@ -84,6 +85,12 @@ describe('WebPlatform', () => {
 
         afterAll(() => {
             process.env.VERSION = envVersion;
+        });
+
+        it('should return true from canSelfUpdate()', async () => {
+            const platform = new WebPlatform();
+            const result = await platform.canSelfUpdate();
+            expect(result).toBe(true);
         });
 
         it('getAppVersion returns normalized app version', async () => {
