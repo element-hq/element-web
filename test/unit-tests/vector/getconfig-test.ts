@@ -13,10 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import request from 'browser-request';
 
 import { getVectorConfig } from "../../../src/vector/getconfig";
-
 
 describe('getVectorConfig()', () => {
     const setRequestMockImplementationOnce = (err?: unknown, response?: { status: number }, body?: string) =>
@@ -24,9 +24,7 @@ describe('getVectorConfig()', () => {
 
     const prevDocumentDomain = document.domain;
     const elementDomain = 'app.element.io';
-
     const now = 1234567890;
-
     const specificConfig = {
         brand: 'specific',
     }
