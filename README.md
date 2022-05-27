@@ -185,6 +185,29 @@ Ensure you've followed the above development instructions and then:
 yarn test
 ```
 
+### Running lint
+
+To check your code complies with the project style, ensure you've followed the
+above development instructions and then:
+
+```bash
+yarn lint
+```
+
+### Dependency problems
+
+If you see errors (particularly "Cannot find module") running the lint or test
+commands, and `yarn install` doesn't fix them, it may be because
+yarn is not fetching git dependencies eagerly enough.
+
+Try running this:
+
+```bash
+yarn cache clean && yarn install --force
+```
+
+Now the yarn commands should work as normal.
+
 ### End-to-End tests
 
 Make sure you've got your Element development server running (by doing `yarn
