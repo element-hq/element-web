@@ -19,9 +19,9 @@ import { Beacon } from 'matrix-js-sdk/src/matrix';
 import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
-import CopyableText from '../elements/CopyableText';
 import BeaconStatus from './BeaconStatus';
 import { BeaconDisplayStatus } from './displayStatus';
+import ShareLatestLocation from './ShareLatestLocation';
 
 interface Props {
     beacon: Beacon;
@@ -50,10 +50,7 @@ const BeaconStatusTooltip: React.FC<Props> = ({ beacon }) => {
             displayLiveTimeRemaining
             className='mx_BeaconStatusTooltip_inner'
         >
-            <CopyableText
-                border={false}
-                getTextToCopy={() => beacon.latestLocationState?.uri}
-            />
+            <ShareLatestLocation latestLocationState={beacon.latestLocationState} />
         </BeaconStatus>
     </div>;
 };

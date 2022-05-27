@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ShareLatestLocation /> renders share buttons when there is a location 1`] = `
+<ShareLatestLocation
+  latestLocationState={
+    Object {
+      "timestamp": 123,
+      "uri": "geo:51,42;u=35",
+    }
+  }
+>
+  <TooltipTarget
+    label="Open in OpenStreetMap"
+  >
+    <div
+      onBlur={[Function]}
+      onFocus={[Function]}
+      onMouseLeave={[Function]}
+      onMouseMove={[Function]}
+      onMouseOver={[Function]}
+      tabIndex={0}
+    >
+      <a
+        data-test-id="open-location-in-osm"
+        href="https://www.openstreetmap.org/?mlat=51&mlon=42#map=16/51/42"
+        rel="noreferrer noopener"
+        target="_blank"
+      >
+        <div
+          className="mx_ShareLatestLocation_icon"
+        />
+      </a>
+    </div>
+  </TooltipTarget>
+  <CopyableText
+    border={false}
+    className="mx_ShareLatestLocation_copy"
+    getTextToCopy={[Function]}
+  >
+    <div
+      className="mx_CopyableText mx_ShareLatestLocation_copy"
+    >
+      <AccessibleTooltipButton
+        className="mx_CopyableText_copyButton"
+        onClick={[Function]}
+        onHideTooltip={[Function]}
+        title="Copy"
+      >
+        <AccessibleButton
+          aria-label="Copy"
+          className="mx_CopyableText_copyButton"
+          element="div"
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onMouseLeave={[Function]}
+          onMouseOver={[Function]}
+          role="button"
+          tabIndex={0}
+        >
+          <div
+            aria-label="Copy"
+            className="mx_AccessibleButton mx_CopyableText_copyButton"
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseLeave={[Function]}
+            onMouseOver={[Function]}
+            role="button"
+            tabIndex={0}
+          />
+        </AccessibleButton>
+      </AccessibleTooltipButton>
+    </div>
+  </CopyableText>
+</ShareLatestLocation>
+`;

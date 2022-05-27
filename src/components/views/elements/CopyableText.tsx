@@ -27,9 +27,10 @@ interface IProps {
     children?: React.ReactNode;
     getTextToCopy: () => string;
     border?: boolean;
+    className?: string;
 }
 
-const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border=true }) => {
+const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border=true, className }) => {
     const [tooltip, setTooltip] = useState<string | undefined>(undefined);
 
     const onCopyClickInternal = async (e: ButtonEvent) => {
@@ -44,11 +45,11 @@ const CopyableText: React.FC<IProps> = ({ children, getTextToCopy, border=true }
         }
     };
 
-    const className = classNames("mx_CopyableText", {
+    const combinedClassName = classNames("mx_CopyableText", className, {
         mx_CopyableText_border: border,
     });
 
-    return <div className={className}>
+    return <div className={combinedClassName}>
         { children }
         <AccessibleTooltipButton
             title={tooltip ?? _t("Copy")}

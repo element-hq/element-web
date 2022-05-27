@@ -50,7 +50,7 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
 import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
-import { createMapSiteLink } from '../../../utils/location';
+import { createMapSiteLinkFromEvent } from '../../../utils/location';
 
 interface IProps extends IPosition {
     chevronFace: ChevronFace;
@@ -360,7 +360,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
         let openInMapSiteButton: JSX.Element;
         if (this.canOpenInMapSite(mxEvent)) {
-            const mapSiteLink = createMapSiteLink(mxEvent);
+            const mapSiteLink = createMapSiteLinkFromEvent(mxEvent);
             openInMapSiteButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconOpenInMapSite"

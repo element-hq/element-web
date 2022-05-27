@@ -65,7 +65,7 @@ export const createMarker = (coords: GeolocationCoordinates, element: HTMLElemen
     return marker;
 };
 
-const makeLink = (coords: GeolocationCoordinates): string => {
+export const makeMapSiteLink = (coords: GeolocationCoordinates): string => {
     return (
         "https://www.openstreetmap.org/" +
         `?mlat=${coords.latitude}` +
@@ -74,18 +74,18 @@ const makeLink = (coords: GeolocationCoordinates): string => {
     );
 };
 
-export const createMapSiteLink = (event: MatrixEvent): string => {
+export const createMapSiteLinkFromEvent = (event: MatrixEvent): string => {
     const content: Object = event.getContent();
     const mLocation = content[M_LOCATION.name];
     if (mLocation !== undefined) {
         const uri = mLocation["uri"];
         if (uri !== undefined) {
-            return makeLink(parseGeoUri(uri));
+            return makeMapSiteLink(parseGeoUri(uri));
         }
     } else {
         const geoUri = content["geo_uri"];
         if (geoUri) {
-            return makeLink(parseGeoUri(geoUri));
+            return makeMapSiteLink(parseGeoUri(geoUri));
         }
     }
     return null;

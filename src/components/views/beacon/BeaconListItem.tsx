@@ -23,10 +23,10 @@ import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { humanizeTime } from '../../../utils/humanize';
 import { _t } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
-import CopyableText from '../elements/CopyableText';
 import BeaconStatus from './BeaconStatus';
 import { BeaconDisplayStatus } from './displayStatus';
 import StyledLiveBeaconIcon from './StyledLiveBeaconIcon';
+import ShareLatestLocation from './ShareLatestLocation';
 
 interface Props {
     beacon: Beacon;
@@ -69,10 +69,7 @@ const BeaconListItem: React.FC<Props> = ({ beacon }) => {
                 label={beaconMember?.name || beacon.beaconInfo.description || beacon.beaconInfoOwner}
                 displayStatus={BeaconDisplayStatus.Active}
             >
-                <CopyableText
-                    border={false}
-                    getTextToCopy={() => latestLocationState?.uri}
-                />
+                <ShareLatestLocation latestLocationState={latestLocationState} />
             </BeaconStatus>
             <span className='mx_BeaconListItem_lastUpdated'>{ _t("Updated %(humanizedUpdateTime)s", { humanizedUpdateTime }) }</span>
         </div>

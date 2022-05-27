@@ -14,19 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_BeaconStatusTooltip {
-    position: absolute;
-    top: 42px;
-    max-width: 150px;
-    height: 38px;
-    box-sizing: content-box;
-    padding-top: $spacing-8;
+.mx_ShareLatestLocation_icon {
+    height: 13px;
+    width: 13px;
+    color: $secondary-content;
 }
 
-.mx_BeaconStatusTooltip_inner {
-    position: relative;
-    height: 100%;
-    border-radius: 4px;
-    background: $menu-bg-color;
-    box-shadow: 4px 4px 12px 0 $menu-box-shadow-color;
+.mx_ShareLatestLocation_copy {
+    // override copyable text style to make compact
+    .mx_CopyableText_copyButton {
+        margin-left: $spacing-8 !important;
+    }
 }
