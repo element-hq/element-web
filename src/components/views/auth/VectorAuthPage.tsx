@@ -15,35 +15,34 @@ limitations under the License.
 */
 
 import React, { CSSProperties } from 'react';
-import * as sdk from 'matrix-react-sdk/src/index';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
-export default class VectorAuthPage extends React.PureComponent {
-    static replaces = 'AuthPage';
+import VectorAuthFooter from "./VectorAuthFooter";
 
-    static welcomeBackgroundUrl;
+export default class VectorAuthPage extends React.PureComponent {
+    private static welcomeBackgroundUrl;
 
     // cache the url as a static to prevent it changing without refreshing
-    static getWelcomeBackgroundUrl() {
+    private static getWelcomeBackgroundUrl() {
         if (VectorAuthPage.welcomeBackgroundUrl) return VectorAuthPage.welcomeBackgroundUrl;
 
-        const brandingConfig = SdkConfig.get().branding;
+        const brandingConfig = SdkConfig.getObject("branding");
         VectorAuthPage.welcomeBackgroundUrl = "themes/element/img/backgrounds/lake.jpg";
-        if (brandingConfig && brandingConfig.welcomeBackgroundUrl) {
-            if (Array.isArray(brandingConfig.welcomeBackgroundUrl)) {
-                const index = Math.floor(Math.random() * brandingConfig.welcomeBackgroundUrl.length);
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl[index];
+
+        const configuredUrl = brandingConfig?.get("welcome_background_url");
+        if (configuredUrl) {
+            if (Array.isArray(configuredUrl)) {
+                const index = Math.floor(Math.random() * configuredUrl.length);
+                VectorAuthPage.welcomeBackgroundUrl = configuredUrl[index];
             } else {
-                VectorAuthPage.welcomeBackgroundUrl = brandingConfig.welcomeBackgroundUrl;
+                VectorAuthPage.welcomeBackgroundUrl = configuredUrl;
             }
         }
 
         return VectorAuthPage.welcomeBackgroundUrl;
     }
 
-    render() {
-        const AuthFooter = sdk.getComponent('auth.AuthFooter');
-
+    public render() {
         const pageStyle = {
             background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
         };
@@ -78,7 +77,7 @@ export default class VectorAuthPage extends React.PureComponent {
                         { this.props.children }
                     </div>
                 </div>
-                <AuthFooter />
+                <VectorAuthFooter />
             </div>
         );
     }

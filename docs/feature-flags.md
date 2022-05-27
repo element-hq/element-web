@@ -35,7 +35,7 @@ clients commit to doing the associated clean up work once a feature stabilises.
 When starting work on a feature, we should create a matching feature flag:
 
 1. Add a new
-   [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.ts)
+   [setting](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.tsx)
    of the form:
 ```js
     "feature_cats": {
@@ -81,7 +81,7 @@ configs.
 
 **Note:** The above will only enable the feature for https://app.element.io and official Element
 Desktop builds. It will not be enabled for self-hosted installed, custom desktop builds, etc. To
-cover these cases, change the setting's `default` in `Settings.ts` to `true`.
+cover these cases, change the setting's `default` in `Settings.tsx` to `true`.
 
 ## Feature deployed successfully
 

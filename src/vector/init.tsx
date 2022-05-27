@@ -63,7 +63,12 @@ export async function loadConfig() {
     // granular settings are loaded correctly and to avoid duplicating the override logic for the theme.
     //
     // Note: this isn't called twice for some wrappers, like the Jitsi wrapper.
-    SdkConfig.put(await PlatformPeg.get().getConfig() || {});
+    const platformConfig = await PlatformPeg.get().getConfig();
+    if (platformConfig) {
+        SdkConfig.put(platformConfig);
+    } else {
+        SdkConfig.unset(); // clears the config (sets to empty object)
+    }
 }
 
 export function loadOlm(): Promise<void> {
@@ -120,27 +125,6 @@ export async function loadLanguage() {
     } catch (e) {
         logger.error("Unable to set language", e);
     }
-}
-
-export async function loadSkin() {
-    // Ensure the skin is the very first thing to load for the react-sdk. We don't even want to reference
-    // the SDK until we have to in imports.
-    logger.log("Loading skin...");
-    // load these async so that its code is not executed immediately and we can catch any exceptions
-    const [sdk, skin] = await Promise.all([
-        import(
-            /* webpackChunkName: "matrix-react-sdk" */
-            /* webpackPreload: true */
-            "matrix-react-sdk"),
-        import(
-            /* webpackChunkName: "element-web-component-index" */
-            /* webpackPreload: true */
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore - this module is generated so may fail lint
-            "../component-index"),
-    ]);
-    sdk.loadSkin(skin);
-    logger.log("Skin loaded!");
 }
 
 export async function loadTheme() {

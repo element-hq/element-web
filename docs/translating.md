@@ -18,7 +18,6 @@
 2. After registering check if you got an email to verify your account and click the link (if there is none head to step 1.4)
 3. Log into weblate
 4. Head to https://translate.element.io/accounts/profile/ and select the languages you know and maybe another language you know too.
-6. Head to https://translate.element.io/accounts/profile/#subscriptions and select Element Web as Project
 
 ## How to check if your language already is being translated
 
@@ -62,4 +61,4 @@ You can use inside the translation field "Review needed" checkbox. It will be sh
 
 ### Further reading
 
-The official Weblate doc provides some more in-deepth explanation on how to do translations and talks about do and don'ts. You can find it at: https://docs.weblate.org/en/latest/user/translating.html
+The official Weblate doc provides some more in-depth explanation on how to do translations and talks about do and don'ts. You can find it at: https://docs.weblate.org/en/latest/user/translating.html

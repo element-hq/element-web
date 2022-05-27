@@ -6,7 +6,7 @@ Element app via CSS & custom imagery.
 
 They are *NOT* co be confused with 'skins', which describe apps which sit on top
 of matrix-react-sdk - e.g. in theory Element itself is a react-sdk skin.
-As of Jan 2017, skins are not fully supported; Element is the only available skin.
+As of March 2022, skins are not fully supported; Element is the only available skin.
 
 To define a theme for Element:
 
@@ -36,7 +36,7 @@ default theme, you would use `default_theme: "custom-Electric Blue"`.
 eg. in config.json:
 
 ```
-"settingDefaults": {
+"setting_defaults": {
         "custom_themes": [
             {
                 "name": "Electric Blue",

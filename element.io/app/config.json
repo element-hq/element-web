@@ -52,6 +52,7 @@
     },
     "posthog": {
         "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
-        "apiHost": "https://posthog.hss.element.io"
-    }
+        "apiHost": "https://posthog.element.io"
+    },
+    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }

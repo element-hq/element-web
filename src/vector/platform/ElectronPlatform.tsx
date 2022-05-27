@@ -26,30 +26,23 @@ import BaseEventIndexManager, {
     ISearchArgs,
 } from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import { _t, _td } from 'matrix-react-sdk/src/languageHandler';
+import { _t } from 'matrix-react-sdk/src/languageHandler';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
+import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import Modal from "matrix-react-sdk/src/Modal";
 import InfoDialog from "matrix-react-sdk/src/components/views/dialogs/InfoDialog";
 import Spinner from "matrix-react-sdk/src/components/views/elements/Spinner";
-import {
-    CategoryName,
-    DIGITS,
-    registerShortcut,
-} from "matrix-react-sdk/src/accessibility/KeyboardShortcuts";
-import { isOnlyCtrlOrCmdKeyEvent, Key } from "matrix-react-sdk/src/Keyboard";
 import React from "react";
 import { randomString } from "matrix-js-sdk/src/randomstring";
 import { Action } from "matrix-react-sdk/src/dispatcher/actions";
 import { ActionPayload } from "matrix-react-sdk/src/dispatcher/payloads";
-import { SwitchSpacePayload } from "matrix-react-sdk/src/dispatcher/payloads/SwitchSpacePayload";
 import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
-import SettingsStore from 'matrix-react-sdk/src/settings/SettingsStore';
 import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -285,58 +278,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         });
 
-        // register OS-specific shortcuts
-        registerShortcut("KeyBinding.switchToSpaceByNumber", CategoryName.NAVIGATION, {
-            default: {
-                ctrlOrCmdKey: true,
-                key: DIGITS,
-            },
-            displayName: _td("Switch to space by number"),
-        });
-
-        if (isMac) {
-            registerShortcut("KeyBinding.openUserSettings", CategoryName.NAVIGATION, {
-                default: {
-                    commandKey: true,
-                    key: Key.COMMA,
-                },
-                displayName: _td("Open user settings"),
-            });
-            registerShortcut("KeyBinding.previousVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
-                default: {
-                    commandKey: true,
-                    key: Key.SQUARE_BRACKET_LEFT,
-                },
-                displayName: _td("Previous recently visited room or community"),
-            });
-            registerShortcut("KeyBinding.nextVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
-                default: {
-                    commandKey: true,
-                    key: Key.SQUARE_BRACKET_RIGHT,
-                },
-                displayName: _td("Next recently visited room or community"),
-            });
-        } else {
-            registerShortcut("KeyBinding.previousVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
-                default: {
-                    altKey: true,
-                    key: Key.ARROW_LEFT,
-                },
-                displayName: _td("Previous recently visited room or community"),
-            });
-            registerShortcut("KeyBinding.nextVisitedRoomOrCommunity", CategoryName.NAVIGATION, {
-                default: {
-                    altKey: true,
-                    key: Key.ARROW_RIGHT,
-                },
-                displayName: _td("Next recently visited room or community"),
-            });
-        }
-
         this.ipcCall("startSSOFlow", this.ssoID);
     }
 
-    async getConfig(): Promise<{}> {
+    async getConfig(): Promise<IConfigOptions> {
         return this.ipcCall('getConfig');
     }
 
@@ -364,7 +309,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    setNotificationCount(count: number) {
+    public allowOverridingNativeContextMenus(): boolean {
+        return true;
+    }
+
+    public setNotificationCount(count: number): void {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
 
@@ -463,6 +412,18 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
         return this.ipcCall('setMinimizeToTrayEnabled', enabled);
+    }
+
+    public supportsTogglingHardwareAcceleration(): boolean {
+        return true;
+    }
+
+    public async getHardwareAccelerationEnabled(): Promise<boolean> {
+        return this.ipcCall('getHardwareAccelerationEnabled');
+    }
+
+    public async setHardwareAccelerationEnabled(enabled: boolean): Promise<void> {
+        return this.ipcCall('setHardwareAccelerationEnabled', enabled);
     }
 
     async canSelfUpdate(): Promise<boolean> {
@@ -578,52 +539,12 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    private navigateForwardBack(back: boolean) {
+    public navigateForwardBack(back: boolean): void {
         this.ipcCall(back ? "navigateBack" : "navigateForward");
     }
 
-    private navigateToSpace(num: number) {
-        dis.dispatch<SwitchSpacePayload>({
-            action: Action.SwitchSpace,
-            num,
-        });
-    }
-
-    onKeyDown(ev: KeyboardEvent): boolean {
-        let handled = false;
-
-        switch (ev.key) {
-            case Key.SQUARE_BRACKET_LEFT:
-            case Key.SQUARE_BRACKET_RIGHT:
-                if (isMac && ev.metaKey && !ev.altKey && !ev.ctrlKey && !ev.shiftKey) {
-                    this.navigateForwardBack(ev.key === Key.SQUARE_BRACKET_LEFT);
-                    handled = true;
-                }
-                break;
-
-            case Key.ARROW_LEFT:
-            case Key.ARROW_RIGHT:
-                if (!isMac && ev.altKey && !ev.metaKey && !ev.ctrlKey && !ev.shiftKey) {
-                    this.navigateForwardBack(ev.key === Key.ARROW_LEFT);
-                    handled = true;
-                }
-                break;
-        }
-
-        if (!handled &&
-            // ideally we would use SpaceStore.spacesEnabled here but importing SpaceStore in this platform
-            // breaks skinning as the platform is instantiated prior to the skin being loaded
-            !SettingsStore.getValue("showCommunitiesInsteadOfSpaces") &&
-            ev.code.startsWith("Digit") &&
-            ev.code !== "Digit0" && // this is the shortcut for reset zoom, don't override it
-            isOnlyCtrlOrCmdKeyEvent(ev)
-        ) {
-            const spaceNumber = ev.code.slice(5); // Cut off the first 5 characters - "Digit"
-            this.navigateToSpace(parseInt(spaceNumber, 10));
-            handled = true;
-        }
-
-        return handled;
+    public overrideBrowserShortcuts(): boolean {
+        return true;
     }
 
     async getPickleKey(userId: string, deviceId: string): Promise<string | null> {

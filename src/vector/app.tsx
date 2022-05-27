@@ -18,80 +18,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// To ensure we load the browser-request version
+import "matrix-js-sdk"; // eslint-disable-line no-restricted-imports
+
 import React from 'react';
-import * as sdk from 'matrix-react-sdk';
 import PlatformPeg from 'matrix-react-sdk/src/PlatformPeg';
 import { _td, newTranslatableError } from 'matrix-react-sdk/src/languageHandler';
 import AutoDiscoveryUtils from 'matrix-react-sdk/src/utils/AutoDiscoveryUtils';
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import * as Lifecycle from "matrix-react-sdk/src/Lifecycle";
 import SdkConfig, { parseSsoRedirectOptions } from "matrix-react-sdk/src/SdkConfig";
+import { IConfigOptions } from "matrix-react-sdk/src/IConfigOptions";
 import { logger } from "matrix-js-sdk/src/logger";
 import { createClient } from "matrix-js-sdk/src/matrix";
+import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
+import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 
-import type MatrixChatType from "matrix-react-sdk/src/components/structures/MatrixChat";
-import { parseQs, parseQsFromFragment } from './url_utils';
+import { parseQs } from './url_utils';
 import VectorBasePlatform from "./platform/VectorBasePlatform";
+import { getScreenFromLocation, init as initRouting, onNewScreen } from "./routing";
 
 // add React and ReactPerf to the global namespace, to make them easier to access via the console
 // this incidentally means we can forget our React imports in JSX files without penalty.
 window.React = React;
 
-let lastLocationHashSet: string = null;
-
 logger.log(`Application is running in ${process.env.NODE_ENV} mode`);
 
 window.matrixLogger = logger;
-
-// Parse the given window.location and return parameters that can be used when calling
-// MatrixChat.showScreen(screen, params)
-function getScreenFromLocation(location: Location) {
-    const fragparts = parseQsFromFragment(location);
-    return {
-        screen: fragparts.location.substring(1),
-        params: fragparts.params,
-    };
-}
-
-// Here, we do some crude URL analysis to allow
-// deep-linking.
-function routeUrl(location: Location) {
-    if (!window.matrixChat) return;
-
-    logger.log("Routing URL ", location.href);
-    const s = getScreenFromLocation(location);
-    (window.matrixChat as MatrixChatType).showScreen(s.screen, s.params);
-}
-
-function onHashChange(ev: HashChangeEvent) {
-    if (decodeURIComponent(window.location.hash) === lastLocationHashSet) {
-        // we just set this: no need to route it!
-        return;
-    }
-    routeUrl(window.location);
-}
-
-// This will be called whenever the SDK changes screens,
-// so a web page can update the URL bar appropriately.
-function onNewScreen(screen: string, replaceLast = false) {
-    logger.log("newscreen " + screen);
-    const hash = '#/' + screen;
-    lastLocationHashSet = hash;
-
-    // if the new hash is a substring of the old one then we are stripping fields e.g `via` so replace history
-    if (screen.startsWith("room/") &&
-        window.location.hash.includes("/$") === hash.includes("/$") && // only if both did or didn't contain event link
-        window.location.hash.startsWith(hash)
-    ) {
-        replaceLast = true;
-    }
-
-    if (replaceLast) {
-        window.location.replace(hash);
-    } else {
-        window.location.assign(hash);
-    }
-}
 
 // We use this to work out what URL the SDK should
 // pass through when registering to allow the user to
@@ -141,8 +94,7 @@ function onTokenLoginCompleted() {
 }
 
 export async function loadApp(fragParams: {}) {
-    window.addEventListener('hashchange', onHashChange);
-
+    initRouting();
     const platform = PlatformPeg.get();
 
     const params = parseQs(window.location);
@@ -154,6 +106,7 @@ export async function loadApp(fragParams: {}) {
 
     // Don't bother loading the app until the config is verified
     const config = await verifyServerConfig();
+    const snakedConfig = new SnakedObject<IConfigOptions>(config);
 
     // Before we continue, let's see if we're supposed to do an SSO redirect
     const [userId] = await Lifecycle.getStoredSessionOwner();
@@ -169,8 +122,8 @@ export async function loadApp(fragParams: {}) {
     if (!hasPossibleToken && !isReturningFromSso && autoRedirect) {
         logger.log("Bypassing app load to redirect to SSO");
         const tempCli = createClient({
-            baseUrl: config['validated_server_config'].hsUrl,
-            idBaseUrl: config['validated_server_config'].isUrl,
+            baseUrl: config.validated_server_config.hsUrl,
+            idBaseUrl: config.validated_server_config.isUrl,
         });
         PlatformPeg.get().startSingleSignOn(tempCli, "sso", `/${getScreenFromLocation(window.location).screen}`);
 
@@ -180,9 +133,9 @@ export async function loadApp(fragParams: {}) {
         return;
     }
 
-    const defaultDeviceName = config['defaultDeviceDisplayName'] ?? platform.getDefaultDeviceDisplayName();
+    const defaultDeviceName = snakedConfig.get("default_device_display_name")
+        ?? platform.getDefaultDeviceDisplayName();
 
-    const MatrixChat = sdk.getComponent('structures.MatrixChat');
     return <MatrixChat
         onNewScreen={onNewScreen}
         makeRegistrationUrl={makeRegistrationUrl}
@@ -196,7 +149,7 @@ export async function loadApp(fragParams: {}) {
     />;
 }
 
-async function verifyServerConfig() {
+async function verifyServerConfig(): Promise<IConfigOptions> {
     let validatedConfig;
     try {
         logger.log("Verifying homeserver configuration");

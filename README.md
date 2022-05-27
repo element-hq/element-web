@@ -1,3 +1,12 @@
+[![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
+![Tests](https://github.com/vector-im/element-web/actions/workflows/tests.yaml/badge.svg)
+![Static Analysis](https://github.com/vector-im/element-web/actions/workflows/static_analysis.yaml/badge.svg)
+[![Weblate](https://translate.element.io/widgets/element-web/-/element-web/svg-badge.svg)](https://translate.element.io/engage/element-web/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=coverage)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
+
 Element
 =======
 
@@ -41,8 +50,8 @@ released version of Element:
 1. Untar the tarball on your web server
 1. Move (or symlink) the `element-x.x.x` directory to an appropriate name
 1. Configure the correct caching headers in your webserver (see below)
-1. If desired, copy `config.sample.json` to `config.json` and edit it
-   as desired. See the [configuration docs](docs/config.md) for details.
+1. Configure the app by copying `config.sample.json` to `config.json` and
+   modifying it. See the [configuration docs](docs/config.md) for details.
 1. Enter the URL into your browser and log into Element!
 
 Releases are signed using gpg and the OpenPGP standard, and can be checked against the public key located
@@ -122,7 +131,7 @@ Ensure you have the latest LTS version of Node.js installed.
 Using `yarn` instead of `npm` is recommended. Please see the Yarn [install
 guide](https://classic.yarnpkg.com/en/docs/install) if you do not have it already.
 
-1. Install or update `node.js` so that your `node` is at least v14.x.
+1. Install or update `node.js` so that your `node` is at least the current recommended LTS.
 1. Install `yarn` if not present already.
 1. Clone the repo: `git clone https://github.com/vector-im/element-web.git`.
 1. Switch to the element-web directory: `cd element-web`.
@@ -250,10 +259,11 @@ Before attempting to develop on Element you **must** read the [developer guide
 for `matrix-react-sdk`](https://github.com/matrix-org/matrix-react-sdk#developer-guide), which
 also defines the design, architecture and style for Element too.
 
-Before starting work on a feature, it's best to ensure your plan aligns well
-with our vision for Element. Please chat with the team in
-[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before you
-start so we can ensure it's something we'd be willing to merge.
+Read the [Choosing an issue](docs/choosing-an-issue.md) page for some guidance
+about where to start. Before starting work on a feature, it's best to ensure
+your plan aligns well with our vision for Element. Please chat with the team in
+[#element-dev:matrix.org](https://matrix.to/#/#element-dev:matrix.org) before
+you start so we can ensure it's something we'd be willing to merge.
 
 You should also familiarise yourself with the ["Here be Dragons" guide
 ](https://docs.google.com/document/d/12jYzvkidrp1h7liEuLIe6BMdU0NUjndUYI971O06ooM)
@@ -263,9 +273,6 @@ The idea of Element is to be a relatively lightweight "skin" of customisations o
 top of the underlying `matrix-react-sdk`. `matrix-react-sdk` provides both the
 higher and lower level React components useful for building Matrix communication
 apps using React.
-
-After creating a new component you must run `yarn reskindex` to regenerate
-the `component-index.js` for the app (used in future for skinning).
 
 Please note that Element is intended to run correctly without access to the public
 internet.  So please don't depend on resources (JS libs, CSS, images, fonts)
@@ -305,15 +312,22 @@ yarn install
 popd
 ```
 
-Finally, build and start Element itself:
+Clone the repo and switch to the `element-web` directory:
 
 ```bash
 git clone https://github.com/vector-im/element-web.git
 cd element-web
+```
+
+Configure the app by copying `config.sample.json` to `config.json` and
+modifying it. See the [configuration docs](docs/config.md) for details.
+
+Finally, build and start Element itself:
+
+```bash
 yarn link matrix-js-sdk
 yarn link matrix-react-sdk
 yarn install
-yarn reskindex
 yarn start
 ```
 
@@ -329,9 +343,6 @@ Wait a few seconds for the initial build to finish; you should see something lik
    Remember, the command will not terminate since it runs the web server
    and rebuilds source files when they change. This development server also
    disables caching, so do NOT use it in production.
-
-Configure the app by copying `config.sample.json` to `config.json` and
-modifying it. See the [configuration docs](docs/config.md) for details.
 
 Open <http://127.0.0.1:8080/> in your browser to see your newly built Element.
 
@@ -364,9 +375,6 @@ ___
 When you make changes to `matrix-react-sdk` or `matrix-js-sdk` they should be
 automatically picked up by webpack and built.
 
-If you add or remove any components from the Element skin, you will need to rebuild
-the skin's index by running, `yarn reskindex`.
-
 If any of these steps error with, `file table overflow`, you are probably on a mac
 which has a very low limit on max open files. Run `ulimit -Sn 1024` and try again.
 You'll need to do this in each new terminal you open before building Element.
@@ -383,7 +391,7 @@ yarn test
 
 ### End-to-End tests
 
-See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) how to run the end-to-end tests.
+See [matrix-react-sdk](https://github.com/matrix-org/matrix-react-sdk/#end-to-end-tests) for how to run the end-to-end tests.
 
 Translations
 ============

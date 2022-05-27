@@ -16,6 +16,7 @@ electron/pub
 /config.json
 /config.json.*
 /config.local*.json
+# Legacy skinning file that some people might still have
 /src/component-index.js
 /.tmp
 /webpack-stats.json

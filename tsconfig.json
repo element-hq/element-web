@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2016",
     "noImplicitAny": false,
+    "noUnusedLocals": true,
     "sourceMap": false,
     "outDir": "./lib",
     "declaration": true,

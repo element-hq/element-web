@@ -27,6 +27,7 @@ import UAParser from 'ua-parser-js';
 import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from './VectorBasePlatform';
+import { parseQs } from "../url_utils";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
 
@@ -105,11 +106,10 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     getNormalizedAppVersion(version: string): string {
-        // if version looks like semver with leading v, strip it
-        // (matches scripts/normalize-version.sh)
-        const semVerRegex = new RegExp("^v[0-9]+.[0-9]+.[0-9]+(-.+)?$");
+        // if version looks like semver with leading v, strip it (matches scripts/normalize-version.sh)
+        const semVerRegex = /^v\d+.\d+.\d+(-.+)?$/;
         if (semVerRegex.test(version)) {
-            return version.substr(1);
+            return version.substring(1);
         }
         return version;
     }
@@ -119,25 +119,56 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     startUpdater() {
-        this.pollForUpdate();
-        setInterval(this.pollForUpdate, POKE_RATE_MS);
+        // Poll for an update immediately, and reload the page now if we're out of date
+        // already as we've just initialised an old version of the app somehow.
+        //
+        // Forcibly reloading the page aims to avoid users interacting at all with the old
+        // and potentially broken version of the app.
+        //
+        // Ideally, loading an old copy would be impossible with the
+        // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
+        console.log("startUpdater, current version is " + this.getNormalizedAppVersion(process.env.VERSION));
+        this.pollForUpdate((version: string, newVersion: string) => {
+            const query = parseQs(location);
+            if (query.updated) {
+                console.log("Update reloaded but still on an old version, stopping");
+                // We just reloaded already and are still on the old version!
+                // Show the toast rather than reload in a loop.
+                showUpdateToast(version, newVersion);
+                return;
+            }
+
+            // Set updated as a cachebusting query param and reload the page.
+            const url = new URL(window.location.href);
+            url.searchParams.set("updated", newVersion);
+            console.log("Update reloading to " + url.toString());
+            window.location.href = url.toString();
+        });
+        setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
     }
 
     async canSelfUpdate(): Promise<boolean> {
         return true;
     }
 
-    pollForUpdate = () => {
+    pollForUpdate = (
+        showUpdate: (currentVersion: string, mostRecentVersion: string) => void,
+        showNoUpdate?: () => void,
+    ) => {
         return this.getMostRecentVersion().then((mostRecentVersion) => {
             const currentVersion = this.getNormalizedAppVersion(process.env.VERSION);
 
             if (currentVersion !== mostRecentVersion) {
                 if (this.shouldShowUpdate(mostRecentVersion)) {
-                    showUpdateToast(currentVersion, mostRecentVersion);
+                    console.log("Update available to " + mostRecentVersion + ", will notify user");
+                    showUpdate(currentVersion, mostRecentVersion);
+                } else {
+                    console.log("Update available to " + mostRecentVersion + " but won't be shown");
                 }
                 return { status: UpdateCheckStatus.Ready };
             } else {
-                hideUpdateToast();
+                console.log("No update available, already on " + mostRecentVersion);
+                showNoUpdate?.();
             }
 
             return { status: UpdateCheckStatus.NotAvailable };
@@ -152,7 +183,7 @@ export default class WebPlatform extends VectorBasePlatform {
 
     startUpdateCheck() {
         super.startUpdateCheck();
-        this.pollForUpdate().then((updateState) => {
+        this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...updateState,

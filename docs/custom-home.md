@@ -1,12 +1,12 @@
-# Custom Home View
+# Custom Home Page
 
-The home view is shown whenever the user is logged in, but no room is selected.
-A custom `home.html` replacing the default home view can be configured either in `.well-known/matrix/client` or `config.json`.
-Such a custom home view can be used to communicate helpful information and important rules to the users.
+The home page is shown whenever the user is logged in, but no room is selected.
+A custom `home.html` replacing the default home page can be configured either in `.well-known/matrix/client` or `config.json`.
+Such a custom home page can be used to communicate helpful information and important rules to the users.
 
 ## Configuration
 
-To provide a custom home view for all element-web/desktop users of a homeserver, include the following in `.well-known/matrix/client`:
+To provide a custom home page for all element-web/desktop users of a homeserver, include the following in `.well-known/matrix/client`:
 
 ```
 {
@@ -16,7 +16,7 @@ To provide a custom home view for all element-web/desktop users of a homeserver,
 }
 ```
 
-In case the `.well-known/matrix/client` contains no `home_url`, element-web falls back to the value provided in its `config.json`:
+The home page can be overridden in `config.json` to provide all users of an element-web installation with the same experience:
 
 ```
 {
@@ -55,7 +55,7 @@ The following is a simple example for a custom `home.html`:
 </ul>
 ```
 
-When choosing colors, be aware that the home view may be displayed in either light or dark mode.
+When choosing colors, be aware that the home page may be displayed in either light or dark mode.
 
 It may be needed to set CORS headers for the `home.html` to enable element-desktop to fetch it, with e.g., the following nginx config:
 
