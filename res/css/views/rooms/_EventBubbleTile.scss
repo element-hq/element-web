@@ -496,6 +496,13 @@ limitations under the License.
                 "shield link" auto
                 / auto  1fr;
 
+            .mx_UnknownBody,
+            .mx_EventTile_keyRequestInfo,
+            .mx_ReplyChain_wrapper,
+            .mx_ViewSourceEvent {
+                min-width: 0; // Prevent a grid blowout
+            }
+
             .mx_EventTile_e2eIcon {
                 grid-area: shield;
             }
@@ -510,7 +517,6 @@ limitations under the License.
 
             .mx_ReplyChain_wrapper {
                 grid-area: reply;
-                min-width: 0; // Prevent a grid blowout due to nowrap displayName
             }
         }
 
