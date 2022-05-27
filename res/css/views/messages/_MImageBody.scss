@@ -54,23 +54,12 @@ $timeline-image-border-radius: 8px;
     }
 }
 
-.mx_MImageBody {
-    .mx_MImageBody_thumbnail_container {
-        border-radius: $timeline-image-border-radius;
+.mx_MImageBody_thumbnail_container {
+    border-radius: $timeline-image-border-radius;
 
-        // Necessary for the border radius to apply correctly to the placeholder
-        overflow: hidden;
-        contain: paint;
-
-        // Override inline max-width value to avoid overflow
-        max-width: 100% !important;
-
-        .mx_MImageBody_thumbnail {
-            // Apply the border radius to an image directly.
-            // This is necessary for images smaller than the placeholder.
-            border-radius: $timeline-image-border-radius;
-        }
-    }
+    // Necessary for the border radius to apply correctly to the placeholder
+    overflow: hidden;
+    contain: paint;
 }
 
 .mx_MImageBody_thumbnail {
