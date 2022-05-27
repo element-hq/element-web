@@ -23,9 +23,7 @@ import WebPlatform from '../../../../src/vector/platform/WebPlatform';
 describe('WebPlatform', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-
     });
-
 
     it('returns human readable name', () => {
         const platform = new WebPlatform();
