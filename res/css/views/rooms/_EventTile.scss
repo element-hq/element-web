@@ -923,6 +923,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             }
         }
 
+        .mx_ReplyChain_wrapper {
+            .mx_MLocationBody,
+            .mx_UnknownBody { // Error message inside ReplyTile
+                margin-inline: unset;
+            }
+        }
+
         .mx_EventTile_mediaLine {
             // such as MImageBody
             > div,
@@ -934,13 +941,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             // such as MAudioBody and MFileBody
             > span {
                 display: block; // Apply the margin declarations to span element
-            }
-        }
-
-        .mx_ReplyChain_wrapper {
-            .mx_MLocationBody {
-                margin-inline-start: 0;
-                margin-inline-end: 0;
             }
         }
 
