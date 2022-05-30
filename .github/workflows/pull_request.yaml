@@ -1,10 +1,8 @@
 name: Pull Request
 on:
   pull_request_target:
-    types: [ edited, labeled, unlabeled, synchronize ]
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref }}
-  cancel-in-progress: true
+    types: [ opened, edited, labeled, unlabeled, synchronize ]
+concurrency: ${{ github.workflow }}-${{ github.event.pull_request.head.ref }}
 jobs:
   changelog:
     name: Preview Changelog
