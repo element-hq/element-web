@@ -17,6 +17,7 @@ limitations under the License.
 import { logger } from "matrix-js-sdk/src/logger";
 
 import { IConfigOptions } from "../IConfigOptions";
+import { getEmbeddedPagesWellKnown } from '../utils/WellKnownUtils';
 import { SnakedObject } from "./SnakedObject";
 
 export function getHomePageUrl(appConfig: IConfigOptions): string | null {
@@ -36,6 +37,10 @@ export function getHomePageUrl(appConfig: IConfigOptions): string | null {
                 "`embedded_pages.home_url` instead, per https://github.com/vector-im/element-web/issues/21428",
             );
         }
+    }
+
+    if (!pageUrl) {
+        pageUrl = getEmbeddedPagesWellKnown()?.home_url;
     }
 
     return pageUrl;

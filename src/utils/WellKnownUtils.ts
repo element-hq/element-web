@@ -24,6 +24,7 @@ const E2EE_WK_KEY = "io.element.e2ee";
 const E2EE_WK_KEY_DEPRECATED = "im.vector.riot.e2ee";
 export const TILE_SERVER_WK_KEY = new UnstableValue(
     "m.tile_server", "org.matrix.msc3488.tile_server");
+const EMBEDDED_PAGES_WK_PROPERTY = "io.element.embedded_pages";
 
 /* eslint-disable camelcase */
 export interface ICallBehaviourWellKnown {
@@ -38,6 +39,10 @@ export interface IE2EEWellKnown {
 
 export interface ITileServerWellKnown {
     map_style_url?: string;
+}
+
+export interface IEmbeddedPagesWellKnown {
+    home_url?: string;
 }
 /* eslint-enable camelcase */
 
@@ -68,6 +73,16 @@ export function tileServerFromWellKnown(
         clientWellKnown?.[TILE_SERVER_WK_KEY.name] ??
         clientWellKnown?.[TILE_SERVER_WK_KEY.altName]
     );
+}
+
+export function getEmbeddedPagesWellKnown(): IEmbeddedPagesWellKnown | undefined {
+    return embeddedPagesFromWellKnown(MatrixClientPeg.get()?.getClientWellKnown());
+}
+
+export function embeddedPagesFromWellKnown(
+    clientWellKnown?: IClientWellKnown,
+): IEmbeddedPagesWellKnown {
+    return (clientWellKnown?.[EMBEDDED_PAGES_WK_PROPERTY]);
 }
 
 export function isSecureBackupRequired(): boolean {
