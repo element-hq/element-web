@@ -188,7 +188,7 @@
     "jest-mock": "^27.5.1",
     "jest-raw-loader": "^1.0.1",
     "jest-sonar-reporter": "^2.0.0",
-    "matrix-mock-request": "^1.2.3",
+    "matrix-mock-request": "^2.0.0",
     "matrix-react-test-utils": "^0.2.3",
     "matrix-web-i18n": "^1.2.0",
     "raw-loader": "^4.0.2",
