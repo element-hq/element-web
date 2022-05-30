@@ -27,7 +27,6 @@ import { RestMultiSession } from "./rest/multi";
 import { RestSession } from "./rest/session";
 import { stickerScenarios } from './scenarios/sticker';
 import { userViewScenarios } from "./scenarios/user-view";
-import { updateScenarios } from "./scenarios/update";
 
 export async function scenario(createSession: (s: string) => Promise<ElementSession>,
     restCreator: RestSessionCreator): Promise<void> {
@@ -63,10 +62,6 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
     // closing them as we go rather than leaving them all open until the end).
     const stickerSession = await createSession("sally");
     await stickerScenarios("sally", "ilikestickers", stickerSession, restCreator);
-
-    // Create a new window to test app auto-updating
-    const updateSession = await createSession("update");
-    await updateScenarios(updateSession);
 }
 
 async function createRestUsers(restCreator: RestSessionCreator): Promise<RestMultiSession> {
