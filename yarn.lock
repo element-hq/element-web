@@ -2922,7 +2922,7 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-bluebird@^3.5.0, bluebird@^3.5.5:
+bluebird@^3.5.5:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
   integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
@@ -8245,12 +8245,11 @@ matrix-events-sdk@^0.0.1-beta.7:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
-matrix-mock-request@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-1.2.3.tgz#56b15d86e2601a9b48a854844396d18caab649c8"
-  integrity sha512-Tr7LDHweTW8Ql4C8XhGQFGMzuh+HmPjOcQqrHH1qfSesq0cwdPWanvdnllNjeHoAMcZ43HpMFMzFZfNW1/6HYg==
+matrix-mock-request@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.0.0.tgz#653c258eb3b6dfbf6a48418e8633a377c82de3ab"
+  integrity sha512-5fQqMwcQuTjUV4PWBBkVJ69qtR1wW7hGylHM7Ilu5yBQdsAIhOH5xPQm8/qrEP2zQNcSogaB42sBGyuIl0Sx4g==
   dependencies:
-    bluebird "^3.5.0"
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
