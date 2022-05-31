@@ -193,7 +193,7 @@ Starting with `branding`, the following subproperties are available:
    `welcome.html` that ships with Element will be used instead.
 2. `home_url`: A URL to an HTML page to show within the app as the "home" page. When the app doesn't have a room/screen to
    show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default,
-   no home page is set and therefore a hardcoded landing screen is used.
+   no home page is set and therefore a hardcoded landing screen is used. More documentation and examples are [here](./custom-home.md).
 3. `login_for_welcome`: When `true` (default `false`), the app will use the login form as a welcome page instead of the welcome
    page itself. This disables use of `welcome_url` and all welcome page functionality.
 
