@@ -427,7 +427,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
             <div className="mx_SettingsTab_section">
                 <span className="mx_SettingsTab_subheading">{ _t("Account management") }</span>
                 <span className="mx_SettingsTab_subsectionText">
-                    { _t("Deactivating your account is a permanent action - be careful!") }
+                    { _t("Deactivating your account is a permanent action — be careful!") }
                 </span>
                 <AccessibleButton onClick={this.onDeactivateClicked} kind="danger">
                     { _t("Deactivate Account") }
