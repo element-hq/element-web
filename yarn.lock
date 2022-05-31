@@ -8229,6 +8229,23 @@ matrix-events-sdk@^0.0.1-beta.7:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
+matrix-js-sdk@18.1.0-rc.1:
+  version "18.1.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-18.1.0-rc.1.tgz#9ec21ba7b05001b7965ba95f81d7ead11f3a5b0f"
+  integrity sha512-raMSQKtyjnJ/M5N3Tp85iOwCbhkdRr27lBxBFhSzxrEBl+LTYKGzXw+wXw+whr42tBHczpM7fgBawSAJcG7rkA==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^4.0.1"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "^0.0.1-beta.7"
+    p-retry "^4.5.0"
+    qs "^6.9.6"
+    request "^2.88.2"
+    unhomoglyph "^1.0.6"
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "18.0.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/2f540e31a5dd266a463f65c07eec19024bfc5762"
