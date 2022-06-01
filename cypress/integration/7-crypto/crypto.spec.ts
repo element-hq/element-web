@@ -19,13 +19,17 @@ limitations under the License.
 import type { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { SynapseInstance } from "../../plugins/synapsedocker";
 
-function waitForEncryption(cli: MatrixClient, roomId: string, win: Cypress.AUTWindow, resolve: () => void) {
-    cli.crypto.cryptoStore.getEndToEndRooms(null, (result) => {
-        if (result[roomId]) {
-            resolve();
-        } else {
-            cli.once(win.matrixcs.RoomStateEvent.Update, () => waitForEncryption(cli, roomId, win, resolve));
-        }
+function waitForEncryption(cli: MatrixClient, roomId: string, win: Cypress.AUTWindow): Promise<void> {
+    return new Promise<void>(resolve => {
+        const onEvent = () => {
+            cli.crypto.cryptoStore.getEndToEndRooms(null, (result) => {
+                if (result[roomId]) {
+                    cli.off(win.matrixcs.ClientEvent.Event, onEvent);
+                    resolve();
+                }
+            });
+        };
+        cli.on(win.matrixcs.ClientEvent.Event, onEvent);
     });
 }
 
@@ -61,15 +65,15 @@ describe("Cryptography", () => {
             cy.window(),
         ]).then(([bot, roomId, win]) => {
             cy.inviteUser(roomId, bot.getUserId());
-            cy.visit("/#/room/" + roomId);
             cy.wrap(
-                new Promise<void>(resolve =>
-                    waitForEncryption(bot, roomId, win, resolve),
+                waitForEncryption(
+                    bot, roomId, win,
                 ).then(() => bot.sendMessage(roomId, {
                     body: "Top secret message",
                     msgtype: "m.text",
                 })),
             );
+            cy.visit("/#/room/" + roomId);
         });
 
         cy.get(".mx_RoomView_body .mx_cryptoEvent").should("contain", "Encryption enabled");
