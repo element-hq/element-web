@@ -418,7 +418,8 @@ export default class CallView extends React.Component<IProps, IState> {
 
         const isScreensharing = call.isScreensharing();
         const { primaryFeed, sidebarShown } = this.state;
-        const sharerName = primaryFeed.getMember().name;
+        const sharerName = primaryFeed?.getMember().name;
+        if (!sharerName) return;
 
         let text = isScreensharing
             ? _t("You are presenting")
