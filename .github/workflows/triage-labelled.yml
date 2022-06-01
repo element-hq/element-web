@@ -101,7 +101,6 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'A-New-Search-Experience') ||
       contains(github.event.issue.labels.*.name, 'Team: Delight') ||
-      contains(github.event.issue.labels.*.name, 'Z-IA') ||
       contains(github.event.issue.labels.*.name, 'Z-NewUserJourney')
     steps:
       - uses: octokit/graphql-action@v2.x
