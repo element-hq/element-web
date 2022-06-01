@@ -10,29 +10,6 @@ concurrency:
 jobs:
   sonarqube:
     name: 🩻 SonarQube
-    if: github.event.workflow_run.conclusion == 'success'
-    runs-on: ubuntu-latest
-    steps:
-      - name: "🧮 Checkout code"
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.event.workflow_run.head_repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_branch }} # checkout commit that triggered this workflow
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-
-      - name: "🔍 Read package.json version"
-        id: version
-        uses: martinbeentjes/npm-get-version-action@main
-
-      - name: "🩻 SonarCloud Scan"
-        uses: matrix-org/sonarcloud-workflow-action@v1
-        with:
-          is_pr: ${{ github.event.workflow_run.event == 'pull_request' }}
-          owner: ${{ github.event.workflow_run.head_repository.owner.login }}
-          version: ${{ steps.version.outputs.current-version }}
-          branch: ${{ github.event.workflow_run.head_branch }}
-          revision: ${{ github.event.workflow_run.head_sha }}
-          token: ${{ secrets.SONAR_TOKEN }}
-          coverage_run_id: ${{ github.event.workflow_run.id }}
-          coverage_workflow_name: tests.yml
-          coverage_extract_path: coverage
+    uses: matrix-org/matrix-js-sdk/.github/workflows/sonarcloud.yml@develop
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
