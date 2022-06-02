@@ -16,18 +16,24 @@ limitations under the License.
 
 .mx_DevtoolsDialog_wrapper {
     .mx_Dialog {
-        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .mx_Dialog_fixedWidth {
-        overflow-y: hidden;
-        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        max-height: 100%;
+
+        .mx_Dialog_buttons button {
+            margin-bottom: 0;
+        }
     }
 }
 
 .mx_DevTools_content {
     overflow-y: auto;
-    height: calc(100% - 124px); // 58px for buttons + 50px for header + 8px margin around
 }
 
 .mx_DevTools_RoomStateExplorer_query {

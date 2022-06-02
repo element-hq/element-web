@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import classnames from "classnames";
+
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import Modal from "../Modal";
@@ -89,9 +91,10 @@ export class DialogOpener {
                     kind: payload.kind,
                     call: payload.call,
                     roomId: payload.roomId,
-                }, payload.className, false, true).finished.then((results) => {
-                    payload.onFinishedCallback?.(results);
-                });
+                }, classnames("mx_InviteDialog_flexWrapper", payload.className), false, true).finished
+                    .then((results) => {
+                        payload.onFinishedCallback?.(results);
+                    });
                 break;
             case Action.OpenAddToExistingSpaceDialog: {
                 const space = payload.space;

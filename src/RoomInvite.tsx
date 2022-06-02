@@ -63,7 +63,7 @@ export function showStartChatInviteDialog(initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.
     Modal.createTrackedDialog(
         'Start DM', '', InviteDialog, { kind: KIND_DM, initialText },
-        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+        /*className=*/"mx_InviteDialog_flexWrapper", /*isPriority=*/false, /*isStatic=*/true,
     );
 }
 
@@ -75,7 +75,7 @@ export function showRoomInviteDialog(roomId: string, initialText = ""): void {
             initialText,
             roomId,
         },
-        /*className=*/null, /*isPriority=*/false, /*isStatic=*/true,
+        /*className=*/"mx_InviteDialog_flexWrapper", /*isPriority=*/false, /*isStatic=*/true,
     );
 }
 

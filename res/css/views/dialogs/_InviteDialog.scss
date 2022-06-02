@@ -14,6 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_InviteDialog_flexWrapper .mx_Dialog {
+    display: flex;
+    flex-direction: column;
+}
+
 .mx_InviteDialog_transferWrapper .mx_Dialog {
     padding-bottom: 16px;
 }
@@ -128,8 +133,9 @@ limitations under the License.
         text-transform: uppercase;
     }
 
-    .mx_CopyableText {
+    .mx_CopyableText.mx_CopyableText_border {
         width: unset; // full width
+        margin-bottom: 0;
 
         > a {
             text-decoration: none;
@@ -270,14 +276,16 @@ limitations under the License.
 
 .mx_InviteDialog_other {
     // Prevent the dialog from jumping around randomly when elements change.
-    height: 600px;
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+    overflow: hidden;
 
     .mx_InviteDialog_addressBar {
         margin-right: 0;
     }
 
     .mx_InviteDialog_userSections {
-        height: calc(100% - 115px); // mx_InviteDialog's height minus some for the upper and lower elements
         padding-right: 0;
 
         .mx_InviteDialog_section {
@@ -285,29 +293,37 @@ limitations under the License.
             margin-top: 12px;
         }
     }
-
-    .mx_InviteDialog_hasFooter {
-        .mx_InviteDialog_userSections {
-            height: calc(100% - 175px); // For displaying an invite link on the footer of the dialog
-        }
-    }
 }
 
 .mx_InviteDialog_content {
-    height: calc(100% - 36px); // full height minus the size of the header
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
     overflow: hidden;
 }
 
 .mx_InviteDialog_transfer {
-    width: 496px;
-    height: 466px;
-    flex-direction: column;
+    width: auto;
 
     .mx_InviteDialog_content {
-        flex-direction: column;
+        width: 496px;
+        height: 430px;
 
         .mx_TabbedView {
-            height: calc(100% - 60px);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 1;
+            flex-grow: 1;
+            min-height: 0;
+
+            .mx_TabbedView_tabPanel {
+                flex-direction: column;
+
+                .mx_TabbedView_tabPanelContent {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
         }
         overflow: visible;
     }
@@ -325,10 +341,6 @@ limitations under the License.
     margin-top: 4px;
     overflow-y: auto;
     padding: 0 45px 4px 0;
-}
-
-.mx_InviteDialog_hasFooter .mx_InviteDialog_userSections {
-    height: calc(100% - 175px);
 }
 
 .mx_InviteDialog_helpText {
@@ -380,14 +392,13 @@ limitations under the License.
 
 .mx_InviteDialog_transferConsultConnect {
     padding-top: 16px;
-    /* This wants a drop shadow the full width of the dialog, so relative-position it
-     * and make it wider, then compensate with padding
+    /* This wants a drop shadow the full width of the dialog, so use negative margin to make it full width,
+     * then compensate with padding
      */
-    position: relative;
-    width: 496px;
-    left: -24px;
     padding-left: 24px;
     padding-right: 24px;
+    margin-left: -24px;
+    margin-right: -24px;
     border-top: 1px solid $quinary-content;
 
     display: flex;
