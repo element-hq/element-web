@@ -92,7 +92,8 @@ limitations under the License.
         }
 
         .mx_EventTile_msgOption {
-            margin-right: 2px;
+            // Override mx_EventTile_msgOption of mx_EventTile:not([data-layout="bubble"])
+            margin-inline-end: 0;
         }
 
         &.mx_EventTile_info {
@@ -149,11 +150,19 @@ limitations under the License.
         flex-basis: 48px; // 12 (padding on message list) + 36 (padding on event lines)
     }
 
-    &.mx_BaseCard {
-        // For a chat timeline on the right panel when the widget is maximised
-        // TODO: rename ThreadPanel
-        &.mx_ThreadPanel {
-            padding-right: 8px; // .mx_RightPanel padding
+    .mx_GenericEventListSummary_unstyledList, // RR next to a message on the event list summary
+    .mx_RoomView_MessageList {                // RR next to a message on the messsge list
+        .mx_EventTile[data-layout=bubble] {
+            .mx_ReadReceiptGroup {
+                // 6px: scroll bar width (magic number)
+                inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + $container-gap-width + 6px);
+            }
+
+            &.mx_EventTile_info {
+                .mx_ReadReceiptGroup {
+                    inset-inline-end: -4px; // align with RR outside of info tile
+                }
+            }
         }
     }
 }
