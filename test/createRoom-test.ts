@@ -23,7 +23,7 @@ import { stubClient, setupAsyncStoreWithClient } from "./test-utils";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
 import WidgetStore from "../src/stores/WidgetStore";
 import WidgetUtils from "../src/utils/WidgetUtils";
-import { VIDEO_CHANNEL, VIDEO_CHANNEL_MEMBER } from "../src/utils/VideoChannelUtils";
+import { VIDEO_CHANNEL_MEMBER } from "../src/utils/VideoChannelUtils";
 import createRoom, { canEncryptToAllUsers } from '../src/createRoom';
 
 describe("createRoom", () => {
@@ -43,12 +43,11 @@ describe("createRoom", () => {
                 events: { [VIDEO_CHANNEL_MEMBER]: videoMemberPower },
             },
         }]] = mocked(client.createRoom).mock.calls as any; // no good type
-        const [[widgetRoomId, widgetStateKey, , widgetId]] = mocked(client.sendStateEvent).mock.calls;
+        const [[widgetRoomId, widgetStateKey]] = mocked(client.sendStateEvent).mock.calls;
 
         // We should have set up the Jitsi widget
         expect(widgetRoomId).toEqual(roomId);
         expect(widgetStateKey).toEqual("im.vector.modular.widgets");
-        expect(widgetId).toEqual(VIDEO_CHANNEL);
 
         // All members should be able to update their connected devices
         expect(videoMemberPower).toEqual(0);

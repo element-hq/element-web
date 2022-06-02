@@ -1035,8 +1035,7 @@ export default class CallHandler extends EventEmitter {
         }
 
         try {
-            const userId = client.credentials.userId;
-            await WidgetUtils.addJitsiWidget(roomId, type, 'Jitsi', `jitsi_${userId}_${Date.now()}`);
+            await WidgetUtils.addJitsiWidget(roomId, type, 'Jitsi', false);
             logger.log('Jitsi widget added');
         } catch (e) {
             if (e.errcode === 'M_FORBIDDEN') {

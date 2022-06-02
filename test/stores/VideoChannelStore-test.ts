@@ -23,14 +23,13 @@ import WidgetStore, { IApp } from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "../../src/stores/widgets/ElementWidgetActions";
 import VideoChannelStore, { VideoChannelEvent } from "../../src/stores/VideoChannelStore";
-import { VIDEO_CHANNEL } from "../../src/utils/VideoChannelUtils";
 
 describe("VideoChannelStore", () => {
     const store = VideoChannelStore.instance;
 
-    const widget = { id: VIDEO_CHANNEL } as unknown as Widget;
+    const widget = { id: "1" } as unknown as Widget;
     const app = {
-        id: VIDEO_CHANNEL,
+        id: "1",
         eventId: "$1:example.org",
         roomId: "!1:example.org",
         type: MatrixWidgetType.JitsiMeet,
@@ -38,6 +37,7 @@ describe("VideoChannelStore", () => {
         name: "Video channel",
         creatorUserId: "@alice:example.org",
         avatar_url: null,
+        data: { isVideoChannel: true },
     } as IApp;
 
     // Set up mocks to simulate the remote end of the widget API

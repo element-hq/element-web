@@ -35,16 +35,15 @@ interface IVideoChannelMemberContent {
     devices: string[];
 }
 
-export const VIDEO_CHANNEL = "io.element.video";
 export const VIDEO_CHANNEL_MEMBER = "io.element.video.member";
 
 export const getVideoChannel = (roomId: string): IApp => {
     const apps = WidgetStore.instance.getApps(roomId);
-    return apps.find(app => WidgetType.JITSI.matches(app.type) && app.id === VIDEO_CHANNEL);
+    return apps.find(app => WidgetType.JITSI.matches(app.type) && app.data.isVideoChannel);
 };
 
 export const addVideoChannel = async (roomId: string, roomName: string) => {
-    await WidgetUtils.addJitsiWidget(roomId, CallType.Video, "Video channel", VIDEO_CHANNEL, roomName);
+    await WidgetUtils.addJitsiWidget(roomId, CallType.Video, "Video channel", true, roomName);
 };
 
 export const getConnectedMembers = (room: Room, connectedLocalEcho: boolean): Set<RoomMember> => {

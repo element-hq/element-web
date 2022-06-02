@@ -32,7 +32,7 @@ import {
     mkVideoChannelMember,
 } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { VIDEO_CHANNEL, VIDEO_CHANNEL_MEMBER } from "../../../src/utils/VideoChannelUtils";
+import { VIDEO_CHANNEL_MEMBER } from "../../../src/utils/VideoChannelUtils";
 import WidgetStore from "../../../src/stores/WidgetStore";
 import _VideoRoomView from "../../../src/components/structures/VideoRoomView";
 import VideoLobby from "../../../src/components/views/voip/VideoLobby";
@@ -42,7 +42,7 @@ const VideoRoomView = wrapInMatrixClientContext(_VideoRoomView);
 
 describe("VideoRoomView", () => {
     jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([{
-        id: VIDEO_CHANNEL,
+        id: "1",
         eventId: "$1:example.org",
         roomId: "!1:example.org",
         type: MatrixWidgetType.JitsiMeet,
@@ -50,6 +50,7 @@ describe("VideoRoomView", () => {
         name: "Video channel",
         creatorUserId: "@alice:example.org",
         avatar_url: null,
+        data: { isVideoChannel: true },
     }]);
     Object.defineProperty(navigator, "mediaDevices", {
         value: { enumerateDevices: () => [] },
