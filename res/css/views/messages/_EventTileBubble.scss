@@ -19,7 +19,7 @@ limitations under the License.
     padding: 10px;
     border-radius: 8px;
     margin: 10px auto;
-    max-width: 75%;
+    max-width: min(90%, 600px);
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) min-content min-content;
