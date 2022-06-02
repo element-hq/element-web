@@ -79,15 +79,17 @@ const ShareType: React.FC<Props> = ({
     return <div className='mx_ShareType'>
         <LocationIcon className='mx_ShareType_badge' />
         <Heading className='mx_ShareType_heading' size='h3'>{ _t("What location type do you want to share?") }</Heading>
-        { enabledShareTypes.map((type) =>
-            <ShareTypeOption
-                key={type}
-                onClick={() => setShareType(type)}
-                label={labels[type]}
-                shareType={type}
-                data-test-id={`share-location-option-${type}`}
-            />,
-        ) }
+        <div className='mx_ShareType_wrapper_options'>
+            { enabledShareTypes.map((type) =>
+                <ShareTypeOption
+                    key={type}
+                    onClick={() => setShareType(type)}
+                    label={labels[type]}
+                    shareType={type}
+                    data-test-id={`share-location-option-${type}`}
+                />,
+            ) }
+        </div>
     </div>;
 };
 
