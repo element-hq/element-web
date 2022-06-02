@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { createRef } from 'react';
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { EventSubscription } from 'fbemitter';
 import { logger } from "matrix-js-sdk/src/logger";
@@ -118,6 +118,7 @@ function getPrimarySecondaryCallsForPip(roomId: string): [MatrixCall, MatrixCall
 export default class PipView extends React.Component<IProps, IState> {
     private roomStoreToken: EventSubscription;
     private settingsWatcherRef: string;
+    private movePersistedElement = createRef<() => void>();
 
     constructor(props: IProps) {
         super(props);
@@ -175,6 +176,8 @@ export default class PipView extends React.Component<IProps, IState> {
     private onEndMoving() {
         this.setState({ moving: false });
     }
+
+    private onMove = () => this.movePersistedElement.current?.();
 
     private onRoomViewStoreUpdate = () => {
         const newRoomId = RoomViewStore.instance.getRoomId();
@@ -338,6 +341,7 @@ export default class PipView extends React.Component<IProps, IState> {
                         persistentWidgetId={this.state.persistentWidgetId}
                         persistentRoomId={roomId}
                         pointerEvents={this.state.moving ? 'none' : undefined}
+                        movePersistedElement={this.movePersistedElement}
                     />
                 </div>;
         }
@@ -347,6 +351,7 @@ export default class PipView extends React.Component<IProps, IState> {
                 className="mx_CallPreview"
                 draggable={pipMode}
                 onDoubleClick={this.onDoubleClick}
+                onMove={this.onMove}
             >
                 { pipContent }
             </PictureInPictureDragger>;

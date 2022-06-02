@@ -1,6 +1,6 @@
 /*
 Copyright 2018 New Vector Ltd
-Copyright 2019, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2019-2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ContextType } from 'react';
+import React, { ContextType, MutableRefObject } from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import WidgetUtils from '../../../utils/WidgetUtils';
@@ -27,6 +27,7 @@ interface IProps {
     persistentWidgetId: string;
     persistentRoomId: string;
     pointerEvents?: string;
+    movePersistedElement: MutableRefObject<() => void>;
 }
 
 export default class PersistentApp extends React.Component<IProps> {
@@ -70,6 +71,7 @@ export default class PersistentApp extends React.Component<IProps> {
                 miniMode={true}
                 showMenubar={false}
                 pointerEvents={this.props.pointerEvents}
+                movePersistedElement={this.props.movePersistedElement}
             />;
         }
         return null;

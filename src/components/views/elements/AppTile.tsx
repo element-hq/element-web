@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import url from 'url';
-import React, { ContextType, createRef } from 'react';
+import React, { ContextType, createRef, MutableRefObject } from 'react';
 import classNames from 'classnames';
 import { MatrixCapabilities } from "matrix-widget-api";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
@@ -84,6 +84,8 @@ interface IProps {
     pointerEvents?: string;
     widgetPageTitle?: string;
     showLayoutButtons?: boolean;
+    // Handle to manually notify the PersistedElement that it needs to move
+    movePersistedElement?: MutableRefObject<() => void>;
 }
 
 interface IState {
@@ -623,7 +625,11 @@ export default class AppTile extends React.Component<IProps, IState> {
                     const zIndexAboveOtherPersistentElements = 101;
 
                     appTileBody = <div className="mx_AppTile_persistedWrapper">
-                        <PersistedElement zIndex={this.props.miniMode ? zIndexAboveOtherPersistentElements : 9} persistKey={this.persistKey}>
+                        <PersistedElement
+                            zIndex={this.props.miniMode ? zIndexAboveOtherPersistentElements : 9}
+                            persistKey={this.persistKey}
+                            moveRef={this.props.movePersistedElement}
+                        >
                             { appTileBody }
                         </PersistedElement>
                     </div>;

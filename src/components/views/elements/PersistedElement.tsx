@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import ReactDOM from 'react-dom';
 import { throttle } from "lodash";
 import { isNullOrUndefined } from "matrix-js-sdk/src/utils";
@@ -56,6 +56,9 @@ interface IProps {
     zIndex?: number;
 
     style?: React.StyleHTMLAttributes<HTMLDivElement>;
+
+    // Handle to manually notify this PersistedElement that it needs to move
+    moveRef?: MutableRefObject<() => void>;
 }
 
 /**
@@ -86,6 +89,8 @@ export default class PersistedElement extends React.Component<IProps> {
         // the timeline_resize action.
         window.addEventListener('resize', this.repositionChild);
         this.dispatcherRef = dis.register(this.onAction);
+
+        if (this.props.moveRef) this.props.moveRef.current = this.repositionChild;
     }
 
     /**
@@ -177,8 +182,9 @@ export default class PersistedElement extends React.Component<IProps> {
         Object.assign(child.style, {
             zIndex: isNullOrUndefined(this.props.zIndex) ? 9 : this.props.zIndex,
             position: 'absolute',
-            top: parentRect.top + 'px',
-            left: parentRect.left + 'px',
+            top: '0',
+            left: '0',
+            transform: `translateX(${parentRect.left}px) translateY(${parentRect.top}px)`,
             width: parentRect.width + 'px',
             height: parentRect.height + 'px',
         });

@@ -1,5 +1,5 @@
 /*
-Copyright 2021 New Vector Ltd
+Copyright 2021-2022 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ limitations under the License.
 
 import React, { createRef } from 'react';
 
-import UIStore from '../../../stores/UIStore';
+import UIStore, { UI_EVENTS } from '../../../stores/UIStore';
 import { lerp } from '../../../utils/AnimationUtils';
 import { MarkedExecution } from '../../../utils/MarkedExecution';
 
@@ -43,69 +43,66 @@ interface IProps {
     children: ({ onStartMoving, onResize }: IChildrenOptions) => React.ReactNode;
     draggable: boolean;
     onDoubleClick?: () => void;
-}
-
-interface IState {
-    // Position of the PictureInPictureDragger
-    translationX: number;
-    translationY: number;
+    onMove?: () => void;
 }
 
 /**
  * PictureInPictureDragger shows a small version of CallView hovering over the UI in 'picture-in-picture'
  * (PiP mode). It displays the call(s) which is *not* in the room the user is currently viewing.
  */
-export default class PictureInPictureDragger extends React.Component<IProps, IState> {
+export default class PictureInPictureDragger extends React.Component<IProps> {
     private callViewWrapper = createRef<HTMLDivElement>();
     private initX = 0;
     private initY = 0;
     private desiredTranslationX = UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH;
     private desiredTranslationY = UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_HEIGHT;
+    private translationX = this.desiredTranslationX;
+    private translationY = this.desiredTranslationY;
     private moving = false;
     private scheduledUpdate = new MarkedExecution(
         () => this.animationCallback(),
         () => requestAnimationFrame(() => this.scheduledUpdate.trigger()),
     );
 
-    constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-            translationX: UIStore.instance.windowWidth - PADDING.right - PIP_VIEW_WIDTH,
-            translationY: UIStore.instance.windowHeight - PADDING.bottom - PIP_VIEW_HEIGHT,
-        };
-    }
-
     public componentDidMount() {
         document.addEventListener("mousemove", this.onMoving);
         document.addEventListener("mouseup", this.onEndMoving);
-        window.addEventListener("resize", this.onResize);
+        UIStore.instance.on(UI_EVENTS.Resize, this.onResize);
     }
 
     public componentWillUnmount() {
         document.removeEventListener("mousemove", this.onMoving);
         document.removeEventListener("mouseup", this.onEndMoving);
-        window.removeEventListener("resize", this.onResize);
+        UIStore.instance.off(UI_EVENTS.Resize, this.onResize);
     }
 
     private animationCallback = () => {
-        // If the PiP isn't being dragged and there is only a tiny difference in
-        // the desiredTranslation and translation, quit the animationCallback
-        // loop. If that is the case, it means the PiP has snapped into its
-        // position and there is nothing to do. Not doing this would cause an
-        // infinite loop
         if (
             !this.moving &&
-            Math.abs(this.state.translationX - this.desiredTranslationX) <= 1 &&
-            Math.abs(this.state.translationY - this.desiredTranslationY) <= 1
-        ) return;
+            Math.abs(this.translationX - this.desiredTranslationX) <= 1 &&
+            Math.abs(this.translationY - this.desiredTranslationY) <= 1
+        ) {
+            // Break the loop by settling the element into its final position
+            this.translationX = this.desiredTranslationX;
+            this.translationY = this.desiredTranslationY;
+            this.setStyle();
+        } else {
+            const amt = this.moving ? MOVING_AMT : SNAPPING_AMT;
+            this.translationX = lerp(this.translationX, this.desiredTranslationX, amt);
+            this.translationY = lerp(this.translationY, this.desiredTranslationY, amt);
 
-        const amt = this.moving ? MOVING_AMT : SNAPPING_AMT;
-        this.setState({
-            translationX: lerp(this.state.translationX, this.desiredTranslationX, amt),
-            translationY: lerp(this.state.translationY, this.desiredTranslationY, amt),
-        });
-        this.scheduledUpdate.mark();
+            this.setStyle();
+            this.scheduledUpdate.mark();
+        }
+
+        this.props.onMove?.();
+    };
+
+    private setStyle = () => {
+        if (!this.callViewWrapper.current) return;
+        // Set the element's style directly, bypassing React for efficiency
+        this.callViewWrapper.current.style.transform =
+            `translateX(${this.translationX}px) translateY(${this.translationY}px)`;
     };
 
     private setTranslation(inTranslationX: number, inTranslationY: number) {
@@ -164,20 +161,14 @@ export default class PictureInPictureDragger extends React.Component<IProps, ISt
             this.desiredTranslationY = PADDING.top;
         }
 
+        if (!animate) {
+            this.translationX = this.desiredTranslationX;
+            this.translationY = this.desiredTranslationY;
+        }
+
         // We start animating here because we want the PiP to move when we're
         // resizing the window
         this.scheduledUpdate.mark();
-
-        if (animate) {
-            // We start animating here because we want the PiP to move when we're
-            // resizing the window
-            this.scheduledUpdate.mark();
-        } else {
-            this.setState({
-                translationX: this.desiredTranslationX,
-                translationY: this.desiredTranslationY,
-            });
-        }
     };
 
     private onStartMoving = (event: React.MouseEvent | MouseEvent) => {
@@ -205,25 +196,21 @@ export default class PictureInPictureDragger extends React.Component<IProps, ISt
     };
 
     public render() {
-        const translatePixelsX = this.state.translationX + "px";
-        const translatePixelsY = this.state.translationY + "px";
         const style = {
-            transform: `translateX(${translatePixelsX})
-                        translateY(${translatePixelsY})`,
+            transform: `translateX(${this.translationX}px) translateY(${this.translationY}px)`,
         };
+
         return (
             <div
                 className={this.props.className}
-                style={this.props.draggable ? style : undefined}
+                style={style}
                 ref={this.callViewWrapper}
                 onDoubleClick={this.props.onDoubleClick}
             >
-                <>
-                    { this.props.children({
-                        onStartMoving: this.onStartMoving,
-                        onResize: this.onResize,
-                    }) }
-                </>
+                { this.props.children({
+                    onStartMoving: this.onStartMoving,
+                    onResize: this.onResize,
+                }) }
             </div>
         );
     }
