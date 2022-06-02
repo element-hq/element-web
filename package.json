@@ -58,6 +58,7 @@
     "@babel/runtime": "^7.12.5",
     "@sentry/browser": "^6.11.0",
     "@sentry/tracing": "^6.11.0",
+    "@testing-library/react": "^12.1.5",
     "@types/geojson": "^7946.0.8",
     "await-lock": "^2.1.0",
     "blurhash": "^1.1.3",

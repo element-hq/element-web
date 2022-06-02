@@ -67,4 +67,17 @@ export const mockClientMethodsUser = (userId = '@alice:domain') => ({
     getUserId: jest.fn().mockReturnValue(userId),
     isGuest: jest.fn().mockReturnValue(false),
     mxcUrlToHttp: jest.fn().mockReturnValue('mock-mxcUrlToHttp'),
+    credentials: { userId },
+});
+
+/**
+ * Returns basic mocked client methods related to rendering events
+ * ```
+ * const mockClient = getMockClientWithEventEmitter({
+        ...mockClientMethodsUser('@mytestuser:domain'),
+    });
+ * ```
+ */
+export const mockClientMethodsEvents = () => ({
+    decryptEventIfNeeded: jest.fn(),
 });

@@ -670,6 +670,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
                     {...this.props}
                     className="mx_MessageContextMenu"
                     compact={true}
+                    data-testid="mx_MessageContextMenu"
                 >
                     { nativeItemsList }
                     { quickItemsList }

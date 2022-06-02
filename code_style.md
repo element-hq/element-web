@@ -208,3 +208,7 @@ React
   information in component state that could be derived from the model?
 
 - Avoid things marked as Legacy or Deprecated in React 16 (e.g string refs and legacy contexts)
+
+Unit tests
+-----
+- New tests should use [react testing library](https://testing-library.com/docs/react-testing-library/intro/)
