@@ -17,7 +17,8 @@ limitations under the License.
 .mx_MBeaconBody {
     position: relative;
     height: 220px;
-    width: 325px;
+    max-width: 325px;
+    width: 100%;
 
     border-radius: $timeline-image-border-radius;
     overflow: hidden;

@@ -25,20 +25,28 @@ import {
     MsgType,
     Room,
 } from 'matrix-js-sdk/src/matrix';
+import { Thread } from 'matrix-js-sdk/src/models/thread';
 
 import MessageActionBar from '../../../../src/components/views/messages/MessageActionBar';
 import {
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
     mockClientMethodsEvents,
+    makeBeaconInfoEvent,
 } from '../../../test-utils';
 import { RoomPermalinkCreator } from '../../../../src/utils/permalinks/Permalinks';
 import RoomContext, { TimelineRenderingType } from '../../../../src/contexts/RoomContext';
 import { IRoomState } from '../../../../src/components/structures/RoomView';
 import dispatcher from '../../../../src/dispatcher/dispatcher';
 import SettingsStore from '../../../../src/settings/SettingsStore';
+import { Action } from '../../../../src/dispatcher/actions';
+import { UserTab } from '../../../../src/components/views/dialogs/UserTab';
+import { showThread } from '../../../../src/dispatcher/dispatch-actions/threads';
 
 jest.mock('../../../../src/dispatcher/dispatcher');
+jest.mock('../../../../src/dispatcher/dispatch-actions/threads', () => ({
+    showThread: jest.fn(),
+}));
 
 describe('<MessageActionBar />', () => {
     const userId = '@alice:server.org';
@@ -359,5 +367,101 @@ describe('<MessageActionBar />', () => {
 
         it.todo('unsends event on cancel click');
         it.todo('retrys event on retry click');
+    });
+
+    describe('thread button', () => {
+        beforeEach(() => {
+            Thread.setServerSideSupport(true, false);
+        });
+
+        describe('when threads feature is not enabled', () => {
+            it('does not render thread button when threads does not have server support', () => {
+                jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
+                Thread.setServerSideSupport(false, false);
+                const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+                expect(queryByLabelText('Reply in thread')).toBeFalsy();
+            });
+
+            it('renders thread button when threads has server support', () => {
+                jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
+                const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+                expect(queryByLabelText('Reply in thread')).toBeTruthy();
+            });
+
+            it('opens user settings on click', () => {
+                jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
+                const { getByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+
+                act(() => {
+                    fireEvent.click(getByLabelText('Reply in thread'));
+                });
+
+                expect(dispatcher.dispatch).toHaveBeenCalledWith({
+                    action: Action.ViewUserSettings,
+                    initialTabId: UserTab.Labs,
+                });
+            });
+        });
+
+        describe('when threads feature is enabled', () => {
+            beforeEach(() => {
+                jest.spyOn(SettingsStore, 'getValue').mockImplementation(setting => setting === 'feature_thread');
+            });
+
+            it('renders thread button on own actionable event', () => {
+                const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+                expect(queryByLabelText('Reply in thread')).toBeTruthy();
+            });
+
+            it('does not render thread button for a beacon_info event', () => {
+                const beaconInfoEvent = makeBeaconInfoEvent(userId, roomId);
+                const { queryByLabelText } = getComponent({ mxEvent: beaconInfoEvent });
+                expect(queryByLabelText('Reply in thread')).toBeFalsy();
+            });
+
+            it('opens thread on click', () => {
+                const { getByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+
+                act(() => {
+                    fireEvent.click(getByLabelText('Reply in thread'));
+                });
+
+                expect(showThread).toHaveBeenCalledWith({
+                    rootEvent: alicesMessageEvent,
+                    push: false,
+                });
+            });
+
+            it('opens parent thread for a thread reply message', () => {
+                const threadReplyEvent = new MatrixEvent({
+                    type: EventType.RoomMessage,
+                    sender: userId,
+                    room_id: roomId,
+                    content: {
+                        msgtype: MsgType.Text,
+                        body: 'this is a thread reply',
+                    },
+                });
+                // mock the thread stuff
+                jest.spyOn(threadReplyEvent, 'isThreadRelation', 'get').mockReturnValue(true);
+                // set alicesMessageEvent as the root event
+                jest.spyOn(threadReplyEvent, 'getThread').mockReturnValue(
+                    { rootEvent: alicesMessageEvent } as unknown as Thread,
+                );
+                const { getByLabelText } = getComponent({ mxEvent: threadReplyEvent });
+
+                act(() => {
+                    fireEvent.click(getByLabelText('Reply in thread'));
+                });
+
+                expect(showThread).toHaveBeenCalledWith({
+                    rootEvent: alicesMessageEvent,
+                    initialEvent: threadReplyEvent,
+                    highlighted: true,
+                    scroll_into_view: true,
+                    push: false,
+                });
+            });
+        });
     });
 });

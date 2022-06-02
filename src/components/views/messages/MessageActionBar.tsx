@@ -21,6 +21,7 @@ import { EventStatus, MatrixEvent, MatrixEventEvent } from 'matrix-js-sdk/src/mo
 import classNames from 'classnames';
 import { MsgType, RelationType } from 'matrix-js-sdk/src/@types/event';
 import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
 
 import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
@@ -329,8 +330,14 @@ export default class MessageActionBar extends React.PureComponent<IMessageAction
 
         const inNotThreadTimeline = this.context.timelineRenderingType !== TimelineRenderingType.Thread;
 
-        const isAllowedMessageType = !this.forbiddenThreadHeadMsgType.includes(
-            this.props.mxEvent.getContent().msgtype as MsgType,
+        const isAllowedMessageType = (
+            !this.forbiddenThreadHeadMsgType.includes(
+                this.props.mxEvent.getContent().msgtype as MsgType) &&
+            /** forbid threads from live location shares
+             * until cross-platform support
+             * (PSF-1041)
+             */
+            !M_BEACON_INFO.matches(this.props.mxEvent.getType())
         );
 
         return inNotThreadTimeline && isAllowedMessageType;

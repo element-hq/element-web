@@ -62,7 +62,11 @@ describe('EventUtils', () => {
     });
     redactedEvent.makeRedacted(redactedEvent);
 
-    const stateEvent = makeBeaconInfoEvent(userId, roomId);
+    const stateEvent = new MatrixEvent({
+        type: EventType.RoomTopic,
+        state_key: '',
+    });
+    const beaconInfoEvent = makeBeaconInfoEvent(userId, roomId);
 
     const roomMemberEvent = new MatrixEvent({
         type: EventType.RoomMember,
@@ -155,6 +159,7 @@ describe('EventUtils', () => {
             ['poll start event', pollStartEvent],
             ['event with empty content body', emptyContentBody],
             ['event with a content body', niceTextMessage],
+            ['beacon_info event', beaconInfoEvent],
         ])('returns true for %s', (_description, event) => {
             expect(isContentActionable(event)).toBe(true);
         });
@@ -323,6 +328,10 @@ describe('EventUtils', () => {
         });
         it('returns false for a poll event', () => {
             const event = makePollStartEvent('Who?', userId);
+            expect(canForward(event)).toBe(false);
+        });
+        it('returns false for a beacon_info event', () => {
+            const event = makeBeaconInfoEvent(userId, roomId);
             expect(canForward(event)).toBe(false);
         });
         it('returns true for a room message event', () => {

@@ -21,7 +21,7 @@ import { _t } from '../../../languageHandler';
 import { useOwnLiveBeacons } from '../../../utils/beacon';
 import BeaconStatus from './BeaconStatus';
 import { BeaconDisplayStatus } from './displayStatus';
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 
 interface Props {
     displayStatus: BeaconDisplayStatus;
@@ -45,6 +45,14 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
         onResetLocationPublishError,
     } = useOwnLiveBeacons([beacon?.identifier]);
 
+    // eat events here to avoid 1) the map and 2) reply or thread tiles
+    // moving under the beacon status on stop/retry click
+    const preventDefaultWrapper = (callback: () => void) => (e?: ButtonEvent) => {
+        e?.stopPropagation();
+        e?.preventDefault();
+        callback();
+    };
+
     // combine display status with errors that only occur for user's own beacons
     const ownDisplayStatus = hasLocationPublishError || hasStopSharingError ?
         BeaconDisplayStatus.Error :
@@ -60,7 +68,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
         { ownDisplayStatus === BeaconDisplayStatus.Active && <AccessibleButton
             data-test-id='beacon-status-stop-beacon'
             kind='link'
-            onClick={onStopSharing}
+            onClick={preventDefaultWrapper(onStopSharing)}
             className='mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton'
             disabled={stoppingInProgress}
         >
@@ -70,7 +78,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
         { hasLocationPublishError && <AccessibleButton
             data-test-id='beacon-status-reset-wire-error'
             kind='link'
-            onClick={onResetLocationPublishError}
+            onClick={preventDefaultWrapper(onResetLocationPublishError)}
             className='mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton'
         >
             { _t('Retry') }
@@ -79,7 +87,7 @@ const OwnBeaconStatus: React.FC<Props & HTMLProps<HTMLDivElement>> = ({
         { hasStopSharingError && <AccessibleButton
             data-test-id='beacon-status-stop-beacon-retry'
             kind='link'
-            onClick={onStopSharing}
+            onClick={preventDefaultWrapper(onStopSharing)}
             className='mx_OwnBeaconStatus_button mx_OwnBeaconStatus_destructiveButton'
         >
             { _t('Retry') }
