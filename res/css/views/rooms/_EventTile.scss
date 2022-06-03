@@ -610,6 +610,86 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 }
 
+/* Compact layout overrides */
+
+.mx_MatrixChat_useCompactLayout {
+    .mx_EventTile {
+        padding-top: $spacing-4;
+
+        &.mx_EventTile_info {
+            padding-top: 0; // same as the padding for non-compact .mx_EventTile.mx_EventTile_info
+            font-size: $font-13px;
+
+            .mx_EventTile_avatar {
+                top: 4px;
+            }
+
+            .mx_EventTile_line,
+            .mx_EventTile_reply {
+                line-height: $font-20px;
+            }
+        }
+
+        &.mx_EventTile_emote {
+            padding-top: $spacing-8; // add a bit more space for emotes so that avatars don't collide
+
+            &.mx_EventTile_continuation {
+                padding-top: 0;
+
+                .mx_EventTile_line,
+                .mx_EventTile_reply {
+                    padding-block: 0;
+                }
+            }
+
+            .mx_EventTile_avatar {
+                top: 2px;
+            }
+
+            .mx_EventTile_line,
+            .mx_EventTile_reply {
+                padding-top: 0px;
+                padding-bottom: 1px;
+            }
+        }
+
+        .mx_EventTile_avatar {
+            top: 2px;
+        }
+
+        .mx_EventTile_line,
+        .mx_EventTile_reply {
+            padding-block: 0;
+        }
+
+        .mx_EventTile_e2eIcon {
+            top: 3px;
+        }
+
+        .mx_DisambiguatedProfile {
+            font-size: $font-13px;
+        }
+
+        .mx_ReadReceiptGroup {
+            // This aligns the avatar with the last line of the
+            // message. We want to move it one line up - 2rem
+            top: -2rem;
+        }
+
+        .mx_EventTile_content .markdown-body {
+            p,
+            ul,
+            ol,
+            dl,
+            blockquote,
+            pre,
+            table {
+                margin-bottom: $spacing-4; // 1/4 of the non-compact margin-bottom
+            }
+        }
+    }
+}
+
 /* end of overrides */
 
 .mx_EventTile_keyRequestInfo {
