@@ -272,10 +272,6 @@ hr.mx_RoomView_myReadMarker {
 .mx_MatrixChat_useCompactLayout {
     .mx_RoomView_MessageList {
         margin-bottom: 4px;
-
-        h2 {
-            margin-top: 6px; // TODO: Use a spacing variable
-        }
     }
 
     .mx_RoomView_statusAreaBox {
