@@ -194,8 +194,8 @@ $MinWidth: 240px;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-top: 2px;
-    padding-bottom: 8px;
+    padding-top: 3px;
+    padding-bottom: 6px;
 }
 
 .mx_AppTileMenuBarTitle {
@@ -221,39 +221,50 @@ $MinWidth: 240px;
 }
 
 .mx_AppTileMenuBar_iconButton {
-    width: 12px;
-    height: 12px;
-    mask-repeat: no-repeat;
-    mask-position: 0 center;
-    mask-size: auto 12px;
-    background-color: $topleftmenu-color;
-    margin: 0 5px;
+    height: 24px;
+    margin: 0 4px;
+    position: relative;
+    width: 24px;
 
-    &.mx_AppTileMenuBar_iconButton_close {
-        mask-size: auto 10px;
+    &::before {
+        background-color: $muted-fg-color;
+        content: '';
+        height: 24px;
+        mask-position: center;
+        mask-repeat: no-repeat;
+        mask-size: 12px;
+        position: absolute;
+        width: 24px;
+    }
+
+    &:hover::after {
+        background-color: $panel-actions;
+        border-radius: 50%;
+        content: '';
+        height: 24px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 24px;
+    }
+
+    &.mx_AppTileMenuBar_iconButton_collapse::before {
+        mask-image: url("$(res)/img/element-icons/minimise-collapse.svg");
+    }
+
+    &.mx_AppTileMenuBar_iconButton_maximise::before {
         mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
-        background-color: $accent;
     }
 
-    &.mx_AppTileMenuBar_iconButton_maximise {
-        mask-size: auto 10px;
-        mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
+    &.mx_AppTileMenuBar_iconButton_minimise::before {
+        mask-image: url("$(res)/img/element-icons/minus-button.svg");
     }
 
-    &.mx_AppTileMenuBar_iconButton_unpin {
-        mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
-        background-color: $accent;
-    }
-
-    &.mx_AppTileMenuBar_iconButton_pin {
-        mask-image: url("$(res)/img/element-icons/room/pin-upright.svg");
-    }
-
-    &.mx_AppTileMenuBar_iconButton_popout {
+    &.mx_AppTileMenuBar_iconButton_popout::before {
         mask-image: url('$(res)/img/feather-customised/widget/external-link.svg');
     }
 
-    &.mx_AppTileMenuBar_iconButton_menu {
+    &.mx_AppTileMenuBar_iconButton_menu::before {
         mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
     }
 }
