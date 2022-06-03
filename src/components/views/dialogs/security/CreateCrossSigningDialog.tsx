@@ -91,7 +91,7 @@ export default class CreateCrossSigningDialog extends React.PureComponent<IProps
         }
     }
 
-    private doBootstrapUIAuth = async (makeRequest: (authData: any) => Promise<void>): Promise<void> => {
+    private doBootstrapUIAuth = async (makeRequest: (authData: any) => Promise<{}>): Promise<void> => {
         if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
             await makeRequest({
                 type: 'm.login.password',
