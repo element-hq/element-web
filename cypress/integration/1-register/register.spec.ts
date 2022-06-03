@@ -67,5 +67,10 @@ describe("Registration", () => {
 
         cy.url().should('contain', '/#/home');
         cy.stopMeasuring("from-submit-to-home");
+
+        cy.get('[aria-label="User menu"]').click();
+        cy.get('[aria-label="Security & Privacy"]').click();
+        cy.get(".mx_DevicesPanel_myDevice .mx_DevicesPanel_deviceTrust .mx_E2EIcon")
+            .should("have.class", "mx_E2EIcon_verified");
     });
 });

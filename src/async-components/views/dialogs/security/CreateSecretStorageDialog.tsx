@@ -274,9 +274,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         });
     };
 
-    private doBootstrapUIAuth = async (makeRequest: (authData: any) => void): Promise<void> => {
+    private doBootstrapUIAuth = async (makeRequest: (authData: any) => Promise<void>): Promise<void> => {
         if (this.state.canUploadKeysWithPasswordOnly && this.state.accountPassword) {
-            makeRequest({
+            await makeRequest({
                 type: 'm.login.password',
                 identifier: {
                     type: 'm.id.user',
