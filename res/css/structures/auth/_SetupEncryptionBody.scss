@@ -17,9 +17,11 @@ limitations under the License.
 .mx_SetupEncryptionBody_reset {
     color: $light-fg-color;
     margin-top: $font-14px;
-}
 
-.mx_SetupEncryptionBody_reset_link {
-    @mixin ButtonResetDefault;
-    color: $alert;
+    .mx_SetupEncryptionBody_reset_link {
+        &.mx_AccessibleButton_kind_link_inline {
+            padding: 0;
+            color: $alert;
+        }
+    }
 }
