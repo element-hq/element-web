@@ -16,12 +16,13 @@ limitations under the License.
 
 import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
+import { mocked } from 'jest-mock';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
-import { mocked } from 'jest-mock';
-import { act } from 'react-dom/test-utils';
-import { M_ASSET, LocationAssetType } from 'matrix-js-sdk/src/@types/location';
+import { RelationType } from 'matrix-js-sdk/src/matrix';
 import { logger } from 'matrix-js-sdk/src/logger';
+import { M_ASSET, LocationAssetType } from 'matrix-js-sdk/src/@types/location';
+import { act } from 'react-dom/test-utils';
 
 import LocationShareMenu from '../../../../src/components/views/location/LocationShareMenu';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
@@ -374,6 +375,16 @@ describe('<LocationShareMenu />', () => {
 
     describe('Live location share', () => {
         beforeEach(() => enableSettings(["feature_location_share_live"]));
+
+        it('does not display live location share option when composer has a relation', () => {
+            const relation = {
+                rel_type: RelationType.Thread,
+                event_id: '12345',
+            };
+            const component = getComponent({ relation });
+
+            expect(getShareTypeOption(component, LocationShareType.Live).length).toBeFalsy();
+        });
 
         it('creates beacon info event on submission', () => {
             const onFinished = jest.fn();
