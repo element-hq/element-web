@@ -55,6 +55,7 @@ limitations under the License.
         &.mx_EventTile_info .mx_EventTile_line,
         .mx_EventTile_line {
             padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-horizontal);
+            padding-inline-end: $MessageTimestamp_width; // ensure timestamp is not hidden
 
             .mx_EventTile_e2eIcon {
                 inset-inline-start: 8px;
