@@ -51,7 +51,9 @@ limitations under the License.
         }
 
         &.mx_BasicMessageComposer_input_shouldShowPillAvatar {
-            span.mx_UserPill, span.mx_RoomPill, span.mx_SpacePill {
+            span.mx_UserPill,
+            span.mx_RoomPill,
+            span.mx_SpacePill {
                 user-select: all;
                 position: relative;
                 cursor: unset; // We don't want indicate clickability
@@ -66,7 +68,7 @@ limitations under the License.
                     content: var(--avatar-letter);
                     width: $font-16px;
                     height: $font-16px;
-                    margin-right: 0.24rem;
+                    margin-inline-end: 0.24rem;
                     background: var(--avatar-background), $background;
                     color: $avatar-initial-color;
                     background-repeat: no-repeat;

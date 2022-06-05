@@ -48,8 +48,8 @@ limitations under the License.
 
     &::before,
     .mx_BaseAvatar {
-        margin-left: -0.3em; // Otherwise the gap is too large
-        margin-right: 0.2em;
+        margin-inline-start: -0.3em; // Otherwise the gap is too large
+        margin-inline-end: 0.2em;
     }
 
     a& {
