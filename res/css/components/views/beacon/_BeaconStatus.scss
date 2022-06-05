@@ -55,6 +55,11 @@ limitations under the License.
 
     white-space: nowrap;
     overflow: hidden;
+
+    .mx_BeaconStatus_description_status {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 }
 
 .mx_BeaconStatus_expiryTime {

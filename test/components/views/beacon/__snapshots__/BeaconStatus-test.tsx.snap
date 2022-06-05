@@ -136,7 +136,9 @@ exports[`<BeaconStatus /> renders loading state 1`] = `
     <div
       className="mx_BeaconStatus_description"
     >
-      <span>
+      <span
+        className="mx_BeaconStatus_description_status"
+      >
         Loading live location...
       </span>
     </div>
@@ -165,7 +167,9 @@ exports[`<BeaconStatus /> renders stopped state 1`] = `
     <div
       className="mx_BeaconStatus_description"
     >
-      <span>
+      <span
+        className="mx_BeaconStatus_description_status"
+      >
         Live location ended
       </span>
     </div>
