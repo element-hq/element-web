@@ -19,12 +19,12 @@ $timeline-image-border-radius: 8px;
 
 .mx_MImageBody_banner {
     position: absolute;
-    bottom: 4px;
-    left: 4px;
-    padding: 4px;
+    bottom: $spacing-4;
+    left: $spacing-4;
+    padding: $spacing-4;
     border-radius: $timeline-image-border-radius;
     font-size: $font-15px;
-
+    user-select: none; // prevent banner text from being selected
     pointer-events: none; // let the cursor go through to the media underneath
 
     // Trying to match the width of the image is surprisingly difficult, so arbitrarily break it off early.
