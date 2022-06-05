@@ -739,9 +739,3 @@ legend {
     mask-repeat: no-repeat;
     mask-size: contain;
 }
-
-@define-mixin ListResetDefault {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
