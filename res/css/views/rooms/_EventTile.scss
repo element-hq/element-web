@@ -419,12 +419,12 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         .mx_ThreadSummaryIcon,
         .mx_EventTile_line {
             /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
-            margin-right: 110px;
+            margin-right: 80px;
             min-height: $font-14px;
         }
 
         .mx_ThreadSummary {
-            max-width: min(calc(100% - $left-gutter - 110px), 600px); // leave space on both left & right gutters
+            max-width: min(calc(100% - $left-gutter - 80px), 600px); // leave space on both left & right gutters
         }
     }
 
