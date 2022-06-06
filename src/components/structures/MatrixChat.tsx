@@ -2012,9 +2012,11 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                     <div className="mx_MatrixChat_splash">
                         { errorBox }
                         <Spinner />
-                        <AccessibleButton kind='link_inline' className="mx_MatrixChat_splashButtons" onClick={this.onLogoutClick}>
-                            { _t('Logout') }
-                        </AccessibleButton>
+                        <div className="mx_MatrixChat_splashButtons">
+                            <AccessibleButton kind='link_inline' onClick={this.onLogoutClick}>
+                                { _t('Logout') }
+                            </AccessibleButton>
+                        </div>
                     </div>
                 );
             }
