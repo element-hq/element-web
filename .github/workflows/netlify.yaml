@@ -7,16 +7,8 @@ on:
     types:
       - completed
 jobs:
-  prdetails:
-    name: ℹ️ PR Details
-    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
-    uses: matrix-org/matrix-js-sdk/.github/workflows/pr_details.yml@develop
-    with:
-      owner: ${{ github.event.workflow_run.head_repository.owner.login }}
-      branch: ${{ github.event.workflow_run.head_branch }}
-
   deploy:
-    needs: prdetails
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: 📝 Create Deployment
@@ -30,6 +22,12 @@ jobs:
           desc: |
             Do you trust the author of this PR? Maybe this build will steal your keys or give you malware.
             Exercise caution. Use test accounts.
+
+      - id: prdetails
+        uses: matrix-org/pr-details-action@v1.1
+        with:
+          owner: ${{ github.event.workflow_run.head_repository.owner.login }}
+          branch: ${{ github.event.workflow_run.head_branch }}
 
       # There's a 'download artifact' action, but it hasn't been updated for the workflow_run action
       # (https://github.com/actions/download-artifact/issues/60) so instead we get this mess:
@@ -50,7 +48,7 @@ jobs:
           # These don't work because we're in workflow_run
           enable-pull-request-comment: false
           enable-commit-comment: false
-          alias: pr${{ needs.prdetails.outputs.pr_id }}
+          alias: pr${{ steps.prdetails.outputs.pr_id }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
