@@ -375,6 +375,8 @@ export default class CallHandler extends EventEmitter {
     }
 
     public play(audioId: AudioID): void {
+        const logPrefix = `CallHandler.play(${audioId}):`;
+        logger.debug(`${logPrefix} beginning of function`);
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
@@ -383,13 +385,15 @@ export default class CallHandler extends EventEmitter {
                 try {
                     // This still causes the chrome debugger to break on promise rejection if
                     // the promise is rejected, even though we're catching the exception.
+                    logger.debug(`${logPrefix} attempting to play audio`);
                     await audio.play();
+                    logger.debug(`${logPrefix} playing audio successfully`);
                 } catch (e) {
                     // This is usually because the user hasn't interacted with the document,
                     // or chrome doesn't think so and is denying the request. Not sure what
                     // we can really do here...
                     // https://github.com/vector-im/element-web/issues/7657
-                    logger.log("Unable to play audio clip", e);
+                    logger.warn(`${logPrefix} unable to play audio clip`, e);
                 }
             };
             if (this.audioPromises.has(audioId)) {
@@ -400,20 +404,30 @@ export default class CallHandler extends EventEmitter {
             } else {
                 this.audioPromises.set(audioId, playAudio());
             }
+        } else {
+            logger.warn(`${logPrefix} unable to find <audio> element for ${audioId}`);
         }
     }
 
     public pause(audioId: AudioID): void {
+        const logPrefix = `CallHandler.pause(${audioId}):`;
+        logger.debug(`${logPrefix} beginning of function`);
         // TODO: Attach an invisible element for this instead
         // which listens?
         const audio = document.getElementById(audioId) as HTMLMediaElement;
+        const pauseAudio = () => {
+            logger.debug(`${logPrefix} pausing audio`);
+            // pause doesn't return a promise, so just do it
+            audio.pause();
+        };
         if (audio) {
             if (this.audioPromises.has(audioId)) {
-                this.audioPromises.set(audioId, this.audioPromises.get(audioId).then(() => audio.pause()));
+                this.audioPromises.set(audioId, this.audioPromises.get(audioId).then(pauseAudio));
             } else {
-                // pause doesn't return a promise, so just do it
-                audio.pause();
+                pauseAudio();
             }
+        } else {
+            logger.warn(`${logPrefix} unable to find <audio> element for ${audioId}`);
         }
     }
 
