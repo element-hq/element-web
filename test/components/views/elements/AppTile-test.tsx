@@ -18,7 +18,7 @@ import React from "react";
 import TestRenderer from "react-test-renderer";
 import { jest } from "@jest/globals";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixWidgetType } from "matrix-widget-api";
+import { ClientWidgetApi, MatrixWidgetType } from "matrix-widget-api";
 import { mount, ReactWrapper } from "enzyme";
 import { Optional } from "matrix-events-sdk";
 
@@ -39,11 +39,14 @@ import ActiveWidgetStore from "../../../../src/stores/ActiveWidgetStore";
 import AppTile from "../../../../src/components/views/elements/AppTile";
 import { Container, WidgetLayoutStore } from "../../../../src/stores/widgets/WidgetLayoutStore";
 import AppsDrawer from "../../../../src/components/views/rooms/AppsDrawer";
+import { ElementWidgetCapabilities } from "../../../../src/stores/widgets/ElementWidgetCapabilities";
+import { ElementWidget } from "../../../../src/stores/widgets/StopGapWidget";
+import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
 
 describe("AppTile", () => {
     let cli;
-    let r1;
-    let r2;
+    let r1: Room;
+    let r2: Room;
     const resizeNotifier = new ResizeNotifier();
     let app1: IApp;
     let app2: IApp;
@@ -328,6 +331,10 @@ describe("AppTile", () => {
             moveToContainerSpy = jest.spyOn(WidgetLayoutStore.instance, 'moveToContainer');
         });
 
+        it("requiresClient should be true", () => {
+            expect(wrapper.state('requiresClient')).toBe(true);
+        });
+
         it("clicking 'minimise' should send the widget to the right", () => {
             const minimiseButton = wrapper.find('.mx_AppTileMenuBar_iconButton_minimise');
             minimiseButton.first().simulate('click');
@@ -353,6 +360,36 @@ describe("AppTile", () => {
                 const unMaximiseButton = wrapper.find('.mx_AppTileMenuBar_iconButton_collapse');
                 unMaximiseButton.first().simulate('click');
                 expect(moveToContainerSpy).toHaveBeenCalledWith(r1, app1, Container.Top);
+            });
+        });
+
+        describe("with an existing widgetApi holding requiresClient = false", () => {
+            let wrapper: ReactWrapper;
+
+            beforeEach(() => {
+                const api = {
+                    hasCapability: (capability: ElementWidgetCapabilities): boolean => {
+                        return !(capability === ElementWidgetCapabilities.RequiresClient);
+                    },
+                    once: () => {},
+                } as unknown as ClientWidgetApi;
+
+                const mockWidget = new ElementWidget(app1);
+                WidgetMessagingStore.instance.storeMessaging(mockWidget, r1.roomId, api);
+
+                wrapper = mount((
+                    <MatrixClientContext.Provider value={cli}>
+                        <AppTile
+                            key={app1.id}
+                            app={app1}
+                            room={r1}
+                        />
+                    </MatrixClientContext.Provider>
+                ));
+            });
+
+            it("requiresClient should be false", () => {
+                expect(wrapper.state('requiresClient')).toBe(false);
             });
         });
     });

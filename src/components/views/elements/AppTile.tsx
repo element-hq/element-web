@@ -35,7 +35,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { StopGapWidget } from "../../../stores/widgets/StopGapWidget";
+import { ElementWidget, StopGapWidget } from "../../../stores/widgets/StopGapWidget";
 import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
@@ -50,6 +50,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { ActionPayload } from "../../../dispatcher/payloads";
 import { Action } from '../../../dispatcher/actions';
 import { ElementWidgetCapabilities } from '../../../stores/widgets/ElementWidgetCapabilities';
+import { WidgetMessagingStore } from '../../../stores/widgets/WidgetMessagingStore';
 
 interface IProps {
     app: IApp;
@@ -196,6 +197,24 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
     };
 
+    private determineInitialRequiresClientState(): boolean {
+        try {
+            const mockWidget = new ElementWidget(this.props.app);
+            const widgetApi = WidgetMessagingStore.instance.getMessaging(mockWidget, this.props.room.roomId);
+            if (widgetApi) {
+                // Load value from existing API to prevent resetting the requiresClient value on layout changes.
+                return widgetApi.hasCapability(ElementWidgetCapabilities.RequiresClient);
+            }
+        } catch {
+            // fallback to true
+        }
+
+        // requiresClient is initially set to true. This avoids the broken state of the popout
+        // button being visible (for an instance) and then disappearing when the widget is loaded.
+        // requiresClient <-> hide the popout button
+        return true;
+    }
+
     /**
      * Set initial component state when the App wUrl (widget URL) is being updated.
      * Component props *must* be passed (rather than relying on this.props).
@@ -214,10 +233,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             error: null,
             menuDisplayed: false,
             widgetPageTitle: this.props.widgetPageTitle,
-            // requiresClient is initially set to true. This avoids the broken state of the popout
-            // button being visible (for an instance) and then disappearing when the widget is loaded.
-            // requiresClient <-> hide the popout button
-            requiresClient: true,
+            requiresClient: this.determineInitialRequiresClientState(),
         };
     }
 
