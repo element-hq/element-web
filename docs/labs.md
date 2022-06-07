@@ -179,3 +179,7 @@ action bar or in the message options.
 ## Voice & video rooms (`feature_video_rooms`) [In Development]
 
 Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
+
+## Rich text in room topics (`feature_html_topic`) [In Development]
+
+Enables rendering of MD / HTML in room topics.
