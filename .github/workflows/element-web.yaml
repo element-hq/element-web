@@ -1,0 +1,52 @@
+# Produce a build of element-web with this version of react-sdk
+# and any matching branches of element-web and js-sdk, output it
+# as an artifact and run integration tests.
+name: Element Web - Build
+on:
+  pull_request: { }
+  push:
+    branches: [ develop, master ]
+  repository_dispatch:
+    types: [ upstream-sdk-notify ]
+env:
+  # These must be set for fetchdep.sh to get the right branch
+  REPOSITORY: ${{ github.repository }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+jobs:
+  build:
+    name: "Build Element-Web"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Fetch layered build
+        id: layered_build
+        run: |
+          scripts/ci/layered.sh
+          JSSDK_SHA=$(git -C matrix-js-sdk rev-parse --short=12 HEAD)
+          REACT_SHA=$(git rev-parse --short=12 HEAD)
+          VECTOR_SHA=$(git -C element-web rev-parse --short=12 HEAD)
+          echo "::set-output name=VERSION::$VECTOR_SHA-react-$REACT_SHA-js-$JSSDK_SHA"
+
+      - name: Copy config
+        run: cp element.io/develop/config.json config.json
+        working-directory: ./element-web
+
+      - name: Build
+        env:
+          CI_PACKAGE: true
+          VERSION: "${{ steps.layered_build.outputs.VERSION }}"
+        run: yarn build
+        working-directory: ./element-web
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: previewbuild
+          path: element-web/webapp
+          # We'll only use this in a triggered job, then we're done with it
+          retention-days: 1

@@ -171,9 +171,8 @@ should generally try to adhere to them.
 ## Percy Visual Testing
 We also support visual testing via Percy, this extracts the DOM from Cypress and renders it using custom renderers
 for Safari, Firefox, Chrome & Edge, allowing us to spot visual regressions before they become release regressions.
-Right now we run it as part of the standard Pull Request CI automation but due to only having 25k screenshots/month,
-and each `cy.percySnapshot()` call results in 8 screenshots (4 browsers, 2 sizes) this could quickly be exhausted and
-at that point we would likely run it on a CRON interval or before releases.
+Each `cy.percySnapshot()` call results in 8 screenshots (4 browsers, 2 sizes) this can quickly be exhausted and
+so we only run Percy testing on `develop` and PRs which are labelled `X-Needs-Percy`.
 
 To record a snapshot use `cy.percySnapshot()`, you may have to pass `percyCSS` into the 2nd argument to hide certain
 elements which contain dynamic/generated data to avoid them cause false positives in the Percy screenshot diffs.
