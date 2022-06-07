@@ -126,6 +126,9 @@ describe('<LeftPanelLiveShareWarning />', () => {
                 metricsTrigger: undefined,
                 // latest beacon's room
                 room_id: roomId2,
+                event_id: beacon2.beaconInfoId,
+                highlighted: true,
+                scroll_into_view: true,
             });
         });
 
@@ -158,6 +161,9 @@ describe('<LeftPanelLiveShareWarning />', () => {
                 metricsTrigger: undefined,
                 // error beacon's room
                 room_id: roomId1,
+                event_id: beacon1.beaconInfoId,
+                highlighted: true,
+                scroll_into_view: true,
             });
         });
 
@@ -264,6 +270,9 @@ describe('<LeftPanelLiveShareWarning />', () => {
                     metricsTrigger: undefined,
                     // stopping error beacon's room
                     room_id: beacon2.roomId,
+                    event_id: beacon2.beaconInfoId,
+                    highlighted: true,
+                    scroll_into_view: true,
                 });
             });
         });

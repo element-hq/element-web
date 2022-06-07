@@ -21,11 +21,14 @@ import { _t } from '../../../languageHandler';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../stores/OwnBeaconStore';
 import { useOwnLiveBeacons } from '../../../utils/beacon';
-import AccessibleButton from '../elements/AccessibleButton';
+import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import Spinner from '../elements/Spinner';
 import StyledLiveBeaconIcon from './StyledLiveBeaconIcon';
 import { Icon as CloseIcon } from '../../../../res/img/image-view/close.svg';
 import LiveTimeRemaining from './LiveTimeRemaining';
+import dispatcher from '../../../dispatcher/dispatcher';
+import { ViewRoomPayload } from '../../../dispatcher/payloads/ViewRoomPayload';
+import { Action } from '../../../dispatcher/actions';
 
 const getLabel = (hasLocationPublishError: boolean, hasStopSharingError: boolean): string => {
     if (hasLocationPublishError) {
@@ -57,6 +60,13 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
 
     const hasError = hasStopSharingError || hasLocationPublishError;
 
+    // eat events from buttons so navigate to tile
+    // is not triggered
+    const stopPropagationWrapper = (callback: () => void) => (e?: ButtonEvent) => {
+        e?.stopPropagation();
+        callback();
+    };
+
     const onButtonClick = () => {
         if (hasLocationPublishError) {
             onResetLocationPublishError();
@@ -65,8 +75,20 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
         }
     };
 
+    const onClick = () => {
+        dispatcher.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: beacon.roomId,
+            metricsTrigger: undefined,
+            event_id: beacon.beaconInfoId,
+            scroll_into_view: true,
+            highlighted: true,
+        });
+    };
+
     return <div
         className='mx_RoomLiveShareWarning'
+        onClick={onClick}
     >
         <StyledLiveBeaconIcon className="mx_RoomLiveShareWarning_icon" withError={hasError} />
 
@@ -82,7 +104,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
         <AccessibleButton
             className='mx_RoomLiveShareWarning_stopButton'
             data-test-id='room-live-share-primary-button'
-            onClick={onButtonClick}
+            onClick={stopPropagationWrapper(onButtonClick)}
             kind='danger'
             element='button'
             disabled={stoppingInProgress}
@@ -94,7 +116,7 @@ const RoomLiveShareWarningInner: React.FC<RoomLiveShareWarningInnerProps> = ({ l
             title={_t('Stop sharing and close')}
             element='button'
             className='mx_RoomLiveShareWarning_closeButton'
-            onClick={onStopSharing}
+            onClick={stopPropagationWrapper(onStopSharing)}
         >
             <CloseIcon className='mx_RoomLiveShareWarning_closeButtonIcon' />
         </AccessibleButton> }

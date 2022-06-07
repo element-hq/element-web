@@ -20,6 +20,7 @@ exports[`<RoomLiveShareWarning /> when user has live beacons and geolocation is 
   >
     <div
       className="mx_RoomLiveShareWarning"
+      onClick={[Function]}
     >
       <StyledLiveBeaconIcon
         className="mx_RoomLiveShareWarning_icon"
