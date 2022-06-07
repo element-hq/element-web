@@ -1,5 +1,5 @@
-Changes in [1.10.14-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.10.14-rc.1) (2022-05-31)
-===========================================================================================================
+Changes in [1.10.14](https://github.com/vector-im/element-web/releases/tag/v1.10.14) (2022-06-07)
+=================================================================================================
 
 ## ✨ Features
  * Make Lao translation available ([\#22358](https://github.com/vector-im/element-web/pull/22358)). Fixes #22327.
