@@ -112,6 +112,12 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
     const containerName = `react-sdk-cypress-synapse-${crypto.randomBytes(4).toString("hex")}`;
     const userInfo = os.userInfo();
 
+    let userParams: string[] = [];
+    if (userInfo.uid >= 0) {
+        // On *nix we run the docker container as our uid:gid otherwise cleaning it up its media_store can be difficult
+        userParams = ["-u", `${userInfo.uid}:${userInfo.gid}`];
+    }
+
     const synapseId = await new Promise<string>((resolve, reject) => {
         childProcess.execFile('docker', [
             "run",
@@ -119,8 +125,7 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
             "-d",
             "-v", `${synCfg.configDir}:/data`,
             "-p", `${synCfg.port}:8008/tcp`,
-            // We run the docker container as our uid:gid otherwise cleaning it up its media_store can be difficult
-            "-u", `${userInfo.uid}:${userInfo.gid}`,
+            ...userParams,
             "matrixdotorg/synapse:develop",
             "run",
         ], (err, stdout) => {
