@@ -54,7 +54,10 @@ jobs:
   close-if-fork-develop:
     name: Forbid develop branch fork contributions
     runs-on: ubuntu-latest
-    if: github.event.action == 'opened' && github.event.pull_request.repository.head.repo.full_name != github.repository
+    if: >
+      github.event.action == 'opened' &&
+      github.event.pull_request.head.ref == 'develop' &&
+      github.event.pull_request.head.repo.full_name != github.repository
     steps:
       - name: Close pull request
         uses: actions/github-script@v5
