@@ -1,5 +1,5 @@
-Changes in [3.46.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.46.0-rc.1) (2022-05-31)
-===============================================================================================================
+Changes in [3.46.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.46.0) (2022-06-07)
+=====================================================================================================
 
 ## ✨ Features
  * Configure custom home.html via `.well-known/matrix/client["io.element.embedded_pages"]["home_url"]` for all your element-web/desktop users ([\#7790](https://github.com/matrix-org/matrix-react-sdk/pull/7790)). Contributed by @johannes-krude.
