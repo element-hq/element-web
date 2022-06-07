@@ -1,6 +1,6 @@
 {
   "name": "matrix-react-sdk",
-  "version": "3.45.0",
+  "version": "3.46.0",
   "description": "SDK for matrix.org using React",
   "author": "matrix.org",
   "repository": {
@@ -22,7 +22,7 @@
     "README.md",
     "package.json"
   ],
-  "main": "./src/index.ts",
+  "main": "./lib/index.ts",
   "matrix_src_main": "./src/index.ts",
   "matrix_lib_main": "./lib/index.ts",
   "matrix_lib_typings": "./lib/index.d.ts",
@@ -92,7 +92,7 @@
     "matrix-analytics-events": "github:matrix-org/matrix-analytics-events.git#a0687ca6fbdb7258543d49b99fb88b9201e900b0",
     "matrix-encrypt-attachment": "^1.0.3",
     "matrix-events-sdk": "^0.0.1-beta.7",
-    "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
+    "matrix-js-sdk": "18.1.0",
     "matrix-widget-api": "^0.1.0-beta.18",
     "minimist": "^1.2.5",
     "opus-recorder": "^8.0.3",
@@ -246,5 +246,6 @@
   "jestSonar": {
     "reportPath": "coverage",
     "sonar56x": true
-  }
+  },
+  "typings": "./lib/index.d.ts"
 }
