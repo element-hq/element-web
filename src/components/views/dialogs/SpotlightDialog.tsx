@@ -30,7 +30,7 @@ import { normalize } from "matrix-js-sdk/src/utils";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { RoomHierarchy } from "matrix-js-sdk/src/room-hierarchy";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
-import { WebSearch as WebSearchEvent } from "matrix-analytics-events/types/typescript/WebSearch";
+import { WebSearch as WebSearchEvent } from "@matrix-org/analytics-events/types/typescript/WebSearch";
 
 import { IDialogProps } from "./IDialogProps";
 import { _t } from "../../../languageHandler";

@@ -19,7 +19,7 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
       "_latestLocationState": undefined,
       "_maxListeners": undefined,
       "clearLatestLocation": [Function],
-      "livenessWatchInterval": undefined,
+      "livenessWatchTimeout": undefined,
       "roomId": "!room:server",
       "rootEvent": Object {
         "content": Object {
@@ -81,7 +81,7 @@ exports[`<BeaconStatus /> active state renders without children 1`] = `
             "_latestLocationState": undefined,
             "_maxListeners": undefined,
             "clearLatestLocation": [Function],
-            "livenessWatchInterval": undefined,
+            "livenessWatchTimeout": undefined,
             "roomId": "!room:server",
             "rootEvent": Object {
               "content": Object {

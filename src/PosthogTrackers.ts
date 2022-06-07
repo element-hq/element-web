@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import { PureComponent, SyntheticEvent } from "react";
-import { WebScreen as ScreenEvent } from "matrix-analytics-events/types/typescript/WebScreen";
-import { Interaction as InteractionEvent } from "matrix-analytics-events/types/typescript/Interaction";
+import { WebScreen as ScreenEvent } from "@matrix-org/analytics-events/types/typescript/WebScreen";
+import { Interaction as InteractionEvent } from "@matrix-org/analytics-events/types/typescript/Interaction";
 
 import PageType from "./PageTypes";
 import Views from "./Views";

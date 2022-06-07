@@ -25,7 +25,7 @@ import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import { Element as ChildElement, parseFragment as parseHtml } from "parse5";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IContent } from 'matrix-js-sdk/src/models/event';
-import { SlashCommand as SlashCommandEvent } from "matrix-analytics-events/types/typescript/SlashCommand";
+import { SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-events/types/typescript/SlashCommand";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import dis from './dispatcher/dispatcher';

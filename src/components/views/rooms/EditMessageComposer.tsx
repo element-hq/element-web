@@ -20,7 +20,7 @@ import { EventStatus, IContent, MatrixEvent } from 'matrix-js-sdk/src/models/eve
 import { MsgType } from 'matrix-js-sdk/src/@types/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
 import { logger } from "matrix-js-sdk/src/logger";
-import { Composer as ComposerEvent } from "matrix-analytics-events/types/typescript/Composer";
+import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';

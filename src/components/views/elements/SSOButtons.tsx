@@ -18,7 +18,7 @@ import React from "react";
 import { chunk } from "lodash";
 import classNames from "classnames";
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { Signup } from "matrix-analytics-events/types/typescript/Signup";
+import { Signup } from "@matrix-org/analytics-events/types/typescript/Signup";
 
 import PlatformPeg from "../../../PlatformPeg";
 import AccessibleButton from "./AccessibleButton";

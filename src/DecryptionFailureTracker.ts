@@ -16,7 +16,7 @@ limitations under the License.
 
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
-import { Error as ErrorEvent } from "matrix-analytics-events/types/typescript/Error";
+import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
 
 import Analytics from "./Analytics";
 import { PosthogAnalytics } from './PosthogAnalytics';
