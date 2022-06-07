@@ -284,18 +284,6 @@ limitations under the License.
     }
 }
 
-.mx_ThreadPanel_replies {
-    margin-top: $spacing-8;
-    display: flex;
-    align-items: center;
-    position: relative;
-
-    .mx_ThreadPanel_ThreadsAmount {
-        @mixin ThreadsAmount;
-        font-size: $font-12px; // Same font size as the counter on the main panel
-    }
-}
-
 .mx_ThreadPanel_viewInRoom::before {
     mask-image: url('$(res)/img/element-icons/view-in-room.svg');
 }

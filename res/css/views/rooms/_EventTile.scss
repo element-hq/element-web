@@ -728,6 +728,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     $borderRadius: 8px;
     $padding: $spacing-8;
     $hrHeight: 1px;
+    $notification-dot-size: 8px; // notification dot next to the timestamp
 
     margin: calc(var(--topOffset) + $hrHeight) 0 var(--topOffset); // include the height of horizontal line
     padding: $padding $spacing-24 $padding $padding;
@@ -747,29 +748,34 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         box-shadow: none; // don't show the verification left stroke in the thread list
     }
 
-    &::after {
+    &::after,
+    &::before {
         content: "";
         position: absolute;
-        left: calc(var(--leftOffset) + $padding);
-        right: $spacing-24; // 24px: 32px - 8px (right padding)
+    }
+
+    &::after {
+        $inset-block-start: auto;
+        $inset-inline-end: calc(32px - $padding);
+        $inset-block-end: calc(-1 * var(--topOffset) - $hrHeight); // exclude the height of horizontal line
+        $inset-inline-start: calc(var(--leftOffset) + $padding);
+        inset: $inset-block-start $inset-inline-end $inset-block-end $inset-inline-start;
+
         height: $hrHeight;
-        bottom: calc(-1 * var(--topOffset) - $hrHeight); // exclude the height of horizontal line
         background-color: $quinary-content;
         pointer-events: none; // disable the message action bar on hover
     }
 
     &::before {
-        content: "";
-        position: absolute;
         inset: 0;
     }
 
     // Display notification dot
     &[data-notification]::before {
-        width: 8px;
-        height: 8px;
+        width: $notification-dot-size;
+        height: $notification-dot-size;
         border-radius: 50%;
-        inset: 14px 8px auto auto; // 14px: align the dot with the timestamp row
+        inset: 14px $spacing-8 auto auto; // 14px: align the dot with the timestamp row
     }
 
     &[data-notification=total]::before {
@@ -793,36 +799,46 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     .mx_EventTile_avatar {
-        top: $padding;
-        left: $padding;
+        inset: $padding auto auto $padding;
     }
 
     .mx_DisambiguatedProfile {
-        margin-right: 12px;
+        margin-right: $spacing-12;
         display: inline-flex;
         flex: 1;
-    }
 
-    .mx_DisambiguatedProfile_displayName,
-    .mx_DisambiguatedProfile_mxid {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        .mx_DisambiguatedProfile_displayName,
+        .mx_DisambiguatedProfile_mxid {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-    .mx_DisambiguatedProfile_displayName {
-        flex: none;
-        max-width: 100%;
-    }
+        .mx_DisambiguatedProfile_displayName {
+            flex: none;
+            max-width: 100%;
+        }
 
-    .mx_DisambiguatedProfile_mxid {
-        flex: 1;
+        .mx_DisambiguatedProfile_mxid {
+            flex: 1;
+        }
     }
 
     .mx_EventTile_line {
         width: 100%;
         box-sizing: border-box;
-        border-radius: $borderRadius !important; // override 4px
+
+        .mx_ThreadPanel_replies {
+            margin-top: $spacing-8;
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            .mx_ThreadPanel_replies_amount {
+                @mixin ThreadsAmount;
+                font-size: $font-12px; // Same font size as the counter on the main panel
+            }
+        }
     }
 
     .mx_DisambiguatedProfile,
