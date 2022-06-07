@@ -25,6 +25,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import SpaceBasicSettings from "./SpaceBasicSettings";
 import { avatarUrlForRoom } from "../../../Avatar";
 import { IDialogProps } from "../dialogs/IDialogProps";
+import { htmlSerializeFromMdIfNeeded } from "../../../editor/serialize";
 import { leaveSpace } from "../../../utils/leave-behaviour";
 import { getTopic } from "../../../hooks/room/useTopic";
 
@@ -47,7 +48,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
     const canSetName = space.currentState.maySendStateEvent(EventType.RoomName, userId);
     const nameChanged = name !== space.name;
 
-    const currentTopic = getTopic(space);
+    const currentTopic = getTopic(space).text;
     const [topic, setTopic] = useState<string>(currentTopic);
     const canSetTopic = space.currentState.maySendStateEvent(EventType.RoomTopic, userId);
     const topicChanged = topic !== currentTopic;
@@ -77,7 +78,8 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
         }
 
         if (topicChanged) {
-            promises.push(cli.setRoomTopic(space.roomId, topic));
+            const htmlTopic = htmlSerializeFromMdIfNeeded(topic, { forceHTML: false });
+            promises.push(cli.setRoomTopic(space.roomId, topic, htmlTopic));
         }
 
         const results = await Promise.allSettled(promises);

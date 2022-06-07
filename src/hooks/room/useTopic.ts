@@ -19,14 +19,17 @@ import { EventType } from "matrix-js-sdk/src/@types/event";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { parseTopicContent, TopicState } from "matrix-js-sdk/src/content-helpers";
+import { MRoomTopicEventContent } from "matrix-js-sdk/src/@types/topic";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 
 export const getTopic = (room: Room) => {
-    return room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic;
+    const content: MRoomTopicEventContent = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent();
+    return !!content ? parseTopicContent(content) : null;
 };
 
-export function useTopic(room: Room): string {
+export function useTopic(room: Room): TopicState {
     const [topic, setTopic] = useState(getTopic(room));
     useTypedEventEmitter(room.currentState, RoomStateEvent.Events, (ev: MatrixEvent) => {
         if (ev.getType() !== EventType.RoomTopic) return;

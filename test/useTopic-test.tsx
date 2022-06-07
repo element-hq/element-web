@@ -42,7 +42,7 @@ describe("useTopic", () => {
 
         function RoomTopic() {
             const topic = useTopic(room);
-            return <p>{ topic }</p>;
+            return <p>{ topic.text }</p>;
         }
 
         const wrapper = mount(<RoomTopic />);

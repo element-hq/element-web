@@ -323,6 +323,18 @@ const composerSanitizeHtmlParams: IExtendedSanitizeOptions = {
     },
 };
 
+// reduced set of allowed tags to avoid turning topics into Myspace
+const topicSanitizeHtmlParams: IExtendedSanitizeOptions = {
+    ...sanitizeHtmlParams,
+    allowedTags: [
+        'font', // custom to matrix for IRC-style font coloring
+        'del', // for markdown
+        'a', 'sup', 'sub',
+        'b', 'i', 'u', 'strong', 'em', 'strike', 'br', 'div',
+        'span',
+    ],
+};
+
 abstract class BaseHighlighter<T extends React.ReactNode> {
     constructor(public highlightClass: string, public highlightLink: string) {
     }
@@ -603,6 +615,57 @@ export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts 
             dir="auto"
         /> : <span key="body" ref={opts.ref} className={className} dir="auto">
             { emojiBodyElements || strippedBody }
+        </span>;
+}
+
+/**
+ * Turn a room topic into html
+ * @param topic plain text topic
+ * @param htmlTopic optional html topic
+ * @param ref React ref to attach to any React components returned
+ * @param allowExtendedHtml whether to allow extended HTML tags such as headings and lists
+ * @return The HTML-ified node.
+ */
+export function topicToHtml(
+    topic: string,
+    htmlTopic?: string,
+    ref?: React.Ref<HTMLSpanElement>,
+    allowExtendedHtml = false,
+): ReactNode {
+    if (!SettingsStore.getValue("feature_html_topic")) {
+        htmlTopic = null;
+    }
+
+    let isFormattedTopic = !!htmlTopic;
+    let topicHasEmoji = false;
+    let safeTopic = "";
+
+    try {
+        topicHasEmoji = mightContainEmoji(isFormattedTopic ? htmlTopic : topic);
+
+        if (isFormattedTopic) {
+            safeTopic = sanitizeHtml(htmlTopic, allowExtendedHtml ? sanitizeHtmlParams : topicSanitizeHtmlParams);
+            if (topicHasEmoji) {
+                safeTopic = formatEmojis(safeTopic, true).join('');
+            }
+        }
+    } catch {
+        isFormattedTopic = false; // Fall back to plain-text topic
+    }
+
+    let emojiBodyElements: ReturnType<typeof formatEmojis>;
+    if (!isFormattedTopic && topicHasEmoji) {
+        emojiBodyElements = formatEmojis(topic, false);
+    }
+
+    return isFormattedTopic ?
+        <span
+            key="body"
+            ref={ref}
+            dangerouslySetInnerHTML={{ __html: safeTopic }}
+            dir="auto"
+        /> : <span key="body" ref={ref} dir="auto">
+            { emojiBodyElements || topic }
         </span>;
 }
 

@@ -25,6 +25,7 @@ import * as ContentHelpers from 'matrix-js-sdk/src/content-helpers';
 import { Element as ChildElement, parseFragment as parseHtml } from "parse5";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IContent } from 'matrix-js-sdk/src/models/event';
+import { MRoomTopicEventContent } from 'matrix-js-sdk/src/@types/topic';
 import { SlashCommand as SlashCommandEvent } from "@matrix-org/analytics-events/types/typescript/SlashCommand";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
@@ -32,7 +33,7 @@ import dis from './dispatcher/dispatcher';
 import { _t, _td, ITranslatableError, newTranslatableError } from './languageHandler';
 import Modal from './Modal';
 import MultiInviter from './utils/MultiInviter';
-import { linkifyAndSanitizeHtml } from './HtmlUtils';
+import { linkifyElement, topicToHtml } from './HtmlUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import WidgetUtils from "./utils/WidgetUtils";
 import { textToHtmlRainbow } from "./utils/colour";
@@ -66,6 +67,7 @@ import { XOR } from "./@types/common";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import VoipUserMapper from './VoipUserMapper';
+import { htmlSerializeFromMdIfNeeded } from './editor/serialize';
 import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
@@ -463,7 +465,8 @@ export const Commands = [
         runFn: function(roomId, args) {
             const cli = MatrixClientPeg.get();
             if (args) {
-                return success(cli.setRoomTopic(roomId, args));
+                const html = htmlSerializeFromMdIfNeeded(args, { forceHTML: false });
+                return success(cli.setRoomTopic(roomId, args, html));
             }
             const room = cli.getRoom(roomId);
             if (!room) {
@@ -472,14 +475,19 @@ export const Commands = [
                 );
             }
 
-            const topicEvents = room.currentState.getStateEvents('m.room.topic', '');
-            const topic = topicEvents && topicEvents.getContent().topic;
-            const topicHtml = topic ? linkifyAndSanitizeHtml(topic) : _t('This room has no topic.');
+            const content: MRoomTopicEventContent = room.currentState.getStateEvents('m.room.topic', '')?.getContent();
+            const topic = !!content
+                ? ContentHelpers.parseTopicContent(content)
+                : { text: _t('This room has no topic.') };
+
+            const ref = e => e && linkifyElement(e);
+            const body = topicToHtml(topic.text, topic.html, ref, true);
 
             Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
                 title: room.name,
-                description: <div dangerouslySetInnerHTML={{ __html: topicHtml }} />,
+                description: <div ref={ref}>{ body }</div>,
                 hasCloseButton: true,
+                className: "markdown-body",
             });
             return success();
         },
@@ -1333,11 +1341,10 @@ interface ICmd {
 }
 
 /**
- * Process the given text for /commands and return a bound method to perform them.
+ * Process the given text for /commands and returns a parsed command that can be used for running the operation.
  * @param {string} input The raw text input by the user.
- * @return {null|function(): Object} Function returning an object with the property 'error' if there was an error
- * processing the command, or 'promise' if a request was sent out.
- * Returns null if the input didn't match a command.
+ * @return {ICmd} The parsed command object.
+ * Returns an empty object if the input didn't match a command.
  */
 export function getCommand(input: string): ICmd {
     const { cmd, args } = parseCommandString(input);

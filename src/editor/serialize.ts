@@ -62,7 +62,11 @@ export function htmlSerializeIfNeeded(
         return escapeHtml(textSerialize(model)).replace(/\n/g, '<br/>');
     }
 
-    let md = mdSerialize(model);
+    const md = mdSerialize(model);
+    return htmlSerializeFromMdIfNeeded(md, { forceHTML });
+}
+
+export function htmlSerializeFromMdIfNeeded(md: string, { forceHTML = false } = {}): string {
     // copy of raw input to remove unwanted math later
     const orig = md;
 

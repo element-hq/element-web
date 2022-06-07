@@ -330,6 +330,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: [SettingLevel.ACCOUNT],
         default: null,
     },
+    "feature_html_topic": {
+        isFeature: true,
+        labsGroup: LabGroup.Rooms,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Show HTML representation of room topics"),
+        default: false,
+    },
     "feature_bridge_state": {
         isFeature: true,
         labsGroup: LabGroup.Rooms,

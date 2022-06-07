@@ -31,6 +31,7 @@ import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import AccessibleButton from "./AccessibleButton";
 import { Linkify } from "./Linkify";
 import TooltipTarget from "./TooltipTarget";
+import { topicToHtml } from "../../../HtmlUtils";
 
 interface IProps extends React.HTMLProps<HTMLDivElement> {
     room?: Room;
@@ -44,6 +45,7 @@ export default function RoomTopic({
     const ref = useRef<HTMLDivElement>();
 
     const topic = useTopic(room);
+    const body = topicToHtml(topic?.text, topic?.html, ref);
 
     const onClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         props.onClick?.(e);
@@ -62,6 +64,7 @@ export default function RoomTopic({
     useDispatcher(dis, (payload) => {
         if (payload.action === Action.ShowRoomTopic) {
             const canSetTopic = room.currentState.maySendStateEvent(EventType.RoomTopic, client.getUserId());
+            const body = topicToHtml(topic?.text, topic?.html, ref, true);
 
             const modal = Modal.createDialog(InfoDialog, {
                 title: room.name,
@@ -74,7 +77,7 @@ export default function RoomTopic({
                             }
                         }}
                     >
-                        { topic }
+                        { body }
                     </Linkify>
                     { canSetTopic && <AccessibleButton
                         kind="primary_outline"
@@ -101,7 +104,7 @@ export default function RoomTopic({
     >
         <TooltipTarget label={_t("Click to read topic")} alignment={Alignment.Bottom} ignoreHover={ignoreHover}>
             <Linkify>
-                { topic }
+                { body }
             </Linkify>
         </TooltipTarget>
     </div>;

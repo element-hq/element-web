@@ -22,6 +22,7 @@ import Field from "../elements/Field";
 import { mediaFromMxc } from "../../../customisations/Media";
 import AccessibleButton from "../elements/AccessibleButton";
 import AvatarSetting from "../settings/AvatarSetting";
+import { htmlSerializeFromMdIfNeeded } from '../../../editor/serialize';
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
 
 interface IProps {
@@ -142,7 +143,8 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         }
 
         if (this.state.originalTopic !== this.state.topic) {
-            await client.setRoomTopic(this.props.roomId, this.state.topic);
+            const html = htmlSerializeFromMdIfNeeded(this.state.topic, { forceHTML: false });
+            await client.setRoomTopic(this.props.roomId, this.state.topic, html);
             newState.originalTopic = this.state.topic;
         }
 

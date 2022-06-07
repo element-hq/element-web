@@ -166,6 +166,12 @@ limitations under the License.
     display: -webkit-box;
 }
 
+.mx_RoomHeader_topic .mx_Emoji {
+    // Undo font size increase to prevent vertical cropping and ensure the same size
+    // as in plain text emojis
+    font-size: inherit;
+}
+
 .mx_RoomHeader_avatar {
     flex: 0;
     margin: 0 6px 0 7px;

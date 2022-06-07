@@ -304,6 +304,73 @@ legend {
     overflow-y: auto;
 }
 
+// Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants.
+.mx_Dialog .markdown-body {
+    font-family: inherit !important;
+    white-space: normal !important;
+    line-height: inherit !important;
+    color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
+    font-size: $font-14px;
+
+    pre,
+    code {
+        font-family: $monospace-font-family !important;
+        background-color: $codeblock-background-color;
+    }
+
+    // this selector wrongly applies to code blocks too but we will unset it in the next one
+    code {
+        white-space: pre-wrap; // don't collapse spaces in inline code blocks
+    }
+
+    pre code {
+        white-space: pre; // we want code blocks to be scrollable and not wrap
+
+        >* {
+            display: inline;
+        }
+    }
+
+    pre {
+        // have to use overlay rather than auto otherwise Linux and Windows
+        // Chrome gets very confused about vertical spacing:
+        // https://github.com/vector-im/vector-web/issues/754
+        overflow-x: overlay;
+        overflow-y: visible;
+
+        &::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+    }
+}
+
+.mx_Dialog .markdown-body h1,
+.mx_Dialog .markdown-body h2,
+.mx_Dialog .markdown-body h3,
+.mx_Dialog .markdown-body h4,
+.mx_Dialog .markdown-body h5,
+.mx_Dialog .markdown-body h6 {
+    font-family: inherit !important;
+    color: inherit;
+}
+
+/* Make h1 and h2 the same size as h3. */
+.mx_Dialog .markdown-body h1,
+.mx_Dialog .markdown-body h2 {
+    font-size: 1.5em;
+    border-bottom: none !important; // override GFM
+}
+
+.mx_Dialog .markdown-body a {
+    color: $accent-alt;
+}
+
+.mx_Dialog .markdown-body blockquote {
+    border-left: 2px solid $blockquote-bar-color;
+    border-radius: 2px;
+    padding: 0 10px;
+}
+
 .mx_Dialog_fixedWidth {
     width: 60vw;
     max-width: 704px;
