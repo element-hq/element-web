@@ -56,7 +56,8 @@ jobs:
       contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||
       contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
       contains(github.event.issue.labels.*.name, 'A-Tags') ||
-      contains(github.event.issue.labels.*.name, 'A-Video-Rooms')) &&
+      contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
+      contains(github.event.issue.labels.*.name, 'A-Message-Starring')) &&
       contains(github.event.issue.labels.*.name, 'Z-Labs')
     steps:
       - uses: actions/github-script@v5

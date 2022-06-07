@@ -300,12 +300,12 @@ function createJWTToken() {
     );
 }
 
-async function notifyHangup() {
+async function notifyHangup(errorMessage?: string) {
     if (widgetApi) {
         // We send the hangup event before setAlwaysOnScreen, because the latter
         // can cause the receiving side to instantly stop listening.
         try {
-            await widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+            await widgetApi.transport.send(ElementWidgetActions.HangupCall, { errorMessage });
         } finally {
             await widgetApi.setAlwaysOnScreen(false);
         }
@@ -366,8 +366,12 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
             startAudioOnly,
             startWithAudioMuted: audioDevice == null,
             startWithVideoMuted: videoDevice == null,
-            // Request all log levels for inclusion in rageshakes
-            apiLogLevels: ["warn", "log", "error", "info", "debug"],
+            // Request some log levels for inclusion in rageshakes
+            // Ideally we would capture all possible log levels, but this can
+            // cause Jitsi Meet to try to post various circular data structures
+            // back over the iframe API, and therefore end up crashing
+            // https://github.com/jitsi/jitsi-meet/issues/11585
+            apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
     };
@@ -414,7 +418,7 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         if (error.isFatal) {
             // We got disconnected. Since Jitsi Meet might send us back to the
             // prejoin screen, we're forced to act as if we hung up entirely.
-            notifyHangup();
+            notifyHangup(error.message);
             meetApi = null;
             closeConference();
         }
