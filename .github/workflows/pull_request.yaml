@@ -19,8 +19,60 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-      - uses: yogevbd/enforce-label-action@2.1.0
+      - uses: yogevbd/enforce-label-action@2.2.2
         with:
           REQUIRED_LABELS_ANY: "T-Defect,T-Enhancement,T-Task"
           BANNED_LABELS: "X-Blocked"
           BANNED_LABELS_DESCRIPTION: "Preventing merge whilst PR is marked blocked!"
+
+  community-prs:
+    name: Label Community PRs
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    steps:
+      - name: Check membership
+        uses: tspascoal/get-user-teams-membership@v1
+        id: teams
+        with:
+          username: ${{ github.event.pull_request.user.login }}
+          organization: matrix-org
+          team: core-team
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+      - name: Add label
+        if: ${{ steps.teams.outputs.isTeamMember == 'false' }}
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.addLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ['Z-Community-PR']
+            });
+
+  close-if-fork-develop:
+    name: Forbid develop branch fork contributions
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened' && github.event.pull_request.repository.head.repo.full_name != github.repository
+    steps:
+      - name: Close pull request
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Thanks for opening a pull request, unfortunately we do not accept contributions from the main " +
+                " branch of your fork, please re-open once you switch to an alternative branch for everyone's sanity." +
+                " See https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.md",
+            });
+
+            github.rest.pulls.update({
+              pull_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'closed'
+            });
+
