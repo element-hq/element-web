@@ -189,7 +189,7 @@ const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
                 action: Action.ViewUserSettings,
                 initialTabId: UserTab.Labs,
             });
-        } else if (mxEvent.isThreadRelation) {
+        } else if (mxEvent.getThread() && !mxEvent.isThreadRoot) {
             showThread({
                 rootEvent: mxEvent.getThread().rootEvent,
                 initialEvent: mxEvent,

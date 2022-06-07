@@ -443,7 +443,7 @@ describe('<MessageActionBar />', () => {
                     },
                 });
                 // mock the thread stuff
-                jest.spyOn(threadReplyEvent, 'isThreadRelation', 'get').mockReturnValue(true);
+                jest.spyOn(threadReplyEvent, 'isThreadRoot', 'get').mockReturnValue(false);
                 // set alicesMessageEvent as the root event
                 jest.spyOn(threadReplyEvent, 'getThread').mockReturnValue(
                     { rootEvent: alicesMessageEvent } as unknown as Thread,
