@@ -28,9 +28,14 @@ interface IProps {
     onClick?(): void;
     colored?: boolean;
     emphasizeDisplayName?: boolean;
+    as?: string;
 }
 
 export default class DisambiguatedProfile extends React.Component<IProps> {
+    public static defaultProps = {
+        as: "div",
+    };
+
     render() {
         const { fallbackName, member, colored, emphasizeDisplayName, onClick } = this.props;
         const rawDisplayName = member?.rawDisplayName || fallbackName;
@@ -57,13 +62,14 @@ export default class DisambiguatedProfile extends React.Component<IProps> {
             [colorClass]: true,
         });
 
-        return (
-            <div className="mx_DisambiguatedProfile" onClick={onClick}>
-                <span className={displayNameClasses} dir="auto">
-                    { rawDisplayName }
-                </span>
-                { mxidElement }
-            </div>
-        );
+        return React.createElement(this.props.as, {
+            className: "mx_DisambiguatedProfile",
+            onClick,
+        }, <>
+            <span className={displayNameClasses} dir="auto">
+                { rawDisplayName }
+            </span>
+            { mxidElement }
+        </>);
     }
 }

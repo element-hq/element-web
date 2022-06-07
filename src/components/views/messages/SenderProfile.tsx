@@ -27,11 +27,16 @@ import { MatrixClientPeg } from "../../../MatrixClientPeg";
 interface IProps {
     mxEvent: MatrixEvent;
     onClick?(): void;
+    as?: string;
 }
 
 export default class SenderProfile extends React.PureComponent<IProps> {
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
+
+    public static defaultProps = {
+        as: "div",
+    };
 
     render() {
         const { mxEvent, onClick } = this.props;
@@ -60,6 +65,7 @@ export default class SenderProfile extends React.PureComponent<IProps> {
                         member={member}
                         colored={true}
                         emphasizeDisplayName={true}
+                        as={this.props.as}
                     />
                 );
             } }
