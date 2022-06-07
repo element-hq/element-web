@@ -14,10 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_MessageEditHistoryDialog .mx_Dialog_header > .mx_Dialog_title {
-    text-align: center;
-}
-
 .mx_MessageEditHistoryDialog {
     display: flex;
     flex-direction: column;
@@ -56,17 +52,31 @@ limitations under the License.
     }
 
     .mx_EventTile {
+        padding-top: 0 !important; // Override mx_EventTile:not([data-layout=bubble])
+
         .mx_MessageTimestamp {
             position: absolute;
         }
-    }
 
-    .mx_EventTile_line, .mx_EventTile_content {
-        margin-right: 0px;
+        .mx_EventTile_line {
+            padding-top: 1px;
+            padding-bottom: 3px;
+
+            line-height: $font-22px;
+
+            .mx_EventTile_content {
+                margin-right: 0px;
+            }
+        }
     }
 
     .mx_MessageActionBar .mx_AccessibleButton {
-        font-size: $font-10px;
-        padding: 0 8px;
+        display: flex;
+        align-items: center;
+
+        padding-inline-start: $spacing-8;
+        padding-inline-end: $spacing-8;
+
+        font-size: $font-15px;
     }
 }
