@@ -33,6 +33,7 @@ node_modules/matrix-react-sdk/scripts/fetchdep.sh matrix-org matrix-analytics-ev
 pushd matrix-analytics-events
 yarn link
 yarn install --pure-lockfile
+yarn build:ts
 popd
 
 # Now set up the react-sdk
