@@ -217,14 +217,6 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    screenCaptureErrorString(): string | null {
-        // it won't work at all if you're not on HTTPS so whine whine whine
-        if (window.location.protocol !== "https:") {
-            return _t("You need to be using HTTPS to place a screen-sharing call.");
-        }
-        return null;
-    }
-
     reload() {
         window.location.reload();
     }

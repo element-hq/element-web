@@ -451,10 +451,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    screenCaptureErrorString(): string | null {
-        return null;
-    }
-
     requestNotificationPermission(): Promise<string> {
         return Promise.resolve('granted');
     }
