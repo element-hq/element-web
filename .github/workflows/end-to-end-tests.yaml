@@ -53,5 +53,5 @@ jobs:
           benchmark-data-dir-path: dev/bench
           fail-on-alert: false
           comment-on-alert: false
-          github-token: ${{ secrets.DEPLOY_GH_PAGES }}
+          github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
           auto-push: ${{ github.ref == 'refs/heads/develop' }}

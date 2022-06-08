@@ -10,6 +10,7 @@ jobs:
   deploy:
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
+    environment: Netlify
     steps:
       - name: 📝 Create Deployment
         uses: bobheadxi/deployments@v1
