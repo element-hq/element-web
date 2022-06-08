@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
-      checks: write
+      statuses: write
       issues: read
       pull-requests: read
     environment: Cypress
