@@ -31,6 +31,11 @@ limitations under the License.
         display: flex;
         flex-direction: column;
 
+        /* the below is required, without this some unexpected scroll jump
+        will occur when erasing the composer content or jumping to voice note
+        recording */
+        min-height: 45px;
+
         .mx_BasicMessageComposer_input {
             // this will center the contenteditable
             // in it's parent vertically
