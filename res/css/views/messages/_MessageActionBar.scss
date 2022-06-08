@@ -18,6 +18,9 @@ limitations under the License.
 .mx_MessageActionBar {
     --MessageActionBar-size-button: 28px;
     --MessageActionBar-size-box: 32px; // 28px + 2px (margin) * 2
+    --MessageActionBar-item-hover-background: $panel-actions;
+    --MessageActionBar-item-hover-borderRadius: 6px;
+    --MessageActionBar-item-hover-zIndex: 1;
 
     position: absolute;
     visibility: hidden;
@@ -59,9 +62,9 @@ limitations under the License.
         margin: 2px;
 
         &:hover {
-            background: $panel-actions;
-            border-radius: 6px;
-            z-index: 1;
+            background: var(--MessageActionBar-item-hover-background);
+            border-radius: var(--MessageActionBar-item-hover-borderRadius);
+            z-index: var(--MessageActionBar-item-hover-zIndex);
         }
     }
 }
