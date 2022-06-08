@@ -242,66 +242,22 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipc.call('getAppVersion');
     }
 
-    public supportsAutoLaunch(): boolean {
-        return true;
+    public supportsSetting(settingName?: string): boolean {
+        switch (settingName) {
+            case "Electron.showTrayIcon": // Things other than Mac support tray icons
+            case "Electron.alwaysShowMenuBar": // This isn't relevant on Mac as Menu bars don't live in the app window
+                return !isMac;
+            default:
+                return true;
+        }
     }
 
-    public async getAutoLaunchEnabled(): Promise<boolean> {
-        return this.ipc.call('getAutoLaunchEnabled');
+    public getSettingValue(settingName: string): Promise<any> {
+        return this.ipc.call("getSettingValue", settingName);
     }
 
-    public async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
-        return this.ipc.call('setAutoLaunchEnabled', enabled);
-    }
-
-    public supportsWarnBeforeExit(): boolean {
-        return true;
-    }
-
-    public async shouldWarnBeforeExit(): Promise<boolean> {
-        return this.ipc.call('shouldWarnBeforeExit');
-    }
-
-    public async setWarnBeforeExit(enabled: boolean): Promise<void> {
-        return this.ipc.call('setWarnBeforeExit', enabled);
-    }
-
-    public supportsAutoHideMenuBar(): boolean {
-        // This is irelevant on Mac as Menu bars don't live in the app window
-        return !isMac;
-    }
-
-    public async getAutoHideMenuBarEnabled(): Promise<boolean> {
-        return this.ipc.call('getAutoHideMenuBarEnabled');
-    }
-
-    public async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
-        return this.ipc.call('setAutoHideMenuBarEnabled', enabled);
-    }
-
-    public supportsMinimizeToTray(): boolean {
-        // Things other than Mac support tray icons
-        return !isMac;
-    }
-
-    public async getMinimizeToTrayEnabled(): Promise<boolean> {
-        return this.ipc.call('getMinimizeToTrayEnabled');
-    }
-
-    public async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
-        return this.ipc.call('setMinimizeToTrayEnabled', enabled);
-    }
-
-    public supportsTogglingHardwareAcceleration(): boolean {
-        return true;
-    }
-
-    public async getHardwareAccelerationEnabled(): Promise<boolean> {
-        return this.ipc.call('getHardwareAccelerationEnabled');
-    }
-
-    public async setHardwareAccelerationEnabled(enabled: boolean): Promise<void> {
-        return this.ipc.call('setHardwareAccelerationEnabled', enabled);
+    public setSettingValue(settingName: string, value: any): Promise<void> {
+        return this.ipc.call("setSettingValue", settingName, value);
     }
 
     async canSelfUpdate(): Promise<boolean> {
