@@ -14,7 +14,6 @@
     "Go to your browser to complete Sign In": "Go to your browser to complete Sign In",
     "Unknown device": "Unknown device",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
-    "You need to be using HTTPS to place a screen-sharing call.": "You need to be using HTTPS to place a screen-sharing call.",
     "Powered by Matrix": "Powered by Matrix",
     "Use %(brand)s on mobile": "Use %(brand)s on mobile",
     "Unsupported browser": "Unsupported browser",
