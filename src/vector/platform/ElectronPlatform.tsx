@@ -18,13 +18,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
-import BaseEventIndexManager, {
-    ICrawlerCheckpoint,
-    IEventAndProfile,
-    IIndexStats,
-    ISearchArgs,
-} from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
+import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
+import BaseEventIndexManager from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
@@ -43,11 +38,11 @@ import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/Update
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
-import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import VectorBasePlatform from './VectorBasePlatform';
+import { SeshatIndexManager } from "./SeshatIndexManager";
 
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -88,128 +83,6 @@ function getUpdateCheckStatus(status: boolean | string) {
             status: UpdateCheckStatus.Error,
             detail: status,
         };
-    }
-}
-
-interface IPCPayload {
-    id?: number;
-    error?: string;
-    reply?: any;
-}
-
-class SeshatIndexManager extends BaseEventIndexManager {
-    private pendingIpcCalls: Record<number, { resolve, reject }> = {};
-    private nextIpcCallId = 0;
-
-    constructor() {
-        super();
-
-        electron.on('seshatReply', this.onIpcReply);
-    }
-
-    private async ipcCall(name: string, ...args: any[]): Promise<any> {
-        // TODO this should be moved into the preload.js file.
-        const ipcCallId = ++this.nextIpcCallId;
-        return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
-            window.electron.send('seshat', { id: ipcCallId, name, args });
-        });
-    }
-
-    private onIpcReply = (ev: {}, payload: IPCPayload) => {
-        if (payload.id === undefined) {
-            logger.warn("Ignoring IPC reply with no ID");
-            return;
-        }
-
-        if (this.pendingIpcCalls[payload.id] === undefined) {
-            logger.warn("Unknown IPC payload ID: " + payload.id);
-            return;
-        }
-
-        const callbacks = this.pendingIpcCalls[payload.id];
-        delete this.pendingIpcCalls[payload.id];
-        if (payload.error) {
-            callbacks.reject(payload.error);
-        } else {
-            callbacks.resolve(payload.reply);
-        }
-    };
-
-    async supportsEventIndexing(): Promise<boolean> {
-        return this.ipcCall('supportsEventIndexing');
-    }
-
-    async initEventIndex(userId: string, deviceId: string): Promise<void> {
-        return this.ipcCall('initEventIndex', userId, deviceId);
-    }
-
-    async addEventToIndex(ev: IMatrixEvent, profile: IMatrixProfile): Promise<void> {
-        return this.ipcCall('addEventToIndex', ev, profile);
-    }
-
-    async deleteEvent(eventId: string): Promise<boolean> {
-        return this.ipcCall('deleteEvent', eventId);
-    }
-
-    async isEventIndexEmpty(): Promise<boolean> {
-        return this.ipcCall('isEventIndexEmpty');
-    }
-
-    async isRoomIndexed(roomId: string): Promise<boolean> {
-        return this.ipcCall('isRoomIndexed', roomId);
-    }
-
-    async commitLiveEvents(): Promise<void> {
-        return this.ipcCall('commitLiveEvents');
-    }
-
-    async searchEventIndex(searchConfig: ISearchArgs): Promise<IResultRoomEvents> {
-        return this.ipcCall('searchEventIndex', searchConfig);
-    }
-
-    async addHistoricEvents(
-        events: IEventAndProfile[],
-        checkpoint: ICrawlerCheckpoint | null,
-        oldCheckpoint: ICrawlerCheckpoint | null,
-    ): Promise<boolean> {
-        return this.ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
-    }
-
-    async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
-        return this.ipcCall('addCrawlerCheckpoint', checkpoint);
-    }
-
-    async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
-        return this.ipcCall('removeCrawlerCheckpoint', checkpoint);
-    }
-
-    async loadFileEvents(args): Promise<IEventAndProfile[]> {
-        return this.ipcCall('loadFileEvents', args);
-    }
-
-    async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
-        return this.ipcCall('loadCheckpoints');
-    }
-
-    async closeEventIndex(): Promise<void> {
-        return this.ipcCall('closeEventIndex');
-    }
-
-    async getStats(): Promise<IIndexStats> {
-        return this.ipcCall('getStats');
-    }
-
-    async getUserVersion(): Promise<number> {
-        return this.ipcCall('getUserVersion');
-    }
-
-    async setUserVersion(version: number): Promise<void> {
-        return this.ipcCall('setUserVersion', version);
-    }
-
-    async deleteEventIndex(): Promise<void> {
-        return this.ipcCall('deleteEventIndex');
     }
 }
 
