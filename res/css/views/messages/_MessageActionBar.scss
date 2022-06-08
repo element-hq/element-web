@@ -149,11 +149,11 @@ limitations under the License.
         mask-image: url('$(res)/img/element-icons/collapse-message.svg');
     }
 
-    &.mx_MessageActionBar_viewInRoom::after {
+    &.mx_MessageActionBar_viewInRoomButton::after {
         mask-image: url('$(res)/img/element-icons/view-in-room.svg');
     }
 
-    &.mx_MessageActionBar_copyLinkToThread::after {
+    &.mx_MessageActionBar_copyLinkButton::after {
         mask-image: url('$(res)/img/element-icons/link.svg');
     }
 }
