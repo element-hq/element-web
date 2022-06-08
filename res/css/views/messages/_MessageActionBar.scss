@@ -75,81 +75,85 @@ limitations under the License.
         cursor: not-allowed;
         opacity: .75;
     }
-}
 
-.mx_MessageActionBar_maskButton::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    mask-size: 18px;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    background-color: $secondary-content;
-}
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        mask-size: 18px;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        background-color: $secondary-content;
+    }
 
-.mx_MessageActionBar_maskButton:hover::after {
-    background-color: $primary-content;
-}
+    &:hover::after {
+        background-color: $primary-content;
+    }
 
-.mx_MessageActionBar_reactButton::after {
-    mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
-}
+    &.mx_MessageActionBar_reactButton::after {
+        mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
+    }
 
-.mx_MessageActionBar_replyButton::after {
-    mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
-}
+    &.mx_MessageActionBar_replyButton::after {
+        mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
+    }
 
-.mx_MessageActionBar_threadButton::after {
-    mask-image: url('$(res)/img/element-icons/message/thread.svg');
-}
+    &.mx_MessageActionBar_threadButton {
+        &::after {
+            mask-image: url('$(res)/img/element-icons/message/thread.svg');
+        }
 
-.mx_MessageActionBar_threadButton .mx_Indicator {
-    background: $links;
-    animation-iteration-count: infinite;
-}
+        .mx_Indicator {
+            background: $links;
+            animation-iteration-count: infinite;
+        }
+    }
 
-.mx_MessageActionBar_editButton::after {
-    mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
-}
+    &.mx_MessageActionBar_editButton::after {
+        mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
+    }
 
-.mx_MessageActionBar_optionsButton::after {
-    mask-image: url('$(res)/img/element-icons/context-menu.svg');
-}
+    &.mx_MessageActionBar_optionsButton::after {
+        mask-image: url('$(res)/img/element-icons/context-menu.svg');
+    }
 
-.mx_MessageActionBar_resendButton::after {
-    mask-image: url('$(res)/img/element-icons/retry.svg');
-}
+    &.mx_MessageActionBar_resendButton::after {
+        mask-image: url('$(res)/img/element-icons/retry.svg');
+    }
 
-.mx_MessageActionBar_cancelButton::after {
-    mask-image: url('$(res)/img/element-icons/trashcan.svg');
-}
+    &.mx_MessageActionBar_cancelButton::after {
+        mask-image: url('$(res)/img/element-icons/trashcan.svg');
+    }
 
-.mx_MessageActionBar_downloadButton::after {
-    mask-size: 14px;
-    mask-image: url('$(res)/img/download.svg');
-}
+    &.mx_MessageActionBar_downloadButton {
+        &::after {
+            mask-size: 14px;
+            mask-image: url('$(res)/img/download.svg');
 
-.mx_MessageActionBar_expandMessageButton::after {
-    mask-size: 12px;
-    mask-image: url('$(res)/img/element-icons/expand-message.svg');
-}
+            &.mx_MessageActionBar_downloadSpinnerButton::after {
+                background-color: transparent; // hide the download icon mask
+            }
+        }
+    }
 
-.mx_MessageActionBar_collapseMessageButton::after {
-    mask-size: 12px;
-    mask-image: url('$(res)/img/element-icons/collapse-message.svg');
-}
+    &.mx_MessageActionBar_expandMessageButton::after {
+        mask-size: 12px;
+        mask-image: url('$(res)/img/element-icons/expand-message.svg');
+    }
 
-.mx_MessageActionBar_viewInRoom::after {
-    mask-image: url('$(res)/img/element-icons/view-in-room.svg');
-}
+    &.mx_MessageActionBar_collapseMessageButton::after {
+        mask-size: 12px;
+        mask-image: url('$(res)/img/element-icons/collapse-message.svg');
+    }
 
-.mx_MessageActionBar_copyLinkToThread::after {
-    mask-image: url('$(res)/img/element-icons/link.svg');
-}
+    &.mx_MessageActionBar_viewInRoom::after {
+        mask-image: url('$(res)/img/element-icons/view-in-room.svg');
+    }
 
-.mx_MessageActionBar_downloadButton.mx_MessageActionBar_downloadSpinnerButton::after {
-    background-color: transparent; // hide the download icon mask
+    &.mx_MessageActionBar_copyLinkToThread::after {
+        mask-image: url('$(res)/img/element-icons/link.svg');
+    }
 }
