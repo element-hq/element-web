@@ -8,3 +8,5 @@ jobs:
     uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop
     with:
       labels: "T-Defect,T-Enhancement,T-Task"
+    secrets:
+      ELEMENT_BOT_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
