@@ -2654,6 +2654,7 @@
     "Leave some rooms": "Leave some rooms",
     "Leave space": "Leave space",
     "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.": "Encrypted messages are secured with end-to-end encryption. Only you and the recipient(s) have the keys to read these messages.",
+    "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.": "When you sign out, these keys will be deleted from this device, which means you won't be able to read encrypted messages unless you have the keys for them on your other devices, or backed them up to the server.",
     "Start using Key Backup": "Start using Key Backup",
     "I don't want my encrypted messages": "I don't want my encrypted messages",
     "Manually export keys": "Manually export keys",
