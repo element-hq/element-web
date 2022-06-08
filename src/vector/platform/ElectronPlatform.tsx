@@ -43,6 +43,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import VectorBasePlatform from './VectorBasePlatform';
 import { SeshatIndexManager } from "./SeshatIndexManager";
+import IPCManager from "./IPCManager";
 
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -87,11 +88,10 @@ function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
 }
 
 export default class ElectronPlatform extends VectorBasePlatform {
-    private eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
-    private pendingIpcCalls: Record<number, { resolve, reject }> = {};
-    private nextIpcCallId = 0;
+    private readonly ipc = new IPCManager("ipcCall", "ipcReply");
+    private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
-    private ssoID: string = randomString(32);
+    private readonly ssoID: string = randomString(32);
 
     constructor() {
         super();
@@ -116,7 +116,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
             rageshake.flush();
         });
 
-        electron.on('ipcReply', this.onIpcReply);
         electron.on('update-downloaded', this.onUpdateDownloaded);
 
         electron.on('preferences', () => {
@@ -151,11 +150,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         });
 
-        this.ipcCall("startSSOFlow", this.ssoID);
+        this.ipc.call("startSSOFlow", this.ssoID);
     }
 
     public async getConfig(): Promise<IConfigOptions> {
-        return this.ipcCall('getConfig');
+        return this.ipc.call('getConfig');
     }
 
     private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
@@ -229,7 +228,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         const handler = notification.onclick as Function;
         notification.onclick = () => {
             handler?.();
-            this.ipcCall('focusWindow');
+            this.ipc.call('focusWindow');
         };
 
         return notification;
@@ -240,7 +239,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async getAppVersion(): Promise<string> {
-        return this.ipcCall('getAppVersion');
+        return this.ipc.call('getAppVersion');
     }
 
     public supportsAutoLaunch(): boolean {
@@ -248,11 +247,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async getAutoLaunchEnabled(): Promise<boolean> {
-        return this.ipcCall('getAutoLaunchEnabled');
+        return this.ipc.call('getAutoLaunchEnabled');
     }
 
     public async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setAutoLaunchEnabled', enabled);
+        return this.ipc.call('setAutoLaunchEnabled', enabled);
     }
 
     public supportsWarnBeforeExit(): boolean {
@@ -260,11 +259,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async shouldWarnBeforeExit(): Promise<boolean> {
-        return this.ipcCall('shouldWarnBeforeExit');
+        return this.ipc.call('shouldWarnBeforeExit');
     }
 
     public async setWarnBeforeExit(enabled: boolean): Promise<void> {
-        return this.ipcCall('setWarnBeforeExit', enabled);
+        return this.ipc.call('setWarnBeforeExit', enabled);
     }
 
     public supportsAutoHideMenuBar(): boolean {
@@ -273,11 +272,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async getAutoHideMenuBarEnabled(): Promise<boolean> {
-        return this.ipcCall('getAutoHideMenuBarEnabled');
+        return this.ipc.call('getAutoHideMenuBarEnabled');
     }
 
     public async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setAutoHideMenuBarEnabled', enabled);
+        return this.ipc.call('setAutoHideMenuBarEnabled', enabled);
     }
 
     public supportsMinimizeToTray(): boolean {
@@ -286,11 +285,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async getMinimizeToTrayEnabled(): Promise<boolean> {
-        return this.ipcCall('getMinimizeToTrayEnabled');
+        return this.ipc.call('getMinimizeToTrayEnabled');
     }
 
     public async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setMinimizeToTrayEnabled', enabled);
+        return this.ipc.call('setMinimizeToTrayEnabled', enabled);
     }
 
     public supportsTogglingHardwareAcceleration(): boolean {
@@ -298,15 +297,15 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async getHardwareAccelerationEnabled(): Promise<boolean> {
-        return this.ipcCall('getHardwareAccelerationEnabled');
+        return this.ipc.call('getHardwareAccelerationEnabled');
     }
 
     public async setHardwareAccelerationEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setHardwareAccelerationEnabled', enabled);
+        return this.ipc.call('setHardwareAccelerationEnabled', enabled);
     }
 
     async canSelfUpdate(): Promise<boolean> {
-        const feedUrl = await this.ipcCall('getUpdateFeedUrl');
+        const feedUrl = await this.ipc.call('getUpdateFeedUrl');
         return Boolean(feedUrl);
     }
 
@@ -338,56 +337,27 @@ export default class ElectronPlatform extends VectorBasePlatform {
         window.location.reload();
     }
 
-    private async ipcCall(name: string, ...args: any[]): Promise<any> {
-        const ipcCallId = ++this.nextIpcCallId;
-        return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
-            window.electron.send('ipcCall', { id: ipcCallId, name, args });
-            // Maybe add a timeout to these? Probably not necessary.
-        });
-    }
-
-    private onIpcReply = (ev, payload) => {
-        if (payload.id === undefined) {
-            logger.warn("Ignoring IPC reply with no ID");
-            return;
-        }
-
-        if (this.pendingIpcCalls[payload.id] === undefined) {
-            logger.warn("Unknown IPC payload ID: " + payload.id);
-            return;
-        }
-
-        const callbacks = this.pendingIpcCalls[payload.id];
-        delete this.pendingIpcCalls[payload.id];
-        if (payload.error) {
-            callbacks.reject(payload.error);
-        } else {
-            callbacks.resolve(payload.reply);
-        }
-    };
-
     public getEventIndexingManager(): BaseEventIndexManager | null {
         return this.eventIndexManager;
     }
 
     public async setLanguage(preferredLangs: string[]) {
-        return this.ipcCall('setLanguage', preferredLangs);
+        return this.ipc.call('setLanguage', preferredLangs);
     }
 
     public setSpellCheckLanguages(preferredLangs: string[]) {
-        this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
+        this.ipc.call('setSpellCheckLanguages', preferredLangs).catch(error => {
             logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
             logger.error(error);
         });
     }
 
     public async getSpellCheckLanguages(): Promise<string[]> {
-        return this.ipcCall('getSpellCheckLanguages');
+        return this.ipc.call('getSpellCheckLanguages');
     }
 
     public async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
-        return this.ipcCall('getDesktopCapturerSources', options);
+        return this.ipc.call('getDesktopCapturerSources', options);
     }
 
     public supportsDesktopCapturer(): boolean {
@@ -395,7 +365,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public async getAvailableSpellCheckLanguages(): Promise<string[]> {
-        return this.ipcCall('getAvailableSpellCheckLanguages');
+        return this.ipc.call('getAvailableSpellCheckLanguages');
     }
 
     public getSSOCallbackUrl(fragmentAfterLogin: string): URL {
@@ -420,7 +390,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public navigateForwardBack(back: boolean): void {
-        this.ipcCall(back ? "navigateBack" : "navigateForward");
+        this.ipc.call(back ? "navigateBack" : "navigateForward");
     }
 
     public overrideBrowserShortcuts(): boolean {
@@ -429,7 +399,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this.ipcCall('getPickleKey', userId, deviceId);
+            return await this.ipc.call('getPickleKey', userId, deviceId);
         } catch (e) {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -439,7 +409,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this.ipcCall('createPickleKey', userId, deviceId);
+            return await this.ipc.call('createPickleKey', userId, deviceId);
         } catch (e) {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -449,7 +419,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
-            await this.ipcCall('destroyPickleKey', userId, deviceId);
+            await this.ipc.call('destroyPickleKey', userId, deviceId);
         } catch (e) {}
     }
 }
