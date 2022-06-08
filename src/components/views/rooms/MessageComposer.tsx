@@ -391,7 +391,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                 &nbsp;
                 { replacementRoomId && (
                     <a href={makeRoomPermalink(replacementRoomId)}
-                        className="mx_MessageComposer_roomReplaced_link"
+                        className="mx_linkButton"
                         onClick={this.onTombstoneClick}
                     >
                         { _t("The conversation continues here.") }
