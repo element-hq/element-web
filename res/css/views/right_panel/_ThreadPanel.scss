@@ -33,53 +33,76 @@ limitations under the License.
 
         .mx_BaseCard_back {
             margin-inline-start: calc(var(--BaseCard_header_button-margin) - 4px);
+
+            ~ .mx_ThreadPanel__header {
+                width: calc(100% - 60px);
+                margin-inline-start: var(--ThreadPanel_header-button-size);
+
+                span {
+                    margin-inline-start: 6px;
+                }
+            }
         }
 
         .mx_BaseCard_close {
             margin-inline-end: calc(var(--BaseCard_header_button-margin) - 4px);
         }
-    }
 
-    .mx_BaseCard_back ~ .mx_ThreadPanel__header {
-        width: calc(100% - 60px);
-        margin-inline-start: var(--ThreadPanel_header-button-size);
+        .mx_ThreadPanel__header {
+            width: calc(100% - 38px);
+            height: 24px;
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            align-items: center;
 
-        span {
-            margin-inline-start: 6px;
-        }
-    }
+            span:first-of-type {
+                font-weight: 600;
+                font-size: 15px;
+                line-height: 18px;
+                color: $secondary-content;
+            }
 
-    .mx_ThreadPanel__header {
-        width: calc(100% - 38px);
-        height: 24px;
-        display: flex;
-        flex: 1;
-        justify-content: space-between;
-        align-items: center;
+            .mx_AccessibleButton {
+                font-size: 12px;
+                color: $secondary-content;
+            }
 
-        span:first-of-type {
-            font-weight: 600;
-            font-size: 15px;
-            line-height: 18px;
-            color: $secondary-content;
-        }
+            .mx_MessageActionBar_optionsButton {
+                position: relative;
+            }
 
-        .mx_AccessibleButton {
-            font-size: 12px;
-            color: $secondary-content;
-        }
+            .mx_MessageActionBar_maskButton {
+                width: var(--ThreadPanel_header-button-size);
+                height: var(--ThreadPanel_header-button-size);
 
-        .mx_MessageActionBar_optionsButton {
-            position: relative;
-        }
+                &::after {
+                    mask-size: var(--ThreadPanel_header-button-size);
+                    mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
+                }
+            }
 
-        .mx_MessageActionBar_maskButton {
-            width: var(--ThreadPanel_header-button-size);
-            height: var(--ThreadPanel_header-button-size);
+            .mx_ThreadPanel_dropdown {
+                padding: 3px $spacing-4 3px $spacing-8; // TODO: Use a spacing variable
+                border-radius: 4px;
+                line-height: 1.5;
+                user-select: none;
 
-            &::after {
-                mask-size: var(--ThreadPanel_header-button-size);
-                mask-image: url("$(res)/img/element-icons/message/overflow-large.svg");
+                &:hover,
+                &[aria-expanded=true] {
+                    background: $quinary-content;
+                }
+
+                &::before {
+                    content: "";
+                    width: 18px;
+                    height: 18px;
+                    background: currentColor;
+                    mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
+                    mask-size: 100%;
+                    mask-repeat: no-repeat;
+                    float: right;
+                }
             }
         }
     }
@@ -177,29 +200,6 @@ limitations under the License.
         margin-top: 8px;
         padding: 0 8px;
         box-sizing: border-box;
-    }
-
-    .mx_ThreadPanel_dropdown {
-        padding: 3px 4px 3px 8px;
-        border-radius: 4px;
-        line-height: 1.5;
-        user-select: none;
-    }
-
-    .mx_ThreadPanel_dropdown:hover,
-    .mx_ThreadPanel_dropdown[aria-expanded=true] {
-        background: $quinary-content;
-    }
-
-    .mx_ThreadPanel_dropdown::before {
-        content: "";
-        width: 18px;
-        height: 18px;
-        background: currentColor;
-        mask-image: url("$(res)/img/feather-customised/chevron-down.svg");
-        mask-size: 100%;
-        mask-repeat: no-repeat;
-        float: right;
     }
 
     .mx_MessageTimestamp {
