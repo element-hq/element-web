@@ -66,14 +66,14 @@ function platformFriendlyName(): string {
     }
 }
 
-function _onAction(payload: ActionPayload) {
+function onAction(payload: ActionPayload): void {
     // Whitelist payload actions, no point sending most across
     if (['call_state'].includes(payload.action)) {
         electron.send('app_onAction', payload);
     }
 }
 
-function getUpdateCheckStatus(status: boolean | string) {
+function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
     if (status === true) {
         return { status: UpdateCheckStatus.Downloading };
     } else if (status === false) {
@@ -96,7 +96,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     constructor() {
         super();
 
-        dis.register(_onAction);
+        dis.register(onAction);
         /*
             IPC Call `check_updates` returns:
             true if there is an update available
@@ -154,11 +154,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         this.ipcCall("startSSOFlow", this.ssoID);
     }
 
-    async getConfig(): Promise<IConfigOptions> {
+    public async getConfig(): Promise<IConfigOptions> {
         return this.ipcCall('getConfig');
     }
 
-    onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
+    private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
@@ -168,7 +168,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     };
 
-    getHumanReadableName(): string {
+    public getHumanReadableName(): string {
         return 'Electron Platform'; // no translation required: only used for analytics
     }
 
@@ -176,7 +176,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
      * Return true if platform supports multi-language
      * spell-checking, otherwise false.
      */
-    supportsMultiLanguageSpellCheck(): boolean {
+    public supportsMultiLanguageSpellCheck(): boolean {
         // Electron uses OS spell checking on macOS, so no need for in-app options
         if (isMac) return false;
         return true;
@@ -193,15 +193,21 @@ export default class ElectronPlatform extends VectorBasePlatform {
         electron.send('setBadgeCount', count);
     }
 
-    supportsNotifications(): boolean {
+    public supportsNotifications(): boolean {
         return true;
     }
 
-    maySendNotifications(): boolean {
+    public maySendNotifications(): boolean {
         return true;
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Room, ev?: MatrixEvent): Notification {
+    public displayNotification(
+        title: string,
+        msg: string,
+        avatarUrl: string,
+        room: Room,
+        ev?: MatrixEvent,
+    ): Notification {
         // GNOME notification spec parses HTML tags for styling...
         // Electron Docs state all supported linux notification systems follow this markup spec
         // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
@@ -229,61 +235,61 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return notification;
     }
 
-    loudNotification(ev: MatrixEvent, room: Room) {
+    public loudNotification(ev: MatrixEvent, room: Room) {
         electron.send('loudNotification');
     }
 
-    async getAppVersion(): Promise<string> {
+    public async getAppVersion(): Promise<string> {
         return this.ipcCall('getAppVersion');
     }
 
-    supportsAutoLaunch(): boolean {
+    public supportsAutoLaunch(): boolean {
         return true;
     }
 
-    async getAutoLaunchEnabled(): Promise<boolean> {
+    public async getAutoLaunchEnabled(): Promise<boolean> {
         return this.ipcCall('getAutoLaunchEnabled');
     }
 
-    async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
+    public async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
         return this.ipcCall('setAutoLaunchEnabled', enabled);
     }
 
-    supportsWarnBeforeExit(): boolean {
+    public supportsWarnBeforeExit(): boolean {
         return true;
     }
 
-    async shouldWarnBeforeExit(): Promise<boolean> {
+    public async shouldWarnBeforeExit(): Promise<boolean> {
         return this.ipcCall('shouldWarnBeforeExit');
     }
 
-    async setWarnBeforeExit(enabled: boolean): Promise<void> {
+    public async setWarnBeforeExit(enabled: boolean): Promise<void> {
         return this.ipcCall('setWarnBeforeExit', enabled);
     }
 
-    supportsAutoHideMenuBar(): boolean {
+    public supportsAutoHideMenuBar(): boolean {
         // This is irelevant on Mac as Menu bars don't live in the app window
         return !isMac;
     }
 
-    async getAutoHideMenuBarEnabled(): Promise<boolean> {
+    public async getAutoHideMenuBarEnabled(): Promise<boolean> {
         return this.ipcCall('getAutoHideMenuBarEnabled');
     }
 
-    async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
+    public async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
         return this.ipcCall('setAutoHideMenuBarEnabled', enabled);
     }
 
-    supportsMinimizeToTray(): boolean {
+    public supportsMinimizeToTray(): boolean {
         // Things other than Mac support tray icons
         return !isMac;
     }
 
-    async getMinimizeToTrayEnabled(): Promise<boolean> {
+    public async getMinimizeToTrayEnabled(): Promise<boolean> {
         return this.ipcCall('getMinimizeToTrayEnabled');
     }
 
-    async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
+    public async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
         return this.ipcCall('setMinimizeToTrayEnabled', enabled);
     }
 
@@ -304,19 +310,19 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return Boolean(feedUrl);
     }
 
-    startUpdateCheck() {
+    public startUpdateCheck() {
         super.startUpdateCheck();
         electron.send('check_updates');
     }
 
-    installUpdate() {
+    public installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
         electron.send('install_update');
     }
 
-    getDefaultDeviceDisplayName(): string {
+    public getDefaultDeviceDisplayName(): string {
         const brand = SdkConfig.get().brand;
         return _t('%(brand)s Desktop (%(platformName)s)', {
             brand,
@@ -324,11 +330,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    requestNotificationPermission(): Promise<string> {
+    public requestNotificationPermission(): Promise<string> {
         return Promise.resolve('granted');
     }
 
-    reload() {
+    public reload() {
         window.location.reload();
     }
 
@@ -361,45 +367,50 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     };
 
-    getEventIndexingManager(): BaseEventIndexManager | null {
+    public getEventIndexingManager(): BaseEventIndexManager | null {
         return this.eventIndexManager;
     }
 
-    async setLanguage(preferredLangs: string[]) {
+    public async setLanguage(preferredLangs: string[]) {
         return this.ipcCall('setLanguage', preferredLangs);
     }
 
-    setSpellCheckLanguages(preferredLangs: string[]) {
+    public setSpellCheckLanguages(preferredLangs: string[]) {
         this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
             logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
             logger.error(error);
         });
     }
 
-    async getSpellCheckLanguages(): Promise<string[]> {
+    public async getSpellCheckLanguages(): Promise<string[]> {
         return this.ipcCall('getSpellCheckLanguages');
     }
 
-    async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
+    public async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
         return this.ipcCall('getDesktopCapturerSources', options);
     }
 
-    supportsDesktopCapturer(): boolean {
+    public supportsDesktopCapturer(): boolean {
         return true;
     }
 
-    async getAvailableSpellCheckLanguages(): Promise<string[]> {
+    public async getAvailableSpellCheckLanguages(): Promise<string[]> {
         return this.ipcCall('getAvailableSpellCheckLanguages');
     }
 
-    getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+    public getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
         url.searchParams.set("element-desktop-ssoid", this.ssoID);
         return url;
     }
 
-    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string, idpId?: string) {
+    public startSingleSignOn(
+        mxClient: MatrixClient,
+        loginType: "sso" | "cas",
+        fragmentAfterLogin: string,
+        idpId?: string,
+    ) {
         // this will get intercepted by electron-main will-navigate
         super.startSingleSignOn(mxClient, loginType, fragmentAfterLogin, idpId);
         Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
@@ -416,7 +427,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
-    async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
+    public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
             return await this.ipcCall('getPickleKey', userId, deviceId);
         } catch (e) {
@@ -426,7 +437,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     }
 
-    async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
+    public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
             return await this.ipcCall('createPickleKey', userId, deviceId);
         } catch (e) {
@@ -436,7 +447,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     }
 
-    async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
+    public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
             await this.ipcCall('destroyPickleKey', userId, deviceId);
         } catch (e) {}

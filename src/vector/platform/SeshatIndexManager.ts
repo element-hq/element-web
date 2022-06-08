@@ -114,39 +114,39 @@ export class SeshatIndexManager extends BaseEventIndexManager {
         return this.ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
     }
 
-    async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
+    public async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
         return this.ipcCall('addCrawlerCheckpoint', checkpoint);
     }
 
-    async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
+    public async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
         return this.ipcCall('removeCrawlerCheckpoint', checkpoint);
     }
 
-    async loadFileEvents(args): Promise<IEventAndProfile[]> {
+    public async loadFileEvents(args): Promise<IEventAndProfile[]> {
         return this.ipcCall('loadFileEvents', args);
     }
 
-    async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
+    public async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
         return this.ipcCall('loadCheckpoints');
     }
 
-    async closeEventIndex(): Promise<void> {
+    public async closeEventIndex(): Promise<void> {
         return this.ipcCall('closeEventIndex');
     }
 
-    async getStats(): Promise<IIndexStats> {
+    public async getStats(): Promise<IIndexStats> {
         return this.ipcCall('getStats');
     }
 
-    async getUserVersion(): Promise<number> {
+    public async getUserVersion(): Promise<number> {
         return this.ipcCall('getUserVersion');
     }
 
-    async setUserVersion(version: number): Promise<void> {
+    public async setUserVersion(version: number): Promise<void> {
         return this.ipcCall('setUserVersion', version);
     }
 
-    async deleteEventIndex(): Promise<void> {
+    public async deleteEventIndex(): Promise<void> {
         return this.ipcCall('deleteEventIndex');
     }
 }
