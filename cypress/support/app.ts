@@ -16,7 +16,6 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import "./client"; // XXX: without an (any) import here, types break down
 import Chainable = Cypress.Chainable;
 import AUTWindow = Cypress.AUTWindow;
 
@@ -41,3 +40,6 @@ Cypress.Commands.add("tweakConfig", (tweaks: Record<string, any>): Chainable<AUT
         }
     });
 });
+
+// Needed to make this file a module
+export { };
