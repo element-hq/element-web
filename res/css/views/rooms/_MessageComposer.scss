@@ -27,6 +27,11 @@ limitations under the License.
         "composer controls" auto
         / 1fr     auto;
 
+    /* the below is required, without this some unexpected scroll jump
+       will occur when erasing the composer content or jumping to voice note
+       recording */
+    min-height: 45px;
+
     .mx_ReplyPreview {
         grid-area: reply;
     }
