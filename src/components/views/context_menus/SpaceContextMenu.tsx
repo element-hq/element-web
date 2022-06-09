@@ -184,7 +184,9 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
                     iconClassName="mx_SpacePanel_iconPlus"
                     label={_t("Video room")}
                     onClick={onNewVideoRoomClick}
-                />
+                >
+                    <BetaPill />
+                </IconizedContextMenuOption>
             }
             { canAddSubSpaces &&
                 <IconizedContextMenuOption

@@ -20,6 +20,7 @@ limitations under the License.
     background-color: $system;
     border-radius: 8px;
     box-sizing: border-box;
+    color: $secondary-content;
 
     .mx_BetaCard_columns {
         display: flex;
@@ -45,14 +46,13 @@ limitations under the License.
             .mx_BetaCard_caption {
                 font-size: $font-15px;
                 line-height: $font-20px;
-                color: $secondary-content;
             }
 
             .mx_BetaCard_buttons {
                 display: flex;
                 flex-wrap: wrap-reverse;
-                gap: 12px;
-                margin: 20px auto;
+                gap: $spacing-12;
+                margin: $spacing-20 auto 0;
 
                 .mx_AccessibleButton {
                     padding: 7px 40px;
@@ -66,10 +66,16 @@ limitations under the License.
                 }
             }
 
-            .mx_BetaCard_disclaimer {
+            .mx_BetaCard_refreshWarning {
+                margin-top: $spacing-8;
+                font-size: $font-10px;
+                text-align: center;
+            }
+
+            .mx_BetaCard_faq {
+                margin-top: $spacing-20;
                 font-size: $font-12px;
                 line-height: $font-15px;
-                color: $secondary-content;
 
                 > h4 {
                     margin: 12px 0 0;
@@ -105,7 +111,6 @@ limitations under the License.
                 margin-top: 4px;
                 font-size: $font-12px;
                 line-height: $font-15px;
-                color: $secondary-content;
             }
         }
     }

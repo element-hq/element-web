@@ -35,6 +35,7 @@ import RoomTopic from "../elements/RoomTopic";
 import RoomFacePile from "../elements/RoomFacePile";
 import RoomAvatar from "../avatars/RoomAvatar";
 import MemberAvatar from "../avatars/MemberAvatar";
+import { BetaPill } from "../beta/BetaCard";
 import RoomInfoLine from "./RoomInfoLine";
 
 interface IProps {
@@ -151,6 +152,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         avatarRow = <>
             <RoomAvatar room={room} height={50} width={50} viewAvatarOnClick />
             <div className="mx_RoomPreviewCard_video" />
+            <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
         </>;
     } else if (room.isSpaceRoom()) {
         avatarRow = <RoomAvatar room={room} height={80} width={80} viewAvatarOnClick />;

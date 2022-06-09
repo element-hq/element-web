@@ -23,6 +23,9 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { Action } from "../../../dispatcher/actions";
+import { UserTab } from "../dialogs/UserTab";
 import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
@@ -41,6 +44,7 @@ import { RightPanelPhases } from '../../../stores/right-panel/RightPanelStorePha
 import { NotificationStateEvents } from '../../../stores/notifications/NotificationState';
 import RoomContext from "../../../contexts/RoomContext";
 import RoomLiveShareWarning from '../beacon/RoomLiveShareWarning';
+import { BetaPill } from "../beta/BetaCard";
 
 export interface ISearchInfo {
     searchTerm: string;
@@ -272,6 +276,15 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
         const e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;
 
+        const isVideoRoom = SettingsStore.getValue("feature_video_rooms") && this.props.room.isElementVideoRoom();
+        const viewLabs = () => defaultDispatcher.dispatch({
+            action: Action.ViewUserSettings,
+            initialTabId: UserTab.Labs,
+        });
+        const betaPill = isVideoRoom ? (
+            <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
+        ) : null;
+
         return (
             <div className="mx_RoomHeader light-panel">
                 <div className="mx_RoomHeader_wrapper" aria-owns="mx_RightPanel">
@@ -280,6 +293,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     { name }
                     { searchStatus }
                     { topicElement }
+                    { betaPill }
                     { rightRow }
                     <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} />
                 </div>

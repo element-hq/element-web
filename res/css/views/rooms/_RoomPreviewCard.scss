@@ -105,6 +105,13 @@ limitations under the License.
                 mask-image: url('$(res)/img/element-icons/call/video-call.svg');
             }
         }
+
+        // XXX Remove this when video rooms leave beta
+        .mx_BetaCard_betaPill {
+            position: absolute;
+            right: $spacing-24;
+            top: $spacing-32;
+        }
     }
 
     h1.mx_RoomPreviewCard_name {

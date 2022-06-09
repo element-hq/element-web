@@ -41,6 +41,7 @@ import IconizedContextMenu, {
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
+import { BetaPill } from "../beta/BetaCard";
 import SpaceStore from "../../../stores/spaces/SpaceStore";
 import {
     isMetaSpace,
@@ -238,19 +239,23 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                             tooltip={canAddRooms ? undefined
                                 : _t("You do not have permissions to create new rooms in this space")}
                         />
-                        { SettingsStore.getValue("feature_video_rooms") && <IconizedContextMenuOption
-                            label={_t("New video room")}
-                            iconClassName="mx_RoomList_iconNewVideoRoom"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                closeMenu();
-                                showCreateNewRoom(activeSpace, RoomType.ElementVideo);
-                            }}
-                            disabled={!canAddRooms}
-                            tooltip={canAddRooms ? undefined
-                                : _t("You do not have permissions to create new rooms in this space")}
-                        /> }
+                        { SettingsStore.getValue("feature_video_rooms") && (
+                            <IconizedContextMenuOption
+                                label={_t("New video room")}
+                                iconClassName="mx_RoomList_iconNewVideoRoom"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    closeMenu();
+                                    showCreateNewRoom(activeSpace, RoomType.ElementVideo);
+                                }}
+                                disabled={!canAddRooms}
+                                tooltip={canAddRooms ? undefined
+                                    : _t("You do not have permissions to create new rooms in this space")}
+                            >
+                                <BetaPill />
+                            </IconizedContextMenuOption>
+                        ) }
                         <IconizedContextMenuOption
                             label={_t("Add existing room")}
                             iconClassName="mx_RoomList_iconAddExistingRoom"
@@ -282,19 +287,23 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                         PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                     }}
                 />
-                { SettingsStore.getValue("feature_video_rooms") && <IconizedContextMenuOption
-                    label={_t("New video room")}
-                    iconClassName="mx_RoomList_iconNewVideoRoom"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        closeMenu();
-                        defaultDispatcher.dispatch({
-                            action: "view_create_room",
-                            type: RoomType.ElementVideo,
-                        });
-                    }}
-                /> }
+                { SettingsStore.getValue("feature_video_rooms") && (
+                    <IconizedContextMenuOption
+                        label={_t("New video room")}
+                        iconClassName="mx_RoomList_iconNewVideoRoom"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            closeMenu();
+                            defaultDispatcher.dispatch({
+                                action: "view_create_room",
+                                type: RoomType.ElementVideo,
+                            });
+                        }}
+                    >
+                        <BetaPill />
+                    </IconizedContextMenuOption>
+                ) }
             </> }
             <IconizedContextMenuOption
                 label={_t("Explore public rooms")}
