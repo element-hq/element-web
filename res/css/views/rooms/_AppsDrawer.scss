@@ -16,6 +16,8 @@ limitations under the License.
 */
 
 $MiniAppTileHeight: 200px;
+// TODO this should be 300px but that's too large
+$MinWidth: 240px;
 
 .mx_AppsDrawer {
     margin: $container-gap-width;
@@ -88,6 +90,30 @@ $MiniAppTileHeight: 200px;
             opacity: 0.8;
         }
     }
+
+    .mx_AppTile {
+        width: 50%;
+        min-width: $MinWidth;
+    }
+
+    &.mx_AppsDrawer_2apps .mx_AppTile {
+        width: 50%;
+
+        &:nth-child(3) {
+            flex-grow: 1;
+            width: 0 !important;
+            min-width: $MinWidth !important;
+        }
+    }
+    &.mx_AppsDrawer_3apps .mx_AppTile {
+        width: 33%;
+
+        &:nth-child(3) {
+            flex-grow: 1;
+            width: 0 !important;
+            min-width: $MinWidth !important;
+        }
+    }
 }
 
 .mx_AppsContainer_resizer {
@@ -122,31 +148,7 @@ $MiniAppTileHeight: 200px;
     }
 }
 
-// TODO this should be 300px but that's too large
-$MinWidth: 240px;
-
-.mx_AppsDrawer_2apps .mx_AppTile {
-    width: 50%;
-
-    &:nth-child(3) {
-        flex-grow: 1;
-        width: 0 !important;
-        min-width: $MinWidth !important;
-    }
-}
-.mx_AppsDrawer_3apps .mx_AppTile {
-    width: 33%;
-
-    &:nth-child(3) {
-        flex-grow: 1;
-        width: 0 !important;
-        min-width: $MinWidth !important;
-    }
-}
-
 .mx_AppTile {
-    width: 50%;
-    min-width: $MinWidth;
     border: $container-border-width solid $widget-menu-bar-bg-color;
     display: flex;
     flex-direction: column;
