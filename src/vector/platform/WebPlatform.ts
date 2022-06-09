@@ -106,11 +106,10 @@ export default class WebPlatform extends VectorBasePlatform {
     }
 
     getNormalizedAppVersion(version: string): string {
-        // if version looks like semver with leading v, strip it
-        // (matches scripts/normalize-version.sh)
-        const semVerRegex = new RegExp("^v[0-9]+.[0-9]+.[0-9]+(-.+)?$");
+        // if version looks like semver with leading v, strip it (matches scripts/normalize-version.sh)
+        const semVerRegex = /^v\d+.\d+.\d+(-.+)?$/;
         if (semVerRegex.test(version)) {
-            return version.substr(1);
+            return version.substring(1);
         }
         return version;
     }

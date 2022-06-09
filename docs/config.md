@@ -14,7 +14,7 @@ for the desktop app the application will need to be exited fully (including via 
 ## Homeserver configuration
 
 In order for Element to even start you will need to tell it what homeserver to connect to *by default*. Users will be
-able to use a different homeserver if they like, though this can be disabled with `"disable_custom_urls": false` in your
+able to use a different homeserver if they like, though this can be disabled with `"disable_custom_urls": true` in your
 config.
 
 One of the following options **must** be supplied:
@@ -95,7 +95,8 @@ instance. As of writing those settings are not fully documented, however a few a
       }
    }
    ```
-   These values will take priority over the hardcoded defaults for the settings.
+   These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
+   [Settings.tsx](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -192,7 +193,7 @@ Starting with `branding`, the following subproperties are available:
    `welcome.html` that ships with Element will be used instead.
 2. `home_url`: A URL to an HTML page to show within the app as the "home" page. When the app doesn't have a room/screen to
    show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default,
-   no home page is set and therefore a hardcoded landing screen is used.
+   no home page is set and therefore a hardcoded landing screen is used. More documentation and examples are [here](./custom-home.md).
 3. `login_for_welcome`: When `true` (default `false`), the app will use the login form as a welcome page instead of the welcome
    page itself. This disables use of `welcome_url` and all welcome page functionality.
 
