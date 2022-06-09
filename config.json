@@ -1,7 +1,7 @@
 {
     "default_server_config": {
         "m.homeserver": {
-            "base_url": "https://scitest.esss.lu.se",
+            "base_url": "https://server.scichat.esss.lu.se",
             "server_name": "ESS"
         },
         "m.identity_server": {
@@ -17,7 +17,7 @@
         "authHeaderLogoUrl": "https://github.com/SciCatProject/riot-web/raw/master/ess-branding/esslogo.png",
         "welcomeBackgroundUrl": "https://github.com/SciCatProject/riot-web/raw/master/ess-branding/ess-site.png",
         "authFooterLinks": [
-            { "text": "SciCat", "url": "https://scitest.esss.lu.se/" }
+            { "text": "SciCat", "url": "https://scicat.ess.eu/" }
         ]
     },
     "integrations_ui_url": "https://scichat-integration.esss.lu.se/riot",
