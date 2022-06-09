@@ -54,7 +54,7 @@ jobs:
             const response = await github.rest.git.getCommit({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: contxt.workflow_run.head_sha,
+              commit_sha: context.workflow_run.head_sha,
             });
             core.exportVariable("COMMIT_INFO_MESSAGE", response.data.message);
             core.exportVariable("COMMIT_INFO_AUTHOR", response.data.author.name);
