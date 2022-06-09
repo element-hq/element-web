@@ -63,8 +63,8 @@ jobs:
       # Only run Percy when it is demanded or on develop
       - name: Disable Percy if not needed
         if: |
-          contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy') ||
-          github.event.workflow_run.event != 'pull_request'
+          github.event.workflow_run.event != 'pull_request' ||
+          contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
         run: |
           echo "PERCY_ENABLE=0" >> $GITHUB_ENV
 
