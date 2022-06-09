@@ -1,0 +1,31 @@
+# Separate to the main build workflow for access to develop
+# environment secrets, largely similar to build.yaml.
+name: Build and Package develop
+on:
+  push:
+    branches: [ develop ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+jobs:
+  build:
+    name: "Build & Upload source maps to Sentry"
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: "./scripts/layered.sh"
+
+      - name: Build, Package & Upload sourcemaps
+        run: "./scripts/ci_package.sh"
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_ORG: sentry
+          SENTRY_PROJECT: riot-web

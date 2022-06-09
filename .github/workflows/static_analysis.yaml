@@ -1,0 +1,65 @@
+name: Static Analysis
+on:
+  pull_request: { }
+  push:
+    branches: [ develop, master ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+env:
+  # These must be set for fetchdep.sh to get the right branch
+  REPOSITORY: ${{ github.repository }}
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+jobs:
+  ts_lint:
+    name: "Typescript Syntax Check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: "./scripts/layered.sh"
+
+      - name: Typecheck
+        run: "yarn run lint:types"
+
+  i18n_lint:
+    name: "i18n Check"
+    uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
+
+  js_lint:
+    name: "ESLint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      # Does not need branch matching as only analyses this layer
+      - name: Install Deps
+        run: "yarn install --pure-lockfile"
+
+      - name: Run Linter
+        run: "yarn run lint:js"
+
+  style_lint:
+    name: "Style Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      # Does not need branch matching as only analyses this layer
+      - name: Install Deps
+        run: "yarn install --pure-lockfile"
+
+      - name: Run Linter
+        run: "yarn run lint:style"

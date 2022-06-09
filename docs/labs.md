@@ -34,18 +34,6 @@ date from the calendar.
 
 Also adds the `/jumptodate 2022-01-31` slash command.
 
-## Custom status (`feature_custom_status`)
-
-An experimental approach for supporting custom status messages across DMs. To set a status, click on
-your avatar next to the message composer.
-
-## Custom tags (`feature_custom_tags`)
-
-An experimental approach for dealing with custom tags. Custom tags will appear in the bottom portion
-of the community filter panel.
-
-Setting custom tags is not supported by Element.
-
 ## Render simple counters in room header (`feature_state_counters`)
 
 Allows rendering of labelled counters above the message list.
@@ -68,10 +56,6 @@ Once enabled, send a custom state event to a room to set values:
 ```
 
 That's it. Now should see your new counter under the header.
-
-## Multiple integration managers (`feature_many_integration_managers`)
-
-Exposes a way to access all the integration managers known to Element. This is an implementation of [MSC1957](https://github.com/matrix-org/matrix-doc/pull/1957).
 
 ## New ways to ignore people (`feature_mjolnir`)
 
@@ -115,25 +99,14 @@ For some sample themes, check out [aaronraimist/element-themes](https://github.c
 
 ## Message preview tweaks
 
-To enable message previews for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
-To enable message previews for reactions in DMs, enable `feature_roomlist_preview_reactions_dms`, ignored when it is enabled for all rooms.
+To enable message previews in the left panel for reactions in all rooms, enable `feature_roomlist_preview_reactions_all`.
 
-## Communities v2 prototyping (`feature_communities_v2_prototypes`) [In Development]
-
-**This is a highly experimental implementation for parts of the communities v2 experience.** It does not
-represent what communities v2 will look/feel like and can/will change without notice. Due to the early
-stages this feature is in and the requirement for a compatible homeserver, we will not be accepting issues
-or feedback for this functionality at this time.
+To enable message previews for reactions in DMs only, enable `feature_roomlist_preview_reactions_dms`. This is ignored when it is enabled for all rooms.
 
 ## Dehydrated devices (`feature_dehydration`)
 
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
-
-## Do not disturb (`feature_dnd`)
-
-Enables UI for turning on "do not disturb" mode for the current device. When DND mode is engaged, popups
-and notification noises are suppressed. Not perfect, but can help reduce noise.
 
 ## Hidden read receipts (`feature_hidden_read_receipts`)
 
@@ -196,3 +169,13 @@ Threading allows users to branch out a new conversation from the main timeline o
 Threads can be access by clicking their summary below the root event on the room timeline. Users can find a comprehensive list of threads by click the icon on the room header button.
 
 This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.
+
+## Right-click Message Context Menu (`feature_message_right_click_context_menu`)
+
+Enables showing a right-click context menu when right-clicking messages in the
+timeline. This menu shows options that can usually be found in the message
+action bar or in the message options.
+
+## Voice & video rooms (`feature_video_rooms`) [In Development]
+
+Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
