@@ -48,14 +48,25 @@ jobs:
 
       - name: Get commit details
         if: github.event.workflow_run.event == 'pull_request'
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const response = await github.rest.git.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: contxt.workflow_run.head_sha,
+            });
+            core.exportVariable("COMMIT_INFO_MESSAGE", response.data.message);
+            core.exportVariable("COMMIT_INFO_AUTHOR", response.data.author.name);
+            core.exportVariable("COMMIT_INFO_EMAIL", response.data.author.email);
+
+      # Only run Percy when it is demanded or on develop
+      - name: Disable Percy if not needed
+        if: |
+          contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy') ||
+          github.event.workflow_run.event != 'pull_request'
         run: |
-          echo "COMMIT_INFO_MESSAGE=\"$(git log --format=%B -n 1 ${{ github.event.workflow_run.head_sha }})\"" >> $GITHUB_ENV
-          echo "COMMIT_INFO_AUTHOR=$(git log --format='%an' -n 1 ${{ github.event.workflow_run.head_sha }})" >> $GITHUB_ENV
-          echo "COMMIT_INFO_EMAIL=$(git log --format='%ae' -n 1 ${{ github.event.workflow_run.head_sha }})" >> $GITHUB_ENV
-          # Only run Percy when it is demanded or on develop
-          if [[ "${{ (contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy') || github.event.workflow_run.event != 'pull_request') }}" == "false" ]]; then
-            echo "PERCY_ENABLE=0" >> $GITHUB_ENV
-          fi
+          echo "PERCY_ENABLE=0" >> $GITHUB_ENV
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v2
