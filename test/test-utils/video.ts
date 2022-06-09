@@ -18,7 +18,7 @@ import { EventEmitter } from "events";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { mkEvent } from "./test-utils";
-import { VIDEO_CHANNEL_MEMBER } from "../../src/utils/VideoChannelUtils";
+import { VIDEO_CHANNEL_MEMBER, STUCK_DEVICE_TIMEOUT_MS } from "../../src/utils/VideoChannelUtils";
 import VideoChannelStore, { VideoChannelEvent, IJitsiParticipant } from "../../src/stores/VideoChannelStore";
 
 export class StubVideoChannelStore extends EventEmitter {
@@ -52,11 +52,14 @@ export const stubVideoChannelStore = (): StubVideoChannelStore => {
     return store;
 };
 
-export const mkVideoChannelMember = (userId: string, devices: string[]): MatrixEvent => mkEvent({
+export const mkVideoChannelMember = (userId: string, devices: string[], expiresAt?: number): MatrixEvent => mkEvent({
     event: true,
     type: VIDEO_CHANNEL_MEMBER,
     room: "!1:example.org",
     user: userId,
     skey: userId,
-    content: { devices },
+    content: {
+        devices,
+        expires_ts: expiresAt == null ? Date.now() + STUCK_DEVICE_TIMEOUT_MS : expiresAt,
+    },
 });

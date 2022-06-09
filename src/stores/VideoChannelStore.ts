@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
+import { logger } from "matrix-js-sdk/src/logger";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { ClientWidgetApi, IWidgetApiRequest } from "matrix-widget-api";
 
@@ -24,7 +25,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { ElementWidgetActions } from "./widgets/ElementWidgetActions";
 import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "./widgets/WidgetMessagingStore";
-import { getVideoChannel, addOurDevice, removeOurDevice } from "../utils/VideoChannelUtils";
+import { STUCK_DEVICE_TIMEOUT_MS, getVideoChannel, addOurDevice, removeOurDevice } from "../utils/VideoChannelUtils";
 import { timeout } from "../utils/promise";
 import WidgetUtils from "../utils/WidgetUtils";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
@@ -80,6 +81,7 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
     }
 
     private activeChannel: ClientWidgetApi;
+    private resendDevicesTimer: number;
 
     // This is persisted to settings so we can detect unclean disconnects
     public get roomId(): string | null { return SettingsStore.getValue("videoChannelRoomId"); }
@@ -235,6 +237,11 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
 
         // Tell others that we're connected, by adding our device to room state
         await addOurDevice(this.room);
+        // Re-add this device every so often so our video member event doesn't become stale
+        this.resendDevicesTimer = setInterval(async () => {
+            logger.log(`Resending video member event for ${this.roomId}`);
+            await addOurDevice(this.room);
+        }, (STUCK_DEVICE_TIMEOUT_MS * 3) / 4);
     };
 
     public disconnect = async () => {
@@ -257,6 +264,7 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         this.activeChannel.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
         room.off(RoomEvent.MyMembership, this.onMyMembership);
         window.removeEventListener("beforeunload", this.setDisconnected);
+        clearInterval(this.resendDevicesTimer);
 
         this.activeChannel = null;
         this.roomId = null;

@@ -16,12 +16,14 @@ limitations under the License.
 
 import { mocked } from "jest-mock";
 import { Widget, ClientWidgetApi, MatrixWidgetType, IWidgetApiRequest } from "matrix-widget-api";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { stubClient, setupAsyncStoreWithClient, mkRoom } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import WidgetStore, { IApp } from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
 import { ElementWidgetActions } from "../../src/stores/widgets/ElementWidgetActions";
+import { VIDEO_CHANNEL_MEMBER, STUCK_DEVICE_TIMEOUT_MS } from "../../src/utils/VideoChannelUtils";
 import VideoChannelStore, { VideoChannelEvent } from "../../src/stores/VideoChannelStore";
 
 describe("VideoChannelStore", () => {
@@ -46,9 +48,10 @@ describe("VideoChannelStore", () => {
     let onMock: (action: string, listener: (ev: CustomEvent<IWidgetApiRequest>) => void) => void;
     let onceMock: (action: string, listener: (ev: CustomEvent<IWidgetApiRequest>) => void) => void;
     let messaging: ClientWidgetApi;
+    let cli: MatrixClient;
     beforeEach(() => {
         stubClient();
-        const cli = MatrixClientPeg.get();
+        cli = MatrixClientPeg.get();
         setupAsyncStoreWithClient(WidgetMessagingStore.instance, cli);
         setupAsyncStoreWithClient(store, cli);
         mocked(cli).getRoom.mockReturnValue(mkRoom(cli, "!1:example.org"));
@@ -71,6 +74,8 @@ describe("VideoChannelStore", () => {
             },
         } as unknown as ClientWidgetApi;
     });
+
+    afterEach(() => jest.useRealTimers());
 
     const widgetReady = () => {
         // Tell the WidgetStore that the widget is ready
@@ -109,6 +114,9 @@ describe("VideoChannelStore", () => {
     };
 
     it("connects and disconnects", async () => {
+        jest.useFakeTimers();
+        jest.setSystemTime(0);
+
         WidgetMessagingStore.instance.storeMessaging(widget, "!1:example.org", messaging);
         widgetReady();
         expect(store.roomId).toBeFalsy();
@@ -120,12 +128,40 @@ describe("VideoChannelStore", () => {
         expect(store.roomId).toEqual("!1:example.org");
         expect(store.connected).toEqual(true);
 
+        // Our device should now appear as connected
+        expect(cli.sendStateEvent).toHaveBeenLastCalledWith(
+            "!1:example.org",
+            VIDEO_CHANNEL_MEMBER,
+            { devices: [cli.getDeviceId()], expires_ts: expect.any(Number) },
+            cli.getUserId(),
+        );
+        mocked(cli).sendStateEvent.mockClear();
+
+        // Our devices should be resent within the timeout period to prevent
+        // the data from becoming stale
+        jest.advanceTimersByTime(STUCK_DEVICE_TIMEOUT_MS);
+        expect(cli.sendStateEvent).toHaveBeenLastCalledWith(
+            "!1:example.org",
+            VIDEO_CHANNEL_MEMBER,
+            { devices: [cli.getDeviceId()], expires_ts: expect.any(Number) },
+            cli.getUserId(),
+        );
+        mocked(cli).sendStateEvent.mockClear();
+
         const disconnectPromise = store.disconnect();
         await confirmDisconnect();
         await expect(disconnectPromise).resolves.toBeUndefined();
         expect(store.roomId).toBeFalsy();
         expect(store.connected).toEqual(false);
         WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
+
+        // Our device should now be marked as disconnected
+        expect(cli.sendStateEvent).toHaveBeenLastCalledWith(
+            "!1:example.org",
+            VIDEO_CHANNEL_MEMBER,
+            { devices: [], expires_ts: expect.any(Number) },
+            cli.getUserId(),
+        );
     });
 
     it("waits for messaging when connecting", async () => {

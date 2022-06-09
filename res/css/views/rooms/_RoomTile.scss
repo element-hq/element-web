@@ -75,40 +75,6 @@ limitations under the License.
         .mx_RoomTile_subtitle {
             line-height: $font-18px;
             color: $secondary-content;
-
-            .mx_RoomTile_videoIndicator {
-                &::before {
-                    display: inline-block;
-                    vertical-align: text-bottom;
-                    content: '';
-                    background-color: $secondary-content;
-                    mask-image: url('$(res)/img/element-icons/call/video-call.svg');
-                    mask-size: 16px;
-                    width: 16px;
-                    height: 16px;
-                    margin-right: 4px;
-                }
-
-                &.mx_RoomTile_videoIndicator_active {
-                    color: $accent;
-
-                    &::before {
-                        background-color: $accent;
-                    }
-                }
-            }
-
-            .mx_RoomTile_videoParticipants::before {
-                display: inline-block;
-                vertical-align: text-bottom;
-                content: '';
-                background-color: $secondary-content;
-                mask-image: url('$(res)/img/element-icons/group-members.svg');
-                mask-size: 16px;
-                width: 16px;
-                height: 16px;
-                margin-right: 2px;
-            }
         }
 
         .mx_RoomTile_titleWithSubtitle {

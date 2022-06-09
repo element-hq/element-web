@@ -14,28 +14,37 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { throttle } from "lodash";
 import { Optional } from "matrix-events-sdk";
+import { logger } from "matrix-js-sdk/src/logger";
 import { IMyDevice } from "matrix-js-sdk/src/client";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 
-import { useTypedEventEmitter } from "../hooks/useEventEmitter";
+import { useEventEmitter, useTypedEventEmitter } from "../hooks/useEventEmitter";
 import WidgetStore, { IApp } from "../stores/WidgetStore";
 import { WidgetType } from "../widgets/WidgetType";
 import WidgetUtils from "./WidgetUtils";
-
-const STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60;
+import VideoChannelStore, { VideoChannelEvent, IJitsiParticipant } from "../stores/VideoChannelStore";
 
 interface IVideoChannelMemberContent {
     // Connected device IDs
     devices: string[];
+    // Time at which this state event should be considered stale
+    expires_ts: number;
 }
 
 export const VIDEO_CHANNEL_MEMBER = "io.element.video.member";
+export const STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
+
+export enum ConnectionState {
+    Disconnected = "disconnected",
+    Connecting = "connecting",
+    Connected = "connected",
+}
 
 export const getVideoChannel = (roomId: string): IApp => {
     const apps = WidgetStore.instance.getApps(roomId);
@@ -46,34 +55,75 @@ export const addVideoChannel = async (roomId: string, roomName: string) => {
     await WidgetUtils.addJitsiWidget(roomId, CallType.Video, "Video channel", true, roomName);
 };
 
-export const getConnectedMembers = (room: Room, connectedLocalEcho: boolean): Set<RoomMember> => {
+// Gets the members connected to a given video room, along with a timestamp
+// indicating when this data should be considered stale
+const getConnectedMembers = (room: Room, connectedLocalEcho: boolean): [Set<RoomMember>, number] => {
     const members = new Set<RoomMember>();
+    const now = Date.now();
+    let allExpireAt = Infinity;
 
     for (const e of room.currentState.getStateEvents(VIDEO_CHANNEL_MEMBER)) {
         const member = room.getMember(e.getStateKey());
-        let devices = e.getContent<IVideoChannelMemberContent>()?.devices ?? [];
+        const content = e.getContent<IVideoChannelMemberContent>();
+        let devices = Array.isArray(content.devices) ? content.devices : [];
+        const expiresAt = typeof content.expires_ts === "number" ? content.expires_ts : -Infinity;
+
+        // Ignore events with a timeout that's way off in the future
+        const inTheFuture = (expiresAt - ((STUCK_DEVICE_TIMEOUT_MS * 5) / 4)) > now;
+        const expired = expiresAt <= now || inTheFuture;
 
         // Apply local echo for the disconnected case
         if (!connectedLocalEcho && member?.userId === room.client.getUserId()) {
             devices = devices.filter(d => d !== room.client.getDeviceId());
         }
-        // Must have a device connected and still be joined to the room
-        if (devices.length && member?.membership === "join") members.add(member);
+        // Must have a device connected, be unexpired, and still be joined to the room
+        if (devices.length && !expired && member?.membership === "join") {
+            members.add(member);
+            if (expiresAt < allExpireAt) allExpireAt = expiresAt;
+        }
     }
 
     // Apply local echo for the connected case
     if (connectedLocalEcho) members.add(room.getMember(room.client.getUserId()));
-    return members;
+    return [members, allExpireAt];
 };
 
 export const useConnectedMembers = (
     room: Room, connectedLocalEcho: boolean, throttleMs = 100,
 ): Set<RoomMember> => {
-    const [members, setMembers] = useState<Set<RoomMember>>(getConnectedMembers(room, connectedLocalEcho));
-    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, throttle(() => {
-        setMembers(getConnectedMembers(room, connectedLocalEcho));
-    }, throttleMs, { leading: true, trailing: true }));
+    const [[members, expiresAt], setState] = useState(() => getConnectedMembers(room, connectedLocalEcho));
+    const updateState = useMemo(() => throttle(() => {
+        setState(getConnectedMembers(room, connectedLocalEcho));
+    }, throttleMs, { leading: true, trailing: true }), [setState, room, connectedLocalEcho, throttleMs]);
+
+    useTypedEventEmitter(room.currentState, RoomStateEvent.Update, updateState);
+    useEffect(() => {
+        if (expiresAt < Infinity) {
+            const timer = setTimeout(() => {
+                logger.log(`Refreshing video members for ${room.roomId}`);
+                updateState();
+            }, expiresAt - Date.now());
+            return () => clearTimeout(timer);
+        }
+    }, [expiresAt, updateState, room.roomId]);
+
     return members;
+};
+
+export const useJitsiParticipants = (room: Room): IJitsiParticipant[] => {
+    const store = VideoChannelStore.instance;
+    const [participants, setParticipants] = useState(() =>
+        store.connected && store.roomId === room.roomId ? store.participants : [],
+    );
+
+    useEventEmitter(store, VideoChannelEvent.Disconnect, (roomId: string) => {
+        if (roomId === room.roomId) setParticipants([]);
+    });
+    useEventEmitter(store, VideoChannelEvent.Participants, (roomId: string, participants: IJitsiParticipant[]) => {
+        if (roomId === room.roomId) setParticipants(participants);
+    });
+
+    return participants;
 };
 
 const updateDevices = async (room: Optional<Room>, fn: (devices: string[] | null) => string[]) => {
@@ -84,9 +134,12 @@ const updateDevices = async (room: Optional<Room>, fn: (devices: string[] | null
     const newDevices = fn(devices);
 
     if (newDevices) {
-        await room.client.sendStateEvent(
-            room.roomId, VIDEO_CHANNEL_MEMBER, { devices: newDevices }, room.client.getUserId(),
-        );
+        const content: IVideoChannelMemberContent = {
+            devices: newDevices,
+            expires_ts: Date.now() + STUCK_DEVICE_TIMEOUT_MS,
+        };
+
+        await room.client.sendStateEvent(room.roomId, VIDEO_CHANNEL_MEMBER, content, room.client.getUserId());
     }
 };
 
@@ -110,7 +163,7 @@ export const removeOurDevice = async (room: Room) => {
  * @param {boolean} connectedLocalEcho Local echo of whether this device is connected
  */
 export const fixStuckDevices = async (room: Room, connectedLocalEcho: boolean) => {
-    const now = new Date().valueOf();
+    const now = Date.now();
     const { devices: myDevices } = await room.client.getDevices();
     const deviceMap = new Map<string, IMyDevice>(myDevices.map(d => [d.device_id, d]));
 
@@ -125,4 +178,27 @@ export const fixStuckDevices = async (room: Room, connectedLocalEcho: boolean) =
         // Skip the update if the devices are unchanged
         return newDevices.length === devices.length ? null : newDevices;
     });
+};
+
+export const useConnectionState = (room: Room): ConnectionState => {
+    const store = VideoChannelStore.instance;
+    const [state, setState] = useState(() =>
+        store.roomId === room.roomId
+            ? store.connected
+                ? ConnectionState.Connected
+                : ConnectionState.Connecting
+            : ConnectionState.Disconnected,
+    );
+
+    useEventEmitter(store, VideoChannelEvent.Disconnect, (roomId: string) => {
+        if (roomId === room.roomId) setState(ConnectionState.Disconnected);
+    });
+    useEventEmitter(store, VideoChannelEvent.StartConnect, (roomId: string) => {
+        if (roomId === room.roomId) setState(ConnectionState.Connecting);
+    });
+    useEventEmitter(store, VideoChannelEvent.Connect, (roomId: string) => {
+        if (roomId === room.roomId) setState(ConnectionState.Connected);
+    });
+
+    return state;
 };
