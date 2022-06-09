@@ -37,20 +37,34 @@ describe("createRoom", () => {
         setupAsyncStoreWithClient(WidgetStore.instance, client);
         jest.spyOn(WidgetUtils, "waitForRoomWidget").mockResolvedValue();
 
+        const userId = client.getUserId();
         const roomId = await createRoom({ roomType: RoomType.ElementVideo });
+
         const [[{
             power_level_content_override: {
-                events: { [VIDEO_CHANNEL_MEMBER]: videoMemberPower },
+                users: {
+                    [userId]: userPower,
+                },
+                events: {
+                    "im.vector.modular.widgets": widgetPower,
+                    [VIDEO_CHANNEL_MEMBER]: videoMemberPower,
+                },
             },
         }]] = mocked(client.createRoom).mock.calls as any; // no good type
         const [[widgetRoomId, widgetStateKey]] = mocked(client.sendStateEvent).mock.calls;
 
-        // We should have set up the Jitsi widget
+        // We should have had enough power to be able to set up the Jitsi widget
+        expect(userPower).toBeGreaterThanOrEqual(widgetPower);
+        // and should have actually set it up
         expect(widgetRoomId).toEqual(roomId);
         expect(widgetStateKey).toEqual("im.vector.modular.widgets");
 
         // All members should be able to update their connected devices
         expect(videoMemberPower).toEqual(0);
+        // Jitsi widget should be immutable for admins
+        expect(widgetPower).toBeGreaterThan(100);
+        // and we should have been reset back to admin
+        expect(client.setPowerLevel).toHaveBeenCalledWith(roomId, userId, 100, undefined);
     });
 });
 
