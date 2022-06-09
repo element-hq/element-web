@@ -39,3 +39,10 @@ export const sortBeaconsByLatestExpiry = (left: Beacon, right: Beacon): number =
 // aka sort by timestamp descending
 export const sortBeaconsByLatestCreation = (left: Beacon, right: Beacon): number =>
     right.beaconInfo.timestamp - left.beaconInfo.timestamp;
+
+// a beacon's starting timestamp can be in the future
+// (either from small deviations in system clock times, or on purpose from another client)
+// a beacon is only live between its start timestamp and expiry
+// detect when a beacon is waiting to become live
+export const isBeaconWaitingToStart = (beacon: Beacon): boolean =>
+    !beacon.isLive && beacon.beaconInfo.timestamp > Date.now() && getBeaconExpiryTimestamp(beacon) > Date.now();

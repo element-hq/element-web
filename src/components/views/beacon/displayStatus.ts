@@ -25,14 +25,18 @@ export enum BeaconDisplayStatus {
 export const getBeaconDisplayStatus = (
     isLive: boolean,
     latestLocationState?: BeaconLocationState,
-    error?: Error): BeaconDisplayStatus => {
+    error?: Error,
+    waitingToStart?: boolean,
+): BeaconDisplayStatus => {
     if (error) {
         return BeaconDisplayStatus.Error;
+    }
+    if (waitingToStart) {
+        return BeaconDisplayStatus.Loading;
     }
     if (!isLive) {
         return BeaconDisplayStatus.Stopped;
     }
-
     if (!latestLocationState) {
         return BeaconDisplayStatus.Loading;
     }

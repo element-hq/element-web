@@ -23,7 +23,7 @@ import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { _t } from '../../../languageHandler';
 import Modal from '../../../Modal';
-import { useBeacon } from '../../../utils/beacon';
+import { isBeaconWaitingToStart, useBeacon } from '../../../utils/beacon';
 import { isSelfLocation } from '../../../utils/location';
 import { BeaconDisplayStatus, getBeaconDisplayStatus } from '../beacon/displayStatus';
 import BeaconStatus from '../beacon/BeaconStatus';
@@ -39,6 +39,7 @@ const useBeaconState = (beaconInfoEvent: MatrixEvent): {
     description?: string;
     latestLocationState?: BeaconLocationState;
     isLive?: boolean;
+    waitingToStart?: boolean;
 } => {
     const beacon = useBeacon(beaconInfoEvent);
 
@@ -56,12 +57,19 @@ const useBeaconState = (beaconInfoEvent: MatrixEvent): {
         return {};
     }
 
+    // a beacon's starting timestamp can be in the future
+    // (either from small deviations in system clock times, or on purpose from another client)
+    // a beacon is only live between its start timestamp and expiry
+    // detect when a beacon is waiting to become live
+    // and display a loading state
+    const waitingToStart = !!beacon && isBeaconWaitingToStart(beacon);
     const { description } = beacon.beaconInfo;
 
     return {
         beacon,
         description,
         isLive,
+        waitingToStart,
         latestLocationState,
     };
 };
@@ -84,12 +92,13 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) =>
         beacon,
         isLive,
         latestLocationState,
+        waitingToStart,
     } = useBeaconState(mxEvent);
     const mapId = useUniqueId(mxEvent.getId());
 
     const matrixClient = useContext(MatrixClientContext);
     const [error, setError] = useState<Error>();
-    const displayStatus = getBeaconDisplayStatus(isLive, latestLocationState, error);
+    const displayStatus = getBeaconDisplayStatus(isLive, latestLocationState, error, waitingToStart);
     const markerRoomMember = isSelfLocation(mxEvent.getContent()) ? mxEvent.sender : undefined;
     const isOwnBeacon = beacon?.beaconInfoOwner === matrixClient.getUserId();
 
