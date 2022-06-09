@@ -176,7 +176,7 @@ Enables showing a right-click context menu when right-clicking messages in the
 timeline. This menu shows options that can usually be found in the message
 action bar or in the message options.
 
-## Voice & video rooms (`feature_video_rooms`) [In Development]
+## Video rooms (`feature_video_rooms`)
 
 Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
 
