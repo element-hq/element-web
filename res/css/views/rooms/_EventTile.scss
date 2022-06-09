@@ -852,17 +852,18 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 }
 
+// For style rules of ThreadView, see _ThreadPanel.scss
 .mx_ThreadView {
     --ThreadView_group_spacing-start: 56px; // 56px: 64px - 8px (padding)
     --ThreadView_group_spacing-end: 8px; // same as padding
 
-    .mx_EventTile_roomName {
-        display: none;
-    }
-
     .mx_EventTile {
         display: flex;
         flex-direction: column;
+
+        .mx_EventTile_roomName {
+            display: none;
+        }
 
         .mx_EventTile_line {
             padding-top: var(--BaseCard_EventTile_line-padding-block);
@@ -882,8 +883,64 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             font-size: $font-10px;
         }
 
+        // handling for hidden events (e.g reactions) in the thread view
+        &.mx_EventTile_info {
+            padding-top: 0;
+
+            .mx_EventTile_avatar {
+                position: absolute;
+                top: 1.5px; // Align with hidden event content
+                margin-top: 0;
+                margin-bottom: 0;
+                width: 14px; // avatar img size
+                height: 14px; // avatar img size
+            }
+
+            .mx_ViewSourceEvent_toggle {
+                display: none; // hide the hidden event expand button, not enough space, view source can still be used
+            }
+
+            &.mx_EventTile_selected .mx_EventTile_line,
+            .mx_EventTile_line {
+                $line-height: $font-12px;
+
+                padding-inline-start: 0;
+                line-height: $line-height;
+
+                .mx_EventTile_content,
+                .mx_RedactedBody {
+                    width: auto;
+                    margin-inline-start: calc(var(--ThreadView_group_spacing-start) + 14px + 6px); // 14px: avatar width, 6px: 20px - 14px
+                    font-size: $line-height;
+                }
+            }
+
+            &:not([data-layout=bubble]) {
+                .mx_MessageTimestamp {
+                    top: 2px; // Align with avatar
+                }
+
+                .mx_EventTile_avatar {
+                    left: calc($MessageTimestamp_width + 14px - 4px); // 14px: avatar width, 4px: align with text
+                    z-index: 9; // position above the hover styling
+                }
+            }
+
+            &[data-layout=bubble] {
+                .mx_EventTile_avatar {
+                    inset-inline-start: 0;
+                }
+            }
+        }
+
         &:not([data-layout=bubble]) {
             padding-top: $spacing-16;
+
+            &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
+            &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
+            &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
+                padding-inline-start: 0; // Override
+            }
 
             .mx_EventTile_line {
                 padding-top: var(--BaseCard_EventTile_line-padding-block);
@@ -915,73 +972,80 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
                 }
             }
         }
-    }
 
-    .mx_EventTile[data-layout=group] {
-        width: 100%;
-
-        .mx_EventTile_content,
-        .mx_HiddenBody,
-        .mx_RedactedBody,
-        .mx_UnknownBody,
-        .mx_MPollBody,
-        .mx_MLocationBody,
-        .mx_ReplyChain_wrapper,
-        .mx_ReactionsRow {
-            margin-inline-start: var(--ThreadView_group_spacing-start);
-            margin-inline-end: var(--ThreadView_group_spacing-end);
+        &[data-layout=group] {
+            width: 100%;
 
             .mx_EventTile_content,
             .mx_HiddenBody,
             .mx_RedactedBody,
-            .mx_MImageBody {
-                margin: 0;
-            }
-        }
-
-        .mx_ReplyChain_wrapper {
+            .mx_UnknownBody,
+            .mx_MPollBody,
             .mx_MLocationBody,
-            .mx_UnknownBody { // Error message inside ReplyTile
-                margin-inline: unset;
-            }
-        }
-
-        .mx_EventTile_mediaLine {
-            // such as MImageBody
-            > div,
-            > span {
+            .mx_ReplyChain_wrapper,
+            .mx_ReactionsRow {
                 margin-inline-start: var(--ThreadView_group_spacing-start);
                 margin-inline-end: var(--ThreadView_group_spacing-end);
-            }
 
-            // such as MAudioBody and MFileBody
-            > span {
-                display: block; // Apply the margin declarations to span element
-            }
-        }
-
-        .mx_MessageTimestamp {
-            top: 2px; // Align with mx_EventTile_content
-        }
-
-        .mx_EventTile_senderDetails {
-            display: flex;
-            align-items: center;
-            gap: $spacing-16; // gap between the avatar and the sender ID
-            padding-inline-start: $spacing-8;
-
-            a {
-                flex: 1;
-                min-width: unset;
-                max-width: 100%;
-                display: flex;
-                align-items: center;
-
-                .mx_DisambiguatedProfile {
-                    margin-left: 8px;
-                    flex: 1;
+                .mx_EventTile_content,
+                .mx_HiddenBody,
+                .mx_RedactedBody,
+                .mx_MImageBody {
+                    margin: 0;
                 }
             }
+
+            .mx_ReplyChain_wrapper {
+                .mx_MLocationBody,
+                .mx_UnknownBody { // Error message inside ReplyTile
+                    margin-inline: unset;
+                }
+            }
+
+            .mx_EventTile_mediaLine {
+                // such as MImageBody
+                > div,
+                > span {
+                    margin-inline-start: var(--ThreadView_group_spacing-start);
+                    margin-inline-end: var(--ThreadView_group_spacing-end);
+                }
+
+                // such as MAudioBody and MFileBody
+                > span {
+                    display: block; // Apply the margin declarations to span element
+                }
+            }
+
+            .mx_MessageTimestamp {
+                top: 2px; // Align with mx_EventTile_content
+            }
+
+            .mx_EventTile_senderDetails {
+                display: flex;
+                align-items: center;
+                gap: $spacing-16; // gap between the avatar and the sender ID
+                padding-inline-start: $spacing-8;
+
+                a {
+                    flex: 1;
+                    min-width: unset;
+                    max-width: 100%;
+                    display: flex;
+                    align-items: center;
+
+                    .mx_DisambiguatedProfile {
+                        margin-left: 8px;
+                        flex: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    .mx_GenericEventListSummary {
+        &:not([data-layout=bubble]) > .mx_EventTile_line {
+            padding-inline-start: var(--ThreadView_group_spacing-start); // align summary text with message text
+            padding-inline-end: var(--ThreadView_group_spacing-end); // align summary text with message text
         }
     }
 }
