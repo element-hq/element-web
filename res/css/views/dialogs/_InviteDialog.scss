@@ -146,94 +146,6 @@ limitations under the License.
     }
 }
 
-.mx_InviteDialog_roomTile {
-    cursor: pointer;
-    padding: 5px 10px;
-
-    &:hover {
-        background-color: $header-panel-bg-color;
-        border-radius: 4px;
-    }
-
-    * {
-        vertical-align: middle;
-    }
-
-    .mx_InviteDialog_roomTile_avatarStack {
-        display: inline-block;
-        position: relative;
-        width: 36px;
-        height: 36px;
-
-        & > * {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-    }
-
-    .mx_InviteDialog_roomTile_selected {
-        width: 36px;
-        height: 36px;
-        border-radius: 36px;
-        background-color: $username-variant1-color;
-        display: inline-block;
-        position: relative;
-
-        &::before {
-            content: "";
-            width: 24px;
-            height: 24px;
-            grid-column: 1;
-            grid-row: 1;
-            mask-image: url("$(res)/img/feather-customised/check.svg");
-            mask-size: 100%;
-            mask-repeat: no-repeat;
-            position: absolute;
-            top: 6px; // 50%
-            left: 6px; // 50%
-            background-color: #ffffff; // this is fine without a var because it's for both themes
-        }
-    }
-
-    .mx_InviteDialog_roomTile_nameStack {
-        display: inline-block;
-        overflow: hidden;
-    }
-
-    .mx_InviteDialog_roomTile_name {
-        font-weight: 600;
-        font-size: $font-14px;
-        color: $primary-content;
-        margin-left: 7px;
-    }
-
-    .mx_InviteDialog_roomTile_userId {
-        font-size: $font-12px;
-        color: $muted-fg-color;
-        margin-left: 7px;
-    }
-
-    .mx_InviteDialog_roomTile_name,
-    .mx_InviteDialog_roomTile_userId {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .mx_InviteDialog_roomTile_time {
-        text-align: right;
-        font-size: $font-12px;
-        color: $muted-fg-color;
-        float: right;
-        line-height: $font-36px; // Height of the avatar to keep the time vertically aligned
-    }
-
-    .mx_InviteDialog_roomTile_highlight {
-        font-weight: 900;
-    }
-}
-
 // Many of these styles are stolen from mx_UserPill, but adjusted for the invite dialog.
 .mx_InviteDialog_userTile {
     margin-right: 8px;
@@ -414,42 +326,131 @@ limitations under the License.
     mask-image: url('$(res)/img/voip/tab-dialpad.svg');
 }
 
+.mx_InviteDialog_tile {
+    cursor: pointer;
+    display: grid;
+    gap: $spacing-8 $spacing-12;
+    align-items: center;
+
+    &.mx_InviteDialog_tile--room {
+        grid-template-columns: min-content auto auto; // mx_InviteDialog_tile_avatarStack, mx_InviteDialog_tile_nameStack, time
+        padding: $spacing-4 $spacing-8;
+
+        &:hover {
+            background-color: $header-panel-bg-color;
+            border-radius: 4px;
+        }
+
+        .mx_InviteDialog_tile--room_selected {
+            border-radius: 36px;
+            background-color: $username-variant1-color;
+
+            &::before {
+                content: "";
+                width: 24px;
+                height: 24px;
+                grid-column: 1;
+                grid-row: 1;
+                mask-image: url("$(res)/img/feather-customised/check.svg");
+                mask-size: 100%;
+                mask-repeat: no-repeat;
+                position: absolute;
+                top: 6px; // 50%
+                left: 6px; // 50%
+                background-color: #ffffff; // this is fine without a var because it's for both themes
+            }
+        }
+
+        .mx_InviteDialog_tile--room_time {
+            margin-inline-start: auto;
+            width: max-content;
+            font-size: $font-12px;
+            color: $muted-fg-color;
+        }
+
+        .mx_InviteDialog_tile--room_highlight {
+            font-weight: 900;
+        }
+    }
+
+    &.mx_InviteDialog_tile--inviterError {
+        grid-template-columns: max-content auto; // max-content = avatar width
+        margin-bottom: $spacing-24;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .mx_InviteDialog_tile--inviterError_errorText {
+            grid-row-start: 2;
+            grid-column-start: 2;
+
+            font-size: $font-15px;
+            color: $alert;
+        }
+    }
+
+    * {
+        vertical-align: middle;
+    }
+
+    .mx_InviteDialog_tile_avatarStack,
+    .mx_InviteDialog_tile--room_selected {
+        width: 36px;
+        height: 36px;
+        display: inline-block;
+        position: relative;
+    }
+
+    .mx_InviteDialog_tile_avatarStack {
+        grid-row-start: 1;
+        grid-column-start: 1;
+
+        & > * {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    .mx_InviteDialog_tile_nameStack {
+        grid-row-start: 1;
+        grid-column-start: 2;
+
+        display: flex;
+        flex-flow: column;
+        align-self: center;
+        align-items: baseline;
+        gap: 2px 0;
+        overflow: hidden;
+
+        .mx_InviteDialog_tile_nameStack_name,
+        .mx_InviteDialog_tile_nameStack_userId {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+        }
+
+        .mx_InviteDialog_tile_nameStack_name {
+            font-size: $font-15px;
+            font-weight: $font-semi-bold;
+            color: $primary-content;
+        }
+
+        .mx_InviteDialog_tile_nameStack_userId {
+            font-size: $font-12px;
+            color: $muted-fg-color;
+        }
+    }
+}
+
 .mx_InviteDialog_multiInviterError {
     > h4 {
         font-size: $font-15px;
         line-height: $font-24px;
         color: $secondary-content;
         font-weight: normal;
-    }
-
-    > div {
-        .mx_InviteDialog_multiInviterError_entry {
-            margin-bottom: 24px;
-
-            .mx_InviteDialog_multiInviterError_entry_userProfile {
-                .mx_InviteDialog_multiInviterError_entry_name {
-                    margin-left: 6px;
-                    font-size: $font-15px;
-                    line-height: $font-24px;
-                    font-weight: $font-semi-bold;
-                    color: $primary-content;
-                }
-
-                .mx_InviteDialog_multiInviterError_entry_userId {
-                    margin-left: 6px;
-                    font-size: $font-12px;
-                    line-height: $font-15px;
-                    color: $tertiary-content;
-                }
-            }
-
-            .mx_InviteDialog_multiInviterError_entry_error {
-                margin-left: 32px;
-                font-size: $font-15px;
-                line-height: $font-24px;
-                color: $alert;
-            }
-        }
     }
 }
 

@@ -68,7 +68,7 @@ export async function createDm(session: ElementSession, invitees: string[]): Pro
         await session.replaceInputText(inviteesEditor, target);
         await session.delay(1000); // give it a moment to figure out a suggestion
         // find the suggestion and accept it
-        const suggestions = await session.queryAll('.mx_InviteDialog_roomTile_userId');
+        const suggestions = await session.queryAll('.mx_InviteDialog_tile_nameStack_userId');
         const suggestionTexts = await Promise.all(suggestions.map(s => session.innerText(s)));
         const suggestionIndex = suggestionTexts.indexOf(target);
         if (suggestionIndex === -1) {

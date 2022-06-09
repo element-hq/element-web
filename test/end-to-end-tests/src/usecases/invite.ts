@@ -35,7 +35,7 @@ export async function invite(session: ElementSession, userId: string): Promise<v
     await inviteButton.click();
     const inviteTextArea = await session.query(".mx_InviteDialog_editor input");
     await inviteTextArea.type(userId);
-    const selectUserItem = await session.query(".mx_InviteDialog_roomTile");
+    const selectUserItem = await session.query(".mx_InviteDialog_tile--room");
     await selectUserItem.click();
     const confirmButton = await session.query(".mx_InviteDialog_goButton");
     await confirmButton.click();
