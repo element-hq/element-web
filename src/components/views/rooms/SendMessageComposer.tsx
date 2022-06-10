@@ -351,12 +351,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     ? this.props.relation?.event_id
                     : null;
 
-                if (cmd.category === CommandCategories.messages) {
-                    content = await runSlashCommand(cmd, args, this.props.room.roomId, threadId);
-                    if (!content) {
-                        return; // errored
-                    }
+                let commandSuccessful: boolean;
+                [content, commandSuccessful] = await runSlashCommand(cmd, args, this.props.room.roomId, threadId);
+                if (!commandSuccessful) {
+                    return; // errored
+                }
 
+                if (cmd.category === CommandCategories.messages) {
                     attachRelation(content, this.props.relation);
                     if (replyToEvent) {
                         addReplyToMessageContent(content, replyToEvent, {
@@ -365,7 +366,6 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                         });
                     }
                 } else {
-                    runSlashCommand(cmd, args, this.props.room.roomId, threadId);
                     shouldSend = false;
                 }
             } else if (!await shouldSendAnyway(commandText)) {

@@ -332,13 +332,14 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 const [cmd, args, commandText] = getSlashCommand(this.model);
                 if (cmd) {
                     const threadId = editedEvent?.getThread()?.id || null;
+                    const [content, commandSuccessful] = await runSlashCommand(cmd, args, roomId, threadId);
+                    if (!commandSuccessful) {
+                        return; // errored
+                    }
+
                     if (cmd.category === CommandCategories.messages) {
-                        editContent["m.new_content"] = await runSlashCommand(cmd, args, roomId, threadId);
-                        if (!editContent["m.new_content"]) {
-                            return; // errored
-                        }
+                        editContent["m.new_content"] = content;
                     } else {
-                        runSlashCommand(cmd, args, roomId, threadId);
                         shouldSend = false;
                     }
                 } else if (!await shouldSendAnyway(commandText)) {
