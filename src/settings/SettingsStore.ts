@@ -34,6 +34,7 @@ import { SettingLevel } from "./SettingLevel";
 import SettingsHandler from "./handlers/SettingsHandler";
 import { SettingUpdatedPayload } from "../dispatcher/payloads/SettingUpdatedPayload";
 import { Action } from "../dispatcher/actions";
+import PlatformSettingsHandler from "./handlers/PlatformSettingsHandler";
 
 const defaultWatchManager = new WatchManager();
 
@@ -61,6 +62,7 @@ const LEVEL_HANDLERS = {
     ),
     [SettingLevel.ACCOUNT]: new LocalEchoWrapper(new AccountSettingsHandler(defaultWatchManager), SettingLevel.ACCOUNT),
     [SettingLevel.ROOM]: new LocalEchoWrapper(new RoomSettingsHandler(defaultWatchManager), SettingLevel.ROOM),
+    [SettingLevel.PLATFORM]: new LocalEchoWrapper(new PlatformSettingsHandler(), SettingLevel.PLATFORM),
     [SettingLevel.CONFIG]: new ConfigSettingsHandler(featureNames),
     [SettingLevel.DEFAULT]: new DefaultSettingsHandler(defaultSettings, invertedDefaultSettings),
 };
@@ -74,6 +76,14 @@ export const LEVEL_ORDER = [
     SettingLevel.CONFIG,
     SettingLevel.DEFAULT,
 ];
+
+function getLevelOrder(setting: ISetting): SettingLevel[] {
+    // Settings which support only a single setting level are inherently ordered
+    if (setting.supportedLevelsAreOrdered || setting.supportedLevels.length === 1) {
+        return setting.supportedLevels;
+    }
+    return LEVEL_ORDER;
+}
 
 export type CallbackFn = (
     settingName: string,
@@ -316,7 +326,7 @@ export default class SettingsStore {
         }
 
         const setting = SETTINGS[settingName];
-        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+        const levelOrder = getLevelOrder(setting);
 
         return SettingsStore.getValueAt(levelOrder[0], settingName, roomId, false, excludeDefault);
     }
@@ -345,7 +355,7 @@ export default class SettingsStore {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
-        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+        const levelOrder = getLevelOrder(setting);
         if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
 
         const minIndex = levelOrder.indexOf(level);
@@ -518,7 +528,7 @@ export default class SettingsStore {
             throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
         }
 
-        const levelOrder = (setting.supportedLevelsAreOrdered ? setting.supportedLevels : LEVEL_ORDER);
+        const levelOrder = getLevelOrder(setting);
         if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
 
         const handlers = SettingsStore.getHandlers(settingName);
