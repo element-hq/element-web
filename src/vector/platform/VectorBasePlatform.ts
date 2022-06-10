@@ -30,11 +30,11 @@ import Favicon from "../../favicon";
 export default abstract class VectorBasePlatform extends BasePlatform {
     protected _favicon: Favicon;
 
-    async getConfig(): Promise<IConfigOptions> {
+    public async getConfig(): Promise<IConfigOptions> {
         return getVectorConfig();
     }
 
-    getHumanReadableName(): string {
+    public getHumanReadableName(): string {
         return 'Vector Base Platform'; // no translation required: only used for analytics
     }
 
@@ -43,7 +43,7 @@ export default abstract class VectorBasePlatform extends BasePlatform {
      * it uses canvas, which can trigger a permission prompt in Firefox's resist fingerprinting mode.
      * See https://github.com/vector-im/element-web/issues/9605.
      */
-    get favicon() {
+    public get favicon() {
         if (this._favicon) {
             return this._favicon;
         }
@@ -62,13 +62,13 @@ export default abstract class VectorBasePlatform extends BasePlatform {
         this.favicon.badge(notif, { bgColor });
     }
 
-    setNotificationCount(count: number) {
+    public setNotificationCount(count: number) {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
         this.updateFavicon();
     }
 
-    setErrorStatus(errorDidOccur: boolean) {
+    public setErrorStatus(errorDidOccur: boolean) {
         if (this.errorDidOccur === errorDidOccur) return;
         super.setErrorStatus(errorDidOccur);
         this.updateFavicon();
@@ -77,14 +77,14 @@ export default abstract class VectorBasePlatform extends BasePlatform {
     /**
      * Begin update polling, if applicable
      */
-    startUpdater() {
+    public startUpdater() {
     }
 
     /**
      * Get a sensible default display name for the
      * device Vector is running on
      */
-    getDefaultDeviceDisplayName(): string {
+    public getDefaultDeviceDisplayName(): string {
         return _t("Unknown device");
     }
 }
