@@ -47,6 +47,12 @@ declare global {
              * @param userId the id of the user to invite
              */
             inviteUser(roomId: string, userId: string): Chainable<{}>;
+            /**
+             * Sets account data for the user.
+             * @param type The type of account data.
+             * @param data The data to store.
+             */
+            setAccountData(type: string, data: object): Chainable<{}>;
         }
     }
 }
@@ -89,5 +95,11 @@ Cypress.Commands.add("createSpace", (options: ICreateRoomOpts): Chainable<string
 Cypress.Commands.add("inviteUser", (roomId: string, userId: string): Chainable<{}> => {
     return cy.getClient().then(async (cli: MatrixClient) => {
         return cli.invite(roomId, userId);
+    });
+});
+
+Cypress.Commands.add("setAccountData", (type: string, data: object): Chainable<{}> => {
+    return cy.getClient().then(async (cli: MatrixClient) => {
+        return cli.setAccountData(type, data);
     });
 });
