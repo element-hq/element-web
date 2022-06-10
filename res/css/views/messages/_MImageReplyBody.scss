@@ -16,17 +16,21 @@ limitations under the License.
 
 .mx_MImageReplyBody {
     display: flex;
+    column-gap: $spacing-4;
 
-    .mx_MImageBody_thumbnail_container {
+    .mx_MImageBody_thumbnail_container,
+    .mx_MImageReplyBody_info {
         flex: 1;
-        margin-right: 4px;
+        min-width: 0; // Prevent a blowout
     }
 
     .mx_MImageReplyBody_info {
-        flex: 1;
-
         .mx_MImageReplyBody_sender {
             grid-area: sender;
+
+            .mx_DisambiguatedProfile {
+                max-width: 100%;
+            }
         }
 
         .mx_MImageReplyBody_filename {
