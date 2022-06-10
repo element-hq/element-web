@@ -53,9 +53,12 @@ limitations under the License.
 }
 
 .mx_EventTile[data-layout=bubble] {
+    --EventTile_bubble-margin-inline-start: 49px;
+    --EventTile_bubble-margin-inline-end: 60px;
+
     position: relative;
     margin-top: var(--gutterSize);
-    margin-left: 49px;
+    margin-left: var(--EventTile_bubble-margin-inline-start);
     font-size: $font-14px;
 
     .mx_ThreadSummary {
@@ -89,8 +92,8 @@ limitations under the License.
         position: absolute;
         top: -1px;
         bottom: -1px;
-        left: -60px;
-        right: -60px;
+        left: calc(-1 * var(--EventTile_bubble-margin-inline-start));
+        right: calc(-1 * var(--EventTile_bubble-margin-inline-end));
         z-index: -1;
         border-radius: 4px;
     }
@@ -665,6 +668,17 @@ limitations under the License.
         }
     }
 
+    /* events that do not require bubble layout */
+    .mx_EventTile_line {
+        background: transparent;
+    }
+
+    &:hover {
+        &::before {
+            background: transparent;
+        }
+    }
+
     &::after {
         content: "";
         clear: both;
@@ -704,20 +718,6 @@ limitations under the License.
             &::before {
                 inset-inline-end: 0; // match alignment of the hover background to that of chat bubbles
             }
-        }
-    }
-}
-
-/* events that do not require bubble layout */
-.mx_GenericEventListSummary[data-layout=bubble],
-.mx_EventTile.mx_EventTile_bad[data-layout=bubble] {
-    .mx_EventTile_line {
-        background: transparent;
-    }
-
-    &:hover {
-        &::before {
-            background: transparent;
         }
     }
 }

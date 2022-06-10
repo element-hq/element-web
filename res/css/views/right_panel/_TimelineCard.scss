@@ -43,63 +43,75 @@ limitations under the License.
     }
 
     .mx_NewRoomIntro {
-        margin-inline-start: var(--BaseCard_EventTile-spacing-horizontal);
-        margin-inline-end: var(--BaseCard_EventTile-spacing-horizontal);
+        margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
+        margin-inline-end: var(--BaseCard_EventTile-spacing-inline);
     }
 
     .mx_EventTile_content {
         margin-right: 0;
     }
 
-    .mx_EventTile:not([data-layout="bubble"]) {
-        &.mx_EventTile_info .mx_EventTile_line,
-        .mx_EventTile_line {
-            padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-horizontal);
-            padding-inline-end: $MessageTimestamp_width; // ensure timestamp is not hidden
+    .mx_EventTile {
+        &[data-layout=bubble] {
+            &::before {
+                z-index: auto; // enable background color on hover
+            }
 
-            .mx_EventTile_e2eIcon {
-                inset-inline-start: 8px;
+            .mx_ReactionsRow {
+                position: relative; // display on hover
             }
         }
 
-        .mx_DisambiguatedProfile,
-        .mx_ReactionsRow,
-        .mx_ThreadSummary {
-            margin-inline-start: var(--BaseCard_EventTile-spacing-horizontal);
-        }
+        &:not([data-layout="bubble"]) {
+            &.mx_EventTile_info .mx_EventTile_line,
+            .mx_EventTile_line {
+                padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-inline);
+                padding-inline-end: $MessageTimestamp_width; // ensure timestamp is not hidden
 
-        .mx_ReactionsRow {
-            padding: 0;
+                .mx_EventTile_e2eIcon {
+                    inset-inline-start: 8px;
+                }
+            }
 
-            // See margin setting of ReactionsRow on _EventTile.scss
-            margin-right: 8px;
-        }
+            .mx_DisambiguatedProfile,
+            .mx_ReactionsRow,
+            .mx_ThreadSummary {
+                margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
+            }
 
-        .mx_ThreadSummary {
-            margin-right: 0;
-            max-width: min(calc(100% - 36px), 600px);
-        }
+            .mx_ReactionsRow {
+                padding: 0;
 
-        .mx_EventTile_avatar {
-            position: absolute; // for IRC layout
-            top: 12px;
-            left: -3px;
-        }
+                // See margin setting of ReactionsRow on _EventTile.scss
+                margin-right: 8px;
+            }
 
-        .mx_MessageTimestamp {
-            position: absolute; // for modern layout and IRC layout
-            inset-inline-start: auto;
-            inset-inline-end: 0;
-        }
+            .mx_ThreadSummary {
+                margin-right: 0;
+                max-width: min(calc(100% - 36px), 600px);
+            }
 
-        .mx_EventTile_msgOption {
-            // Override mx_EventTile_msgOption of mx_EventTile:not([data-layout="bubble"])
-            margin-inline-end: 0;
-        }
-
-        &.mx_EventTile_info {
             .mx_EventTile_avatar {
-                left: 18px;
+                position: absolute; // for IRC layout
+                top: 12px;
+                left: -3px;
+            }
+
+            .mx_MessageTimestamp {
+                position: absolute; // for modern layout and IRC layout
+                inset-inline-start: auto;
+                inset-inline-end: 0;
+            }
+
+            .mx_EventTile_msgOption {
+                // Override mx_EventTile_msgOption of mx_EventTile:not([data-layout="bubble"])
+                margin-inline-end: 0;
+            }
+
+            &.mx_EventTile_info {
+                .mx_EventTile_avatar {
+                    left: 18px;
+                }
             }
         }
     }
@@ -134,8 +146,8 @@ limitations under the License.
     .mx_GenericEventListSummary:not([data-layout=bubble]) {
         .mx_EventTile_line,
         > .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
-            padding-inline-start: var(--BaseCard_EventTile-spacing-horizontal);
-            padding-inline-end: var(--BaseCard_EventTile-spacing-horizontal);
+            padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
+            padding-inline-end: var(--BaseCard_EventTile-spacing-inline);
         }
     }
 

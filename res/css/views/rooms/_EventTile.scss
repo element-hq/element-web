@@ -955,8 +955,17 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         }
 
         &[data-layout=bubble] {
-            margin-inline-start: var(--BaseCard_EventTile-spacing-horizontal);
-            margin-inline-end: var(--BaseCard_EventTile-spacing-horizontal);
+            margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
+            margin-inline-end: var(--BaseCard_EventTile-spacing-inline);
+
+            &::before {
+                inset-inline: calc(-1 * var(--BaseCard_EventTile-spacing-inline));
+                z-index: auto; // enable background color on hover
+            }
+
+            .mx_ReactionsRow {
+                position: relative; // display on hover
+            }
 
             .mx_EventTile_line.mx_EventTile_mediaLine {
                 padding-block: 0;
