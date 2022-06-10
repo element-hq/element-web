@@ -15,64 +15,82 @@ limitations under the License.
 */
 
 import React from "react";
-import TestRenderer from "react-test-renderer";
+import { mount, ReactWrapper } from "enzyme";
+import { mocked, MockedObject } from "jest-mock";
+import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
+import { stubClient, wrapInMatrixClientContext } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { stubClient } from "../../test-utils";
 import { Action } from "../../../src/dispatcher/actions";
 import dis from "../../../src/dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
-import MatrixClientContext from "../../../src/contexts/MatrixClientContext";
-import { RoomView } from "../../../src/components/structures/RoomView";
+import { RoomView as _RoomView } from "../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
 
-describe("RoomView", () => {
-    it("updates url preview visibility on encryption state change", async () => {
-        stubClient();
-        const cli = MatrixClientPeg.get();
-        cli.hasLazyLoadMembersEnabled = () => false;
-        cli.isInitialSyncComplete = () => true;
-        cli.stopPeeking = () => undefined;
+const RoomView = wrapInMatrixClientContext(_RoomView);
 
-        const r1 = new Room("r1", cli, "@name:example.com");
-        cli.getRoom = () => r1;
-        r1.getPendingEvents = () => [];
+describe("RoomView", () => {
+    let cli: MockedObject<MatrixClient>;
+    let room: Room;
+    beforeEach(() => {
+        stubClient();
+        cli = mocked(MatrixClientPeg.get());
+
+        room = new Room("r1", cli, "@alice:example.com");
+        room.getPendingEvents = () => [];
+        cli.getRoom.mockReturnValue(room);
+        // Re-emit certain events on the mocked client
+        room.on(RoomEvent.Timeline, (...args) => cli.emit(RoomEvent.Timeline, ...args));
+        room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
 
         DMRoomMap.makeShared();
+    });
 
-        const switchRoomPromise = new Promise<void>(resolve => {
-            const subscription = RoomViewStore.instance.addListener(() => {
-                if (RoomViewStore.instance.getRoomId()) {
-                    subscription.remove();
-                    resolve();
-                }
+    const mountRoomView = async (): Promise<ReactWrapper> => {
+        if (RoomViewStore.instance.getRoomId() !== room.roomId) {
+            const switchRoomPromise = new Promise<void>(resolve => {
+                const subscription = RoomViewStore.instance.addListener(() => {
+                    if (RoomViewStore.instance.getRoomId()) {
+                        subscription.remove();
+                        resolve();
+                    }
+                });
             });
-        });
 
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: r1.roomId,
-            metricsTrigger: null,
-        });
+            dis.dispatch<ViewRoomPayload>({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                metricsTrigger: null,
+            });
 
-        await switchRoomPromise;
+            await switchRoomPromise;
+        }
 
-        const renderer = TestRenderer.create(<MatrixClientContext.Provider value={cli}>
-            <RoomView mxClient={cli}
+        return mount(
+            <RoomView
+                mxClient={cli}
                 threepidInvite={null}
                 oobData={null}
                 resizeNotifier={new ResizeNotifier()}
                 justCreatedOpts={null}
                 forceTimeline={false}
                 onRegistered={null}
-            />
-        </MatrixClientContext.Provider>);
+            />,
+        );
+    };
+    const getRoomViewInstance = async (): Promise<_RoomView> =>
+        (await mountRoomView()).find(_RoomView).instance() as _RoomView;
 
-        const roomViewInstance = renderer.root.findByType(RoomView).instance;
+    it("updates url preview visibility on encryption state change", async () => {
+        // we should be starting unencrypted
+        expect(cli.isCryptoEnabled()).toEqual(false);
+        expect(cli.isRoomEncrypted(room.roomId)).toEqual(false);
+
+        const roomViewInstance = await getRoomViewInstance();
 
         // in a default (non-encrypted room, it should start out with url previews enabled)
         // This is a white-box test in that we're asserting things about the state, which
@@ -84,32 +102,28 @@ describe("RoomView", () => {
         // 2) SettingsStore is a static class and so very hard to mock out.
         expect(roomViewInstance.state.showUrlPreview).toBe(true);
 
-        // now enable encryption (by mocking out the tests for whether a room is encrypted)
-        cli.isCryptoEnabled = () => true;
-        cli.isRoomEncrypted = () => true;
+        // now enable encryption
+        cli.isCryptoEnabled.mockReturnValue(true);
+        cli.isRoomEncrypted.mockReturnValue(true);
 
         // and fake an encryption event into the room to prompt it to re-check
-        // wait until the event has been added
-        const eventAddedPromise = new Promise<void>(resolve => {
-            r1.once(RoomEvent.Timeline, (...args) => {
-                // we're also using mock client that doesn't re-emit, so
-                // we emit the event to client manually
-                cli.emit(RoomEvent.Timeline, ...args);
-                resolve();
-            });
-        });
-
-        r1.addLiveEvents([new MatrixEvent({
+        room.addLiveEvents([new MatrixEvent({
             type: "m.room.encryption",
             sender: cli.getUserId(),
             content: {},
             event_id: "someid",
-            room_id: r1.roomId,
+            room_id: room.roomId,
         })]);
-
-        await eventAddedPromise;
 
         // URL previews should now be disabled
         expect(roomViewInstance.state.showUrlPreview).toBe(false);
+    });
+
+    it("updates live timeline when a timeline reset happens", async () => {
+        const roomViewInstance = await getRoomViewInstance();
+        const oldTimeline = roomViewInstance.state.liveTimeline;
+
+        room.getUnfilteredTimelineSet().resetLiveTimeline();
+        expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
     });
 });

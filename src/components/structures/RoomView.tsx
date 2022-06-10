@@ -30,6 +30,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { RoomState, RoomStateEvent } from 'matrix-js-sdk/src/models/room-state';
+import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
 import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
 import { MatrixError } from 'matrix-js-sdk/src/http-api';
@@ -282,6 +283,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         this.dispatcherRef = dis.register(this.onAction);
         context.on(ClientEvent.Room, this.onRoom);
         context.on(RoomEvent.Timeline, this.onRoomTimeline);
+        context.on(RoomEvent.TimelineReset, this.onRoomTimelineReset);
         context.on(RoomEvent.Name, this.onRoomName);
         context.on(RoomStateEvent.Events, this.onRoomStateEvents);
         context.on(RoomStateEvent.Update, this.onRoomStateUpdate);
@@ -1020,6 +1022,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             tombstone: this.getRoomTombstone(room),
             liveTimeline: room.getLiveTimeline(),
         });
+    };
+
+    private onRoomTimelineReset = (room: Room, timelineSet: EventTimelineSet) => {
+        if (!room || room.roomId !== this.state.room?.roomId) return;
+        logger.log(`Live timeline of ${room.roomId} was reset`);
+        this.setState({ liveTimeline: timelineSet.getLiveTimeline() });
     };
 
     private getRoomTombstone(room = this.state.room) {
