@@ -209,6 +209,7 @@ function createRoomState(room: Room, narrow: boolean): IRoomState {
         shouldPeek: true,
         membersLoaded: false,
         numUnreadMessages: 0,
+        canSelfRedact: false,
         canPeek: false,
         showApps: false,
         isPeeking: false,

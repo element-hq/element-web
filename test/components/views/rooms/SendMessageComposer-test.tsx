@@ -48,21 +48,18 @@ const WrapWithProviders: React.FC<{
 </MatrixClientContext.Provider>;
 
 describe('<SendMessageComposer/>', () => {
-    const defaultRoomContext = {
+    const defaultRoomContext: IRoomState = {
         roomLoading: true,
         peekLoading: false,
         shouldPeek: true,
         membersLoaded: false,
         numUnreadMessages: 0,
-        searching: false,
-        guestsCanJoin: false,
         canPeek: false,
         showApps: false,
         isPeeking: false,
         showRightPanel: true,
         joining: false,
         atEndOfLiveTimeline: true,
-        atEndOfLiveTimelineInit: false,
         showTopUnreadMessagesBar: false,
         statusBarVisible: false,
         canReact: false,
@@ -82,6 +79,9 @@ describe('<SendMessageComposer/>', () => {
         matrixClientIsReady: false,
         timelineRenderingType: TimelineRenderingType.Room,
         liveTimeline: undefined,
+        canSelfRedact: false,
+        resizing: false,
+        narrow: false,
     };
     describe("createMessageContent", () => {
         const permalinkCreator = jest.fn() as any;

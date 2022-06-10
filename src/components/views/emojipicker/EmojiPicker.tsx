@@ -37,6 +37,7 @@ interface IProps {
     selectedEmojis?: Set<string>;
     showQuickReactions?: boolean;
     onChoose(unicode: string): boolean;
+    isEmojiDisabled?: (unicode: string) => boolean;
 }
 
 interface IState {
@@ -261,6 +262,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
                                 onClick={this.onClickEmoji}
                                 onMouseEnter={this.onHoverEmoji}
                                 onMouseLeave={this.onHoverEmojiEnd}
+                                isEmojiDisabled={this.props.isEmojiDisabled}
                                 selectedEmojis={this.props.selectedEmojis}
                             />
                         );

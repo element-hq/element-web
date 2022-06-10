@@ -183,7 +183,10 @@ export default class ReactionsRow extends React.PureComponent<IProps, IState> {
                 mxEvent={mxEvent}
                 reactionEvents={events}
                 myReactionEvent={myReactionEvent}
-                disabled={!this.context.canReact}
+                disabled={
+                    !this.context.canReact ||
+                    (myReactionEvent && !myReactionEvent.isRedacted() && !this.context.canSelfRedact)
+                }
             />;
         }).filter(item => !!item);
 

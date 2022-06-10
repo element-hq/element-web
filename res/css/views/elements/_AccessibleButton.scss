@@ -18,7 +18,7 @@ limitations under the License.
     cursor: pointer;
 
     &.mx_AccessibleButton_disabled {
-        cursor: default;
+        cursor: not-allowed;
 
         &.mx_AccessibleButton_kind_primary,
         &.mx_AccessibleButton_kind_primary_outline,

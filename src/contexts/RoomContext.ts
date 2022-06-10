@@ -43,6 +43,7 @@ const RoomContext = createContext<IRoomState>({
     showTopUnreadMessagesBar: false,
     statusBarVisible: false,
     canReact: false,
+    canSelfRedact: false,
     canSendMessages: false,
     resizing: false,
     layout: Layout.Group,

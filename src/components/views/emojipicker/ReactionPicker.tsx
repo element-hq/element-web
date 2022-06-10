@@ -73,7 +73,7 @@ class ReactionPicker extends React.Component<IProps, IState> {
         }
     }
 
-    private getReactions() {
+    private getReactions(): Record<string, string> {
         if (!this.props.reactions) {
             return {};
         }
@@ -95,6 +95,8 @@ class ReactionPicker extends React.Component<IProps, IState> {
         this.props.onFinished();
         const myReactions = this.getReactions();
         if (myReactions.hasOwnProperty(reaction)) {
+            if (this.props.mxEvent.isRedacted() || !this.context.canSelfRedact) return;
+
             MatrixClientPeg.get().redactEvent(this.props.mxEvent.getRoomId(), myReactions[reaction]);
             dis.dispatch<FocusComposerPayload>({
                 action: Action.FocusAComposer,
@@ -119,9 +121,17 @@ class ReactionPicker extends React.Component<IProps, IState> {
         }
     };
 
+    private isEmojiDisabled = (unicode: string): boolean => {
+        if (!this.getReactions()[unicode]) return false;
+        if (this.context.canSelfRedact) return false;
+
+        return true;
+    };
+
     render() {
         return <EmojiPicker
             onChoose={this.onChoose}
+            isEmojiDisabled={this.isEmojiDisabled}
             selectedEmojis={this.state.selectedEmojis}
             showQuickReactions={true}
             data-testid='mx_ReactionPicker'
