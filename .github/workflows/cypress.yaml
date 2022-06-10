@@ -134,7 +134,7 @@ jobs:
           name: cypress-benchmark
 
       - name: Store benchmark result
-        uses: matrix-org/github-action-benchmark@jsperfentry-5
+        uses: matrix-org/github-action-benchmark@jsperfentry-6
         with:
           name: Cypress measurements
           tool: 'jsperformanceentry'
