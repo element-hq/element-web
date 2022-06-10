@@ -1008,4 +1008,32 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_UI_FEATURE,
         default: true,
     },
+
+    // Electron-specific settings, they are stored by Electron and set/read over an IPC.
+    // We store them over there are they are necessary to know before the renderer process launches.
+    "Electron.autoLaunch": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("Start automatically after system login"),
+        default: false,
+    },
+    "Electron.warnBeforeExit": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("Warn before quitting"),
+        default: true,
+    },
+    "Electron.alwaysShowMenuBar": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("Always show the window menu bar"),
+        default: false,
+    },
+    "Electron.showTrayIcon": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("Show tray icon and minimise window to it on close"),
+        default: true,
+    },
+    "Electron.enableHardwareAcceleration": {
+        supportedLevels: [SettingLevel.PLATFORM],
+        displayName: _td("Enable hardware acceleration"),
+        default: true,
+    },
 };

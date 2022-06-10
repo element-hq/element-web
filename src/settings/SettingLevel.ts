@@ -24,6 +24,7 @@ export enum SettingLevel {
     ROOM_ACCOUNT = "room-account",
     ACCOUNT = "account",
     ROOM = "room",
+    PLATFORM = "platform",
     CONFIG = "config",
     DEFAULT = "default",
 }
