@@ -43,7 +43,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import VectorBasePlatform from './VectorBasePlatform';
 import { SeshatIndexManager } from "./SeshatIndexManager";
-import IPCManager from "./IPCManager";
+import { IPCManager } from "./IPCManager";
 
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');

@@ -27,11 +27,11 @@ interface IPCPayload {
     reply?: any;
 }
 
-export default class IPCManager {
+export class IPCManager {
     private pendingIpcCalls: { [ipcCallId: number]: IDeferred<any> } = {};
     private nextIpcCallId = 0;
 
-    constructor(
+    public constructor(
         private readonly sendChannel: ElectronChannel = "ipcCall",
         private readonly recvChannel: ElectronChannel = "ipcReply",
     ) {
