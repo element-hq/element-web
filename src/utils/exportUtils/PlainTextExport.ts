@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { IContent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { logger } from "matrix-js-sdk/src/logger";
+import React from "react";
 
 import Exporter from "./Exporter";
 import { formatFullDateNoDay } from "../../DateUtils";
