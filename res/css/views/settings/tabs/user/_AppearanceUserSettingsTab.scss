@@ -15,8 +15,9 @@ limitations under the License.
 */
 
 .mx_AppearanceUserSettingsTab {
-    > .mx_SettingsTab_SubHeading {
+    .mx_SettingsTab_subsectionText {
         margin-block: $spacing-12 $spacing-32;
+        color: $primary-content; // Same as mx_SettingsTab
     }
 
     .mx_Field {

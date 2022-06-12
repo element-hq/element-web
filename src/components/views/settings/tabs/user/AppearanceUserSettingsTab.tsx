@@ -143,7 +143,7 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         return (
             <div className="mx_SettingsTab mx_AppearanceUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Customise your appearance") }</div>
-                <div className="mx_SettingsTab_SubHeading">
+                <div className="mx_SettingsTab_subsectionText">
                     { _t("Appearance Settings only affect this %(brand)s session.", { brand }) }
                 </div>
                 <ThemeChoicePanel />
