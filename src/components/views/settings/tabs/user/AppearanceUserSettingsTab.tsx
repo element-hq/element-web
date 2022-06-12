@@ -23,6 +23,7 @@ import { MatrixClientPeg } from '../../../../../MatrixClientPeg';
 import SettingsStore from "../../../../../settings/SettingsStore";
 import SettingsFlag from '../../../elements/SettingsFlag';
 import Field from '../../../elements/Field';
+import AccessibleButton from "../../../elements/AccessibleButton";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
 import { UIFeature } from "../../../../../settings/UIFeature";
 import { Layout } from "../../../../../settings/enums/Layout";
@@ -90,12 +91,12 @@ export default class AppearanceUserSettingsTab extends React.Component<IProps, I
         if (!SettingsStore.getValue(UIFeature.AdvancedSettings)) return null;
 
         const brand = SdkConfig.get().brand;
-        const toggle = <div
-            className="mx_AppearanceUserSettingsTab_AdvancedToggle"
+        const toggle = <AccessibleButton
+            kind="link"
             onClick={() => this.setState({ showAdvanced: !this.state.showAdvanced })}
         >
             { this.state.showAdvanced ? _t("Hide advanced") : _t("Show advanced") }
-        </div>;
+        </AccessibleButton>;
 
         let advanced: React.ReactNode;
 
