@@ -55,9 +55,8 @@ const SidebarUserSettingsTab = () => {
     return (
         <div className="mx_SettingsTab mx_SidebarUserSettingsTab">
             <div className="mx_SettingsTab_heading">{ _t("Sidebar") }</div>
-
             <div className="mx_SettingsTab_section">
-                <div className="mx_SidebarUserSettingsTab_subheading">{ _t("Spaces to show") }</div>
+                <div className="mx_SettingsTab_subheading">{ _t("Spaces to show") }</div>
                 <div className="mx_SettingsTab_subsectionText">
                     { _t("Spaces are ways to group rooms and people. " +
                         "Alongside the spaces you're in, you can use some pre-built ones too.") }
