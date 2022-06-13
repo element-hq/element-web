@@ -53,6 +53,7 @@
         "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
         "apiHost": "https://posthog.element.io"
     },
+    "privacy_policy_url": "https://element.io/cookie-policy",
     "features": {
         "feature_spotlight": true,
         "feature_video_rooms": true
