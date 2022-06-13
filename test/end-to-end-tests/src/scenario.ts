@@ -18,7 +18,6 @@ limitations under the License.
 import { range } from './util';
 import { signup } from './usecases/signup';
 import { toastScenarios } from './scenarios/toast';
-import { roomDirectoryScenarios } from './scenarios/directory';
 import { lazyLoadingScenarios } from './scenarios/lazy-loading';
 import { e2eEncryptionScenarios } from './scenarios/e2e-encryption';
 import { ElementSession } from "./session";
@@ -45,7 +44,6 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
     const bob = await createUser("bob");
 
     await toastScenarios(alice, bob);
-    await roomDirectoryScenarios(alice, bob);
     await e2eEncryptionScenarios(alice, bob);
     console.log("create REST users:");
     const charlies = await createRestUsers(restCreator);

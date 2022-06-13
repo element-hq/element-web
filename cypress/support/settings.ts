@@ -34,15 +34,21 @@ declare global {
             openUserSettings(tab?: string): Chainable<JQuery<HTMLElement>>;
 
             /**
+             * Open room settings (via room header menu), returning a handle to the resulting dialog.
+             * @param tab the name of the tab to switch to after opening, optional.
+             */
+            openRoomSettings(tab?: string): Chainable<JQuery<HTMLElement>>;
+
+            /**
              * Switch settings tab to the one by the given name, ideally call this in the context of the dialog.
              * @param tab the name of the tab to switch to.
              */
-            switchTabUserSettings(tab: string): Chainable<JQuery<HTMLElement>>;
+            switchTab(tab: string): Chainable<JQuery<HTMLElement>>;
 
             /**
-             * Close user settings, ideally call this in the context of the dialog.
+             * Close dialog, ideally call this in the context of the dialog.
              */
-            closeUserSettings(): Chainable<JQuery<HTMLElement>>;
+            closeDialog(): Chainable<JQuery<HTMLElement>>;
 
             /**
              * Join the given beta, the `Labs` tab must already be opened,
@@ -72,18 +78,30 @@ Cypress.Commands.add("openUserSettings", (tab?: string): Chainable<JQuery<HTMLEl
     });
     return cy.get(".mx_UserSettingsDialog").within(() => {
         if (tab) {
-            cy.switchTabUserSettings(tab);
+            cy.switchTab(tab);
         }
     });
 });
 
-Cypress.Commands.add("switchTabUserSettings", (tab: string): Chainable<JQuery<HTMLElement>> => {
+Cypress.Commands.add("openRoomSettings", (tab?: string): Chainable<JQuery<HTMLElement>> => {
+    cy.get(".mx_RoomHeader_name").click();
+    cy.get(".mx_RoomTile_contextMenu").within(() => {
+        cy.get('[aria-label="Settings"]').click();
+    });
+    return cy.get(".mx_RoomSettingsDialog").within(() => {
+        if (tab) {
+            cy.switchTab(tab);
+        }
+    });
+});
+
+Cypress.Commands.add("switchTab", (tab: string): Chainable<JQuery<HTMLElement>> => {
     return cy.get(".mx_TabbedView_tabLabels").within(() => {
         cy.get(".mx_TabbedView_tabLabel").contains(tab).click();
     });
 });
 
-Cypress.Commands.add("closeUserSettings", (): Chainable<JQuery<HTMLElement>> => {
+Cypress.Commands.add("closeDialog", (): Chainable<JQuery<HTMLElement>> => {
     return cy.get('[aria-label="Close dialog"]').click();
 });
 

@@ -37,7 +37,7 @@ declare global {
     }
 }
 
-Cypress.Commands.add("percySnapshotElement", { prevSubject: true }, (subject, name, options) => {
+Cypress.Commands.add("percySnapshotElement", { prevSubject: "element" }, (subject, name, options) => {
     cy.percySnapshot(name, {
         domTransformation: documentClone => scope(documentClone, subject.selector),
         ...options,
