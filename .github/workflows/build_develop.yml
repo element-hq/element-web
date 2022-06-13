@@ -10,7 +10,7 @@ jobs:
   build:
     name: "Build & Upload source maps to Sentry"
     # Only respect triggers from our develop branch, ignore that of forks
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.repository == 'vector-im/element-web'
     runs-on: ubuntu-latest
     environment: develop
     steps:
