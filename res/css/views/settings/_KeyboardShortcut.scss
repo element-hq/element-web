@@ -20,17 +20,11 @@ limitations under the License.
         padding: 5px;
         border-radius: 4px;
         background-color: $header-panel-bg-color;
-        margin-right: 5px;
         min-width: 20px;
         text-align: center;
         display: inline-block;
         border: 1px solid $kbd-border-color;
         box-shadow: 0 2px $kbd-border-color;
-        margin-bottom: 4px;
         text-transform: capitalize;
-
-        & + kbd {
-            margin-left: 5px;
-        }
     }
 }

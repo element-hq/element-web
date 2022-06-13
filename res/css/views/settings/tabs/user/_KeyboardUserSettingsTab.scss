@@ -16,9 +16,25 @@ limitations under the License.
 */
 
 .mx_KeyboardUserSettingsTab .mx_SettingsTab_section {
-    .mx_KeyboardShortcut_shortcutRow {
+    .mx_KeyboardShortcut_shortcutRow,
+    .mx_KeyboardShortcut {
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .mx_KeyboardShortcut_shortcutRow {
+        column-gap: $spacing-8;
+        margin-bottom: $spacing-4;
+
+        // TODO: Use flexbox
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .mx_KeyboardShortcut {
+            flex-wrap: nowrap;
+            column-gap: 5px; // TODO: Use a spacing variable
+        }
     }
 }
