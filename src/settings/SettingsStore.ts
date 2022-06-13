@@ -80,7 +80,8 @@ export const LEVEL_ORDER = [
 function getLevelOrder(setting: ISetting): SettingLevel[] {
     // Settings which support only a single setting level are inherently ordered
     if (setting.supportedLevelsAreOrdered || setting.supportedLevels.length === 1) {
-        return setting.supportedLevels;
+        // return a copy to prevent callers from modifying the array
+        return [...setting.supportedLevels];
     }
     return LEVEL_ORDER;
 }
@@ -359,7 +360,7 @@ export default class SettingsStore {
         if (!levelOrder.includes(SettingLevel.DEFAULT)) levelOrder.push(SettingLevel.DEFAULT); // always include default
 
         const minIndex = levelOrder.indexOf(level);
-        if (minIndex === -1) throw new Error("Level " + level + " is not prioritized");
+        if (minIndex === -1) throw new Error(`Level "${level}" for setting "${settingName}" is not prioritized`);
 
         const handlers = SettingsStore.getHandlers(settingName);
 
