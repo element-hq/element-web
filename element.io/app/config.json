@@ -14,11 +14,6 @@
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
     "uisi_autorageshake_app": "element-auto-uisi",
     "showLabsSettings": false,
-    "piwik": {
-        "url": "https://piwik.riot.im/",
-        "siteId": 1,
-        "policyUrl": "https://element.io/cookie-policy"
-    },
     "roomDirectory": {
         "servers": [
             "matrix.org",
