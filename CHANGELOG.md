@@ -1,3 +1,11 @@
+Changes in [3.47.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.47.0) (2022-06-14)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix CallView crash ([\#8735](https://github.com/matrix-org/matrix-react-sdk/pull/8735)). Contributed by @SimonBrandner.
+ * Fix missing element desktop preferences ([\#8798](https://github.com/matrix-org/matrix-react-sdk/pull/8798)). Contributed by @t3chguy.
+
+
 Changes in [3.46.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.46.0) (2022-06-07)
 =====================================================================================================
 
