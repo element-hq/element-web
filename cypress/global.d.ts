@@ -26,7 +26,6 @@ import type {
     Visibility,
     RoomMemberEvent,
 } from "matrix-js-sdk/src/matrix";
-import type { WebStorageSessionStore } from "matrix-js-sdk/src/store/session/webstorage";
 import type { MatrixDispatcher } from "../src/dispatcher/dispatcher";
 import type PerformanceMonitor from "../src/performance";
 
@@ -49,7 +48,6 @@ declare global {
                 MatrixScheduler: typeof MatrixScheduler;
                 MemoryStore: typeof MemoryStore;
                 MemoryCryptoStore: typeof MemoryCryptoStore;
-                WebStorageSessionStore: typeof WebStorageSessionStore;
                 Visibility: typeof Visibility;
                 Preset: typeof Preset;
             };
