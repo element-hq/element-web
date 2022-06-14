@@ -8,6 +8,8 @@ jobs:
   notify-element-web:
     name: "Notify Element Web"
     runs-on: ubuntu-latest
+    # Only respect triggers from our develop branch, ignore that of forks
+    if: github.repository == 'matrix-org/matrix-react-sdk'
     steps:
       - name: Notify element-web repo that a new SDK build is on develop
         uses: peter-evans/repository-dispatch@v1

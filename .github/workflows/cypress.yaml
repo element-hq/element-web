@@ -122,12 +122,13 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.event.workflow_run.event != 'pull_request' &&
-      github.event.workflow_run.head_branch == 'develop'
+      github.event.workflow_run.head_branch == 'develop' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v2
-    
+
       - name: Download benchmark result
         uses: actions/download-artifact@v3
         with:

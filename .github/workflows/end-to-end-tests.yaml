@@ -4,7 +4,7 @@ on:
   # won't pull in the right versions of other repos, so they're only enabled
   # on develop.
   push:
-    branches: [ develop ]
+    branches: [ develop, master ]
   pull_request:
     branches: [ develop ]
   repository_dispatch:
@@ -41,7 +41,7 @@ jobs:
             retention-days: 14
 
       - name: Store benchmark result
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/develop' && github.repository == 'matrix-org/matrix-react-sdk'
         uses: matrix-org/github-action-benchmark@jsperfentry-1
         with:
           tool: 'jsperformanceentry'
