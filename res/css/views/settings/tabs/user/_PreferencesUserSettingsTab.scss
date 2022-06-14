@@ -20,7 +20,7 @@ limitations under the License.
     }
 
     .mx_SettingsTab_section {
-        margin-bottom: 30px;
+        margin-bottom: var(--SettingsTab_section-margin-bottom-preferences-labs);
 
         > details {
             > summary {
