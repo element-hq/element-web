@@ -8253,10 +8253,10 @@ matrix-mock-request@^2.0.0:
   dependencies:
     expect "^1.20.2"
 
-matrix-react-sdk@3.46.0:
-  version "3.46.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.46.0.tgz#de9f8456941818099b9dedc41fc6921135ef1c89"
-  integrity sha512-k6dMCrpMpdcbpBr6MuSfWEcO4+w7ZY0CgW3Zzzo+dO5/Z4v2f7Q/bAN+456IInN4/ntO2Js2wakCCj9EnS6ltQ==
+matrix-react-sdk@3.47.0:
+  version "3.47.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.47.0.tgz#d662ac4eafc18b22366a7c46e749aa014c073e05"
+  integrity sha512-s6v0Z8rYHJJNKmPcu/8SyvzqcODskirYozi9nCsHKOGqa2ziuIZzkJUZhtOMwOO7k8pEUaCL58Hc1tERtNzkOA==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
