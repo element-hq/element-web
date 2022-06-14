@@ -339,7 +339,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     ) {
         // this will get intercepted by electron-main will-navigate
         super.startSingleSignOn(mxClient, loginType, fragmentAfterLogin, idpId);
-        Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
+        Modal.createDialog(InfoDialog, {
             title: _t("Go to your browser to complete Sign In"),
             description: <Spinner />,
         });
