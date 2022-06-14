@@ -21,16 +21,5 @@ limitations under the License.
 
     .mx_SettingsTab_section {
         margin-bottom: var(--SettingsTab_section-margin-bottom-preferences-labs);
-
-        > details {
-            > summary {
-                cursor: pointer;
-                color: $primary-content;
-            }
-
-            & + .mx_SettingsFlag {
-                margin-top: 20px;
-            }
-        }
     }
 }
