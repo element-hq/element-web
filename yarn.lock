@@ -8281,7 +8281,7 @@ matrix-events-sdk@^0.0.1-beta.7:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "18.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cb5b2e14703ecab96f89ce6945e60de75a1c4f54"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb8491c91bbc5662fef9406d4d8953c1ab47f19d"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8310,7 +8310,6 @@ matrix-react-sdk@3.47.0:
     "@babel/runtime" "^7.12.5"
     "@sentry/browser" "^6.11.0"
     "@sentry/tracing" "^6.11.0"
-    "@testing-library/react" "^12.1.5"
     "@types/geojson" "^7946.0.8"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
@@ -8344,7 +8343,7 @@ matrix-react-sdk@3.47.0:
     matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#a0687ca6fbdb7258543d49b99fb88b9201e900b0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "^0.0.1-beta.7"
-    matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
+    matrix-js-sdk "18.1.0"
     matrix-widget-api "^0.1.0-beta.18"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
