@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
+import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
 import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
@@ -28,9 +28,17 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import VectorBasePlatform from './VectorBasePlatform';
 import { parseQs } from "../url_utils";
-import { reloadPage } from "../routing";
 
 const POKE_RATE_MS = 10 * 60 * 1000; // 10 min
+
+function getNormalizedAppVersion(version: string): string {
+    // if version looks like semver with leading v, strip it (matches scripts/normalize-version.sh)
+    const semVerRegex = /^v\d+.\d+.\d+(-.+)?$/;
+    if (semVerRegex.test(version)) {
+        return version.substring(1);
+    }
+    return version;
+}
 
 export default class WebPlatform extends VectorBasePlatform {
     constructor() {
@@ -41,7 +49,7 @@ export default class WebPlatform extends VectorBasePlatform {
         }
     }
 
-    getHumanReadableName(): string {
+    public getHumanReadableName(): string {
         return 'Web Platform'; // no translation required: only used for analytics
     }
 
@@ -49,7 +57,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * Returns true if the platform supports displaying
      * notifications, otherwise false.
      */
-    supportsNotifications(): boolean {
+    public supportsNotifications(): boolean {
         return Boolean(window.Notification);
     }
 
@@ -57,7 +65,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * Returns true if the application currently has permission
      * to display notifications. Otherwise false.
      */
-    maySendNotifications(): boolean {
+    public maySendNotifications(): boolean {
         return window.Notification.permission === 'granted';
     }
 
@@ -68,7 +76,7 @@ export default class WebPlatform extends VectorBasePlatform {
      * that is 'granted' if the user allowed the request or
      * 'denied' otherwise.
      */
-    requestNotificationPermission(): Promise<string> {
+    public requestNotificationPermission(): Promise<string> {
         // annoyingly, the latest spec says this returns a
         // promise, but this is only supported in Chrome 46
         // and Firefox 47, so adapt the callback API.
@@ -100,27 +108,17 @@ export default class WebPlatform extends VectorBasePlatform {
                         return;
                     }
 
-                    resolve(this.getNormalizedAppVersion(body.trim()));
+                    resolve(getNormalizedAppVersion(body.trim()));
                 },
             );
         });
     }
 
-    getNormalizedAppVersion(version: string): string {
-        // if version looks like semver with leading v, strip it
-        // (matches scripts/normalize-version.sh)
-        const semVerRegex = new RegExp("^v[0-9]+.[0-9]+.[0-9]+(-.+)?$");
-        if (semVerRegex.test(version)) {
-            return version.substr(1);
-        }
-        return version;
+    public getAppVersion(): Promise<string> {
+        return Promise.resolve(getNormalizedAppVersion(process.env.VERSION));
     }
 
-    getAppVersion(): Promise<string> {
-        return Promise.resolve(this.getNormalizedAppVersion(process.env.VERSION));
-    }
-
-    startUpdater() {
+    public startUpdater(): void {
         // Poll for an update immediately, and reload the page now if we're out of date
         // already as we've just initialised an old version of the app somehow.
         //
@@ -129,10 +127,10 @@ export default class WebPlatform extends VectorBasePlatform {
         //
         // Ideally, loading an old copy would be impossible with the
         // cache-control: nocache HTTP header set, but Firefox doesn't always obey it :/
-        console.log("startUpdater, current version is " + this.getNormalizedAppVersion(process.env.VERSION));
+        console.log("startUpdater, current version is " + getNormalizedAppVersion(process.env.VERSION));
         this.pollForUpdate((version: string, newVersion: string) => {
             const query = parseQs(location);
-            if (query.updated === "1") {
+            if (query.updated) {
                 console.log("Update reloaded but still on an old version, stopping");
                 // We just reloaded already and are still on the old version!
                 // Show the toast rather than reload in a loop.
@@ -140,30 +138,25 @@ export default class WebPlatform extends VectorBasePlatform {
                 return;
             }
 
-            // Set updated=1 as a query param so we can detect that we've already done this once
-            // and reload the page.
-            let suffix = "updated=1";
-            if (window.location.search.length === 0) {
-                suffix = "?" + suffix;
-            } else {
-                suffix = "&" + suffix;
-            }
-
-            reloadPage(window.location.href + suffix);
+            // Set updated as a cachebusting query param and reload the page.
+            const url = new URL(window.location.href);
+            url.searchParams.set("updated", newVersion);
+            console.log("Update reloading to " + url.toString());
+            window.location.href = url.toString();
         });
         setInterval(() => this.pollForUpdate(showUpdateToast, hideUpdateToast), POKE_RATE_MS);
     }
 
-    async canSelfUpdate(): Promise<boolean> {
+    public async canSelfUpdate(): Promise<boolean> {
         return true;
     }
 
-    pollForUpdate = (
+    private pollForUpdate = (
         showUpdate: (currentVersion: string, mostRecentVersion: string) => void,
         showNoUpdate?: () => void,
-    ) => {
+    ): Promise<UpdateStatus> => {
         return this.getMostRecentVersion().then((mostRecentVersion) => {
-            const currentVersion = this.getNormalizedAppVersion(process.env.VERSION);
+            const currentVersion = getNormalizedAppVersion(process.env.VERSION);
 
             if (currentVersion !== mostRecentVersion) {
                 if (this.shouldShowUpdate(mostRecentVersion)) {
@@ -188,7 +181,7 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     };
 
-    startUpdateCheck() {
+    public startUpdateCheck(): void {
         super.startUpdateCheck();
         this.pollForUpdate(showUpdateToast, hideUpdateToast).then((updateState) => {
             dis.dispatch<CheckUpdatesPayload>({
@@ -198,11 +191,11 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    installUpdate() {
+    public installUpdate(): void {
         window.location.reload();
     }
 
-    getDefaultDeviceDisplayName(): string {
+    public getDefaultDeviceDisplayName(): string {
         // strip query-string and fragment from uri
         const url = new URL(window.location.href);
 
@@ -224,15 +217,7 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    screenCaptureErrorString(): string | null {
-        // it won't work at all if you're not on HTTPS so whine whine whine
-        if (window.location.protocol !== "https:") {
-            return _t("You need to be using HTTPS to place a screen-sharing call.");
-        }
-        return null;
-    }
-
-    reload() {
+    public reload(): void {
         window.location.reload();
     }
 }

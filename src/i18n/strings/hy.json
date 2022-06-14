@@ -1,0 +1,16 @@
+{
+    "Explore rooms": "Փնտրել սենյակներ",
+    "Failed to start": "Չի ստացվում սկսել",
+    "Use %(brand)s on mobile": "Օգտագործում է %(brand)s հեռախոսի վրա",
+    "You need to be using HTTPS to place a screen-sharing call.": "Դուք պետք է օգտագործեք HTTPS միացում որպիսի կարողանաք կատարել էկրանը ցույց տալով զանգ",
+    "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s%(browserName)s%(osName)s",
+    "Unknown device": "Անծանոթ սարք",
+    "Welcome to Element": "Բարի գալուստ Element",
+    "Your browser can't run %(brand)s": "Ձեր բրաուզերը չի թողարկում %(brand)s",
+    "Unsupported browser": "Չհամապատասխանող բրաուզեր",
+    "Dismiss": "Հեռացնել",
+    "Open": "Բացել",
+    "Unable to load config file: please refresh the page to try again.": "Ֆայլի ներմուծման սխալ․ խնդրում ենք թարմացնել էջը և նորից փորձել։",
+    "Invalid JSON": "Չաշխատող JSON",
+    "Your Element is misconfigured": "Ձեր Element֊ը սխալ է կարգավորված"
+}

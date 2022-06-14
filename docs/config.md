@@ -14,7 +14,7 @@ for the desktop app the application will need to be exited fully (including via 
 ## Homeserver configuration
 
 In order for Element to even start you will need to tell it what homeserver to connect to *by default*. Users will be
-able to use a different homeserver if they like, though this can be disabled with `"disable_custom_urls": false` in your
+able to use a different homeserver if they like, though this can be disabled with `"disable_custom_urls": true` in your
 config.
 
 One of the following options **must** be supplied:
@@ -95,7 +95,8 @@ instance. As of writing those settings are not fully documented, however a few a
       }
    }
    ```
-   These values will take priority over the hardcoded defaults for the settings.
+   These values will take priority over the hardcoded defaults for the settings. For a list of available settings, see
+   [Settings.tsx](https://github.com/matrix-org/matrix-react-sdk/blob/develop/src/settings/Settings.tsx).
 
 ## Customisation & branding
 
@@ -192,7 +193,7 @@ Starting with `branding`, the following subproperties are available:
    `welcome.html` that ships with Element will be used instead.
 2. `home_url`: A URL to an HTML page to show within the app as the "home" page. When the app doesn't have a room/screen to
    show the user, it will use the home page instead. The home page is additionally accessible from the user menu. By default,
-   no home page is set and therefore a hardcoded landing screen is used.
+   no home page is set and therefore a hardcoded landing screen is used. More documentation and examples are [here](./custom-home.md).
 3. `login_for_welcome`: When `true` (default `false`), the app will use the login form as a welcome page instead of the welcome
    page itself. This disables use of `welcome_url` and all welcome page functionality.
 
@@ -205,7 +206,7 @@ Together, the options might look like this in your config:
       "auth_header_logo_url": "https://example.org/assets/logo.svg",
       "auth_footer_links": [
          {"text": "FAQ", "url": "https://example.org/faq"},
-         {"text": "Donate", "url": "https://example.org/donate"},
+         {"text": "Donate", "url": "https://example.org/donate"}
       ]
    },
    "embedded_pages": {
@@ -392,25 +393,19 @@ To add additional "terms and conditions" links throughout the app, use the follo
 
 ## Analytics
 
-Analytics are currently possible with two systems: `posthog` (preferred) and <del>`piwik`</del> (matomo; deprecated). When
-these configuration options are not present, analytics are deemed impossible and the user won't be asked to opt-in to the
-system.
-
 To configure [Posthog](https://posthog.com/), add the following under `posthog` in your config:
 
 1. `api_host`: The hostname of the posthog server.
 2. `project_api_key`: The API key from posthog.
 
-To configure Piwik (***DEPRECATED***), add the following under `piwik` in your config:
+When these configuration options are not present,
+analytics are deemed impossible and the user won't be asked to opt in to the system.
 
-1. `url`: The URL of the piwik server.
-2. `site_id`: The site ID to use.
-3. `policy_url`: URL to the analytics collection policy.
-4. `whitelisted_hs_urls`: A list of homeserver client-server URLs to *not* redact from analytics.
+There are additional root-level options which can be specified:
 
-Additionally, you may set `"piwik": false` to disable piwik configuration too. An `analytics_owner` can also be specified in your
-config to replace the company name used in dialogs talking about analytics - this defaults to `brand`, and is useful when the
-provider of analytics is different from the provider of the Element instance.
+1. `analytics_owner`: the company name used in dialogs talking about analytics - this defaults to `brand`,
+and is useful when the provider of analytics is different from the provider of the Element instance.
+2. `privacy_policy_url`: URL to the privacy policy including the analytics collection policy.
 
 ## Server hosting links
 

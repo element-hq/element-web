@@ -79,7 +79,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             if (!optional && vals.length !== 1) {
                 throw new Error(`Expected singular ${name} in query string`);
             }
-            return <string>vals[0];
+            return vals[0];
         };
 
         // If we have these params, expect a widget API to be available (ie. to be in an iframe
@@ -137,7 +137,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
         const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
         skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") || isVideoChannel;
+            .get("skip_built_in_welcome_screen") ?? false;
 
         // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
@@ -155,13 +155,23 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    joinConference();
+                    const { audioDevice, videoDevice } = ev.detail.data;
+                    joinConference(audioDevice as string, videoDevice as string);
                     ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     meetApi?.executeCommand('hangup');
+                    ack(ev);
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.ForceHangupCall}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    meetApi?.dispose();
+                    notifyHangup();
+                    meetApi = null;
+                    closeConference();
                     ack(ev);
                 },
             );
@@ -221,6 +231,13 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         }
 
         enableJoinButton(); // always enable the button
+
+        // Inform the client that we're ready to receive events
+        try {
+            await widgetApi?.transport.send(ElementWidgetActions.WidgetReady, {});
+        } catch (e) {
+            logger.error(e);
+        }
     } catch (e) {
         logger.error("Error setting up Jitsi widget", e);
         document.getElementById("widgetActionContainer").innerText = "Failed to load Jitsi widget";
@@ -243,7 +260,9 @@ function switchVisibleContainers() {
 
 function toggleConferenceVisibility(inConference: boolean) {
     document.getElementById("jitsiContainer").style.visibility = inConference ? 'unset' : 'hidden';
-    document.getElementById("joinButtonContainer").style.visibility = inConference ? 'hidden' : 'unset';
+    // Video rooms have a separate UI for joining, so they should never show our join button
+    document.getElementById("joinButtonContainer").style.visibility =
+        (inConference || isVideoChannel) ? 'hidden' : 'unset';
 }
 
 function skipToJitsiSplashScreen() {
@@ -291,19 +310,29 @@ function createJWTToken() {
     );
 }
 
-async function notifyHangup() {
+async function notifyHangup(errorMessage?: string) {
     if (widgetApi) {
         // We send the hangup event before setAlwaysOnScreen, because the latter
         // can cause the receiving side to instantly stop listening.
         try {
-            await widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+            await widgetApi.transport.send(ElementWidgetActions.HangupCall, { errorMessage });
         } finally {
             await widgetApi.setAlwaysOnScreen(false);
         }
     }
 }
 
-function joinConference() { // event handler bound in HTML
+function closeConference() {
+    switchVisibleContainers();
+    document.getElementById("jitsiContainer").innerHTML = "";
+
+    if (skipOurWelcomeScreen) {
+        skipToJitsiSplashScreen();
+    }
+}
+
+// event handler bound in HTML
+function joinConference(audioDevice?: string, videoDevice?: string) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -328,6 +357,14 @@ function joinConference() { // event handler bound in HTML
         height: "100%",
         parentNode: document.querySelector("#jitsiContainer"),
         roomName: conferenceId,
+        devices: {
+            audioInput: audioDevice,
+            videoInput: videoDevice,
+        },
+        userInfo: {
+            displayName,
+            email: userId,
+        },
         interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
             SHOW_WATERMARK_FOR_GUESTS: false,
@@ -335,21 +372,30 @@ function joinConference() { // event handler bound in HTML
             VIDEO_LAYOUT_FIT: "height",
         },
         configOverwrite: {
+            subject: roomName,
             startAudioOnly,
             disableAEC,
             disableNS,
             disableAP,
             disableAGC,
             disableHPF,
+            startWithAudioMuted: audioDevice == null,
+            startWithVideoMuted: videoDevice == null,
+            // Request some log levels for inclusion in rageshakes
+            // Ideally we would capture all possible log levels, but this can
+            // cause Jitsi Meet to try to post various circular data structures
+            // back over the iframe API, and therefore end up crashing
+            // https://github.com/jitsi/jitsi-meet/issues/11585
+            apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
     };
 
     // Video channel widgets need some more tailored config options
     if (isVideoChannel) {
-        // Ensure that we start on Jitsi Meet's native prejoin screen, for
-        // deployments that skip straight to the conference by default
-        options.configOverwrite.prejoinConfig = { enabled: true };
+        // Ensure that we skip Jitsi Meet's native prejoin screen, for
+        // deployments that have it enabled
+        options.configOverwrite.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
         options.configOverwrite.toolbarButtons = [
             "microphone", "camera", "desktop", "tileview", "hangup",
@@ -359,14 +405,22 @@ function joinConference() { // event handler bound in HTML
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
-    if (displayName) meetApi.executeCommand("displayName", displayName);
-    if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
-    if (userId) meetApi.executeCommand("email", userId);
-    if (roomName) meetApi.executeCommand("subject", roomName);
 
     // fires once when user joins the conference
     // (regardless of video on or off)
     meetApi.on("videoConferenceJoined", () => {
+        // Although we set our displayName with the userInfo option above, that
+        // option has a bug where it causes the name to be the HTML encoding of
+        // what was actually intended. So, we use the displayName command to at
+        // least ensure that the name is correct after entering the meeting.
+        // https://github.com/jitsi/jitsi-meet/issues/11664
+        // We can't just use these commands immediately after creating the
+        // iframe, because there's *another* bug where they can crash Jitsi by
+        // racing with its startup process.
+        if (displayName) meetApi.executeCommand("displayName", displayName);
+        // This doesn't have a userInfo equivalent, so has to be set via commands
+        if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
+
         if (widgetApi) {
             // ignored promise because we don't care if it works
             // noinspection JSIgnoredPromiseFromCall
@@ -378,34 +432,40 @@ function joinConference() { // event handler bound in HTML
         if (isVideoChannel) meetApi.executeCommand("setTileView", true);
     });
 
-    meetApi.on("readyToClose", () => {
-        switchVisibleContainers();
+    meetApi.on("videoConferenceLeft", () => {
         notifyHangup();
-
-        document.getElementById("jitsiContainer").innerHTML = "";
         meetApi = null;
-
-        if (skipOurWelcomeScreen) {
-            skipToJitsiSplashScreen();
-        }
     });
+
+    meetApi.on("readyToClose", closeConference);
 
     meetApi.on("errorOccurred", ({ error }) => {
         if (error.isFatal) {
             // We got disconnected. Since Jitsi Meet might send us back to the
             // prejoin screen, we're forced to act as if we hung up entirely.
-            notifyHangup();
+            notifyHangup(error.message);
+            meetApi = null;
+            closeConference();
         }
     });
 
     meetApi.on("audioMuteStatusChanged", ({ muted }) => {
         const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
-        widgetApi.transport.send(action, {});
+        widgetApi?.transport.send(action, {});
     });
 
     meetApi.on("videoMuteStatusChanged", ({ muted }) => {
-        const action = muted ? ElementWidgetActions.MuteVideo : ElementWidgetActions.UnmuteVideo;
-        widgetApi.transport.send(action, {});
+        if (muted) {
+            // Jitsi Meet always sends a "video muted" event directly before
+            // hanging up, which we need to ignore by padding the timeout here,
+            // otherwise the React SDK will mistakenly think the user turned off
+            // their video by hand
+            setTimeout(() => {
+                if (meetApi) widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
+            }, 200);
+        } else {
+            widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
+        }
     });
 
     ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach(event => {
@@ -415,4 +475,9 @@ function joinConference() { // event handler bound in HTML
             });
         });
     });
+
+    // Patch logs into rageshakes
+    meetApi.on("log", ({ logLevel, args }) =>
+        (parent as unknown as typeof global).mx_rage_logger?.log(logLevel, ...args),
+    );
 }
