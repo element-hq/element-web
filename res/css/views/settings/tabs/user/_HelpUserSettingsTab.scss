@@ -15,16 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HelpUserSettingsTab_debugButton {
-    margin-bottom: 5px;
-    margin-top: 5px;
-}
+.mx_HelpUserSettingsTab {
+    code {
+        word-break: break-all;
+        user-select: all;
+    }
 
-.mx_HelpUserSettingsTab span.mx_AccessibleButton {
-    word-break: break-word;
-}
+    details {
+        margin: $spacing-16 auto;
 
-.mx_HelpUserSettingsTab code {
-    word-break: break-all;
-    user-select: all;
+        summary {
+            margin-bottom: $spacing-16;
+        }
+    }
 }
