@@ -110,7 +110,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         }
 
         return (
-            <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
+            <div className='mx_SettingsTab_section'>
                 <span className='mx_SettingsTab_subheading'>{ _t("Legal") }</span>
                 <div className='mx_SettingsTab_subsectionText'>
                     { legalLinks }
@@ -125,7 +125,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
         return (
             <div className='mx_SettingsTab_section'>
                 <span className='mx_SettingsTab_subheading'>{ _t("Credits") }</span>
-                <ul>
+                <ul className='mx_SettingsTab_subsectionText'>
                     <li>
                         The <a href="themes/element/img/backgrounds/lake.jpg" rel="noreferrer noopener" target="_blank">
                             default cover photo
@@ -245,11 +245,11 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                             "last interacted with, and the usernames of other users. " +
                             "They do not contain messages.",
                         ) }
-                        <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this.onBugReport} kind='primary'>
-                                { _t("Submit debug logs") }
-                            </AccessibleButton>
-                        </div>
+                    </div>
+                    <AccessibleButton onClick={this.onBugReport} kind='primary'>
+                        { _t("Submit debug logs") }
+                    </AccessibleButton>
+                    <div className='mx_SettingsTab_subsectionText'>
                         { _t(
                             "To report a Matrix-related security issue, please read the Matrix.org " +
                             "<a>Security Disclosure Policy</a>.", {},
@@ -280,7 +280,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                         { _t("Keyboard Shortcuts") }
                     </AccessibleButton>
                 </div>
-                <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
+                <div className='mx_SettingsTab_section'>
                     <span className='mx_SettingsTab_subheading'>{ _t("Versions") }</span>
                     <div className='mx_SettingsTab_subsectionText'>
                         <CopyableText getTextToCopy={this.getVersionTextToCopy}>
@@ -292,25 +292,22 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
                 </div>
                 { this.renderLegal() }
                 { this.renderCredits() }
-                <div className='mx_SettingsTab_section mx_HelpUserSettingsTab_versions'>
+                <div className='mx_SettingsTab_section'>
                     <span className='mx_SettingsTab_subheading'>{ _t("Advanced") }</span>
                     <div className='mx_SettingsTab_subsectionText'>
-                        { _t("Homeserver is") } <code>{ MatrixClientPeg.get().getHomeserverUrl() }</code><br />
-                        { _t("Identity server is") } <code>{ MatrixClientPeg.get().getIdentityServerUrl() }</code><br />
-                        <br />
+                        <div>{ _t("Homeserver is") } <code>{ MatrixClientPeg.get().getHomeserverUrl() }</code></div>
+                        <div>{ _t("Identity server is") } <code>{ MatrixClientPeg.get().getIdentityServerUrl() }</code></div>
                         <details>
-                            <summary>{ _t("Access Token") }</summary><br />
+                            <summary>{ _t("Access Token") }</summary>
                             <b>{ _t("Your access token gives full access to your account."
                                + " Do not share it with anyone.") }</b>
                             <CopyableText getTextToCopy={() => MatrixClientPeg.get().getAccessToken()}>
                                 { MatrixClientPeg.get().getAccessToken() }
                             </CopyableText>
-                        </details><br />
-                        <div className='mx_HelpUserSettingsTab_debugButton'>
-                            <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
-                                { _t("Clear cache and reload") }
-                            </AccessibleButton>
-                        </div>
+                        </details>
+                        <AccessibleButton onClick={this.onClearCacheAndReload} kind='danger'>
+                            { _t("Clear cache and reload") }
+                        </AccessibleButton>
                     </div>
                 </div>
             </div>
