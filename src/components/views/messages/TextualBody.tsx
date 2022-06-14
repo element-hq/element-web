@@ -468,7 +468,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         scalarClient.connect().then(() => {
             const completeUrl = scalarClient.getStarterLink(starterLink);
             const integrationsUrl = integrationManager.uiUrl;
-            Modal.createTrackedDialog('Add an integration', '', QuestionDialog, {
+            Modal.createDialog(QuestionDialog, {
                 title: _t("Add an Integration"),
                 description:
                     <div>

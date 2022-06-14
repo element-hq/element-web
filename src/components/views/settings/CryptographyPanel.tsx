@@ -91,7 +91,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     }
 
     private onExportE2eKeysClicked = (): void => {
-        Modal.createTrackedDialogAsync('Export E2E Keys', '',
+        Modal.createDialogAsync(
             import(
                 '../../../async-components/views/dialogs/security/ExportE2eKeysDialog'
             ) as unknown as Promise<ComponentType<{}>>,
@@ -100,7 +100,7 @@ export default class CryptographyPanel extends React.Component<IProps, IState> {
     };
 
     private onImportE2eKeysClicked = (): void => {
-        Modal.createTrackedDialogAsync('Import E2E Keys', '',
+        Modal.createDialogAsync(
             import(
                 '../../../async-components/views/dialogs/security/ImportE2eKeysDialog'
             ) as unknown as Promise<ComponentType<{}>>,

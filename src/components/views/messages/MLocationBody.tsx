@@ -57,9 +57,7 @@ export default class MLocationBody extends React.Component<IBodyProps, IState> {
     }
 
     private onClick = () => {
-        Modal.createTrackedDialog(
-            'Location View',
-            '',
+        Modal.createDialog(
             LocationViewDialog,
             {
                 matrixClient: this.context,

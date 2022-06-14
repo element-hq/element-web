@@ -108,7 +108,7 @@ export default class EventIndexPanel extends React.Component<{}, IState> {
     }
 
     private onManage = async () => {
-        Modal.createTrackedDialogAsync('Message search', 'Message search',
+        Modal.createDialogAsync(
             // @ts-ignore: TS doesn't seem to like the type of this now that it
             // has also been converted to TS as well, but I can't figure out why...
             import('../../../async-components/views/dialogs/eventindex/ManageEventIndexDialog'),

@@ -234,7 +234,7 @@ const ThreadPanel: React.FC<IProps> = ({
     }, [timelineSet, timelinePanel]);
 
     const openFeedback = SdkConfig.get().bug_report_endpoint_url ? () => {
-        Modal.createTrackedDialog("Threads Feedback", "feature_thread", BetaFeedbackDialog, {
+        Modal.createDialog(BetaFeedbackDialog, {
             featureId: "feature_thread",
         });
     } : null;

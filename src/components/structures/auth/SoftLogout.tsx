@@ -101,7 +101,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
     }
 
     private onClearAll = () => {
-        Modal.createTrackedDialog('Clear Data', 'Soft Logout', ConfirmWipeDeviceDialog, {
+        Modal.createDialog(ConfirmWipeDeviceDialog, {
             onFinished: (wipeData) => {
                 if (!wipeData) return;
 

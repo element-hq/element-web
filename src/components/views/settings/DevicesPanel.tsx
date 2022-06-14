@@ -215,7 +215,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                     continueKind: "danger",
                 },
             };
-            Modal.createTrackedDialog('Delete Device Dialog', '', InteractiveAuthDialog, {
+            Modal.createDialog(InteractiveAuthDialog, {
                 title: _t("Authentication"),
                 matrixClient: MatrixClientPeg.get(),
                 authData: error.data,

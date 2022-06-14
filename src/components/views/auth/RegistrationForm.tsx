@@ -126,7 +126,7 @@ export default class RegistrationForm extends React.PureComponent<IProps, IState
 
         if (this.state.email === '') {
             if (this.showEmail()) {
-                Modal.createTrackedDialog("Email prompt dialog", '', RegistrationEmailPromptDialog, {
+                Modal.createDialog(RegistrationEmailPromptDialog, {
                     onFinished: async (confirmed: boolean, email?: string) => {
                         if (confirmed) {
                             this.setState({

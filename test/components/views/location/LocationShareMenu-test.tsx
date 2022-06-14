@@ -66,7 +66,7 @@ jest.mock('../../../../src/stores/OwnProfileStore', () => ({
 }));
 
 jest.mock('../../../../src/Modal', () => ({
-    createTrackedDialog: jest.fn(),
+    createDialog: jest.fn(),
 }));
 
 describe('<LocationShareMenu />', () => {
@@ -121,7 +121,7 @@ describe('<LocationShareMenu />', () => {
         mockClient.sendMessage.mockClear();
         mockClient.unstable_createLiveBeacon.mockClear().mockResolvedValue({ event_id: '1' });
         jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient as unknown as MatrixClient);
-        mocked(Modal).createTrackedDialog.mockClear();
+        mocked(Modal).createDialog.mockClear();
 
         jest.clearAllMocks();
 
@@ -433,7 +433,7 @@ describe('<LocationShareMenu />', () => {
             await flushPromisesWithFakeTimers();
 
             expect(logSpy).toHaveBeenCalledWith("We couldn't start sharing your live location", error);
-            expect(mocked(Modal).createTrackedDialog).toHaveBeenCalled();
+            expect(mocked(Modal).createDialog).toHaveBeenCalled();
         });
     });
 });

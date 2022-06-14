@@ -167,7 +167,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     }
 
     private startNewBackup = (): void => {
-        Modal.createTrackedDialogAsync('Key Backup', 'Key Backup',
+        Modal.createDialogAsync(
             import(
                 '../../../async-components/views/dialogs/security/CreateKeyBackupDialog'
             ) as unknown as Promise<ComponentType<{}>>,
@@ -180,7 +180,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     };
 
     private deleteBackup = (): void => {
-        Modal.createTrackedDialog('Delete Backup', '', QuestionDialog, {
+        Modal.createDialog(QuestionDialog, {
             title: _t('Delete Backup'),
             description: _t(
                 "Are you sure? You will lose your encrypted messages if your " +
@@ -199,10 +199,7 @@ export default class SecureBackupPanel extends React.PureComponent<{}, IState> {
     };
 
     private restoreBackup = async (): Promise<void> => {
-        Modal.createTrackedDialog(
-            'Restore Backup', '', RestoreKeyBackupDialog, null, null,
-            /* priority = */ false, /* static = */ true,
-        );
+        Modal.createDialog(RestoreKeyBackupDialog, null, null, /* priority = */ false, /* static = */ true);
     };
 
     private resetSecretStorage = async (): Promise<void> => {

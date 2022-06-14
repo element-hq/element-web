@@ -39,7 +39,6 @@ import 'focus-visible';
 import 'what-input';
 
 import PosthogTrackers from '../../PosthogTrackers';
-import Analytics from "../../Analytics";
 import { DecryptionFailureTracker } from "../../DecryptionFailureTracker";
 import { IMatrixClientCreds, MatrixClientPeg } from "../../MatrixClientPeg";
 import PlatformPeg from "../../PlatformPeg";
@@ -73,8 +72,7 @@ import LoggedInView from './LoggedInView';
 import { Action } from "../../dispatcher/actions";
 import {
     hideToast as hideAnalyticsToast,
-    showAnonymousAnalyticsOptInToast,
-    showPseudonymousAnalyticsOptInToast,
+    showToast as showAnalyticsToast,
 } from "../../toasts/AnalyticsToast";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
 import { OpenToTabPayload } from "../../dispatcher/payloads/OpenToTabPayload";
@@ -344,10 +342,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         }
 
-        if (SettingsStore.getValue("pseudonymousAnalyticsOptIn")) {
-            Analytics.enable();
-        }
-
         initSentry(SdkConfig.get("sentry"));
     }
 
@@ -406,7 +400,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     componentDidUpdate(prevProps, prevState) {
         if (this.shouldTrackPageChange(prevState, this.state)) {
             const durationMs = this.stopPageChangeTimer();
-            Analytics.trackPageChange(durationMs);
             PosthogTrackers.instance.trackPageChange(this.state.view, this.state.page_type, durationMs);
         }
         if (this.focusComposer) {
@@ -625,7 +618,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.copyRoom(payload.room_id);
                 break;
             case 'reject_invite':
-                Modal.createTrackedDialog('Reject invitation', '', QuestionDialog, {
+                Modal.createDialog(QuestionDialog, {
                     title: _t('Reject invitation'),
                     description: _t('Are you sure you want to reject the invitation?'),
                     onFinished: (confirm) => {
@@ -640,7 +633,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                                 }
                             }, (err) => {
                                 modal.close();
-                                Modal.createTrackedDialog('Failed to reject invitation', '', ErrorDialog, {
+                                Modal.createDialog(ErrorDialog, {
                                     title: _t('Failed to reject invitation'),
                                     description: err.toString(),
                                 });
@@ -684,7 +677,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 break;
             case Action.ViewUserSettings: {
                 const tabPayload = payload as OpenToTabPayload;
-                Modal.createTrackedDialog('User settings', '', UserSettingsDialog,
+                Modal.createDialog(UserSettingsDialog,
                     { initialTabId: tabPayload.initialTabId },
                     /*className=*/null, /*isPriority=*/false, /*isStatic=*/true);
 
@@ -699,7 +692,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.viewSomethingBehindModal();
                 break;
             case Action.ViewRoomDirectory: {
-                Modal.createTrackedDialog('Room directory', '', RoomDirectory, {
+                Modal.createDialog(RoomDirectory, {
                     initialText: payload.initialText,
                 }, 'mx_RoomDirectory_dialogWrapper', false, true);
 
@@ -756,7 +749,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 });
                 break;
             case Action.OpenDialPad:
-                Modal.createTrackedDialog('Dial pad', '', DialPadModal, {}, "mx_Dialog_dialPadWrapper");
+                Modal.createDialog(DialPadModal, {}, "mx_Dialog_dialPadWrapper");
                 break;
             case Action.OnLoggedIn:
                 if (
@@ -800,19 +793,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 this.setState({
                     hideToSRUsers: false,
                 });
-                break;
-            case Action.AnonymousAnalyticsAccept:
-                hideAnalyticsToast();
-                SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, true);
-                SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
-                if (Analytics.canEnable()) {
-                    Analytics.enable();
-                }
-                break;
-            case Action.AnonymousAnalyticsReject:
-                hideAnalyticsToast();
-                SettingsStore.setValue("analyticsOptIn", null, SettingLevel.DEVICE, false);
-                SettingsStore.setValue("showCookieBar", null, SettingLevel.DEVICE, false);
                 break;
             case Action.PseudonymousAnalyticsAccept:
                 hideAnalyticsToast();
@@ -1009,7 +989,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
     }
 
     private async createRoom(defaultPublic = false, defaultName?: string, type?: RoomType) {
-        const modal = Modal.createTrackedDialog('Create Room', '', CreateRoomDialog, {
+        const modal = Modal.createDialog(CreateRoomDialog, {
             type,
             defaultPublic,
             defaultName,
@@ -1112,7 +1092,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const warnings = this.leaveRoomWarnings(roomId);
 
         const isSpace = roomToLeave?.isSpaceRoom();
-        Modal.createTrackedDialog(isSpace ? "Leave space" : "Leave room", '', QuestionDialog, {
+        Modal.createDialog(QuestionDialog, {
             title: isSpace ? _t("Leave space") : _t("Leave room"),
             description: (
                 <span>
@@ -1156,7 +1136,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             RoomListStore.instance.manualRoomUpdate(room, RoomUpdateCause.RoomRemoved);
         }).catch((err) => {
             const errCode = err.errcode || _td("unknown error code");
-            Modal.createTrackedDialog("Failed to forget room", '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to forget room %(errCode)s", { errCode }),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -1167,7 +1147,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         const roomLink = makeRoomPermalink(roomId);
         const success = await copyPlaintext(roomLink);
         if (!success) {
-            Modal.createTrackedDialog("Unable to copy room link", "", ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Unable to copy room link"),
                 description: _t("Unable to copy a link to the room to the clipboard."),
             });
@@ -1271,8 +1251,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
 
         if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
             this.initPosthogAnalyticsToast();
-        } else if (Analytics.canEnable() && SettingsStore.getValue("showCookieBar")) {
-            showAnonymousAnalyticsOptInToast();
         }
 
         if (SdkConfig.get("mobile_guide_toast")) {
@@ -1282,14 +1260,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
-    private showPosthogToast(analyticsOptIn: boolean) {
-        showPseudonymousAnalyticsOptInToast(analyticsOptIn);
-    }
-
     private initPosthogAnalyticsToast() {
         // Show the analytics toast if necessary
         if (SettingsStore.getValue("pseudonymousAnalyticsOptIn") === null) {
-            this.showPosthogToast(SettingsStore.getValue("analyticsOptIn", null, true));
+            showAnalyticsToast();
         }
 
         // Listen to changes in settings and show the toast if appropriate - this is necessary because account
@@ -1298,7 +1272,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         SettingsStore.watchSetting("pseudonymousAnalyticsOptIn", null,
             (originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue) => {
                 if (newValue === null) {
-                    this.showPosthogToast(SettingsStore.getValue("analyticsOptIn", null, true));
+                    showAnalyticsToast();
                 } else {
                     // It's possible for the value to change if a cached sync loads at page load, but then network
                     // sync contains a new value of the flag with it set to false (e.g. another device set it since last
@@ -1478,7 +1452,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 return;
             }
 
-            Modal.createTrackedDialog('Signed out', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t('Signed Out'),
                 description: _t('For security, this session has been signed out. Please sign in again.'),
             });
@@ -1488,7 +1462,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             });
         });
         cli.on(HttpApiEvent.NoConsent, function(message, consentUri) {
-            Modal.createTrackedDialog('No Consent Dialog', '', QuestionDialog, {
+            Modal.createDialog(QuestionDialog, {
                 title: _t('Terms and Conditions'),
                 description: <div>
                     <p> { _t(
@@ -1535,7 +1509,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         cli.on(CryptoEvent.Warning, (type) => {
             switch (type) {
                 case 'CRYPTO_WARNING_OLD_VERSION_DETECTED':
-                    Modal.createTrackedDialog('Crypto migrated', '', ErrorDialog, {
+                    Modal.createDialog(ErrorDialog, {
                         title: _t('Old cryptography data detected'),
                         description: _t(
                             "Data from an older version of %(brand)s has been detected. " +
@@ -1569,14 +1543,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             }
 
             if (haveNewVersion) {
-                Modal.createTrackedDialogAsync('New Recovery Method', 'New Recovery Method',
+                Modal.createDialogAsync(
                     import(
                         '../../async-components/views/dialogs/security/NewRecoveryMethodDialog'
                     ) as unknown as Promise<ComponentType<{}>>,
                     { newVersionInfo },
                 );
             } else {
-                Modal.createTrackedDialogAsync('Recovery Method Removed', 'Recovery Method Removed',
+                Modal.createDialogAsync(
                     import(
                         '../../async-components/views/dialogs/security/RecoveryMethodRemovedDialog'
                     ) as unknown as Promise<ComponentType<{}>>,
@@ -1585,16 +1559,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         });
 
         cli.on(CryptoEvent.KeySignatureUploadFailure, (failures, source, continuation) => {
-            Modal.createTrackedDialog(
-                'Failed to upload key signatures',
-                'Failed to upload key signatures',
+            Modal.createDialog(
                 KeySignatureUploadFailedDialog,
                 { failures, source, continuation });
         });
 
         cli.on(CryptoEvent.VerificationRequest, request => {
             if (request.verifier) {
-                Modal.createTrackedDialog('Incoming Verification', '', IncomingSasDialog, {
+                Modal.createDialog(IncomingSasDialog, {
                     verifier: request.verifier,
                 }, null, /* priority = */ false, /* static = */ true);
             } else if (request.pending) {

@@ -22,7 +22,6 @@ import { BreadcrumbsStore } from "../../../stores/BreadcrumbsStore";
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
 import { _t } from "../../../languageHandler";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
-import Analytics from "../../../Analytics";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { useRovingTabIndex } from "../../../accessibility/RovingTabIndex";
 import Toolbar from "../../../accessibility/Toolbar";
@@ -104,7 +103,6 @@ export default class RoomBreadcrumbs extends React.PureComponent<IProps, IState>
     };
 
     private viewRoom = (room: Room, index: number, viaKeyboard = false) => {
-        Analytics.trackEvent("Breadcrumbs", "click_node", String(index));
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
             room_id: room.roomId,

@@ -104,7 +104,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                 continueDisabled: false,
                 addTask: null,
             });
-            Modal.createTrackedDialog(`Unable to ${label} email address`, '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -139,7 +139,7 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
                 continueDisabled: false,
                 addTask: null,
             });
-            Modal.createTrackedDialog(`Unable to ${label} email address`, '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -181,14 +181,14 @@ export class EmailAddress extends React.Component<IEmailAddressProps, IEmailAddr
         } catch (err) {
             this.setState({ continueDisabled: false });
             if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
-                Modal.createTrackedDialog("E-mail hasn't been verified yet", "", ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t("Your email address hasn't been verified yet"),
                     description: _t("Click the link in the email you received to verify " +
                         "and then click continue again."),
                 });
             } else {
                 logger.error("Unable to verify email address: " + err);
-                Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });

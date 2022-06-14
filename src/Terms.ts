@@ -190,7 +190,7 @@ export async function dialogTermsInteractionCallback(
 ): Promise<string[]> {
     logger.log("Terms that need agreement", policiesAndServicePairs);
 
-    const { finished } = Modal.createTrackedDialog<[boolean, string[]]>('Terms of Service', '', TermsDialog, {
+    const { finished } = Modal.createDialog<[boolean, string[]]>(TermsDialog, {
         policiesAndServicePairs,
         agreedUrls,
     }, classNames("mx_TermsDialog", extraClassNames));

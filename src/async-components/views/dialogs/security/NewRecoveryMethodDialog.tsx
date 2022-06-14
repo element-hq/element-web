@@ -43,11 +43,9 @@ export default class NewRecoveryMethodDialog extends React.PureComponent<IProps>
     };
 
     private onSetupClick = async (): Promise<void> => {
-        Modal.createTrackedDialog(
-            'Restore Backup', '', RestoreKeyBackupDialog, {
-                onFinished: this.props.onFinished,
-            }, null, /* priority = */ false, /* static = */ true,
-        );
+        Modal.createDialog(RestoreKeyBackupDialog, {
+            onFinished: this.props.onFinished,
+        }, null, /* priority = */ false, /* static = */ true);
     };
 
     public render(): JSX.Element {

@@ -49,7 +49,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
     let acceptLabel = _t("What's new?");
     if (releaseNotes) {
         onAccept = () => {
-            Modal.createTrackedDialog('Display release notes', '', QuestionDialog, {
+            Modal.createDialog(QuestionDialog, {
                 title: _t("What's New"),
                 description: <pre>{ releaseNotes }</pre>,
                 button: _t("Update"),
@@ -62,7 +62,7 @@ export const showToast = (version: string, newVersion: string, releaseNotes?: st
         };
     } else if (checkVersion(version) && checkVersion(newVersion)) {
         onAccept = () => {
-            Modal.createTrackedDialog('Display Changelog', '', ChangelogDialog, {
+            Modal.createDialog(ChangelogDialog, {
                 version,
                 newVersion,
                 onFinished: (update) => {

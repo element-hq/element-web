@@ -315,7 +315,7 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
             // the error to the user for if/when the UI is available.
             description = _t("The server does not support the room version specified.");
         }
-        Modal.createTrackedDialog('Failure to create room', '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t("Failure to create room"),
             description,
         });

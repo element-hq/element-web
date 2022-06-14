@@ -35,7 +35,7 @@ export default class RecoveryMethodRemovedDialog extends React.PureComponent<IPr
 
     private onSetupClick = (): void => {
         this.props.onFinished();
-        Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
+        Modal.createDialogAsync(
             import("./CreateKeyBackupDialog") as unknown as Promise<ComponentType<{}>>,
             null, null, /* priority = */ false, /* static = */ true,
         );

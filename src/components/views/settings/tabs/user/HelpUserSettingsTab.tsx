@@ -87,7 +87,7 @@ export default class HelpUserSettingsTab extends React.Component<IProps, IState>
     };
 
     private onBugReport = (e) => {
-        Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
+        Modal.createDialog(BugReportDialog, {});
     };
 
     private onStartBotChat = (e) => {

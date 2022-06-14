@@ -61,16 +61,16 @@ export function inviteMultipleToRoom(
 
 export function showStartChatInviteDialog(initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.
-    Modal.createTrackedDialog(
-        'Start DM', '', InviteDialog, { kind: KIND_DM, initialText },
+    Modal.createDialog(
+        InviteDialog, { kind: KIND_DM, initialText },
         /*className=*/"mx_InviteDialog_flexWrapper", /*isPriority=*/false, /*isStatic=*/true,
     );
 }
 
 export function showRoomInviteDialog(roomId: string, initialText = ""): void {
     // This dialog handles the room creation internally - we don't need to worry about it.
-    Modal.createTrackedDialog(
-        "Invite Users", "", InviteDialog, {
+    Modal.createDialog(
+        InviteDialog, {
             kind: KIND_INVITE,
             initialText,
             roomId,
@@ -108,7 +108,7 @@ export function inviteUsersToRoom(
         showAnyInviteErrors(result.states, room, result.inviter);
     }).catch((err) => {
         logger.error(err.stack);
-        Modal.createTrackedDialog('Failed to invite', '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t("Failed to invite"),
             description: ((err && err.message) ? err.message : _t("Operation failed")),
         });
@@ -127,7 +127,7 @@ export function showAnyInviteErrors(
         // Just get the first message because there was a fatal problem on the first
         // user. This usually means that no other users were attempted, making it
         // pointless for us to list who failed exactly.
-        Modal.createTrackedDialog('Failed to invite users to the room', '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t("Failed to invite users to %(roomName)s", { roomName: room.name }),
             description: inviter.getErrorText(failedUsers[0]),
         });
@@ -175,7 +175,7 @@ export function showAnyInviteErrors(
                 </div>
             </div>;
 
-            Modal.createTrackedDialog("Some invites could not be sent", "", ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Some invites couldn't be sent"),
                 description,
             });

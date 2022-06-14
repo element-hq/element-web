@@ -120,7 +120,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
             }
         } catch (err) {
             logger.log("Failed to save profile", err);
-            Modal.createTrackedDialog('Failed to save profile', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to save your profile"),
                 description: ((err && err.message) ? err.message : _t("The operation could not be completed")),
             });

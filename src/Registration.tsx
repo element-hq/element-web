@@ -49,7 +49,7 @@ export async function startAnyRegistrationFlow(
     options: { go_home_on_cancel?: boolean, go_welcome_on_cancel?: boolean, screen_after?: boolean},
 ): Promise<void> {
     if (options === undefined) options = {};
-    const modal = Modal.createTrackedDialog('Registration required', '', QuestionDialog, {
+    const modal = Modal.createDialog(QuestionDialog, {
         hasCancelButton: true,
         quitOnly: true,
         title: _t("Sign In or Create Account"),

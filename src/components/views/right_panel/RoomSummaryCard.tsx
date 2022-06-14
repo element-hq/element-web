@@ -248,13 +248,13 @@ const RoomSummaryCard: React.FC<IProps> = ({ room, onClose }) => {
     const cli = useContext(MatrixClientContext);
 
     const onShareRoomClick = () => {
-        Modal.createTrackedDialog('share room dialog', '', ShareDialog, {
+        Modal.createDialog(ShareDialog, {
             target: room,
         });
     };
 
     const onRoomExportClick = async () => {
-        Modal.createTrackedDialog('export room dialog', '', ExportDialog, {
+        Modal.createDialog(ExportDialog, {
             room,
         });
     };

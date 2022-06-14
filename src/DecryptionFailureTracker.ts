@@ -18,7 +18,6 @@ import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
 
-import Analytics from "./Analytics";
 import { PosthogAnalytics } from './PosthogAnalytics';
 
 export class DecryptionFailure {
@@ -37,7 +36,6 @@ export type ErrCodeMapFn = (errcode: string) => ErrorCode;
 
 export class DecryptionFailureTracker {
     private static internalInstance = new DecryptionFailureTracker((total, errorCode, rawError) => {
-        Analytics.trackEvent('E2E', 'Decryption failure', errorCode, String(total));
         for (let i = 0; i < total; i++) {
             PosthogAnalytics.instance.trackEvent<ErrorEvent>({
                 eventName: "Error",

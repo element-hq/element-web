@@ -188,20 +188,16 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
             if (removableServers.has(server)) {
                 const onClick = async () => {
                     closeMenu();
-                    const { finished } = Modal.createTrackedDialog(
-                        "Network Dropdown", "Remove server", QuestionDialog,
-                        {
-                            title: _t("Are you sure?"),
-                            description: _t("Are you sure you want to remove <b>%(serverName)s</b>", {
-                                serverName: server,
-                            }, {
-                                b: serverName => <b>{ serverName }</b>,
-                            }),
-                            button: _t("Remove"),
-                            fixedWidth: false,
-                        },
-                        "mx_NetworkDropdown_dialog",
-                    );
+                    const { finished } = Modal.createDialog(QuestionDialog, {
+                        title: _t("Are you sure?"),
+                        description: _t("Are you sure you want to remove <b>%(serverName)s</b>", {
+                            serverName: server,
+                        }, {
+                            b: serverName => <b>{ serverName }</b>,
+                        }),
+                        button: _t("Remove"),
+                        fixedWidth: false,
+                    }, "mx_NetworkDropdown_dialog");
 
                     const [ok] = await finished;
                     if (!ok) return;
@@ -242,7 +238,7 @@ const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, s
 
         const onClick = async () => {
             closeMenu();
-            const { finished } = Modal.createTrackedDialog("Network Dropdown", "Add a new server", TextInputDialog, {
+            const { finished } = Modal.createDialog(TextInputDialog, {
                 title: _t("Add a new server"),
                 description: _t("Enter the name of a new server you want to explore."),
                 button: _t("Add"),

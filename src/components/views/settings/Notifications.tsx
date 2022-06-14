@@ -277,7 +277,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
     }
 
     private showSaveError() {
-        Modal.createTrackedDialog('Error saving notification preferences', '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t('Error saving notification preferences'),
             description: _t('An error occurred whilst saving your notification preferences.'),
         });

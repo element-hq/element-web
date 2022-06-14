@@ -28,7 +28,6 @@ import { IMatrixClientCreds, MatrixClientPeg } from './MatrixClientPeg';
 import SecurityCustomisations from "./customisations/Security";
 import EventIndexPeg from './indexing/EventIndexPeg';
 import createMatrixClient from './utils/createMatrixClient';
-import Analytics from './Analytics';
 import Notifier from './Notifier';
 import UserActivity from './UserActivity';
 import Presence from './Presence';
@@ -201,7 +200,7 @@ export function attemptTokenLogin(
     const identityServer = localStorage.getItem(SSO_ID_SERVER_URL_KEY);
     if (!homeserver) {
         logger.warn("Cannot log in with token: can't determine HS URL to use");
-        Modal.createTrackedDialog("SSO", "Unknown HS", ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t("We couldn't log you in"),
             description: _t("We asked the browser to remember which homeserver you use to let you sign in, " +
                 "but unfortunately your browser has forgotten it. Go to the sign in page and try again."),
@@ -226,7 +225,7 @@ export function attemptTokenLogin(
             return true;
         });
     }).catch((err) => {
-        Modal.createTrackedDialog("SSO", "Token Rejected", ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t("We couldn't log you in"),
             description: err.name === "ConnectionError"
                 ? _t("Your homeserver was unreachable and was not able to log you in. Please try again. " +
@@ -470,7 +469,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
 async function handleLoadSessionFailure(e: Error): Promise<boolean> {
     logger.error("Unable to load session", e);
 
-    const modal = Modal.createTrackedDialog('Session Restore Error', '', SessionRestoreErrorDialog, {
+    const modal = Modal.createDialog(SessionRestoreErrorDialog, {
         error: e,
     });
 
@@ -597,8 +596,6 @@ async function doSetLoggedIn(
         await abortLogin();
     }
 
-    Analytics.setLoggedIn(credentials.guest, credentials.homeserverUrl);
-
     MatrixClientPeg.replaceUsingCreds(credentials);
 
     setSentryUser(credentials.userId);
@@ -640,7 +637,7 @@ async function doSetLoggedIn(
 
 function showStorageEvictedDialog(): Promise<boolean> {
     return new Promise(resolve => {
-        Modal.createTrackedDialog('Storage evicted', '', StorageEvictedDialog, {
+        Modal.createDialog(StorageEvictedDialog, {
             onFinished: resolve,
         });
     });
@@ -880,8 +877,6 @@ export async function onLoggedOut(): Promise<void> {
  * @returns {Promise} promise which resolves once the stores have been cleared
  */
 async function clearStorage(opts?: { deleteEverything?: boolean }): Promise<void> {
-    Analytics.disable();
-
     if (window.localStorage) {
         // try to save any 3pid invites from being obliterated and registration time
         const pendingInvites = ThreepidInviteStore.instance.getWireInvites();

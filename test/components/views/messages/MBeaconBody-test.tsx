@@ -78,7 +78,7 @@ describe('<MBeaconBody />', () => {
             wrappingComponentProps: { value: mockClient },
         });
 
-    const modalSpy = jest.spyOn(Modal, 'createTrackedDialog').mockReturnValue(undefined);
+    const modalSpy = jest.spyOn(Modal, 'createDialog').mockReturnValue(undefined);
 
     beforeAll(() => {
         maplibregl.AttributionControl = jest.fn();

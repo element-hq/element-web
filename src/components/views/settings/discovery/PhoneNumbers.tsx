@@ -104,7 +104,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                 continueDisabled: false,
                 addTask: null,
             });
-            Modal.createTrackedDialog(`Unable to ${label} phone number`, '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -143,7 +143,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
                 continueDisabled: false,
                 addTask: null,
             });
-            Modal.createTrackedDialog(`Unable to ${label} phone number`, '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: errorTitle,
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -195,7 +195,7 @@ export class PhoneNumber extends React.Component<IPhoneNumberProps, IPhoneNumber
             this.setState({ continueDisabled: false });
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
                 logger.error("Unable to verify phone number: " + err);
-                Modal.createTrackedDialog('Unable to verify phone number', '', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify phone number."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });

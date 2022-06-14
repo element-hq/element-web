@@ -56,7 +56,7 @@ export default class RoomUpgradeDialog extends React.Component<IProps, IState> {
         upgradeRoom(this.props.room, this.targetVersion, false, false).then(() => {
             this.props.onFinished(true);
         }).catch((err) => {
-            Modal.createTrackedDialog('Failed to upgrade room', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to upgrade room"),
                 description: ((err && err.message) ? err.message : _t("The room upgrade could not be completed")),
             });

@@ -71,7 +71,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             logger.error(e);
 
-            Modal.createTrackedDialog('Failed to add Mjolnir rule', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t('Error adding ignored user/server'),
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
             });
@@ -92,7 +92,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             logger.error(e);
 
-            Modal.createTrackedDialog('Failed to subscribe to Mjolnir list', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t('Error subscribing to list'),
                 description: _t('Please verify the room ID or address and try again.'),
             });
@@ -109,7 +109,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             logger.error(e);
 
-            Modal.createTrackedDialog('Failed to remove Mjolnir rule', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t('Error removing ignored user/server'),
                 description: _t('Something went wrong. Please try again or view your console for hints.'),
             });
@@ -126,7 +126,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
         } catch (e) {
             logger.error(e);
 
-            Modal.createTrackedDialog('Failed to unsubscribe from Mjolnir list', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t('Error unsubscribing from list'),
                 description: _t('Please try again or view your console for hints.'),
             });
@@ -149,7 +149,7 @@ export default class MjolnirUserSettingsTab extends React.Component<{}, IState> 
             return <ul>{ tiles }</ul>;
         };
 
-        Modal.createTrackedDialog('View Mjolnir list rules', '', QuestionDialog, {
+        Modal.createDialog(QuestionDialog, {
             title: _t("Ban list rules - %(roomName)s", { roomName: name }),
             description: (
                 <div>

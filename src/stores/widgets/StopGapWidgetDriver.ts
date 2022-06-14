@@ -118,8 +118,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         let rememberApproved = false;
         if (missing.size > 0) {
             try {
-                const [result] = await Modal.createTrackedDialog(
-                    'Approve Widget Caps', '',
+                const [result] = await Modal.createDialog(
                     WidgetCapabilitiesPromptDialog,
                     {
                         requestedCapabilities: missing,
@@ -265,7 +264,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
         observer.update({ state: OpenIDRequestState.PendingUserConfirmation });
 
-        Modal.createTrackedDialog("OpenID widget permissions", '', WidgetOpenIDPermissionsDialog, {
+        Modal.createDialog(WidgetOpenIDPermissionsDialog, {
             widget: this.forWidget,
             widgetKind: this.forWidgetKind,
             inRoomId: this.inRoomId,

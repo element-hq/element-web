@@ -397,7 +397,7 @@ export default class ContentMessages {
         }
 
         if (tooBigFiles.length > 0) {
-            const { finished } = Modal.createTrackedDialog<[boolean]>('Upload Failure', '', UploadFailureDialog, {
+            const { finished } = Modal.createDialog<[boolean]>(UploadFailureDialog, {
                 badFiles: tooBigFiles,
                 totalFiles: files.length,
                 contentMessages: this,
@@ -413,13 +413,11 @@ export default class ContentMessages {
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
             if (!uploadAll) {
-                const { finished } = Modal.createTrackedDialog<[boolean, boolean]>('Upload Files confirmation',
-                    '', UploadConfirmDialog, {
-                        file,
-                        currentIndex: i,
-                        totalFiles: okFiles.length,
-                    },
-                );
+                const { finished } = Modal.createDialog<[boolean, boolean]>(UploadConfirmDialog, {
+                    file,
+                    currentIndex: i,
+                    totalFiles: okFiles.length,
+                });
                 const [shouldContinue, shouldUploadAll] = await finished;
                 if (!shouldContinue) break;
                 if (shouldUploadAll) {
@@ -588,7 +586,7 @@ export default class ContentMessages {
                         { fileName: upload.fileName },
                     );
                 }
-                Modal.createTrackedDialog('Upload failed', '', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t('Upload Failed'),
                     description: desc,
                 });

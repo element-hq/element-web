@@ -85,7 +85,7 @@ export const showToast = (kind: Kind) => {
 
     const onAccept = async () => {
         if (kind === Kind.VERIFY_THIS_SESSION) {
-            Modal.createTrackedDialog("Verify session", "Verify session", SetupEncryptionDialog,
+            Modal.createDialog(SetupEncryptionDialog,
                 {}, null, /* priority = */ false, /* static = */ true);
         } else {
             const modal = Modal.createDialog(

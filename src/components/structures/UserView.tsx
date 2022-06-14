@@ -70,7 +70,7 @@ export default class UserView extends React.Component<IProps, IState> {
         try {
             profileInfo = await cli.getProfileInfo(this.props.userId);
         } catch (err) {
-            Modal.createTrackedDialog(_t('Could not load user profile'), '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t('Could not load user profile'),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });

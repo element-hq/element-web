@@ -106,9 +106,7 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent }, ref) =>
         if (displayStatus !== BeaconDisplayStatus.Active) {
             return;
         }
-        Modal.createTrackedDialog(
-            'Beacon View',
-            '',
+        Modal.createDialog(
             BeaconViewDialog,
             {
                 roomId: mxEvent.getRoomId(),

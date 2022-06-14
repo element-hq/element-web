@@ -32,7 +32,7 @@ const CryptoStoreTooNewDialog: React.FC<IProps> = (props: IProps) => {
     const brand = SdkConfig.get().brand;
 
     const _onLogoutClicked = () => {
-        Modal.createTrackedDialog('Logout e2e db too new', '', QuestionDialog, {
+        Modal.createDialog(QuestionDialog, {
             title: _t("Sign out"),
             description: _t(
                 "To avoid losing your chat history, you must export your room keys " +

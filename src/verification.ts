@@ -57,7 +57,7 @@ export async function verifyDevice(user: User, device: IDevice) {
         }
     }
 
-    Modal.createTrackedDialog("Verification warning", "unverified session", UntrustedDeviceDialog, {
+    Modal.createDialog(UntrustedDeviceDialog, {
         user,
         device,
         onFinished: async (action) => {
@@ -69,13 +69,10 @@ export async function verifyDevice(user: User, device: IDevice) {
                 );
                 setRightPanel({ member: user, verificationRequestPromise });
             } else if (action === "legacy") {
-                Modal.createTrackedDialog("Legacy verify session", "legacy verify session",
-                    ManualDeviceKeyVerificationDialog,
-                    {
-                        userId: user.userId,
-                        device,
-                    },
-                );
+                Modal.createDialog(ManualDeviceKeyVerificationDialog, {
+                    userId: user.userId,
+                    device,
+                });
             }
         },
     });

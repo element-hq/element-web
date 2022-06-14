@@ -199,7 +199,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
         }
 
         if (this.state.logoutDevices) {
-            const { finished } = Modal.createTrackedDialog<[boolean]>('Forgot Password Warning', '', QuestionDialog, {
+            const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
                 title: _t('Warning!'),
                 description:
                     <div>
@@ -271,7 +271,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
     };
 
     public showErrorDialog(description: string, title?: string) {
-        Modal.createTrackedDialog('Forgot Password Error', '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title,
             description,
         });

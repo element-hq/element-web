@@ -171,11 +171,11 @@ export class IntegrationManagers {
     }
 
     openNoManagerDialog(): void {
-        Modal.createTrackedDialog('Integrations impossible', '', IntegrationsImpossibleDialog);
+        Modal.createDialog(IntegrationsImpossibleDialog);
     }
 
     showDisabledDialog(): void {
-        Modal.createTrackedDialog('Integrations disabled', '', IntegrationsDisabledDialog);
+        Modal.createDialog(IntegrationsDisabledDialog);
     }
 
     async overwriteManagerOnAccount(manager: IntegrationManagerInstance) {

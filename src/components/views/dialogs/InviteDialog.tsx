@@ -904,7 +904,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
         if (this.unmounted) return;
 
         if (failed.length > 0) {
-            Modal.createTrackedDialog('Invite Paste Fail', '', QuestionDialog, {
+            Modal.createDialog(QuestionDialog, {
                 title: _t('Failed to find the following users'),
                 description: _t(
                     "The following users might not exist or are invalid, and cannot be invited: %(csvNames)s",

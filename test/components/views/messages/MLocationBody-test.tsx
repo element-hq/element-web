@@ -127,7 +127,7 @@ describe("MLocationBody", () => {
             });
 
             it('opens map dialog on click', () => {
-                const modalSpy = jest.spyOn(Modal, 'createTrackedDialog').mockReturnValue(undefined);
+                const modalSpy = jest.spyOn(Modal, 'createDialog').mockReturnValue(undefined);
                 const component = getComponent();
 
                 act(() => {

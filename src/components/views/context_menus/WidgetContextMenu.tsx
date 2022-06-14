@@ -69,7 +69,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
                 logger.error("Failed to start livestream", err);
                 // XXX: won't i18n well, but looks like widget api only support 'message'?
                 const message = err.message || _t("Unable to start audio streaming.");
-                Modal.createTrackedDialog('WidgetContext Menu', 'Livestream failed', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t('Failed to start livestream'),
                     description: message,
                 });
@@ -134,7 +134,7 @@ const WidgetContextMenu: React.FC<IProps> = ({
                 onDeleteClick();
             } else {
                 // Show delete confirmation dialog
-                Modal.createTrackedDialog('Delete Widget', '', QuestionDialog, {
+                Modal.createDialog(QuestionDialog, {
                     title: _t("Delete Widget"),
                     description: _t(
                         "Deleting a widget removes it for all users in this room." +

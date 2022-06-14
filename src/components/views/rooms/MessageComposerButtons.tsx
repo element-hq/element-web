@@ -315,9 +315,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
             MatrixClientPeg.get().getUserId(),
         );
         if (!canSend) {
-            Modal.createTrackedDialog(
-                'Polls',
-                'permissions error: cannot start',
+            Modal.createDialog(
                 ErrorDialog,
                 {
                     title: _t("Permission Required"),
@@ -331,9 +329,7 @@ class PollButton extends React.PureComponent<IPollButtonProps> {
                 ? this.props.relation.event_id
                 : null;
 
-            Modal.createTrackedDialog(
-                'Polls',
-                'create',
+            Modal.createDialog(
                 PollCreateDialog,
                 {
                     room: this.props.room,

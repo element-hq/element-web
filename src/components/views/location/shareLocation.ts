@@ -49,7 +49,6 @@ const handleShareError = (error: Error, openMenu: () => void, shareType: Locatio
         "We couldn't start sharing your live location" :
         "We couldn't send your location";
     logger.error(errorMessage, error);
-    const analyticsAction = errorMessage;
     const params = {
         title: _t("We couldn't send your location"),
         description: _t("%(brand)s could not send your location. Please try again later.", {
@@ -63,7 +62,7 @@ const handleShareError = (error: Error, openMenu: () => void, shareType: Locatio
             }
         },
     };
-    Modal.createTrackedDialog(analyticsAction, '', QuestionDialog, params);
+    Modal.createDialog(QuestionDialog, params);
 };
 
 export const shareLiveLocation = (

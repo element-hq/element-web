@@ -95,7 +95,7 @@ export default class ChangePassword extends React.Component<IProps, IState> {
 
         if (userHasOtherDevices && !serverSupportsControlOfDevicesLogout && this.props.confirm) {
             // warn about logging out all devices
-            const { finished } = Modal.createTrackedDialog<[boolean]>('Change Password', '', QuestionDialog, {
+            const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
                 title: _t("Warning!"),
                 description:
                     <div>
@@ -196,14 +196,14 @@ export default class ChangePassword extends React.Component<IProps, IState> {
 
     private optionallySetEmail(): Promise<boolean> {
         // Ask for an email otherwise the user has no way to reset their password
-        const modal = Modal.createTrackedDialog('Do you want to set an email address?', '', SetEmailDialog, {
+        const modal = Modal.createDialog(SetEmailDialog, {
             title: _t('Do you want to set an email address?'),
         });
         return modal.finished.then(([confirmed]) => confirmed);
     }
 
     private onExportE2eKeysClicked = (): void => {
-        Modal.createTrackedDialogAsync('Export E2E Keys', 'Change Password',
+        Modal.createDialogAsync(
             import(
                 '../../../async-components/views/dialogs/security/ExportE2eKeysDialog'
             ) as unknown as Promise<ComponentType<{}>>,

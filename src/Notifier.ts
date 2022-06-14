@@ -28,7 +28,6 @@ import { MatrixClientPeg } from './MatrixClientPeg';
 import SdkConfig from './SdkConfig';
 import PlatformPeg from './PlatformPeg';
 import * as TextForEvent from './TextForEvent';
-import Analytics from './Analytics';
 import * as Avatar from './Avatar';
 import dis from './dispatcher/dispatcher';
 import { _t } from './languageHandler';
@@ -230,8 +229,6 @@ export const Notifier = {
         // calculated value. It is determined based upon whether or not the master rule is enabled
         // and other flags. Setting it here would cause a circular reference.
 
-        Analytics.trackEvent('Notifier', 'Set Enabled', String(enable));
-
         // make sure that we persist the current setting audio_enabled setting
         // before changing anything
         if (SettingsStore.isLevelSupported(SettingLevel.DEVICE)) {
@@ -249,7 +246,7 @@ export const Notifier = {
                         ? _t('%(brand)s does not have permission to send you notifications - ' +
                             'please check your browser settings', { brand })
                         : _t('%(brand)s was not given permission to send notifications - please try again', { brand });
-                    Modal.createTrackedDialog('Unable to enable Notifications', result, ErrorDialog, {
+                    Modal.createDialog(ErrorDialog, {
                         title: _t('Unable to enable Notifications'),
                         description,
                     });
@@ -297,8 +294,6 @@ export const Notifier = {
 
     setPromptHidden: function(hidden: boolean, persistent = true) {
         this.toolbarHidden = hidden;
-
-        Analytics.trackEvent('Notifier', 'Set Toolbar Hidden', String(hidden));
 
         hideNotificationsToast();
 

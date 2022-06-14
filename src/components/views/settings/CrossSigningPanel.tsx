@@ -75,10 +75,7 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
 
     private onBootstrapClick = () => {
         if (this.state.crossSigningPrivateKeysInStorage) {
-            Modal.createTrackedDialog(
-                "Verify session", "Verify session", SetupEncryptionDialog,
-                {}, null, /* priority = */ false, /* static = */ true,
-            );
+            Modal.createDialog(SetupEncryptionDialog, {}, null, /* priority = */ false, /* static = */ true);
         } else {
             // Trigger the flow to set up secure backup, which is what this will do when in
             // the appropriate state.
@@ -130,14 +127,11 @@ export default class CrossSigningPanel extends React.PureComponent<{}, IState> {
             const cli = MatrixClientPeg.get();
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {
-                    const { finished } = Modal.createTrackedDialog(
-                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                        {
-                            title: _t("Setting up keys"),
-                            matrixClient: cli,
-                            makeRequest,
-                        },
-                    );
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+                        title: _t("Setting up keys"),
+                        matrixClient: cli,
+                        makeRequest,
+                    });
                     const [confirmed] = await finished;
                     if (!confirmed) {
                         throw new Error("Cross-signing key upload auth canceled");

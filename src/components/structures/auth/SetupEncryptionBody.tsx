@@ -98,7 +98,7 @@ export default class SetupEncryptionBody extends React.Component<IProps, IState>
         // We need to call onFinished now to close this dialog, and
         // again later to signal that the verification is complete.
         this.props.onFinished();
-        Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
+        Modal.createDialog(VerificationRequestDialog, {
             verificationRequestPromise: requestPromise,
             member: cli.getUser(userId),
             onFinished: async () => {

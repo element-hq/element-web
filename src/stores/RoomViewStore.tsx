@@ -448,7 +448,7 @@ export class RoomViewStore extends Store<ActionPayload> {
             }
         }
 
-        Modal.createTrackedDialog('Failed to join room', '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t("Failed to join"),
             description,
         });

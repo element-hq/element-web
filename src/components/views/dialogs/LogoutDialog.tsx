@@ -80,7 +80,7 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
     }
 
     private onExportE2eKeysClicked = (): void => {
-        Modal.createTrackedDialogAsync('Export E2E Keys', '',
+        Modal.createDialogAsync(
             import(
                 '../../../async-components/views/dialogs/security/ExportE2eKeysDialog'
             ) as unknown as Promise<ComponentType<{}>>,
@@ -103,12 +103,9 @@ export default class LogoutDialog extends React.Component<IProps, IState> {
             // A key backup exists for this account, but the creating device is not
             // verified, so restore the backup which will give us the keys from it and
             // allow us to trust it (ie. upload keys to it)
-            Modal.createTrackedDialog(
-                'Restore Backup', '', RestoreKeyBackupDialog, null, null,
-                /* priority = */ false, /* static = */ true,
-            );
+            Modal.createDialog(RestoreKeyBackupDialog, null, null, /* priority = */ false, /* static = */ true);
         } else {
-            Modal.createTrackedDialogAsync("Key Backup", "Key Backup",
+            Modal.createDialogAsync(
                 import(
                     "../../../async-components/views/dialogs/security/CreateKeyBackupDialog"
                 ) as unknown as Promise<ComponentType<{}>>,

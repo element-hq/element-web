@@ -97,7 +97,7 @@ export default class RoomUpgradeWarningDialog extends React.Component<IProps, IS
         e.preventDefault();
         e.stopPropagation();
 
-        Modal.createTrackedDialog('Bug Report Dialog', '', BugReportDialog, {});
+        Modal.createDialog(BugReportDialog, {});
     };
 
     render() {

@@ -181,9 +181,7 @@ export function pollAlreadyHasVotes(mxEvent: MatrixEvent, getRelationsForEvent?:
 
 export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: GetRelationsForEvent): void {
     if (pollAlreadyHasVotes(mxEvent, getRelationsForEvent)) {
-        Modal.createTrackedDialog(
-            'Not allowed to edit poll',
-            '',
+        Modal.createDialog(
             ErrorDialog,
             {
                 title: _t("Can't edit poll"),
@@ -193,9 +191,7 @@ export function launchPollEditor(mxEvent: MatrixEvent, getRelationsForEvent?: Ge
             },
         );
     } else {
-        Modal.createTrackedDialog(
-            'Polls',
-            'create',
+        Modal.createDialog(
             PollCreateDialog,
             {
                 room: MatrixClientPeg.get().getRoom(mxEvent.getRoomId()),
@@ -312,9 +308,7 @@ export default class MPollBody extends React.Component<IBodyProps, IState> {
         ).catch((e: any) => {
             console.error("Failed to submit poll response event:", e);
 
-            Modal.createTrackedDialog(
-                'Vote not registered',
-                '',
+            Modal.createDialog(
                 ErrorDialog,
                 {
                     title: _t("Vote not registered"),

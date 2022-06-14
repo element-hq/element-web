@@ -23,7 +23,7 @@ import SdkConfig, { DEFAULTS } from "./SdkConfig";
 
 export function showGroupReplacedWithSpacesDialog(groupId: string) {
     const learnMoreUrl = SdkConfig.get().spaces_learn_more_url ?? DEFAULTS.spaces_learn_more_url;
-    Modal.createTrackedDialog("Groups are now Spaces", '', QuestionDialog, {
+    Modal.createDialog(QuestionDialog, {
         title: _t("That link is no longer supported"),
         description: <>
             <p>

@@ -82,7 +82,7 @@ const singleMxcUpload = async (): Promise<any> => {
         fileSelector.onchange = (ev: HTMLInputEvent) => {
             const file = ev.target.files[0];
 
-            Modal.createTrackedDialog('Upload Files confirmation', '', UploadConfirmDialog, {
+            Modal.createDialog(UploadConfirmDialog, {
                 file,
                 onFinished: (shouldContinue) => {
                     resolve(shouldContinue ? MatrixClientPeg.get().uploadContent(file) : null);
@@ -307,7 +307,7 @@ export const Commands = [
                     );
                 }
 
-                const { finished } = Modal.createTrackedDialog('Slash Commands', 'upgrade room confirmation',
+                const { finished } = Modal.createDialog(
                     RoomUpgradeWarningDialog, { roomId: roomId, targetVersion: args }, /*className=*/null,
                     /*isPriority=*/false, /*isStatic=*/true);
 
@@ -483,7 +483,7 @@ export const Commands = [
             const ref = e => e && linkifyElement(e);
             const body = topicToHtml(topic.text, topic.html, ref, true);
 
-            Modal.createTrackedDialog('Slash Commands', 'Topic', InfoDialog, {
+            Modal.createDialog(InfoDialog, {
                 title: room.name,
                 description: <div ref={ref}>{ body }</div>,
                 hasCloseButton: true,
@@ -529,22 +529,18 @@ export const Commands = [
                     ) {
                         const defaultIdentityServerUrl = getDefaultIdentityServerUrl();
                         if (defaultIdentityServerUrl) {
-                            const { finished } = Modal.createTrackedDialog<[boolean]>(
-                                'Slash Commands',
-                                'Identity server',
-                                QuestionDialog, {
-                                    title: _t("Use an identity server"),
-                                    description: <p>{ _t(
-                                        "Use an identity server to invite by email. " +
-                                        "Click continue to use the default identity server " +
-                                        "(%(defaultIdentityServerName)s) or manage in Settings.",
-                                        {
-                                            defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
-                                        },
-                                    ) }</p>,
-                                    button: _t("Continue"),
-                                },
-                            );
+                            const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
+                                title: _t("Use an identity server"),
+                                description: <p>{ _t(
+                                    "Use an identity server to invite by email. " +
+                                    "Click continue to use the default identity server " +
+                                    "(%(defaultIdentityServerName)s) or manage in Settings.",
+                                    {
+                                        defaultIdentityServerName: abbreviateUrl(defaultIdentityServerUrl),
+                                    },
+                                ) }</p>,
+                                button: _t("Continue"),
+                            });
 
                             prom = finished.then(([useDefault]) => {
                                 if (useDefault) {
@@ -810,7 +806,7 @@ export const Commands = [
                     ignoredUsers.push(userId); // de-duped internally in the js-sdk
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            Modal.createTrackedDialog('Slash Commands', 'User ignored', InfoDialog, {
+                            Modal.createDialog(InfoDialog, {
                                 title: _t('Ignored user'),
                                 description: <div>
                                     <p>{ _t('You are now ignoring %(userId)s', { userId }) }</p>
@@ -840,7 +836,7 @@ export const Commands = [
                     if (index !== -1) ignoredUsers.splice(index, 1);
                     return success(
                         cli.setIgnoredUsers(ignoredUsers).then(() => {
-                            Modal.createTrackedDialog('Slash Commands', 'User unignored', InfoDialog, {
+                            Modal.createDialog(InfoDialog, {
                                 title: _t('Unignored user'),
                                 description: <div>
                                     <p>{ _t('You are no longer ignoring %(userId)s', { userId }) }</p>
@@ -1040,7 +1036,7 @@ export const Commands = [
                         await cli.setDeviceVerified(userId, deviceId, true);
 
                         // Tell the user we verified everything
-                        Modal.createTrackedDialog('Slash Commands', 'Verified key', InfoDialog, {
+                        Modal.createDialog(InfoDialog, {
                             title: _t('Verified key'),
                             description: <div>
                                 <p>
@@ -1098,7 +1094,7 @@ export const Commands = [
         command: "help",
         description: _td("Displays list of commands with usages and descriptions"),
         runFn: function() {
-            Modal.createTrackedDialog('Slash Commands', 'Help', SlashCommandHelpDialog);
+            Modal.createDialog(SlashCommandHelpDialog);
             return success();
         },
         category: CommandCategories.advanced,
@@ -1130,7 +1126,7 @@ export const Commands = [
         args: "<description>",
         runFn: function(roomId, args) {
             return success(
-                Modal.createTrackedDialog('Slash Commands', 'Bug Report Dialog', BugReportDialog, {
+                Modal.createDialog(BugReportDialog, {
                     initialText: args,
                 }).finished,
             );

@@ -23,7 +23,7 @@ import ServerOfflineDialog from "../dialogs/ServerOfflineDialog";
 
 export default class NonUrgentEchoFailureToast extends React.PureComponent {
     private openDialog = () => {
-        Modal.createTrackedDialog('Local Echo Server Error', '', ServerOfflineDialog, {});
+        Modal.createDialog(ServerOfflineDialog, {});
     };
 
     public render() {

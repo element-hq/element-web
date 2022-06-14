@@ -36,7 +36,7 @@ const MXID_PROFILE_STATES = {
 };
 
 jest.mock('../../src/Modal', () => ({
-    createTrackedDialog: jest.fn(),
+    createDialog: jest.fn(),
 }));
 
 jest.mock('../../src/settings/SettingsStore', () => ({
@@ -54,12 +54,8 @@ const mockPromptBeforeInviteUnknownUsers = (value: boolean) => {
 };
 
 const mockCreateTrackedDialog = (callbackName: 'onInviteAnyways'|'onGiveUp') => {
-    mocked(Modal.createTrackedDialog).mockImplementation(
-        (
-            _analyticsAction: string,
-            _analyticsInfo: string,
-            ...rest: Parameters<ModalManager['createDialog']>
-        ): any => {
+    mocked(Modal.createDialog).mockImplementation(
+        (...rest: Parameters<ModalManager['createDialog']>): any => {
             rest[1][callbackName]();
         },
     );

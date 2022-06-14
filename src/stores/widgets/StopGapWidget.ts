@@ -375,7 +375,7 @@ export class StopGapWidget extends EventEmitter {
             this.messaging.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IHangupCallApiRequest>) => {
                     if (ev.detail.data?.errorMessage) {
-                        Modal.createTrackedDialog("Connection lost", "", ErrorDialog, {
+                        Modal.createDialog(ErrorDialog, {
                             title: _t("Connection lost"),
                             description: _t("You were disconnected from the call. (Error: %(message)s)", {
                                 message: ev.detail.data.errorMessage,

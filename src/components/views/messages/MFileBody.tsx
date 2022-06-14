@@ -172,7 +172,7 @@ export default class MFileBody extends React.Component<IProps, IState> {
             });
         } catch (err) {
             logger.warn("Unable to decrypt attachment: ", err);
-            Modal.createTrackedDialog('Error decrypting attachment', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Error"),
                 description: _t("Error decrypting attachment"),
             });

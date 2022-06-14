@@ -296,7 +296,7 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                Modal.createTrackedDialog('Export room dialog', '', ExportDialog, { room });
+                Modal.createDialog(ExportDialog, { room });
                 onFinished();
             }}
             label={_t("Export chat")}

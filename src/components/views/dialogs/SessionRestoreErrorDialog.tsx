@@ -33,13 +33,13 @@ interface IProps extends IDialogProps {
 
 export default class SessionRestoreErrorDialog extends React.Component<IProps> {
     private sendBugReport = (): void => {
-        Modal.createTrackedDialog('Session Restore Error', 'Send Bug Report Dialog', BugReportDialog, {
+        Modal.createDialog(BugReportDialog, {
             error: this.props.error,
         });
     };
 
     private onClearStorageClick = (): void => {
-        Modal.createTrackedDialog('Session Restore Confirm Logout', '', QuestionDialog, {
+        Modal.createDialog(QuestionDialog, {
             title: _t("Sign out"),
             description:
                 <div>{ _t("Sign out and remove encryption keys?") }</div>,

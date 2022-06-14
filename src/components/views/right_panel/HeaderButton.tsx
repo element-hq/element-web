@@ -21,7 +21,6 @@ limitations under the License.
 import React from 'react';
 import classNames from 'classnames';
 
-import Analytics from '../../../Analytics';
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ButtonEvent } from "../elements/AccessibleButton";
 
@@ -31,8 +30,6 @@ interface IProps {
     isUnread?: boolean;
     // click handler
     onClick: (ev: ButtonEvent) => void;
-    // The parameters to track the click event
-    analytics: Parameters<typeof Analytics.trackEvent>;
 
     // Button name
     name: string;
@@ -42,14 +39,8 @@ interface IProps {
 
 // TODO: replace this, the composer buttons and the right panel buttons with a unified representation
 export default class HeaderButton extends React.Component<IProps> {
-    private onClick = (ev: ButtonEvent) => {
-        Analytics.trackEvent(...this.props.analytics);
-        this.props.onClick(ev);
-    };
-
     public render() {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { isHighlighted, isUnread = false, onClick, analytics, name, title, ...props } = this.props;
+        const { isHighlighted, isUnread = false, onClick, name, title, ...props } = this.props;
 
         const classes = classNames({
             mx_RightPanel_headerButton: true,
@@ -64,7 +55,7 @@ export default class HeaderButton extends React.Component<IProps> {
             role="tab"
             title={title}
             className={classes}
-            onClick={this.onClick}
+            onClick={onClick}
         />;
     }
 }

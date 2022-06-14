@@ -173,7 +173,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
     };
 
     private onViewSourceClick = (): void => {
-        Modal.createTrackedDialog('View Event Source', '', ViewSource, {
+        Modal.createDialog(ViewSource, {
             mxEvent: this.props.mxEvent,
         }, 'mx_Dialog_viewsource');
         this.closeMenu();
@@ -238,7 +238,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onShareClick = (e: React.MouseEvent): void => {
         e.preventDefault();
-        Modal.createTrackedDialog('share room message dialog', '', ShareDialog, {
+        Modal.createDialog(ShareDialog, {
             target: this.props.mxEvent,
             permalinkCreator: this.props.permalinkCreator,
         });
@@ -286,7 +286,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
 
     private onEndPollClick = (): void => {
         const matrixClient = MatrixClientPeg.get();
-        Modal.createTrackedDialog('End Poll', '', EndPollDialog, {
+        Modal.createDialog(EndPollDialog, {
             matrixClient,
             event: this.props.mxEvent,
             getRelationsForEvent: this.props.getRelationsForEvent,

@@ -18,11 +18,9 @@
             "localhost:5005"
         ]
     },
-    "piwik": {
-        "url": "https://piwik.riot.im/",
-        "whitelistedHSUrls": ["http://localhost:5005"],
-        "whitelistedISUrls": ["https://vector.im", "https://matrix.org"],
-        "siteId": 1
+    "posthog": {
+        "projectApiKey": "not-a-real-api-key",
+        "apiHost": "http://localhost:5005"
     },
     "enable_presence_by_hs_url": {
         "https://matrix.org": false

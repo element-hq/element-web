@@ -53,7 +53,7 @@ export function createRedactEventDialog({
     mxEvent: MatrixEvent;
     onCloseDialog?: () => void;
 }) {
-    Modal.createTrackedDialog('Confirm Redact Dialog', '', ConfirmRedactDialog, {
+    Modal.createDialog(ConfirmRedactDialog, {
         onFinished: async (proceed: boolean, reason?: string) => {
             if (!proceed) return;
 
@@ -73,7 +73,7 @@ export function createRedactEventDialog({
                 // detached queue and we show the room status bar to allow retry
                 if (typeof code !== "undefined") {
                     // display error message stating you couldn't delete this.
-                    Modal.createTrackedDialog('You cannot delete this message', '', ErrorDialog, {
+                    Modal.createDialog(ErrorDialog, {
                         title: _t('Error'),
                         description: _t('You cannot delete this message. (%(code)s)', { code }),
                     });

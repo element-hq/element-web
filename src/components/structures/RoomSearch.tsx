@@ -104,7 +104,7 @@ export default class RoomSearch extends React.PureComponent<IProps, IState> {
     };
 
     private openSpotlight() {
-        Modal.createTrackedDialog("Spotlight", "", SpotlightDialog, {}, "mx_SpotlightDialog_wrapper", false, true);
+        Modal.createDialog(SpotlightDialog, {}, "mx_SpotlightDialog_wrapper", false, true);
     }
 
     private onAction = (payload: ActionPayload) => {

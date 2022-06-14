@@ -183,15 +183,10 @@ class LocationPicker extends React.Component<ILocationPickerProps, IState> {
         // pin drop location without permissions is ok
         if (isSharingOwnLocation(this.props.shareType)) {
             this.props.onFinished();
-            Modal.createTrackedDialog(
-                'Could not fetch location',
-                '',
-                ErrorDialog,
-                {
-                    title: _t("Could not fetch location"),
-                    description: positionFailureMessage(e.code),
-                },
-            );
+            Modal.createDialog(ErrorDialog, {
+                title: _t("Could not fetch location"),
+                description: positionFailureMessage(e.code),
+            });
         }
 
         if (this.geolocate) {

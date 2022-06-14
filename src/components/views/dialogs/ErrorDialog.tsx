@@ -16,7 +16,7 @@ limitations under the License.
 
 /*
  * Usage:
- * Modal.createTrackedDialog('An Identifier', 'some detail', ErrorDialog, {
+ * Modal.createDialog(ErrorDialog, {
  *   title: "some text", (default: "Error")
  *   description: "some more text",
  *   button: "Button Text",

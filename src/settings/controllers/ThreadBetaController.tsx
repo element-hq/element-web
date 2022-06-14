@@ -28,7 +28,7 @@ export default class ThreadBetaController extends SettingController {
     public async beforeChange(level: SettingLevel, roomId: string, newValue: any): Promise<boolean> {
         if (Thread.hasServerSideSupport || !newValue) return true; // Full support or user is disabling
 
-        const { finished } = Modal.createTrackedDialog<[boolean]>("Thread beta", "degraded mode", QuestionDialog, {
+        const { finished } = Modal.createDialog<[boolean]>(QuestionDialog, {
             title: _t("Partial Support for Threads"),
             description: <>
                 <p>{ _t("Your homeserver does not currently support threads, so this feature may be unreliable. " +

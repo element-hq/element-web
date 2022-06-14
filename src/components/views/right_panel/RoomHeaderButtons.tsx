@@ -95,7 +95,6 @@ const PinnedMessagesHeaderButton = ({ room, isHighlighted, onClick }: IHeaderBut
         isHighlighted={isHighlighted}
         isUnread={!!unreadIndicator}
         onClick={onClick}
-        analytics={["Right Panel", "Pinned Messages Button", "click"]}
     >
         { unreadIndicator }
     </HeaderButton>;
@@ -115,7 +114,6 @@ const TimelineCardHeaderButton = ({ room, isHighlighted, onClick }: IHeaderButto
         title={_t("Chat")}
         isHighlighted={isHighlighted}
         onClick={onClick}
-        analytics={["Right Panel", "Timeline Panel Button", "click"]}
     >
         { unreadIndicator }
     </HeaderButton>;
@@ -244,7 +242,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                     onClick={this.onThreadsPanelClicked}
                     isHighlighted={this.isPhase(RoomHeaderButtons.THREAD_PHASES)}
                     isUnread={this.threadNotificationState.color > 0}
-                    analytics={['Right Panel', 'Threads List Button', 'click']}>
+                >
                     <UnreadIndicator color={this.threadNotificationState.color} />
                 </HeaderButton>
                 : null,
@@ -256,7 +254,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
                 onClick={this.onNotificationsClicked}
-                analytics={['Right Panel', 'Notification List Button', 'click']} />,
+            />,
         );
         rightPanelPhaseButtons.set(RightPanelPhases.RoomSummary,
             <HeaderButton
@@ -265,7 +263,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 title={_t('Room Info')}
                 isHighlighted={this.isPhase(ROOM_INFO_PHASES)}
                 onClick={this.onRoomSummaryClicked}
-                analytics={['Right Panel', 'Room Summary Button', 'click']} />,
+            />,
         );
 
         return <>

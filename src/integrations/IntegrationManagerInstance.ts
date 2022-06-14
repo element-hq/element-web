@@ -66,10 +66,7 @@ export class IntegrationManagerInstance {
             return IntegrationManagers.sharedInstance().showDisabledDialog();
         }
 
-        const dialog = Modal.createTrackedDialog(
-            'Integration Manager', '', IntegrationManager,
-            { loading: true }, 'mx_IntegrationManager',
-        );
+        const dialog = Modal.createDialog(IntegrationManager, { loading: true }, 'mx_IntegrationManager');
 
         const client = this.getScalarClient();
         client.setTermsInteractionCallback((policyInfo, agreedUrls) => {
@@ -101,9 +98,6 @@ export class IntegrationManagerInstance {
 
         // Close the old dialog and open a new one
         dialog.close();
-        Modal.createTrackedDialog(
-            'Integration Manager', '', IntegrationManager,
-            newProps, 'mx_IntegrationManager',
-        );
+        Modal.createDialog(IntegrationManager, newProps, 'mx_IntegrationManager');
     }
 }

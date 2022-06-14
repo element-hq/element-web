@@ -80,7 +80,7 @@ export class ExistingEmailAddress extends React.Component<IExistingEmailAddressP
             return this.props.onRemoved(this.props.email);
         }).catch((err) => {
             logger.error("Unable to remove contact information: " + err);
-            Modal.createTrackedDialog('Remove 3pid failed', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Unable to remove contact information"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -168,7 +168,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
 
         // TODO: Inline field validation
         if (!Email.looksValid(email)) {
-            Modal.createTrackedDialog('Invalid email address', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Invalid Email Address"),
                 description: _t("This doesn't appear to be a valid email address"),
             });
@@ -183,7 +183,7 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         }).catch((err) => {
             logger.error("Unable to add email address " + email + " " + err);
             this.setState({ verifying: false, continueDisabled: false, addTask: null });
-            Modal.createTrackedDialog('Unable to add email address', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Unable to add email address"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -215,14 +215,14 @@ export default class EmailAddresses extends React.Component<IProps, IState> {
         }).catch((err) => {
             this.setState({ continueDisabled: false });
             if (err.errcode === 'M_THREEPID_AUTH_FAILED') {
-                Modal.createTrackedDialog("Email hasn't been verified yet", "", ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t("Your email address hasn't been verified yet"),
                     description: _t("Click the link in the email you received to verify " +
                         "and then click continue again."),
                 });
             } else {
                 logger.error("Unable to verify email address: ", err);
-                Modal.createTrackedDialog('Unable to verify email address', '', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify email address."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });

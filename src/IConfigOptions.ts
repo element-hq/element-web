@@ -135,18 +135,15 @@ export interface IConfigOptions {
         servers: string[];
     };
 
-    // piwik (matomo) is deprecated in favour of posthog
     piwik?: false | {
-        url: string; // piwik instance
-        site_id: string;
-        policy_url: string; // cookie policy
-        whitelisted_hs_urls: string[];
+        policy_url: string; // deprecated in favour of `privacy_policy_url` at root instead
     };
     posthog?: {
         project_api_key: string;
         api_host: string; // hostname
     };
     analytics_owner?: string; // defaults to `brand`
+    privacy_policy_url?: string; // location for cookie policy
 
     // Server hosting upsell options
     hosting_signup_link?: string; // slightly different from `host_signup`

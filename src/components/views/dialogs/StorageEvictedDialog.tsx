@@ -30,7 +30,7 @@ interface IProps extends IDialogProps { }
 export default class StorageEvictedDialog extends React.Component<IProps> {
     private sendBugReport = (ev: React.MouseEvent): void => {
         ev.preventDefault();
-        Modal.createTrackedDialog('Storage evicted', 'Send Bug Report Dialog', BugReportDialog, {});
+        Modal.createDialog(BugReportDialog, {});
     };
 
     private onSignOutClick = (): void => {

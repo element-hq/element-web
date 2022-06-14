@@ -232,14 +232,11 @@ export class SetupEncryptionStore extends EventEmitter {
                 const cli = MatrixClientPeg.get();
                 await cli.bootstrapCrossSigning({
                     authUploadDeviceSigningKeys: async (makeRequest) => {
-                        const { finished } = Modal.createTrackedDialog(
-                            'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                            {
-                                title: _t("Setting up keys"),
-                                matrixClient: cli,
-                                makeRequest,
-                            },
-                        );
+                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+                            title: _t("Setting up keys"),
+                            matrixClient: cli,
+                            makeRequest,
+                        });
                         const [confirmed] = await finished;
                         if (!confirmed) {
                             throw new Error("Cross-signing key upload auth canceled");

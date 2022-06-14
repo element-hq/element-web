@@ -1353,7 +1353,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 );
             }
 
-            Modal.createTrackedDialog('Failed to load timeline position', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Failed to load timeline position"),
                 description,
                 onFinished,

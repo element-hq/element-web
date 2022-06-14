@@ -30,24 +30,20 @@ import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { useEventEmitter } from "../../hooks/useEventEmitter";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
 import MiniAvatarUploader, { AVATAR_SIZE } from "../views/elements/MiniAvatarUploader";
-import Analytics from "../../Analytics";
 import PosthogTrackers from "../../PosthogTrackers";
 import EmbeddedPage from "./EmbeddedPage";
 
 const onClickSendDm = (ev: ButtonEvent) => {
-    Analytics.trackEvent('home_page', 'button', 'dm');
     PosthogTrackers.trackInteraction("WebHomeCreateChatButton", ev);
     dis.dispatch({ action: 'view_create_chat' });
 };
 
 const onClickExplore = (ev: ButtonEvent) => {
-    Analytics.trackEvent('home_page', 'button', 'room_directory');
     PosthogTrackers.trackInteraction("WebHomeExploreRoomsButton", ev);
     dis.fire(Action.ViewRoomDirectory);
 };
 
 const onClickNewRoom = (ev: ButtonEvent) => {
-    Analytics.trackEvent('home_page', 'button', 'create_room');
     PosthogTrackers.trackInteraction("WebHomeCreateRoomButton", ev);
     dis.dispatch({ action: 'view_create_room' });
 };

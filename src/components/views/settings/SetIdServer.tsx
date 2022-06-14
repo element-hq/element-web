@@ -219,7 +219,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
     };
 
     private showNoTermsWarning(fullUrl) {
-        const { finished } = Modal.createTrackedDialog('No Terms Warning', '', QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title: _t("Identity server has no terms of service"),
             description: (
                 <div>
@@ -320,7 +320,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
             message = unboundMessage;
         }
 
-        const { finished } = Modal.createTrackedDialog('Identity Server Bound Warning', '', QuestionDialog, {
+        const { finished } = Modal.createDialog(QuestionDialog, {
             title,
             description: message,
             button,

@@ -172,25 +172,20 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
             () => this.props.onFinished(true),
         ).catch(e => {
             console.error("Failed to post poll:", e);
-            Modal.createTrackedDialog(
-                'Failed to post poll',
-                '',
-                QuestionDialog,
-                {
-                    title: _t("Failed to post poll"),
-                    description: _t(
-                        "Sorry, the poll you tried to create was not posted."),
-                    button: _t('Try again'),
-                    cancelButton: _t('Cancel'),
-                    onFinished: (tryAgain: boolean) => {
-                        if (!tryAgain) {
-                            this.cancel();
-                        } else {
-                            this.setState({ busy: false, canSubmit: true });
-                        }
-                    },
+            Modal.createDialog(QuestionDialog, {
+                title: _t("Failed to post poll"),
+                description: _t(
+                    "Sorry, the poll you tried to create was not posted."),
+                button: _t('Try again'),
+                cancelButton: _t('Cancel'),
+                onFinished: (tryAgain: boolean) => {
+                    if (!tryAgain) {
+                        this.cancel();
+                    } else {
+                        this.setState({ busy: false, canSubmit: true });
+                    }
                 },
-            );
+            });
         });
     }
 

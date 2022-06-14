@@ -316,7 +316,7 @@ export default class MultiInviter {
                     }
 
                     logger.log("Showing failed to invite dialog...");
-                    Modal.createTrackedDialog('Failed to invite', '', AskInviteAnywayDialog, {
+                    Modal.createDialog(AskInviteAnywayDialog, {
                         unknownProfileUsers: unknownProfileUsers.map(u => ({
                             userId: u,
                             errorText: this.errors[u].errorText,

@@ -206,7 +206,7 @@ export default class AddThreepid {
                                 continueKind: "primary",
                             },
                         };
-                        const { finished } = Modal.createTrackedDialog('Add Email', '', InteractiveAuthDialog, {
+                        const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                             title: _t("Add Email Address"),
                             matrixClient: MatrixClientPeg.get(),
                             authData: e.data,
@@ -319,7 +319,7 @@ export default class AddThreepid {
                             continueKind: "primary",
                         },
                     };
-                    const { finished } = Modal.createTrackedDialog('Add MSISDN', '', InteractiveAuthDialog, {
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog, {
                         title: _t("Add Phone Number"),
                         matrixClient: MatrixClientPeg.get(),
                         authData: e.data,

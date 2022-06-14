@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ReactNode } from "react";
+import React from "react";
 import { Optional } from "matrix-events-sdk";
 
 import { _t } from "../languageHandler";
 import SdkConfig from "../SdkConfig";
 import dis from "../dispatcher/dispatcher";
-import Analytics from "../Analytics";
 import AccessibleButton from "../components/views/elements/AccessibleButton";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
@@ -31,6 +30,7 @@ import {
 import { Action } from "../dispatcher/actions";
 import { SnakedObject } from "../utils/SnakedObject";
 import { IConfigOptions } from "../IConfigOptions";
+import SettingsStore from "../settings/SettingsStore";
 
 const onAccept = () => {
     dis.dispatch({
@@ -75,53 +75,26 @@ const onLearnMorePreviouslyOptedIn = () => {
     });
 };
 
-const onUsageDataClicked = () => {
-    Analytics.showDetailsModal();
-};
-
 const TOAST_KEY = "analytics";
 
-const getAnonymousDescription = (): ReactNode => {
-    // get toast description for anonymous tracking (the previous scheme pre-posthog)
-    const brand = SdkConfig.get().brand;
+export function getPolicyUrl(): Optional<string> {
+    const policyUrl = SdkConfig.get("privacy_policy_url");
+    if (policyUrl) return policyUrl;
+
+    // Try get from legacy config location
     const piwikConfig = SdkConfig.get("piwik");
     let piwik: Optional<SnakedObject<Extract<IConfigOptions["piwik"], object>>>;
     if (typeof piwikConfig === 'object') {
         piwik = new SnakedObject(piwikConfig);
     }
-    const cookiePolicyUrl = piwik?.get("policy_url");
-    return _t(
-        "Send <UsageDataLink>anonymous usage data</UsageDataLink> which helps us improve %(brand)s. " +
-        "This will use a <PolicyLink>cookie</PolicyLink>.",
-        {
-            brand,
-        },
-        {
-            "UsageDataLink": (sub) => (
-                <AccessibleButton kind="link" onClick={onUsageDataClicked}>{ sub }</AccessibleButton>
-            ),
-            "PolicyLink": (sub) => cookiePolicyUrl ? (
-                <a target="_blank" href={cookiePolicyUrl}>{ sub }</a>
-            ) : sub,
-        },
-    );
-};
+    return piwik?.get("policy_url");
+}
 
-const showToast = (props: Omit<React.ComponentProps<typeof GenericToast>, "toastKey">) => {
-    const analyticsOwner = SdkConfig.get("analytics_owner") ?? SdkConfig.get().brand;
-    ToastStore.sharedInstance().addOrReplaceToast({
-        key: TOAST_KEY,
-        title: _t("Help improve %(analyticsOwner)s", { analyticsOwner }),
-        props,
-        component: GenericToast,
-        className: "mx_AnalyticsToast",
-        priority: 10,
-    });
-};
+export const showToast = (): void => {
+    const legacyAnalyticsOptIn = SettingsStore.getValue("analyticsOptIn", null, true);
 
-export const showPseudonymousAnalyticsOptInToast = (analyticsOptIn: boolean): void => {
-    let props;
-    if (analyticsOptIn) {
+    let props: Omit<React.ComponentProps<typeof GenericToast>, "toastKey">;
+    if (legacyAnalyticsOptIn) {
         // The user previously opted into our old analytics system - let them know things have changed and ask
         // them to opt in again.
         props = {
@@ -132,10 +105,10 @@ export const showPseudonymousAnalyticsOptInToast = (analyticsOptIn: boolean): vo
             rejectLabel: _t("Learn more"),
             onReject: onLearnMorePreviouslyOptedIn,
         };
-    } else if (analyticsOptIn === null || analyticsOptIn === undefined) {
+    } else if (legacyAnalyticsOptIn === null || legacyAnalyticsOptIn === undefined) {
         // The user had no analytics setting previously set, so we just need to prompt to opt-in, rather than
         // explaining any change.
-        const learnMoreLink = (sub) => (
+        const learnMoreLink = (sub: string) => (
             <AccessibleButton kind="link" onClick={onLearnMoreNoOptIn}>{ sub }</AccessibleButton>
         );
         props = {
@@ -151,22 +124,16 @@ export const showPseudonymousAnalyticsOptInToast = (analyticsOptIn: boolean): vo
         // The user previously opted out of analytics, don't ask again
         return;
     }
-    showToast(props);
-};
 
-export const showAnonymousAnalyticsOptInToast = (): void => {
-    const props = {
-        description: getAnonymousDescription(),
-        acceptLabel: _t("Yes"),
-        onAccept: () => dis.dispatch({
-            action: Action.AnonymousAnalyticsAccept,
-        }),
-        rejectLabel: _t("No"),
-        onReject: () => dis.dispatch({
-            action: Action.AnonymousAnalyticsReject,
-        }),
-    };
-    showToast(props);
+    const analyticsOwner = SdkConfig.get("analytics_owner") ?? SdkConfig.get().brand;
+    ToastStore.sharedInstance().addOrReplaceToast({
+        key: TOAST_KEY,
+        title: _t("Help improve %(analyticsOwner)s", { analyticsOwner }),
+        props,
+        component: GenericToast,
+        className: "mx_AnalyticsToast",
+        priority: 10,
+    });
 };
 
 export const hideToast = () => {

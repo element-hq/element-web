@@ -92,7 +92,7 @@ export async function runSlashCommand(
             errText = _t("Server unavailable, overloaded, or something else went wrong.");
         }
 
-        Modal.createTrackedDialog(title, '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t(title),
             description: errText,
         });
@@ -105,7 +105,7 @@ export async function runSlashCommand(
 
 export async function shouldSendAnyway(commandText: string): Promise<boolean> {
     // ask the user if their unknown command should be sent as a message
-    const { finished } = Modal.createTrackedDialog("Unknown command", "", QuestionDialog, {
+    const { finished } = Modal.createDialog(QuestionDialog, {
         title: _t("Unknown Command"),
         description: <div>
             <p>

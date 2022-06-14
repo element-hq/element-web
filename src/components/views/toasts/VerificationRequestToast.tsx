@@ -129,7 +129,7 @@ export default class VerificationRequestToast extends React.PureComponent<IProps
                     request.channel.roomId,
                 );
             } else {
-                Modal.createTrackedDialog('Incoming Verification', '', VerificationRequestDialog, {
+                Modal.createDialog(VerificationRequestDialog, {
                     verificationRequest: request,
                     onFinished: () => {
                         request.cancel();

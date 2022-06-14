@@ -173,7 +173,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
         this.context.sendStateEvent(this.props.roomId, "m.room.canonical_alias",
             eventContent, "").catch((err) => {
             logger.error(err);
-            Modal.createTrackedDialog('Error updating main address', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Error updating main address"),
                 description: _t(
                     "There was an error updating the room's main address. It may not be allowed by the server " +
@@ -211,7 +211,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             .catch((err) => {
                 // TODO: Add error handling based upon server validation
                 logger.error(err);
-                Modal.createTrackedDialog('Error updating alternative addresses', '', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t("Error updating main address"),
                     description: _t(
                         "There was an error updating the room's alternative addresses. " +
@@ -243,7 +243,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
             }
         }).catch((err) => {
             logger.error(err);
-            Modal.createTrackedDialog('Error creating address', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Error creating address"),
                 description: _t(
                     "There was an error creating that address. It may not be allowed by the server " +
@@ -275,7 +275,7 @@ export default class AliasSettings extends React.Component<IProps, IState> {
                     "error occurred.",
                 );
             }
-            Modal.createTrackedDialog('Error removing address', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Error removing address"),
                 description,
             });

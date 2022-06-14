@@ -229,7 +229,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
         ev.preventDefault();
         ev.stopPropagation();
 
-        Modal.createTrackedDialog('Feedback Dialog', '', FeedbackDialog);
+        Modal.createDialog(FeedbackDialog);
         this.setState({ contextMenuPosition: null }); // also close the menu
     };
 
@@ -242,7 +242,7 @@ export default class UserMenu extends React.Component<IProps, IState> {
             // log out without user prompt if they have no local megolm sessions
             defaultDispatcher.dispatch({ action: 'logout' });
         } else {
-            Modal.createTrackedDialog('Logout from LeftPanel', '', LogoutDialog);
+            Modal.createDialog(LogoutDialog);
         }
 
         this.setState({ contextMenuPosition: null }); // also close the menu

@@ -72,16 +72,11 @@ export const showAddExistingRooms = (space: Room): void => {
 };
 
 export const showCreateNewRoom = async (space: Room, type?: RoomType): Promise<boolean> => {
-    const modal = Modal.createTrackedDialog<[boolean, IOpts]>(
-        "Space Landing",
-        "Create Room",
-        CreateRoomDialog,
-        {
-            type,
-            defaultPublic: space.getJoinRule() === JoinRule.Public,
-            parentSpace: space,
-        },
-    );
+    const modal = Modal.createDialog<[boolean, IOpts]>(CreateRoomDialog, {
+        type,
+        defaultPublic: space.getJoinRule() === JoinRule.Public,
+        parentSpace: space,
+    });
     const [shouldCreate, opts] = await modal.finished;
     if (shouldCreate) {
         await createRoom(opts);
@@ -97,7 +92,7 @@ export const shouldShowSpaceInvite = (space: Room) =>
 
 export const showSpaceInvite = (space: Room, initialText = ""): void => {
     if (space.getJoinRule() === "public") {
-        const modal = Modal.createTrackedDialog("Space Invite", "User Menu", InfoDialog, {
+        const modal = Modal.createDialog(InfoDialog, {
             title: _t("Invite to %(spaceName)s", { spaceName: space.name }),
             description: <React.Fragment>
                 <span>{ _t("Share your public space") }</span>
@@ -114,39 +109,27 @@ export const showSpaceInvite = (space: Room, initialText = ""): void => {
 };
 
 export const showAddExistingSubspace = (space: Room): void => {
-    Modal.createTrackedDialog(
-        "Space Landing",
-        "Create Subspace",
-        AddExistingSubspaceDialog,
-        {
-            space,
-            onCreateSubspaceClick: () => showCreateNewSubspace(space),
-            onFinished: (added: boolean) => {
-                if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
-                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                }
-            },
+    Modal.createDialog(AddExistingSubspaceDialog, {
+        space,
+        onCreateSubspaceClick: () => showCreateNewSubspace(space),
+        onFinished: (added: boolean) => {
+            if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
+                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+            }
         },
-        "mx_AddExistingToSpaceDialog_wrapper",
-    );
+    }, "mx_AddExistingToSpaceDialog_wrapper");
 };
 
 export const showCreateNewSubspace = (space: Room): void => {
-    Modal.createTrackedDialog(
-        "Space Landing",
-        "Create Subspace",
-        CreateSubspaceDialog,
-        {
-            space,
-            onAddExistingSpaceClick: () => showAddExistingSubspace(space),
-            onFinished: (added: boolean) => {
-                if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
-                    defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
-                }
-            },
+    Modal.createDialog(CreateSubspaceDialog, {
+        space,
+        onAddExistingSpaceClick: () => showAddExistingSubspace(space),
+        onFinished: (added: boolean) => {
+            if (added && RoomViewStore.instance.getRoomId() === space.roomId) {
+                defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
+            }
         },
-        "mx_CreateSubspaceDialog_wrapper",
-    );
+    }, "mx_CreateSubspaceDialog_wrapper");
 };
 
 export const bulkSpaceBehaviour = async (

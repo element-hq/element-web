@@ -711,14 +711,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevelsAreOrdered: true,
         default: {}, // none allowed
     },
+    // Legacy, kept around for transitionary purposes
     "analyticsOptIn": {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        displayName: _td('Send analytics data'),
         default: false,
-    },
-    "showCookieBar": {
-        supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
-        default: true,
     },
     "pseudonymousAnalyticsOptIn": {
         supportedLevels: [SettingLevel.ACCOUNT],

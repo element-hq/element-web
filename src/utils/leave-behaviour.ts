@@ -108,7 +108,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
             let message = _t("Unexpected server error trying to leave the room");
             if (err.errcode && err.message) {
                 if (err.errcode === 'M_CANNOT_LEAVE_SERVER_NOTICE_ROOM') {
-                    Modal.createTrackedDialog('Error Leaving Room', '', ErrorDialog, {
+                    Modal.createDialog(ErrorDialog, {
                         title: _t("Can't leave Server Notices room"),
                         description: _t(
                             "This room is used for important messages from the Homeserver, " +
@@ -121,7 +121,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
             }
             messages.push(message, React.createElement('BR')); // createElement to avoid using a tsx file in utils
         }
-        Modal.createTrackedDialog('Error Leaving Room', '', ErrorDialog, {
+        Modal.createDialog(ErrorDialog, {
             title: _t("Error leaving room"),
             description: messages,
         });
@@ -143,7 +143,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
 }
 
 export const leaveSpace = (space: Room) => {
-    Modal.createTrackedDialog("Leave Space", "", LeaveSpaceDialog, {
+    Modal.createDialog(LeaveSpaceDialog, {
         space,
         onFinished: async (leave: boolean, rooms: Room[]) => {
             if (!leave) return;

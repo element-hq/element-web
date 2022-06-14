@@ -154,7 +154,7 @@ export default class DateSeparator extends React.Component<IProps, IState> {
             // detached queue and we show the room status bar to allow retry
             if (typeof code !== "undefined") {
                 // display error message stating you couldn't delete this.
-                Modal.createTrackedDialog('Unable to find event at that date', '', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t('Error'),
                     description: _t('Unable to find event at that date. (%(code)s)', { code }),
                 });

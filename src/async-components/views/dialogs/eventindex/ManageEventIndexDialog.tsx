@@ -134,10 +134,7 @@ export default class ManageEventIndexDialog extends React.Component<IProps, ISta
 
     private onDisable = async () => {
         const DisableEventIndexDialog = (await import("./DisableEventIndexDialog")).default;
-        Modal.createTrackedDialog("Disable message search", "Disable message search",
-            DisableEventIndexDialog,
-            null, null, /* priority = */ false, /* static = */ true,
-        );
+        Modal.createDialog(DisableEventIndexDialog, null, null, /* priority = */ false, /* static = */ true);
     };
 
     private onCrawlerSleepTimeChange = (e) => {

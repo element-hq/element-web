@@ -150,7 +150,7 @@ async function getSecretStorageKey(
     }
 
     const inputToKey = makeInputToKey(keyInfo);
-    const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
+    const { finished } = Modal.createDialog(
         AccessSecretStorageDialog,
         /* props= */
         {
@@ -195,7 +195,7 @@ export async function getDehydrationKey(
     }
 
     const inputToKey = makeInputToKey(keyInfo);
-    const { finished } = Modal.createTrackedDialog("Access Secret Storage dialog", "",
+    const { finished } = Modal.createDialog(
         AccessSecretStorageDialog,
         /* props= */
         {
@@ -298,7 +298,7 @@ export const crossSigningCallbacks: ICryptoCallbacks = {
 export async function promptForBackupPassphrase(): Promise<Uint8Array> {
     let key: Uint8Array;
 
-    const { finished } = Modal.createTrackedDialog('Restore Backup', '', RestoreKeyBackupDialog, {
+    const { finished } = Modal.createDialog(RestoreKeyBackupDialog, {
         showSummary: false, keyCallback: k => key = k,
     }, null, /* priority = */ false, /* static = */ true);
 
@@ -336,7 +336,7 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
         if (!(await cli.hasSecretStorageKey()) || forceReset) {
             // This dialog calls bootstrap itself after guiding the user through
             // passphrase creation.
-            const { finished } = Modal.createTrackedDialogAsync('Create Secret Storage dialog', '',
+            const { finished } = Modal.createDialogAsync(
                 import(
                     "./async-components/views/dialogs/security/CreateSecretStorageDialog"
                 ) as unknown as Promise<ComponentType<{}>>,
@@ -363,14 +363,11 @@ export async function accessSecretStorage(func = async () => { }, forceReset = f
         } else {
             await cli.bootstrapCrossSigning({
                 authUploadDeviceSigningKeys: async (makeRequest) => {
-                    const { finished } = Modal.createTrackedDialog(
-                        'Cross-signing keys dialog', '', InteractiveAuthDialog,
-                        {
-                            title: _t("Setting up keys"),
-                            matrixClient: cli,
-                            makeRequest,
-                        },
-                    );
+                    const { finished } = Modal.createDialog(InteractiveAuthDialog, {
+                        title: _t("Setting up keys"),
+                        matrixClient: cli,
+                        makeRequest,
+                    });
                     const [confirmed] = await finished;
                     if (!confirmed) {
                         throw new Error("Cross-signing key upload auth canceled");

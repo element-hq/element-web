@@ -62,16 +62,11 @@ export default class EndPollDialog extends React.Component<IProps> {
                 this.props.event.getRoomId(), endEvent.type, endEvent.content,
             ).catch((e: any) => {
                 console.error("Failed to submit poll response event:", e);
-                Modal.createTrackedDialog(
-                    'Failed to end poll',
-                    '',
-                    ErrorDialog,
-                    {
-                        title: _t("Failed to end poll"),
-                        description: _t(
-                            "Sorry, the poll did not end. Please try again."),
-                    },
-                );
+                Modal.createDialog(ErrorDialog, {
+                    title: _t("Failed to end poll"),
+                    description: _t(
+                        "Sorry, the poll did not end. Please try again."),
+                });
             });
         }
         this.props.onFinished(endPoll);

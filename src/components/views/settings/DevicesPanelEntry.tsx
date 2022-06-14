@@ -84,14 +84,14 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
     };
 
     private onOwnDeviceSignOut = (): void => {
-        Modal.createTrackedDialog('Logout from device list', '', LogoutDialog,
+        Modal.createDialog(LogoutDialog,
             /* props= */{}, /* className= */null,
             /* isPriority= */false, /* isStatic= */true);
     };
 
     private verify = async () => {
         if (this.props.isOwnDevice) {
-            Modal.createTrackedDialog("Verify session", "Verify session", SetupEncryptionDialog, {
+            Modal.createDialog(SetupEncryptionDialog, {
                 onFinished: this.props.onDeviceChange,
             });
         } else {
@@ -101,7 +101,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                 userId,
                 [this.props.device.device_id],
             );
-            Modal.createTrackedDialog('New Session Verification', 'Starting dialog', VerificationRequestDialog, {
+            Modal.createDialog(VerificationRequestDialog, {
                 verificationRequestPromise,
                 member: cli.getUser(userId),
                 onFinished: async () => {

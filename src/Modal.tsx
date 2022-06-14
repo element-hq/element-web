@@ -20,7 +20,6 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { defer, sleep } from "matrix-js-sdk/src/utils";
 
-import Analytics from './Analytics';
 import dis from './dispatcher/dispatcher';
 import AsyncWrapper from './AsyncWrapper';
 
@@ -103,24 +102,6 @@ export class ModalManager {
         return this.priorityModal || this.staticModal || this.modals.length > 0;
     }
 
-    public createTrackedDialog<T extends any[]>(
-        analyticsAction: string,
-        analyticsInfo: string,
-        ...rest: Parameters<ModalManager["createDialog"]>
-    ) {
-        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.createDialog<T>(...rest);
-    }
-
-    public appendTrackedDialog<T extends any[]>(
-        analyticsAction: string,
-        analyticsInfo: string,
-        ...rest: Parameters<ModalManager["appendDialog"]>
-    ) {
-        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.appendDialog<T>(...rest);
-    }
-
     public createDialog<T extends any[]>(
         Element: React.ComponentType,
         ...rest: ParametersWithoutFirst<ModalManager["createDialogAsync"]>
@@ -133,24 +114,6 @@ export class ModalManager {
         ...rest: ParametersWithoutFirst<ModalManager["appendDialogAsync"]>
     ) {
         return this.appendDialogAsync<T>(Promise.resolve(Element), ...rest);
-    }
-
-    public createTrackedDialogAsync<T extends any[]>(
-        analyticsAction: string,
-        analyticsInfo: string,
-        ...rest: Parameters<ModalManager["createDialogAsync"]>
-    ) {
-        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.createDialogAsync<T>(...rest);
-    }
-
-    public appendTrackedDialogAsync<T extends any[]>(
-        analyticsAction: string,
-        analyticsInfo: string,
-        ...rest: Parameters<ModalManager["appendDialogAsync"]>
-    ) {
-        Analytics.trackEvent('Modal', analyticsAction, analyticsInfo);
-        return this.appendDialogAsync<T>(...rest);
     }
 
     public closeCurrentModal(reason: string) {
@@ -273,7 +236,7 @@ export class ModalManager {
      * @param {onBeforeClose} options.onBeforeClose a callback to decide whether to close the dialog
      * @returns {object} Object with 'close' parameter being a function that will close the dialog
      */
-    private createDialogAsync<T extends any[]>(
+    public createDialogAsync<T extends any[]>(
         prom: Promise<React.ComponentType>,
         props?: IProps<T>,
         className?: string,

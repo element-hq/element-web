@@ -18,9 +18,6 @@ import { LocalStorageCryptoStore } from 'matrix-js-sdk/src/crypto/store/localSto
 import { IndexedDBStore } from "matrix-js-sdk/src/store/indexeddb";
 import { IndexedDBCryptoStore } from "matrix-js-sdk/src/crypto/store/indexeddb-crypto-store";
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient } from 'matrix-js-sdk/src/client';
-
-import Analytics from '../Analytics';
 
 const localStorage = window.localStorage;
 
@@ -41,10 +38,6 @@ function log(msg: string) {
 
 function error(msg: string, ...args: string[]) {
     logger.error(`StorageManager: ${msg}`, ...args);
-}
-
-function track(action: string) {
-    Analytics.trackEvent("StorageManager", action);
 }
 
 export function tryPersistStorage() {
@@ -81,7 +74,6 @@ export async function checkConsistency() {
     } else {
         healthy = false;
         error("Local storage cannot be used on this browser");
-        track("Local storage disabled");
     }
 
     if (indexedDB && localStorage) {
@@ -92,7 +84,6 @@ export async function checkConsistency() {
     } else {
         healthy = false;
         error("Sync store cannot be used on this browser");
-        track("Sync store disabled");
     }
 
     if (indexedDB) {
@@ -104,7 +95,6 @@ export async function checkConsistency() {
     } else {
         healthy = false;
         error("Crypto store cannot be used on this browser");
-        track("Crypto store disabled");
     }
 
     if (dataInLocalStorage && cryptoInited && !dataInCryptoStore) {
@@ -114,15 +104,12 @@ export async function checkConsistency() {
             " but no data found in crypto store. " +
             "IndexedDB storage has likely been evicted by the browser!",
         );
-        track("Crypto store evicted");
     }
 
     if (healthy) {
         log("Storage consistency checks passed");
-        track("Consistency checks passed");
     } else {
         error("Storage consistency checks failed");
-        track("Consistency checks failed");
     }
 
     return {
@@ -143,7 +130,6 @@ async function checkSyncStore() {
         return { exists, healthy: true };
     } catch (e) {
         error("Sync store using IndexedDB inaccessible", e);
-        track("Sync store using IndexedDB inaccessible");
     }
     log("Sync store using memory only");
     return { exists, healthy: false };
@@ -159,7 +145,6 @@ async function checkCryptoStore() {
         return { exists, healthy: true };
     } catch (e) {
         error("Crypto store using IndexedDB inaccessible", e);
-        track("Crypto store using IndexedDB inaccessible");
     }
     try {
         exists = LocalStorageCryptoStore.exists(localStorage);
@@ -167,16 +152,9 @@ async function checkCryptoStore() {
         return { exists, healthy: true };
     } catch (e) {
         error("Crypto store using local storage inaccessible", e);
-        track("Crypto store using local storage inaccessible");
     }
     log("Crypto store using memory only");
     return { exists, healthy: false };
-}
-
-export function trackStores(client: MatrixClient) {
-    client.store?.on?.("degraded", () => {
-        track("Sync store using IndexedDB degraded to memory");
-    });
 }
 
 /**

@@ -76,7 +76,7 @@ export class ExistingPhoneNumber extends React.Component<IExistingPhoneNumberPro
             return this.props.onRemoved(this.props.msisdn);
         }).catch((err) => {
             logger.error("Unable to remove contact information: " + err);
-            Modal.createTrackedDialog('Remove 3pid failed', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Unable to remove contact information"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -185,7 +185,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
         }).catch((err) => {
             logger.error("Unable to add phone number " + phoneNumber + " " + err);
             this.setState({ verifying: false, continueDisabled: false, addTask: null });
-            Modal.createTrackedDialog('Add Phone Number Error', '', ErrorDialog, {
+            Modal.createDialog(ErrorDialog, {
                 title: _t("Error"),
                 description: ((err && err.message) ? err.message : _t("Operation failed")),
             });
@@ -222,7 +222,7 @@ export default class PhoneNumbers extends React.Component<IProps, IState> {
             this.setState({ continueDisabled: false });
             if (err.errcode !== 'M_THREEPID_AUTH_FAILED') {
                 logger.error("Unable to verify phone number: " + err);
-                Modal.createTrackedDialog('Unable to verify phone number', '', ErrorDialog, {
+                Modal.createDialog(ErrorDialog, {
                     title: _t("Unable to verify phone number."),
                     description: ((err && err.message) ? err.message : _t("Operation failed")),
                 });

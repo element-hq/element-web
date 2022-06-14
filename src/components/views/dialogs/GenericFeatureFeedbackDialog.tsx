@@ -50,7 +50,7 @@ const GenericFeatureFeedbackDialog: React.FC<IProps> = ({
         submitFeedback(SdkConfig.get().bug_report_endpoint_url, rageshakeLabel, comment, canContact, rageshakeData);
         onFinished(true);
 
-        Modal.createTrackedDialog("Feedback Sent", rageshakeLabel, InfoDialog, {
+        Modal.createDialog(InfoDialog, {
             title,
             description: _t("Feedback sent! Thanks, we appreciate it!"),
             button: _t("Close"),
