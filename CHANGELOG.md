@@ -1,3 +1,9 @@
+Changes in [1.10.15](https://github.com/vector-im/element-web/releases/tag/v1.10.15) (2022-06-14)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix missing element desktop preferences ([\#8798](https://github.com/matrix-org/matrix-react-sdk/pull/8798)). Contributed by @t3chguy.
+
 Changes in [1.10.14](https://github.com/vector-im/element-web/releases/tag/v1.10.14) (2022-06-07)
 =================================================================================================
 
