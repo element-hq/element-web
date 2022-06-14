@@ -64,7 +64,7 @@ limitations under the License.
         > .mx_AccessibleButton_kind_link {
             display: inline-block;
             margin: auto 18px;
-            color: #368bd6;
+            color: $links;
             font-size: $font-14px; // See _SpaceSettingsDialog.scss
         }
 

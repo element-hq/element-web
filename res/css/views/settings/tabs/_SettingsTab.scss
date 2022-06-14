@@ -45,7 +45,7 @@ limitations under the License.
 }
 
 .mx_SettingsTab_subsectionText {
-    color: $settings-subsection-fg-color;
+    color: $secondary-content;
     font-size: $font-14px;
     display: block;
     margin: 10px 80px 10px 0; // Align with the rest of the view
@@ -98,7 +98,7 @@ limitations under the License.
 }
 
 .mx_SettingsTab a {
-    color: $accent-alt;
+    color: $links;
 }
 
 .mx_SettingsTab_toggleWithDescription {

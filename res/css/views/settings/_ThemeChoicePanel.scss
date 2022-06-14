@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 .mx_ThemeChoicePanel {
-    $radio-bg-color: $input-darker-bg-color;
     color: $primary-content;
 
     > .mx_ThemeSelectors {
@@ -32,7 +31,7 @@ limitations under the License.
             border-radius: 10px;
             width: 180px;
 
-            background: $radio-bg-color;
+            background: $quinary-content;
             opacity: 0.4;
 
             flex-shrink: 1;
@@ -42,7 +41,6 @@ limitations under the License.
             margin-top: 10px;
 
             font-weight: 600;
-            color: $muted-fg-color;
 
             > span {
                 justify-content: center;
@@ -62,25 +60,6 @@ limitations under the License.
                 // 5% lightened version of 181b21
                 background-color: #25282e;
                 color: #f3f8fd;
-
-                > input > div {
-                    border-color: $input-darker-bg-color;
-                    > div {
-                        border-color: $input-darker-bg-color;
-                    }
-                }
-            }
-
-            &.mx_ThemeSelector_black {
-                background-color: #000000;
-                color: #f3f8fd;
-
-                > input > div {
-                    border-color: $input-darker-bg-color;
-                    > div {
-                        border-color: $input-darker-bg-color;
-                    }
-                }
             }
         }
     }

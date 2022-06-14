@@ -35,7 +35,7 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     padding: 15px 15px 35px;
-    background: rgba($appearance-tab-border-color, 0.2);
+    background: rgba($quinary-content, 0.2);
     border-radius: 10px;
     font-size: 10px;
     margin-top: 24px;
@@ -43,7 +43,7 @@ limitations under the License.
 }
 
 .mx_FontScalingPanel_fontSlider_preview {
-    border: 1px solid $appearance-tab-border-color;
+    border: 1px solid $quinary-content;
     border-radius: 10px;
     padding: 0 16px 9px 16px;
     pointer-events: none;

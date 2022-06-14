@@ -37,7 +37,7 @@ limitations under the License.
         text-align: center;
 
         > span {
-            color: #fff; // hardcoded to contrast with background
+            color: $primary-content;
             position: relative; // tricks the layout engine into putting this on top of the bg
             font-weight: 500;
         }
@@ -51,7 +51,7 @@ limitations under the License.
             right: 0;
 
             opacity: 0.5;
-            background-color: $settings-profile-overlay-placeholder-fg-color;
+            background-color: $quinary-content;
             border-radius: 90px;
         }
     }
@@ -91,7 +91,7 @@ limitations under the License.
     }
 
     .mx_AvatarSetting_avatarPlaceholder::before {
-        background-color: $settings-profile-overlay-placeholder-fg-color;
+        background-color: $quinary-content;
         mask: url("$(res)/img/feather-customised/user.svg");
         mask-repeat: no-repeat;
         mask-size: 36px;
@@ -108,7 +108,7 @@ limitations under the License.
         width: 32px;
         height: 32px;
         border-radius: 32px;
-        background-color: $settings-profile-button-bg-color;
+        background-color: $secondary-content;
 
         position: absolute;
         bottom: 0;
@@ -123,7 +123,7 @@ limitations under the License.
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: 55%;
-        background-color: $settings-profile-overlay-placeholder-fg-color;
+        background-color: $quinary-content;
         mask-image: url('$(res)/img/feather-customised/edit.svg');
     }
 }

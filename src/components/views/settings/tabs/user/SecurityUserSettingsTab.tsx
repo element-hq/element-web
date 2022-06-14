@@ -344,7 +344,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                 { warning }
                 <div className="mx_SettingsTab_heading">{ _t("Where you're signed in") }</div>
                 <div className="mx_SettingsTab_section">
-                    <span>
+                    <span className="mx_SettingsTab_subsectionText">
                         { _t(
                             "Manage your signed-in devices below. " +
                             "A device's name is visible to people you communicate with.",
