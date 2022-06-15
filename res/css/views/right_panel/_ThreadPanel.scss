@@ -116,29 +116,11 @@ limitations under the License.
         height: 100%;
     }
 
-    // Override _GroupLayout.scss for the thread panel
-    .mx_GroupLayout {
-        .mx_EventTile {
-            .mx_MessageActionBar {
-                right: 0;
-                top: -36px; // 2px above EventTile
-                z-index: 10; // See _EventTile.scss
-            }
-
-            &[data-shape=ThreadsList] {
-                > .mx_DisambiguatedProfile {
-                    margin-inline-start: 0;
-                }
-
-                .mx_MessageTimestamp {
-                    position: initial;
-                    width: auto;
-                }
-
-                .mx_EventTile_line {
-                    padding-bottom: 0; // Override mx_EventTile_line on _GroupLayout.scss
-                }
-            }
+    .mx_EventTile[data-layout=group] {
+        .mx_MessageActionBar {
+            right: 0;
+            top: -36px; // 2px above EventTile
+            z-index: 10; // See _EventTile.scss
         }
     }
 

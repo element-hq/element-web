@@ -173,6 +173,7 @@ $irc-line-height: $font-18px;
 
     .mx_DisambiguatedProfile {
         width: var(--name-width);
+        margin-inline-end: 0; // override mx_EventTile > *
         display: flex;
         order: 2;
         flex-shrink: 0;

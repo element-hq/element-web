@@ -66,8 +66,25 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     &[data-layout=group] {
-        .mx_EventTile_line {
-            line-height: var(--GroupLayout-EventTile-line-height);
+        > .mx_DisambiguatedProfile {
+            line-height: $font-20px;
+            margin-left: $left-gutter;
+        }
+
+        > .mx_EventTile_avatar {
+            position: absolute;
+            z-index: 9;
+        }
+
+        .mx_MessageTimestamp {
+            position: absolute; // for modern layout
+        }
+
+        .mx_EventTile_line,
+        .mx_EventTile_reply {
+            padding-top: 1px;
+            padding-bottom: 3px;
+            line-height: $font-22px;
         }
     }
 }
@@ -128,7 +145,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         display: inline-block;
         padding-bottom: 0px;
         padding-top: 0px;
-        margin: 0px;
         max-width: calc(100% - $left-gutter);
     }
 
@@ -789,7 +805,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     .mx_DisambiguatedProfile {
-        margin-right: $spacing-12;
+        margin-inline: 0 $spacing-12;
         display: inline-flex;
         flex: 1;
 
@@ -813,6 +829,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_EventTile_line {
         width: 100%;
         box-sizing: border-box;
+        padding-bottom: 0;
 
         .mx_ThreadPanel_replies {
             margin-top: $spacing-8;
@@ -835,6 +852,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_MessageTimestamp {
         max-width: 80px;
         width: auto;
+        position: initial;
     }
 }
 

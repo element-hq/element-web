@@ -15,38 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$left-gutter: 64px;
-
-.mx_GroupLayout {
-    --GroupLayout-EventTile-line-height: $font-22px;
-
-    .mx_EventTile {
-        > .mx_DisambiguatedProfile {
-            line-height: $font-20px;
-            margin-left: $left-gutter;
-        }
-
-        > .mx_EventTile_avatar {
-            position: absolute;
-            z-index: 9;
-        }
-
-        .mx_MessageTimestamp {
-            position: absolute; // for modern layout
-        }
-
-        .mx_EventTile_line,
-        .mx_EventTile_reply {
-            padding-top: 1px;
-            padding-bottom: 3px;
-        }
-
-        .mx_EventTile_reply {
-            line-height: var(--GroupLayout-EventTile-line-height);
-        }
-    }
-}
-
 /* Compact layout overrides */
 
 .mx_MatrixChat_useCompactLayout {
