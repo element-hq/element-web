@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import classNames from "classnames";
-import { sum } from "lodash";
+import { capitalize, sum } from "lodash";
 import { WebSearch as WebSearchEvent } from "@matrix-org/analytics-events/types/typescript/WebSearch";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
 import { IPublicRoomsChunkRoom, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
@@ -741,11 +741,11 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         onClick={() => defaultDispatcher.dispatch({
                             action: 'view_create_room',
                             public: true,
-                            defaultName: trimmedQuery,
+                            defaultName: capitalize(trimmedQuery),
                         })}
                     >
                         <span className="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_primary_outline">
-                            { _t("Create new Room") }
+                            { _t("Create new room") }
                         </span>
                     </Option>
                 </div>
