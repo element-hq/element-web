@@ -55,6 +55,7 @@ limitations under the License.
 .mx_EventTile[data-layout=bubble] {
     --EventTile_bubble-margin-inline-start: 49px;
     --EventTile_bubble-margin-inline-end: 60px;
+    --EventTile_bubble_gap-inline: 5px;
 
     position: relative;
     margin-top: var(--gutterSize);
@@ -268,12 +269,12 @@ limitations under the License.
     }
 
     .mx_EventTile_line {
-        --EventBubbleTile_line-margin-inline-end: -12px;
+        --EventTile_bubble_line-margin-inline-end: -12px;
 
         position: relative;
         display: flex;
-        gap: 5px;
-        margin: 0 var(--EventBubbleTile_line-margin-inline-end) 0 -9px;
+        gap: 5px var(--EventTile_bubble_gap-inline);
+        margin: 0 var(--EventTile_bubble_line-margin-inline-end) 0 -9px;
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
@@ -600,7 +601,7 @@ limitations under the License.
     .mx_EventTile_avatar {
         position: static;
         order: -1;
-        margin-right: 5px;
+        margin-inline-end: var(--EventTile_bubble_gap-inline); // Same spacing between E2E icon and a hidden event
     }
 
     .mx_EventTile_line,
@@ -611,7 +612,8 @@ limitations under the License.
     }
 
     .mx_EventTile_e2eIcon {
-        margin-left: 9px;
+        margin-inline-start: 0; // mx_EventTile_avatar has margin-inline-end, so margin is not needed here
+        align-self: center;
     }
 
     .mx_EventTile_line {
