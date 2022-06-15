@@ -1121,9 +1121,13 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             || Boolean(this.state.contextMenu));
 
         // Thread panel shows the timestamp of the last reply in that thread
-        const ts = this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList
+        let ts = this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList
             ? this.props.mxEvent.getTs()
-            : this.state.thread?.replyToEvent.getTs();
+            : this.state.thread?.replyToEvent?.getTs();
+        if (typeof ts !== "number") {
+            // Fall back to something we can use
+            ts = this.props.mxEvent.getTs();
+        }
 
         const messageTimestamp = <MessageTimestamp
             showRelative={this.context.timelineRenderingType === TimelineRenderingType.ThreadsList}
