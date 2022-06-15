@@ -1,6 +1,5 @@
 /*
-Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2016, 2020 The Matrix.org Foundation C.I.C.
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,41 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useEffect, useState } from "react";
-import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { without } from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
+import { MatrixError } from "matrix-js-sdk/src/matrix";
 
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { instanceForInstanceId, ALL_ROOMS, Protocols } from '../../../utils/DirectoryUtils';
-import ContextMenu, {
-    ChevronFace,
-    ContextMenuButton,
-    MenuGroup,
-    MenuItem,
-    MenuItemRadio,
-    useContextMenu,
-} from "../../structures/ContextMenu";
+import { MenuItemRadio } from "../../../accessibility/context_menu/MenuItemRadio";
 import { _t } from "../../../languageHandler";
-import SdkConfig from "../../../SdkConfig";
-import { useSettingValue } from "../../../hooks/useSettings";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import Modal from "../../../Modal";
-import SettingsStore from "../../../settings/SettingsStore";
-import withValidation from "../elements/Validation";
+import SdkConfig from "../../../SdkConfig";
 import { SettingLevel } from "../../../settings/SettingLevel";
+import SettingsStore from "../../../settings/SettingsStore";
+import { Protocols } from "../../../utils/DirectoryUtils";
+import { GenericDropdownMenu, GenericDropdownMenuItem } from "../../structures/GenericDropdownMenu";
 import TextInputDialog from "../dialogs/TextInputDialog";
-import QuestionDialog from "../dialogs/QuestionDialog";
-import UIStore from "../../../stores/UIStore";
-import { compare } from "../../../utils/strings";
-import { SnakedObject } from "../../../utils/SnakedObject";
-import { IConfigOptions } from "../../../IConfigOptions";
+import AccessibleButton from "../elements/AccessibleButton";
+import withValidation from "../elements/Validation";
 
 const SETTING_NAME = "room_directory_servers";
 
-const inPlaceOf = (elementRect: Pick<DOMRect, "right" | "top">) => ({
-    right: UIStore.instance.windowWidth - elementRect.right,
-    top: elementRect.top,
-    chevronOffset: 0,
-    chevronFace: ChevronFace.None,
-});
+export interface IPublicRoomDirectoryConfig {
+    roomServer: string;
+    instanceId?: string;
+}
 
 const validServer = withValidation<undefined, { error?: MatrixError }>({
     deriveData: async ({ value }) => {
@@ -74,228 +61,170 @@ const validServer = withValidation<undefined, { error?: MatrixError }>({
             final: true,
             test: async (_, { error }) => !error,
             valid: () => _t("Looks good"),
-            invalid: ({ error }) => error.errcode === "M_FORBIDDEN"
+            invalid: ({ error }) => error?.errcode === "M_FORBIDDEN"
                 ? _t("You are not allowed to view this server's rooms list")
                 : _t("Can't find this server or its room list"),
         },
     ],
 });
 
-interface IProps {
-    protocols: Protocols;
-    selectedServerName: string;
-    selectedInstanceId: string;
-    onOptionChange(server: string, instanceId?: string): void;
+function useSettingsValueWithSetter<T>(
+    settingName: string,
+    level: SettingLevel,
+    roomId: string | null = null,
+    excludeDefault = false,
+): [T, (value: T) => Promise<void>] {
+    const [value, setValue] = useState(SettingsStore.getValue<T>(settingName, roomId ?? undefined, excludeDefault));
+    const setter = useCallback(
+        async (value: T) => {
+            setValue(value);
+            SettingsStore.setValue(settingName, roomId, level, value);
+        },
+        [level, roomId, settingName],
+    );
+
+    useEffect(() => {
+        const ref = SettingsStore.watchSetting(settingName, roomId, () => {
+            setValue(SettingsStore.getValue<T>(settingName, roomId, excludeDefault));
+        });
+        // clean-up
+        return () => {
+            SettingsStore.unwatchSetting(ref);
+        };
+    }, [settingName, roomId, excludeDefault]);
+
+    return [value, setter];
 }
 
-// This dropdown sources homeservers from three places:
-// + your currently connected homeserver
-// + homeservers in config.json["roomDirectory"]
-// + homeservers in SettingsStore["room_directory_servers"]
-// if a server exists in multiple, only keep the top-most entry.
+interface ServerList {
+    allServers: string[];
+    homeServer: string;
+    userDefinedServers: string[];
+    setUserDefinedServers: (servers: string[]) => void;
+}
 
-const NetworkDropdown = ({ onOptionChange, protocols = {}, selectedServerName, selectedInstanceId }: IProps) => {
-    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLDivElement>();
-    const _userDefinedServers: string[] = useSettingValue(SETTING_NAME);
-    const [userDefinedServers, _setUserDefinedServers] = useState(_userDefinedServers);
+function removeAll<T>(target: Set<T>, ...toRemove: T[]) {
+    for (const value of toRemove) {
+        target.delete(value);
+    }
+}
 
-    const handlerFactory = (server, instanceId) => {
-        return () => {
-            onOptionChange(server, instanceId);
-            closeMenu();
-        };
-    };
+function useServers(): ServerList {
+    const [userDefinedServers, setUserDefinedServers] = useSettingsValueWithSetter<string[]>(
+        SETTING_NAME,
+        SettingLevel.ACCOUNT,
+    );
 
-    const setUserDefinedServers = servers => {
-        _setUserDefinedServers(servers);
-        SettingsStore.setValue(SETTING_NAME, null, SettingLevel.ACCOUNT, servers);
-    };
-    // keep local echo up to date with external changes
-    useEffect(() => {
-        _setUserDefinedServers(_userDefinedServers);
-    }, [_userDefinedServers]);
+    const homeServer = MatrixClientPeg.getHomeserverName();
+    const configServers = new Set<string>(
+        SdkConfig.getObject("room_directory")?.get("servers") ?? [],
+    );
+    removeAll(configServers, homeServer);
+    // configured servers take preference over user-defined ones, if one occurs in both ignore the latter one.
+    const removableServers = new Set(userDefinedServers);
+    removeAll(removableServers, homeServer);
+    removeAll(removableServers, ...configServers);
 
-    // we either show the button or the dropdown in its place.
-    let content;
-    if (menuDisplayed) {
-        const roomDirectory = SdkConfig.getObject("room_directory")
-            ?? new SnakedObject<IConfigOptions["room_directory"]>({ servers: [] });
-
-        const hsName = MatrixClientPeg.getHomeserverName();
-        const configServers = new Set<string>(roomDirectory.get("servers"));
-
-        // configured servers take preference over user-defined ones, if one occurs in both ignore the latter one.
-        const removableServers = new Set(userDefinedServers.filter(s => !configServers.has(s) && s !== hsName));
-        const servers = [
+    return {
+        allServers: [
             // we always show our connected HS, this takes precedence over it being configured or user-defined
-            hsName,
-            ...Array.from(configServers).filter(s => s !== hsName).sort(),
+            homeServer,
+            ...Array.from(configServers).sort(),
             ...Array.from(removableServers).sort(),
-        ];
+        ],
+        homeServer,
+        userDefinedServers: Array.from(removableServers).sort(),
+        setUserDefinedServers,
+    };
+}
 
-        // For our own HS, we can use the instance_ids given in the third party protocols
-        // response to get the server to filter the room list by network for us.
-        // We can't get thirdparty protocols for remote server yet though, so for those
-        // we can only show the default room list.
-        const options = servers.map(server => {
-            const serverSelected = server === selectedServerName;
-            const entries = [];
+interface IProps {
+    protocols: Protocols | null;
+    config: IPublicRoomDirectoryConfig | null;
+    setConfig: (value: IPublicRoomDirectoryConfig | null) => void;
+}
 
-            const protocolsList = server === hsName ? Object.values(protocols) : [];
-            if (protocolsList.length > 0) {
-                // add a fake protocol with ALL_ROOMS
-                protocolsList.push({
-                    instances: [{
-                        fields: [],
-                        network_id: "",
-                        instance_id: ALL_ROOMS,
-                        desc: _t("All rooms"),
-                    }],
-                    location_fields: [],
-                    user_fields: [],
-                    field_types: {},
-                    icon: "",
-                });
-            }
+export const NetworkDropdown = ({ protocols, config, setConfig }: IProps) => {
+    const { allServers, homeServer, userDefinedServers, setUserDefinedServers } = useServers();
 
-            protocolsList.forEach(({ instances=[] }) => {
-                [...instances].sort((b, a) => {
-                    return compare(a.desc, b.desc);
-                }).forEach(({ desc, instance_id: instanceId }) => {
-                    entries.push(
-                        <MenuItemRadio
-                            key={String(instanceId)}
-                            active={serverSelected && instanceId === selectedInstanceId}
-                            onClick={handlerFactory(server, instanceId)}
-                            label={desc}
-                            className="mx_NetworkDropdown_server_network"
-                        >
-                            { desc }
-                        </MenuItemRadio>);
-                });
-            });
+    const options: GenericDropdownMenuItem<IPublicRoomDirectoryConfig | null>[] = allServers.map(roomServer => ({
+        key: { roomServer, instanceId: null },
+        label: roomServer,
+        description: roomServer === homeServer ? _t("Your server") : null,
+        options: [
+            {
+                key: { roomServer, instanceId: undefined },
+                label: _t("Matrix"),
+            },
+            ...(roomServer === homeServer && protocols ? Object.values(protocols)
+                .flatMap(protocol => protocol.instances)
+                .map(instance => ({
+                    key: { roomServer, instanceId: instance.instance_id },
+                    label: instance.desc,
+                })) : []),
+        ],
+        ...(userDefinedServers.includes(roomServer) ? ({
+            adornment: (
+                <AccessibleButton
+                    className="mx_NetworkDropdown_removeServer"
+                    alt={_t("Remove server “%(roomServer)s”", { roomServer })}
+                    onClick={() => setUserDefinedServers(without(userDefinedServers, roomServer))}
+                />
+            ),
+        }) : {}),
+    }));
 
-            let subtitle;
-            if (server === hsName) {
-                subtitle = (
-                    <div className="mx_NetworkDropdown_server_subtitle">
-                        { _t("Your server") }
-                    </div>
-                );
-            }
-
-            let removeButton;
-            if (removableServers.has(server)) {
-                const onClick = async () => {
+    const addNewServer = useCallback(({ closeMenu }) => (
+        <>
+            <span className="mx_GenericDropdownMenu_divider" />
+            <MenuItemRadio
+                active={false}
+                className="mx_GenericDropdownMenu_Option mx_GenericDropdownMenu_Option--item"
+                onClick={async () => {
                     closeMenu();
-                    const { finished } = Modal.createDialog(QuestionDialog, {
-                        title: _t("Are you sure?"),
-                        description: _t("Are you sure you want to remove <b>%(serverName)s</b>", {
-                            serverName: server,
-                        }, {
-                            b: serverName => <b>{ serverName }</b>,
-                        }),
-                        button: _t("Remove"),
+                    const { finished } = Modal.createDialog(TextInputDialog, {
+                        title: _t("Add a new server"),
+                        description: _t("Enter the name of a new server you want to explore."),
+                        button: _t("Add"),
+                        hasCancel: false,
+                        placeholder: _t("Server name"),
+                        validator: validServer,
                         fixedWidth: false,
                     }, "mx_NetworkDropdown_dialog");
 
-                    const [ok] = await finished;
+                    const [ok, newServer] = await finished;
                     if (!ok) return;
 
-                    // delete from setting
-                    setUserDefinedServers(servers.filter(s => s !== server));
-
-                    // the selected server is being removed, reset to our HS
-                    if (serverSelected) {
-                        onOptionChange(hsName, undefined);
+                    if (!allServers.includes(newServer)) {
+                        setUserDefinedServers([...userDefinedServers, newServer]);
+                        setConfig({
+                            roomServer: newServer,
+                        });
                     }
-                };
-                removeButton = <MenuItem onClick={onClick} label={_t("Remove server")} />;
-            }
+                }}
+            >
+                <div className="mx_GenericDropdownMenu_Option--label">
+                    <span className="mx_NetworkDropdown_addServer">
+                        { _t("Add new server…") }
+                    </span>
+                </div>
+            </MenuItemRadio>
+        </>
+    ), [allServers, setConfig, setUserDefinedServers, userDefinedServers]);
 
-            // ARIA: in actual fact the entire menu is one large radio group but for better screen reader support
-            // we use group to notate server wrongly.
-            return (
-                <MenuGroup label={server} className="mx_NetworkDropdown_server" key={server}>
-                    <div className="mx_NetworkDropdown_server_title">
-                        { server }
-                        { removeButton }
-                    </div>
-                    { subtitle }
-
-                    <MenuItemRadio
-                        active={serverSelected && !selectedInstanceId}
-                        onClick={handlerFactory(server, undefined)}
-                        label={_t("Matrix")}
-                        className="mx_NetworkDropdown_server_network"
-                    >
-                        { _t("Matrix") }
-                    </MenuItemRadio>
-                    { entries }
-                </MenuGroup>
-            );
-        });
-
-        const onClick = async () => {
-            closeMenu();
-            const { finished } = Modal.createDialog(TextInputDialog, {
-                title: _t("Add a new server"),
-                description: _t("Enter the name of a new server you want to explore."),
-                button: _t("Add"),
-                hasCancel: false,
-                placeholder: _t("Server name"),
-                validator: validServer,
-                fixedWidth: false,
-            }, "mx_NetworkDropdown_dialog");
-
-            const [ok, newServer] = await finished;
-            if (!ok) return;
-
-            if (!userDefinedServers.includes(newServer)) {
-                setUserDefinedServers([...userDefinedServers, newServer]);
-            }
-
-            onOptionChange(newServer); // change filter to the new server
-        };
-
-        const buttonRect = handle.current.getBoundingClientRect();
-        content = <ContextMenu {...inPlaceOf(buttonRect)} onFinished={closeMenu} focusLock>
-            <div className="mx_NetworkDropdown_menu">
-                { options }
-                <MenuItem className="mx_NetworkDropdown_server_add" label={undefined} onClick={onClick}>
-                    { _t("Add a new server...") }
-                </MenuItem>
-            </div>
-        </ContextMenu>;
-    } else {
-        let currentValue;
-        if (selectedInstanceId === ALL_ROOMS) {
-            currentValue = _t("All rooms");
-        } else if (selectedInstanceId) {
-            const instance = instanceForInstanceId(protocols, selectedInstanceId);
-            currentValue = _t("%(networkName)s rooms", {
-                networkName: instance.desc,
-            });
-        } else {
-            currentValue = _t("Matrix rooms");
-        }
-
-        content = <ContextMenuButton
-            className="mx_NetworkDropdown_handle"
-            onClick={openMenu}
-            isExpanded={menuDisplayed}
-        >
-            <span>
-                { currentValue }
-            </span> <span className="mx_NetworkDropdown_handle_server">
-                ({ selectedServerName })
-            </span>
-        </ContextMenuButton>;
-    }
-
-    return <div className="mx_NetworkDropdown" ref={handle}>
-        { content }
-    </div>;
+    return (
+        <GenericDropdownMenu
+            className="mx_NetworkDropdown_wrapper"
+            value={config}
+            toKey={(config: IPublicRoomDirectoryConfig | null) =>
+                config ? `${config.roomServer}-${config.instanceId}` : "null"}
+            options={options}
+            onChange={(option) => setConfig(option)}
+            selectedLabel={option => option?.key ? _t("Show: %(instance)s rooms (%(server)s)", {
+                server: option.key.roomServer,
+                instance: option.key.instanceId ? option.label : "Matrix",
+            }) : _t("Show: Matrix rooms")}
+            AdditionalOptions={addNewServer}
+        />
+    );
 };
-
-export default NetworkDropdown;

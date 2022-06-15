@@ -23,7 +23,7 @@ export type Protocols = Record<string, IProtocol>;
 
 // Find a protocol 'instance' with a given instance_id
 // in the supplied protocols dict
-export function instanceForInstanceId(protocols: Protocols, instanceId: string): IInstance {
+export function instanceForInstanceId(protocols: Protocols, instanceId: string | null | undefined): IInstance | null {
     if (!instanceId) return null;
     for (const proto of Object.keys(protocols)) {
         if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;
@@ -31,11 +31,12 @@ export function instanceForInstanceId(protocols: Protocols, instanceId: string):
             if (instance.instance_id == instanceId) return instance;
         }
     }
+    return null;
 }
 
 // given an instance_id, return the name of the protocol for
 // that instance ID in the supplied protocols dict
-export function protocolNameForInstanceId(protocols: Protocols, instanceId: string): string {
+export function protocolNameForInstanceId(protocols: Protocols, instanceId: string | null | undefined): string | null {
     if (!instanceId) return null;
     for (const proto of Object.keys(protocols)) {
         if (!protocols[proto].instances && protocols[proto].instances instanceof Array) continue;
@@ -43,4 +44,5 @@ export function protocolNameForInstanceId(protocols: Protocols, instanceId: stri
             if (instance.instance_id == instanceId) return proto;
         }
     }
+    return null;
 }

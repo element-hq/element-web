@@ -17,41 +17,44 @@ limitations under the License.
 import { useCallback, useState } from "react";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { DirectoryMember } from "../utils/direct-messages";
 import { useLatestResult } from "./useLatestResult";
 
-export interface IUserDirectoryOpts {
-    limit: number;
+export interface IProfileInfoOpts {
     query?: string;
 }
 
-export const useUserDirectory = () => {
-    const [users, setUsers] = useState<DirectoryMember[]>([]);
+export interface IProfileInfo {
+    user_id: string;
+    avatar_url?: string;
+    display_name?: string;
+}
+
+export const useProfileInfo = () => {
+    const [profile, setProfile] = useState<IProfileInfo | null>(null);
 
     const [loading, setLoading] = useState(false);
 
-    const [updateQuery, updateResult] = useLatestResult<{ term: string, limit?: number }, DirectoryMember[]>(setUsers);
+    const [updateQuery, updateResult] = useLatestResult<string, IProfileInfo | null>(setProfile);
 
-    const search = useCallback(async ({
-        limit = 20,
-        query: term,
-    }: IUserDirectoryOpts): Promise<boolean> => {
-        const opts = { limit, term };
-        updateQuery(opts);
-
-        if (!term?.length) {
-            setUsers([]);
+    const search = useCallback(async ({ query: term }: IProfileInfoOpts): Promise<boolean> => {
+        updateQuery(term);
+        if (!term?.length || !term.startsWith('@') || !term.includes(':')) {
+            setProfile(null);
             return true;
         }
 
+        setLoading(true);
         try {
-            setLoading(true);
-            const { results } = await MatrixClientPeg.get().searchUserDirectory(opts);
-            updateResult(opts, results.map(user => new DirectoryMember(user)));
+            const result = await MatrixClientPeg.get().getProfileInfo(term);
+            updateResult(term, {
+                user_id: term,
+                avatar_url: result.avatar_url,
+                display_name: result.displayname,
+            });
             return true;
         } catch (e) {
-            console.error("Could not fetch user in user directory for params", { limit, term }, e);
-            updateResult(opts, []);
+            console.error("Could not fetch profile info for params", { term }, e);
+            updateResult(term, null);
             return false;
         } finally {
             setLoading(false);
@@ -61,7 +64,7 @@ export const useUserDirectory = () => {
     return {
         ready: true,
         loading,
-        users,
+        profile,
         search,
     } as const;
 };

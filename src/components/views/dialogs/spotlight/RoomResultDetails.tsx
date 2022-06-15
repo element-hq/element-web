@@ -14,22 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/// <reference types="cypress" />
+import React from "react";
+import { Room } from "matrix-js-sdk/src/matrix";
 
-import "@percy/cypress";
-import "cypress-real-events";
+import { roomContextDetailsText, spaceContextDetailsText } from "../../../../utils/i18n-helpers";
 
-import "./performance";
-import "./synapse";
-import "./login";
-import "./labs";
-import "./client";
-import "./settings";
-import "./bot";
-import "./clipboard";
-import "./util";
-import "./app";
-import "./percy";
-import "./webserver";
-import "./views";
-import "./iframes";
+export const RoomResultDetails = ({ room }: { room: Room }) => {
+    const contextDetails = room.isSpaceRoom() ? spaceContextDetailsText(room) : roomContextDetailsText(room);
+    if (contextDetails) {
+        return <div className="mx_SpotlightDialog_result_details">
+            { contextDetails }
+        </div>;
+    }
+
+    return null;
+};

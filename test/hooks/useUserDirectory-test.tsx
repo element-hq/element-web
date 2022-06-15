@@ -96,7 +96,7 @@ describe("useUserDirectory", () => {
         expect(wrapper.text()).toBe("ready: true, loading: false");
     });
 
-    it("should work with empty queries", async () => {
+    it("should recover from a server exception", async () => {
         cli.searchUserDirectory = () => { throw new Error("Oops"); };
         const query = "Bob";
 

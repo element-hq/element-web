@@ -54,8 +54,9 @@ limitations under the License.
     flex: 1 !important;
 }
 
-.mx_RoomDirectory_listheader .mx_NetworkDropdown {
-    flex: 0 0 200px;
+.mx_RoomDirectory_listheader .mx_GenericDropdownMenu_button {
+    margin: 0 9px 0 auto;
+    width: fit-content;
 }
 
 .mx_RoomDirectory_tableWrapper {

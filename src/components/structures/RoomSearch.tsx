@@ -31,7 +31,7 @@ import { UPDATE_SELECTED_SPACE } from "../../stores/spaces";
 import { IS_MAC, Key } from "../../Keyboard";
 import SettingsStore from "../../settings/SettingsStore";
 import Modal from "../../Modal";
-import SpotlightDialog from "../views/dialogs/SpotlightDialog";
+import SpotlightDialog from "../views/dialogs/spotlight/SpotlightDialog";
 import { ALTERNATE_KEY_NAME, KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import ToastStore from "../../stores/ToastStore";
 

@@ -160,14 +160,14 @@ limitations under the License.
         padding-right: 8px;
         color: #ffffff; // this is fine without a var because it's for both themes
 
-        .mx_InviteDialog_userTile_avatar {
+        .mx_SearchResultAvatar {
             border-radius: 20px;
             position: relative;
             left: -5px;
             top: 2px;
         }
 
-        img.mx_InviteDialog_userTile_avatar {
+        img.mx_SearchResultAvatar {
             vertical-align: top;
         }
 
@@ -175,7 +175,7 @@ limitations under the License.
             vertical-align: top;
         }
 
-        .mx_InviteDialog_userTile_threepidAvatar {
+        .mx_SearchResultAvatar_threepidAvatar {
             background-color: #ffffff; // this is fine without a var because it's for both themes
         }
     }

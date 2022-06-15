@@ -28,9 +28,10 @@ describe("Threads", () => {
     let synapse: SynapseInstance;
 
     beforeEach(() => {
+        // Default threads to ON for this spec
+        cy.enableLabsFeature("feature_thread");
         cy.window().then(win => {
             win.localStorage.setItem("mx_lhs_size", "0"); // Collapse left panel for these tests
-            win.localStorage.setItem("mx_labs_feature_feature_thread", "true"); // Default threads to ON for this spec
         });
         cy.startSynapse("default").then(data => {
             synapse = data;

@@ -14,14 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useCallback, useEffect, useState } from "react";
-import { IProtocol, IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
 import { IRoomDirectoryOptions } from "matrix-js-sdk/src/@types/requests";
+import { IProtocol, IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
+import { useCallback, useEffect, useState } from "react";
 
+import { IPublicRoomDirectoryConfig } from "../components/views/directory/NetworkDropdown";
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SdkConfig from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
 import { Protocols } from "../utils/DirectoryUtils";
+import { useLatestResult } from "./useLatestResult";
 
 export const ALL_ROOMS = "ALL_ROOMS";
 const LAST_SERVER_KEY = "mx_last_room_directory_server";
@@ -37,12 +39,14 @@ let thirdParty: Protocols;
 export const usePublicRoomDirectory = () => {
     const [publicRooms, setPublicRooms] = useState<IPublicRoomsChunkRoom[]>([]);
 
-    const [roomServer, setRoomServer] = useState<string | null | undefined>(undefined);
-    const [instanceId, setInstanceId] = useState<string | null | undefined>(undefined);
+    const [config, setConfigInternal] = useState<IPublicRoomDirectoryConfig | null | undefined>(undefined);
+
     const [protocols, setProtocols] = useState<Protocols | null>(null);
 
     const [ready, setReady] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const [updateQuery, updateResult] = useLatestResult<IRoomDirectoryOptions, IPublicRoomsChunkRoom[]>(setPublicRooms);
 
     async function initProtocols() {
         if (!MatrixClientPeg.get()) {
@@ -57,12 +61,11 @@ export const usePublicRoomDirectory = () => {
         }
     }
 
-    function setConfig(server: string, instanceId?: string) {
+    function setConfig(config: IPublicRoomDirectoryConfig) {
         if (!ready) {
             throw new Error("public room configuration not initialised yet");
         } else {
-            setRoomServer(server);
-            setInstanceId(instanceId ?? null);
+            setConfigInternal(config);
         }
     }
 
@@ -70,21 +73,16 @@ export const usePublicRoomDirectory = () => {
         limit = 20,
         query,
     }: IPublicRoomsOpts): Promise<boolean> => {
-        if (!query?.length) {
-            setPublicRooms([]);
-            return true;
-        }
-
         const opts: IRoomDirectoryOptions = { limit };
 
-        if (roomServer != MatrixClientPeg.getHomeserverName()) {
-            opts.server = roomServer;
+        if (config?.roomServer != MatrixClientPeg.getHomeserverName()) {
+            opts.server = config?.roomServer;
         }
 
-        if (instanceId === ALL_ROOMS) {
+        if (config?.instanceId === ALL_ROOMS) {
             opts.include_all_networks = true;
-        } else if (instanceId) {
-            opts.third_party_instance_id = instanceId;
+        } else if (config?.instanceId) {
+            opts.third_party_instance_id = config.instanceId;
         }
 
         if (query) {
@@ -93,19 +91,20 @@ export const usePublicRoomDirectory = () => {
             };
         }
 
+        updateQuery(opts);
         try {
             setLoading(true);
             const { chunk } = await MatrixClientPeg.get().publicRooms(opts);
-            setPublicRooms(chunk);
+            updateResult(opts, chunk);
             return true;
         } catch (e) {
             console.error("Could not fetch public rooms for params", opts, e);
-            setPublicRooms([]);
+            updateResult(opts, []);
             return false;
         } finally {
             setLoading(false);
         }
-    }, [roomServer, instanceId]);
+    }, [config, updateQuery, updateResult]);
 
     useEffect(() => {
         initProtocols();
@@ -118,9 +117,9 @@ export const usePublicRoomDirectory = () => {
 
         const myHomeserver = MatrixClientPeg.getHomeserverName();
         const lsRoomServer = localStorage.getItem(LAST_SERVER_KEY);
-        const lsInstanceId = localStorage.getItem(LAST_INSTANCE_KEY);
+        const lsInstanceId: string | undefined = localStorage.getItem(LAST_INSTANCE_KEY) ?? undefined;
 
-        let roomServer = myHomeserver;
+        let roomServer: string = myHomeserver;
         if (
             SdkConfig.getObject("room_directory")?.get("servers")?.includes(lsRoomServer) ||
                     SettingsStore.getValue("room_directory_servers")?.includes(lsRoomServer)
@@ -128,7 +127,7 @@ export const usePublicRoomDirectory = () => {
             roomServer = lsRoomServer;
         }
 
-        let instanceId: string | null = null;
+        let instanceId: string | undefined = undefined;
         if (roomServer === myHomeserver && (
             lsInstanceId === ALL_ROOMS ||
                     Object.values(protocols).some((p: IProtocol) => {
@@ -139,25 +138,24 @@ export const usePublicRoomDirectory = () => {
         }
 
         setReady(true);
-        setInstanceId(instanceId);
-        setRoomServer(roomServer);
+        setConfigInternal({ roomServer, instanceId });
     }, [protocols]);
 
     useEffect(() => {
-        localStorage.setItem(LAST_SERVER_KEY, roomServer);
-    }, [roomServer]);
-
-    useEffect(() => {
-        localStorage.setItem(LAST_INSTANCE_KEY, instanceId);
-    }, [instanceId]);
+        localStorage.setItem(LAST_SERVER_KEY, config?.roomServer);
+        if (config?.instanceId) {
+            localStorage.setItem(LAST_INSTANCE_KEY, config?.instanceId);
+        } else {
+            localStorage.removeItem(LAST_INSTANCE_KEY);
+        }
+    }, [config]);
 
     return {
         ready,
         loading,
         publicRooms,
         protocols,
-        roomServer,
-        instanceId,
+        config,
         search,
         setConfig,
     } as const;

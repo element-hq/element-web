@@ -54,7 +54,7 @@ import TooltipTarget from "../elements/TooltipTarget";
 import { BetaPill } from "../beta/BetaCard";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { useWebSearchMetrics } from "../dialogs/SpotlightDialog";
+import { useWebSearchMetrics } from "../dialogs/spotlight/SpotlightDialog";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
 
