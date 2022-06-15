@@ -18,7 +18,7 @@ import React, { HTMLProps } from "react";
 
 import { formatSeconds } from "../../../DateUtils";
 
-export interface IProps extends Pick<HTMLProps<HTMLSpanElement>, "aria-live"> {
+interface IProps extends Pick<HTMLProps<HTMLSpanElement>, "aria-live" | "role"> {
     seconds: number;
 }
 
@@ -31,14 +31,14 @@ export default class Clock extends React.Component<IProps> {
         super(props);
     }
 
-    shouldComponentUpdate(nextProps: Readonly<IProps>): boolean {
+    public shouldComponentUpdate(nextProps: Readonly<IProps>): boolean {
         const currentFloor = Math.floor(this.props.seconds);
         const nextFloor = Math.floor(nextProps.seconds);
         return currentFloor !== nextFloor;
     }
 
     public render() {
-        return <span aria-live={this.props["aria-live"]} className='mx_Clock'>
+        return <span aria-live={this.props["aria-live"]} role={this.props.role} className='mx_Clock'>
             { formatSeconds(this.props.seconds) }
         </span>;
     }

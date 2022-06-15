@@ -20,13 +20,14 @@ import { mocked } from 'jest-mock';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { act } from 'react-dom/test-utils';
 
-import RecordingPlayback from '../../../../src/components/views/audio_messages/RecordingPlayback';
+import RecordingPlayback, { PlaybackLayout } from '../../../../src/components/views/audio_messages/RecordingPlayback';
 import { Playback } from '../../../../src/audio/Playback';
 import RoomContext, { TimelineRenderingType } from '../../../../src/contexts/RoomContext';
 import { createAudioContext } from '../../../../src/audio/compat';
 import { findByTestId, flushPromises } from '../../../test-utils';
 import PlaybackWaveform from '../../../../src/components/views/audio_messages/PlaybackWaveform';
 import SeekBar from "../../../../src/components/views/audio_messages/SeekBar";
+import PlaybackClock from "../../../../src/components/views/audio_messages/PlaybackClock";
 
 jest.mock('../../../../src/audio/compat', () => ({
     createAudioContext: jest.fn(),
@@ -128,19 +129,34 @@ describe('<RecordingPlayback />', () => {
         expect(playback.toggle).toHaveBeenCalled();
     });
 
-    it('should render a seek bar by default', () => {
-        const playback = new Playback(new ArrayBuffer(8));
-        const component = getComponent({ playback });
+    describe('Composer Layout', () => {
+        it('should have a waveform, no seek bar, and clock', () => {
+            const playback = new Playback(new ArrayBuffer(8));
+            const component = getComponent({ playback, layout: PlaybackLayout.Composer });
 
-        expect(component.find(PlaybackWaveform).length).toBeFalsy();
-        expect(component.find(SeekBar).length).toBeTruthy();
+            expect(component.find(PlaybackClock).length).toBeTruthy();
+            expect(component.find(PlaybackWaveform).length).toBeTruthy();
+            expect(component.find(SeekBar).length).toBeFalsy();
+        });
     });
 
-    it('should render a waveform when requested', () => {
-        const playback = new Playback(new ArrayBuffer(8));
-        const component = getComponent({ playback, withWaveform: true });
+    describe('Timeline Layout', () => {
+        it('should have a waveform, a seek bar, and clock', () => {
+            const playback = new Playback(new ArrayBuffer(8));
+            const component = getComponent({ playback, layout: PlaybackLayout.Timeline });
 
-        expect(component.find(PlaybackWaveform).length).toBeTruthy();
-        expect(component.find(SeekBar).length).toBeFalsy();
+            expect(component.find(PlaybackClock).length).toBeTruthy();
+            expect(component.find(PlaybackWaveform).length).toBeTruthy();
+            expect(component.find(SeekBar).length).toBeTruthy();
+        });
+
+        it('should be the default', () => {
+            const playback = new Playback(new ArrayBuffer(8));
+            const component = getComponent({ playback }); // no layout set for test
+
+            expect(component.find(PlaybackClock).length).toBeTruthy();
+            expect(component.find(PlaybackWaveform).length).toBeTruthy();
+            expect(component.find(SeekBar).length).toBeTruthy();
+        });
     });
 });
