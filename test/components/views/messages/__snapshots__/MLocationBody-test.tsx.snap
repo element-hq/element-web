@@ -120,6 +120,10 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                       "error": Array [
                         [Function],
                         [Function],
+                        [Function],
+                        [Function],
+                        [Function],
+                        [Function],
                       ],
                     },
                     "_eventsCount": 1,
@@ -130,8 +134,16 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                           mockConstructor {},
                           "top-right",
                         ],
+                        Array [
+                          mockConstructor {},
+                          "top-right",
+                        ],
                       ],
                       "results": Array [
+                        Object {
+                          "type": "return",
+                          "value": undefined,
+                        },
                         Object {
                           "type": "return",
                           "value": undefined,
@@ -148,8 +160,18 @@ exports[`MLocationBody <MLocationBody> without error renders map correctly 1`] =
                             "lon": -0.1276,
                           },
                         ],
+                        Array [
+                          Object {
+                            "lat": 51.5076,
+                            "lon": -0.1276,
+                          },
+                        ],
                       ],
                       "results": Array [
+                        Object {
+                          "type": "return",
+                          "value": undefined,
+                        },
                         Object {
                           "type": "return",
                           "value": undefined,

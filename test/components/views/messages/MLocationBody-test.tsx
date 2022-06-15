@@ -17,10 +17,11 @@ limitations under the License.
 import React from 'react';
 import { mount } from "enzyme";
 import { LocationAssetType } from "matrix-js-sdk/src/@types/location";
-import { RoomMember } from 'matrix-js-sdk/src/matrix';
+import { ClientEvent, RoomMember } from 'matrix-js-sdk/src/matrix';
 import maplibregl from 'maplibre-gl';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { act } from 'react-dom/test-utils';
+import { SyncState } from 'matrix-js-sdk/src/sync';
 
 import MLocationBody from "../../../../src/components/views/messages/MLocationBody";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
@@ -56,6 +57,19 @@ describe("MLocationBody", () => {
             wrappingComponent: MatrixClientContext.Provider,
             wrappingComponentProps: { value: mockClient },
         });
+        const getMapErrorComponent = () => {
+            const mockMap = new maplibregl.Map();
+            mockClient.getClientWellKnown.mockReturnValue({
+                [TILE_SERVER_WK_KEY.name]: { map_style_url: 'bad-tile-server.com' },
+            });
+            const component = getComponent();
+
+            // simulate error initialising map in maplibregl
+            // @ts-ignore
+            mockMap.emit('error', { status: 404 });
+
+            return component;
+        };
 
         beforeAll(() => {
             maplibregl.AttributionControl = jest.fn();
@@ -86,17 +100,16 @@ describe("MLocationBody", () => {
             });
 
             it('displays correct fallback content when map_style_url is misconfigured', () => {
-                const mockMap = new maplibregl.Map();
-                mockClient.getClientWellKnown.mockReturnValue({
-                    [TILE_SERVER_WK_KEY.name]: { map_style_url: 'bad-tile-server.com' },
-                });
-                const component = getComponent();
-
-                // simulate error initialising map in maplibregl
-                // @ts-ignore
-                mockMap.emit('error', { status: 404 });
+                const component = getMapErrorComponent();
                 component.setProps({});
                 expect(component.find(".mx_EventTile_body")).toMatchSnapshot();
+            });
+
+            it('should clear the error on reconnect', () => {
+                const component = getMapErrorComponent();
+                expect((component.state() as React.ComponentState).error).toBeDefined();
+                mockClient.emit(ClientEvent.Sync, SyncState.Reconnecting, SyncState.Error);
+                expect((component.state() as React.ComponentState).error).toBeUndefined();
             });
         });
 
