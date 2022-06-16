@@ -55,6 +55,8 @@ limitations under the License.
 .mx_EventTile[data-layout=bubble] {
     --EventTile_bubble-margin-inline-start: 49px;
     --EventTile_bubble-margin-inline-end: 60px;
+    --EventTile_bubble_line-margin-inline-start: -9px;
+    --EventTile_bubble_line-margin-inline-end: -12px;
     --EventTile_bubble_gap-inline: 5px;
 
     position: relative;
@@ -177,6 +179,10 @@ limitations under the License.
         border-color: $quinary-content;
     }
 
+    .mx_ReactionsRow {
+        margin-inline: var(--EventTile_bubble_line-margin-inline-start) var(--EventTile_bubble_line-margin-inline-end);
+    }
+
     &[data-self=false] {
         .mx_EventTile_line {
             border-bottom-right-radius: var(--cornerRadius);
@@ -203,6 +209,10 @@ limitations under the License.
         .mx_ThreadSummary {
             margin-inline-start: calc(-1 * var(--gutterSize));
             margin-inline-end: auto;
+        }
+
+        .mx_ReactionsRow {
+            justify-content: flex-start;
         }
 
         --backgroundColor: $eventbubble-others-bg;
@@ -242,13 +252,10 @@ limitations under the License.
         }
 
         .mx_ReactionsRow {
-            float: right;
-            clear: right;
-            display: flex;
+            justify-content: flex-end;
 
-            /* Moving the "add reaction button" before the reactions */
             > :last-child {
-                order: -1;
+                order: -1; // Moving the "add reaction button" before the reactions
             }
         }
 
@@ -269,12 +276,11 @@ limitations under the License.
     }
 
     .mx_EventTile_line {
-        --EventTile_bubble_line-margin-inline-end: -12px;
-
         position: relative;
         display: flex;
         gap: 5px var(--EventTile_bubble_gap-inline);
-        margin: 0 var(--EventTile_bubble_line-margin-inline-end) 0 -9px;
+        margin-block: 0;
+        margin-inline: var(--EventTile_bubble_line-margin-inline-start) var(--EventTile_bubble_line-margin-inline-end);
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
@@ -479,11 +485,6 @@ limitations under the License.
             // align summary text with corner timestamp
             padding: 4px 0;
         }
-    }
-
-    .mx_ReactionsRow {
-        margin-right: -18px;
-        margin-left: -9px;
     }
 
     &.mx_EventTile_bad {

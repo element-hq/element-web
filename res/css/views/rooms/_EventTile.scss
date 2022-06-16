@@ -65,6 +65,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         }
     }
 
+    .mx_ReactionsRow {
+        display: flex;
+        flex-flow: wrap;
+        align-items: center;
+        gap: $spacing-4;
+    }
+
     &[data-layout=group] {
         > .mx_DisambiguatedProfile {
             line-height: $font-20px;
@@ -286,8 +293,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     .mx_ReactionsRow {
-        margin: 0;
-        padding: 4px 64px;
+        margin: $spacing-4 64px;
     }
 }
 
@@ -981,7 +987,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
                 align-items: flex-end;
 
                 .mx_EventTile_line.mx_EventTile_mediaLine {
-                    margin: 0 var(--EventBubbleTile_line-margin-inline-end) 0 0; // align with normal messages
+                    margin: 0 var(--EventTile_bubble_line-margin-inline-end) 0 0; // align with normal messages
                 }
             }
         }

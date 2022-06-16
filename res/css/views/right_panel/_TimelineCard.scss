@@ -60,10 +60,7 @@ limitations under the License.
             }
 
             .mx_ReactionsRow {
-                padding: 0;
-
-                // See margin setting of ReactionsRow on _EventTile.scss
-                margin-right: 8px;
+                margin-inline-end: $spacing-8; // See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.scss
             }
 
             .mx_ThreadSummary {
