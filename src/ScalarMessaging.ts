@@ -234,6 +234,13 @@ Example:
         avatar_url: null
     }
 }
+
+get_open_id_token
+-----------------
+Get an openID token for the current user session.
+Request: No parameters
+Response:
+ - The openId token object as described in https://spec.matrix.org/v1.2/client-server-api/#post_matrixclientv3useruseridopenidrequest_token
 */
 
 import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
@@ -262,6 +269,7 @@ enum Action {
     BotOptions = "bot_options",
     SetBotOptions = "set_bot_options",
     SetBotPower = "set_bot_power",
+    GetOpenIdToken = "get_open_id_token"
 }
 
 function sendResponse(event: MessageEvent<any>, res: any): void {
@@ -587,6 +595,16 @@ function returnStateEvent(event: MessageEvent<any>, roomId: string, eventType: s
     sendResponse(event, stateEvent.getContent());
 }
 
+async function getOpenIdToken(event: MessageEvent<any>) {
+    try {
+        const tokenObject = MatrixClientPeg.get().getOpenIdToken();
+        sendResponse(event, tokenObject);
+    } catch (ex) {
+        logger.warn("Unable to fetch openId token.", ex);
+        sendError(event, 'Unable to fetch openId token.');
+    }
+}
+
 const onMessage = function(event: MessageEvent<any>): void {
     if (!event.origin) { // stupid chrome
         // @ts-ignore
@@ -700,6 +718,9 @@ const onMessage = function(event: MessageEvent<any>): void {
             break;
         case Action.SetBotPower:
             setBotPower(event, roomId, userId, event.data.level, event.data.ignoreIfGreater);
+            break;
+        case Action.GetOpenIdToken:
+            getOpenIdToken(event);
             break;
         default:
             logger.warn("Unhandled postMessage event with action '" + event.data.action +"'");
