@@ -15,24 +15,6 @@ limitations under the License.
 */
 
 .mx_PinnedMessagesCard {
-    padding-top: 0;
-
-    .mx_BaseCard_header {
-        text-align: center;
-        margin-top: 0;
-        border-bottom: 1px solid $menu-border-color;
-
-        > h2 {
-            font-weight: $font-semi-bold;
-            font-size: $font-18px;
-            margin: 8px 0;
-        }
-
-        .mx_BaseCard_close {
-            margin-right: 6px;
-        }
-    }
-
     .mx_PinnedMessagesCard_empty_wrapper {
         display: flex;
         height: 100%;

@@ -18,9 +18,6 @@ limitations under the License.
 .mx_UserInfo.mx_BaseCard {
     // UserInfo has a circular image at the top so it fits between the back & close buttons
     padding-top: 0;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
     overflow-y: auto;
     font-size: $font-12px;
 

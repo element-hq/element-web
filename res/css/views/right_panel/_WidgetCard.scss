@@ -15,47 +15,11 @@ limitations under the License.
 */
 
 .mx_WidgetCard {
-    height: 100%;
-    display: contents;
-
     .mx_AppTileFullWidth {
         max-width: unset;
         width: auto !important;
-        margin: 0px $container-border-width 0px $container-border-width;
         height: 100%;
         border: 0;
-    }
-
-    .mx_BaseCard_header {
-        display: inline-flex;
-
-        & > h2 {
-            margin-right: 0;
-            flex-grow: 1;
-        }
-
-        .mx_WidgetCard_optionsButton {
-            position: relative;
-            margin-right: 44px;
-            height: 20px;
-            width: 20px;
-            min-width: 20px; // prevent crushing by the flexbox
-            padding: 0;
-
-            &::before {
-                content: "";
-                position: absolute;
-                width: 20px;
-                height: 20px;
-                top: 0;
-                left: 4px;
-                mask-repeat: no-repeat;
-                mask-position: center;
-                mask-size: contain;
-                mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
-                background-color: $secondary-content;
-            }
-        }
     }
 }
 

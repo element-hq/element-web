@@ -82,7 +82,7 @@ const ThreadListContextMenu: React.FC<IProps> = ({
     return <React.Fragment>
         <ContextMenuTooltipButton
             {...props}
-            className="mx_MessageActionBar_maskButton mx_MessageActionBar_optionsButton"
+            className="mx_BaseCard_header_title_button--option"
             onClick={openMenu}
             title={_t("Thread options")}
             isExpanded={menuDisplayed}
