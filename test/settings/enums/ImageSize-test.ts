@@ -38,5 +38,9 @@ describe("ImageSize", () => {
             const size = suggestedSize(ImageSize.Normal, { w: 642, h: 350 }); // does not divide evenly
             expect(size).toStrictEqual({ w: 324, h: 176 });
         });
+        it("returns integer values for portrait images", () => {
+            const size = suggestedSize(ImageSize.Normal, { w: 720, h: 1280 });
+            expect(size).toStrictEqual({ w: 182, h: 324 });
+        });
     });
 });
