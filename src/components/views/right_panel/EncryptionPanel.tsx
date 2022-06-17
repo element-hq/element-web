@@ -122,7 +122,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
                 state: { member, verificationRequest: verificationRequest_ },
             });
         }
-        if (!RightPanelStore.instance.isOpen) RightPanelStore.instance.togglePanel();
+        if (!RightPanelStore.instance.isOpen) RightPanelStore.instance.togglePanel(null);
     }, [member]);
 
     const requested =

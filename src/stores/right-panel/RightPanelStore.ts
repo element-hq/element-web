@@ -45,14 +45,22 @@ import { RoomViewStore } from "../RoomViewStore";
 export default class RightPanelStore extends ReadyWatchingStore {
     private static internalInstance: RightPanelStore;
 
-    private global?: IRightPanelForRoom = null;
-    private byRoom: {
-        [roomId: string]: IRightPanelForRoom;
-    } = {};
+    private global?: IRightPanelForRoom;
+    private byRoom: { [roomId: string]: IRightPanelForRoom };
     private viewedRoomId: Optional<string>;
 
     private constructor() {
         super(defaultDispatcher);
+        this.reset();
+    }
+
+    /**
+     * Resets the store. Intended for test usage only.
+     */
+    public reset() {
+        this.global = null;
+        this.byRoom = {};
+        this.viewedRoomId = null;
     }
 
     protected async onReady(): Promise<any> {
@@ -134,19 +142,20 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const cardState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
 
         // Checks for wrong SetRightPanelPhase requests
-        if (!this.isPhaseValid(targetPhase)) return;
+        if (!this.isPhaseValid(targetPhase, Boolean(rId))) return;
 
         if ((targetPhase === this.currentCardForRoom(rId)?.phase && !!cardState)) {
             // Update state: set right panel with a new state but keep the phase (don't know it this is ever needed...)
             const hist = this.byRoom[rId]?.history ?? [];
             hist[hist.length - 1].state = cardState;
             this.emitAndUpdateSettings();
-        } else if (targetPhase !== this.currentCard?.phase) {
-            // Set right panel and erase history.
-            this.show();
-            this.setRightPanelCache({ phase: targetPhase, state: cardState ?? {} }, rId);
+        } else if (targetPhase !== this.currentCardForRoom(rId)?.phase || !this.byRoom[rId]) {
+            // Set right panel and initialize/erase history
+            const history = [{ phase: targetPhase, state: cardState ?? {} }];
+            this.byRoom[rId] = { history, isOpen: true };
+            this.emitAndUpdateSettings();
         } else {
-            this.show();
+            this.show(rId);
             this.emitAndUpdateSettings();
         }
     }
@@ -156,23 +165,23 @@ export default class RightPanelStore extends ReadyWatchingStore {
         const rId = roomId ?? this.viewedRoomId;
         const history = cards.map(c => ({ phase: c.phase, state: c.state ?? {} }));
         this.byRoom[rId] = { history, isOpen: true };
-        this.show();
+        this.show(rId);
         this.emitAndUpdateSettings();
     }
 
+    // Appends a card to the history and shows the right panel if not already visible
     public pushCard(
         card: IRightPanelCard,
         allowClose = true,
         roomId: string = null,
     ) {
-        // This function appends a card to the history and shows the right panel if now already visible.
         const rId = roomId ?? this.viewedRoomId;
         const redirect = this.getVerificationRedirect(card);
         const targetPhase = redirect?.phase ?? card.phase;
-        const pState = redirect?.state ?? (Object.keys(card.state ?? {}).length === 0 ? null : card.state);
+        const pState = redirect?.state ?? card.state ?? {};
 
         // Checks for wrong SetRightPanelPhase requests
-        if (!this.isPhaseValid(targetPhase)) return;
+        if (!this.isPhaseValid(targetPhase, Boolean(rId))) return;
 
         const roomCache = this.byRoom[rId];
         if (!!roomCache) {
@@ -182,12 +191,12 @@ export default class RightPanelStore extends ReadyWatchingStore {
         } else {
             // setup room panel cache with the new card
             this.byRoom[rId] = {
-                history: [{ phase: targetPhase, state: pState ?? {} }],
+                history: [{ phase: targetPhase, state: pState }],
                 // if there was no right panel store object the the panel was closed -> keep it closed, except if allowClose==false
                 isOpen: !allowClose,
             };
         }
-        this.show();
+        this.show(rId);
         this.emitAndUpdateSettings();
     }
 
@@ -200,7 +209,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return removedCard;
     }
 
-    public togglePanel(roomId: string = null) {
+    public togglePanel(roomId: string | null) {
         const rId = roomId ?? this.viewedRoomId;
         if (!this.byRoom[rId]) return;
 
@@ -208,27 +217,31 @@ export default class RightPanelStore extends ReadyWatchingStore {
         this.emitAndUpdateSettings();
     }
 
-    public show() {
-        if (!this.isOpen) {
-            this.togglePanel();
+    public show(roomId: string | null) {
+        if (!this.isOpenForRoom(roomId ?? this.viewedRoomId)) {
+            this.togglePanel(roomId);
         }
     }
 
-    public hide() {
-        if (this.isOpen) {
-            this.togglePanel();
+    public hide(roomId: string | null) {
+        if (this.isOpenForRoom(roomId ?? this.viewedRoomId)) {
+            this.togglePanel(roomId);
         }
     }
 
     private loadCacheFromSettings() {
-        const room = this.viewedRoomId && this.mxClient?.getRoom(this.viewedRoomId);
-        if (!!room) {
-            this.global = this.global ??
-                convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room);
-            this.byRoom[this.viewedRoomId] = this.byRoom[this.viewedRoomId] ??
-                convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room);
-        } else {
-            console.warn("Could not restore the right panel after load because there was no associated room object.");
+        if (this.viewedRoomId) {
+            const room = this.mxClient?.getRoom(this.viewedRoomId);
+            if (!!room) {
+                this.global = this.global ??
+                    convertToStatePanel(SettingsStore.getValue("RightPanel.phasesGlobal"), room);
+                this.byRoom[this.viewedRoomId] = this.byRoom[this.viewedRoomId] ??
+                    convertToStatePanel(SettingsStore.getValue("RightPanel.phases", this.viewedRoomId), room);
+            } else {
+                logger.warn(
+                    "Could not restore the right panel after load because there was no associated room object.",
+                );
+            }
         }
     }
 
@@ -273,35 +286,29 @@ export default class RightPanelStore extends ReadyWatchingStore {
             case RightPanelPhases.ThreadView:
                 if (!SettingsStore.getValue("feature_thread")) return false;
                 if (!card.state.threadHeadEvent) {
-                    console.warn("removed card from right panel because of missing threadHeadEvent in card state");
+                    logger.warn("removed card from right panel because of missing threadHeadEvent in card state");
                 }
                 return !!card.state.threadHeadEvent;
             case RightPanelPhases.RoomMemberInfo:
             case RightPanelPhases.SpaceMemberInfo:
             case RightPanelPhases.EncryptionPanel:
                 if (!card.state.member) {
-                    console.warn("removed card from right panel because of missing member in card state");
+                    logger.warn("removed card from right panel because of missing member in card state");
                 }
                 return !!card.state.member;
             case RightPanelPhases.Room3pidMemberInfo:
             case RightPanelPhases.Space3pidMemberInfo:
                 if (!card.state.memberInfoEvent) {
-                    console.warn("removed card from right panel because of missing memberInfoEvent in card state");
+                    logger.warn("removed card from right panel because of missing memberInfoEvent in card state");
                 }
                 return !!card.state.memberInfoEvent;
             case RightPanelPhases.Widget:
                 if (!card.state.widgetId) {
-                    console.warn("removed card from right panel because of missing widgetId in card state");
+                    logger.warn("removed card from right panel because of missing widgetId in card state");
                 }
                 return !!card.state.widgetId;
         }
         return true;
-    }
-
-    private setRightPanelCache(card: IRightPanelCard, roomId?: string) {
-        const history = [{ phase: card.phase, state: card.state ?? {} }];
-        this.byRoom[roomId ?? this.viewedRoomId] = { history, isOpen: true };
-        this.emitAndUpdateSettings();
     }
 
     private getVerificationRedirect(card: IRightPanelCard): IRightPanelCard {
@@ -322,7 +329,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
         return null;
     }
 
-    public isPhaseValid(targetPhase: RightPanelPhases, isViewingRoom = this.isViewingRoom): boolean {
+    private isPhaseValid(targetPhase: RightPanelPhases, isViewingRoom: boolean): boolean {
         if (!RightPanelPhases[targetPhase]) {
             logger.warn(`Tried to switch right panel to unknown phase: ${targetPhase}`);
             return false;
@@ -384,10 +391,6 @@ export default class RightPanelStore extends ReadyWatchingStore {
             };
         }
         this.emitAndUpdateSettings();
-    }
-
-    private get isViewingRoom(): boolean {
-        return !!this.viewedRoomId;
     }
 
     public static get instance(): RightPanelStore {

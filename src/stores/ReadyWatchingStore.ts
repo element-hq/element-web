@@ -73,11 +73,11 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
             // Everything after this is unnecessary (we only need to know once we have a client)
             // and we intentionally don't set the client before this point to avoid stores
             // updating for every event emitted during the cached sync.
-            if (!(payload.prevState === SyncState.Prepared && payload.state !== SyncState.Prepared)) {
-                return;
-            }
-
-            if (this.matrixClient !== payload.matrixClient) {
+            if (
+                payload.prevState !== SyncState.Prepared
+                && payload.state === SyncState.Prepared
+                && this.matrixClient !== payload.matrixClient
+            ) {
                 if (this.matrixClient) {
                     await this.onNotReady();
                 }

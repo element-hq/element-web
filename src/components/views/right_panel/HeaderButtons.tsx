@@ -70,10 +70,10 @@ export default abstract class HeaderButtons<P = {}> extends React.Component<IPro
     public setPhase(phase: RightPanelPhases, cardState?: Partial<IRightPanelCardState>) {
         const rps = RightPanelStore.instance;
         if (rps.currentCard.phase == phase && !cardState && rps.isOpen) {
-            rps.togglePanel();
+            rps.togglePanel(null);
         } else {
             RightPanelStore.instance.setCard({ phase, state: cardState });
-            if (!rps.isOpen) rps.togglePanel();
+            if (!rps.isOpen) rps.togglePanel(null);
         }
     }
 

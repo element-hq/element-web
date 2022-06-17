@@ -91,12 +91,6 @@ export default class RightPanel extends React.Component<IProps, IState> {
             currentCard = RightPanelStore.instance.currentCardForRoom(props.room.roomId);
         }
 
-        if (currentCard?.phase && !RightPanelStore.instance.isPhaseValid(currentCard.phase, !!props.room)) {
-            // XXX: We can probably get rid of this workaround once GroupView is dead, it's unmounting happens weirdly
-            // late causing the app to soft-crash due to lack of a room object being passed to a RightPanel
-            return null; // skip this update, we're about to be unmounted and don't have the appropriate props
-        }
-
         return {
             cardState: currentCard?.state,
             phase: currentCard?.phase,
@@ -142,7 +136,7 @@ export default class RightPanel extends React.Component<IProps, IState> {
             // When the user clicks close on the encryption panel cancel the pending request first if any
             this.state.cardState.verificationRequest.cancel();
         } else {
-            RightPanelStore.instance.togglePanel();
+            RightPanelStore.instance.togglePanel(this.props.room?.roomId);
         }
     };
 

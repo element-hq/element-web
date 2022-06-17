@@ -493,7 +493,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
             case KeyBindingAction.ToggleRoomSidePanel:
                 if (this.props.page_type === "room_view") {
-                    RightPanelStore.instance.togglePanel();
+                    RightPanelStore.instance.togglePanel(null);
                     handled = true;
                 }
                 break;

@@ -16,12 +16,13 @@ limitations under the License.
 
 import React from "react";
 import { mount, ReactWrapper } from "enzyme";
+import { act } from "react-dom/test-utils";
 import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
-import { stubClient, wrapInMatrixClientContext } from "../../test-utils";
+import { stubClient, mockPlatformPeg, unmockPlatformPeg, wrapInMatrixClientContext } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { Action } from "../../../src/dispatcher/actions";
 import dis from "../../../src/dispatcher/dispatcher";
@@ -29,18 +30,25 @@ import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayloa
 import { RoomView as _RoomView } from "../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
 import { RoomViewStore } from "../../../src/stores/RoomViewStore";
+import SettingsStore from "../../../src/settings/SettingsStore";
+import { SettingLevel } from "../../../src/settings/SettingLevel";
 import DMRoomMap from "../../../src/utils/DMRoomMap";
+import { NotificationState } from "../../../src/stores/notifications/NotificationState";
+import RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
+import { RightPanelPhases } from "../../../src/stores/right-panel/RightPanelStorePhases";
 
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
 describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
     let room: Room;
-    beforeEach(() => {
+    let roomCount = 0;
+    beforeEach(async () => {
+        mockPlatformPeg({ reload: () => {} });
         stubClient();
         cli = mocked(MatrixClientPeg.get());
 
-        room = new Room("r1", cli, "@alice:example.com");
+        room = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
         room.getPendingEvents = () => [];
         cli.getRoom.mockReturnValue(room);
         // Re-emit certain events on the mocked client
@@ -48,11 +56,17 @@ describe("RoomView", () => {
         room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
 
         DMRoomMap.makeShared();
+        RightPanelStore.instance.useUnitTestClient(cli);
+    });
+
+    afterEach(async () => {
+        unmockPlatformPeg();
+        jest.restoreAllMocks();
     });
 
     const mountRoomView = async (): Promise<ReactWrapper> => {
         if (RoomViewStore.instance.getRoomId() !== room.roomId) {
-            const switchRoomPromise = new Promise<void>(resolve => {
+            const switchedRoom = new Promise<void>(resolve => {
                 const subscription = RoomViewStore.instance.addListener(() => {
                     if (RoomViewStore.instance.getRoomId()) {
                         subscription.remove();
@@ -67,10 +81,10 @@ describe("RoomView", () => {
                 metricsTrigger: null,
             });
 
-            await switchRoomPromise;
+            await switchedRoom;
         }
 
-        return mount(
+        const roomView = mount(
             <RoomView
                 mxClient={cli}
                 threepidInvite={null}
@@ -81,6 +95,8 @@ describe("RoomView", () => {
                 onRegistered={null}
             />,
         );
+        await act(() => Promise.resolve()); // Allow state to settle
+        return roomView;
     };
     const getRoomViewInstance = async (): Promise<_RoomView> =>
         (await mountRoomView()).find(_RoomView).instance() as _RoomView;
@@ -125,5 +141,26 @@ describe("RoomView", () => {
 
         room.getUnfilteredTimelineSet().resetLiveTimeline();
         expect(roomViewInstance.state.liveTimeline).not.toEqual(oldTimeline);
+    });
+
+    describe("video rooms", () => {
+        beforeEach(async () => {
+            // Make it a video room
+            room.isElementVideoRoom = () => true;
+            await SettingsStore.setValue("feature_video_rooms", null, SettingLevel.DEVICE, true);
+        });
+
+        it("normally doesn't open the chat panel", async () => {
+            jest.spyOn(NotificationState.prototype, "isUnread", "get").mockReturnValue(false);
+            await mountRoomView();
+            expect(RightPanelStore.instance.isOpen).toEqual(false);
+        });
+
+        it("opens the chat panel if there are unread messages", async () => {
+            jest.spyOn(NotificationState.prototype, "isUnread", "get").mockReturnValue(true);
+            await mountRoomView();
+            expect(RightPanelStore.instance.isOpen).toEqual(true);
+            expect(RightPanelStore.instance.currentCard.phase).toEqual(RightPanelPhases.Timeline);
+        });
     });
 });

@@ -209,7 +209,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
 
     private onThreadsPanelClicked = (ev: ButtonEvent) => {
         if (RoomHeaderButtons.THREAD_PHASES.includes(this.state.phase)) {
-            RightPanelStore.instance.togglePanel();
+            RightPanelStore.instance.togglePanel(this.props.room?.roomId);
         } else {
             showThreadPanel();
             PosthogTrackers.trackInteraction("WebRoomHeaderButtonsThreadsButton", ev);
