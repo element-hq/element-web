@@ -23,6 +23,7 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { ILocationContent, LocationAssetType, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
 import { makeLocationContent } from "matrix-js-sdk/src/content-helpers";
+import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 
 import { _t } from "../../../languageHandler";
 import dis from "../../../dispatcher/dispatcher";
@@ -158,7 +159,7 @@ const Entry: React.FC<IEntryProps> = ({ room, type, content, matrixClient: cli, 
     </div>;
 };
 
-const getStrippedEventContent = (event: MatrixEvent): IContent => {
+const transformEvent = (event: MatrixEvent): {type: string, content: IContent } => {
     const {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         "m.relates_to": _, // strip relations - in future we will attach a relation pointing at the original event
@@ -166,24 +167,34 @@ const getStrippedEventContent = (event: MatrixEvent): IContent => {
         ...content
     } = event.getContent();
 
+    // beacon pulses get transformed into static locations on forward
+    const type = M_BEACON.matches(event.getType()) ? EventType.RoomMessage : event.getType();
+
     // self location shares should have their description removed
     // and become 'pin' share type
-    if (isLocationEvent(event) && isSelfLocation(content as ILocationContent)) {
+    if (
+        (isLocationEvent(event) && isSelfLocation(content as ILocationContent)) ||
+        // beacon pulses get transformed into static locations on forward
+        M_BEACON.matches(event.getType())
+    ) {
         const timestamp = M_TIMESTAMP.findIn<number>(content);
         const geoUri = locationEventGeoUri(event);
         return {
-            ...content,
-            ...makeLocationContent(
-                undefined, // text
-                geoUri,
-                timestamp || Date.now(),
-                undefined, // description
-                LocationAssetType.Pin,
-            ),
+            type,
+            content: {
+                ...content,
+                ...makeLocationContent(
+                    undefined, // text
+                    geoUri,
+                    timestamp || Date.now(),
+                    undefined, // description
+                    LocationAssetType.Pin,
+                ),
+            },
         };
     }
 
-    return content;
+    return { type, content };
 };
 
 const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCreator, onFinished }) => {
@@ -193,7 +204,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
         cli.getProfileInfo(userId).then(info => setProfileInfo(info));
     }, [cli, userId]);
 
-    const content = getStrippedEventContent(event);
+    const { type, content } = transformEvent(event);
 
     // For the message preview we fake the sender as ourselves
     const mockEvent = new MatrixEvent({
@@ -293,7 +304,7 @@ const ForwardDialog: React.FC<IProps> = ({ matrixClient: cli, event, permalinkCr
                                 <Entry
                                     key={room.roomId}
                                     room={room}
-                                    type={event.getType()}
+                                    type={type}
                                     content={content}
                                     matrixClient={cli}
                                     onFinished={onFinished}

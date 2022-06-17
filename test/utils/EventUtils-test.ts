@@ -28,7 +28,6 @@ import {
     canCancel,
     canEditContent,
     canEditOwnEvent,
-    canForward,
     isContentActionable,
     isLocationEvent,
     isVoiceMessage,
@@ -316,32 +315,6 @@ describe('EventUtils', () => {
                 },
             });
             expect(isLocationEvent(event)).toBe(false);
-        });
-    });
-
-    describe('canForward()', () => {
-        it('returns true for a location event', () => {
-            const event = new MatrixEvent({
-                type: M_LOCATION.name,
-            });
-            expect(canForward(event)).toBe(true);
-        });
-        it('returns false for a poll event', () => {
-            const event = makePollStartEvent('Who?', userId);
-            expect(canForward(event)).toBe(false);
-        });
-        it('returns false for a beacon_info event', () => {
-            const event = makeBeaconInfoEvent(userId, roomId);
-            expect(canForward(event)).toBe(false);
-        });
-        it('returns true for a room message event', () => {
-            const event = new MatrixEvent({
-                type: EventType.RoomMessage,
-                content: {
-                    body: 'Hello',
-                },
-            });
-            expect(canForward(event)).toBe(true);
         });
     });
 

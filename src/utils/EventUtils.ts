@@ -281,14 +281,6 @@ export const isLocationEvent = (event: MatrixEvent): boolean => {
     );
 };
 
-export function canForward(event: MatrixEvent): boolean {
-    return !(
-        M_POLL_START.matches(event.getType()) ||
-        // disallow forwarding until psf-1044
-        M_BEACON_INFO.matches(event.getType())
-    );
-}
-
 export function hasThreadSummary(event: MatrixEvent): boolean {
     return event.isThreadRoot && event.getThread()?.length && !!event.getThread().replyToEvent;
 }

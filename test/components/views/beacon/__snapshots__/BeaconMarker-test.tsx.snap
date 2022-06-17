@@ -26,10 +26,20 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
       },
       "_eventsCount": 5,
       "_isLive": true,
-      "_latestLocationState": Object {
-        "description": undefined,
-        "timestamp": 1647270879404,
-        "uri": "geo:51,41",
+      "_latestLocationEvent": Object {
+        "content": Object {
+          "m.relates_to": Object {
+            "event_id": "$alice-room1-1",
+            "rel_type": "m.reference",
+          },
+          "org.matrix.msc3488.location": Object {
+            "description": undefined,
+            "uri": "geo:51,41",
+          },
+          "org.matrix.msc3488.ts": 1647270879404,
+        },
+        "sender": "@alice:server",
+        "type": "org.matrix.msc3672.beacon",
       },
       "_maxListeners": undefined,
       "clearLatestLocation": [Function],

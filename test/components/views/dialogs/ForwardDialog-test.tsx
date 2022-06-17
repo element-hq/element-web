@@ -28,6 +28,7 @@ import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import {
     getMockClientWithEventEmitter,
+    makeBeaconEvent,
     makeLegacyLocationEvent,
     makeLocationEvent,
     mkEvent,
@@ -282,6 +283,33 @@ describe("ForwardDialog", () => {
             };
             expect(mockClient.sendEvent).toHaveBeenCalledWith(
                 roomId, modernLocationEvent.getType(), expectedStrippedContent,
+            );
+        });
+
+        it('forwards beacon location as a pin drop event', async () => {
+            const timestamp = 123456;
+            const beaconEvent = makeBeaconEvent('@alice:server.org', { geoUri, timestamp });
+            const text = `Location ${geoUri} at ${new Date(timestamp).toISOString()}`;
+            const expectedContent = {
+                msgtype: "m.location",
+                body: text,
+                [TEXT_NODE_TYPE.name]: text,
+                [M_ASSET.name]: { type: LocationAssetType.Pin },
+                [M_LOCATION.name]: {
+                    uri: geoUri,
+                    description: undefined,
+                },
+                geo_uri: geoUri,
+                [M_TIMESTAMP.name]: timestamp,
+            };
+            const wrapper = await mountForwardDialog(beaconEvent);
+
+            expect(wrapper.find('MLocationBody').length).toBeTruthy();
+
+            sendToFirstRoom(wrapper);
+
+            expect(mockClient.sendEvent).toHaveBeenCalledWith(
+                roomId, EventType.RoomMessage, expectedContent,
             );
         });
 

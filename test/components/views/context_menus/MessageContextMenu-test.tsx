@@ -18,18 +18,26 @@ import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { EventStatus, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Room } from 'matrix-js-sdk/src/models/room';
-import { PendingEventOrdering } from 'matrix-js-sdk/src/matrix';
+import {
+    PendingEventOrdering,
+    BeaconIdentifier,
+    Beacon,
+    getBeaconInfoIdentifier,
+} from 'matrix-js-sdk/src/matrix';
 import { ExtensibleEvent, MessageEvent, M_POLL_KIND_DISCLOSED, PollStartEvent } from 'matrix-events-sdk';
 import { Thread } from "matrix-js-sdk/src/models/thread";
 import { mocked } from "jest-mock";
+import { act } from '@testing-library/react';
 
 import * as TestUtils from '../../../test-utils';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
-import { canEditContent, canForward, isContentActionable } from "../../../../src/utils/EventUtils";
+import { canEditContent, isContentActionable } from "../../../../src/utils/EventUtils";
 import { copyPlaintext, getSelectedText } from "../../../../src/utils/strings";
 import MessageContextMenu from "../../../../src/components/views/context_menus/MessageContextMenu";
+import { makeBeaconEvent, makeBeaconInfoEvent } from '../../../test-utils';
+import dispatcher from '../../../../src/dispatcher/dispatcher';
 
 jest.mock("../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
@@ -37,31 +45,15 @@ jest.mock("../../../../src/utils/strings", () => ({
 }));
 jest.mock("../../../../src/utils/EventUtils", () => ({
     canEditContent: jest.fn(),
-    canForward: jest.fn(),
     isContentActionable: jest.fn(),
     isLocationEvent: jest.fn(),
 }));
 
+const roomId = 'roomid';
+
 describe('MessageContextMenu', () => {
     beforeEach(() => {
         jest.resetAllMocks();
-    });
-
-    it('allows forwarding a room message', () => {
-        mocked(canForward).mockReturnValue(true);
-        mocked(isContentActionable).mockReturnValue(true);
-
-        const eventContent = MessageEvent.from("hello");
-        const menu = createMenuWithContent(eventContent);
-        expect(menu.find('div[aria-label="Forward"]')).toHaveLength(1);
-    });
-
-    it('does not allow forwarding a poll', () => {
-        mocked(canForward).mockReturnValue(false);
-
-        const eventContent = PollStartEvent.from("why?", ["42"], M_POLL_KIND_DISCLOSED);
-        const menu = createMenuWithContent(eventContent);
-        expect(menu.find('div[aria-label="Forward"]')).toHaveLength(0);
     });
 
     it('does show copy link button when supplied a link', () => {
@@ -80,6 +72,99 @@ describe('MessageContextMenu', () => {
         const menu = createMenuWithContent(eventContent);
         const copyLinkButton = menu.find('a[aria-label="Copy link"]');
         expect(copyLinkButton).toHaveLength(0);
+    });
+
+    describe('message forwarding', () => {
+        it('allows forwarding a room message', () => {
+            mocked(isContentActionable).mockReturnValue(true);
+
+            const eventContent = MessageEvent.from("hello");
+            const menu = createMenuWithContent(eventContent);
+            expect(menu.find('div[aria-label="Forward"]')).toHaveLength(1);
+        });
+
+        it('does not allow forwarding a poll', () => {
+            const eventContent = PollStartEvent.from("why?", ["42"], M_POLL_KIND_DISCLOSED);
+            const menu = createMenuWithContent(eventContent);
+            expect(menu.find('div[aria-label="Forward"]')).toHaveLength(0);
+        });
+
+        describe('forwarding beacons', () => {
+            const aliceId = "@alice:server.org";
+            beforeEach(() => {
+                mocked(isContentActionable).mockReturnValue(true);
+            });
+
+            it('does not allow forwarding a beacon that is not live', () => {
+                const deadBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false });
+                const beacon = new Beacon(deadBeaconEvent);
+                const beacons = new Map<BeaconIdentifier, Beacon>();
+                beacons.set(getBeaconInfoIdentifier(deadBeaconEvent), beacon);
+                const menu = createMenu(deadBeaconEvent, {}, {}, beacons);
+                expect(menu.find('div[aria-label="Forward"]')).toHaveLength(0);
+            });
+
+            it('does not allow forwarding a beacon that is not live but has a latestLocation', () => {
+                const deadBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false });
+                const beaconLocation = makeBeaconEvent(
+                    aliceId, { beaconInfoId: deadBeaconEvent.getId(), geoUri: 'geo:51,41' },
+                );
+                const beacon = new Beacon(deadBeaconEvent);
+                // @ts-ignore illegally set private prop
+                beacon._latestLocationEvent = beaconLocation;
+                const beacons = new Map<BeaconIdentifier, Beacon>();
+                beacons.set(getBeaconInfoIdentifier(deadBeaconEvent), beacon);
+                const menu = createMenu(deadBeaconEvent, {}, {}, beacons);
+                expect(menu.find('div[aria-label="Forward"]')).toHaveLength(0);
+            });
+
+            it('does not allow forwarding a live beacon that does not have a latestLocation', () => {
+                const beaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true });
+
+                const beacon = new Beacon(beaconEvent);
+                const beacons = new Map<BeaconIdentifier, Beacon>();
+                beacons.set(getBeaconInfoIdentifier(beaconEvent), beacon);
+                const menu = createMenu(beaconEvent, {}, {}, beacons);
+                expect(menu.find('div[aria-label="Forward"]')).toHaveLength(0);
+            });
+
+            it('allows forwarding a live beacon that has a location', () => {
+                const liveBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true });
+                const beaconLocation = makeBeaconEvent(
+                    aliceId, { beaconInfoId: liveBeaconEvent.getId(), geoUri: 'geo:51,41' },
+                );
+                const beacon = new Beacon(liveBeaconEvent);
+                // @ts-ignore illegally set private prop
+                beacon._latestLocationEvent = beaconLocation;
+                const beacons = new Map<BeaconIdentifier, Beacon>();
+                beacons.set(getBeaconInfoIdentifier(liveBeaconEvent), beacon);
+                const menu = createMenu(liveBeaconEvent, {}, {}, beacons);
+                expect(menu.find('div[aria-label="Forward"]')).toHaveLength(1);
+            });
+
+            it('opens forward dialog with correct event', () => {
+                const dispatchSpy = jest.spyOn(dispatcher, 'dispatch');
+                const liveBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: true });
+                const beaconLocation = makeBeaconEvent(
+                    aliceId, { beaconInfoId: liveBeaconEvent.getId(), geoUri: 'geo:51,41' },
+                );
+                const beacon = new Beacon(liveBeaconEvent);
+                // @ts-ignore illegally set private prop
+                beacon._latestLocationEvent = beaconLocation;
+                const beacons = new Map<BeaconIdentifier, Beacon>();
+                beacons.set(getBeaconInfoIdentifier(liveBeaconEvent), beacon);
+                const menu = createMenu(liveBeaconEvent, {}, {}, beacons);
+
+                act(() => {
+                    menu.find('div[aria-label="Forward"]').simulate('click');
+                });
+
+                // called with forwardableEvent, not beaconInfo event
+                expect(dispatchSpy).toHaveBeenCalledWith(expect.objectContaining({
+                    event: beaconLocation,
+                }));
+            });
+        });
     });
 
     describe("right click", () => {
@@ -215,18 +300,22 @@ function createMenu(
     mxEvent: MatrixEvent,
     props?: Partial<React.ComponentProps<typeof MessageContextMenu>>,
     context: Partial<IRoomState> = {},
+    beacons: Map<BeaconIdentifier, Beacon> = new Map(),
 ): ReactWrapper {
     TestUtils.stubClient();
     const client = MatrixClientPeg.get();
 
     const room = new Room(
-        "roomid",
+        roomId,
         client,
         "@user:example.com",
         {
             pendingEventOrdering: PendingEventOrdering.Detached,
         },
     );
+
+    // @ts-ignore illegally set private prop
+    room.currentState.beacons = beacons;
 
     mxEvent.setStatus(EventStatus.SENT);
 

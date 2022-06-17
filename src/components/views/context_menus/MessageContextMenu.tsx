@@ -30,7 +30,7 @@ import Modal from '../../../Modal';
 import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
-import { canEditContent, canForward, editEvent, isContentActionable, isLocationEvent } from '../../../utils/EventUtils';
+import { canEditContent, editEvent, isContentActionable, isLocationEvent } from '../../../utils/EventUtils';
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
 import { ReadPinsEventId } from "../right_panel/types";
 import { Action } from "../../../dispatcher/actions";
@@ -51,6 +51,7 @@ import { GetRelationsForEvent, IEventTileOps } from "../rooms/EventTile";
 import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwardDialogPayload";
 import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
 import { createMapSiteLinkFromEvent } from '../../../utils/location';
+import { getForwardableEvent } from '../../../events/forward/getForwardableEvent';
 
 interface IProps extends IPosition {
     chevronFace: ChevronFace;
@@ -188,10 +189,10 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         this.closeMenu();
     };
 
-    private onForwardClick = (): void => {
+    private onForwardClick = (forwardableEvent: MatrixEvent) => (): void => {
         dis.dispatch<OpenForwardDialogPayload>({
             action: Action.OpenForwardDialog,
-            event: this.props.mxEvent,
+            event: forwardableEvent,
             permalinkCreator: this.props.permalinkCreator,
         });
         this.closeMenu();
@@ -379,12 +380,13 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let forwardButton: JSX.Element;
-        if (contentActionable && canForward(mxEvent)) {
+        const forwardableEvent = getForwardableEvent(mxEvent, cli);
+        if (contentActionable && forwardableEvent) {
             forwardButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconForward"
                     label={_t("Forward")}
-                    onClick={this.onForwardClick}
+                    onClick={this.onForwardClick(forwardableEvent)}
                 />
             );
         }
