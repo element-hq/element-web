@@ -17,6 +17,10 @@ limitations under the License.
 .mx_SettingsTab {
     --SettingsTab_section-margin-bottom-preferences-labs: 30px;
     color: $primary-content;
+
+    a {
+        color: $links;
+    }
 }
 
 .mx_SettingsTab_warningText {
@@ -27,12 +31,12 @@ limitations under the License.
     font-size: $font-20px;
     font-weight: 600;
     color: $primary-content;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
+    margin-top: 10px; // TODO: Use a spacing variable
+    margin-bottom: 10px; // TODO: Use a spacing variable
 
-.mx_SettingsTab_heading:nth-child(n + 2) {
-    margin-top: 30px;
+    &:nth-child(n + 2) {
+        margin-top: 30px; // TODO: Use a spacing variable
+    }
 }
 
 .mx_SettingsTab_subheading {
@@ -40,55 +44,48 @@ limitations under the License.
     display: block;
     font-weight: 600;
     color: $primary-content;
-    margin-bottom: 10px;
-    margin-top: 12px;
+    margin-top: $spacing-12;
+    margin-bottom: 10px; // TODO: Use a spacing variable
 }
 
 .mx_SettingsTab_subsectionText {
     color: $secondary-content;
     font-size: $font-14px;
     display: block;
-    margin: 10px 80px 10px 0; // Align with the rest of the view
+    margin-top: 10px; // TODO: Use a spacing variable
+    margin-inline-end: 80px; // Align with the rest of the view
+    margin-bottom: 10px; // TODO: Use a spacing variable
+    margin-inline-start: 0;
 }
 
 .mx_SettingsTab_section {
-    $right-gutter: 80px;
+    $end-gutter: 80px;
 
-    margin-bottom: 24px;
+    margin-bottom: $spacing-24;
 
     .mx_SettingsFlag {
-        margin-right: $right-gutter;
-        margin-bottom: 10px;
+        margin-inline-end: $end-gutter;
+        margin-bottom: 10px; // TODO: Use a spacing variable
+
+        .mx_SettingsFlag_label {
+            vertical-align: middle;
+            display: inline-block;
+            max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
+            box-sizing: border-box;
+        }
+
+        .mx_ToggleSwitch {
+            float: inline-end;
+        }
     }
 
     > p {
-        margin-right: $right-gutter;
+        margin-inline-end: $end-gutter;
     }
 
     &.mx_SettingsTab_subsectionText .mx_SettingsFlag {
-        margin-right: 0 !important;
+        margin-inline-end: 0 !important;
     }
-}
-
-.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_label {
-    vertical-align: middle;
-    display: inline-block;
-    font-size: $font-14px;
-    color: $primary-content;
-    max-width: calc(100% - $font-48px); // Force word wrap instead of colliding with the switch
-    box-sizing: border-box;
-    padding-right: 10px;
-}
-
-.mx_SettingsTab_section .mx_SettingsFlag .mx_SettingsFlag_microcopy {
-    margin-top: 4px;
-    font-size: $font-12px;
-    line-height: $font-15px;
-    color: $secondary-content;
-}
-
-.mx_SettingsTab_section .mx_SettingsFlag .mx_ToggleSwitch {
-    float: right;
 }
 
 .mx_SettingsTab_linkBtn {
@@ -97,10 +94,6 @@ limitations under the License.
     word-break: break-all;
 }
 
-.mx_SettingsTab a {
-    color: $links;
-}
-
 .mx_SettingsTab_toggleWithDescription {
-    margin-top: 24px;
+    margin-top: $spacing-24;
 }
