@@ -34,6 +34,14 @@ limitations under the License.
         border-top: 1px solid $menu-border-color;
     }
 
+    .mx_PinnedEventTile_senderAvatar,
+    .mx_PinnedEventTile_sender,
+    .mx_PinnedEventTile_unpinButton,
+    .mx_PinnedEventTile_message,
+    .mx_PinnedEventTile_footer {
+        min-width: 0; // Prevent a grid blowout
+    }
+
     .mx_PinnedEventTile_senderAvatar {
         grid-area: avatar;
     }
