@@ -72,7 +72,7 @@ limitations under the License.
         height: 0;
         margin-left: 4px;
         margin-right: 19px;
-        border-top: 1px solid $system;
+        border-top: 1px solid $quinary-content;
     }
 
     .mx_GenericDropdownMenu_Option {
@@ -102,7 +102,7 @@ limitations under the License.
 
         &.mx_GenericDropdownMenu_Option--item {
             &:hover {
-                background-color: $event-selected-color;
+                background-color: $menu-selected-color;
             }
 
             &[aria-checked="true"]::before {

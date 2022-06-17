@@ -15,7 +15,39 @@ limitations under the License.
 */
 
 .mx_NetworkDropdown_wrapper .mx_ContextualMenu {
-    min-width: 200px;
+    .mx_GenericDropdownMenu_Option {
+        &.mx_GenericDropdownMenu_Option--header {
+            padding-top: $spacing-12;
+            padding-bottom: $spacing-4;
+            min-width: 160px;
+        }
+
+        &.mx_GenericDropdownMenu_Option--item {
+            padding-top: $spacing-4;
+            padding-bottom: $spacing-4;
+
+            > .mx_GenericDropdownMenu_Option--label span:first-child {
+                font-weight: normal;
+            }
+        }
+
+        > .mx_GenericDropdownMenu_Option--label {
+            flex-direction: row;
+            align-items: baseline;
+            align-content: baseline;
+            color: $primary-content;
+
+            span:not(:first-child) {
+                margin-left: $spacing-4;
+                color: $secondary-content;
+            }
+        }
+    }
+
+    .mx_GenericDropdownMenu_divider {
+        margin-top: $spacing-4;
+        margin-bottom: $spacing-4;
+    }
 }
 
 .mx_NetworkDropdown_addServer {
@@ -28,7 +60,7 @@ limitations under the License.
     display: inline-block;
     width: 16px;
     height: 16px;
-    background: $system;
+    background: $quinary-content;
     border-radius: 8px;
     text-align: center;
     line-height: 16px;
