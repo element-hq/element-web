@@ -174,6 +174,14 @@ export default class SettingsStore {
         const watcherId = `${new Date().getTime()}_${SettingsStore.watcherCount++}_${settingName}_${roomId}`;
 
         const localizedCallback = (changedInRoomId: string | null, atLevel: SettingLevel, newValAtLevel: any) => {
+            if (!SettingsStore.doesSettingSupportLevel(originalSettingName, atLevel)) {
+                logger.warn(
+                    `Setting handler notified for an update of an invalid setting level: ` +
+                    `${originalSettingName}@${atLevel} - this likely means a weird setting value ` +
+                    `made it into the level's storage. The notification will be ignored.`,
+                );
+                return;
+            }
             const newValue = SettingsStore.getValue(originalSettingName);
             const newValueAtLevel = SettingsStore.getValueAt(atLevel, originalSettingName) ?? newValAtLevel;
             callbackFn(originalSettingName, changedInRoomId, atLevel, newValueAtLevel, newValue);
@@ -514,6 +522,23 @@ export default class SettingsStore {
     public static isLevelSupported(level: SettingLevel): boolean {
         if (!LEVEL_HANDLERS[level]) return false;
         return LEVEL_HANDLERS[level].isSupported();
+    }
+
+    /**
+     * Determines if a setting supports a particular level.
+     * @param settingName The setting name.
+     * @param level The level.
+     * @returns True if supported, false otherwise. Note that this will not check to see if
+     * the level itself can be supported by the runtime (ie: you will need to call #isLevelSupported()
+     * on your own).
+     */
+    public static doesSettingSupportLevel(settingName: string, level: SettingLevel): boolean {
+        const setting = SETTINGS[settingName];
+        if (!setting) {
+            throw new Error("Setting '" + settingName + "' does not appear to be a setting.");
+        }
+
+        return level === SettingLevel.DEFAULT || (setting.supportedLevels.includes(level));
     }
 
     /**
