@@ -37,6 +37,10 @@ limitations under the License.
                 z-index: auto; // enable background color on hover
             }
 
+            &.mx_EventTile_info .mx_MessageActionBar {
+                inset-inline-end: calc($container-gap-width + var(--BaseCard_padding-inline) + 1px); // 1px: border width
+            }
+
             .mx_ReactionsRow {
                 position: relative; // display on hover
             }

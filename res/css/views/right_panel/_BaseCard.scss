@@ -15,11 +15,12 @@ limitations under the License.
 */
 
 .mx_BaseCard {
+    --BaseCard_padding-inline: $spacing-8;
     --BaseCard_EventTile_line-padding-block: 2px;
     --BaseCard_EventTile-spacing-inline: 36px; // TODO: Use a spacing variable
     --BaseCard_header-button-size: 24px;
 
-    padding: 0 $spacing-8;
+    padding: 0 var(--BaseCard_padding-inline);
     overflow: hidden;
     display: flex;
     flex-direction: column;
