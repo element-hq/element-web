@@ -59,6 +59,10 @@ limitations under the License.
                 margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
             }
 
+            .mx_ReplyTile .mx_DisambiguatedProfile {
+                margin-inline-start: 0;
+            }
+
             .mx_ReactionsRow {
                 margin-inline-end: $spacing-8; // See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.scss
             }
