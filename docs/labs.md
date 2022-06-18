@@ -183,3 +183,8 @@ Enables support for creating and joining video rooms, which are persistent video
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
 Enables rendering of MD / HTML in room topics.
+
+## Exploring public spaces (`feature_exploring_public_spaces`)
+
+Enables exploring public spaces in the new search dialog. Requires the server to
+have `msc3827` enabled.
