@@ -264,18 +264,20 @@ export default class Pill extends React.Component<IProps, IState> {
                         onClick={onClick}
                         onMouseOver={this.onMouseOver}
                         onMouseLeave={this.onMouseLeave}
+                        dir="auto"
                     >
                         { avatar }
-                        { linkText }
+                        <span className="mx_Pill_linkText">{ linkText }</span>
                         { tip }
                     </a> :
                     <span
                         className={classes}
                         onMouseOver={this.onMouseOver}
                         onMouseLeave={this.onMouseLeave}
+                        dir="auto"
                     >
                         { avatar }
-                        { linkText }
+                        <span className="mx_Pill_linkText">{ linkText }</span>
                         { tip }
                     </span> }
             </MatrixClientContext.Provider>;

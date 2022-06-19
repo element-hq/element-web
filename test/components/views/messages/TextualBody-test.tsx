@@ -331,11 +331,11 @@ describe("<TextualBody />", () => {
                 '<span class="mx_EventTile_body markdown-body" dir="auto">' +
                 'A <span><a class="mx_Pill mx_RoomPill" ' +
                 'href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com' +
-                '?via=example.com&amp;via=bob.com"' +
+                '?via=example.com&amp;via=bob.com" dir="auto"' +
                 '><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
                 'src="mxc://avatar.url/room.png" ' +
                 'style="width: 16px; height: 16px;" alt="" aria-hidden="true">' +
-                'room name</a></span> with vias</span>',
+                '<span class="mx_Pill_linkText">room name</span></a></span> with vias</span>',
             );
         });
 
@@ -425,4 +425,3 @@ describe("<TextualBody />", () => {
         });
     });
 });
-

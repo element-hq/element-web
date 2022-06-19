@@ -21,7 +21,9 @@ limitations under the License.
     vertical-align: text-top;
     display: inline-flex;
     align-items: center;
-
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
     cursor: pointer;
 
     color: $accent-fg-color !important; // To override .markdown-body
@@ -50,6 +52,13 @@ limitations under the License.
     .mx_BaseAvatar {
         margin-inline-start: -0.3em; // Otherwise the gap is too large
         margin-inline-end: 0.2em;
+        min-width: $font-16px; // ensure the avatar is not compressed
+    }
+
+    .mx_Pill_linkText {
+        white-space: nowrap; // enforce the pill text to be a single line
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     a& {
