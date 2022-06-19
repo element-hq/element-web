@@ -74,6 +74,7 @@ limitations under the License.
 
         // XXX Remove this when video rooms leave beta
         .mx_BetaCard_betaPill {
+            margin-inline-start: auto;
             align-self: start;
         }
     }

@@ -102,7 +102,10 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                         { inviteSender }
                     </div> : null }
                 </div>
-                <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
+                { room.isElementVideoRoom()
+                    ? <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
+                    : null
+                }
             </div>;
         }
 
