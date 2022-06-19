@@ -71,6 +71,11 @@ limitations under the License.
                 color: $secondary-content;
             }
         }
+
+        // XXX Remove this when video rooms leave beta
+        .mx_BetaCard_betaPill {
+            align-self: start;
+        }
     }
 
     .mx_RoomPreviewCard_avatar {
@@ -104,13 +109,6 @@ limitations under the License.
                 mask-repeat: no-repeat;
                 mask-image: url('$(res)/img/element-icons/call/video-call.svg');
             }
-        }
-
-        // XXX Remove this when video rooms leave beta
-        .mx_BetaCard_betaPill {
-            position: absolute;
-            right: $spacing-24;
-            top: $spacing-32;
         }
     }
 
