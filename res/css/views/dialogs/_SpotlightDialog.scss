@@ -283,14 +283,15 @@ limitations under the License.
                         }
                     }
                     .mx_SpotlightDialog_result_publicRoomDescription {
-                        display: -webkit-box;
                         color: $secondary-content;
                         font-size: $font-12px;
                         white-space: normal;
                         word-wrap: break-word;
                         line-height: $font-20px;
+                        display: -webkit-box;
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 3;
+                        overflow: hidden;
                     }
                 }
 
