@@ -76,6 +76,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         > .mx_DisambiguatedProfile {
             line-height: $font-20px;
             margin-left: $left-gutter;
+            max-width: calc(100% - $left-gutter);
         }
 
         > .mx_EventTile_avatar {
@@ -152,7 +153,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         display: inline-block;
         padding-bottom: 0px;
         padding-top: 0px;
-        max-width: calc(100% - $left-gutter);
     }
 
     &.mx_EventTile_isEditing .mx_MessageTimestamp {
