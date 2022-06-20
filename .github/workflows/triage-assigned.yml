@@ -14,5 +14,5 @@ jobs:
       - uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
         with:
           project: Web App Team
-          column: Ready
+          column: "In Progress"
           repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

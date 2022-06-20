@@ -18,13 +18,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { UpdateCheckStatus } from "matrix-react-sdk/src/BasePlatform";
-import BaseEventIndexManager, {
-    ICrawlerCheckpoint,
-    IEventAndProfile,
-    IIndexStats,
-    ISearchArgs,
-} from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
+import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
+import BaseEventIndexManager from 'matrix-react-sdk/src/indexing/BaseEventIndexManager';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
@@ -43,11 +38,12 @@ import { showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/Update
 import { CheckUpdatesPayload } from "matrix-react-sdk/src/dispatcher/payloads/CheckUpdatesPayload";
 import ToastStore from "matrix-react-sdk/src/stores/ToastStore";
 import GenericExpiringToast from "matrix-react-sdk/src/components/views/toasts/GenericExpiringToast";
-import { IMatrixProfile, IEventWithRoomId as IMatrixEvent, IResultRoomEvents } from "matrix-js-sdk/src/@types/search";
 import { logger } from "matrix-js-sdk/src/logger";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import VectorBasePlatform from './VectorBasePlatform';
+import { SeshatIndexManager } from "./SeshatIndexManager";
+import { IPCManager } from "./IPCManager";
 
 const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
@@ -71,14 +67,14 @@ function platformFriendlyName(): string {
     }
 }
 
-function _onAction(payload: ActionPayload) {
+function onAction(payload: ActionPayload): void {
     // Whitelist payload actions, no point sending most across
     if (['call_state'].includes(payload.action)) {
         electron.send('app_onAction', payload);
     }
 }
 
-function getUpdateCheckStatus(status: boolean | string) {
+function getUpdateCheckStatus(status: boolean | string): UpdateStatus {
     if (status === true) {
         return { status: UpdateCheckStatus.Downloading };
     } else if (status === false) {
@@ -91,139 +87,16 @@ function getUpdateCheckStatus(status: boolean | string) {
     }
 }
 
-interface IPCPayload {
-    id?: number;
-    error?: string;
-    reply?: any;
-}
-
-class SeshatIndexManager extends BaseEventIndexManager {
-    private pendingIpcCalls: Record<number, { resolve, reject }> = {};
-    private nextIpcCallId = 0;
-
-    constructor() {
-        super();
-
-        electron.on('seshatReply', this.onIpcReply);
-    }
-
-    private async ipcCall(name: string, ...args: any[]): Promise<any> {
-        // TODO this should be moved into the preload.js file.
-        const ipcCallId = ++this.nextIpcCallId;
-        return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
-            window.electron.send('seshat', { id: ipcCallId, name, args });
-        });
-    }
-
-    private onIpcReply = (ev: {}, payload: IPCPayload) => {
-        if (payload.id === undefined) {
-            logger.warn("Ignoring IPC reply with no ID");
-            return;
-        }
-
-        if (this.pendingIpcCalls[payload.id] === undefined) {
-            logger.warn("Unknown IPC payload ID: " + payload.id);
-            return;
-        }
-
-        const callbacks = this.pendingIpcCalls[payload.id];
-        delete this.pendingIpcCalls[payload.id];
-        if (payload.error) {
-            callbacks.reject(payload.error);
-        } else {
-            callbacks.resolve(payload.reply);
-        }
-    };
-
-    async supportsEventIndexing(): Promise<boolean> {
-        return this.ipcCall('supportsEventIndexing');
-    }
-
-    async initEventIndex(userId: string, deviceId: string): Promise<void> {
-        return this.ipcCall('initEventIndex', userId, deviceId);
-    }
-
-    async addEventToIndex(ev: IMatrixEvent, profile: IMatrixProfile): Promise<void> {
-        return this.ipcCall('addEventToIndex', ev, profile);
-    }
-
-    async deleteEvent(eventId: string): Promise<boolean> {
-        return this.ipcCall('deleteEvent', eventId);
-    }
-
-    async isEventIndexEmpty(): Promise<boolean> {
-        return this.ipcCall('isEventIndexEmpty');
-    }
-
-    async isRoomIndexed(roomId: string): Promise<boolean> {
-        return this.ipcCall('isRoomIndexed', roomId);
-    }
-
-    async commitLiveEvents(): Promise<void> {
-        return this.ipcCall('commitLiveEvents');
-    }
-
-    async searchEventIndex(searchConfig: ISearchArgs): Promise<IResultRoomEvents> {
-        return this.ipcCall('searchEventIndex', searchConfig);
-    }
-
-    async addHistoricEvents(
-        events: IEventAndProfile[],
-        checkpoint: ICrawlerCheckpoint | null,
-        oldCheckpoint: ICrawlerCheckpoint | null,
-    ): Promise<boolean> {
-        return this.ipcCall('addHistoricEvents', events, checkpoint, oldCheckpoint);
-    }
-
-    async addCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
-        return this.ipcCall('addCrawlerCheckpoint', checkpoint);
-    }
-
-    async removeCrawlerCheckpoint(checkpoint: ICrawlerCheckpoint): Promise<void> {
-        return this.ipcCall('removeCrawlerCheckpoint', checkpoint);
-    }
-
-    async loadFileEvents(args): Promise<IEventAndProfile[]> {
-        return this.ipcCall('loadFileEvents', args);
-    }
-
-    async loadCheckpoints(): Promise<ICrawlerCheckpoint[]> {
-        return this.ipcCall('loadCheckpoints');
-    }
-
-    async closeEventIndex(): Promise<void> {
-        return this.ipcCall('closeEventIndex');
-    }
-
-    async getStats(): Promise<IIndexStats> {
-        return this.ipcCall('getStats');
-    }
-
-    async getUserVersion(): Promise<number> {
-        return this.ipcCall('getUserVersion');
-    }
-
-    async setUserVersion(version: number): Promise<void> {
-        return this.ipcCall('setUserVersion', version);
-    }
-
-    async deleteEventIndex(): Promise<void> {
-        return this.ipcCall('deleteEventIndex');
-    }
-}
-
 export default class ElectronPlatform extends VectorBasePlatform {
-    private eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
-    private pendingIpcCalls: Record<number, { resolve, reject }> = {};
-    private nextIpcCallId = 0;
+    private readonly ipc = new IPCManager("ipcCall", "ipcReply");
+    private readonly eventIndexManager: BaseEventIndexManager = new SeshatIndexManager();
     // this is the opaque token we pass to the HS which when we get it in our callback we can resolve to a profile
-    private ssoID: string = randomString(32);
+    private readonly ssoID: string = randomString(32);
 
     constructor() {
         super();
 
-        dis.register(_onAction);
+        dis.register(onAction);
         /*
             IPC Call `check_updates` returns:
             true if there is an update available
@@ -243,7 +116,6 @@ export default class ElectronPlatform extends VectorBasePlatform {
             rageshake.flush();
         });
 
-        electron.on('ipcReply', this.onIpcReply);
         electron.on('update-downloaded', this.onUpdateDownloaded);
 
         electron.on('preferences', () => {
@@ -278,14 +150,14 @@ export default class ElectronPlatform extends VectorBasePlatform {
             });
         });
 
-        this.ipcCall("startSSOFlow", this.ssoID);
+        this.ipc.call("startSSOFlow", this.ssoID);
     }
 
-    async getConfig(): Promise<IConfigOptions> {
-        return this.ipcCall('getConfig');
+    public async getConfig(): Promise<IConfigOptions> {
+        return this.ipc.call('getConfig');
     }
 
-    onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
+    private onUpdateDownloaded = async (ev, { releaseNotes, releaseName }) => {
         dis.dispatch<CheckUpdatesPayload>({
             action: Action.CheckUpdates,
             status: UpdateCheckStatus.Ready,
@@ -295,7 +167,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     };
 
-    getHumanReadableName(): string {
+    public getHumanReadableName(): string {
         return 'Electron Platform'; // no translation required: only used for analytics
     }
 
@@ -303,7 +175,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
      * Return true if platform supports multi-language
      * spell-checking, otherwise false.
      */
-    supportsMultiLanguageSpellCheck(): boolean {
+    public supportsMultiLanguageSpellCheck(): boolean {
         // Electron uses OS spell checking on macOS, so no need for in-app options
         if (isMac) return false;
         return true;
@@ -320,15 +192,21 @@ export default class ElectronPlatform extends VectorBasePlatform {
         electron.send('setBadgeCount', count);
     }
 
-    supportsNotifications(): boolean {
+    public supportsNotifications(): boolean {
         return true;
     }
 
-    maySendNotifications(): boolean {
+    public maySendNotifications(): boolean {
         return true;
     }
 
-    displayNotification(title: string, msg: string, avatarUrl: string, room: Room, ev?: MatrixEvent): Notification {
+    public displayNotification(
+        title: string,
+        msg: string,
+        avatarUrl: string,
+        room: Room,
+        ev?: MatrixEvent,
+    ): Notification {
         // GNOME notification spec parses HTML tags for styling...
         // Electron Docs state all supported linux notification systems follow this markup spec
         // https://github.com/electron/electron/blob/master/docs/tutorial/desktop-environment-integration.md#linux
@@ -350,100 +228,56 @@ export default class ElectronPlatform extends VectorBasePlatform {
         const handler = notification.onclick as Function;
         notification.onclick = () => {
             handler?.();
-            this.ipcCall('focusWindow');
+            this.ipc.call('focusWindow');
         };
 
         return notification;
     }
 
-    loudNotification(ev: MatrixEvent, room: Room) {
+    public loudNotification(ev: MatrixEvent, room: Room) {
         electron.send('loudNotification');
     }
 
-    async getAppVersion(): Promise<string> {
-        return this.ipcCall('getAppVersion');
+    public async getAppVersion(): Promise<string> {
+        return this.ipc.call('getAppVersion');
     }
 
-    supportsAutoLaunch(): boolean {
-        return true;
+    public supportsSetting(settingName?: string): boolean {
+        switch (settingName) {
+            case "Electron.showTrayIcon": // Things other than Mac support tray icons
+            case "Electron.alwaysShowMenuBar": // This isn't relevant on Mac as Menu bars don't live in the app window
+                return !isMac;
+            default:
+                return true;
+        }
     }
 
-    async getAutoLaunchEnabled(): Promise<boolean> {
-        return this.ipcCall('getAutoLaunchEnabled');
+    public getSettingValue(settingName: string): Promise<any> {
+        return this.ipc.call("getSettingValue", settingName);
     }
 
-    async setAutoLaunchEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setAutoLaunchEnabled', enabled);
-    }
-
-    supportsWarnBeforeExit(): boolean {
-        return true;
-    }
-
-    async shouldWarnBeforeExit(): Promise<boolean> {
-        return this.ipcCall('shouldWarnBeforeExit');
-    }
-
-    async setWarnBeforeExit(enabled: boolean): Promise<void> {
-        return this.ipcCall('setWarnBeforeExit', enabled);
-    }
-
-    supportsAutoHideMenuBar(): boolean {
-        // This is irelevant on Mac as Menu bars don't live in the app window
-        return !isMac;
-    }
-
-    async getAutoHideMenuBarEnabled(): Promise<boolean> {
-        return this.ipcCall('getAutoHideMenuBarEnabled');
-    }
-
-    async setAutoHideMenuBarEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setAutoHideMenuBarEnabled', enabled);
-    }
-
-    supportsMinimizeToTray(): boolean {
-        // Things other than Mac support tray icons
-        return !isMac;
-    }
-
-    async getMinimizeToTrayEnabled(): Promise<boolean> {
-        return this.ipcCall('getMinimizeToTrayEnabled');
-    }
-
-    async setMinimizeToTrayEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setMinimizeToTrayEnabled', enabled);
-    }
-
-    public supportsTogglingHardwareAcceleration(): boolean {
-        return true;
-    }
-
-    public async getHardwareAccelerationEnabled(): Promise<boolean> {
-        return this.ipcCall('getHardwareAccelerationEnabled');
-    }
-
-    public async setHardwareAccelerationEnabled(enabled: boolean): Promise<void> {
-        return this.ipcCall('setHardwareAccelerationEnabled', enabled);
+    public setSettingValue(settingName: string, value: any): Promise<void> {
+        return this.ipc.call("setSettingValue", settingName, value);
     }
 
     async canSelfUpdate(): Promise<boolean> {
-        const feedUrl = await this.ipcCall('getUpdateFeedUrl');
+        const feedUrl = await this.ipc.call('getUpdateFeedUrl');
         return Boolean(feedUrl);
     }
 
-    startUpdateCheck() {
+    public startUpdateCheck() {
         super.startUpdateCheck();
         electron.send('check_updates');
     }
 
-    installUpdate() {
+    public installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
         electron.send('install_update');
     }
 
-    getDefaultDeviceDisplayName(): string {
+    public getDefaultDeviceDisplayName(): string {
         const brand = SdkConfig.get().brand;
         return _t('%(brand)s Desktop (%(platformName)s)', {
             brand,
@@ -451,105 +285,77 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
     }
 
-    screenCaptureErrorString(): string | null {
-        return null;
-    }
-
-    requestNotificationPermission(): Promise<string> {
+    public requestNotificationPermission(): Promise<string> {
         return Promise.resolve('granted');
     }
 
-    reload() {
+    public reload() {
         window.location.reload();
     }
 
-    private async ipcCall(name: string, ...args: any[]): Promise<any> {
-        const ipcCallId = ++this.nextIpcCallId;
-        return new Promise((resolve, reject) => {
-            this.pendingIpcCalls[ipcCallId] = { resolve, reject };
-            window.electron.send('ipcCall', { id: ipcCallId, name, args });
-            // Maybe add a timeout to these? Probably not necessary.
-        });
-    }
-
-    private onIpcReply = (ev, payload) => {
-        if (payload.id === undefined) {
-            logger.warn("Ignoring IPC reply with no ID");
-            return;
-        }
-
-        if (this.pendingIpcCalls[payload.id] === undefined) {
-            logger.warn("Unknown IPC payload ID: " + payload.id);
-            return;
-        }
-
-        const callbacks = this.pendingIpcCalls[payload.id];
-        delete this.pendingIpcCalls[payload.id];
-        if (payload.error) {
-            callbacks.reject(payload.error);
-        } else {
-            callbacks.resolve(payload.reply);
-        }
-    };
-
-    getEventIndexingManager(): BaseEventIndexManager | null {
+    public getEventIndexingManager(): BaseEventIndexManager | null {
         return this.eventIndexManager;
     }
 
-    async setLanguage(preferredLangs: string[]) {
-        return this.ipcCall('setLanguage', preferredLangs);
+    public async setLanguage(preferredLangs: string[]) {
+        return this.ipc.call('setLanguage', preferredLangs);
     }
 
-    setSpellCheckLanguages(preferredLangs: string[]) {
-        this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
+    public setSpellCheckLanguages(preferredLangs: string[]) {
+        this.ipc.call('setSpellCheckLanguages', preferredLangs).catch(error => {
             logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
             logger.error(error);
         });
     }
 
-    async getSpellCheckLanguages(): Promise<string[]> {
-        return this.ipcCall('getSpellCheckLanguages');
+    public async getSpellCheckLanguages(): Promise<string[]> {
+        return this.ipc.call('getSpellCheckLanguages');
     }
 
-    async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
-        return this.ipcCall('getDesktopCapturerSources', options);
+    public async getDesktopCapturerSources(options: GetSourcesOptions): Promise<Array<DesktopCapturerSource>> {
+        return this.ipc.call('getDesktopCapturerSources', options);
     }
 
-    supportsDesktopCapturer(): boolean {
+    public supportsDesktopCapturer(): boolean {
         return true;
     }
 
-    async getAvailableSpellCheckLanguages(): Promise<string[]> {
-        return this.ipcCall('getAvailableSpellCheckLanguages');
+    public async getAvailableSpellCheckLanguages(): Promise<string[]> {
+        return this.ipc.call('getAvailableSpellCheckLanguages');
     }
 
-    getSSOCallbackUrl(fragmentAfterLogin: string): URL {
+    public getSSOCallbackUrl(fragmentAfterLogin: string): URL {
         const url = super.getSSOCallbackUrl(fragmentAfterLogin);
         url.protocol = "element";
         url.searchParams.set("element-desktop-ssoid", this.ssoID);
         return url;
     }
 
-    startSingleSignOn(mxClient: MatrixClient, loginType: "sso" | "cas", fragmentAfterLogin: string, idpId?: string) {
+    public startSingleSignOn(
+        mxClient: MatrixClient,
+        loginType: "sso" | "cas",
+        fragmentAfterLogin: string,
+        idpId?: string,
+    ) {
         // this will get intercepted by electron-main will-navigate
         super.startSingleSignOn(mxClient, loginType, fragmentAfterLogin, idpId);
-        Modal.createTrackedDialog('Electron', 'SSO', InfoDialog, {
+        Modal.createDialog(InfoDialog, {
             title: _t("Go to your browser to complete Sign In"),
             description: <Spinner />,
         });
     }
 
     public navigateForwardBack(back: boolean): void {
-        this.ipcCall(back ? "navigateBack" : "navigateForward");
+        this.ipc.call(back ? "navigateBack" : "navigateForward");
     }
 
     public overrideBrowserShortcuts(): boolean {
         return true;
     }
 
-    async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
+    public async getPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this.ipcCall('getPickleKey', userId, deviceId);
+            return await this.ipc.call('getPickleKey', userId, deviceId);
         } catch (e) {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -557,9 +363,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     }
 
-    async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
+    public async createPickleKey(userId: string, deviceId: string): Promise<string | null> {
         try {
-            return await this.ipcCall('createPickleKey', userId, deviceId);
+            return await this.ipc.call('createPickleKey', userId, deviceId);
         } catch (e) {
             // if we can't connect to the password storage, assume there's no
             // pickle key
@@ -567,9 +373,9 @@ export default class ElectronPlatform extends VectorBasePlatform {
         }
     }
 
-    async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
+    public async destroyPickleKey(userId: string, deviceId: string): Promise<void> {
         try {
-            await this.ipcCall('destroyPickleKey', userId, deviceId);
+            await this.ipc.call('destroyPickleKey', userId, deviceId);
         } catch (e) {}
     }
 }

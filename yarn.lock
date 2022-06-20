@@ -1410,6 +1410,11 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
+"@matrix-org/analytics-events@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.1.1.tgz#ae95b0c1fb86a094c5f51d121f10e6a1b1ddca68"
+  integrity sha512-PIDkfYMNmph6x/rfgtIeQXUWj9hGzTLnOCFUYZFBnoTiS4UXkH73bz77Ho12uoUezUz4v40mxTXdrFxp8Zo6zA==
+
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz":
   version "3.2.8"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz#8d53636d045e1776e2a2ec6613e57330dd9ce856"
@@ -8265,10 +8270,6 @@ mathml-tag-names@^2.1.3:
   resolved "https://registry.yarnpkg.com/mathml-tag-names/-/mathml-tag-names-2.1.3.tgz#4ddadd67308e780cf16a47685878ee27b736a0a3"
   integrity sha512-APMBEanjybaPzUrfqU0IMU5I0AswKMH7k8OTLs0vvV4KZpExkTkY87nR/zpbuTPj+gARop7aGUbl11pnDfW6xg==
 
-"matrix-analytics-events@github:matrix-org/matrix-analytics-events.git#a0687ca6fbdb7258543d49b99fb88b9201e900b0":
-  version "0.0.1"
-  resolved "https://codeload.github.com/matrix-org/matrix-analytics-events/tar.gz/a0687ca6fbdb7258543d49b99fb88b9201e900b0"
-
 matrix-encrypt-attachment@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/matrix-encrypt-attachment/-/matrix-encrypt-attachment-1.0.3.tgz#6e016587728c396549c833985f39cbf6c07ee97b"
@@ -8281,7 +8282,7 @@ matrix-events-sdk@^0.0.1-beta.7:
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "18.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cb5b2e14703ecab96f89ce6945e60de75a1c4f54"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/eb8491c91bbc5662fef9406d4d8953c1ab47f19d"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8303,10 +8304,11 @@ matrix-mock-request@^2.0.0:
     expect "^1.20.2"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.46.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/5da187d520f836af7808ab5346a379c2262e745a"
+  version "3.47.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/7d14d15ba663bebc440ab08c1a948de6b67d31ea"
   dependencies:
     "@babel/runtime" "^7.12.5"
+    "@matrix-org/analytics-events" "^0.1.1"
     "@sentry/browser" "^6.11.0"
     "@sentry/tracing" "^6.11.0"
     "@testing-library/react" "^12.1.5"
@@ -8340,7 +8342,6 @@ matrix-mock-request@^2.0.0:
     linkifyjs "4.0.0-beta.4"
     lodash "^4.17.20"
     maplibre-gl "^1.15.2"
-    matrix-analytics-events "github:matrix-org/matrix-analytics-events.git#a0687ca6fbdb7258543d49b99fb88b9201e900b0"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "^0.0.1-beta.7"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
