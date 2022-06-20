@@ -19,7 +19,7 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
       userId={null}
     >
       <div
-        className="mx_FontScalingPanel_fontSlider_preview mx_GroupLayout mx_EventTilePreview_loader"
+        className="mx_FontScalingPanel_fontSlider_preview mx_EventTilePreview_loader"
       >
         <Spinner
           h={32}
