@@ -187,4 +187,4 @@ Enables rendering of MD / HTML in room topics.
 ## Exploring public spaces (`feature_exploring_public_spaces`)
 
 Enables exploring public spaces in the new search dialog. Requires the server to
-have `msc3827` enabled.
+have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
