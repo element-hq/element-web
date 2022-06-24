@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { RoomType } from "matrix-js-sdk/src/@types/event";
 import { IRoomDirectoryOptions } from "matrix-js-sdk/src/@types/requests";
 import { IProtocol, IPublicRoomsChunkRoom } from "matrix-js-sdk/src/client";
 import { useCallback, useEffect, useState } from "react";
@@ -32,6 +33,7 @@ const LAST_INSTANCE_KEY = "mx_last_room_directory_instance";
 export interface IPublicRoomsOpts {
     limit: number;
     query?: string;
+    roomTypes?: Set<RoomType | null>;
 }
 
 let thirdParty: Protocols;
@@ -72,6 +74,7 @@ export const usePublicRoomDirectory = () => {
     const search = useCallback(async ({
         limit = 20,
         query,
+        roomTypes,
     }: IPublicRoomsOpts): Promise<boolean> => {
         const opts: IRoomDirectoryOptions = { limit };
 
@@ -85,9 +88,10 @@ export const usePublicRoomDirectory = () => {
             opts.third_party_instance_id = config.instanceId;
         }
 
-        if (query) {
+        if (query || roomTypes) {
             opts.filter = {
-                generic_search_term: query,
+                "generic_search_term": query,
+                "org.matrix.msc3827.room_types": roomTypes ? Array.from<RoomType | null>(roomTypes) : null,
             };
         }
 

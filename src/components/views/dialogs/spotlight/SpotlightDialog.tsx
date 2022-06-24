@@ -18,7 +18,7 @@ import classNames from "classnames";
 import { capitalize, sum } from "lodash";
 import { WebSearch as WebSearchEvent } from "@matrix-org/analytics-events/types/typescript/WebSearch";
 import { IHierarchyRoom } from "matrix-js-sdk/src/@types/spaces";
-import { IPublicRoomsChunkRoom, MatrixClient, RoomMember } from "matrix-js-sdk/src/matrix";
+import { IPublicRoomsChunkRoom, MatrixClient, RoomMember, RoomType } from "matrix-js-sdk/src/matrix";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { normalize } from "matrix-js-sdk/src/utils";
 import React, {
@@ -89,6 +89,8 @@ import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
 import { RoomResultDetails } from "./RoomResultDetails";
 import { TooltipOption } from "./TooltipOption";
+import LabelledCheckbox from "../../elements/LabelledCheckbox";
+import { useFeatureEnabled } from "../../../../hooks/useSettings";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -101,6 +103,18 @@ interface IProps extends IDialogProps {
 
 function refIsForRecentlyViewed(ref: RefObject<HTMLElement>): boolean {
     return ref.current?.id?.startsWith("mx_SpotlightDialog_button_recentlyViewed_") === true;
+}
+
+function getRoomTypes(showRooms: boolean, showSpaces: boolean): Set<RoomType | null> | null {
+    const roomTypes = new Set<RoomType | null>();
+
+    // This is what servers not implementing MSC3827 are expecting
+    if (showRooms && !showSpaces) return null;
+
+    if (showRooms) roomTypes.add(null);
+    if (showSpaces) roomTypes.add(RoomType.Space);
+
+    return roomTypes;
 }
 
 enum Section {
@@ -277,14 +291,19 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     const [inviteLinkCopied, setInviteLinkCopied] = useState<boolean>(false);
     const trimmedQuery = useMemo(() => query.trim(), [query]);
 
+    const exploringPublicSpacesEnabled = useFeatureEnabled("feature_exploring_public_spaces");
+
     const { loading: publicRoomsLoading, publicRooms, protocols, config, setConfig, search: searchPublicRooms } =
         usePublicRoomDirectory();
+    const [showRooms, setShowRooms] = useState(true);
+    const [showSpaces, setShowSpaces] = useState(false);
     const { loading: peopleLoading, users, search: searchPeople } = useUserDirectory();
     const { loading: profileLoading, profile, search: searchProfileInfo } = useProfileInfo();
     const searchParams: [IDirectoryOpts] = useMemo(() => ([{
         query: trimmedQuery,
+        roomTypes: getRoomTypes(showRooms, showSpaces),
         limit: SECTION_LIMIT,
-    }]), [trimmedQuery]);
+    }]), [trimmedQuery, showRooms, showSpaces]);
     useDebouncedCallback(
         filter === Filter.PublicRooms,
         searchPublicRooms,
@@ -624,15 +643,32 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 <div className="mx_SpotlightDialog_section mx_SpotlightDialog_results" role="group">
                     <div className="mx_SpotlightDialog_sectionHeader">
                         <h4>{ _t("Suggestions") }</h4>
-                        <NetworkDropdown
-                            protocols={protocols}
-                            config={config ?? null}
-                            setConfig={setConfig}
-                        />
+                        <div className="mx_SpotlightDialog_options">
+                            { exploringPublicSpacesEnabled && <>
+                                <LabelledCheckbox
+                                    label={_t("Show rooms")}
+                                    value={showRooms}
+                                    onChange={setShowRooms}
+                                />
+                                <LabelledCheckbox
+                                    label={_t("Show spaces")}
+                                    value={showSpaces}
+                                    onChange={setShowSpaces}
+                                />
+                            </> }
+                            <NetworkDropdown
+                                protocols={protocols}
+                                config={config ?? null}
+                                setConfig={setConfig}
+                            />
+                        </div>
                     </div>
-                    <div>
-                        { results[Section.PublicRooms].slice(0, SECTION_LIMIT).map(resultMapper) }
-                    </div>
+                    <div> { (showRooms || showSpaces)
+                        ? results[Section.PublicRooms].slice(0, SECTION_LIMIT).map(resultMapper)
+                        : <div className="mx_SpotlightDialog_otherSearches_messageSearchText">
+                            { _t("You cannot search for rooms that are neither a room nor a space") }
+                        </div>
+                    } </div>
                 </div>
             );
         }

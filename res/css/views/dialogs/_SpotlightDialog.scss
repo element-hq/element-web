@@ -168,6 +168,11 @@ limitations under the License.
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: $spacing-8;
+
+                .mx_SpotlightDialog_options {
+                    display: flex;
+                    gap: $spacing-4;
+                }
             }
 
             & + .mx_SpotlightDialog_section {

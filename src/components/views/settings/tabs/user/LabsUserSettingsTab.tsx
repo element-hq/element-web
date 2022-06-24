@@ -49,23 +49,31 @@ export class LabsSettingToggle extends React.Component<ILabsSettingToggleProps> 
 interface IState {
     showHiddenReadReceipts: boolean;
     showJumpToDate: boolean;
+    showExploringPublicSpaces: boolean;
 }
 
 export default class LabsUserSettingsTab extends React.Component<{}, IState> {
     constructor(props: {}) {
         super(props);
 
-        MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2285").then((showHiddenReadReceipts) => {
+        const cli = MatrixClientPeg.get();
+
+        cli.doesServerSupportUnstableFeature("org.matrix.msc2285").then((showHiddenReadReceipts) => {
             this.setState({ showHiddenReadReceipts });
         });
 
-        MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc3030").then((showJumpToDate) => {
+        cli.doesServerSupportUnstableFeature("org.matrix.msc3030").then((showJumpToDate) => {
             this.setState({ showJumpToDate });
+        });
+
+        cli.doesServerSupportUnstableFeature("org.matrix.msc3827").then((showExploringPublicSpaces) => {
+            this.setState({ showExploringPublicSpaces });
         });
 
         this.state = {
             showHiddenReadReceipts: false,
             showJumpToDate: false,
+            showExploringPublicSpaces: false,
         };
     }
 
@@ -128,6 +136,16 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
                     <SettingsFlag
                         key="feature_jump_to_date"
                         name="feature_jump_to_date"
+                        level={SettingLevel.DEVICE}
+                    />,
+                );
+            }
+
+            if (this.state.showExploringPublicSpaces) {
+                groups.getOrCreate(LabGroup.Spaces, []).push(
+                    <SettingsFlag
+                        key="feature_exploring_public_spaces"
+                        name="feature_exploring_public_spaces"
                         level={SettingLevel.DEVICE}
                     />,
                 );

@@ -29,6 +29,7 @@ import { useLocalEcho } from "../../../hooks/useLocalEcho";
 import JoinRuleSettings from "../settings/JoinRuleSettings";
 import { useRoomState } from "../../../hooks/useRoomState";
 import SettingsFieldset from "../settings/SettingsFieldset";
+import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 
 interface IProps {
     matrixClient: MatrixClient;
@@ -38,6 +39,9 @@ interface IProps {
 
 const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn }: IProps) => {
     const [error, setError] = useState("");
+    const serverSupportsExploringSpaces = useAsyncMemo<boolean>(async () => {
+        return cli.doesServerSupportUnstableFeature("org.matrix.msc3827");
+    }, [cli], false);
 
     const userId = cli.getUserId();
 
@@ -103,7 +107,7 @@ const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn 
                 canSetCanonicalAlias={canSetCanonical}
                 canSetAliases={true}
                 canonicalAliasEvent={canonicalAliasEv}
-                hidePublishSetting={true}
+                hidePublishSetting={!serverSupportsExploringSpaces}
             />
         </>;
     }

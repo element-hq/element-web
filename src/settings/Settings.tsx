@@ -220,6 +220,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             requiresRefresh: true,
         },
     },
+    "feature_exploring_public_spaces": {
+        displayName: _td("Explore public spaces in the new search dialog"),
+        supportedLevels: LEVELS_FEATURE,
+        default: false,
+    },
     "feature_msc3531_hide_messages_pending_moderation": {
         isFeature: true,
         labsGroup: LabGroup.Moderation,
