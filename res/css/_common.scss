@@ -701,10 +701,6 @@ legend {
     }
 }
 
-@define-mixin mx_Settings_fullWidthField {
-    margin-right: 100px;
-}
-
 @define-mixin ProgressBarColour $colour {
     color: $colour;
     &::-moz-progress-bar {

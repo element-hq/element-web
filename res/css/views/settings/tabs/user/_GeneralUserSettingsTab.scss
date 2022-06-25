@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_GeneralUserSettingsTab_changePassword .mx_Field {
-    @mixin mx_Settings_fullWidthField;
+    margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
 }
 
 .mx_GeneralUserSettingsTab_changePassword .mx_Field:first-child {
@@ -40,7 +40,7 @@ limitations under the License.
 .mx_GeneralUserSettingsTab_discovery .mx_ExistingEmailAddress,
 .mx_GeneralUserSettingsTab_discovery .mx_ExistingPhoneNumber,
 .mx_GeneralUserSettingsTab_languageInput {
-    @mixin mx_Settings_fullWidthField;
+    margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
 }
 
 .mx_GeneralUserSettingsTab_warningIcon {

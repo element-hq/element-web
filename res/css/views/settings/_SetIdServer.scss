@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 .mx_SetIdServer .mx_Field_input {
-    @mixin mx_Settings_fullWidthField;
+    margin-inline-end: var(--SettingsTab_fullWidthField-margin-inline-end);
 }
 
 .mx_SetIdServer_tooltip {
