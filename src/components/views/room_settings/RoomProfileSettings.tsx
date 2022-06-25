@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { createRef } from 'react';
+import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
@@ -249,7 +250,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                 onSubmit={this.saveProfile}
                 autoComplete="off"
                 noValidate={true}
-                className="mx_ProfileSettings_profileForm"
+                className="mx_ProfileSettings"
             >
                 <input
                     type="file"
@@ -260,7 +261,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                     accept="image/*"
                 />
                 <div className="mx_ProfileSettings_profile">
-                    <div className="mx_ProfileSettings_controls">
+                    <div className="mx_ProfileSettings_profile_controls">
                         <Field
                             label={_t("Room Name")}
                             type="text"
@@ -270,8 +271,11 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
                             disabled={!this.state.canSetName}
                         />
                         <Field
-                            className="mx_ProfileSettings_controls_topic"
-                            id="profileTopic"
+                            className={classNames(
+                                "mx_ProfileSettings_profile_controls_topic",
+                                "mx_ProfileSettings_profile_controls_topic--room",
+                            )}
+                            id="profileTopic" // See: NewRoomIntro.tsx
                             label={_t("Room Topic")}
                             disabled={!this.state.canSetTopic}
                             type="text"

@@ -14,49 +14,49 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ProfileSettings_controls_topic {
-    & > textarea {
-        font-family: inherit;
-        resize: vertical;
-    }
-}
-
-.mx_ProfileSettings_profile {
-    display: flex;
-}
-
-.mx_ProfileSettings_controls {
-    flex-grow: 1;
-    margin-right: 54px;
-}
-
-.mx_ProfileSettings_controls .mx_Field #profileTopic {
-    height: 4em;
-}
-
-.mx_ProfileSettings_controls .mx_Field:first-child {
-    margin-top: 0;
-}
-
-.mx_ProfileSettings_userId {
-    margin-right: $spacing-20;
-}
-
-.mx_ProfileSettings_avatarUpload {
-    display: none;
-}
-
-.mx_ProfileSettings_profileForm {
+.mx_ProfileSettings {
     @mixin mx_Settings_fullWidthField;
     border-bottom: 1px solid $quinary-content;
-}
 
-.mx_ProfileSettings_buttons {
-    margin-top: 10px; // 18px is already accounted for by the <p> above the buttons
-    margin-bottom: 28px;
+    .mx_ProfileSettings_avatarUpload {
+        display: none;
+    }
 
-    > .mx_AccessibleButton_kind_link {
-        font-size: $font-14px;
-        margin-right: 10px;
+    .mx_ProfileSettings_profile {
+        display: flex;
+
+        .mx_ProfileSettings_profile_controls {
+            flex-grow: 1;
+            margin-inline-end: 54px;
+
+            .mx_Field:first-child {
+                margin-top: 0;
+            }
+
+            .mx_ProfileSettings_profile_controls_topic {
+                & > textarea {
+                    font-family: inherit;
+                    resize: vertical;
+                }
+
+                &.mx_ProfileSettings_profile_controls_topic--room {
+                    height: 4em;
+                }
+            }
+
+            .mx_ProfileSettings_profile_controls_userId {
+                margin-inline-end: $spacing-20;
+            }
+        }
+    }
+
+    .mx_ProfileSettings_buttons {
+        margin-top: 10px; // 18px is already accounted for by the <p> above the buttons
+        margin-bottom: $spacing-28;
+
+        > .mx_AccessibleButton_kind_link {
+            font-size: $font-14px;
+            margin-inline-end: 10px; // TODO: Use a spacing variable
+        }
     }
 }

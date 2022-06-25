@@ -183,7 +183,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                 onSubmit={this.saveProfile}
                 autoComplete="off"
                 noValidate={true}
-                className="mx_ProfileSettings_profileForm"
+                className="mx_ProfileSettings"
             >
                 <input
                     type="file"
@@ -194,7 +194,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                     accept="image/*"
                 />
                 <div className="mx_ProfileSettings_profile">
-                    <div className="mx_ProfileSettings_controls">
+                    <div className="mx_ProfileSettings_profile_controls">
                         <span className="mx_SettingsTab_subheading">{ _t("Profile") }</span>
                         <Field
                             label={_t("Display Name")}
@@ -204,7 +204,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                             onChange={this.onDisplayNameChanged}
                         />
                         <p>
-                            { userIdentifier && <span className="mx_ProfileSettings_userId">
+                            { userIdentifier && <span className="mx_ProfileSettings_profile_controls_userId">
                                 { userIdentifier }
                             </span> }
                             { hostingSignup }
