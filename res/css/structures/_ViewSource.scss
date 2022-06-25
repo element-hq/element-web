@@ -14,37 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_ViewSource_separator {
-    clear: both;
-    border-bottom: 1px solid #e5e5e5;
-    padding-top: 0.7em;
-    padding-bottom: 0.7em;
-}
+.mx_ViewSource {
+    pre {
+        font-size: $font-12px;
+        padding: 0.5em 1em;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
 
-.mx_ViewSource_heading {
-    font-size: $font-17px;
-    font-weight: 400;
-    color: $primary-content;
-    margin-top: 0.7em;
-}
+    .mx_ViewSource_header {
+        border-bottom: 1px solid $quinary-content;
+        padding-bottom: $spacing-12;
+        margin-bottom: $spacing-12;
 
-.mx_ViewSource pre {
-    text-align: left;
-    font-size: $font-12px;
-    padding: 0.5em 1em 0.5em 1em;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
+        .mx_CopyableText {
+            word-break: break-all;
+        }
+    }
 
-.mx_ViewSource_details {
-    margin-top: 0.8em;
-}
+    .mx_ViewSource_heading {
+        font-size: $font-17px;
+        font-weight: 400;
+        color: $primary-content;
+        margin-top: $spacing-12;
+    }
 
-.mx_ViewSource_container {
-    max-width: calc(100% - 24px);
-}
+    .mx_ViewSource_details {
+        margin-top: $spacing-12;
+    }
 
-.mx_ViewSource_container .mx_CopyableText_border {
-    width: 100%;
+    .mx_CopyableText_border {
+        box-sizing: border-box;
+        width: 100%;
+    }
 }
