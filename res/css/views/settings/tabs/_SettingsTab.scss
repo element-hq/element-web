@@ -16,6 +16,8 @@ limitations under the License.
 
 .mx_SettingsTab {
     --SettingsTab_section-margin-bottom-preferences-labs: 30px;
+    --SettingsTab_tooltip-max-width: 120px; // So it fits in the space provided by the page
+
     color: $primary-content;
 
     a {
