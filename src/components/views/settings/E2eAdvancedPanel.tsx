@@ -30,7 +30,7 @@ const E2eAdvancedPanel = props => {
         <SettingsFlag name={SETTING_MANUALLY_VERIFY_ALL_SESSIONS}
             level={SettingLevel.DEVICE}
         />
-        <div className="mx_E2eAdvancedPanel_settingLongDescription">{ _t(
+        <div className="mx_SettingsTab_subsectionText">{ _t(
             "Individually verify each session used by a user to mark it as trusted, not trusting cross-signed devices.",
         ) }</div>
     </div>;
