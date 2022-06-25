@@ -94,6 +94,11 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             padding-bottom: 3px;
             line-height: $font-22px;
         }
+
+        .mx_ThreadSummary,
+        .mx_ThreadSummaryIcon {
+            margin-left: $left-gutter;
+        }
     }
 }
 
@@ -103,11 +108,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     padding-top: 18px;
     font-size: $font-14px;
     position: relative;
-
-    .mx_ThreadSummary,
-    .mx_ThreadSummaryIcon {
-        margin-left: 64px;
-    }
 
     .mx_EventTile_avatar {
         top: 14px;
