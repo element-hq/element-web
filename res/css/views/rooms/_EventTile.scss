@@ -106,6 +106,10 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         .mx_ThreadSummaryIcon {
             margin-left: $left-gutter;
         }
+
+        .mx_ReactionsRow {
+            margin: $spacing-4 64px;
+        }
     }
 }
 
@@ -295,10 +299,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         left: 44px;
         bottom: 0;
         right: 0;
-    }
-
-    .mx_ReactionsRow {
-        margin: $spacing-4 64px;
     }
 }
 
