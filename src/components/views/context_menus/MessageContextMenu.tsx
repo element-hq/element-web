@@ -454,7 +454,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let quoteButton: JSX.Element;
-        if (eventTileOps) { // this event is rendered using TextualBody
+        if (eventTileOps && canSendMessages) { // this event is rendered using TextualBody
             quoteButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconQuote"
