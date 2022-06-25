@@ -72,6 +72,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         gap: $spacing-4;
     }
 
+    &[data-layout=irc],
+    &[data-layout=group] {
+        .mx_MImageBody {
+            margin-right: 34px;
+        }
+    }
+
     &[data-layout=group] {
         > .mx_DisambiguatedProfile {
             line-height: $font-20px;
@@ -275,8 +282,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     .mx_MImageBody {
-        margin-right: 34px;
-
         .mx_MImageBody_thumbnail_container {
             justify-content: flex-start;
             min-height: $font-44px;
