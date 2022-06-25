@@ -80,12 +80,7 @@ $irc-line-height: $font-18px;
             text-align: right;
         }
 
-        > .mx_EventTile_e2eIcon {
-            position: absolute;
-            right: unset;
-            left: unset;
-            top: 0;
-
+        .mx_EventTile_e2eIcon {
             padding: 0;
 
             flex-shrink: 0;
