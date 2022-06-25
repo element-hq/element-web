@@ -14,31 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_IntegrationManager .mx_Dialog {
-    width: 60%;
-    height: 70%;
-    overflow: hidden;
-    padding: 0px;
-    max-width: initial;
-    max-height: initial;
-}
+.mx_IntegrationManager {
+    .mx_Dialog {
+        box-sizing: border-box;
+        width: 60%;
+        height: 70%;
+        overflow: hidden;
+        max-width: initial;
+        max-height: initial;
+    }
 
-.mx_IntegrationManager iframe {
-    background-color: #fff;
-    border: 0px;
-    width: 100%;
-    height: 100%;
-}
+    iframe {
+        background-color: #fff;
+        border: 0;
+        width: 100%;
+        height: 100%;
+    }
 
-.mx_IntegrationManager_loading h3 {
-    text-align: center;
-}
+    h3 {
+        margin-block: $spacing-20;
+    }
 
-.mx_IntegrationManager_error {
-    text-align: center;
-    padding-top: 20px;
-}
+    .mx_IntegrationManager_loading,
+    .mx_IntegrationManager_error {
+        text-align: center;
+    }
 
-.mx_IntegrationManager_error h3 {
-    color: $alert;
+    .mx_IntegrationManager_error h3 {
+        color: $alert;
+    }
 }

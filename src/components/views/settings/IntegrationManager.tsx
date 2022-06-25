@@ -22,6 +22,7 @@ import { ActionPayload } from '../../../dispatcher/payloads';
 import Spinner from "../elements/Spinner";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
+import Heading from '../typography/Heading';
 
 interface IProps {
     // false to display an error saying that we couldn't connect to the integration manager
@@ -88,7 +89,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
         if (this.props.loading) {
             return (
                 <div className='mx_IntegrationManager_loading'>
-                    <h3>{ _t("Connecting to integration manager...") }</h3>
+                    <Heading size="h3">{ _t("Connecting to integration manager...") }</Heading>
                     <Spinner />
                 </div>
             );
@@ -97,7 +98,7 @@ export default class IntegrationManager extends React.Component<IProps, IState> 
         if (!this.props.connected || this.state.errored) {
             return (
                 <div className='mx_IntegrationManager_error'>
-                    <h3>{ _t("Cannot connect to integration manager") }</h3>
+                    <Heading size="h3">{ _t("Cannot connect to integration manager") }</Heading>
                     <p>{ _t("The integration manager is offline or it cannot reach your homeserver.") }</p>
                 </div>
             );
