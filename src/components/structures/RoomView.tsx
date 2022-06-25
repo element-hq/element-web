@@ -1752,7 +1752,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private get messagePanelClassNames(): string {
         return classNames("mx_RoomView_messagePanel", {
             mx_IRCLayout: this.state.layout === Layout.IRC,
-            mx_GroupLayout: this.state.layout === Layout.Group,
         });
     }
 

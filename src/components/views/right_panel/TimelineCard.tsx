@@ -20,7 +20,6 @@ import { IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { EventTimelineSet } from 'matrix-js-sdk/src/models/event-timeline-set';
 import { NotificationCountType, Room } from 'matrix-js-sdk/src/models/room';
 import { Thread } from 'matrix-js-sdk/src/models/thread';
-import classNames from 'classnames';
 
 import BaseCard from "./BaseCard";
 import ResizeNotifier from '../../../utils/ResizeNotifier';
@@ -203,11 +202,6 @@ export default class TimelineCard extends React.Component<IProps, IState> {
             ? this.state.initialEventId
             : null;
 
-        const messagePanelClassNames = classNames({
-            "mx_RoomView_messagePanel": true,
-            "mx_GroupLayout": this.state.layout === Layout.Group,
-        });
-
         let jumpToBottom;
         if (!this.state.atEndOfLiveTimeline) {
             jumpToBottom = (<JumpToBottomButton
@@ -254,7 +248,7 @@ export default class TimelineCard extends React.Component<IProps, IState> {
                             hideThreadedMessages={false}
                             hidden={false}
                             showReactions={true}
-                            className={messagePanelClassNames}
+                            className="mx_RoomView_messagePanel"
                             permalinkCreator={this.props.permalinkCreator}
                             membersLoaded={true}
                             editState={this.state.editState}

@@ -185,7 +185,6 @@ export default class HTMLExporter extends Exporter {
                                 mx_AutoHideScrollbar
                                 mx_ScrollPanel
                                 mx_RoomView_messagePanel
-                                mx_GroupLayout
                                 "
                             >
                                 <div class="mx_RoomView_messageListWrapper">
@@ -464,4 +463,3 @@ export default class HTMLExporter extends Exporter {
         this.cleanUp();
     }
 }
-

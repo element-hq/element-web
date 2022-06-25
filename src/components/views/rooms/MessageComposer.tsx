@@ -440,7 +440,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
         const classes = classNames({
             "mx_MessageComposer": true,
-            "mx_GroupLayout": true,
             "mx_MessageComposer--compact": this.props.compact,
             "mx_MessageComposer_e2eStatus": this.props.e2eStatus != undefined,
         });
