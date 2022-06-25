@@ -12,14 +12,14 @@ exports[`FontScalingPanel renders the font scaling UI 1`] = `
     </span>
     <EventTilePreview
       avatarUrl={null}
-      className="mx_FontScalingPanel_fontSlider_preview"
+      className="mx_FontScalingPanel_preview"
       displayName={null}
       layout="group"
       message="Hey you. You're the best!"
       userId={null}
     >
       <div
-        className="mx_FontScalingPanel_fontSlider_preview mx_EventTilePreview_loader"
+        className="mx_FontScalingPanel_preview mx_EventTilePreview_loader"
       >
         <Spinner
           h={32}

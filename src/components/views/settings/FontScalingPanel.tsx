@@ -116,7 +116,7 @@ export default class FontScalingPanel extends React.Component<IProps, IState> {
 
             <span className="mx_SettingsTab_subheading">{ _t("Font size") }</span>
             <EventTilePreview
-                className="mx_FontScalingPanel_fontSlider_preview"
+                className="mx_FontScalingPanel_preview"
                 message={this.MESSAGE_PREVIEW_TEXT}
                 layout={this.state.layout}
                 userId={this.state.userId}

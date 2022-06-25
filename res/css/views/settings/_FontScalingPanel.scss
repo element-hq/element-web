@@ -16,66 +16,59 @@ limitations under the License.
 
 .mx_FontScalingPanel {
     color: $primary-content;
-    > .mx_SettingsTab_SubHeading {
-        margin-bottom: 32px;
-    }
-}
 
-.mx_FontScalingPanel .mx_Field {
-    width: 256px;
-}
-
-.mx_FontScalingPanel_fontSlider,
-.mx_FontScalingPanel_fontSlider_preview {
-    @mixin mx_Settings_fullWidthField;
-}
-
-.mx_FontScalingPanel_fontSlider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 15px 15px 35px;
-    background: rgba($quinary-content, 0.2);
-    border-radius: 10px;
-    font-size: 10px;
-    margin-top: 24px;
-    margin-bottom: 24px;
-}
-
-.mx_FontScalingPanel_fontSlider_preview {
-    border: 1px solid $quinary-content;
-    border-radius: 10px;
-    padding: 0 16px 9px 16px;
-    pointer-events: none;
-    display: flow-root;
-
-    .mx_EventTile[data-layout=bubble] {
-        margin-top: 30px;
+    .mx_FontScalingPanel_preview,
+    .mx_FontScalingPanel_fontSlider {
+        @mixin mx_Settings_fullWidthField;
     }
 
-    .mx_EventTile_msgOption {
-        display: none;
+    .mx_FontScalingPanel_preview {
+        border: 1px solid $quinary-content;
+        border-radius: 10px;
+        padding: 0 $spacing-16 9px $spacing-16;
+        pointer-events: none;
+        display: flow-root;
+
+        &.mx_IRCLayout {
+            padding-top: 9px; // TODO: Use a spacing variable
+        }
+
+        .mx_EventTile[data-layout=bubble] {
+            margin-top: 30px; // TODO: Use a spacing variable
+        }
+
+        .mx_EventTile_msgOption {
+            display: none;
+        }
     }
 
-    &.mx_IRCLayout {
-        padding-top: 9px;
+    .mx_FontScalingPanel_fontSlider {
+        display: flex;
+        align-items: center;
+        padding: 15px $spacing-20 35px; // TODO: Use spacing variables
+        background: rgba($quinary-content, 0.2);
+        border-radius: 10px;
+        font-size: $font-10px;
+        margin-top: $spacing-24;
+        margin-bottom: $spacing-24;
+
+        .mx_FontScalingPanel_fontSlider_smallText,
+        .mx_FontScalingPanel_fontSlider_largeText {
+            font-weight: 500;
+        }
+
+        .mx_FontScalingPanel_fontSlider_smallText {
+            font-size: $font-15px;
+            padding-inline-end: $spacing-20;
+        }
+
+        .mx_FontScalingPanel_fontSlider_largeText {
+            font-size: $font-18px;
+            padding-inline-start: $spacing-20;
+        }
     }
-}
 
-.mx_FontScalingPanel_fontSlider_smallText {
-    font-size: 15px;
-    padding-right: 20px;
-    padding-left: 5px;
-    font-weight: 500;
-}
-
-.mx_FontScalingPanel_fontSlider_largeText {
-    font-size: 18px;
-    padding-left: 20px;
-    padding-right: 5px;
-    font-weight: 500;
-}
-
-.mx_FontScalingPanel_customFontSizeField {
-    margin-left: calc($font-16px + 10px);
+    .mx_FontScalingPanel_customFontSizeField {
+        margin-inline-start: var(--AppearanceUserSettingsTab_Field-margin-inline-start);
+    }
 }

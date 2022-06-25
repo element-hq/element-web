@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 .mx_AppearanceUserSettingsTab {
+    --AppearanceUserSettingsTab_Field-margin-inline-start: calc($font-16px + 10px);
+
     .mx_SettingsTab_subsectionText {
         margin-block: $spacing-12 $spacing-32;
         color: $primary-content; // Same as mx_SettingsTab
@@ -30,7 +32,7 @@ limitations under the License.
         }
 
         .mx_AppearanceUserSettingsTab_systemFont {
-            margin-inline-start: calc($font-16px + 10px);
+            margin-inline-start: var(--AppearanceUserSettingsTab_Field-margin-inline-start);
         }
     }
 }
