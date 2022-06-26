@@ -498,6 +498,17 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return this.ipcCall('setLanguage', preferredLangs);
     }
 
+    public setSpellCheckEnabled(enabled: boolean): void {
+        this.ipcCall('setSpellCheckEnabled', enabled).catch(error => {
+            logger.log("Failed to send setSpellCheckEnabled IPC to Electron");
+            logger.error(error);
+        });
+    }
+
+    public async getSpellCheckEnabled(): Promise<boolean> {
+        return this.ipcCall('getSpellCheckEnabled');
+    }
+
     setSpellCheckLanguages(preferredLangs: string[]) {
         this.ipcCall('setSpellCheckLanguages', preferredLangs).catch(error => {
             logger.log("Failed to send setSpellCheckLanguages IPC to Electron");
