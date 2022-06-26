@@ -38,6 +38,29 @@ limitations under the License.
                 position: absolute; // for IRC layout
                 left: -3px;
             }
+
+            .mx_EventTile_msgOption {
+                margin-inline-end: 0;
+            }
+
+            .mx_DisambiguatedProfile,
+            .mx_ReactionsRow,
+            .mx_ThreadSummary {
+                margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
+            }
+
+            .mx_ReplyTile .mx_DisambiguatedProfile {
+                margin-inline-start: 0;
+            }
+
+            .mx_ReactionsRow {
+                margin-inline-end: $spacing-8; // See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.scss
+            }
+
+            .mx_ThreadSummary {
+                margin-inline-end: 0;
+                max-width: min(calc(100% - 36px), 600px);
+            }
         }
 
         &[data-layout=bubble] {
@@ -65,34 +88,10 @@ limitations under the License.
                 }
             }
 
-            .mx_DisambiguatedProfile,
-            .mx_ReactionsRow,
-            .mx_ThreadSummary {
-                margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
-            }
-
-            .mx_ReplyTile .mx_DisambiguatedProfile {
-                margin-inline-start: 0;
-            }
-
-            .mx_ReactionsRow {
-                margin-inline-end: $spacing-8; // See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.scss
-            }
-
-            .mx_ThreadSummary {
-                margin-right: 0;
-                max-width: min(calc(100% - 36px), 600px);
-            }
-
             .mx_MessageTimestamp {
                 position: absolute; // for modern layout and IRC layout
                 inset-inline-start: auto;
                 inset-inline-end: 0;
-            }
-
-            .mx_EventTile_msgOption {
-                // Override mx_EventTile_msgOption of mx_EventTile:not([data-layout="bubble"])
-                margin-inline-end: 0;
             }
 
             &.mx_EventTile_info {

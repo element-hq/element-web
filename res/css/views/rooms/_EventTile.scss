@@ -120,6 +120,10 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             inset: 6px 0 0 44px;
         }
 
+        .mx_EventTile_msgOption {
+            margin-right: 10px;
+        }
+
         .mx_ThreadSummary,
         .mx_ThreadSummaryIcon {
             margin-left: $left-gutter;
@@ -260,8 +264,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
            Replaces margin-top: -6px. This interacts better with a read
            marker being in between. Content overflows. */
         height: 1px;
-
-        margin-right: 10px;
     }
 
     .mx_EventTile_msgOption a {
