@@ -74,24 +74,26 @@ export default class SetIntegrationManager extends React.Component<IProps, IStat
 
         return (
             <div className='mx_SetIntegrationManager'>
-                <div className="mx_SettingsTab_heading">
-                    <span>{ _t("Manage integrations") }</span>
-                    <span className="mx_SettingsTab_subheading">{ managerName }</span>
+                <div className="mx_SettingsFlag">
+                    <div className="mx_SetIntegrationManager_heading_manager">
+                        <span className="mx_SettingsTab_heading">{ _t("Manage integrations") }</span>
+                        <span className="mx_SettingsTab_subheading">{ managerName }</span>
+                    </div>
                     <ToggleSwitch
                         checked={this.state.provisioningEnabled}
                         disabled={false}
                         onChange={this.onProvisioningToggled}
                     />
                 </div>
-                <span className="mx_SettingsTab_subsectionText">
+                <div className="mx_SettingsTab_subsectionText">
                     { bodyText }
-                    <br />
-                    <br />
+                </div>
+                <div className="mx_SettingsTab_subsectionText">
                     { _t(
                         "Integration managers receive configuration data, and can modify widgets, " +
                         "send room invites, and set power levels on your behalf.",
                     ) }
-                </span>
+                </div>
             </div>
         );
     }

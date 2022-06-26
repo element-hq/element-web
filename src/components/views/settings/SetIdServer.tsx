@@ -407,7 +407,7 @@ export default class SetIdServer extends React.Component<IProps, IState> {
         }
 
         return (
-            <form className="mx_SettingsTab_section mx_SetIdServer" onSubmit={this.checkIdServer}>
+            <form className="mx_SetIdServer" onSubmit={this.checkIdServer}>
                 <span className="mx_SettingsTab_subheading">
                     { sectionTitle }
                 </span>
