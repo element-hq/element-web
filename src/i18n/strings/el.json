@@ -34,5 +34,6 @@
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "Missing indexeddb worker script!": "Απουσία indexeddb worker script!",
     "Use %(brand)s on mobile": "Χρήση %(brand)s σε κινητό",
-    "Switch to space by number": "Εναλλαγή σε space με αριθμό"
+    "Switch to space by number": "Εναλλαγή σε space με αριθμό",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo"
 }
