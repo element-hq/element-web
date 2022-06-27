@@ -23,5 +23,9 @@ import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
  */
 export const shouldDisplayAsBeaconTile = (event: MatrixEvent): boolean => (
     M_BEACON_INFO.matches(event.getType()) &&
-    !!event.getContent()?.live
+    (
+        event.getContent()?.live ||
+        // redacted beacons should show 'message deleted' tile
+        event.isRedacted()
+    )
 );
