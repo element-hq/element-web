@@ -243,11 +243,11 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         padding-left: 2px;
         padding-right: 2px;
         cursor: pointer;
-    }
 
-    .mx_EventTile_searchHighlight a {
-        background-color: $accent;
-        color: $accent-fg-color;
+        a {
+            background-color: $accent;
+            color: $accent-fg-color;
+        }
     }
 
     &.mx_EventTile_contextual {
@@ -264,10 +264,10 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
            Replaces margin-top: -6px. This interacts better with a read
            marker being in between. Content overflows. */
         height: 1px;
-    }
 
-    .mx_EventTile_msgOption a {
-        text-decoration: none;
+        a {
+            text-decoration: none;
+        }
     }
 
     /* De-zalgoing */
@@ -538,8 +538,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 }
 
-/* Various markdown overrides */
-
 .mx_EventTile_body {
     a:hover {
         text-decoration: underline;
@@ -547,6 +545,11 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
     pre {
         border: 1px solid transparent;
+
+        .mx_EventTile:hover &,
+        .mx_EventTile.focus-visible:focus-within & {
+            border: 1px solid $tertiary-content;
+        }
     }
 
     // selector wrongly applies to pill avatars but those have explicit width/height passed at a higher specificity
@@ -554,15 +557,49 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         object-fit: contain;
         object-position: left top;
     }
-}
 
-.mx_EventTile_clamp {
-    .mx_EventTile_body {
+    .mx_EventTile_clamp & {
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
+    }
+
+    .mx_EventTile_pre_container {
+        // For correct positioning of _copyButton (See TextualBody)
+        position: relative;
+
+        &:focus-within,
+        &:hover {
+            .mx_EventTile_button {
+                visibility: visible;
+            }
+        }
+
+        .mx_EventTile_collapsedCodeBlock {
+            max-height: 30vh;
+        }
+
+        // Inserted adjacent to <pre> blocks, (See TextualBody)
+        .mx_EventTile_button {
+            position: absolute;
+            top: $spacing-8;
+            right: $spacing-8;
+            width: 19px;
+            height: 19px;
+            visibility: hidden;
+            background-color: $message-action-bar-fg-color;
+
+            &.mx_EventTile_buttonBottom {
+                top: 33px;
+            }
+
+            &.mx_EventTile_collapseButton,
+            &.mx_EventTile_expandButton {
+                mask-size: 75%;
+            }
+        }
     }
 }
 
@@ -576,11 +613,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         display: block;
         padding-left: 1em;
     }
-}
-
-.mx_EventTile:hover .mx_EventTile_body pre,
-.mx_EventTile.focus-visible:focus-within .mx_EventTile_body pre {
-    border: 1px solid $tertiary-content;
 }
 
 .mx_EventTile_button {
@@ -605,44 +637,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 .mx_EventTile_expandButton {
     mask-image: url("$(res)/img/element-icons/maximise-expand.svg");
 }
-
-.mx_EventTile_body .mx_EventTile_pre_container {
-    // For correct positioning of _copyButton (See TextualBody)
-    position: relative;
-
-    &:focus-within,
-    &:hover {
-        .mx_EventTile_button {
-            visibility: visible;
-        }
-    }
-
-    .mx_EventTile_collapsedCodeBlock {
-        max-height: 30vh;
-    }
-
-    // Inserted adjacent to <pre> blocks, (See TextualBody)
-    .mx_EventTile_button {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 19px;
-        height: 19px;
-        visibility: hidden;
-        background-color: $message-action-bar-fg-color;
-
-        &.mx_EventTile_buttonBottom {
-            top: 33px;
-        }
-
-        &.mx_EventTile_collapseButton,
-        &.mx_EventTile_expandButton {
-            mask-size: 75%;
-        }
-    }
-}
-
-/* end of overrides */
 
 .mx_EventTile_keyRequestInfo {
     font-size: $font-12px;
@@ -685,10 +679,10 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_EventTile_line {
         padding-left: 0;
         margin-right: 0;
-    }
 
-    .mx_EventTile_line span {
-        padding: 4px 8px;
+        span {
+            padding: $spacing-4 $spacing-8;
+        }
     }
 
     a {
