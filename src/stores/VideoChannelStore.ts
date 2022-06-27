@@ -109,7 +109,11 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         SettingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
     }
 
-    public connect = async (roomId: string, audioDevice: MediaDeviceInfo, videoDevice: MediaDeviceInfo) => {
+    public connect = async (
+        roomId: string,
+        audioDevice: MediaDeviceInfo | null,
+        videoDevice: MediaDeviceInfo | null,
+    ) => {
         if (this.activeChannel) await this.disconnect();
 
         const jitsi = getVideoChannel(roomId);
@@ -202,8 +206,8 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             },
         );
         messaging.transport.send(ElementWidgetActions.JoinCall, {
-            audioDevice: audioDevice?.label,
-            videoDevice: videoDevice?.label,
+            audioDevice: audioDevice?.label ?? null,
+            videoDevice: videoDevice?.label ?? null,
         });
         try {
             await Promise.race([waitForJoin, dontStopMessaging]);
