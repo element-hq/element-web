@@ -19,10 +19,16 @@ limitations under the License.
     padding: 10px;
     border-radius: 8px;
     margin: 10px auto;
-    max-width: min(90%, 600px);
+    // Reserve space for external timestamps, but also cap the width
+    max-width: min(calc(100% - 2 * $MessageTimestamp_width), 600px);
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) min-content min-content;
+
+    .mx_EventTile[data-layout=bubble] & {
+        // Timestamps are inside the tile, so the width can be less constrained
+        max-width: 600px;
+    }
 
     &::before, &::after {
         position: relative;
