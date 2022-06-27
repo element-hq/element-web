@@ -98,8 +98,8 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
                 new Promise<void>(resolve => {
                     widgetApi.once(`action:${ElementWidgetActions.ClientReady}`, ev => {
                         ev.preventDefault();
-                        widgetApi.transport.reply(ev.detail, {});
                         resolve();
+                        widgetApi.transport.reply(ev.detail, {});
                     });
                 }),
                 new Promise<void>(resolve => {
@@ -145,6 +145,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
                     const { audioDevice, videoDevice } = ev.detail.data;
                     joinConference(audioDevice as string | null, videoDevice as string | null);
                     ack(ev);
@@ -152,12 +153,14 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             );
             widgetApi.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
                     meetApi?.executeCommand('hangup');
                     ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.ForceHangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
                     meetApi?.dispose();
                     notifyHangup();
                     meetApi = null;
@@ -167,50 +170,57 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && !await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && !await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.TileLayout}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     meetApi?.executeCommand('setTileView', true);
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.SpotlightLayout}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     meetApi?.executeCommand('setTileView', false);
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.StartLiveStream}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
                     if (meetApi) {
                         meetApi.executeCommand('startRecording', {
                             mode: 'stream',
