@@ -20,50 +20,31 @@ limitations under the License.
     margin: auto;
     border-top: 1px solid $primary-hairline-color;
     position: relative;
+    padding-left: 42px;
+    padding-right: 16px;
+}
 
-    display: grid;
-    grid-template:
-        "reply    reply"    auto
-        "composer controls" auto
-        / 1fr     auto;
+.mx_MessageComposer_replaced_wrapper {
+    margin-left: auto;
+    margin-right: auto;
+}
 
-    /* the below is required, without this some unexpected scroll jump
-       will occur when erasing the composer content or jumping to voice note
-       recording */
-    min-height: 45px;
+.mx_MessageComposer_replaced_valign {
+    height: 60px;
+    display: table-cell;
+    vertical-align: middle;
+}
 
-    .mx_ReplyPreview {
-        grid-area: reply;
-    }
+.mx_MessageComposer_roomReplaced_icon {
+    float: left;
+    margin-right: 20px;
+    margin-top: 5px;
+    width: 31px;
+    height: 31px;
+}
 
-    .mx_MessageComposer_row {
-        min-width: 0;
-        grid-area: composer;
-    }
-
-    .mx_MessageComposer_controls {
-        grid-area: controls;
-        display: flex;
-        align-items: flex-end;
-        margin-bottom: 2px;
-    }
-
-    >[role=button] {
-        margin-bottom: 7px;
-    }
-
-    .mx_VoiceRecordComposerTile_delete {
-        margin-bottom: 9px;
-    }
-
-    .mx_VoiceRecordComposerTile_stop,
-    .mx_MessageComposer_sendMessage {
-        margin-bottom: $spacing-4;
-    }
-
-    .mx_VoiceMessagePrimaryContainer {
-        margin-right: $spacing-8;
-    }
+.mx_MessageComposer_roomReplaced_header {
+    font-weight: bold;
 }
 
 .mx_MessageComposer_autocomplete_wrapper {
@@ -75,36 +56,7 @@ limitations under the License.
     display: flex;
     flex-direction: row;
     align-items: center;
-    border: 1px solid $quaternary-content;
-    border-radius: 12px;
-    padding: $spacing-12 $spacing-8;
-    margin-right: $spacing-16;
-
-    transition: border-color var(--transition-short);
-
-    &[data-notice=true] {
-        border-color: transparent;
-        color: $secondary-content;
-
-        p {
-            margin: 0;
-            line-height: 0;
-        }
-
-        svg {
-            vertical-align: middle;
-            position: relative;
-            top: -2px;
-        }
-    }
-
-    &:focus-within {
-        border-color: $tertiary-content;
-    }
-
-    &[aria-disabled=true] {
-        cursor: not-allowed;
-    }
+    width: 100%;
 }
 
 .mx_MessageComposer .mx_MessageComposer_avatar {
@@ -121,16 +73,22 @@ limitations under the License.
 }
 
 .mx_MessageComposer_e2eIcon.mx_E2EIcon {
-    margin: 0 0 2px;
+    position: absolute;
+    left: 20px;
+    margin-right: 0; // Counteract the E2EIcon class
+    margin-left: 3px; // Counteract the E2EIcon class
     width: 12px;
     height: 12px;
-    align-self: end;
 }
 
 .mx_MessageComposer_noperm_error {
+    width: 100%;
+    height: 60px;
     font-style: italic;
-    color: $tertiary-content;
-    font-size: $font-12px;
+    color: $info-plinth-fg-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .mx_MessageComposer_input_wrapper {
@@ -166,19 +124,13 @@ limitations under the License.
 .mx_MessageComposer_editor > :first-child {
     margin-top: 0 !important;
 }
-
 .mx_MessageComposer_editor > :last-child {
     margin-bottom: 0 !important;
 }
 
 @keyframes visualbell {
-    from {
-        background-color: $visual-bell-bg-color;
-    }
-
-    to {
-        background-color: $background;
-    }
+    from { background-color: $visual-bell-bg-color; }
+    to { background-color: $background; }
 }
 
 .mx_MessageComposer_input_error {
@@ -214,14 +166,12 @@ limitations under the License.
     color: $accent;
     opacity: 1.0;
 }
-
 .mx_MessageComposer_input textarea::-webkit-input-placeholder {
     color: $accent;
 }
 
 .mx_MessageComposer_button_highlight {
     background: rgba($accent, 0.25);
-
     // make the icon the accent color too
     &::before {
         background-color: $accent !important;
@@ -238,7 +188,6 @@ limitations under the License.
     padding-left: var(--size);
     border-radius: 50%;
     margin-right: 6px;
-    margin-bottom: 7px;
 
     &:last-child {
         margin-right: auto;
@@ -312,30 +261,11 @@ limitations under the License.
     mask-image: url('$(res)/img/image-view/more.svg');
 }
 
-.mx_MessageComposer_sendMessageWrapper {
-    --sendMessageSize: 32px;
-    transition: all var(--transition-short);
-}
-
-.mx_MessageComposer_sendMessageWrapper,
-.mx_MessageComposer_sendMessageWrapper-enter,
-.mx_MessageComposer_sendMessageWrapper-exit {
-    width: 0;
-    transform: scale(.6);
-    opacity: 0;
-}
-
-.mx_MessageComposer_sendMessageWrapper-enter-active {
-    width: var(--sendMessageSize);
-    transform: scale(1);
-    opacity: 1;
-}
-
 .mx_MessageComposer_sendMessage {
     cursor: pointer;
     position: relative;
-    width: var(--sendMessageSize);
-    height: var(--sendMessageSize);
+    width: 32px;
+    height: 32px;
     border-radius: 100%;
     background-color: $accent;
 
@@ -428,6 +358,10 @@ limitations under the License.
     .mx_MessageComposer_input {
         min-height: 50px;
     }
+
+    .mx_MessageComposer_noperm_error {
+        height: 50px;
+    }
 }
 
 /**
@@ -437,7 +371,21 @@ limitations under the License.
 .mx_MessageComposer.mx_MessageComposer--compact {
     margin-right: 0;
 
+    .mx_MessageComposer_wrapper {
+        padding: 0 0 0 25px;
+    }
+
+    &:not(.mx_MessageComposer_e2eStatus) {
+        .mx_MessageComposer_wrapper {
+            padding: 0;
+        }
+    }
+
     .mx_MessageComposer_button:last-child {
         margin-right: 0;
+    }
+
+    .mx_MessageComposer_e2eIcon {
+        left: 0;
     }
 }

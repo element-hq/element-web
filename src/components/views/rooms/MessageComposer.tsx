@@ -22,7 +22,6 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { Optional } from "matrix-events-sdk";
 import { THREAD_RELATION_TYPE } from 'matrix-js-sdk/src/models/thread';
-import { CSSTransition } from 'react-transition-group';
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -52,14 +51,12 @@ import { SettingUpdatedPayload } from "../../../dispatcher/payloads/SettingUpdat
 import MessageComposerButtons from './MessageComposerButtons';
 import { ButtonEvent } from '../elements/AccessibleButton';
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { Icon as InfoIcon } from "../../../../res/img/element-icons/room/room-summary.svg";
 
 let instanceCount = 0;
 
 interface ISendButtonProps {
     onClick: (ev: ButtonEvent) => void;
     title?: string; // defaults to something generic
-    "aria-hidden"?: boolean;
 }
 
 function SendButton(props: ISendButtonProps) {
@@ -68,7 +65,6 @@ function SendButton(props: ISendButtonProps) {
             className="mx_MessageComposer_sendMessage"
             onClick={props.onClick}
             title={props.title ?? _t('Send message')}
-            aria-hidden={props['aria-hidden'] ?? false}
         />
     );
 }
@@ -267,15 +263,15 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             } else if (replyingToThread) {
                 return _t('Reply to thread…');
             } else if (this.props.e2eStatus) {
-                return _t('Send encrypted reply…');
+                return _t('Send an encrypted reply…');
             } else {
-                return _t('Send reply…');
+                return _t('Send a reply…');
             }
         } else {
             if (this.props.e2eStatus) {
-                return _t('Send encrypted message…');
+                return _t('Send an encrypted message…');
             } else {
-                return _t('Send message…');
+                return _t('Send a message…');
             }
         }
     };
@@ -355,15 +351,17 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     public render() {
-        const controls = [];
+        const controls = [
+            this.props.e2eStatus ?
+                <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
+                null,
+        ];
 
         let menuPosition: AboveLeftOf | undefined;
         if (this.ref.current) {
             const contentRect = this.ref.current.getBoundingClientRect();
             menuPosition = aboveLeftOf(contentRect);
         }
-
-        const roomReplaced = !!this.context.tombstone;
 
         const canSendMessages = this.context.canSendMessages && !this.context.tombstone;
         if (canSendMessages) {
@@ -381,23 +379,34 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     toggleStickerPickerOpen={this.toggleStickerPickerOpen}
                 />,
             );
-        } else if (roomReplaced) {
+
+            controls.push(<VoiceRecordComposerTile
+                key="controls_voice_record"
+                ref={this.voiceRecordingButton}
+                room={this.props.room} />);
+        } else if (this.context.tombstone) {
             const replacementRoomId = this.context.tombstone.getContent()['replacement_room'];
 
-            controls.push(<p key="room_replaced">
-                <InfoIcon width={24} />
-                &nbsp;
-                { _t("This room has been replaced and is no longer active.") }
-                &nbsp;
-                { replacementRoomId && (
-                    <a href={makeRoomPermalink(replacementRoomId)}
-                        className="mx_linkButton"
-                        onClick={this.onTombstoneClick}
-                    >
-                        { _t("The conversation continues here.") }
-                    </a>
-                ) }
-            </p>);
+            const continuesLink = replacementRoomId ? (
+                <a href={makeRoomPermalink(replacementRoomId)}
+                    className="mx_MessageComposer_roomReplaced_link"
+                    onClick={this.onTombstoneClick}
+                >
+                    { _t("The conversation continues here.") }
+                </a>
+            ) : '';
+
+            controls.push(<div className="mx_MessageComposer_replaced_wrapper" key="room_replaced">
+                <div className="mx_MessageComposer_replaced_valign">
+                    <img className="mx_MessageComposer_roomReplaced_icon"
+                        src={require("../../../../res/img/room_replaced.svg").default}
+                    />
+                    <span className="mx_MessageComposer_roomReplaced_header">
+                        { _t("This room has been replaced and is no longer active.") }
+                    </span><br />
+                    { continuesLink }
+                </div>
+            </div>);
         } else {
             controls.push(
                 <div key="controls_error" className="mx_MessageComposer_noperm_error">
@@ -432,12 +441,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
         const showSendButton = !this.state.isComposerEmpty || this.state.haveRecording;
 
-        if (this.props.e2eStatus) {
-            controls.push(
-                <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" />,
-            );
-        }
-
         const classes = classNames({
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
@@ -451,17 +454,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                     <ReplyPreview
                         replyToEvent={this.props.replyToEvent}
                         permalinkCreator={this.props.permalinkCreator} />
-                    <div
-                        className="mx_MessageComposer_row"
-                        aria-disabled={!canSendMessages && !roomReplaced}
-                        data-notice={roomReplaced}>
+                    <div className="mx_MessageComposer_row">
                         { controls }
-                    </div>
-                    <div className="mx_MessageComposer_controls">
-                        { canSendMessages && <VoiceRecordComposerTile
-                            key="controls_voice_record"
-                            ref={this.voiceRecordingButton}
-                            room={this.props.room} /> }
                         { canSendMessages && <MessageComposerButtons
                             addEmoji={this.addEmoji}
                             haveRecording={this.state.haveRecording}
@@ -481,20 +475,13 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             showStickersButton={this.state.showStickersButton}
                             toggleButtonMenu={this.toggleButtonMenu}
                         /> }
-                        <CSSTransition
-                            in={showSendButton}
-                            classNames="mx_MessageComposer_sendMessageWrapper"
-                            addEndListener={() => {}}
-                        >
-                            <div className='mx_MessageComposer_sendMessageWrapper'>
-                                <SendButton
-                                    key="controls_send"
-                                    onClick={this.sendMessage}
-                                    title={this.state.haveRecording ? _t("Send voice message") : undefined}
-                                    aria-hidden={!showSendButton}
-                                />
-                            </div>
-                        </CSSTransition>
+                        { showSendButton && (
+                            <SendButton
+                                key="controls_send"
+                                onClick={this.sendMessage}
+                                title={this.state.haveRecording ? _t("Send voice message") : undefined}
+                            />
+                        ) }
                     </div>
                 </div>
             </div>

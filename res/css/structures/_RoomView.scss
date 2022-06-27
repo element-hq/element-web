@@ -32,12 +32,6 @@ limitations under the License.
     position: relative;
 }
 
-.mx_MainSplit_timeline {
-    .mx_MessageComposer_wrapper {
-        margin: $spacing-8 $spacing-16;
-    }
-}
-
 .mx_RoomView_auxPanel {
     min-width: 0px;
     width: 100%;
@@ -161,7 +155,7 @@ limitations under the License.
     .mx_RoomView_messageListWrapper {
         justify-content: flex-start;
 
-        > .mx_RoomView_MessageList > li > ol {
+        >.mx_RoomView_MessageList > li > ol {
             list-style-type: none;
         }
     }
