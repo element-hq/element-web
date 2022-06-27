@@ -146,7 +146,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     const { audioDevice, videoDevice } = ev.detail.data;
-                    joinConference(audioDevice as string, videoDevice as string);
+                    joinConference(audioDevice as string | null, videoDevice as string | null);
                     ack(ev);
                 },
             );
@@ -322,7 +322,11 @@ function closeConference() {
 }
 
 // event handler bound in HTML
-function joinConference(audioDevice?: string, videoDevice?: string) {
+// An audio device of undefined instructs Jitsi to start unmuted with whatever
+// audio device it can find, while a device of null instructs it to start muted,
+// and a non-nullish device specifies the label of a specific device to use.
+// Same for video devices.
+function joinConference(audioDevice?: string | null, videoDevice?: string | null) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -364,8 +368,8 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         configOverwrite: {
             subject: roomName,
             startAudioOnly,
-            startWithAudioMuted: audioDevice == null,
-            startWithVideoMuted: videoDevice == null,
+            startWithAudioMuted: audioDevice === null,
+            startWithVideoMuted: videoDevice === null,
             // Request some log levels for inclusion in rageshakes
             // Ideally we would capture all possible log levels, but this can
             // cause Jitsi Meet to try to post various circular data structures
