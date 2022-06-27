@@ -14,14 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { mocked } from "jest-mock";
-import { Widget, ClientWidgetApi, MatrixWidgetType, IWidgetApiRequest } from "matrix-widget-api";
+import { mocked, Mocked } from "jest-mock";
+import {
+    Widget,
+    ClientWidgetApi,
+    MatrixWidgetType,
+    WidgetApiAction,
+    IWidgetApiRequest,
+    IWidgetApiRequestData,
+} from "matrix-widget-api";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import { stubClient, setupAsyncStoreWithClient, mkRoom } from "../test-utils";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import WidgetStore, { IApp } from "../../src/stores/WidgetStore";
 import { WidgetMessagingStore } from "../../src/stores/widgets/WidgetMessagingStore";
+import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../../src/stores/ActiveWidgetStore";
 import { ElementWidgetActions } from "../../src/stores/widgets/ElementWidgetActions";
 import { VIDEO_CHANNEL_MEMBER, STUCK_DEVICE_TIMEOUT_MS } from "../../src/utils/VideoChannelUtils";
 import VideoChannelStore, { VideoChannelEvent } from "../../src/stores/VideoChannelStore";
@@ -43,22 +51,19 @@ describe("VideoChannelStore", () => {
     } as IApp;
 
     // Set up mocks to simulate the remote end of the widget API
-    let messageSent: Promise<void>;
-    let messageSendMock: () => void;
+    let sendMock: (action: WidgetApiAction, data: IWidgetApiRequestData) => void;
     let onMock: (action: string, listener: (ev: CustomEvent<IWidgetApiRequest>) => void) => void;
     let onceMock: (action: string, listener: (ev: CustomEvent<IWidgetApiRequest>) => void) => void;
     let messaging: ClientWidgetApi;
-    let cli: MatrixClient;
+    let cli: Mocked<MatrixClient>;
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
+        cli = mocked(MatrixClientPeg.get());
         setupAsyncStoreWithClient(WidgetMessagingStore.instance, cli);
         setupAsyncStoreWithClient(store, cli);
-        mocked(cli).getRoom.mockReturnValue(mkRoom(cli, "!1:example.org"));
+        cli.getRoom.mockReturnValue(mkRoom(cli, "!1:example.org"));
 
-        let resolveMessageSent: () => void;
-        messageSent = new Promise(resolve => resolveMessageSent = resolve);
-        messageSendMock = jest.fn().mockImplementation(() => resolveMessageSent());
+        sendMock = jest.fn();
         onMock = jest.fn();
         onceMock = jest.fn();
 
@@ -69,13 +74,18 @@ describe("VideoChannelStore", () => {
             stop: () => {},
             once: onceMock,
             transport: {
-                send: messageSendMock,
+                send: sendMock,
                 reply: () => {},
             },
         } as unknown as ClientWidgetApi;
     });
 
     afterEach(() => jest.useRealTimers());
+
+    const getRequest = <T extends IWidgetApiRequestData>(): Promise<[WidgetApiAction, T]> =>
+        new Promise<[WidgetApiAction, T]>(resolve => {
+            mocked(sendMock).mockImplementationOnce((action, data) => resolve([action, data as T]));
+        });
 
     const widgetReady = () => {
         // Tell the WidgetStore that the widget is ready
@@ -87,7 +97,7 @@ describe("VideoChannelStore", () => {
 
     const confirmConnect = async () => {
         // Wait for the store to contact the widget API
-        await messageSent;
+        await getRequest();
         // Then, locate the callback that will confirm the join
         const [, join] = mocked(onMock).mock.calls.find(([action]) =>
             action === `action:${ElementWidgetActions.JoinCall}`,
@@ -122,8 +132,9 @@ describe("VideoChannelStore", () => {
         expect(store.roomId).toBeFalsy();
         expect(store.connected).toEqual(false);
 
+        const connectConfirmed = confirmConnect();
         const connectPromise = store.connect("!1:example.org", null, null);
-        await confirmConnect();
+        await connectConfirmed;
         await expect(connectPromise).resolves.toBeUndefined();
         expect(store.roomId).toEqual("!1:example.org");
         expect(store.connected).toEqual(true);
@@ -135,7 +146,7 @@ describe("VideoChannelStore", () => {
             { devices: [cli.getDeviceId()], expires_ts: expect.any(Number) },
             cli.getUserId(),
         );
-        mocked(cli).sendStateEvent.mockClear();
+        cli.sendStateEvent.mockClear();
 
         // Our devices should be resent within the timeout period to prevent
         // the data from becoming stale
@@ -146,7 +157,7 @@ describe("VideoChannelStore", () => {
             { devices: [cli.getDeviceId()], expires_ts: expect.any(Number) },
             cli.getUserId(),
         );
-        mocked(cli).sendStateEvent.mockClear();
+        cli.sendStateEvent.mockClear();
 
         const disconnectPromise = store.disconnect();
         await confirmDisconnect();
@@ -165,10 +176,11 @@ describe("VideoChannelStore", () => {
     });
 
     it("waits for messaging when connecting", async () => {
+        const connectConfirmed = confirmConnect();
         const connectPromise = store.connect("!1:example.org", null, null);
         WidgetMessagingStore.instance.storeMessaging(widget, "!1:example.org", messaging);
         widgetReady();
-        await confirmConnect();
+        await connectConfirmed;
         await expect(connectPromise).resolves.toBeUndefined();
         expect(store.roomId).toEqual("!1:example.org");
         expect(store.connected).toEqual(true);
@@ -184,12 +196,30 @@ describe("VideoChannelStore", () => {
         expect(store.roomId).toBeFalsy();
         expect(store.connected).toEqual(false);
 
+        const requestPromise = getRequest();
         const connectPromise = store.connect("!1:example.org", null, null);
         // Wait for the store to contact the widget API, then stop the messaging
-        await messageSent;
+        await requestPromise;
         WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
         await expect(connectPromise).rejects.toBeDefined();
         expect(store.roomId).toBeFalsy();
         expect(store.connected).toEqual(false);
+    });
+
+    it("switches to spotlight mode when the widget becomes a PiP", async () => {
+        WidgetMessagingStore.instance.storeMessaging(widget, "!1:example.org", messaging);
+        widgetReady();
+        confirmConnect();
+        await store.connect("!1:example.org", null, null);
+
+        const request = getRequest<IWidgetApiRequestData>();
+        ActiveWidgetStore.instance.emit(ActiveWidgetStoreEvent.Undock);
+        const [action, data] = await request;
+        expect(action).toEqual(ElementWidgetActions.SpotlightLayout);
+        expect(data).toEqual({});
+
+        store.disconnect();
+        await confirmDisconnect();
+        WidgetMessagingStore.instance.stopMessaging(widget, "!1:example.org");
     });
 });

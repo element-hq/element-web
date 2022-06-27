@@ -25,6 +25,7 @@ import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { ElementWidgetActions } from "./widgets/ElementWidgetActions";
 import { WidgetMessagingStore, WidgetMessagingStoreEvent } from "./widgets/WidgetMessagingStore";
+import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "./ActiveWidgetStore";
 import { STUCK_DEVICE_TIMEOUT_MS, getVideoChannel, addOurDevice, removeOurDevice } from "../utils/VideoChannelUtils";
 import { timeout } from "../utils/promise";
 import WidgetUtils from "../utils/WidgetUtils";
@@ -234,6 +235,8 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         }
 
         this.connected = true;
+        ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onDock);
+        ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onUndock);
         this.room.on(RoomEvent.MyMembership, this.onMyMembership);
         window.addEventListener("beforeunload", this.setDisconnected);
 
@@ -264,8 +267,14 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         const roomId = this.roomId;
         const room = this.room;
 
-        this.activeChannel.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         this.activeChannel.off(`action:${ElementWidgetActions.CallParticipants}`, this.onParticipants);
+        this.activeChannel.off(`action:${ElementWidgetActions.MuteAudio}`, this.onMuteAudio);
+        this.activeChannel.off(`action:${ElementWidgetActions.UnmuteAudio}`, this.onUnmuteAudio);
+        this.activeChannel.off(`action:${ElementWidgetActions.MuteVideo}`, this.onMuteVideo);
+        this.activeChannel.off(`action:${ElementWidgetActions.UnmuteVideo}`, this.onUnmuteVideo);
+        this.activeChannel.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onDock);
+        ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onUndock);
         room.off(RoomEvent.MyMembership, this.onMyMembership);
         window.removeEventListener("beforeunload", this.setDisconnected);
         clearInterval(this.resendDevicesTimer);
@@ -323,5 +332,16 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
 
     private onMyMembership = (room: Room, membership: string) => {
         if (membership !== "join") this.setDisconnected();
+    };
+
+    private onDock = async () => {
+        // The widget is no longer a PiP, so let's restore the default layout
+        await this.activeChannel.transport.send(ElementWidgetActions.TileLayout, {});
+    };
+
+    private onUndock = async () => {
+        // The widget has become a PiP, so let's switch Jitsi to spotlight mode
+        // to only show the active speaker and economize on space
+        await this.activeChannel.transport.send(ElementWidgetActions.SpotlightLayout, {});
     };
 }
