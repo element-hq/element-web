@@ -204,6 +204,20 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
                     ack(ev);
                 },
             );
+            widgetApi.on(`action:${ElementWidgetActions.TileLayout}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
+                    meetApi?.executeCommand('setTileView', true);
+                    ack(ev);
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.SpotlightLayout}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
+                    meetApi?.executeCommand('setTileView', false);
+                    ack(ev);
+                },
+            );
             widgetApi.on(`action:${ElementWidgetActions.StartLiveStream}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
                     ev.preventDefault();
