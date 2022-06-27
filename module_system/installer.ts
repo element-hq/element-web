@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import * as fs from "fs";
-import * as child_process from "child_process";
+import * as childProcess from "child_process";
 import * as semver from "semver";
 
 import { BuildConfig } from "./BuildConfig";
@@ -58,7 +58,7 @@ export function installer(config: BuildConfig): void {
 
     try {
         // Install the modules with yarn
-        let yarnAddRef = config.modules.join(" ");
+        const yarnAddRef = config.modules.join(" ");
         callYarnAdd(yarnAddRef); // install them all at once
 
         // Grab the optional dependencies again and exclude what was there already. Everything
@@ -131,7 +131,7 @@ function writePackageDetails(deps: RawDependencies) {
 function callYarnAdd(dep: string) {
     // Add the module to the optional dependencies section just in case something
     // goes wrong in restoring the original package details.
-    child_process.execSync(`yarn add -O ${dep}`, {
+    childProcess.execSync(`yarn add -O ${dep}`, {
         env: process.env,
         stdio: ['inherit', 'inherit', 'inherit'],
     });
@@ -152,7 +152,7 @@ function findDepVersionInPackageJson(dep: string, pkgJsonStr: string): string {
 }
 
 function getTopLevelDependencyVersion(dep: string): string {
-    const dependencyTree = JSON.parse(child_process.execSync(`npm list ${dep} --depth=0 --json`, {
+    const dependencyTree = JSON.parse(childProcess.execSync(`npm list ${dep} --depth=0 --json`, {
         env: process.env,
         stdio: ['inherit', 'pipe', 'pipe'],
     }).toString('utf-8'));
