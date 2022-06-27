@@ -49,8 +49,13 @@ limitations under the License.
                 margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
             }
 
+            .mx_DisambiguatedProfile {
+                max-width: calc(100% - var(--BaseCard_EventTile-spacing-inline)); // instead of $left-gutter
+            }
+
             .mx_ReplyTile .mx_DisambiguatedProfile {
                 margin-inline-start: 0;
+                max-width: unset;
             }
 
             .mx_ReactionsRow {
