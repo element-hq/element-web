@@ -59,6 +59,8 @@ limitations under the License.
         white-space: nowrap; // enforce the pill text to be a single line
         overflow: hidden;
         text-overflow: ellipsis;
+
+        pointer-events: none; // ensure clicks on the pills go through the anchor
     }
 
     a& {

@@ -1,0 +1,75 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/// <reference types="cypress" />
+
+import { SynapseInstance } from "../../plugins/synapsedocker";
+
+describe("Pills", () => {
+    let synapse: SynapseInstance;
+
+    beforeEach(() => {
+        cy.startSynapse("default").then(data => {
+            synapse = data;
+
+            cy.initTestUser(synapse, "Sally");
+        });
+    });
+
+    afterEach(() => {
+        cy.stopSynapse(synapse);
+    });
+
+    it('should navigate clicks internally to the app', () => {
+        const messageRoom = "Send Messages Here";
+        const targetLocalpart = "aliasssssssssssss";
+        cy.createRoom({
+            name: "Target",
+            room_alias_name: targetLocalpart,
+        }).as("targetRoomId");
+        cy.createRoom({
+            name: messageRoom,
+        }).as("messageRoomId");
+        cy.all([
+            cy.get<string>("@targetRoomId"),
+            cy.get<string>("@messageRoomId"),
+        ]).then(([targetRoomId, messageRoomId]) => { // discard the target room ID - we don't need it
+            cy.viewRoomByName(messageRoom);
+            cy.url().should("contain", `/#/room/${messageRoomId}`);
+
+            // send a message using the built-in room mention functionality (autocomplete)
+            cy.get(".mx_SendMessageComposer .mx_BasicMessageComposer_input")
+                .type(`Hello world! Join here: #${targetLocalpart.substring(0, 3)}`);
+            cy.get(".mx_Autocomplete_Completion_title").click();
+            cy.get(".mx_MessageComposer_sendMessage").click();
+
+            // find the pill in the timeline and click it
+            cy.get(".mx_EventTile_body .mx_Pill").click();
+
+            // verify we landed at a sane place
+            cy.url().should("contain", `/#/room/#${targetLocalpart}:`);
+
+            cy.wait(250); // let the room list settle
+
+            // go back to the message room and try to click on the pill text, as a user would
+            cy.viewRoomByName(messageRoom);
+            cy.get(".mx_EventTile_body .mx_Pill .mx_Pill_linkText")
+                .should("have.css", "pointer-events", "none")
+                .click({ force: true }); // force is to ensure we bypass pointer-events
+            cy.url().should("contain", `https://matrix.to/#/#${targetLocalpart}:`);
+        });
+    });
+});
