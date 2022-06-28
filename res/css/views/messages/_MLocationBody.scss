@@ -42,3 +42,8 @@ limitations under the License.
 .mx_DisambiguatedProfile ~ .mx_MLocationBody {
     margin-top: 6px; // See: https://github.com/matrix-org/matrix-react-sdk/pull/8442
 }
+
+.mx_ReplyTile .mx_MLocationBody {
+    // Prevent clicking a location within a reply
+    pointer-events: none;
+}

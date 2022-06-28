@@ -51,3 +51,8 @@ limitations under the License.
     max-width: 100%;
     width: 450px;
 }
+
+.mx_ReplyTile .mx_MBeaconBody {
+    // Prevent clicking a beacon within a reply
+    pointer-events: none;
+}
