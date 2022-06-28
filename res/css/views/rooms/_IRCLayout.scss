@@ -120,15 +120,8 @@ $irc-line-height: $font-18px;
         margin: 0;
     }
 
-    .mx_GenericEventListSummary {
-        > .mx_EventTile_line {
-            padding-left: calc(var(--name-width) + $icon-width + $MessageTimestamp_width + 3 * $right-padding); // 15 px of padding
-        }
-
-        .mx_GenericEventListSummary_avatars {
-            padding: 0;
-            margin: 0 9px 0 0;
-        }
+    .mx_GenericEventListSummary > .mx_EventTile_line {
+        padding-left: calc(var(--name-width) + $icon-width + $MessageTimestamp_width + 3 * $right-padding); // 15 px of padding
     }
 
     .mx_EventTile.mx_EventTile_info {

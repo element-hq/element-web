@@ -16,6 +16,76 @@ limitations under the License.
 
 .mx_GenericEventListSummary {
     position: relative;
+
+    &[data-layout=irc],
+    &[data-layout=group] {
+        .mx_GenericEventListSummary_toggle {
+            float: right;
+            margin: 8px 10px 0 0;
+        }
+
+        .mx_GenericEventListSummary_avatars {
+            padding-top: $spacing-8;
+        }
+    }
+
+    &[data-layout=irc] {
+        .mx_GenericEventListSummary_avatars {
+            padding: 0;
+            margin: 0 9px 0 0;
+        }
+    }
+
+    &[data-layout=bubble] {
+        --maxWidth: 70%;
+        margin-left: calc(var(--avatarSize) + var(--gutterSize));
+
+        &[data-expanded=false] {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 49px; // Align with left edge of bubble tiles
+        }
+
+        // ideally we'd use display=contents here for the layout to all work regardless of the *ELS but
+        // that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse.
+        &[data-expanded=true] {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        &::after {
+            content: "";
+            clear: both;
+        }
+
+        &:hover {
+            &::before {
+                background: transparent;
+            }
+        }
+
+        .mx_GenericEventListSummary_toggle {
+            margin: 0 55px 0 5px;
+
+            &[aria-expanded=false] {
+                order: 9;
+            }
+
+            &[aria-expanded=true] {
+                text-align: right;
+            }
+        }
+
+        .mx_GenericEventListSummary_line {
+            display: none;
+        }
+
+        .mx_GenericEventListSummary_avatars {
+            padding-top: 0;
+        }
+    }
 }
 
 .mx_GenericEventListSummary_unstyledList {
@@ -31,7 +101,6 @@ limitations under the License.
 .mx_GenericEventListSummary_avatars {
     display: inline-block;
     margin-right: 8px;
-    padding-top: 8px;
     line-height: $font-12px;
 }
 
@@ -43,9 +112,6 @@ limitations under the License.
 .mx_GenericEventListSummary_toggle {
     color: $accent;
     cursor: pointer;
-    float: right;
-    margin-right: 10px;
-    margin-top: 8px;
 }
 
 .mx_GenericEventListSummary_line {

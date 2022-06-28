@@ -489,6 +489,12 @@ limitations under the License.
     }
 
     &.mx_EventTile_bad {
+        &:hover {
+            &::before {
+                background: transparent;
+            }
+        }
+
         /* Special layout scenario for "Unable To Decrypt (UTD)" events */
         .mx_EventTile_line {
             display: grid;
@@ -590,15 +596,19 @@ limitations under the License.
 
 .mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
 .mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble],
+.mx_EventTile.mx_EventTile_info[data-layout=bubble] {
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
+.mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout=bubble],
 .mx_EventTile.mx_EventTile_info[data-layout=bubble],
 .mx_GenericEventListSummary[data-layout=bubble][data-expanded=false] {
     --backgroundColor: transparent;
     --gutterSize: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 5px 0;
 
     .mx_EventTile_avatar {
         position: static;
@@ -634,90 +644,34 @@ limitations under the License.
 }
 
 .mx_GenericEventListSummary[data-layout=bubble] {
-    --maxWidth: 70%;
-    margin-left: calc(var(--avatarSize) + var(--gutterSize));
+    .mx_EventTile.mx_EventTile_info .mx_EventTile_line {
+        // Avoid overflow of event info by cancelling width settings
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
 
-    .mx_GenericEventListSummary_toggle {
-        margin: 0 55px 0 5px;
-        float: none;
+    // increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button
+    &[data-expanded=false] + .mx_EventTile[data-layout=bubble][data-self=true] {
+        margin-top: 20px;
+    }
 
-        &[aria-expanded=false] {
-            order: 9;
+    &[data-expanded=true] .mx_EventTile_info {
+        padding: 2px 0;
+        margin-right: 0;
+
+        .mx_MessageActionBar {
+            inset-inline-start: initial; // Reset .mx_EventTile[data-layout="bubble"][data-self="false"] .mx_MessageActionBar
+            inset-inline-end: 48px; // align with that of right-column bubbles
         }
-        &[aria-expanded=true] {
-            text-align: right;
+
+        .mx_ReadReceiptGroup {
+            // match alignment to RRs of chat bubbles
+            inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + 60px);
         }
-    }
 
-    .mx_GenericEventListSummary_line {
-        display: none;
-    }
-
-    .mx_GenericEventListSummary_avatars {
-        padding-top: 0;
-    }
-
-    .mx_EventTile {
-        &.mx_EventTile_info {
-            .mx_EventTile_line {
-                // Avoid overflow of event info by cancelling width settings
-                width: 100%;
-                min-width: 0;
-                max-width: 100%;
-            }
-        }
-    }
-
-    /* events that do not require bubble layout */
-    .mx_EventTile_line {
-        background: transparent;
-    }
-
-    &:hover {
         &::before {
-            background: transparent;
-        }
-    }
-
-    &::after {
-        content: "";
-        clear: both;
-    }
-
-    &[data-expanded=false] {
-        // Align with left edge of bubble tiles
-        padding: 0 49px;
-
-        // increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button
-        + .mx_EventTile[data-layout=bubble][data-self=true] {
-            margin-top: 20px;
-        }
-    }
-
-    // ideally we'd use display=contents here for the layout to all work regardless of the *ELS but
-    // that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse.
-    &[data-expanded=true] {
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-
-        .mx_EventTile_info {
-            padding: 2px 0;
-            margin-right: 0;
-
-            .mx_MessageActionBar {
-                inset-inline-start: initial; // Reset .mx_EventTile[data-layout="bubble"][data-self="false"] .mx_MessageActionBar
-                inset-inline-end: 48px; // align with that of right-column bubbles
-            }
-
-            .mx_ReadReceiptGroup {
-                // match alignment to RRs of chat bubbles
-                inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + 60px);
-            }
-
-            &::before {
-                inset-inline-end: 0; // match alignment of the hover background to that of chat bubbles
-            }
+            inset-inline-end: 0; // match alignment of the hover background to that of chat bubbles
         }
     }
 }
