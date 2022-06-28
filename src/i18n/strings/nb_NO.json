@@ -1,10 +1,7 @@
 {
-    "powered by Matrix": "Drevet av Matrix",
     "Unknown device": "Ukjent enhet",
-    "You need to be using HTTPS to place a screen-sharing call.": "Du er nødt til å bruke HTTPS for å ha en samtale med skjermdeling.",
     "Dismiss": "Avvis",
     "Welcome to Element": "Velkommen til Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert chat &amp; samarbeid drevet av [matrix]",
     "Sign In": "Logg inn",
     "Create Account": "Opprett konto",
     "Explore rooms": "Se alle rom",
@@ -13,7 +10,6 @@
     "Invalid configuration: no default server specified.": "Ugyldig konfigurasjon: ingen standardserver spesifisert.",
     "Unexpected error preparing the app. See console for details.": "Uventet feil ved klargjøring av appen. Se konsollen for detaljer.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ugyldig konfigurasjon: Spesifiser kun en av følgende: default_server_config, default_server_name eller default_hs_url.",
-    "Open user settings": "Åpne brukerinnstillinger",
     "Go to your browser to complete Sign In": "Gå til nettleseren din for å fullføre innloggingen",
     "Failed to start": "Kunne ikke starte",
     "Go to element.io": "Gå til element.io",
@@ -22,17 +18,14 @@
     "Your browser can't run %(brand)s": "Nettleseren din kan ikke kjøre %(brand)s",
     "Unsupported browser": "Ustøttet nettleser",
     "Powered by Matrix": "Drevet av Matrix",
-    "Previous/next recently visited room or community": "Forrige/neste nylig besøkte rom eller samfunn",
     "Download Completed": "Nedlasting Fullført",
     "Unable to load config file: please refresh the page to try again.": "Kan ikke laste inn konfigurasjonsfil: oppdater siden for å prøve igjen.",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Ditt Element konfigurasjonen inneholder ugyldig JSON. Løs problemet og last siden på nytt.",
     "Your Element is misconfigured": "Ditt Element er feilkonfigurert",
-    "Missing indexeddb worker script!": "Mangler indexeddb arbeiderskript!",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Vennligst installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eller <safariLink>Safari</safariLink> for den beste opplevelsen.",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s bruker avanserte nettleserfunksjoner som ikke støttes av din nåværende nettleser.",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Skrivebord (%(platformName)s)",
     "Open": "Åpne",
-    "Use %(brand)s on mobile": "Bruk %(brand)s på mobil",
-    "Switch to space by number": "Bytt til plass etter nummer"
+    "Use %(brand)s on mobile": "Bruk %(brand)s på mobil"
 }
