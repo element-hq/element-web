@@ -1,9 +1,6 @@
 {
     "Unknown device": "se samtcise'u vau je na slabu",
-    "You need to be using HTTPS to place a screen-sharing call.": ".i lo nu do pilno la'au xy. bu ty. ty. py. sy. li'u sarcu lo nu do co'a vidni benji",
     "Dismiss": "nu mipri",
-    "powered by Matrix": ".i la .meitriks. cu jicmu",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": ".i la .meitriks. cu jicmu lo nu catni be na ku je mifra tavla je ke kansa gunka",
     "Invalid JSON": ".i le veirdjeisano na drani",
     "Download Completed": ".i mo'u kibycpa",
     "Open": "nu viska",
@@ -22,7 +19,6 @@
     "Sign In": "nu co'a jaspu",
     "Create Account": "nu pa re'u co'a jaspu",
     "Explore rooms": "nu facki le du'u ve zilbe'i",
-    "Missing indexeddb worker script!": ".i na pa gunka samtci pe la'o zoi. indexeddb .zoi vanbi",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": ".i le tcimi'e vreji na drani le ka jai do'e fai gi jo nai zoi zoi. default_server_config .zoi gi zoi zoi. default_server_name .zoi gi zoi zoi. default_hs_url .zoi cmene da",
     "Invalid configuration: no default server specified.": ".i le tcimi'e vreji na drani le ka jai do'e zmicu'a fo le ka samtcise'u",
     "Your Element is misconfigured": ".i le tcimi'e be la .elyment. be'o vreji na drani",
@@ -30,7 +26,5 @@
     "The message from the parser is: %(message)s": ".i notci fi le genturfa'i fa zoi zoi. %(message)s .zoi",
     "Unable to load config file: please refresh the page to try again.": ".i da nabmi fi lo nu samymo'i le tcimi'e vreji .i ko ba zukte le ka kibycpa le kibypapri kei le ka troci",
     "Unexpected error preparing the app. See console for details.": ".i da nabmi fi lo nu co'a ka'e pilno le samtci .i ko tcidu le notci be fi le samymi'etci",
-    "Open user settings": "nu viska le pilno tcimi'e tutci",
-    "Previous/next recently visited room or community": "ve zilbe'i vau ja girzu vau je bo lamli'e vau ja se lamli'e",
     "Powered by Matrix": ".i la .meitriks. cu jicmu"
 }
