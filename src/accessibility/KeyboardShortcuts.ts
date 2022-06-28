@@ -18,7 +18,6 @@ limitations under the License.
 import { _td } from "../languageHandler";
 import { IS_MAC, Key } from "../Keyboard";
 import { IBaseSetting } from "../settings/Settings";
-import IncompatibleController from "../settings/controllers/IncompatibleController";
 import { KeyCombo } from "../KeyBindingsManager";
 
 export enum KeyBindingAction {
@@ -484,13 +483,6 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
             key: Key.ARROW_RIGHT,
         },
         displayName: _td("Expand room list section"),
-    },
-    [KeyBindingAction.ClearRoomFilter]: {
-        default: {
-            key: Key.ESCAPE,
-        },
-        displayName: _td("Clear room list filter field"),
-        controller: new IncompatibleController("feature_spotlight", { key: null }),
     },
     [KeyBindingAction.NextRoom]: {
         default: {

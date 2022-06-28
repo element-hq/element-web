@@ -38,62 +38,9 @@ limitations under the License.
         margin-bottom: 2px;
     }
 
-    .mx_RoomSearch_input {
-        border: none !important; // !important to override default app-wide styles
-        flex: 1 !important; // !important to override default app-wide styles
-        color: $primary-content !important; // !important to override default app-wide styles
-        padding: 0;
-        height: 100%;
-        width: 100%;
-
-        &:not(.mx_RoomSearch_inputExpanded)::placeholder {
-            color: $tertiary-content !important; // !important to override default app-wide styles
-        }
-    }
-
-    .mx_RoomSearch_input,
     .mx_RoomSearch_spotlightTriggerText {
         font-size: $font-12px;
         line-height: $font-16px;
-    }
-
-    &.mx_RoomSearch_hasQuery {
-        border-color: $secondary-content;
-    }
-
-    &.mx_RoomSearch_focused {
-        box-shadow: 0 0 4px 4px rgba(0, 132, 255, 0.5);
-        border-color: transparent;
-    }
-
-    &.mx_RoomSearch_focused, &.mx_RoomSearch_hasQuery {
-        background-color: $background;
-
-        .mx_RoomSearch_clearButton {
-            width: 16px;
-            height: 16px;
-            margin-right: 8px;
-            background-color: $quinary-content;
-            border-radius: 50%;
-            position: relative;
-
-            &::before {
-                content: "";
-                position: absolute;
-                width: inherit;
-                height: inherit;
-                mask-image: url('$(res)/img/feather-customised/x.svg');
-                mask-position: center;
-                mask-size: 12px;
-                mask-repeat: no-repeat;
-                background-color: $secondary-content;
-            }
-        }
-    }
-
-    .mx_RoomSearch_clearButton {
-        width: 0;
-        height: 0;
     }
 
     &.mx_RoomSearch_minimized {

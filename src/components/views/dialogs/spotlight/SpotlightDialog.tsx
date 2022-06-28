@@ -76,15 +76,13 @@ import { copyPlaintext } from "../../../../utils/strings";
 import BaseAvatar from "../../avatars/BaseAvatar";
 import DecoratedRoomAvatar from "../../avatars/DecoratedRoomAvatar";
 import { SearchResultAvatar } from "../../avatars/SearchResultAvatar";
-import { BetaPill } from "../../beta/BetaCard";
 import { NetworkDropdown } from "../../directory/NetworkDropdown";
 import AccessibleButton from "../../elements/AccessibleButton";
 import Spinner from "../../elements/Spinner";
 import NotificationBadge from "../../rooms/NotificationBadge";
 import BaseDialog from "../BaseDialog";
-import BetaFeedbackDialog from "../BetaFeedbackDialog";
+import FeedbackDialog from "../FeedbackDialog";
 import { IDialogProps } from "../IDialogProps";
-import { UserTab } from "../UserTab";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
 import { RoomResultDetails } from "./RoomResultDetails";
@@ -988,9 +986,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
 
     const openFeedback = SdkConfig.get().bug_report_endpoint_url ? () => {
-        Modal.createDialog(BetaFeedbackDialog, {
-            featureId: "feature_spotlight",
-        });
+        Modal.createDialog(FeedbackDialog);
     } : null;
 
     const activeDescendant = rovingContext.state.activeRef?.current?.id;
@@ -1062,13 +1058,6 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             </div>
 
             <div className="mx_SpotlightDialog_footer">
-                <BetaPill onClick={() => {
-                    defaultDispatcher.dispatch({
-                        action: Action.ViewUserSettings,
-                        initialTabId: UserTab.Labs,
-                    });
-                    onFinished();
-                }} />
                 { openFeedback && _t("Results not as expected? Please <a>give feedback</a>.", {}, {
                     a: sub => <AccessibleButton kind="link_inline" onClick={openFeedback}>
                         { sub }

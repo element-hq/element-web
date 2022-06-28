@@ -125,7 +125,6 @@ describe("Spotlight", () => {
     let room2Id: string;
 
     beforeEach(() => {
-        cy.enableLabsFeature("feature_spotlight");
         cy.startSynapse("default").then(data => {
             synapse = data;
             cy.initTestUser(synapse, "Jim").then(() =>
