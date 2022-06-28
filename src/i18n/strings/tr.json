@@ -1,10 +1,7 @@
 {
     "Dismiss": "Kapat",
-    "powered by Matrix": "Matrix'den besleniyor",
     "Unknown device": "Bilinmeyen aygıt",
-    "You need to be using HTTPS to place a screen-sharing call.": "Ekran paylaşımlı arama yapmak için HTTPS kullanıyor olmalısınız.",
     "Welcome to Element": "Element'e hoş geldiniz",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Merkezsiz, şifreli sohbet &amp; işbirliği ile Matrix tarafından desteklenmektedir",
     "Sign In": "Giriş Yap",
     "Create Account": "Hesap Oluştur",
     "Explore rooms": "Odaları keşfet",
@@ -14,7 +11,6 @@
     "Invalid configuration: no default server specified.": "Hatalı ayarlar: varsayılan sunucu belirlenmemiş.",
     "The message from the parser is: %(message)s": "Ayrıştırıcıdan gelen mesaj: %(message)s",
     "Go to your browser to complete Sign In": "Oturum açmayı tamamlamak için tarayıcınıza gidin",
-    "Open user settings": "Kullanıcı ayarlarını aç",
     "Your Element is misconfigured": "Element uygulaması hatalı ayarlanmış",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Element uygulamasının ayarları hatalı JSON içeriyor. Lütfen hatayı düzeltip sayfayı yenileyin.",
     "Unable to load config file: please refresh the page to try again.": "Yapılandırma (config) dosyası yüklenemedi: lütfen yeniden denemek için sayfayı yenileyin.",
@@ -27,14 +23,10 @@
     "I understand the risks and wish to continue": "Riskleri anlıyorum ve devam etmek istiyorum",
     "Go to element.io": "element.io adresine git",
     "Failed to start": "Başlatılamadı",
-    "Previous/next recently visited room or community": "Yakında ziyaret edilen önceki/sonraki oda veya topluluk",
     "Powered by Matrix": "Gücünü Matrix'ten alır",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)  (%(browserName), %(osName))",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Masaüstü (%(platformName)s)",
     "Open": "Aç",
-    "Missing indexeddb worker script!": "Indexeddb worker kodu eksik!",
     "Use %(brand)s on mobile": "Mobilde %(brand)s kullan",
-    "Switch to space by number": "Sayı ile belirtilen alana geç",
-    "Previous recently visited room or community": "En son ziyaret edilen oda veya topluluk",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo tarafından merkeziyetsiz, şifrelenmiş sohbet &amp; iş birliği"
 }

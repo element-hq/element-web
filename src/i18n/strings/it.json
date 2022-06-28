@@ -1,10 +1,7 @@
 {
     "Dismiss": "Chiudi",
-    "powered by Matrix": "offerto da Matrix",
     "Unknown device": "Dispositivo sconosciuto",
-    "You need to be using HTTPS to place a screen-sharing call.": "Devi usare HTTPS per effettuare una chiamata con la condivisione dello schermo.",
     "Welcome to Element": "Benvenuti su Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Chat criptate, decentralizzate e collaborazioni offerte da [matrix]",
     "Sign In": "Accedi",
     "Create Account": "Crea account",
     "Explore rooms": "Esplora stanze",
@@ -14,10 +11,7 @@
     "The message from the parser is: %(message)s": "Il messaggio dal parser è: %(message)s",
     "Invalid JSON": "JSON non valido",
     "Go to your browser to complete Sign In": "Vai nel tuo browser per completare l'accesso",
-    "Open user settings": "Apri impostazioni utente",
-    "Missing indexeddb worker script!": "Script di lavoro indexeddb mancante!",
     "Unable to load config file: please refresh the page to try again.": "Impossibile caricare il file di configurazione: ricarica la pagina per riprovare.",
-    "Previous/next recently visited room or community": "Avanti/indietro stanze o comunità visitate di recente",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Browser non supportato",
@@ -34,8 +28,5 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funzionalità avanzate del browser che non sono supportate dal tuo browser attuale.",
     "Powered by Matrix": "Offerto da Matrix",
     "Use %(brand)s on mobile": "Usa %(brand)s su mobile",
-    "Switch to space by number": "Passa allo spazio per numero",
-    "Next recently visited room or community": "Prossima stanza o comunità visitata di recente",
-    "Previous recently visited room or community": "Precedente stanza o comunità visitata di recente",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Chat e collaborazioni criptate e decentralizzate offerte da $matrixLogo"
 }
