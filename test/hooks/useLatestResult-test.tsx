@@ -47,20 +47,20 @@ describe("useLatestResult", () => {
         await act(async () => {
             await sleep(25);
         });
-        expect(wrapper.text()).toContain("0");
+        expect(wrapper.text()).toEqual("0");
         wrapper.setProps({ doRequest, query: 1 });
         await act(async () => {
-            await sleep(15);
+            await sleep(10);
         });
         wrapper.setProps({ doRequest, query: 2 });
         await act(async () => {
-            await sleep(15);
+            await sleep(10);
         });
-        expect(wrapper.text()).toContain("0");
+        expect(wrapper.text()).toEqual("0");
         await act(async () => {
             await sleep(15);
         });
-        expect(wrapper.text()).toContain("2");
+        expect(wrapper.text()).toEqual("2");
     });
 
     it("should prevent out-of-order results", async () => {
@@ -73,7 +73,7 @@ describe("useLatestResult", () => {
         await act(async () => {
             await sleep(5);
         });
-        expect(wrapper.text()).toContain("0");
+        expect(wrapper.text()).toEqual("0");
         wrapper.setProps({ doRequest, query: 50 });
         await act(async () => {
             await sleep(5);
@@ -82,10 +82,10 @@ describe("useLatestResult", () => {
         await act(async () => {
             await sleep(5);
         });
-        expect(wrapper.text()).toContain("1");
+        expect(wrapper.text()).toEqual("1");
         await act(async () => {
             await sleep(50);
         });
-        expect(wrapper.text()).toContain("1");
+        expect(wrapper.text()).toEqual("1");
     });
 });
