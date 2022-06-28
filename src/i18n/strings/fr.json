@@ -1,10 +1,7 @@
 {
     "Dismiss": "Ignorer",
-    "powered by Matrix": "propulsé par Matrix",
     "Unknown device": "Appareil inconnu",
-    "You need to be using HTTPS to place a screen-sharing call.": "Vous devez utiliser HTTPS pour effectuer un appel avec partage d’écran.",
     "Welcome to Element": "Bienvenue sur Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Messagerie et collaboration décentralisées et chiffrées, propulsées par [matrix]",
     "Sign In": "Se connecter",
     "Create Account": "Créer un compte",
     "Explore rooms": "Parcourir les salons",
@@ -14,10 +11,7 @@
     "The message from the parser is: %(message)s": "Le message de l’analyseur est : %(message)s",
     "Invalid JSON": "JSON non valide",
     "Go to your browser to complete Sign In": "Utilisez votre navigateur pour terminer la connexion",
-    "Open user settings": "Ouvrir les paramètres utilisateur",
-    "Missing indexeddb worker script!": "Script du worker IndexedDB manquant !",
     "Unable to load config file: please refresh the page to try again.": "Impossible de charger le fichier de configuration : rechargez la page pour réessayer.",
-    "Previous/next recently visited room or community": "Salon ou communauté visité récemment précédent/suivant",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Navigateur non pris en charge",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Veuillez installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink> ou <safariLink>Safari</safariLink> pour une expérience optimale.",
@@ -34,8 +28,5 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s nécessite des fonctionnalités avancées que votre navigateur actuel ne prend pas en charge.",
     "Powered by Matrix": "Propulsé par Matrix",
     "Use %(brand)s on mobile": "Utiliser %(brand)s sur téléphone",
-    "Switch to space by number": "Afficher un espace par son numéro",
-    "Next recently visited room or community": "Prochain salon ou communauté récemment visité",
-    "Previous recently visited room or community": "Salon ou communauté précédemment visité",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Messagerie décentralisée, chiffrée &amp; une collaboration alimentée par $matrixLogo"
 }

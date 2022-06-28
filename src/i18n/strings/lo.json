@@ -15,7 +15,6 @@
     "Unsupported browser": "ບໍ່ຮັບຮອງເວັບບຣາວເຊີນີ້",
     "Use %(brand)s on mobile": "ໃຊ້ມືຖື %(brand)s",
     "Powered by Matrix": "ສະໜັບສະໜູນໂດຍ Matrix",
-    "You need to be using HTTPS to place a screen-sharing call.": "ທ່ານຈໍາເປັນຕ້ອງໃຊ້ HTTPS ເພື່ອໃຊ້ການແບ່ງປັນຫນ້າຈໍ.",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unknown device": "ທີ່ບໍ່ຮູ້ຈັກອຸປະກອນນີ້",
     "Go to your browser to complete Sign In": "ໄປທີ່ໜ້າເວັບຂອງທ່ານເພື່ອເຂົ້າສູ່ລະບົບ",
