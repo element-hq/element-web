@@ -102,11 +102,6 @@ limitations under the License.
     }
 
     .mx_DisambiguatedProfile {
-        font-size: $font-14px;
         line-height: $font-17px;
-
-        display: inline-block; // anti-zalgo, with overflow hidden
-        padding: 0;
-        margin: 0;
     }
 }

@@ -72,6 +72,14 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         }
     }
 
+    .mx_DisambiguatedProfile {
+        color: $primary-content;
+        font-size: $font-14px;
+        display: inline-block;
+        padding-bottom: 0px;
+        padding-top: 0px;
+    }
+
     .mx_ReactionsRow {
         display: flex;
         flex-flow: wrap;
@@ -192,14 +200,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
     &.mx_EventTile_continuation {
         padding-top: 0px !important;
-    }
-
-    .mx_DisambiguatedProfile {
-        color: $primary-content;
-        font-size: $font-14px;
-        display: inline-block;
-        padding-bottom: 0px;
-        padding-top: 0px;
     }
 
     &.mx_EventTile_isEditing .mx_MessageTimestamp {
