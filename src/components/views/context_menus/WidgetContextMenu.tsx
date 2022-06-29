@@ -85,16 +85,6 @@ const WidgetContextMenu: React.FC<IProps> = ({
     const pinnedWidgets = WidgetLayoutStore.instance.getContainerWidgets(room, Container.Top);
     const widgetIndex = pinnedWidgets.findIndex(widget => widget.id === app.id);
 
-    let unpinButton;
-    if (showUnpin && widgetIndex >= 0) {
-        const onUnpinClick = () => {
-            WidgetLayoutStore.instance.moveToContainer(room, app, Container.Right);
-            onFinished();
-        };
-
-        unpinButton = <IconizedContextMenuOption onClick={onUnpinClick} label={_t("Unpin")} />;
-    }
-
     let editButton;
     if (canModify && WidgetUtils.isManagedByManager(app)) {
         const _onEditClick = () => {
@@ -208,7 +198,6 @@ const WidgetContextMenu: React.FC<IProps> = ({
             { snapshotButton }
             { moveLeftButton }
             { moveRightButton }
-            { unpinButton }
         </IconizedContextMenuOptionList>
     </IconizedContextMenu>;
 };
