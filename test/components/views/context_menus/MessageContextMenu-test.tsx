@@ -23,30 +23,32 @@ import {
     BeaconIdentifier,
     Beacon,
     getBeaconInfoIdentifier,
+    EventType,
 } from 'matrix-js-sdk/src/matrix';
 import { ExtensibleEvent, MessageEvent, M_POLL_KIND_DISCLOSED, PollStartEvent } from 'matrix-events-sdk';
 import { Thread } from "matrix-js-sdk/src/models/thread";
 import { mocked } from "jest-mock";
 import { act } from '@testing-library/react';
 
-import * as TestUtils from '../../../test-utils';
 import { MatrixClientPeg } from '../../../../src/MatrixClientPeg';
 import RoomContext, { TimelineRenderingType } from "../../../../src/contexts/RoomContext";
 import { IRoomState } from "../../../../src/components/structures/RoomView";
-import { canEditContent, isContentActionable } from "../../../../src/utils/EventUtils";
+import { canEditContent } from "../../../../src/utils/EventUtils";
 import { copyPlaintext, getSelectedText } from "../../../../src/utils/strings";
 import MessageContextMenu from "../../../../src/components/views/context_menus/MessageContextMenu";
-import { makeBeaconEvent, makeBeaconInfoEvent } from '../../../test-utils';
+import { makeBeaconEvent, makeBeaconInfoEvent, stubClient } from '../../../test-utils';
 import dispatcher from '../../../../src/dispatcher/dispatcher';
+import SettingsStore from '../../../../src/settings/SettingsStore';
+import { ReadPinsEventId } from '../../../../src/components/views/right_panel/types';
 
 jest.mock("../../../../src/utils/strings", () => ({
     copyPlaintext: jest.fn(),
     getSelectedText: jest.fn(),
 }));
 jest.mock("../../../../src/utils/EventUtils", () => ({
+    // @ts-ignore don't mock everything
+    ...jest.requireActual("../../../../src/utils/EventUtils"),
     canEditContent: jest.fn(),
-    isContentActionable: jest.fn(),
-    isLocationEvent: jest.fn(),
 }));
 
 const roomId = 'roomid';
@@ -54,6 +56,7 @@ const roomId = 'roomid';
 describe('MessageContextMenu', () => {
     beforeEach(() => {
         jest.resetAllMocks();
+        stubClient();
     });
 
     it('does show copy link button when supplied a link', () => {
@@ -74,10 +77,151 @@ describe('MessageContextMenu', () => {
         expect(copyLinkButton).toHaveLength(0);
     });
 
+    describe('message pinning', () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, 'getValue').mockReturnValue(true);
+        });
+
+        afterAll(() => {
+            jest.spyOn(SettingsStore, 'getValue').mockRestore();
+        });
+
+        it('does not show pin option when user does not have rights to pin', () => {
+            const eventContent = MessageEvent.from("hello");
+            const event = new MatrixEvent(eventContent.serialize());
+
+            const room = makeDefaultRoom();
+            // mock permission to disallow adding pinned messages to room
+            jest.spyOn(room.currentState, 'mayClientSendStateEvent').mockReturnValue(false);
+
+            const menu = createMenu(event, {}, {}, undefined, room);
+
+            expect(menu.find('div[aria-label="Pin"]')).toHaveLength(0);
+        });
+
+        it('does not show pin option for beacon_info event', () => {
+            const deadBeaconEvent = makeBeaconInfoEvent('@alice:server.org', roomId, { isLive: false });
+
+            const room = makeDefaultRoom();
+            // mock permission to allow adding pinned messages to room
+            jest.spyOn(room.currentState, 'mayClientSendStateEvent').mockReturnValue(true);
+
+            const menu = createMenu(deadBeaconEvent, {}, {}, undefined, room);
+
+            expect(menu.find('div[aria-label="Pin"]')).toHaveLength(0);
+        });
+
+        it('does not show pin option when pinning feature is disabled', () => {
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
+
+            const room = makeDefaultRoom();
+            // mock permission to allow adding pinned messages to room
+            jest.spyOn(room.currentState, 'mayClientSendStateEvent').mockReturnValue(true);
+            // disable pinning feature
+            jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
+
+            const menu = createMenu(pinnableEvent, {}, {}, undefined, room);
+
+            expect(menu.find('div[aria-label="Pin"]')).toHaveLength(0);
+        });
+
+        it('shows pin option when pinning feature is enabled', () => {
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
+
+            const room = makeDefaultRoom();
+            // mock permission to allow adding pinned messages to room
+            jest.spyOn(room.currentState, 'mayClientSendStateEvent').mockReturnValue(true);
+
+            const menu = createMenu(pinnableEvent, {}, {}, undefined, room);
+
+            expect(menu.find('div[aria-label="Pin"]')).toHaveLength(1);
+        });
+
+        it('pins event on pin option click', () => {
+            const onFinished = jest.fn();
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
+            pinnableEvent.event.event_id = '!3';
+            const client = MatrixClientPeg.get();
+            const room = makeDefaultRoom();
+
+            // mock permission to allow adding pinned messages to room
+            jest.spyOn(room.currentState, 'mayClientSendStateEvent').mockReturnValue(true);
+
+            // mock read pins account data
+            const pinsAccountData = new MatrixEvent({ content: { event_ids: ['!1', '!2'] } });
+            jest.spyOn(room, 'getAccountData').mockReturnValue(pinsAccountData);
+
+            const menu = createMenu(pinnableEvent, { onFinished }, {}, undefined, room);
+
+            act(() => {
+                menu.find('div[aria-label="Pin"]').simulate('click');
+            });
+
+            // added to account data
+            expect(client.setRoomAccountData).toHaveBeenCalledWith(
+                roomId,
+                ReadPinsEventId,
+                { event_ids: [
+                    // from account data
+                    '!1', '!2',
+                    pinnableEvent.getId(),
+                ],
+                },
+            );
+
+            // add to room's pins
+            expect(client.sendStateEvent).toHaveBeenCalledWith(roomId, EventType.RoomPinnedEvents, {
+                pinned: [pinnableEvent.getId()] }, "");
+
+            expect(onFinished).toHaveBeenCalled();
+        });
+
+        it('unpins event on pin option click when event is pinned', () => {
+            const eventContent = MessageEvent.from("hello");
+            const pinnableEvent = new MatrixEvent({ ...eventContent.serialize(), room_id: roomId });
+            pinnableEvent.event.event_id = '!3';
+            const client = MatrixClientPeg.get();
+            const room = makeDefaultRoom();
+
+            // make the event already pinned in the room
+            const pinEvent = new MatrixEvent({
+                type: EventType.RoomPinnedEvents,
+                room_id: roomId,
+                state_key: "",
+                content: { pinned: [pinnableEvent.getId(), '!another-event'] },
+            });
+            room.currentState.setStateEvents([pinEvent]);
+
+            // mock permission to allow adding pinned messages to room
+            jest.spyOn(room.currentState, 'mayClientSendStateEvent').mockReturnValue(true);
+
+            // mock read pins account data
+            const pinsAccountData = new MatrixEvent({ content: { event_ids: ['!1', '!2'] } });
+            jest.spyOn(room, 'getAccountData').mockReturnValue(pinsAccountData);
+
+            const menu = createMenu(pinnableEvent, {}, {}, undefined, room);
+
+            act(() => {
+                menu.find('div[aria-label="Unpin"]').simulate('click');
+            });
+
+            expect(client.setRoomAccountData).not.toHaveBeenCalled();
+
+            // add to room's pins
+            expect(client.sendStateEvent).toHaveBeenCalledWith(
+                roomId, EventType.RoomPinnedEvents,
+                // pinnableEvent's id removed, other pins intact
+                { pinned: ['!another-event'] },
+                "",
+            );
+        });
+    });
+
     describe('message forwarding', () => {
         it('allows forwarding a room message', () => {
-            mocked(isContentActionable).mockReturnValue(true);
-
             const eventContent = MessageEvent.from("hello");
             const menu = createMenuWithContent(eventContent);
             expect(menu.find('div[aria-label="Forward"]')).toHaveLength(1);
@@ -91,9 +235,6 @@ describe('MessageContextMenu', () => {
 
         describe('forwarding beacons', () => {
             const aliceId = "@alice:server.org";
-            beforeEach(() => {
-                mocked(isContentActionable).mockReturnValue(true);
-            });
 
             it('does not allow forwarding a beacon that is not live', () => {
                 const deadBeaconEvent = makeBeaconInfoEvent(aliceId, roomId, { isLive: false });
@@ -212,7 +353,6 @@ describe('MessageContextMenu', () => {
             const context = {
                 canSendMessages: true,
             };
-            mocked(isContentActionable).mockReturnValue(true);
 
             const menu = createRightClickMenuWithContent(eventContent, context);
             const replyButton = menu.find('div[aria-label="Reply"]');
@@ -224,9 +364,11 @@ describe('MessageContextMenu', () => {
             const context = {
                 canSendMessages: true,
             };
-            mocked(isContentActionable).mockReturnValue(false);
+            const unsentMessage = new MatrixEvent(eventContent.serialize());
+            // queued messages are not actionable
+            unsentMessage.setStatus(EventStatus.QUEUED);
 
-            const menu = createRightClickMenuWithContent(eventContent, context);
+            const menu = createMenu(unsentMessage, {}, context);
             const replyButton = menu.find('div[aria-label="Reply"]');
             expect(replyButton).toHaveLength(0);
         });
@@ -236,7 +378,6 @@ describe('MessageContextMenu', () => {
             const context = {
                 canReact: true,
             };
-            mocked(isContentActionable).mockReturnValue(true);
 
             const menu = createRightClickMenuWithContent(eventContent, context);
             const reactButton = menu.find('div[aria-label="React"]');
@@ -296,23 +437,25 @@ function createMenuWithContent(
     return createMenu(mxEvent, props, context);
 }
 
-function createMenu(
-    mxEvent: MatrixEvent,
-    props?: Partial<React.ComponentProps<typeof MessageContextMenu>>,
-    context: Partial<IRoomState> = {},
-    beacons: Map<BeaconIdentifier, Beacon> = new Map(),
-): ReactWrapper {
-    TestUtils.stubClient();
-    const client = MatrixClientPeg.get();
-
-    const room = new Room(
+function makeDefaultRoom(): Room {
+    return new Room(
         roomId,
-        client,
+        MatrixClientPeg.get(),
         "@user:example.com",
         {
             pendingEventOrdering: PendingEventOrdering.Detached,
         },
     );
+}
+
+function createMenu(
+    mxEvent: MatrixEvent,
+    props?: Partial<React.ComponentProps<typeof MessageContextMenu>>,
+    context: Partial<IRoomState> = {},
+    beacons: Map<BeaconIdentifier, Beacon> = new Map(),
+    room: Room = makeDefaultRoom(),
+): ReactWrapper {
+    const client = MatrixClientPeg.get();
 
     // @ts-ignore illegally set private prop
     room.currentState.beacons = beacons;

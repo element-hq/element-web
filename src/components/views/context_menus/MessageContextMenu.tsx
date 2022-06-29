@@ -1,6 +1,6 @@
 /*
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2015 - 2021 The Matrix.org Foundation C.I.C.
+Copyright 2015 - 2022 The Matrix.org Foundation C.I.C.
 Copyright 2021 - 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,13 @@ import Modal from '../../../Modal';
 import Resend from '../../../Resend';
 import SettingsStore from '../../../settings/SettingsStore';
 import { isUrlPermitted } from '../../../HtmlUtils';
-import { canEditContent, editEvent, isContentActionable, isLocationEvent } from '../../../utils/EventUtils';
+import {
+    canEditContent,
+    canPinEvent,
+    editEvent,
+    isContentActionable,
+    isLocationEvent,
+} from '../../../utils/EventUtils';
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
 import { ReadPinsEventId } from "../right_panel/types";
 import { Action } from "../../../dispatcher/actions";
@@ -121,7 +127,9 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const canRedact = room.currentState.maySendRedactionForEvent(this.props.mxEvent, cli.credentials.userId)
             && this.props.mxEvent.getType() !== EventType.RoomServerAcl
             && this.props.mxEvent.getType() !== EventType.RoomEncryption;
-        let canPin = room.currentState.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli);
+
+        let canPin = room.currentState.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli) &&
+            canPinEvent(this.props.mxEvent);
 
         // HACK: Intentionally say we can't pin if the user doesn't want to use the functionality
         if (!SettingsStore.getValue("feature_pinning")) canPin = false;
@@ -204,6 +212,7 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         const eventId = this.props.mxEvent.getId();
 
         const pinnedIds = room?.currentState?.getStateEvents(EventType.RoomPinnedEvents, "")?.getContent().pinned || [];
+
         if (pinnedIds.includes(eventId)) {
             pinnedIds.splice(pinnedIds.indexOf(eventId), 1);
         } else {

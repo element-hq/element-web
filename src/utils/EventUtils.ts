@@ -284,3 +284,7 @@ export const isLocationEvent = (event: MatrixEvent): boolean => {
 export function hasThreadSummary(event: MatrixEvent): boolean {
     return event.isThreadRoot && event.getThread()?.length && !!event.getThread().replyToEvent;
 }
+
+export function canPinEvent(event: MatrixEvent): boolean {
+    return !M_BEACON_INFO.matches(event.getType());
+}

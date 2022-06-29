@@ -25,9 +25,9 @@ import { ForwardableEventTransformFunction } from "./types";
 export const getForwardableBeaconEvent: ForwardableEventTransformFunction = (event, cli) => {
     const room = cli.getRoom(event.getRoomId());
     const beacon = room.currentState.beacons?.get(getBeaconInfoIdentifier(event));
-    const latestLocationEvent = beacon.latestLocationEvent;
+    const latestLocationEvent = beacon?.latestLocationEvent;
 
-    if (beacon.isLive && latestLocationEvent) {
+    if (beacon?.isLive && latestLocationEvent) {
         return latestLocationEvent;
     }
     return null;
