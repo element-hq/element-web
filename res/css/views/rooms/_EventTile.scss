@@ -86,6 +86,16 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         .mx_MImageBody {
             margin-right: 34px;
         }
+
+        .mx_EventTile_line,
+        .mx_EventTile_reply {
+            position: relative;
+            border-radius: 8px;
+        }
+
+        .mx_EventTile_reply {
+            margin-right: 10px;
+        }
     }
 
     &[data-layout=group] {
@@ -113,6 +123,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         .mx_EventTile_reply {
             padding-top: 1px;
             padding-bottom: 3px;
+            padding-left: $left-gutter;
             line-height: $font-22px;
         }
 
@@ -195,17 +206,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
     &.mx_EventTile_continuation .mx_EventTile_line {
         clear: both;
-    }
-
-    .mx_EventTile_line,
-    .mx_EventTile_reply {
-        position: relative;
-        padding-left: $left-gutter;
-        border-radius: 8px;
-    }
-
-    .mx_EventTile_reply {
-        margin-right: 10px;
     }
 
     /* this is used for the tile for the event which is selected via the URL.
