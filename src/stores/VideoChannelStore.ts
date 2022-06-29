@@ -202,6 +202,7 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
             messaging,
             `action:${ElementWidgetActions.JoinCall}`,
             (ev: CustomEvent<IWidgetApiRequest>) => {
+                ev.preventDefault();
                 this.ack(ev);
                 return true;
             },
@@ -290,42 +291,49 @@ export default class VideoChannelStore extends AsyncStoreWithClient<null> {
         await removeOurDevice(room);
     };
 
-    private ack = (ev: CustomEvent<IWidgetApiRequest>) => {
+    private ack = (ev: CustomEvent<IWidgetApiRequest>, messaging = this.activeChannel) => {
         // Even if we don't have a reply to a given widget action, we still need
         // to give the widget API something to acknowledge receipt
-        this.activeChannel.transport.reply(ev.detail, {});
+        messaging.transport.reply(ev.detail, {});
     };
 
     private onHangup = async (ev: CustomEvent<IWidgetApiRequest>) => {
-        this.ack(ev);
+        ev.preventDefault();
+        const messaging = this.activeChannel;
         // In case this hangup is caused by Jitsi Meet crashing at startup,
         // wait for the connection event in order to avoid racing
         if (!this.connected) await waitForEvent(this, VideoChannelEvent.Connect);
         await this.setDisconnected();
+        this.ack(ev, messaging);
     };
 
     private onParticipants = (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
         this.participants = ev.detail.data.participants as IJitsiParticipant[];
         this.emit(VideoChannelEvent.Participants, this.roomId, ev.detail.data.participants);
         this.ack(ev);
     };
 
     private onMuteAudio = (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
         this.audioMuted = true;
         this.ack(ev);
     };
 
     private onUnmuteAudio = (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
         this.audioMuted = false;
         this.ack(ev);
     };
 
     private onMuteVideo = (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
         this.videoMuted = true;
         this.ack(ev);
     };
 
     private onUnmuteVideo = (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
         this.videoMuted = false;
         this.ack(ev);
     };
