@@ -99,6 +99,8 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     &[data-layout=group] {
+        --EventTile_group_line-line-height: $font-22px;
+
         > .mx_DisambiguatedProfile {
             line-height: $font-20px;
             margin-left: $left-gutter;
@@ -124,7 +126,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             padding-top: 1px;
             padding-bottom: 3px;
             padding-left: $left-gutter;
-            line-height: $font-22px;
+            line-height: var(--EventTile_group_line-line-height);
         }
 
         .mx_EventTile_e2eIcon {

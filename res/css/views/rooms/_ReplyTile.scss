@@ -18,7 +18,6 @@ limitations under the License.
     position: relative;
     padding: 2px 0;
     font-size: $font-14px;
-    line-height: $font-16px;
 
     &.mx_ReplyTile_audio .mx_MFileBody_info_icon::before {
         mask-image: url("$(res)/img/element-icons/speaker.svg");
@@ -60,16 +59,14 @@ limitations under the License.
     // We do reply size limiting with CSS to avoid duplicating the TextualBody component.
     .mx_EventTile_content {
         $reply-lines: 2;
-        $line-height: $font-22px;
 
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: $reply-lines;
-        line-height: $line-height;
 
         .mx_EventTile_body.mx_EventTile_bigEmoji {
-            line-height: $line-height !important;
+            line-height: $font-22px !important; // Same as var(--EventTile_group_line-line-height)
             font-size: $font-14px !important; // Override the big emoji override
         }
 
