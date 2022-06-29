@@ -97,6 +97,7 @@ const DEFAULT_CONTENT_PROPS: ContentProps = {
 export const makeBeaconEvent = (
     sender: string,
     contentProps: Partial<ContentProps> = {},
+    roomId?: string,
 ): MatrixEvent => {
     const { geoUri, timestamp, beaconInfoId, description } = {
         ...DEFAULT_CONTENT_PROPS,
@@ -105,6 +106,7 @@ export const makeBeaconEvent = (
 
     return new MatrixEvent({
         type: M_BEACON.name,
+        room_id: roomId,
         sender,
         content: makeBeaconContent(geoUri, timestamp, beaconInfoId, description),
     });

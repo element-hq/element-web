@@ -38,6 +38,7 @@ exports[`<BeaconMarker /> renders marker when beacon has location 1`] = `
           },
           "org.matrix.msc3488.ts": 1647270879404,
         },
+        "room_id": undefined,
         "sender": "@alice:server",
         "type": "org.matrix.msc3672.beacon",
       },
