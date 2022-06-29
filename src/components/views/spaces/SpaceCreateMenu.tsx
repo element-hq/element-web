@@ -105,7 +105,7 @@ export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
     return <div className="mx_SpaceFeedbackPrompt">
         <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a new feature.") }</span>
         <AccessibleButton
-            kind="link"
+            kind="link_inline"
             onClick={() => {
                 if (onClick) onClick();
                 Modal.createDialog(GenericFeatureFeedbackDialog, {

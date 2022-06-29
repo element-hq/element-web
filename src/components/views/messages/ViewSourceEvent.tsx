@@ -76,7 +76,7 @@ export default class ViewSourceEvent extends React.PureComponent<IProps, IState>
         return <span className={classes}>
             { content }
             <AccessibleButton
-                kind='link_inline'
+                kind='link'
                 title={_t('toggle event')}
                 className="mx_ViewSourceEvent_toggle"
                 onClick={this.onToggle}

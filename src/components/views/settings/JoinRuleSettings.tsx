@@ -163,8 +163,7 @@ const JoinRuleSettings = ({ room, promptUpgrade, aliasWarning, onError, beforeCh
                         a: sub => <AccessibleButton
                             disabled={disabled}
                             onClick={onEditRestrictedClick}
-                            kind="link"
-                            className="mx_JoinRuleSettings_linkButton"
+                            kind="link_inline"
                         >
                             { sub }
                         </AccessibleButton>,

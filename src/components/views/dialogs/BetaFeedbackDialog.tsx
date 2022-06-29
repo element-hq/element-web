@@ -44,7 +44,7 @@ const BetaFeedbackDialog: React.FC<IProps> = ({ featureId, onFinished }) => {
         }))}
     >
         <AccessibleButton
-            kind="link"
+            kind="link_inline"
             onClick={() => {
                 onFinished(false);
                 defaultDispatcher.dispatch({

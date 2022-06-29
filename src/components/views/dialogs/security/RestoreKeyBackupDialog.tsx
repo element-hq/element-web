@@ -408,15 +408,13 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                     {},
                     {
                         button1: s => <AccessibleButton
-                            className="mx_linkButton"
-                            element="span"
+                            kind="link_inline"
                             onClick={this.onUseRecoveryKeyClick}
                         >
                             { s }
                         </AccessibleButton>,
                         button2: s => <AccessibleButton
-                            className="mx_linkButton"
-                            element="span"
+                            kind="link_inline"
                             onClick={this.onResetRecoveryClick}
                         >
                             { s }
@@ -470,8 +468,8 @@ export default class RestoreKeyBackupDialog extends React.PureComponent<IProps, 
                     "<button>set up new recovery options</button>",
                     {},
                     {
-                        button: s => <AccessibleButton className="mx_linkButton"
-                            element="span"
+                        button: s => <AccessibleButton
+                            kind="link_inline"
                             onClick={this.onResetRecoveryClick}
                         >
                             { s }

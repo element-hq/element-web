@@ -368,7 +368,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
                     value={_t('Send Reset Email')}
                 />
             </form>
-            <AccessibleButton kind='link_inline' className="mx_AuthBody_changeFlow" onClick={this.onLoginClick}>
+            <AccessibleButton kind='link' className="mx_AuthBody_changeFlow" onClick={this.onLoginClick}>
                 { _t('Sign in instead') }
             </AccessibleButton>
         </div>;

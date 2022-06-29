@@ -276,14 +276,14 @@ export default class UserMenu extends React.Component<IProps, IState> {
                 <div className="mx_UserMenu_contextMenu_header mx_UserMenu_contextMenu_guestPrompts">
                     { _t("Got an account? <a>Sign in</a>", {}, {
                         a: sub => (
-                            <AccessibleButton kind="link" onClick={this.onSignInClick}>
+                            <AccessibleButton kind="link_inline" onClick={this.onSignInClick}>
                                 { sub }
                             </AccessibleButton>
                         ),
                     }) }
                     { _t("New here? <a>Create an account</a>", {}, {
                         a: sub => (
-                            <AccessibleButton kind="link" onClick={this.onRegisterClick}>
+                            <AccessibleButton kind="link_inline" onClick={this.onRegisterClick}>
                                 { sub }
                             </AccessibleButton>
                         ),

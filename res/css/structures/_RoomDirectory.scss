@@ -180,19 +180,11 @@ limitations under the License.
 .mx_RoomDirectory > span {
     font-size: $font-15px;
     margin-top: 0;
-
-    .mx_AccessibleButton {
-        padding: 0;
-    }
 }
 
 @media screen and (max-width: 700px) {
     .mx_RoomDirectory_roomMemberCount {
         padding: 0px;
-    }
-
-    .mx_AccessibleButton_kind_secondary {
-        padding: 0px !important;
     }
 
     .mx_RoomDirectory_join {

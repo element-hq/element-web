@@ -102,7 +102,7 @@ const FeedbackDialog: React.FC<IProps> = (props: IProps) => {
                 _t("PRO TIP: If you start a bug, please submit <debugLogsLink>debug logs</debugLogsLink> " +
                     "to help us track down the problem.", {}, {
                     debugLogsLink: sub => (
-                        <AccessibleButton kind="link" onClick={onDebugLogsLinkClick}>{ sub }</AccessibleButton>
+                        <AccessibleButton kind="link_inline" onClick={onDebugLogsLinkClick}>{ sub }</AccessibleButton>
                     ),
                 })
             }</p>

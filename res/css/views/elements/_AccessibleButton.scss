@@ -137,15 +137,11 @@ limitations under the License.
         font-size: inherit;
         font-weight: normal;
         line-height: inherit;
-    }
-
-    &.mx_AccessibleButton_kind_link {
         padding: 0;
     }
 
     &.mx_AccessibleButton_kind_link_inline {
         display: inline;
-        padding: 0 2px;
     }
 
     &.mx_AccessibleButton_kind_confirm_sm,

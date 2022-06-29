@@ -76,14 +76,14 @@ export default class TileErrorBoundary extends React.Component<IProps, IState> {
 
             let submitLogsButton;
             if (SdkConfig.get().bug_report_endpoint_url) {
-                submitLogsButton = <AccessibleButton kind="link_inline" onClick={this.onBugReport}>
+                submitLogsButton = <AccessibleButton kind="link" onClick={this.onBugReport}>
                     { _t("Submit logs") }
                 </AccessibleButton>;
             }
 
             let viewSourceButton;
             if (mxEvent && SettingsStore.getValue("developerMode")) {
-                viewSourceButton = <AccessibleButton onClick={this.onViewSource} kind="link_inline">
+                viewSourceButton = <AccessibleButton onClick={this.onViewSource} kind="link">
                     { _t("View Source") }
                 </AccessibleButton>;
             }

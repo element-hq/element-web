@@ -416,7 +416,6 @@ limitations under the License.
         }
 
         .mx_SpotlightDialog_recentSearches > h4 > .mx_AccessibleButton_kind_link {
-            padding: 0;
             float: right;
             font-size: $font-12px;
             line-height: $font-15px;
@@ -468,10 +467,6 @@ limitations under the License.
 
         > span {
             align-self: center;
-
-            .mx_AccessibleButton_kind_link_inline {
-                padding: 0;
-            }
         }
 
         .mx_AccessibleButton_kind_primary_outline {

@@ -580,7 +580,7 @@ export default class Registration extends React.Component<IProps, IState> {
         let goBack;
         if (this.state.doingUIAuth) {
             goBack = <AccessibleButton
-                kind='link_inline'
+                kind='link'
                 className="mx_AuthBody_changeFlow"
                 onClick={this.onGoToFormClicked}
             >
@@ -601,8 +601,7 @@ export default class Registration extends React.Component<IProps, IState> {
                         },
                     ) }</p>
                     <p><AccessibleButton
-                        element="span"
-                        className="mx_linkButton"
+                        kind="link_inline"
                         onClick={async event => {
                             const sessionLoaded = await this.onLoginClickWithCheck(event);
                             if (sessionLoaded) {
@@ -620,8 +619,7 @@ export default class Registration extends React.Component<IProps, IState> {
                     "<a>Log in</a> to your new account.", {},
                     {
                         a: (sub) => <AccessibleButton
-                            element="span"
-                            className="mx_linkButton"
+                            kind="link_inline"
                             onClick={async event => {
                                 const sessionLoaded = await this.onLoginClickWithCheck(event);
                                 if (sessionLoaded) {

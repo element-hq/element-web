@@ -109,7 +109,7 @@ export const showToast = (): void => {
         // The user had no analytics setting previously set, so we just need to prompt to opt-in, rather than
         // explaining any change.
         const learnMoreLink = (sub: string) => (
-            <AccessibleButton kind="link" onClick={onLearnMoreNoOptIn}>{ sub }</AccessibleButton>
+            <AccessibleButton kind="link_inline" onClick={onLearnMoreNoOptIn}>{ sub }</AccessibleButton>
         );
         props = {
             description: _t(

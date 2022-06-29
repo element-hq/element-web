@@ -99,17 +99,13 @@ const NewRoomIntro = () => {
         let topicText;
         if (canAddTopic && topic) {
             topicText = _t("Topic: %(topic)s (<a>edit</a>)", { topic }, {
-                a: sub => <AccessibleButton kind="link" onClick={onTopicClick}>{ sub }</AccessibleButton>,
+                a: sub => <AccessibleButton kind="link_inline" onClick={onTopicClick}>{ sub }</AccessibleButton>,
             });
         } else if (topic) {
             topicText = _t("Topic: %(topic)s ", { topic });
         } else if (canAddTopic) {
             topicText = _t("<a>Add a topic</a> to help people know what it is about.", {}, {
-                a: sub => <AccessibleButton
-                    kind="link"
-                    element="span"
-                    onClick={onTopicClick}
-                >{ sub }</AccessibleButton>,
+                a: sub => <AccessibleButton kind="link_inline" onClick={onTopicClick}>{ sub }</AccessibleButton>,
             });
         }
 

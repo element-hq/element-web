@@ -328,8 +328,8 @@ export default class AccessSecretStorageDialog extends React.PureComponent<IProp
                 <p>{ _t(
                     "Enter your Security Phrase or <button>use your Security Key</button> to continue.", {},
                     {
-                        button: s => <AccessibleButton className="mx_linkButton"
-                            element="span"
+                        button: s => <AccessibleButton
+                            kind="link_inline"
                             onClick={this.onUseRecoveryKeyClick}
                         >
                             { s }

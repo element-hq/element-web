@@ -162,7 +162,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                     <span className="mx_SettingsTab_subheading">{ _t("Keyboard shortcuts") }</span>
                     <div className="mx_SettingsFlag">
                         { _t("To view all keyboard shortcuts, <a>click here</a>.", {}, {
-                            a: sub => <AccessibleButton kind="link" onClick={this.onKeyboardShortcutsClicked}>
+                            a: sub => <AccessibleButton kind="link_inline" onClick={this.onKeyboardShortcutsClicked}>
                                 { sub }
                             </AccessibleButton>,
                         }) }

@@ -196,7 +196,10 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     { _t("Default") }
                                     <div className="mx_NotificationSettingsTab_microCopy">
                                         { _t("Get notifications as set up in your <a>settings</a>", {}, {
-                                            a: sub => <AccessibleButton kind="link" onClick={this.onOpenSettingsClick}>
+                                            a: sub => <AccessibleButton
+                                                kind="link_inline"
+                                                onClick={this.onOpenSettingsClick}
+                                            >
                                                 { sub }
                                             </AccessibleButton>,
                                         }) }
@@ -219,7 +222,10 @@ export default class NotificationsSettingsTab extends React.Component<IProps, IS
                                     <div className="mx_NotificationSettingsTab_microCopy">
                                         { _t("Get notified only with mentions and keywords " +
                                             "as set up in your <a>settings</a>", {}, {
-                                            a: sub => <AccessibleButton kind="link" onClick={this.onOpenSettingsClick}>
+                                            a: sub => <AccessibleButton
+                                                kind="link_inline"
+                                                onClick={this.onOpenSettingsClick}
+                                            >
                                                 { sub }
                                             </AccessibleButton>,
                                         }) }

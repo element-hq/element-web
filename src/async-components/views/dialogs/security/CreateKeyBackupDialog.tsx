@@ -305,11 +305,9 @@ export default class CreateKeyBackupDialog extends React.PureComponent<IProps, I
         if (matchText) {
             passPhraseMatch = <div className="mx_CreateKeyBackupDialog_passPhraseMatch">
                 <div>{ matchText }</div>
-                <div>
-                    <AccessibleButton element="span" className="mx_linkButton" onClick={this.onSetAgainClick}>
-                        { changeText }
-                    </AccessibleButton>
-                </div>
+                <AccessibleButton kind="link" onClick={this.onSetAgainClick}>
+                    { changeText }
+                </AccessibleButton>
             </div>;
         }
         return <form onSubmit={this.onPassPhraseConfirmNextClick}>

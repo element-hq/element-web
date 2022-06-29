@@ -656,11 +656,9 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
         if (matchText) {
             passPhraseMatch = <div>
                 <div>{ matchText }</div>
-                <div>
-                    <AccessibleButton element="span" className="mx_linkButton" onClick={this.onSetAgainClick}>
-                        { changeText }
-                    </AccessibleButton>
-                </div>
+                <AccessibleButton kind="link" onClick={this.onSetAgainClick}>
+                    { changeText }
+                </AccessibleButton>
             </div>;
         }
         return <form onSubmit={this.onPassPhraseConfirmNextClick}>

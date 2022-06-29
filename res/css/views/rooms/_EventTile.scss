@@ -647,10 +647,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         .mx_AccessibleButton {
             color: $primary-content;
             text-decoration: underline;
-
-            &.mx_AccessibleButton_kind_link_inline {
-                padding: 0;
-            }
         }
     }
 }
