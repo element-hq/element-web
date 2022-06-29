@@ -19,6 +19,8 @@ $left-gutter: 64px;
 $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
 .mx_EventTile {
+    --EventTile_content-margin-inline-end: 34px; // TODO: Use a spacing variable
+
     flex-shrink: 0;
 
     .mx_EventTile_avatar {
@@ -84,7 +86,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         }
 
         .mx_MImageBody {
-            margin-right: 34px;
+            margin-right: var(--EventTile_content-margin-inline-end);
+
+            .mx_MImageBody_thumbnail_container {
+                justify-content: flex-start;
+                min-height: $font-44px;
+                min-width: $font-44px;
+            }
         }
 
         .mx_EventTile_line,
@@ -299,14 +307,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     &:hover .mx_EventTile_e2eIcon {
         opacity: 1;
     }
-
-    .mx_MImageBody {
-        .mx_MImageBody_thumbnail_container {
-            justify-content: flex-start;
-            min-height: $font-44px;
-            min-width: $font-44px;
-        }
-    }
 }
 
 .mx_GenericEventListSummary:not([data-layout=bubble]) .mx_EventTile_line {
@@ -332,7 +332,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     */
     overflow-y: hidden;
     overflow-x: hidden;
-    margin-right: 34px;
+    margin-right: var(--EventTile_content-margin-inline-end);
 
     .mx_EventTile_edited,
     .mx_EventTile_pendingModeration {
