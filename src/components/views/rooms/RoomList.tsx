@@ -14,35 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentType, createRef, ReactComponentElement, RefObject } from "react";
-import { Room } from "matrix-js-sdk/src/models/room";
-import { RoomType, EventType } from "matrix-js-sdk/src/@types/event";
 import * as fbEmitter from "fbemitter";
+import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
+import { Room } from "matrix-js-sdk/src/models/room";
+import React, { ComponentType, createRef, ReactComponentElement, RefObject } from "react";
 
-import { _t, _td } from "../../../languageHandler";
 import { IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
-import ResizeNotifier from "../../../utils/ResizeNotifier";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
-import { RoomViewStore } from "../../../stores/RoomViewStore";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { Action } from "../../../dispatcher/actions";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { ActionPayload } from "../../../dispatcher/payloads";
+import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { useEventEmitterState } from "../../../hooks/useEventEmitter";
+import { _t, _td } from "../../../languageHandler";
+import { MatrixClientPeg } from "../../../MatrixClientPeg";
+import PosthogTrackers from "../../../PosthogTrackers";
+import SettingsStore from "../../../settings/SettingsStore";
+import { UIComponent } from "../../../settings/UIFeature";
+import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import RoomSublist, { IAuxButtonProps } from "./RoomSublist";
-import { ActionPayload } from "../../../dispatcher/payloads";
-import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import ExtraTile from "./ExtraTile";
-import { Action } from "../../../dispatcher/actions";
-import { ViewRoomDeltaPayload } from "../../../dispatcher/payloads/ViewRoomDeltaPayload";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
-import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
-import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
-import IconizedContextMenu, {
-    IconizedContextMenuOption,
-    IconizedContextMenuOptionList,
-} from "../context_menus/IconizedContextMenu";
-import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import { BetaPill } from "../beta/BetaCard";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
+import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import { RoomViewStore } from "../../../stores/RoomViewStore";
 import {
     isMetaSpace,
     ISuggestedRoom,
@@ -51,17 +46,21 @@ import {
     UPDATE_SELECTED_SPACE,
     UPDATE_SUGGESTED_ROOMS,
 } from "../../../stores/spaces";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import { arrayFastClone, arrayHasDiff } from "../../../utils/arrays";
+import { objectShallowClone, objectWithOnly } from "../../../utils/objects";
+import ResizeNotifier from "../../../utils/ResizeNotifier";
 import { shouldShowSpaceInvite, showAddExistingRooms, showCreateNewRoom, showSpaceInvite } from "../../../utils/space";
-import RoomAvatar from "../avatars/RoomAvatar";
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
-import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
-import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import SettingsStore from "../../../settings/SettingsStore";
-import PosthogTrackers from "../../../PosthogTrackers";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import RoomAvatar from "../avatars/RoomAvatar";
+import { BetaPill } from "../beta/BetaCard";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import ExtraTile from "./ExtraTile";
+import RoomSublist, { IAuxButtonProps } from "./RoomSublist";
 
 interface IProps {
     onKeyDown: (ev: React.KeyboardEvent, state: IRovingTabIndexState) => void;
@@ -76,7 +75,6 @@ interface IProps {
 
 interface IState {
     sublists: ITagMap;
-    isNameFiltering: boolean;
     currentRoomId?: string;
     suggestedRooms: ISuggestedRoom[];
 }
@@ -403,7 +401,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
         this.state = {
             sublists: {},
-            isNameFiltering: !!RoomListStore.instance.getFirstNameFilterCondition(),
             suggestedRooms: SpaceStore.instance.suggestedRooms,
         };
     }
@@ -480,8 +477,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         const previousListIds = Object.keys(this.state.sublists);
         const newListIds = Object.keys(newLists);
 
-        const isNameFiltering = !!RoomListStore.instance.getFirstNameFilterCondition();
-        let doUpdate = this.state.isNameFiltering !== isNameFiltering || arrayHasDiff(previousListIds, newListIds);
+        let doUpdate = arrayHasDiff(previousListIds, newListIds);
         if (!doUpdate) {
             // so we didn't have the visible sublists change, but did the contents of those
             // sublists change significantly enough to break the sticky headers? Probably, so
@@ -503,30 +499,9 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
             const newSublists = objectWithOnly(newLists, newListIds);
             const sublists = objectShallowClone(newSublists, (k, v) => arrayFastClone(v));
 
-            this.setState({ sublists, isNameFiltering }, () => {
+            this.setState({ sublists }, () => {
                 this.props.onResize();
             });
-        }
-    };
-
-    private onStartChat = (ev: ButtonEvent) => {
-        const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
-        defaultDispatcher.dispatch({ action: "view_create_chat", initialText });
-        PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateChatItem", ev);
-    };
-
-    private onExplore = (ev: ButtonEvent) => {
-        if (!isMetaSpace(this.props.activeSpace)) {
-            defaultDispatcher.dispatch<ViewRoomPayload>({
-                action: Action.ViewRoom,
-                room_id: this.props.activeSpace,
-                metricsTrigger: undefined, // other
-            });
-            PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", ev);
-        } else {
-            const initialText = RoomListStore.instance.getFirstNameFilterCondition()?.search;
-            defaultDispatcher.dispatch({ action: Action.ViewRoomDirectory, initialText });
-            PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", ev);
         }
     };
 
@@ -573,8 +548,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     private renderSublists(): React.ReactElement[] {
         // show a skeleton UI if the user is in no rooms and they are not filtering and have no suggested rooms
-        const showSkeleton = !this.state.isNameFiltering && !this.state.suggestedRooms?.length &&
-            Object.values(RoomListStore.instance.unfilteredLists).every(list => !list?.length);
+        const showSkeleton = !this.state.suggestedRooms?.length &&
+            Object.values(RoomListStore.instance.orderedLists).every(list => !list?.length);
 
         return TAG_ORDER
             .map(orderedTagId => {
@@ -636,29 +611,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
     }
 
     public render() {
-        let explorePrompt: JSX.Element;
-        if (!this.props.isMinimized) {
-            if (this.state.isNameFiltering) {
-                explorePrompt = <div className="mx_RoomList_explorePrompt">
-                    <div>{ _t("Can't see what you're looking for?") }</div>
-                    <AccessibleButton
-                        className="mx_RoomList_explorePrompt_startChat"
-                        kind="link"
-                        onClick={this.onStartChat}
-                    >
-                        { _t("Start a new chat") }
-                    </AccessibleButton>
-                    <AccessibleButton
-                        className="mx_RoomList_explorePrompt_explore"
-                        kind="link"
-                        onClick={this.onExplore}
-                    >
-                        { !isMetaSpace(this.props.activeSpace) ? _t("Explore rooms") : _t("Explore all public rooms") }
-                    </AccessibleButton>
-                </div>;
-            }
-        }
-
         const sublists = this.renderSublists();
         return (
             <RovingTabIndexProvider handleHomeEnd handleUpDown onKeyDown={this.props.onKeyDown}>
@@ -673,7 +625,6 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                         ref={this.treeRef}
                     >
                         { sublists }
-                        { explorePrompt }
                     </div>
                 ) }
             </RovingTabIndexProvider>

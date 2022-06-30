@@ -187,7 +187,7 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
                 metricsTrigger: "WebSpacePanelNotificationBadge",
             });
         } else {
-            const lists = RoomListStore.instance.unfilteredLists;
+            const lists = RoomListStore.instance.orderedLists;
             for (let i = 0; i < TAG_ORDER.length; i++) {
                 const t = TAG_ORDER[i];
                 const listRooms = lists[t];

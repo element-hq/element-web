@@ -17,7 +17,7 @@ limitations under the License.
 import { EventEmitter } from "events";
 import { Room } from "matrix-js-sdk/src/models/room";
 
-import { FILTER_CHANGED, FilterKind, IFilterCondition } from "./IFilterCondition";
+import { FILTER_CHANGED, IFilterCondition } from "./IFilterCondition";
 import { IDestroyable } from "../../../utils/IDestroyable";
 import SpaceStore from "../../spaces/SpaceStore";
 import { isMetaSpace, MetaSpace, SpaceKey } from "../../spaces";
@@ -35,10 +35,6 @@ export class SpaceFilterCondition extends EventEmitter implements IFilterConditi
     private userIds = new Set<string>();
     private showPeopleInSpace = true;
     private space: SpaceKey = MetaSpace.Home;
-
-    public get kind(): FilterKind {
-        return FilterKind.Prefilter;
-    }
 
     public isVisible(room: Room): boolean {
         return SpaceStore.instance.isRoomInSpace(this.space, room.roomId);

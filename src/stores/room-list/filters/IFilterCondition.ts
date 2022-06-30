@@ -19,21 +19,6 @@ import { EventEmitter } from "events";
 
 export const FILTER_CHANGED = "filter_changed";
 
-export enum FilterKind {
-    /**
-     * A prefilter is one which coarsely determines which rooms are
-     * available for runtime filtering/rendering. Typically this will
-     * be things like Space selection.
-     */
-    Prefilter,
-
-    /**
-     * Runtime filters operate on the data set exposed by prefilters.
-     * Typically these are dynamic values like room name searching.
-     */
-    Runtime,
-}
-
 /**
  * A filter condition for the room list, determining if a room
  * should be shown or not.
@@ -47,11 +32,6 @@ export enum FilterKind {
  * as a change in the user's input), this emits FILTER_CHANGED.
  */
 export interface IFilterCondition extends EventEmitter {
-    /**
-     * The kind of filter this presents.
-     */
-    kind: FilterKind;
-
     /**
      * Determines if a given room should be visible under this
      * condition.

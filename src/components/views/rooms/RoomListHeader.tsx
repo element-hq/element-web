@@ -14,35 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext, useEffect, useState } from "react";
-import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { ClientEvent } from "matrix-js-sdk/src/client";
+import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
+import React, { useContext, useEffect, useState } from "react";
 
-import { _t } from "../../../languageHandler";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
+import { Action } from "../../../dispatcher/actions";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { useDispatcher } from "../../../hooks/useDispatcher";
 import { useEventEmitterState, useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
-import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
-import SpaceContextMenu from "../context_menus/SpaceContextMenu";
-import { HomeButtonContextMenu } from "../spaces/SpacePanel";
-import IconizedContextMenu, {
-    IconizedContextMenuOption,
-    IconizedContextMenuOptionList,
-} from "../context_menus/IconizedContextMenu";
-import defaultDispatcher from "../../../dispatcher/dispatcher";
-import {
-    shouldShowSpaceInvite,
-    showAddExistingRooms,
-    showCreateNewRoom,
-    showCreateNewSubspace,
-    showSpaceInvite,
-} from "../../../utils/space";
-import { Action } from "../../../dispatcher/actions";
-import { useDispatcher } from "../../../hooks/useDispatcher";
-import InlineSpinner from "../elements/InlineSpinner";
-import MatrixClientContext from "../../../contexts/MatrixClientContext";
-import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
+import { _t } from "../../../languageHandler";
+import PosthogTrackers from "../../../PosthogTrackers";
+import { UIComponent } from "../../../settings/UIFeature";
 import {
     getMetaSpaceName,
     MetaSpace,
@@ -50,13 +37,24 @@ import {
     UPDATE_HOME_BEHAVIOUR,
     UPDATE_SELECTED_SPACE,
 } from "../../../stores/spaces";
-import TooltipTarget from "../elements/TooltipTarget";
+import SpaceStore from "../../../stores/spaces/SpaceStore";
+import {
+    shouldShowSpaceInvite,
+    showAddExistingRooms,
+    showCreateNewRoom,
+    showCreateNewSubspace,
+    showSpaceInvite,
+} from "../../../utils/space";
+import { ChevronFace, ContextMenuTooltipButton, useContextMenu } from "../../structures/ContextMenu";
 import { BetaPill } from "../beta/BetaCard";
-import PosthogTrackers from "../../../PosthogTrackers";
-import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { useWebSearchMetrics } from "../dialogs/spotlight/SpotlightDialog";
-import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
-import { UIComponent } from "../../../settings/UIFeature";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
+import SpaceContextMenu from "../context_menus/SpaceContextMenu";
+import InlineSpinner from "../elements/InlineSpinner";
+import TooltipTarget from "../elements/TooltipTarget";
+import { HomeButtonContextMenu } from "../spaces/SpacePanel";
 
 const contextMenuBelow = (elementRect: DOMRect) => {
     // align the context menu's icons with the icon which opened the context menu
@@ -131,15 +129,6 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
     const pendingActions = usePendingActions();
 
-    const filterCondition = RoomListStore.instance.getFirstNameFilterCondition();
-    const count = useEventEmitterState(RoomListStore.instance, LISTS_UPDATE_EVENT, () => {
-        if (filterCondition) {
-            return Object.values(RoomListStore.instance.orderedLists).flat(1).length;
-        } else {
-            return null;
-        }
-    });
-
     const canShowMainMenu = activeSpace || spaceKey === MetaSpace.Home;
 
     useEffect(() => {
@@ -149,22 +138,13 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         }
     }, [closeMainMenu, canShowMainMenu, mainMenuDisplayed]);
 
-    // we pass null for the queryLength to inhibit the metrics hook for when there is no filterCondition
-    useWebSearchMetrics(count, filterCondition ? filterCondition.search.length : null, false);
-
     const spaceName = useTypedEventEmitterState(activeSpace, RoomEvent.Name, () => activeSpace?.name);
 
     useEffect(() => {
         if (onVisibilityChange) {
             onVisibilityChange();
         }
-    }, [count, onVisibilityChange]);
-
-    if (typeof count === "number") {
-        return <div className="mx_LeftPanel_roomListFilterCount">
-            { _t("%(count)s results", { count }) }
-        </div>;
-    }
+    }, [onVisibilityChange]);
 
     const canAddRooms = activeSpace?.currentState?.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
 
