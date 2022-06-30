@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { DecryptionError } from "matrix-js-sdk/src/crypto/algorithms";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Error as ErrorEvent } from "@matrix-org/analytics-events/types/typescript/Error";
 
@@ -129,9 +129,13 @@ export class DecryptionFailureTracker {
     //     localStorage.setItem('mx-decryption-failure-event-ids', JSON.stringify([...this.trackedEvents]));
     // }
 
-    public eventDecrypted(e: MatrixEvent, err: MatrixError): void {
+    public eventDecrypted(e: MatrixEvent, err: DecryptionError): void {
+        // for now we only track megolm decrytion failures
+        if (e.getWireContent().algorithm != "m.megolm.v1.aes-sha2") {
+            return;
+        }
         if (err) {
-            this.addDecryptionFailure(new DecryptionFailure(e.getId(), err.errcode));
+            this.addDecryptionFailure(new DecryptionFailure(e.getId(), err.code));
         } else {
             // Could be an event in the failures, remove it
             this.removeDecryptionFailuresForEvent(e);

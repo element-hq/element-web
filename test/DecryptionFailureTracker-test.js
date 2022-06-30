@@ -22,13 +22,16 @@ class MockDecryptionError extends Error {
     constructor(code) {
         super();
 
-        this.errcode = code || 'MOCK_DECRYPTION_ERROR';
+        this.code = code || 'MOCK_DECRYPTION_ERROR';
     }
 }
 
 function createFailedDecryptionEvent() {
     const event = new MatrixEvent({
         event_id: "event-id-" + Math.random().toString(16).slice(2),
+        content: {
+            algorithm: "m.megolm.v1.aes-sha2",
+        },
     });
     event.setClearData(event.badEncryptedMessage(":("));
     return event;
