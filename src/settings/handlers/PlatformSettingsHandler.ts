@@ -16,21 +16,49 @@ limitations under the License.
 
 import SettingsHandler from "./SettingsHandler";
 import PlatformPeg from "../../PlatformPeg";
+import { SETTINGS } from "../Settings";
+import { SettingLevel } from "../SettingLevel";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+import { ActionPayload } from "../../dispatcher/payloads";
+import { Action } from "../../dispatcher/actions";
 
 /**
  * Gets and sets settings at the "platform" level for the current device.
  * This handler does not make use of the roomId parameter.
  */
 export default class PlatformSettingsHandler extends SettingsHandler {
+    private store: { [settingName: string]: any } = {};
+
+    constructor() {
+        super();
+
+        defaultDispatcher.register(this.onAction);
+    }
+
+    private onAction = (payload: ActionPayload) => {
+        if (payload.action === Action.PlatformSet) {
+            this.store = {};
+            // Load setting values as they are async and `getValue` must be synchronous
+            Object.entries(SETTINGS).forEach(([key, setting]) => {
+                if (setting.supportedLevels.includes(SettingLevel.PLATFORM) && payload.platform.supportsSetting(key)) {
+                    payload.platform.getSettingValue(key).then(value => {
+                        this.store[key] = value;
+                    });
+                }
+            });
+        }
+    };
+
     public canSetValue(settingName: string, roomId: string): boolean {
         return PlatformPeg.get().supportsSetting(settingName);
     }
 
     public getValue(settingName: string, roomId: string): any {
-        return PlatformPeg.get().getSettingValue(settingName);
+        return this.store[settingName];
     }
 
     public setValue(settingName: string, roomId: string, newValue: any): Promise<void> {
+        this.store[settingName] = newValue; // keep cache up to date for synchronous access
         return PlatformPeg.get().setSettingValue(settingName, newValue);
     }
 

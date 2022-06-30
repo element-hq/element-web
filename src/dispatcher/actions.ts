@@ -315,4 +315,10 @@ export enum Action {
      * Fired when the client was logged in. No additional payload information required.
      */
     OnLoggedIn = "on_logged_in",
+
+    /**
+     * Fired when the PlatformPeg gets a new platform set upon it, should only happen once per app load lifecycle.
+     * Fires with the PlatformSetPayload.
+     */
+    PlatformSet = "platform_set",
 }

@@ -16,6 +16,9 @@ limitations under the License.
 */
 
 import BasePlatform from "./BasePlatform";
+import defaultDispatcher from "./dispatcher/dispatcher";
+import { Action } from "./dispatcher/actions";
+import { PlatformSetPayload } from "./dispatcher/payloads/PlatformSetPayload";
 
 /*
  * Holds the current instance of the `Platform` to use across the codebase.
@@ -29,23 +32,26 @@ import BasePlatform from "./BasePlatform";
  * object.
  */
 export class PlatformPeg {
-    platform: BasePlatform = null;
+    private platform: BasePlatform = null;
 
     /**
      * Returns the current Platform object for the application.
      * This should be an instance of a class extending BasePlatform.
      */
-    get() {
+    public get() {
         return this.platform;
     }
 
     /**
-     * Sets the current platform handler object to use for the
-     * application.
-     * This should be an instance of a class extending BasePlatform.
+     * Sets the current platform handler object to use for the application.
+     * @param {BasePlatform} platform an instance of a class extending BasePlatform.
      */
-    set(plaf: BasePlatform) {
-        this.platform = plaf;
+    public set(platform: BasePlatform) {
+        this.platform = platform;
+        defaultDispatcher.dispatch<PlatformSetPayload>({
+            action: Action.PlatformSet,
+            platform,
+        });
     }
 }
 
