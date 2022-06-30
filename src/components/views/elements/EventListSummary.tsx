@@ -527,6 +527,7 @@ export default class EventListSummary extends React.Component<IProps> {
         );
 
         return <GenericEventListSummary
+            data-testid={this.props['data-testid']}
             events={this.props.events}
             threshold={this.props.threshold}
             onToggle={this.props.onToggle}

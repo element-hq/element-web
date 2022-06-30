@@ -80,4 +80,5 @@ export const mockClientMethodsUser = (userId = '@alice:domain') => ({
  */
 export const mockClientMethodsEvents = () => ({
     decryptEventIfNeeded: jest.fn(),
+    getPushActionsForEvent: jest.fn(),
 });

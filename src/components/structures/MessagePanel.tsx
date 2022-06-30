@@ -1313,6 +1313,7 @@ class MainGrouper extends BaseGrouper {
         ret.push(
             <EventListSummary
                 key={key}
+                data-testid={key}
                 events={this.events}
                 onToggle={panel.onHeightChanged} // Update scroll state
                 startExpanded={highlightInSummary}
