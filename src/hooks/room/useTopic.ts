@@ -21,10 +21,11 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { parseTopicContent, TopicState } from "matrix-js-sdk/src/content-helpers";
 import { MRoomTopicEventContent } from "matrix-js-sdk/src/@types/topic";
+import { Optional } from "matrix-events-sdk";
 
 import { useTypedEventEmitter } from "../useEventEmitter";
 
-export const getTopic = (room: Room) => {
+export const getTopic = (room: Room): Optional<TopicState> => {
     const content: MRoomTopicEventContent = room?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent();
     return !!content ? parseTopicContent(content) : null;
 };

@@ -48,7 +48,7 @@ const SpaceSettingsGeneralTab = ({ matrixClient: cli, space, onFinished }: IProp
     const canSetName = space.currentState.maySendStateEvent(EventType.RoomName, userId);
     const nameChanged = name !== space.name;
 
-    const currentTopic = getTopic(space).text;
+    const currentTopic = getTopic(space)?.text;
     const [topic, setTopic] = useState<string>(currentTopic);
     const canSetTopic = space.currentState.maySendStateEvent(EventType.RoomTopic, userId);
     const topicChanged = topic !== currentTopic;
