@@ -189,7 +189,7 @@ limitations under the License.
     // Prevent the dialog from jumping around randomly when elements change.
     display: flex;
     flex-direction: column;
-    max-height: 600px;
+    height: 600px;
     overflow: hidden;
 
     .mx_InviteDialog_addressBar {
@@ -197,6 +197,7 @@ limitations under the License.
     }
 
     .mx_InviteDialog_userSections {
+        flex-grow: 1;
         padding-inline-end: 0;
 
         .mx_InviteDialog_section {
@@ -209,7 +210,7 @@ limitations under the License.
 .mx_InviteDialog_content {
     display: flex;
     flex-direction: column;
-    flex-shrink: 1;
+    flex-grow: 1;
     overflow: hidden;
 }
 
