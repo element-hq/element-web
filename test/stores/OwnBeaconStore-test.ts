@@ -1347,5 +1347,29 @@ describe('OwnBeaconStore', () => {
             // didn't throw, no error log
             expect(loggerErrorSpy).not.toHaveBeenCalled();
         });
+
+        it('stops existing live beacon for room before creates new beacon', async () => {
+            // room1 already has a live beacon for alice
+            makeRoomsWithStateEvents([
+                alicesRoom1BeaconInfo,
+                alicesRoom2BeaconInfo,
+            ]);
+            const store = await makeOwnBeaconStore();
+
+            const content = makeBeaconInfoContent(100);
+            await store.createLiveBeacon(room1Id, content);
+
+            // stop alicesRoom1BeaconInfo
+            expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledWith(
+                room1Id, expect.objectContaining({ live: false }),
+            );
+            // only called for beacons in room1, room2 beacon is not stopped
+            expect(mockClient.unstable_setLiveBeacon).toHaveBeenCalledTimes(1);
+
+            // new beacon created
+            expect(mockClient.unstable_createLiveBeacon).toHaveBeenCalledWith(
+                room1Id, content,
+            );
+        });
     });
 });

@@ -78,6 +78,7 @@ describe('<LocationShareMenu />', () => {
         }),
         sendMessage: jest.fn(),
         unstable_createLiveBeacon: jest.fn().mockResolvedValue({ event_id: '1' }),
+        unstable_setLiveBeacon: jest.fn().mockResolvedValue({ event_id: '1' }),
         getVisibleRooms: jest.fn().mockReturnValue([]),
     });
 
@@ -386,7 +387,7 @@ describe('<LocationShareMenu />', () => {
             expect(getShareTypeOption(component, LocationShareType.Live).length).toBeFalsy();
         });
 
-        it('creates beacon info event on submission', () => {
+        it('creates beacon info event on submission', async () => {
             const onFinished = jest.fn();
             const component = getComponent({ onFinished });
 
@@ -398,6 +399,9 @@ describe('<LocationShareMenu />', () => {
                 getSubmitButton(component).at(0).simulate('click');
                 component.setProps({});
             });
+
+            // flush stopping existing beacons promises
+            await flushPromisesWithFakeTimers();
 
             expect(onFinished).toHaveBeenCalled();
             const [eventRoomId, eventContent] = mockClient.unstable_createLiveBeacon.mock.calls[0];
@@ -429,6 +433,7 @@ describe('<LocationShareMenu />', () => {
                 component.setProps({});
             });
 
+            await flushPromisesWithFakeTimers();
             await flushPromisesWithFakeTimers();
             await flushPromisesWithFakeTimers();
 

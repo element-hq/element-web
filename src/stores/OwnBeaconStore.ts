@@ -106,7 +106,7 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
      * ids of live beacons
      * ordered by creation time descending
      */
-    private liveBeaconIds = [];
+    private liveBeaconIds: BeaconIdentifier[] = [];
     private locationInterval: number;
     private geolocationError: GeolocationError | undefined;
     private clearPositionWatch: ClearWatchCallback | undefined;
@@ -392,6 +392,12 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         roomId: Room['roomId'],
         beaconInfoContent: MBeaconInfoEventContent,
     ): Promise<void> => {
+        // explicitly stop any live beacons this user has
+        // to ensure they remain stopped
+        // if the new replacing beacon is redacted
+        const existingLiveBeaconIdsForRoom = this.getLiveBeaconIds(roomId);
+        await Promise.all(existingLiveBeaconIdsForRoom.map(beaconId => this.stopBeacon(beaconId)));
+
         // eslint-disable-next-line camelcase
         const { event_id } = await this.matrixClient.unstable_createLiveBeacon(
             roomId,
