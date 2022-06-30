@@ -89,13 +89,13 @@ limitations under the License.
 
     .mx_PinnedEventTile_footer {
         grid-area: footer;
-        font-size: 10px;
+        font-size: $font-10px;
         line-height: 12px;
 
         .mx_PinnedEventTile_timestamp {
-            font-size: inherit;
-            line-height: inherit;
             color: $secondary-content;
+            display: unset;
+            width: unset; // Cancel the default width value
         }
 
         .mx_AccessibleButton_kind_link {

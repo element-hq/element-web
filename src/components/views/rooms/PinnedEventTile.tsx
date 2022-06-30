@@ -144,7 +144,7 @@ export default class PinnedEventTile extends React.Component<IProps> {
             </div>
 
             <div className="mx_PinnedEventTile_footer">
-                <span className="mx_PinnedEventTile_timestamp">
+                <span className="mx_MessageTimestamp mx_PinnedEventTile_timestamp">
                     { formatDate(new Date(this.props.event.getTs())) }
                 </span>
 

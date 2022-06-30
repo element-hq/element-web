@@ -64,6 +64,11 @@ limitations under the License.
     margin-left: var(--EventTile_bubble-margin-inline-start);
     font-size: $font-14px;
 
+    .mx_MessageTimestamp {
+        width: unset; // Cancel the default width
+        max-width: var(--MessageTimestamp-max-width);
+    }
+
     .mx_ThreadSummary {
         clear: both;
         width: fit-content;
