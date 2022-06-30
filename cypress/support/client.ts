@@ -54,6 +54,12 @@ declare global {
              */
             setAccountData(type: string, data: object): Chainable<{}>;
             /**
+             * Gets the list of DMs with a given user
+             * @param userId The ID of the user
+             * @return the list of DMs with that user
+             */
+            getDmRooms(userId: string): Chainable<string[]>;
+            /**
              * Boostraps cross-signing.
              */
             bootstrapCrossSigning(): Chainable<void>;
@@ -63,6 +69,12 @@ declare global {
 
 Cypress.Commands.add("getClient", (): Chainable<MatrixClient | undefined> => {
     return cy.window({ log: false }).then(win => win.mxMatrixClientPeg.matrixClient);
+});
+
+Cypress.Commands.add("getDmRooms", (userId: string): Chainable<string[]> => {
+    return cy.getClient()
+        .then(cli => cli.getAccountData("m.direct")?.getContent<Record<string, string[]>>())
+        .then(dmRoomMap => dmRoomMap[userId] ?? []);
 });
 
 Cypress.Commands.add("createRoom", (options: ICreateRoomOpts): Chainable<string> => {

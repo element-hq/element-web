@@ -156,6 +156,7 @@ describe("Spotlight", () => {
     });
 
     afterEach(() => {
+        cy.visit("/#/home");
         cy.stopSynapse(synapse);
     });
 
@@ -261,6 +262,47 @@ describe("Spotlight", () => {
             cy.spotlightResults().eq(0).click();
         }).then(() => {
             cy.roomHeaderName().should("contain", bot2Name);
+        });
+    });
+
+    it("should find group DMs by usernames or user ids", () => {
+        // First we want to share a room with both bots to ensure we’ve got their usernames cached
+        cy.inviteUser(room1Id, bot2.getUserId());
+
+        // Starting a DM with ByteBot (will be turned into a group dm later)
+        cy.openSpotlightDialog().within(() => {
+            cy.spotlightFilter(Filter.People);
+            cy.spotlightSearch().clear().type(bot2Name);
+            cy.spotlightResults().should("have.length", 1);
+            cy.spotlightResults().eq(0).should("contain", bot2Name);
+            cy.spotlightResults().eq(0).click();
+        }).then(() => {
+            cy.roomHeaderName().should("contain", bot2Name);
+            cy.get(".mx_RoomSublist[aria-label=People]").should("contain", bot2Name);
+        });
+
+        // Invite BotBob into existing DM with ByteBot
+        cy.getDmRooms(bot2.getUserId()).then(dmRooms => dmRooms[0])
+            .then(groupDmId => cy.inviteUser(groupDmId, bot1.getUserId()))
+            .then(() => {
+                cy.roomHeaderName().should("contain", `${bot1Name} and ${bot2Name}`);
+                cy.get(".mx_RoomSublist[aria-label=People]").should("contain", `${bot1Name} and ${bot2Name}`);
+            });
+
+        // Search for BotBob by id, should return group DM and user
+        cy.openSpotlightDialog().within(() => {
+            cy.spotlightFilter(Filter.People);
+            cy.spotlightSearch().clear().type(bot1.getUserId());
+            cy.spotlightResults().should("have.length", 2);
+            cy.spotlightResults().eq(0).should("contain", `${bot1Name} and ${bot2Name}`);
+        });
+
+        // Search for ByteBot by id, should return group DM and user
+        cy.openSpotlightDialog().within(() => {
+            cy.spotlightFilter(Filter.People);
+            cy.spotlightSearch().clear().type(bot2.getUserId());
+            cy.spotlightResults().should("have.length", 2);
+            cy.spotlightResults().eq(0).should("contain", `${bot1Name} and ${bot2Name}`);
         });
     });
 

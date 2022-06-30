@@ -177,16 +177,20 @@ const toPublicRoomResult = (publicRoom: IPublicRoomsChunkRoom): IPublicRoomResul
 });
 
 const toRoomResult = (room: Room): IRoomResult => {
+    const myUserId = MatrixClientPeg.get().getUserId();
     const otherUserId = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
+
     if (otherUserId) {
+        const otherMembers = room.getMembers().filter(it => it.userId !== myUserId);
+        const query = [
+            ...otherMembers.map(it => it.name.toLowerCase()),
+            ...otherMembers.map(it => it.userId.toLowerCase()),
+        ].filter(Boolean);
         return {
             room,
             section: Section.People,
             filter: [Filter.People],
-            query: [
-                otherUserId.toLowerCase(),
-                room.getMember(otherUserId)?.name.toLowerCase(),
-            ].filter(Boolean),
+            query,
         };
     } else if (room.isSpaceRoom()) {
         return {

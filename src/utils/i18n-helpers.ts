@@ -44,7 +44,9 @@ export function roomContextDetailsText(room: Room): string {
     if (room.isSpaceRoom()) return undefined;
 
     const dmPartner = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    if (dmPartner) {
+    // if we’ve got more than 2 users, don’t treat it like a regular DM
+    const isGroupDm = room.getMembers().length > 2;
+    if (dmPartner && !isGroupDm) {
         return dmPartner;
     }
 
