@@ -47,7 +47,9 @@ export class MediaEventHelper implements IDestroyable {
     }
 
     public get fileName(): string {
-        return this.event.getContent<IMediaEventContent>().body || "download";
+        return this.event.getContent<IMediaEventContent>().filename
+            || this.event.getContent<IMediaEventContent>().body
+            || "download";
     }
 
     public destroy() {

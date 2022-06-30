@@ -47,6 +47,7 @@ export interface IMediaEventInfo {
 
 export interface IMediaEventContent {
     body?: string;
+    filename?: string; // `m.file` optional field
     url?: string; // required on unencrypted media
     file?: IEncryptedFile; // required for *encrypted* media
     info?: IMediaEventInfo;
