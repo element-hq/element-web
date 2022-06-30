@@ -16,7 +16,7 @@
 
 import { arrayHasDiff } from "./arrays";
 
-export function mayBeAnimated(mimeType: string): boolean {
+export function mayBeAnimated(mimeType?: string): boolean {
     // AVIF animation support at the time of writing is only available in Chrome hence not having `blobIsAnimated` check
     return ["image/gif", "image/webp", "image/png", "image/apng", "image/avif"].includes(mimeType);
 }
@@ -34,7 +34,7 @@ function arrayBufferReadStr(arr: ArrayBuffer, start: number, len: number): strin
     return String.fromCharCode.apply(null, arrayBufferRead(arr, start, len));
 }
 
-export async function blobIsAnimated(mimeType: string, blob: Blob): Promise<boolean> {
+export async function blobIsAnimated(mimeType: string | undefined, blob: Blob): Promise<boolean> {
     switch (mimeType) {
         case "image/webp": {
             // Only extended file format WEBP images support animation, so grab the expected data range and verify header.

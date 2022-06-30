@@ -380,7 +380,7 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
         if (content.info?.w && content.info?.h) {
             infoWidth = content.info.w;
             infoHeight = content.info.h;
-            infoSvg = content.info.mimetype.startsWith("image/svg");
+            infoSvg = content.info.mimetype === "image/svg+xml";
         } else {
             // Whilst the image loads, display nothing. We also don't display a blurhash image
             // because we don't really know what size of image we'll end up with.
