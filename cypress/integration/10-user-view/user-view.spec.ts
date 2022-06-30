@@ -27,7 +27,7 @@ describe("UserView", () => {
             synapse = data;
 
             cy.initTestUser(synapse, "Violet");
-            cy.getBot(synapse, "Usman").as("bot");
+            cy.getBot(synapse, { displayName: "Usman" }).as("bot");
         });
     });
 

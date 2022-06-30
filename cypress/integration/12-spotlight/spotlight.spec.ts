@@ -128,11 +128,11 @@ describe("Spotlight", () => {
         cy.startSynapse("default").then(data => {
             synapse = data;
             cy.initTestUser(synapse, "Jim").then(() =>
-                cy.getBot(synapse, bot1Name).then(_bot1 => {
+                cy.getBot(synapse, { displayName: bot1Name }).then(_bot1 => {
                     bot1 = _bot1;
                 }),
             ).then(() =>
-                cy.getBot(synapse, bot2Name).then(_bot2 => {
+                cy.getBot(synapse, { displayName: bot2Name }).then(_bot2 => {
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     bot2 = _bot2;
                 }),

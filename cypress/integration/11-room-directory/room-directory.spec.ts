@@ -27,7 +27,7 @@ describe("Room Directory", () => {
             synapse = data;
 
             cy.initTestUser(synapse, "Ray");
-            cy.getBot(synapse, "Paul").as("bot");
+            cy.getBot(synapse, { displayName: "Paul" }).as("bot");
         });
     });
 

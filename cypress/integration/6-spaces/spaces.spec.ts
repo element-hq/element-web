@@ -167,7 +167,7 @@ describe("Spaces", () => {
 
     it("should allow user to invite another to a space", () => {
         let bot: MatrixClient;
-        cy.getBot(synapse, "BotBob").then(_bot => {
+        cy.getBot(synapse, { displayName: "BotBob" }).then(_bot => {
             bot = _bot;
         });
 
@@ -202,7 +202,7 @@ describe("Spaces", () => {
         });
         getSpacePanelButton("My Space").should("exist");
 
-        cy.getBot(synapse, "BotBob").then({ timeout: 10000 }, async bot => {
+        cy.getBot(synapse, { displayName: "BotBob" }).then({ timeout: 10000 }, async bot => {
             const { room_id: roomId } = await bot.createRoom(spaceCreateOptions("Space Space"));
             await bot.invite(roomId, user.userId);
         });

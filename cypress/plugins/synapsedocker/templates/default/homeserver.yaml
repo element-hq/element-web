@@ -50,3 +50,6 @@ signing_key_path: "/data/localhost.signing.key"
 trusted_key_servers:
   - server_name: "matrix.org"
 suppress_key_server_warning: true
+
+ui_auth:
+  session_timeout: "300s"
