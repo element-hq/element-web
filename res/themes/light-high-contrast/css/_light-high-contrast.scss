@@ -129,3 +129,112 @@ $roomtopic-color: $secondary-content;
 .mx_Dialog_buttons button.mx_LocationPicker_cancelButton::before {
     background-color: $background !important;
 }
+
+.mx_SpotlightDialog_wrapper .mx_Dialog {
+    #mx_SpotlightDialog_keyboardPrompt {
+        kbd {
+            color: $background !important;
+        }
+    }
+}
+
+.mx_SpotlightDialog {
+    .mx_SpotlightDialog_searchBox {
+        > .mx_SpotlightDialog_filter {
+            color: $background !important;
+            &::before {
+                background-color: $background !important;
+            }
+        }
+    }
+    #mx_SpotlightDialog_content {
+        .mx_SpotlightDialog_recentlyViewed {
+            .mx_SpotlightDialog_option {
+                &:hover, &[aria-selected=true] {
+                    color: $background !important;
+
+                    .mx_DecoratedRoomAvatar_icon::before {
+                        background-color: $background !important;
+                    }
+                }
+            }
+        }
+        .mx_SpotlightDialog_results,
+        .mx_SpotlightDialog_recentSearches,
+        .mx_SpotlightDialog_otherSearches,
+        .mx_SpotlightDialog_hiddenResults {
+            .mx_SpotlightDialog_option {
+                &:hover, &[aria-selected=true] {
+                    background-color: $quinary-content !important;
+                    color: $background !important;
+
+                    &.mx_SpotlightDialog_startChat::before,
+                    &.mx_SpotlightDialog_joinRoomAlias::before,
+                    &.mx_SpotlightDialog_explorePublicRooms::before,
+                    &.mx_SpotlightDialog_startGroupChat::before {
+                        background-color: $background !important;
+                    }
+
+                    .mx_DecoratedRoomAvatar_icon::before {
+                        background-color: $background !important;
+                    }
+
+                    .mx_SpotlightDialog_result_publicRoomDetails {
+                        .mx_SpotlightDialog_result_publicRoomHeader {
+                            .mx_SpotlightDialog_result_publicRoomName {
+                                color: $background;
+                            }
+                            .mx_SpotlightDialog_result_publicRoomAlias {
+                                color: $background;
+                            }
+                        }
+                        .mx_SpotlightDialog_result_publicRoomDescription {
+                            color: $background;
+                        }
+                    }
+
+                    .mx_NotificationBadge {
+                        background-color: $background !important;
+                    }
+
+                    .mx_SpotlightDialog_result_details {
+                        color: $background !important;
+                    }
+                }
+            }
+        }
+        .mx_SpotlightDialog_enterPrompt {
+            background-color: $background !important;
+        }
+    }
+}
+
+.mx_GenericDropdownMenu_button:hover,
+.mx_GenericDropdownMenu_button[aria-expanded=true] {
+    color: $background !important;
+}
+
+.mx_ContextualMenu_wrapper.mx_GenericDropdownMenu_wrapper {
+    .mx_GenericDropdownMenu_Option {
+        &.mx_GenericDropdownMenu_Option--item {
+            &:hover {
+                background-color: $quinary-content !important;
+                color: $background !important;
+
+                &[aria-checked="true"]::before {
+                    background-color: $background !important;
+                }
+
+                > .mx_GenericDropdownMenu_Option--label {
+                    span:first-child {
+                        color: $background !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.mx_NetworkDropdown_removeServer::before {
+    background-color: $background !important;
+}
