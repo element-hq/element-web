@@ -18,6 +18,7 @@ import React, {
     Dispatch,
     KeyboardEvent,
     KeyboardEventHandler,
+    ReactElement,
     ReactNode,
     SetStateAction,
     useCallback,
@@ -50,7 +51,7 @@ import TextWithTooltip from "../views/elements/TextWithTooltip";
 import { useStateToggle } from "../../hooks/useStateToggle";
 import { getChildOrder } from "../../stores/spaces/SpaceStore";
 import AccessibleTooltipButton from "../views/elements/AccessibleTooltipButton";
-import { linkifyElement } from "../../HtmlUtils";
+import { linkifyElement, topicToHtml } from "../../HtmlUtils";
 import { useDispatcher } from "../../hooks/useDispatcher";
 import { Action } from "../../dispatcher/actions";
 import { IState, RovingTabIndexProvider, useRovingTabIndex } from "../../accessibility/RovingTabIndex";
@@ -65,6 +66,7 @@ import { JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPay
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { Alignment } from "../views/elements/Tooltip";
+import { getTopic } from "../../hooks/room/useTopic";
 
 interface IProps {
     space: Room;
@@ -122,7 +124,7 @@ const Tile: React.FC<ITileProps> = ({
         });
     };
 
-    let button;
+    let button: ReactElement;
     if (busy) {
         button = <AccessibleTooltipButton
             disabled={true}
@@ -154,7 +156,7 @@ const Tile: React.FC<ITileProps> = ({
         </AccessibleButton>;
     }
 
-    let checkbox;
+    let checkbox: ReactElement | undefined;
     if (onToggleClick) {
         if (hasPermissions) {
             checkbox = <StyledCheckbox checked={!!selected} onChange={onToggleClick} tabIndex={isActive ? 0 : -1} />;
@@ -168,7 +170,7 @@ const Tile: React.FC<ITileProps> = ({
         }
     }
 
-    let avatar;
+    let avatar: ReactElement;
     if (joinedRoom) {
         avatar = <RoomAvatar room={joinedRoom} width={20} height={20} />;
     } else {
@@ -186,19 +188,22 @@ const Tile: React.FC<ITileProps> = ({
         description += " · " + _t("%(count)s rooms", { count: numChildRooms });
     }
 
-    const topic = joinedRoom?.currentState?.getStateEvents(EventType.RoomTopic, "")?.getContent()?.topic || room.topic;
-    if (topic) {
-        description += " · " + topic;
+    let topic: ReactNode | string | null;
+    if (joinedRoom) {
+        const topicObj = getTopic(joinedRoom);
+        topic = topicToHtml(topicObj?.text, topicObj?.html);
+    } else {
+        topic = room.topic;
     }
 
-    let joinedSection;
+    let joinedSection: ReactElement | undefined;
     if (joinedRoom) {
         joinedSection = <div className="mx_SpaceHierarchy_roomTile_joined">
             { _t("Joined") }
         </div>;
     }
 
-    let suggestedSection;
+    let suggestedSection: ReactElement | undefined;
     if (suggested && (!joinedRoom || hasPermissions)) {
         suggestedSection = <InfoTooltip tooltip={_t("This room is suggested as a good one to join")}>
             { _t("Suggested") }
@@ -226,6 +231,8 @@ const Tile: React.FC<ITileProps> = ({
                 }}
             >
                 { description }
+                { topic && " · " }
+                { topic }
             </div>
         </div>
         <div className="mx_SpaceHierarchy_actions">
