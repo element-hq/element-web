@@ -637,7 +637,7 @@ export default class RoomSublist extends React.Component<IProps, IState> {
 
                     const collapseClasses = classNames({
                         'mx_RoomSublist_collapseBtn': true,
-                        'mx_RoomSublist_collapseBtn_collapsed': !this.state.isExpanded,
+                        'mx_RoomSublist_collapseBtn_collapsed': !this.state.isExpanded && !this.props.forceExpanded,
                     });
 
                     const classes = classNames({
