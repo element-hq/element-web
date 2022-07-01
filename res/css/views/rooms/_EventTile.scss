@@ -611,6 +611,16 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
                 mask-size: 75%;
             }
         }
+
+        .mx_EventTile_copyButton {
+            height: 17px;
+            mask-image: url($copy-button-url);
+            mask-position: center center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            right: 9px;
+            width: 17px;
+        }
     }
 }
 
@@ -629,10 +639,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 .mx_EventTile_button {
     display: inline-block;
     cursor: pointer;
-}
-
-.mx_EventTile_copyButton {
-    mask-image: url($copy-button-url);
 }
 
 .mx_EventTile_collapseButton,

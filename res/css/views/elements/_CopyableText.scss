@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 .mx_CopyableText {
+    align-items: flex-start;
     display: flex;
     justify-content: space-between;
     width: max-content;
@@ -31,19 +32,25 @@ limitations under the License.
 
     .mx_CopyableText_copyButton {
         flex-shrink: 0;
-        width: 20px;
-        height: 20px;
+        // using em here to adapt to the local font size
+        width: 1em;
+        height: 1em;
         cursor: pointer;
         margin-left: 20px;
         display: block;
+        // center to first line
+        position: relative;
+        top: .15em;
 
         &::before {
             content: "";
-
             mask-image: url($copy-button-url);
+            mask-position: center center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
             background-color: $message-action-bar-fg-color;
-            width: 20px;
-            height: 20px;
+            width: 1em;
+            height: 1em;
             display: block;
             background-repeat: no-repeat;
         }

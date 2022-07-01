@@ -20,9 +20,20 @@ limitations under the License.
     color: $secondary-content;
 }
 
-.mx_ShareLatestLocation_copy {
+// double class to be more specific than the general mx_CopyableText CSS rule
+.mx_CopyableText.mx_ShareLatestLocation_copy {
     // override copyable text style to make compact
     .mx_CopyableText_copyButton {
+        height: 13px;
         margin-left: $spacing-8 !important;
+        position: relative;
+        top: -1px;
+        width: 13px;
+
+        &::before {
+            background-color: $secondary-content;
+            height: 13px;
+            width: 13px;
+        }
     }
 }
