@@ -206,7 +206,7 @@ Together, the options might look like this in your config:
       "auth_header_logo_url": "https://example.org/assets/logo.svg",
       "auth_footer_links": [
          {"text": "FAQ", "url": "https://example.org/faq"},
-         {"text": "Donate", "url": "https://example.org/donate"},
+         {"text": "Donate", "url": "https://example.org/donate"}
       ]
    },
    "embedded_pages": {
@@ -393,25 +393,19 @@ To add additional "terms and conditions" links throughout the app, use the follo
 
 ## Analytics
 
-Analytics are currently possible with two systems: `posthog` (preferred) and <del>`piwik`</del> (matomo; deprecated). When
-these configuration options are not present, analytics are deemed impossible and the user won't be asked to opt-in to the
-system.
-
 To configure [Posthog](https://posthog.com/), add the following under `posthog` in your config:
 
 1. `api_host`: The hostname of the posthog server.
 2. `project_api_key`: The API key from posthog.
 
-To configure Piwik (***DEPRECATED***), add the following under `piwik` in your config:
+When these configuration options are not present,
+analytics are deemed impossible and the user won't be asked to opt in to the system.
 
-1. `url`: The URL of the piwik server.
-2. `site_id`: The site ID to use.
-3. `policy_url`: URL to the analytics collection policy.
-4. `whitelisted_hs_urls`: A list of homeserver client-server URLs to *not* redact from analytics.
+There are additional root-level options which can be specified:
 
-Additionally, you may set `"piwik": false` to disable piwik configuration too. An `analytics_owner` can also be specified in your
-config to replace the company name used in dialogs talking about analytics - this defaults to `brand`, and is useful when the
-provider of analytics is different from the provider of the Element instance.
+1. `analytics_owner`: the company name used in dialogs talking about analytics - this defaults to `brand`,
+and is useful when the provider of analytics is different from the provider of the Element instance.
+2. `privacy_policy_url`: URL to the privacy policy including the analytics collection policy.
 
 ## Server hosting links
 

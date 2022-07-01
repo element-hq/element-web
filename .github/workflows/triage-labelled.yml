@@ -11,7 +11,6 @@ jobs:
     if: >
       contains(github.event.issue.labels.*.name, 'A-Maths') ||
       contains(github.event.issue.labels.*.name, 'A-Message-Pinning') ||
-      contains(github.event.issue.labels.*.name, 'A-New-Search-Experience') ||
       contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
       contains(github.event.issue.labels.*.name, 'Z-IA') ||
       contains(github.event.issue.labels.*.name, 'A-Themes-Custom') ||

@@ -1,10 +1,7 @@
 {
     "Unknown device": "Thiết bị không xác định",
-    "You need to be using HTTPS to place a screen-sharing call.": "Bạn cần sử dụng giao thức HTTPS để thực hiện một cuộc gọi có chia sẻ màn hình.",
     "Dismiss": "Bỏ qua",
-    "powered by Matrix": "tài trợ bởi Matrix",
     "Welcome to Element": "Chào mừng tới Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Nhắn tin &amp; giao tiếp một cách bảo mật, phi tập trung dưới giao thức [matrix]",
     "Unexpected error preparing the app. See console for details.": "Có lỗi xảy ra trong lúc thiết lập ứng dụng. Mở bảng điều khiển (console) để biết chi tiết.",
     "The message from the parser is: %(message)s": "Thông báo của trình xử lý là: %(message)s",
     "Invalid JSON": "JSON không hợp lệ",
@@ -23,17 +20,13 @@
     "Unsupported browser": "Trình duyệt không được hỗ trợ",
     "Go to your browser to complete Sign In": "Mở trình duyệt web để hoàn thành đăng nhập",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Máy tính để bàn (%(platformName)s)",
-    "Previous/next recently visited room or community": "Phòng chat hoặc cộng đồng trước/tiếp theo đã đến gần đây",
-    "Open user settings": "Mở cài đặt người dùng",
     "Open": "Mở",
     "Unable to load config file: please refresh the page to try again.": "Không thể tải tệp cấu hình: hãy tải lại trang để thử lại.",
     "Failed to start": "Khởi động thất bại",
     "Use %(brand)s on mobile": "Sử dụng %(brand)s trên di động",
     "Powered by Matrix": "Được chạy trên giao thức Matrix",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
-    "Missing indexeddb worker script!": "Thiếu tệp lệnh làm việc của indexeddb!",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Thiết lập Element của bạn chứa JSON không hợp lệ. Vui lòng sửa vấn đề và tải lại trang.",
     "Your Element is misconfigured": "Element của bạn bị thiết lập sai",
-    "Switch to space by number": "Chuyển sang Space bằng số",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dịch vụ chat &amp; liên lạc đã được mã hóa, phi tập trung. Được cung cấp bởi $matrixLogo"
 }
