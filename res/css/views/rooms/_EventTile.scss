@@ -28,6 +28,28 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         color: $alert;
     }
 
+    &.mx_EventTile_bubbleContainer {
+        display: grid;
+        grid-template-columns: 1fr 100px;
+
+        .mx_EventTile_line {
+            margin-right: 0;
+            grid-column: 1 / 3;
+            padding: 0 !important; // override default padding of mx_EventTile_line so that we can be centered
+        }
+
+        .mx_EventTile_msgOption {
+            grid-column: 2;
+        }
+
+        &:hover {
+            .mx_EventTile_line {
+                // To avoid bubble events being highlighted
+                background-color: inherit !important;
+            }
+        }
+    }
+
     .mx_EventTile_avatar {
         cursor: pointer;
         user-select: none;
@@ -461,29 +483,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     // on ELS we need the margin to allow interaction with the expand/collapse button which is normally in the RR gutter
-}
-
-.mx_EventTile_bubbleContainer {
-    display: grid;
-    grid-template-columns: 1fr 100px;
-
-    .mx_EventTile_line {
-        margin-right: 0;
-        grid-column: 1 / 3;
-        // override default padding of mx_EventTile_line so that we can be centered
-        padding: 0 !important;
-    }
-
-    .mx_EventTile_msgOption {
-        grid-column: 2;
-    }
-
-    &:hover {
-        .mx_EventTile_line {
-            // To avoid bubble events being highlighted
-            background-color: inherit !important;
-        }
-    }
 }
 
 .mx_EventTile_bigEmoji {
