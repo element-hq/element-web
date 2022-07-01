@@ -138,6 +138,12 @@ $irc-line-height: $font-18px;
                 // add a 1px padding top and bottom because our larger emoji font otherwise gets cropped by anti-zalgo
                 padding: 1px 0;
             }
+
+            .mx_ReplyTile {
+                .mx_MTextBody {
+                    display: -webkit-box; // Enable -webkit-line-clamp
+                }
+            }
         }
 
         .mx_EventTile_reply {
