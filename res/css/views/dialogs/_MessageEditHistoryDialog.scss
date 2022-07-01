@@ -59,10 +59,10 @@ limitations under the License.
         }
 
         .mx_EventTile_line {
-            padding-top: 1px;
-            padding-bottom: 3px;
-
-            line-height: $font-22px;
+            padding-top: var(--EventTile_group_line-spacing-block-start);
+            padding-bottom: var(--EventTile_group_line-spacing-block-end);
+            padding-left: var(--EventTile_group_line-spacing-inline-start);
+            line-height: var(--EventTile_group_line-line-height);
 
             .mx_EventTile_content {
                 margin-right: 0px;

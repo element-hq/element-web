@@ -20,6 +20,10 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
 .mx_EventTile {
     --EventTile_content-margin-inline-end: 34px; // TODO: Use a spacing variable
+    --EventTile_group_line-spacing-block-start: 1px;
+    --EventTile_group_line-spacing-block-end: 3px;
+    --EventTile_group_line-spacing-inline-start: $left-gutter;
+    --EventTile_group_line-line-height: $font-22px;
 
     flex-shrink: 0;
 
@@ -164,8 +168,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 
     &[data-layout=group] {
-        --EventTile_group_line-line-height: $font-22px;
-
         > .mx_DisambiguatedProfile {
             line-height: $font-20px;
             margin-left: $left-gutter;
@@ -188,9 +190,9 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
         .mx_EventTile_line,
         .mx_EventTile_reply {
-            padding-top: 1px;
-            padding-bottom: 3px;
-            padding-left: $left-gutter;
+            padding-top: var(--EventTile_group_line-spacing-block-start);
+            padding-bottom: var(--EventTile_group_line-spacing-block-end);
+            padding-left: var(--EventTile_group_line-spacing-inline-start);
             line-height: var(--EventTile_group_line-line-height);
         }
 
