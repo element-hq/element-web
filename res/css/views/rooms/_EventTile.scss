@@ -55,6 +55,10 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         user-select: none;
     }
 
+    .mx_EventTile_body {
+        overflow-y: hidden;
+    }
+
     .mx_EventTile_receiptSent,
     .mx_EventTile_receiptSending {
         position: relative;
@@ -112,6 +116,17 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         flex-flow: wrap;
         align-items: center;
         gap: $spacing-4;
+    }
+
+    .mx_ReplyChain--expanded {
+        .mx_EventTile_body {
+            display: block;
+            overflow-y: scroll;
+        }
+
+        .mx_EventTile_collapsedCodeBlock {
+            display: block !important; // !important needed due to .mx_ReplyTile .mx_EventTile_content .mx_EventTile_pre_container > pre
+        }
     }
 
     &[data-layout=irc],
@@ -300,11 +315,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         a {
             text-decoration: none;
         }
-    }
-
-    /* De-zalgoing */
-    .mx_EventTile_body {
-        overflow-y: hidden;
     }
 
     &:hover.mx_EventTile_verified .mx_EventTile_line {
