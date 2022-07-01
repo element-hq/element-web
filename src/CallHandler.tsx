@@ -265,28 +265,43 @@ export default class CallHandler extends EventEmitter {
         return this.supportsSipNativeVirtual;
     }
 
-    public pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
-        return MatrixClientPeg.get().getThirdpartyUser(
-            this.pstnSupportPrefixed ? PROTOCOL_PSTN_PREFIXED : PROTOCOL_PSTN, {
-                'm.id.phone': phoneNumber,
-            },
-        );
+    public async pstnLookup(phoneNumber: string): Promise<ThirdpartyLookupResponse[]> {
+        try {
+            return await MatrixClientPeg.get().getThirdpartyUser(
+                this.pstnSupportPrefixed ? PROTOCOL_PSTN_PREFIXED : PROTOCOL_PSTN, {
+                    'm.id.phone': phoneNumber,
+                },
+            );
+        } catch (e) {
+            logger.warn('Failed to lookup user from phone number', e);
+            return Promise.resolve([]);
+        }
     }
 
-    public sipVirtualLookup(nativeMxid: string): Promise<ThirdpartyLookupResponse[]> {
-        return MatrixClientPeg.get().getThirdpartyUser(
-            PROTOCOL_SIP_VIRTUAL, {
-                'native_mxid': nativeMxid,
-            },
-        );
+    public async sipVirtualLookup(nativeMxid: string): Promise<ThirdpartyLookupResponse[]> {
+        try {
+            return await MatrixClientPeg.get().getThirdpartyUser(
+                PROTOCOL_SIP_VIRTUAL, {
+                    'native_mxid': nativeMxid,
+                },
+            );
+        } catch (e) {
+            logger.warn('Failed to query SIP identity for user', e);
+            return Promise.resolve([]);
+        }
     }
 
-    public sipNativeLookup(virtualMxid: string): Promise<ThirdpartyLookupResponse[]> {
-        return MatrixClientPeg.get().getThirdpartyUser(
-            PROTOCOL_SIP_NATIVE, {
-                'virtual_mxid': virtualMxid,
-            },
-        );
+    public async sipNativeLookup(virtualMxid: string): Promise<ThirdpartyLookupResponse[]> {
+        try {
+            return await MatrixClientPeg.get().getThirdpartyUser(
+                PROTOCOL_SIP_NATIVE, {
+                    'virtual_mxid': virtualMxid,
+                },
+            );
+        } catch (e) {
+            logger.warn('Failed to query identity for SIP user', e);
+            return Promise.resolve([]);
+        }
     }
 
     private onCallIncoming = (call: MatrixCall): void => {
