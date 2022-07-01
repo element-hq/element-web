@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { IContent, MatrixEvent, MsgType } from "matrix-js-sdk/src/matrix";
+import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
+import { LocationAssetType, M_ASSET } from "matrix-js-sdk/src/@types/location";
+
 import {
     getNestedReplyText,
     getParentEventId,
@@ -23,6 +27,22 @@ import {
 } from "../src/utils/Reply";
 import { mkEvent } from "./test-utils";
 import { RoomPermalinkCreator } from "../src/utils/permalinks/Permalinks";
+
+function makeTestEvent(type: string, content: IContent): MatrixEvent {
+    return mkEvent({
+        event: true,
+        type: type,
+        user: "@user1:server",
+        room: "!room1:server",
+        content,
+    });
+}
+
+const mockPermalinkGenerator = {
+    forEvent(eventId: string): string {
+        return "$$permalink$$";
+    },
+} as RoomPermalinkCreator;
 
 // don't litter test console with logs
 jest.mock("matrix-js-sdk/src/logger");
@@ -99,22 +119,29 @@ But this is not
 
     describe("getNestedReplyText", () => {
         it("Returns valid reply fallback text for m.text msgtypes", () => {
-            const event = mkEvent({
-                event: true,
-                type: "m.room.message",
-                user: "@user1:server",
-                room: "!room1:server",
-                content: {
-                    body: "body",
-                    msgtype: "m.text",
-                },
+            const event = makeTestEvent(MsgType.Text, {
+                body: "body",
+                msgtype: "m.text",
             });
 
-            expect(getNestedReplyText(event, {
-                forEvent(eventId: string): string {
-                    return "$$permalink$$";
-                },
-            } as RoomPermalinkCreator)).toMatchSnapshot();
+            expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
+        });
+
+        [
+            ["m.room.message", MsgType.Location, LocationAssetType.Pin],
+            ["m.room.message", MsgType.Location, LocationAssetType.Self],
+            [M_BEACON_INFO.name, undefined, LocationAssetType.Pin],
+            [M_BEACON_INFO.name, undefined, LocationAssetType.Self],
+        ].forEach(([type, msgType, assetType]) => {
+            it(`should create the expected fallback text for ${assetType} ${type}/${msgType}`, () => {
+                const event = makeTestEvent(type, {
+                    body: "body",
+                    msgtype: msgType,
+                    [M_ASSET.name]: { type: assetType },
+                });
+
+                expect(getNestedReplyText(event, mockPermalinkGenerator)).toMatchSnapshot();
+            });
         });
     });
 

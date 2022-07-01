@@ -19,10 +19,12 @@ import sanitizeHtml from "sanitize-html";
 import escapeHtml from "escape-html";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
+import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 
 import { PERMITTED_URL_SCHEMES } from "../HtmlUtils";
 import { makeUserPermalink, RoomPermalinkCreator } from "./permalinks/Permalinks";
 import SettingsStore from "../settings/SettingsStore";
+import { isSelfLocation } from "./location";
 
 export function getParentEventId(ev?: MatrixEvent): string | undefined {
     if (!ev || ev.isRedacted()) return;
@@ -93,6 +95,15 @@ export function getNestedReplyText(
     const userLink = makeUserPermalink(ev.getSender());
     const mxid = ev.getSender();
 
+    if (M_BEACON_INFO.matches(ev.getType())) {
+        const aTheir = isSelfLocation(ev.getContent()) ? "their" : "a";
+        return {
+            html: `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
+            + `<br>shared ${aTheir} live location.</blockquote></mx-reply>`,
+            body: `> <${mxid}> shared ${aTheir} live location.\n\n`,
+        };
+    }
+
     // This fallback contains text that is explicitly EN.
     switch (msgtype) {
         case MsgType.Text:
@@ -126,6 +137,13 @@ export function getNestedReplyText(
                 + `<br>sent a file.</blockquote></mx-reply>`;
             body = `> <${mxid}> sent a file.\n\n`;
             break;
+        case MsgType.Location: {
+            const aTheir = isSelfLocation(ev.getContent()) ? "their" : "a";
+            html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> <a href="${userLink}">${mxid}</a>`
+            + `<br>shared ${aTheir} location.</blockquote></mx-reply>`;
+            body = `> <${mxid}> shared ${aTheir} location.\n\n`;
+            break;
+        }
         case MsgType.Emote: {
             html = `<mx-reply><blockquote><a href="${evLink}">In reply to</a> * `
                 + `<a href="${userLink}">${mxid}</a><br>${html}</blockquote></mx-reply>`;
