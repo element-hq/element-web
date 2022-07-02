@@ -50,6 +50,8 @@ limitations under the License.
 
         &[data-layout=irc],
         &[data-layout=group] {
+            --TimelineCard_ReadReceiptGroup-inset-block-start: -6px;
+
             &.mx_EventTile_info .mx_EventTile_line,
             .mx_EventTile_line {
                 padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-inline);
@@ -97,6 +99,10 @@ limitations under the License.
                 margin-inline-end: $spacing-8; // See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.scss
             }
 
+            .mx_ReadReceiptGroup {
+                top: var(--TimelineCard_ReadReceiptGroup-inset-block-start);
+            }
+
             .mx_ThreadSummary {
                 margin-inline-end: 0;
                 max-width: min(calc(100% - 36px), 600px);
@@ -107,6 +113,15 @@ limitations under the License.
             .mx_EventTile_avatar,
             .mx_MessageTimestamp {
                 position: absolute;
+            }
+        }
+
+        &[data-layout=group] {
+            // Read receipt group on compact modern layout
+            // This is required because mx_TimelineCard is a child element wrapped by mx_MatrixChat_useCompactLayout,
+            // which specifies the default position of mx_ReadReceiptGroup on compact modern layout.
+            .mx_MatrixChat_useCompactLayout & .mx_ReadReceiptGroup {
+                top: var(--TimelineCard_ReadReceiptGroup-inset-block-start);
             }
         }
 
@@ -139,10 +154,6 @@ limitations under the License.
             padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
             padding-inline-end: var(--BaseCard_EventTile-spacing-inline);
         }
-    }
-
-    .mx_ReadReceiptGroup {
-        top: -6px;
     }
 
     .mx_WhoIsTypingTile {
