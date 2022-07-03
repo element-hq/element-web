@@ -9,6 +9,9 @@ env:
   # These must be set for fetchdep.sh to get the right branch
   REPOSITORY: ${{ github.repository }}
   PR_NUMBER: ${{ github.event.pull_request.number }}
+permissions:
+  contents: read
+
 jobs:
   ts_lint:
     name: "Typescript Syntax Check"
@@ -27,6 +30,8 @@ jobs:
         run: "yarn run lint:types"
 
   i18n_lint:
+    permissions:
+      contents: none
     name: "i18n Check"
     uses: matrix-org/matrix-react-sdk/.github/workflows/i18n_check.yml@develop
 

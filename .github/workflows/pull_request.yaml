@@ -3,8 +3,13 @@ on:
   pull_request_target:
     types: [ opened, edited, labeled, unlabeled, synchronize ]
 concurrency: ${{ github.workflow }}-${{ github.event.pull_request.head.ref }}
+permissions:
+  contents: read
+
 jobs:
   action:
+    permissions:
+      contents: none
     uses: matrix-org/matrix-js-sdk/.github/workflows/pull_request.yaml@develop
     with:
       labels: "T-Defect,T-Enhancement,T-Task"

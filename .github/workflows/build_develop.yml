@@ -6,6 +6,9 @@ on:
     branches: [ develop ]
   repository_dispatch:
     types: [ element-web-notify ]
+permissions:
+  contents: read
+
 jobs:
   build:
     name: "Build & Upload source maps to Sentry"
