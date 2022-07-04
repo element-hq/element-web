@@ -529,6 +529,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         key={`${Section[result.section]}-${result.member.userId}`}
                         onClick={() => {
                             startDm(cli, [result.member]);
+                            onFinished();
                         }}
                     >
                         <SearchResultAvatar user={result.member} size={AVATAR_SIZE} />
