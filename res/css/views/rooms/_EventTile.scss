@@ -106,6 +106,12 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         }
     }
 
+    .mx_RoomView_searchResultsPanel & {
+        &.mx_EventTile_contextual {
+            opacity: 0.4;
+        }
+    }
+
     &.mx_EventTile_highlight,
     &.mx_EventTile_highlight .markdown-body {
         color: $alert;
@@ -297,10 +303,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             background-color: $accent;
             color: $accent-fg-color;
         }
-    }
-
-    &.mx_EventTile_contextual {
-        opacity: 0.4;
     }
 
     .mx_EventTile_msgOption {
