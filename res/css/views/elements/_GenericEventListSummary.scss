@@ -67,14 +67,16 @@ limitations under the License.
         }
 
         .mx_GenericEventListSummary_toggle {
-            margin: 0 55px 0 5px;
+            margin-block: 0;
+            margin-inline-end: 55px;
 
             &[aria-expanded=false] {
                 order: 9;
+                margin-inline-start: 5px;
             }
 
             &[aria-expanded=true] {
-                text-align: right;
+                margin-inline-start: auto; // reduce clickable area
             }
         }
 
@@ -106,11 +108,6 @@ limitations under the License.
 
 .mx_GenericEventListSummary_avatars .mx_BaseAvatar {
     margin-right: -4px;
-    cursor: pointer;
-}
-
-.mx_GenericEventListSummary_toggle {
-    color: $accent;
     cursor: pointer;
 }
 

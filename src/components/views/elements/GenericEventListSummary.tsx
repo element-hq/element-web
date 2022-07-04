@@ -119,7 +119,12 @@ const GenericEventListSummary: React.FC<IProps> = ({
             data-layout={layout}
             data-testid={testId}
         >
-            <AccessibleButton className="mx_GenericEventListSummary_toggle" onClick={toggleExpanded} aria-expanded={expanded}>
+            <AccessibleButton
+                kind="link_inline"
+                className="mx_GenericEventListSummary_toggle"
+                onClick={toggleExpanded}
+                aria-expanded={expanded}
+            >
                 { expanded ? _t('collapse') : _t('expand') }
             </AccessibleButton>
             { body }
