@@ -39,8 +39,8 @@ limitations under the License.
                     resize: vertical;
                 }
 
-                &.mx_ProfileSettings_profile_controls_topic--room {
-                    height: 4em;
+                &.mx_ProfileSettings_profile_controls_topic--room textarea {
+                    min-height: 4em;
                 }
             }
 
