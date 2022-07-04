@@ -23,9 +23,11 @@ limitations under the License.
     }
 
     .mx_FontScalingPanel_preview {
+        --FontScalingPanel_preview-padding-block: 9px;
+
         border: 1px solid $quinary-content;
         border-radius: 10px;
-        padding: 0 $spacing-16 9px $spacing-16;
+        padding: 0 $spacing-16 var(--FontScalingPanel_preview-padding-block) $spacing-16;
         pointer-events: none;
         display: flow-root;
 

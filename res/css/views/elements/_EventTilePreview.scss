@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_FontScalingPanel_preview.mx_EventTilePreview_loader {
-    padding: 9px 0;
+.mx_FontScalingPanel {
+    .mx_FontScalingPanel_preview.mx_EventTilePreview_loader {
+        padding: var(--FontScalingPanel_preview-padding-block) 0;
+    }
 }
