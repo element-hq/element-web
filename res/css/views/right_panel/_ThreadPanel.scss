@@ -208,15 +208,9 @@ limitations under the License.
     border-radius: 50%;
 
     &::after {
-        content: "";
+        @mixin ThreadSummaryIcon;
         width: inherit;
         height: inherit;
-        mask-image: url('$(res)/img/element-icons/thread-summary.svg');
-        mask-position: center;
-        display: inline-block;
-        mask-repeat: no-repeat;
-        mask-size: contain;
-        background-color: $secondary-content;
     }
 }
 

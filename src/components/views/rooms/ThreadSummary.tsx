@@ -58,7 +58,7 @@ const ThreadSummary = ({ mxEvent, thread }: IProps) => {
             }}
             aria-label={_t("Open thread")}
         >
-            <span className="mx_ThreadSummary_ThreadsAmount">
+            <span className="mx_ThreadSummary_replies_amount">
                 { countSection }
             </span>
             <ThreadMessagePreview thread={thread} showDisplayname={!roomContext.narrow} />

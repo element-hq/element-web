@@ -14,26 +14,35 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$left-gutter: 64px; // From _EventTile.scss
-$threadSummaryLineHeight: calc(2 * $font-12px);
+.mx_ThreadSummary,
+.mx_ThreadSummary_content,
+.mx_ThreadSummary_icon {
+    font-size: $font-12px;
+}
+
+.mx_ThreadSummary,
+.mx_ThreadSummary_content {
+    color: $secondary-content;
+}
+
+.mx_ThreadSummary,
+.mx_ThreadSummary_icon {
+    margin-top: $spacing-8;
+}
 
 .mx_ThreadSummary {
     min-width: 267px;
-    max-width: min(calc(100% - $left-gutter), 600px); // leave space on both left & right gutters
+    max-width: min(calc(100% - var(--EventTile_group_line-spacing-inline-start)), 600px); // leave space on both left & right gutters
     width: fit-content;
     height: 40px;
     position: relative;
     background-color: $system;
-    padding-left: $spacing-12;
+    padding-inline: $spacing-12 $spacing-16;
     display: flex;
     align-items: center;
-    border-radius: 8px;
-    padding-right: $spacing-16;
-    margin-top: $spacing-8;
-    font-size: $font-12px;
-    color: $secondary-content;
-    box-sizing: border-box;
     justify-content: flex-start;
+    border-radius: 8px;
+    box-sizing: border-box;
     clear: both;
     overflow: hidden;
     border: 1px solid $system; // always render a border so the hover effect doesn't require a re-layout
@@ -70,7 +79,6 @@ $threadSummaryLineHeight: calc(2 * $font-12px);
 
     &:hover,
     &:focus {
-        cursor: pointer;
         border-color: $quinary-content;
 
         .mx_ThreadSummary_chevron {
@@ -80,34 +88,59 @@ $threadSummaryLineHeight: calc(2 * $font-12px);
     }
 
     &::before {
+        @mixin ThreadSummaryIcon;
         align-self: center; // v-align the threads icon
     }
-}
 
-// XXX: these classes are re-used outside of the component
-.mx_ThreadSummary_ThreadsAmount {
-    @mixin ThreadsAmount;
-}
+    .mx_ThreadSummary_sender,
+    .mx_ThreadSummary_content,
+    .mx_ThreadSummary_replies_amount {
+        line-height: var(--EventTile_ThreadSummary-line-height);
+    }
 
-.mx_ThreadSummary_sender {
-    font-weight: $font-semi-bold;
-    line-height: $threadSummaryLineHeight;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-}
+    .mx_ThreadSummary_sender,
+    .mx_ThreadSummary_content {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 
-.mx_ThreadSummary_content {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    margin-left: $spacing-4;
-    font-size: $font-12px;
-    line-height: $threadSummaryLineHeight;
-    color: $secondary-content;
-    flex: 1;
+    .mx_ThreadSummary_sender {
+        font-weight: $font-semi-bold;
+    }
+
+    .mx_ThreadSummary_content {
+        margin-left: $spacing-4;
+        flex: 1;
+    }
+
+    .mx_ThreadSummary_replies_amount {
+        @mixin ThreadRepliesAmount;
+    }
+
+    .mx_MessagePanel_narrow & {
+        min-width: initial;
+        max-width: 100%; // prevent overflow
+        width: initial;
+    }
 }
 
 .mx_ThreadSummary_avatar {
     margin-inline-end: $spacing-8;
+}
+
+.mx_ThreadSummary_icon {
+    display: inline-block;
+    margin-bottom: $spacing-8;
+
+    &::before {
+        @mixin ThreadSummaryIcon;
+        vertical-align: middle;
+        margin-inline-end: $spacing-8;
+        margin-top: -2px;
+    }
+
+    a& {
+        color: $secondary-content;
+    }
 }

@@ -16,7 +16,6 @@ limitations under the License.
 */
 
 $left-gutter: 64px;
-$threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
 
 .mx_EventTile {
     --EventTile_content-margin-inline-end: 34px; // TODO: Use a spacing variable
@@ -24,6 +23,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     --EventTile_group_line-spacing-block-end: 3px;
     --EventTile_group_line-spacing-inline-start: $left-gutter;
     --EventTile_group_line-line-height: $font-22px;
+    --EventTile_ThreadSummary-line-height: calc(2 * $font-12px);
 
     flex-shrink: 0;
 
@@ -204,7 +204,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
         }
 
         .mx_ThreadSummary,
-        .mx_ThreadSummaryIcon {
+        .mx_ThreadSummary_icon {
             margin-left: $left-gutter;
         }
 
@@ -484,7 +484,7 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     .mx_EventTile[data-layout=group] {
 
         .mx_ThreadSummary,
-        .mx_ThreadSummaryIcon,
+        .mx_ThreadSummary_icon,
         .mx_EventTile_line {
             /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
             margin-right: 80px;
@@ -722,33 +722,6 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
     }
 }
 
-.mx_ThreadPanel_replies::before,
-.mx_ThreadSummaryIcon::before,
-.mx_ThreadSummary::before {
-    @mixin ThreadInfoIcon;
-    background-color: $secondary-content !important;
-}
-
-.mx_ThreadSummaryIcon {
-    display: inline-block;
-    font-size: $font-12px;
-    color: $secondary-content !important;
-    margin-top: 8px;
-    margin-bottom: 8px;
-
-    &::before {
-        vertical-align: middle;
-        margin-right: 8px;
-        margin-top: -2px;
-    }
-}
-
-.mx_MessagePanel_narrow .mx_ThreadSummary {
-    min-width: initial;
-    max-width: 100%; // prevent overflow
-    width: initial;
-}
-
 .mx_EventTile[data-shape=ThreadsList] {
     --topOffset: $spacing-12;
     --leftOffset: 48px;
@@ -864,8 +837,13 @@ $threadInfoLineHeight: calc(2 * $font-12px); // See: _commons.scss
             align-items: center;
             position: relative;
 
+            &::before {
+                @mixin ThreadSummaryIcon;
+            }
+
             .mx_ThreadPanel_replies_amount {
-                @mixin ThreadsAmount;
+                @mixin ThreadRepliesAmount;
+                line-height: var(--EventTile_ThreadSummary-line-height);
                 font-size: $font-12px; // Same font size as the counter on the main panel
             }
         }

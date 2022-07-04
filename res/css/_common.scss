@@ -775,25 +775,22 @@ legend {
     }
 }
 
-@define-mixin ThreadsAmount {
-    $threadInfoLineHeight: calc(2 * $font-12px);
-
+@define-mixin ThreadRepliesAmount {
     color: $secondary-content;
     font-weight: $font-semi-bold;
-    line-height: $threadInfoLineHeight;
     white-space: nowrap;
     position: relative;
     padding: 0 $spacing-12 0 $spacing-8;
 }
 
-@define-mixin ThreadInfoIcon {
+@define-mixin ThreadSummaryIcon {
     content: "";
     display: inline-block;
     mask-image: url('$(res)/img/element-icons/thread-summary.svg');
     mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
     height: 18px;
     min-width: 18px;
     background-color: $secondary-content !important;
-    mask-repeat: no-repeat;
-    mask-size: contain;
 }
