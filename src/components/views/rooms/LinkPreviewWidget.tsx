@@ -120,16 +120,18 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
 
         return (
             <div className="mx_LinkPreviewWidget">
-                { img }
-                <div className="mx_LinkPreviewWidget_caption">
-                    <div className="mx_LinkPreviewWidget_title">
-                        <a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a>
-                        { p["og:site_name"] && <span className="mx_LinkPreviewWidget_siteName">
-                            { (" - " + p["og:site_name"]) }
-                        </span> }
-                    </div>
-                    <div className="mx_LinkPreviewWidget_description" ref={this.description}>
-                        { description }
+                <div className="mx_LinkPreviewWidget_wrapImageCaption">
+                    { img }
+                    <div className="mx_LinkPreviewWidget_caption">
+                        <div className="mx_LinkPreviewWidget_title">
+                            <a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a>
+                            { p["og:site_name"] && <span className="mx_LinkPreviewWidget_siteName">
+                                { (" - " + p["og:site_name"]) }
+                            </span> }
+                        </div>
+                        <div className="mx_LinkPreviewWidget_description" ref={this.description}>
+                            { description }
+                        </div>
                     </div>
                 </div>
                 { this.props.children }
