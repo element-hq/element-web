@@ -14,15 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { getBeaconInfoIdentifier } from "matrix-js-sdk/src/matrix";
-
-import { ForwardableEventTransformFunction } from "./types";
+import {
+    MatrixClient,
+    MatrixEvent,
+    getBeaconInfoIdentifier,
+} from "matrix-js-sdk/src/matrix";
 
 /**
- * Live location beacons should forward their latest location as a static pin location
- * If the beacon is not live, or doesn't have a location forwarding is not allowed
+ * Beacons should only have shareable locations (open in external mapping tool, forward)
+ * when they are live and have a location
+ * If not live, returns null
  */
-export const getForwardableBeaconEvent: ForwardableEventTransformFunction = (event, cli) => {
+export const getShareableLocationEventForBeacon = (event: MatrixEvent, cli: MatrixClient): MatrixEvent | null => {
     const room = cli.getRoom(event.getRoomId());
     const beacon = room.currentState.beacons?.get(getBeaconInfoIdentifier(event));
     const latestLocationEvent = beacon?.latestLocationEvent;

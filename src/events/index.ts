@@ -14,6 +14,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
-
-export type ActionableEventTransformFunction = (event: MatrixEvent, cli: MatrixClient) => MatrixEvent | null;
+export { getForwardableEvent } from './forward/getForwardableEvent';
+export { getShareableLocationEvent } from './location/getShareableLocationEvent';

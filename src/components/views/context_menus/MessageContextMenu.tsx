@@ -35,7 +35,6 @@ import {
     canPinEvent,
     editEvent,
     isContentActionable,
-    isLocationEvent,
 } from '../../../utils/EventUtils';
 import IconizedContextMenu, { IconizedContextMenuOption, IconizedContextMenuOptionList } from './IconizedContextMenu';
 import { ReadPinsEventId } from "../right_panel/types";
@@ -58,6 +57,7 @@ import { OpenForwardDialogPayload } from "../../../dispatcher/payloads/OpenForwa
 import { OpenReportEventDialogPayload } from "../../../dispatcher/payloads/OpenReportEventDialogPayload";
 import { createMapSiteLinkFromEvent } from '../../../utils/location';
 import { getForwardableEvent } from '../../../events/forward/getForwardableEvent';
+import { getShareableLocationEvent } from '../../../events/location/getShareableLocationEvent';
 
 interface IProps extends IPosition {
     chevronFace: ChevronFace;
@@ -143,10 +143,6 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         if (!pinnedEvent) return false;
         const content = pinnedEvent.getContent();
         return content.pinned && Array.isArray(content.pinned) && content.pinned.includes(this.props.mxEvent.getId());
-    }
-
-    private canOpenInMapSite(mxEvent: MatrixEvent): boolean {
-        return isLocationEvent(mxEvent);
     }
 
     private canEndPoll(mxEvent: MatrixEvent): boolean {
@@ -369,8 +365,9 @@ export default class MessageContextMenu extends React.Component<IProps, IState> 
         }
 
         let openInMapSiteButton: JSX.Element;
-        if (this.canOpenInMapSite(mxEvent)) {
-            const mapSiteLink = createMapSiteLinkFromEvent(mxEvent);
+        const shareableLocationEvent = getShareableLocationEvent(mxEvent, cli);
+        if (shareableLocationEvent) {
+            const mapSiteLink = createMapSiteLinkFromEvent(shareableLocationEvent);
             openInMapSiteButton = (
                 <IconizedContextMenuOption
                     iconClassName="mx_MessageContextMenu_iconOpenInMapSite"

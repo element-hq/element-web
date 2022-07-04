@@ -14,26 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { M_POLL_START } from "matrix-events-sdk";
 import { M_BEACON_INFO } from "matrix-js-sdk/src/@types/beacon";
 import { MatrixEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { getShareableLocationEventForBeacon } from "../../utils/beacon/getShareableLocation";
+import { isLocationEvent } from "../../utils/EventUtils";
 
 /**
- * Get forwardable event for a given event
- * If an event is not forwardable return null
+ * Get event that is shareable as a location
+ * If an event does not have a shareable location, return null
  */
-export const getForwardableEvent = (event: MatrixEvent, cli: MatrixClient): MatrixEvent | null => {
-    if (M_POLL_START.matches(event.getType())) {
-        return null;
+export const getShareableLocationEvent = (event: MatrixEvent, cli: MatrixClient): MatrixEvent | null => {
+    if (isLocationEvent(event)) {
+        return event;
     }
 
-    // Live location beacons should forward their latest location as a static pin location
-    // If the beacon is not live, or doesn't have a location forwarding is not allowed
     if (M_BEACON_INFO.matches(event.getType())) {
         return getShareableLocationEventForBeacon(event, cli);
     }
-    return event;
+    return null;
 };
-
