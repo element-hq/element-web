@@ -42,7 +42,7 @@ interface IProps extends Omit<React.ComponentProps<typeof BaseAvatar>, "name" | 
     pushUserOnClick?: boolean;
     title?: string;
     style?: any;
-    forceHistorical?: boolean; // true to deny `feature_use_only_current_profiles` usage. Default false.
+    forceHistorical?: boolean; // true to deny `useOnlyCurrentProfiles` usage. Default false.
     hideTitle?: boolean;
 }
 
@@ -72,7 +72,7 @@ export default class MemberAvatar extends React.PureComponent<IProps, IState> {
 
     private static getState(props: IProps): IState {
         let member = props.member;
-        if (member && !props.forceHistorical && SettingsStore.getValue("feature_use_only_current_profiles")) {
+        if (member && !props.forceHistorical && SettingsStore.getValue("useOnlyCurrentProfiles")) {
             const room = MatrixClientPeg.get().getRoom(member.roomId);
             if (room) {
                 member = room.getMember(member.userId);

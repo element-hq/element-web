@@ -38,7 +38,7 @@ export default class SenderProfile extends React.PureComponent<IProps> {
         const msgtype = mxEvent.getContent().msgtype;
 
         let member = mxEvent.sender;
-        if (SettingsStore.getValue("feature_use_only_current_profiles")) {
+        if (SettingsStore.getValue("useOnlyCurrentProfiles")) {
             const room = MatrixClientPeg.get().getRoom(mxEvent.getRoomId());
             if (room) {
                 member = room.getMember(mxEvent.getSender());

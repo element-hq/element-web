@@ -16,9 +16,12 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import type { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
+import type { FileType, UploadContentResponseType } from "matrix-js-sdk/src/http-api";
+import type { IAbortablePromise } from "matrix-js-sdk/src/@types/partials";
+import type { ICreateRoomOpts, ISendEventResponse, IUploadOpts } from "matrix-js-sdk/src/@types/requests";
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { Room } from "matrix-js-sdk/src/models/room";
+import type { IContent } from "matrix-js-sdk/src/models/event";
 import Chainable = Cypress.Chainable;
 
 declare global {
@@ -53,6 +56,64 @@ declare global {
              * @param data The data to store.
              */
             setAccountData(type: string, data: object): Chainable<{}>;
+            /**
+             * @param {string} roomId
+             * @param {string} threadId
+             * @param {string} eventType
+             * @param {Object} content
+             * @return {module:http-api.MatrixError} Rejects: with an error response.
+             */
+            sendEvent(
+                roomId: string,
+                threadId: string | null,
+                eventType: string,
+                content: IContent
+            ): Chainable<ISendEventResponse>;
+            /**
+             * @param {string} name
+             * @param {module:client.callback} callback Optional.
+             * @return {Promise} Resolves: {} an empty object.
+             * @return {module:http-api.MatrixError} Rejects: with an error response.
+             */
+            setDisplayName(name: string): Chainable<{}>;
+            /**
+             * @param {string} url
+             * @param {module:client.callback} callback Optional.
+             * @return {Promise} Resolves: {} an empty object.
+             * @return {module:http-api.MatrixError} Rejects: with an error response.
+             */
+            setAvatarUrl(url: string): Chainable<{}>;
+            /**
+             * Upload a file to the media repository on the homeserver.
+             *
+             * @param {object} file The object to upload. On a browser, something that
+             *   can be sent to XMLHttpRequest.send (typically a File).  Under node.js,
+             *   a a Buffer, String or ReadStream.
+             */
+            uploadContent<O extends IUploadOpts>(
+                file: FileType,
+                opts?: O,
+            ): IAbortablePromise<UploadContentResponseType<O>>;
+            /**
+             * Turn an MXC URL into an HTTP one. <strong>This method is experimental and
+             * may change.</strong>
+             * @param {string} mxcUrl The MXC URL
+             * @param {Number} width The desired width of the thumbnail.
+             * @param {Number} height The desired height of the thumbnail.
+             * @param {string} resizeMethod The thumbnail resize method to use, either
+             * "crop" or "scale".
+             * @param {Boolean} allowDirectLinks If true, return any non-mxc URLs
+             * directly. Fetching such URLs will leak information about the user to
+             * anyone they share a room with. If false, will return null for such URLs.
+             * @return {?string} the avatar URL or null.
+             */
+            mxcUrlToHttp(
+                mxcUrl: string,
+                width?: number,
+                height?: number,
+                resizeMethod?: string,
+                allowDirectLinks?: boolean,
+            ): string | null;
             /**
              * Gets the list of DMs with a given user
              * @param userId The ID of the user
@@ -117,6 +178,35 @@ Cypress.Commands.add("inviteUser", (roomId: string, userId: string): Chainable<{
 Cypress.Commands.add("setAccountData", (type: string, data: object): Chainable<{}> => {
     return cy.getClient().then(async (cli: MatrixClient) => {
         return cli.setAccountData(type, data);
+    });
+});
+
+Cypress.Commands.add("sendEvent", (
+    roomId: string,
+    threadId: string | null,
+    eventType: string,
+    content: IContent,
+): Chainable<ISendEventResponse> => {
+    return cy.getClient().then(async (cli: MatrixClient) => {
+        return cli.sendEvent(roomId, threadId, eventType, content);
+    });
+});
+
+Cypress.Commands.add("setDisplayName", (name: string): Chainable<{}> => {
+    return cy.getClient().then(async (cli: MatrixClient) => {
+        return cli.setDisplayName(name);
+    });
+});
+
+Cypress.Commands.add("uploadContent", (file: FileType): Chainable<{}> => {
+    return cy.getClient().then(async (cli: MatrixClient) => {
+        return cli.uploadContent(file);
+    });
+});
+
+Cypress.Commands.add("setAvatarUrl", (url: string): Chainable<{}> => {
+    return cy.getClient().then(async (cli: MatrixClient) => {
+        return cli.setAvatarUrl(url);
     });
 });
 

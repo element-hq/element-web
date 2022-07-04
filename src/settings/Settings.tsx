@@ -347,10 +347,8 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Show extensible event representation of events"),
         default: false,
     },
-    "feature_use_only_current_profiles": {
-        isFeature: true,
-        labsGroup: LabGroup.Rooms,
-        supportedLevels: LEVELS_FEATURE,
+    "useOnlyCurrentProfiles": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         displayName: _td("Show current avatar and name for users in message history"),
         default: false,
     },
