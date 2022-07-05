@@ -169,6 +169,22 @@ $left-gutter: 64px;
             margin-right: 10px;
         }
 
+        .mx_EventTile_msgOption {
+            float: right;
+            text-align: right;
+            position: relative;
+            width: 90px;
+
+            /* Hack to stop the height of this pushing the messages apart.
+               Replaces margin-top: -6px. This interacts better with a read
+               marker being in between. Content overflows. */
+            height: 1px;
+
+            a {
+                text-decoration: none;
+            }
+        }
+
         &.mx_EventTile_highlight,
         &.mx_EventTile_highlight .markdown-body {
             .mx_EventTile_line {
@@ -302,22 +318,6 @@ $left-gutter: 64px;
         a {
             background-color: $accent;
             color: $accent-fg-color;
-        }
-    }
-
-    .mx_EventTile_msgOption {
-        float: right;
-        text-align: right;
-        position: relative;
-        width: 90px;
-
-        /* Hack to stop the height of this pushing the messages apart.
-           Replaces margin-top: -6px. This interacts better with a read
-           marker being in between. Content overflows. */
-        height: 1px;
-
-        a {
-            text-decoration: none;
         }
     }
 
