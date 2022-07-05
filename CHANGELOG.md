@@ -1,5 +1,5 @@
-Changes in [1.11.0-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.0-rc.1) (2022-06-28)
-=========================================================================================================
+Changes in [1.11.0](https://github.com/vector-im/element-web/releases/tag/v1.11.0) (2022-07-05)
+===============================================================================================
 
 ## 🚨 BREAKING CHANGES
  * Remove Piwik support ([\#8835](https://github.com/matrix-org/matrix-react-sdk/pull/8835)).
@@ -27,7 +27,7 @@ Changes in [1.11.0-rc.1](https://github.com/vector-im/element-web/releases/tag/v
  * Live location share - link to timeline tile from share warning ([\#8752](https://github.com/matrix-org/matrix-react-sdk/pull/8752)). Contributed by @kerryarchibald.
  * Improve composer visiblity ([\#8578](https://github.com/matrix-org/matrix-react-sdk/pull/8578)). Fixes #22072 and #17362.
  * Makes the avatar of the user menu non-draggable ([\#8765](https://github.com/matrix-org/matrix-react-sdk/pull/8765)). Contributed by @luixxiul.
- * Improve widget buttons behaviour and layout ([\#8734](https://github.com/matrix-org/matrix-react-sdk/pull/8734)). Contributed by @weeman1337.
+ * Improve widget buttons behaviour and layout ([\#8734](https://github.com/matrix-org/matrix-react-sdk/pull/8734)).
  * Use AccessibleButton for 'Reset All' link button on SetupEncryptionBody ([\#8730](https://github.com/matrix-org/matrix-react-sdk/pull/8730)). Contributed by @luixxiul.
  * Adjust message timestamp position on TimelineCard in non-bubble layouts ([\#8745](https://github.com/matrix-org/matrix-react-sdk/pull/8745)). Fixes #22426. Contributed by @luixxiul.
  * Use AccessibleButton for 'In reply to' link button on ReplyChain ([\#8726](https://github.com/matrix-org/matrix-react-sdk/pull/8726)). Fixes #22407. Contributed by @luixxiul.
@@ -38,8 +38,9 @@ Changes in [1.11.0-rc.1](https://github.com/vector-im/element-web/releases/tag/v
  * Reduce video rooms log spam ([\#22665](https://github.com/vector-im/element-web/pull/22665)).
  * Connect to Jitsi unmuted by default ([\#22660](https://github.com/vector-im/element-web/pull/22660)). Fixes #22637.
  * Work around a Jitsi bug with display name encoding ([\#22525](https://github.com/vector-im/element-web/pull/22525)). Fixes #22521.
+ * Make invite dialogue fixed height ([\#8945](https://github.com/matrix-org/matrix-react-sdk/pull/8945)).
  * Correct issue with tab order in new search experience ([\#8919](https://github.com/matrix-org/matrix-react-sdk/pull/8919)). Fixes #22670. Contributed by @justjanne.
- * Clicking location replies now redirects to the replied event instead of opening the map ([\#8918](https://github.com/matrix-org/matrix-react-sdk/pull/8918)). Fixes #22667. Contributed by @weeman1337.
+ * Clicking location replies now redirects to the replied event instead of opening the map ([\#8918](https://github.com/matrix-org/matrix-react-sdk/pull/8918)). Fixes #22667.
  * Keep clicks on pills within the app ([\#8917](https://github.com/matrix-org/matrix-react-sdk/pull/8917)). Fixes #22653.
  * Don't overlap tile bubbles with timestamps in modern layout ([\#8908](https://github.com/matrix-org/matrix-react-sdk/pull/8908)). Fixes #22425.
  * Connect to Jitsi unmuted by default ([\#8909](https://github.com/matrix-org/matrix-react-sdk/pull/8909)).
@@ -67,7 +68,7 @@ Changes in [1.11.0-rc.1](https://github.com/vector-im/element-web/releases/tag/v
  * Fix issues with the Create new room button in Spotlight ([\#8851](https://github.com/matrix-org/matrix-react-sdk/pull/8851)). Contributed by @justjanne.
  * Remove margin from E2E icon between avatar and hidden event ([\#8584](https://github.com/matrix-org/matrix-react-sdk/pull/8584)). Fixes #22186. Contributed by @luixxiul.
  * Fix waveform on a message bubble ([\#8852](https://github.com/matrix-org/matrix-react-sdk/pull/8852)). Contributed by @luixxiul.
- * Location sharing maps are now loaded after reconnection ([\#8848](https://github.com/matrix-org/matrix-react-sdk/pull/8848)). Fixes #20993. Contributed by @weeman1337.
+ * Location sharing maps are now loaded after reconnection ([\#8848](https://github.com/matrix-org/matrix-react-sdk/pull/8848)). Fixes #20993.
  * Update the avatar mask so it doesn’t cut off spaces’ avatars anymore ([\#8849](https://github.com/matrix-org/matrix-react-sdk/pull/8849)). Contributed by @justjanne.
  * Add a bit of safety around timestamp handling for threads ([\#8845](https://github.com/matrix-org/matrix-react-sdk/pull/8845)).
  * Remove top margin from event tile on a narrow viewport ([\#8814](https://github.com/matrix-org/matrix-react-sdk/pull/8814)). Contributed by @luixxiul.
@@ -91,7 +92,7 @@ Changes in [1.11.0-rc.1](https://github.com/vector-im/element-web/releases/tag/v
  * Fix the incorrect nesting of download button on MessageActionBar ([\#8785](https://github.com/matrix-org/matrix-react-sdk/pull/8785)). Contributed by @luixxiul.
  * Revert link color change in composer ([\#8784](https://github.com/matrix-org/matrix-react-sdk/pull/8784)). Fixes #22468.
  * Fix 'Logout' inline link on the splash screen ([\#8770](https://github.com/matrix-org/matrix-react-sdk/pull/8770)). Fixes #22449. Contributed by @luixxiul.
- * Fix disappearing widget poput button when changing the widget layout ([\#8754](https://github.com/matrix-org/matrix-react-sdk/pull/8754)). Contributed by @weeman1337.
+ * Fix disappearing widget poput button when changing the widget layout ([\#8754](https://github.com/matrix-org/matrix-react-sdk/pull/8754)).
  * Reduce gutter with the new read receipt UI ([\#8736](https://github.com/matrix-org/matrix-react-sdk/pull/8736)). Fixes #21890.
  * Add ellipsis effect to hidden beacon status ([\#8755](https://github.com/matrix-org/matrix-react-sdk/pull/8755)). Fixes #22441. Contributed by @luixxiul.
  * Make the pill on the basic message composer compatible with display name in RTL languages ([\#8758](https://github.com/matrix-org/matrix-react-sdk/pull/8758)). Fixes #22445. Contributed by @luixxiul.
