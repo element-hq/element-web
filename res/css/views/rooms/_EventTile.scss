@@ -150,8 +150,6 @@ $left-gutter: 64px;
         }
 
         .mx_MImageBody {
-            margin-right: var(--EventTile_content-margin-inline-end);
-
             .mx_MImageBody_thumbnail_container {
                 justify-content: flex-start;
                 min-height: $font-44px;
