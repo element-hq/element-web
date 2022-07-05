@@ -16,24 +16,12 @@ limitations under the License.
 
 .mx_SecurityRoomSettingsTab {
     .mx_SettingsTab_showAdvanced {
-        padding: 0;
-        margin-bottom: 16px;
+        margin-bottom: $spacing-16;
     }
-}
 
-.mx_SecurityRoomSettingsTab_warning {
-    display: block;
-
-    img {
-        vertical-align: middle;
-        margin-right: 5px;
-        margin-left: 3px;
-        margin-bottom: 5px;
+    .mx_SecurityRoomSettingsTab_warning {
+        display: flex;
+        align-items: center;
+        column-gap: $spacing-4;
     }
-}
-
-.mx_SecurityRoomSettingsTab_encryptionSection {
-    padding-bottom: 24px;
-    border-bottom: 1px solid $quinary-content;
-    margin-bottom: 32px;
 }
