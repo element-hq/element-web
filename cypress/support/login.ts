@@ -82,6 +82,9 @@ Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: str
             win.localStorage.setItem("mx_is_guest", "false");
             win.localStorage.setItem("mx_has_pickle_key", "false");
             win.localStorage.setItem("mx_has_access_token", "true");
+
+            // Ensure the language is set to a consistent value
+            win.localStorage.setItem("mx_local_settings", '{"language":"en"}');
         });
 
         return cy.visit("/").then(() => {
