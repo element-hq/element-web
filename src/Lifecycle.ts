@@ -63,6 +63,7 @@ import VideoChannelStore from "./stores/VideoChannelStore";
 import { fixStuckDevices } from "./utils/VideoChannelUtils";
 import { Action } from "./dispatcher/actions";
 import AbstractLocalStorageSettingsHandler from "./settings/handlers/AbstractLocalStorageSettingsHandler";
+import { OverwriteLoginPayload } from "./dispatcher/payloads/OverwriteLoginPayload";
 
 const HOMESERVER_URL_KEY = "mx_hs_url";
 const ID_SERVER_URL_KEY = "mx_is_url";
@@ -71,6 +72,10 @@ dis.register((payload) => {
     if (payload.action === Action.TriggerLogout) {
         // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
         onLoggedOut();
+    } else if (payload.action === Action.OverwriteLogin) {
+        const typed = <OverwriteLoginPayload>payload;
+        // noinspection JSIgnoredPromiseFromCall - we don't care if it fails
+        doSetLoggedIn(typed.credentials, true);
     }
 });
 

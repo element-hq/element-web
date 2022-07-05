@@ -28,6 +28,7 @@ import PlatformPeg from "./PlatformPeg";
 import { SettingLevel } from "./settings/SettingLevel";
 import { retry } from "./utils/promise";
 import SdkConfig from "./SdkConfig";
+import { ModuleRunner } from "./modules/ModuleRunner";
 
 // @ts-ignore - $webapp is a webpack resolve alias pointing to the output directory, see webpack config
 import webpackLangJsonUrl from "$webapp/i18n/languages.json";
@@ -609,15 +610,40 @@ export class CustomTranslationOptions {
     }
 }
 
+function doRegisterTranslations(customTranslations: ICustomTranslations) {
+    // We convert the operator-friendly version into something counterpart can
+    // consume.
+    const langs: {
+        // same structure, just flipped key order
+        [lang: string]: {
+            [str: string]: string;
+        };
+    } = {};
+    for (const [str, translations] of Object.entries(customTranslations)) {
+        for (const [lang, newStr] of Object.entries(translations)) {
+            if (!langs[lang]) langs[lang] = {};
+            langs[lang][str] = newStr;
+        }
+    }
+
+    // Finally, tell counterpart about our translations
+    for (const [lang, translations] of Object.entries(langs)) {
+        counterpart.registerTranslations(lang, translations);
+    }
+}
+
 /**
- * If a custom translations file is configured, it will be parsed and registered.
- * If no customization is made, or the file can't be parsed, no action will be
- * taken.
+ * Any custom modules with translations to load are parsed first, followed by an
+ * optionally defined translations file in the config. If no customization is made,
+ * or the file can't be parsed, no action will be taken.
  *
  * This function should be called *after* registering other translations data to
  * ensure it overrides strings properly.
  */
 export async function registerCustomTranslations() {
+    const moduleTranslations = ModuleRunner.instance.allTranslations;
+    doRegisterTranslations(moduleTranslations);
+
     const lookupUrl = SdkConfig.get().custom_translations_url;
     if (!lookupUrl) return; // easy - nothing to do
 
@@ -639,25 +665,8 @@ export async function registerCustomTranslations() {
         // If the (potentially cached) json is invalid, don't use it.
         if (!json) return;
 
-        // We convert the operator-friendly version into something counterpart can
-        // consume.
-        const langs: {
-            // same structure, just flipped key order
-            [lang: string]: {
-                [str: string]: string;
-            };
-        } = {};
-        for (const [str, translations] of Object.entries(json)) {
-            for (const [lang, newStr] of Object.entries(translations)) {
-                if (!langs[lang]) langs[lang] = {};
-                langs[lang][str] = newStr;
-            }
-        }
-
-        // Finally, tell counterpart about our translations
-        for (const [lang, translations] of Object.entries(langs)) {
-            counterpart.registerTranslations(lang, translations);
-        }
+        // Finally, register it.
+        doRegisterTranslations(json);
     } catch (e) {
         // We consume all exceptions because it's considered non-fatal for custom
         // translations to break. Most failures will be during initial development

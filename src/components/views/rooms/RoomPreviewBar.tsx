@@ -21,6 +21,10 @@ import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { IJoinRuleEventContent, JoinRule } from "matrix-js-sdk/src/@types/partials";
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import classNames from 'classnames';
+import {
+    RoomPreviewOpts,
+    RoomViewLifecycle,
+} from "@matrix-org/react-sdk-module-api/lib/lifecycles/RoomViewLifecycle";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import dis from '../../../dispatcher/dispatcher';
@@ -34,6 +38,7 @@ import AccessibleButton from "../elements/AccessibleButton";
 import RoomAvatar from "../avatars/RoomAvatar";
 import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
+import { ModuleRunner } from "../../../modules/ModuleRunner";
 
 const MemberEventHtmlReasonField = "io.element.html_reason";
 
@@ -313,13 +318,26 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 break;
             }
             case MessageCase.NotLoggedIn: {
-                title = _t("Join the conversation with an account");
-                if (SettingsStore.getValue(UIFeature.Registration)) {
-                    primaryActionLabel = _t("Sign Up");
-                    primaryActionHandler = this.onRegisterClick;
+                const opts: RoomPreviewOpts = { canJoin: false };
+                if (this.props.room?.roomId) {
+                    ModuleRunner.instance
+                        .invoke(RoomViewLifecycle.PreviewRoomNotLoggedIn, opts, this.props.room.roomId);
                 }
-                secondaryActionLabel = _t("Sign In");
-                secondaryActionHandler = this.onLoginClick;
+                if (opts.canJoin) {
+                    title = _t("Join the room to participate");
+                    primaryActionLabel = _t("Join");
+                    primaryActionHandler = () => {
+                        ModuleRunner.instance.invoke(RoomViewLifecycle.JoinFromRoomPreview, this.props.room.roomId);
+                    };
+                } else {
+                    title = _t("Join the conversation with an account");
+                    if (SettingsStore.getValue(UIFeature.Registration)) {
+                        primaryActionLabel = _t("Sign Up");
+                        primaryActionHandler = this.onRegisterClick;
+                    }
+                    secondaryActionLabel = _t("Sign In");
+                    secondaryActionHandler = this.onLoginClick;
+                }
                 if (this.props.previewLoading) {
                     footer = (
                         <div>
