@@ -2445,6 +2445,7 @@
     "Anyone will be able to find and join this room, not just members of <SpaceName/>.": "Anyone will be able to find and join this room, not just members of <SpaceName/>.",
     "Anyone will be able to find and join this room.": "Anyone will be able to find and join this room.",
     "Only people invited will be able to find and join this room.": "Only people invited will be able to find and join this room.",
+    "You can't disable this later. The room will be encrypted but the embedded call will not.": "You can't disable this later. The room will be encrypted but the embedded call will not.",
     "You can't disable this later. Bridges & most bots won't work yet.": "You can't disable this later. Bridges & most bots won't work yet.",
     "Your server requires encryption to be enabled in private rooms.": "Your server requires encryption to be enabled in private rooms.",
     "Enable end-to-end encryption": "Enable end-to-end encryption",
