@@ -6,6 +6,9 @@
     "outDir": "./lib/module_system",
     "lib": [
       "es2019"
+    ],
+    "types": [
+      "node"
     ]
   },
   "include": [
