@@ -1,10 +1,7 @@
 {
     "Dismiss": "Rexeitar",
-    "powered by Matrix": "funciona grazas a Matrix",
     "Unknown device": "Dispositivo descoñecido",
-    "You need to be using HTTPS to place a screen-sharing call.": "Precisa utilizar HTTPS para establecer unha chamada de pantalla compartida.",
     "Welcome to Element": "Benvida/o a Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Conversas e colaboración descentralizada e cifrada grazas a [matrix]",
     "Sign In": "Acceder",
     "Create Account": "Crear conta",
     "Explore rooms": "Explorar salas",
@@ -13,10 +10,7 @@
     "Unexpected error preparing the app. See console for details.": "Fallo non agardado ao preparar a app. Detalles na consola.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Configuración non válida: só se pode indicar un de default_server_config, default_server_name, ou default_hs_url.",
     "Invalid configuration: no default server specified.": "Configuración non válida: non se indicou servidor por defecto.",
-    "Missing indexeddb worker script!": "Falta o script indexeddb!",
     "Unable to load config file: please refresh the page to try again.": "Non se cargou o ficheiro de configuración: actualiza a páxina para reintentalo.",
-    "Open user settings": "Abrir axustes da usuaria",
-    "Previous/next recently visited room or community": "Anterior/seguinte sala ou comunidade recentes",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "Go to your browser to complete Sign In": "Abre o navegador para realizar a Conexión",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
@@ -34,8 +28,5 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s utiliza características avanzadas do navegador que non están dispoñibles no teu navegador.",
     "Powered by Matrix": "Funciona grazas a Matrix",
     "Use %(brand)s on mobile": "Utiliza %(brand)s no móbil",
-    "Switch to space by number": "Cambiar a espazo polo número",
-    "Next recently visited room or community": "Seguinte sala ou comunidade visitada recentemente",
-    "Previous recently visited room or community": "Sala ou Comunidade visitada recentemente",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Conversas &amp; colaboración descentralizadas e cifradas grazas a $matrixLogo"
 }

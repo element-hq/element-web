@@ -2,7 +2,6 @@
     "Explore rooms": "Փնտրել սենյակներ",
     "Failed to start": "Չի ստացվում սկսել",
     "Use %(brand)s on mobile": "Օգտագործում է %(brand)s հեռախոսի վրա",
-    "You need to be using HTTPS to place a screen-sharing call.": "Դուք պետք է օգտագործեք HTTPS միացում որպիսի կարողանաք կատարել էկրանը ցույց տալով զանգ",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s%(browserName)s%(osName)s",
     "Unknown device": "Անծանոթ սարք",
     "Welcome to Element": "Բարի գալուստ Element",

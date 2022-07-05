@@ -1,10 +1,7 @@
 {
     "Dismiss": "Sluiten",
-    "powered by Matrix": "draait op Matrix",
     "Unknown device": "Onbekend apparaat",
-    "You need to be using HTTPS to place a screen-sharing call.": "Oproepen met schermdelen vergen HTTPS.",
     "Welcome to Element": "Welkom bij Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentrale en versleutelde chat &amp; samenwerken dankzij [matrix]",
     "Sign In": "Inloggen",
     "Create Account": "Registreren",
     "Explore rooms": "Kamers ontdekken",
@@ -14,10 +11,7 @@
     "The message from the parser is: %(message)s": "De ontleder meldt: %(message)s",
     "Invalid JSON": "Ongeldige JSON",
     "Go to your browser to complete Sign In": "Ga naar uw browser om de aanmelding te voltooien",
-    "Open user settings": "Open de gebruikersinstellingen",
-    "Missing indexeddb worker script!": "Het indexeddb script ontbreekt!",
     "Unable to load config file: please refresh the page to try again.": "Kan het configuratiebestand niet laden. Herlaad de pagina alstublieft.",
-    "Previous/next recently visited room or community": "Vorige/volgende recent bezochte kamer of gemeenschap",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Niet-ondersteunde browser",
@@ -34,8 +28,5 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s gebruikt geavanceerde functies die niet ondersteund worden in uw huidige browser.",
     "Powered by Matrix": "Mogelijk gemaakt door Matrix",
     "Use %(brand)s on mobile": "Gebruik %(brand)s op uw mobiel",
-    "Switch to space by number": "Wissel naar Space met nummer",
-    "Next recently visited room or community": "Volgende recent bezochte kamer of community",
-    "Previous recently visited room or community": "Vorige recent bezochte kamer of community",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Gedecentraliseerde, versleutelde chat &amp; samenwerking mogelijk gemaakt door $matrixLogo"
 }

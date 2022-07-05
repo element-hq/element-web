@@ -1,10 +1,7 @@
 {
     "Dismiss": "關閉",
-    "powered by Matrix": "由 Matrix 提供",
     "Unknown device": "未知裝置",
-    "You need to be using HTTPS to place a screen-sharing call.": "你需要使用 HTTPS 來撥打螢幕分享的通話。",
     "Welcome to Element": "歡迎來到 Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "去中心化、保密的聊天與協作，由 [matrix] 提供",
     "Sign In": "登入",
     "Create Account": "建立帳號",
     "Explore rooms": "探索聊天室",
@@ -14,10 +11,7 @@
     "The message from the parser is: %(message)s": "從解析器而來的訊息為：%(message)s",
     "Invalid JSON": "無效的 JSON",
     "Go to your browser to complete Sign In": "到您的瀏覽器完成登入",
-    "Open user settings": "開啟使用者設定",
-    "Missing indexeddb worker script!": "缺少 indexeddb 輔助指令稿！",
     "Unable to load config file: please refresh the page to try again.": "無法載入設定檔：請重新整理頁面以再試一次。",
-    "Previous/next recently visited room or community": "上一個／下一個最近造訪的聊天室或社群",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s 桌面版 (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "不支援的瀏覽器",
@@ -34,8 +28,5 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s 使用了您目前的瀏覽器不支援的進階瀏覽器功能。",
     "Powered by Matrix": "由 Matrix 提供",
     "Use %(brand)s on mobile": "在行動裝置上使用 %(brand)s",
-    "Switch to space by number": "依數字切換至空間",
-    "Next recently visited room or community": "下一個近期造訪過的聊天室或社群",
-    "Previous recently visited room or community": "前一個近期造訪過的聊天室或社群",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "去中心化、加密的聊天與協作，威力本源 $matrixLogo"
 }
