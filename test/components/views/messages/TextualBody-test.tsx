@@ -329,13 +329,13 @@ describe("<TextualBody />", () => {
             const content = wrapper.find(".mx_EventTile_body");
             expect(content.html()).toBe(
                 '<span class="mx_EventTile_body markdown-body" dir="auto">' +
-                'A <span><a class="mx_Pill mx_RoomPill" ' +
+                'A <span><bdi><a class="mx_Pill mx_RoomPill" ' +
                 'href="https://matrix.to/#/!ZxbRYPQXDXKGmDnJNg:example.com' +
-                '?via=example.com&amp;via=bob.com" dir="auto"' +
+                '?via=example.com&amp;via=bob.com"' +
                 '><img class="mx_BaseAvatar mx_BaseAvatar_image" ' +
                 'src="mxc://avatar.url/room.png" ' +
                 'style="width: 16px; height: 16px;" alt="" aria-hidden="true">' +
-                '<span class="mx_Pill_linkText">room name</span></a></span> with vias</span>',
+                '<span class="mx_Pill_linkText">room name</span></a></bdi></span> with vias</span>',
             );
         });
 

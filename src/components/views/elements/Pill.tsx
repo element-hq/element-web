@@ -256,7 +256,7 @@ export default class Pill extends React.Component<IProps, IState> {
                 tip = <Tooltip label={resource} alignment={Alignment.Right} />;
             }
 
-            return <MatrixClientContext.Provider value={this.matrixClient}>
+            return <bdi><MatrixClientContext.Provider value={this.matrixClient}>
                 { this.props.inMessage ?
                     <a
                         className={classes}
@@ -264,7 +264,6 @@ export default class Pill extends React.Component<IProps, IState> {
                         onClick={onClick}
                         onMouseOver={this.onMouseOver}
                         onMouseLeave={this.onMouseLeave}
-                        dir="auto"
                     >
                         { avatar }
                         <span className="mx_Pill_linkText">{ linkText }</span>
@@ -274,13 +273,12 @@ export default class Pill extends React.Component<IProps, IState> {
                         className={classes}
                         onMouseOver={this.onMouseOver}
                         onMouseLeave={this.onMouseLeave}
-                        dir="auto"
                     >
                         { avatar }
                         <span className="mx_Pill_linkText">{ linkText }</span>
                         { tip }
                     </span> }
-            </MatrixClientContext.Provider>;
+            </MatrixClientContext.Provider></bdi>;
         } else {
             // Deliberately render nothing if the URL isn't recognised
             return null;
