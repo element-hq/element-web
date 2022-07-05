@@ -73,10 +73,6 @@ limitations under the License.
         margin-right: 0;
     }
 
-    &.mx_EventTile_continuation {
-        margin-top: 2px;
-    }
-
     &.mx_EventTile_highlight {
         &::before {
             background-color: $event-highlight-bg-color;
