@@ -241,6 +241,23 @@ $left-gutter: 64px;
             z-index: 9;
         }
 
+        .mx_RoomView_timeline_rr_enabled & {
+            $inline-end-margin: 80px; // TODO: Use a spacing variable
+
+            .mx_ThreadSummary,
+            .mx_ThreadSummary_icon,
+            .mx_EventTile_line {
+                margin-right: $inline-end-margin;
+                min-height: $font-14px;
+            }
+
+            .mx_ThreadSummary {
+                max-width: min(calc(100% - $left-gutter - $inline-end-margin), 600px); // leave space on both left & right gutters
+            }
+
+            // on ELS we need the margin to allow interaction with the expand/collapse button which is normally in the RR gutter
+        }
+
         &.mx_EventTile_continuation {
             padding-top: 0px !important;
         }
@@ -482,25 +499,6 @@ $left-gutter: 64px;
     &.visible > .mx_EventTile_spoiler_content {
         filter: none;
     }
-}
-
-.mx_RoomView_timeline_rr_enabled {
-    .mx_EventTile[data-layout=group] {
-
-        .mx_ThreadSummary,
-        .mx_ThreadSummary_icon,
-        .mx_EventTile_line {
-            /* ideally should be 100px, but 95px gives us a max thumbnail size of 800x600, which is nice */
-            margin-right: 80px;
-            min-height: $font-14px;
-        }
-
-        .mx_ThreadSummary {
-            max-width: min(calc(100% - $left-gutter - 80px), 600px); // leave space on both left & right gutters
-        }
-    }
-
-    // on ELS we need the margin to allow interaction with the expand/collapse button which is normally in the RR gutter
 }
 
 .mx_EventTile_bigEmoji {
