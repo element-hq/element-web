@@ -306,11 +306,12 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                             { _t("Share anonymous data to help us identify issues. Nothing personal. " +
                                  "No third parties.") }
                         </p>
-                        <p>
-                            <AccessibleButton className="mx_SettingsTab_linkBtn" onClick={onClickAnalyticsLearnMore}>
-                                { _t("Learn more") }
-                            </AccessibleButton>
-                        </p>
+                        <AccessibleButton
+                            kind="link"
+                            onClick={onClickAnalyticsLearnMore}
+                        >
+                            { _t("Learn more") }
+                        </AccessibleButton>
                     </div>
                     { PosthogAnalytics.instance.isEnabled() && (
                         <SettingsFlag
