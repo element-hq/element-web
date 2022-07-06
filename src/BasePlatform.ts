@@ -232,6 +232,14 @@ export default abstract class BasePlatform {
     }
 
     /**
+     * Returns true if the platform requires URL previews in tooltips, otherwise false.
+     * @returns {boolean} whether the platform requires URL previews in tooltips
+     */
+    public needsUrlTooltips(): boolean {
+        return false;
+    }
+
+    /**
      * Returns a promise that resolves to a string representing the current version of the application.
      */
     public abstract getAppVersion(): Promise<string>;

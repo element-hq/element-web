@@ -29,6 +29,7 @@ import * as ContextMenu from '../../structures/ContextMenu';
 import { ChevronFace, toRightOf } from '../../structures/ContextMenu';
 import SettingsStore from "../../../settings/SettingsStore";
 import { pillifyLinks, unmountPills } from '../../../utils/pillify';
+import { tooltipifyLinks, unmountTooltips } from '../../../utils/tooltipify';
 import { IntegrationManagers } from "../../../integrations/IntegrationManagers";
 import { isPermalinkHost, tryTransformPermalinkToLocalHref } from "../../../utils/permalinks/Permalinks";
 import { copyPlaintext } from "../../../utils/strings";
@@ -63,6 +64,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
     private unmounted = false;
     private pills: Element[] = [];
+    private tooltips: Element[] = [];
 
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
@@ -91,6 +93,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
         pillifyLinks([this.contentRef.current], this.props.mxEvent, this.pills);
         HtmlUtils.linkifyElement(this.contentRef.current);
+        tooltipifyLinks([this.contentRef.current], this.pills, this.tooltips);
         this.calculateUrlPreview();
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
@@ -283,6 +286,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
     componentWillUnmount() {
         this.unmounted = true;
         unmountPills(this.pills);
+        unmountTooltips(this.tooltips);
     }
 
     shouldComponentUpdate(nextProps, nextState) {

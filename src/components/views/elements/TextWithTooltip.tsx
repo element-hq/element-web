@@ -14,12 +14,12 @@
  limitations under the License.
  */
 
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import classNames from 'classnames';
 
 import TooltipTarget from './TooltipTarget';
 
-interface IProps {
+interface IProps extends HTMLAttributes<HTMLSpanElement> {
     class?: string;
     tooltipClass?: string;
     tooltip: React.ReactNode;
