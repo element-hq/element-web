@@ -21,16 +21,16 @@ import { _t } from "../../../languageHandler";
 import RecordingPlayback from "../audio_messages/RecordingPlayback";
 import MAudioBody from "./MAudioBody";
 import MFileBody from "./MFileBody";
+import MediaProcessingError from "./shared/MediaProcessingError";
 
 export default class MVoiceMessageBody extends MAudioBody {
     // A voice message is an audio file but rendered in a special way.
     public render() {
         if (this.state.error) {
             return (
-                <span className="mx_MVoiceMessageBody">
-                    <img src={require("../../../../res/img/warning.svg").default} width="16" height="16" />
+                <MediaProcessingError className="mx_MVoiceMessageBody">
                     { _t("Error processing voice message") }
-                </span>
+                </MediaProcessingError>
             );
         }
 

@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 import filesize from "filesize";
 
+import { Icon as FileIcon } from '../../../../res/img/feather-customised/files.svg';
 import { _t } from '../../../languageHandler';
 import { getBlobSafeMimeType } from '../../../utils/blobs';
 import BaseDialog from "./BaseDialog";
@@ -80,11 +81,16 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
             title = _t('Upload files');
         }
 
+        const fileId = `mx-uploadconfirmdialog-${this.props.file.name}`;
         let preview: JSX.Element;
         let placeholder: JSX.Element;
         if (this.mimeType.startsWith("image/")) {
             preview = (
-                <img className="mx_UploadConfirmDialog_imagePreview" src={this.objectUrl} />
+                <img
+                    className="mx_UploadConfirmDialog_imagePreview"
+                    src={this.objectUrl}
+                    aria-labelledby={fileId}
+                />
             );
         } else if (this.mimeType.startsWith("video/")) {
             preview = (
@@ -92,9 +98,10 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
             );
         } else {
             placeholder = (
-                <img
+                <FileIcon
                     className="mx_UploadConfirmDialog_fileIcon"
-                    src={require("../../../../res/img/feather-customised/files.svg").default}
+                    height={18}
+                    width={18}
                 />
             );
         }
@@ -118,7 +125,7 @@ export default class UploadConfirmDialog extends React.Component<IProps> {
                     <div className="mx_UploadConfirmDialog_previewOuter">
                         <div className="mx_UploadConfirmDialog_previewInner">
                             { preview && <div>{ preview }</div> }
-                            <div>
+                            <div id={fileId}>
                                 { placeholder }
                                 { this.props.file.name } ({ filesize(this.props.file.size) })
                             </div>

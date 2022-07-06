@@ -21,6 +21,7 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { Icon as WarningIcon } from "../../../../../../res/img/warning.svg";
 import { _t } from "../../../../../languageHandler";
 import LabelledToggleSwitch from "../../../elements/LabelledToggleSwitch";
 import Modal from "../../../../../Modal";
@@ -231,7 +232,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
         if (room.getJoinRule() === JoinRule.Public && !this.state.hasAliases) {
             aliasWarning = (
                 <div className='mx_SecurityRoomSettingsTab_warning'>
-                    <img src={require("../../../../../../res/img/warning.svg").default} width={15} height={15} />
+                    <WarningIcon width={15} height={15} />
                     <span>
                         { _t("To link to this room, please add an address.") }
                     </span>

@@ -38,6 +38,7 @@ import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContex
 import { blobIsAnimated, mayBeAnimated } from '../../../utils/Image';
 import { presentableTextForFile } from "../../../utils/FileUtils";
 import { createReconnectedListener } from '../../../utils/connection';
+import MediaProcessingError from './shared/MediaProcessingError';
 
 enum Placeholder {
     NoImage,
@@ -552,10 +553,9 @@ export default class MImageBody extends React.Component<IBodyProps, IState> {
 
         if (this.state.error) {
             return (
-                <div className="mx_MImageBody">
-                    <img src={require("../../../../res/img/warning.svg").default} width="16" height="16" />
+                <MediaProcessingError className="mx_MImageBody">
                     { _t("Error decrypting image") }
-                </div>
+                </MediaProcessingError>
             );
         }
 

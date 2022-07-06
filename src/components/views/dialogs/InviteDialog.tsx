@@ -21,6 +21,8 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { Icon as InfoIcon } from "../../../../res/img/element-icons/info.svg";
+import { Icon as EmailPillAvatarIcon } from "../../../../res/img/icon-email-pill-avatar.svg";
 import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import { makeRoomPermalink, makeUserPermalink } from "../../../utils/permalinks/Permalinks";
@@ -186,8 +188,7 @@ class DMRoomTile extends React.PureComponent<IDMRoomTileProps> {
 
         const avatarSize = 36;
         const avatar = (this.props.member as ThreepidMember).isEmail
-            ? <img
-                src={require("../../../../res/img/icon-email-pill-avatar.svg").default}
+            ? <EmailPillAvatarIcon
                 width={avatarSize}
                 height={avatarSize}
             />
@@ -1152,10 +1153,7 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 if (visibility === "world_readable" || visibility === "shared") {
                     keySharingWarning =
                         <p className='mx_InviteDialog_helpText'>
-                            <img
-                                src={require("../../../../res/img/element-icons/info.svg").default}
-                                width={14}
-                                height={14} />
+                            <InfoIcon height={14} width={14} />
                             { " " + _t("Invited people will be able to read old messages.") }
                         </p>;
                 }
