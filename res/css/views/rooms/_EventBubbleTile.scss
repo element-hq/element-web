@@ -28,12 +28,16 @@ limitations under the License.
     --gutterSize: 11px;
     --cornerRadius: 12px;
     --maxWidth: 70%;
-    margin-right: 60px;
+
+    // For both event tile and event list summary
+    --EventTile_bubble-margin-inline-start: 49px;
+    --EventTile_bubble-margin-inline-end: 60px;
+
+    margin-inline-start: var(--EventTile_bubble-margin-inline-start);
+    margin-inline-end: var(--EventTile_bubble-margin-inline-end);
 }
 
 .mx_EventTile[data-layout=bubble] {
-    --EventTile_bubble-margin-inline-start: 49px;
-    --EventTile_bubble-margin-inline-end: 60px;
     --EventTile_bubble_line-margin-inline-start: -9px;
     --EventTile_bubble_line-margin-inline-end: -12px;
     --EventTile_bubble_gap-inline: 5px;
@@ -579,6 +583,13 @@ limitations under the License.
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
+    .mx_EventTile_line,
+    .mx_EventTile_info {
+        min-width: 100%;
+        // Preserve alignment with left edge of text in bubbles
+        margin: 0;
+    }
 }
 
 .mx_EventTile.mx_EventTile_bubbleContainer[data-layout=bubble],
@@ -592,13 +603,6 @@ limitations under the License.
         position: static;
         order: -1;
         margin-inline-end: var(--EventTile_bubble_gap-inline); // Same spacing between E2E icon and a hidden event
-    }
-
-    .mx_EventTile_line,
-    .mx_EventTile_info {
-        min-width: 100%;
-        // Preserve alignment with left edge of text in bubbles
-        margin: 0;
     }
 
     .mx_EventTile_e2eIcon {
