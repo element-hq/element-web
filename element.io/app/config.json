@@ -14,11 +14,6 @@
     "bug_report_endpoint_url": "https://element.io/bugreports/submit",
     "uisi_autorageshake_app": "element-auto-uisi",
     "showLabsSettings": false,
-    "piwik": {
-        "url": "https://piwik.riot.im/",
-        "siteId": 1,
-        "policyUrl": "https://element.io/cookie-policy"
-    },
     "roomDirectory": {
         "servers": [
             "matrix.org",
@@ -54,5 +49,6 @@
         "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
         "apiHost": "https://posthog.element.io"
     },
+    "privacy_policy_url": "https://element.io/cookie-policy",
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }
