@@ -195,14 +195,16 @@ $left-gutter: 64px;
         }
     }
 
+    &[data-layout=irc] {
+        .mx_MessageTimestamp {
+            text-align: right;
+        }
+    }
+
     &[data-layout=group] {
         .mx_EventTile_avatar {
             top: 14px;
             left: $spacing-8;
-        }
-
-        .mx_MessageTimestamp {
-            position: absolute; // for modern layout
         }
 
         .mx_EventTile_line,
@@ -219,6 +221,12 @@ $left-gutter: 64px;
 
         .mx_EventTile_msgOption {
             margin-right: 10px;
+        }
+
+        .mx_MessageTimestamp {
+            position: absolute;
+            left: 0;
+            text-align: center;
         }
 
         .mx_ThreadSummary,
@@ -306,11 +314,6 @@ $left-gutter: 64px;
                 top: 0;
             }
         }
-    }
-
-    .mx_MessageTimestamp {
-        left: 0px;
-        text-align: center;
     }
 
     /* this is used for the tile for the event which is selected via the URL.
@@ -957,11 +960,14 @@ $left-gutter: 64px;
                 }
             }
 
-            &:not([data-layout=bubble]) {
+            &[data-layout=irc],
+            &[data-layout=group] {
                 .mx_MessageTimestamp {
                     top: 2px; // Align with avatar
                 }
+            }
 
+            &:not([data-layout=bubble]) {
                 .mx_EventTile_avatar {
                     left: calc($MessageTimestamp_width + 14px - 4px); // 14px: avatar width, 4px: align with text
                     z-index: 9; // position above the hover styling
@@ -1067,11 +1073,6 @@ $left-gutter: 64px;
                 }
             }
 
-            .mx_MessageTimestamp {
-                top: 2px; // Align with mx_EventTile_content
-                position: absolute; // for IRC layout
-            }
-
             .mx_EventTile_senderDetails {
                 display: flex;
                 align-items: center;
@@ -1090,6 +1091,11 @@ $left-gutter: 64px;
                         flex: 1;
                     }
                 }
+            }
+
+            .mx_MessageTimestamp {
+                position: absolute; // for IRC layout
+                top: 2px; // Align with mx_EventTile_content
             }
         }
     }

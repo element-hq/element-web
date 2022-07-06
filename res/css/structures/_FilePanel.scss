@@ -96,7 +96,7 @@ limitations under the License.
 
         .mx_MessageTimestamp {
             flex: 1 0 0;
-            text-align: right; // FIXME: .mx_EventTile:not([data-layout=bubble]) .mx_MessageTimestamp
+            text-align: right;
             visibility: visible;
             position: initial;
             font-size: $font-14px;
