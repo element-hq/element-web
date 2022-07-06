@@ -320,8 +320,25 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     );
     const possibleResults = useMemo<Result[]>(
         () => {
-            const roomMembers = findVisibleRoomMembers(cli);
-            const roomMemberIds = new Set(roomMembers.map(item => item.userId));
+            const roomResults = findVisibleRooms(cli).map(toRoomResult);
+            // If we already have a DM with the user we're looking for, we will
+            // show that DM instead of the user themselves
+            const alreadyAddedUserIds = roomResults.reduce((userIds, result) => {
+                const userId = DMRoomMap.shared().getUserIdForRoomId(result.room.roomId);
+                if (!userId) return userIds;
+                if (result.room.getJoinedMemberCount() > 2) return userIds;
+                userIds.add(userId);
+                return userIds;
+            }, new Set<string>());
+            const userResults = [];
+            for (const user of [...findVisibleRoomMembers(cli), ...users]) {
+                // Make sure we don't have any user more than once
+                if (alreadyAddedUserIds.has(user.userId)) continue;
+                alreadyAddedUserIds.add(user.userId);
+
+                userResults.push(toMemberResult(user));
+            }
+
             return [
                 ...SpaceStore.instance.enabledMetaSpaces.map(spaceKey => ({
                     section: Section.Spaces,
@@ -335,9 +352,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         SpaceStore.instance.setActiveSpace(spaceKey);
                     },
                 })),
-                ...findVisibleRooms(cli).map(toRoomResult),
-                ...roomMembers.map(toMemberResult),
-                ...users.filter(item => !roomMemberIds.has(item.userId)).map(toMemberResult),
+                ...roomResults,
+                ...userResults,
                 ...(profile ? [new DirectoryMember(profile)] : []).map(toMemberResult),
                 ...publicRooms.map(toPublicRoomResult),
             ].filter(result => filter === null || result.filter.includes(filter));

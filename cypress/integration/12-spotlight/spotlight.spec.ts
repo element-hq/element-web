@@ -55,6 +55,7 @@ declare global {
             roomHeaderName(
                 options?: Partial<Loggable & Timeoutable & Withinable & Shadow>
             ): Chainable<JQuery<HTMLElement>>;
+            startDM(name: string): Chainable<void>;
         }
     }
 }
@@ -107,6 +108,20 @@ Cypress.Commands.add("roomHeaderName", (
     options?: Partial<Loggable & Timeoutable & Withinable & Shadow>,
 ): Chainable<JQuery<HTMLElement>> => {
     return cy.get(".mx_RoomHeader_nametext", options);
+});
+
+Cypress.Commands.add("startDM", (name: string) => {
+    cy.openSpotlightDialog().within(() => {
+        cy.spotlightFilter(Filter.People);
+        cy.spotlightSearch().clear().type(name);
+        cy.get(".mx_Spinner").should("not.exist");
+        cy.spotlightResults().should("have.length", 1);
+        cy.spotlightResults().eq(0).should("contain", name);
+        cy.spotlightResults().eq(0).click();
+    }).then(() => {
+        cy.roomHeaderName().should("contain", name);
+        cy.get(".mx_RoomSublist[aria-label=People]").should("contain", name);
+    });
 });
 
 describe("Spotlight", () => {
@@ -316,6 +331,23 @@ describe("Spotlight", () => {
             cy.get(".mx_SpotlightDialog_startGroupChat").click();
         }).then(() => {
             cy.get('[role=dialog]').should("contain", "Direct Messages");
+        });
+    });
+
+    it("should close spotlight after starting a DM", () => {
+        cy.startDM(bot1Name);
+        cy.get(".mx_SpotlightDialog").should("have.length", 0);
+    });
+
+    it("should show the same user only once", () => {
+        cy.startDM(bot1Name);
+        cy.visit("/#/home");
+
+        cy.openSpotlightDialog().within(() => {
+            cy.spotlightFilter(Filter.People);
+            cy.spotlightSearch().clear().type(bot1Name);
+            cy.get(".mx_Spinner").should("not.exist");
+            cy.spotlightResults().should("have.length", 1);
         });
     });
 
