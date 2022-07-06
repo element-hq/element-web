@@ -56,6 +56,7 @@ let isVideoChannel: boolean;
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
 let skipOurWelcomeScreen = false;
+let forceAlwaysOnScreen = false;
 
 const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev.detail, {});
 
@@ -126,8 +127,9 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         // We've reached the point where we have to wait for the config, so do that then parse it.
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
         const jitsiConfig = instanceConfig.get("jitsi_widget") ?? {};
-        skipOurWelcomeScreen = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig))
-            .get("skip_built_in_welcome_screen") ?? false;
+        const jitsiWidgetConfig = (new SnakedObject<IConfigOptions["jitsi_widget"]>(jitsiConfig));
+        skipOurWelcomeScreen = jitsiWidgetConfig.get("skip_built_in_welcome_screen") ?? false;
+        forceAlwaysOnScreen = jitsiWidgetConfig.get("force_always_on_screen") ?? false;
 
         // Either reveal the prejoin screen, or skip straight to Jitsi depending on the config.
         // We don't set up the call yet though as this might lead to failure without the widget API.
@@ -432,6 +434,9 @@ function joinConference(audioDevice?: string | null, videoDevice?: string | null
 
     // Patch logs into rageshakes
     meetApi.on("log", onLog);
+    if (forceAlwaysOnScreen) {
+        widgetApi.setAlwaysOnScreen(true);
+    }
 }
 
 const onVideoConferenceJoined = () => {

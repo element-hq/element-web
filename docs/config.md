@@ -261,15 +261,20 @@ The VoIP and Jitsi options are:
       }
    }
    ```
-2. `jitsi_widget`: Optional configuration for the built-in Jitsi widget. Currently can only contain a single `skip_built_in_welcome_screen`
-   value, denoting whether the "Join Conference" button should be shown. When `true` (default `false`), Jitsi calls will skip to
-   the call instead of having a screen with a single button on it. This is most useful if the Jitsi instance being used already
-   has a landing page for users to test audio and video before joining the call, otherwise users will automatically join the call.
+2. `jitsi_widget`: Optional configuration for the built-in Jitsi widget. It supports the following `skip_built_in_welcome_screen`
+   customisations: `skip_built_in_welcome_screen` denoting whether the "Join Conference" button should be shown. 
+   When `true` (default `false`), Jitsi calls will skip to the call instead of having a screen with a single button on it. 
+   This is most useful if the Jitsi instance being used already has a landing page for users to test audio and video before 
+   joining the call, otherwise users will automatically join the call.
+   `force_always_on_screen` whether the Jitsi widget should be displayed in picture-in-picture mode even if no conference 
+   has been joined yet. This can be useful for environments that require authentication where users often click away before 
+   entering their credentials.
    For example:
    ```json
    {
       "jitsi_widget": {
-         "skip_built_in_welcome_screen": true
+         "skip_built_in_welcome_screen": true,
+         "force_always_on_screen": true
       }
    }
    ```
