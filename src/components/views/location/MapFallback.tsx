@@ -30,7 +30,6 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 const MapFallback: React.FC<Props> = ({ className, isLoading, children, ...rest }) => {
     return <div className={classNames('mx_MapFallback', className)} {...rest}>
         <MapFallbackImage className='mx_MapFallback_bg' />
-        { /* <div className='mx_MapFallback_bg'/> */ }
         { isLoading ? <Spinner h={32} w={32} /> : <LocationMarkerIcon className='mx_MapFallback_icon' /> }
         { children }
     </div>;

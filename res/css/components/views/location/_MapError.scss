@@ -18,9 +18,41 @@ limitations under the License.
     padding: 100px $spacing-32 0;
     text-align: center;
 
-    p {
-        margin: $spacing-16 0 $spacing-32;
+    --mx-map-error-icon-color: $secondary-content;
+    --mx-map-error-icon-size: 58px;
+}
+
+.mx_MapError.mx_MapError_isMinimised {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: $spacing-24;
+    background-color: $panels;
+    font-size: $font-12px;
+    line-height: $font-16px;
+
+    --mx-map-error-icon-color: $alert;
+    --mx-map-error-icon-size: 26px;
+
+    .mx_MapError_message {
+        margin: 0;
+        max-width: 275px;
     }
+
+    .mx_MapError_heading {
+        padding-top: $spacing-8;
+        // override h3 heading size
+        font-size: inherit !important;
+        font-weight: normal !important;
+    }
+}
+
+.mx_MapError_message {
+    margin: $spacing-16 0 $spacing-32;
 }
 
 .mx_MapError_heading {
@@ -28,9 +60,9 @@ limitations under the License.
 }
 
 .mx_MapError_icon {
-    height: 58px;
+    height: var(--mx-map-error-icon-size);
 
     path {
-        fill: $secondary-content;
+        fill: var(--mx-map-error-icon-color);
     }
 }

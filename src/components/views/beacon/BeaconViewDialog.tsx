@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import {
     Beacon,
@@ -38,6 +38,8 @@ import DialogSidebar from './DialogSidebar';
 import DialogOwnBeaconStatus from './DialogOwnBeaconStatus';
 import BeaconStatusTooltip from './BeaconStatusTooltip';
 import MapFallback from '../location/MapFallback';
+import { MapError } from '../location/MapError';
+import { LocationShareError } from '../../../utils/location';
 
 interface IProps extends IDialogProps {
     roomId: Room['roomId'];
@@ -83,6 +85,15 @@ const BeaconViewDialog: React.FC<IProps> = ({
 
     const { bounds, centerGeoUri } = useInitialMapPosition(liveBeacons, focusBeacon);
 
+    const [mapDisplayError, setMapDisplayError] = useState<Error>();
+
+    // automatically open the sidebar if there is no map to see
+    useEffect(() => {
+        if (mapDisplayError) {
+            setSidebarOpen(true);
+        }
+    }, [mapDisplayError]);
+
     return (
         <BaseDialog
             className='mx_BeaconViewDialog'
@@ -90,11 +101,12 @@ const BeaconViewDialog: React.FC<IProps> = ({
             fixedWidth={false}
         >
             <MatrixClientContext.Provider value={matrixClient}>
-                { !!liveBeacons?.length ? <Map
+                { (!!liveBeacons?.length && !mapDisplayError) && <Map
                     id='mx_BeaconViewDialog'
                     bounds={bounds}
                     centerGeoUri={centerGeoUri}
                     interactive
+                    onError={setMapDisplayError}
                     className="mx_BeaconViewDialog_map"
                 >
                     {
@@ -109,7 +121,14 @@ const BeaconViewDialog: React.FC<IProps> = ({
                                 <ZoomButtons map={map} />
                             </>
                     }
-                </Map> :
+                </Map> }
+                { mapDisplayError &&
+                    <MapError
+                        error={mapDisplayError.message as LocationShareError}
+                        isMinimised
+                    />
+                }
+                { !liveBeacons?.length && !mapDisplayError &&
                     <MapFallback
                         data-test-id='beacon-view-dialog-map-fallback'
                         className='mx_BeaconViewDialog_map'

@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+.mx_OwnBeaconStatus_button {
+    margin-left: $spacing-8;
+}
+
 .mx_EventTile[data-layout="bubble"] .mx_OwnBeaconStatus_button {
     // align to top to make room for timestamp
     // in bubble view

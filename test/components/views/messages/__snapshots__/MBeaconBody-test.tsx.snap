@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MBeaconBody /> when map display is not configured renders maps unavailable error for a live beacon with location 1`] = `
+<MapError
+  className="mx_MBeaconBody_mapError mx_MBeaconBody_mapErrorInteractive"
+  error="MapStyleUrlNotConfigured"
+  isMinimised={true}
+  onClick={[Function]}
+>
+  <div
+    className="mx_MapError mx_MBeaconBody_mapError mx_MBeaconBody_mapErrorInteractive mx_MapError_isMinimised"
+    data-test-id="map-rendering-error"
+    onClick={[Function]}
+  >
+    <div
+      className="mx_MapError_icon"
+    />
+    <Heading
+      className="mx_MapError_heading"
+      size="h3"
+    >
+      <h3
+        className="mx_Heading_h3 mx_MapError_heading"
+      >
+        Unable to load map
+      </h3>
+    </Heading>
+    <p
+      className="mx_MapError_message"
+    >
+      This homeserver is not configured to display maps.
+    </p>
+  </div>
+</MapError>
+`;
