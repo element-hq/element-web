@@ -850,6 +850,12 @@ $left-gutter: 64px;
                 line-height: var(--EventTile_ThreadSummary-line-height);
                 font-size: $font-12px; // Same font size as the counter on the main panel
             }
+
+            .mx_ThreadSummary_content {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
         }
     }
 
