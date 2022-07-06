@@ -149,11 +149,14 @@ limitations under the License.
         }
     }
 
-    .mx_GenericEventListSummary:not([data-layout=bubble]) {
-        .mx_EventTile_line,
-        > .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
-            padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
-            padding-inline-end: var(--BaseCard_EventTile-spacing-inline);
+    .mx_GenericEventListSummary {
+        &[data-layout=irc],
+        &[data-layout=group] {
+            .mx_EventTile_line,
+            .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
+                padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
+                padding-inline-end: var(--BaseCard_EventTile-spacing-inline);
+            }
         }
     }
 

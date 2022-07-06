@@ -261,6 +261,10 @@ $left-gutter: 64px;
         &.mx_EventTile_continuation {
             padding-top: 0px !important;
         }
+
+        &.mx_EventTile_info .mx_EventTile_line {
+            padding-left: calc($left-gutter + 20px); // override padding-left $left-gutter
+        }
     }
 
     &[data-layout=bubble] {
@@ -366,17 +370,42 @@ $left-gutter: 64px;
     }
 }
 
-.mx_GenericEventListSummary:not([data-layout=bubble]) .mx_EventTile_line {
-    padding-left: $left-gutter;
-
-    .mx_RedactedBody {
-        line-height: 1; // remove spacing between lines
+.mx_GenericEventListSummary {
+    &[data-layout=irc],
+    &[data-layout=group] {
+        .mx_EventTile_line .mx_RedactedBody {
+            line-height: 1; // remove spacing between lines
+        }
     }
-}
 
-.mx_EventTile:not([data-layout=bubble]).mx_EventTile_info .mx_EventTile_line,
-.mx_GenericEventListSummary:not([data-layout=bubble]) > .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
-    padding-left: calc($left-gutter + 20px); // override padding-left $left-gutter
+    &[data-layout=irc] {
+        .mx_EventTile_info .mx_EventTile_line {
+            padding-left: 0; // Override .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_line
+        }
+
+        .mx_EventTile_line .mx_RedactedBody {
+            padding-left: 24px; // 25px - 1px
+
+            &::before {
+                left: var(--right-padding);
+            }
+        }
+
+        // Apply only collapsed events block
+        > .mx_EventTile_line {
+            padding-left: calc(var(--name-width) + var(--icon-width) + $MessageTimestamp_width + 3 * var(--right-padding)); // 15 px of padding
+        }
+    }
+
+    &[data-layout=group] {
+        .mx_EventTile_line {
+            padding-left: $left-gutter;
+        }
+
+        .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
+            padding-left: calc($left-gutter + 20px); // override padding-left $left-gutter
+        }
+    }
 }
 
 .mx_EventTile_content {

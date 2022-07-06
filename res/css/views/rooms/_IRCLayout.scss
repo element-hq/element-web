@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-$icon-width: 14px;
-$right-padding: 5px;
 $irc-line-height: $font-18px;
 
 .mx_IRCLayout {
     --name-width: 70px;
+    --icon-width: 14px;
+    --right-padding: 5px;
 
     line-height: $irc-line-height !important;
 
@@ -36,7 +36,7 @@ $irc-line-height: $font-18px;
         padding-top: 0;
 
         > * {
-            margin-right: $right-padding;
+            margin-right: var(--right-padding);
         }
 
         .mx_EventTile_msgOption {
@@ -157,7 +157,7 @@ $irc-line-height: $font-18px;
 
     .mx_EventTile_emote {
         .mx_EventTile_avatar {
-            margin-left: calc(var(--name-width) + $icon-width + $right-padding);
+            margin-left: calc(var(--name-width) + var(--icon-width) + var(--right-padding));
         }
     }
 
@@ -165,18 +165,15 @@ $irc-line-height: $font-18px;
         margin: 0;
     }
 
-    .mx_GenericEventListSummary > .mx_EventTile_line {
-        padding-left: calc(var(--name-width) + $icon-width + $MessageTimestamp_width + 3 * $right-padding); // 15 px of padding
-    }
-
     .mx_EventTile.mx_EventTile_info {
         .mx_EventTile_avatar {
-            left: calc(var(--name-width) + 10px + $icon-width);
+            left: calc(var(--name-width) + 10px + var(--icon-width));
             top: 0;
+            margin-right: var(--right-padding);
         }
 
         .mx_EventTile_line {
-            left: calc(var(--name-width) + 10px + $icon-width);
+            left: calc(var(--name-width) + 10px + var(--icon-width));
         }
 
         .mx_TextualEvent {
