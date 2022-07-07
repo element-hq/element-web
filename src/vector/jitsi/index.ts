@@ -29,7 +29,7 @@ import { SnakedObject } from "matrix-react-sdk/src/utils/SnakedObject";
 import { getVectorConfig } from "../getconfig";
 
 // We have to trick webpack into loading our CSS for us.
-require("./index.scss");
+require("./index.pcss");
 
 const JITSI_OPENIDTOKEN_JWT_AUTH = 'openidtoken-jwt';
 

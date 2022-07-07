@@ -48,7 +48,7 @@
     "lint:js": "eslint --max-warnings 0 src",
     "lint:js-fix": "eslint --fix src",
     "lint:types": "tsc --noEmit --jsx react",
-    "lint:style": "stylelint \"res/css/**/*.scss\"",
+    "lint:style": "stylelint \"res/css/**/*.pcss\"",
     "test": "jest",
     "coverage": "yarn test --coverage"
   },
@@ -171,7 +171,7 @@
       "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"
     ],
     "moduleNameMapper": {
-      "\\.(css|scss)$": "<rootDir>/__mocks__/cssMock.js",
+      "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
       "\\.(gif|png|ttf|woff2)$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/imageMock.js",
       "\\.svg$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/svg.js",
       "\\$webapp/i18n/languages.json": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/languages.json",
