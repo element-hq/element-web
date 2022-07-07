@@ -1,5 +1,6 @@
 {
     "Dismiss": "Afvis",
+    "powered by Matrix": "Drevet af Matrix",
     "Unknown device": "Ukendt enhed",
     "Welcome to Element": "Velkommen til Element",
     "The message from the parser is: %(message)s": "Beskeden fra parseren er: %(message)s",
