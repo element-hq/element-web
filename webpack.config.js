@@ -300,10 +300,10 @@ module.exports = (env, argv) => {
                     ],
                 },
                 {
-                    test: /\.scss$/,
+                    test: /\.pcss$/,
                     use: [
                         /**
-                         * This code is hopeful that no .scss outside of our themes will be directly imported in any
+                         * This code is hopeful that no .pcss outside of our themes will be directly imported in any
                          * of the JS/TS files.
                          * Should be MUCH better with webpack 5, but we're stuck to this solution for now.
                          */
@@ -349,8 +349,7 @@ module.exports = (env, argv) => {
                             options: {
                                 sourceMap: true,
                                 plugins: () => [
-                                    // Note that we use slightly different plugins for SCSS.
-
+                                    // Note that we use slightly different plugins for PostCSS.
                                     require('postcss-import')(),
                                     require("postcss-mixins")(),
                                     require("postcss-simple-vars")(),
