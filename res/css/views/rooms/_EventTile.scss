@@ -73,6 +73,10 @@ $left-gutter: 64px;
         }
     }
 
+    .mx_EventTileBubble {
+        margin-block: 10px; // TODO: Use a spacing variable
+    }
+
     .mx_MImageBody {
         .mx_MImageBody_thumbnail_container {
             display: flex;
@@ -217,9 +221,27 @@ $left-gutter: 64px;
         }
     }
 
+    &[data-layout=bubble],
+    &[data-layout=group] {
+        .mx_EventTileBubble {
+            margin-inline: auto;
+        }
+    }
+
     &[data-layout=irc] {
+        --EventTile_irc_line_info-inset-inline-start: calc(var(--name-width) + 10px + var(--icon-width));
+
         .mx_MessageTimestamp {
             text-align: right;
+        }
+
+        .mx_EventTileBubble {
+            position: relative;
+            left: var(--EventTile_irc_line_info-inset-inline-start);
+        }
+
+        .mx_ReplyTile .mx_EventTileBubble {
+            left: unset; // Cancel the value specified above for the tile inside ReplyTile
         }
     }
 
@@ -306,6 +328,11 @@ $left-gutter: 64px;
     }
 
     &[data-layout=bubble] {
+        .mx_EventTileBubble {
+            // Timestamps are inside the tile, so the width can be less constrained
+            max-width: 600px;
+        }
+
         &.mx_EventTile_continuation {
             margin-top: 2px;
         }

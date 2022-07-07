@@ -16,51 +16,43 @@ limitations under the License.
 
 .mx_EventTileBubble {
     background-color: $dark-panel-bg-color;
-    padding: 10px;
+    padding: 10px; // TODO: Use a spacing variable
     border-radius: 8px;
-    margin: 10px auto;
     // Reserve space for external timestamps, but also cap the width
     max-width: min(calc(100% - 2 * $MessageTimestamp_width), 600px);
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 24px minmax(0, 1fr) min-content min-content;
 
-    .mx_EventTile[data-layout=bubble] & {
-        // Timestamps are inside the tile, so the width can be less constrained
-        max-width: 600px;
-    }
-
-    &::before, &::after {
+    &::before,
+    &::after {
         position: relative;
         grid-column: 1;
         grid-row: 1 / 3;
         width: 16px;
         height: 16px;
         content: "";
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset: 0;
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
-        margin-top: 4px;
+        margin-top: $spacing-4;
     }
 
-    .mx_EventTileBubble_title, .mx_EventTileBubble_subtitle {
+    .mx_EventTileBubble_title,
+    .mx_EventTileBubble_subtitle {
+        grid-column: 2;
         overflow-wrap: break-word;
     }
 
     .mx_EventTileBubble_title {
         font-weight: 600;
         font-size: $font-15px;
-        grid-column: 2;
         grid-row: 1;
     }
 
     .mx_EventTileBubble_subtitle {
         font-size: $font-12px;
-        grid-column: 2;
         grid-row: 2;
     }
 
@@ -68,6 +60,6 @@ limitations under the License.
         grid-column: 4;
         grid-row: 1 / 3;
         align-self: center;
-        margin-left: 16px;
+        margin-left: $spacing-16;
     }
 }
