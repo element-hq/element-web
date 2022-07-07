@@ -17,31 +17,45 @@ limitations under the License.
 .mx_GenericEventListSummary {
     position: relative;
 
+    .mx_GenericEventListSummary_avatars {
+        margin-right: $spacing-8;
+    }
+
     &[data-layout=irc],
     &[data-layout=group] {
         .mx_GenericEventListSummary_toggle {
             float: right;
-            margin: 8px 10px 0 0;
-        }
-
-        .mx_GenericEventListSummary_avatars {
-            padding-top: $spacing-8;
+            margin-inline: 0 10px;
         }
     }
 
-    &[data-layout=irc] {
-        .mx_GenericEventListSummary_avatars {
-            padding: 0;
-            margin: 0 9px 0 0;
-        }
+    &[data-layout=group] {
+        margin-top: $spacing-8;
     }
 
     &[data-layout=bubble] {
         --maxWidth: 70%;
+        display: flex;
         margin-left: calc(var(--avatarSize) + var(--gutterSize));
 
+        .mx_GenericEventListSummary_toggle {
+            margin-block: 0;
+
+            &[aria-expanded=false] {
+                order: 9; // TODO: Remove
+            }
+
+            &[aria-expanded=true] {
+                margin-inline-start: auto; // reduce clickable area
+                margin-inline-end: var(--EventTile_bubble-margin-inline-end); // as the parent has zero margin
+            }
+        }
+
+        .mx_GenericEventListSummary_line {
+            display: none;
+        }
+
         &[data-expanded=false] {
-            display: flex;
             align-items: center;
             justify-content: space-between;
             column-gap: 5px;
@@ -50,7 +64,6 @@ limitations under the License.
         // ideally we'd use display=contents here for the layout to all work regardless of the *ELS but
         // that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse.
         &[data-expanded=true] {
-            display: flex;
             flex-direction: column;
             margin: 0;
         }
@@ -65,26 +78,22 @@ limitations under the License.
                 background: transparent;
             }
         }
+    }
 
-        .mx_GenericEventListSummary_toggle {
-            margin-block: 0;
+    .mx_MatrixChat_useCompactLayout & {
+        font-size: $font-13px;
+        margin-top: $spacing-4;
 
-            &[aria-expanded=false] {
-                order: 9;
-            }
-
-            &[aria-expanded=true] {
-                margin-inline-start: auto; // reduce clickable area
-                margin-inline-end: var(--EventTile_bubble-margin-inline-end); // as the parent has zero margin
-            }
+        .mx_EventTile_line {
+            line-height: $font-20px;
         }
 
         .mx_GenericEventListSummary_line {
-            display: none;
+            line-height: $font-22px;
         }
 
-        .mx_GenericEventListSummary_avatars {
-            padding-top: 0;
+        .mx_TextualEvent.mx_GenericEventListSummary_summary {
+            font-size: $font-13px;
         }
     }
 }
@@ -101,38 +110,16 @@ limitations under the License.
 
 .mx_GenericEventListSummary_avatars {
     display: inline-block;
-    margin-right: 8px;
     line-height: $font-12px;
-}
 
-.mx_GenericEventListSummary_avatars .mx_BaseAvatar {
-    margin-right: -4px;
-    cursor: pointer;
+    .mx_BaseAvatar {
+        margin-right: -4px;
+        cursor: pointer;
+    }
 }
 
 .mx_GenericEventListSummary_line {
     border-bottom: 1px solid $primary-hairline-color;
     margin-left: 63px;
     line-height: $font-30px;
-}
-
-.mx_MatrixChat_useCompactLayout {
-    .mx_GenericEventListSummary {
-        font-size: $font-13px;
-        .mx_EventTile_line {
-            line-height: $font-20px;
-        }
-    }
-
-    .mx_GenericEventListSummary_line {
-        line-height: $font-22px;
-    }
-
-    .mx_GenericEventListSummary_toggle {
-        margin-top: 3px;
-    }
-
-    .mx_TextualEvent.mx_GenericEventListSummary_summary {
-        font-size: $font-13px;
-    }
 }
