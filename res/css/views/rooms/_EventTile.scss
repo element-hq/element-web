@@ -365,7 +365,7 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_line {
-            padding: 3px 0 2px; // Align with mx_EventTile_avatar and mx_EventTile_e2eIcon
+            padding-block: 3px 2px; // Align with mx_EventTile_avatar and mx_EventTile_e2eIcon
 
             .mx_MessageTimestamp {
                 top: 0;
