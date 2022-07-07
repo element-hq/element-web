@@ -193,6 +193,28 @@ $left-gutter: 64px;
         &.mx_EventTile_continuation .mx_EventTile_line {
             clear: both;
         }
+
+        &:hover {
+            // TODO: Adjust the values for IRC layout
+            --EventTile_hover_box-shadow-offset-x: calc(50px + $selected-message-border-width);
+            --EventTile_hover_box-shadow-spread-radius: -50px;
+
+            .mx_EventTile_line {
+                background-color: $event-selected-color;
+            }
+
+            &.mx_EventTile_verified .mx_EventTile_line {
+                box-shadow: inset var(--EventTile_hover_box-shadow-offset-x) 0 0 var(--EventTile_hover_box-shadow-spread-radius) $e2e-verified-color;
+            }
+
+            &.mx_EventTile_unverified .mx_EventTile_line {
+                box-shadow: inset var(--EventTile_hover_box-shadow-offset-x) 0 0 var(--EventTile_hover_box-shadow-spread-radius) $e2e-unverified-color;
+            }
+
+            &.mx_EventTile_unknown .mx_EventTile_line {
+                box-shadow: inset var(--EventTile_hover_box-shadow-offset-x) 0 0 var(--EventTile_hover_box-shadow-spread-radius) $e2e-unknown-color;
+            }
+        }
     }
 
     &[data-layout=irc] {
@@ -273,6 +295,14 @@ $left-gutter: 64px;
         &.mx_EventTile_info .mx_EventTile_line {
             padding-left: calc($left-gutter + 20px); // override padding-left $left-gutter
         }
+
+        &:hover {
+            &.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
+            &.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
+            &.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
+                padding-left: calc($left-gutter + 18px + $selected-message-border-width);
+            }
+        }
     }
 
     &[data-layout=bubble] {
@@ -329,7 +359,6 @@ $left-gutter: 64px;
         padding-left: calc($left-gutter + 18px);
     }
 
-    &.mx_EventTile:hover .mx_EventTile_line,
     &.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line,
     &.mx_EventTile.focus-visible:focus-within .mx_EventTile_line {
         background-color: $event-selected-color;
@@ -347,24 +376,6 @@ $left-gutter: 64px;
             background-color: $accent;
             color: $accent-fg-color;
         }
-    }
-
-    &:hover.mx_EventTile_verified .mx_EventTile_line {
-        box-shadow: inset calc(50px + $selected-message-border-width) 0 0 -50px $e2e-verified-color;
-    }
-
-    &:hover.mx_EventTile_unverified .mx_EventTile_line {
-        box-shadow: inset calc(50px + $selected-message-border-width) 0 0 -50px $e2e-unverified-color;
-    }
-
-    &:hover.mx_EventTile_unknown .mx_EventTile_line {
-        box-shadow: inset calc(50px + $selected-message-border-width) 0 0 -50px $e2e-unknown-color;
-    }
-
-    &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
-    &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
-    &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-        padding-left: calc($left-gutter + 18px + $selected-message-border-width);
     }
 
     /* End to end encryption stuff */
