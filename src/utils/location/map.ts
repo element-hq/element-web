@@ -19,6 +19,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import { logger } from "matrix-js-sdk/src/logger";
 
+import { _t } from "../../languageHandler";
 import { parseGeoUri } from "./parseGeoUri";
 import { findMapStyleUrl } from "./findMapStyleUrl";
 import { LocationShareError } from "./LocationShareErrors";
@@ -37,6 +38,18 @@ export const createMap = (
             zoom: 15,
             interactive,
             attributionControl: false,
+            locale: {
+                'AttributionControl.ToggleAttribution': _t('Toggle attribution'),
+                'AttributionControl.MapFeedback': _t('Map feedback'),
+                'FullscreenControl.Enter': _t('Enter fullscreen'),
+                'FullscreenControl.Exit': _t('Exit fullscreen'),
+                'GeolocateControl.FindMyLocation': _t('Find my location'),
+                'GeolocateControl.LocationNotAvailable': _t('Location not available'),
+                'LogoControl.Title': _t('Mapbox logo'),
+                'NavigationControl.ResetBearing': _t('Reset bearing to north'),
+                'NavigationControl.ZoomIn': _t('Zoom in'),
+                'NavigationControl.ZoomOut': _t('Zoom out'),
+            },
         });
         map.addControl(new maplibregl.AttributionControl(), 'top-right');
 
