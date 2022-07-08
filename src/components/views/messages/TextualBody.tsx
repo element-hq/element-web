@@ -93,8 +93,13 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         // we should be pillify them here by doing the linkifying BEFORE the pillifying.
         pillifyLinks([this.contentRef.current], this.props.mxEvent, this.pills);
         HtmlUtils.linkifyElement(this.contentRef.current);
-        tooltipifyLinks([this.contentRef.current], this.pills, this.tooltips);
+
         this.calculateUrlPreview();
+
+        // tooltipifyLinks AFTER calculateUrlPreview because the DOM inside the tooltip
+        // container is empty before the internal component has mounted so calculateUrlPreview
+        // won't find any anchors
+        tooltipifyLinks([this.contentRef.current], this.pills, this.tooltips);
 
         if (this.props.mxEvent.getContent().format === "org.matrix.custom.html") {
             // Handle expansion and add buttons
