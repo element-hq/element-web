@@ -45,6 +45,7 @@ import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { findDMForUser } from "./utils/direct-messages";
 import { privateShouldBeEncrypted } from "./utils/rooms";
 import { waitForMember } from "./utils/membership";
+import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";
 
 // we define a number of interfaces which take their names from the js-sdk
 /* eslint-disable camelcase */
@@ -191,20 +192,18 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         }
 
         if (opts.joinRule === JoinRule.Restricted) {
-            if (SpaceStore.instance.restrictedJoinRuleSupport?.preferred) {
-                createOpts.room_version = SpaceStore.instance.restrictedJoinRuleSupport.preferred;
+            createOpts.room_version = PreferredRoomVersions.RestrictedRooms;
 
-                createOpts.initial_state.push({
-                    type: EventType.RoomJoinRules,
-                    content: {
-                        "join_rule": JoinRule.Restricted,
-                        "allow": [{
-                            "type": RestrictedAllowType.RoomMembership,
-                            "room_id": opts.parentSpace.roomId,
-                        }],
-                    },
-                });
-            }
+            createOpts.initial_state.push({
+                type: EventType.RoomJoinRules,
+                content: {
+                    "join_rule": JoinRule.Restricted,
+                    "allow": [{
+                        "type": RestrictedAllowType.RoomMembership,
+                        "room_id": opts.parentSpace.roomId,
+                    }],
+                },
+            });
         }
     }
 

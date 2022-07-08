@@ -30,7 +30,6 @@ import RoomAliasField from "../elements/RoomAliasField";
 import LabelledToggleSwitch from "../elements/LabelledToggleSwitch";
 import DialogButtons from "../elements/DialogButtons";
 import BaseDialog from "../dialogs/BaseDialog";
-import SpaceStore from "../../../stores/spaces/SpaceStore";
 import JoinRuleDropdown from "../elements/JoinRuleDropdown";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
@@ -66,7 +65,7 @@ export default class CreateRoomDialog extends React.Component<IProps, IState> {
     constructor(props) {
         super(props);
 
-        this.supportsRestricted = this.props.parentSpace && !!SpaceStore.instance.restrictedJoinRuleSupport?.preferred;
+        this.supportsRestricted = !!this.props.parentSpace;
 
         let joinRule = JoinRule.Invite;
         if (this.props.defaultPublic) {
