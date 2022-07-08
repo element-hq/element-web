@@ -968,8 +968,6 @@ $left-gutter: 64px;
 
         // handling for hidden events (e.g reactions) in the thread view
         &.mx_EventTile_info {
-            padding-top: 0;
-
             .mx_EventTile_avatar {
                 position: absolute;
                 top: 1.5px; // Align with hidden event content
@@ -1000,6 +998,8 @@ $left-gutter: 64px;
 
             &[data-layout=irc],
             &[data-layout=group] {
+                padding-top: 0;
+
                 .mx_MessageTimestamp {
                     top: 2px; // Align with avatar
                 }
