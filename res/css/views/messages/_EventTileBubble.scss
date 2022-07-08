@@ -15,6 +15,8 @@ limitations under the License.
 */
 
 .mx_EventTileBubble {
+    --EventTileBubble_margin-block: 10px; // TODO: Use a spacing variable
+
     background-color: $dark-panel-bg-color;
     padding: 10px; // TODO: Use a spacing variable
     border-radius: 8px;

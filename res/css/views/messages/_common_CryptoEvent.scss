@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_cryptoEvent {
+.mx_EventTileBubble.mx_cryptoEvent {
+    margin: var(--EventTileBubble_margin-block) auto;
+
     // white infill for the transparency
     &.mx_cryptoEvent_icon::before {
         background-color: #ffffff;

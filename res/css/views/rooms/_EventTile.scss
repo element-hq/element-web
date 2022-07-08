@@ -74,7 +74,7 @@ $left-gutter: 64px;
     }
 
     .mx_EventTileBubble {
-        margin-block: 10px; // TODO: Use a spacing variable
+        margin-block: var(--EventTileBubble_margin-block);
     }
 
     .mx_MImageBody {
@@ -238,6 +238,10 @@ $left-gutter: 64px;
         .mx_EventTileBubble {
             position: relative;
             left: var(--EventTile_irc_line_info-inset-inline-start);
+
+            &.mx_cryptoEvent {
+                left: unset;
+            }
         }
 
         .mx_ReplyTile .mx_EventTileBubble {

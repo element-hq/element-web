@@ -14,7 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_HistoryTile::before {
-    background-color: $header-panel-text-primary-color;
-    mask-image: url('$(res)/img/element-icons/hide.svg');
+.mx_EventTileBubble.mx_HistoryTile {
+    margin: var(--EventTileBubble_margin-block) auto;
+
+    &::before {
+        background-color: $header-panel-text-primary-color;
+        mask-image: url('$(res)/img/element-icons/hide.svg');
+    }
 }
