@@ -28,10 +28,6 @@ import AccessibleButton from "../views/elements/AccessibleButton";
 
 interface IProps {
     isMinimized: boolean;
-    /**
-     * @returns true if a room has been selected and the search field should be cleared
-     */
-    onSelectRoom(): boolean;
 }
 
 export default class RoomSearch extends React.PureComponent<IProps> {
@@ -67,9 +63,9 @@ export default class RoomSearch extends React.PureComponent<IProps> {
             <div className="mx_RoomSearch_icon" />
         );
 
-        const shortcutPrompt = <div className="mx_RoomSearch_shortcutPrompt">
+        const shortcutPrompt = <kbd className="mx_RoomSearch_shortcutPrompt">
             { IS_MAC ? "⌘ K" : _t(ALTERNATE_KEY_NAME[Key.CONTROL]) + " K" }
-        </div>;
+        </kbd>;
 
         return <AccessibleButton onClick={this.openSpotlight} className={classes}>
             { icon }

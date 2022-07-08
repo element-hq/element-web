@@ -304,14 +304,6 @@ export default class LeftPanel extends React.Component<IProps, IState> {
         }
     };
 
-    private selectRoom = () => {
-        const firstRoom = this.listContainerRef.current.querySelector<HTMLDivElement>(".mx_RoomTile");
-        if (firstRoom) {
-            firstRoom.click();
-            return true; // to get the field to clear
-        }
-    };
-
     private renderBreadcrumbs(): React.ReactNode {
         if (this.state.showBreadcrumbs === BreadcrumbsMode.Legacy && !this.props.isMinimized) {
             return (
@@ -357,10 +349,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                 onBlur={this.onBlur}
                 onKeyDown={this.onKeyDown}
             >
-                <RoomSearch
-                    isMinimized={this.props.isMinimized}
-                    onSelectRoom={this.selectRoom}
-                />
+                <RoomSearch isMinimized={this.props.isMinimized} />
 
                 { dialPadButton }
                 { rightButton }
