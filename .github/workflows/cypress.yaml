@@ -69,7 +69,7 @@ jobs:
           echo "PERCY_ENABLE=0" >> $GITHUB_ENV
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4.1.1
         with:
           # The built-in Electron runner seems to grind to a halt trying
           # to run the tests, so use chrome.
