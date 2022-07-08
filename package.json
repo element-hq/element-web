@@ -41,7 +41,7 @@
     "build:bundle-stats": "webpack --progress --bail --mode production --json > webpack-stats.json",
     "build:module_system": "tsc --project ./tsconfig.module_system.json && node ./lib/module_system/scripts/install.js",
     "dist": "scripts/package.sh",
-    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
+    "start": "yarn build:module_system && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
     "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js --https\"",
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --mode development --disable-host-check --hot",
