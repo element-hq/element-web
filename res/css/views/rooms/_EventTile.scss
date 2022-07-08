@@ -326,7 +326,7 @@ $left-gutter: 64px;
             &.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
             &.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
             &.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-                padding-left: calc($left-gutter + 18px + $selected-message-border-width);
+                padding-inline-start: calc($left-gutter + 18px + $selected-message-border-width);
             }
         }
     }
@@ -957,8 +957,7 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_line {
-            padding-top: var(--BaseCard_EventTile_line-padding-block);
-            padding-bottom: var(--BaseCard_EventTile_line-padding-block);
+            padding-block: var(--BaseCard_EventTile_line-padding-block);
         }
 
         .mx_EventTile_line,
@@ -1004,15 +1003,13 @@ $left-gutter: 64px;
             &[data-layout=group] {
                 padding-top: 0;
 
-                .mx_MessageTimestamp {
-                    top: 2px; // Align with avatar
-                }
-            }
-
-            &:not([data-layout=bubble]) {
                 .mx_EventTile_avatar {
                     left: calc($MessageTimestamp_width + 14px - 4px); // 14px: avatar width, 4px: align with text
                     z-index: 9; // position above the hover styling
+                }
+
+                .mx_MessageTimestamp {
+                    top: 2px; // Align with avatar
                 }
             }
 
@@ -1023,51 +1020,15 @@ $left-gutter: 64px;
             }
         }
 
-        &:not([data-layout=bubble]) {
-            padding-top: $spacing-16;
-
-            &:hover.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
-            &:hover.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
-            &:hover.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
-                padding-inline-start: 0; // Override
-            }
+        &[data-layout=irc],
+        &[data-layout=group] {
+            padding-block-start: $spacing-16;
 
             .mx_EventTile_line {
-                padding-top: var(--BaseCard_EventTile_line-padding-block);
-                padding-bottom: var(--BaseCard_EventTile_line-padding-block);
-
                 .mx_EventTile_content {
                     &.mx_EditMessageComposer {
                         padding-inline-start: 0; // align start of first letter with that of the event body
                     }
-                }
-            }
-        }
-
-        &[data-layout=bubble] {
-            margin-inline-start: var(--BaseCard_EventTile-spacing-inline);
-            margin-inline-end: var(--BaseCard_EventTile-spacing-inline);
-
-            &::before {
-                inset-inline: calc(-1 * var(--BaseCard_EventTile-spacing-inline));
-                z-index: auto; // enable background color on hover
-            }
-
-            .mx_ReactionsRow {
-                position: relative; // display on hover
-            }
-
-            .mx_EventTile_line.mx_EventTile_mediaLine {
-                padding-block: 0;
-                padding-inline-start: 0;
-                max-width: var(--EventBubbleTile_line-max-width);
-            }
-
-            &[data-self=true] {
-                align-items: flex-end;
-
-                .mx_EventTile_line.mx_EventTile_mediaLine {
-                    margin: 0 var(--EventTile_bubble_line-margin-inline-end) 0 0; // align with normal messages
                 }
             }
         }
@@ -1139,13 +1100,51 @@ $left-gutter: 64px;
                 position: absolute; // for IRC layout
                 top: 2px; // Align with mx_EventTile_content
             }
+
+            &:hover {
+                &.mx_EventTile_verified.mx_EventTile_info .mx_EventTile_line,
+                &.mx_EventTile_unverified.mx_EventTile_info .mx_EventTile_line,
+                &.mx_EventTile_unknown.mx_EventTile_info .mx_EventTile_line {
+                    padding-inline-start: 0;
+                }
+            }
+        }
+
+        &[data-layout=bubble] {
+            margin-inline: var(--BaseCard_EventTile-spacing-inline);
+
+            &::before {
+                inset-inline: calc(-1 * var(--BaseCard_EventTile-spacing-inline));
+                z-index: auto; // enable background color on hover
+            }
+
+            .mx_ReactionsRow {
+                position: relative; // display on hover
+            }
+
+            .mx_EventTile_line.mx_EventTile_mediaLine {
+                padding-block: 0;
+                padding-inline-start: 0;
+                max-width: var(--EventBubbleTile_line-max-width);
+            }
+
+            &[data-self=true] {
+                align-items: flex-end;
+
+                .mx_EventTile_line.mx_EventTile_mediaLine {
+                    margin: 0 var(--EventTile_bubble_line-margin-inline-end) 0 0; // align with normal messages
+                }
+            }
         }
     }
 
     .mx_GenericEventListSummary {
-        &:not([data-layout=bubble]) > .mx_EventTile_line {
-            padding-inline-start: var(--ThreadView_group_spacing-start); // align summary text with message text
-            padding-inline-end: var(--ThreadView_group_spacing-end); // align summary text with message text
+        &[data-layout=irc],
+        &[data-layout=group] {
+            > .mx_EventTile_line {
+                padding-inline-start: var(--ThreadView_group_spacing-start); // align summary text with message text
+                padding-inline-end: var(--ThreadView_group_spacing-end); // align summary text with message text
+            }
         }
     }
 }
