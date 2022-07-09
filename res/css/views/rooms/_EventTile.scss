@@ -73,6 +73,19 @@ $left-gutter: 64px;
         }
     }
 
+    .mx_EventTile_searchHighlight {
+        background-color: $accent;
+        color: $accent-fg-color;
+        border-radius: 5px;
+        padding-inline: 2px;
+        cursor: pointer;
+
+        a {
+            background-color: $accent;
+            color: $accent-fg-color;
+        }
+    }
+
     .mx_EventTileBubble {
         margin-block: var(--EventTileBubble_margin-block);
     }
@@ -393,20 +406,6 @@ $left-gutter: 64px;
     &.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line,
     &.mx_EventTile.focus-visible:focus-within .mx_EventTile_line {
         background-color: $event-selected-color;
-    }
-
-    .mx_EventTile_searchHighlight {
-        background-color: $accent;
-        color: $accent-fg-color;
-        border-radius: 5px;
-        padding-left: 2px;
-        padding-right: 2px;
-        cursor: pointer;
-
-        a {
-            background-color: $accent;
-            color: $accent-fg-color;
-        }
     }
 
     /* End to end encryption stuff */
