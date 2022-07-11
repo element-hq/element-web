@@ -413,6 +413,9 @@ function joinConference(audioDevice?: string | null, videoDevice?: string | null
         ];
         // Hide all top bar elements
         options.configOverwrite.conferenceInfo = { autoHide: [] };
+        // Remove the ability to hide your own tile, since we're hiding the
+        // settings button which would be the only way to get it back
+        options.configOverwrite.disableSelfViewSettings = true;
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
