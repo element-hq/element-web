@@ -445,6 +445,7 @@
     "Verified key": "Verified key",
     "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.": "The signing key you provided matches the signing key you received from %(userId)s's session %(deviceId)s. Session marked as verified.",
     "Forces the current outbound group session in an encrypted room to be discarded": "Forces the current outbound group session in an encrypted room to be discarded",
+    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Developer command: Discards the current outbound group session and sets up new Olm sessions",
     "Sends the given message coloured as a rainbow": "Sends the given message coloured as a rainbow",
     "Sends the given emote coloured as a rainbow": "Sends the given emote coloured as a rainbow",
     "Displays list of commands with usages and descriptions": "Displays list of commands with usages and descriptions",
