@@ -16,12 +16,14 @@ limitations under the License.
 */
 
 .mx_EditMessageComposer {
+    --EditMessageComposer-padding-inline: 3px;
+
     display: flex;
     flex-direction: column;
     max-width: 100%; // disable overflow
     width: auto;
     gap: 5px;
-    padding: 3px;
+    padding: 3px var(--EditMessageComposer-padding-inline);
 
     .mx_BasicMessageComposer_input {
         border-radius: 4px;

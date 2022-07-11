@@ -260,6 +260,13 @@ $left-gutter: 64px;
         .mx_ReplyTile .mx_EventTileBubble {
             left: unset; // Cancel the value specified above for the tile inside ReplyTile
         }
+
+        &.mx_EventTile_isEditing > .mx_EventTile_line {
+            .mx_EditMessageComposer {
+                // add space for the stroke on box-shadow
+                padding-inline-start: calc($selected-message-border-width + var(--EditMessageComposer-padding-inline));
+            }
+        }
     }
 
     &[data-layout=group] {
