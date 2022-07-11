@@ -410,14 +410,13 @@ function joinConference(audioDevice?: string | null, videoDevice?: string | null
         // deployments that have it enabled
         options.configOverwrite.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
+        options.configOverwrite.toolbarButtons = ["microphone", "camera", "tileview", "hangup"];
         // Note: We can hide the screenshare button in video rooms but not in
         // normal conference calls, since in video rooms we control exactly what
         // set of controls appear, but in normal calls we need to leave that up
         // to the deployment's configuration.
         // https://github.com/vector-im/element-web/issues/4880#issuecomment-940002464
-        options.configOverwrite.toolbarButtons = supportsScreensharing
-            ? ["microphone", "camera", "desktop", "tileview", "hangup"]
-            : ["microphone", "camera", "tileview", "hangup"];
+        if (supportsScreensharing) options.configOverwrite.toolbarButtons.splice(2, 0, "desktop");
         // Hide all top bar elements
         options.configOverwrite.conferenceInfo = { autoHide: [] };
         // Remove the ability to hide your own tile, since we're hiding the
