@@ -20,7 +20,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import AccessibleButton from "../elements/AccessibleButton";
 import Modal from "../../../Modal";
-import PersistedElement from "../elements/PersistedElement";
 import QuestionDialog from './QuestionDialog';
 import SdkConfig from "../../../SdkConfig";
 import { _t } from "../../../languageHandler";
@@ -34,8 +33,6 @@ import {
 } from "./HostSignupDialogTypes";
 import { IConfigOptions } from "../../../IConfigOptions";
 import { SnakedObject } from "../../../utils/SnakedObject";
-
-const HOST_SIGNUP_KEY = "host_signup";
 
 interface IProps {}
 
@@ -111,8 +108,6 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
 
     private closeDialog = async () => {
         window.removeEventListener("message", this.messageHandler);
-        // Ensure we destroy the host signup persisted element
-        PersistedElement.destroyElement("host_signup");
         // Finally clear the flag in
         return HostSignupStore.instance.setHostSignupActive(false);
     };
@@ -235,69 +230,65 @@ export default class HostSignupDialog extends React.PureComponent<IProps, IState
 
     public render(): React.ReactNode {
         return (
-            <div className="mx_HostSignup_persisted">
-                <PersistedElement key={HOST_SIGNUP_KEY} persistKey={HOST_SIGNUP_KEY}>
-                    <div className={classNames({ "mx_Dialog_wrapper": !this.state.minimized })}>
-                        <div
-                            className={classNames("mx_Dialog",
+            <div className={classNames({ "mx_Dialog_wrapper": !this.state.minimized })}>
+                <div
+                    className={classNames("mx_Dialog",
+                        {
+                            "mx_HostSignupDialog_minimized": this.state.minimized,
+                            "mx_HostSignupDialog": !this.state.minimized,
+                        },
+                    )}
+                >
+                    { this.state.minimized &&
+                        <div className="mx_Dialog_header mx_Dialog_headerWithButton">
+                            <div className="mx_Dialog_title">
+                                { _t("%(hostSignupBrand)s Setup", {
+                                    hostSignupBrand: this.config.get("brand"),
+                                }) }
+                            </div>
+                            <AccessibleButton
+                                className="mx_HostSignup_maximize_button"
+                                onClick={this.maximizeDialog}
+                                aria-label={_t("Maximise dialog")}
+                                title={_t("Maximise dialog")}
+                            />
+                        </div>
+                    }
+                    { !this.state.minimized &&
+                        <div className="mx_Dialog_header mx_Dialog_headerWithCancel">
+                            <AccessibleButton
+                                onClick={this.minimizeDialog}
+                                className="mx_HostSignup_minimize_button"
+                                aria-label={_t("Minimise dialog")}
+                                title={_t("Minimise dialog")}
+                            />
+                            <AccessibleButton
+                                onClick={this.onCloseClick}
+                                className="mx_Dialog_cancelButton"
+                                aria-label={_t("Close dialog")}
+                                title={_t("Close dialog")}
+                            />
+                        </div>
+                    }
+                    { this.state.error &&
+                        <div>
+                            { this.state.error }
+                        </div>
+                    }
+                    { !this.state.error &&
+                        <iframe
+                            title={_t(
+                                "Upgrade to %(hostSignupBrand)s",
                                 {
-                                    "mx_HostSignupDialog_minimized": this.state.minimized,
-                                    "mx_HostSignupDialog": !this.state.minimized,
+                                    hostSignupBrand: this.config.get("brand"),
                                 },
                             )}
-                        >
-                            { this.state.minimized &&
-                                <div className="mx_Dialog_header mx_Dialog_headerWithButton">
-                                    <div className="mx_Dialog_title">
-                                        { _t("%(hostSignupBrand)s Setup", {
-                                            hostSignupBrand: this.config.get("brand"),
-                                        }) }
-                                    </div>
-                                    <AccessibleButton
-                                        className="mx_HostSignup_maximize_button"
-                                        onClick={this.maximizeDialog}
-                                        aria-label={_t("Maximise dialog")}
-                                        title={_t("Maximise dialog")}
-                                    />
-                                </div>
-                            }
-                            { !this.state.minimized &&
-                                <div className="mx_Dialog_header mx_Dialog_headerWithCancel">
-                                    <AccessibleButton
-                                        onClick={this.minimizeDialog}
-                                        className="mx_HostSignup_minimize_button"
-                                        aria-label={_t("Minimise dialog")}
-                                        title={_t("Minimise dialog")}
-                                    />
-                                    <AccessibleButton
-                                        onClick={this.onCloseClick}
-                                        className="mx_Dialog_cancelButton"
-                                        aria-label={_t("Close dialog")}
-                                        title={_t("Close dialog")}
-                                    />
-                                </div>
-                            }
-                            { this.state.error &&
-                                <div>
-                                    { this.state.error }
-                                </div>
-                            }
-                            { !this.state.error &&
-                                <iframe
-                                    title={_t(
-                                        "Upgrade to %(hostSignupBrand)s",
-                                        {
-                                            hostSignupBrand: this.config.get("brand"),
-                                        },
-                                    )}
-                                    src={this.config.get("url")}
-                                    ref={this.iframeRef}
-                                    sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
-                                />
-                            }
-                        </div>
-                    </div>
-                </PersistedElement>
+                            src={this.config.get("url")}
+                            ref={this.iframeRef}
+                            sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+                        />
+                    }
+                </div>
             </div>
         );
     }
