@@ -1004,7 +1004,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     };
 
     const openFeedback = SdkConfig.get().bug_report_endpoint_url ? () => {
-        Modal.createDialog(FeedbackDialog);
+        Modal.createDialog(FeedbackDialog, {
+            feature: "spotlight",
+        });
     } : null;
 
     const activeDescendant = rovingContext.state.activeRef?.current?.id;
