@@ -407,11 +407,6 @@ $left-gutter: 64px;
     &.mx_EventTile.focus-visible:focus-within .mx_EventTile_line {
         background-color: $event-selected-color;
     }
-
-    /* End to end encryption stuff */
-    &:hover .mx_EventTile_e2eIcon {
-        opacity: 1;
-    }
 }
 
 .mx_GenericEventListSummary {
@@ -588,7 +583,6 @@ $left-gutter: 64px;
     width: 14px;
     height: 14px;
     display: block;
-    opacity: 0.2;
     background-repeat: no-repeat;
     background-size: contain;
 
@@ -608,11 +602,6 @@ $left-gutter: 64px;
 
     &::before {
         mask-size: 80%;
-    }
-
-    &.mx_EventTile_e2eIcon_warning,
-    &.mx_EventTile_e2eIcon_normal {
-        opacity: 1;
     }
 
     &.mx_EventTile_e2eIcon_warning::after {
