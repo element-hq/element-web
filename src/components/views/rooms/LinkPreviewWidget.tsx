@@ -120,8 +120,9 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         // opaque string. This does not allow any HTML to be injected into the DOM.
         const description = AllHtmlEntities.decode(p["og:description"] || "");
 
-        const anchor = <a href={this.props.link} target="_blank" rel="noreferrer noopener">{ p["og:title"] }</a>;
-        const needsTooltip = PlatformPeg.get()?.needsUrlTooltips() && this.props.link !== p["og:title"].trim();
+        const title = p["og:title"]?.trim() ?? "";
+        const anchor = <a href={this.props.link} target="_blank" rel="noreferrer noopener">{ title }</a>;
+        const needsTooltip = PlatformPeg.get()?.needsUrlTooltips() && this.props.link !== title;
 
         return (
             <div className="mx_LinkPreviewWidget">
