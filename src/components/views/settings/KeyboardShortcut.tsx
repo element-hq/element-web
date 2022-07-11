@@ -63,5 +63,3 @@ export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value }) =>
         <KeyboardKey name={value.key} last />
     </div>;
 };
-
-export default KeyboardShortcut;

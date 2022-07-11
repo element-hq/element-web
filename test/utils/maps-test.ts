@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EnhancedMap, mapDiff, mapKeyChanges } from "../../src/utils/maps";
+import { EnhancedMap, mapDiff } from "../../src/utils/maps";
 
 describe('maps', () => {
     describe('mapDiff', () => {
@@ -113,68 +113,6 @@ describe('maps', () => {
             expect(result.removed).toHaveLength(0);
             expect(result.changed).toHaveLength(1);
             expect(result.changed).toEqual([1]);
-        });
-    });
-
-    describe('mapKeyChanges', () => {
-        it('should indicate no changes for unchanged pointers', () => {
-            const a = new Map([[1, 1], [2, 2], [3, 3]]);
-            const result = mapKeyChanges(a, a);
-            expect(result).toBeDefined();
-            expect(result).toHaveLength(0);
-        });
-
-        it('should indicate no changes for unchanged maps with different pointers', () => {
-            const a = new Map([[1, 1], [2, 2], [3, 3]]);
-            const b = new Map([[1, 1], [2, 2], [3, 3]]);
-            const result = mapKeyChanges(a, b);
-            expect(result).toBeDefined();
-            expect(result).toHaveLength(0);
-        });
-
-        it('should indicate changes for added properties', () => {
-            const a = new Map([[1, 1], [2, 2], [3, 3]]);
-            const b = new Map([[1, 1], [2, 2], [3, 3], [4, 4]]);
-            const result = mapKeyChanges(a, b);
-            expect(result).toBeDefined();
-            expect(result).toHaveLength(1);
-            expect(result).toEqual([4]);
-        });
-
-        it('should indicate changes for removed properties', () => {
-            const a = new Map([[1, 1], [2, 2], [3, 3], [4, 4]]);
-            const b = new Map([[1, 1], [2, 2], [3, 3]]);
-            const result = mapKeyChanges(a, b);
-            expect(result).toBeDefined();
-            expect(result).toHaveLength(1);
-            expect(result).toEqual([4]);
-        });
-
-        it('should indicate changes for changed properties', () => {
-            const a = new Map([[1, 1], [2, 2], [3, 3], [4, 4]]);
-            const b = new Map([[1, 1], [2, 2], [3, 3], [4, 55]]);
-            const result = mapKeyChanges(a, b);
-            expect(result).toBeDefined();
-            expect(result).toHaveLength(1);
-            expect(result).toEqual([4]);
-        });
-
-        it('should indicate changes for properties with different pointers', () => {
-            const a = new Map([[1, {}]]); // {} always creates a new object
-            const b = new Map([[1, {}]]);
-            const result = mapKeyChanges(a, b);
-            expect(result).toBeDefined();
-            expect(result).toHaveLength(1);
-            expect(result).toEqual([1]);
-        });
-
-        it('should indicate changes for changed, added, and removed properties', () => {
-            const a = new Map([[1, 1], [2, 2], [3, 3]]);
-            const b = new Map([[1, 1], [2, 8], [4, 4]]); // note change
-            const result = mapKeyChanges(a, b);
-            expect(result).toBeDefined();
-            expect(result).toHaveLength(3);
-            expect(result).toEqual([3, 4, 2]); // order irrelevant, but the test cares
         });
     });
 

@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import { arrayDiff, arrayUnion, arrayIntersection } from "./arrays";
-
-export function iterableUnion<T>(a: Iterable<T>, b: Iterable<T>): Iterable<T> {
-    return arrayUnion(Array.from(a), Array.from(b));
-}
+import { arrayDiff, arrayIntersection } from "./arrays";
 
 export function iterableIntersection<T>(a: Iterable<T>, b: Iterable<T>): Iterable<T> {
     return arrayIntersection(Array.from(a), Array.from(b));

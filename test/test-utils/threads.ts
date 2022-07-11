@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
-import { Thread } from "matrix-js-sdk/src/models/thread";
+import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 
 import { mkMessage, MessageEventProps } from "./test-utils";
 
@@ -88,9 +87,4 @@ export const makeThreadEvents = ({
     });
 
     return { rootEvent, events };
-};
-
-export const makeThread = (client: MatrixClient, room: Room, props: MakeThreadEventsProps): Thread => {
-    const { rootEvent, events } = makeThreadEvents(props);
-    return new Thread(rootEvent.getId(), rootEvent, { initialEvents: events, room, client });
 };

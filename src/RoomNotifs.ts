@@ -35,38 +35,6 @@ export enum RoomNotifState {
     Mute = 'mute',
 }
 
-export const BADGE_STATES = [RoomNotifState.AllMessages, RoomNotifState.AllMessagesLoud];
-export const MENTION_BADGE_STATES = [...BADGE_STATES, RoomNotifState.MentionsOnly];
-
-export function shouldShowNotifBadge(roomNotifState: RoomNotifState): boolean {
-    return BADGE_STATES.includes(roomNotifState);
-}
-
-export function shouldShowMentionBadge(roomNotifState: RoomNotifState): boolean {
-    return MENTION_BADGE_STATES.includes(roomNotifState);
-}
-
-export function aggregateNotificationCount(rooms: Room[]): {count: number, highlight: boolean} {
-    return rooms.reduce<{count: number, highlight: boolean}>((result, room) => {
-        const roomNotifState = getRoomNotifsState(room.roomId);
-        const highlight = room.getUnreadNotificationCount(NotificationCountType.Highlight) > 0;
-        // use helper method to include highlights in the previous version of the room
-        const notificationCount = getUnreadNotificationCount(room);
-
-        const notifBadges = notificationCount > 0 && shouldShowNotifBadge(roomNotifState);
-        const mentionBadges = highlight && shouldShowMentionBadge(roomNotifState);
-        const badges = notifBadges || mentionBadges;
-
-        if (badges) {
-            result.count += notificationCount;
-            if (highlight) {
-                result.highlight = true;
-            }
-        }
-        return result;
-    }, { count: 0, highlight: false });
-}
-
 export function getRoomNotifsState(roomId: string): RoomNotifState {
     if (MatrixClientPeg.get().isGuest()) return RoomNotifState.AllMessages;
 

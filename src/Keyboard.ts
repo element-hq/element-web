@@ -83,11 +83,3 @@ export function isOnlyCtrlOrCmdKeyEvent(ev) {
         return ev.ctrlKey && !ev.altKey && !ev.metaKey && !ev.shiftKey;
     }
 }
-
-export function isOnlyCtrlOrCmdIgnoreShiftKeyEvent(ev) {
-    if (IS_MAC) {
-        return ev.metaKey && !ev.altKey && !ev.ctrlKey;
-    } else {
-        return ev.ctrlKey && !ev.altKey && !ev.metaKey;
-    }
-}

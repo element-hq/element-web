@@ -24,9 +24,6 @@ export interface IContentRules {
     externalRules: IAnnotatedPushRule[];
 }
 
-export const SCOPE = "global";
-export const KIND = "content";
-
 export class ContentRules {
     /**
      * Extract the keyword rules from a list of rules, and parse them

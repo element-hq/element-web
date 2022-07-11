@@ -14,16 +14,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-/**
- * Defines the constructor of a canvas based room effect
- */
-export interface ICanvasEffectConstructable {
-    /**
-     * @param {{[key:string]:any}} options? Optional animation options
-     * @returns ICanvasEffect Returns a new instance of the canvas effect
-     */
-    new(options?: { [key: string]: any }): ICanvasEffect;
-}
 
 /**
  * Defines the interface of a canvas based room effect

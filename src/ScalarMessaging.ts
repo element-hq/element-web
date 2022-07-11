@@ -752,7 +752,3 @@ export function stopListening(): void {
         logger.error(e);
     }
 }
-
-export function setOpenManagerUrl(url: string): void {
-    openManagerUrl = url;
-}

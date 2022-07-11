@@ -37,7 +37,7 @@ interface IProps {
     hasCancel?: boolean;
 }
 
-const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
+export const AnalyticsLearnMoreDialog: React.FC<IProps> = ({
     onFinished,
     analyticsOwner,
     privacyPolicyUrl,
@@ -105,5 +105,3 @@ export const showDialog = (props: Omit<IProps, "cookiePolicyUrl" | "analyticsOwn
         ...props,
     }, "mx_AnalyticsLearnMoreDialog_wrapper");
 };
-
-export default AnalyticsLearnMoreDialog;

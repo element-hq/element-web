@@ -45,5 +45,3 @@ export const CollapsibleButton = ({ title, children, className, iconClassName, .
         { children }
     </AccessibleTooltipButton>;
 };
-
-export default CollapsibleButton;

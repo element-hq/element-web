@@ -44,25 +44,6 @@ export function getDisplayAliasForAliasSet(canonicalAlias: string, altAliases: s
     return canonicalAlias || altAliases?.[0];
 }
 
-export function looksLikeDirectMessageRoom(room: Room, myUserId: string): boolean {
-    const myMembership = room.getMyMembership();
-    const me = room.getMember(myUserId);
-
-    if (myMembership == "join" || myMembership === "ban" || (me && me.isKicked())) {
-        // Used to split rooms via tags
-        const tagNames = Object.keys(room.tags);
-        // Used for 1:1 direct messages
-        // Show 1:1 chats in separate "Direct Messages" section as long as they haven't
-        // been moved to a different tag section
-        const totalMemberCount = room.currentState.getJoinedMemberCount() +
-            room.currentState.getInvitedMemberCount();
-        if (totalMemberCount === 2 && !tagNames.length) {
-            return true;
-        }
-    }
-    return false;
-}
-
 export function guessAndSetDMRoom(room: Room, isDirect: boolean): Promise<void> {
     let newTarget;
     if (isDirect) {

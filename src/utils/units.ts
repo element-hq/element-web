@@ -14,14 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* Simple utils for formatting style values
- */
-
-// converts a pixel value to rem.
-export function toRem(pixelValue: number): string {
-    return pixelValue / 10 + "rem";
-}
-
 export function toPx(pixelValue: number): string {
     return pixelValue + "px";
 }

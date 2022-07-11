@@ -104,16 +104,3 @@ export const shareLocation = (
         handleShareError(error, openMenu, shareType);
     }
 };
-
-export function textForLocation(
-    uri: string,
-    ts: number,
-    description: string | null,
-): string {
-    const date = new Date(ts).toISOString();
-    if (description) {
-        return `Location "${description}" ${uri} at ${date}`;
-    } else {
-        return `Location ${uri} at ${date}`;
-    }
-}

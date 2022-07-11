@@ -371,5 +371,3 @@ const SpaceTreeLevel: React.FC<ITreeLevelProps> = ({
         }) }
     </ul>;
 };
-
-export default SpaceTreeLevel;
