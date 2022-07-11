@@ -324,6 +324,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
         return true;
     }
 
+    public supportsJitsiScreensharing(): boolean {
+        // See https://github.com/vector-im/element-web/issues/4880
+        return false;
+    }
+
     public async getAvailableSpellCheckLanguages(): Promise<string[]> {
         return this.ipc.call('getAvailableSpellCheckLanguages');
     }

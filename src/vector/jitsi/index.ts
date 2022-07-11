@@ -52,6 +52,7 @@ let openIdToken: IOpenIDCredentials;
 let roomName: string;
 let startAudioOnly: boolean;
 let isVideoChannel: boolean;
+let supportsScreensharing: boolean;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -122,6 +123,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         roomName = qsParam('roomName', true);
         startAudioOnly = qsParam('isAudioOnly', true) === "true";
         isVideoChannel = qsParam('isVideoChannel', true) === "true";
+        supportsScreensharing = qsParam('supportsScreensharing', true) === "true";
 
         // We've reached the point where we have to wait for the config, so do that then parse it.
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
@@ -408,9 +410,14 @@ function joinConference(audioDevice?: string | null, videoDevice?: string | null
         // deployments that have it enabled
         options.configOverwrite.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
-        options.configOverwrite.toolbarButtons = [
-            "microphone", "camera", "desktop", "tileview", "hangup",
-        ];
+        // Note: We can hide the screenshare button in video rooms but not in
+        // normal conference calls, since in video rooms we control exactly what
+        // set of controls appear, but in normal calls we need to leave that up
+        // to the deployment's configuration.
+        // https://github.com/vector-im/element-web/issues/4880#issuecomment-940002464
+        options.configOverwrite.toolbarButtons = supportsScreensharing
+            ? ["microphone", "camera", "desktop", "tileview", "hangup"]
+            : ["microphone", "camera", "tileview", "hangup"];
         // Hide all top bar elements
         options.configOverwrite.conferenceInfo = { autoHide: [] };
         // Remove the ability to hide your own tile, since we're hiding the
