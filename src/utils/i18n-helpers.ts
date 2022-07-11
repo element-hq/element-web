@@ -20,49 +20,36 @@ import SpaceStore from "../stores/spaces/SpaceStore";
 import { _t } from "../languageHandler";
 import DMRoomMap from "./DMRoomMap";
 
-export function spaceContextDetailsText(space: Room): string {
-    if (!space.isSpaceRoom()) return undefined;
-
-    const [parent, secondParent, ...otherParents] = SpaceStore.instance.getKnownParents(space.roomId);
-    if (secondParent && !otherParents?.length) {
-        // exactly 2 edge case for improved i18n
-        return _t("%(space1Name)s and %(space2Name)s", {
-            space1Name: space.client.getRoom(parent)?.name,
-            space2Name: space.client.getRoom(secondParent)?.name,
-        });
-    } else if (parent) {
-        return _t("%(spaceName)s and %(count)s others", {
-            spaceName: space.client.getRoom(parent)?.name,
-            count: otherParents.length,
-        });
-    }
-
-    return space.getCanonicalAlias();
+export interface RoomContextDetails {
+    details: string;
+    ariaLabel?: string;
 }
 
-export function roomContextDetailsText(room: Room): string {
-    if (room.isSpaceRoom()) return undefined;
-
+export function roomContextDetails(room: Room): RoomContextDetails | null {
     const dmPartner = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
     // if we’ve got more than 2 users, don’t treat it like a regular DM
     const isGroupDm = room.getMembers().length > 2;
-    if (dmPartner && !isGroupDm) {
-        return dmPartner;
+    if (!room.isSpaceRoom() && dmPartner && !isGroupDm) {
+        return { details: dmPartner };
     }
 
     const [parent, secondParent, ...otherParents] = SpaceStore.instance.getKnownParents(room.roomId);
     if (secondParent && !otherParents?.length) {
         // exactly 2 edge case for improved i18n
-        return _t("%(space1Name)s and %(space2Name)s", {
-            space1Name: room.client.getRoom(parent)?.name,
-            space2Name: room.client.getRoom(secondParent)?.name,
-        });
+        const space1Name = room.client.getRoom(parent)?.name;
+        const space2Name = room.client.getRoom(secondParent)?.name;
+        return {
+            details: _t("%(space1Name)s and %(space2Name)s", { space1Name, space2Name }),
+            ariaLabel: _t("In spaces %(space1Name)s and %(space2Name)s.", { space1Name, space2Name }),
+        };
     } else if (parent) {
-        return _t("%(spaceName)s and %(count)s others", {
-            spaceName: room.client.getRoom(parent)?.name,
-            count: otherParents.length,
-        });
+        const spaceName = room.client.getRoom(parent)?.name;
+        const count = otherParents.length;
+        return {
+            details: _t("%(spaceName)s and %(count)s others", { spaceName, count }),
+            ariaLabel: _t("In %(spaceName)s and %(count)s other spaces.", { spaceName, count }),
+        };
     }
 
-    return room.getCanonicalAlias();
+    return { details: room.getCanonicalAlias() };
 }

@@ -14,18 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
 import { Room } from "matrix-js-sdk/src/matrix";
+import React, { ComponentPropsWithoutRef, ElementType } from "react";
 
-import { roomContextDetailsText, spaceContextDetailsText } from "../../../../utils/i18n-helpers";
+import { roomContextDetails } from "../../../utils/i18n-helpers";
 
-export const RoomResultDetails = ({ room }: { room: Room }) => {
-    const contextDetails = room.isSpaceRoom() ? spaceContextDetailsText(room) : roomContextDetailsText(room);
+type Props<T extends ElementType> = ComponentPropsWithoutRef<T> & {
+    component?: T;
+    room: Room;
+};
+
+export function RoomContextDetails<T extends ElementType>({ room, component: Component = "div", ...other }: Props<T>) {
+    const contextDetails = roomContextDetails(room);
     if (contextDetails) {
-        return <div className="mx_SpotlightDialog_result_details">
-            { contextDetails }
-        </div>;
+        return <Component
+            {...other}
+            aria-label={contextDetails.ariaLabel}
+        >
+            { contextDetails.details }
+        </Component>;
     }
 
     return null;
-};
+}

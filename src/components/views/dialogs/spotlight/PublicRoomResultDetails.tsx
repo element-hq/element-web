@@ -24,7 +24,14 @@ import { getDisplayAliasForRoom } from "../../../structures/RoomDirectory";
 const MAX_NAME_LENGTH = 80;
 const MAX_TOPIC_LENGTH = 800;
 
-export function PublicRoomResultDetails({ room }: { room: IPublicRoomsChunkRoom }): JSX.Element {
+interface Props {
+    room: IPublicRoomsChunkRoom;
+    labelId: string;
+    descriptionId: string;
+    detailsId: string;
+}
+
+export function PublicRoomResultDetails({ room, labelId, descriptionId, detailsId }: Props): JSX.Element {
     let name = room.name || getDisplayAliasForRoom(room) || _t('Unnamed room');
     if (name.length > MAX_NAME_LENGTH) {
         name = `${name.substring(0, MAX_NAME_LENGTH)}...`;
@@ -41,12 +48,12 @@ export function PublicRoomResultDetails({ room }: { room: IPublicRoomsChunkRoom 
     return (
         <div className="mx_SpotlightDialog_result_publicRoomDetails">
             <div className="mx_SpotlightDialog_result_publicRoomHeader">
-                <span className="mx_SpotlightDialog_result_publicRoomName">{ name }</span>
-                <span className="mx_SpotlightDialog_result_publicRoomAlias">
+                <span id={labelId} className="mx_SpotlightDialog_result_publicRoomName">{ name }</span>
+                <span id={descriptionId} className="mx_SpotlightDialog_result_publicRoomAlias">
                     { room.canonical_alias ?? room.room_id }
                 </span>
             </div>
-            <div className="mx_SpotlightDialog_result_publicRoomDescription">
+            <div id={detailsId} className="mx_SpotlightDialog_result_publicRoomDescription">
                 <span className="mx_SpotlightDialog_result_publicRoomMemberCount">
                     { _t("%(count)s Members", {
                         count: room.num_joined_members,
