@@ -1,15 +1,21 @@
-<!-- Please read https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.md before submitting your pull request -->
+<!-- Thanks for submitting a PR! Please ensure the following requirements are met in order for us to review your PR -->
 
-<!-- Include a Sign-Off as described in https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.md#sign-off -->
+## Checklist
 
-<!-- To specify text for the changelog entry (otherwise the PR title will be used):
-Notes:
+* [ ] Tests written for new code (and old code if feasible)
+* [ ] Linter and other CI checks pass
+* [ ] Sign-off given on the changes (see [CONTRIBUTING.md](https://github.com/matrix-org/matrix-react-sdk/blob/develop/CONTRIBUTING.md))
 
-Changes in this project generate changelog entries in element-web by default.
-To suppress this:
+<!--
+If you would like to specify text for the changelog entry other than your PR title, add the following:
+
+Notes: Add super cool feature
+
+Changes in this project also generate changelogs in Element Web. To disable this, use the following:
 
 element-web notes: none
 
-...or to specify different notes:
-element-web notes: <notes>
+or specify alternative text:
+
+element-web notes: Add super cool feature
 -->
