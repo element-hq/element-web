@@ -39,7 +39,7 @@ export function initRageshake() {
         logger.log("To fix line numbers in Chrome: " +
             "Meatball menu → Settings → Ignore list → Add /rageshake\\.js$");
 
-        window.addEventListener('beforeunload', (e) => {
+        window.addEventListener('beforeunload', () => {
             logger.log('element-web closing');
             // try to flush the logs to indexeddb
             rageshake.flush();

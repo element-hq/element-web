@@ -92,8 +92,8 @@ export function loadOlm(): Promise<void> {
         locateFile: () => olmWasmPath,
     }).then(() => {
         logger.log("Using WebAssembly Olm");
-    }).catch((e) => {
-        logger.log("Failed to load Olm: trying legacy version", e);
+    }).catch((wasmLoadError) => {
+        logger.log("Failed to load Olm: trying legacy version", wasmLoadError);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
             s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
@@ -106,8 +106,8 @@ export function loadOlm(): Promise<void> {
             return window.Olm.init();
         }).then(() => {
             logger.log("Using legacy Olm");
-        }).catch((e) => {
-            logger.log("Both WebAssembly and asm.js Olm failed!", e);
+        }).catch((legacyLoadError) => {
+            logger.log("Both WebAssembly and asm.js Olm failed!", legacyLoadError);
         });
     });
 }
