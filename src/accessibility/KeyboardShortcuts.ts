@@ -1,5 +1,6 @@
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2022 The Matrix.org Foundation C.I.C.
 Copyright 2021 - 2022 Šimon Brandner <simon.bra.ag@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -712,13 +713,3 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
         },
     },
 };
-
-// For tests
-export function mock({ keyboardShortcuts, macOnlyShortcuts, desktopShortcuts }): void {
-    Object.keys(KEYBOARD_SHORTCUTS).forEach((k) => delete KEYBOARD_SHORTCUTS[k]);
-    if (keyboardShortcuts) Object.assign(KEYBOARD_SHORTCUTS, keyboardShortcuts);
-    MAC_ONLY_SHORTCUTS.splice(0, MAC_ONLY_SHORTCUTS.length);
-    if (macOnlyShortcuts) macOnlyShortcuts.forEach((e) => MAC_ONLY_SHORTCUTS.push(e));
-    DESKTOP_SHORTCUTS.splice(0, DESKTOP_SHORTCUTS.length);
-    if (desktopShortcuts) desktopShortcuts.forEach((e) => DESKTOP_SHORTCUTS.push(e));
-}
