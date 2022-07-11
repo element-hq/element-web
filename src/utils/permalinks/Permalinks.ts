@@ -19,6 +19,7 @@ import * as utils from "matrix-js-sdk/src/utils";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import MatrixToPermalinkConstructor, { baseUrl as matrixtoBaseUrl } from "./MatrixToPermalinkConstructor";
@@ -211,7 +212,7 @@ export class RoomPermalinkCreator {
         const bannedHostsRegexps = [];
         let allowedHostsRegexps = [ANY_REGEX]; // default allow everyone
         if (this.room.currentState) {
-            const aclEvent = this.room.currentState.getStateEvents("m.room.server_acl", "");
+            const aclEvent = this.room.currentState.getStateEvents(EventType.RoomServerAcl, "");
             if (aclEvent && aclEvent.getContent()) {
                 const getRegex = (hostname) => new RegExp("^" + utils.globToRegexp(hostname, false) + "$");
 

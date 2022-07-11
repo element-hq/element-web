@@ -60,7 +60,7 @@ import { hasThreadSummary } from "../../utils/EventUtils";
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
-const groupedEvents = [
+const groupedStateEvents = [
     EventType.RoomMember,
     EventType.RoomThirdPartyInvite,
     EventType.RoomServerAcl,
@@ -1190,7 +1190,7 @@ class MainGrouper extends BaseGrouper {
     static canStartGroup = function(panel: MessagePanel, ev: MatrixEvent): boolean {
         if (!panel.shouldShowEvent(ev)) return false;
 
-        if (groupedEvents.includes(ev.getType() as EventType)) {
+        if (ev.isState() && groupedStateEvents.includes(ev.getType() as EventType)) {
             return true;
         }
 
@@ -1225,7 +1225,7 @@ class MainGrouper extends BaseGrouper {
         if (this.panel.wantsDateSeparator(this.events[0], ev.getDate())) {
             return false;
         }
-        if (groupedEvents.includes(ev.getType() as EventType)) {
+        if (ev.isState() && groupedStateEvents.includes(ev.getType() as EventType)) {
             return true;
         }
         if (ev.isRedacted()) {
