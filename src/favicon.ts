@@ -54,7 +54,7 @@ export default class Favicon {
 
     private isReady = false;
     // callback to run once isReady is asserted, allows for a badge to be queued for when it can be shown
-    private readyCb = () => {};
+    private readyCb?: () => void;
 
     constructor(params: Partial<IParams> = {}) {
         this.params = { ...defaults, ...params };
@@ -180,7 +180,7 @@ export default class Favicon {
     private ready() {
         if (this.isReady) return;
         this.isReady = true;
-        this.readyCb();
+        this.readyCb?.();
     }
 
     private setIcon(canvas) {
@@ -230,9 +230,9 @@ export default class Favicon {
     private static getLinks() {
         const icons: HTMLLinkElement[] = [];
         const links = window.document.getElementsByTagName("head")[0].getElementsByTagName("link");
-        for (let i = 0; i < links.length; i++) {
-            if ((/(^|\s)icon(\s|$)/i).test(links[i].getAttribute("rel"))) {
-                icons.push(links[i]);
+        for (const link of links) {
+            if ((/(^|\s)icon(\s|$)/i).test(link.getAttribute("rel"))) {
+                icons.push(link);
             }
         }
         return icons;
