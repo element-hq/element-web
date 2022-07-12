@@ -243,7 +243,7 @@ limitations under the License.
                     display: inline-flex;
                     flex-direction: row;
                     margin-left: auto;
-                    align-items: start;
+                    align-items: flex-start;
                 }
 
                 &.mx_SpotlightDialog_result_multiline {
