@@ -207,6 +207,12 @@ $left-gutter: 64px;
             }
         }
 
+        &.mx_EventTile_info {
+            .mx_EventTile_e2eIcon {
+                top: 0;
+            }
+        }
+
         &.mx_EventTile_continuation .mx_EventTile_line {
             clear: both;
         }
@@ -265,6 +271,15 @@ $left-gutter: 64px;
             .mx_EditMessageComposer {
                 // add space for the stroke on box-shadow
                 padding-inline-start: calc($selected-message-border-width + var(--EditMessageComposer-padding-inline));
+            }
+        }
+
+        &.mx_EventTile_info {
+            .mx_EventTile_avatar {
+                left: var(--EventTile_irc_line_info-inset-inline-start);
+                top: 0;
+                margin-right: var(--right-padding);
+                padding-block: var(--EventTile_irc_line-padding-block);
             }
         }
     }
@@ -338,8 +353,31 @@ $left-gutter: 64px;
             padding-top: 0px !important;
         }
 
-        &.mx_EventTile_info .mx_EventTile_line {
-            padding-left: calc($left-gutter + 20px); // override padding-left $left-gutter
+        &.mx_EventTile_info {
+            $spacing-block-start: 3px;
+            $spacing-block-end: 2px;
+
+            padding-top: 0;
+
+            .mx_EventTile_avatar,
+            .mx_EventTile_e2eIcon {
+                margin: $spacing-block-start 0 $spacing-block-end;
+            }
+
+            .mx_EventTile_avatar {
+                top: initial;
+                inset-inline-start: $left-gutter;
+                height: 14px;
+            }
+
+            .mx_EventTile_line {
+                padding-block: $spacing-block-start $spacing-block-end;
+                padding-inline-start: calc(var(--EventTile_group_line-spacing-inline-start) + 20px); // 20px: avatar area
+
+                .mx_MessageTimestamp {
+                    top: 0;
+                }
+            }
         }
 
         &:hover {
@@ -370,33 +408,6 @@ $left-gutter: 64px;
     font-size: $font-14px;
     position: relative;
 
-    &.mx_EventTile_info {
-        padding-top: 0;
-
-        .mx_EventTile_avatar,
-        .mx_EventTile_e2eIcon {
-            margin: 3px 0 2px; // Align with mx_EventTile_line
-        }
-
-        .mx_EventTile_e2eIcon {
-            top: 0;
-        }
-
-        .mx_EventTile_avatar {
-            top: initial;
-            inset-inline-start: $left-gutter;
-            height: 14px;
-        }
-
-        .mx_EventTile_line {
-            padding-block: 3px 2px; // Align with mx_EventTile_avatar and mx_EventTile_e2eIcon
-
-            .mx_MessageTimestamp {
-                top: 0;
-            }
-        }
-    }
-
     /* this is used for the tile for the event which is selected via the URL.
      * TODO: ultimately we probably want some transition on here.
      */
@@ -425,10 +436,6 @@ $left-gutter: 64px;
     }
 
     &[data-layout=irc] {
-        .mx_EventTile_info .mx_EventTile_line {
-            padding-left: 0; // Override .mx_EventTile:not([data-layout="bubble"]).mx_EventTile_info .mx_EventTile_line
-        }
-
         .mx_EventTile_line .mx_RedactedBody {
             padding-left: 24px; // 25px - 1px
 

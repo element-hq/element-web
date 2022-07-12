@@ -24,6 +24,8 @@ $irc-line-height: $font-18px;
     line-height: $irc-line-height !important;
 
     .mx_EventTile {
+        --EventTile_irc_line-padding-block: 1px;
+
         // timestamps are links which shouldn't be underlined
         > a {
             text-decoration: none;
@@ -129,10 +131,11 @@ $irc-line-height: $font-18px;
         .mx_EventTile_line {
             .mx_EventTile_e2eIcon,
             .mx_TextualEvent,
+            .mx_ViewSourceEvent,
             .mx_MTextBody {
                 display: inline-block;
                 // add a 1px padding top and bottom because our larger emoji font otherwise gets cropped by anti-zalgo
-                padding: 1px 0;
+                padding: var(--EventTile_irc_line-padding-block) 0;
             }
 
             .mx_ReplyTile {
@@ -162,16 +165,11 @@ $irc-line-height: $font-18px;
     }
 
     .mx_EventTile.mx_EventTile_info {
-        .mx_EventTile_avatar {
-            left: var(--EventTile_irc_line_info-inset-inline-start);
-            top: 0;
-            margin-right: var(--right-padding);
-        }
-
         .mx_EventTile_line {
             left: var(--EventTile_irc_line_info-inset-inline-start);
         }
 
+        .mx_ViewSourceEvent, // For hidden events
         .mx_TextualEvent {
             line-height: $irc-line-height;
         }
