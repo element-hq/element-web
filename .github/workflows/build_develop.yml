@@ -33,6 +33,22 @@ jobs:
           SENTRY_PROJECT: riot-web
 
       - run: mv dist/element-*.tar.gz webapp.tar.gz
+      
+      - name: Wait for static analysis to succeed
+        uses: lewagon/wait-on-check-action@v1.0.0
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Static Analysis'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+      
+      - name: Wait for tests to succeed
+        uses: lewagon/wait-on-check-action@v1.0.0
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Tests'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
 
       - uses: actions/upload-artifact@v3
         with:
