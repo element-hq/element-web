@@ -74,6 +74,10 @@ limitations under the License.
 
             .mx_EventTile_msgOption {
                 margin-inline-end: 0;
+
+                .mx_ReadReceiptGroup {
+                    top: var(--TimelineCard_ReadReceiptGroup-inset-block-start);
+                }
             }
 
             .mx_DisambiguatedProfile,
@@ -98,10 +102,6 @@ limitations under the License.
 
             .mx_ReactionsRow {
                 margin-inline-end: $spacing-8; // See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.scss
-            }
-
-            .mx_ReadReceiptGroup {
-                top: var(--TimelineCard_ReadReceiptGroup-inset-block-start);
             }
 
             .mx_ThreadSummary {

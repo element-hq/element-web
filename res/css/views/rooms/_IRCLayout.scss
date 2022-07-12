@@ -44,10 +44,6 @@ $irc-line-height: $font-18px;
         .mx_EventTile_msgOption {
             order: 5;
             flex-shrink: 0;
-
-            .mx_ReadReceiptGroup {
-                top: -0.3rem; // ($irc-line-height - avatar height) / 2
-            }
         }
 
         .mx_EventTile_line,

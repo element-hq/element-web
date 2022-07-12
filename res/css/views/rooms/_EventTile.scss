@@ -250,6 +250,12 @@ $left-gutter: 64px;
     &[data-layout=irc] {
         --EventTile_irc_line_info-inset-inline-start: calc(var(--name-width) + 10px + var(--icon-width));
 
+        .mx_EventTile_msgOption {
+            .mx_ReadReceiptGroup {
+                inset-block-start: -0.3rem; // ($irc-line-height - avatar height) / 2
+            }
+        }
+
         .mx_MessageTimestamp {
             text-align: right;
         }
@@ -303,7 +309,14 @@ $left-gutter: 64px;
         }
 
         .mx_EventTile_msgOption {
-            margin-right: 10px;
+            margin-inline-end: 10px;
+
+            .mx_ReadReceiptGroup {
+                // This aligns the avatar with the last line of the
+                // message. We want to move it one line up
+                // See .mx_EventTile[data-layout=group] .mx_EventTile_line in _EventTile.scss
+                inset-block-start: calc(-$font-22px - 3px);
+            }
         }
 
         .mx_MessageTimestamp {
@@ -390,6 +403,20 @@ $left-gutter: 64px;
     }
 
     &[data-layout=bubble] {
+        .mx_EventTile_msgOption {
+            .mx_ReadReceiptGroup {
+                position: absolute;
+                inset-block-start: auto;
+
+                // as close to right gutter without clipping as possible
+                inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end));
+
+                // (EventTileLine.line-height - ReadReceiptGroup.height) / 2
+                // this centers the ReadReceiptGroup if we’ve got a single line
+                inset-block-end: calc(($font-18px - 24px) / 2);
+            }
+        }
+
         .mx_EventTileBubble {
             // Timestamps are inside the tile, so the width can be less constrained
             max-width: 600px;
@@ -1221,10 +1248,12 @@ $left-gutter: 64px;
                 font-size: $font-13px;
             }
 
-            .mx_ReadReceiptGroup {
-                // This aligns the avatar with the last line of the
-                // message. We want to move it one line up - 2rem
-                top: -2rem;
+            .mx_EventTile_msgOption {
+                .mx_ReadReceiptGroup {
+                    // This aligns the avatar with the last line of the
+                    // message. We want to move it one line up - 2rem
+                    inset-block-start: -2rem;
+                }
             }
 
             .mx_EventTile_content .markdown-body {

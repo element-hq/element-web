@@ -527,18 +527,6 @@ limitations under the License.
         }
     }
 
-    .mx_ReadReceiptGroup {
-        position: absolute;
-
-        // as close to right gutter without clipping as possible
-        inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end));
-
-        // (EventTileLine.line-height - ReadReceiptGroup.height) / 2
-        // this centers the ReadReceiptGroup if we’ve got a single line
-        bottom: calc(($font-18px - 24px) / 2);
-        top: auto;
-    }
-
     .mx_MTextBody {
         max-width: 100%;
     }

@@ -19,10 +19,6 @@ limitations under the License.
 
     position: relative;
     display: inline-block;
-    // This aligns the avatar with the last line of the
-    // message. We want to move it one line up
-    // See .mx_EventTile[data-layout=group] .mx_EventTile_line in _EventTile.scss
-    top: calc(-$font-22px - 3px);
     user-select: none;
     z-index: 1;
 
