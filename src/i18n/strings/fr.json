@@ -2121,8 +2121,8 @@
     "Continue with %(provider)s": "Continuer avec %(provider)s",
     "Homeserver": "Serveur d’accueil",
     "Server Options": "Options serveur",
-    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.": "Les messages ici sont chiffrés de bout en bout. Quand les gens joignent, vous pouvez les vérifier dans leur profil, tapez simplement sur leur avatar.",
-    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Les messages ici sont chiffrés de bout en bout. Vérifiez %(displayName)s dans leur profil - tapez sur leur avatar.",
+    "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.": "Les messages ici sont chiffrés de bout en bout. Quand les gens joignent, vous pouvez les vérifier dans leur profil, cliquez simplement sur leur avatar.",
+    "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Les messages ici sont chiffrés de bout en bout. Vérifiez %(displayName)s dans son profil - cliquez sur son avatar.",
     "This is the start of <roomName/>.": "C’est le début de <roomName/>.",
     "Add a photo, so people can easily spot your room.": "Ajoutez une photo afin que les gens repèrent facilement votre salon.",
     "%(displayName)s created this room.": "%(displayName)s a créé ce salon.",
@@ -3413,5 +3413,9 @@
     "How can I create a video room?": "Comment créer un salon vidéo ?",
     "Video rooms are always-on VoIP channels embedded within a room in %(brand)s.": "Les salons vidéo sont des canaux VoIP toujours actifs embarqués dans un salon dans %(brand)s.",
     "A new way to chat over voice and video in %(brand)s.": "Une nouvelle façons de discuter avec la voix et la vidéo dans %(brand)s.",
-    "Video rooms": "Salons vidéo"
+    "Video rooms": "Salons vidéo",
+    "You cannot search for rooms that are neither a room nor a space": "Vous ne pouvez pas rechercher de salons qui ne soient ni des salons ni des espaces",
+    "Show spaces": "Afficher les espaces",
+    "Show rooms": "Afficher les salons",
+    "Explore public spaces in the new search dialog": "Explorer les espaces publics dans la nouvelle fenêtre de recherche"
 }

@@ -3093,5 +3093,9 @@
     "Image size in the timeline": "Kuvan koko aikajanalla",
     "To proceed, please accept the verification request on your other device.": "Jatka hyväksymällä vahvistuspyyntö toisella laitteella.",
     "Use your preferred Matrix homeserver if you have one, or host your own.": "Käytä haluamaasi Matrix-kotipalvelinta, tai isännöi omaa palvelinta.",
-    "We call the places where you can host your account 'homeservers'.": "Kutsumme \"kotipalvelimiksi\" paikkoja, missä voit isännöidä tiliäsi."
+    "We call the places where you can host your account 'homeservers'.": "Kutsumme \"kotipalvelimiksi\" paikkoja, missä voit isännöidä tiliäsi.",
+    "Something went wrong in confirming your identity. Cancel and try again.": "Jokin meni pieleen henkilöllisyyttä vahvistaessa. Peruuta ja yritä uudelleen.",
+    "Confirm your account deactivation by using Single Sign On to prove your identity.": "Vahvista tilin deaktivointi todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.|one": "Vahvista tämän laitteen uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen.",
+    "Confirm logging out these devices by using Single Sign On to prove your identity.|other": "Vahvista näiden laitteiden uloskirjaaminen todistamalla henkilöllisyytesi kertakirjautumista käyttäen."
 }

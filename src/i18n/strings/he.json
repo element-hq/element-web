@@ -2415,5 +2415,8 @@
     "You can't see earlier messages": "לא ניתן לצפות בהודעות קודמות",
     "Your Security Key is in your <b>Downloads</b> folder.": "מפתח האבטחה שלך נמצא ב<b>תיקיית ההורדות</b> שלך.",
     "Confirm your Security Phrase": "אשר את ביטוי האבטחה שלך",
-    "Secure your backup with a Security Phrase": "אבטח את הגיבוי שלך עם ביטוי אבטחה"
+    "Secure your backup with a Security Phrase": "אבטח את הגיבוי שלך עם ביטוי אבטחה",
+    "You're trying to access a community link (%(groupId)s).<br/>Communities are no longer supported and have been replaced by spaces.<br2/><a>Learn more about spaces here.</a>": "אתה מנסה לגשת לקישור קהילה (%(groupId)s).<br/>קהילות כבר אינן נתמכות והוחלפו מרחבים.<br2/><a>למידע נוסף על מרחבים עיין כאן.</a>",
+    "You're already in a call with this person.": "אתה כבר בשיחה עם האדם הזה.",
+    "Already in call": "כבר בשיחה"
 }

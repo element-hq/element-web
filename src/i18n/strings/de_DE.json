@@ -2393,7 +2393,7 @@
     "Zoom in": "Vergrößern",
     "Zoom out": "Verkleinern",
     "%(seconds)ss left": "%(seconds)s vergangen",
-    "Change server ACLs": "ACLs des Servers bearbeiten",
+    "Change server ACLs": "Server ACLs bearbeiten",
     "Failed to send": "Fehler beim Senden",
     "View all %(count)s members|other": "Alle %(count)s Mitglieder anzeigen",
     "View all %(count)s members|one": "Mitglied anzeigen",

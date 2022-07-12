@@ -2596,7 +2596,7 @@
     "Specify a number of messages": "Especifique um número de mensagens",
     "From the beginning": "Do começo",
     "Are you sure you want to exit during this export?": "Tem certeza de que deseja sair durante esta exportação?",
-    "The above, but in <Room /> as well": "Acima, mas também em <Room />",
+    "The above, but in <Room /> as well": "O mesmo que acima, mas em <Room /> também",
     "The above, but in any room you are joined or invited to as well": "Acima, mas em qualquer sala em que você participe ou seja convidado também",
     "%(senderName)s has updated the room layout": "%(senderName)s atualizou o layout da sala",
     "%(senderName)s unpinned a message from this room. See all pinned messages.": "%(senderName)s desafixou uma mensagem desta sala. Veja todas as mensagens fixadas.",
