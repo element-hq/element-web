@@ -88,6 +88,7 @@ import FeedbackDialog from "../FeedbackDialog";
 import { IDialogProps } from "../IDialogProps";
 import { Option } from "./Option";
 import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
+import { RoomResultContextMenus } from "./RoomResultContextMenus";
 import { RoomContextDetails } from "../../rooms/RoomContextDetails";
 import { TooltipOption } from "./TooltipOption";
 
@@ -506,8 +507,11 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
     let otherSearchesSection: JSX.Element;
     if (trimmedQuery || filter !== Filter.PublicRooms) {
         otherSearchesSection = (
-            <div className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches" role="group">
-                <h4>
+            <div
+                className="mx_SpotlightDialog_section mx_SpotlightDialog_otherSearches"
+                role="group"
+                aria-labelledby="mx_SpotlightDialog_section_otherSearches">
+                <h4 id="mx_SpotlightDialog_section_otherSearches">
                     { trimmedQuery
                         ? _t('Use "%(query)s" to search', { query })
                         : _t("Search for") }
@@ -544,7 +548,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 const unreadLabel = roomAriaUnreadLabel(result.room, notification);
                 const ariaProperties = {
                     "aria-label": unreadLabel ? `${result.room.name} ${unreadLabel}` : result.room.name,
-                    "aria-details": `mx_SpotlightDialog_button_result_${result.room.roomId}_details`,
+                    "aria-describedby": `mx_SpotlightDialog_button_result_${result.room.roomId}_details`,
                 };
                 return (
                     <Option
@@ -553,6 +557,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         onClick={(ev) => {
                             viewRoom(result.room.roomId, true, ev?.type !== "click");
                         }}
+                        endAdornment={<RoomResultContextMenus room={result.room} />}
                         {...ariaProperties}
                     >
                         <DecoratedRoomAvatar
@@ -948,8 +953,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     tabIndex={-1}
                     aria-labelledby="mx_SpotlightDialog_section_recentSearches"
                 >
-                    <h4 id="mx_SpotlightDialog_section_recentSearches">
-                        { _t("Recent searches") }
+                    <h4>
+                        <span id="mx_SpotlightDialog_section_recentSearches">
+                            { _t("Recent searches") }
+                        </span>
                         <AccessibleButton kind="link" onClick={clearRecentSearches}>
                             { _t("Clear") }
                         </AccessibleButton>
@@ -960,7 +967,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                             const unreadLabel = roomAriaUnreadLabel(room, notification);
                             const ariaProperties = {
                                 "aria-label": unreadLabel ? `${room.name} ${unreadLabel}` : room.name,
-                                "aria-details": `mx_SpotlightDialog_button_recentSearch_${room.roomId}_details`,
+                                "aria-describedby": `mx_SpotlightDialog_button_recentSearch_${room.roomId}_details`,
                             };
                             return (
                                 <Option
@@ -969,6 +976,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                     onClick={(ev) => {
                                         viewRoom(room.roomId, true, ev?.type !== "click");
                                     }}
+                                    endAdornment={<RoomResultContextMenus room={room} />}
                                     {...ariaProperties}
                                 >
                                     <DecoratedRoomAvatar
@@ -1034,28 +1042,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 break;
         }
 
+        let ref: RefObject<HTMLElement>;
         const accessibilityAction = getKeyBindingsManager().getAccessibilityAction(ev);
         switch (accessibilityAction) {
             case KeyBindingAction.Escape:
                 ev.stopPropagation();
                 ev.preventDefault();
                 onFinished();
-                break;
-        }
-    };
-
-    const onKeyDown = (ev: KeyboardEvent) => {
-        let ref: RefObject<HTMLElement>;
-
-        const action = getKeyBindingsManager().getAccessibilityAction(ev);
-
-        switch (action) {
-            case KeyBindingAction.Backspace:
-                if (!query && filter !== null) {
-                    ev.stopPropagation();
-                    ev.preventDefault();
-                    setFilter(null);
-                }
                 break;
             case KeyBindingAction.ArrowUp:
             case KeyBindingAction.ArrowDown:
@@ -1075,7 +1068,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     }
 
                     const idx = refs.indexOf(rovingContext.state.activeRef);
-                    ref = findSiblingElement(refs, idx + (action === KeyBindingAction.ArrowUp ? -1 : 1));
+                    ref = findSiblingElement(refs, idx + (accessibilityAction === KeyBindingAction.ArrowUp ? -1 : 1));
                 }
                 break;
 
@@ -1092,13 +1085,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
                     const refs = rovingContext.state.refs.filter(refIsForRecentlyViewed);
                     const idx = refs.indexOf(rovingContext.state.activeRef);
-                    ref = findSiblingElement(refs, idx + (action === KeyBindingAction.ArrowLeft ? -1 : 1));
+                    ref = findSiblingElement(refs, idx + (accessibilityAction === KeyBindingAction.ArrowLeft ? -1 : 1));
                 }
-                break;
-            case KeyBindingAction.Enter:
-                ev.stopPropagation();
-                ev.preventDefault();
-                rovingContext.state.activeRef?.current?.click();
                 break;
         }
 
@@ -1110,6 +1098,25 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             ref.current?.scrollIntoView({
                 block: "nearest",
             });
+        }
+    };
+
+    const onKeyDown = (ev: KeyboardEvent) => {
+        const action = getKeyBindingsManager().getAccessibilityAction(ev);
+
+        switch (action) {
+            case KeyBindingAction.Backspace:
+                if (!query && filter !== null) {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    setFilter(null);
+                }
+                break;
+            case KeyBindingAction.Enter:
+                ev.stopPropagation();
+                ev.preventDefault();
+                rovingContext.state.activeRef?.current?.click();
+                break;
         }
     };
 

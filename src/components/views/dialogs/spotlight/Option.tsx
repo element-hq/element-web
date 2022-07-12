@@ -37,7 +37,9 @@ export const Option: React.FC<OptionProps> = ({ inputRef, children, endAdornment
         role="option"
     >
         { children }
-        <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>↵</kbd>
-        { endAdornment }
+        <div className="mx_SpotlightDialog_option--endAdornment">
+            <kbd className="mx_SpotlightDialog_enterPrompt" aria-hidden>↵</kbd>
+            { endAdornment }
+        </div>
     </AccessibleButton>;
 };

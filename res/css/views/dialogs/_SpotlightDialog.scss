@@ -239,6 +239,13 @@ limitations under the License.
                 text-overflow: ellipsis;
                 overflow: hidden;
 
+                .mx_SpotlightDialog_option--endAdornment {
+                    display: inline-flex;
+                    flex-direction: row;
+                    margin-left: auto;
+                    align-items: start;
+                }
+
                 &.mx_SpotlightDialog_result_multiline {
                     align-items: start;
 
@@ -309,8 +316,45 @@ limitations under the License.
                     margin-left: $spacing-8;
                 }
 
+                .mx_SpotlightDialog_option--menu,
+                .mx_SpotlightDialog_option--notifications {
+                    width: 20px;
+                    min-width: 20px;
+                    height: 20px;
+                    margin-top: auto;
+                    margin-bottom: auto;
+                    position: relative;
+                    display: none;
+
+                    &::before {
+                        top: 2px;
+                        left: 2px;
+                        content: '';
+                        width: 16px;
+                        height: 16px;
+                        position: absolute;
+                        mask-position: center;
+                        mask-size: contain;
+                        mask-repeat: no-repeat;
+                        background: $tertiary-content;
+                    }
+
+                    &:hover::before, &[aria-selected=true]::before {
+                        background-color: $secondary-content;
+                    }
+                }
+
+                .mx_SpotlightDialog_option--menu::before {
+                    mask-image: url('$(res)/img/element-icons/context-menu.svg');
+                }
+
                 &:hover, &[aria-selected=true] {
                     background-color: $system;
+
+                    .mx_SpotlightDialog_option--menu,
+                    .mx_SpotlightDialog_option--notifications {
+                        display: block;
+                    }
                 }
 
                 &[aria-selected=true] .mx_SpotlightDialog_enterPrompt {
@@ -436,7 +480,7 @@ limitations under the License.
             color: $tertiary-content;
             border-radius: 6px;
             background-color: $quinary-content;
-            margin: 0 $spacing-4 0 auto;
+            margin-right: $spacing-4;
             display: none;
         }
 
