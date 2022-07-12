@@ -26,6 +26,7 @@ import { split } from 'lodash';
 import katex from 'katex';
 import { AllHtmlEntities } from 'html-entities';
 import { IContent } from 'matrix-js-sdk/src/models/event';
+import { Optional } from 'matrix-events-sdk';
 
 import {
     _linkifyElement,
@@ -456,9 +457,9 @@ function formatEmojis(message: string, isHtmlMessage: boolean): (JSX.Element | s
  * opts.forComposerQuote: optional param to lessen the url rewriting done by sanitization, for quoting into composer
  * opts.ref: React ref to attach to any React components returned (not compatible with opts.returnString)
  */
-export function bodyToHtml(content: IContent, highlights: string[], opts: IOptsReturnString): string;
-export function bodyToHtml(content: IContent, highlights: string[], opts: IOptsReturnNode): ReactNode;
-export function bodyToHtml(content: IContent, highlights: string[], opts: IOpts = {}) {
+export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnString): string;
+export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOptsReturnNode): ReactNode;
+export function bodyToHtml(content: IContent, highlights: Optional<string[]>, opts: IOpts = {}) {
     const isFormattedBody = content.format === "org.matrix.custom.html" && content.formatted_body;
     let bodyHasEmoji = false;
     let isHtmlMessage = false;

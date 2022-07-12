@@ -199,7 +199,11 @@ export default class RightPanel extends React.Component<IProps, IState> {
 
             case RightPanelPhases.PinnedMessages:
                 if (SettingsStore.getValue("feature_pinning")) {
-                    card = <PinnedMessagesCard room={this.props.room} onClose={this.onClose} />;
+                    card = <PinnedMessagesCard
+                        room={this.props.room}
+                        onClose={this.onClose}
+                        permalinkCreator={this.props.permalinkCreator}
+                    />;
                 }
                 break;
             case RightPanelPhases.Timeline:

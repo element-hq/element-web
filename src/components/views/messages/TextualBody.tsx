@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef, SyntheticEvent, MouseEvent } from 'react';
+import React, { createRef, SyntheticEvent, MouseEvent, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import highlight from 'highlight.js';
 import { MsgType } from "matrix-js-sdk/src/@types/event";
@@ -565,7 +565,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
 
         // only strip reply if this is the original replying event, edits thereafter do not have the fallback
         const stripReply = !mxEvent.replacingEvent() && !!getParentEventId(mxEvent);
-        let body;
+        let body: ReactNode;
         if (SettingsStore.isEnabled("feature_extensible_events")) {
             const extev = this.props.mxEvent.unstableExtensibleEvent as MessageEvent;
             if (extev?.isEquivalentTo(M_MESSAGE)) {

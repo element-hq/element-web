@@ -33,9 +33,11 @@ import { useRoomState } from "../../../hooks/useRoomState";
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { ReadPinsEventId } from "./types";
 import Heading from '../typography/Heading';
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 
 interface IProps {
     room: Room;
+    permalinkCreator: RoomPermalinkCreator;
     onClose(): void;
 }
 
@@ -78,7 +80,7 @@ export const useReadPinnedEvents = (room: Room): Set<string> => {
     return readPinnedEvents;
 };
 
-const PinnedMessagesCard = ({ room, onClose }: IProps) => {
+const PinnedMessagesCard = ({ room, onClose, permalinkCreator }: IProps) => {
     const cli = useContext(MatrixClientContext);
     const roomContext = useContext(RoomContext);
     const canUnpin = useRoomState(room, state => state.mayClientSendStateEvent(EventType.RoomPinnedEvents, cli));
@@ -152,6 +154,7 @@ const PinnedMessagesCard = ({ room, onClose }: IProps) => {
                 key={ev.getId()}
                 event={ev}
                 onUnpinClicked={canUnpin ? () => onUnpinClicked(ev) : undefined}
+                permalinkCreator={permalinkCreator}
             />
         ));
     } else {

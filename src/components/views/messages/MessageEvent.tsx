@@ -67,7 +67,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
     public context!: React.ContextType<typeof MatrixClientContext>;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
-        super(props);
+        super(props, context);
 
         if (MediaEventHelper.isEligible(this.props.mxEvent)) {
             this.mediaHelper = new MediaEventHelper(this.props.mxEvent);

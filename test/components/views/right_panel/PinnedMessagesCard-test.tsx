@@ -42,6 +42,7 @@ import PinnedMessagesCard from "../../../../src/components/views/right_panel/Pin
 import PinnedEventTile from "../../../../src/components/views/rooms/PinnedEventTile";
 import MPollBody from "../../../../src/components/views/messages/MPollBody";
 import MatrixClientContext from "../../../../src/contexts/MatrixClientContext";
+import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 
 describe("<PinnedMessagesCard />", () => {
     stubClient();
@@ -85,7 +86,11 @@ describe("<PinnedMessagesCard />", () => {
     const mountPins = async (room: Room): Promise<ReactWrapper<ComponentProps<typeof PinnedMessagesCard>>> => {
         let pins;
         await act(async () => {
-            pins = mount(<PinnedMessagesCard room={room} onClose={jest.fn()} />, {
+            pins = mount(<PinnedMessagesCard
+                room={room}
+                onClose={jest.fn()}
+                permalinkCreator={new RoomPermalinkCreator(room, room.roomId)}
+            />, {
                 wrappingComponent: MatrixClientContext.Provider,
                 wrappingComponentProps: { value: cli },
             });
