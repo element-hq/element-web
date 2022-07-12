@@ -288,6 +288,10 @@ export default abstract class BasePlatform {
         return false;
     }
 
+    public supportsJitsiScreensharing(): boolean {
+        return true;
+    }
+
     public overrideBrowserShortcuts(): boolean {
         return false;
     }
