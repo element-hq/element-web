@@ -843,16 +843,6 @@ $left-gutter: 64px;
     flex-flow: wrap;
     align-items: center;
 
-    &:hover,
-    // Override .mx_EventTile:not([data-layout=bubble]).mx_EventTile:hover .mx_EventTile_line
-    &:not([data-layout=bubble]):hover .mx_EventTile_line {
-        background-color: $system;
-    }
-
-    &:not([data-layout=bubble]):hover .mx_EventTile_line {
-        box-shadow: none; // don't show the verification left stroke in the thread list
-    }
-
     &::after,
     &::before {
         content: "";
@@ -969,6 +959,18 @@ $left-gutter: 64px;
         font-size: $font-12px;
         max-width: var(--MessageTimestamp-max-width);
         position: initial;
+    }
+
+    &:hover {
+        background-color: $system;
+    }
+
+    // ThreadsList has always group layout
+    &[data-layout=group]:hover {
+        .mx_EventTile_line {
+            background-color: $system; // override $event-selected-color
+            box-shadow: none; // don't show the verification left stroke in the thread list
+        }
     }
 }
 
