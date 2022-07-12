@@ -31,3 +31,11 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: sentry
           SENTRY_PROJECT: riot-web
+
+      - run: mv dist/element-*.tar.gz webapp.tar.gz
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: webapp
+          path: webapp.tar.gz
+          retention-days: 1
