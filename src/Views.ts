@@ -38,6 +38,9 @@ enum Views {
     // flow to setup SSSS / cross-signing on this account
     E2E_SETUP,
 
+    // screen that allows users to select which use case they’ll use matrix for
+    USE_CASE_SELECTION,
+
     // we are logged in with an active matrix client. The logged_in state also
     // includes guests users as they too are logged in at the client level.
     LOGGED_IN,

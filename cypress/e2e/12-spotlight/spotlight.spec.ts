@@ -357,7 +357,7 @@ describe("Spotlight", () => {
             cy.spotlightSearch().clear().type("b");
             // our debouncing logic only starts the search after a short timeout,
             // so we wait a few milliseconds.
-            cy.wait(300);
+            cy.wait(1000);
             cy.get(".mx_Spinner").should("not.exist").then(() => {
                 cy.spotlightResults().should("have.length", 2).then(() => {
                     cy.spotlightResults().eq(0)

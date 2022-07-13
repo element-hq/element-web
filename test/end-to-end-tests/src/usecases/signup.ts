@@ -77,6 +77,10 @@ export async function signup(
     const acceptButton = await session.query('.mx_InteractiveAuthEntryComponents_termsSubmit');
     await acceptButton.click();
 
+    //now click the 'Skip' button to skip the use case selection
+    const skipUseCaseButton = await session.query('.mx_UseCaseSelection_skip .mx_AccessibleButton');
+    await skipUseCaseButton.click();
+
     //wait for registration to finish so the hash gets set
     //onhashchange better?
 

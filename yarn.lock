@@ -1570,10 +1570,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.1.1.tgz#ae95b0c1fb86a094c5f51d121f10e6a1b1ddca68"
-  integrity sha512-PIDkfYMNmph6x/rfgtIeQXUWj9hGzTLnOCFUYZFBnoTiS4UXkH73bz77Ho12uoUezUz4v40mxTXdrFxp8Zo6zA==
+"@matrix-org/analytics-events@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.1.2.tgz#820b1a78d1471f21da96274d92eb161b41f9e880"
+  integrity sha512-TumnmENiuTtSmfcVwzovLDq4pRgRlUmuq1bxOtli9XWMgscs3Z6URu5PJcvuFj87L7bKJrGCNS3zR+DMUxc7kg==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz":
   version "3.2.8"

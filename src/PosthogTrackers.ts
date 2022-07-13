@@ -30,6 +30,7 @@ const notLoggedInMap: Record<Exclude<Views, Views.LOGGED_IN>, ScreenName> = {
     [Views.WELCOME]: "Welcome",
     [Views.LOGIN]: "Login",
     [Views.REGISTER]: "Register",
+    [Views.USE_CASE_SELECTION]: "UseCaseSelection",
     [Views.FORGOT_PASSWORD]: "ForgotPassword",
     [Views.COMPLETE_SECURITY]: "CompleteSecurity",
     [Views.E2E_SETUP]: "E2ESetup",
