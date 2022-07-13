@@ -76,6 +76,7 @@ describe('MegolmExportEncryption', function() {
         window.crypto = {
             subtle: webCrypto.subtle,
             getRandomValues,
+            randomUUID: jest.fn().mockReturnValue("not-random-uuid"),
         };
         MegolmExportEncryption = require("../../src/utils/MegolmExportEncryption");
     });

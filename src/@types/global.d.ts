@@ -173,10 +173,6 @@ declare global {
         setSinkId(outputId: string): void;
     }
 
-    interface HTMLStyleElement {
-        disabled?: boolean;
-    }
-
     // Add Chrome-specific `instant` ScrollBehaviour
     type _ScrollBehavior = ScrollBehavior | "instant";
 
