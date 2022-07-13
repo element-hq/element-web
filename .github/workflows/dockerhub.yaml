@@ -1,21 +1,24 @@
 name: Dockerhub
 on:
   push:
-    branches: [ develop ]
     tags: [ v* ]
-concurrency: ${{ github.ref }}
+  schedule:
+    # This job can take a while, and we have usage limits, so just publish develop only twice a day
+    - cron: '0 7/12 * * *'
+concurrency: ${{ github.ref_name }}
 jobs:
   buildx:
-    name: Build artifacts
+    name: Docker Buildx
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # needed for docker-package to be able to calculate the version
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
       - name: Set up Docker Buildx
-        id: buildx
         uses: docker/setup-buildx-action@v2
         with:
           install: true
@@ -41,7 +44,7 @@ jobs:
         with:
           context: .
           push: true
-          platforms: ${{ steps.buildx.outputs.platforms }}
+          platforms: linux/amd64,linux/arm64,linux/arm
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
