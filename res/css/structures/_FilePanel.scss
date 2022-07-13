@@ -71,8 +71,15 @@ limitations under the License.
         .mx_MFileBody_download {
             padding-top: $spacing-8;
             display: flex;
+            justify-content: space-between;
             font-size: $font-14px;
             color: $event-timestamp-color;
+
+            .mx_MImageBody_size {
+                font-size: $font-14px;
+                text-align: right;
+                white-space: nowrap;
+            }
         }
 
         .mx_MFileBody_downloadLink {
@@ -80,42 +87,26 @@ limitations under the License.
             color: $light-fg-color;
         }
 
-        .mx_MImageBody_size {
-            flex: 1 0 0;
-            font-size: $font-14px;
-            text-align: right;
-            white-space: nowrap;
-        }
+        // anchor link as wrapper
+        .mx_EventTile_senderDetailsLink {
+            text-decoration: none;
 
-        .mx_DisambiguatedProfile {
-            flex: 1 1 auto;
-            line-height: initial;
-            opacity: 1.0;
-            color: $event-timestamp-color;
-        }
+            .mx_EventTile_senderDetails {
+                display: flex;
+                justify-content: space-between;
+                margin-top: -2px;
 
-        .mx_MessageTimestamp {
-            flex: 1 0 0;
-            text-align: right;
-            visibility: visible;
-            position: initial;
-            font-size: $font-14px;
-            opacity: 1.0;
+                .mx_DisambiguatedProfile {
+                    color: $event-timestamp-color; // for ellipsis. Color of displayName and mxid is inherited
+                }
+
+                .mx_MessageTimestamp {
+                    text-align: right;
+                    font-size: $font-14px;
+                }
+            }
         }
     }
-
-    /* Overides for the sender details line */
-
-    .mx_EventTile_senderDetails {
-        display: flex;
-        margin-top: -2px;
-    }
-
-    .mx_EventTile_senderDetailsLink {
-        text-decoration: none;
-    }
-
-    /* Overrides for the wrappers around the body tile */
 
     .mx_EventTile_line {
         margin-inline-end: 0;
