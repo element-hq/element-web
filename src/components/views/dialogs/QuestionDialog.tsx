@@ -23,7 +23,7 @@ import { IDialogProps } from "./IDialogProps";
 import BaseDialog from "./BaseDialog";
 import DialogButtons from "../elements/DialogButtons";
 
-interface IProps extends IDialogProps {
+export interface IQuestionDialogProps extends IDialogProps {
     title?: string;
     description?: React.ReactNode;
     extraButtons?: React.ReactNode;
@@ -39,8 +39,8 @@ interface IProps extends IDialogProps {
     cancelButton?: React.ReactNode;
 }
 
-export default class QuestionDialog extends React.Component<IProps> {
-    public static defaultProps: Partial<IProps> = {
+export default class QuestionDialog extends React.Component<IQuestionDialogProps> {
+    public static defaultProps: Partial<IQuestionDialogProps> = {
         title: "",
         description: "",
         extraButtons: null,

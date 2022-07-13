@@ -2199,6 +2199,8 @@
     "Failed to fetch your location. Please try again later.": "Failed to fetch your location. Please try again later.",
     "Timed out trying to fetch your location. Please try again later.": "Timed out trying to fetch your location. Please try again later.",
     "Unknown error fetching location. Please try again later.": "Unknown error fetching location. Please try again later.",
+    "You don't have permission to share locations": "You don't have permission to share locations",
+    "You need to have the right permissions in order to share locations in this room.": "You need to have the right permissions in order to share locations in this room.",
     "We couldn't send your location": "We couldn't send your location",
     "%(brand)s could not send your location. Please try again later.": "%(brand)s could not send your location. Please try again later.",
     "%(displayName)s's live location": "%(displayName)s's live location",

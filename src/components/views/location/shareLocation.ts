@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { makeLocationContent, makeBeaconInfoContent } from "matrix-js-sdk/src/content-helpers";
 import { logger } from "matrix-js-sdk/src/logger";
 import { IEventRelation } from "matrix-js-sdk/src/models/event";
@@ -23,7 +24,7 @@ import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { _t } from "../../../languageHandler";
 import Modal from "../../../Modal";
-import QuestionDialog from "../dialogs/QuestionDialog";
+import QuestionDialog, { IQuestionDialogProps } from "../dialogs/QuestionDialog";
 import SdkConfig from "../../../SdkConfig";
 import { OwnBeaconStore } from "../../../stores/OwnBeaconStore";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
@@ -45,12 +46,32 @@ const DEFAULT_LIVE_DURATION = 300000;
 
 export type ShareLocationFn = (props: LocationShareProps) => Promise<void>;
 
-const handleShareError = (error: Error, openMenu: () => void, shareType: LocationShareType) => {
-    const errorMessage = shareType === LocationShareType.Live ?
-        "We couldn't start sharing your live location" :
-        "We couldn't send your location";
-    logger.error(errorMessage, error);
-    const params = {
+const getPermissionsErrorParams = (shareType: LocationShareType): {
+    errorMessage: string;
+    modalParams: IQuestionDialogProps;
+} => {
+    const errorMessage = shareType === LocationShareType.Live
+        ? "Insufficient permissions to start sharing your live location"
+        : "Insufficient permissions to send your location";
+
+    const modalParams = {
+        title: _t("You don't have permission to share locations"),
+        description: _t("You need to have the right permissions in order to share locations in this room."),
+        button: _t("OK"),
+        hasCancelButton: false,
+        onFinished: () => {}, // NOOP
+    };
+    return { modalParams, errorMessage };
+};
+
+const getDefaultErrorParams = (shareType: LocationShareType, openMenu: () => void): {
+    errorMessage: string;
+    modalParams: IQuestionDialogProps;
+} => {
+    const errorMessage = shareType === LocationShareType.Live
+        ? "We couldn't start sharing your live location"
+        : "We couldn't send your location";
+    const modalParams = {
         title: _t("We couldn't send your location"),
         description: _t("%(brand)s could not send your location. Please try again later.", {
             brand: SdkConfig.get().brand,
@@ -63,7 +84,17 @@ const handleShareError = (error: Error, openMenu: () => void, shareType: Locatio
             }
         },
     };
-    Modal.createDialog(QuestionDialog, params);
+    return { modalParams, errorMessage };
+};
+
+const handleShareError = (error: Error, openMenu: () => void, shareType: LocationShareType): void => {
+    const { modalParams, errorMessage } = (error as MatrixError).errcode === 'M_FORBIDDEN' ?
+        getPermissionsErrorParams(shareType) :
+        getDefaultErrorParams(shareType, openMenu);
+
+    logger.error(errorMessage, error);
+
+    Modal.createDialog(QuestionDialog, modalParams);
 };
 
 export const shareLiveLocation = (
