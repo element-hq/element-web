@@ -162,6 +162,10 @@ $left-gutter: 64px;
 
     &[data-layout=irc],
     &[data-layout=group] {
+        // TODO: adjust the values for IRC layout
+        --EventTile-box-shadow-offset-x: calc(50px + $selected-message-border-width);
+        --EventTile-box-shadow-spread-radius: -50px;
+
         .mx_EventTile_e2eIcon {
             position: absolute;
         }
@@ -207,6 +211,24 @@ $left-gutter: 64px;
             }
         }
 
+        &.focus-visible:focus-within,
+        &.mx_EventTile_actionBarFocused,
+        &.mx_EventTile_isEditing,
+        &.mx_EventTile_selected {
+            .mx_EventTile_line {
+                background-color: $event-selected-color;
+            }
+        }
+
+        // this is used for the tile for the event which is selected via the URL.
+        &.mx_EventTile_isEditing,
+        &.mx_EventTile_selected {
+            > .mx_EventTile_line {
+                // TODO: ultimately we probably want some transition on here.
+                box-shadow: inset var(--EventTile-box-shadow-offset-x) 0 0 var(--EventTile-box-shadow-spread-radius) $accent;
+            }
+        }
+
         &.mx_EventTile_info {
             .mx_EventTile_e2eIcon {
                 top: 0;
@@ -218,24 +240,20 @@ $left-gutter: 64px;
         }
 
         &:hover {
-            // TODO: Adjust the values for IRC layout
-            --EventTile_hover_box-shadow-offset-x: calc(50px + $selected-message-border-width);
-            --EventTile_hover_box-shadow-spread-radius: -50px;
-
             .mx_EventTile_line {
                 background-color: $event-selected-color;
             }
 
             &.mx_EventTile_verified .mx_EventTile_line {
-                box-shadow: inset var(--EventTile_hover_box-shadow-offset-x) 0 0 var(--EventTile_hover_box-shadow-spread-radius) $e2e-verified-color;
+                box-shadow: inset var(--EventTile-box-shadow-offset-x) 0 0 var(--EventTile-box-shadow-spread-radius) $e2e-verified-color;
             }
 
             &.mx_EventTile_unverified .mx_EventTile_line {
-                box-shadow: inset var(--EventTile_hover_box-shadow-offset-x) 0 0 var(--EventTile_hover_box-shadow-spread-radius) $e2e-unverified-color;
+                box-shadow: inset var(--EventTile-box-shadow-offset-x) 0 0 var(--EventTile-box-shadow-spread-radius) $e2e-unverified-color;
             }
 
             &.mx_EventTile_unknown .mx_EventTile_line {
-                box-shadow: inset var(--EventTile_hover_box-shadow-offset-x) 0 0 var(--EventTile_hover_box-shadow-spread-radius) $e2e-unknown-color;
+                box-shadow: inset var(--EventTile-box-shadow-offset-x) 0 0 var(--EventTile-box-shadow-spread-radius) $e2e-unknown-color;
             }
         }
     }
@@ -435,22 +453,8 @@ $left-gutter: 64px;
     font-size: $font-14px;
     position: relative;
 
-    /* this is used for the tile for the event which is selected via the URL.
-     * TODO: ultimately we probably want some transition on here.
-     */
-    &.mx_EventTile_isEditing > .mx_EventTile_line,
-    &.mx_EventTile_selected > .mx_EventTile_line {
-        box-shadow: inset calc(50px + $selected-message-border-width) 0 0 -50px $accent;
-        background-color: $event-selected-color;
-    }
-
     &.mx_EventTile_selected.mx_EventTile_info .mx_EventTile_line {
         padding-left: calc($left-gutter + 18px);
-    }
-
-    &.mx_EventTile.mx_EventTile_actionBarFocused .mx_EventTile_line,
-    &.mx_EventTile.focus-visible:focus-within .mx_EventTile_line {
-        background-color: $event-selected-color;
     }
 }
 
