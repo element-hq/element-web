@@ -1,10 +1,7 @@
 {
     "Unknown device": "უცნობი მოწყობილობა",
-    "You need to be using HTTPS to place a screen-sharing call.": "ეკრანის გაზიარების ფუნქციის მქონე ზარისთვის საჭიროა, იყენებდეთ HTTPS-ს.",
     "Dismiss": "უარის თქმა",
-    "powered by Matrix": "Matrix-ზე დაფუძნებული",
     "Welcome to Element": "კეთილი იყოს თქვენი მობრძანება Element-ზე",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "დეცენტრალიზებული, დაშიფრული ჩატი &amp; კოლაბორაცია, დაფუძნებული [matrix]-ზე",
     "Explore rooms": "ოთახების დათავლიერება",
     "Failed to start": "ჩართვა ვერ მოხერხდა",
     "Use %(brand)s on mobile": "გამოიყენე %(brand)s-ი მობილურზე",
@@ -25,7 +22,6 @@
     "Powered by Matrix": "მუშაობს Matrix-ის მეშვეობით",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Go to your browser to complete Sign In": "გახსენი ბრაუზერი Sign In-ის დასასრულებლად",
-    "Open user settings": "მომხმარებლების პარამეტრების გახსნა",
     "Open": "გახსნა",
     "Download Completed": "გადმოწერა დასრულებულია"
 }

@@ -176,6 +176,15 @@ Enables showing a right-click context menu when right-clicking messages in the
 timeline. This menu shows options that can usually be found in the message
 action bar or in the message options.
 
-## Voice & video rooms (`feature_video_rooms`) [In Development]
+## Video rooms (`feature_video_rooms`)
 
 Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
+
+## Rich text in room topics (`feature_html_topic`) [In Development]
+
+Enables rendering of MD / HTML in room topics.
+
+## Exploring public spaces (`feature_exploring_public_spaces`)
+
+Enables exploring public spaces in the new search dialog. Requires the server to
+have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.

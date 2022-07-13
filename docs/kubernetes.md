@@ -70,12 +70,6 @@ Then you can deploy it to your cluster with something like `kubectl apply -f my-
                         "matrix.org"
                 ]
             },
-            "piwik": {
-                "url": "https://piwik.riot.im/",
-                "whitelistedHSUrls": ["https://matrix.org"],
-                "whitelistedISUrls": ["https://vector.im", "https://matrix.org"],
-                "siteId": 1
-            },
             "enable_presence_by_hs_url": {
                 "https://matrix.org": false,
                 "https://matrix-client.matrix.org": false

@@ -1,10 +1,7 @@
 {
     "Dismiss": "Απόρριψη",
     "Unknown device": "Άγνωστη συσκευή",
-    "You need to be using HTTPS to place a screen-sharing call.": "Απαιτείται η χρήση HTTPS για την πραγματοποίηση κλήσης διαμοιρασμού επιφάνειας εργασίας.",
-    "powered by Matrix": "λειτουργεί με το Matrix",
     "Welcome to Element": "Καλώς ήλθατε στο Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Αποκεντρωμένη, κρυπτογραφημένη συνεργασία συνομιλίας χρησιμοποιώντας το [matrix]",
     "Sign In": "Σύνδεση",
     "Create Account": "Δημιουργία Λογαριασμού",
     "The message from the parser is: %(message)s": "Το μήνυμα από τον αναλυτή είναι: %(message)s",
@@ -21,8 +18,6 @@
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Η ρύθμιση του Element περιέχει μη έγκυρο JSON. Διορθώστε το πρόβλημα και φορτώστε ξανά τη σελίδα.",
     "Unable to load config file: please refresh the page to try again.": "Δεν είναι δυνατή η φόρτωση του αρχείου config: ανανεώστε τη σελίδα για να δοκιμάσετε ξανά.",
     "Download Completed": "Η λήψη ολοκληρώθηκε",
-    "Open user settings": "Ανοίξτε τις ρυθμίσεις χρήστη",
-    "Previous/next recently visited room or community": "Προηγούμενο / επόμενο δωμάτιο ή κοινότητα που επισκεφτήκατε πρόσφατα",
     "Unsupported browser": "Μη υποστηριζόμενο πρόγραμμα περιήγησης",
     "Your browser can't run %(brand)s": "Το πρόγραμμα περιήγησής σας δεν μπορεί να εκτελέσει %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s χρησιμοποιεί προηγμένες δυνατότητες προγράμματος περιήγησης που δεν υποστηρίζονται από το τρέχον πρόγραμμα περιήγησής σας.",
@@ -32,7 +27,7 @@
     "Failed to start": "Αποτυχία έναρξης",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
-    "Missing indexeddb worker script!": "Απουσία indexeddb worker script!",
     "Use %(brand)s on mobile": "Χρήση %(brand)s σε κινητό",
-    "Switch to space by number": "Εναλλαγή σε space με αριθμό"
+    "Switch to space by number": "Εναλλαγή σε space με αριθμό",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Αποκεντρωμένη, κρυπτογραφημένη συνομιλία και συνεργασία χρησιμοποιώντας το $matrixLogo"
 }

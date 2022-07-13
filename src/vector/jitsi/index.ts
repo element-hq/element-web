@@ -52,6 +52,7 @@ let openIdToken: IOpenIDCredentials;
 let roomName: string;
 let startAudioOnly: boolean;
 let isVideoChannel: boolean;
+let supportsScreensharing: boolean;
 
 let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
@@ -98,8 +99,8 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
                 new Promise<void>(resolve => {
                     widgetApi.once(`action:${ElementWidgetActions.ClientReady}`, ev => {
                         ev.preventDefault();
-                        widgetApi.transport.reply(ev.detail, {});
                         resolve();
+                        widgetApi.transport.reply(ev.detail, {});
                     });
                 }),
                 new Promise<void>(resolve => {
@@ -122,6 +123,7 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
         roomName = qsParam('roomName', true);
         startAudioOnly = qsParam('isAudioOnly', true) === "true";
         isVideoChannel = qsParam('isVideoChannel', true) === "true";
+        supportsScreensharing = qsParam('supportsScreensharing', true) === "true";
 
         // We've reached the point where we have to wait for the config, so do that then parse it.
         const instanceConfig = new SnakedObject<IConfigOptions>((await configPromise) ?? <IConfigOptions>{});
@@ -145,51 +147,82 @@ const ack = (ev: CustomEvent<IWidgetApiRequest>) => widgetApi.transport.reply(ev
 
             widgetApi.on(`action:${ElementWidgetActions.JoinCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
                     const { audioDevice, videoDevice } = ev.detail.data;
-                    joinConference(audioDevice as string, videoDevice as string);
+                    joinConference(audioDevice as string | null, videoDevice as string | null);
                     ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.HangupCall}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
                     meetApi?.executeCommand('hangup');
+                    ack(ev);
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.ForceHangupCall}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
+                    meetApi?.dispose();
+                    notifyHangup();
+                    meetApi = null;
+                    closeConference();
                     ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && !await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteAudio}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && await meetApi.isAudioMuted()) {
                         meetApi.executeCommand('toggleAudio');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.MuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && !await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.UnmuteVideo}`,
                 async (ev: CustomEvent<IWidgetApiRequest>) => {
-                    ack(ev);
+                    ev.preventDefault();
                     if (meetApi && await meetApi.isVideoMuted()) {
                         meetApi.executeCommand('toggleVideo');
                     }
+                    ack(ev);
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.TileLayout}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
+                    meetApi?.executeCommand('setTileView', true);
+                    ack(ev);
+                },
+            );
+            widgetApi.on(`action:${ElementWidgetActions.SpotlightLayout}`,
+                (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
+                    meetApi?.executeCommand('setTileView', false);
+                    ack(ev);
                 },
             );
             widgetApi.on(`action:${ElementWidgetActions.StartLiveStream}`,
                 (ev: CustomEvent<IWidgetApiRequest>) => {
+                    ev.preventDefault();
                     if (meetApi) {
                         meetApi.executeCommand('startRecording', {
                             mode: 'stream',
@@ -291,12 +324,12 @@ function createJWTToken() {
     );
 }
 
-async function notifyHangup() {
+async function notifyHangup(errorMessage?: string) {
     if (widgetApi) {
         // We send the hangup event before setAlwaysOnScreen, because the latter
         // can cause the receiving side to instantly stop listening.
         try {
-            await widgetApi.transport.send(ElementWidgetActions.HangupCall, {});
+            await widgetApi.transport.send(ElementWidgetActions.HangupCall, { errorMessage });
         } finally {
             await widgetApi.setAlwaysOnScreen(false);
         }
@@ -313,7 +346,11 @@ function closeConference() {
 }
 
 // event handler bound in HTML
-function joinConference(audioDevice?: string, videoDevice?: string) {
+// An audio device of undefined instructs Jitsi to start unmuted with whatever
+// audio device it can find, while a device of null instructs it to start muted,
+// and a non-nullish device specifies the label of a specific device to use.
+// Same for video devices.
+function joinConference(audioDevice?: string | null, videoDevice?: string | null) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -355,8 +392,14 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         configOverwrite: {
             subject: roomName,
             startAudioOnly,
-            startWithAudioMuted: audioDevice == null,
-            startWithVideoMuted: videoDevice == null,
+            startWithAudioMuted: audioDevice === null,
+            startWithVideoMuted: videoDevice === null,
+            // Request some log levels for inclusion in rageshakes
+            // Ideally we would capture all possible log levels, but this can
+            // cause Jitsi Meet to try to post various circular data structures
+            // back over the iframe API, and therefore end up crashing
+            // https://github.com/jitsi/jitsi-meet/issues/11585
+            apiLogLevels: ["warn", "error"],
         } as any,
         jwt: jwt,
     };
@@ -367,72 +410,102 @@ function joinConference(audioDevice?: string, videoDevice?: string) {
         // deployments that have it enabled
         options.configOverwrite.prejoinConfig = { enabled: false };
         // Use a simplified set of toolbar buttons
-        options.configOverwrite.toolbarButtons = [
-            "microphone", "camera", "desktop", "tileview", "hangup",
-        ];
+        options.configOverwrite.toolbarButtons = ["microphone", "camera", "tileview", "hangup"];
+        // Note: We can hide the screenshare button in video rooms but not in
+        // normal conference calls, since in video rooms we control exactly what
+        // set of controls appear, but in normal calls we need to leave that up
+        // to the deployment's configuration.
+        // https://github.com/vector-im/element-web/issues/4880#issuecomment-940002464
+        if (supportsScreensharing) options.configOverwrite.toolbarButtons.splice(2, 0, "desktop");
         // Hide all top bar elements
         options.configOverwrite.conferenceInfo = { autoHide: [] };
+        // Remove the ability to hide your own tile, since we're hiding the
+        // settings button which would be the only way to get it back
+        options.configOverwrite.disableSelfViewSettings = true;
     }
 
     meetApi = new JitsiMeetExternalAPI(jitsiDomain, options);
 
     // fires once when user joins the conference
     // (regardless of video on or off)
-    meetApi.on("videoConferenceJoined", () => {
-        if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
-
-        if (widgetApi) {
-            // ignored promise because we don't care if it works
-            // noinspection JSIgnoredPromiseFromCall
-            widgetApi.setAlwaysOnScreen(true);
-            widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
-        }
-
-        // Video rooms should start in tile mode
-        if (isVideoChannel) meetApi.executeCommand("setTileView", true);
-    });
-
-    meetApi.on("videoConferenceLeft", () => {
-        notifyHangup();
-        meetApi = null;
-    });
-
+    meetApi.on("videoConferenceJoined", onVideoConferenceJoined);
+    meetApi.on("videoConferenceLeft", onVideoConferenceLeft);
     meetApi.on("readyToClose", closeConference);
-
-    meetApi.on("errorOccurred", ({ error }) => {
-        if (error.isFatal) {
-            // We got disconnected. Since Jitsi Meet might send us back to the
-            // prejoin screen, we're forced to act as if we hung up entirely.
-            notifyHangup();
-            meetApi = null;
-            closeConference();
-        }
-    });
-
-    meetApi.on("audioMuteStatusChanged", ({ muted }) => {
-        const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
-        widgetApi.transport.send(action, {});
-    });
-
-    meetApi.on("videoMuteStatusChanged", ({ muted }) => {
-        if (muted) {
-            // Jitsi Meet always sends a "video muted" event directly before
-            // hanging up, which we need to ignore by padding the timeout here,
-            // otherwise the React SDK will mistakenly think the user turned off
-            // their video by hand
-            setTimeout(() => {
-                if (meetApi) widgetApi.transport.send(ElementWidgetActions.MuteVideo, {});
-            }, 200);
-        } else {
-            widgetApi.transport.send(ElementWidgetActions.UnmuteVideo, {});
-        }
-    });
+    meetApi.on("errorOccurred", onErrorOccurred);
+    meetApi.on("audioMuteStatusChanged", onAudioMuteStatusChanged);
+    meetApi.on("videoMuteStatusChanged", onVideoMuteStatusChanged);
 
     ["videoConferenceJoined", "participantJoined", "participantLeft"].forEach(event => {
-        meetApi.on(event, () => {
-            widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
-                participants: meetApi.getParticipantsInfo(),
-            });
-        });
+        meetApi.on(event, updateParticipants);
     });
+
+    // Patch logs into rageshakes
+    meetApi.on("log", onLog);
 }
+
+const onVideoConferenceJoined = () => {
+    // Although we set our displayName with the userInfo option above, that
+    // option has a bug where it causes the name to be the HTML encoding of
+    // what was actually intended. So, we use the displayName command to at
+    // least ensure that the name is correct after entering the meeting.
+    // https://github.com/jitsi/jitsi-meet/issues/11664
+    // We can't just use these commands immediately after creating the
+    // iframe, because there's *another* bug where they can crash Jitsi by
+    // racing with its startup process.
+    if (displayName) meetApi.executeCommand("displayName", displayName);
+    // This doesn't have a userInfo equivalent, so has to be set via commands
+    if (avatarUrl) meetApi.executeCommand("avatarUrl", avatarUrl);
+
+    if (widgetApi) {
+        // ignored promise because we don't care if it works
+        // noinspection JSIgnoredPromiseFromCall
+        widgetApi.setAlwaysOnScreen(true);
+        widgetApi.transport.send(ElementWidgetActions.JoinCall, {});
+    }
+
+    // Video rooms should start in tile mode
+    if (isVideoChannel) meetApi.executeCommand("setTileView", true);
+};
+
+const onVideoConferenceLeft = () => {
+    notifyHangup();
+    meetApi = null;
+};
+
+const onErrorOccurred = ({ error }) => {
+    if (error.isFatal) {
+        // We got disconnected. Since Jitsi Meet might send us back to the
+        // prejoin screen, we're forced to act as if we hung up entirely.
+        notifyHangup(error.message);
+        meetApi = null;
+        closeConference();
+    }
+};
+
+const onAudioMuteStatusChanged = ({ muted }) => {
+    const action = muted ? ElementWidgetActions.MuteAudio : ElementWidgetActions.UnmuteAudio;
+    widgetApi?.transport.send(action, {});
+};
+
+const onVideoMuteStatusChanged = ({ muted }) => {
+    if (muted) {
+        // Jitsi Meet always sends a "video muted" event directly before
+        // hanging up, which we need to ignore by padding the timeout here,
+        // otherwise the React SDK will mistakenly think the user turned off
+        // their video by hand
+        setTimeout(() => {
+            if (meetApi) widgetApi?.transport.send(ElementWidgetActions.MuteVideo, {});
+        }, 200);
+    } else {
+        widgetApi?.transport.send(ElementWidgetActions.UnmuteVideo, {});
+    }
+};
+
+const updateParticipants = () => {
+    widgetApi?.transport.send(ElementWidgetActions.CallParticipants, {
+        participants: meetApi.getParticipantsInfo(),
+    });
+};
+
+const onLog = ({ logLevel, args }) =>
+    (parent as unknown as typeof global).mx_rage_logger?.log(logLevel, ...args);

@@ -1,16 +1,11 @@
 {
     "Dismiss": "Abaikan",
-    "powered by Matrix": "didukung oleh Matrix",
     "Unknown device": "Perangkat tidak dikenal",
-    "You need to be using HTTPS to place a screen-sharing call.": "Anda perlu menggunakan HTTPS untuk melakukan panggilan berbagi layar.",
     "Welcome to Element": "Selamat datang di Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Obrolan &amp; kolaborasi terdecentralisasi dan terenkripsi, diberdayakan oleh [matrix]",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfigurasi Element Anda berisi JSON yang tidak valid. Mohon perbaiki masalahnya dan muat ulang halamannya.",
     "Invalid configuration: no default server specified.": "Konfigurasi tidak valid: server bawaan belum ditentukan.",
-    "Missing indexeddb worker script!": "Tidak ada script worker indexeddb!",
     "Explore rooms": "Jelajahi ruangan",
     "Create Account": "Buat Akun",
-    "Switch to space by number": "Beralih ke space bedasarkan angka",
     "Go to your browser to complete Sign In": "Buka browser Anda untuk menyelesaikan Sign In",
     "Sign In": "Masuk",
     "Failed to start": "Gagal untuk memulai",
@@ -25,8 +20,6 @@
     "Powered by Matrix": "Diberdayakan oleh Matrix",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
-    "Previous/next recently visited room or community": "Ruangan atau komunitas yang baru saja dikunjungi sebelumnya/berikutnya",
-    "Open user settings": "Buka pengaturan pengguna",
     "Open": "Buka",
     "Download Completed": "Unduhan Selesai",
     "Unexpected error preparing the app. See console for details.": "Kesalahan tak terduga saat menyiapkan aplikasi. Lihat konsol untuk detail.",
@@ -35,7 +28,5 @@
     "The message from the parser is: %(message)s": "Pesan dari pengurai adalah: %(message)s",
     "Your Element is misconfigured": "Anda mengatur Element dengan salah",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Konfigurasi tidak valid: hanya bisa menentukan satu dari default_server_config, default_server_name, atau default_hs_url.",
-    "Next recently visited room or community": "Ruangan atau komunitas berikutnya yang baru saja dilihat",
-    "Previous recently visited room or community": "Ruangan atau komunitas sebelumnya yang baru saja dilihat",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Obrolan &amp; kolaborasi terdesentralisasi dan terenkripsi, diberdayakan oleh $matrixLogo"
 }
