@@ -236,6 +236,10 @@ export default class ElectronPlatform extends VectorBasePlatform {
         electron.send('loudNotification');
     }
 
+    public needsUrlTooltips(): boolean {
+        return true;
+    }
+
     public async getAppVersion(): Promise<string> {
         return this.ipc.call('getAppVersion');
     }
@@ -327,6 +331,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public supportsDesktopCapturer(): boolean {
         return true;
+    }
+
+    public supportsJitsiScreensharing(): boolean {
+        // See https://github.com/vector-im/element-web/issues/4880
+        return false;
     }
 
     public async getAvailableSpellCheckLanguages(): Promise<string[]> {

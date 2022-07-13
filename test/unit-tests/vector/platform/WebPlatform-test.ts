@@ -30,6 +30,13 @@ describe('WebPlatform', () => {
         expect(platform.getHumanReadableName()).toEqual('Web Platform');
     });
 
+    it('registers service worker', () => {
+        // @ts-ignore - mocking readonly object
+        navigator.serviceWorker = { register: jest.fn() };
+        new WebPlatform();
+        expect(navigator.serviceWorker.register).toHaveBeenCalled();
+    });
+
     describe('notification support', () => {
         const mockNotification = {
             requestPermission: jest.fn(),
@@ -50,7 +57,7 @@ describe('WebPlatform', () => {
         it('supportsNotifications returns true when platform supports notifications', () => {
             expect(new WebPlatform().supportsNotifications()).toBe(true);
         });
-        
+
         it('maySendNotifications returns true when notification permissions are not granted', () => {
             expect(new WebPlatform().maySendNotifications()).toBe(false);
         });
@@ -109,78 +116,76 @@ describe('WebPlatform', () => {
         });
 
         describe('pollForUpdate()', () => {
-            
             it('should return not available and call showNoUpdate when current version matches most recent version', async () => {
                 process.env.VERSION = prodVersion;
                 setRequestMockImplementation(undefined, { status: 200}, prodVersion);
                 const platform = new WebPlatform();
-    
+
                 const showUpdate = jest.fn();
                 const showNoUpdate = jest.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
-    
+
                 expect(result).toEqual({ status: UpdateCheckStatus.NotAvailable });
                 expect(showUpdate).not.toHaveBeenCalled();
                 expect(showNoUpdate).toHaveBeenCalled();
             });
-    
+
             it('should strip v prefix from versions before comparing', async () => {
                 process.env.VERSION = prodVersion;
                 setRequestMockImplementation(undefined, { status: 200}, `v${prodVersion}`);
                 const platform = new WebPlatform();
-    
+
                 const showUpdate = jest.fn();
                 const showNoUpdate = jest.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
-    
+
                 // versions only differ by v prefix, no update
                 expect(result).toEqual({ status: UpdateCheckStatus.NotAvailable });
                 expect(showUpdate).not.toHaveBeenCalled();
                 expect(showNoUpdate).toHaveBeenCalled();
             });
-    
+
             it('should return ready and call showUpdate when current version differs from most recent version', async () => {
                 process.env.VERSION = '0.0.0'; // old version
                 setRequestMockImplementation(undefined, { status: 200}, prodVersion);
                 const platform = new WebPlatform();
-    
+
                 const showUpdate = jest.fn();
                 const showNoUpdate = jest.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
-    
+
                 expect(result).toEqual({ status: UpdateCheckStatus.Ready });
                 expect(showUpdate).toHaveBeenCalledWith('0.0.0', prodVersion);
                 expect(showNoUpdate).not.toHaveBeenCalled();
             });
-    
+
             it('should return ready without showing update when user registered in last 24', async () => {
                 process.env.VERSION = '0.0.0'; // old version
                 jest.spyOn(MatrixClientPeg, 'userRegisteredWithinLastHours').mockReturnValue(true);
                 setRequestMockImplementation(undefined, { status: 200}, prodVersion);
                 const platform = new WebPlatform();
-    
+
                 const showUpdate = jest.fn();
                 const showNoUpdate = jest.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
-    
+
                 expect(result).toEqual({ status: UpdateCheckStatus.Ready });
                 expect(showUpdate).not.toHaveBeenCalled();
                 expect(showNoUpdate).not.toHaveBeenCalled();
             });
-    
+
             it('should return error when version check fails', async () => {
                 setRequestMockImplementation('oups');
                 const platform = new WebPlatform();
-    
+
                 const showUpdate = jest.fn();
                 const showNoUpdate = jest.fn();
                 const result = await platform.pollForUpdate(showUpdate, showNoUpdate);
-    
+
                 expect(result).toEqual({ status: UpdateCheckStatus.Error, detail: 'Unknown Error' });
                 expect(showUpdate).not.toHaveBeenCalled();
                 expect(showNoUpdate).not.toHaveBeenCalled();
             });
         });
-
     });
 });

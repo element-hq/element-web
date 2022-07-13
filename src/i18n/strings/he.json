@@ -1,19 +1,14 @@
 {
     "Dismiss": "התעלם",
-    "powered by Matrix": "מופעל ע\"י Matrix",
     "Unknown device": "מכשיר לא ידוע",
-    "You need to be using HTTPS to place a screen-sharing call.": "עליך להיות מחובר ב-HTTPS בכדי לבצע שיחה עם שיתוף מסך.",
     "Welcome to Element": "ברוכים הבאים ל Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "צ'אט וכלי שיתוף פעולה מבוזר ומוצפן - מופעל באמצעות [matrix]",
     "Invalid JSON": "JSON לא חוקי",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "תצורה שגויה: ניתן לציין רק אחד מהערכים הבאים, default_server_config, default_server_name, או default_hs_url.",
     "Invalid configuration: no default server specified.": "תצורה שגויה: לא צוין שרת ברירת מחדל.",
-    "Open user settings": "פתח הגדרות משתמש",
     "Go to your browser to complete Sign In": "עבור לדפדפן להמשך ההתחברות",
     "Explore rooms": "גלה חדרים",
     "Create Account": "משתמש חדש",
     "Sign In": "התחברות",
-    "Previous/next recently visited room or community": "הבא\\קודם חדרים וקהילות שביקרתם לאחרונה",
     "Open": "פתח",
     "Download Completed": "ההורדה הושלמה",
     "Unexpected error preparing the app. See console for details.": "שגיאה לא צפויה במהלך טעינת האפליקציה. ראו קונסול לפרטים נוספים.",
@@ -34,5 +29,6 @@
     "The message from the parser is: %(message)s": "ההודעה מהמנתח היא: %(message)s",
     "Missing indexeddb worker script!": "סקריפט indexeddb worker חסר!",
     "Switch to space by number": "עבור 'למרחב' על פי המספר שלו",
-    "Use %(brand)s on mobile": "השתמש ב-%(brand)s במכשיר הנייד"
+    "Use %(brand)s on mobile": "השתמש ב-%(brand)s במכשיר הנייד",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "צ'אט מבוזר ומוצפן &amp; מופעל בשיתוף פעולה ע\"י $matrixLogo"
 }

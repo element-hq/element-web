@@ -48,7 +48,7 @@ export class IPCManager {
         return deferred.promise;
     }
 
-    private onIpcReply = (ev: {}, payload: IPCPayload): void => {
+    private onIpcReply = (_ev: {}, payload: IPCPayload): void => {
         if (payload.id === undefined) {
             logger.warn("Ignoring IPC reply with no ID");
             return;
