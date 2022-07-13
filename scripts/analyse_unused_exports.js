@@ -9,6 +9,7 @@ const ignore = [];
 
 ignore.push(...Object.values(JSON.parse(fs.readFileSync(`${__dirname}/../components.json`))));
 ignore.push("/index.ts");
+// We ignore js-sdk by default as it may export for other non element-web projects
 if (!includeJSSDK) ignore.push("matrix-js-sdk");
 
 const command = `yarn ts-prune --ignore "${ignore.join("|")}" | grep -v "(used in module)"`;
