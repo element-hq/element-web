@@ -1,7 +1,7 @@
 {
     "default_server_config": {
         "m.homeserver": {
-            "base_url": "https://server.scichat.esss.lu.se",
+            "base_url": "https://server.scichat.ess.eu",
             "server_name": "ESS"
         },
         "m.identity_server": {
