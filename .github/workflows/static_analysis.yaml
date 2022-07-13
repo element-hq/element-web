@@ -75,7 +75,7 @@ jobs:
           cache: 'yarn'
 
       - name: Install Deps
-        run: "scripts/ci/layered.sh"
+        run: "scripts/layered.sh"
 
       - name: Dead Code Analysis
         run: "yarn run analyse:unused-exports"
