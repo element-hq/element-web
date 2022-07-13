@@ -11,8 +11,9 @@ ignore.push("/index.ts");
 
 const command = `yarn ts-prune --ignore "${ignore.join("|")}" | grep -v "(used in module)"`;
 
-exec(command, (error, stdout) => {
+exec(command, (error, stdout, stderr) => {
     if (error) throw error;
+    if (stderr) throw Error(stderr);
 
     let lines = stdout.split("\n");
     // Remove the first line as that is the command that was being run and we
