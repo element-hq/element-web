@@ -50,6 +50,7 @@ import UploadFailureDialog from "./components/views/dialogs/UploadFailureDialog"
 import UploadConfirmDialog from "./components/views/dialogs/UploadConfirmDialog";
 import { createThumbnail } from "./utils/image-media";
 import { attachRelation } from "./components/views/rooms/SendMessageComposer";
+import { doMaybeLocalRoomAction } from "./utils/local-room";
 
 // scraped out of a macOS hidpi (5660ppm) screenshot png
 //                  5669 px (x-axis)      , 5669 px (y-axis)      , per metre
@@ -351,11 +352,14 @@ export default class ContentMessages {
         text: string,
         matrixClient: MatrixClient,
     ): Promise<ISendEventResponse> {
-        const prom = matrixClient.sendStickerMessage(roomId, threadId, url, info, text).catch((e) => {
+        return doMaybeLocalRoomAction(
+            roomId,
+            (actualRoomId: string) => matrixClient.sendStickerMessage(actualRoomId, threadId, url, info, text),
+            matrixClient,
+        ).catch((e) => {
             logger.warn(`Failed to send content with URL ${url} to room ${roomId}`, e);
             throw e;
         });
-        return prom;
     }
 
     public getUploadLimit(): number | null {
@@ -412,6 +416,8 @@ export default class ContentMessages {
         let promBefore: Promise<any> = Promise.resolve();
         for (let i = 0; i < okFiles.length; ++i) {
             const file = okFiles[i];
+            const loopPromiseBefore = promBefore;
+
             if (!uploadAll) {
                 const { finished } = Modal.createDialog<[boolean, boolean]>(UploadConfirmDialog, {
                     file,
@@ -425,7 +431,17 @@ export default class ContentMessages {
                 }
             }
 
-            promBefore = this.sendContentToRoom(file, roomId, relation, matrixClient, replyToEvent, promBefore);
+            promBefore = doMaybeLocalRoomAction(
+                roomId,
+                (actualRoomId) => this.sendContentToRoom(
+                    file,
+                    actualRoomId,
+                    relation,
+                    matrixClient,
+                    replyToEvent,
+                    loopPromiseBefore,
+                ),
+            );
         }
 
         if (replyToEvent) {

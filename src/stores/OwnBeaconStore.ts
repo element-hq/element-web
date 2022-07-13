@@ -44,6 +44,7 @@ import {
     watchPosition,
 } from "../utils/beacon";
 import { getCurrentPosition } from "../utils/beacon";
+import { doMaybeLocalRoomAction } from "../utils/local-room";
 
 const isOwnBeacon = (beacon: Beacon, userId: string): boolean => beacon.beaconInfoOwner === userId;
 
@@ -399,9 +400,10 @@ export class OwnBeaconStore extends AsyncStoreWithClient<OwnBeaconStoreState> {
         await Promise.all(existingLiveBeaconIdsForRoom.map(beaconId => this.stopBeacon(beaconId)));
 
         // eslint-disable-next-line camelcase
-        const { event_id } = await this.matrixClient.unstable_createLiveBeacon(
+        const { event_id } = await doMaybeLocalRoomAction(
             roomId,
-            beaconInfoContent,
+            (actualRoomId: string) => this.matrixClient.unstable_createLiveBeacon(actualRoomId, beaconInfoContent),
+            this.matrixClient,
         );
 
         storeLocallyCreateBeaconEventId(event_id);

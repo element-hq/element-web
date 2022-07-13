@@ -35,6 +35,7 @@ import { arrayFastClone, arraySeed } from "../../../utils/arrays";
 import Field from "./Field";
 import AccessibleButton from "./AccessibleButton";
 import Spinner from "./Spinner";
+import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 
 interface IProps extends IDialogProps {
     room: Room;
@@ -163,11 +164,15 @@ export default class PollCreateDialog extends ScrollableBaseModal<IProps, IState
     protected submit(): void {
         this.setState({ busy: true, canSubmit: false });
         const pollEvent = this.createEvent();
-        this.matrixClient.sendEvent(
+        doMaybeLocalRoomAction(
             this.props.room.roomId,
-            this.props.threadId,
-            pollEvent.type,
-            pollEvent.content,
+            (actualRoomId: string) => this.matrixClient.sendEvent(
+                actualRoomId,
+                this.props.threadId,
+                pollEvent.type,
+                pollEvent.content,
+            ),
+            this.matrixClient,
         ).then(
             () => this.props.onFinished(true),
         ).catch(e => {

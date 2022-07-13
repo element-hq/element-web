@@ -37,6 +37,7 @@ import { StaticNotificationState } from "../../../stores/notifications/StaticNot
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import InlineSpinner from "../elements/InlineSpinner";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
+import { doMaybeLocalRoomAction } from "../../../utils/local-room";
 
 interface IProps {
     room: Room;
@@ -103,7 +104,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         try {
             // noinspection ES6MissingAwait - we don't care if it fails, it'll get queued.
-            MatrixClientPeg.get().sendMessage(this.props.room.roomId, {
+            const content = {
                 "body": "Voice message",
                 //"msgtype": "org.matrix.msc2516.voice",
                 "msgtype": MsgType.Audio,
@@ -132,7 +133,12 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                     waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
                 },
                 "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
-            });
+            };
+
+            doMaybeLocalRoomAction(
+                this.props.room.roomId,
+                (actualRoomId: string) => MatrixClientPeg.get().sendMessage(actualRoomId, content),
+            );
         } catch (e) {
             logger.error("Error sending voice message:", e);
 

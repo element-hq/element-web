@@ -28,8 +28,8 @@ describe("MatrixClientPeg", () => {
     it("setJustRegisteredUserId", () => {
         stubClient();
         (peg as any).matrixClient = peg.get();
-        peg.setJustRegisteredUserId("@userId:matrix.rog");
-        expect(peg.get().credentials.userId).toBe("@userId:matrix.rog");
+        peg.setJustRegisteredUserId("@userId:matrix.org");
+        expect(peg.get().credentials.userId).toBe("@userId:matrix.org");
         expect(peg.currentUserIsJustRegistered()).toBe(true);
         expect(peg.userRegisteredWithinLastHours(0)).toBe(false);
         expect(peg.userRegisteredWithinLastHours(1)).toBe(true);
