@@ -4,7 +4,7 @@
 const fs = require("fs");
 const { exec } = require("node:child_process");
 
-const includeJSSDK = Boolean(process.argv.find((val) => val === "--include-js-sdk"));
+const includeJSSDK = process.argv.includes("--include-js-sdk");
 const ignore = [];
 
 ignore.push(...Object.values(JSON.parse(fs.readFileSync(`${__dirname}/../components.json`))));
