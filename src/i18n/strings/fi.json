@@ -2,9 +2,6 @@
     "Dismiss": "Hylkää",
     "Unknown device": "Tuntematon laite",
     "Welcome to Element": "Tervetuloa Element-sovellukseen",
-    "You need to be using HTTPS to place a screen-sharing call.": "Sinun täytyy käyttää HTTPS-yhteyttä, jotta voit jakaa näytön puhelussa.",
-    "powered by Matrix": "moottorina Matrix",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Hajautettua ja salattua viestintää Matrix-teknologialla",
     "Sign In": "Kirjaudu",
     "Create Account": "Luo tili",
     "Explore rooms": "Selaa huoneita",
@@ -13,10 +10,7 @@
     "Invalid configuration: no default server specified.": "Virheellinen asetus: oletuspalvelinta ei ole määritetty.",
     "The message from the parser is: %(message)s": "Viesti jäsentimeltä: %(message)s",
     "Invalid JSON": "Virheellinen JSON",
-    "Missing indexeddb worker script!": "Indexeddb-suorittajan skripti puuttuu!",
     "Unable to load config file: please refresh the page to try again.": "Asetustiedostoa ei voi ladata. Yritä uudelleen lataamalla sivu uudelleen.",
-    "Open user settings": "Avaa käyttäjäasetukset",
-    "Previous/next recently visited room or community": "Edellinen/seuraava hiljattain vierailtu huone tai yhteisö",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)sin työpöytäversio (%(platformName)s)",
     "Go to your browser to complete Sign In": "Tee kirjautuminen loppuun selaimessasi",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
@@ -33,8 +27,5 @@
     "Powered by Matrix": "Moottorina Matrix",
     "Your browser can't run %(brand)s": "%(brand)s ei toimi selaimessasi",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s käyttää edistyneitä selaimen ominaisuuksia, joita nykyinen selaimesi ei tue.",
-    "Use %(brand)s on mobile": "Käytä %(brand)sia mobiilisti",
-    "Switch to space by number": "Vaihda avaruuteen käyttäen numeroa",
-    "Next recently visited room or community": "Seuraava aiemmin vierailtu huone tai yhteisö",
-    "Previous recently visited room or community": "Aiemmin viimeaikoina vierailtu huone tai yhteisö"
+    "Use %(brand)s on mobile": "Käytä %(brand)sia mobiilisti"
 }

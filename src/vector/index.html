@@ -52,8 +52,8 @@
     <% for (var i=0; i < htmlWebpackPlugin.tags.headTags.length; i++) {
         var tag = htmlWebpackPlugin.tags.headTags[i];
         var path = tag.attributes && tag.attributes.href;
-        if (path.indexOf("Inter") !== -1) { %>
-            <link rel="preload" as="font" href="<%= path %>" crossorigin="anonymous"/>
+        if (path.includes("/Inter/")) { %>
+            <link rel="preload" as="font" href=".<%= path %>" crossorigin="anonymous"/>
         <% }
     } %>
 

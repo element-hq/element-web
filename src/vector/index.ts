@@ -113,6 +113,7 @@ async function start() {
         loadLanguage,
         loadTheme,
         loadApp,
+        loadModules,
         showError,
         showIncompatibleBrowser,
         _t,
@@ -154,6 +155,11 @@ async function start() {
 
         // now that the config is ready, try to persist logs
         const persistLogsPromise = setupLogStorage();
+
+        // Load modules before language to ensure any custom translations are respected, and any app
+        // startup functionality is run
+        const loadModulesPromise = loadModules();
+        await settled(loadModulesPromise);
 
         // Load language after loading config.json so that settingsDefaults.language can be applied
         const loadLanguagePromise = loadLanguage();
@@ -209,6 +215,7 @@ async function start() {
         // assert things started successfully
         // ##################################
         await loadOlmPromise;
+        await loadModulesPromise;
         await loadThemePromise;
         await loadLanguagePromise;
 

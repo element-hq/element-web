@@ -19,7 +19,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import WebPlatform from "./WebPlatform";
 
 export default class PWAPlatform extends WebPlatform {
-    setNotificationCount(count: number) {
+    public setNotificationCount(count: number): void {
         if (!navigator.setAppBadge) return super.setNotificationCount(count);
         if (this.notificationCount === count) return;
         this.notificationCount = count;

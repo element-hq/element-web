@@ -1,4 +1,4 @@
-[![Chat](https://img.shields.io/matrix/element-web:matrix.org)](https://matrix.to/#/#element-web:matrix.org)
+[![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
 ![Tests](https://github.com/vector-im/element-web/actions/workflows/tests.yaml/badge.svg)
 ![Static Analysis](https://github.com/vector-im/element-web/actions/workflows/static_analysis.yaml/badge.svg)
 [![Weblate](https://translate.element.io/widgets/element-web/-/element-web/svg-badge.svg)](https://translate.element.io/engage/element-web/)

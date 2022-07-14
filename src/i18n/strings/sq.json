@@ -1,10 +1,7 @@
 {
     "Unknown device": "Pajisje e panjohur",
-    "You need to be using HTTPS to place a screen-sharing call.": "Që të bëni një thirrje me ndarje ekrani, duhet të jeni duke përdorur HTTPS-në.",
     "Dismiss": "Mos e merr parasysh",
-    "powered by Matrix": "bazuar në Matrix",
     "Welcome to Element": "Mirë se vini te Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Fjalosje &amp; bashkëpunim të decentralizuar, të fshehtëzuar, bazuar në [matrix]",
     "Sign In": "Hyni",
     "Create Account": "Krijoni Llogari",
     "Explore rooms": "Eksploroni dhoma",
@@ -14,9 +11,7 @@
     "The message from the parser is: %(message)s": "Mesazhi prej procesit është: %(message)s",
     "Invalid JSON": "JSON i pavlefshëm",
     "Go to your browser to complete Sign In": "Që të plotësoni Hyrjen, kaloni te shfletuesi juaj",
-    "Open user settings": "Hapni rregullime përdoruesi",
     "Unable to load config file: please refresh the page to try again.": "S’arrihet të ngarkohet kartelë formësimesh: ju lutemi, rifreskoni faqen dhe riprovoni.",
-    "Previous/next recently visited room or community": "Dhomë ose bashkësi e mëparshme/pasuese e vizituar së fundi",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Shfletues i pambuluar",
@@ -25,7 +20,6 @@
     "I understand the risks and wish to continue": "I kuptoj rreziqet dhe dëshiroj të vazhdoj",
     "Go to element.io": "Shko te element.io",
     "Failed to start": "S’u arrit të nisej",
-    "Missing indexeddb worker script!": "Mungon programth worker-i indexeddb-je!",
     "Download Completed": "Shkarkim i Plotësuar",
     "Open": "Hape",
     "Your Element is misconfigured": "Element-i juaj është i keqformësuar",
@@ -34,8 +28,5 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s përdor veçori të thelluara të shfletuesit, të cilat shfletuesi juaj i tanishëm s’i mbulon.",
     "Powered by Matrix": "Bazuar në Matrix",
     "Use %(brand)s on mobile": "Përdor %(brand)s në celular",
-    "Switch to space by number": "Kalo te hapësira me numrin",
-    "Next recently visited room or community": "Dhomë ose bashkësi e vizituar më parë pasuese",
-    "Previous recently visited room or community": "Dhomë ose bashkësi e vizituar më parë e mëparshme",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Fjalosje &amp; bashkëpunim i decentralizuar, i fshehtëzuar, bazuar në $matrixLogo"
 }
