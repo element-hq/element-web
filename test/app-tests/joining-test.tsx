@@ -24,7 +24,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import ReactTestUtils from "react-dom/test-utils";
 import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
-import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
 import {sleep} from "../test-utils";
 import MockHttpBackend from "matrix-mock-request";
 import "fake-indexeddb/auto";
@@ -32,6 +31,7 @@ import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/struc
 import MatrixChat from "matrix-react-sdk/src/components/structures/MatrixChat";
 import RoomDirectory from "matrix-react-sdk/src/components/structures/RoomDirectory";
 import RoomPreviewBar from "matrix-react-sdk/src/components/views/rooms/RoomPreviewBar";
+import { ValidatedServerConfig } from 'matrix-react-sdk/src/utils/ValidatedServerConfig';
 
 const HS_URL='http://localhost';
 const IS_URL='http://localhost';
