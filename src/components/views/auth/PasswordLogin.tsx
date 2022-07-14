@@ -19,7 +19,7 @@ import classNames from 'classnames';
 
 import { _t } from '../../../languageHandler';
 import SdkConfig from '../../../SdkConfig';
-import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from '../../../utils/ValidatedServerConfig';
 import AccessibleButton from "../elements/AccessibleButton";
 import withValidation, { IValidationResult } from "../elements/Validation";
 import Field from "../elements/Field";

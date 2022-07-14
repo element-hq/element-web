@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import AccessibleButton from "./AccessibleButton";
-import { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
+import { ValidatedServerConfig } from '../../../utils/ValidatedServerConfig';
 import { _t } from "../../../languageHandler";
 import TextWithTooltip from "./TextWithTooltip";
 import SdkConfig from "../../../SdkConfig";

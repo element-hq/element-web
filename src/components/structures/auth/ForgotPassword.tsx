@@ -24,7 +24,7 @@ import { createClient } from "matrix-js-sdk/src/matrix";
 import { _t, _td } from '../../../languageHandler';
 import Modal from "../../../Modal";
 import PasswordReset from "../../../PasswordReset";
-import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import AuthPage from "../../views/auth/AuthPage";
 import ServerPicker from "../../views/elements/ServerPicker";
 import EmailField from "../../views/auth/EmailField";
@@ -39,6 +39,7 @@ import AuthBody from "../../views/auth/AuthBody";
 import PassphraseConfirmField from "../../views/auth/PassphraseConfirmField";
 import AccessibleButton from '../../views/elements/AccessibleButton';
 import StyledCheckbox from '../../views/elements/StyledCheckbox';
+import { ValidatedServerConfig } from '../../../utils/ValidatedServerConfig';
 
 enum Phase {
     // Show the forgot password inputs

@@ -18,7 +18,7 @@ import React, { createRef } from "react";
 import { AutoDiscovery } from "matrix-js-sdk/src/autodiscovery";
 import { logger } from "matrix-js-sdk/src/logger";
 
-import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import BaseDialog from './BaseDialog';
 import { _t } from '../../../languageHandler';
 import AccessibleButton from "../elements/AccessibleButton";
@@ -27,6 +27,7 @@ import Field from "../elements/Field";
 import StyledRadioButton from "../elements/StyledRadioButton";
 import TextWithTooltip from "../elements/TextWithTooltip";
 import withValidation, { IFieldState } from "../elements/Validation";
+import { ValidatedServerConfig } from "../../../utils/ValidatedServerConfig";
 
 interface IProps {
     title?: string;

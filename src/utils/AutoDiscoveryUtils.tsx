@@ -21,25 +21,12 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { _t, _td, newTranslatableError } from "../languageHandler";
 import { makeType } from "./TypeUtils";
 import SdkConfig from '../SdkConfig';
+import { ValidatedServerConfig } from './ValidatedServerConfig';
 
 const LIVELINESS_DISCOVERY_ERRORS: string[] = [
     AutoDiscovery.ERROR_INVALID_HOMESERVER,
     AutoDiscovery.ERROR_INVALID_IDENTITY_SERVER,
 ];
-
-export class ValidatedServerConfig {
-    hsUrl: string;
-    hsName: string;
-    hsNameIsDifferent: string;
-
-    isUrl: string;
-
-    isDefault: boolean;
-    // when the server config is based on static URLs the hsName is not resolvable and things may wish to use hsUrl
-    isNameResolvable: boolean;
-
-    warning: string;
-}
 
 export interface IAuthComponentState {
     serverIsAlive: boolean;

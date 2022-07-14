@@ -22,7 +22,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t, _td } from '../../../languageHandler';
 import { messageForResourceLimitError } from '../../../utils/ErrorUtils';
-import AutoDiscoveryUtils, { ValidatedServerConfig } from "../../../utils/AutoDiscoveryUtils";
+import AutoDiscoveryUtils from "../../../utils/AutoDiscoveryUtils";
 import * as Lifecycle from '../../../Lifecycle';
 import { IMatrixClientCreds, MatrixClientPeg } from "../../../MatrixClientPeg";
 import AuthPage from "../../views/auth/AuthPage";
@@ -39,6 +39,7 @@ import Spinner from "../../views/elements/Spinner";
 import { AuthHeaderDisplay } from './header/AuthHeaderDisplay';
 import { AuthHeaderProvider } from './header/AuthHeaderProvider';
 import SettingsStore from '../../../settings/SettingsStore';
+import { ValidatedServerConfig } from '../../../utils/ValidatedServerConfig';
 
 const debuglog = (...args: any[]) => {
     if (SettingsStore.getValue("debug_registration")) {
