@@ -10,6 +10,7 @@ env:
   PR_NUMBER: ${{ github.event.pull_request.number }}
 jobs:
   build:
+    name: "Build"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
