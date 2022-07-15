@@ -14,7 +14,7 @@ const path = require('path');
  * creates files:
  * - src/components/toasts/NewToast.tsx
  * - test/components/toasts/NewToast-test.tsx
- * - res/css/components/toasts/_NewToast.scss
+ * - res/css/components/toasts/_NewToast.pcss
  *
  */
 
@@ -115,7 +115,7 @@ const makeReactComponent = async () => {
     const componentFilePath = await makeFile({ filePath, componentName, base: 'src', extension: '.tsx', template: TEMPLATES.COMPONENT });
     await makeFile({ filePath, componentFilePath, componentName, base: 'test', extension: '-test.tsx', template: TEMPLATES.TEST, componentName });
     if (withStyle) {
-        await makeFile({ filePath, componentName, base: 'res/css', prefix: '_', extension: '.scss', template: TEMPLATES.STYLE });
+        await makeFile({ filePath, componentName, base: 'res/css', prefix: '_', extension: '.pcss', template: TEMPLATES.STYLE });
     }
 }
 

@@ -22,7 +22,7 @@ const MyComponent = () => {
 Icon components are svg elements and can be styled as usual.
 
 ```
-// _MyComponents.scss
+// _MyComponents.pcss
 .mx_MyComponent-icon {
     height: 20px;
     width: 20px;

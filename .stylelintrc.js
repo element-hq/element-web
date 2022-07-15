@@ -1,5 +1,6 @@
 module.exports = {
     "extends": "stylelint-config-standard",
+    customSyntax: require('postcss-scss'),
     "plugins": [
         "stylelint-scss",
     ],
@@ -27,6 +28,25 @@ module.exports = {
         // rather than a CI thing. Shorthand selectors are harder to detect when searching for a
         // class name. This regex is trying to *allow* anything except `&words`, such as `&::before`,
         // `&.mx_Class`, etc.
-        "selector-nested-pattern": "^((&[ :.\\\[,])|([^&]))"
-    }
+        "selector-nested-pattern": "^((&[ :.\\\[,])|([^&]))",
+        "declaration-colon-space-after": "always-single-line",
+        // Disable some defaults
+        "selector-class-pattern": null,
+        "custom-property-pattern": null,
+        "selector-id-pattern": null,
+        "keyframes-name-pattern": null,
+        "string-quotes": null,
+        "alpha-value-notation": null,
+        "color-function-notation": null,
+        "selector-not-notation": null,
+        "import-notation": null,
+        "value-keyword-case": null,
+        "declaration-block-no-redundant-longhand-properties": null,
+        "shorthand-property-no-redundant-values": null,
+        "property-no-vendor-prefix": null,
+        "value-no-vendor-prefix": null,
+        "selector-no-vendor-prefix": null,
+        "media-feature-name-no-vendor-prefix": null,
+        "number-max-precision": null,
+    },
 }
