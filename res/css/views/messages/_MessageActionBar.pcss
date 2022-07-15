@@ -21,6 +21,7 @@ limitations under the License.
     --MessageActionBar-item-hover-background: $panel-actions;
     --MessageActionBar-item-hover-borderRadius: 6px;
     --MessageActionBar-item-hover-zIndex: 1;
+    --MessageActionBar-star-button-color: #ffa534;
 
     position: absolute;
     visibility: hidden;
@@ -112,6 +113,14 @@ limitations under the License.
                 background: $links;
                 animation-iteration-count: infinite;
             }
+        }
+
+        &.mx_MessageActionBar_favouriteButton::after {
+            mask-image: url('$(res)/img/element-icons/room/message-bar/star.svg');
+        }
+
+        &.mx_MessageActionBar_favouriteButton_fillstar::after {
+            background-color: var(--MessageActionBar-star-button-color);
         }
 
         &.mx_MessageActionBar_editButton::after {
