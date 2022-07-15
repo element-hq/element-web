@@ -1,3 +1,9 @@
+Changes in [3.49.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.49.0-rc.2) (2022-07-15)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Prefer using the canonical alias in spotlight search ([\#9059](https://github.com/matrix-org/matrix-react-sdk/pull/9059)). Fixes vector-im/element-web#22845.
+
 Changes in [3.49.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.49.0-rc.1) (2022-07-12)
 ===============================================================================================================
 
