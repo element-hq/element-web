@@ -479,12 +479,12 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         // eslint-disable-next-line
     }, [results, filter]);
 
-    const viewRoom = (roomId: string, persist = false, viaKeyboard = false) => {
+    const viewRoom = (room: {roomId: string, roomAlias?: string}, persist = false, viaKeyboard = false) => {
         if (persist) {
             const recents = new Set(SettingsStore.getValue("SpotlightSearch.recentSearches", null).reverse());
             // remove & add the room to put it at the end
-            recents.delete(roomId);
-            recents.add(roomId);
+            recents.delete(room.roomId);
+            recents.add(room.roomId);
 
             SettingsStore.setValue(
                 "SpotlightSearch.recentSearches",
@@ -496,9 +496,10 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
         defaultDispatcher.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
-            room_id: roomId,
             metricsTrigger: "WebUnifiedSearch",
             metricsViaKeyboard: viaKeyboard,
+            room_id: room.roomId,
+            room_alias: room.roomAlias,
         });
         onFinished();
     };
@@ -551,7 +552,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         id={`mx_SpotlightDialog_button_result_${result.room.roomId}`}
                         key={`${Section[result.section]}-${result.room.roomId}`}
                         onClick={(ev) => {
-                            viewRoom(result.room.roomId, true, ev?.type !== "click");
+                            viewRoom({ roomId: result.room.roomId }, true, ev?.type !== "click");
                         }}
                         {...ariaProperties}
                     >
@@ -598,7 +599,11 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             if (isPublicRoomResult(result)) {
                 const clientRoom = cli.getRoom(result.publicRoom.room_id);
                 const listener = (ev) => {
-                    viewRoom(result.publicRoom.room_id, true, ev.type !== "click");
+                    const { publicRoom } = result;
+                    viewRoom({
+                        roomAlias: publicRoom.canonical_alias || publicRoom.aliases?.[0],
+                        roomId: publicRoom.room_id,
+                    }, true, ev.type !== "click");
                 };
                 return (
                     <Option
@@ -777,7 +782,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                 id={`mx_SpotlightDialog_button_result_${room.room_id}`}
                                 key={room.room_id}
                                 onClick={(ev) => {
-                                    viewRoom(room.room_id, true, ev?.type !== "click");
+                                    viewRoom({ roomId: room.room_id }, true, ev?.type !== "click");
                                 }}
                             >
                                 <BaseAvatar
@@ -967,7 +972,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                     id={`mx_SpotlightDialog_button_recentSearch_${room.roomId}`}
                                     key={room.roomId}
                                     onClick={(ev) => {
-                                        viewRoom(room.roomId, true, ev?.type !== "click");
+                                        viewRoom({ roomId: room.roomId }, true, ev?.type !== "click");
                                     }}
                                     {...ariaProperties}
                                 >
@@ -1008,7 +1013,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                                 title={room.name}
                                 key={room.roomId}
                                 onClick={(ev) => {
-                                    viewRoom(room.roomId, false, ev.type !== "click");
+                                    viewRoom({ roomId: room.roomId }, false, ev.type !== "click");
                                 }}
                             >
                                 <DecoratedRoomAvatar room={room} avatarSize={32} tooltipProps={{ tabIndex: -1 }} />
