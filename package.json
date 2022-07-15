@@ -51,7 +51,8 @@
     "lint:types": "tsc --noEmit --jsx react && tsc --noEmit --project ./tsconfig.module_system.json",
     "lint:style": "stylelint \"res/css/**/*.pcss\"",
     "test": "jest",
-    "coverage": "yarn test --coverage"
+    "coverage": "yarn test --coverage",
+    "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js"
   },
   "dependencies": {
     "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
@@ -135,7 +136,7 @@
     "node-fetch": "^2.6.7",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss-easings": "^2.0.0",
-    "postcss-hexrgba": "^2.0.1",
+    "postcss-hexrgba": "2.0.1",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
     "postcss-mixins": "^6.2.3",
@@ -155,7 +156,8 @@
     "stylelint-config-standard": "^26.0.0",
     "stylelint-scss": "^4.2.0",
     "terser-webpack-plugin": "^2.3.8",
-    "typescript": "^4.5.3",
+    "ts-prune": "^0.10.3",
+    "typescript": "^4.7.4",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",

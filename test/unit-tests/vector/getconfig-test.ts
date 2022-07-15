@@ -48,16 +48,16 @@ describe('getVectorConfig()', () => {
     it('requests specific config for document domain', async () => {
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(specificConfig))
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         await getVectorConfig();
 
         expect(request.mock.calls[0][0]).toEqual({ method: "GET", url: 'config.app.element.io.json', qs: { cachebuster: now } })
     });
-    
+
     it('adds trailing slash to relativeLocation when not an empty string', async () => {
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(specificConfig))
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         await getVectorConfig('..');
 
         expect(request.mock.calls[0][0]).toEqual(expect.objectContaining({ url: '../config.app.element.io.json' }))
@@ -67,7 +67,7 @@ describe('getVectorConfig()', () => {
     it('returns parsed specific config when it is non-empty', async () => {
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(specificConfig))
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         const result = await getVectorConfig();
         expect(result).toEqual(specificConfig);
     });
@@ -75,7 +75,7 @@ describe('getVectorConfig()', () => {
     it('returns general config when specific config succeeds but is empty', async () => {
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify({}))
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         const result = await getVectorConfig();
         expect(result).toEqual(generalConfig);
     });
@@ -83,7 +83,7 @@ describe('getVectorConfig()', () => {
     it('returns general config when specific config 404s', async () => {
         setRequestMockImplementationOnce(undefined, { status: 404 })
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         const result = await getVectorConfig();
         expect(result).toEqual(generalConfig);
     });
@@ -91,7 +91,7 @@ describe('getVectorConfig()', () => {
     it('returns general config when specific config is fetched from a file and is empty', async () => {
         setRequestMockImplementationOnce(undefined, { status: 0 }, '')
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         const result = await getVectorConfig();
         expect(result).toEqual(generalConfig);
     });
@@ -99,7 +99,7 @@ describe('getVectorConfig()', () => {
     it('returns general config when specific config returns a non-200 status', async () => {
         setRequestMockImplementationOnce(undefined, { status: 401 })
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         const result = await getVectorConfig();
         expect(result).toEqual(generalConfig);
     });
@@ -107,7 +107,7 @@ describe('getVectorConfig()', () => {
     it('returns general config when specific config returns an error', async () => {
         setRequestMockImplementationOnce('err1')
         setRequestMockImplementationOnce(undefined, { status: 200 }, JSON.stringify(generalConfig))
-        
+
         const result = await getVectorConfig();
         expect(result).toEqual(generalConfig);
     });
@@ -119,4 +119,12 @@ describe('getVectorConfig()', () => {
         await expect(() => getVectorConfig()).rejects.toEqual({"err": "err-general", "response": undefined});
     });
 
+    it('rejects with an error when config is invalid JSON', async () => {
+        setRequestMockImplementationOnce('err-specific');
+        setRequestMockImplementationOnce(undefined, { status: 200 }, '{"invalid": "json",}');
+
+        await expect(() => getVectorConfig()).rejects.toEqual({
+            err: new SyntaxError("Unexpected token } in JSON at position 19"),
+        });
+    });
 });
