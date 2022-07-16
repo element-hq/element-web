@@ -23,6 +23,7 @@ import type { EventType } from "matrix-js-sdk/src/@types/event";
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
+import { Layout } from "../../../src/settings/enums/Layout";
 import Chainable = Cypress.Chainable;
 
 // The avatar size used in the timeline
@@ -140,6 +141,23 @@ describe("Timeline", () => {
                 expectDisplayName(e, NEW_NAME);
                 expectAvatar(e, newAvatarUrl);
             });
+        });
+
+        it("should click 'collapse' link button on the first hovered info event line on bubble layout", () => {
+            cy.visit("/#/room/" + roomId);
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
+            cy.contains(".mx_RoomView_body .mx_GenericEventListSummary[data-layout=bubble] " +
+                ".mx_GenericEventListSummary_summary", "created and configured the room.");
+
+            // Click "expand" link button
+            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click();
+
+            // Click "collapse" link button on the first hovered info event line
+            cy.get(".mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type").realHover()
+                .get(".mx_GenericEventListSummary_toggle[aria-expanded=true]").click({ force: false });
+
+            // Make sure "collapse" link button worked
+            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
         });
     });
 });
