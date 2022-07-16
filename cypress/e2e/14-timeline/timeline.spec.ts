@@ -143,6 +143,14 @@ describe("Timeline", () => {
             });
         });
 
+        it("should create and configure a room on IRC layout", () => {
+            cy.visit("/#/room/" + roomId);
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+            cy.contains(".mx_RoomView_body .mx_GenericEventListSummary[data-layout=irc] " +
+                ".mx_GenericEventListSummary_summary", "created and configured the room.");
+            cy.percySnapshot("Configured room on IRC layout");
+        });
+
         it("should click 'collapse' link button on the first hovered info event line on bubble layout", () => {
             cy.visit("/#/room/" + roomId);
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
