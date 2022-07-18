@@ -22,7 +22,7 @@ import {
 } from "matrix-js-sdk/src/matrix";
 
 import { haveRendererForEvent } from "../src/events/EventTileFactory";
-import { getMockClientWithEventEmitter, mockClientMethodsUser } from "./test-utils";
+import { getMockClientWithEventEmitter, makeBeaconEvent, mockClientMethodsUser } from "./test-utils";
 import { eventTriggersUnreadCount } from "../src/Unread";
 
 jest.mock("../src/events/EventTileFactory", () => ({
@@ -90,6 +90,12 @@ describe('eventTriggersUnreadCount()', () => {
         mocked(haveRendererForEvent).mockReturnValue(true);
         expect(eventTriggersUnreadCount(alicesMessage)).toBe(true);
         expect(haveRendererForEvent).toHaveBeenCalledWith(alicesMessage, false);
+    });
+
+    it('returns false for beacon locations', () => {
+        const beaconLocationEvent = makeBeaconEvent(aliceId);
+        expect(eventTriggersUnreadCount(beaconLocationEvent)).toBe(false);
+        expect(haveRendererForEvent).not.toHaveBeenCalled();
     });
 
     const noUnreadEventTypes = [
