@@ -151,6 +151,28 @@ describe("Timeline", () => {
             cy.percySnapshot("Configured room on IRC layout");
         });
 
+        it("should click top left of view source event toggle", () => {
+            sendEvent(roomId);
+            cy.visit("/#/room/" + roomId);
+            cy.setSettingValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
+            cy.contains(".mx_RoomView_body .mx_GenericEventListSummary " +
+                ".mx_GenericEventListSummary_summary", "created and configured the room.");
+
+            // Edit message
+            cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile_line", "Message").within(() => {
+                cy.get('[aria-label="Edit"]').click({ force: true }); // Cypress has no ability to hover
+                cy.get(".mx_BasicMessageComposer_input").type("Edit{enter}");
+            });
+            cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "MessageEdit");
+
+            // Click top left of the event toggle, which should not be covered by MessageActionBar's safe area
+            cy.get(".mx_EventTile .mx_ViewSourceEvent").realHover()
+                .get(".mx_EventTile .mx_ViewSourceEvent .mx_ViewSourceEvent_toggle").click('topLeft', { force: false });
+
+            // Make sure the expand toggle worked
+            cy.get(".mx_EventTile .mx_ViewSourceEvent_expanded .mx_ViewSourceEvent_toggle").should("be.visible");
+        });
+
         it("should click 'collapse' link button on the first hovered info event line on bubble layout", () => {
             cy.visit("/#/room/" + roomId);
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Bubble);
