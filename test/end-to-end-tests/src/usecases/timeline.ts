@@ -20,32 +20,6 @@ import { ElementHandle } from "puppeteer";
 
 import { ElementSession } from "../session";
 
-export async function scrollToTimelineTop(session: ElementSession): Promise<void> {
-    session.log.step(`scrolls to the top of the timeline`);
-    await session.page.evaluate(() => {
-        return Promise.resolve().then(async () => {
-            let timedOut = false;
-            let timeoutHandle = null;
-            // set scrollTop to 0 in a loop and check every 50ms
-            // if content became available (scrollTop not being 0 anymore),
-            // assume everything is loaded after 3s
-            do {
-                const timelineScrollView = document.querySelector(".mx_RoomView_timeline .mx_ScrollPanel");
-                if (timelineScrollView && timelineScrollView.scrollTop !== 0) {
-                    if (timeoutHandle) {
-                        clearTimeout(timeoutHandle);
-                    }
-                    timeoutHandle = setTimeout(() => timedOut = true, 3000);
-                    timelineScrollView.scrollTop = 0;
-                } else {
-                    await new Promise((resolve) => setTimeout(resolve, 50));
-                }
-            } while (!timedOut);
-        });
-    });
-    session.log.done();
-}
-
 interface Message {
     sender: string;
     encrypted?: boolean;
@@ -79,41 +53,6 @@ export async function receiveMessage(session: ElementSession, expectedMessage: M
     session.log.done();
 }
 
-export async function checkTimelineContains(session: ElementSession, expectedMessages: Message[],
-    sendersDescription: string): Promise<void> {
-    session.log.step(`checks timeline contains ${expectedMessages.length} ` +
-        `given messages${sendersDescription ? ` from ${sendersDescription}`:""}`);
-    const eventTiles = await getAllEventTiles(session);
-    let timelineMessages: Message[] = await Promise.all(eventTiles.map((eventTile) => {
-        return getMessageFromEventTile(eventTile);
-    }));
-    //filter out tiles that were not messages
-    timelineMessages = timelineMessages.filter((m) => !!m);
-    timelineMessages.reduce((prevSender: string, m) => {
-        if (m.continuation) {
-            m.sender = prevSender;
-            return prevSender;
-        } else {
-            return m.sender;
-        }
-    }, "");
-
-    expectedMessages.forEach((expectedMessage) => {
-        const foundMessage = timelineMessages.find((message) => {
-            return message.sender === expectedMessage.sender &&
-                message.body === expectedMessage.body;
-        });
-        try {
-            assertMessage(foundMessage, expectedMessage);
-        } catch (err) {
-            console.log("timelineMessages", timelineMessages);
-            throw err;
-        }
-    });
-
-    session.log.done();
-}
-
 function assertMessage(foundMessage: Message, expectedMessage: Message): void {
     assert(foundMessage, `message ${JSON.stringify(expectedMessage)} not found in timeline`);
     assert.equal(foundMessage.body, expectedMessage.body);
@@ -125,10 +64,6 @@ function assertMessage(foundMessage: Message, expectedMessage: Message): void {
 
 function getLastEventTile(session: ElementSession): Promise<ElementHandle> {
     return session.query(".mx_EventTile_last");
-}
-
-function getAllEventTiles(session: ElementSession): Promise<ElementHandle[]> {
-    return session.queryAll(".mx_RoomView_MessageList .mx_EventTile");
 }
 
 async function getMessageFromEventTile(eventTile: ElementHandle): Promise<Message> {

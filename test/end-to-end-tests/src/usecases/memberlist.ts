@@ -15,7 +15,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { strict as assert } from 'assert';
 import { ElementHandle } from "puppeteer";
 
 import { openRoomSummaryCard } from "./rightpanel";
@@ -27,46 +26,6 @@ export async function openMemberInfo(session: ElementSession, name: String): Pro
         return m.displayName === name;
     }).map((m) => m.label)[0];
     await matchingLabel.click();
-}
-
-interface Device {
-    id: string;
-    key: string;
-}
-
-export async function verifyDeviceForUser(session: ElementSession, name: string,
-    expectedDevice: Device): Promise<void> {
-    session.log.step(`verifies e2e device for ${name}`);
-    const membersAndNames = await getMembersInMemberlist(session);
-    const matchingLabel = membersAndNames.filter((m) => {
-        return m.displayName === name;
-    }).map((m) => m.label)[0];
-    await matchingLabel.click();
-    // click verify in member info
-    const firstVerifyButton = await session.query(".mx_MemberDeviceInfo_verify");
-    await firstVerifyButton.click();
-    // expect "Verify device" dialog and click "Begin Verification"
-    const dialogHeader = await session.innerText(await session.query(".mx_Dialog .mx_Dialog_title"));
-    assert(dialogHeader, "Verify device");
-    const beginVerificationButton = await session.query(".mx_Dialog .mx_Dialog_primary");
-    await beginVerificationButton.click();
-    // get emoji SAS labels
-    const sasLabelElements = await session.queryAll(
-        ".mx_VerificationShowSas .mx_VerificationShowSas_emojiSas .mx_VerificationShowSas_emojiSas_label");
-    const sasLabels = await Promise.all(sasLabelElements.map(e => session.innerText(e)));
-    console.log("my sas labels", sasLabels);
-
-    const dialogCodeFields = await session.queryAll(".mx_QuestionDialog code");
-    assert.strictEqual(dialogCodeFields.length, 2);
-    const deviceId = await session.innerText(dialogCodeFields[0]);
-    const deviceKey = await session.innerText(dialogCodeFields[1]);
-    assert.strictEqual(expectedDevice.id, deviceId);
-    assert.strictEqual(expectedDevice.key, deviceKey);
-    const confirmButton = await session.query(".mx_Dialog_primary");
-    await confirmButton.click();
-    const closeMemberInfo = await session.query(".mx_MemberInfo_cancel");
-    await closeMemberInfo.click();
-    session.log.done();
 }
 
 interface MemberName {

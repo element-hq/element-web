@@ -20,14 +20,6 @@ import { padEnd } from "lodash";
 
 import { ElementSession } from "./session";
 
-export const range = function(start: number, amount: number, step = 1): Array<number> {
-    const r = [];
-    for (let i = 0; i < amount; ++i) {
-        r.push(start + (i * step));
-    }
-    return r;
-};
-
 export const delay = function(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 };

@@ -118,24 +118,6 @@ export class ElementSession {
         return await this.page.$$(selector);
     }
 
-    /** wait for a /sync request started after this call that gets a 200 response */
-    public async waitForNextSuccessfulSync(): Promise<void> {
-        const syncUrls = [];
-        function onRequest(request) {
-            if (request.url().indexOf("/sync") !== -1) {
-                syncUrls.push(request.url());
-            }
-        }
-
-        this.page.on('request', onRequest);
-
-        await this.page.waitForResponse((response) => {
-            return syncUrls.includes(response.request().url()) && response.status() === 200;
-        });
-
-        this.page.off('request', onRequest);
-    }
-
     public async waitNoSpinner(): Promise<void> {
         await this.page.waitForSelector(".mx_Spinner", { hidden: true });
     }
@@ -150,13 +132,6 @@ export class ElementSession {
 
     public delay(ms: number) {
         return delay(ms);
-    }
-
-    public async setOffline(enabled: boolean): Promise<void> {
-        const description = enabled ? "offline" : "back online";
-        this.log.step(`goes ${description}`);
-        await this.page.setOfflineMode(enabled);
-        this.log.done();
     }
 
     public async close(): Promise<void> {

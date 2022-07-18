@@ -18,7 +18,7 @@ limitations under the License.
 
 import request from "browser-request";
 
-import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { SynapseInstance } from "../plugins/synapsedocker";
 import Chainable = Cypress.Chainable;
 
@@ -31,10 +31,15 @@ interface CreateBotOpts {
      * The display name to give to that bot user
      */
     displayName?: string;
+    /**
+     * Whether or not to start the syncing client.
+     */
+    startClient?: boolean;
 }
 
 const defaultCreateBotOptions = {
     autoAcceptInvites: true,
+    startClient: true,
 } as CreateBotOpts;
 
 declare global {
@@ -59,6 +64,13 @@ declare global {
              * @param roomName Name of the room to join
              */
             botJoinRoomByName(cli: MatrixClient, roomName: string): Chainable<Room>;
+            /**
+             * Send a message as a bot into a room
+             * @param cli The bot's MatrixClient
+             * @param roomId ID of the room to join
+             * @param message the message body to send
+             */
+            botSendMessage(cli: MatrixClient, roomId: string, message: string): Chainable<ISendEventResponse>;
         }
     }
 }
@@ -88,6 +100,10 @@ Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): 
                 });
             }
 
+            if (!opts.startClient) {
+                return cy.wrap(cli);
+            }
+
             return cy.wrap(
                 cli.initCrypto()
                     .then(() => cli.setGlobalErrorOnUnknownDevices(false))
@@ -113,4 +129,15 @@ Cypress.Commands.add("botJoinRoomByName", (cli: MatrixClient, roomName: string):
     }
 
     return cy.wrap(Promise.reject());
+});
+
+Cypress.Commands.add("botSendMessage", (
+    cli: MatrixClient,
+    roomId: string,
+    message: string,
+): Chainable<ISendEventResponse> => {
+    return cy.wrap(cli.sendMessage(roomId, {
+        msgtype: "m.text",
+        body: message,
+    }), { log: false });
 });

@@ -172,7 +172,7 @@
     "blob-polyfill": "^6.0.20211015",
     "chokidar": "^3.5.1",
     "cypress": "^10.3.0",
-    "cypress-real-events": "^1.7.0",
+    "cypress-real-events": "^1.7.1",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "8.9.0",
