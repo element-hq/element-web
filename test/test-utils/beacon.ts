@@ -205,7 +205,11 @@ export const makeRoomWithBeacons = (
     const room = makeRoomWithStateEvents(beaconInfoEvents, { roomId, mockClient });
     const beacons = beaconInfoEvents.map(event => room.currentState.beacons.get(getBeaconInfoIdentifier(event)));
     if (locationEvents) {
-        beacons.forEach(beacon => beacon.addLocations(locationEvents));
+        beacons.forEach(beacon => {
+            // this filtering happens in roomState, which is bypassed here
+            const validLocationEvents = locationEvents?.filter(event => event.getSender() === beacon.beaconInfoOwner);
+            beacon.addLocations(validLocationEvents);
+        });
     }
     return beacons;
 };

@@ -162,7 +162,7 @@ const MBeaconBody: React.FC<IBodyProps> = React.forwardRef(({ mxEvent, getRelati
             {
                 roomId: mxEvent.getRoomId(),
                 matrixClient,
-                focusBeacon: beacon,
+                initialFocusedBeacon: beacon,
                 isMapDisplayError,
             },
             "mx_BeaconViewDialog_wrapper",

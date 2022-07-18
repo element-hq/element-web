@@ -1,53 +1,144 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<DialogSidebar /> renders sidebar correctly 1`] = `
-<DialogSidebar
-  beacons={Array []}
-  requestClose={[MockFunction]}
->
+exports[`<DialogSidebar /> renders sidebar correctly with beacons 1`] = `
+<div>
   <div
-    className="mx_DialogSidebar"
+    class="mx_DialogSidebar"
   >
     <div
-      className="mx_DialogSidebar_header"
+      class="mx_DialogSidebar_header"
     >
-      <Heading
-        size="h4"
+      <h4
+        class="mx_Heading_h4"
       >
-        <h4
-          className="mx_Heading_h4"
-        >
-          View List
-        </h4>
-      </Heading>
-      <AccessibleButton
-        className="mx_DialogSidebar_closeButton"
-        data-test-id="dialog-sidebar-close"
-        element="div"
-        onClick={[MockFunction]}
+        View List
+      </h4>
+      <div
+        class="mx_AccessibleButton mx_DialogSidebar_closeButton"
+        data-testid="dialog-sidebar-close"
         role="button"
-        tabIndex={0}
+        tabindex="0"
         title="Close sidebar"
       >
         <div
-          className="mx_AccessibleButton mx_DialogSidebar_closeButton"
-          data-test-id="dialog-sidebar-close"
-          onClick={[MockFunction]}
-          onKeyDown={[Function]}
-          onKeyUp={[Function]}
-          role="button"
-          tabIndex={0}
-          title="Close sidebar"
-        >
-          <div
-            className="mx_DialogSidebar_closeButtonIcon"
-          />
-        </div>
-      </AccessibleButton>
+          class="mx_DialogSidebar_closeButtonIcon"
+        />
+      </div>
     </div>
     <ol
-      className="mx_DialogSidebar_list"
+      class="mx_DialogSidebar_list"
+    >
+      <li
+        class="mx_BeaconListItem"
+      >
+        <span
+          class="mx_BaseAvatar mx_BeaconListItem_avatar"
+          role="presentation"
+        >
+          <span
+            aria-hidden="true"
+            class="mx_BaseAvatar_initial"
+            style="font-size: 20.8px; width: 32px; line-height: 32px;"
+          />
+          <img
+            alt=""
+            aria-hidden="true"
+            class="mx_BaseAvatar_image"
+            src=""
+            style="width: 32px; height: 32px;"
+          />
+        </span>
+        <div
+          class="mx_BeaconListItem_info"
+        >
+          <div
+            class="mx_BeaconStatus mx_BeaconStatus_Active mx_BeaconListItem_status"
+          >
+            <div
+              class="mx_BeaconStatus_description"
+            >
+              <span
+                class="mx_BeaconStatus_label"
+              >
+                @alice:server.org
+              </span>
+              <span
+                class="mx_BeaconStatus_expiryTime"
+              >
+                Live until 16:14
+              </span>
+            </div>
+            <div
+              class="mx_BeaconListItem_interactions"
+            >
+              <div
+                tabindex="0"
+              >
+                <a
+                  data-test-id="open-location-in-osm"
+                  href="https://www.openstreetmap.org/?mlat=51&mlon=41#map=16/51/41"
+                  rel="noreferrer noopener"
+                  target="_blank"
+                >
+                  <div
+                    class="mx_ShareLatestLocation_icon"
+                  />
+                </a>
+              </div>
+              <div
+                class="mx_CopyableText mx_ShareLatestLocation_copy"
+              >
+                <div
+                  aria-label="Copy"
+                  class="mx_AccessibleButton mx_CopyableText_copyButton"
+                  role="button"
+                  tabindex="0"
+                />
+              </div>
+            </div>
+          </div>
+          <span
+            class="mx_BeaconListItem_lastUpdated"
+          >
+            Updated a few seconds ago
+          </span>
+        </div>
+      </li>
+    </ol>
+  </div>
+  );
+</div>
+`;
+
+exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
+<div>
+  <div
+    class="mx_DialogSidebar"
+  >
+    <div
+      class="mx_DialogSidebar_header"
+    >
+      <h4
+        class="mx_Heading_h4"
+      >
+        View List
+      </h4>
+      <div
+        class="mx_AccessibleButton mx_DialogSidebar_closeButton"
+        data-testid="dialog-sidebar-close"
+        role="button"
+        tabindex="0"
+        title="Close sidebar"
+      >
+        <div
+          class="mx_DialogSidebar_closeButtonIcon"
+        />
+      </div>
+    </div>
+    <ol
+      class="mx_DialogSidebar_list"
     />
   </div>
-</DialogSidebar>
+  );
+</div>
 `;
