@@ -17,7 +17,6 @@ limitations under the License.
 
 import { signup } from './usecases/signup';
 import { toastScenarios } from './scenarios/toast';
-import { e2eEncryptionScenarios } from './scenarios/e2e-encryption';
 import { ElementSession } from "./session";
 
 export async function scenario(createSession: (s: string) => Promise<ElementSession>): Promise<void> {
@@ -38,5 +37,4 @@ export async function scenario(createSession: (s: string) => Promise<ElementSess
     const bob = await createUser("bob");
 
     await toastScenarios(alice, bob);
-    await e2eEncryptionScenarios(alice, bob);
 }
