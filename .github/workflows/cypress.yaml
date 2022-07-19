@@ -22,7 +22,7 @@ jobs:
 
       - id: prdetails
         if: github.event.workflow_run.event == 'pull_request'
-        uses: matrix-org/pr-details-action@v1.1
+        uses: matrix-org/pr-details-action@v1.2
         with:
           owner: ${{ github.event.workflow_run.head_repository.owner.login }}
           branch: ${{ github.event.workflow_run.head_branch }}
