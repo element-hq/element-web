@@ -80,6 +80,7 @@ import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../event
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from './ReadReceiptGroup';
 import { useTooltip } from "../../../utils/useTooltip";
+import { isLocalRoom } from '../../../utils/localRoom/isLocalRoom';
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
 
@@ -765,6 +766,9 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
 
     private renderE2EPadlock() {
         const ev = this.props.mxEvent;
+
+        // no icon for local rooms
+        if (isLocalRoom(ev.getRoomId())) return;
 
         // event could not be decrypted
         if (ev.getContent().msgtype === 'm.bad.encrypted') {

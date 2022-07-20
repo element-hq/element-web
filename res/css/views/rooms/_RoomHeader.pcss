@@ -100,7 +100,7 @@ limitations under the License.
     display: flex;
     user-select: none;
 
-    &:hover {
+    &:not(.mx_RoomHeader_name--textonly):hover {
         background-color: $quinary-content;
     }
 
@@ -139,7 +139,7 @@ limitations under the License.
     opacity: 0.6;
 }
 
-.mx_RoomHeader_name,
+.mx_RoomHeader_name:not(.mx_RoomHeader_name--textonly),
 .mx_RoomHeader_avatar {
     cursor: pointer;
 }

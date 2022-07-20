@@ -65,6 +65,8 @@ interface IProps {
     appsShown: boolean;
     searchInfo: ISearchInfo;
     excludedRightPanelPhaseButtons?: Array<RightPanelPhases>;
+    showButtons?: boolean;
+    enableRoomOptionsMenu?: boolean;
 }
 
 interface IState {
@@ -76,6 +78,8 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         editing: false,
         inRoom: false,
         excludedRightPanelPhaseButtons: [],
+        showButtons: true,
+        enableRoomOptionsMenu: true,
     };
 
     static contextType = RoomContext;
@@ -130,81 +134,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         this.setState({ contextMenuPosition: null });
     };
 
-    public render() {
-        let searchStatus = null;
-
-        // don't display the search count until the search completes and
-        // gives us a valid (possibly zero) searchCount.
-        if (this.props.searchInfo &&
-            this.props.searchInfo.searchCount !== undefined &&
-            this.props.searchInfo.searchCount !== null) {
-            searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;
-                { _t("(~%(count)s results)", { count: this.props.searchInfo.searchCount }) }
-            </div>;
-        }
-
-        // XXX: this is a bit inefficient - we could just compare room.name for 'Empty room'...
-        let settingsHint = false;
-        const members = this.props.room ? this.props.room.getJoinedMembers() : undefined;
-        if (members) {
-            if (members.length === 1 && members[0].userId === MatrixClientPeg.get().credentials.userId) {
-                const nameEvent = this.props.room.currentState.getStateEvents('m.room.name', '');
-                if (!nameEvent || !nameEvent.getContent().name) {
-                    settingsHint = true;
-                }
-            }
-        }
-
-        let oobName = _t("Join Room");
-        if (this.props.oobData && this.props.oobData.name) {
-            oobName = this.props.oobData.name;
-        }
-
-        let contextMenu: JSX.Element;
-        if (this.state.contextMenuPosition && this.props.room) {
-            contextMenu = (
-                <RoomContextMenu
-                    {...contextMenuBelow(this.state.contextMenuPosition)}
-                    room={this.props.room}
-                    onFinished={this.onContextMenuCloseClick}
-                />
-            );
-        }
-
-        const textClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
-        const name = (
-            <ContextMenuTooltipButton
-                className="mx_RoomHeader_name"
-                onClick={this.onContextMenuOpenClick}
-                isExpanded={!!this.state.contextMenuPosition}
-                title={_t("Room options")}
-            >
-                <RoomName room={this.props.room}>
-                    { (name) => {
-                        const roomName = name || oobName;
-                        return <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>;
-                    } }
-                </RoomName>
-                { this.props.room && <div className="mx_RoomHeader_chevron" /> }
-                { contextMenu }
-            </ContextMenuTooltipButton>
-        );
-
-        const topicElement = <RoomTopic
-            room={this.props.room}
-            className="mx_RoomHeader_topic"
-        />;
-
-        let roomAvatar;
-        if (this.props.room) {
-            roomAvatar = <DecoratedRoomAvatar
-                room={this.props.room}
-                avatarSize={24}
-                oobData={this.props.oobData}
-                viewAvatarOnClick={true}
-            />;
-        }
-
+    private renderButtons(): JSX.Element[] {
         const buttons: JSX.Element[] = [];
 
         if (this.props.inRoom &&
@@ -269,10 +199,105 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             buttons.push(inviteButton);
         }
 
-        const rightRow =
-            <div className="mx_RoomHeader_buttons">
-                { buttons }
+        return buttons;
+    }
+
+    private renderName(oobName) {
+        let contextMenu: JSX.Element;
+        if (this.state.contextMenuPosition && this.props.room) {
+            contextMenu = (
+                <RoomContextMenu
+                    {...contextMenuBelow(this.state.contextMenuPosition)}
+                    room={this.props.room}
+                    onFinished={this.onContextMenuCloseClick}
+                />
+            );
+        }
+
+        // XXX: this is a bit inefficient - we could just compare room.name for 'Empty room'...
+        let settingsHint = false;
+        const members = this.props.room ? this.props.room.getJoinedMembers() : undefined;
+        if (members) {
+            if (members.length === 1 && members[0].userId === MatrixClientPeg.get().credentials.userId) {
+                const nameEvent = this.props.room.currentState.getStateEvents('m.room.name', '');
+                if (!nameEvent || !nameEvent.getContent().name) {
+                    settingsHint = true;
+                }
+            }
+        }
+
+        const textClasses = classNames('mx_RoomHeader_nametext', { mx_RoomHeader_settingsHint: settingsHint });
+        const roomName = <RoomName room={this.props.room}>
+            { (name) => {
+                const roomName = name || oobName;
+                return <div dir="auto" className={textClasses} title={roomName}>{ roomName }</div>;
+            } }
+        </RoomName>;
+
+        if (this.props.enableRoomOptionsMenu) {
+            return (
+                <ContextMenuTooltipButton
+                    className="mx_RoomHeader_name"
+                    onClick={this.onContextMenuOpenClick}
+                    isExpanded={!!this.state.contextMenuPosition}
+                    title={_t("Room options")}
+                >
+                    { roomName }
+                    { this.props.room && <div className="mx_RoomHeader_chevron" /> }
+                    { contextMenu }
+                </ContextMenuTooltipButton>
+            );
+        }
+
+        return <div className="mx_RoomHeader_name mx_RoomHeader_name--textonly">
+            { roomName }
+        </div>;
+    }
+
+    public render() {
+        let searchStatus = null;
+
+        // don't display the search count until the search completes and
+        // gives us a valid (possibly zero) searchCount.
+        if (this.props.searchInfo &&
+            this.props.searchInfo.searchCount !== undefined &&
+            this.props.searchInfo.searchCount !== null) {
+            searchStatus = <div className="mx_RoomHeader_searchStatus">&nbsp;
+                { _t("(~%(count)s results)", { count: this.props.searchInfo.searchCount }) }
             </div>;
+        }
+
+        let oobName = _t("Join Room");
+        if (this.props.oobData && this.props.oobData.name) {
+            oobName = this.props.oobData.name;
+        }
+
+        const name = this.renderName(oobName);
+
+        const topicElement = <RoomTopic
+            room={this.props.room}
+            className="mx_RoomHeader_topic"
+        />;
+
+        let roomAvatar;
+        if (this.props.room) {
+            roomAvatar = <DecoratedRoomAvatar
+                room={this.props.room}
+                avatarSize={24}
+                oobData={this.props.oobData}
+                viewAvatarOnClick={true}
+            />;
+        }
+
+        let buttons;
+        if (this.props.showButtons) {
+            buttons = <React.Fragment>
+                <div className="mx_RoomHeader_buttons">
+                    { this.renderButtons() }
+                </div>
+                <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} />
+            </React.Fragment>;
+        }
 
         const e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;
 
@@ -294,8 +319,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     { searchStatus }
                     { topicElement }
                     { betaPill }
-                    { rightRow }
-                    <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} />
+                    { buttons }
                 </div>
                 <RoomLiveShareWarning roomId={this.props.room.roomId} />
             </div>
