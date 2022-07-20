@@ -132,6 +132,7 @@ import VideoChannelStore from "../../stores/VideoChannelStore";
 import { IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
 import { UseCaseSelection } from '../views/elements/UseCaseSelection';
 import { ValidatedServerConfig } from '../../utils/ValidatedServerConfig';
+import { isLocalRoom } from '../../utils/localRoom/isLocalRoom';
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -890,7 +891,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
 
         // If we are redirecting to a Room Alias and it is for the room we already showing then replace history item
-        const replaceLast = presentedId[0] === "#" && roomInfo.room_id === this.state.currentRoomId;
+        let replaceLast = presentedId[0] === "#" && roomInfo.room_id === this.state.currentRoomId;
+
+        if (isLocalRoom(this.state.currentRoomId)) {
+            // Replace local room history items
+            replaceLast = true;
+        }
 
         if (roomInfo.room_id === this.state.currentRoomId) {
             // if we are re-viewing the same room then copy any state we already know

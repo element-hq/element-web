@@ -2101,6 +2101,7 @@
     "View Source": "View Source",
     "Some encryption parameters have been changed.": "Some encryption parameters have been changed.",
     "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.": "Messages here are end-to-end encrypted. Verify %(displayName)s in their profile - tap on their avatar.",
+    "Messages in this chat will be end-to-end encrypted.": "Messages in this chat will be end-to-end encrypted.",
     "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.": "Messages in this room are end-to-end encrypted. When people join, you can verify them in their profile, just tap on their avatar.",
     "Encryption enabled": "Encryption enabled",
     "Ignored attempt to disable encryption": "Ignored attempt to disable encryption",

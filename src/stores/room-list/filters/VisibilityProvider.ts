@@ -18,7 +18,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import CallHandler from "../../../CallHandler";
 import { RoomListCustomisations } from "../../../customisations/RoomList";
-import { LocalRoom } from "../../../models/LocalRoom";
+import { isLocalRoom } from "../../../utils/localRoom/isLocalRoom";
 import VoipUserMapper from "../../../VoipUserMapper";
 
 export class VisibilityProvider {
@@ -55,7 +55,7 @@ export class VisibilityProvider {
             return false;
         }
 
-        if (room instanceof LocalRoom) {
+        if (isLocalRoom(room)) {
             // local rooms shouldn't show up anywhere
             return false;
         }

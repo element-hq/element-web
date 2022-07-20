@@ -31,6 +31,7 @@ import {
     IEventRelation,
     IUnsigned,
 } from 'matrix-js-sdk/src/matrix';
+import { normalize } from "matrix-js-sdk/src/utils";
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import dis from '../../src/dispatcher/dispatcher';
@@ -389,6 +390,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         removeListener: jest.fn(),
         getDMInviter: jest.fn(),
         name,
+        normalizedName: normalize(name || ""),
         getAvatarUrl: () => 'mxc://avatar.url/room.png',
         getMxcAvatarUrl: () => 'mxc://avatar.url/room.png',
         isSpaceRoom: jest.fn().mockReturnValue(false),

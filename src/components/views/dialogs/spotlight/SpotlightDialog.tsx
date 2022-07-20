@@ -91,6 +91,7 @@ import { PublicRoomResultDetails } from "./PublicRoomResultDetails";
 import { RoomResultContextMenus } from "./RoomResultContextMenus";
 import { RoomContextDetails } from "../../rooms/RoomContextDetails";
 import { TooltipOption } from "./TooltipOption";
+import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -243,6 +244,9 @@ export const useWebSearchMetrics = (numResults: number, queryLength: number, via
 
 const findVisibleRooms = (cli: MatrixClient) => {
     return cli.getVisibleRooms().filter(room => {
+        // Do not show local rooms
+        if (isLocalRoom(room)) return false;
+
         // TODO we may want to put invites in their own list
         return room.getMyMembership() === "join" || room.getMyMembership() == "invite";
     });
@@ -395,7 +399,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
             possibleResults.forEach(entry => {
                 if (isRoomResult(entry)) {
-                    if (!entry.room.normalizedName.includes(normalizedQuery) &&
+                    if (!entry.room.normalizedName?.includes(normalizedQuery) &&
                         !entry.room.getCanonicalAlias()?.toLowerCase().includes(lcQuery) &&
                         !entry.query?.some(q => q.includes(lcQuery))
                     ) return; // bail, does not match query
