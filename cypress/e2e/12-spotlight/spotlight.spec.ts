@@ -139,6 +139,9 @@ describe("Spotlight", () => {
     const room2Name = "Lounge";
     let room2Id: string;
 
+    const room3Name = "Public";
+    let room3Id: string;
+
     beforeEach(() => {
         cy.startSynapse("default").then(data => {
             synapse = data;
@@ -163,6 +166,19 @@ describe("Spotlight", () => {
                             room2Id = _room2Id;
                             bot2.invite(room2Id, bot1.getUserId());
                         });
+                    bot2.createRoom({
+                        name: room3Name,
+                        visibility: Visibility.Public, initial_state: [{
+                            type: "m.room.history_visibility",
+                            state_key: "",
+                            content: {
+                                history_visibility: "world_readable",
+                            },
+                        }],
+                    }).then(({ room_id: _room3Id }) => {
+                        room3Id = _room3Id;
+                        bot2.invite(room3Id, bot1.getUserId());
+                    });
                 }),
             ).then(() =>
                 cy.get('.mx_RoomSublist_skeletonUI').should('not.exist'),
@@ -212,6 +228,7 @@ describe("Spotlight", () => {
             cy.spotlightSearch().clear().type(room1Name);
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", room1Name);
+            cy.spotlightResults().eq(0).should("contain", "View");
             cy.spotlightResults().eq(0).click();
             cy.url().should("contain", room1Id);
         }).then(() => {
@@ -225,11 +242,27 @@ describe("Spotlight", () => {
             cy.spotlightSearch().clear().type(room2Name);
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", room2Name);
+            cy.spotlightResults().eq(0).should("contain", "Join");
             cy.spotlightResults().eq(0).click();
             cy.url().should("contain", room2Id);
         }).then(() => {
             cy.get(".mx_RoomPreviewBar_actions .mx_AccessibleButton").click();
             cy.roomHeaderName().should("contain", room2Name);
+        });
+    });
+
+    it("should find unknown public world readable rooms", () => {
+        cy.openSpotlightDialog().within(() => {
+            cy.spotlightFilter(Filter.PublicRooms);
+            cy.spotlightSearch().clear().type(room3Name);
+            cy.spotlightResults().should("have.length", 1);
+            cy.spotlightResults().eq(0).should("contain", room3Name);
+            cy.spotlightResults().eq(0).should("contain", "View");
+            cy.spotlightResults().eq(0).click();
+            cy.url().should("contain", room3Id);
+        }).then(() => {
+            cy.get(".mx_RoomPreviewBar_actions .mx_AccessibleButton").click();
+            cy.roomHeaderName().should("contain", room3Name);
         });
     });
 
