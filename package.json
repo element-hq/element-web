@@ -55,7 +55,7 @@
     "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js"
   },
   "dependencies": {
-    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz",
     "@matrix-org/react-sdk-module-api": "^0.0.3",
     "browser-request": "^0.3.3",
     "gfm.css": "^1.1.2",
