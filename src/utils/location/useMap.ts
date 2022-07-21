@@ -35,7 +35,7 @@ export const useMap = ({
     interactive,
     bodyId,
     onError,
-}: UseMapProps): MapLibreMap => {
+}: UseMapProps): MapLibreMap | undefined => {
     const [map, setMap] = useState<MapLibreMap>();
 
     useEffect(

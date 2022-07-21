@@ -19,7 +19,6 @@ import { Command } from "commander";
 
 import { ElementSession } from './src/session';
 import { scenario } from './src/scenario';
-import { RestSessionCreator } from './src/rest/creator';
 
 const program = new Command();
 
@@ -54,12 +53,7 @@ async function runTests() {
         options['executablePath'] = path;
     }
 
-    const restCreator = new RestSessionCreator(
-        hsUrl,
-        program.opts().registrationSharedSecret,
-    );
-
-    async function createSession(username) {
+    async function createSession(username: string) {
         const session = await ElementSession.create(
             username, options, program.opts().appUrl, hsUrl, program.opts().throttleCpu,
         );
@@ -69,7 +63,7 @@ async function runTests() {
 
     let failure = false;
     try {
-        await scenario(createSession, restCreator);
+        await scenario(createSession);
     } catch (err) {
         failure = true;
         console.log('failure: ', err);

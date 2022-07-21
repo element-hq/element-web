@@ -16,6 +16,7 @@ limitations under the License.
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import SettingsStore from "../settings/SettingsStore";
+import { isLocalRoom } from "../utils/localRoom/isLocalRoom";
 import Timer from "../utils/Timer";
 
 const TYPING_USER_TIMEOUT = 10000;
@@ -64,6 +65,9 @@ export default class TypingStore {
      * @param {boolean} isTyping Whether the user is typing or not.
      */
     public setSelfTyping(roomId: string, threadId: string | null, isTyping: boolean): void {
+        // No typing notifications for local rooms
+        if (isLocalRoom(roomId)) return;
+
         if (!SettingsStore.getValue('sendTypingNotifications')) return;
         if (SettingsStore.getValue('lowBandwidth')) return;
         // Disable typing notification for threads for the initial launch

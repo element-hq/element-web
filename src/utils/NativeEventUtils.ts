@@ -14,25 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/// <reference types="cypress" />
+import React from "react";
 
-import "@percy/cypress";
-import "cypress-real-events";
-
-import "./performance";
-import "./synapse";
-import "./login";
-import "./labs";
-import "./client";
-import "./settings";
-import "./bot";
-import "./clipboard";
-import "./util";
-import "./app";
-import "./percy";
-import "./webserver";
-import "./views";
-import "./iframes";
-import "./timeline";
-import "./network";
-import "./composer";
+// Wrap DOM event handlers with stopPropagation and preventDefault
+export const preventDefaultWrapper =
+    <T extends React.BaseSyntheticEvent = React.BaseSyntheticEvent>(callback: () => void) => (e?: T) => {
+        e?.stopPropagation();
+        e?.preventDefault();
+        callback();
+    };

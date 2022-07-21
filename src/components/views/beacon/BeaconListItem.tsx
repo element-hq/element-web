@@ -14,13 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useContext } from 'react';
+import React, { HTMLProps, useContext } from 'react';
 import { Beacon, BeaconEvent } from 'matrix-js-sdk/src/matrix';
 import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
 import { humanizeTime } from '../../../utils/humanize';
+import { preventDefaultWrapper } from '../../../utils/NativeEventUtils';
 import { _t } from '../../../languageHandler';
 import MemberAvatar from '../avatars/MemberAvatar';
 import BeaconStatus from './BeaconStatus';
@@ -32,7 +33,7 @@ interface Props {
     beacon: Beacon;
 }
 
-const BeaconListItem: React.FC<Props> = ({ beacon }) => {
+const BeaconListItem: React.FC<Props & HTMLProps<HTMLLIElement>> = ({ beacon, ...rest }) => {
     const latestLocationState = useEventEmitterState(
         beacon,
         BeaconEvent.LocationUpdate,
@@ -52,7 +53,7 @@ const BeaconListItem: React.FC<Props> = ({ beacon }) => {
 
     const humanizedUpdateTime = humanizeTime(latestLocationState.timestamp);
 
-    return <li className='mx_BeaconListItem'>
+    return <li className='mx_BeaconListItem' {...rest}>
         { isSelfLocation ?
             <MemberAvatar
                 className='mx_BeaconListItem_avatar'
@@ -69,7 +70,11 @@ const BeaconListItem: React.FC<Props> = ({ beacon }) => {
                 label={beaconMember?.name || beacon.beaconInfo.description || beacon.beaconInfoOwner}
                 displayStatus={BeaconDisplayStatus.Active}
             >
-                <ShareLatestLocation latestLocationState={latestLocationState} />
+                { /* eat events from interactive share buttons
+                so parent click handlers are not triggered */ }
+                <div className='mx_BeaconListItem_interactions' onClick={preventDefaultWrapper(() => {})}>
+                    <ShareLatestLocation latestLocationState={latestLocationState} />
+                </div>
             </BeaconStatus>
             <span className='mx_BeaconListItem_lastUpdated'>{ _t("Updated %(humanizedUpdateTime)s", { humanizedUpdateTime }) }</span>
         </div>

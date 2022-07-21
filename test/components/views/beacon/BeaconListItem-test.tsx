@@ -27,6 +27,7 @@ import { act } from 'react-dom/test-utils';
 import BeaconListItem from '../../../../src/components/views/beacon/BeaconListItem';
 import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
 import {
+    findByTestId,
     getMockClientWithEventEmitter,
     makeBeaconEvent,
     makeBeaconInfoEvent,
@@ -167,6 +168,31 @@ describe('<BeaconListItem />', () => {
                 });
 
                 expect(component.find('.mx_BeaconListItem_lastUpdated').text()).toEqual('Updated a few seconds ago');
+            });
+        });
+
+        describe('interactions', () => {
+            it('does not call onClick handler when clicking share button', () => {
+                const [beacon] = setupRoomWithBeacons([alicePinBeaconEvent], [aliceLocation1]);
+                const onClick = jest.fn();
+                const component = getComponent({ beacon, onClick });
+
+                act(() => {
+                    findByTestId(component, 'open-location-in-osm').at(0).simulate('click');
+                });
+                expect(onClick).not.toHaveBeenCalled();
+            });
+
+            it('calls onClick handler when clicking outside of share buttons', () => {
+                const [beacon] = setupRoomWithBeacons([alicePinBeaconEvent], [aliceLocation1]);
+                const onClick = jest.fn();
+                const component = getComponent({ beacon, onClick });
+
+                act(() => {
+                    // click the beacon name
+                    component.find('.mx_BeaconStatus_description').simulate('click');
+                });
+                expect(onClick).toHaveBeenCalled();
             });
         });
     });

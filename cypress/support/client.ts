@@ -124,6 +124,11 @@ declare global {
              * Boostraps cross-signing.
              */
             bootstrapCrossSigning(): Chainable<void>;
+            /**
+             * Joins the given room by alias or ID
+             * @param roomIdOrAlias the id or alias of the room to join
+             */
+            joinRoom(roomIdOrAlias: string): Chainable<Room>;
         }
     }
 }
@@ -216,4 +221,8 @@ Cypress.Commands.add("bootstrapCrossSigning", () => {
             authUploadDeviceSigningKeys: async func => { await func({}); },
         });
     });
+});
+
+Cypress.Commands.add("joinRoom", (roomIdOrAlias: string): Chainable<Room> => {
+    return cy.getClient().then(cli => cli.joinRoom(roomIdOrAlias));
 });

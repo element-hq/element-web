@@ -15,31 +15,88 @@ limitations under the License.
 */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 import DialogSidebar from '../../../../src/components/views/beacon/DialogSidebar';
-import { findByTestId } from '../../../test-utils';
+import MatrixClientContext from '../../../../src/contexts/MatrixClientContext';
+import {
+    getMockClientWithEventEmitter,
+    makeBeaconEvent,
+    makeBeaconInfoEvent,
+    makeRoomWithBeacons,
+    mockClientMethodsUser,
+} from '../../../test-utils';
 
 describe('<DialogSidebar />', () => {
     const defaultProps = {
         beacons: [],
         requestClose: jest.fn(),
+        onBeaconClick: jest.fn(),
     };
-    const getComponent = (props = {}) =>
-        mount(<DialogSidebar {...defaultProps} {...props} />);
 
-    it('renders sidebar correctly', () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
+    const now = 1647270879403;
+
+    const roomId = '!room:server.org';
+    const aliceId = '@alice:server.org';
+    const client = getMockClientWithEventEmitter({
+        ...mockClientMethodsUser(aliceId),
+        getRoom: jest.fn(),
+    });
+
+    const beaconEvent = makeBeaconInfoEvent(aliceId,
+        roomId,
+        { isLive: true, timestamp: now },
+        '$alice-room1-1',
+    );
+    const location1 = makeBeaconEvent(
+        aliceId, { beaconInfoId: beaconEvent.getId(), geoUri: 'geo:51,41', timestamp: now },
+    );
+
+    const getComponent = (props = {}) => (
+        <MatrixClientContext.Provider value={client}>
+            <DialogSidebar {...defaultProps} {...props} />);
+        </MatrixClientContext.Provider>);
+
+    beforeEach(() => {
+        // mock now so time based text in snapshots is stable
+        jest.spyOn(Date, 'now').mockReturnValue(now);
+    });
+
+    afterAll(() => {
+        jest.spyOn(Date, 'now').mockRestore();
+    });
+
+    it('renders sidebar correctly without beacons', () => {
+        const { container } = render(getComponent());
+        expect(container).toMatchSnapshot();
+    });
+
+    it('renders sidebar correctly with beacons', () => {
+        const [beacon] = makeRoomWithBeacons(roomId, client, [beaconEvent], [location1]);
+        const { container } = render(getComponent({ beacons: [beacon] }));
+        expect(container).toMatchSnapshot();
+    });
+
+    it('calls on beacon click', () => {
+        const onBeaconClick = jest.fn();
+        const [beacon] = makeRoomWithBeacons(roomId, client, [beaconEvent], [location1]);
+        const { container } = render(getComponent({ beacons: [beacon], onBeaconClick }));
+
+        act(() => {
+            const [listItem] = container.getElementsByClassName('mx_BeaconListItem');
+            fireEvent.click(listItem);
+        });
+
+        expect(onBeaconClick).toHaveBeenCalled();
     });
 
     it('closes on close button click', () => {
         const requestClose = jest.fn();
-        const component = getComponent({ requestClose });
+        const { getByTestId } = render(getComponent({ requestClose }));
 
         act(() => {
-            findByTestId(component, 'dialog-sidebar-close').at(0).simulate('click');
+            fireEvent.click(getByTestId('dialog-sidebar-close'));
         });
         expect(requestClose).toHaveBeenCalled();
     });

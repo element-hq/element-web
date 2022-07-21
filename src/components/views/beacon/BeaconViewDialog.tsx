@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import {
     Beacon,
@@ -45,7 +45,16 @@ interface IProps extends IDialogProps {
     roomId: Room['roomId'];
     matrixClient: MatrixClient;
     // open the map centered on this beacon's location
-    focusBeacon?: Beacon;
+    initialFocusedBeacon?: Beacon;
+}
+
+// track the 'focused time' as ts
+// to make it possible to refocus the same beacon
+// as the beacon location may change
+// or the map may move around
+interface FocusedBeaconState {
+    ts: number;
+    beacon?: Beacon;
 }
 
 const getBoundsCenter = (bounds: Bounds): string | undefined => {
@@ -59,31 +68,52 @@ const getBoundsCenter = (bounds: Bounds): string | undefined => {
     });
 };
 
-const useInitialMapPosition = (liveBeacons: Beacon[], focusBeacon?: Beacon): {
+const useInitialMapPosition = (liveBeacons: Beacon[], { beacon, ts }: FocusedBeaconState): {
     bounds?: Bounds; centerGeoUri: string;
 } => {
-    const bounds = useRef<Bounds | undefined>(getBeaconBounds(liveBeacons));
-    const centerGeoUri = useRef<string>(
-        focusBeacon?.latestLocationState?.uri ||
-        getBoundsCenter(bounds.current),
+    const [bounds, setBounds] = useState<Bounds | undefined>(getBeaconBounds(liveBeacons));
+    const [centerGeoUri, setCenterGeoUri] = useState<string>(
+        beacon?.latestLocationState?.uri ||
+        getBoundsCenter(bounds),
     );
-    return { bounds: bounds.current, centerGeoUri: centerGeoUri.current };
+
+    useEffect(() => {
+        if (
+            // this check ignores the first initial focused beacon state
+            // as centering logic on map zooms to show everything
+            // instead of focusing down
+            ts !== 0 &&
+            // only set focus to a known location
+            beacon?.latestLocationState?.uri
+        ) {
+            // append custom `mxTs` parameter to geoUri
+            // so map is triggered to refocus on this uri
+            // event if it was previously the center geouri
+            // but the map have moved/zoomed
+            setCenterGeoUri(`${beacon?.latestLocationState?.uri};mxTs=${Date.now()}`);
+            setBounds(getBeaconBounds([beacon]));
+        }
+    }, [beacon, ts]);
+
+    return { bounds, centerGeoUri };
 };
 
 /**
  * Dialog to view live beacons maximised
  */
 const BeaconViewDialog: React.FC<IProps> = ({
-    focusBeacon,
+    initialFocusedBeacon,
     roomId,
     matrixClient,
     onFinished,
 }) => {
     const liveBeacons = useLiveBeacons(roomId, matrixClient);
+    const [focusedBeaconState, setFocusedBeaconState] =
+        useState<FocusedBeaconState>({ beacon: initialFocusedBeacon, ts: 0 });
 
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-    const { bounds, centerGeoUri } = useInitialMapPosition(liveBeacons, focusBeacon);
+    const { bounds, centerGeoUri } = useInitialMapPosition(liveBeacons, focusedBeaconState);
 
     const [mapDisplayError, setMapDisplayError] = useState<Error>();
 
@@ -93,6 +123,10 @@ const BeaconViewDialog: React.FC<IProps> = ({
             setSidebarOpen(true);
         }
     }, [mapDisplayError]);
+
+    const onBeaconListItemClick = (beacon: Beacon) => {
+        setFocusedBeaconState({ beacon, ts: Date.now() });
+    };
 
     return (
         <BaseDialog
@@ -144,7 +178,7 @@ const BeaconViewDialog: React.FC<IProps> = ({
                     </MapFallback>
                 }
                 { isSidebarOpen ?
-                    <DialogSidebar beacons={liveBeacons} requestClose={() => setSidebarOpen(false)} /> :
+                    <DialogSidebar beacons={liveBeacons} onBeaconClick={onBeaconListItemClick} requestClose={() => setSidebarOpen(false)} /> :
                     <AccessibleButton
                         kind='primary'
                         onClick={() => setSidebarOpen(true)}

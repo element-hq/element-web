@@ -16,6 +16,9 @@ limitations under the License.
 
 import EmojiProvider from '../../src/autocomplete/EmojiProvider';
 import { mkStubRoom } from '../test-utils/test-utils';
+import { add } from "../../src/emojipicker/recent";
+import { stubClient } from "../test-utils";
+import { MatrixClientPeg } from '../../src/MatrixClientPeg';
 
 const EMOJI_SHORTCODES = [
     ":+1",
@@ -42,6 +45,8 @@ const TOO_SHORT_EMOJI_SHORTCODE = [
 
 describe('EmojiProvider', function() {
     const testRoom = mkStubRoom(undefined, undefined, undefined);
+    stubClient();
+    MatrixClientPeg.get();
 
     it.each(EMOJI_SHORTCODES)('Returns consistent results after final colon %s', async function(emojiShortcode) {
         const ep = new EmojiProvider(testRoom);
@@ -63,5 +68,22 @@ describe('EmojiProvider', function() {
         const completions = await ep.getCompletions(emojiShortcode + ':', range);
 
         expect(completions[0].completion).toEqual(expectedEmoji);
+    });
+
+    it('Returns correct autocompletion based on recently used emoji', async function() {
+        add("😘"); //kissing_heart
+        add("😘");
+        add("😚"); //kissing_closed_eyes
+        const emojiProvider = new EmojiProvider(null);
+
+        let completionsList = await emojiProvider.getCompletions(":kis", { beginning: true, end: 3, start: 3 });
+        expect(completionsList[0].component.props.title).toEqual(":kissing_heart:");
+        expect(completionsList[1].component.props.title).toEqual(":kissing_closed_eyes:");
+
+        completionsList = await emojiProvider.getCompletions(":kissing_c", { beginning: true, end: 3, start: 3 });
+        expect(completionsList[0].component.props.title).toEqual(":kissing_closed_eyes:");
+
+        completionsList = await emojiProvider.getCompletions(":so", { beginning: true, end: 2, start: 2 });
+        expect(completionsList[0].component.props.title).toEqual(":sob:");
     });
 });

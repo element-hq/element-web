@@ -17,6 +17,7 @@ limitations under the License.
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { EventType } from "matrix-js-sdk/src/@types/event";
+import { M_BEACON } from "matrix-js-sdk/src/@types/beacon";
 
 import { MatrixClientPeg } from "./MatrixClientPeg";
 import shouldHideEvent from './shouldHideEvent';
@@ -44,6 +45,8 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
         case EventType.RoomAliases:
         case EventType.RoomCanonicalAlias:
         case EventType.RoomServerAcl:
+        case M_BEACON.name:
+        case M_BEACON.altName:
             return false;
     }
 
