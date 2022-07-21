@@ -29,8 +29,9 @@ import QueryMatcher from './QueryMatcher';
 import { PillCompletion } from './Components';
 import { ICompletion, ISelectionRange } from './Autocompleter';
 import SettingsStore from "../settings/SettingsStore";
-import { EMOJI, IEmoji } from '../emoji';
+import { EMOJI, IEmoji, getEmojiFromUnicode } from '../emoji';
 import { TimelineRenderingType } from '../contexts/RoomContext';
+import * as recent from '../emojipicker/recent';
 
 const LIMIT = 20;
 
@@ -73,6 +74,7 @@ function colonsTrimmed(str: string): string {
 export default class EmojiProvider extends AutocompleteProvider {
     matcher: QueryMatcher<ISortedEmoji>;
     nameMatcher: QueryMatcher<ISortedEmoji>;
+    private readonly recentlyUsed: IEmoji[];
 
     constructor(room: Room, renderingType?: TimelineRenderingType) {
         super({ commandRegex: EMOJI_REGEX, renderingType });
@@ -87,6 +89,8 @@ export default class EmojiProvider extends AutocompleteProvider {
             // For removing punctuation
             shouldMatchWordsOnly: true,
         });
+
+        this.recentlyUsed = Array.from(new Set(recent.get().map(getEmojiFromUnicode).filter(Boolean)));
     }
 
     async getCompletions(
@@ -109,7 +113,7 @@ export default class EmojiProvider extends AutocompleteProvider {
             // Do second match with shouldMatchWordsOnly in order to match against 'name'
             completions = completions.concat(this.nameMatcher.match(matchedString));
 
-            const sorters = [];
+            let sorters = [];
             // make sure that emoticons come first
             sorters.push(c => score(matchedString, c.emoji.emoticon || ""));
 
@@ -130,6 +134,15 @@ export default class EmojiProvider extends AutocompleteProvider {
             sorters.push(c => c._orderBy);
             completions = sortBy(uniq(completions), sorters);
 
+            completions = completions.slice(0, LIMIT);
+
+            // Do a second sort to place emoji matching with frequently used one on top
+            sorters = [];
+            this.recentlyUsed.forEach(emoji => {
+                sorters.push(c => score(emoji.shortcodes[0], c.emoji.shortcodes[0]));
+            });
+            completions = sortBy(uniq(completions), sorters);
+
             completions = completions.map(c => ({
                 completion: c.emoji.unicode,
                 component: (
@@ -138,7 +151,7 @@ export default class EmojiProvider extends AutocompleteProvider {
                     </PillCompletion>
                 ),
                 range,
-            })).slice(0, LIMIT);
+            }));
         }
         return completions;
     }
