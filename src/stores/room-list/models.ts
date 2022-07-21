@@ -23,11 +23,13 @@ export enum DefaultTagID {
     DM = "im.vector.fake.direct",
     ServerNotice = "m.server_notice",
     Suggested = "im.vector.fake.suggested",
+    SavedItems = "im.vector.fake.saved_items",
 }
 
 export const OrderedDefaultTagIDs = [
     DefaultTagID.Invite,
     DefaultTagID.Favourite,
+    DefaultTagID.SavedItems,
     DefaultTagID.DM,
     DefaultTagID.Untagged,
     DefaultTagID.LowPriority,
