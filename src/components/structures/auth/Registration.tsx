@@ -382,7 +382,8 @@ export default class Registration extends React.Component<IProps, IState> {
         const hasEmail = Boolean(this.state.formVals.email);
         const hasAccessToken = Boolean(response.access_token);
         debuglog("Registration: ui auth finished:", { hasEmail, hasAccessToken });
-        if (!hasEmail && hasAccessToken) {
+        // don’t log in if we found a session for a different user
+        if (!hasEmail && hasAccessToken && !newState.differentLoggedInUserId) {
             // we'll only try logging in if we either have no email to verify at all or we're the client that verified
             // the email, not the client that started the registration flow
             await this.props.onLoggedIn({
