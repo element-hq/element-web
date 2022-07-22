@@ -384,24 +384,28 @@ class TimelinePanel extends React.Component<IProps, IState> {
      * every message change so instead we only log it out when asked.
      */
     private onDumpDebugLogs = (): void => {
-        const room = this.props.timelineSet.room;
+        const room = this.props.timelineSet?.room;
         // Get a list of the event IDs used in this TimelinePanel.
         // This includes state and hidden events which we don't render
-        const eventIdList = this.state.events.map((ev) => ev.getId());
+        const eventIdList = this.state?.events?.map((ev) => ev.getId());
 
         // Get the list of actually rendered events seen in the DOM.
         // This is useful to know for sure what's being shown on screen.
         // And we can suss out any corrupted React `key` problems.
         let renderedEventIds: string[];
-        const messagePanel = this.messagePanel.current;
-        if (messagePanel) {
-            const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
-            if (messagePanelNode) {
-                const actuallyRenderedEvents = messagePanelNode.querySelectorAll('[data-event-id]');
-                renderedEventIds = [...actuallyRenderedEvents].map((renderedEvent) => {
-                    return renderedEvent.getAttribute('data-event-id');
-                });
+        try {
+            const messagePanel = this.messagePanel.current;
+            if (messagePanel) {
+                const messagePanelNode = ReactDOM.findDOMNode(messagePanel) as Element;
+                if (messagePanelNode) {
+                    const actuallyRenderedEvents = messagePanelNode.querySelectorAll('[data-event-id]');
+                    renderedEventIds = [...actuallyRenderedEvents].map((renderedEvent) => {
+                        return renderedEvent.getAttribute('data-event-id');
+                    });
+                }
             }
+        } catch (err) {
+            logger.error(`onDumpDebugLogs: Failed to get the actual event ID's in the DOM`, err);
         }
 
         // Get the list of events and threads for the room as seen by the
@@ -413,26 +417,44 @@ class TimelinePanel extends React.Component<IProps, IState> {
             const timelineSets = room.getTimelineSets();
             const threadsTimelineSets = room.threadsTimelineSets;
 
-            // Serialize all of the timelineSets and timelines in each set to their event IDs
-            serializedEventIdsFromTimelineSets = serializeEventIdsFromTimelineSets(timelineSets);
-            serializedEventIdsFromThreadsTimelineSets = serializeEventIdsFromTimelineSets(threadsTimelineSets);
+            try {
+                // Serialize all of the timelineSets and timelines in each set to their event IDs
+                serializedEventIdsFromTimelineSets = serializeEventIdsFromTimelineSets(timelineSets);
+                serializedEventIdsFromThreadsTimelineSets = serializeEventIdsFromTimelineSets(threadsTimelineSets);
+            } catch (err) {
+                logger.error(`onDumpDebugLogs: Failed to serialize event IDs from timelinesets`, err);
+            }
 
-            // Serialize all threads in the room from theadId -> event IDs in the thread
-            room.getThreads().forEach((thread) => {
-                serializedThreadsMap[thread.id] = {
-                    events: thread.events.map(ev => ev.getId()),
-                    numTimelines: thread.timelineSet.getTimelines().length,
-                    liveTimeline: thread.timelineSet.getLiveTimeline().getEvents().length,
-                    prevTimeline: thread.timelineSet.getLiveTimeline().getNeighbouringTimeline(Direction.Backward)
-                        ?.getEvents().length,
-                    nextTimeline: thread.timelineSet.getLiveTimeline().getNeighbouringTimeline(Direction.Forward)
-                        ?.getEvents().length,
-                };
-            });
+            try {
+                // Serialize all threads in the room from theadId -> event IDs in the thread
+                room.getThreads().forEach((thread) => {
+                    serializedThreadsMap[thread.id] = {
+                        events: thread.events.map(ev => ev.getId()),
+                        numTimelines: thread.timelineSet.getTimelines().length,
+                        liveTimeline: thread.timelineSet.getLiveTimeline().getEvents().length,
+                        prevTimeline: thread.timelineSet.getLiveTimeline().getNeighbouringTimeline(Direction.Backward)
+                            ?.getEvents().length,
+                        nextTimeline: thread.timelineSet.getLiveTimeline().getNeighbouringTimeline(Direction.Forward)
+                            ?.getEvents().length,
+                    };
+                });
+            } catch (err) {
+                logger.error(`onDumpDebugLogs: Failed to serialize event IDs from the threads`, err);
+            }
         }
 
-        const timelineWindowEventIds = this.timelineWindow.getEvents().map(ev => ev.getId());
-        const pendingEvents = this.props.timelineSet.getPendingEvents().map(ev => ev.getId());
+        let timelineWindowEventIds: string[];
+        try {
+            timelineWindowEventIds = this.timelineWindow.getEvents().map(ev => ev.getId());
+        } catch (err) {
+            logger.error(`onDumpDebugLogs: Failed to get event IDs from the timelineWindow`, err);
+        }
+        let pendingEventIds: string[];
+        try {
+            pendingEventIds = this.props.timelineSet.getPendingEvents().map(ev => ev.getId());
+        } catch (err) {
+            logger.error(`onDumpDebugLogs: Failed to get pending event IDs`, err);
+        }
 
         logger.debug(
             `TimelinePanel(${this.context.timelineRenderingType}): Debugging info for ${room?.roomId}\n` +
@@ -444,7 +466,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             `${JSON.stringify(serializedEventIdsFromThreadsTimelineSets)}\n` +
             `\tserializedThreadsMap=${JSON.stringify(serializedThreadsMap)}\n` +
             `\ttimelineWindowEventIds(${timelineWindowEventIds.length})=${JSON.stringify(timelineWindowEventIds)}\n` +
-            `\tpendingEvents(${pendingEvents.length})=${JSON.stringify(pendingEvents)}`,
+            `\tpendingEventIds(${pendingEventIds.length})=${JSON.stringify(pendingEventIds)}`,
         );
     };
 
