@@ -41,12 +41,8 @@ import dispatcher from '../../../../src/dispatcher/dispatcher';
 import SettingsStore from '../../../../src/settings/SettingsStore';
 import { Action } from '../../../../src/dispatcher/actions';
 import { UserTab } from '../../../../src/components/views/dialogs/UserTab';
-import { showThread } from '../../../../src/dispatcher/dispatch-actions/threads';
 
 jest.mock('../../../../src/dispatcher/dispatcher');
-jest.mock('../../../../src/dispatcher/dispatch-actions/threads', () => ({
-    showThread: jest.fn(),
-}));
 
 describe('<MessageActionBar />', () => {
     const userId = '@alice:server.org';
@@ -447,7 +443,8 @@ describe('<MessageActionBar />', () => {
                     fireEvent.click(getByLabelText('Reply in thread'));
                 });
 
-                expect(showThread).toHaveBeenCalledWith({
+                expect(dispatcher.dispatch).toHaveBeenCalledWith({
+                    action: Action.ShowThread,
                     rootEvent: alicesMessageEvent,
                     push: false,
                 });
@@ -475,7 +472,8 @@ describe('<MessageActionBar />', () => {
                     fireEvent.click(getByLabelText('Reply in thread'));
                 });
 
-                expect(showThread).toHaveBeenCalledWith({
+                expect(dispatcher.dispatch).toHaveBeenCalledWith({
+                    action: Action.ShowThread,
                     rootEvent: alicesMessageEvent,
                     initialEvent: threadReplyEvent,
                     highlighted: true,

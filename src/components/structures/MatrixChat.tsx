@@ -130,6 +130,10 @@ import { SnakedObject } from "../../utils/SnakedObject";
 import { leaveRoomBehaviour } from "../../utils/leave-behaviour";
 import VideoChannelStore from "../../stores/VideoChannelStore";
 import { IRoomStateEventsActionPayload } from "../../actions/MatrixActionCreators";
+import { ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
+import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
+import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { UseCaseSelection } from '../views/elements/UseCaseSelection';
 import { ValidatedServerConfig } from '../../utils/ValidatedServerConfig';
 import { isLocalRoom } from '../../utils/localRoom/isLocalRoom';
@@ -803,6 +807,41 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 hideAnalyticsToast();
                 SettingsStore.setValue("pseudonymousAnalyticsOptIn", null, SettingLevel.ACCOUNT, false);
                 break;
+            case Action.ShowThread: {
+                const {
+                    rootEvent,
+                    initialEvent,
+                    highlighted,
+                    scrollIntoView,
+                    push,
+                } = payload as ShowThreadPayload;
+
+                const threadViewCard = {
+                    phase: RightPanelPhases.ThreadView,
+                    state: {
+                        threadHeadEvent: rootEvent,
+                        initialEvent: initialEvent,
+                        isInitialEventHighlighted: highlighted,
+                        initialEventScrollIntoView: scrollIntoView,
+                    },
+                };
+                if (push ?? false) {
+                    RightPanelStore.instance.pushCard(threadViewCard);
+                } else {
+                    RightPanelStore.instance.setCards([
+                        { phase: RightPanelPhases.ThreadPanel },
+                        threadViewCard,
+                    ]);
+                }
+
+                // Focus the composer
+                dis.dispatch({
+                    action: Action.FocusSendMessageComposer,
+                    context: TimelineRenderingType.Thread,
+                });
+
+                break;
+            }
         }
     };
 

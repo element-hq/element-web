@@ -25,7 +25,7 @@ import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
 
 import type { Relations } from 'matrix-js-sdk/src/models/relations';
 import { _t } from '../../../languageHandler';
-import dis from '../../../dispatcher/dispatcher';
+import dis, { defaultDispatcher } from '../../../dispatcher/dispatcher';
 import ContextMenu, { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
 import { isContentActionable, canEditContent, editEvent, canCancel } from '../../../utils/EventUtils';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
@@ -41,13 +41,13 @@ import { RoomPermalinkCreator } from '../../../utils/permalinks/Permalinks';
 import ReplyChain from '../elements/ReplyChain';
 import ReactionPicker from "../emojipicker/ReactionPicker";
 import { CardContext } from '../right_panel/context';
-import { showThread } from "../../../dispatcher/dispatch-actions/threads";
 import { shouldDisplayReply } from '../../../utils/Reply';
 import { Key } from "../../../Keyboard";
 import { ALTERNATE_KEY_NAME } from "../../../accessibility/KeyboardShortcuts";
 import { UserTab } from '../dialogs/UserTab';
 import { Action } from '../../../dispatcher/actions';
 import SdkConfig from "../../../SdkConfig";
+import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import useFavouriteMessages from '../../../hooks/useFavouriteMessages';
 
 interface IOptionsButtonProps {
@@ -191,7 +191,8 @@ const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
                 initialTabId: UserTab.Labs,
             });
         } else if (mxEvent.getThread() && !mxEvent.isThreadRoot) {
-            showThread({
+            defaultDispatcher.dispatch<ShowThreadPayload>({
+                action: Action.ShowThread,
                 rootEvent: mxEvent.getThread().rootEvent,
                 initialEvent: mxEvent,
                 scroll_into_view: true,
@@ -199,7 +200,8 @@ const ReplyInThreadButton = ({ mxEvent }: IReplyInThreadButton) => {
                 push: context.isCard,
             });
         } else {
-            showThread({
+            defaultDispatcher.dispatch<ShowThreadPayload>({
+                action: Action.ShowThread,
                 rootEvent: mxEvent,
                 push: context.isCard,
             });

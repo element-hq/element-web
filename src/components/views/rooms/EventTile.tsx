@@ -58,7 +58,6 @@ import MessageActionBar from "../messages/MessageActionBar";
 import ReactionsRow from '../messages/ReactionsRow';
 import { getEventDisplayInfo } from '../../../utils/EventRenderingUtils';
 import SettingsStore from "../../../settings/SettingsStore";
-import { showThread } from '../../../dispatcher/dispatch-actions/threads';
 import { MessagePreviewStore } from '../../../stores/room-list/MessagePreviewStore';
 import RoomContext, { TimelineRenderingType } from "../../../contexts/RoomContext";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
@@ -80,6 +79,7 @@ import { haveRendererForEvent, isMessageEvent, renderTile } from "../../../event
 import ThreadSummary, { ThreadMessagePreview } from "./ThreadSummary";
 import { ReadReceiptGroup } from './ReadReceiptGroup';
 import { useTooltip } from "../../../utils/useTooltip";
+import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from '../../../utils/localRoom/isLocalRoom';
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
@@ -1357,7 +1357,11 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                         "onMouseEnter": () => this.setState({ hover: true }),
                         "onMouseLeave": () => this.setState({ hover: false }),
                         "onClick": (ev: MouseEvent) => {
-                            showThread({ rootEvent: this.props.mxEvent, push: true });
+                            dis.dispatch<ShowThreadPayload>({
+                                action: Action.ShowThread,
+                                rootEvent: this.props.mxEvent,
+                                push: true,
+                            });
                             const target = ev.currentTarget as HTMLElement;
                             const index = Array.from(target.parentElement.children).indexOf(target);
                             PosthogTrackers.trackInteraction("WebThreadsPanelThreadItem", ev, index);

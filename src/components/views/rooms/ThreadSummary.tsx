@@ -21,7 +21,6 @@ import { IContent, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/model
 import { _t } from "../../../languageHandler";
 import { CardContext } from "../right_panel/context";
 import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
-import { showThread } from "../../../dispatcher/dispatch-actions/threads";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { useTypedEventEmitter, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import RoomContext from "../../../contexts/RoomContext";
@@ -29,6 +28,9 @@ import { MessagePreviewStore } from "../../../stores/room-list/MessagePreviewSto
 import MemberAvatar from "../avatars/MemberAvatar";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import { Action } from "../../../dispatcher/actions";
+import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
 
 interface IProps {
     mxEvent: MatrixEvent;
@@ -50,7 +52,8 @@ const ThreadSummary = ({ mxEvent, thread }: IProps) => {
         <AccessibleButton
             className="mx_ThreadSummary"
             onClick={(ev: ButtonEvent) => {
-                showThread({
+                defaultDispatcher.dispatch<ShowThreadPayload>({
+                    action: Action.ShowThread,
                     rootEvent: mxEvent,
                     push: cardContext.isCard,
                 });

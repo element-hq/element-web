@@ -326,4 +326,9 @@ export enum Action {
      * Fires with the PlatformSetPayload.
      */
     PlatformSet = "platform_set",
+
+    /**
+     * Fired when we want to view a thread, either a new one or an existing one
+     */
+    ShowThread = "show_thread",
 }

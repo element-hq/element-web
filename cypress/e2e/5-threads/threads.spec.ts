@@ -212,4 +212,34 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content")
             .should("contain", "I'm very good thanks :)");
     });
+
+    it("right panel behaves correctly", () => {
+        // Create room
+        let roomId: string;
+        cy.createRoom({}).then(_roomId => {
+            roomId = _roomId;
+            cy.visit("/#/room/" + roomId);
+        });
+        // Send message
+        cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
+
+        // Create thread
+        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+            .realHover().find(".mx_MessageActionBar_threadButton").click();
+        cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
+
+        // Send message to thread
+        cy.get(".mx_BaseCard .mx_BasicMessageComposer_input").type("Hello Mr. User{enter}");
+        cy.get(".mx_BaseCard .mx_EventTile").should("contain", "Hello Mr. User");
+
+        // Close thread
+        cy.get(".mx_BaseCard_close").click();
+
+        // Open existing thread
+        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+            .realHover().find(".mx_MessageActionBar_threadButton").click();
+        cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
+        cy.get(".mx_BaseCard .mx_EventTile").should("contain", "Hello Mr. Bot");
+        cy.get(".mx_BaseCard .mx_EventTile").should("contain", "Hello Mr. User");
+    });
 });
