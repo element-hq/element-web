@@ -28,5 +28,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s usa funciones avanzadas que su navegador actual no soporta.",
     "Powered by Matrix": "Funciona con Matrix",
     "Use %(brand)s on mobile": "Usar %(brand)s en modo móvil",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Conversaciones y colaboración descentralizadas y cifradas gracias a $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Conversaciones y colaboración descentralizadas y cifradas gracias a $matrixLogo",
+    "Anyone can knock on this room to join. You can change this at any time from room settings.": "Anyone can knock on this room to join. You can change this at any time from room settings.",
+    "Knocking": "Knocking"
 }
