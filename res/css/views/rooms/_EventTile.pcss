@@ -274,7 +274,7 @@ $left-gutter: 64px;
     }
 
     &[data-layout="irc"] {
-        --EventTile_irc_line_info-inset-inline-start: calc(var(--name-width) + 10px + var(--icon-width));
+        --EventTile_irc_line_info-margin-inline-start: calc(var(--name-width) + 10px + var(--icon-width));
 
         .mx_EventTile_msgOption {
             .mx_ReadReceiptGroup {
@@ -288,7 +288,7 @@ $left-gutter: 64px;
 
         .mx_EventTileBubble {
             position: relative;
-            left: var(--EventTile_irc_line_info-inset-inline-start);
+            left: var(--EventTile_irc_line_info-margin-inline-start);
 
             &.mx_cryptoEvent {
                 left: unset;
@@ -308,10 +308,14 @@ $left-gutter: 64px;
 
         &.mx_EventTile_info {
             .mx_EventTile_avatar {
-                left: var(--EventTile_irc_line_info-inset-inline-start);
+                left: var(--EventTile_irc_line_info-margin-inline-start);
                 top: 0;
                 margin-right: var(--right-padding);
                 padding-block: var(--EventTile_irc_line-padding-block);
+            }
+
+            .mx_EventTile_line {
+                margin-inline-start: var(--EventTile_irc_line_info-margin-inline-start);
             }
         }
     }
