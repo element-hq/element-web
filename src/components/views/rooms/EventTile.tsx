@@ -28,6 +28,8 @@ import { CallErrorCode } from "matrix-js-sdk/src/webrtc/call";
 import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 import { UserTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 
+import { Icon as LinkIcon } from '../../../../res/img/element-icons/link.svg';
+import { Icon as ViewInRoomIcon } from '../../../../res/img/element-icons/view-in-room.svg';
 import ReplyChain from "../elements/ReplyChain";
 import { _t } from '../../../languageHandler';
 import dis from '../../../dispatcher/dispatcher';
@@ -1384,17 +1386,21 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
                         </div>
                         <Toolbar className="mx_MessageActionBar" aria-label={_t("Message Actions")} aria-live="off">
                             <RovingAccessibleTooltipButton
-                                className="mx_MessageActionBar_maskButton mx_MessageActionBar_viewInRoomButton"
+                                className="mx_MessageActionBar_iconButton"
                                 onClick={this.viewInRoom}
                                 title={_t("View in room")}
                                 key="view_in_room"
-                            />
+                            >
+                                <ViewInRoomIcon />
+                            </RovingAccessibleTooltipButton>
                             <RovingAccessibleTooltipButton
-                                className="mx_MessageActionBar_maskButton mx_MessageActionBar_copyLinkButton"
+                                className="mx_MessageActionBar_iconButton"
                                 onClick={this.copyLinkToThread}
                                 title={_t("Copy link to thread")}
                                 key="copy_link_to_thread"
-                            />
+                            >
+                                <LinkIcon />
+                            </RovingAccessibleTooltipButton>
                         </Toolbar>
                         { msgOption }
                     </>)

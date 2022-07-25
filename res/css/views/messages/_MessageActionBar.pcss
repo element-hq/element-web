@@ -89,9 +89,20 @@ limitations under the License.
         }
     }
 
-    .mx_MessageActionBar_maskButton {
+    .mx_MessageActionBar_iconButton {
+        --MessageActionBar-icon-size: 18px;
         width: var(--MessageActionBar-size-button);
         height: var(--MessageActionBar-size-button);
+        color: $secondary-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            height: var(--MessageActionBar-icon-size);
+            width: var(--MessageActionBar-icon-size);
+            flex: 0 0 var(--MessageActionBar-icon-size);
+        }
 
         &:disabled,
         &[disabled] {
@@ -99,35 +110,11 @@ limitations under the License.
             opacity: .75;
         }
 
-        &::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            mask-size: 18px;
-            mask-repeat: no-repeat;
-            mask-position: center;
-            background-color: $secondary-content;
-        }
-
-        &:hover::after {
-            background-color: $primary-content;
-        }
-
-        &.mx_MessageActionBar_reactButton::after {
-            mask-image: url('$(res)/img/element-icons/room/message-bar/emoji.svg');
-        }
-
-        &.mx_MessageActionBar_replyButton::after {
-            mask-image: url('$(res)/img/element-icons/room/message-bar/reply.svg');
+        &:hover {
+            color: $primary-content;
         }
 
         &.mx_MessageActionBar_threadButton {
-            &::after {
-                mask-image: url('$(res)/img/element-icons/message/thread.svg');
-            }
 
             .mx_Indicator {
                 background: $links;
@@ -135,57 +122,22 @@ limitations under the License.
             }
         }
 
-        &.mx_MessageActionBar_favouriteButton::after {
-            mask-image: url('$(res)/img/element-icons/room/message-bar/star.svg');
-        }
-
-        &.mx_MessageActionBar_favouriteButton_fillstar::after {
-            background-color: var(--MessageActionBar-star-button-color);
-        }
-
-        &.mx_MessageActionBar_editButton::after {
-            mask-image: url('$(res)/img/element-icons/room/message-bar/edit.svg');
-        }
-
-        &.mx_MessageActionBar_optionsButton::after {
-            mask-image: url('$(res)/img/element-icons/context-menu.svg');
-        }
-
-        &.mx_MessageActionBar_resendButton::after {
-            mask-image: url('$(res)/img/element-icons/retry.svg');
-        }
-
-        &.mx_MessageActionBar_cancelButton::after {
-            mask-image: url('$(res)/img/element-icons/trashcan.svg');
+        &.mx_MessageActionBar_favouriteButton_fillstar {
+            color: var(--MessageActionBar-star-button-color);
         }
 
         &.mx_MessageActionBar_downloadButton {
-            &::after {
-                mask-size: 14px;
-                mask-image: url('$(res)/img/download.svg');
+            --MessageActionBar-icon-size: 14px;
+
+            &.mx_MessageActionBar_downloadSpinnerButton {
+                svg {
+                    display: none; // hide the download icon
+                }
             }
-
-            &.mx_MessageActionBar_downloadSpinnerButton::after {
-                background-color: transparent; // hide the download icon mask
-            }
         }
 
-        &.mx_MessageActionBar_expandMessageButton::after {
-            mask-size: 12px;
-            mask-image: url('$(res)/img/element-icons/expand-message.svg');
-        }
-
-        &.mx_MessageActionBar_collapseMessageButton::after {
-            mask-size: 12px;
-            mask-image: url('$(res)/img/element-icons/collapse-message.svg');
-        }
-
-        &.mx_MessageActionBar_viewInRoomButton::after {
-            mask-image: url('$(res)/img/element-icons/view-in-room.svg');
-        }
-
-        &.mx_MessageActionBar_copyLinkButton::after {
-            mask-image: url('$(res)/img/element-icons/link.svg');
+        &.mx_MessageActionBar_expandCollapseMessageButton {
+            --MessageActionBar-icon-size: 12px;
         }
     }
 }

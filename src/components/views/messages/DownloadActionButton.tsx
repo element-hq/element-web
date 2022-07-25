@@ -18,6 +18,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import React from "react";
 import classNames from "classnames";
 
+import { Icon as DownloadIcon } from "../../../../res/img/download.svg";
 import { MediaEventHelper } from "../../../utils/MediaEventHelper";
 import { RovingAccessibleTooltipButton } from "../../../accessibility/RovingTabIndex";
 import Spinner from "../elements/Spinner";
@@ -85,7 +86,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
         }
 
         const classes = classNames({
-            'mx_MessageActionBar_maskButton': true,
+            'mx_MessageActionBar_iconButton': true,
             'mx_MessageActionBar_downloadButton': true,
             'mx_MessageActionBar_downloadSpinnerButton': !!spinner,
         });
@@ -96,6 +97,7 @@ export default class DownloadActionButton extends React.PureComponent<IProps, IS
             onClick={this.onDownloadClick}
             disabled={!!spinner}
         >
+            <DownloadIcon />
             { spinner }
         </RovingAccessibleTooltipButton>;
     }
