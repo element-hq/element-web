@@ -15,18 +15,20 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { EventType, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 
 import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../../src/models/LocalRoom";
 import * as localRoomModule from "../../src/utils/local-room";
 import defaultDispatcher from "../../src/dispatcher/dispatcher";
-import { createTestClient, makeMembershipEvent, mkEvent } from "../test-utils";
-import { DirectoryMember } from "../../src/utils/direct-messages";
+import { createTestClient } from "../test-utils";
+import { isRoomReady } from "../../src/utils/localRoom/isRoomReady";
+
+jest.mock("../../src/utils/localRoom/isRoomReady", () => ({
+    isRoomReady: jest.fn(),
+}));
 
 describe("local-room", () => {
     const userId1 = "@user1:example.com";
-    const member1 = new DirectoryMember({ user_id: userId1 });
-    const userId2 = "@user2:example.com";
     let room1: Room;
     let localRoom: LocalRoom;
     let client: MatrixClient;
@@ -88,94 +90,6 @@ describe("local-room", () => {
         });
     });
 
-    describe("isRoomReady", () => {
-        beforeEach(() => {
-            localRoom.targets = [member1];
-        });
-
-        it("should return false if the room has no actual room id", () => {
-            expect(localRoomModule.isRoomReady(client, localRoom)).toBe(false);
-        });
-
-        describe("for a room with an actual room id", () => {
-            beforeEach(() => {
-                localRoom.actualRoomId = room1.roomId;
-                mocked(client.getRoom).mockReturnValue(null);
-            });
-
-            it("it should return false", () => {
-                expect(localRoomModule.isRoomReady(client, localRoom)).toBe(false);
-            });
-
-            describe("and the room is known to the client", () => {
-                beforeEach(() => {
-                    mocked(client.getRoom).mockImplementation((roomId: string) => {
-                        if (roomId === room1.roomId) return room1;
-                    });
-                });
-
-                it("it should return false", () => {
-                    expect(localRoomModule.isRoomReady(client, localRoom)).toBe(false);
-                });
-
-                describe("and all members have been invited or joined", () => {
-                    beforeEach(() => {
-                        room1.currentState.setStateEvents([
-                            makeMembershipEvent(room1.roomId, userId1, "join"),
-                            makeMembershipEvent(room1.roomId, userId2, "invite"),
-                        ]);
-                    });
-
-                    it("it should return false", () => {
-                        expect(localRoomModule.isRoomReady(client, localRoom)).toBe(false);
-                    });
-
-                    describe("and a RoomHistoryVisibility event", () => {
-                        beforeEach(() => {
-                            room1.currentState.setStateEvents([mkEvent({
-                                user: userId1,
-                                event: true,
-                                type: EventType.RoomHistoryVisibility,
-                                room: room1.roomId,
-                                content: {},
-                            })]);
-                        });
-
-                        it("it should return true", () => {
-                            expect(localRoomModule.isRoomReady(client, localRoom)).toBe(true);
-                        });
-
-                        describe("and an encrypted room", () => {
-                            beforeEach(() => {
-                                localRoom.encrypted = true;
-                            });
-
-                            it("it should return false", () => {
-                                expect(localRoomModule.isRoomReady(client, localRoom)).toBe(false);
-                            });
-
-                            describe("and a room encryption state event", () => {
-                                beforeEach(() => {
-                                    room1.currentState.setStateEvents([mkEvent({
-                                        user: userId1,
-                                        event: true,
-                                        type: EventType.RoomEncryption,
-                                        room: room1.roomId,
-                                        content: {},
-                                    })]);
-                                });
-
-                                it("it should return true", () => {
-                                    expect(localRoomModule.isRoomReady(client, localRoom)).toBe(true);
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-
     describe("waitForRoomReadyAndApplyAfterCreateCallbacks", () => {
         let localRoomCallbackRoomId: string;
 
@@ -190,7 +104,7 @@ describe("local-room", () => {
 
         describe("for an immediate ready room", () => {
             beforeEach(() => {
-                jest.spyOn(localRoomModule, "isRoomReady").mockReturnValue(true);
+                mocked(isRoomReady).mockReturnValue(true);
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", async () => {
@@ -203,7 +117,7 @@ describe("local-room", () => {
 
         describe("for a room running into the create timeout", () => {
             beforeEach(() => {
-                jest.spyOn(localRoomModule, "isRoomReady").mockReturnValue(false);
+                mocked(isRoomReady).mockReturnValue(false);
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", (done) => {
@@ -221,12 +135,12 @@ describe("local-room", () => {
 
         describe("for a room that is ready after a while", () => {
             beforeEach(() => {
-                jest.spyOn(localRoomModule, "isRoomReady").mockReturnValue(false);
+                mocked(isRoomReady).mockReturnValue(false);
             });
 
             it("should invoke the callbacks, set the room state to created and return the actual room id", (done) => {
                 const prom = localRoomModule.waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
-                jest.spyOn(localRoomModule, "isRoomReady").mockReturnValue(true);
+                mocked(isRoomReady).mockReturnValue(true);
                 jest.advanceTimersByTime(500);
                 prom.then((roomId: string) => {
                     expect(localRoom.state).toBe(LocalRoomState.CREATED);

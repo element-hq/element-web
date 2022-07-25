@@ -62,10 +62,11 @@ import CopyableText from "../elements/CopyableText";
 import { ScreenName } from '../../../PosthogTrackers';
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
-import { DirectoryMember, IDMUserTileProps, Member, startDm, ThreepidMember } from "../../../utils/direct-messages";
+import { DirectoryMember, IDMUserTileProps, Member, ThreepidMember } from "../../../utils/direct-messages";
 import { AnyInviteKind, KIND_CALL_TRANSFER, KIND_DM, KIND_INVITE } from './InviteDialogTypes';
 import Modal from '../../../Modal';
 import dis from "../../../dispatcher/dispatcher";
+import { startDm } from '../../../utils/dm/startDm';
 
 // we have a number of types defined from the Matrix spec which can't reasonably be altered here.
 /* eslint-disable camelcase */

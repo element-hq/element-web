@@ -15,12 +15,13 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { ClientEvent, EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { MatrixClientPeg } from "../MatrixClientPeg";
-import { LocalRoom, LocalRoomState, LOCAL_ROOM_ID_PREFIX } from "../models/LocalRoom";
-import * as thisModule from "./local-room";
+import { LocalRoom, LocalRoomState } from "../models/LocalRoom";
+import { isLocalRoom } from "./localRoom/isLocalRoom";
+import { isRoomReady } from "./localRoom/isRoomReady";
 
 /**
  * Does a room action:
@@ -40,7 +41,7 @@ export async function doMaybeLocalRoomAction<T>(
     fn: (actualRoomId: string) => Promise<T>,
     client?: MatrixClient,
 ): Promise<T> {
-    if (roomId.startsWith(LOCAL_ROOM_ID_PREFIX)) {
+    if (isLocalRoom(roomId)) {
         client = client ?? MatrixClientPeg.get();
         const room = client.getRoom(roomId) as LocalRoom;
 
@@ -63,34 +64,6 @@ export async function doMaybeLocalRoomAction<T>(
 }
 
 /**
- * Tests whether a room created based on a local room is ready.
- */
-export function isRoomReady(
-    client: MatrixClient,
-    localRoom: LocalRoom,
-): boolean {
-    // not ready if no actual room id exists
-    if (!localRoom.actualRoomId) return false;
-
-    const room = client.getRoom(localRoom.actualRoomId);
-    // not ready if the room does not exist
-    if (!room) return false;
-
-    // not ready if not all members joined/invited
-    if (room.getInvitedAndJoinedMemberCount() !== 1 + localRoom.targets?.length) return false;
-
-    const roomHistoryVisibilityEvents = room.currentState.getStateEvents(EventType.RoomHistoryVisibility);
-    // not ready if the room history has not been configured
-    if (roomHistoryVisibilityEvents.length === 0) return false;
-
-    const roomEncryptionEvents = room.currentState.getStateEvents(EventType.RoomEncryption);
-    // not ready if encryption has not been configured (applies only to encrypted rooms)
-    if (localRoom.encrypted === true && roomEncryptionEvents.length === 0) return false;
-
-    return true;
-}
-
-/**
  * Waits until a room is ready and then applies the after-create local room callbacks.
  * Also implements a stopgap timeout after that a room is assumed to be ready.
  *
@@ -104,7 +77,7 @@ export async function waitForRoomReadyAndApplyAfterCreateCallbacks(
     client: MatrixClient,
     localRoom: LocalRoom,
 ): Promise<string> {
-    if (thisModule.isRoomReady(client, localRoom)) {
+    if (isRoomReady(client, localRoom)) {
         return applyAfterCreateCallbacks(localRoom, localRoom.actualRoomId).then(() => {
             localRoom.state = LocalRoomState.CREATED;
             client.emit(ClientEvent.Room, localRoom);
@@ -130,7 +103,7 @@ export async function waitForRoomReadyAndApplyAfterCreateCallbacks(
         };
 
         const checkRoomStateIntervalHandle = setInterval(() => {
-            if (thisModule.isRoomReady(client, localRoom)) finish();
+            if (isRoomReady(client, localRoom)) finish();
         }, 500);
         const stopgapTimeoutHandle = setTimeout(stopgapFinish, 5000);
     });

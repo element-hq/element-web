@@ -42,7 +42,7 @@ import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import { findDMForUser } from "./utils/direct-messages";
+import { findDMForUser } from "./utils/dm/findDMForUser";
 import { privateShouldBeEncrypted } from "./utils/rooms";
 import { waitForMember } from "./utils/membership";
 import { PreferredRoomVersions } from "./utils/PreferredRoomVersions";

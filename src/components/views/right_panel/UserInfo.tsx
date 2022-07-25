@@ -78,8 +78,8 @@ import { IRightPanelCardState } from '../../../stores/right-panel/RightPanelStor
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { findDMForUser } from "../../../utils/direct-messages";
 import { privateShouldBeEncrypted } from "../../../utils/rooms";
+import { findDMForUser } from '../../../utils/dm/findDMForUser';
 
 export interface IDevice {
     deviceId: string;

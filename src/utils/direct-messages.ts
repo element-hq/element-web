@@ -14,54 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IInvite3PID } from "matrix-js-sdk/src/@types/requests";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
+import { logger } from "matrix-js-sdk/src/logger";
 
-import createRoom, { canEncryptToAllUsers } from "../createRoom";
+import { canEncryptToAllUsers } from "../createRoom";
 import { Action } from "../dispatcher/actions";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
-import { getAddressType } from "../UserAddress";
-import DMRoomMap from "./DMRoomMap";
-import { isJoinedOrNearlyJoined } from "./membership";
 import dis from "../dispatcher/dispatcher";
+import { LocalRoom, LocalRoomState } from "../models/LocalRoom";
+import { waitForRoomReadyAndApplyAfterCreateCallbacks } from "./local-room";
+import { findDMRoom } from "./dm/findDMRoom";
 import { privateShouldBeEncrypted } from "./rooms";
+import { createDmLocalRoom } from "./dm/createDmLocalRoom";
+import { startDm } from "./dm/startDm";
 
-export function findDMForUser(client: MatrixClient, userId: string): Room {
-    const roomIds = DMRoomMap.shared().getDMRoomsForUserId(userId);
-    const rooms = roomIds.map(id => client.getRoom(id));
-    const suitableDMRooms = rooms.filter(r => {
-        // Validate that we are joined and the other person is also joined. We'll also make sure
-        // that the room also looks like a DM (until we have canonical DMs to tell us). For now,
-        // a DM is a room of two people that contains those two people exactly. This does mean
-        // that bots, assistants, etc will ruin a room's DM-ness, though this is a problem for
-        // canonical DMs to solve.
-        if (r && r.getMyMembership() === "join") {
-            const members = r.currentState.getMembers();
-            const joinedMembers = members.filter(m => isJoinedOrNearlyJoined(m.membership));
-            const otherMember = joinedMembers.find(m => m.userId === userId);
-            return otherMember && joinedMembers.length === 2;
-        }
-        return false;
-    }).sort((r1, r2) => {
-        return r2.getLastActiveTimestamp() -
-            r1.getLastActiveTimestamp();
-    });
-    if (suitableDMRooms.length) {
-        return suitableDMRooms[0];
-    }
-}
-
-export async function startDm(client: MatrixClient, targets: Member[]): Promise<void> {
-    const targetIds = targets.map(t => t.userId);
-
-    // Check if there is already a DM with these people and reuse it if possible.
-    let existingRoom: Room;
-    if (targetIds.length === 1) {
-        existingRoom = findDMForUser(client, targetIds[0]);
-    } else {
-        existingRoom = DMRoomMap.shared().getDMRoomForIdentifiers(targetIds);
-    }
+export async function startDmOnFirstMessage(
+    client: MatrixClient,
+    targets: Member[],
+): Promise<Room> {
+    const existingRoom = findDMRoom(client, targets);
     if (existingRoom) {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,
@@ -70,51 +42,47 @@ export async function startDm(client: MatrixClient, targets: Member[]): Promise<
             joining: false,
             metricsTrigger: "MessageUser",
         });
+        return existingRoom;
+    }
+
+    const room = await createDmLocalRoom(client, targets);
+    dis.dispatch({
+        action: Action.ViewRoom,
+        room_id: room.roomId,
+        joining: false,
+        targets,
+    });
+    return room;
+}
+
+/**
+ * Starts a DM based on a local room.
+ *
+ * @async
+ * @param {MatrixClient} client
+ * @param {LocalRoom} localRoom
+ * @returns {Promise<string | void>} Resolves to the created room id
+ */
+export async function createRoomFromLocalRoom(client: MatrixClient, localRoom: LocalRoom): Promise<string | void> {
+    if (!localRoom.isNew) {
+        // This action only makes sense for new local rooms.
         return;
     }
 
-    const createRoomOptions = { inlineErrors: true } as any; // XXX: Type out `createRoomOptions`
+    localRoom.state = LocalRoomState.CREATING;
+    client.emit(ClientEvent.Room, localRoom);
 
-    if (privateShouldBeEncrypted()) {
-        // Check whether all users have uploaded device keys before.
-        // If so, enable encryption in the new room.
-        const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
-        if (!has3PidMembers) {
-            const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
-            if (allHaveDeviceKeys) {
-                createRoomOptions.encryption = true;
-            }
-        }
-    }
-
-    // Check if it's a traditional DM and create the room if required.
-    // TODO: [Canonical DMs] Remove this check and instead just create the multi-person DM
-    const isSelf = targetIds.length === 1 && targetIds[0] === client.getUserId();
-    if (targetIds.length === 1 && !isSelf) {
-        createRoomOptions.dmUserId = targetIds[0];
-    }
-
-    if (targetIds.length > 1) {
-        createRoomOptions.createOpts = targetIds.reduce(
-            (roomOptions, address) => {
-                const type = getAddressType(address);
-                if (type === 'email') {
-                    const invite: IInvite3PID = {
-                        id_server: client.getIdentityServerUrl(true),
-                        medium: 'email',
-                        address,
-                    };
-                    roomOptions.invite_3pid.push(invite);
-                } else if (type === 'mx-user-id') {
-                    roomOptions.invite.push(address);
-                }
-                return roomOptions;
-            },
-            { invite: [], invite_3pid: [] },
-        );
-    }
-
-    await createRoom(createRoomOptions);
+    return startDm(client, localRoom.targets, false).then(
+        (roomId) => {
+            localRoom.actualRoomId = roomId;
+            return waitForRoomReadyAndApplyAfterCreateCallbacks(client, localRoom);
+        },
+        () => {
+            logger.warn(`Error creating DM for local room ${localRoom.roomId}`);
+            localRoom.state = LocalRoomState.ERROR;
+            client.emit(ClientEvent.Room, localRoom);
+        },
+    );
 }
 
 // This is the interface that is expected by various components in the Invite Dialog and RoomInvite.
@@ -199,4 +167,29 @@ export class ThreepidMember extends Member {
 export interface IDMUserTileProps {
     member: Member;
     onRemove(member: Member): void;
+}
+
+/**
+ * Detects whether a room should be encrypted.
+ *
+ * @async
+ * @param {MatrixClient} client
+ * @param {Member[]} targets The members to which run the check against
+ * @returns {Promise<boolean>}
+ */
+export async function determineCreateRoomEncryptionOption(client: MatrixClient, targets: Member[]): Promise<boolean> {
+    if (privateShouldBeEncrypted()) {
+        // Check whether all users have uploaded device keys before.
+        // If so, enable encryption in the new room.
+        const has3PidMembers = targets.some(t => t instanceof ThreepidMember);
+        if (!has3PidMembers) {
+            const targetIds = targets.map(t => t.userId);
+            const allHaveDeviceKeys = await canEncryptToAllUsers(client, targetIds);
+            if (allHaveDeviceKeys) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

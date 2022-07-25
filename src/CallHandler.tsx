@@ -58,9 +58,9 @@ import IncomingCallToast, { getIncomingCallToastKey } from './toasts/IncomingCal
 import ToastStore from './stores/ToastStore';
 import Resend from './Resend';
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
-import { findDMForUser } from "./utils/direct-messages";
 import { KIND_CALL_TRANSFER } from "./components/views/dialogs/InviteDialogTypes";
 import { OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogPayload";
+import { findDMForUser } from './utils/dm/findDMForUser';
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';

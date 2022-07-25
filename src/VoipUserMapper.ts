@@ -23,7 +23,7 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import DMRoomMap from "./utils/DMRoomMap";
 import CallHandler from './CallHandler';
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
-import { findDMForUser } from "./utils/direct-messages";
+import { findDMForUser } from './utils/dm/findDMForUser';
 
 // Functions for mapping virtual users & rooms. Currently the only lookup
 // is sip virtual: there could be others in the future.
