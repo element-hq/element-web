@@ -28,12 +28,45 @@ declare global {
              * @param name The room name to find and click on/open.
              */
             viewRoomByName(name: string): Chainable<JQuery<HTMLElement>>;
+
+            /**
+             * Returns the space panel space button based on a name. The space
+             * must be visible in the space panel
+             * @param name The space name to find
+             */
+            getSpacePanelButton(name: string): Chainable<JQuery<HTMLElement>>;
+
+            /**
+             * Opens the given space home by name. The space must be visible in
+             * the space list.
+             * @param name The space name to find and click on/open.
+             */
+            viewSpaceHomeByName(name: string): Chainable<JQuery<HTMLElement>>;
+
+            /**
+             * Opens the given space by name. The space must be visible in the
+             * space list.
+             * @param name The space name to find and click on/open.
+             */
+            viewSpaceByName(name: string): Chainable<JQuery<HTMLElement>>;
         }
     }
 }
 
 Cypress.Commands.add("viewRoomByName", (name: string): Chainable<JQuery<HTMLElement>> => {
     return cy.get(`.mx_RoomTile[aria-label="${name}"]`).click();
+});
+
+Cypress.Commands.add("getSpacePanelButton", (name: string): Chainable<JQuery<HTMLElement>> => {
+    return cy.get(`.mx_SpaceButton[aria-label="${name}"]`);
+});
+
+Cypress.Commands.add("viewSpaceByName", (name: string): Chainable<JQuery<HTMLElement>> => {
+    return cy.getSpacePanelButton(name).click();
+});
+
+Cypress.Commands.add("viewSpaceHomeByName", (name: string): Chainable<JQuery<HTMLElement>> => {
+    return cy.getSpacePanelButton(name).dblclick();
 });
 
 // Needed to make this file a module

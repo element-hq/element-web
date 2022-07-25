@@ -27,12 +27,8 @@ function openSpaceCreateMenu(): Chainable<JQuery> {
     return cy.get(".mx_SpaceCreateMenu_wrapper .mx_ContextualMenu");
 }
 
-function getSpacePanelButton(spaceName: string): Chainable<JQuery> {
-    return cy.get(`.mx_SpaceButton[aria-label="${spaceName}"]`);
-}
-
 function openSpaceContextMenu(spaceName: string): Chainable<JQuery> {
-    getSpacePanelButton(spaceName).rightclick();
+    cy.getSpacePanelButton(spaceName).rightclick();
     return cy.get(".mx_SpacePanel_contextMenu");
 }
 
@@ -200,14 +196,14 @@ describe("Spaces", () => {
         cy.createSpace({
             name: "My Space",
         });
-        getSpacePanelButton("My Space").should("exist");
+        cy.getSpacePanelButton("My Space").should("exist");
 
         cy.getBot(synapse, { displayName: "BotBob" }).then({ timeout: 10000 }, async bot => {
             const { room_id: roomId } = await bot.createRoom(spaceCreateOptions("Space Space"));
             await bot.invite(roomId, user.userId);
         });
         // Assert that `Space Space` is above `My Space` due to it being an invite
-        getSpacePanelButton("Space Space").should("exist")
+        cy.getSpacePanelButton("Space Space").should("exist")
             .parent().next().find('.mx_SpaceButton[aria-label="My Space"]').should("exist");
     });
 
@@ -234,7 +230,7 @@ describe("Spaces", () => {
         });
 
         cy.get("@spaceId").then(() => {
-            getSpacePanelButton(spaceName).dblclick(); // Open space home
+            cy.viewSpaceHomeByName(spaceName);
         });
         cy.get(".mx_SpaceRoomView .mx_SpaceHierarchy_list").within(() => {
             cy.get(".mx_SpaceHierarchy_roomTile").contains("Music").should("exist");

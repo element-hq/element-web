@@ -38,6 +38,7 @@ import { inviteMultipleToRoom, showRoomInviteDialog } from "../../RoomInvite";
 import { UIComponent } from "../../settings/UIFeature";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import RightPanelStore from "../../stores/right-panel/RightPanelStore";
+import { IRightPanelCard } from "../../stores/right-panel/RightPanelStoreIPanelState";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import {
@@ -617,10 +618,18 @@ export default class SpaceRoomView extends React.PureComponent<IProps, IState> {
         if (payload.action !== Action.ViewUser && payload.action !== "view_3pid_invite") return;
 
         if (payload.action === Action.ViewUser && payload.member) {
-            RightPanelStore.instance.setCard({
+            const spaceMemberInfoCard: IRightPanelCard = {
                 phase: RightPanelPhases.SpaceMemberInfo,
                 state: { spaceId: this.props.space.roomId, member: payload.member },
-            });
+            };
+            if (payload.push) {
+                RightPanelStore.instance.pushCard(spaceMemberInfoCard);
+            } else {
+                RightPanelStore.instance.setCards([
+                    { phase: RightPanelPhases.SpaceMemberList, state: { spaceId: this.props.space.roomId } },
+                    spaceMemberInfoCard,
+                ]);
+            }
         } else if (payload.action === "view_3pid_invite" && payload.event) {
             RightPanelStore.instance.setCard({
                 phase: RightPanelPhases.Space3pidMemberInfo,
