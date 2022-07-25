@@ -16,6 +16,8 @@ const command = `yarn ts-prune --ignore "${ignore.join("|")}" | grep -v "(used i
 
 exec(command, (error, stdout, stderr) => {
     if (error) throw error;
+    // We have to do this as piping the output of ts-prune causes the return
+    // code to be 0
     if (stderr) throw Error(stderr);
 
     let lines = stdout.split("\n");
