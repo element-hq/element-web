@@ -1,4 +1,4 @@
-name: Build and Package
+name: Build
 on:
   pull_request: { }
   push:
@@ -22,5 +22,5 @@ jobs:
       - name: Install Dependencies
         run: "./scripts/layered.sh"
 
-      - name: Build & Package
-        run: "./scripts/ci_package.sh"
+      - name: Build
+        run: "yarn build"

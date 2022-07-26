@@ -188,3 +188,7 @@ Enables rendering of MD / HTML in room topics.
 
 Enables exploring public spaces in the new search dialog. Requires the server to
 have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
+
+## Favourite Messages (`feature_favourite_messages`) [In Development]
+
+Enables users to bookmark a message or content for a later reference.

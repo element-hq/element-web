@@ -44,14 +44,7 @@ jobs:
     name: P1 X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
-      (contains(github.event.issue.labels.*.name, 'S-Critical') &&
-       (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-        contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
-       contains(github.event.issue.labels.*.name, 'S-Major') &&
-       contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-       contains(github.event.issue.labels.*.name, 'A11y') &&
-       contains(github.event.issue.labels.*.name, 'O-Frequent'))
+      contains(github.event.issue.labels.*.name, 'X-Needs-Design')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
