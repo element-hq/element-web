@@ -1,11 +1,5 @@
-Changes in [3.49.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.49.0-rc.2) (2022-07-15)
-===============================================================================================================
-
-## 🐛 Bug Fixes
- * Prefer using the canonical alias in spotlight search ([\#9059](https://github.com/matrix-org/matrix-react-sdk/pull/9059)). Fixes vector-im/element-web#22845.
-
-Changes in [3.49.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.49.0-rc.1) (2022-07-12)
-===============================================================================================================
+Changes in [3.49.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.49.0) (2022-07-26)
+=====================================================================================================
 
 ## ✨ Features
  * Hide screenshare button in video rooms on Desktop ([\#9045](https://github.com/matrix-org/matrix-react-sdk/pull/9045)).
@@ -15,14 +9,14 @@ Changes in [3.49.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Added trim to ignore whitespaces in email check ([\#9027](https://github.com/matrix-org/matrix-react-sdk/pull/9027)). Contributed by @ankur12-1610.
  * Improve _GenericEventListSummary.scss ([\#9005](https://github.com/matrix-org/matrix-react-sdk/pull/9005)). Contributed by @luixxiul.
  * Live location share - tiles without tile server (PSG-591) ([\#8962](https://github.com/matrix-org/matrix-react-sdk/pull/8962)). Contributed by @kerryarchibald.
- * Add option to display tooltip on link hover ([\#8394](https://github.com/matrix-org/matrix-react-sdk/pull/8394)). Fixes vector-im/element-web#21907. Contributed by @Johennes.
+ * Add option to display tooltip on link hover ([\#8394](https://github.com/matrix-org/matrix-react-sdk/pull/8394)). Fixes vector-im/element-web#21907.
  * Support a module API surface for custom functionality ([\#8246](https://github.com/matrix-org/matrix-react-sdk/pull/8246)).
  * Adjust encryption copy when creating a video room ([\#8989](https://github.com/matrix-org/matrix-react-sdk/pull/8989)). Fixes vector-im/element-web#22737.
  * Add bidirectonal isolation for pills ([\#8985](https://github.com/matrix-org/matrix-react-sdk/pull/8985)). Contributed by @sha-265.
  * Delabs `Show current avatar and name for users in message history` ([\#8764](https://github.com/matrix-org/matrix-react-sdk/pull/8764)). Fixes vector-im/element-web#22336.
  * Live location share - open latest location in map site ([\#8981](https://github.com/matrix-org/matrix-react-sdk/pull/8981)). Contributed by @kerryarchibald.
  * Improve LinkPreviewWidget ([\#8881](https://github.com/matrix-org/matrix-react-sdk/pull/8881)). Fixes vector-im/element-web#22634. Contributed by @luixxiul.
- * Render HTML topics in rooms on space home ([\#8939](https://github.com/matrix-org/matrix-react-sdk/pull/8939)). Contributed by @Johennes.
+ * Render HTML topics in rooms on space home ([\#8939](https://github.com/matrix-org/matrix-react-sdk/pull/8939)).
  * Hide timestamp on event tiles being edited on every layout ([\#8956](https://github.com/matrix-org/matrix-react-sdk/pull/8956)). Contributed by @luixxiul.
  * Introduce new copy icon ([\#8942](https://github.com/matrix-org/matrix-react-sdk/pull/8942)).
  * Allow finding group DMs by members in spotlight ([\#8922](https://github.com/matrix-org/matrix-react-sdk/pull/8922)). Fixes vector-im/element-web#22564. Contributed by @justjanne.
@@ -32,6 +26,7 @@ Changes in [3.49.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Live location share - disallow message pinning ([\#8928](https://github.com/matrix-org/matrix-react-sdk/pull/8928)). Contributed by @kerryarchibald.
 
 ## 🐛 Bug Fixes
+ * Unbreak in-app permalink tooltips  ([\#9100](https://github.com/matrix-org/matrix-react-sdk/pull/9100)).
  * Add space for the stroke on message editor on IRC layout ([\#9030](https://github.com/matrix-org/matrix-react-sdk/pull/9030)). Fixes vector-im/element-web#22785. Contributed by @luixxiul.
  * Fix pinned messages not re-linkifying on edit ([\#9042](https://github.com/matrix-org/matrix-react-sdk/pull/9042)). Fixes vector-im/element-web#22726.
  * Don't unnecessarily persist the host signup dialog ([\#9043](https://github.com/matrix-org/matrix-react-sdk/pull/9043)). Fixes vector-im/element-web#22778.
@@ -39,7 +34,7 @@ Changes in [3.49.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Fix event list summaries including invalid events ([\#9041](https://github.com/matrix-org/matrix-react-sdk/pull/9041)). Fixes vector-im/element-web#22790.
  * Correct accessibility labels for unread rooms in spotlight ([\#9003](https://github.com/matrix-org/matrix-react-sdk/pull/9003)). Contributed by @justjanne.
  * Enable search strings highlight on bubble layout ([\#9032](https://github.com/matrix-org/matrix-react-sdk/pull/9032)). Fixes vector-im/element-web#22786. Contributed by @luixxiul.
- * Unbreak URL preview for formatted links with tooltips ([\#9022](https://github.com/matrix-org/matrix-react-sdk/pull/9022)). Fixes vector-im/element-web#22764. Contributed by @Johennes.
+ * Unbreak URL preview for formatted links with tooltips ([\#9022](https://github.com/matrix-org/matrix-react-sdk/pull/9022)). Fixes vector-im/element-web#22764.
  * Re-add margin to tiles based on EventTileBubble ([\#9015](https://github.com/matrix-org/matrix-react-sdk/pull/9015)). Fixes vector-im/element-web#22772. Contributed by @luixxiul.
  * Fix Shortcut prompt for Search showing in minimized Roomlist ([\#9014](https://github.com/matrix-org/matrix-react-sdk/pull/9014)). Fixes vector-im/element-web#22739. Contributed by @justjanne.
  * Fix avatar position on event info line for hidden events on a thread ([\#9019](https://github.com/matrix-org/matrix-react-sdk/pull/9019)). Fixes vector-im/element-web#22777. Contributed by @luixxiul.
