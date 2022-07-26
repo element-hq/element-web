@@ -247,7 +247,7 @@ describe("Timeline", () => {
                 .should("have.length", 1);
         });
 
-        it("can reply with a voice message", () => {
+        xit("can reply with a voice message", () => {
             viewRoomSendMessageAndSetupReply();
 
             cy.openMessageComposerOptions().find(`[aria-label="Voice Message"]`).click();
