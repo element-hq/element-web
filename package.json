@@ -144,7 +144,6 @@
     "postcss-preset-env": "^6.7.0",
     "postcss-scss": "^2.1.1",
     "postcss-simple-vars": "^5.0.2",
-    "postcss-strip-inline-comments": "^0.1.5",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
     "semver": "^7.3.7",
