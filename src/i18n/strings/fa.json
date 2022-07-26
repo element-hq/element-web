@@ -152,7 +152,7 @@
     "We couldn't log you in": "نتوانستیم شما را وارد کنیم",
     "Trust": "اعتماد کن",
     "Only continue if you trust the owner of the server.": "تنها در صورتی که به صاحب سرور اطمینان دارید، ادامه دهید.",
-    "Identity server has no terms of service": "سرور هویت‌سنجی، شرایط استفاده از خدمت (terms of service) را مشخص نکرده‌است",
+    "Identity server has no terms of service": "سرور هویت هیچگونه شرایط خدمات ندارد",
     "Unnamed Room": "اتاق بدون نام",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s %(time)s": "%(weekDayName)s, %(monthName)s.%(day)s.%(fullYear)s.%(time)s",
     "%(weekDayName)s, %(monthName)s %(day)s %(fullYear)s": "%(weekDayName)s, %(monthName)s.%(day)s.%(fullYear)s",
@@ -2498,5 +2498,9 @@
     "Toggle space panel": "پنل فاصله را تغییر حالت دهید",
     "Previous autocomplete suggestion": "پیشنهاد تکمیل-خودکار قبلی",
     "Next autocomplete suggestion": "پیشنهاد تکمیل-خودکار بعدی",
-    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "دوتایی (کاربر و نشست) ناشناخته : ( %(userId)sو%(deviceId)s )"
+    "Unknown (user, session) pair: (%(userId)s, %(deviceId)s)": "دوتایی (کاربر و نشست) ناشناخته : ( %(userId)sو%(deviceId)s )",
+    "Jump to the given date in the timeline": "پرش به تاریخ تعیین شده در جدول زمانی",
+    "Failed to invite users to %(roomName)s": "افزودن کاربران به %(roomName)s با شکست روبرو شد",
+    "You're trying to access a community link (%(groupId)s).<br/>Communities are no longer supported and have been replaced by spaces.<br2/><a>Learn more about spaces here.</a>": "شما قصد دسترسی به لینک انجمن%(groupId)s را دارید. <br/> انجمن ها دیگر پشتیبانی نمی شوند و با فضاها جایگزین شده اند.<br2/><a> در مورد فضا بیشتر بدانید</a>",
+    "That link is no longer supported": "لینک موردنظر دیگر پشتیبانی نمی شود"
 }

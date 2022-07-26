@@ -1210,5 +1210,14 @@
     "Identity server URL must be HTTPS": "ID 서버 URL은 HTTPS이어야 함",
     "Appearance": "모습",
     "Appearance Settings only affect this %(brand)s session.": "모습 설정은 이 %(brand)s 세션에만 영향을 끼칩니다.",
-    "Customise your appearance": "모습 개인화하기"
+    "Customise your appearance": "모습 개인화하기",
+    "Creating...": "만드는 중...",
+    "Give feedback.": "피드백을 주세요.",
+    "Delete avatar": "아바타 삭제",
+    "Delete": "삭제",
+    "More options": "추가 옵션",
+    "Pin to sidebar": "사이드바 고정",
+    "Developer tools": "개발자 도구",
+    "All settings": "전체 설정",
+    "Use Single Sign On to continue": "SSO로 계속하기"
 }
