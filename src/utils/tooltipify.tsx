@@ -53,11 +53,11 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
             const href = node.getAttribute("href");
 
             const tooltip = <LinkWithTooltip tooltip={new URL(href, window.location.href).toString()}>
-                <span dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+                { node.innerHTML }
             </LinkWithTooltip>;
 
             ReactDOM.render(tooltip, container);
-            node.parentNode.replaceChild(container, node);
+            node.replaceChildren(container);
             containers.push(container);
             tooltipified = true;
         }
