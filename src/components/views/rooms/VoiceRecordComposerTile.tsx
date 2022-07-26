@@ -19,6 +19,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
+import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
@@ -38,9 +39,17 @@ import { NotificationColor } from "../../../stores/notifications/NotificationCol
 import InlineSpinner from "../elements/InlineSpinner";
 import { PlaybackManager } from "../../../audio/PlaybackManager";
 import { doMaybeLocalRoomAction } from "../../../utils/local-room";
+import defaultDispatcher from "../../../dispatcher/dispatcher";
+import { attachRelation } from "./SendMessageComposer";
+import { addReplyToMessageContent } from "../../../utils/Reply";
+import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
+import RoomContext from "../../../contexts/RoomContext";
 
 interface IProps {
     room: Room;
+    permalinkCreator?: RoomPermalinkCreator;
+    relation?: IEventRelation;
+    replyToEvent?: MatrixEvent;
 }
 
 interface IState {
@@ -53,7 +62,10 @@ interface IState {
  * Container tile for rendering the voice message recorder in the composer.
  */
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
-    public constructor(props) {
+    static contextType = RoomContext;
+    public context!: React.ContextType<typeof RoomContext>;
+
+    public constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -87,6 +99,8 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         if (!this.state.recorder) {
             throw new Error("No recording started - cannot send anything");
         }
+
+        const { replyToEvent, relation, permalinkCreator } = this.props;
 
         await this.state.recorder.stop();
 
@@ -134,6 +148,21 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
                 },
                 "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
             };
+
+            attachRelation(content, relation);
+            if (replyToEvent) {
+                addReplyToMessageContent(content, replyToEvent, {
+                    permalinkCreator,
+                    includeLegacyFallback: true,
+                });
+                // Clear reply_to_event as we put the message into the queue
+                // if the send fails, retry will handle resending.
+                defaultDispatcher.dispatch({
+                    action: 'reply_to_event',
+                    event: null,
+                    context: this.context.timelineRenderingType,
+                });
+            }
 
             doMaybeLocalRoomAction(
                 this.props.room.roomId,

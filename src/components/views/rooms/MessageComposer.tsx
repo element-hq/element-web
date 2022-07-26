@@ -383,7 +383,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             controls.push(<VoiceRecordComposerTile
                 key="controls_voice_record"
                 ref={this.voiceRecordingButton}
-                room={this.props.room} />);
+                room={this.props.room}
+                permalinkCreator={this.props.permalinkCreator}
+                relation={this.props.relation}
+                replyToEvent={this.props.replyToEvent} />);
         } else if (this.context.tombstone) {
             const replacementRoomId = this.context.tombstone.getContent()['replacement_room'];
 

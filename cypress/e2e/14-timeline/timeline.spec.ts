@@ -71,26 +71,27 @@ describe("Timeline", () => {
     let oldAvatarUrl: string;
     let newAvatarUrl: string;
 
+    beforeEach(() => {
+        cy.startSynapse("default").then(data => {
+            synapse = data;
+            cy.initTestUser(synapse, OLD_NAME).then(() =>
+                cy.window({ log: false }).then(() => {
+                    cy.createRoom({ name: ROOM_NAME }).then(_room1Id => {
+                        roomId = _room1Id;
+                    });
+                }),
+            );
+        });
+    });
+
     describe("useOnlyCurrentProfiles", () => {
         beforeEach(() => {
-            cy.startSynapse("default").then(data => {
-                synapse = data;
-                cy.initTestUser(synapse, OLD_NAME).then(() =>
-                    cy.window({ log: false }).then(() => {
-                        cy.createRoom({ name: ROOM_NAME }).then(_room1Id => {
-                            roomId = _room1Id;
-                        });
-                    }),
-                ).then(() => {
-                    cy.uploadContent(OLD_AVATAR).then((url) => {
-                        oldAvatarUrl = url;
-                        cy.setAvatarUrl(url);
-                    });
-                }).then(() => {
-                    cy.uploadContent(NEW_AVATAR).then((url) => {
-                        newAvatarUrl = url;
-                    });
-                });
+            cy.uploadContent(OLD_AVATAR).then((url) => {
+                oldAvatarUrl = url;
+                cy.setAvatarUrl(url);
+            });
+            cy.uploadContent(NEW_AVATAR).then((url) => {
+                newAvatarUrl = url;
             });
         });
 
@@ -142,7 +143,9 @@ describe("Timeline", () => {
                 expectAvatar(e, newAvatarUrl);
             });
         });
+    });
 
+    describe("message displaying", () => {
         it("should create and configure a room on IRC layout", () => {
             cy.visit("/#/room/" + roomId);
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
@@ -214,6 +217,47 @@ describe("Timeline", () => {
 
             // Make sure "collapse" link button worked
             cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
+        });
+    });
+
+    describe("message sending", () => {
+        const MESSAGE = "Hello world";
+        const viewRoomSendMessageAndSetupReply = () => {
+            // View room
+            cy.visit("/#/room/" + roomId);
+
+            // Send a message
+            cy.getComposer().type(`${MESSAGE}{enter}`);
+
+            // Reply to the message
+            cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile_line", "Hello world").within(() => {
+                cy.get('[aria-label="Reply"]').click({ force: true }); // Cypress has no ability to hover
+            });
+        };
+
+        it("can reply with a text message", () => {
+            const reply = "Reply";
+            viewRoomSendMessageAndSetupReply();
+
+            cy.getComposer().type(`${reply}{enter}`);
+
+            cy.get(".mx_RoomView_body .mx_EventTile .mx_EventTile_line").find(".mx_ReplyTile .mx_MTextBody")
+                .should("contain", MESSAGE);
+            cy.get(".mx_RoomView_body .mx_EventTile > .mx_EventTile_line > .mx_MTextBody").contains(reply)
+                .should("have.length", 1);
+        });
+
+        it("can reply with a voice message", () => {
+            viewRoomSendMessageAndSetupReply();
+
+            cy.openMessageComposerOptions().find(`[aria-label="Voice Message"]`).click();
+            cy.wait(3000);
+            cy.getComposer().find(".mx_MessageComposer_sendMessage").click();
+
+            cy.get(".mx_RoomView_body .mx_EventTile .mx_EventTile_line").find(".mx_ReplyTile .mx_MTextBody")
+                .should("contain", MESSAGE);
+            cy.get(".mx_RoomView_body .mx_EventTile > .mx_EventTile_line > .mx_MVoiceMessageBody")
+                .should("have.length", 1);
         });
     });
 });

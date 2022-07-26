@@ -213,6 +213,34 @@ describe("Threads", () => {
             .should("contain", "I'm very good thanks :)");
     });
 
+    it("can send voice messages", () => {
+        // Increase viewport size and right-panel size, so that voice messages fit
+        cy.viewport(1280, 720);
+        cy.window().then((window) => {
+            window.localStorage.setItem("mx_rhs_size", "600");
+        });
+
+        let roomId: string;
+        cy.createRoom({}).then(_roomId => {
+            roomId = _roomId;
+            cy.visit("/#/room/" + roomId);
+        });
+
+        // Send message
+        cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
+
+        // Create thread
+        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+            .realHover().find(".mx_MessageActionBar_threadButton").click();
+        cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
+
+        cy.openMessageComposerOptions(true).find(`[aria-label="Voice Message"]`).click();
+        cy.wait(3000);
+        cy.getComposer(true).find(".mx_MessageComposer_sendMessage").click();
+
+        cy.get(".mx_ThreadView .mx_MVoiceMessageBody").should("have.length", 1);
+    });
+
     it("right panel behaves correctly", () => {
         // Create room
         let roomId: string;
