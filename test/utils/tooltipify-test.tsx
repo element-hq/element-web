@@ -41,9 +41,10 @@ describe('tooltipify', () => {
         const containers: Element[] = [];
         tooltipifyLinks([root], [], containers);
         expect(containers).toHaveLength(1);
-        const anchor = root.querySelector(".mx_TextWithTooltip_target a");
+        const anchor = root.querySelector("a");
         expect(anchor?.getAttribute("href")).toEqual("/foo");
-        expect(anchor?.innerHTML).toEqual("click");
+        const tooltip = anchor.querySelector(".mx_TextWithTooltip_target");
+        expect(tooltip).toBeDefined();
     });
 
     it('ignores node', () => {
