@@ -18,14 +18,14 @@ limitations under the License.
     position: relative;
     width: min-content;
 
-    // this isn't a floating tooltip so override some things to not need to bother with z-index and floating
+    /* this isn't a floating tooltip so override some things to not need to bother with z-index and floating */
     .mx_Tooltip {
         display: inline-block;
         position: absolute;
         z-index: unset;
         width: max-content;
         left: 72px;
-        // top edge starting at 50 % of parent - 50 % of itself -> centered vertically
+        /* top edge starting at 50 % of parent - 50 % of itself -> centered vertically */
         top: 50%;
         transform: translateY(-50%);
     }

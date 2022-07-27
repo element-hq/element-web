@@ -15,14 +15,14 @@ limitations under the License.
 */
 
 .mx_UserNotifSettings_grid {
-    width: calc(100% + 12px); // +12px to line up center of 'Noisy' column with toggle switches
+    width: calc(100% + 12px); /* +12px to line up center of 'Noisy' column with toggle switches */
     display: grid;
     grid-template-columns: auto repeat(3, 62px);
     place-items: center center;
     grid-gap: 8px;
     margin-top: $spacing-40;
 
-    // Override StyledRadioButton default styles
+    /* Override StyledRadioButton default styles */
     .mx_StyledRadioButton {
         justify-content: center;
 
@@ -46,9 +46,9 @@ limitations under the License.
 
 .mx_UserNotifSettings_gridRowLabel {
     justify-self: start;
-    // <legend> does not accept
-    // display: inline | inline-block
-    // force it inline using float
+    /* <legend> does not accept */
+    /* display: inline | inline-block */
+    /* force it inline using float */
     float: left;
 }
 .mx_UserNotifSettings_gridRowHeading {
@@ -63,12 +63,12 @@ limitations under the License.
 }
 
 .mx_UserNotifSettings {
-    color: $primary-content; // override from default settings page styles
+    color: $primary-content; /* override from default settings page styles */
 
     .mx_UserNotifSettings_floatingSection {
         margin-top: 40px;
 
-        & > div:first-child { // section header
+        & > div:first-child { /* section header */
             font-size: $font-18px;
             font-weight: $font-semi-bold;
         }
@@ -79,7 +79,7 @@ limitations under the License.
             margin-top: 8px;
 
             tr > td:first-child {
-                // Just for a bit of spacing
+                /* Just for a bit of spacing */
                 padding-right: 8px;
             }
         }
@@ -90,7 +90,7 @@ limitations under the License.
     }
 
     .mx_TagComposer {
-        margin-top: 35px; // lots of distance from the last line of the table
+        margin-top: 35px; /* lots of distance from the last line of the table */
     }
 }
 

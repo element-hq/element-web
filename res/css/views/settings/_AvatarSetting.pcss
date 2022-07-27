@@ -16,7 +16,7 @@ limitations under the License.
 
 .mx_AvatarSetting_avatar {
     width: 90px;
-    min-width: 90px; // so it doesn't get crushed by the flexbox in languages with longer words
+    min-width: 90px; /* so it doesn't get crushed by the flexbox in languages with longer words */
     height: 90px;
     margin-top: 8px;
     position: relative;
@@ -24,26 +24,26 @@ limitations under the License.
     .mx_AvatarSetting_hover {
         transition: opacity $hover-transition;
 
-        // position to place the hover bg over the entire thing
+        /* position to place the hover bg over the entire thing */
         position: absolute;
         top: 0;
         bottom: 0;
         left: 0;
         right: 0;
 
-        pointer-events: none; // let the pointer fall through the underlying thing
+        pointer-events: none; /* let the pointer fall through the underlying thing */
 
         line-height: 90px;
         text-align: center;
 
         > span {
             color: $primary-content;
-            position: relative; // tricks the layout engine into putting this on top of the bg
+            position: relative; /* tricks the layout engine into putting this on top of the bg */
             font-weight: 500;
         }
 
         .mx_AvatarSetting_hoverBg {
-            // absolute position to lazily fill the entire container
+            /* absolute position to lazily fill the entire container */
             position: absolute;
             top: 0;
             bottom: 0;

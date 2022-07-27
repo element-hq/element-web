@@ -16,10 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// data-whatintent makes more sense here semantically but then the tooltip would stay visible without the button
-// which looks broken, so we match the behaviour of tooltips which is fine too.
+/* data-whatintent makes more sense here semantically but then the tooltip would stay visible without the button */
+/* which looks broken, so we match the behaviour of tooltips which is fine too. */
 [data-whatinput="mouse"] .mx_CallViewButtons.mx_CallViewButtons_hidden {
-    opacity: 0.001; // opacity 0 can cause a re-layout
+    opacity: 0.001; /* opacity 0 can cause a re-layout */
     pointer-events: none;
 }
 
@@ -32,7 +32,7 @@ limitations under the License.
     bottom: 32px;
     opacity: 1;
     transition: opacity 0.5s;
-    z-index: 200; // To be above _all_ feeds
+    z-index: 200; /* To be above _all_ feeds */
     gap: 18px;
 
     .mx_CallViewButtons_button {
@@ -50,7 +50,7 @@ limitations under the License.
 
         position: relative;
 
-        box-shadow: 0px 4px 4px 0px #00000026; // Same on both themes
+        box-shadow: 0px 4px 4px 0px #00000026; /* Same on both themes */
 
         &::before {
             content: '';
@@ -85,7 +85,7 @@ limitations under the License.
             }
         }
 
-        // State buttons
+        /* State buttons */
         &.mx_CallViewButtons_button_on {
             background-color: $call-view-button-on-background;
 
@@ -106,7 +106,7 @@ limitations under the License.
 
                 &::before {
                     mask-image: url('$(res)/img/voip/call-view/screensharing.svg');
-                    background-color: white; // Same on both themes
+                    background-color: white; /* Same on both themes */
                 }
             }
 
@@ -148,9 +148,9 @@ limitations under the License.
                 }
             }
         }
-        // State buttons
+        /* State buttons */
 
-        // Stateless buttons
+        /* Stateless buttons */
         &.mx_CallViewButtons_dialpad::before {
             mask-image: url('$(res)/img/voip/call-view/dialpad.svg');
         }
@@ -160,21 +160,21 @@ limitations under the License.
 
             &::before {
                 mask-image: url('$(res)/img/voip/call-view/hangup.svg');
-                background-color: white; // Same on both themes
+                background-color: white; /* Same on both themes */
             }
         }
 
         &.mx_CallViewButtons_button_more::before {
             mask-image: url('$(res)/img/voip/call-view/more.svg');
         }
-        // Stateless buttons
+        /* Stateless buttons */
 
-        // Invisible state
+        /* Invisible state */
         &.mx_CallViewButtons_button_invisible {
             visibility: hidden;
             pointer-events: none;
             position: absolute;
         }
-        // Invisible state
+        /* Invisible state */
     }
 }

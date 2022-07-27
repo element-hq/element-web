@@ -42,12 +42,12 @@ limitations under the License.
             margin-block: 0;
 
             &[aria-expanded="false"] {
-                order: 9; // TODO: Remove
+                order: 9; /* TODO: Remove */
             }
 
             &[aria-expanded="true"] {
-                margin-inline-start: auto; // reduce clickable area
-                margin-inline-end: var(--EventTile_bubble-margin-inline-end); // as the parent has zero margin
+                margin-inline-start: auto; /* reduce clickable area */
+                margin-inline-end: var(--EventTile_bubble-margin-inline-end); /* as the parent has zero margin */
             }
         }
 
@@ -61,8 +61,8 @@ limitations under the License.
             column-gap: 5px;
         }
 
-        // ideally we'd use display=contents here for the layout to all work regardless of the *ELS but
-        // that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse.
+        /* ideally we'd use display=contents here for the layout to all work regardless of the *ELS but */
+        /* that breaks ScrollPanel's reliance upon offsetTop so we have to have a bit more finesse. */
         &[data-expanded="true"] {
             flex-direction: column;
             margin: 0;

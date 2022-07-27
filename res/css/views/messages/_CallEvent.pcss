@@ -113,7 +113,7 @@ limitations under the License.
                 display: flex;
                 flex-direction: column;
                 gap: $spacing-4;
-                margin-left: 10px; // To match mx_CallEvent
+                margin-left: 10px; /* To match mx_CallEvent */
                 margin-right: 10px;
                 min-width: 0;
 
@@ -160,8 +160,8 @@ limitations under the License.
             flex-wrap: wrap;
             align-items: center;
             color: $secondary-content;
-            gap: $spacing-12; // See mx_IncomingCallToast_buttons
-            margin-inline-start: 42px; // avatar (32px) + mx_CallEvent_info_basic margin (10px)
+            gap: $spacing-12; /* See mx_IncomingCallToast_buttons */
+            margin-inline-start: 42px; /* avatar (32px) + mx_CallEvent_info_basic margin (10px) */
             word-break: break-word;
             max-width: fit-content;
 
@@ -217,7 +217,7 @@ limitations under the License.
         .mx_CallEvent {
             position: relative;
 
-            // 5px (gap) + 14px (e2e icon size * mask-size) + 9px (margin-left of e2e icon)
+            /* 5px (gap) + 14px (e2e icon size * mask-size) + 9px (margin-left of e2e icon) */
             right: calc(5px + 14px + 9px);
         }
     }
@@ -236,7 +236,7 @@ limitations under the License.
 .mx_IRCLayout {
     .mx_CallEvent_wrapper {
         .mx_CallEvent {
-            margin-inline-start: $spacing-4; // display green line
+            margin-inline-start: $spacing-4; /* display green line */
         }
     }
 }

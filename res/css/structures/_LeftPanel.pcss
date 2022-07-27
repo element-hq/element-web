@@ -29,7 +29,7 @@ $roomListCollapsedWidth: 68px;
     max-width: 50%;
     position: relative;
 
-    // Contain the amount of layers rendered by constraining what actually needs re-layering via css
+    /* Contain the amount of layers rendered by constraining what actually needs re-layering via css */
     contain: layout paint;
 }
 
@@ -37,7 +37,7 @@ $roomListCollapsedWidth: 68px;
     display: flex;
     flex-direction: row;
     flex: 1;
-    height: 100%; // ensure space panel is still scrollable with an outer wrapper
+    height: 100%; /* ensure space panel is still scrollable with an outer wrapper */
 
     .mx_LeftPanel_wrapper--user {
         background-color: $roomlist-bg-color;
@@ -54,20 +54,20 @@ $roomListCollapsedWidth: 68px;
 .mx_LeftPanel {
     background-color: $roomlist-bg-color;
 
-    // Create a row-based flexbox for the space panel and the room list
+    /* Create a row-based flexbox for the space panel and the room list */
     display: flex;
     contain: content;
     position: relative;
     flex-grow: 1;
     overflow: hidden;
 
-    // Note: The 'room list' in this context is actually everything that isn't the tag
-    // panel, such as the menu options, breadcrumbs, filtering, etc
+    /* Note: The 'room list' in this context is actually everything that isn't the tag */
+    /* panel, such as the menu options, breadcrumbs, filtering, etc */
     .mx_LeftPanel_roomListContainer {
         background-color: $roomlist-bg-color;
         flex: 1 0 0;
         min-width: 0;
-        // Create another flexbox (this time a column) for the room list components
+        /* Create another flexbox (this time a column) for the room list components */
         display: flex;
         flex-direction: column;
 
@@ -76,9 +76,9 @@ $roomListCollapsedWidth: 68px;
              * for internal whitespace in the breadcrumbs)
              */
             padding: 12px;
-            flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
+            flex-shrink: 0; /* to convince safari's layout engine the flexbox is fine */
 
-            // Create another flexbox column for the rows to stack within
+            /* Create another flexbox column for the rows to stack within */
             display: flex;
             flex-direction: column;
         }
@@ -88,8 +88,8 @@ $roomListCollapsedWidth: 68px;
             overflow-x: scroll;
             margin: 12px 12px 0 12px;
             flex: 0 0 auto;
-            // Create yet another flexbox, this time within the row, to ensure items stay
-            // aligned correctly. This is also a row-based flexbox.
+            /* Create yet another flexbox, this time within the row, to ensure items stay */
+            /* aligned correctly. This is also a row-based flexbox. */
             display: flex;
             align-items: center;
             contain: content;
@@ -112,9 +112,9 @@ $roomListCollapsedWidth: 68px;
             padding: 12px 0 8px;
             border-bottom: 1px solid $quinary-content;
 
-            flex-shrink: 0; // to convince safari's layout engine the flexbox is fine
+            flex-shrink: 0; /* to convince safari's layout engine the flexbox is fine */
 
-            // Create a flexbox to organize the inputs
+            /* Create a flexbox to organize the inputs */
             display: flex;
             align-items: center;
 
@@ -186,11 +186,11 @@ $roomListCollapsedWidth: 68px;
         }
 
         .mx_LeftPanel_roomListWrapper {
-            // Make the y-scrollbar more responsive
+            /* Make the y-scrollbar more responsive */
             padding-right: 2px;
             overflow: hidden;
-            margin-top: 10px; // so we're not up against the search/filter
-            flex: 1 0 0; // needed in Safari to properly set flex-basis
+            margin-top: 10px; /* so we're not up against the search/filter */
+            flex: 1 0 0; /* needed in Safari to properly set flex-basis */
 
             &.mx_LeftPanel_roomListWrapper_stickyBottom {
                 padding-bottom: 32px;
@@ -202,12 +202,12 @@ $roomListCollapsedWidth: 68px;
         }
 
         .mx_LeftPanel_actualRoomListContainer {
-            position: relative; // for sticky headers
-            height: 100%; // ensure scrolling still works
+            position: relative; /* for sticky headers */
+            height: 100%; /* ensure scrolling still works */
         }
     }
 
-    // These styles override the defaults for the minimized (66px) layout
+    /* These styles override the defaults for the minimized (66px) layout */
     &.mx_LeftPanel_minimized {
         flex-grow: 0;
         min-width: unset;
@@ -222,7 +222,7 @@ $roomListCollapsedWidth: 68px;
             }
 
             .mx_LeftPanel_filterContainer {
-                // Organize the flexbox into a centered column layout
+                /* Organize the flexbox into a centered column layout */
                 flex-direction: column;
                 justify-content: center;
 

@@ -42,8 +42,8 @@ limitations under the License.
     font-weight: normal;
     font-size: $font-14px;
     border: none;
-    // Even without a border here, we still need this avoid overlapping the rounded
-    // corners on the field above.
+    /* Even without a border here, we still need this avoid overlapping the rounded */
+    /* corners on the field above. */
     border-radius: 4px;
     padding: 8px 9px;
     color: $primary-content;
@@ -57,7 +57,7 @@ limitations under the License.
     -webkit-appearance: none;
 }
 
-// Can't add pseudo-elements to a select directly, so we use its parent.
+/* Can't add pseudo-elements to a select directly, so we use its parent. */
 .mx_Field_select::before {
     content: "";
     position: absolute;
@@ -108,11 +108,11 @@ limitations under the License.
     left: 0px;
     margin: 7px 8px;
     padding: 2px;
-    pointer-events: none; // Allow clicks to fall through to the input
+    pointer-events: none; /* Allow clicks to fall through to the input */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: calc(100% - 20px); // 100% of parent minus margin and padding
+    max-width: calc(100% - 20px); /* 100% of parent minus margin and padding */
 }
 
 .mx_Field_labelAlwaysTopLeft label,
@@ -183,7 +183,7 @@ limitations under the License.
     animation: mx_fadeout 1s 2s forwards;
 }
 
-// Customise other components when placed inside a Field
+/* Customise other components when placed inside a Field */
 
 .mx_Field .mx_Dropdown_input {
     border: initial;

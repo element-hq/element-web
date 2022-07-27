@@ -20,7 +20,7 @@ limitations under the License.
 
     display: flex;
     flex-direction: column;
-    max-width: 100%; // disable overflow
+    max-width: 100%; /* disable overflow */
     width: auto;
     gap: 5px;
     padding: 3px var(--EditMessageComposer-padding-inline);
@@ -33,13 +33,13 @@ limitations under the License.
         padding: 3px 6px;
 
         &:focus {
-            border-color: rgba($accent, 0.5); // Only ever used here
+            border-color: rgba($accent, 0.5); /* Only ever used here */
         }
     }
 
     .mx_EditMessageComposer_buttons {
         display: flex;
-        flex-flow: row wrap-reverse; // display "Save" over "Cancel"
+        flex-flow: row wrap-reverse; /* display "Save" over "Cancel" */
         justify-content: flex-end;
         gap: 5px;
         margin-inline-start: auto;
@@ -47,7 +47,7 @@ limitations under the License.
         .mx_AccessibleButton {
             flex: 1;
             box-sizing: border-box;
-            min-width: 100px; // magic number to align the edge of the button with the input area
+            min-width: 100px; /* magic number to align the edge of the button with the input area */
         }
     }
 }

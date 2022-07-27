@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Not actually a component but things shared by settings components
+/* Not actually a component but things shared by settings components */
 .mx_UserSettingsDialog,
 .mx_RoomSettingsDialog,
 .mx_SpaceSettingsDialog,
 .mx_SpacePreferencesDialog {
     width: 90vw;
     max-width: 1000px;
-    // set the height too since tabbed view scrolls itself.
+    /* set the height too since tabbed view scrolls itself. */
     height: 80vh;
 
     .mx_TabbedView {
@@ -35,8 +35,8 @@ limitations under the License.
         display: flex;
         flex-direction: column;
 
-        // Put some padding on the bottom to avoid the settings tab from
-        // colliding harshly with the dialog when scrolled down.
+        /* Put some padding on the bottom to avoid the settings tab from */
+        /* colliding harshly with the dialog when scrolled down. */
         padding-bottom: 100px;
     }
 }

@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Note: the room tile expects to be in a flexbox column container
+/* Note: the room tile expects to be in a flexbox column container */
 .mx_RoomTile {
     margin-bottom: 4px;
     padding: 4px;
 
-    // The tile is also a flexbox row itself
+    /* The tile is also a flexbox row itself */
     display: flex;
-    contain: content; // Not strict as it will break when resizing a sublist vertically
+    contain: content; /* Not strict as it will break when resizing a sublist vertically */
     box-sizing: border-box;
 
     font-size: $font-13px;
@@ -47,9 +47,9 @@ limitations under the License.
         min-width: 0;
         flex-basis: 0;
         flex-grow: 1;
-        margin-right: 8px; // spacing to buttons/badges
+        margin-right: 8px; /* spacing to buttons/badges */
 
-        // Create a new column layout flexbox for the title parts
+        /* Create a new column layout flexbox for the title parts */
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -57,7 +57,7 @@ limitations under the License.
         .mx_RoomTile_title, .mx_RoomTile_subtitle {
             width: 100%;
 
-            // Ellipsize any text overflow
+            /* Ellipsize any text overflow */
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
@@ -78,39 +78,39 @@ limitations under the License.
         }
 
         .mx_RoomTile_titleWithSubtitle {
-            margin-top: -3px; // shift the title up a bit more
+            margin-top: -3px; /* shift the title up a bit more */
         }
     }
 
     .mx_RoomTile_notificationsButton {
-        margin-left: 4px; // spacing between buttons
+        margin-left: 4px; /* spacing between buttons */
     }
 
     .mx_RoomTile_badgeContainer {
         height: 16px;
-        // don't set width so that it takes no space when there is no badge to show
-        margin: auto 0; // vertically align
+        /* don't set width so that it takes no space when there is no badge to show */
+        margin: auto 0; /* vertically align */
 
-        // Create a flexbox to make aligning dot badges easier
+        /* Create a flexbox to make aligning dot badges easier */
         display: flex;
         align-items: center;
 
         .mx_NotificationBadge {
-            margin-right: 2px; // centering
+            margin-right: 2px; /* centering */
         }
 
         .mx_NotificationBadge_dot {
-            // make the smaller dot occupy the same width for centering
+            /* make the smaller dot occupy the same width for centering */
             margin-left: 5px;
             margin-right: 7px;
         }
     }
 
-    // The context menu buttons are hidden by default
+    /* The context menu buttons are hidden by default */
     .mx_RoomTile_menuButton,
     .mx_RoomTile_notificationsButton {
         width: 20px;
-        min-width: 20px; // yay flex
+        min-width: 20px; /* yay flex */
         height: 20px;
         margin-top: auto;
         margin-bottom: auto;
@@ -131,7 +131,7 @@ limitations under the License.
         }
     }
 
-    // If the room has an overriden notification setting then we always show the notifications menu button
+    /* If the room has an overriden notification setting then we always show the notifications menu button */
     .mx_RoomTile_notificationsButton.mx_RoomTile_notificationsButton_show {
         display: block;
     }
@@ -144,7 +144,7 @@ limitations under the License.
         &:hover,
         &:focus-within,
         &.mx_RoomTile_hasMenuOpen {
-            // Hide the badge container on hover because it'll be a menu button
+            /* Hide the badge container on hover because it'll be a menu button */
             .mx_RoomTile_badgeContainer {
                 width: 0;
                 height: 0;
@@ -169,7 +169,7 @@ limitations under the License.
     }
 }
 
-// We use these both in context menus and the room tiles
+/* We use these both in context menus and the room tiles */
 .mx_RoomTile_iconBell::before {
     mask-image: url('$(res)/img/element-icons/notifications.svg');
 }

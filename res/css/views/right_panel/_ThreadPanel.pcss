@@ -26,7 +26,7 @@ limitations under the License.
             }
 
             .mx_ThreadPanel_dropdown {
-                padding: 3px $spacing-4 3px $spacing-8; // TODO: Use a spacing variable
+                padding: 3px $spacing-4 3px $spacing-8; /* TODO: Use a spacing variable */
                 border-radius: 4px;
                 line-height: 1.5;
                 user-select: none;
@@ -55,25 +55,25 @@ limitations under the License.
         background-color: $background;
         border-radius: 8px;
         padding-inline-end: 0;
-        overflow-y: scroll; // set gap between the thread tile and the right border
+        overflow-y: scroll; /* set gap between the thread tile and the right border */
         height: 100%;
     }
 
     .mx_EventTile[data-layout="group"] {
         .mx_MessageActionBar {
             right: 0;
-            top: -36px; // 2px above EventTile
-            z-index: 10; // See _EventTile.pcss
+            top: -36px; /* 2px above EventTile */
+            z-index: 10; /* See _EventTile.pcss */
         }
     }
 
-    // For style rules of EventTile in a thread, see _EventTile.pcss
+    /* For style rules of EventTile in a thread, see _EventTile.pcss */
     &.mx_ThreadView {
         max-height: 100%;
 
         .mx_ThreadView_timelinePanelWrapper {
             position: relative;
-            min-height: 0; // don't displace the composer
+            min-height: 0; /* don't displace the composer */
             flex-grow: 1;
 
             .mx_FileDropTarget {
@@ -86,9 +86,9 @@ limitations under the License.
         }
     }
 
-    .mx_RoomView_messagePanel { // To avoid the rule from being applied to .mx_ThreadPanel_empty
+    .mx_RoomView_messagePanel { /* To avoid the rule from being applied to .mx_ThreadPanel_empty */
         .mx_RoomView_messageListWrapper {
-            width: calc(100% + 6px); // 8px - 2px
+            width: calc(100% + 6px); /* 8px - 2px */
         }
     }
 
@@ -100,7 +100,7 @@ limitations under the License.
 
     .mx_EventTile,
     .mx_GenericEventListSummary {
-        // Account for scrollbar when hovering
+        /* Account for scrollbar when hovering */
         padding-top: 0;
 
         .mx_DateSeparator {
@@ -160,7 +160,7 @@ limitations under the License.
     bottom: 0;
     left: 0;
     padding: 20px;
-    box-sizing: border-box; // Include padding and border
+    box-sizing: border-box; /* Include padding and border */
     width: 100%;
 
     h2 {

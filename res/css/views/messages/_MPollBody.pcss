@@ -109,7 +109,7 @@ limitations under the License.
         }
     }
 
-    // options not actionable in these states
+    /* options not actionable in these states */
     .mx_MPollBody_option_checked, .mx_MPollBody_option_ended {
         pointer-events: none;
     }
@@ -151,14 +151,14 @@ limitations under the License.
     }
 }
 
-// Prevent clicking a poll within a reply
+/* Prevent clicking a poll within a reply */
 .mx_ReplyTile .mx_MPollBody {
     pointer-events: none;
 }
 
 .mx_MPollBody_option,
-// label has cursor: default in user-agent stylesheet
-// override
+/* label has cursor: default in user-agent stylesheet */
+/* override */
 .mx_MPollBody_live-option {
     cursor: pointer;
 }

@@ -14,31 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// CSS inspiration from:
-// * https://www.w3schools.com/howto/howto_js_rangeslider.asp
-// * https://stackoverflow.com/a/28283806
-// * https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+/* CSS inspiration from: */
+/* * https://www.w3schools.com/howto/howto_js_rangeslider.asp */
+/* * https://stackoverflow.com/a/28283806 */
+/* * https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/ */
 
 .mx_SeekBar {
-    // Dev note: we deliberately do not have the -ms-track (and friends) selectors because we don't
-    // need to support IE.
+    /* Dev note: we deliberately do not have the -ms-track (and friends) selectors because we don't */
+    /* need to support IE. */
 
-    appearance: none; // default style override
+    appearance: none; /* default style override */
 
     width: 100%;
     height: 1px;
     background: $quaternary-content;
-    outline: none; // remove blue selection border
-    position: relative; // for before+after pseudo elements later on
+    outline: none; /* remove blue selection border */
+    position: relative; /* for before+after pseudo elements later on */
 
     cursor: pointer;
 
     &::-webkit-slider-thumb {
-        appearance: none; // default style override
+        appearance: none; /* default style override */
 
-        // Dev note: This needs to be duplicated with the -moz-range-thumb selector
-        // because otherwise Edge (webkit) will fail to see the styles and just refuse
-        // to apply them.
+        /* Dev note: This needs to be duplicated with the -moz-range-thumb selector */
+        /* because otherwise Edge (webkit) will fail to see the styles and just refuse */
+        /* to apply them. */
         width: 8px;
         height: 8px;
         border-radius: 8px;
@@ -53,33 +53,33 @@ limitations under the License.
         background-color: $tertiary-content;
         cursor: pointer;
 
-        // Firefox adds a border on the thumb
+        /* Firefox adds a border on the thumb */
         border: none;
     }
 
-    // This is for webkit support, but we can't limit the functionality of it to just webkit
-    // browsers. Firefox responds to webkit-prefixed values now, which means we can't use media
-    // or support queries to selectively apply the rule. An upside is that this CSS doesn't work
-    // in firefox, so it's just wasted CPU/GPU time.
-    &::before { // ::before to ensure it ends up under the thumb
+    /* This is for webkit support, but we can't limit the functionality of it to just webkit */
+    /* browsers. Firefox responds to webkit-prefixed values now, which means we can't use media */
+    /* or support queries to selectively apply the rule. An upside is that this CSS doesn't work */
+    /* in firefox, so it's just wasted CPU/GPU time. */
+    &::before { /* ::before to ensure it ends up under the thumb */
         content: '';
         background-color: $tertiary-content;
 
-        // Absolute positioning to ensure it overlaps with the existing bar
+        /* Absolute positioning to ensure it overlaps with the existing bar */
         position: absolute;
         top: 0;
         left: 0;
 
-        // Sizing to match the bar
+        /* Sizing to match the bar */
         width: 100%;
         height: 1px;
 
-        // And finally dynamic width without overly hurting the rendering engine.
+        /* And finally dynamic width without overly hurting the rendering engine. */
         transform-origin: 0 100%;
         transform: scaleX(var(--fillTo));
     }
 
-    // This is firefox's built-in support for the above, with 100% less hacks.
+    /* This is firefox's built-in support for the above, with 100% less hacks. */
     &::-moz-range-progress {
         background-color: $tertiary-content;
         height: 1px;
@@ -89,9 +89,9 @@ limitations under the License.
         opacity: 0.5;
     }
 
-    // Increase clickable area for the slider (approximately same size as browser default)
-    // We do it this way to keep the same padding and margins of the element, avoiding margin math.
-    // Source: https://front-back.com/expand-clickable-areas-for-a-better-touch-experience/
+    /* Increase clickable area for the slider (approximately same size as browser default) */
+    /* We do it this way to keep the same padding and margins of the element, avoiding margin math. */
+    /* Source: https://front-back.com/expand-clickable-areas-for-a-better-touch-experience/ */
     &::after {
         content: '';
         position: absolute;

@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 .mx_VoiceRecordComposerTile_stop {
-    // 28px plus a 2px border makes this a 32px square (as intended)
+    /* 28px plus a 2px border makes this a 32px square (as intended) */
     width: 28px;
     height: 28px;
     border: 2px solid $voice-record-stop-border-color;
     border-radius: 32px;
-    margin-right: 8px; // between us and the waveform component
+    margin-right: 8px; /* between us and the waveform component */
     position: relative;
 
     &::after {
@@ -39,7 +39,7 @@ limitations under the License.
     width: 24px;
     height: 24px;
     vertical-align: middle;
-    margin-right: 8px; // distance from left edge of waveform container (container has some margin too)
+    margin-right: 8px; /* distance from left edge of waveform container (container has some margin too) */
     background-color: $voice-record-icon-color;
     mask-repeat: no-repeat;
     mask-size: contain;
@@ -62,20 +62,20 @@ limitations under the License.
 }
 
 .mx_MessageComposer_row .mx_VoiceMessagePrimaryContainer {
-    // Note: remaining class properties are in the PlayerContainer CSS.
+    /* Note: remaining class properties are in the PlayerContainer CSS. */
 
-    // fixed height to reduce layout jumps with the play button appearing
-    // https://github.com/vector-im/element-web/issues/18431
+    /* fixed height to reduce layout jumps with the play button appearing */
+    /* https://github.com/vector-im/element-web/issues/18431 */
     height: 32px;
 
-    margin: 6px; // force the composer area to put a gutter around us
-    margin-right: 12px; // isolate from stop/send button
+    margin: 6px; /* force the composer area to put a gutter around us */
+    margin-right: 12px; /* isolate from stop/send button */
 
-    position: relative; // important for the live circle
+    position: relative; /* important for the live circle */
 
     &.mx_VoiceRecordComposerTile_recording {
-        // We are putting the circle in this padding, so we need +10px from the regular
-        // padding on the left side.
+        /* We are putting the circle in this padding, so we need +10px from the regular */
+        /* padding on the left side. */
         padding-left: 22px;
 
         &::before {
@@ -86,24 +86,24 @@ limitations under the License.
             width: 10px;
             height: 10px;
             position: absolute;
-            left: 12px; // 12px from the left edge for container padding
-            top: 17px; // vertically center (middle align with clock)
+            left: 12px; /* 12px from the left edge for container padding */
+            top: 17px; /* vertically center (middle align with clock) */
             border-radius: 10px;
         }
     }
 }
 
-// The keyframes are slightly weird here to help make a ramping/punch effect
-// for the recording dot. We start and end at 100% opacity to help make the
-// dot feel a bit like a real lamp that is blinking: the animation ends up
-// spending a lot of its time showing a steady state without a fade effect.
-// This lamp effect extends into why the 0% opacity keyframe is not in the
-// midpoint: lamps take longer to turn off than they do to turn on, and the
-// extra frames give it a bit of a realistic punch for when the animation is
-// ramping back up to 100% opacity.
+/* The keyframes are slightly weird here to help make a ramping/punch effect */
+/* for the recording dot. We start and end at 100% opacity to help make the */
+/* dot feel a bit like a real lamp that is blinking: the animation ends up */
+/* spending a lot of its time showing a steady state without a fade effect. */
+/* This lamp effect extends into why the 0% opacity keyframe is not in the */
+/* midpoint: lamps take longer to turn off than they do to turn on, and the */
+/* extra frames give it a bit of a realistic punch for when the animation is */
+/* ramping back up to 100% opacity. */
 
-// Target animation timings: steady for 1.5s, fade out for 0.3s, fade in for 0.2s
-// (intended to be used in a loop for 2s animation speed)
+/* Target animation timings: steady for 1.5s, fade out for 0.3s, fade in for 0.2s */
+/* (intended to be used in a loop for 2s animation speed) */
 @keyframes recording-pulse {
     0% {
         opacity: 1;

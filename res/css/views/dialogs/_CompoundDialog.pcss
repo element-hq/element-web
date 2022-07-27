@@ -14,15 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// --------------------------------------------------------------------------------
-// DEV NOTE: This stylesheet covers dialogs listed by the compound, including
-// over multiple React components. The actual inner contents of the dialog should
-// be in their respective stylesheets.
-// --------------------------------------------------------------------------------
+/* -------------------------------------------------------------------------------- */
+/* DEV NOTE: This stylesheet covers dialogs listed by the compound, including */
+/* over multiple React components. The actual inner contents of the dialog should */
+/* be in their respective stylesheets. */
+/* -------------------------------------------------------------------------------- */
 
-// Override legacy/default styles for dialogs
+/* Override legacy/default styles for dialogs */
 .mx_Dialog_wrapper.mx_CompoundDialog > .mx_Dialog {
-    padding: 0; // we'll manage it ourselves
+    padding: 0; /* we'll manage it ourselves */
     color: $primary-content;
 }
 
@@ -34,7 +34,7 @@ limitations under the License.
             display: inline-block;
             font-weight: 600;
             font-size: $font-24px;
-            margin: 0; // managed by header class
+            margin: 0; /* managed by header class */
         }
 
         .mx_CompoundDialog_cancelButton {
@@ -42,7 +42,7 @@ limitations under the License.
             width: 20px;
             height: 20px;
 
-            // Align with middle of title, 34px from right edge
+            /* Align with middle of title, 34px from right edge */
             position: absolute;
             top: 34px;
             right: 34px;
@@ -69,14 +69,14 @@ limitations under the License.
 }
 
 .mx_ScrollableBaseDialog {
-    width: 544px; // fixed
-    height: 516px; // fixed
+    width: 544px; /* fixed */
+    height: 516px; /* fixed */
 
     .mx_CompoundDialog_content {
-        height: 349px; // dialogHeight - header - footer
+        height: 349px; /* dialogHeight - header - footer */
     }
 
     .mx_CompoundDialog_footer {
-        box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.05); // hardcoded colour for both themes
+        box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.05); /* hardcoded colour for both themes */
     }
 }

@@ -56,7 +56,7 @@ limitations under the License.
         }
     }
 
-    // We do reply size limiting with CSS to avoid duplicating the TextualBody component.
+    /* We do reply size limiting with CSS to avoid duplicating the TextualBody component. */
     .mx_EventTile_content {
         $reply-lines: 2;
 
@@ -66,16 +66,16 @@ limitations under the License.
         -webkit-line-clamp: $reply-lines;
 
         .mx_EventTile_body.mx_EventTile_bigEmoji {
-            line-height: $font-22px !important; // Same as var(--EventTile_group_line-line-height)
-            font-size: $font-14px !important; // Override the big emoji override
+            line-height: $font-22px !important; /* Same as var(--EventTile_group_line-line-height) */
+            font-size: $font-14px !important; /* Override the big emoji override */
         }
 
-        // Hide line numbers
+        /* Hide line numbers */
         .mx_EventTile_lineNumbers {
             display: none;
         }
 
-        // Hack to cut content in <pre> tags too
+        /* Hack to cut content in <pre> tags too */
         .mx_EventTile_pre_container > pre {
             overflow-x: scroll;
             overflow-y: hidden;

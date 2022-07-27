@@ -23,7 +23,7 @@ limitations under the License.
 @import "./_spacing.pcss";
 @import url("maplibre-gl/dist/maplibre-gl.css");
 
-$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); // quadratic
+$hover-transition: 0.08s cubic-bezier(.46, .03, .52, .96); /* quadratic */
 
 $selected-message-border-width: 4px;
 
@@ -34,7 +34,7 @@ $slider-dot-size: 1em;
 $slider-selection-dot-size: 2.4em;
 
 $container-border-width: 8px;
-$container-gap-width: 8px; // only even numbers should be used because otherwise we get 0.5px margin values.
+$container-gap-width: 8px; /* only even numbers should be used because otherwise we get 0.5px margin values. */
 
 $timeline-image-border-radius: 8px;
 :root {
@@ -56,7 +56,7 @@ html {
        N.B. Breaks things when we have legitimate horizontal overscroll */
     height: 100%;
     overflow: hidden;
-    // Stop similar overscroll bounce in Firefox Nightly for macOS
+    /* Stop similar overscroll bounce in Firefox Nightly for macOS */
     overscroll-behavior: none;
 }
 
@@ -68,8 +68,8 @@ body {
     border: 0px;
     margin: 0px;
 
-    // needed to match the designs correctly on macOS
-    // see https://github.com/vector-im/element-web/issues/11425
+    /* needed to match the designs correctly on macOS */
+    /* see https://github.com/vector-im/element-web/issues/11425 */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -93,8 +93,8 @@ pre, code {
 }
 
 b {
-    // On Firefox, the default weight for `<b>` is `bolder` which results in no bold
-    // effect since we only have specific weights of our fonts available.
+    /* On Firefox, the default weight for `<b>` is `bolder` which results in no bold */
+    /* effect since we only have specific weights of our fonts available. */
     font-weight: bold;
 }
 
@@ -129,14 +129,14 @@ input[type="search"].mx_textinput_icon {
     background-position: 10px center;
 }
 
-// FIXME THEME - Tint by CSS rather than referencing a duplicate asset
+/* FIXME THEME - Tint by CSS rather than referencing a duplicate asset */
 input[type="text"].mx_textinput_icon.mx_textinput_search,
 input[type="search"].mx_textinput_icon.mx_textinput_search {
     background-image: url('$(res)/img/feather-customised/search-input.svg');
 }
 
-// dont search UI as not all browsers support it,
-// we implement it ourselves where needed instead
+/* dont search UI as not all browsers support it, */
+/* we implement it ourselves where needed instead */
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-results-button,
@@ -144,7 +144,7 @@ input[type="search"]::-webkit-search-results-decoration {
     display: none;
 }
 
-// Override Firefox's UA style so we get a consistent look across browsers
+/* Override Firefox's UA style so we get a consistent look across browsers */
 input::placeholder,
 textarea::placeholder {
     opacity: initial;
@@ -165,15 +165,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
     box-shadow: none;
 }
 
-// This is used to hide the standard outline added by browsers for
-// accessible (focusable) components. Not intended for buttons, but
-// should be used on things like focusable containers where the outline
-// is usually not helping anyone.
+/* This is used to hide the standard outline added by browsers for */
+/* accessible (focusable) components. Not intended for buttons, but */
+/* should be used on things like focusable containers where the outline */
+/* is usually not helping anyone. */
 *:focus:not(.focus-visible) {
     outline: none;
 }
 
-// override defaults
+/* override defaults */
 fieldset {
     display: inline-block;
     margin-inline: unset;
@@ -188,10 +188,10 @@ legend {
     border: none;
 }
 
-// .mx_textinput is a container for a text input
-// + some other controls like buttons, ...
-// it has the appearance of a text box so the controls
-// appear to be part of the input
+/* .mx_textinput is a container for a text input */
+/* + some other controls like buttons, ... */
+/* it has the appearance of a text box so the controls */
+/* appear to be part of the input */
 
 .mx_Dialog, .mx_MatrixChat_wrapper {
     .mx_textinput > input[type="text"],
@@ -210,7 +210,7 @@ legend {
         color: $input-darker-fg-color;
         border-radius: 4px;
         border: 1px solid rgba($primary-content, .1);
-        // these things should probably not be defined globally
+        /* these things should probably not be defined globally */
         margin: 9px;
     }
 
@@ -254,11 +254,10 @@ legend {
     border: 0;
 }
 
-// These are magic constants which are excluded from tinting, to let themes
-// (which only have CSS) tell the app what their non-tinted
-// colourscheme is by inspecting the stylesheet DOM.
-//
-// They are not used for layout!!
+/* These are magic constants which are excluded from tinting, to let themes */
+/* (which only have CSS) tell the app what their non-tinted */
+/* colourscheme is by inspecting the stylesheet DOM. */
+/* They are not used for layout!! */
 #mx_theme_accentColor {
     color: $accent;
 }
@@ -304,12 +303,12 @@ legend {
     overflow-y: auto;
 }
 
-// Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants.
+/* Styles copied/inspired by GroupLayout, ReplyTile, and EventTile variants. */
 .mx_Dialog .markdown-body {
     font-family: inherit !important;
     white-space: normal !important;
     line-height: inherit !important;
-    color: inherit; // inherit the colour from the dark or light theme by default (but not for code blocks)
+    color: inherit; /* inherit the colour from the dark or light theme by default (but not for code blocks) */
     font-size: $font-14px;
 
     pre,
@@ -318,13 +317,13 @@ legend {
         background-color: $codeblock-background-color;
     }
 
-    // this selector wrongly applies to code blocks too but we will unset it in the next one
+    /* this selector wrongly applies to code blocks too but we will unset it in the next one */
     code {
-        white-space: pre-wrap; // don't collapse spaces in inline code blocks
+        white-space: pre-wrap; /* don't collapse spaces in inline code blocks */
     }
 
     pre code {
-        white-space: pre; // we want code blocks to be scrollable and not wrap
+        white-space: pre; /* we want code blocks to be scrollable and not wrap */
 
         >* {
             display: inline;
@@ -332,9 +331,9 @@ legend {
     }
 
     pre {
-        // have to use overlay rather than auto otherwise Linux and Windows
-        // Chrome gets very confused about vertical spacing:
-        // https://github.com/vector-im/vector-web/issues/754
+        /* have to use overlay rather than auto otherwise Linux and Windows */
+        /* Chrome gets very confused about vertical spacing: */
+        /* https://github.com/vector-im/vector-web/issues/754 */
         overflow-x: overlay;
         overflow-y: visible;
 
@@ -358,7 +357,7 @@ legend {
 .mx_Dialog .markdown-body h1,
 .mx_Dialog .markdown-body h2 {
     font-size: 1.5em;
-    border-bottom: none !important; // override GFM
+    border-bottom: none !important; /* override GFM */
 }
 
 .mx_Dialog .markdown-body a {
@@ -397,8 +396,8 @@ legend {
 }
 
 .mx_Dialog_wrapperWithStaticUnder .mx_Dialog_background {
-    // Roughly half of what it would normally be - we don't want to black out
-    // the app, just make it clear that the dialogs are stacked.
+    /* Roughly half of what it would normally be - we don't want to black out */
+    /* the app, just make it clear that the dialogs are stacked. */
     opacity: 0.4;
 }
 
@@ -446,7 +445,7 @@ legend {
     text-align: center;
 }
 .mx_Dialog_header.mx_Dialog_headerWithCancel {
-    padding-right: 20px; // leave space for the 'X' cancel button
+    padding-right: 20px; /* leave space for the 'X' cancel button */
 }
 
 .mx_Dialog_title.danger {
@@ -487,7 +486,7 @@ legend {
     text-align: right;
 
     .mx_Dialog_buttons_additive {
-        // The consumer is responsible for positioning their elements.
+        /* The consumer is responsible for positioning their elements. */
         float: left;
     }
 }
@@ -499,12 +498,12 @@ legend {
     text-align: initial;
     margin-inline-start: auto;
 
-    // default gap among elements
-    column-gap: $spacing-8; // See margin-right below inside the button style
-    row-gap: 5px; // See margin-bottom below inside the button style
+    /* default gap among elements */
+    column-gap: $spacing-8; /* See margin-right below inside the button style */
+    row-gap: 5px; /* See margin-bottom below inside the button style */
 
     button {
-        margin: 0 !important; // override the margin settings
+        margin: 0 !important; /* override the margin settings */
     }
 }
 
@@ -526,7 +525,7 @@ legend {
     margin-right: 8px;
     margin-bottom: 5px;
 
-    // flip colours for the secondary ones
+    /* flip colours for the secondary ones */
     font-weight: 600;
     border: 1px solid $accent;
     color: $accent;
@@ -598,7 +597,7 @@ legend {
 }
 
 .mx_DialogDesignChanges_wrapper .mx_Dialog_fixedWidth {
-    max-width: 636px; // match splash image width
+    max-width: 636px; /* match splash image width */
 
     .mx_AccessibleButton_kind_link {
         font-size: inherit;
@@ -606,10 +605,10 @@ legend {
     }
 }
 
-// TODO: Review mx_GeneralButton usage to see if it can use a different class
-// These classes were brought in from the old UserSettings and are included here to avoid
-// breaking the app.
-// Ref: https://github.com/vector-im/element-web/issues/8420
+/* TODO: Review mx_GeneralButton usage to see if it can use a different class */
+/* These classes were brought in from the old UserSettings and are included here to avoid */
+/* breaking the app. */
+/* Ref: https://github.com/vector-im/element-web/issues/8420 */
 .mx_GeneralButton {
     @mixin mx_DialogButton;
     display: inline;
@@ -651,8 +650,8 @@ legend {
     margin-top: 69px;
 }
 
-// username colors
-// used by SenderProfile & RoomPreviewBar
+/* username colors */
+/* used by SenderProfile & RoomPreviewBar */
 .mx_Username_color1 {
     color: $username-variant1-color;
 }
@@ -694,7 +693,7 @@ legend {
     padding: 6px 8px;
 }
 
-// This is a workaround for our mixins not supporting child selectors
+/* This is a workaround for our mixins not supporting child selectors */
 .mx_Tooltip_dark {
     .mx_Tooltip_chevron::after {
         border-right-color: $tooltip-timeline-bg-color;

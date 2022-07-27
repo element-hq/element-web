@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// A context menu that largely fits the | [icon]    [label] | format.
+/* A context menu that largely fits the | [icon]    [label] | format. */
 .mx_IconizedContextMenu {
     min-width: 146px;
     width: max-content;
@@ -30,47 +30,47 @@ limitations under the License.
             font-weight: $font-semi-bold;
         }
 
-        // the notFirst class is for cases where the optionList might be under a header of sorts.
+        /* the notFirst class is for cases where the optionList might be under a header of sorts. */
         &:nth-child(n + 2), .mx_IconizedContextMenu_optionList_notFirst {
-            // This is a bit of a hack when we could just use a simple border-top property,
-            // however we have a (kinda) good reason for doing it this way: we need opacity.
-            // To get the right color, we need an opacity modifier which means we have to work
-            // around the problem. PostCSS doesn't support the opacity() function, and if we
-            // use something like postcss-functions we quickly run into an issue where the
-            // function we would define gets passed a CSS variable for custom themes, which
-            // can't be converted easily even when considering https://stackoverflow.com/a/41265350/7037379
+            /* This is a bit of a hack when we could just use a simple border-top property, */
+            /* however we have a (kinda) good reason for doing it this way: we need opacity. */
+            /* To get the right color, we need an opacity modifier which means we have to work */
+            /* around the problem. PostCSS doesn't support the opacity() function, and if we */
+            /* use something like postcss-functions we quickly run into an issue where the */
+            /* function we would define gets passed a CSS variable for custom themes, which */
+            /* can't be converted easily even when considering https://stackoverflow.com/a/41265350/7037379 */
             //
-            // Therefore, we just hack in a line and border the thing ourselves
+            /* Therefore, we just hack in a line and border the thing ourselves */
             &::before {
                 border-top: 1px solid $primary-content;
                 opacity: 0.1;
                 content: '';
 
-                // Counteract the padding problems (width: 100% ignores the 40px padding,
-                // unless we position it absolutely then it does the right thing).
+                /* Counteract the padding problems (width: 100% ignores the 40px padding, */
+                /* unless we position it absolutely then it does the right thing). */
                 width: 100%;
                 position: absolute;
                 left: 0;
             }
         }
 
-        // round the top corners of the top button for the hover effect to be bounded
+        /* round the top corners of the top button for the hover effect to be bounded */
         &:first-child .mx_IconizedContextMenu_item:first-child {
-            border-radius: 8px 8px 0 0; // radius matches .mx_ContextualMenu
+            border-radius: 8px 8px 0 0; /* radius matches .mx_ContextualMenu */
         }
 
-        // round the bottom corners of the bottom button for the hover effect to be bounded
+        /* round the bottom corners of the bottom button for the hover effect to be bounded */
         &:last-child .mx_IconizedContextMenu_item:last-child {
-            border-radius: 0 0 8px 8px; // radius matches .mx_ContextualMenu
+            border-radius: 0 0 8px 8px; /* radius matches .mx_ContextualMenu */
         }
 
-        // round all corners of the only button for the hover effect to be bounded
+        /* round all corners of the only button for the hover effect to be bounded */
         &:first-child:last-child .mx_IconizedContextMenu_item:first-child:last-child {
-            border-radius: 8px; // radius matches .mx_ContextualMenu
+            border-radius: 8px; /* radius matches .mx_ContextualMenu */
         }
 
         .mx_IconizedContextMenu_item {
-            // pad the inside of the button so that the hover background is padded too
+            /* pad the inside of the button so that the hover background is padded too */
             padding-top: 12px;
             padding-bottom: 12px;
             text-decoration: none;
@@ -78,7 +78,7 @@ limitations under the License.
             font-size: $font-15px;
             line-height: $font-24px;
 
-            // Create a flexbox to more easily define the list items
+            /* Create a flexbox to more easily define the list items */
             display: flex;
             align-items: center;
 
@@ -91,17 +91,17 @@ limitations under the License.
                 cursor: not-allowed;
             }
 
-            img, .mx_IconizedContextMenu_icon { // icons
+            img, .mx_IconizedContextMenu_icon { /* icons */
                 width: 16px;
                 min-width: 16px;
                 max-width: 16px;
             }
 
-            span.mx_IconizedContextMenu_label { // labels
+            span.mx_IconizedContextMenu_label { /* labels */
                 width: 100%;
                 flex: 1;
 
-                // Ellipsize any text overflow
+                /* Ellipsize any text overflow */
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;

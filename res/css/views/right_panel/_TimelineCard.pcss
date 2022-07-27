@@ -17,7 +17,7 @@ limitations under the License.
 .mx_TimelineCard {
     .mx_TimelineCard_timeline {
         overflow: hidden;
-        position: relative; // offset parent for jump to bottom button
+        position: relative; /* offset parent for jump to bottom button */
         flex: 1;
         border-radius: 8px;
     }
@@ -55,7 +55,7 @@ limitations under the License.
             &.mx_EventTile_info .mx_EventTile_line,
             .mx_EventTile_line {
                 padding: var(--BaseCard_EventTile_line-padding-block) var(--BaseCard_EventTile-spacing-inline);
-                padding-inline-end: $MessageTimestamp_width; // ensure timestamp is not hidden
+                padding-inline-end: $MessageTimestamp_width; /* ensure timestamp is not hidden */
 
                 .mx_EventTile_e2eIcon {
                     inset-inline-start: $spacing-8;
@@ -87,7 +87,7 @@ limitations under the License.
             }
 
             .mx_DisambiguatedProfile {
-                max-width: calc(100% - var(--BaseCard_EventTile-spacing-inline)); // instead of $left-gutter
+                max-width: calc(100% - var(--BaseCard_EventTile-spacing-inline)); /* instead of $left-gutter */
             }
 
             .mx_ReplyTile .mx_DisambiguatedProfile {
@@ -101,7 +101,7 @@ limitations under the License.
             }
 
             .mx_ReactionsRow {
-                // See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.pcss
+                /* See: var(--ThreadView_group_spacing-end) for ReactionsRow on _EventTile.pcss */
                 margin-inline-end: $spacing-8;
             }
 
@@ -119,9 +119,9 @@ limitations under the License.
         }
 
         &[data-layout="group"] {
-            // Read receipt group on compact modern layout
-            // This is required because mx_TimelineCard is a child element wrapped by mx_MatrixChat_useCompactLayout,
-            // which specifies the default position of mx_ReadReceiptGroup on compact modern layout.
+            /* Read receipt group on compact modern layout */
+            /* This is required because mx_TimelineCard is a child element wrapped by mx_MatrixChat_useCompactLayout, */
+            /* which specifies the default position of mx_ReadReceiptGroup on compact modern layout. */
             .mx_MatrixChat_useCompactLayout & .mx_ReadReceiptGroup {
                 top: var(--TimelineCard_ReadReceiptGroup-inset-block-start);
             }
@@ -129,16 +129,16 @@ limitations under the License.
 
         &[data-layout="bubble"] {
             &::before {
-                z-index: auto; // enable background color on hover
+                z-index: auto; /* enable background color on hover */
             }
 
             &.mx_EventTile_info .mx_MessageActionBar {
-                // 1px: border width
+                /* 1px: border width */
                 inset-inline-end: calc($container-gap-width + var(--BaseCard_padding-inline) + 1px);
             }
 
             .mx_ReactionsRow {
-                position: relative; // display on hover
+                position: relative; /* display on hover */
             }
         }
     }
@@ -157,24 +157,24 @@ limitations under the License.
             .mx_EventTile_line,
             .mx_GenericEventListSummary_unstyledList > .mx_EventTile_info .mx_EventTile_avatar ~ .mx_EventTile_line {
                 padding-inline-start: var(--BaseCard_EventTile-spacing-inline);
-                padding-inline-end: $MessageTimestamp_width; // ensure timestamp is not hidden
+                padding-inline-end: $MessageTimestamp_width; /* ensure timestamp is not hidden */
             }
         }
     }
 
     .mx_WhoIsTypingTile {
-        margin-left: -12px; // undo padding on the message list
+        margin-left: -12px; /* undo padding on the message list */
     }
 
     .mx_WhoIsTypingTile_avatars {
-        flex-basis: 48px; // 12 (padding on message list) + 36 (padding on event lines)
+        flex-basis: 48px; /* 12 (padding on message list) + 36 (padding on event lines) */
     }
 
-    .mx_GenericEventListSummary_unstyledList, // RR next to a message on the event list summary
-    .mx_RoomView_MessageList {                // RR next to a message on the messsge list
+    .mx_GenericEventListSummary_unstyledList, /* RR next to a message on the event list summary */
+    .mx_RoomView_MessageList {                /* RR next to a message on the messsge list */
         .mx_EventTile[data-layout="bubble"] {
             .mx_ReadReceiptGroup {
-                // 6px: scroll bar width (magic number)
+                /* 6px: scroll bar width (magic number) */
                 /* stylelint-disable-next-line declaration-colon-space-after */
                 inset-inline-end:
                     calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + $container-gap-width + 6px);
@@ -182,7 +182,7 @@ limitations under the License.
 
             &.mx_EventTile_info {
                 .mx_ReadReceiptGroup {
-                    inset-inline-end: -4px; // align with RR outside of info tile
+                    inset-inline-end: -4px; /* align with RR outside of info tile */
                 }
             }
         }

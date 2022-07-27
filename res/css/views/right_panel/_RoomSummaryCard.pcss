@@ -47,8 +47,8 @@ limitations under the License.
                 height: 54px;
                 border-radius: 50%;
                 background-color: #737d8c;
-                margin-top: -3px; // alignment
-                margin-left: -10px; // overlap
+                margin-top: -3px; /* alignment */
+                margin-left: -10px; /* overlap */
                 border: 3px solid $dark-panel-bg-color;
 
                 &::before {
@@ -109,14 +109,14 @@ limitations under the License.
 
     .mx_RoomSummaryCard_appsGroup {
         .mx_RoomSummaryCard_Button {
-            // this button is special so we have to override some of the original styling
-            // as we will be applying it in its children
+            /* this button is special so we have to override some of the original styling */
+            /* as we will be applying it in its children */
             padding: 0;
             height: auto;
             color: $tertiary-content;
 
             .mx_RoomSummaryCard_icon_app {
-                padding: 10px 48px 10px 12px; // based on typical mx_RoomSummaryCard_Button padding
+                padding: 10px 48px 10px 12px; /* based on typical mx_RoomSummaryCard_Button padding */
                 text-overflow: ellipsis;
                 overflow: hidden;
 
@@ -135,11 +135,11 @@ limitations under the License.
             .mx_RoomSummaryCard_app_options {
                 position: absolute;
                 top: 0;
-                height: 100%; // to give bigger interactive zone
+                height: 100%; /* to give bigger interactive zone */
                 width: 24px;
                 padding: 12px 4px;
                 box-sizing: border-box;
-                min-width: 24px; // prevent flexbox crushing
+                min-width: 24px; /* prevent flexbox crushing */
 
                 &:hover {
                     &::after {
@@ -147,7 +147,7 @@ limitations under the License.
                         position: absolute;
                         height: 24px;
                         width: 24px;
-                        top: 8px; // equal to padding-top of parent
+                        top: 8px; /* equal to padding-top of parent */
                         left: 0;
                         border-radius: 12px;
                         background-color: rgba(141, 151, 165, 0.1);
@@ -174,7 +174,7 @@ limitations under the License.
                 }
             }
             .mx_RoomSummaryCard_app_maximiseToggle {
-                right: 32px; //24 + 8
+                right: 32px; /* 24 + 8 */
 
                 &::before {
                     mask-size: 14px;
@@ -183,9 +183,8 @@ limitations under the License.
             }
 
             .mx_RoomSummaryCard_app_options {
-                right: 56px; //2*24 + 8
+                right: 56px; /* 2*24 + 8 */
                 display: none;
-
                 &::before {
                     mask-image: url('$(res)/img/element-icons/room/ellipsis.svg');
                 }
@@ -226,8 +225,8 @@ limitations under the License.
             }
 
             &::after {
-                top: 8px; // re-align based on the height change
-                pointer-events: none; // pass through to the real button
+                top: 8px; /* re-align based on the height change */
+                pointer-events: none; /* pass through to the real button */
             }
         }
     }

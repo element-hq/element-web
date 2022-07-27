@@ -39,7 +39,7 @@ limitations under the License.
 }
 
 .mx_MBeaconBody_withoutMapInfoLastUpdated {
-    // 48px lines up with icon in BeaconStatus
+    /* 48px lines up with icon in BeaconStatus */
     margin-top: -$spacing-8;
     padding: 0 $spacing-8 $spacing-8 48px;
 
@@ -50,15 +50,15 @@ limitations under the License.
 .mx_MBeaconBody_map {
     height: 100%;
     width: 100%;
-    z-index: 0; // keeps the entire map under the message action bars
+    z-index: 0; /* keeps the entire map under the message action bars */
 
     cursor: pointer;
 }
 
 .mx_MBeaconBody_mapFallback,
 .mx_MBeaconBody_mapError {
-    // pushes spinner/icon up
-    // to appear more centered with the footer
+    /* pushes spinner/icon up */
+    /* to appear more centered with the footer */
     padding-bottom: 50px !important;
 }
 
@@ -83,6 +83,6 @@ limitations under the License.
 }
 
 .mx_ReplyTile .mx_MBeaconBody {
-    // Prevent clicking a beacon within a reply
+    /* Prevent clicking a beacon within a reply */
     pointer-events: none;
 }

@@ -27,7 +27,7 @@ limitations under the License.
             position: relative;
 
             .mx_BaseAvatar {
-                pointer-events: none; // makes the avatar non-draggable
+                pointer-events: none; /* makes the avatar non-draggable */
             }
         }
     }
@@ -78,25 +78,25 @@ limitations under the License.
     .mx_UserMenu_contextMenu_header {
         padding: 20px;
 
-        // Create a flexbox to organize the header a bit easier
+        /* Create a flexbox to organize the header a bit easier */
         display: flex;
         align-items: center;
 
         .mx_UserMenu_contextMenu_name {
-            // Create another flexbox of columns to handle large user IDs
+            /* Create another flexbox of columns to handle large user IDs */
             display: flex;
             flex-direction: column;
-            width: calc(100% - 40px); // 40px = 32px theme button + 8px margin to theme button
+            width: calc(100% - 40px); /* 40px = 32px theme button + 8px margin to theme button */
 
             .mx_UserMenu_contextMenu_displayName,
             .mx_UserMenu_contextMenu_userId {
                 font-size: $font-15px;
 
-                // Automatically grow subelements to fit the container
+                /* Automatically grow subelements to fit the container */
                 flex: 1;
                 width: 100%;
 
-                // Ellipsize text overflow
+                /* Ellipsize text overflow */
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
@@ -122,7 +122,7 @@ limitations under the License.
             background-color: $theme-button-bg-color;
             cursor: pointer;
 
-            // to make alignment easier, create flexbox for the image
+            /* to make alignment easier, create flexbox for the image */
             display: flex;
             align-items: center;
             justify-content: center;

@@ -32,7 +32,7 @@ limitations under the License.
 
 .mx_ThreadSummary {
     min-width: 267px;
-    // leave space on both left & right gutters
+    /* leave space on both left & right gutters */
     max-width: min(calc(100% - var(--EventTile_group_line-spacing-inline-start)), 600px);
     width: fit-content;
     height: 40px;
@@ -46,7 +46,7 @@ limitations under the License.
     box-sizing: border-box;
     clear: both;
     overflow: hidden;
-    border: 1px solid $system; // always render a border so the hover effect doesn't require a re-layout
+    border: 1px solid $system; /* always render a border so the hover effect doesn't require a re-layout */
 
     .mx_ThreadSummary_chevron {
         position: absolute;
@@ -55,7 +55,7 @@ limitations under the License.
         bottom: 0;
         width: 60px;
         box-sizing: border-box;
-        // XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug
+        /* XXX: We use `$system-transparent` instead of `transparent` to work around a Safari <15.4 bug */
         background: linear-gradient(270deg, $system 50%, $system-transparent 100%);
 
         opacity: 0;
@@ -90,7 +90,7 @@ limitations under the License.
 
     &::before {
         @mixin ThreadSummaryIcon;
-        align-self: center; // v-align the threads icon
+        align-self: center; /* v-align the threads icon */
     }
 
     .mx_ThreadSummary_sender,
@@ -121,7 +121,7 @@ limitations under the License.
 
     .mx_MessagePanel_narrow & {
         min-width: initial;
-        max-width: 100%; // prevent overflow
+        max-width: 100%; /* prevent overflow */
         width: initial;
     }
 }

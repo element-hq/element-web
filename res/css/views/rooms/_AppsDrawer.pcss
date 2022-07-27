@@ -16,14 +16,14 @@ limitations under the License.
 */
 
 $MiniAppTileHeight: 200px;
-// TODO this should be 300px but that's too large
+/* TODO this should be 300px but that's too large */
 $MinWidth: 240px;
 
 .mx_AppsDrawer {
     margin: $container-gap-width;
-    // The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser.
+    /* The left side gap is fully handled by this margin. To prohibit bleeding on webkit browser. */
     margin-right: calc($container-gap-width / 2);
-    margin-bottom: 0; // No bottom margin for the correct gap to the CallView below.
+    margin-bottom: 0; /* No bottom margin for the correct gap to the CallView below. */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -44,16 +44,16 @@ $MinWidth: 240px;
     .mx_AppsContainer_resizerHandle {
         cursor: ns-resize;
 
-        // Override styles from library, making the whole area the target area
+        /* Override styles from library, making the whole area the target area */
         width: 100% !important;
         height: 100% !important;
 
-        // This is positioned directly below frame
+        /* This is positioned directly below frame */
         position: absolute;
-        bottom: 50% !important; // override from library
+        bottom: 50% !important; /* override from library */
 
-        // We then render the pill handle in an ::after to keep it in the handle's
-        // area without being a massive line across the screen
+        /* We then render the pill handle in an ::after to keep it in the handle's */
+        /* area without being a massive line across the screen */
         &::after {
             content: '';
             position: absolute;
@@ -62,8 +62,8 @@ $MinWidth: 240px;
             height: 4px;
             bottom: 0;
 
-            // Together, these make the bar 64px wide
-            // These are also overridden from the library
+            /* Together, these make the bar 64px wide */
+            /* These are also overridden from the library */
             left: calc(50% - 32px);
             right: calc(50% - 32px);
         }
@@ -81,7 +81,7 @@ $MinWidth: 240px;
             top: 50%;
             transform: translate(0, -50%);
 
-            height: 64px; // to match width of the ones on roomlist
+            height: 64px; /* to match width of the ones on roomlist */
             width: 4px;
             border-radius: 4px;
 
@@ -158,7 +158,7 @@ $MinWidth: 240px;
 }
 
 .mx_AppTileFullWidth {
-    width: 100% !important; // to override the inline style set by the resizer
+    width: 100% !important; /* to override the inline style set by the resizer */
     margin: 0;
     padding: 0;
     border: $container-border-width solid $widget-menu-bar-bg-color;
@@ -377,7 +377,7 @@ $MinWidth: 240px;
     position: relative;
     height: 100%;
 
-    // match bg of border so that the cut corners have the right fill
+    /* match bg of border so that the cut corners have the right fill */
     background-color: $widget-body-bg-color !important;
     border-radius: 8px;
 }

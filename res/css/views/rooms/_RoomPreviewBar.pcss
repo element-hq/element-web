@@ -35,7 +35,7 @@ limitations under the License.
 
     h3,
     .mx_RoomPreviewBar_message p {
-        // break-word, with fallback to break-all, which is wider supported
+        /* break-word, with fallback to break-all, which is wider supported */
         word-break: break-all;
         word-break: break-word;
     }
@@ -98,11 +98,11 @@ limitations under the License.
     }
 }
 
-// With maximised widgets, the panel fits in better when rounded
+/* With maximised widgets, the panel fits in better when rounded */
 .mx_MainSplit_maximisedWidget .mx_RoomPreviewBar_panel {
     margin: $container-gap-width;
-    margin-right: calc($container-gap-width / 2); // Shared with right panel
-    margin-top: 0; // Already covered by apps drawer
+    margin-right: calc($container-gap-width / 2); /* Shared with right panel */
+    margin-top: 0; /* Already covered by apps drawer */
     border-radius: 8px;
 }
 
@@ -126,15 +126,15 @@ limitations under the License.
     .mx_RoomPreviewBar_actions {
         flex-direction: column;
         .mx_AccessibleButton {
-            padding: 7px 50px; // extra wide
+            padding: 7px 50px; /* extra wide */
         }
 
         & > * {
             margin-top: 12px;
         }
         .mx_AccessibleButton.mx_AccessibleButton_kind_primary {
-            // to account for the padding of the primary button which causes inconsistent look between
-            // subsequent secondary (text) buttons
+            /* to account for the padding of the primary button which causes inconsistent look between */
+            /* subsequent secondary (text) buttons */
             margin-bottom: 7px;
         }
     }

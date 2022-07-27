@@ -18,14 +18,14 @@ limitations under the License.
     position: relative;
     width: 32px;
     height: 32px;
-    min-width: 32px; // for when the button is used in a flexbox
-    min-height: 32px; // for when the button is used in a flexbox
+    min-width: 32px; /* for when the button is used in a flexbox */
+    min-height: 32px; /* for when the button is used in a flexbox */
     border-radius: 32px;
     background-color: $system;
 
     &::before {
         content: '';
-        position: absolute; // sizing varies by icon
+        position: absolute; /* sizing varies by icon */
         background-color: $secondary-content;
         mask-repeat: no-repeat;
         mask-size: contain;
@@ -38,16 +38,16 @@ limitations under the License.
     &.mx_PlayPauseButton_play::before {
         width: 13px;
         height: 16px;
-        top: 8px; // center
-        left: 12px; // center
+        top: 8px; /* center */
+        left: 12px; /* center */
         mask-image: url('$(res)/img/element-icons/play.svg');
     }
 
     &.mx_PlayPauseButton_pause::before {
         width: 10px;
         height: 12px;
-        top: 10px; // center
-        left: 11px; // center
+        top: 10px; /* center */
+        left: 11px; /* center */
         mask-image: url('$(res)/img/element-icons/pause.svg');
     }
 }

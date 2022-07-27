@@ -42,14 +42,14 @@ limitations under the License.
     width: 100%;
 }
 
-// XXX: This should be a common button class
+/* XXX: This should be a common button class */
 .mx_InteractiveAuthEntryComponents_msisdnSubmit:disabled {
     background-color: $light-fg-color;
     cursor: default;
 }
 
 .mx_InteractiveAuthEntryComponents_termsSubmit:disabled {
-    background-color: #92caad; // Only used here
+    background-color: #92caad; /* Only used here */
     cursor: default;
 }
 
@@ -76,18 +76,18 @@ limitations under the License.
 }
 
 .mx_InteractiveAuthEntryComponents_emailWrapper {
-    // "Resend" button/link
+    /* "Resend" button/link */
     .mx_AccessibleButton_kind_link_inline {
-        // We need this to be an inline-block so positioning works correctly
+        /* We need this to be an inline-block so positioning works correctly */
         display: inline-block !important;
 
-        // Spinner as end adornment of the "resend" button/link
+        /* Spinner as end adornment of the "resend" button/link */
         .mx_Spinner {
-            // Spinners are usually block elements, but we need it as inline element
+            /* Spinners are usually block elements, but we need it as inline element */
             display: inline-flex !important;
-            // Spinners by default fill all available width, but we don't want that
+            /* Spinners by default fill all available width, but we don't want that */
             width: auto !important;
-            // We need to center the spinner relative to the button/link
+            /* We need to center the spinner relative to the button/link */
             vertical-align: middle !important;
         }
     }

@@ -44,9 +44,9 @@ limitations under the License.
             pointer-events: none;
         }
 
-        // When forwarding messages from encrypted rooms, EventTile will complain
-        // that our preview is unencrypted, which doesn't actually matter
-        // We also hide download links to not encourage users to try interacting
+        /* When forwarding messages from encrypted rooms, EventTile will complain */
+        /* that our preview is unencrypted, which doesn't actually matter */
+        /* We also hide download links to not encourage users to try interacting */
         .mx_EventTile_msgOption,
         .mx_EventTile_e2eIcon_unencrypted,
         .mx_EventTile_e2eIcon_warning,
@@ -66,7 +66,7 @@ limitations under the License.
         display: contents;
 
         .mx_SearchBox {
-            // To match the space around the title
+            /* To match the space around the title */
             margin: 0 0 15px 0;
             flex-grow: 0;
         }
@@ -133,7 +133,7 @@ limitations under the License.
                     margin-left: 12px;
 
                     &:not(.mx_ForwardList_canSend) .mx_ForwardList_sendLabel {
-                        // Hide the "Send" label while preserving button size
+                        /* Hide the "Send" label while preserving button size */
                         visibility: hidden;
                     }
 
@@ -142,7 +142,7 @@ limitations under the License.
                     }
 
                     .mx_NotificationBadge {
-                        // Match the failed to send indicator's color with the disabled button
+                        /* Match the failed to send indicator's color with the disabled button */
                         background-color: $button-danger-disabled-fg-color;
                     }
 

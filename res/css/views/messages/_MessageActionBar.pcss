@@ -17,7 +17,7 @@ limitations under the License.
 
 .mx_MessageActionBar {
     --MessageActionBar-size-button: 28px;
-    --MessageActionBar-size-box: 32px; // 28px + 2px (margin) * 2
+    --MessageActionBar-size-box: 32px; /* 28px + 2px (margin) * 2 */
     --MessageActionBar-item-hover-background: $panel-actions;
     --MessageActionBar-item-hover-borderRadius: 6px;
     --MessageActionBar-item-hover-zIndex: 1;
@@ -35,20 +35,20 @@ limitations under the License.
     top: -32px;
     right: 8px;
     user-select: none;
-    // Ensure the action bar appears above other things like the read marker
-    // and sender avatar (for small screens)
+    /* Ensure the action bar appears above other things like the read marker */
+    /* and sender avatar (for small screens) */
     z-index: 10;
 
-    // Adds a previous event safe area so that you can't accidentally hover the
-    // previous event while trying to mouse into the action bar or from the
-    // react button to its tooltip.
+    /* Adds a previous event safe area so that you can't accidentally hover the */
+    /* previous event while trying to mouse into the action bar or from the */
+    /* react button to its tooltip. */
     &::before {
         content: '';
         position: absolute;
-        // tooltip safe mousing area + tooltip overhang +
-        // action bar + action bar offset from event
+        /* tooltip safe mousing area + tooltip overhang + */
+        /* action bar + action bar offset from event */
         width: calc(10px + 48px + 100% + 8px);
-        // safe area + action bar
+        /* safe area + action bar */
         height: calc(20px + 100%);
         top: -12px;
         left: -58px;
@@ -57,10 +57,10 @@ limitations under the License.
 
         /* stylelint-disable-next-line max-line-length */
         .mx_GenericEventListSummary[data-layout="bubble"] .mx_GenericEventListSummary_toggle ~ .mx_GenericEventListSummary_unstyledList .mx_EventTile_info:first-of-type & {
-            // improve clickability of "collapse" link button on bubble layout by reducing width and height values
-            // mx_GenericEventListSummary_toggle ~: to apply rules to action bar when "collapse" button is available
-            // mx_EventTile_info:first-of-type: to apply rules to the info event tile just under "collapse" button
-            // TODO: use a new class name instead
+            /* improve clickability of "collapse" link button on bubble layout by reducing width and height values */
+            /* mx_GenericEventListSummary_toggle ~: to apply rules to action bar when "collapse" button is available */
+            /* mx_EventTile_info:first-of-type: to apply rules to the info event tile just under "collapse" button */
+            /* TODO: use a new class name instead */
             width: 100%;
             height: 100%;
             top: 0;
@@ -68,7 +68,7 @@ limitations under the License.
         }
 
         .mx_EventTile_info .mx_ViewSourceEvent ~ & {
-            // improve clickability of view source event toggle button by removing vertical safe area
+            /* improve clickability of view source event toggle button by removing vertical safe area */
             width: 100%;
             height: 100%;
             top: 0;
@@ -131,7 +131,7 @@ limitations under the License.
 
             &.mx_MessageActionBar_downloadSpinnerButton {
                 svg {
-                    display: none; // hide the download icon
+                    display: none; /* hide the download icon */
                 }
             }
         }

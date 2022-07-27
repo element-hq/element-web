@@ -39,7 +39,7 @@ limitations under the License.
     }
 }
 
-// white infill for the transparency
+/* white infill for the transparency */
 .mx_E2EIcon::before {
     background-color: #ffffff;
     mask-image: url('$(res)/img/e2e/normal.svg');
@@ -48,16 +48,16 @@ limitations under the License.
     mask-size: 80%;
 }
 
-// transparent-looking border surrounding the shield for when overlain over avatars
+/* transparent-looking border surrounding the shield for when overlain over avatars */
 .mx_E2EIcon_bordered {
     mask-image: url('$(res)/img/e2e/normal.svg');
     background-color: $header-panel-bg-color;
 
-    // shrink the actual badge
+    /* shrink the actual badge */
     &::after {
         mask-size: 75%;
     }
-    // shrink the infill of the badge
+    /* shrink the infill of the badge */
     &::before {
         mask-size: 60%;
     }

@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// make any scrollbar grey and thin
+/* make any scrollbar grey and thin */
 html {
     scrollbar-color: $scrollbar-thumb-color transparent;
 }
-// scrollbar-width is not inherited (but -color is, why?!),
-// so declare it on every element
+/* scrollbar-width is not inherited (but -color is, why?!), */
+/* so declare it on every element */
 * {
     scrollbar-width: thin;
 }
@@ -34,7 +34,7 @@ html {
     background-color: $scrollbar-thumb-color;
 }
 
-// make auto-hide scrollbars not transparent again on hover
+/* make auto-hide scrollbars not transparent again on hover */
 .mx_AutoHideScrollbar:hover {
     scrollbar-color: $scrollbar-thumb-color transparent;
 
@@ -43,11 +43,11 @@ html {
     }
 }
 
-// make scrollbars transparent for autohide scrollbars
+/* make scrollbars transparent for autohide scrollbars */
 .mx_AutoHideScrollbar {
     overflow-x: hidden;
     overflow-y: auto;
-    overflow-y: overlay;    // where supported
+    overflow-y: overlay;    /* where supported */
     -ms-overflow-style: -ms-autohiding-scrollbar;
 
     &::-webkit-scrollbar {

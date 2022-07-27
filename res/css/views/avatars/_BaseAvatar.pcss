@@ -16,15 +16,15 @@ limitations under the License.
 
 .mx_BaseAvatar {
     position: relative;
-    // In at least Firefox, the case of relative positioned inline elements
-    // (such as mx_BaseAvatar) with absolute positioned children (such as
-    // mx_BaseAvatar_initial) is a dark corner full of spider webs. It will give
-    // different results during full reflow of the page vs. incremental reflow
-    // of small portions. While that's surely a browser bug, we can avoid it by
-    // using `inline-block` instead of the default `inline`.
-    // https://github.com/vector-im/element-web/issues/5594
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1535053
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=255139
+    /* In at least Firefox, the case of relative positioned inline elements */
+    /* (such as mx_BaseAvatar) with absolute positioned children (such as */
+    /* mx_BaseAvatar_initial) is a dark corner full of spider webs. It will give */
+    /* different results during full reflow of the page vs. incremental reflow */
+    /* of small portions. While that's surely a browser bug, we can avoid it by */
+    /* using `inline-block` instead of the default `inline`. */
+    /* https://github.com/vector-im/element-web/issues/5594 */
+    /* https://bugzilla.mozilla.org/show_bug.cgi?id=1535053 */
+    /* https://bugzilla.mozilla.org/show_bug.cgi?id=255139 */
     display: inline-block;
     user-select: none;
 
@@ -53,9 +53,9 @@ limitations under the License.
     background-color: $background;
 }
 
-// Percy screenshot test specific CSS
+/* Percy screenshot test specific CSS */
 @media only percy {
-    // Stick the default room avatar colour, so it doesn't cause a false diff on the screenshot
+    /* Stick the default room avatar colour, so it doesn't cause a false diff on the screenshot */
     .mx_BaseAvatar_initial {
         background-color: $username-variant2-color !important;
         border-radius: 125px;

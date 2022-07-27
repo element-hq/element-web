@@ -29,7 +29,7 @@ limitations under the License.
     --cornerRadius: 12px;
     --maxWidth: 70%;
 
-    // For both event tile and event list summary
+    /* For both event tile and event list summary */
     --EventTile_bubble-margin-inline-start: 49px;
     --EventTile_bubble-margin-inline-end: 60px;
 
@@ -48,7 +48,7 @@ limitations under the License.
     font-size: $font-14px;
 
     .mx_MessageTimestamp {
-        width: unset; // Cancel the default width
+        width: unset; /* Cancel the default width */
         max-width: var(--MessageTimestamp-max-width);
     }
 
@@ -102,32 +102,33 @@ limitations under the License.
         --EventBubbleTile_line-max-width: 70%;
 
         width: fit-content;
-        max-width: var(--EventBubbleTile_line-max-width); // Align message bubble and displayName
-        line-height: $font-18px; // fixed line height to prevent emoji from being taller than text
+        max-width: var(--EventBubbleTile_line-max-width); /* Align message bubble and displayName */
+        line-height: $font-18px; /* fixed line height to prevent emoji from being taller than text */
     }
 
-    // other users profile on bubble layout
+    /* other users profile on bubble layout */
     > .mx_DisambiguatedProfile {
-        white-space: normal; // display mxid
+        white-space: normal; /* display mxid */
 
         .mx_DisambiguatedProfile_displayName {
-            white-space: nowrap; // truncate long display names
+            white-space: nowrap; /* truncate long display names */
             margin-inline-end: 5px;
 
-            // For RTL displayName
+            /* For RTL displayName */
             unicode-bidi: embed;
             direction: ltr;
         }
 
         .mx_DisambiguatedProfile_mxid {
-            margin-inline-start: 0; // Align mxid with truncated displayName inside mx_EventTile[data-layout="bubble"]
+            margin-inline-start: 0; /* Align mxid with truncated displayName
+                inside mx_EventTile[data-layout="bubble"] */
         }
     }
 
-    // inside mx_RoomView_MessageList, outside of mx_ReplyTile
-    // (on the main panel and the chat panel with a maximized widget)
+    /* inside mx_RoomView_MessageList, outside of mx_ReplyTile */
+    /* (on the main panel and the chat panel with a maximized widget) */
     > .mx_DisambiguatedProfile,
-    // inside a thread, outside of mx_ReplyTile
+    /* inside a thread, outside of mx_ReplyTile */
     .mx_EventTile_senderDetails > .mx_DisambiguatedProfile {
         position: relative;
         top: -2px;
@@ -137,11 +138,11 @@ limitations under the License.
 
     .mx_MessageActionBar {
         top: -28px;
-        z-index: 9; // above the avatar
+        z-index: 9; /* above the avatar */
     }
 
     .mx_MediaBody {
-        // leave space for the timestamp
+        /* leave space for the timestamp */
         padding-right: 48px;
     }
 
@@ -185,7 +186,7 @@ limitations under the License.
 
         .mx_MessageActionBar {
             inset-inline-start: calc(100% - var(--MessageActionBar-size-box));
-            right: initial; // Reset the default value
+            right: initial; /* Reset the default value */
         }
 
         .mx_ThreadSummary {
@@ -216,7 +217,7 @@ limitations under the License.
         }
 
         .mx_EventTile_sticker {
-            // align timestamp with those inside bubbles
+            /* align timestamp with those inside bubbles */
             margin-right: 32px;
         }
 
@@ -238,12 +239,12 @@ limitations under the License.
             justify-content: flex-end;
 
             > :last-child {
-                order: -1; // Moving the "add reaction button" before the reactions
+                order: -1; /* Moving the "add reaction button" before the reactions */
             }
         }
 
         .mx_EventTile_avatar {
-            top: -19px; // height of the sender block
+            top: -19px; /* height of the sender block */
             right: -35px;
         }
 
@@ -267,37 +268,37 @@ limitations under the License.
         border-top-left-radius: var(--cornerRadius);
         border-top-right-radius: var(--cornerRadius);
 
-        // the selector here is quite weird because timestamps can appear linked & unlinked and in different places
-        // in the DOM depending on the specific rendering context
-        > a, // timestamp wrapper anchor
+        /* the selector here is quite weird because timestamps can appear linked & unlinked and in different places */
+        /* in the DOM depending on the specific rendering context */
+        > a, /* timestamp wrapper anchor */
         .mx_MessageActionBar + .mx_MessageTimestamp {
             position: absolute;
             padding: 4px 8px;
             bottom: 0;
             right: 0;
-            z-index: 3; // above media and location share maps
+            z-index: 3; /* above media and location share maps */
         }
 
         &.mx_EventTile_mediaLine {
-            // TODO: Use a common class name instead
+            /* TODO: Use a common class name instead */
             .mx_MFileBody,
             .mx_MAudioBody {
-                max-width: 100%; // avoid overflow
+                max-width: 100%; /* avoid overflow */
             }
 
             .mx_MVoiceMessageBody {
-                // allow the event to be collapsed, this causes the waveform to get cropped
+                /* allow the event to be collapsed, this causes the waveform to get cropped */
                 min-width: 0;
             }
 
-            // we put the timestamps for media (other than stickers) atop the media
-            // for images we also apply a linear gradient and change the timestamp colour to aid readability
+            /* we put the timestamps for media (other than stickers) atop the media */
+            /* for images we also apply a linear gradient and change the timestamp colour to aid readability */
             &.mx_EventTile_image {
                 .mx_MessageTimestamp {
-                    color: #ffffff; // regardless of theme, always visible on the below gradient
+                    color: #ffffff; /* regardless of theme, always visible on the below gradient */
                 }
 
-                // linear gradient to make the timestamp more visible
+                /* linear gradient to make the timestamp more visible */
                 .mx_MImageBody::before {
                     content: "";
                     position: absolute;
@@ -313,9 +314,9 @@ limitations under the License.
         }
 
         &.mx_EventTile_sticker {
-            > a, // timestamp wrapper anchor
+            > a, /* timestamp wrapper anchor */
             .mx_MessageActionBar + .mx_MessageTimestamp {
-                // position timestamps for stickers to the right of the un-bubbled sticker
+                /* position timestamps for stickers to the right of the un-bubbled sticker */
                 right: unset;
                 left: 100%;
             }
@@ -334,7 +335,7 @@ limitations under the License.
             }
         }
 
-        //noinspection CssReplaceWithShorthandSafely
+        /* noinspection CssReplaceWithShorthandSafely */
         .mx_MImageBody .mx_MImageBody_thumbnail_container,
         .mx_MVideoBody .mx_MVideoBody_container,
         .mx_MediaBody {
@@ -344,15 +345,16 @@ limitations under the License.
         }
 
         .mx_EventTile_e2eIcon {
-            flex-shrink: 0; // keep it at full size
+            flex-shrink: 0; /* keep it at full size */
         }
     }
 
     &:not(.mx_EventTile_noBubble) .mx_EventTile_line:not(.mx_EventTile_mediaLine) {
-        // make the top and bottom padding 1px smaller so that we can pad .mx_EventTile_content by 1px
-        // to avoid anti-zalgo cutting off our larger than text emojis.
+        /* make the top and bottom padding 1px smaller so that we can pad
+            .mx_EventTile_content by 1px */
+        /* to avoid anti-zalgo cutting off our larger than text emojis. */
         padding: calc(var(--gutterSize) - 1px);
-        padding-right: 60px; // space for the timestamp
+        padding-right: 60px; /* space for the timestamp */
         background: var(--backgroundColor);
 
         .mx_EventTile_content {
@@ -441,7 +443,7 @@ limitations under the License.
             .mx_EventTile_reply {
                 max-width: 90%;
                 padding: 0;
-                > a, // timestamp wrapper anchor
+                > a, /* timestamp wrapper anchor */
                 .mx_MessageActionBar + .mx_MessageTimestamp {
                     display: none !important;
                 }
@@ -461,11 +463,11 @@ limitations under the License.
     }
 
     .mx_MPollBody {
-        width: 550px; // to prevent timestamp overlapping summary text
-        max-width: 100%; // prevent overflowing a reply tile
+        width: 550px; /* to prevent timestamp overlapping summary text */
+        max-width: 100%; /* prevent overflowing a reply tile */
 
         .mx_MPollBody_totalVotes {
-            // align summary text with corner timestamp
+            /* align summary text with corner timestamp */
             padding: 4px 0;
         }
     }
@@ -490,7 +492,7 @@ limitations under the License.
             .mx_EventTile_keyRequestInfo,
             .mx_ReplyChain_wrapper,
             .mx_ViewSourceEvent {
-                min-width: 0; // Prevent a grid blowout
+                min-width: 0; /* Prevent a grid blowout */
             }
 
             .mx_EventTile_e2eIcon {
@@ -511,9 +513,9 @@ limitations under the License.
         }
 
         &.mx_EventTile_info {
-            // "Unable To Decrypt" layout for hidden events
+            /* "Unable To Decrypt" layout for hidden events */
             .mx_EventTile_line {
-                gap: 0 9px; // 9px: margin value of E2E icon
+                gap: 0 9px; /* 9px: margin value of E2E icon */
                 align-items: center;
                 grid-template:
                     "shield source" auto
@@ -540,14 +542,14 @@ limitations under the License.
     --backgroundColor: transparent;
 
     .mx_EventTile_line.mx_EventTile_emote {
-        padding-right: 60px; // align with bubbles text
+        padding-right: 60px; /* align with bubbles text */
         font-style: italic;
 
-        > a { // timestamp anchor wrapper
+        > a { /* timestamp anchor wrapper */
             align-self: center;
             bottom: unset;
             top: unset;
-            font-style: normal; // undo italic above
+            font-style: normal; /* undo italic above */
         }
 
         .mx_MEmoteBody {
@@ -559,7 +561,7 @@ limitations under the License.
 .mx_EventTile.mx_EventTile_bubbleContainer[data-layout="bubble"],
 .mx_EventTile.mx_EventTile_leftAlignedBubble[data-layout="bubble"] {
     .mx_EventTile_line > a {
-        // hide this timestamp as the tile will render its own
+        /* hide this timestamp as the tile will render its own */
         display: none;
     }
 }
@@ -575,7 +577,7 @@ limitations under the License.
     .mx_EventTile_line,
     .mx_EventTile_info {
         min-width: 100%;
-        // Preserve alignment with left edge of text in bubbles
+        /* Preserve alignment with left edge of text in bubbles */
         margin: 0;
     }
 }
@@ -590,16 +592,16 @@ limitations under the License.
     .mx_EventTile_avatar {
         position: static;
         order: -1;
-        margin-inline-end: var(--EventTile_bubble_gap-inline); // Same spacing between E2E icon and a hidden event
+        margin-inline-end: var(--EventTile_bubble_gap-inline); /* Same spacing between E2E icon and a hidden event */
     }
 
     .mx_EventTile_e2eIcon {
-        margin-inline-start: 0; // mx_EventTile_avatar has margin-inline-end, so margin is not needed here
+        margin-inline-start: 0; /* mx_EventTile_avatar has margin-inline-end, so margin is not needed here */
         align-self: center;
     }
 
     .mx_EventTile_line {
-        > a, // timestamp wrapper anchor
+        > a, /* timestamp wrapper anchor */
         .mx_MessageActionBar + .mx_MessageTimestamp {
             right: auto;
             left: -77px;
@@ -615,13 +617,13 @@ limitations under the License.
 
 .mx_GenericEventListSummary[data-layout="bubble"] {
     .mx_EventTile.mx_EventTile_info .mx_EventTile_line {
-        // Avoid overflow of event info by cancelling width settings
+        /* Avoid overflow of event info by cancelling width settings */
         width: 100%;
         min-width: 0;
         max-width: 100%;
     }
 
-    // increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button
+    /* increase margin between ELS and the next Event to not have our user avatar overlap the expand/collapse button */
     &[data-expanded="false"] + .mx_EventTile[data-layout="bubble"][data-self="true"] {
         margin-top: 20px;
     }
@@ -631,22 +633,22 @@ limitations under the License.
         margin-right: 0;
 
         .mx_MessageActionBar {
-            // Reset .mx_EventTile[data-layout="bubble"][data-self="false"] .mx_MessageActionBar
+            /* Reset .mx_EventTile[data-layout="bubble"][data-self="false"] .mx_MessageActionBar */
             inset-inline-start: initial;
-            inset-inline-end: 48px; // align with that of right-column bubbles
+            inset-inline-end: 48px; /* align with that of right-column bubbles */
         }
 
         .mx_ReadReceiptGroup {
-            // match alignment to RRs of chat bubbles
+            /* match alignment to RRs of chat bubbles */
             inset-inline-end: calc(-1 * var(--ReadReceiptGroup_EventBubbleTile-spacing-end) + 60px);
         }
 
         &::before {
-            inset-inline-end: 0; // match alignment of the hover background to that of chat bubbles
+            inset-inline-end: 0; /* match alignment of the hover background to that of chat bubbles */
         }
     }
 }
 
 .mx_EventTile_tileError[data-layout="bubble"] .mx_EventTile_line {
-    flex-direction: column; // restore the centering
+    flex-direction: column; /* restore the centering */
 }

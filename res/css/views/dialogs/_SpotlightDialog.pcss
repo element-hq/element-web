@@ -20,14 +20,14 @@ limitations under the License.
     position: relative;
     height: 60%;
     padding: 0;
-    contain: unset; // needed for #mx_SpotlightDialog_keyboardPrompt to not be culled
+    contain: unset; /* needed for #mx_SpotlightDialog_keyboardPrompt to not be culled */
 
     #mx_SpotlightDialog_keyboardPrompt {
         position: absolute;
         padding: $spacing-8;
         border-radius: 8px;
         background-color: $background;
-        top: -60px; // relative to the top of the modal
+        top: -60px; /* relative to the top of the modal */
         left: 50%;
         transform: translateX(-50%);
         font-size: $font-12px;
@@ -36,13 +36,13 @@ limitations under the License.
 
         kbd {
             display: inline-block;
-            padding: 2px $spacing-4; // TODO: Use a spacing variable
+            padding: 2px $spacing-4; /* TODO: Use a spacing variable */
             margin: 0 $spacing-4;
             border-radius: 6px;
             background-color: $quinary-content;
             vertical-align: middle;
             color: $tertiary-content;
-            // To avoid any styling inherent with <kbd> elements
+            /* To avoid any styling inherent with <kbd> elements */
             font-family: inherit;
             font-weight: inherit;
             font-size: inherit;
@@ -76,7 +76,7 @@ limitations under the License.
             vertical-align: middle;
             color: $primary-content;
             position: relative;
-            padding: $spacing-4 $spacing-8 $spacing-4 37px; // TODO: Use a spacing variable
+            padding: $spacing-4 $spacing-8 $spacing-4 37px; /* TODO: Use a spacing variable */
 
             &::before {
                 background-color: $secondary-content;
@@ -190,7 +190,7 @@ limitations under the License.
                 display: flex;
                 white-space: nowrap;
                 overflow-x: hidden;
-                margin-right: 1px; // occlude the 1px visible of the very next tile to prevent it looking broken
+                margin-right: 1px; /* occlude the 1px visible of the very next tile to prevent it looking broken */
             }
 
             .mx_SpotlightDialog_option {
@@ -209,7 +209,7 @@ limitations under the License.
                 text-overflow: ellipsis;
 
                 .mx_DecoratedRoomAvatar {
-                    margin: 0 9px $spacing-4; // maintain centering
+                    margin: 0 9px $spacing-4; /* maintain centering */
                 }
 
                 & + .mx_SpotlightDialog_option {
@@ -227,7 +227,7 @@ limitations under the License.
         .mx_SpotlightDialog_otherSearches,
         .mx_SpotlightDialog_hiddenResults {
             .mx_SpotlightDialog_option {
-                padding: 6px $spacing-4; // TODO: Use a spacing variable
+                padding: 6px $spacing-4; /* TODO: Use a spacing variable */
                 border-radius: 8px;
                 font-size: $font-15px;
                 line-height: $font-24px;
@@ -251,11 +251,11 @@ limitations under the License.
 
                     .mx_AccessibleButton {
                         padding: $spacing-4 $spacing-20;
-                        margin: 2px $spacing-4; // TODO: Use a spacing variable
+                        margin: 2px $spacing-4; /* TODO: Use a spacing variable */
                     }
 
                     .mx_SpotlightDialog_enterPrompt {
-                        margin-top: 9px; // TODO: Use a spacing variable
+                        margin-top: 9px; /* TODO: Use a spacing variable */
                         margin-right: $spacing-8;
                     }
                 }
@@ -370,7 +370,7 @@ limitations under the License.
             .mx_AccessibleButton {
                 position: relative;
                 margin: 0;
-                padding: 3px $spacing-8 3px $spacing-28; // TODO: Use a spacing variable
+                padding: 3px $spacing-8 3px $spacing-28; /* TODO: Use a spacing variable */
 
                 &::before {
                     content: "";
@@ -471,8 +471,8 @@ limitations under the License.
         }
 
         .mx_SpotlightDialog_enterPrompt {
-            padding: 2px $spacing-4; // TODO: Use a spacing variable
-            // To avoid any styling inherent with <kbd> elements
+            padding: 2px $spacing-4; /* TODO: Use a spacing variable */
+            /* To avoid any styling inherent with <kbd> elements */
             font-family: inherit;
             font-weight: inherit;
             font-size: $font-12px;

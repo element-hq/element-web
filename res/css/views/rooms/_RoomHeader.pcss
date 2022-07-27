@@ -161,18 +161,18 @@ limitations under the License.
     max-height: calc($lineHeight * $lines);
     border-bottom: 1px solid transparent;
 
-    // to align baseline of topic with room name
+    /* to align baseline of topic with room name */
     margin: 4px 7px 0;
 
     overflow: hidden;
-    -webkit-line-clamp: $lines; // See: https://drafts.csswg.org/css-overflow-3/#webkit-line-clamp
+    -webkit-line-clamp: $lines; /* See: https://drafts.csswg.org/css-overflow-3/#webkit-line-clamp */
     -webkit-box-orient: vertical;
     display: -webkit-box;
 }
 
 .mx_RoomHeader_topic .mx_Emoji {
-    // Undo font size increase to prevent vertical cropping and ensure the same size
-    // as in plain text emojis
+    /* Undo font size increase to prevent vertical cropping and ensure the same size */
+    /* as in plain text emojis */
     font-size: inherit;
 }
 
@@ -198,8 +198,8 @@ limitations under the License.
     &::before {
         content: '';
         position: absolute;
-        top: 4px; // center with parent of 32px
-        left: 4px; // center with parent of 32px
+        top: 4px; /* center with parent of 32px */
+        left: 4px; /* center with parent of 32px */
         height: 24px;
         width: 24px;
         background-color: $icon-button-color;
@@ -240,8 +240,8 @@ limitations under the License.
 .mx_RoomHeader_voiceCallButton::before {
     mask-image: url('$(res)/img/element-icons/call/voice-call.svg');
 
-    // The call button SVG is padded slightly differently, so match it up to the size
-    // of the other icons
+    /* The call button SVG is padded slightly differently, so match it up to the size */
+    /* of the other icons */
     mask-size: 20px;
     mask-position: center;
 }

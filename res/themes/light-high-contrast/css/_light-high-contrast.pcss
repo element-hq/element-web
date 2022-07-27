@@ -1,4 +1,4 @@
-//// Reference: https://www.figma.com/file/RnLKnv09glhxGIZtn8zfmh/UI-Themes-%26-Accessibility?node-id=321%3A65847
+/* Reference: https://www.figma.com/file/RnLKnv09glhxGIZtn8zfmh/UI-Themes-%26-Accessibility?node-id=321%3A65847 */
 $accent: #268075;
 $alert: #D62C25;
 $links: #0A6ECA;
@@ -39,7 +39,7 @@ $roomtopic-color: $secondary-content;
 }
 
 @define-mixin mx_DialogButton_secondary {
-    // flip colours for the secondary ones
+    /* flip colours for the secondary ones */
     font-weight: 600;
     border: 1px solid $accent !important;
     color: $accent;
@@ -51,22 +51,22 @@ $roomtopic-color: $secondary-content;
     text-decoration: none;
 }
 
-// Draw an outline on buttons with focus
+/* Draw an outline on buttons with focus */
 .mx_AccessibleButton:focus {
     outline: 2px solid $accent;
     outline-offset: 2px;
 }
 
-// Add padding (and remove margin to compensate), so the outline is not
-// chopped off on the left
+/* Add padding (and remove margin to compensate), so the outline is not */
+/* chopped off on the left */
 .mx_TabbedView_tabPanel {
-    margin-left: 236px !important;  // Remove 4 to allow 4 in mx_SettingsTab
+    margin-left: 236px !important;  /* Remove 4 to allow 4 in mx_SettingsTab */
 }
 .mx_SettingsTab {
     padding-left: 4px !important;
 }
 .mx_BaseCard {
-    padding-left: 4px !important;  // Remove 4 to allow 4 in mx_BaseCard_Group
+    padding-left: 4px !important;  /* Remove 4 to allow 4 in mx_BaseCard_Group */
 }
 .mx_BaseCard_Group {
     padding-left: 4px !important;

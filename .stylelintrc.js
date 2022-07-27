@@ -48,5 +48,6 @@ module.exports = {
         "selector-no-vendor-prefix": null,
         "media-feature-name-no-vendor-prefix": null,
         "number-max-precision": null,
+        "no-invalid-double-slash-comments": true,
     },
 }

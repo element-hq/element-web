@@ -28,10 +28,10 @@ $activeBorderColor: $primary-content;
     padding: 0;
     margin: 0;
     position: relative;
-    // Fix for the blurred avatar-background
+    /* Fix for the blurred avatar-background */
     z-index: 1;
 
-    // Create another flexbox so the Panel fills the container
+    /* Create another flexbox so the Panel fills the container */
     display: flex;
     flex-direction: column;
 
@@ -41,7 +41,7 @@ $activeBorderColor: $primary-content;
         height: 18px;
         border-radius: 50%;
         background-color: $tertiary-content;
-        top: 19px; // v-align with avatar
+        top: 19px; /* v-align with avatar */
         right: -8px;
 
         &::before {
@@ -233,7 +233,7 @@ $activeBorderColor: $primary-content;
             &::before {
                 background-color: $primary-content;
                 mask-image: url('$(res)/img/element-icons/plus.svg');
-                transition: all .2s ease-in-out; // TODO transition
+                transition: all .2s ease-in-out; /* TODO transition */
             }
         }
 
@@ -247,7 +247,7 @@ $activeBorderColor: $primary-content;
 
         .mx_SpaceButton_menuButton {
             width: 20px;
-            min-width: 20px; // yay flex
+            min-width: 20px; /* yay flex */
             height: 20px;
             margin-top: auto;
             margin-bottom: auto;
@@ -282,7 +282,7 @@ $activeBorderColor: $primary-content;
             color: $secondary-content;
             border-radius: 8px;
             background-color: $panel-actions;
-            font-size: $font-15px !important; // override inline style
+            font-size: $font-15px !important; /* override inline style */
             font-weight: $font-semi-bold;
             line-height: $font-18px;
 
@@ -297,7 +297,7 @@ $activeBorderColor: $primary-content;
     }
 
     .mx_SpacePanel_badgeContainer {
-        // Create a flexbox to make aligning dot badges easier
+        /* Create a flexbox to make aligning dot badges easier */
         display: flex;
         align-items: center;
         position: absolute;
@@ -305,12 +305,12 @@ $activeBorderColor: $primary-content;
         top: -3px;
 
         .mx_NotificationBadge {
-            margin: 0 2px; // centering
+            margin: 0 2px; /* centering */
             background-clip: padding-box;
         }
 
         .mx_NotificationBadge_dot {
-            // make the smaller dot occupy the same width for centering
+            /* make the smaller dot occupy the same width for centering */
             margin: 0 -1px 0 0;
             border: 3px solid $spacePanel-bg-color;
         }
@@ -421,7 +421,7 @@ $activeBorderColor: $primary-content;
         display: none;
 
         & + .mx_IconizedContextMenu_label {
-            padding-left: 5px !important; // override default iconized label style to align with header
+            padding-left: 5px !important; /* override default iconized label style to align with header */
         }
     }
 

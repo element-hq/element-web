@@ -70,7 +70,7 @@ limitations under the License.
 
 .mx_RoomStatusBar_unsentMessages {
     > div[role="alert"] {
-        // cheat some basic alignment
+        /* cheat some basic alignment */
         display: flex;
         align-items: center;
         min-height: 70px;
@@ -84,13 +84,13 @@ limitations under the License.
         margin-right: 12px;
 
         .mx_NotificationBadge {
-            // Override sizing from the default badge
+            /* Override sizing from the default badge */
             width: 24px !important;
             height: 24px !important;
             border-radius: 24px !important;
 
             .mx_NotificationBadge_count {
-                font-size: $font-16px !important; // override default
+                font-size: $font-16px !important; /* override default */
             }
         }
     }
@@ -112,7 +112,7 @@ limitations under the License.
 
         .mx_AccessibleButton {
             padding: 5px 10px;
-            padding-left: 30px; // 18px for the icon, 2px margin to text, 10px regular padding
+            padding-left: 30px; /* 18px for the icon, 2px margin to text, 10px regular padding */
             display: inline-block;
             position: relative;
 
@@ -123,14 +123,14 @@ limitations under the License.
             &::before {
                 content: '';
                 position: absolute;
-                left: 10px; // inset for regular button padding
+                left: 10px; /* inset for regular button padding */
                 background-color: $muted-fg-color;
                 mask-repeat: no-repeat;
                 mask-position: center;
                 mask-size: contain;
                 width: 18px;
                 height: 18px;
-                top: 50%; // text sizes are dynamic
+                top: 50%; /* text sizes are dynamic */
                 transform: translateY(-50%);
             }
 
@@ -139,7 +139,7 @@ limitations under the License.
             }
 
             &.mx_RoomStatusBar_unsentRetry {
-                padding-left: 34px; // 28px from above, but +6px to account for the wider icon
+                padding-left: 34px; /* 28px from above, but +6px to account for the wider icon */
 
                 &::before {
                     mask-image: url('$(res)/img/element-icons/retry.svg');
@@ -150,10 +150,10 @@ limitations under the License.
         .mx_InlineSpinner {
             vertical-align: middle;
             margin-right: 5px;
-            top: 1px; // just to help the vertical alignment be slightly better
+            top: 1px; /* just to help the vertical alignment be slightly better */
 
             & + span {
-                margin-right: 10px; // same margin/padding as the rightmost button
+                margin-right: 10px; /* same margin/padding as the rightmost button */
             }
         }
     }

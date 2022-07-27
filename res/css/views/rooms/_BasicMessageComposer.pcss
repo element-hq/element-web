@@ -44,8 +44,8 @@ limitations under the License.
         outline: none;
         overflow-x: hidden;
 
-        // Force caret nodes to be selected in full so that they can be
-        // navigated through in a single keypress
+        /* Force caret nodes to be selected in full so that they can be */
+        /* navigated through in a single keypress */
         .caretNode {
             user-select: all;
         }
@@ -56,22 +56,22 @@ limitations under the License.
             span.mx_SpacePill {
                 user-select: all;
                 position: relative;
-                cursor: unset; // We don't want indicate clickability
+                cursor: unset; /* We don't want indicate clickability */
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
 
                 &:hover {
-                    // We don't want indicate clickability | To override the overriding of .markdown-body
+                    /* We don't want indicate clickability | To override the overriding of .markdown-body */
                     background-color: $pill-bg-color !important;
                 }
 
-                // avatar psuedo element
+                /* avatar psuedo element */
                 &::before {
                     display: inline-block;
                     content: var(--avatar-letter);
                     width: $font-16px;
-                    min-width: $font-16px; // ensure the avatar is not compressed
+                    min-width: $font-16px; /* ensure the avatar is not compressed */
                     height: $font-16px;
                     margin-inline-end: 0.24rem;
                     background: var(--avatar-background), $background;
@@ -88,7 +88,7 @@ limitations under the License.
         }
 
         &.mx_BasicMessageComposer_input_disabled {
-            // Ignore all user input to avoid accidentally triggering the composer
+            /* Ignore all user input to avoid accidentally triggering the composer */
             pointer-events: none;
         }
     }
