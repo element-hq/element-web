@@ -1305,19 +1305,17 @@ export const Commands = [
             description: effect.description(),
             args: '<message>',
             runFn: function(roomId, args) {
-                return success((async () => {
-                    if (!args) {
-                        args = effect.fallbackMessage();
-                        MatrixClientPeg.get().sendEmoteMessage(roomId, args);
-                    } else {
-                        const content = {
-                            msgtype: effect.msgType,
-                            body: args,
-                        };
-                        MatrixClientPeg.get().sendMessage(roomId, content);
-                    }
-                    dis.dispatch({ action: `effects.${effect.command}` });
-                })());
+                let content: IContent;
+                if (!args) {
+                    content = ContentHelpers.makeEmoteMessage(effect.fallbackMessage());
+                } else {
+                    content = {
+                        msgtype: effect.msgType,
+                        body: args,
+                    };
+                }
+                dis.dispatch({ action: `effects.${effect.command}` });
+                return successSync(content);
             },
             category: CommandCategories.effects,
             renderingTypes: [TimelineRenderingType.Room],

@@ -65,7 +65,7 @@ export async function runSlashCommand(
     let error = result.error;
     if (result.promise) {
         try {
-            if (cmd.category === CommandCategories.messages) {
+            if (cmd.category === CommandCategories.messages || cmd.category === CommandCategories.effects) {
                 messageContent = await result.promise;
             } else {
                 await result.promise;

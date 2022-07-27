@@ -358,12 +358,13 @@ export class SendMessageComposer extends React.Component<ISendMessageComposerPro
                     return; // errored
                 }
 
-                if (cmd.category === CommandCategories.messages) {
+                if (cmd.category === CommandCategories.messages || cmd.category === CommandCategories.effects) {
                     attachRelation(content, this.props.relation);
                     if (replyToEvent) {
                         addReplyToMessageContent(content, replyToEvent, {
                             permalinkCreator: this.props.permalinkCreator,
-                            includeLegacyFallback: true,
+                            // Exclude the legacy fallback for custom event types such as those used by /fireworks
+                            includeLegacyFallback: content.msgtype?.startsWith("m.") ?? true,
                         });
                     }
                 } else {
