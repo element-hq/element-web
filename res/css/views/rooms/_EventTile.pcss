@@ -609,6 +609,11 @@ $left-gutter: 64px;
             display: inline-block;
         }
         */
+
+        /* Override nested lists being lower-roman */
+        ol ol, ul ol {
+            list-style-type: revert;
+        }
     }
 }
 
