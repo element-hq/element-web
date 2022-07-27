@@ -66,7 +66,7 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
             this.setState({ showJumpToDate });
         });
 
-        cli.doesServerSupportUnstableFeature("org.matrix.msc3827").then((showExploringPublicSpaces) => {
+        cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable").then((showExploringPublicSpaces) => {
             this.setState({ showExploringPublicSpaces });
         });
 

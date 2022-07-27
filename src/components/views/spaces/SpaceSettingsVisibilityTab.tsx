@@ -40,7 +40,7 @@ interface IProps {
 const SpaceSettingsVisibilityTab = ({ matrixClient: cli, space, closeSettingsFn }: IProps) => {
     const [error, setError] = useState("");
     const serverSupportsExploringSpaces = useAsyncMemo<boolean>(async () => {
-        return cli.doesServerSupportUnstableFeature("org.matrix.msc3827");
+        return cli.doesServerSupportUnstableFeature("org.matrix.msc3827.stable");
     }, [cli], false);
 
     const userId = cli.getUserId();
