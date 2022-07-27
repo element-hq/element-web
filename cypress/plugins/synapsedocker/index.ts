@@ -19,12 +19,12 @@ limitations under the License.
 import * as path from "path";
 import * as os from "os";
 import * as crypto from "crypto";
-import * as childProcess from "child_process";
 import * as fse from "fs-extra";
-import * as net from "net";
 
 import PluginEvents = Cypress.PluginEvents;
 import PluginConfigOptions = Cypress.PluginConfigOptions;
+import { getFreePort } from "../utils/port";
+import { dockerExec, dockerLogs, dockerRun, dockerStop } from "../docker";
 
 // A cypress plugins to add command to start & stop synapses in
 // docker with preset templates.
@@ -45,16 +45,6 @@ const synapses = new Map<string, SynapseInstance>();
 
 function randB64Bytes(numBytes: number): string {
     return crypto.randomBytes(numBytes).toString("base64").replace(/=*$/, "");
-}
-
-async function getFreePort(): Promise<number> {
-    return new Promise<number>(resolve => {
-        const srv = net.createServer();
-        srv.listen(0, () => {
-            const port = (<net.AddressInfo>srv.address()).port;
-            srv.close(() => resolve(port));
-        });
-    });
 }
 
 async function cfgDirFromTemplate(template: string): Promise<SynapseConfig> {
@@ -109,37 +99,22 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
 
     console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
 
-    const containerName = `react-sdk-cypress-synapse-${crypto.randomBytes(4).toString("hex")}`;
-    const userInfo = os.userInfo();
-
-    let userParams: string[] = [];
-    if (userInfo.uid >= 0) {
-        // On *nix we run the docker container as our uid:gid otherwise cleaning it up its media_store can be difficult
-        userParams = ["-u", `${userInfo.uid}:${userInfo.gid}`];
-    }
-
-    const synapseId = await new Promise<string>((resolve, reject) => {
-        childProcess.execFile('docker', [
-            "run",
-            "--name", containerName,
-            "-d",
+    const synapseId = await dockerRun({
+        image: "matrixdotorg/synapse:develop",
+        containerName: `react-sdk-cypress-synapse-${crypto.randomBytes(4).toString("hex")}`,
+        params: [
+            "--rm",
             "-v", `${synCfg.configDir}:/data`,
             "-p", `${synCfg.port}:8008/tcp`,
-            ...userParams,
-            "matrixdotorg/synapse:develop",
-            "run",
-        ], (err, stdout) => {
-            if (err) reject(err);
-            resolve(stdout.trim());
-        });
+        ],
     });
 
     console.log(`Started synapse with id ${synapseId} on port ${synCfg.port}.`);
 
     // Await Synapse healthcheck
-    await new Promise<void>((resolve, reject) => {
-        childProcess.execFile("docker", [
-            "exec", synapseId,
+    await dockerExec({
+        containerId: synapseId,
+        params: [
             "curl",
             "--connect-timeout", "30",
             "--retry", "30",
@@ -147,10 +122,7 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
             "--retry-all-errors",
             "--silent",
             "http://localhost:8008/health",
-        ], { encoding: 'utf8' }, (err, stdout) => {
-            if (err) reject(err);
-            else resolve();
-        });
+        ],
     });
 
     const synapse: SynapseInstance = { synapseId, ...synCfg };
@@ -163,43 +135,18 @@ async function synapseStop(id: string): Promise<void> {
 
     if (!synCfg) throw new Error("Unknown synapse ID");
 
-    try {
-        const synapseLogsPath = path.join("cypress", "synapselogs", id);
-        await fse.ensureDir(synapseLogsPath);
+    const synapseLogsPath = path.join("cypress", "synapselogs", id);
+    await fse.ensureDir(synapseLogsPath);
 
-        const stdoutFile = await fse.open(path.join(synapseLogsPath, "stdout.log"), "w");
-        const stderrFile = await fse.open(path.join(synapseLogsPath, "stderr.log"), "w");
-        await new Promise<void>((resolve, reject) => {
-            childProcess.spawn('docker', [
-                "logs",
-                id,
-            ], {
-                stdio: ["ignore", stdoutFile, stderrFile],
-            }).once('close', resolve);
-        });
-        await fse.close(stdoutFile);
-        await fse.close(stderrFile);
+    await dockerLogs({
+        containerId: id,
+        stdoutFile: path.join(synapseLogsPath, "stdout.log"),
+        stderrFile: path.join(synapseLogsPath, "stderr.log"),
+    });
 
-        await new Promise<void>((resolve, reject) => {
-            childProcess.execFile('docker', [
-                "stop",
-                id,
-            ], err => {
-                if (err) reject(err);
-                resolve();
-            });
-        });
-    } finally {
-        await new Promise<void>((resolve, reject) => {
-            childProcess.execFile('docker', [
-                "rm",
-                id,
-            ], err => {
-                if (err) reject(err);
-                resolve();
-            });
-        });
-    }
+    await dockerStop({
+        containerId: id,
+    });
 
     await fse.remove(synCfg.configDir);
 
@@ -207,7 +154,7 @@ async function synapseStop(id: string): Promise<void> {
 
     console.log(`Stopped synapse id ${id}.`);
     // cypress deliberately fails if you return 'undefined', so
-    // return null to signal all is well and we've handled the task.
+    // return null to signal all is well, and we've handled the task.
     return null;
 }
 
