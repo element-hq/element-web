@@ -25,6 +25,7 @@ import {
     getBeaconInfoIdentifier,
 } from 'matrix-js-sdk/src/matrix';
 import maplibregl from 'maplibre-gl';
+import { mocked } from 'jest-mock';
 
 import BeaconViewDialog from '../../../../src/components/views/beacon/BeaconViewDialog';
 import {
@@ -103,6 +104,7 @@ describe('<BeaconViewDialog />', () => {
 
     beforeEach(() => {
         jest.spyOn(OwnBeaconStore.instance, 'getLiveBeaconIds').mockRestore();
+        jest.spyOn(OwnBeaconStore.instance, 'getBeaconById').mockRestore();
         jest.spyOn(global.Date, 'now').mockReturnValue(now);
         jest.clearAllMocks();
     });
@@ -193,7 +195,24 @@ describe('<BeaconViewDialog />', () => {
         expect(mockMap.fitBounds).toHaveBeenCalledTimes(1);
     });
 
-    it('renders a fallback when no live beacons remain', () => {
+    it('renders a fallback when there are no locations', () => {
+        // this is a cornercase, should not be a reachable state in UI anymore
+        const onFinished = jest.fn();
+        const room = setupRoom([defaultEvent]);
+        room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
+        const component = getComponent({ onFinished });
+
+        // map placeholder
+        expect(findByTestId(component, 'beacon-view-dialog-map-fallback')).toMatchSnapshot();
+
+        act(() => {
+            findByTestId(component, 'beacon-view-dialog-fallback-close').at(0).simulate('click');
+        });
+
+        expect(onFinished).toHaveBeenCalled();
+    });
+
+    it('renders map without markers when no live beacons remain', () => {
         const onFinished = jest.fn();
         const room = setupRoom([defaultEvent]);
         const beacon = room.currentState.beacons.get(getBeaconInfoIdentifier(defaultEvent));
@@ -206,8 +225,13 @@ describe('<BeaconViewDialog />', () => {
         const anotherBeaconEvent = makeBeaconInfoEvent(aliceId,
             roomId,
             { isLive: false },
-            '$bob-room1-1',
+            '$alice-room1-2',
         );
+
+        expect(mockMap.setCenter).toHaveBeenCalledWith({ lat: 51, lon: 41 });
+        // reset call counts
+        mocked(mockMap.setCenter).mockClear();
+        mocked(mockMap.fitBounds).mockClear();
 
         act(() => {
             // emits RoomStateEvent.BeaconLiveness
@@ -216,14 +240,13 @@ describe('<BeaconViewDialog />', () => {
 
         component.setProps({});
 
-        // map placeholder
-        expect(findByTestId(component, 'beacon-view-dialog-map-fallback')).toMatchSnapshot();
-
-        act(() => {
-            findByTestId(component, 'beacon-view-dialog-fallback-close').at(0).simulate('click');
-        });
-
-        expect(onFinished).toHaveBeenCalled();
+        // no more avatars
+        expect(component.find('MemberAvatar').length).toBeFalsy();
+        // map still rendered
+        expect(component.find('Map').length).toBeTruthy();
+        // map location unchanged
+        expect(mockMap.setCenter).not.toHaveBeenCalled();
+        expect(mockMap.fitBounds).not.toHaveBeenCalled();
     });
 
     describe('sidebar', () => {

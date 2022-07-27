@@ -135,9 +135,11 @@ exports[`<DialogSidebar /> renders sidebar correctly without beacons 1`] = `
         />
       </div>
     </div>
-    <ol
-      class="mx_DialogSidebar_list"
-    />
+    <div
+      class="mx_DialogSidebar_noResults"
+    >
+      No live locations
+    </div>
   </div>
   );
 </div>

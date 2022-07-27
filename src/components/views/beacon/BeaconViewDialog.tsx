@@ -68,7 +68,7 @@ const getBoundsCenter = (bounds: Bounds): string | undefined => {
     });
 };
 
-const useInitialMapPosition = (liveBeacons: Beacon[], { beacon, ts }: FocusedBeaconState): {
+const useMapPosition = (liveBeacons: Beacon[], { beacon, ts }: FocusedBeaconState): {
     bounds?: Bounds; centerGeoUri: string;
 } => {
     const [bounds, setBounds] = useState<Bounds | undefined>(getBeaconBounds(liveBeacons));
@@ -113,7 +113,7 @@ const BeaconViewDialog: React.FC<IProps> = ({
 
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-    const { bounds, centerGeoUri } = useInitialMapPosition(liveBeacons, focusedBeaconState);
+    const { bounds, centerGeoUri } = useMapPosition(liveBeacons, focusedBeaconState);
 
     const [mapDisplayError, setMapDisplayError] = useState<Error>();
 
@@ -135,7 +135,7 @@ const BeaconViewDialog: React.FC<IProps> = ({
             fixedWidth={false}
         >
             <MatrixClientContext.Provider value={matrixClient}>
-                { (!!liveBeacons?.length && !mapDisplayError) && <Map
+                { (centerGeoUri && !mapDisplayError) && <Map
                     id='mx_BeaconViewDialog'
                     bounds={bounds}
                     centerGeoUri={centerGeoUri}
@@ -162,7 +162,7 @@ const BeaconViewDialog: React.FC<IProps> = ({
                         isMinimised
                     />
                 }
-                { !liveBeacons?.length && !mapDisplayError &&
+                { !centerGeoUri && !mapDisplayError &&
                     <MapFallback
                         data-test-id='beacon-view-dialog-map-fallback'
                         className='mx_BeaconViewDialog_map'

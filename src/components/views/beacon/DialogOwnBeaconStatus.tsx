@@ -20,7 +20,6 @@ import { LocationAssetType } from 'matrix-js-sdk/src/@types/location';
 
 import { OwnBeaconStore, OwnBeaconStoreEvent } from '../../../stores/OwnBeaconStore';
 import { useEventEmitterState } from '../../../hooks/useEventEmitter';
-import { OwnProfileStore } from '../../../stores/OwnProfileStore';
 import OwnBeaconStatus from './OwnBeaconStatus';
 import { BeaconDisplayStatus } from './displayStatus';
 import MatrixClientContext from '../../../contexts/MatrixClientContext';
@@ -33,7 +32,7 @@ interface Props {
 
 const useOwnBeacon = (roomId: Room['roomId']): Beacon | undefined => {
     const ownBeacon = useEventEmitterState(
-        OwnProfileStore.instance,
+        OwnBeaconStore.instance,
         OwnBeaconStoreEvent.LivenessChange,
         () => {
             const [ownBeaconId] = OwnBeaconStore.instance.getLiveBeaconIds(roomId);

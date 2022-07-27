@@ -46,13 +46,18 @@ const DialogSidebar: React.FC<Props> = ({
                 <CloseIcon className='mx_DialogSidebar_closeButtonIcon' />
             </AccessibleButton>
         </div>
-        <ol className='mx_DialogSidebar_list'>
-            { beacons.map((beacon) => <BeaconListItem
-                key={beacon.identifier}
-                beacon={beacon}
-                onClick={() => onBeaconClick(beacon)}
-            />) }
-        </ol>
+        { beacons?.length
+            ? <ol className='mx_DialogSidebar_list'>
+                { beacons.map((beacon) => <BeaconListItem
+                    key={beacon.identifier}
+                    beacon={beacon}
+                    onClick={() => onBeaconClick(beacon)}
+                />) }
+            </ol>
+            : <div className='mx_DialogSidebar_noResults'>
+                { _t('No live locations') }
+            </div>
+        }
     </div>;
 };
 
