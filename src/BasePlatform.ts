@@ -151,7 +151,7 @@ export default abstract class BasePlatform {
      * Return true if platform supports multi-language
      * spell-checking, otherwise false.
      */
-    public supportsMultiLanguageSpellCheck(): boolean {
+    public supportsSpellCheckSettings(): boolean {
         return false;
     }
 
@@ -273,6 +273,12 @@ export default abstract class BasePlatform {
     }
 
     public setLanguage(preferredLangs: string[]) {}
+
+    public setSpellCheckEnabled(enabled: boolean): void {}
+
+    public async getSpellCheckEnabled(): Promise<boolean> {
+        return null;
+    }
 
     public setSpellCheckLanguages(preferredLangs: string[]) {}
 

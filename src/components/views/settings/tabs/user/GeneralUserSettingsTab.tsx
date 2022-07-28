@@ -50,6 +50,8 @@ import ChangePassword from "../../ChangePassword";
 import InlineTermsAgreement from "../../../terms/InlineTermsAgreement";
 import SetIdServer from "../../SetIdServer";
 import SetIntegrationManager from "../../SetIntegrationManager";
+import ToggleSwitch from "../../../elements/ToggleSwitch";
+import { IS_MAC } from "../../../../../Keyboard";
 
 interface IProps {
     closeSettingsFn: () => void;
@@ -57,6 +59,7 @@ interface IProps {
 
 interface IState {
     language: string;
+    spellCheckEnabled: boolean;
     spellCheckLanguages: string[];
     haveIdServer: boolean;
     serverSupportsSeparateAddAndBind: boolean;
@@ -85,6 +88,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
         this.state = {
             language: languageHandler.getCurrentLanguage(),
+            spellCheckEnabled: false,
             spellCheckLanguages: [],
             haveIdServer: Boolean(MatrixClientPeg.get().getIdentityServerUrl()),
             serverSupportsSeparateAddAndBind: null,
@@ -126,10 +130,16 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
     }
 
     public async componentDidMount(): Promise<void> {
-        const plaf = PlatformPeg.get();
-        if (plaf) {
+        const plat = PlatformPeg.get();
+        const [spellCheckEnabled, spellCheckLanguages] = await Promise.all([
+            plat.getSpellCheckEnabled(),
+            plat.getSpellCheckLanguages(),
+        ]);
+
+        if (spellCheckLanguages) {
             this.setState({
-                spellCheckLanguages: await plaf.getSpellCheckLanguages(),
+                spellCheckEnabled,
+                spellCheckLanguages,
             });
         }
     }
@@ -238,11 +248,12 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
     private onSpellCheckLanguagesChange = (languages: string[]): void => {
         this.setState({ spellCheckLanguages: languages });
+        PlatformPeg.get()?.setSpellCheckLanguages(languages);
+    };
 
-        const plaf = PlatformPeg.get();
-        if (plaf) {
-            plaf.setSpellCheckLanguages(languages);
-        }
+    private onSpellCheckEnabledChange = (spellCheckEnabled: boolean): void => {
+        this.setState({ spellCheckEnabled });
+        PlatformPeg.get()?.setSpellCheckEnabled(spellCheckEnabled);
     };
 
     private onPasswordChangeError = (err): void => {
@@ -368,12 +379,18 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
     private renderSpellCheckSection(): JSX.Element {
         return (
-            <div className="mx_SettingsTab_section">
-                <span className="mx_SettingsTab_subheading">{ _t("Spell check dictionaries") }</span>
-                <SpellCheckSettings
+            <div className="mx_SettingsTab_section mx_SettingsTab_section_spellcheck">
+                <span className="mx_SettingsTab_subheading">
+                    { _t("Spell check") }
+                    <ToggleSwitch
+                        checked={this.state.spellCheckEnabled}
+                        onChange={this.onSpellCheckEnabledChange}
+                    />
+                </span>
+                { (this.state.spellCheckEnabled && !IS_MAC) && <SpellCheckSettings
                     languages={this.state.spellCheckLanguages}
                     onLanguagesChange={this.onSpellCheckLanguagesChange}
-                />
+                /> }
             </div>
         );
     }
@@ -449,7 +466,7 @@ export default class GeneralUserSettingsTab extends React.Component<IProps, ISta
 
     public render(): JSX.Element {
         const plaf = PlatformPeg.get();
-        const supportsMultiLanguageSpellCheck = plaf.supportsMultiLanguageSpellCheck();
+        const supportsMultiLanguageSpellCheck = plaf.supportsSpellCheckSettings();
 
         const discoWarning = this.state.requiredPolicyInfo.hasTerms
             ? <img

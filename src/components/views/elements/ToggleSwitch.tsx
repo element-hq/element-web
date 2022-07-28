@@ -25,7 +25,7 @@ interface IProps {
     checked: boolean;
 
     // Whether or not the user can interact with the switch
-    disabled: boolean;
+    disabled?: boolean;
 
     // Called when the checked state changes. First argument will be the new state.
     onChange(checked: boolean): void;

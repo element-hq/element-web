@@ -72,6 +72,7 @@ export default class SpellCheckLanguages extends React.Component<SpellCheckLangu
         e.preventDefault();
 
         const language = this.state.newLanguage;
+        this.setState({ newLanguage: "" });
 
         if (!language) return;
         if (this.props.languages.includes(language)) return;

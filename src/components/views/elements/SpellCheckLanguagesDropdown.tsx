@@ -116,7 +116,9 @@ export default class SpellCheckLanguagesDropdown extends React.Component<SpellCh
             onSearchChange={this.onSearchChange}
             searchEnabled={true}
             value={value}
-            label={_t("Language Dropdown")}>
+            label={_t("Language Dropdown")}
+            placeholder={_t("Choose a locale")}
+        >
             { options }
         </Dropdown>;
     }

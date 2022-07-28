@@ -82,6 +82,8 @@ interface IProps {
     // width.
     menuWidth?: number;
     searchEnabled?: boolean;
+    // Placeholder to show when no value is selected
+    placeholder?: string;
     // Called when the selected option changes
     onOptionChange(dropdownKey: string): void;
     // Called when the value of the search field changes
@@ -362,7 +364,7 @@ export default class Dropdown extends React.Component<IProps, IState> {
                 this.props.getShortOption(this.props.value) :
                 this.childrenByKey[this.props.value];
             currentValue = <div className="mx_Dropdown_option" id={`${this.props.id}_value`}>
-                { selectedChild }
+                { selectedChild || this.props.placeholder }
             </div>;
         }
 
