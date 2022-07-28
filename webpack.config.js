@@ -187,8 +187,9 @@ module.exports = (env, argv) => {
                 "react": path.resolve(__dirname, 'node_modules/react'),
                 "react-dom": path.resolve(__dirname, 'node_modules/react-dom'),
 
-                // same goes for js-sdk - we don't need two copies.
+                // Same goes for js/react-sdk - we don't need two copies.
                 "matrix-js-sdk": path.resolve(__dirname, 'node_modules/matrix-js-sdk'),
+                "matrix-react-sdk": path.resolve(__dirname, 'node_modules/matrix-react-sdk'),
                 // and prop-types and sanitize-html
                 "prop-types": path.resolve(__dirname, 'node_modules/prop-types'),
                 "sanitize-html": path.resolve(__dirname, 'node_modules/sanitize-html'),
