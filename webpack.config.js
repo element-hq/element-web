@@ -287,7 +287,6 @@ module.exports = (env, argv) => {
                                     // plain CSS together for the bundler.
 
                                     require("postcss-simple-vars")(),
-                                    require("postcss-strip-inline-comments")(),
                                     require("postcss-hexrgba")(),
 
                                     // It's important that this plugin is last otherwise we end
@@ -356,7 +355,6 @@ module.exports = (env, argv) => {
                                     require("postcss-simple-vars")(),
                                     require("postcss-nested")(),
                                     require("postcss-easings")(),
-                                    require("postcss-strip-inline-comments")(),
                                     require("postcss-hexrgba")(),
 
                                     // It's important that this plugin is last otherwise we end
