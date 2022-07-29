@@ -1,5 +1,6 @@
 name: Dockerhub
 on:
+  workflow_dispatch: { }
   push:
     tags: [ v* ]
   schedule:
