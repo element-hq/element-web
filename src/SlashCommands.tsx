@@ -39,7 +39,7 @@ import WidgetUtils from "./utils/WidgetUtils";
 import { textToHtmlRainbow } from "./utils/colour";
 import { AddressType, getAddressType } from './UserAddress';
 import { abbreviateUrl } from './utils/UrlUtils';
-import { getDefaultIdentityServerUrl, useDefaultIdentityServer } from './utils/IdentityServerUtils';
+import { getDefaultIdentityServerUrl, setToDefaultIdentityServer } from './utils/IdentityServerUtils';
 import { isPermalinkHost, parsePermalink } from "./utils/permalinks/Permalinks";
 import { WidgetType } from "./widgets/WidgetType";
 import { Jitsi } from "./widgets/Jitsi";
@@ -544,7 +544,7 @@ export const Commands = [
 
                             prom = finished.then(([useDefault]) => {
                                 if (useDefault) {
-                                    useDefaultIdentityServer();
+                                    setToDefaultIdentityServer();
                                     return;
                                 }
                                 throw newTranslatableError(

@@ -24,7 +24,7 @@ export function getDefaultIdentityServerUrl(): string {
     return SdkConfig.get("validated_server_config").isUrl;
 }
 
-export function useDefaultIdentityServer(): void {
+export function setToDefaultIdentityServer(): void {
     const url = getDefaultIdentityServerUrl();
     // Account data change will update localstorage, client, etc through dispatcher
     MatrixClientPeg.get().setAccountData("m.identity_server", {

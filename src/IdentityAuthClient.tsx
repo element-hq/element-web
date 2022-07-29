@@ -26,7 +26,7 @@ import { Service, startTermsFlow, TermsNotSignedError } from './Terms';
 import {
     doesAccountDataHaveIdentityServer,
     doesIdentityServerHaveTerms,
-    useDefaultIdentityServer,
+    setToDefaultIdentityServer,
 } from './utils/IdentityServerUtils';
 import QuestionDialog from "./components/views/dialogs/QuestionDialog";
 import { abbreviateUrl } from "./utils/UrlUtils";
@@ -164,8 +164,7 @@ export default class IdentityAuthClient {
             });
             const [confirmed] = await finished;
             if (confirmed) {
-                // eslint-disable-next-line react-hooks/rules-of-hooks
-                useDefaultIdentityServer();
+                setToDefaultIdentityServer();
             } else {
                 throw new AbortedIdentityActionError(
                     "User aborted identity server action without terms",

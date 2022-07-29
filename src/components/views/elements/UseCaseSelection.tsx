@@ -32,9 +32,9 @@ const TIMEOUT = 1500;
 export function UseCaseSelection({ onFinished }: Props) {
     const [selection, setSelected] = useState<UseCase | null>(null);
 
+    // Call onFinished 1.5s after `selection` becomes truthy, to give time for the animation to run
     useEffect(() => {
         if (selection) {
-            setSelected(selection);
             let handler: number | null = setTimeout(() => {
                 handler = null;
                 onFinished(selection);

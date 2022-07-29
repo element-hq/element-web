@@ -16,12 +16,7 @@ limitations under the License.
 
 import React, { useContext, useEffect, useState } from "react";
 import {
-    PHASE_CANCELLED,
-    PHASE_DONE,
-    PHASE_READY,
-    PHASE_REQUESTED,
-    PHASE_STARTED,
-    PHASE_UNSENT,
+    Phase,
     VerificationRequest,
     VerificationRequestEvent,
 } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
@@ -32,13 +27,13 @@ import { _t, _td } from "../../../../languageHandler";
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import BaseTool, { DevtoolsContext, IDevtoolsProps } from "./BaseTool";
 
-const PHASE_MAP = {
-    [PHASE_UNSENT]: _td("Unsent"),
-    [PHASE_REQUESTED]: _td("Requested"),
-    [PHASE_READY]: _td("Ready"),
-    [PHASE_DONE]: _td("Done"),
-    [PHASE_STARTED]: _td("Started"),
-    [PHASE_CANCELLED]: _td("Cancelled"),
+const PHASE_MAP: Record<Phase, string> = {
+    [Phase.Unsent]: _td("Unsent"),
+    [Phase.Requested]: _td("Requested"),
+    [Phase.Ready]: _td("Ready"),
+    [Phase.Done]: _td("Done"),
+    [Phase.Started]: _td("Started"),
+    [Phase.Cancelled]: _td("Cancelled"),
 };
 
 const VerificationRequestExplorer: React.FC<{
@@ -68,7 +63,7 @@ const VerificationRequestExplorer: React.FC<{
             <dt>{ _t("Transaction") }</dt>
             <dd>{ txnId }</dd>
             <dt>{ _t("Phase") }</dt>
-            <dd>{ PHASE_MAP[request.phase] || request.phase }</dd> // TODO
+            <dd>{ PHASE_MAP[request.phase] ? _t(PHASE_MAP[request.phase]) : request.phase }</dd>
             <dt>{ _t("Timeout") }</dt>
             <dd>{ Math.floor(timeout / 1000) }</dd>
             <dt>{ _t("Methods") }</dt>
