@@ -485,7 +485,11 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         // eslint-disable-next-line
     }, [results, filter]);
 
-    const viewRoom = (room: {roomId: string, roomAlias?: string}, persist = false, viaKeyboard = false) => {
+    const viewRoom = (
+        room: { roomId: string, roomAlias?: string, autoJoin?: boolean, shouldPeek?: boolean},
+        persist = false,
+        viaKeyboard = false,
+    ) => {
         if (persist) {
             const recents = new Set(SettingsStore.getValue("SpotlightSearch.recentSearches", null).reverse());
             // remove & add the room to put it at the end
@@ -506,6 +510,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
             metricsViaKeyboard: viaKeyboard,
             room_id: room.roomId,
             room_alias: room.roomAlias,
+            auto_join: room.autoJoin,
+            should_peek: room.shouldPeek,
         });
         onFinished();
     };
@@ -623,6 +629,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     viewRoom({
                         roomAlias: publicRoom.canonical_alias || publicRoom.aliases?.[0],
                         roomId: publicRoom.room_id,
+                        autoJoin: !result.publicRoom.world_readable && !cli.isGuest(),
+                        shouldPeek: result.publicRoom.world_readable || cli.isGuest(),
                     }, true, ev.type !== "click");
                 };
                 return (

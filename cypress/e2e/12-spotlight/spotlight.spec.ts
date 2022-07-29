@@ -246,7 +246,7 @@ describe("Spotlight", () => {
             cy.spotlightResults().eq(0).click();
             cy.url().should("contain", room2Id);
         }).then(() => {
-            cy.get(".mx_RoomPreviewBar_actions .mx_AccessibleButton").click();
+            cy.get(".mx_RoomView_MessageList").should("have.length", 1);
             cy.roomHeaderName().should("contain", room2Name);
         });
     });
