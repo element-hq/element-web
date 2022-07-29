@@ -52,6 +52,7 @@ jobs:
 
       - name: Update repo description
         uses: peter-evans/dockerhub-description@v2
+        continue-on-error: true
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
