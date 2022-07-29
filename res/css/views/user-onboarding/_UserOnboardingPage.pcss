@@ -14,16 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* 1rem :: 10px */
+.mx_UserOnboardingPage {
+    width: 100%;
+    height: 100%;
 
-$spacing-4: 4px;
-$spacing-8: 8px;
-$spacing-12: 12px;
-$spacing-16: 16px;
-$spacing-20: 20px;
-$spacing-24: 24px;
-$spacing-28: 28px;
-$spacing-32: 32px;
-$spacing-40: 40px;
-$spacing-48: 48px;
-$spacing-64: 64px;
+    align-self: stretch;
+    max-width: 1200px;
+    margin: 0 auto auto;
+
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    gap: $spacing-64;
+    padding: $spacing-64 100px;
+
+    @media (max-width: 1280px) {
+        padding: $spacing-48 $spacing-32;
+    }
+}

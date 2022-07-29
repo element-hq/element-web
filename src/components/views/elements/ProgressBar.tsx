@@ -1,5 +1,5 @@
 /*
-Copyright 2020 The Matrix.org Foundation C.I.C.
+Copyright 2020,2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,13 +16,20 @@ limitations under the License.
 
 import React from "react";
 
+import { useSmoothAnimation } from "../../../hooks/useSmoothAnimation";
+
 interface IProps {
     value: number;
     max: number;
+    animated?: boolean;
 }
 
-const ProgressBar: React.FC<IProps> = ({ value, max }) => {
-    return <progress className="mx_ProgressBar" max={max} value={value} />;
+const PROGRESS_BAR_ANIMATION_DURATION = 300;
+const ProgressBar: React.FC<IProps> = ({ value, max, animated }) => {
+    // Animating progress bars via CSS transition isn’t possible in all of our supported browsers yet.
+    // As workaround, we’re using animations through JS requestAnimationFrame
+    const currentValue = useSmoothAnimation(0, value, PROGRESS_BAR_ANIMATION_DURATION, animated);
+    return <progress className="mx_ProgressBar" max={max} value={currentValue} />;
 };
 
 export default ProgressBar;

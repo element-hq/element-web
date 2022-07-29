@@ -30,6 +30,7 @@ import AvatarSetting from './AvatarSetting';
 import ExternalLink from '../elements/ExternalLink';
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import { chromeFileInputFix } from "../../../utils/BrowserWorkarounds";
+import PosthogTrackers from '../../../PosthogTrackers';
 
 interface IState {
     userId?: string;
@@ -189,7 +190,10 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                     type="file"
                     ref={this.avatarUpload}
                     className="mx_ProfileSettings_avatarUpload"
-                    onClick={chromeFileInputFix}
+                    onClick={(ev) => {
+                        chromeFileInputFix(ev);
+                        PosthogTrackers.trackInteraction("WebProfileSettingsAvatarUploadButton", ev);
+                    }}
                     onChange={this.onAvatarChanged}
                     accept="image/*"
                 />

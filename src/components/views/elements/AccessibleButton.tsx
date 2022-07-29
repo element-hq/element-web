@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import React, { ReactHTML } from 'react';
+import React, { HTMLAttributes, InputHTMLAttributes, ReactHTML, ReactNode } from 'react';
 import classnames from 'classnames';
 
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
@@ -36,14 +36,29 @@ type AccessibleButtonKind = | 'primary'
     | 'cancel_sm';
 
 /**
+ * This type construct allows us to specifically pass those props down to the element we’re creating that the element
+ * actually supports.
+ *
+ * e.g., if element is set to "a", we’ll support href and target, if it’s set to "input", we support type.
+ *
+ * To remain compatible with existing code, we’ll continue to support InputHTMLAttributes<Element>
+ */
+type DynamicHtmlElementProps<T extends keyof JSX.IntrinsicElements> =
+    JSX.IntrinsicElements[T] extends HTMLAttributes<{}> ? DynamicElementProps<T> : DynamicElementProps<"div">;
+type DynamicElementProps<T extends keyof JSX.IntrinsicElements> =
+    Partial<Omit<JSX.IntrinsicElements[T], 'ref' | 'onClick' | 'onMouseDown' | 'onKeyUp' | 'onKeyDown'>>
+    & Omit<InputHTMLAttributes<Element>, 'onClick'>;
+
+/**
  * children: React's magic prop. Represents all children given to the element.
  * element:  (optional) The base element type. "div" by default.
  * onClick:  (required) Event handler for button activation. Should be
  *           implemented exactly like a normal onClick handler.
  */
-interface IProps extends React.InputHTMLAttributes<Element> {
+type IProps<T extends keyof JSX.IntrinsicElements> = DynamicHtmlElementProps<T> & {
     inputRef?: React.Ref<Element>;
-    element?: keyof ReactHTML;
+    element?: T;
+    children?: ReactNode | undefined;
     // The kind of button, similar to how Bootstrap works.
     // See available classes for AccessibleButton for options.
     kind?: AccessibleButtonKind | string;
@@ -55,7 +70,7 @@ interface IProps extends React.InputHTMLAttributes<Element> {
     className?: string;
     triggerOnMouseDown?: boolean;
     onClick(e?: ButtonEvent): void | Promise<void>;
-}
+};
 
 interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
     ref?: React.Ref<Element>;
@@ -69,7 +84,7 @@ interface IAccessibleButtonProps extends React.InputHTMLAttributes<Element> {
  * @param {Object} props  react element properties
  * @returns {Object} rendered react
  */
-export default function AccessibleButton({
+export default function AccessibleButton<T extends keyof JSX.IntrinsicElements>({
     element,
     onClick,
     children,
@@ -81,7 +96,7 @@ export default function AccessibleButton({
     onKeyUp,
     triggerOnMouseDown,
     ...restProps
-}: IProps) {
+}: IProps<T>) {
     const newProps: IAccessibleButtonProps = restProps;
     if (disabled) {
         newProps["aria-disabled"] = true;

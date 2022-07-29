@@ -14,16 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-/* 1rem :: 10px */
+import { ClientEvent } from "matrix-js-sdk/src/matrix";
 
-$spacing-4: 4px;
-$spacing-8: 8px;
-$spacing-12: 12px;
-$spacing-16: 16px;
-$spacing-20: 20px;
-$spacing-24: 24px;
-$spacing-28: 28px;
-$spacing-32: 32px;
-$spacing-40: 40px;
-$spacing-48: 48px;
-$spacing-64: 64px;
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { useEventEmitterState } from "./useEventEmitter";
+
+export function useInitialSyncComplete(): boolean {
+    const cli = MatrixClientPeg.get();
+    return useEventEmitterState(cli, ClientEvent.Sync, () => cli.isInitialSyncComplete());
+}

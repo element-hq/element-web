@@ -99,6 +99,12 @@ export interface IMatrixClientPeg {
     userRegisteredWithinLastHours(hours: number): boolean;
 
     /**
+     * If the current user has been registered by this device then this
+     * returns a boolean of whether it was after a given timestamp.
+     */
+    userRegisteredAfter(date: Date): boolean;
+
+    /**
      * Replace this MatrixClientPeg's client with a client instance that has
      * homeserver / identity server URLs and active credentials
      *
@@ -163,6 +169,15 @@ class MatrixClientPegClass implements IMatrixClientPeg {
             const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
             const diff = Date.now() - registrationTime;
             return (diff / 36e5) <= hours;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    public userRegisteredAfter(timestamp: Date): boolean {
+        try {
+            const registrationTime = parseInt(window.localStorage.getItem("mx_registration_time"), 10);
+            return timestamp.getTime() <= registrationTime;
         } catch (e) {
             return false;
         }

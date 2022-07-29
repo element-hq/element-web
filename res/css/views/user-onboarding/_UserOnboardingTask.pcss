@@ -1,0 +1,116 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserOnboardingTask {
+    display: contents;
+
+    .mx_UserOnboardingTask_number {
+        counter-increment: user-onboarding;
+        grid-column: 1;
+        color: $secondary-content;
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        border: 2px solid $quinary-content;
+        border-radius: 32px;
+        line-height: 32px;
+        align-self: center;
+        position: relative;
+
+        &::before {
+            content: counter(user-onboarding);
+        }
+    }
+
+    .mx_UserOnboardingTask_content {
+        grid-column: 2;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        flex-shrink: 1;
+
+        transition: all 500ms;
+
+        .mx_UserOnboardingTask_description {
+            font-size: $font-12px;
+        }
+    }
+
+    .mx_UserOnboardingTask_action.mx_AccessibleButton {
+        grid-column: 3;
+        min-width: 180px;
+
+        @media (max-width: 800px) {
+            grid-column: 2;
+            margin-top: -16px;
+        }
+    }
+
+    &.mx_UserOnboardingTask_completed {
+        .mx_UserOnboardingTask_number {
+            &::before {
+                content: "";
+                position: absolute;
+                inset: -2px;
+                background: $accent;
+                border-radius: 32px;
+
+                animation-duration: 300ms;
+                animation-fill-mode: both;
+                animation-name: mx_UserOnboardingTask_spring;
+                will-change: opacity, transform;
+            }
+
+            &::after {
+                background-color: $background;
+                content: "";
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                width: 16px;
+                height: 16px;
+                position: absolute;
+                left: calc(50% - 8px);
+                top: calc(50% - 8px);
+                mask-image: url("$(res)/img/element-icons/check-white.svg");
+
+                animation-duration: 300ms;
+                animation-fill-mode: both;
+                animation-name: mx_UserOnboardingTask_spring;
+                will-change: opacity, transform;
+            }
+        }
+
+        .mx_UserOnboardingTask_content {
+            opacity: 0.6;
+        }
+    }
+}
+
+@keyframes mx_UserOnboardingTask_spring {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

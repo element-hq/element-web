@@ -34,7 +34,6 @@ import { SettingLevel } from "../../settings/SettingLevel";
 import ResizeHandle from '../views/elements/ResizeHandle';
 import { CollapseDistributor, Resizer } from '../../resizer';
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import HomePage from "./HomePage";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import PlatformPeg from "../../PlatformPeg";
 import { DefaultTagID } from "../../stores/room-list/models";
@@ -71,6 +70,7 @@ import { SwitchSpacePayload } from "../../dispatcher/payloads/SwitchSpacePayload
 import LegacyGroupView from "./LegacyGroupView";
 import { IConfigOptions } from "../../IConfigOptions";
 import LeftPanelLiveShareWarning from '../views/beacon/LeftPanelLiveShareWarning';
+import { UserOnboardingPage } from '../views/user-onboarding/UserOnboardingPage';
 
 // We need to fetch each pinned message individually (if we don't already have it)
 // so each pinned message may trigger a request. Limit the number per room for sanity.
@@ -635,7 +635,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                 break;
 
             case PageTypes.HomePage:
-                pageElement = <HomePage justRegistered={this.props.justRegistered} />;
+                pageElement = <UserOnboardingPage justRegistered={this.props.justRegistered} />;
                 break;
 
             case PageTypes.UserView:

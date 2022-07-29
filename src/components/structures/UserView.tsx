@@ -22,13 +22,13 @@ import { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from '../../Modal';
 import { _t } from '../../languageHandler';
-import HomePage from "./HomePage";
 import ErrorDialog from "../views/dialogs/ErrorDialog";
 import MainSplit from "./MainSplit";
 import RightPanel from "./RightPanel";
 import Spinner from "../views/elements/Spinner";
 import ResizeNotifier from "../../utils/ResizeNotifier";
 import { RightPanelPhases } from "../../stores/right-panel/RightPanelStorePhases";
+import { UserOnboardingPage } from "../views/user-onboarding/UserOnboardingPage";
 
 interface IProps {
     userId?: string;
@@ -92,7 +92,7 @@ export default class UserView extends React.Component<IProps, IState> {
                 resizeNotifier={this.props.resizeNotifier}
             />;
             return (<MainSplit panel={panel} resizeNotifier={this.props.resizeNotifier}>
-                <HomePage />
+                <UserOnboardingPage />
             </MainSplit>);
         } else {
             return (<div />);

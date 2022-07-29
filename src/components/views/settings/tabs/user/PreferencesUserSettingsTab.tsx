@@ -18,6 +18,7 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from "../../../../../languageHandler";
+import { UseCase } from "../../../../../settings/enums/UseCase";
 import SettingsStore from "../../../../../settings/SettingsStore";
 import Field from "../../../elements/Field";
 import { SettingLevel } from "../../../../../settings/SettingLevel";
@@ -28,6 +29,7 @@ import { UserTab } from "../../../dialogs/UserTab";
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
 import SdkConfig from "../../../../../SdkConfig";
+import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingPage";
 
 interface IProps {
     closeSettingsFn(success: boolean): void;
@@ -143,14 +145,21 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     };
 
     render() {
+        const useCase = SettingsStore.getValue<UseCase | null>("FTUE.useCaseSelection");
+        const roomListSettings = PreferencesUserSettingsTab.ROOM_LIST_SETTINGS
+            // Only show the breadcrumbs setting if breadcrumbs v2 is disabled
+            .filter(it => it !== "breadcrumbs" || !SettingsStore.getValue("feature_breadcrumbs_v2"))
+            // Only show the user onboarding setting if the user should see the user onboarding page
+            .filter(it => it !== "FTUE.userOnboardingButton" || showUserOnboardingPage(useCase));
+
         return (
             <div className="mx_SettingsTab mx_PreferencesUserSettingsTab">
                 <div className="mx_SettingsTab_heading">{ _t("Preferences") }</div>
 
-                { !SettingsStore.getValue("feature_breadcrumbs_v2") &&
+                { roomListSettings.length > 0 &&
                     <div className="mx_SettingsTab_section">
                         <span className="mx_SettingsTab_subheading">{ _t("Room list") }</span>
-                        { this.renderGroup(PreferencesUserSettingsTab.ROOM_LIST_SETTINGS) }
+                        { this.renderGroup(roomListSettings) }
                     </div>
                 }
 
