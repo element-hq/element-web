@@ -52,7 +52,6 @@
     "test": "jest",
     "test:cypress": "cypress run",
     "test:cypress:open": "cypress open",
-    "test:e2e": "./test/end-to-end-tests/run.sh --app-url http://localhost:8080",
     "coverage": "yarn test --coverage"
   },
   "dependencies": {

@@ -1326,11 +1326,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.showScreenAfterLogin();
         }
 
-        // Will be moved to a pre-login flow as well
-        if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
-            this.initPosthogAnalyticsToast();
-        }
-
         if (SdkConfig.get("mobile_guide_toast")) {
             // The toast contains further logic to detect mobile platforms,
             // check if it has been dismissed before, etc.
@@ -1645,6 +1640,12 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             // changing colour. More advanced behaviour will come once
             // we implement more settings.
             cli.setGlobalErrorOnUnknownDevices(false);
+        }
+
+        // Cannot be done in OnLoggedIn as at that point the AccountSettingsHandler doesn't yet have a client
+        // Will be moved to a pre-login flow as well
+        if (PosthogAnalytics.instance.isEnabled() && SettingsStore.isLevelSupported(SettingLevel.ACCOUNT)) {
+            this.initPosthogAnalyticsToast();
         }
     }
 

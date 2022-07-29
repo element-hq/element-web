@@ -635,8 +635,8 @@ async function doSetLoggedIn(
     }
 
     dis.fire(Action.OnLoggedIn);
-
     await startMatrixClient(/*startSyncing=*/!softLogout);
+
     return client;
 }
 
