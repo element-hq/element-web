@@ -382,6 +382,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
             members: {},
             getJoinRule: jest.fn().mockReturnValue(JoinRule.Invite),
             on: jest.fn(),
+            off: jest.fn(),
         } as unknown as RoomState,
         tags: {},
         setBlacklistUnverifiedDevices: jest.fn(),
