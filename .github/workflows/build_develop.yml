@@ -30,7 +30,7 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: sentry
-          SENTRY_PROJECT: riot-web
+          SENTRY_PROJECT: element
 
       - run: mv dist/element-*.tar.gz webapp.tar.gz
       
