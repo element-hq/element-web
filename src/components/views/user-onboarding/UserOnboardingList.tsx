@@ -22,6 +22,7 @@ import { _t } from "../../../languageHandler";
 import SdkConfig from "../../../SdkConfig";
 import ProgressBar from "../../views/elements/ProgressBar";
 import Heading from "../../views/typography/Heading";
+import { UserOnboardingFeedback } from "./UserOnboardingFeedback";
 import { UserOnboardingTask } from "./UserOnboardingTask";
 
 interface Props {
@@ -55,6 +56,9 @@ export function UserOnboardingList({ completedTasks, waitingTasks }: Props) {
             </div>
             <div className="mx_UserOnboardingList_progress">
                 <ProgressBar value={completed} max={total} animated />
+                { waiting === 0 && (
+                    <UserOnboardingFeedback />
+                ) }
             </div>
             <ol className="mx_UserOnboardingList_list">
                 { tasks.map(([task, completed]) => (
