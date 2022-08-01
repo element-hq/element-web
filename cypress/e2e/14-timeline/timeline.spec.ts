@@ -180,6 +180,41 @@ describe("Timeline", () => {
             cy.percySnapshot("Event line with inline start margin on IRC layout", { percyCSS });
         });
 
+        it("should set inline start padding to a hidden event line", () => {
+            sendEvent(roomId);
+            cy.visit("/#/room/" + roomId);
+            cy.setSettingValue("showHiddenEventsInTimeline", null, SettingLevel.DEVICE, true);
+            cy.contains(".mx_RoomView_body .mx_GenericEventListSummary .mx_GenericEventListSummary_summary",
+                "created and configured the room.");
+
+            // Edit message
+            cy.contains(".mx_RoomView_body .mx_EventTile .mx_EventTile_line", "Message").within(() => {
+                cy.get('[aria-label="Edit"]').click({ force: true }); // Cypress has no ability to hover
+                cy.get(".mx_BasicMessageComposer_input").type("Edit{enter}");
+            });
+            cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "MessageEdit");
+
+            // Click timestamp to highlight hidden event line
+            cy.get(".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp").click();
+
+            // Exclude timestamp from snapshot
+            const percyCSS = ".mx_RoomView_body .mx_EventTile .mx_MessageTimestamp "
+                + "{ visibility: hidden !important; }";
+
+            // should not add inline start padding to a hidden event line on IRC layout
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
+            cy.get(".mx_EventTile[data-layout=irc].mx_EventTile_info .mx_EventTile_line")
+                .should('have.css', 'padding-inline-start', '0px');
+            cy.percySnapshot("Hidden event line with zero padding on IRC layout", { percyCSS });
+
+            // should add inline start padding to a hidden event line on modern layout
+            cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.Group);
+            cy.get(".mx_EventTile[data-layout=group].mx_EventTile_info .mx_EventTile_line")
+                // calc(var(--EventTile_group_line-spacing-inline-start) + 20px) = 64 + 20 = 84px
+                .should('have.css', 'padding-inline-start', '84px');
+            cy.percySnapshot("Hidden event line with padding on modern layout", { percyCSS });
+        });
+
         it("should click top left of view source event toggle", () => {
             sendEvent(roomId);
             cy.visit("/#/room/" + roomId);
