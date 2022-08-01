@@ -61,6 +61,7 @@ import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { KIND_CALL_TRANSFER } from "./components/views/dialogs/InviteDialogTypes";
 import { OpenInviteDialogPayload } from "./dispatcher/payloads/OpenInviteDialogPayload";
 import { findDMForUser } from './utils/dm/findDMForUser';
+import { getJoinedNonFunctionalMembers } from './utils/room/getJoinedNonFunctionalMembers';
 
 export const PROTOCOL_PSTN = 'm.protocol.pstn';
 export const PROTOCOL_PSTN_PREFIXED = 'im.vector.protocol.pstn';
@@ -861,7 +862,7 @@ export default class CallHandler extends EventEmitter {
         // We leave the check for whether there's already a call in this room until later,
         // otherwise it can race.
 
-        const members = room.getJoinedMembers();
+        const members = getJoinedNonFunctionalMembers(room);
         if (members.length <= 1) {
             Modal.createDialog(ErrorDialog, {
                 description: _t('You cannot place a call with yourself.'),

@@ -17,6 +17,7 @@ limitations under the License.
 import { IProtocol } from 'matrix-js-sdk/src/matrix';
 import { CallEvent, CallState, CallType } from 'matrix-js-sdk/src/webrtc/call';
 import EventEmitter from 'events';
+import { mocked } from 'jest-mock';
 
 import CallHandler, {
     CallHandlerEvent, PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED, PROTOCOL_SIP_NATIVE, PROTOCOL_SIP_VIRTUAL,
@@ -26,6 +27,11 @@ import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import DMRoomMap from '../src/utils/DMRoomMap';
 import SdkConfig from '../src/SdkConfig';
 import { Action } from "../src/dispatcher/actions";
+import { getFunctionalMembers } from "../src/utils/room/getFunctionalMembers";
+
+jest.mock("../src/utils/room/getFunctionalMembers", () => ({
+    getFunctionalMembers: jest.fn(),
+}));
 
 // The Matrix IDs that the user sees when talking to Alice & Bob
 const NATIVE_ALICE = "@alice:example.org";
@@ -40,6 +46,8 @@ const VIRTUAL_BOB = "@virtual_bob:example.org";
 const NATIVE_ROOM_ALICE = "$alice_room:example.org";
 const NATIVE_ROOM_BOB = "$bob_room:example.org";
 const NATIVE_ROOM_CHARLIE = "$charlie_room:example.org";
+
+const FUNCTIONAL_USER = "@bot:example.com";
 
 // The room we use to talk to virtual Bob (but that the user does not see)
 // Bob has a virtual room, but Alice doesn't
@@ -69,9 +77,17 @@ function mkStubDM(roomId, userId) {
             getAvatarUrl: () => 'mxc://avatar.url/image.png',
             getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
         },
+        {
+            userId: FUNCTIONAL_USER,
+            name: 'Bot user',
+            rawDisplayName: 'Bot user',
+            roomId: roomId,
+            membership: 'join',
+            getAvatarUrl: () => 'mxc://avatar.url/image.png',
+            getMxcAvatarUrl: () => 'mxc://avatar.url/image.png',
+        },
     ]);
     room.currentState.getMembers = room.getJoinedMembers;
-
     return room;
 }
 
@@ -131,6 +147,10 @@ describe('CallHandler', () => {
 
         callHandler = new CallHandler();
         callHandler.start();
+
+        mocked(getFunctionalMembers).mockReturnValue([
+            FUNCTIONAL_USER,
+        ]);
 
         const nativeRoomAlice = mkStubDM(NATIVE_ROOM_ALICE, NATIVE_ALICE);
         const nativeRoomBob = mkStubDM(NATIVE_ROOM_BOB, NATIVE_BOB);

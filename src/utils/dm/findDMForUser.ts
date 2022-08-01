@@ -19,6 +19,7 @@ import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import DMRoomMap from "../DMRoomMap";
 import { isLocalRoom } from "../localRoom/isLocalRoom";
 import { isJoinedOrNearlyJoined } from "../membership";
+import { getFunctionalMembers } from "../room/getFunctionalMembers";
 
 /**
  * Tries to find a DM room with a specific user.
@@ -39,8 +40,11 @@ export function findDMForUser(client: MatrixClient, userId: string): Room {
         if (r && r.getMyMembership() === "join") {
             if (isLocalRoom(r)) return false;
 
+            const functionalUsers = getFunctionalMembers(r);
             const members = r.currentState.getMembers();
-            const joinedMembers = members.filter(m => isJoinedOrNearlyJoined(m.membership));
+            const joinedMembers = members.filter(
+                m => !functionalUsers.includes(m.userId) && isJoinedOrNearlyJoined(m.membership),
+            );
             const otherMember = joinedMembers.find(m => m.userId === userId);
             return otherMember && joinedMembers.length === 2;
         }
