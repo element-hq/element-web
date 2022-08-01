@@ -298,7 +298,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             return <>
                 <p>{ introText }</p>
                 { this.renderSsoForm(null) }
-                <h3 className="mx_AuthBody_centered">
+                <h2 className="mx_AuthBody_centered">
                     { _t(
                         "%(ssoButtons)s Or %(usernamePassword)s",
                         {
@@ -306,7 +306,7 @@ export default class SoftLogout extends React.Component<IProps, IState> {
                             usernamePassword: "",
                         },
                     ).trim() }
-                </h3>
+                </h2>
                 { this.renderPasswordForm(null) }
             </>;
         }
@@ -327,16 +327,16 @@ export default class SoftLogout extends React.Component<IProps, IState> {
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    <h2>
+                    <h1>
                         { _t("You're signed out") }
-                    </h2>
+                    </h1>
 
-                    <h3>{ _t("Sign in") }</h3>
+                    <h2>{ _t("Sign in") }</h2>
                     <div>
                         { this.renderSignInSection() }
                     </div>
 
-                    <h3>{ _t("Clear personal data") }</h3>
+                    <h2>{ _t("Clear personal data") }</h2>
                     <p>
                         { _t(
                             "Warning: Your personal data (including encryption keys) is still stored " +

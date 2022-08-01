@@ -22,7 +22,7 @@ interface Props {
 }
 
 export default function AuthBody({ flex, children }: PropsWithChildren<Props>) {
-    return <div className={classNames("mx_AuthBody", { "mx_AuthBody_flex": flex })}>
+    return <main className={classNames("mx_AuthBody", { "mx_AuthBody_flex": flex })}>
         { children }
-    </div>;
+    </main>;
 }

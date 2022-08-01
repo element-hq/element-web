@@ -20,7 +20,6 @@ import { MessageEvent } from "matrix-events-sdk";
 
 import type { ISendEventResponse } from "matrix-js-sdk/src/@types/requests";
 import type { EventType } from "matrix-js-sdk/src/@types/event";
-import type { MatrixClient } from "matrix-js-sdk/src/client";
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import { SettingLevel } from "../../../src/settings/SettingLevel";
 import { Layout } from "../../../src/settings/enums/Layout";
@@ -46,10 +45,14 @@ const expectDisplayName = (e: JQuery<HTMLElement>, displayName: string): void =>
 };
 
 const expectAvatar = (e: JQuery<HTMLElement>, avatarUrl: string): void => {
-    cy.getClient().then((cli: MatrixClient) => {
+    cy.all([
+        cy.window({ log: false }),
+        cy.getClient(),
+    ]).then(([win, cli]) => {
+        const size = AVATAR_SIZE * win.devicePixelRatio;
         expect(e.find(".mx_BaseAvatar_image").attr("src")).to.equal(
             // eslint-disable-next-line no-restricted-properties
-            cli.mxcUrlToHttp(avatarUrl, AVATAR_SIZE, AVATAR_SIZE, AVATAR_RESIZE_METHOD),
+            cli.mxcUrlToHttp(avatarUrl, size, size, AVATAR_RESIZE_METHOD),
         );
     });
 };
@@ -75,13 +78,15 @@ describe("Timeline", () => {
         cy.startSynapse("default").then(data => {
             synapse = data;
             cy.initTestUser(synapse, OLD_NAME).then(() =>
-                cy.window({ log: false }).then(() => {
-                    cy.createRoom({ name: ROOM_NAME }).then(_room1Id => {
-                        roomId = _room1Id;
-                    });
+                cy.createRoom({ name: ROOM_NAME }).then(_room1Id => {
+                    roomId = _room1Id;
                 }),
             );
         });
+    });
+
+    afterEach(() => {
+        cy.stopSynapse(synapse);
     });
 
     describe("useOnlyCurrentProfiles", () => {
@@ -93,10 +98,6 @@ describe("Timeline", () => {
             cy.uploadContent(NEW_AVATAR).then((url) => {
                 newAvatarUrl = url;
             });
-        });
-
-        afterEach(() => {
-            cy.stopSynapse(synapse);
         });
 
         it("should show historical profiles if disabled", () => {
@@ -146,11 +147,16 @@ describe("Timeline", () => {
     });
 
     describe("message displaying", () => {
+        beforeEach(() => {
+            cy.injectAxe();
+        });
+
         it("should create and configure a room on IRC layout", () => {
             cy.visit("/#/room/" + roomId);
             cy.setSettingValue("layout", null, SettingLevel.DEVICE, Layout.IRC);
             cy.contains(".mx_RoomView_body .mx_GenericEventListSummary[data-layout=irc] " +
                 ".mx_GenericEventListSummary_summary", "created and configured the room.");
+            cy.get(".mx_Spinner").should("not.exist");
             cy.percySnapshot("Configured room on IRC layout");
         });
 
@@ -174,10 +180,12 @@ describe("Timeline", () => {
                 .should('have.css', "margin-inline-start", "104px")
                 .should('have.css', "inset-inline-start", "0px");
 
+            cy.get(".mx_Spinner").should("not.exist");
             // Exclude timestamp from snapshot
             const percyCSS = ".mx_RoomView_body .mx_EventTile_info .mx_MessageTimestamp "
                 + "{ visibility: hidden !important; }";
             cy.percySnapshot("Event line with inline start margin on IRC layout", { percyCSS });
+            cy.checkA11y();
         });
 
         it("should set inline start padding to a hidden event line", () => {

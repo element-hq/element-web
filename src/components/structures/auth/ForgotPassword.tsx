@@ -437,7 +437,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
             <AuthPage>
                 <AuthHeader />
                 <AuthBody>
-                    <h2> { _t('Set a new password') } </h2>
+                    <h1> { _t('Set a new password') } </h1>
                     { resetPasswordJsx }
                 </AuthBody>
             </AuthPage>

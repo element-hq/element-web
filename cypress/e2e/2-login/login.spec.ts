@@ -41,8 +41,11 @@ describe("Login", () => {
         });
 
         it("logs in with an existing account and lands on the home screen", () => {
+            cy.injectAxe();
+
             cy.get("#mx_LoginForm_username", { timeout: 15000 }).should("be.visible");
             cy.percySnapshot("Login");
+            cy.checkA11y();
 
             cy.get(".mx_ServerPicker_change").click();
             cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);

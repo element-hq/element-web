@@ -219,8 +219,7 @@ const NewRoomIntro = () => {
         <span> { subText } { subButton } </span>
     );
 
-    return <div className="mx_NewRoomIntro">
-
+    return <li className="mx_NewRoomIntro">
         { !hasExpectedEncryptionSettings(cli, room) && (
             <EventTileBubble
                 className="mx_cryptoEvent mx_cryptoEvent_icon_warning"
@@ -230,7 +229,7 @@ const NewRoomIntro = () => {
         ) }
 
         { body }
-    </div>;
+    </li>;
 };
 
 export default NewRoomIntro;

@@ -18,8 +18,8 @@ import React from 'react';
 
 export default class AuthHeaderLogo extends React.PureComponent {
     public render(): React.ReactNode {
-        return <div className="mx_AuthHeaderLogo">
+        return <aside className="mx_AuthHeaderLogo">
             Matrix
-        </div>;
+        </aside>;
     }
 }

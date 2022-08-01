@@ -7,7 +7,11 @@
             "dom",
             "dom.iterable"
         ],
-        "types": ["cypress", "@percy/cypress"],
+        "types": [
+            "cypress",
+            "cypress-axe",
+            "@percy/cypress"
+        ],
         "resolveJsonModule": true,
         "esModuleInterop": true,
         "moduleResolution": "node",

@@ -422,7 +422,7 @@ export default class PasswordLogin extends React.PureComponent<IProps, IState> {
                     <Field
                         id="mx_LoginForm_password"
                         className={pwFieldClass}
-                        autoComplete="password"
+                        autoComplete="current-password"
                         type="password"
                         name="password"
                         label={_t('Password')}

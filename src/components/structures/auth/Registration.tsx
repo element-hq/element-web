@@ -507,9 +507,9 @@ export default class Registration extends React.Component<IProps, IState> {
                 // when there is only a single (or 0) providers we show a wide button with `Continue with X` text
                 if (providers.length > 1) {
                     // i18n: ssoButtons is a placeholder to help translators understand context
-                    continueWithSection = <h3 className="mx_AuthBody_centered">
+                    continueWithSection = <h2 className="mx_AuthBody_centered">
                         { _t("Continue with %(ssoButtons)s", { ssoButtons: "" }).trim() }
-                    </h3>;
+                    </h2>;
                 }
 
                 // i18n: ssoButtons & usernamePassword are placeholders to help translators understand context
@@ -521,7 +521,7 @@ export default class Registration extends React.Component<IProps, IState> {
                         loginType={this.state.ssoFlow.type === "m.login.sso" ? "sso" : "cas"}
                         fragmentAfterLogin={this.props.fragmentAfterLogin}
                     />
-                    <h3 className="mx_AuthBody_centered">
+                    <h2 className="mx_AuthBody_centered">
                         { _t(
                             "%(ssoButtons)s Or %(usernamePassword)s",
                             {
@@ -529,7 +529,7 @@ export default class Registration extends React.Component<IProps, IState> {
                                 usernamePassword: "",
                             },
                         ).trim() }
-                    </h3>
+                    </h2>
                 </React.Fragment>;
             }
 
@@ -617,7 +617,7 @@ export default class Registration extends React.Component<IProps, IState> {
             } else {
                 // regardless of whether we're the client that started the registration or not, we should
                 // try our credentials anyway
-                regDoneText = <h3>{ _t(
+                regDoneText = <h2>{ _t(
                     "<a>Log in</a> to your new account.", {},
                     {
                         a: (sub) => <AccessibleButton
@@ -630,10 +630,10 @@ export default class Registration extends React.Component<IProps, IState> {
                             }}
                         >{ sub }</AccessibleButton>,
                     },
-                ) }</h3>;
+                ) }</h2>;
             }
             body = <div>
-                <h2>{ _t("Registration Successful") }</h2>
+                <h1>{ _t("Registration Successful") }</h1>
                 { regDoneText }
             </div>;
         } else {

@@ -600,10 +600,10 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
             <AuthPage>
                 <AuthHeader disableLanguageSelector={this.props.isSyncing || this.state.busyLoggingIn} />
                 <AuthBody>
-                    <h2>
+                    <h1>
                         { _t('Sign in') }
                         { loader }
-                    </h2>
+                    </h1>
                     { errorTextSection }
                     { serverDeadSection }
                     <ServerPicker

@@ -18,19 +18,18 @@ limitations under the License.
 
 import PluginEvents = Cypress.PluginEvents;
 import PluginConfigOptions = Cypress.PluginConfigOptions;
-import { performance } from "./performance";
-import { synapseDocker } from "./synapsedocker";
-import { webserver } from "./webserver";
-import { docker } from "./docker";
-import { log } from "./log";
 
-/**
- * @type {Cypress.PluginConfig}
- */
-export default function(on: PluginEvents, config: PluginConfigOptions) {
-    docker(on, config);
-    performance(on, config);
-    synapseDocker(on, config);
-    webserver(on, config);
-    log(on, config);
+export function log(on: PluginEvents, config: PluginConfigOptions) {
+    on("task", {
+        log(message: string) {
+            console.log(message);
+
+            return null;
+        },
+        table(message: string) {
+            console.table(message);
+
+            return null;
+        },
+    });
 }

@@ -382,7 +382,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         return (
             <div className={containerClasses}>
-                <aside className="mx_LeftPanel_roomListContainer">
+                <div className="mx_LeftPanel_roomListContainer">
                     { this.renderSearchDialExplore() }
                     { this.renderBreadcrumbs() }
                     { !this.props.isMinimized && (
@@ -401,7 +401,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
                             { roomList }
                         </div>
                     </div>
-                </aside>
+                </div>
             </div>
         );
     }

@@ -57,7 +57,7 @@ export function UseCaseSelection({ onFinished }: Props) {
             </div>
             <div className="mx_UseCaseSelection_info mx_UseCaseSelection_slideInDelayed">
                 <h2>{ _t("Who will you chat to the most?") }</h2>
-                <h4>{ _t("We'll help you get connected.") }</h4>
+                <h3>{ _t("We'll help you get connected.") }</h3>
             </div>
             <div className="mx_UseCaseSelection_options mx_UseCaseSelection_slideInDelayed">
                 <UseCaseSelectionButton

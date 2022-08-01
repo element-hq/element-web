@@ -6,7 +6,7 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
   roomId="!unused:example.org"
   ts={1639728540000}
 >
-  <h2
+  <div
     aria-label="Today"
     className="mx_DateSeparator"
     role="separator"
@@ -15,15 +15,15 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
     <hr
       role="none"
     />
-    <div
+    <h2
       aria-hidden="true"
     >
       Today
-    </div>
+    </h2>
     <hr
       role="none"
     />
-  </h2>
+  </div>
 </DateSeparator>
 `;
 
@@ -33,7 +33,7 @@ exports[`DateSeparator when feature_jump_to_date is enabled renders the date sep
   roomId="!unused:example.org"
   ts={1639728540000}
 >
-  <h2
+  <div
     aria-label="Fri, Dec 17 2021"
     className="mx_DateSeparator"
     role="separator"
@@ -88,11 +88,11 @@ exports[`DateSeparator when feature_jump_to_date is enabled renders the date sep
             role="button"
             tabIndex={0}
           >
-            <div
+            <h2
               aria-hidden="true"
             >
               Fri, Dec 17 2021
-            </div>
+            </h2>
             <div
               className="mx_DateSeparator_chevron"
             />
@@ -103,6 +103,6 @@ exports[`DateSeparator when feature_jump_to_date is enabled renders the date sep
     <hr
       role="none"
     />
-  </h2>
+  </div>
 </DateSeparator>
 `;

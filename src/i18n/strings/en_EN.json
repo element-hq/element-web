@@ -2408,6 +2408,7 @@
     "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.": "You can use the custom server options to sign into other Matrix servers by specifying a different homeserver URL. This allows you to use %(brand)s with an existing Matrix account on a different homeserver.",
     "Join millions for free on the largest public server": "Join millions for free on the largest public server",
     "Homeserver": "Homeserver",
+    "Help": "Help",
     "Choose a locale": "Choose a locale",
     "Continue with %(provider)s": "Continue with %(provider)s",
     "Sign in with single sign-on": "Sign in with single sign-on",

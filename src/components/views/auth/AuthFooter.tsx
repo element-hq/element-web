@@ -23,9 +23,9 @@ import { _t } from '../../../languageHandler';
 export default class AuthFooter extends React.Component {
     public render(): React.ReactNode {
         return (
-            <div className="mx_AuthFooter">
+            <footer className="mx_AuthFooter" role="contentinfo">
                 <a href="https://matrix.org" target="_blank" rel="noreferrer noopener">{ _t("powered by Matrix") }</a>
-            </div>
+            </footer>
         );
     }
 }
