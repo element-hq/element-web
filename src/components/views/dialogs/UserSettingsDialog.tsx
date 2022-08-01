@@ -46,7 +46,7 @@ interface IState {
 }
 
 export default class UserSettingsDialog extends React.Component<IProps, IState> {
-    private mjolnirWatcher: string;
+    private mjolnirWatcher: string | undefined;
 
     constructor(props) {
         super(props);
@@ -61,7 +61,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
     }
 
     public componentWillUnmount(): void {
-        SettingsStore.unwatchSetting(this.mjolnirWatcher);
+        this.mjolnirWatcher && SettingsStore.unwatchSetting(this.mjolnirWatcher);
     }
 
     private mjolnirChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
@@ -70,7 +70,7 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
     };
 
     private getTabs() {
-        const tabs = [];
+        const tabs: Tab[] = [];
 
         tabs.push(new Tab(
             UserTab.General,

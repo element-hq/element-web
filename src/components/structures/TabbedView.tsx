@@ -117,7 +117,12 @@ export default class TabbedView extends React.Component<IProps, IState> {
 
         const label = _t(tab.label);
         return (
-            <AccessibleButton className={classes} key={"tab_label_" + tab.label} onClick={onClickHandler}>
+            <AccessibleButton
+                className={classes}
+                key={"tab_label_" + tab.label}
+                onClick={onClickHandler}
+                data-testid={`settings-tab-${tab.id}`}
+            >
                 { tabIcon }
                 <span className="mx_TabbedView_tabLabel_text">
                     { label }

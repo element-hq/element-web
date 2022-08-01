@@ -68,6 +68,8 @@ export const mockClientMethodsUser = (userId = '@alice:domain') => ({
     isGuest: jest.fn().mockReturnValue(false),
     mxcUrlToHttp: jest.fn().mockReturnValue('mock-mxcUrlToHttp'),
     credentials: { userId },
+    getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
+    getAccessToken: jest.fn(),
 });
 
 /**
@@ -82,3 +84,15 @@ export const mockClientMethodsEvents = () => ({
     decryptEventIfNeeded: jest.fn(),
     getPushActionsForEvent: jest.fn(),
 });
+
+/**
+ * Returns basic mocked client methods related to server support
+ */
+export const mockClientMethodsServer = (): Partial<Record<MethodKeysOf<MatrixClient>, unknown>> => ({
+    doesServerSupportSeparateAddAndBind: jest.fn(),
+    getIdentityServerUrl: jest.fn(),
+    getHomeserverUrl: jest.fn(),
+    getCapabilities: jest.fn().mockReturnValue({}),
+    doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+});
+
