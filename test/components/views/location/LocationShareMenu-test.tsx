@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+// eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from 'enzyme';
 import { mocked } from 'jest-mock';
 import { RoomMember } from 'matrix-js-sdk/src/models/room-member';

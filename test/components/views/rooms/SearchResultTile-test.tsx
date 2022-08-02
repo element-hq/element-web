@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
+// eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { SearchResult } from "matrix-js-sdk/src/models/search-result";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";

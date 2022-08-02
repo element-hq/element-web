@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+// eslint-disable-next-line deprecate/import
 import { shallow, mount } from "enzyme";
 import 'focus-visible'; // to fix context menus
 

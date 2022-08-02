@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { mocked } from 'jest-mock';
+// eslint-disable-next-line deprecate/import
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { Beacon, BeaconIdentifier } from 'matrix-js-sdk/src/matrix';

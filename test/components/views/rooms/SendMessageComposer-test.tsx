@@ -18,6 +18,7 @@ import React from "react";
 import { act } from "react-dom/test-utils";
 import { sleep } from "matrix-js-sdk/src/utils";
 import { ISendEventResponse, MatrixClient, MsgType } from "matrix-js-sdk/src/matrix";
+// eslint-disable-next-line deprecate/import
 import { mount } from 'enzyme';
 import { mocked } from "jest-mock";
 

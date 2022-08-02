@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
+// eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
 
 import {

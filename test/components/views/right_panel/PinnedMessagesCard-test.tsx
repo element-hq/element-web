@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { ComponentProps } from "react";
+// eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
 import { mocked } from "jest-mock";
 import { act } from "react-dom/test-utils";

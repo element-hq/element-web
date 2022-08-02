@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import maplibregl from "maplibre-gl";
+// eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { act } from 'react-dom/test-utils';
 import { RoomMember } from "matrix-js-sdk/src/models/room-member";

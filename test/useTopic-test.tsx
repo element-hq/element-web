@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
+// eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
 

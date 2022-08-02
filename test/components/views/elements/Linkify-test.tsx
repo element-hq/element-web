@@ -13,6 +13,7 @@ limitations under the License.
 */
 
 import React, { useState } from "react";
+// eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 
 import { Linkify } from "../../../../src/components/views/elements/Linkify";

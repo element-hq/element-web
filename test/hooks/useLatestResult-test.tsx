@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { sleep } from "matrix-js-sdk/src/utils";
 import React, { useEffect, useState } from "react";

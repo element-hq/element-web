@@ -19,6 +19,7 @@ import TestRenderer from "react-test-renderer";
 import { jest } from "@jest/globals";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { ClientWidgetApi, MatrixWidgetType } from "matrix-widget-api";
+// eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
 import { Optional } from "matrix-events-sdk";
 

@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import React from "react";
-import { mount } from "enzyme";
+// eslint-disable-next-line deprecate/import
+import { mount, ReactWrapper } from "enzyme";
 import { act } from "react-dom/test-utils";
 import { MatrixEvent, EventType } from "matrix-js-sdk/src/matrix";
-import { ReactWrapper } from "enzyme";
 import { LocationAssetType, M_ASSET, M_LOCATION, M_TIMESTAMP } from "matrix-js-sdk/src/@types/location";
 import { TEXT_NODE_TYPE } from "matrix-js-sdk/src/@types/extensible_events";
 

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
+// eslint-disable-next-line deprecate/import
 import { configure } from "enzyme";
 import "blob-polyfill"; // https://github.com/jsdom/jsdom/issues/2555
 

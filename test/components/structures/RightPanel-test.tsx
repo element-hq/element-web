@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+// eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { jest } from "@jest/globals";
 import { mocked, MockedObject } from "jest-mock";

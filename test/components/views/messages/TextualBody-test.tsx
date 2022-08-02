@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
+// eslint-disable-next-line deprecate/import
 import { mount } from "enzyme";
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 import { MockedObject } from "jest-mock";

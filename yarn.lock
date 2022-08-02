@@ -4171,6 +4171,11 @@ eslint-module-utils@^2.7.3:
     debug "^3.2.7"
     find-up "^2.1.0"
 
+eslint-plugin-deprecate@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.7.0.tgz#04805d2f2884800c580d59933b9c895f31b02437"
+  integrity sha512-MylhCqoH/SJ2MwzVgX0we6oE+lKPVwhOu9hAJ98vMCmbz3FNwqJ8XipdI23bCF7NHxUbhd6mdxFjywKE52pt7A==
+
 eslint-plugin-import@^2.25.4:
   version "2.26.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.26.0.tgz#f812dc47be4f2b72b478a021605a59fc6fe8b88b"
@@ -4209,10 +4214,10 @@ eslint-plugin-jsx-a11y@^6.5.1:
     minimatch "^3.1.2"
     semver "^6.3.0"
 
-eslint-plugin-matrix-org@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.5.2.tgz#eb355b1a81906ea814235d0b224e8162db7cbbf4"
-  integrity sha512-qJbyxp9cOi35Qpn3WCBqohCJaMSVp3ntOJ3WbjpREbCQdyrFze6MJAayl7GNidbNsdP7ejHTi0PtZzyKLcfLzQ==
+eslint-plugin-matrix-org@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.6.1.tgz#deab0636a1fe999d9c2a42929c2b486334ec8ead"
+  integrity sha512-kq7fCbOdj6OvPF50gJtTVSgg6TbQCOxwwZktyIGQJfZyGNWhew77ptTnmaxgxq+RIQ+rzNcWrcMGO5eQC9fZAg==
 
 eslint-plugin-react-hooks@^4.3.0:
   version "4.6.0"

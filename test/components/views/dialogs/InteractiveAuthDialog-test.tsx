@@ -17,6 +17,7 @@ limitations under the License.
 
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+// eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from 'enzyme';
 
 import InteractiveAuthDialog from "../../../../src/components/views/dialogs/InteractiveAuthDialog";

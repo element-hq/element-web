@@ -16,6 +16,7 @@ limitations under the License.
 */
 
 import React from "react";
+// eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from "enzyme";
 
 import { Key } from "../../../../../../src/Keyboard";

@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+// eslint-disable-next-line deprecate/import
 import { mount } from 'enzyme';
 import maplibregl from 'maplibre-gl';
 import { act } from 'react-dom/test-utils';

@@ -16,6 +16,7 @@ limitations under the License.
 
 import React from 'react';
 import { act } from 'react-dom/test-utils';
+// eslint-disable-next-line deprecate/import
 import { mount } from 'enzyme';
 import { Room, Beacon, BeaconEvent, getBeaconInfoIdentifier } from 'matrix-js-sdk/src/matrix';
 import { logger } from 'matrix-js-sdk/src/logger';

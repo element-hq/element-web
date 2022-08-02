@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
+// eslint-disable-next-line deprecate/import
 import { mount } from 'enzyme';
 
 import SettingsStore from '../../../../src/settings/SettingsStore';
