@@ -237,7 +237,11 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public needsUrlTooltips(): boolean {
-        return true;
+        // XXX: This should be `true` but caused too many regressions
+        // Given it was effectively a community contribution, it has been disabled until we can fix it
+        // https://github.com/vector-im/element-web/issues/22970
+        // https://github.com/vector-im/element-web/issues/22953
+        return false;
     }
 
     public async getAppVersion(): Promise<string> {
