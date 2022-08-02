@@ -3441,5 +3441,9 @@
     "In %(spaceName)s and %(count)s other spaces.|zero": "In space %(spaceName)s.",
     "In %(spaceName)s and %(count)s other spaces.|other": "In %(spaceName)s en %(count)s andere spaces.",
     "In spaces %(space1Name)s and %(space2Name)s.": "In spaces %(space1Name)s en %(space2Name)s.",
-    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Opdracht voor ontwikkelaars: verwijdert de huidige uitgaande groepssessie en stelt nieuwe Olm-sessies in"
+    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Opdracht voor ontwikkelaars: verwijdert de huidige uitgaande groepssessie en stelt nieuwe Olm-sessies in",
+    "Messages in this chat will be end-to-end encrypted.": "Berichten in deze chat worden eind-tot-eind versleuteld.",
+    "Saved Items": "Opgeslagen items",
+    "Send your first message to invite <displayName/> to chat": "Stuur uw eerste bericht om <displayName/> uit te nodigen om te chatten",
+    "Favourite Messages (under active development)": "Favoriete berichten (in actieve ontwikkeling)"
 }

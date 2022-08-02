@@ -3441,5 +3441,9 @@
     "In %(spaceName)s and %(count)s other spaces.|zero": "En el espacio %(spaceName)s.",
     "In %(spaceName)s and %(count)s other spaces.|other": "En %(spaceName)s y otros %(count)s espacios",
     "In spaces %(space1Name)s and %(space2Name)s.": "En los espacios %(space1Name)s y %(space2Name)s.",
-    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Comando para desarrolladores: descarta la sesión de grupo actual saliente y crea nuevas sesiones de Olm"
+    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Comando para desarrolladores: descarta la sesión de grupo actual saliente y crea nuevas sesiones de Olm",
+    "Send your first message to invite <displayName/> to chat": "Envía tu primer mensaje para invitar a <displayName/> a la conversación",
+    "Saved Items": "Elementos guardados",
+    "Messages in this chat will be end-to-end encrypted.": "Los mensajes en esta conversación serán cifrados de extremo a extremo.",
+    "Favourite Messages (under active development)": "Mensajes favoritos (en desarrollo)"
 }
