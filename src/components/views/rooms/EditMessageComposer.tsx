@@ -213,6 +213,9 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     };
 
     private endEdit(): void {
+        localStorage.removeItem(this.editorRoomKey);
+        localStorage.removeItem(this.editorStateKey);
+
         // close the event editing and focus composer
         dis.dispatch({
             action: Action.EditEvent,
@@ -241,7 +244,6 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
     }
 
     private cancelEdit = (): void => {
-        this.clearStoredEditorState();
         this.endEdit();
     };
 
@@ -260,11 +262,6 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 logger.error("Error parsing editing state: ", e);
             }
         }
-    }
-
-    private clearStoredEditorState(): void {
-        localStorage.removeItem(this.editorRoomKey);
-        localStorage.removeItem(this.editorStateKey);
     }
 
     private clearPreviousEdit(): void {
@@ -354,7 +351,6 @@ class EditMessageComposer extends React.Component<IEditMessageComposerProps, ISt
                 const threadId = event.threadRootId || null;
 
                 this.props.mxClient.sendMessage(roomId, threadId, editContent);
-                this.clearStoredEditorState();
                 dis.dispatch({ action: "message_sent" });
             }
         }
