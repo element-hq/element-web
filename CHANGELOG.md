@@ -1,5 +1,5 @@
-Changes in [1.11.2-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.2-rc.1) (2022-07-26)
-=========================================================================================================
+Changes in [1.11.2](https://github.com/vector-im/element-web/releases/tag/v1.11.2) (2022-08-03)
+===============================================================================================
 
 ## ✨ Features
  * Live location share -  focus on user location on list item click ([\#9051](https://github.com/matrix-org/matrix-react-sdk/pull/9051)). Contributed by @kerryarchibald.
