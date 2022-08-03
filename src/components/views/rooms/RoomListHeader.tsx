@@ -146,15 +146,19 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         }
     }, [onVisibilityChange]);
 
-    const canAddRooms = activeSpace?.currentState?.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
-
-    const canCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
     const canExploreRooms = shouldShowComponent(UIComponent.ExploreRooms);
+    const canCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
+    const canCreateSpaces = shouldShowComponent(UIComponent.CreateSpaces);
+
+    const hasPermissionToAddSpaceChild =
+        activeSpace?.currentState?.maySendStateEvent(EventType.SpaceChild, cli.getUserId());
+    const canAddSubRooms = hasPermissionToAddSpaceChild && canCreateRooms;
+    const canAddSubSpaces = hasPermissionToAddSpaceChild && canCreateSpaces;
 
     // If the user can't do anything on the plus menu, don't show it. This aims to target the
     // plus menu shown on the Home tab primarily: the user has options to use the menu for
     // communities and spaces, but is at risk of no options on the Home tab.
-    const canShowPlusMenu = canCreateRooms || canExploreRooms || activeSpace;
+    const canShowPlusMenu = canCreateRooms || canExploreRooms || canCreateSpaces || activeSpace;
 
     let contextMenu: JSX.Element;
     if (mainMenuDisplayed && mainMenuHandle.current) {
@@ -249,10 +253,10 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                         showAddExistingRooms(activeSpace);
                         closePlusMenu();
                     }}
-                    disabled={!canAddRooms}
-                    tooltip={!canAddRooms && _t("You do not have permissions to add rooms to this space")}
+                    disabled={!canAddSubRooms}
+                    tooltip={!canAddSubRooms && _t("You do not have permissions to add rooms to this space")}
                 />
-                <IconizedContextMenuOption
+                { canCreateSpaces && <IconizedContextMenuOption
                     label={_t("Add space")}
                     iconClassName="mx_RoomListHeader_iconPlus"
                     onClick={(e) => {
@@ -261,11 +265,12 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
                         showCreateNewSubspace(activeSpace);
                         closePlusMenu();
                     }}
-                    disabled={!canAddRooms}
-                    tooltip={!canAddRooms && _t("You do not have permissions to add spaces to this space")}
+                    disabled={!canAddSubSpaces}
+                    tooltip={!canAddSubSpaces && _t("You do not have permissions to add spaces to this space")}
                 >
                     <BetaPill />
                 </IconizedContextMenuOption>
+                }
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>;
     } else if (plusMenuDisplayed) {
