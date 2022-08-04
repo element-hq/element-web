@@ -44,6 +44,7 @@ jobs:
           running-workflow-name: 'Build & Upload source maps to Sentry'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
+          check-regexp: ^((?!SonarQube|issues|board).)*$
 
       - uses: actions/upload-artifact@v3
         with:
