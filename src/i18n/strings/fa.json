@@ -27,5 +27,6 @@
     "Go to element.io": "برو به element.io",
     "Failed to start": "خطا در شروع",
     "Powered by Matrix": "راه اندازی شده با استفاده از ماتریکس",
-    "Use %(brand)s on mobile": "از %(brand)s گوشی استفاده کنید"
+    "Use %(brand)s on mobile": "از %(brand)s گوشی استفاده کنید",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "همکاری چت غیرمتمرکز و رمزگذاری شده &amp; توسعه یافته با استفاده از $matrixLogo"
 }

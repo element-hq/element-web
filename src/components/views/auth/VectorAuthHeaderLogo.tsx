@@ -24,9 +24,9 @@ export default class VectorAuthHeaderLogo extends React.PureComponent {
         const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
 
         return (
-            <div className="mx_AuthHeaderLogo">
+            <aside className="mx_AuthHeaderLogo">
                 <img src={logoUrl} alt="Element" />
-            </div>
+            </aside>
         );
     }
 }
