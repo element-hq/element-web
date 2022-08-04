@@ -1470,10 +1470,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@matrix-org/analytics-events@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.1.2.tgz#820b1a78d1471f21da96274d92eb161b41f9e880"
-  integrity sha512-TumnmENiuTtSmfcVwzovLDq4pRgRlUmuq1bxOtli9XWMgscs3Z6URu5PJcvuFj87L7bKJrGCNS3zR+DMUxc7kg==
+"@matrix-org/analytics-events@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.2.0.tgz#453925c939ecdd5ca6c797d293deb8cf0933f1b8"
+  integrity sha512-+0/Sydm4MNOcqd8iySJmojVPB74Axba4BXlwTsiKmL5fgYqdUkwmqkO39K7Pn8i+a+8pg11oNvBPkpWs3O5Qww==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz":
   version "3.2.12"
@@ -5026,6 +5026,11 @@ eslint-module-utils@^2.7.3:
     debug "^3.2.7"
     find-up "^2.1.0"
 
+eslint-plugin-deprecate@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-deprecate/-/eslint-plugin-deprecate-0.7.0.tgz#04805d2f2884800c580d59933b9c895f31b02437"
+  integrity sha512-MylhCqoH/SJ2MwzVgX0we6oE+lKPVwhOu9hAJ98vMCmbz3FNwqJ8XipdI23bCF7NHxUbhd6mdxFjywKE52pt7A==
+
 eslint-plugin-import@^2.25.4:
   version "2.26.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.26.0.tgz#f812dc47be4f2b72b478a021605a59fc6fe8b88b"
@@ -5045,10 +5050,10 @@ eslint-plugin-import@^2.25.4:
     resolve "^1.22.0"
     tsconfig-paths "^3.14.1"
 
-eslint-plugin-matrix-org@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.4.0.tgz#de2d2db1cd471d637728133ce9a2b921690e5cd1"
-  integrity sha512-yVkNwtc33qtrQB4PPzpU+PUdFzdkENPan3JF4zhtAQJRUYXyvKEXnYSrXLUWYRXoYFxs9LbyI2CnhJL/RnHJaQ==
+eslint-plugin-matrix-org@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-matrix-org/-/eslint-plugin-matrix-org-0.6.1.tgz#deab0636a1fe999d9c2a42929c2b486334ec8ead"
+  integrity sha512-kq7fCbOdj6OvPF50gJtTVSgg6TbQCOxwwZktyIGQJfZyGNWhew77ptTnmaxgxq+RIQ+rzNcWrcMGO5eQC9fZAg==
 
 eslint-plugin-react-hooks@^4.3.0:
   version "4.6.0"
@@ -8107,8 +8112,8 @@ matrix-events-sdk@^0.0.1-beta.7:
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "19.1.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d5a15ac2757de0eb0c74d421a8e51c3ef383cb37"
+  version "19.2.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/cf33569a2187628dd7954ac771995cce3e804af4"
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
@@ -8130,11 +8135,11 @@ matrix-mock-request@^2.0.0:
     expect "^28.1.0"
 
 "matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
-  version "3.49.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/d2b942de42301a15443b577026007fb624780d6f"
+  version "3.51.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/ed3350c2ba37863fbb5c82dcc85885feaaa03ef8"
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/analytics-events" "^0.1.2"
+    "@matrix-org/analytics-events" "^0.2.0"
     "@matrix-org/react-sdk-module-api" "^0.0.3"
     "@sentry/browser" "^6.11.0"
     "@sentry/tracing" "^6.11.0"

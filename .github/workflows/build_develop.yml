@@ -29,24 +29,16 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_ORG: sentry
-          SENTRY_PROJECT: element
+          SENTRY_ORG: element
+          SENTRY_PROJECT: riot-web
 
       - run: mv dist/element-*.tar.gz webapp.tar.gz
       
-      - name: Wait for static analysis to succeed
+      - name: Wait for other steps to succeed
         uses: lewagon/wait-on-check-action@v1.0.0
         with:
           ref: ${{ github.ref }}
-          running-workflow-name: 'Static Analysis'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-      
-      - name: Wait for tests to succeed
-        uses: lewagon/wait-on-check-action@v1.0.0
-        with:
-          ref: ${{ github.ref }}
-          running-workflow-name: 'Tests'
+          running-workflow-name: 'Build & Upload source maps to Sentry'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
 
