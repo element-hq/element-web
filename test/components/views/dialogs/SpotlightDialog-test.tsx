@@ -26,6 +26,7 @@ import sanitizeHtml from "sanitize-html";
 import SpotlightDialog, { Filter } from "../../../../src/components/views/dialogs/spotlight/SpotlightDialog";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoom";
+import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mkRoom, stubClient } from "../../../test-utils";
 
@@ -345,5 +346,28 @@ describe("Spotlight Dialog", () => {
             expect(options.length).toBe(3);
             expect(options.first().text()).not.toContain(testLocalRoom.name);
         });
+    });
+
+    it("should start a DM when clicking a person", async () => {
+        const wrapper = mount(
+            <SpotlightDialog
+                initialFilter={Filter.People}
+                initialText={testPerson.display_name}
+                onFinished={() => null} />,
+        );
+
+        await act(async () => {
+            await sleep(200);
+        });
+        wrapper.update();
+
+        const options = wrapper.find("div.mx_SpotlightDialog_option");
+        expect(options.length).toBeGreaterThanOrEqual(1);
+        expect(options.first().text()).toContain(testPerson.display_name);
+
+        options.first().simulate("click");
+        expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
+
+        wrapper.unmount();
     });
 });

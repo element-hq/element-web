@@ -57,7 +57,7 @@ const startDMWithBob = function(this: CryptoTestContext) {
 };
 
 const testMessages = function(this: CryptoTestContext) {
-    cy.get(".mx_BasicMessageComposer_input").should("have.focus").type("Hey!{enter}");
+    // check the invite message
     cy.contains(".mx_EventTile_body", "Hey!")
         .closest(".mx_EventTile")
         .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning")
@@ -150,6 +150,11 @@ describe("Cryptography", function() {
     it("creating a DM should work, being e2e-encrypted / user verification", function(this: CryptoTestContext) {
         cy.bootstrapCrossSigning();
         startDMWithBob.call(this);
+        // send first message
+        cy.get(".mx_BasicMessageComposer_input")
+            .click()
+            .should("have.focus")
+            .type("Hey!{enter}");
         checkDMRoom();
         bobJoin.call(this);
         testMessages.call(this);

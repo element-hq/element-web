@@ -32,6 +32,13 @@ limitations under the License.
     position: relative;
 }
 
+.mx_MainSplit_timeline,
+.mx_RoomView--local {
+    .mx_MessageComposer_wrapper {
+        margin: $spacing-8 $spacing-16;
+    }
+}
+
 .mx_RoomView_auxPanel {
     min-width: 0px;
     width: 100%;
@@ -181,6 +188,10 @@ limitations under the License.
     /* needed as min-height is set to clientHeight in ScrollPanel
     to prevent shrinking when WhoIsTypingTile is hidden */
     box-sizing: border-box;
+}
+
+.mx_RoomView--local .mx_ScrollPanel .mx_RoomView_MessageList {
+    justify-content: center;
 }
 
 .mx_RoomView_MessageList li {

@@ -3156,6 +3156,7 @@
     "You can select all or individual messages to retry or delete": "You can select all or individual messages to retry or delete",
     "Connectivity to the server has been lost.": "Connectivity to the server has been lost.",
     "Sent messages will be stored until your connection has returned.": "Sent messages will be stored until your connection has returned.",
+    "We're creating a room with %(names)s": "We're creating a room with %(names)s",
     "You seem to be uploading files, are you sure you want to quit?": "You seem to be uploading files, are you sure you want to quit?",
     "You seem to be in a call, are you sure you want to quit?": "You seem to be in a call, are you sure you want to quit?",
     "Search failed": "Search failed",

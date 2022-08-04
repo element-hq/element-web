@@ -22,11 +22,13 @@ import { mocked, MockedObject } from "jest-mock";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { EventType } from "matrix-js-sdk/src/matrix";
+import { MEGOLM_ALGORITHM } from "matrix-js-sdk/src/crypto/olmlib";
 
 import { stubClient, mockPlatformPeg, unmockPlatformPeg, wrapInMatrixClientContext } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { Action } from "../../../src/dispatcher/actions";
-import dis from "../../../src/dispatcher/dispatcher";
+import { defaultDispatcher } from "../../../src/dispatcher/dispatcher";
 import { ViewRoomPayload } from "../../../src/dispatcher/payloads/ViewRoomPayload";
 import { RoomView as _RoomView } from "../../../src/components/structures/RoomView";
 import ResizeNotifier from "../../../src/utils/ResizeNotifier";
@@ -37,6 +39,9 @@ import DMRoomMap from "../../../src/utils/DMRoomMap";
 import { NotificationState } from "../../../src/stores/notifications/NotificationState";
 import RightPanelStore from "../../../src/stores/right-panel/RightPanelStore";
 import { RightPanelPhases } from "../../../src/stores/right-panel/RightPanelStorePhases";
+import { LocalRoom, LocalRoomState } from "../../../src/models/LocalRoom";
+import { DirectoryMember } from "../../../src/utils/direct-messages";
+import { createDmLocalRoom } from "../../../src/utils/dm/createDmLocalRoom";
 
 const RoomView = wrapInMatrixClientContext(_RoomView);
 
@@ -44,6 +49,7 @@ describe("RoomView", () => {
     let cli: MockedObject<MatrixClient>;
     let room: Room;
     let roomCount = 0;
+
     beforeEach(async () => {
         mockPlatformPeg({ reload: () => {} });
         stubClient();
@@ -51,7 +57,7 @@ describe("RoomView", () => {
 
         room = new Room(`!${roomCount++}:example.org`, cli, "@alice:example.org");
         room.getPendingEvents = () => [];
-        cli.getRoom.mockReturnValue(room);
+        cli.getRoom.mockImplementation(() => room);
         // Re-emit certain events on the mocked client
         room.on(RoomEvent.Timeline, (...args) => cli.emit(RoomEvent.Timeline, ...args));
         room.on(RoomEvent.TimelineReset, (...args) => cli.emit(RoomEvent.TimelineReset, ...args));
@@ -76,7 +82,7 @@ describe("RoomView", () => {
                 });
             });
 
-            dis.dispatch<ViewRoomPayload>({
+            defaultDispatcher.dispatch<ViewRoomPayload>({
                 action: Action.ViewRoom,
                 room_id: room.roomId,
                 metricsTrigger: null,
@@ -162,6 +168,84 @@ describe("RoomView", () => {
             await mountRoomView();
             expect(RightPanelStore.instance.isOpen).toEqual(true);
             expect(RightPanelStore.instance.currentCard.phase).toEqual(RightPanelPhases.Timeline);
+        });
+    });
+
+    describe("for a local room", () => {
+        let localRoom: LocalRoom;
+        let roomView: ReactWrapper;
+
+        beforeEach(async () => {
+            localRoom = room = await createDmLocalRoom(cli, [new DirectoryMember({ user_id: "@user:example.com" })]);
+            cli.store.storeRoom(room);
+        });
+
+        it("should remove the room from the store on unmount", async () => {
+            roomView = await mountRoomView();
+            roomView.unmount();
+            expect(cli.store.removeRoom).toHaveBeenCalledWith(room.roomId);
+        });
+
+        describe("in state NEW", () => {
+            it("should match the snapshot", async () => {
+                roomView = await mountRoomView();
+                expect(roomView.html()).toMatchSnapshot();
+            });
+
+            describe("that is encrypted", () => {
+                beforeEach(() => {
+                    mocked(cli.isRoomEncrypted).mockReturnValue(true);
+                    localRoom.encrypted = true;
+                    localRoom.currentState.setStateEvents([
+                        new MatrixEvent({
+                            event_id: `~${localRoom.roomId}:${cli.makeTxnId()}`,
+                            type: EventType.RoomEncryption,
+                            content: {
+                                algorithm: MEGOLM_ALGORITHM,
+                            },
+                            user_id: cli.getUserId(),
+                            sender: cli.getUserId(),
+                            state_key: "",
+                            room_id: localRoom.roomId,
+                            origin_server_ts: Date.now(),
+                        }),
+                    ]);
+                });
+
+                it("should match the snapshot", async () => {
+                    const roomView = await mountRoomView();
+                    expect(roomView.html()).toMatchSnapshot();
+                });
+            });
+        });
+
+        it("in state CREATING should match the snapshot", async () => {
+            localRoom.state = LocalRoomState.CREATING;
+            roomView = await mountRoomView();
+            expect(roomView.html()).toMatchSnapshot();
+        });
+
+        describe("in state ERROR", () => {
+            beforeEach(async () => {
+                localRoom.state = LocalRoomState.ERROR;
+                roomView = await mountRoomView();
+            });
+
+            it("should match the snapshot", async () => {
+                expect(roomView.html()).toMatchSnapshot();
+            });
+
+            it("clicking retry should set the room state to new dispatch a local room event", () => {
+                jest.spyOn(defaultDispatcher, "dispatch");
+                roomView.findWhere((w: ReactWrapper) => {
+                    return w.hasClass("mx_RoomStatusBar_unsentRetry") && w.text() === "Retry";
+                }).first().simulate("click");
+                expect(localRoom.state).toBe(LocalRoomState.NEW);
+                expect(defaultDispatcher.dispatch).toHaveBeenCalledWith({
+                    action: "local_room_event",
+                    roomId: room.roomId,
+                });
+            });
         });
     });
 });

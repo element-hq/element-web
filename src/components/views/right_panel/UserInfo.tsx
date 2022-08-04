@@ -33,7 +33,6 @@ import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import dis from '../../../dispatcher/dispatcher';
 import Modal from '../../../Modal';
 import { _t } from '../../../languageHandler';
-import createRoom from '../../../createRoom';
 import DMRoomMap from '../../../utils/DMRoomMap';
 import AccessibleButton, { ButtonEvent } from '../elements/AccessibleButton';
 import SdkConfig from '../../../SdkConfig';
@@ -78,8 +77,7 @@ import { IRightPanelCardState } from '../../../stores/right-panel/RightPanelStor
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
-import { privateShouldBeEncrypted } from "../../../utils/rooms";
-import { findDMForUser } from '../../../utils/dm/findDMForUser';
+import { DirectoryMember, startDmOnFirstMessage } from '../../../utils/direct-messages';
 
 export interface IDevice {
     deviceId: string;
@@ -124,38 +122,13 @@ export const getE2EStatus = (cli: MatrixClient, userId: string, devices: IDevice
     return anyDeviceUnverified ? E2EStatus.Warning : E2EStatus.Verified;
 };
 
-async function openDMForUser(matrixClient: MatrixClient, userId: string, viaKeyboard = false): Promise<void> {
-    const lastActiveRoom = findDMForUser(matrixClient, userId);
-
-    if (lastActiveRoom) {
-        dis.dispatch<ViewRoomPayload>({
-            action: Action.ViewRoom,
-            room_id: lastActiveRoom.roomId,
-            metricsTrigger: "MessageUser",
-            metricsViaKeyboard: viaKeyboard,
-        });
-        return;
-    }
-
-    const createRoomOptions = {
-        dmUserId: userId,
-        encryption: undefined,
-    };
-
-    if (privateShouldBeEncrypted()) {
-        // Check whether all users have uploaded device keys before.
-        // If so, enable encryption in the new room.
-        const usersToDevicesMap = await matrixClient.downloadKeys([userId]);
-        const allHaveDeviceKeys = Object.values(usersToDevicesMap).every(devices => {
-            // `devices` is an object of the form { deviceId: deviceInfo, ... }.
-            return Object.keys(devices).length > 0;
-        });
-        if (allHaveDeviceKeys) {
-            createRoomOptions.encryption = true;
-        }
-    }
-
-    await createRoom(createRoomOptions);
+async function openDMForUser(matrixClient: MatrixClient, user: RoomMember): Promise<void> {
+    const startDMUser = new DirectoryMember({
+        user_id: user.userId,
+        display_name: user.rawDisplayName,
+        avatar_url: user.getMxcAvatarUrl(),
+    });
+    startDmOnFirstMessage(matrixClient, [startDMUser]);
 }
 
 type SetUpdating = (updating: boolean) => void;
@@ -328,17 +301,17 @@ function DevicesSection({ devices, userId, loading }: { devices: IDevice[], user
     );
 }
 
-const MessageButton = ({ userId }: { userId: string }) => {
+const MessageButton = ({ member }: { member: RoomMember }) => {
     const cli = useContext(MatrixClientContext);
     const [busy, setBusy] = useState(false);
 
     return (
         <AccessibleButton
             kind="link"
-            onClick={async (ev) => {
+            onClick={async () => {
                 if (busy) return;
                 setBusy(true);
-                await openDMForUser(cli, userId, ev.type !== "click");
+                await openDMForUser(cli, member);
                 setBusy(false);
             }}
             className="mx_UserInfo_field"
@@ -484,7 +457,7 @@ const UserOptionsSection: React.FC<{
 
     let directMessageButton: JSX.Element;
     if (!isMe) {
-        directMessageButton = <MessageButton userId={member.userId} />;
+        directMessageButton = <MessageButton member={member} />;
     }
 
     return (

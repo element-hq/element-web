@@ -118,10 +118,13 @@ Cypress.Commands.add("startDM", (name: string) => {
         cy.spotlightResults().should("have.length", 1);
         cy.spotlightResults().eq(0).should("contain", name);
         cy.spotlightResults().eq(0).click();
-    }).then(() => {
-        cy.roomHeaderName().should("contain", name);
-        cy.get(".mx_RoomSublist[aria-label=People]").should("contain", name);
     });
+    // send first message to start DM
+    cy.get(".mx_BasicMessageComposer_input")
+        .should("have.focus")
+        .type("Hey!{enter}");
+    cy.contains(".mx_EventTile_body", "Hey!");
+    cy.get(".mx_RoomSublist[aria-label=People]").should("contain", name);
 });
 
 describe("Spotlight", () => {
@@ -324,10 +327,18 @@ describe("Spotlight", () => {
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", bot2Name);
             cy.spotlightResults().eq(0).click();
-        }).then(() => {
-            cy.roomHeaderName().should("contain", bot2Name);
-            cy.get(".mx_RoomSublist[aria-label=People]").should("contain", bot2Name);
         });
+
+        // Send first message to actually start DM
+        cy.roomHeaderName().should("contain", bot2Name);
+        cy.get(".mx_BasicMessageComposer_input")
+            .click()
+            .should("have.focus")
+            .type("Hey!{enter}");
+
+        // Assert DM exists by checking for the first message and the room being in the room list
+        cy.contains(".mx_EventTile_body", "Hey!");
+        cy.get(".mx_RoomSublist[aria-label=People]").should("contain", bot2Name);
 
         // Invite BotBob into existing DM with ByteBot
         cy.getDmRooms(bot2.getUserId()).then(dmRooms => dmRooms[0])
