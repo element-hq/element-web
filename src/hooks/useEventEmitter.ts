@@ -68,43 +68,6 @@ export function useEventEmitter(
     );
 }
 
-/**
- * Hook to wrap an EventTarget addEventListener and removeEventListener in hook
- * lifecycle
- */
-export function useEventTarget(
-    emitter: EventTarget | undefined,
-    eventName: string,
-    handler: Handler,
-): void {
-    // Create a ref that stores handler
-    const savedHandler = useRef(handler);
-
-    // Update ref.current value if handler changes.
-    useEffect(() => {
-        savedHandler.current = handler;
-    }, [handler]);
-
-    useEffect(
-        () => {
-            // allow disabling this hook by passing a falsy emitter
-            if (!emitter) return;
-
-            // Create event listener that calls handler function stored in ref
-            const eventListener = (...args) => savedHandler.current(...args);
-
-            // Add event listener
-            emitter.addEventListener(eventName, eventListener);
-
-            // Remove event listener on cleanup
-            return () => {
-                emitter.removeEventListener(eventName, eventListener);
-            };
-        },
-        [eventName, emitter], // Re-run if eventName or emitter changes
-    );
-}
-
 type Mapper<T> = (...args: any[]) => T;
 
 export function useTypedEventEmitterState<
@@ -131,20 +94,5 @@ export function useEventEmitterState<T>(
     // re-run when the emitter changes
     useEffect(handler, [emitter]); // eslint-disable-line react-hooks/exhaustive-deps
     useEventEmitter(emitter, eventName, handler);
-    return value;
-}
-
-export function useEventTargetState<T>(
-    target: EventTarget | undefined,
-    eventName: string,
-    fn: Mapper<T>,
-): T {
-    const [value, setValue] = useState<T>(fn());
-    const handler = useCallback((...args: any[]) => {
-        setValue(fn(...args));
-    }, [fn]);
-    // re-run when the emitter changes
-    useEffect(handler, [target]); // eslint-disable-line react-hooks/exhaustive-deps
-    useEventTarget(target, eventName, handler);
     return value;
 }

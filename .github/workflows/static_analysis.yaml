@@ -74,3 +74,21 @@ jobs:
 
       - name: Run Linter
         run: "yarn run lint:style"
+
+  analyse_dead_code:
+    name: "Analyse Dead Code"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install Deps
+        run: "scripts/ci/layered.sh"
+
+      - name: Dead Code Analysis
+        run: |
+          cd element-web 
+          yarn run analyse:unused-exports
