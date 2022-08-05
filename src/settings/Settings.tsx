@@ -401,10 +401,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
     },
-    "feature_hidden_read_receipts": {
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Don't send read receipts"),
-        default: false,
+    "sendReadReceipts": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Send read receipts"),
+        default: true,
     },
     "feature_message_right_click_context_menu": {
         isFeature: true,

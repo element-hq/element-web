@@ -23,8 +23,8 @@ import { MatrixEvent } from 'matrix-js-sdk/src/models/event';
 import { Relations } from "matrix-js-sdk/src/models/relations";
 import { logger } from 'matrix-js-sdk/src/logger';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
-import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
+import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { wantsDateSeparator } from '../../DateUtils';
@@ -828,7 +828,11 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         }
         const receipts: IReadReceiptProps[] = [];
         room.getReceiptsForEvent(event).forEach((r) => {
-            if (!r.userId || ![ReceiptType.Read, ReceiptType.ReadPrivate].includes(r.type) || r.userId === myUserId) {
+            if (
+                !r.userId ||
+                !isSupportedReceiptType(r.type) ||
+                r.userId === myUserId
+            ) {
                 return; // ignore non-read receipts and receipts from self.
             }
             if (MatrixClientPeg.get().isUserIgnored(r.userId)) {

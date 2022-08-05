@@ -304,7 +304,7 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                     <div className="mx_SettingsTab_subsectionText">
                         <p>
                             { _t("Share anonymous data to help us identify issues. Nothing personal. " +
-                                 "No third parties.") }
+                                "No third parties.") }
                         </p>
                         <AccessibleButton
                             kind="link"

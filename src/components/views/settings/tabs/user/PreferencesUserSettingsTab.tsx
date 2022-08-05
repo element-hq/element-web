@@ -29,6 +29,7 @@ import { UserTab } from "../../../dialogs/UserTab";
 import { OpenToTabPayload } from "../../../../../dispatcher/payloads/OpenToTabPayload";
 import { Action } from "../../../../../dispatcher/actions";
 import SdkConfig from "../../../../../SdkConfig";
+import { MatrixClientPeg } from "../../../../../MatrixClientPeg";
 import { showUserOnboardingPage } from "../../../user-onboarding/UserOnboardingPage";
 
 interface IProps {
@@ -36,51 +37,59 @@ interface IProps {
 }
 
 interface IState {
+    disablingReadReceiptsSupported: boolean;
     autocompleteDelay: string;
     readMarkerInViewThresholdMs: string;
     readMarkerOutOfViewThresholdMs: string;
 }
 
 export default class PreferencesUserSettingsTab extends React.Component<IProps, IState> {
-    static ROOM_LIST_SETTINGS = [
+    private static ROOM_LIST_SETTINGS = [
         'breadcrumbs',
     ];
 
-    static SPACES_SETTINGS = [
+    private static SPACES_SETTINGS = [
         "Spaces.allRoomsInHome",
     ];
 
-    static KEYBINDINGS_SETTINGS = [
+    private static KEYBINDINGS_SETTINGS = [
         'ctrlFForSearch',
     ];
 
-    static COMPOSER_SETTINGS = [
+    private static PRESENCE_SETTINGS = [
+        "sendTypingNotifications",
+        // sendReadReceipts - handled specially due to server needing support
+    ];
+
+    private static COMPOSER_SETTINGS = [
         'MessageComposerInput.autoReplaceEmoji',
         'MessageComposerInput.useMarkdown',
         'MessageComposerInput.suggestEmoji',
-        'sendTypingNotifications',
         'MessageComposerInput.ctrlEnterToSend',
         'MessageComposerInput.surroundWith',
         'MessageComposerInput.showStickersButton',
         'MessageComposerInput.insertTrailingColon',
     ];
 
-    static TIME_SETTINGS = [
+    private static TIME_SETTINGS = [
         'showTwelveHourTimestamps',
         'alwaysShowTimestamps',
     ];
-    static CODE_BLOCKS_SETTINGS = [
+
+    private static CODE_BLOCKS_SETTINGS = [
         'enableSyntaxHighlightLanguageDetection',
         'expandCodeByDefault',
         'showCodeLineNumbers',
     ];
-    static IMAGES_AND_VIDEOS_SETTINGS = [
+
+    private static IMAGES_AND_VIDEOS_SETTINGS = [
         'urlPreviewsEnabled',
         'autoplayGifs',
         'autoplayVideo',
         'showImages',
     ];
-    static TIMELINE_SETTINGS = [
+
+    private static TIMELINE_SETTINGS = [
         'showTypingNotifications',
         'showRedactions',
         'showReadReceipts',
@@ -93,7 +102,8 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         'scrollToBottomOnMessageSent',
         'useOnlyCurrentProfiles',
     ];
-    static GENERAL_SETTINGS = [
+
+    private static GENERAL_SETTINGS = [
         'promptBeforeInviteUnknownUsers',
         // Start automatically after startup (electron-only)
         // Autocomplete delay (niche text box)
@@ -103,6 +113,7 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
         super(props);
 
         this.state = {
+            disablingReadReceiptsSupported: false,
             autocompleteDelay:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'autocompleteDelay').toString(10),
             readMarkerInViewThresholdMs:
@@ -110,6 +121,15 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
             readMarkerOutOfViewThresholdMs:
                 SettingsStore.getValueAt(SettingLevel.DEVICE, 'readMarkerOutOfViewThresholdMs').toString(10),
         };
+    }
+
+    public async componentDidMount(): Promise<void> {
+        this.setState({
+            disablingReadReceiptsSupported: (
+                await MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2285.stable") ||
+                await MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2285")
+            ),
+        });
     }
 
     private onAutocompleteDelayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,6 +203,20 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                 <div className="mx_SettingsTab_section">
                     <span className="mx_SettingsTab_subheading">{ _t("Displaying time") }</span>
                     { this.renderGroup(PreferencesUserSettingsTab.TIME_SETTINGS) }
+                </div>
+
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("Presence") }</span>
+                    <span className="mx_SettingsTab_subsectionText">
+                        { _t("Share your activity and status with others.") }
+                    </span>
+                    <SettingsFlag
+                        disabled={!this.state.disablingReadReceiptsSupported}
+                        disabledDescription={_t("Your server doesn't support disabling sending read receipts.")}
+                        name="sendReadReceipts"
+                        level={SettingLevel.ACCOUNT}
+                    />
+                    { this.renderGroup(PreferencesUserSettingsTab.PRESENCE_SETTINGS) }
                 </div>
 
                 <div className="mx_SettingsTab_section">

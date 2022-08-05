@@ -127,6 +127,7 @@ export function createTestClient(): MatrixClient {
         setAccountData: jest.fn(),
         setRoomAccountData: jest.fn(),
         setRoomTopic: jest.fn(),
+        setRoomReadMarkers: jest.fn().mockResolvedValue({}),
         sendTyping: jest.fn().mockResolvedValue({}),
         sendMessage: jest.fn().mockResolvedValue({}),
         sendStateEvent: jest.fn().mockResolvedValue(undefined),
@@ -361,6 +362,8 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         getMembersWithMembership: jest.fn().mockReturnValue([]),
         getJoinedMembers: jest.fn().mockReturnValue([]),
         getJoinedMemberCount: jest.fn().mockReturnValue(1),
+        getInvitedAndJoinedMemberCount: jest.fn().mockReturnValue(1),
+        setUnreadNotificationCount: jest.fn(),
         getMembers: jest.fn().mockReturnValue([]),
         getPendingEvents: () => [],
         getLiveTimeline: jest.fn().mockReturnValue(stubTimeline),
@@ -407,6 +410,7 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         myUserId: client?.getUserId(),
         canInvite: jest.fn(),
         getThreads: jest.fn().mockReturnValue([]),
+        eventShouldLiveIn: jest.fn().mockReturnValue({}),
     } as unknown as Room;
 }
 
