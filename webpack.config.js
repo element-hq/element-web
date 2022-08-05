@@ -631,6 +631,10 @@ module.exports = (env, argv) => {
                 new SentryCliPlugin({
                     release: process.env.VERSION,
                     include: "./webapp/bundles",
+                    errorHandler: (err, invokeErr, compilation) => {
+                        compilation.warnings.push('Sentry CLI Plugin: ' + err.message);
+                        console.log(`::warning title=Sentry error::${err.message}`);
+                    },
                 }),
             new webpack.EnvironmentPlugin(['VERSION']),
         ].filter(Boolean),
