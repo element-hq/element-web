@@ -16,7 +16,7 @@
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Неподдерживаемый браузер",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Пожалуйста поставьте <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, или <safariLink>Safari</safariLink> для лучшей совместимости.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Вы можете продолжать пользоваться этим браузером но некоторые возможности будут недоступны и интерфейс может быть отрисован неправильно.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Вы можете продолжать пользоваться этим браузером, но некоторые возможности будут недоступны и интерфейс может быть отрисован неправильно.",
     "I understand the risks and wish to continue": "Я понимаю риск и хочу продолжить",
     "Go to element.io": "К element.io",
     "Failed to start": "Старт не удался",
