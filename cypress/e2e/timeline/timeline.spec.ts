@@ -57,12 +57,12 @@ const expectAvatar = (e: JQuery<HTMLElement>, avatarUrl: string): void => {
     });
 };
 
-const sendEvent = (roomId: string): Chainable<ISendEventResponse> => {
+const sendEvent = (roomId: string, html = false): Chainable<ISendEventResponse> => {
     return cy.sendEvent(
         roomId,
         null,
         "m.room.message" as EventType,
-        MessageEvent.from("Message").serialize().content,
+        MessageEvent.from("Message", html ? "<b>Message</b>" : undefined).serialize().content,
     );
 };
 
@@ -260,6 +260,18 @@ describe("Timeline", () => {
 
             // Make sure "collapse" link button worked
             cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]");
+        });
+
+        it("should highlight search result words regardless of formatting", () => {
+            sendEvent(roomId);
+            sendEvent(roomId, true);
+            cy.visit("/#/room/" + roomId);
+
+            cy.get(".mx_RoomHeader_searchButton").click();
+            cy.get(".mx_SearchBar_input input").type("Message{enter}");
+
+            cy.get(".mx_EventTile:not(.mx_EventTile_contextual)").find(".mx_EventTile_searchHighlight").should("exist");
+            cy.get(".mx_RoomView_searchResultsPanel").percySnapshotElement("Highlighted search results");
         });
     });
 
