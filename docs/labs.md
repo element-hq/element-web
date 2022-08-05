@@ -142,8 +142,6 @@ If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
 
-When enabled, historical messages will use the current profile for the sender.
-
 ## Pin drop location sharing (`feature_location_share_pin_drop`) [In Development]
 
 Enables sharing a pin drop location to the timeline.
