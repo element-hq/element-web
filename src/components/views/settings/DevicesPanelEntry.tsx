@@ -20,15 +20,14 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
-import { formatDate } from '../../../DateUtils';
 import StyledCheckbox, { CheckboxStyle } from '../elements/StyledCheckbox';
 import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
-import TextWithTooltip from "../elements/TextWithTooltip";
 import Modal from "../../../Modal";
 import SetupEncryptionDialog from '../dialogs/security/SetupEncryptionDialog';
 import VerificationRequestDialog from '../../views/dialogs/VerificationRequestDialog';
 import LogoutDialog from '../dialogs/LogoutDialog';
+import DeviceTile from './devices/DeviceTile';
 
 interface IProps {
     device: IMyDevice;
@@ -114,17 +113,6 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
     };
 
     public render(): JSX.Element {
-        const device = this.props.device;
-
-        let lastSeen = "";
-        if (device.last_seen_ts) {
-            const lastSeenDate = new Date(device.last_seen_ts);
-            lastSeen = _t("Last seen %(date)s at %(ip)s", {
-                date: formatDate(lastSeenDate),
-                ip: device.last_seen_ip,
-            });
-        }
-
         const myDeviceClass = this.props.isOwnDevice ? " mx_DevicesPanel_myDevice" : '';
 
         let iconClass = '';
@@ -153,16 +141,6 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                 <StyledCheckbox kind={CheckboxStyle.Outline} onChange={this.onDeviceToggled} checked={this.props.selected} />
             </div>;
 
-        const deviceName = device.display_name ?
-            <React.Fragment>
-                <TextWithTooltip tooltip={device.display_name + " (" + device.device_id + ")"}>
-                    { device.display_name }
-                </TextWithTooltip>
-            </React.Fragment> :
-            <React.Fragment>
-                { device.device_id }
-            </React.Fragment>;
-
         const buttons = this.state.renaming ?
             <form className="mx_DevicesPanel_renameForm" onSubmit={this.onRenameSubmit}>
                 <Field
@@ -187,17 +165,9 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
         return (
             <div className={"mx_DevicesPanel_device" + myDeviceClass}>
                 { left }
-                <div className="mx_DevicesPanel_deviceInfo">
-                    <div className="mx_DevicesPanel_deviceName">
-                        { deviceName }
-                    </div>
-                    <div className="mx_DevicesPanel_lastSeen">
-                        { lastSeen }
-                    </div>
-                </div>
-                <div className="mx_DevicesPanel_deviceButtons">
+                <DeviceTile device={this.props.device}>
                     { buttons }
-                </div>
+                </DeviceTile>
             </div>
         );
     }
