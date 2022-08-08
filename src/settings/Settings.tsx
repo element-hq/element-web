@@ -413,13 +413,6 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Right-click message context menu"),
         default: false,
     },
-    "feature_location_share_pin_drop": {
-        isFeature: true,
-        labsGroup: LabGroup.Messaging,
-        supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Location sharing - pin drop"),
-        default: false,
-    },
     "feature_location_share_live": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

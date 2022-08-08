@@ -213,8 +213,6 @@ describe('<LocationShareMenu />', () => {
     });
 
     describe('with pin drop share type enabled', () => {
-        beforeEach(() => enableSettings(["feature_location_share_pin_drop"]));
-
         it('renders share type switch with own and pin drop options', () => {
             const component = getComponent();
             expect(component.find('LocationPicker').length).toBe(0);

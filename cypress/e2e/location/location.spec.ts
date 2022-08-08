@@ -18,7 +18,6 @@ limitations under the License.
 
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import Chainable = Cypress.Chainable;
-import { SettingLevel } from "../../../src/settings/SettingLevel";
 
 describe("Location sharing", () => {
     let synapse: SynapseInstance;
@@ -40,9 +39,6 @@ describe("Location sharing", () => {
 
             cy.initTestUser(synapse, "Tom");
         });
-
-        // enable pin drop location sharing feature
-        cy.setSettingValue("feature_location_share_pin_drop", null, SettingLevel.DEVICE, true);
     });
 
     afterEach(() => {

@@ -49,9 +49,7 @@ const getEnabledShareTypes = (relation): LocationShareType[] => {
         enabledShareTypes.push(LocationShareType.Live);
     }
 
-    if (SettingsStore.getValue("feature_location_share_pin_drop")) {
-        enabledShareTypes.push(LocationShareType.Pin);
-    }
+    enabledShareTypes.push(LocationShareType.Pin);
 
     return enabledShareTypes;
 };
