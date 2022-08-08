@@ -115,6 +115,12 @@ describe('<UserSettingsDialog />', () => {
         expect(getByTestId(`settings-tab-${UserTab.Voice}`)).toBeTruthy();
     });
 
+    it('renders session manager tab when enabled', () => {
+        mockSettingsStore.getValue.mockImplementation((settingName) => settingName === "feature_new_device_manager");
+        const { getByTestId } = render(getComponent());
+        expect(getByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
+    });
+
     it('renders labs tab when show_labs_settings is enabled in config', () => {
         mockSdkConfig.get.mockImplementation((configName) => configName === "show_labs_settings");
         const { getByTestId } = render(getComponent());
@@ -130,11 +136,11 @@ describe('<UserSettingsDialog />', () => {
         expect(getByTestId(`settings-tab-${UserTab.Labs}`)).toBeTruthy();
     });
 
-    it('watches feature_mjolnir setting', () => {
-        let watchSettingCallback: CallbackFn = jest.fn();
+    it('watches settings', () => {
+        const watchSettingCallbacks: Record<string, CallbackFn> = {};
 
         mockSettingsStore.watchSetting.mockImplementation((settingName, roomId, callback) => {
-            watchSettingCallback = callback;
+            watchSettingCallbacks[settingName] = callback;
             return `mock-watcher-id-${settingName}`;
         });
 
@@ -142,16 +148,24 @@ describe('<UserSettingsDialog />', () => {
         expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeFalsy();
 
         expect(mockSettingsStore.watchSetting.mock.calls[0][0]).toEqual('feature_mjolnir');
+        expect(mockSettingsStore.watchSetting.mock.calls[1][0]).toEqual('feature_new_device_manager');
 
         // call the watch setting callback
-        watchSettingCallback("feature_mjolnir", '', SettingLevel.ACCOUNT, true, true);
-
+        watchSettingCallbacks["feature_mjolnir"]("feature_mjolnir", '', SettingLevel.ACCOUNT, true, true);
         // tab is rendered now
         expect(queryByTestId(`settings-tab-${UserTab.Mjolnir}`)).toBeTruthy();
 
+        // call the watch setting callback
+        watchSettingCallbacks["feature_new_device_manager"](
+            "feature_new_device_manager", '', SettingLevel.ACCOUNT, true, true,
+        );
+        // tab is rendered now
+        expect(queryByTestId(`settings-tab-${UserTab.SessionManager}`)).toBeTruthy();
+
         unmount();
 
-        // unwatches mjolnir after unmount
+        // unwatches settings on unmount
         expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith('mock-watcher-id-feature_mjolnir');
+        expect(mockSettingsStore.unwatchSetting).toHaveBeenCalledWith('mock-watcher-id-feature_new_device_manager');
     });
 });

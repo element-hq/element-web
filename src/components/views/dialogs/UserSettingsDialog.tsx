@@ -35,6 +35,7 @@ import BaseDialog from "./BaseDialog";
 import { IDialogProps } from "./IDialogProps";
 import SidebarUserSettingsTab from "../settings/tabs/user/SidebarUserSettingsTab";
 import KeyboardUserSettingsTab from "../settings/tabs/user/KeyboardUserSettingsTab";
+import SessionManagerTab from '../settings/tabs/user/SessionManagerTab';
 import { UserTab } from "./UserTab";
 
 interface IProps extends IDialogProps {
@@ -43,30 +44,40 @@ interface IProps extends IDialogProps {
 
 interface IState {
     mjolnirEnabled: boolean;
+    newSessionManagerEnabled: boolean;
 }
 
 export default class UserSettingsDialog extends React.Component<IProps, IState> {
-    private mjolnirWatcher: string | undefined;
+    private settingsWatchers: string[] = [];
 
     constructor(props) {
         super(props);
 
         this.state = {
             mjolnirEnabled: SettingsStore.getValue("feature_mjolnir"),
+            newSessionManagerEnabled: SettingsStore.getValue("feature_new_device_manager"),
         };
     }
 
     public componentDidMount(): void {
-        this.mjolnirWatcher = SettingsStore.watchSetting("feature_mjolnir", null, this.mjolnirChanged);
+        this.settingsWatchers = [
+            SettingsStore.watchSetting("feature_mjolnir", null, this.mjolnirChanged),
+            SettingsStore.watchSetting("feature_new_device_manager", null, this.sessionManagerChanged),
+        ];
     }
 
     public componentWillUnmount(): void {
-        this.mjolnirWatcher && SettingsStore.unwatchSetting(this.mjolnirWatcher);
+        this.settingsWatchers.forEach(watcherRef => SettingsStore.unwatchSetting(watcherRef));
     }
 
     private mjolnirChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
         // We can cheat because we know what levels a feature is tracked at, and how it is tracked
         this.setState({ mjolnirEnabled: newValue });
+    };
+
+    private sessionManagerChanged: CallbackFn = (settingName, roomId, atLevel, newValue) => {
+        // We can cheat because we know what levels a feature is tracked at, and how it is tracked
+        this.setState({ newSessionManagerEnabled: newValue });
     };
 
     private getTabs() {
@@ -132,6 +143,16 @@ export default class UserSettingsDialog extends React.Component<IProps, IState> 
             <SecurityUserSettingsTab closeSettingsFn={this.props.onFinished} />,
             "UserSettingsSecurityPrivacy",
         ));
+        if (this.state.newSessionManagerEnabled) {
+            tabs.push(new Tab(
+                UserTab.SessionManager,
+                _td("Sessions"),
+                "mx_UserSettingsDialog_securityIcon",
+                <SessionManagerTab />,
+                // don't track with posthog while under construction
+                undefined,
+            ));
+        }
         // Show the Labs tab if enabled or if there are any active betas
         if (SdkConfig.get("show_labs_settings")
             || SettingsStore.getFeatureSettingNames().some(k => SettingsStore.getBetaInfo(k))

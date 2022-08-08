@@ -14,17 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export enum UserTab {
-    General = "USER_GENERAL_TAB",
-    Appearance = "USER_APPEARANCE_TAB",
-    Notifications = "USER_NOTIFICATIONS_TAB",
-    Preferences = "USER_PREFERENCES_TAB",
-    Keyboard = "USER_KEYBOARD_TAB",
-    Sidebar = "USER_SIDEBAR_TAB",
-    Voice = "USER_VOICE_TAB",
-    Security = "USER_SECURITY_TAB",
-    Labs = "USER_LABS_TAB",
-    Mjolnir = "USER_MJOLNIR_TAB",
-    Help = "USER_HELP_TAB",
-    SessionManager = "USER_SESSION_MANAGER_TAB",
-}
+import React, { ReactElement } from 'react';
+import { render } from '@testing-library/react';
+
+import SettingsTab, { SettingsTabProps } from '../../../../../src/components/views/settings/tabs/SettingsTab';
+
+describe('<SettingsTab />', () => {
+    const getComponent = (props: SettingsTabProps): ReactElement => (<SettingsTab {...props} />);
+    it('renders tab', () => {
+        const { container } = render(getComponent({ heading: 'Test Tab', children: <div>test</div> }));
+
+        expect(container).toMatchSnapshot();
+    });
+});
+

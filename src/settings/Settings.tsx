@@ -429,6 +429,13 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td("Favourite Messages (under active development)"),
         default: false,
     },
+    "feature_new_device_manager": {
+        isFeature: true,
+        labsGroup: LabGroup.Experimental,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td("Use new session manager (under active development)"),
+        default: false,
+    },
     "baseFontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
