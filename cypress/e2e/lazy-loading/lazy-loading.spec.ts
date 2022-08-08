@@ -115,21 +115,21 @@ describe("Lazy Loading", () => {
         });
     }
 
-    function getMembersInMemberlist(): Chainable<JQuery> {
-        return cy.get(".mx_MemberList .mx_EntityTile_name");
+    function getMemberInMemberlist(name: string): Chainable<JQuery> {
+        return cy.contains(".mx_MemberList .mx_EntityTile_name", name);
     }
 
     function checkMemberList(charlies: Charly[]) {
-        getMembersInMemberlist().contains("Alice").should("exist");
-        getMembersInMemberlist().contains("Bob").should("exist");
+        getMemberInMemberlist("Alice").should("exist");
+        getMemberInMemberlist("Bob").should("exist");
         charlies.forEach(charly => {
-            getMembersInMemberlist().contains(charly.displayName).should("exist");
+            getMemberInMemberlist(charly.displayName).should("exist");
         });
     }
 
     function checkMemberListLacksCharlies(charlies: Charly[]) {
         charlies.forEach(charly => {
-            getMembersInMemberlist().contains(charly.displayName).should("not.exist");
+            getMemberInMemberlist(charly.displayName).should("not.exist");
         });
     }
 

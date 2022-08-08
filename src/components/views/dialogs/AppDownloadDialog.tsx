@@ -43,7 +43,11 @@ export const AppDownloadDialog: FC<IDialogProps> = ({ onFinished }: IDialogProps
     const urlFDroid = mobileBuilds?.get("fdroid") ?? fallbackFDroid;
 
     return (
-        <BaseDialog title={_t("Download %(brand)s", { brand })} className="mx_AppDownloadDialog" onFinished={onFinished}>
+        <BaseDialog
+            title={_t("Download %(brand)s", { brand })}
+            className="mx_AppDownloadDialog"
+            fixedWidth
+            onFinished={onFinished}>
             { desktopBuilds?.get("available") && (
                 <div className="mx_AppDownloadDialog_desktop">
                     <Heading size="h3">
