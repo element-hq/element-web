@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<TabbedView /> renders tabs 1`] = `
+<div>
+  <div
+    class="mx_TabbedView mx_TabbedView_tabsOnLeft"
+  >
+    <div
+      class="mx_TabbedView_tabLabels"
+    >
+      <div
+        class="mx_AccessibleButton mx_TabbedView_tabLabel mx_TabbedView_tabLabel_active"
+        data-testid="settings-tab-GENERAL"
+        role="button"
+        tabindex="0"
+      >
+        <span
+          class="mx_TabbedView_maskedIcon general"
+        />
+        <span
+          class="mx_TabbedView_tabLabel_text"
+        >
+          General
+        </span>
+      </div>
+      <div
+        class="mx_AccessibleButton mx_TabbedView_tabLabel "
+        data-testid="settings-tab-LABS"
+        role="button"
+        tabindex="0"
+      >
+        <span
+          class="mx_TabbedView_maskedIcon labs"
+        />
+        <span
+          class="mx_TabbedView_tabLabel_text"
+        >
+          Labs
+        </span>
+      </div>
+      <div
+        class="mx_AccessibleButton mx_TabbedView_tabLabel "
+        data-testid="settings-tab-SECURITY"
+        role="button"
+        tabindex="0"
+      >
+        <span
+          class="mx_TabbedView_maskedIcon security"
+        />
+        <span
+          class="mx_TabbedView_tabLabel_text"
+        >
+          Security
+        </span>
+      </div>
+    </div>
+    <div
+      class="mx_TabbedView_tabPanel"
+    >
+      <div
+        class="mx_AutoHideScrollbar mx_TabbedView_tabPanelContent"
+        tabindex="-1"
+      >
+        <div>
+          general
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<TabbedView /> renders without error when there are no tabs 1`] = `
+<div>
+  <div
+    class="mx_TabbedView mx_TabbedView_tabsOnLeft"
+  >
+    <div
+      class="mx_TabbedView_tabLabels"
+    />
+  </div>
+</div>
+`;

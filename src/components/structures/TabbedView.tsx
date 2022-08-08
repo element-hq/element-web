@@ -60,21 +60,16 @@ interface IProps {
 }
 
 interface IState {
-    activeTabIndex: number;
+    activeTabId: string;
 }
 
 export default class TabbedView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        let activeTabIndex = 0;
-        if (props.initialTabId) {
-            const tabIndex = props.tabs.findIndex(t => t.id === props.initialTabId);
-            if (tabIndex >= 0) activeTabIndex = tabIndex;
-        }
-
+        const initialTabIdIsValid = props.tabs.find(tab => tab.id === props.initialTabId);
         this.state = {
-            activeTabIndex,
+            activeTabId: initialTabIdIsValid ? props.initialTabId : props.tabs[0]?.id,
         };
     }
 
@@ -82,9 +77,8 @@ export default class TabbedView extends React.Component<IProps, IState> {
         tabLocation: TabLocation.LEFT,
     };
 
-    private getActiveTabIndex() {
-        if (!this.state || !this.state.activeTabIndex) return 0;
-        return this.state.activeTabIndex;
+    private getTabById(id: string): Tab | undefined {
+        return this.props.tabs.find(tab => tab.id === id);
     }
 
     /**
@@ -93,10 +87,10 @@ export default class TabbedView extends React.Component<IProps, IState> {
      * @private
      */
     private setActiveTab(tab: Tab) {
-        const idx = this.props.tabs.indexOf(tab);
-        if (idx !== -1) {
+        // make sure this tab is still in available tabs
+        if (!!this.getTabById(tab.id)) {
             if (this.props.onChange) this.props.onChange(tab.id);
-            this.setState({ activeTabIndex: idx });
+            this.setState({ activeTabId: tab.id });
         } else {
             logger.error("Could not find tab " + tab.label + " in tabs");
         }
@@ -105,8 +99,7 @@ export default class TabbedView extends React.Component<IProps, IState> {
     private renderTabLabel(tab: Tab) {
         let classes = "mx_TabbedView_tabLabel ";
 
-        const idx = this.props.tabs.indexOf(tab);
-        if (idx === this.getActiveTabIndex()) classes += "mx_TabbedView_tabLabel_active";
+        if (this.state.activeTabId === tab.id) classes += "mx_TabbedView_tabLabel_active";
 
         let tabIcon = null;
         if (tab.icon) {
@@ -143,8 +136,8 @@ export default class TabbedView extends React.Component<IProps, IState> {
 
     public render(): React.ReactNode {
         const labels = this.props.tabs.map(tab => this.renderTabLabel(tab));
-        const tab = this.props.tabs[this.getActiveTabIndex()];
-        const panel = this.renderTabPanel(tab);
+        const tab = this.getTabById(this.state.activeTabId);
+        const panel = tab ? this.renderTabPanel(tab) : null;
 
         const tabbedViewClasses = classNames({
             'mx_TabbedView': true,
