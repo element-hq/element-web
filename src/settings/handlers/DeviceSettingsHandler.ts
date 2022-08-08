@@ -114,12 +114,16 @@ export default class DeviceSettingsHandler extends AbstractLocalStorageSettingsH
     // Note: features intentionally don't use the same key as settings to avoid conflicts
     // and to be backwards compatible.
 
-    private readFeature(featureName: string): boolean | null {
+    // public for access to migrations - not exposed from the SettingsHandler interface
+    public readFeature(featureName: string): boolean | null {
         if (MatrixClientPeg.get() && MatrixClientPeg.get().isGuest()) {
             // Guests should not have any labs features enabled.
             return false;
         }
 
+        // XXX: This turns they key names into `mx_labs_feature_feature_x` (double feature).
+        // This is because all feature names start with `feature_` as a matter of policy.
+        // Oh well.
         return this.getBoolean("mx_labs_feature_" + featureName);
     }
 

@@ -96,7 +96,7 @@ declare global {
              * value.
              * @return {*} The value, or null if not found
              */
-            getSettingValue<T>(name: string, roomId?: string): Chainable<T>;
+            getSettingValue<T>(name: string, roomId?: string, excludeDefault?: boolean): Chainable<T>;
         }
     }
 }
@@ -116,9 +116,10 @@ Cypress.Commands.add("setSettingValue", (
     });
 });
 
-Cypress.Commands.add("getSettingValue", <T = any>(name: string, roomId?: string): Chainable<T> => {
+// eslint-disable-next-line max-len
+Cypress.Commands.add("getSettingValue", <T = any>(name: string, roomId?: string, excludeDefault?: boolean): Chainable<T> => {
     return cy.getSettingsStore().then((store: typeof SettingsStore) => {
-        return store.getValue(name, roomId);
+        return store.getValue(name, roomId, excludeDefault);
     });
 });
 

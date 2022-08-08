@@ -826,6 +826,9 @@ async function startMatrixClient(startSyncing = true): Promise<void> {
         await MatrixClientPeg.assign();
     }
 
+    // Run the migrations after the MatrixClientPeg has been assigned
+    SettingsStore.runMigrations();
+
     // This needs to be started after crypto is set up
     DeviceListener.sharedInstance().start();
     // Similarly, don't start sending presence updates until we've started
