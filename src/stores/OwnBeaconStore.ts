@@ -55,7 +55,7 @@ export enum OwnBeaconStoreEvent {
     BeaconUpdateError = 'BeaconUpdateError',
 }
 
-const MOVING_UPDATE_INTERVAL = 2000;
+const MOVING_UPDATE_INTERVAL = 5000;
 const STATIC_UPDATE_INTERVAL = 30000;
 
 const BAIL_AFTER_CONSECUTIVE_ERROR_COUNT = 2;
