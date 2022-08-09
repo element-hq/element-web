@@ -59,8 +59,9 @@ describe("Pills", () => {
             // find the pill in the timeline and click it
             cy.get(".mx_EventTile_body .mx_Pill").click();
 
+            const localUrl = `/#/room/#${targetLocalpart}:`;
             // verify we landed at a sane place
-            cy.url().should("contain", `/#/room/#${targetLocalpart}:`);
+            cy.url().should("contain", localUrl);
 
             cy.wait(250); // let the room list settle
 
@@ -69,7 +70,7 @@ describe("Pills", () => {
             cy.get(".mx_EventTile_body .mx_Pill .mx_Pill_linkText")
                 .should("have.css", "pointer-events", "none")
                 .click({ force: true }); // force is to ensure we bypass pointer-events
-            cy.url().should("contain", `https://matrix.to/#/#${targetLocalpart}:`);
+            cy.url().should("contain", localUrl);
         });
     });
 });

@@ -57,4 +57,19 @@ describe('tooltipify', () => {
         expect(containers).toHaveLength(0);
         expect(root.outerHTML).toEqual(originalHtml);
     });
+
+    it("does not re-wrap if called multiple times", () => {
+        const component = mount(<div><a href="/foo">click</a></div>);
+        const root = component.getDOMNode();
+        const containers: Element[] = [];
+        tooltipifyLinks([root], [], containers);
+        tooltipifyLinks([root], [], containers);
+        tooltipifyLinks([root], [], containers);
+        tooltipifyLinks([root], [], containers);
+        expect(containers).toHaveLength(1);
+        const anchor = root.querySelector("a");
+        expect(anchor?.getAttribute("href")).toEqual("/foo");
+        const tooltip = anchor.querySelector(".mx_TextWithTooltip_target");
+        expect(tooltip).toBeDefined();
+    });
 });
