@@ -23,15 +23,16 @@ import TooltipTarget from "../../elements/TooltipTarget";
 import { Alignment } from "../../elements/Tooltip";
 import Heading from "../../typography/Heading";
 
-interface Props {
+export interface DeviceTileProps {
     device: IMyDevice;
     children?: React.ReactNode;
+    onClick?: () => void;
 }
 
 const DeviceTileName: React.FC<{ device: IMyDevice }> = ({ device }) => {
     if (device.display_name) {
         return <TooltipTarget
-            alignment={Alignment.Left}
+            alignment={Alignment.Top}
             label={`${device.display_name} (${device.device_id})`}
         >
             <Heading size='h4'>
@@ -59,7 +60,7 @@ const DeviceMetadata: React.FC<{ value: string, id: string }> = ({ value, id }) 
     value ? <span data-testid={`device-metadata-${id}`}>{ value }</span> : null
 );
 
-const DeviceTile: React.FC<Props> = ({ device, children }) => {
+const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, onClick }) => {
     const lastActivity = device.last_seen_ts && `${_t('Last activity')} ${formatLastActivity(device.last_seen_ts)}`;
     const metadata = [
         { id: 'lastActivity', value: lastActivity },
@@ -67,7 +68,7 @@ const DeviceTile: React.FC<Props> = ({ device, children }) => {
     ];
 
     return <div className="mx_DeviceTile">
-        <div className="mx_DeviceTile_info">
+        <div className="mx_DeviceTile_info" onClick={onClick}>
             <DeviceTileName device={device} />
             <div className="mx_DeviceTile_metadata">
                 { metadata.map(({ id, value }, index) =>

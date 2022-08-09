@@ -34,7 +34,6 @@ exports[`<LabelledCheckbox /> should render with byline of "this is a byline" 1`
               className="mx_Checkbox_checkmark"
             />
           </div>
-          <div />
         </label>
       </span>
     </StyledCheckbox>
@@ -90,7 +89,6 @@ exports[`<LabelledCheckbox /> should render with byline of null 1`] = `
               className="mx_Checkbox_checkmark"
             />
           </div>
-          <div />
         </label>
       </span>
     </StyledCheckbox>

@@ -70,9 +70,11 @@ export default class StyledCheckbox extends React.PureComponent<IProps, IState> 
                 <div className="mx_Checkbox_background">
                     <div className="mx_Checkbox_checkmark" />
                 </div>
-                <div>
-                    { this.props.children }
-                </div>
+                { !!this.props.children &&
+                    <div>
+                        { this.props.children }
+                    </div>
+                }
             </label>
         </span>;
     }
