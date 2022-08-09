@@ -14,20 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+.mx_SettingsSubsection {
+    width: 100%;
+    box-sizing: border-box;
+}
 
-import { _t } from "../../../../../languageHandler";
-import SettingsSubsection from '../../shared/SettingsSubsection';
-import SettingsTab from '../SettingsTab';
+.mx_SettingsSubsection_heading {
+    padding-bottom: $spacing-8;
+}
 
-const SessionManagerTab: React.FC = () => {
-    return <SettingsTab heading={_t('Sessions')}>
-        <SettingsSubsection
-            heading={_t('Current session')}
-            // TODO session content coming here
-            // in next PR
-        />
-    </SettingsTab>;
-};
+.mx_SettingsSubsection_description {
+    width: 100%;
+    box-sizing: inherit;
+    line-height: $font-24px;
+    margin-bottom: $spacing-32;
+    color: $secondary-content;
+}
 
-export default SessionManagerTab;
+.mx_SettingsSubsection_content {
+    width: 100%;
+}
