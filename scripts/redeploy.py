@@ -12,10 +12,9 @@
 #   - flask
 #
 from __future__ import print_function
-import json, requests, tarfile, argparse, os, errno
+import requests, argparse, os, errno
 import time
 import traceback
-from urlparse import urljoin
 import glob
 import re
 import shutil
@@ -30,22 +29,11 @@ app = Flask(__name__)
 
 deployer = None
 arg_extract_path = None
-arg_symlink = None
 arg_webhook_token = None
 arg_api_token = None
 
 workQueue = Queue()
 
-def create_symlink(source, linkname):
-    try:
-        os.symlink(source, linkname)
-    except OSError, e:
-        if e.errno == errno.EEXIST:
-            # atomic modification
-            os.symlink(source, linkname + ".tmp")
-            os.rename(linkname + ".tmp", linkname)
-        else:
-            raise e
 
 def req_headers():
     return {
@@ -128,7 +116,7 @@ def on_receive_buildkite_poke():
     artifacts_resp = requests.get(artifacts_url, headers=req_headers())
     artifacts_resp.raise_for_status()
     artifacts_array = artifacts_resp.json()
-    
+
     artifact_to_deploy = None
     for artifact in artifacts_array:
         if re.match(r"dist/.*.tar.gz", artifact['path']):
@@ -173,7 +161,6 @@ def deploy_buildkite_artifact(artifact, pipeline_name, build_num):
         traceback.print_exc()
         abort(400, e.message)
 
-    create_symlink(source=extracted_dir, linkname=arg_symlink)
 
 def deploy_tarball(artifact, build_dir):
     """Download a tarball from jenkins and unpack it
@@ -274,7 +261,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     arg_extract_path = args.extract
-    arg_symlink = args.symlink
     arg_webbook_token = args.webhook_token
     arg_api_token = args.api_token
     arg_buildkite_org = args.buildkite_org
@@ -285,6 +271,7 @@ if __name__ == "__main__":
     deployer = Deployer()
     deployer.bundles_path = args.bundles_dir
     deployer.should_clean = args.clean
+    deployer.symlink_latest = args.symlink
 
     for include in args.include:
         deployer.symlink_paths.update({ os.path.basename(pth): pth for pth in glob.iglob(include) })
@@ -298,7 +285,7 @@ if __name__ == "__main__":
             (args.port,
              arg_extract_path,
              " (clean after)" if deployer.should_clean else "",
-             arg_symlink,
+             args.symlink,
              deployer.symlink_paths,
             )
         )
