@@ -1,4 +1,12 @@
 {
-    "Dismiss": "రద్దుచేసే",
-    "Unknown device": "తెలుయని పరికరం"
+    "Dismiss": "రద్దుచేయి",
+    "Unknown device": "తెలియని పరికరము",
+    "Go to element.io": "element.io కు వెళ్ళు",
+    "I understand the risks and wish to continue": "నాకు పర్యవసానాలు తెలిసే ముందుకు కొనసాగుతా",
+    "Explore rooms": "గదులను అన్వేెషించు",
+    "Welcome to Element": "ఎలిమెంట్ కు స్వాగతం",
+    "Failed to start": "ప్రారంభించుటలో విఫలం",
+    "Create Account": "ఖాతా తెరువు",
+    "Open": "తెరువు",
+    "Download Completed": "దిగుమతి పూర్తయినది"
 }
