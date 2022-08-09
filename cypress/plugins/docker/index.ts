@@ -61,9 +61,14 @@ export function dockerExec(args: {
         childProcess.execFile("docker", [
             "exec", args.containerId,
             ...args.params,
-        ], { encoding: 'utf8' }, err => {
-            if (err) reject(err);
-            else resolve();
+        ], { encoding: 'utf8' }, (err, stdout, stderr) => {
+            if (err) {
+                console.log(stdout);
+                console.log(stderr);
+                reject(err);
+                return;
+            }
+            resolve();
         });
     });
 }
