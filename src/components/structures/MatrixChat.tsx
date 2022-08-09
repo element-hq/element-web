@@ -157,7 +157,7 @@ interface IScreen {
     params?: QueryDict;
 }
 
-interface IProps { // TODO type things better
+interface IProps {
     config: IConfigOptions;
     serverConfig?: ValidatedServerConfig;
     onNewScreen: (screen: string, replaceLast: boolean) => void;

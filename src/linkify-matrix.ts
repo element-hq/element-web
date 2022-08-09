@@ -130,8 +130,8 @@ function onAliasClick(event: MouseEvent, roomAlias: string) {
     });
 }
 
-const escapeRegExp = function(string): string {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = function(s: string): string {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
 // Recognise URLs from both our local and official Element deployments.
