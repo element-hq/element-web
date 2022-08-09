@@ -3480,5 +3480,19 @@
     "Find friends": "Atopar amizades",
     "It’s what you’re here for, so lets get to it": "É a razón de que estés aquí, asi que imos",
     "Find and invite your friends": "Atopa e convida ás túas amizades",
-    "You made it!": "Conseguíchelo!"
+    "You made it!": "Conseguíchelo!",
+    "We're creating a room with %(names)s": "Estamos creando unha sala con %(names)s",
+    "Google Play and the Google Play logo are trademarks of Google LLC.": "Google Play e o logo de Google Play son marcas de Google LLC.",
+    "App Store® and the Apple logo® are trademarks of Apple Inc.": "App Store® e o Apple logo® son marcas de Apple Inc.",
+    "Get it on F-Droid": "Descargar desde F-Droid",
+    "Get it on Google Play": "Descargar desde Google Play",
+    "Android": "Android",
+    "Download on the App Store": "Descargar na App Store",
+    "iOS": "iOS",
+    "Download %(brand)s Desktop": "Descargar %(brand)s Desktop",
+    "Download %(brand)s": "Descargar %(brand)s",
+    "Your server doesn't support disabling sending read receipts.": "O teu servidor non ten soporte para desactivar o envío de resgardos de lectura.",
+    "Share your activity and status with others.": "Comparte a túa actividade e estado con outras persoas.",
+    "Presence": "Presenza",
+    "Send read receipts": "Enviar resgardos de lectura"
 }
