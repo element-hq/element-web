@@ -44,8 +44,8 @@ export function pillifyLinks(nodes: ArrayLike<Element>, mxEvent: MatrixEvent, pi
     while (node) {
         let pillified = false;
 
-        if (node.tagName === "PRE" || node.tagName === "CODE") {
-            // Skip code blocks
+        if (node.tagName === "PRE" || node.tagName === "CODE" || pills.includes(node)) {
+            // Skip code blocks and existing pills
             node = node.nextSibling as Element;
             continue;
         } else if (node.tagName === "A" && node.getAttribute("href")) {
