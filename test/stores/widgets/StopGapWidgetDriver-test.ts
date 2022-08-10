@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
-import { Widget, WidgetKind, WidgetDriver } from "matrix-widget-api";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { Widget, WidgetKind, WidgetDriver, ITurnServer } from "matrix-widget-api";
+import { MatrixClient, ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
 import { DeviceInfo } from "matrix-js-sdk/src/crypto/deviceinfo";
 
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
@@ -74,6 +74,61 @@ describe("StopGapWidgetDriver", () => {
 
             await driver.sendToDevice("org.example.foo", true, contentMap);
             expect(client.encryptAndSendToDevices.mock.calls).toMatchSnapshot();
+        });
+    });
+
+    describe("getTurnServers", () => {
+        it("stops if VoIP isn't supported", async () => {
+            jest.spyOn(client, "pollingTurnServers", "get").mockReturnValue(false);
+            const servers = driver.getTurnServers();
+            expect(await servers.next()).toEqual({ value: undefined, done: true });
+        });
+
+        it("stops if the homeserver provides no TURN servers", async () => {
+            const servers = driver.getTurnServers();
+            expect(await servers.next()).toEqual({ value: undefined, done: true });
+        });
+
+        it("gets TURN servers", async () => {
+            const server1: ITurnServer = {
+                uris: [
+                    "turn:turn.example.com:3478?transport=udp",
+                    "turn:10.20.30.40:3478?transport=tcp",
+                    "turns:10.20.30.40:443?transport=tcp",
+                ],
+                username: "1443779631:@user:example.com",
+                password: "JlKfBy1QwLrO20385QyAtEyIv0=",
+            };
+            const server2: ITurnServer = {
+                uris: [
+                    "turn:turn.example.com:3478?transport=udp",
+                    "turn:10.20.30.40:3478?transport=tcp",
+                    "turns:10.20.30.40:443?transport=tcp",
+                ],
+                username: "1448999322:@user:example.com",
+                password: "hunter2",
+            };
+            const clientServer1: IClientTurnServer = {
+                urls: server1.uris,
+                username: server1.username,
+                credential: server1.password,
+            };
+            const clientServer2: IClientTurnServer = {
+                urls: server2.uris,
+                username: server2.username,
+                credential: server2.password,
+            };
+
+            client.getTurnServers.mockReturnValue([clientServer1]);
+            const servers = driver.getTurnServers();
+            expect(await servers.next()).toEqual({ value: server1, done: false });
+
+            const nextServer = servers.next();
+            client.getTurnServers.mockReturnValue([clientServer2]);
+            client.emit(ClientEvent.TurnServers, [clientServer2]);
+            expect(await nextServer).toEqual({ value: server2, done: false });
+
+            await servers.return(undefined);
         });
     });
 });

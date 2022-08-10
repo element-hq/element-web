@@ -74,7 +74,7 @@ export function createTestClient(): MatrixClient {
     const eventEmitter = new EventEmitter();
     let txnId = 1;
 
-    return {
+    const client = {
         getHomeserverUrl: jest.fn(),
         getIdentityServerUrl: jest.fn(),
         getDomain: jest.fn().mockReturnValue("matrix.org"),
@@ -118,6 +118,7 @@ export function createTestClient(): MatrixClient {
         getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
         getClientWellKnown: jest.fn().mockReturnValue(null),
         supportsVoip: jest.fn().mockReturnValue(true),
+        getTurnServers: jest.fn().mockReturnValue([]),
         getTurnServersExpiry: jest.fn().mockReturnValue(2 ^ 32),
         getThirdpartyUser: jest.fn().mockResolvedValue([]),
         getAccountData: (type) => {
@@ -173,6 +174,12 @@ export function createTestClient(): MatrixClient {
         queueToDevice: jest.fn().mockResolvedValue(undefined),
         encryptAndSendToDevices: jest.fn().mockResolvedValue(undefined),
     } as unknown as MatrixClient;
+
+    Object.defineProperty(client, "pollingTurnServers", {
+        configurable: true,
+        get: () => true,
+    });
+    return client;
 }
 
 type MakeEventPassThruProps = {
