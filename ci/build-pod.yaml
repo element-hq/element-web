@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: jenkins
+spec:
+  containers:
+    - name: node
+      image: node:alpine3.15
+      command: ["tail", "-f", "/dev/null"]
+      imagePullPolicy: Always

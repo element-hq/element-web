@@ -1,5 +1,11 @@
 pipeline {
-    agent any
+
+    agent {
+        kubernetes {
+          label 'node-build'
+          yamlFile 'ci/build-pod.yaml'
+        }
+    }
 
     stages {
         stage('Build') {
