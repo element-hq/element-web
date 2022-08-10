@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                container('node') {
+                    sh 'ci/build.sh'
+                }
             }
         }
         stage('Test') {
