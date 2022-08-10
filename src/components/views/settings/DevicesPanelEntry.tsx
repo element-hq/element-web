@@ -154,12 +154,17 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
                 </AccessibleButton>
             </React.Fragment>;
 
+        const deviceWithVerification = {
+            ...this.props.device,
+            isVerified: this.props.verified,
+        };
+
         if (this.props.isOwnDevice) {
             return <div className={"mx_DevicesPanel_device" + myDeviceClass}>
                 <div className="mx_DevicesPanel_deviceTrust">
                     <span className={"mx_DevicesPanel_icon mx_E2EIcon " + iconClass} />
                 </div>
-                <DeviceTile device={this.props.device}>
+                <DeviceTile device={deviceWithVerification}>
                     { buttons }
                 </DeviceTile>
             </div>;
@@ -167,7 +172,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
 
         return (
             <div className={"mx_DevicesPanel_device" + myDeviceClass}>
-                <SelectableDeviceTile device={this.props.device} onClick={this.onDeviceToggled} isSelected={this.props.selected}>
+                <SelectableDeviceTile device={deviceWithVerification} onClick={this.onDeviceToggled} isSelected={this.props.selected}>
                     { buttons }
                 </SelectableDeviceTile>
             </div>

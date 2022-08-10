@@ -24,6 +24,7 @@ describe('<DeviceTile />', () => {
     const defaultProps = {
         device: {
             device_id: '123',
+            isVerified: false,
         },
     };
     const getComponent = (props = {}) => (
@@ -39,6 +40,11 @@ describe('<DeviceTile />', () => {
     });
 
     it('renders a device with no metadata', () => {
+        const { container } = render(getComponent());
+        expect(container).toMatchSnapshot();
+    });
+
+    it('renders a verified device with no metadata', () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });

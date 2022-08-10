@@ -17,16 +17,26 @@ limitations under the License.
 import React from 'react';
 
 import { _t } from "../../../../../languageHandler";
+import Spinner from '../../../elements/Spinner';
+import { useOwnDevices } from '../../devices/useOwnDevices';
+import DeviceTile from '../../devices/DeviceTile';
 import SettingsSubsection from '../../shared/SettingsSubsection';
 import SettingsTab from '../SettingsTab';
 
 const SessionManagerTab: React.FC = () => {
+    const { devices, currentDeviceId, isLoading } = useOwnDevices();
+
+    const currentDevice = devices[currentDeviceId];
     return <SettingsTab heading={_t('Sessions')}>
         <SettingsSubsection
             heading={_t('Current session')}
-            // TODO session content coming here
-            // in next PR
-        />
+            data-testid='current-session-section'
+        >
+            { isLoading && <Spinner /> }
+            { !!currentDevice && <DeviceTile
+                device={currentDevice}
+            /> }
+        </SettingsSubsection>
     </SettingsTab>;
 };
 

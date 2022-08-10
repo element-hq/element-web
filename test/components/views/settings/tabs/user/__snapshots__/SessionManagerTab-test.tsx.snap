@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SessionManagerTab /> renders current session section 1`] = `
+<div
+  class="mx_SettingsSubsection"
+  data-testid="current-session-section"
+>
+  <h3
+    class="mx_Heading_h3 mx_SettingsSubsection_heading"
+  >
+    Current session
+  </h3>
+  <div
+    class="mx_SettingsSubsection_content"
+  >
+    <div
+      class="mx_DeviceTile"
+      data-testid="device-tile-alices_device"
+    >
+      <div
+        class="mx_DeviceTile_info"
+      >
+        <h4
+          class="mx_Heading_h4"
+        >
+          alices_device
+        </h4>
+        <div
+          class="mx_DeviceTile_metadata"
+        >
+          <span
+            data-testid="device-metadata-isVerified"
+          >
+            Unverified
+          </span>
+           · 
+           · 
+        </div>
+      </div>
+      <div
+        class="mx_DeviceTile_actions"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
+<div
+  class="mx_DeviceTile"
+  data-testid="device-tile-alices_device"
+>
+  <div
+    class="mx_DeviceTile_info"
+  >
+    <h4
+      class="mx_Heading_h4"
+    >
+      alices_device
+    </h4>
+    <div
+      class="mx_DeviceTile_metadata"
+    >
+      <span
+        data-testid="device-metadata-isVerified"
+      >
+        Verified
+      </span>
+       · 
+       · 
+    </div>
+  </div>
+  <div
+    class="mx_DeviceTile_actions"
+  />
+</div>
+`;
