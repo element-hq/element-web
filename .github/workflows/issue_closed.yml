@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/github-script@v5
+        id: main
         with:
           # PAT needed as the GITHUB_TOKEN won't be able to see cross-references from other orgs (matrix-org)
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
@@ -127,13 +128,7 @@ jobs:
 
               // Duplicate was closed with wrong reason, fix it
               if (stateReason === "COMPLETED") {
-                await github.graphql(`mutation($id:ID!) {
-                  closeIssue(input: { issueId:$id, stateReason:NOT_PLANNED }) {
-                    clientMutationId
-                  }
-                }`, {
-                  id: context.payload.issue.node_id,
-                });
+                core.setOutput("closeAsNotPlanned", "true");
               }
             } else {
               // This issue was closed, close all related rageshakes
@@ -146,3 +141,16 @@ jobs:
                 });
               }
             }
+      - uses: actions/github-script@v5
+        name: Close duplicate as Not Planned
+        if: steps.main.outputs.closeAsNotPlanned
+        with:
+          # We do this step separately, and with the default token so as to not re-trigger this workflow when re-closing
+          script: |
+            await github.graphql(`mutation($id:ID!) {
+              closeIssue(input: { issueId:$id, stateReason:NOT_PLANNED }) {
+                clientMutationId
+              }
+            }`, {
+              id: context.payload.issue.node_id,
+            });
