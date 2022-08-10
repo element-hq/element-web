@@ -97,8 +97,8 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
     }
 
-    let introSection;
-    if (justRegistered || !!OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE)) {
+    let introSection: JSX.Element;
+    if (justRegistered || !OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE)) {
         introSection = <UserWelcomeTop />;
     } else {
         const brandingConfig = SdkConfig.getObject("branding");
