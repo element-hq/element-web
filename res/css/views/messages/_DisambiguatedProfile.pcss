@@ -34,3 +34,10 @@ limitations under the License.
         color: $primary-content;
     }
 }
+
+@media only percy {
+    .mx_DisambiguatedProfile_displayName {
+        /* Override the colour in percy tests for screenshot consistency */
+        color: $username-variant1-color !important;
+    }
+}
