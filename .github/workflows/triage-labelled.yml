@@ -19,7 +19,7 @@ jobs:
       contains(github.event.issue.labels.*.name, 'A-Video-Rooms') ||
       contains(github.event.issue.labels.*.name, 'A-Message-Starring')
     steps:
-      - uses: actions/github-script@v5
+      - uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.addLabels({

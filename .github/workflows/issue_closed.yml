@@ -9,7 +9,7 @@ jobs:
     name: Tidy closed issues
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v5
+      - uses: actions/github-script@v6
         with:
           # PAT needed as the GITHUB_TOKEN won't be able to see cross-references from other orgs (matrix-org)
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
