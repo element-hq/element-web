@@ -109,6 +109,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
       </div>
       <div
         class="mx_DeviceTile"
+        data-testid="device-tile-device_1"
       >
         <div
           class="mx_DeviceTile_info"
@@ -121,6 +122,12 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
           <div
             class="mx_DeviceTile_metadata"
           >
+            <span
+              data-testid="device-metadata-isVerified"
+            >
+              Unverified
+            </span>
+             · 
              · 
           </div>
         </div>
@@ -206,6 +213,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
         </span>
         <div
           class="mx_DeviceTile"
+          data-testid="device-tile-device_2"
         >
           <div
             class="mx_DeviceTile_info"
@@ -218,6 +226,12 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             <div
               class="mx_DeviceTile_metadata"
             >
+              <span
+                data-testid="device-metadata-isVerified"
+              >
+                Unverified
+              </span>
+               · 
                · 
             </div>
           </div>
@@ -262,6 +276,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
         </span>
         <div
           class="mx_DeviceTile"
+          data-testid="device-tile-device_3"
         >
           <div
             class="mx_DeviceTile_info"
@@ -274,6 +289,12 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             <div
               class="mx_DeviceTile_metadata"
             >
+              <span
+                data-testid="device-metadata-isVerified"
+              >
+                Unverified
+              </span>
+               · 
                · 
             </div>
           </div>
