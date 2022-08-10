@@ -20,6 +20,7 @@ import {
     IOpenIDCredentials,
     IOpenIDUpdate,
     ISendEventDetails,
+    IRoomEvent,
     MatrixCapabilities,
     OpenIDRequestState,
     SimpleObservable,
@@ -182,6 +183,49 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return { roomId, eventId: r.event_id };
     }
 
+    public async sendToDevice(
+        eventType: string,
+        encrypted: boolean,
+        contentMap: { [userId: string]: { [deviceId: string]: object } },
+    ): Promise<void> {
+        const client = MatrixClientPeg.get();
+
+        if (encrypted) {
+            const deviceInfoMap = await client.crypto.deviceList.downloadKeys(Object.keys(contentMap), false);
+
+            await Promise.all(
+                Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+                    Object.entries(userContentMap).map(async ([deviceId, content]) => {
+                        if (deviceId === "*") {
+                            // Send the message to all devices we have keys for
+                            await client.encryptAndSendToDevices(
+                                Object.values(deviceInfoMap[userId]).map(deviceInfo => ({
+                                    userId, deviceInfo,
+                                })),
+                                content,
+                            );
+                        } else {
+                            // Send the message to a specific device
+                            await client.encryptAndSendToDevices(
+                                [{ userId, deviceInfo: deviceInfoMap[userId][deviceId] }],
+                                content,
+                            );
+                        }
+                    }),
+                ),
+            );
+        } else {
+            await client.queueToDevice({
+                eventType,
+                batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+                    Object.entries(userContentMap).map(([deviceId, content]) =>
+                        ({ userId, deviceId, payload: content }),
+                    ),
+                ),
+            });
+        }
+    }
+
     private pickRooms(roomIds: (string | Symbols.AnyRoom)[] = null): Room[] {
         const client = MatrixClientPeg.get();
         if (!client) throw new Error("Not attached to a client");
@@ -197,7 +241,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         msgtype: string | undefined,
         limitPerRoom: number,
         roomIds: (string | Symbols.AnyRoom)[] = null,
-    ): Promise<object[]> {
+    ): Promise<IRoomEvent[]> {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);
@@ -224,7 +268,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         stateKey: string | undefined,
         limitPerRoom: number,
         roomIds: (string | Symbols.AnyRoom)[] = null,
-    ): Promise<object[]> {
+    ): Promise<IRoomEvent[]> {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);

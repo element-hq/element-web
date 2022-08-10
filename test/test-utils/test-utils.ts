@@ -91,6 +91,12 @@ export function createTestClient(): MatrixClient {
             removeRoom: jest.fn(),
         },
 
+        crypto: {
+            deviceList: {
+                downloadKeys: jest.fn(),
+            },
+        },
+
         getPushActionsForEvent: jest.fn(),
         getRoom: jest.fn().mockImplementation(mkStubRoom),
         getRooms: jest.fn().mockReturnValue([]),
@@ -163,6 +169,9 @@ export function createTestClient(): MatrixClient {
         downloadKeys: jest.fn(),
         fetchRoomEvent: jest.fn(),
         makeTxnId: jest.fn().mockImplementation(() => `t${txnId++}`),
+        sendToDevice: jest.fn().mockResolvedValue(undefined),
+        queueToDevice: jest.fn().mockResolvedValue(undefined),
+        encryptAndSendToDevices: jest.fn().mockResolvedValue(undefined),
     } as unknown as MatrixClient;
 }
 
@@ -176,7 +185,7 @@ type MakeEventPassThruProps = {
 type MakeEventProps = MakeEventPassThruProps & {
     type: string;
     content: IContent;
-    room: Room["roomId"];
+    room?: Room["roomId"]; // to-device messages are roomless
     // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;
