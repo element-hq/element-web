@@ -82,7 +82,7 @@ declare global {
              * @param {*} value The new value of the setting, may be null.
              * @return {Promise} Resolves when the setting has been changed.
              */
-            setSettingValue(name: string, roomId: string, level: SettingLevel, value: any): Chainable<void>;
+            setSettingValue(settingName: string, roomId: string, level: SettingLevel, value: any): Chainable<void>;
 
             /**
              * Gets the value of a setting. The room ID is optional if the
@@ -96,7 +96,7 @@ declare global {
              * value.
              * @return {*} The value, or null if not found
              */
-            getSettingValue<T>(name: string, roomId?: string, excludeDefault?: boolean): Chainable<T>;
+            getSettingValue<T>(settingName: string, roomId?: string, excludeDefault?: boolean): Chainable<T>;
         }
     }
 }
