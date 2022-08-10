@@ -130,7 +130,7 @@ export const AddExistingToSpace: React.FC<IAddExistingToSpaceProps> = ({
     const cli = useContext(MatrixClientContext);
     const visibleRooms = useMemo(() => cli.getVisibleRooms().filter(r => r.getMyMembership() === "join"), [cli]);
 
-    const scrollRef = useRef<AutoHideScrollbar>();
+    const scrollRef = useRef<AutoHideScrollbar<"div">>();
     const [scrollState, setScrollState] = useState<IScrollState>({
         // these are estimates which update as soon as it mounts
         scrollTop: 0,

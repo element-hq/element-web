@@ -315,6 +315,7 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { tabIndex, ...restDragHandleProps } = dragHandleProps || {};
+        const selected = activeSpaces.includes(space.roomId);
 
         return (
             <li
@@ -322,13 +323,14 @@ export class SpaceItem extends React.PureComponent<IItemProps, IItemState> {
                 className={itemClasses}
                 ref={innerRef}
                 aria-expanded={hasChildren ? !collapsed : undefined}
+                aria-selected={selected}
                 role="treeitem"
             >
                 <SpaceButton
                     {...restDragHandleProps}
                     space={space}
                     className={isInvite ? "mx_SpaceButton_invite" : undefined}
-                    selected={activeSpaces.includes(space.roomId)}
+                    selected={selected}
                     label={this.state.name}
                     contextMenuTooltip={_t("Space options")}
                     notificationState={notificationState}

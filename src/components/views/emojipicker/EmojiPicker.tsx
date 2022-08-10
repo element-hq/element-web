@@ -55,7 +55,7 @@ class EmojiPicker extends React.Component<IProps, IState> {
     private readonly memoizedDataByCategory: Record<CategoryKey, IEmoji[]>;
     private readonly categories: ICategory[];
 
-    private scrollRef = React.createRef<AutoHideScrollbar>();
+    private scrollRef = React.createRef<AutoHideScrollbar<"div">>();
 
     constructor(props: IProps) {
         super(props);

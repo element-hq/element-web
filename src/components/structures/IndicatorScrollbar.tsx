@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { ComponentProps, createRef } from "react";
+import React, { createRef } from "react";
 
-import AutoHideScrollbar from "./AutoHideScrollbar";
+import AutoHideScrollbar, { IProps as AutoHideScrollbarProps } from "./AutoHideScrollbar";
 import UIStore, { UI_EVENTS } from "../../stores/UIStore";
 
-interface IProps extends Omit<ComponentProps<typeof AutoHideScrollbar>, "onWheel"> {
+export type IProps<T extends keyof JSX.IntrinsicElements> = Omit<AutoHideScrollbarProps<T>, "onWheel"> & {
     // If true, the scrollbar will append mx_IndicatorScrollbar_leftOverflowIndicator
     // and mx_IndicatorScrollbar_rightOverflowIndicator elements to the list for positioning
     // by the parent element.
@@ -31,21 +31,22 @@ interface IProps extends Omit<ComponentProps<typeof AutoHideScrollbar>, "onWheel
     verticalScrollsHorizontally?: boolean;
 
     children: React.ReactNode;
-    className: string;
-}
+};
 
 interface IState {
     leftIndicatorOffset: string;
     rightIndicatorOffset: string;
 }
 
-export default class IndicatorScrollbar extends React.Component<IProps, IState> {
-    private autoHideScrollbar = createRef<AutoHideScrollbar>();
+export default class IndicatorScrollbar<
+    T extends keyof JSX.IntrinsicElements,
+> extends React.Component<IProps<T>, IState> {
+    private autoHideScrollbar = createRef<AutoHideScrollbar<any>>();
     private scrollElement: HTMLDivElement;
     private likelyTrackpadUser: boolean = null;
     private checkAgainForTrackpad = 0; // ts in milliseconds to recheck this._likelyTrackpadUser
 
-    constructor(props: IProps) {
+    constructor(props: IProps<T>) {
         super(props);
 
         this.state = {
@@ -65,7 +66,7 @@ export default class IndicatorScrollbar extends React.Component<IProps, IState> 
         }
     };
 
-    public componentDidUpdate(prevProps: IProps): void {
+    public componentDidUpdate(prevProps: IProps<T>): void {
         const prevLen = React.Children.count(prevProps.children);
         const curLen = React.Children.count(this.props.children);
         // check overflow only if amount of children changes.
