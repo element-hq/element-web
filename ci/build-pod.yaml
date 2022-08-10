@@ -5,6 +5,6 @@ metadata:
 spec:
   containers:
     - name: node
-      image: node:alpine3.15
+      image: node:18.7-buster
       command: ["tail", "-f", "/dev/null"]
       imagePullPolicy: Always
