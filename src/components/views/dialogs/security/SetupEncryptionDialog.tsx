@@ -24,9 +24,9 @@ import { IDialogProps } from "../IDialogProps";
 
 function iconFromPhase(phase: Phase) {
     if (phase === Phase.Done) {
-        return require("../../../../../res/img/e2e/verified.svg").default;
+        return require("../../../../../res/img/e2e/verified-deprecated.svg").default;
     } else {
-        return require("../../../../../res/img/e2e/warning.svg").default;
+        return require("../../../../../res/img/e2e/warning-deprecated.svg").default;
     }
 }
 
