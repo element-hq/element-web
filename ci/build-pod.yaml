@@ -8,3 +8,10 @@ spec:
       image: node:18.7-buster
       command: ["tail", "-f", "/dev/null"]
       imagePullPolicy: Always
+      resources:
+        limits:
+          cpu: 1
+          memory: 3Gi
+        requests:
+          cpu: 1
+          memory: 3Gi
