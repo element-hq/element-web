@@ -60,8 +60,9 @@ export enum OwnDevicesError {
     Unsupported = 'Unsupported',
     Default = 'Default',
 }
+export type DevicesDictionary = Record<DeviceWithVerification['device_id'], DeviceWithVerification>;
 type DevicesState = {
-    devices: Record<DeviceWithVerification['device_id'], DeviceWithVerification>;
+    devices: DevicesDictionary;
     currentDeviceId: string;
     isLoading: boolean;
     error?: OwnDevicesError;
