@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-// eslint-disable-next-line deprecate/import
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 
 import { tooltipifyLinks } from '../../src/utils/tooltipify';
 import PlatformPeg from '../../src/PlatformPeg';
@@ -27,8 +26,7 @@ describe('tooltipify', () => {
         .mockReturnValue({ needsUrlTooltips: () => true } as unknown as BasePlatform);
 
     it('does nothing for empty element', () => {
-        const component = mount(<div />);
-        const root = component.getDOMNode();
+        const { container: root } = render(<div />);
         const originalHtml = root.outerHTML;
         const containers: Element[] = [];
         tooltipifyLinks([root], [], containers);
@@ -37,8 +35,7 @@ describe('tooltipify', () => {
     });
 
     it('wraps single anchor', () => {
-        const component = mount(<div><a href="/foo">click</a></div>);
-        const root = component.getDOMNode();
+        const { container: root } = render(<div><a href="/foo">click</a></div>);
         const containers: Element[] = [];
         tooltipifyLinks([root], [], containers);
         expect(containers).toHaveLength(1);
@@ -49,8 +46,7 @@ describe('tooltipify', () => {
     });
 
     it('ignores node', () => {
-        const component = mount(<div><a href="/foo">click</a></div>);
-        const root = component.getDOMNode();
+        const { container: root } = render(<div><a href="/foo">click</a></div>);
         const originalHtml = root.outerHTML;
         const containers: Element[] = [];
         tooltipifyLinks([root], [root.children[0]], containers);
@@ -59,8 +55,7 @@ describe('tooltipify', () => {
     });
 
     it("does not re-wrap if called multiple times", () => {
-        const component = mount(<div><a href="/foo">click</a></div>);
-        const root = component.getDOMNode();
+        const { container: root } = render(<div><a href="/foo">click</a></div>);
         const containers: Element[] = [];
         tooltipifyLinks([root], [], containers);
         tooltipifyLinks([root], [], containers);
