@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 
 import DeviceTile from './DeviceTile';
+import { filterDevicesBySecurityRecommendation } from './filter';
 import { DevicesDictionary, DeviceWithVerification } from './useOwnDevices';
 
 interface Props {
@@ -27,8 +28,9 @@ interface Props {
 const sortDevicesByLatestActivity = (left: DeviceWithVerification, right: DeviceWithVerification) =>
     (right.last_seen_ts || 0) - (left.last_seen_ts || 0);
 
-const getSortedDevices = (devices: DevicesDictionary) =>
-    Object.values(devices).sort(sortDevicesByLatestActivity);
+const getFilteredSortedDevices = (devices: DevicesDictionary) =>
+    filterDevicesBySecurityRecommendation(Object.values(devices), [])
+        .sort(sortDevicesByLatestActivity);
 
 /**
  * Filtered list of devices
@@ -36,7 +38,7 @@ const getSortedDevices = (devices: DevicesDictionary) =>
  * TODO(kerrya) Filtering to added as part of PSG-648
  */
 const FilteredDeviceList: React.FC<Props> = ({ devices }) => {
-    const sortedDevices = getSortedDevices(devices);
+    const sortedDevices = getFilteredSortedDevices(devices);
 
     return <ol className='mx_FilteredDeviceList'>
         { sortedDevices.map((device) =>

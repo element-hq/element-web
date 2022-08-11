@@ -1703,6 +1703,7 @@
     "Device": "Device",
     "IP address": "IP address",
     "Session details": "Session details",
+    "Inactive for %(inactiveAgeDays)s+ days": "Inactive for %(inactiveAgeDays)s+ days",
     "Verified": "Verified",
     "Unverified": "Unverified",
     "Unable to remove contact information": "Unable to remove contact information",

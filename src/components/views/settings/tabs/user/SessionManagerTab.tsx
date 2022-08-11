@@ -20,10 +20,11 @@ import { _t } from "../../../../../languageHandler";
 import Spinner from '../../../elements/Spinner';
 import { useOwnDevices } from '../../devices/useOwnDevices';
 import DeviceTile from '../../devices/DeviceTile';
-import DeviceSecurityCard, { DeviceSecurityVariation } from '../../devices/DeviceSecurityCard';
+import DeviceSecurityCard from '../../devices/DeviceSecurityCard';
 import SettingsSubsection from '../../shared/SettingsSubsection';
-import SettingsTab from '../SettingsTab';
 import FilteredDeviceList from '../../devices/FilteredDeviceList';
+import { DeviceSecurityVariation } from '../../devices/filter';
+import SettingsTab from '../SettingsTab';
 
 const SessionManagerTab: React.FC = () => {
     const { devices, currentDeviceId, isLoading } = useOwnDevices();

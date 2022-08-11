@@ -17,9 +17,8 @@ limitations under the License.
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import DeviceSecurityCard, {
-    DeviceSecurityVariation,
-} from '../../../../../src/components/views/settings/devices/DeviceSecurityCard';
+import DeviceSecurityCard from '../../../../../src/components/views/settings/devices/DeviceSecurityCard';
+import { DeviceSecurityVariation } from '../../../../../src/components/views/settings/devices/filter';
 
 describe('<DeviceSecurityCard />', () => {
     const defaultProps = {
