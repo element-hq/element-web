@@ -238,7 +238,7 @@ describe("Timeline", () => {
             cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "MessageEdit").should("exist");
 
             // Click top left of the event toggle, which should not be covered by MessageActionBar's safe area
-            cy.get(".mx_EventTile .mx_ViewSourceEvent").realHover().within(() => {
+            cy.get(".mx_EventTile .mx_ViewSourceEvent").should("exist").realHover().within(() => {
                 cy.get(".mx_ViewSourceEvent_toggle").click('topLeft', { force: false });
             });
 
