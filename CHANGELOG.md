@@ -1,3 +1,9 @@
+Changes in [3.52.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.52.0-rc.2) (2022-08-12)
+===============================================================================================================
+
+## ✨ Features
+ * The first message in a DM can no longer be a sticker. This has been changed to avoid issues with the integration manager. ([\#9180](https://github.com/matrix-org/matrix-react-sdk/pull/9180)).
+
 Changes in [3.52.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.52.0-rc.1) (2022-08-09)
 ===============================================================================================================
 
