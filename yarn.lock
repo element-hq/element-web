@@ -8128,6 +8128,23 @@ matrix-js-sdk@19.3.0-rc.1:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
+matrix-js-sdk@19.3.0-rc.2:
+  version "19.3.0-rc.2"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-19.3.0-rc.2.tgz#ede132ee6f0b97b1444bbd515c12b27678b49da0"
+  integrity sha512-UixvWZ+rfBiDw3jf35XHYkEXHSQ6wHPM9fs58HAe3124PU3JeEeQl2f+0OKJzd0jnXah3WWPAylpvmpNeNGjXg==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "^0.0.1-beta.7"
+    p-retry "4"
+    qs "^6.9.6"
+    request "^2.88.2"
+    unhomoglyph "^1.0.6"
+
 matrix-mock-request@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.1.0.tgz#86f5b0ef846865d0767d3a8e64f5bcd6ca94c178"

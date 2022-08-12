@@ -61,7 +61,7 @@
     "gfm.css": "^1.1.2",
     "jsrsasign": "^10.5.25",
     "katex": "^0.12.0",
-    "matrix-js-sdk": "19.3.0-rc.1",
+    "matrix-js-sdk": "19.3.0-rc.2",
     "matrix-react-sdk": "3.52.0-rc.1",
     "matrix-widget-api": "^0.1.0-beta.18",
     "prop-types": "^15.7.2",
