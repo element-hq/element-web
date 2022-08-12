@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useCallback, useEffect, useState } from "react";
+import { logger } from "matrix-js-sdk/src/logger";
 import { ClientEvent, IMyDevice, Room } from "matrix-js-sdk/src/matrix";
+import { useCallback, useEffect, useState } from "react";
 
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import DMRoomMap from "../utils/DMRoomMap";
@@ -33,18 +34,23 @@ export function useUserOnboardingContext(): UserOnboardingContext | null {
 
     const cli = MatrixClientPeg.get();
     const handler = useCallback(async () => {
-        const profile = await cli.getProfileInfo(cli.getUserId());
+        try {
+            const profile = await cli.getProfileInfo(cli.getUserId());
 
-        const myDevice = cli.getDeviceId();
-        const devices = await cli.getDevices();
+            const myDevice = cli.getDeviceId();
+            const devices = await cli.getDevices();
 
-        const dmRooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals() ?? {};
-        setContext({
-            avatar: profile?.avatar_url ?? null,
-            myDevice,
-            devices: devices.devices,
-            dmRooms: dmRooms,
-        });
+            const dmRooms = DMRoomMap.shared().getUniqueRoomsWithIndividuals() ?? {};
+            setContext({
+                avatar: profile?.avatar_url ?? null,
+                myDevice,
+                devices: devices.devices,
+                dmRooms: dmRooms,
+            });
+        } catch (e) {
+            logger.warn("Could not load context for user onboarding task list: ", e);
+            setContext(null);
+        }
     }, [cli]);
 
     useEventEmitter(cli, ClientEvent.AccountData, handler);

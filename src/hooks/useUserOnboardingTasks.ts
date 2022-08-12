@@ -27,7 +27,7 @@ import { Notifier } from "../Notifier";
 import PosthogTrackers from "../PosthogTrackers";
 import { UseCase } from "../settings/enums/UseCase";
 import { useSettingValue } from "./useSettings";
-import { UserOnboardingContext, useUserOnboardingContext } from "./useUserOnboardingContext";
+import { UserOnboardingContext } from "./useUserOnboardingContext";
 
 export interface UserOnboardingTask {
     id: string;
@@ -140,13 +140,12 @@ const tasks: InternalUserOnboardingTask[] = [
     },
 ];
 
-export function useUserOnboardingTasks(): [UserOnboardingTask[], UserOnboardingTask[]] {
+export function useUserOnboardingTasks(context: UserOnboardingContext): [UserOnboardingTask[], UserOnboardingTask[]] {
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection") ?? UseCase.Skip;
     const relevantTasks = useMemo(
         () => tasks.filter(it => !it.relevant || it.relevant.includes(useCase)),
         [useCase],
     );
-    const onboardingInfo = useUserOnboardingContext();
-    const completedTasks = relevantTasks.filter(it => onboardingInfo && it.completed(onboardingInfo));
+    const completedTasks = relevantTasks.filter(it => context && it.completed(context));
     return [completedTasks, relevantTasks.filter(it => !completedTasks.includes(it))];
 }

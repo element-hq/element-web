@@ -40,7 +40,10 @@ describe("User Onboarding (old user)", () => {
         cy.stopSynapse(synapse);
     });
 
-    it("page is hidden", () => {
+    it("page and preference are hidden", () => {
         cy.get('.mx_UserOnboardingPage').should('not.exist');
+        cy.get('.mx_UserOnboardingButton').should('not.exist');
+        cy.openUserSettings("Preferences");
+        cy.contains("Show shortcut to welcome page above the room list").should("not.exist");
     });
 });

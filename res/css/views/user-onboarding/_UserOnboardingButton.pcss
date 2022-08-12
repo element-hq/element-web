@@ -1,0 +1,84 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_UserOnboardingButton {
+    display: flex;
+    flex-direction: column;
+    align-content: stretch;
+    align-items: stretch;
+    border-radius: 8px;
+    margin: $spacing-8 $spacing-8 0;
+    padding: $spacing-12;
+
+    &.mx_UserOnboardingButton_selected,
+    &:hover,
+    &:focus-within {
+        background-color: $panel-actions;
+    }
+
+    .mx_UserOnboardingButton_content {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: center;
+
+        .mx_Heading_h4 {
+            margin-right: auto;
+            font-size: $font-14px;
+            color: $primary-content;
+        }
+
+        .mx_UserOnboardingButton_percentage {
+            font-size: $font-12px;
+            color: $secondary-content;
+        }
+
+        .mx_UserOnboardingButton_close {
+            position: relative;
+            box-sizing: border-box;
+            width: 14px;
+            height: 14px;
+            border-radius: 7px;
+            border: 1px solid $secondary-content;
+            flex-shrink: 0;
+
+            &::before {
+                background-color: $secondary-content;
+                content: "";
+                mask-repeat: no-repeat;
+                mask-position: center;
+                mask-size: contain;
+                width: 7px;
+                height: 7px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                mask-image: url("$(res)/img/element-icons/cancel-rounded.svg");
+            }
+        }
+    }
+
+    .mx_ProgressBar {
+        width: auto;
+        margin-top: $spacing-8;
+        background: $background;
+    }
+
+    &.mx_UserOnboardingButton_completed .mx_ProgressBar {
+        display: none;
+    }
+}

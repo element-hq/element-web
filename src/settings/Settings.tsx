@@ -804,6 +804,11 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: true,
         controller: new IncompatibleController("feature_breadcrumbs_v2", true),
     },
+    "FTUE.userOnboardingButton": {
+        supportedLevels: LEVELS_ACCOUNT_SETTINGS,
+        displayName: _td("Show shortcut to welcome checklist above the room list"),
+        default: true,
+    },
     "showHiddenEventsInTimeline": {
         displayName: _td("Show hidden events in timeline"),
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS,
