@@ -39,7 +39,18 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
       </div>
       <div
         class="mx_DeviceTile_actions"
-      />
+      >
+        <div
+          class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+          data-testid="current-session-toggle-details"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_DeviceExpandDetailsButton_icon"
+          />
+        </div>
+      </div>
     </div>
     <br />
     <div
@@ -111,7 +122,18 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
       </div>
       <div
         class="mx_DeviceTile_actions"
-      />
+      >
+        <div
+          class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+          data-testid="current-session-toggle-details"
+          role="button"
+          tabindex="0"
+        >
+          <div
+            class="mx_DeviceExpandDetailsButton_icon"
+          />
+        </div>
+      </div>
     </div>
     <br />
     <div
@@ -171,6 +193,17 @@ exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
   </div>
   <div
     class="mx_DeviceTile_actions"
-  />
+  >
+    <div
+      class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+      data-testid="current-session-toggle-details"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_DeviceExpandDetailsButton_icon"
+      />
+    </div>
+  </div>
 </div>
 `;
