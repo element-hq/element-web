@@ -15,9 +15,11 @@ limitations under the License.
 */
 
 import {
-    DeviceSecurityVariation,
     filterDevicesBySecurityRecommendation,
 } from "../../../../../src/components/views/settings/devices/filter";
+import {
+    DeviceSecurityVariation,
+} from "../../../../../src/components/views/settings/devices/types";
 
 const MS_DAY = 86400000;
 describe('filterDevicesBySecurityRecommendation()', () => {

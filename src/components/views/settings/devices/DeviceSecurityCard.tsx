@@ -20,7 +20,7 @@ import React from 'react';
 import { Icon as VerifiedIcon } from '../../../../../res/img/e2e/verified.svg';
 import { Icon as UnverifiedIcon } from '../../../../../res/img/e2e/warning.svg';
 import { Icon as InactiveIcon } from '../../../../../res/img/element-icons/settings/inactive.svg';
-import { DeviceSecurityVariation } from './filter';
+import { DeviceSecurityVariation } from './types';
 interface Props {
     variation: DeviceSecurityVariation;
     heading: string;

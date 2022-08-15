@@ -23,7 +23,7 @@ import TooltipTarget from "../../elements/TooltipTarget";
 import { Alignment } from "../../elements/Tooltip";
 import Heading from "../../typography/Heading";
 import { INACTIVE_DEVICE_AGE_MS, isDeviceInactive } from "./filter";
-import { DeviceWithVerification } from "./useOwnDevices";
+import { DeviceWithVerification } from "./types";
 export interface DeviceTileProps {
     device: DeviceWithVerification;
     children?: React.ReactNode;

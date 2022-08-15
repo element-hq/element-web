@@ -18,7 +18,7 @@ import React from 'react';
 
 import DeviceTile from './DeviceTile';
 import { filterDevicesBySecurityRecommendation } from './filter';
-import { DevicesDictionary, DeviceWithVerification } from './useOwnDevices';
+import { DevicesDictionary, DeviceWithVerification } from './types';
 
 interface Props {
     devices: DevicesDictionary;

@@ -18,7 +18,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 
 import DeviceSecurityCard from '../../../../../src/components/views/settings/devices/DeviceSecurityCard';
-import { DeviceSecurityVariation } from '../../../../../src/components/views/settings/devices/filter';
+import { DeviceSecurityVariation } from '../../../../../src/components/views/settings/devices/types';
 
 describe('<DeviceSecurityCard />', () => {
     const defaultProps = {

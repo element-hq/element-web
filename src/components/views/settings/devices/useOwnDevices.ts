@@ -20,8 +20,7 @@ import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
-
-export type DeviceWithVerification = IMyDevice & { isVerified: boolean | null };
+import { DevicesDictionary } from "./types";
 
 const isDeviceVerified = (
     matrixClient: MatrixClient,
@@ -56,11 +55,11 @@ const fetchDevicesWithVerification = async (matrixClient: MatrixClient): Promise
 
     return devicesDict;
 };
+
 export enum OwnDevicesError {
     Unsupported = 'Unsupported',
     Default = 'Default',
 }
-export type DevicesDictionary = Record<DeviceWithVerification['device_id'], DeviceWithVerification>;
 type DevicesState = {
     devices: DevicesDictionary;
     currentDeviceId: string;
