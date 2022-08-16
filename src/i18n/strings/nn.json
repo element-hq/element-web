@@ -1,10 +1,7 @@
 {
     "Unknown device": "Ukjend eining",
-    "You need to be using HTTPS to place a screen-sharing call.": "Du må bruka HTTPS for å ha ein samtale med skjermdeling.",
     "Dismiss": "Avvis",
-    "powered by Matrix": "Matrixdriven",
     "Welcome to Element": "Velkomen til Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Desentralisert, kryptert nettprat &amp; samarbeid drive av [matrix]",
     "Sign In": "Logg inn",
     "Create Account": "Opprett konto",
     "Explore rooms": "Utforsk romma",
@@ -23,15 +20,12 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Du kan fortsetja å bruka gjeldande nettlesar, men nokre eller alle funksjonane fungerer kanskje ikkje, og utsjånaden og kjensla av applikasjonen kan vera feil.",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Installer <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, eller <safariLink>Safari</safariLink> for den beste opplevinga.",
     "I understand the risks and wish to continue": "Eg forstår risikoen og ynskjer å fortsetja",
-    "Previous/next recently visited room or community": "Føregåande/neste nyleg besøkte rom eller samfunn",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s brukar avanserte nettlesarfunksjonar som ikkje er støtta av den gjeldande nettlesaren din.",
     "Use %(brand)s on mobile": "Bruk %(brand)s på mobil",
     "Powered by Matrix": "Driven av Matrix",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Skrivebord (%(platformName)s)",
     "Your Element is misconfigured": "Element er feilkonfigurert",
     "Failed to start": "Klarte ikkje å starta",
-    "Open user settings": "Opna brukarinnstillingar",
-    "Switch to space by number": "Byt til plass etter nummer",
     "Open": "Opna",
     "Download Completed": "Nedlasting Fullført"
 }

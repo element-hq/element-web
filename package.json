@@ -1,6 +1,6 @@
 {
   "name": "element-web",
-  "version": "1.10.12",
+  "version": "1.11.2",
   "description": "A feature-rich client for Matrix.org",
   "author": "New Vector Ltd.",
   "repository": {
@@ -35,31 +35,35 @@
     "build-stats": "yarn clean && yarn build:genfiles && yarn build:bundle-stats",
     "build:jitsi": "node scripts/build-jitsi.js",
     "build:res": "node scripts/copy-res.js",
-    "build:genfiles": "yarn build:res && yarn build:jitsi",
+    "build:genfiles": "yarn build:res && yarn build:jitsi && yarn build:module_system",
     "build:modernizr": "modernizr -c .modernizr.json -d src/vector/modernizr.js",
     "build:bundle": "webpack --progress --bail --mode production",
     "build:bundle-stats": "webpack --progress --bail --mode production --json > webpack-stats.json",
+    "build:module_system": "tsc --project ./tsconfig.module_system.json && node ./lib/module_system/scripts/install.js",
     "dist": "scripts/package.sh",
-    "start": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
+    "start": "yarn build:module_system && concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js\"",
     "start:https": "concurrently --kill-others-on-fail --prefix \"{time} [{name}]\" -n res,element-js \"yarn start:res\" \"yarn start:js --https\"",
     "start:res": "yarn build:jitsi && node scripts/copy-res.js -w",
     "start:js": "webpack-dev-server --host=0.0.0.0 --output-filename=bundles/_dev_/[name].js --output-chunk-filename=bundles/_dev_/[name].js -w --mode development --disable-host-check --hot",
     "lint": "yarn lint:types && yarn lint:js && yarn lint:style",
-    "lint:js": "eslint --max-warnings 0 src",
-    "lint:js-fix": "eslint --fix src",
-    "lint:types": "tsc --noEmit --jsx react",
-    "lint:style": "stylelint \"res/css/**/*.scss\"",
-    "test": "jest"
+    "lint:js": "eslint --max-warnings 0 src module_system",
+    "lint:js-fix": "eslint --fix src module_system",
+    "lint:types": "tsc --noEmit --jsx react && tsc --noEmit --project ./tsconfig.module_system.json",
+    "lint:style": "stylelint \"res/css/**/*.pcss\"",
+    "test": "jest",
+    "coverage": "yarn test --coverage",
+    "analyse:unused-exports": "node ./scripts/analyse_unused_exports.js"
   },
   "dependencies": {
-    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz",
+    "@matrix-org/olm": "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.12.tgz",
+    "@matrix-org/react-sdk-module-api": "^0.0.3",
     "browser-request": "^0.3.3",
     "gfm.css": "^1.1.2",
-    "jsrsasign": "^10.2.0",
+    "jsrsasign": "^10.5.25",
     "katex": "^0.12.0",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
-    "matrix-widget-api": "^0.1.0-beta.18",
+    "matrix-widget-api": "^1.0.0",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -87,7 +91,7 @@
     "@sentry/webpack-plugin": "^1.18.1",
     "@svgr/webpack": "^5.5.0",
     "@types/flux": "^3.1.9",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^28.0.0",
     "@types/modernizr": "^3.5.3",
     "@types/node": "^14.14.22",
     "@types/react": "17.0.14",
@@ -98,7 +102,7 @@
     "@typescript-eslint/parser": "^5.6.0",
     "allchange": "^1.0.6",
     "autoprefixer": "^9.8.6",
-    "babel-jest": "^26.6.3",
+    "babel-jest": "^28.0.0",
     "babel-loader": "^8.2.2",
     "chokidar": "^3.5.1",
     "concurrently": "^5.3.0",
@@ -107,8 +111,9 @@
     "dotenv": "^10.0.0",
     "eslint": "8.9.0",
     "eslint-config-google": "^0.14.0",
+    "eslint-plugin-deprecate": "^0.7.0",
     "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-matrix-org": "^0.4.0",
+    "eslint-plugin-matrix-org": "^0.6.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -116,14 +121,15 @@
     "file-loader": "^5.1.0",
     "fs-extra": "^0.30.0",
     "html-webpack-plugin": "^4.5.2",
-    "jest": "^26.6.3",
-    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest": "^28.0.0",
+    "jest-environment-jsdom": "^28.1.3",
     "jest-raw-loader": "^1.0.1",
+    "jest-sonar-reporter": "^2.0.0",
     "json-loader": "^0.5.7",
     "loader-utils": "^1.4.0",
-    "matrix-mock-request": "^1.2.3",
+    "matrix-mock-request": "^2.0.0",
     "matrix-react-test-utils": "^0.2.3",
-    "matrix-web-i18n": "^1.2.0",
+    "matrix-web-i18n": "^1.3.0",
     "mini-css-extract-plugin": "^0.12.0",
     "minimist": "^1.2.6",
     "mkdirp": "^1.0.4",
@@ -131,7 +137,7 @@
     "node-fetch": "^2.6.7",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss-easings": "^2.0.0",
-    "postcss-hexrgba": "^2.0.1",
+    "postcss-hexrgba": "2.0.1",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
     "postcss-mixins": "^6.2.3",
@@ -139,29 +145,34 @@
     "postcss-preset-env": "^6.7.0",
     "postcss-scss": "^2.1.1",
     "postcss-simple-vars": "^5.0.2",
-    "postcss-strip-inline-comments": "^0.1.5",
     "raw-loader": "^4.0.2",
     "rimraf": "^3.0.2",
+    "semver": "^7.3.7",
     "shell-escape": "^0.2.0",
     "simple-proxy-agent": "^1.1.0",
     "string-replace-loader": "2",
     "style-loader": "2",
-    "stylelint": "^13.9.0",
-    "stylelint-config-standard": "^20.0.0",
-    "stylelint-scss": "^3.18.0",
+    "stylelint": "^14.9.1",
+    "stylelint-config-standard": "^26.0.0",
+    "stylelint-scss": "^4.2.0",
     "terser-webpack-plugin": "^2.3.8",
-    "typescript": "^4.5.3",
+    "ts-prune": "^0.10.3",
+    "typescript": "^4.7.4",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",
     "worker-loader": "^2.0.0",
-    "worklet-loader": "^2.0.0"
+    "worklet-loader": "^2.0.0",
+    "yaml": "^2.0.1"
   },
   "resolutions": {
     "@types/react": "17.0.14"
   },
   "jest": {
-    "testEnvironment": "jest-environment-jsdom-sixteen",
+    "testEnvironment": "jsdom",
+    "testEnvironmentOptions": {
+      "url": "http://localhost/"
+    },
     "testMatch": [
       "<rootDir>/test/**/*-test.[tj]s?(x)"
     ],
@@ -169,7 +180,7 @@
       "<rootDir>/node_modules/matrix-react-sdk/test/setupTests.js"
     ],
     "moduleNameMapper": {
-      "\\.(css|scss)$": "<rootDir>/__mocks__/cssMock.js",
+      "\\.(css|scss|pcss)$": "<rootDir>/__mocks__/cssMock.js",
       "\\.(gif|png|ttf|woff2)$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/imageMock.js",
       "\\.svg$": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/svg.js",
       "\\$webapp/i18n/languages.json": "<rootDir>/node_modules/matrix-react-sdk/__mocks__/languages.json",
@@ -190,6 +201,15 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!matrix-js-sdk).+$",
       "/node_modules/(?!matrix-react-sdk).+$"
-    ]
+    ],
+    "coverageReporters": [
+      "text-summary",
+      "lcov"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "sonar56x": true
   }
 }

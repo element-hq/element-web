@@ -1,0 +1,53 @@
+# Separate to the main build workflow for access to develop
+# environment secrets, largely similar to build.yaml.
+name: Build and Package develop
+on:
+  push:
+    branches: [ develop ]
+  repository_dispatch:
+    types: [ element-web-notify ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: "Build & Upload source maps to Sentry"
+    # Only respect triggers from our develop branch, ignore that of forks
+    if: github.repository == 'vector-im/element-web'
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: "./scripts/layered.sh"
+
+      - name: Build, Package & Upload sourcemaps
+        run: "./scripts/ci_package.sh"
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+          SENTRY_ORG: element
+          SENTRY_PROJECT: riot-web
+
+      - run: mv dist/element-*.tar.gz webapp.tar.gz
+      
+      - name: Wait for other steps to succeed
+        uses: lewagon/wait-on-check-action@v1.0.0
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Build & Upload source maps to Sentry'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          check-regexp: ^((?!SonarQube|issues|board).)*$
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: webapp
+          path: webapp.tar.gz
+          retention-days: 1

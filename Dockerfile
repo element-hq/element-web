@@ -27,9 +27,6 @@ FROM nginx:alpine
 
 COPY --from=builder /src/webapp /app
 
-# Insert wasm type into Nginx mime.types file so they load correctly.
-RUN sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
-
 # Override default nginx config
 COPY /nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 

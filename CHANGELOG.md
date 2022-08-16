@@ -1,3 +1,376 @@
+Changes in [1.11.2](https://github.com/vector-im/element-web/releases/tag/v1.11.2) (2022-08-03)
+===============================================================================================
+
+## ✨ Features
+ * Live location share -  focus on user location on list item click ([\#9051](https://github.com/matrix-org/matrix-react-sdk/pull/9051)). Contributed by @kerryarchibald.
+ * Live location sharing - don't trigger unread counts for beacon location events ([\#9071](https://github.com/matrix-org/matrix-react-sdk/pull/9071)). Contributed by @kerryarchibald.
+ * Support for sending voice messages as replies and in threads ([\#9097](https://github.com/matrix-org/matrix-react-sdk/pull/9097)). Fixes #22031.
+ * Add `Reply in thread` button to the right-click message context-menu ([\#9004](https://github.com/matrix-org/matrix-react-sdk/pull/9004)). Fixes #22745.
+ * Starred_Messages_Feature_Contd_II/Outreachy ([\#9086](https://github.com/matrix-org/matrix-react-sdk/pull/9086)).
+ * Use "frequently used emojis" for autocompletion in composer ([\#8998](https://github.com/matrix-org/matrix-react-sdk/pull/8998)). Fixes #18978. Contributed by @grimhilt.
+ * Improve clickability of view source event toggle button  ([\#9068](https://github.com/matrix-org/matrix-react-sdk/pull/9068)). Fixes #21856. Contributed by @luixxiul.
+ * Improve clickability of "collapse" link button on bubble layout ([\#9037](https://github.com/matrix-org/matrix-react-sdk/pull/9037)). Fixes #22864. Contributed by @luixxiul.
+ * Starred_Messages_Feature/Outreachy ([\#8842](https://github.com/matrix-org/matrix-react-sdk/pull/8842)).
+ * Implement Use Case Selection screen ([\#8984](https://github.com/matrix-org/matrix-react-sdk/pull/8984)). Contributed by @justjanne.
+ * Live location share - handle insufficient permissions in location sharing ([\#9047](https://github.com/matrix-org/matrix-react-sdk/pull/9047)). Contributed by @kerryarchibald.
+ * Improve _FilePanel.scss ([\#9031](https://github.com/matrix-org/matrix-react-sdk/pull/9031)). Contributed by @luixxiul.
+ * Improve spotlight accessibility by adding context menus ([\#8907](https://github.com/matrix-org/matrix-react-sdk/pull/8907)). Fixes #20875 and #22675. Contributed by @justjanne.
+
+## 🐛 Bug Fixes
+ * Replace mask-images with svg components in MessageActionBar ([\#9088](https://github.com/matrix-org/matrix-react-sdk/pull/9088)). Fixes #22912. Contributed by @kerryarchibald.
+ * Unbreak in-app permalink tooltips ([\#9087](https://github.com/matrix-org/matrix-react-sdk/pull/9087)). Fixes #22874.
+ * Show a back button when viewing a space member ([\#9095](https://github.com/matrix-org/matrix-react-sdk/pull/9095)). Fixes #22898.
+ * Align the right edge of info tile lines with normal ones on IRC layout ([\#9058](https://github.com/matrix-org/matrix-react-sdk/pull/9058)). Fixes #22871. Contributed by @luixxiul.
+ * Prevent email verification from overriding existing sessions ([\#9075](https://github.com/matrix-org/matrix-react-sdk/pull/9075)). Fixes #22881. Contributed by @justjanne.
+ * Fix wrong buttons being used when exploring public rooms ([\#9062](https://github.com/matrix-org/matrix-react-sdk/pull/9062)). Fixes #22862.
+ * Re-add padding to generic event list summary on IRC layout ([\#9063](https://github.com/matrix-org/matrix-react-sdk/pull/9063)). Fixes #22869. Contributed by @luixxiul.
+ * Joining federated rooms via the spotlight search should no longer cause a "No known servers" error. ([\#9055](https://github.com/matrix-org/matrix-react-sdk/pull/9055)). Fixes #22845. Contributed by @Half-Shot.
+
+Changes in [1.11.1](https://github.com/vector-im/element-web/releases/tag/v1.11.1) (2022-07-26)
+===============================================================================================
+
+## ✨ Features
+ * Enable URL tooltips on hover for Element Desktop ([\#22286](https://github.com/vector-im/element-web/pull/22286)). Fixes undefined/element-web#6532.
+ * Hide screenshare button in video rooms on Desktop ([\#9045](https://github.com/matrix-org/matrix-react-sdk/pull/9045)).
+ * Add a developer command to reset Megolm and Olm sessions ([\#9044](https://github.com/matrix-org/matrix-react-sdk/pull/9044)).
+ * add spaces to TileErrorBoundary ([\#9012](https://github.com/matrix-org/matrix-react-sdk/pull/9012)). Contributed by @HarHarLinks.
+ * Location sharing - add localised strings to map ([\#9025](https://github.com/matrix-org/matrix-react-sdk/pull/9025)). Fixes #21443. Contributed by @kerryarchibald.
+ * Added trim to ignore whitespaces in email check ([\#9027](https://github.com/matrix-org/matrix-react-sdk/pull/9027)). Contributed by @ankur12-1610.
+ * Improve _GenericEventListSummary.scss ([\#9005](https://github.com/matrix-org/matrix-react-sdk/pull/9005)). Contributed by @luixxiul.
+ * Live location share - tiles without tile server (PSG-591) ([\#8962](https://github.com/matrix-org/matrix-react-sdk/pull/8962)). Contributed by @kerryarchibald.
+ * Add option to display tooltip on link hover ([\#8394](https://github.com/matrix-org/matrix-react-sdk/pull/8394)). Fixes #21907.
+ * Support a module API surface for custom functionality ([\#8246](https://github.com/matrix-org/matrix-react-sdk/pull/8246)).
+ * Adjust encryption copy when creating a video room ([\#8989](https://github.com/matrix-org/matrix-react-sdk/pull/8989)). Fixes #22737.
+ * Add bidirectonal isolation for pills ([\#8985](https://github.com/matrix-org/matrix-react-sdk/pull/8985)). Contributed by @sha-265.
+ * Delabs `Show current avatar and name for users in message history` ([\#8764](https://github.com/matrix-org/matrix-react-sdk/pull/8764)). Fixes #22336.
+ * Live location share - open latest location in map site ([\#8981](https://github.com/matrix-org/matrix-react-sdk/pull/8981)). Contributed by @kerryarchibald.
+ * Improve LinkPreviewWidget ([\#8881](https://github.com/matrix-org/matrix-react-sdk/pull/8881)). Fixes #22634. Contributed by @luixxiul.
+ * Render HTML topics in rooms on space home ([\#8939](https://github.com/matrix-org/matrix-react-sdk/pull/8939)).
+ * Hide timestamp on event tiles being edited on every layout ([\#8956](https://github.com/matrix-org/matrix-react-sdk/pull/8956)). Contributed by @luixxiul.
+ * Introduce new copy icon ([\#8942](https://github.com/matrix-org/matrix-react-sdk/pull/8942)).
+ * Allow finding group DMs by members in spotlight ([\#8922](https://github.com/matrix-org/matrix-react-sdk/pull/8922)). Fixes #22564. Contributed by @justjanne.
+ * Live location share - explicitly stop beacons replaced beacons ([\#8933](https://github.com/matrix-org/matrix-react-sdk/pull/8933)). Contributed by @kerryarchibald.
+ * Remove unpin from widget kebab menu ([\#8924](https://github.com/matrix-org/matrix-react-sdk/pull/8924)).
+ * Live location share - redact related locations on beacon redaction ([\#8926](https://github.com/matrix-org/matrix-react-sdk/pull/8926)). Contributed by @kerryarchibald.
+ * Live location share - disallow message pinning ([\#8928](https://github.com/matrix-org/matrix-react-sdk/pull/8928)). Contributed by @kerryarchibald.
+
+## 🐛 Bug Fixes
+ * Remove the ability to hide yourself in video rooms ([\#22806](https://github.com/vector-im/element-web/pull/22806)). Fixes #22805.
+ * Unbreak in-app permalink tooltips  ([\#9100](https://github.com/matrix-org/matrix-react-sdk/pull/9100)).
+ * Add space for the stroke on message editor on IRC layout ([\#9030](https://github.com/matrix-org/matrix-react-sdk/pull/9030)). Fixes #22785. Contributed by @luixxiul.
+ * Fix pinned messages not re-linkifying on edit ([\#9042](https://github.com/matrix-org/matrix-react-sdk/pull/9042)). Fixes #22726.
+ * Don't unnecessarily persist the host signup dialog ([\#9043](https://github.com/matrix-org/matrix-react-sdk/pull/9043)). Fixes #22778.
+ * Fix URL previews causing messages to become unrenderable ([\#9028](https://github.com/matrix-org/matrix-react-sdk/pull/9028)). Fixes #22766.
+ * Fix event list summaries including invalid events ([\#9041](https://github.com/matrix-org/matrix-react-sdk/pull/9041)). Fixes #22790.
+ * Correct accessibility labels for unread rooms in spotlight ([\#9003](https://github.com/matrix-org/matrix-react-sdk/pull/9003)). Contributed by @justjanne.
+ * Enable search strings highlight on bubble layout ([\#9032](https://github.com/matrix-org/matrix-react-sdk/pull/9032)). Fixes #22786. Contributed by @luixxiul.
+ * Unbreak URL preview for formatted links with tooltips ([\#9022](https://github.com/matrix-org/matrix-react-sdk/pull/9022)). Fixes #22764.
+ * Re-add margin to tiles based on EventTileBubble ([\#9015](https://github.com/matrix-org/matrix-react-sdk/pull/9015)). Fixes #22772. Contributed by @luixxiul.
+ * Fix Shortcut prompt for Search showing in minimized Roomlist ([\#9014](https://github.com/matrix-org/matrix-react-sdk/pull/9014)). Fixes #22739. Contributed by @justjanne.
+ * Fix avatar position on event info line for hidden events on a thread ([\#9019](https://github.com/matrix-org/matrix-react-sdk/pull/9019)). Fixes #22777. Contributed by @luixxiul.
+ * Fix lost padding of event tile info line ([\#9009](https://github.com/matrix-org/matrix-react-sdk/pull/9009)). Fixes #22754 and #22759. Contributed by @luixxiul.
+ * Align verification bubble with normal event tiles on IRC layout ([\#9001](https://github.com/matrix-org/matrix-react-sdk/pull/9001)). Fixes #22758. Contributed by @luixxiul.
+ * Ensure timestamp on generic event list summary is not hidden from TimelineCard ([\#9000](https://github.com/matrix-org/matrix-react-sdk/pull/9000)). Fixes #22755. Contributed by @luixxiul.
+ * Fix headings margin on security user settings tab ([\#8826](https://github.com/matrix-org/matrix-react-sdk/pull/8826)). Contributed by @luixxiul.
+ * Fix timestamp position on file panel ([\#8976](https://github.com/matrix-org/matrix-react-sdk/pull/8976)). Fixes #22718. Contributed by @luixxiul.
+ * Stop using :not() pseudo class for mx_GenericEventListSummary ([\#8944](https://github.com/matrix-org/matrix-react-sdk/pull/8944)). Fixes #22602. Contributed by @luixxiul.
+ * Don't show the same user twice in Spotlight ([\#8978](https://github.com/matrix-org/matrix-react-sdk/pull/8978)). Fixes #22697.
+ * Align the right edge of expand / collapse link buttons of generic event list summary in bubble layout with a variable ([\#8992](https://github.com/matrix-org/matrix-react-sdk/pull/8992)). Fixes #22743. Contributed by @luixxiul.
+ * Display own avatars on search results panel in bubble layout ([\#8990](https://github.com/matrix-org/matrix-react-sdk/pull/8990)). Contributed by @luixxiul.
+ * Fix text flow of thread summary content on threads list ([\#8991](https://github.com/matrix-org/matrix-react-sdk/pull/8991)). Fixes #22738. Contributed by @luixxiul.
+ * Fix the size of the clickable area of images ([\#8987](https://github.com/matrix-org/matrix-react-sdk/pull/8987)). Fixes #22282.
+ * Fix font size of MessageTimestamp on TimelineCard ([\#8950](https://github.com/matrix-org/matrix-react-sdk/pull/8950)). Contributed by @luixxiul.
+ * Improve security room settings tab style rules ([\#8844](https://github.com/matrix-org/matrix-react-sdk/pull/8844)). Fixes #22575. Contributed by @luixxiul.
+ * Align E2E icon and avatar of info tile in compact modern layout ([\#8965](https://github.com/matrix-org/matrix-react-sdk/pull/8965)). Fixes #22652. Contributed by @luixxiul.
+ * Fix clickable area of general event list summary toggle ([\#8979](https://github.com/matrix-org/matrix-react-sdk/pull/8979)). Fixes #22722. Contributed by @luixxiul.
+ * Fix resizing room topic ([\#8966](https://github.com/matrix-org/matrix-react-sdk/pull/8966)). Fixes #22689.
+ * Dismiss the search dialogue when starting a DM ([\#8967](https://github.com/matrix-org/matrix-react-sdk/pull/8967)). Fixes #22700.
+ * Fix "greyed out" text style inconsistency on search result panel ([\#8974](https://github.com/matrix-org/matrix-react-sdk/pull/8974)). Contributed by @luixxiul.
+ * Add top padding to EventTilePreview loader ([\#8977](https://github.com/matrix-org/matrix-react-sdk/pull/8977)). Fixes #22719. Contributed by @luixxiul.
+ * Fix read receipts group position on TimelineCard in compact modern/group layout ([\#8971](https://github.com/matrix-org/matrix-react-sdk/pull/8971)). Fixes #22715. Contributed by @luixxiul.
+ * Fix calls on homeservers without the unstable thirdparty endpoints. ([\#8931](https://github.com/matrix-org/matrix-react-sdk/pull/8931)). Fixes #21680. Contributed by @deepbluev7.
+ * Enable ReplyChain text to be expanded on IRC layout ([\#8959](https://github.com/matrix-org/matrix-react-sdk/pull/8959)). Fixes #22709. Contributed by @luixxiul.
+ * Fix hidden timestamp on message edit history dialog ([\#8955](https://github.com/matrix-org/matrix-react-sdk/pull/8955)). Fixes #22701. Contributed by @luixxiul.
+ * Enable ReplyChain text to be expanded on bubble layout ([\#8958](https://github.com/matrix-org/matrix-react-sdk/pull/8958)). Fixes #22709. Contributed by @luixxiul.
+ * Fix expand/collapse state wrong in metaspaces ([\#8952](https://github.com/matrix-org/matrix-react-sdk/pull/8952)). Fixes #22632.
+ * Location (live) share replies now provide a fallback content ([\#8949](https://github.com/matrix-org/matrix-react-sdk/pull/8949)).
+ * Fix space settings not opening for script-created spaces ([\#8957](https://github.com/matrix-org/matrix-react-sdk/pull/8957)). Fixes #22703.
+ * Respect `filename` field on `m.file` events ([\#8951](https://github.com/matrix-org/matrix-react-sdk/pull/8951)).
+ * Fix PlatformSettingsHandler always returning true due to returning a Promise ([\#8954](https://github.com/matrix-org/matrix-react-sdk/pull/8954)). Fixes #22616.
+ * Improve high-contrast support for spotlight ([\#8948](https://github.com/matrix-org/matrix-react-sdk/pull/8948)). Fixes #22481. Contributed by @justjanne.
+ * Fix wrong assertions that all media events have a mimetype ([\#8946](https://github.com/matrix-org/matrix-react-sdk/pull/8946)). Fixes matrix-org/element-web-rageshakes#13727.
+ * Make invite dialogue fixed height ([\#8934](https://github.com/matrix-org/matrix-react-sdk/pull/8934)). Fixes #22659.
+ * Fix all megolm error reported as unknown ([\#8916](https://github.com/matrix-org/matrix-react-sdk/pull/8916)).
+ * Remove line-height declarations from _ReplyTile.scss ([\#8932](https://github.com/matrix-org/matrix-react-sdk/pull/8932)). Fixes #22687. Contributed by @luixxiul.
+ * Reduce video rooms log spam ([\#8913](https://github.com/matrix-org/matrix-react-sdk/pull/8913)).
+ * Correct new search input’s rounded corners ([\#8921](https://github.com/matrix-org/matrix-react-sdk/pull/8921)). Fixes #22576. Contributed by @justjanne.
+ * Align unread notification dot on threads list in compact modern=group layout ([\#8911](https://github.com/matrix-org/matrix-react-sdk/pull/8911)). Fixes #22677. Contributed by @luixxiul.
+
+Changes in [1.11.0](https://github.com/vector-im/element-web/releases/tag/v1.11.0) (2022-07-05)
+===============================================================================================
+
+## 🚨 BREAKING CHANGES
+ * Remove Piwik support ([\#8835](https://github.com/matrix-org/matrix-react-sdk/pull/8835)).
+
+## ✨ Features
+ * Document how to configure a custom `home.html`. ([\#21066](https://github.com/vector-im/element-web/pull/21066)). Contributed by @johannes-krude.
+ * Move New Search Experience out of beta ([\#8859](https://github.com/matrix-org/matrix-react-sdk/pull/8859)). Contributed by @justjanne.
+ * Switch video rooms to spotlight layout when in PiP mode ([\#8912](https://github.com/matrix-org/matrix-react-sdk/pull/8912)). Fixes #22574.
+ * Live location sharing - render message deleted tile for redacted beacons ([\#8905](https://github.com/matrix-org/matrix-react-sdk/pull/8905)). Contributed by @kerryarchibald.
+ * Improve view source dialog style ([\#8883](https://github.com/matrix-org/matrix-react-sdk/pull/8883)). Fixes #22636. Contributed by @luixxiul.
+ * Improve integration manager dialog style ([\#8888](https://github.com/matrix-org/matrix-react-sdk/pull/8888)). Fixes #22642. Contributed by @luixxiul.
+ * Implement MSC3827: Filtering of `/publicRooms` by room type ([\#8866](https://github.com/matrix-org/matrix-react-sdk/pull/8866)). Fixes #22578.
+ * Show chat panel when opening a video room with unread messages ([\#8812](https://github.com/matrix-org/matrix-react-sdk/pull/8812)). Fixes #22527.
+ * Live location share - forward latest location ([\#8860](https://github.com/matrix-org/matrix-react-sdk/pull/8860)). Contributed by @kerryarchibald.
+ * Allow integration managers to validate user identity after opening ([\#8782](https://github.com/matrix-org/matrix-react-sdk/pull/8782)). Contributed by @Half-Shot.
+ * Create a common header on right panel cards on BaseCard ([\#8808](https://github.com/matrix-org/matrix-react-sdk/pull/8808)). Contributed by @luixxiul.
+ * Integrate searching public rooms and people into the new search experience ([\#8707](https://github.com/matrix-org/matrix-react-sdk/pull/8707)). Fixes #21354 and #19349. Contributed by @justjanne.
+ * Bring back waveform for voice messages and retain seeking ([\#8843](https://github.com/matrix-org/matrix-react-sdk/pull/8843)). Fixes #21904.
+ * Improve colors in settings  ([\#7283](https://github.com/matrix-org/matrix-react-sdk/pull/7283)).
+ * Keep draft in composer when a slash command syntax errors ([\#8811](https://github.com/matrix-org/matrix-react-sdk/pull/8811)). Fixes #22384.
+ * Release video rooms as a beta feature ([\#8431](https://github.com/matrix-org/matrix-react-sdk/pull/8431)).
+ * Clarify logout key backup warning dialog. Contributed by @notramo. ([\#8741](https://github.com/matrix-org/matrix-react-sdk/pull/8741)). Fixes #15565. Contributed by @MadLittleMods.
+ * Slightly improve the look of the `Message edits` dialog ([\#8763](https://github.com/matrix-org/matrix-react-sdk/pull/8763)). Fixes #22410.
+ * Add support for MD / HTML in room topics ([\#8215](https://github.com/matrix-org/matrix-react-sdk/pull/8215)). Fixes #5180. Contributed by @Johennes.
+ * Live location share - link to timeline tile from share warning ([\#8752](https://github.com/matrix-org/matrix-react-sdk/pull/8752)). Contributed by @kerryarchibald.
+ * Improve composer visiblity ([\#8578](https://github.com/matrix-org/matrix-react-sdk/pull/8578)). Fixes #22072 and #17362.
+ * Makes the avatar of the user menu non-draggable ([\#8765](https://github.com/matrix-org/matrix-react-sdk/pull/8765)). Contributed by @luixxiul.
+ * Improve widget buttons behaviour and layout ([\#8734](https://github.com/matrix-org/matrix-react-sdk/pull/8734)).
+ * Use AccessibleButton for 'Reset All' link button on SetupEncryptionBody ([\#8730](https://github.com/matrix-org/matrix-react-sdk/pull/8730)). Contributed by @luixxiul.
+ * Adjust message timestamp position on TimelineCard in non-bubble layouts ([\#8745](https://github.com/matrix-org/matrix-react-sdk/pull/8745)). Fixes #22426. Contributed by @luixxiul.
+ * Use AccessibleButton for 'In reply to' link button on ReplyChain ([\#8726](https://github.com/matrix-org/matrix-react-sdk/pull/8726)). Fixes #22407. Contributed by @luixxiul.
+ * Live location share - enable reply and react to tiles ([\#8721](https://github.com/matrix-org/matrix-react-sdk/pull/8721)). Contributed by @kerryarchibald.
+ * Change dash to em dash issues fixed ([\#8455](https://github.com/matrix-org/matrix-react-sdk/pull/8455)). Fixes #21895. Contributed by @goelesha.
+
+## 🐛 Bug Fixes
+ * Reduce video rooms log spam ([\#22665](https://github.com/vector-im/element-web/pull/22665)).
+ * Connect to Jitsi unmuted by default ([\#22660](https://github.com/vector-im/element-web/pull/22660)). Fixes #22637.
+ * Work around a Jitsi bug with display name encoding ([\#22525](https://github.com/vector-im/element-web/pull/22525)). Fixes #22521.
+ * Make invite dialogue fixed height ([\#8945](https://github.com/matrix-org/matrix-react-sdk/pull/8945)).
+ * Correct issue with tab order in new search experience ([\#8919](https://github.com/matrix-org/matrix-react-sdk/pull/8919)). Fixes #22670. Contributed by @justjanne.
+ * Clicking location replies now redirects to the replied event instead of opening the map ([\#8918](https://github.com/matrix-org/matrix-react-sdk/pull/8918)). Fixes #22667.
+ * Keep clicks on pills within the app ([\#8917](https://github.com/matrix-org/matrix-react-sdk/pull/8917)). Fixes #22653.
+ * Don't overlap tile bubbles with timestamps in modern layout ([\#8908](https://github.com/matrix-org/matrix-react-sdk/pull/8908)). Fixes #22425.
+ * Connect to Jitsi unmuted by default ([\#8909](https://github.com/matrix-org/matrix-react-sdk/pull/8909)).
+ * Maximize width value of display name on TimelineCard with IRC/modern layout ([\#8904](https://github.com/matrix-org/matrix-react-sdk/pull/8904)). Fixes #22651. Contributed by @luixxiul.
+ * Align the avatar and the display name on TimelineCard ([\#8900](https://github.com/matrix-org/matrix-react-sdk/pull/8900)). Contributed by @luixxiul.
+ * Remove inline margin from reactions row on IRC layout ([\#8891](https://github.com/matrix-org/matrix-react-sdk/pull/8891)). Fixes #22644. Contributed by @luixxiul.
+ * Align "From a thread" on search result panel on IRC layout ([\#8892](https://github.com/matrix-org/matrix-react-sdk/pull/8892)). Fixes #22645. Contributed by @luixxiul.
+ * Display description of E2E advanced panel as subsection text ([\#8889](https://github.com/matrix-org/matrix-react-sdk/pull/8889)). Contributed by @luixxiul.
+ * Remove inline end margin from images on file panel ([\#8886](https://github.com/matrix-org/matrix-react-sdk/pull/8886)). Fixes #22640. Contributed by @luixxiul.
+ * Disable option to `Quote` when we don't have sufficient permissions ([\#8893](https://github.com/matrix-org/matrix-react-sdk/pull/8893)). Fixes #22643.
+ * Add padding to font scaling loader for message bubble layout ([\#8875](https://github.com/matrix-org/matrix-react-sdk/pull/8875)). Fixes #22626. Contributed by @luixxiul.
+ * Set 100% max-width to display name on reply tiles ([\#8867](https://github.com/matrix-org/matrix-react-sdk/pull/8867)). Fixes #22615. Contributed by @luixxiul.
+ * Fix alignment of pill letter ([\#8874](https://github.com/matrix-org/matrix-react-sdk/pull/8874)). Fixes #22622. Contributed by @luixxiul.
+ * Move the beta pill to the right side and display the pill on video room only ([\#8873](https://github.com/matrix-org/matrix-react-sdk/pull/8873)). Fixes #22619 and #22620. Contributed by @luixxiul.
+ * Stop using absolute property to place beta pill on RoomPreviewCard ([\#8872](https://github.com/matrix-org/matrix-react-sdk/pull/8872)). Fixes #22617. Contributed by @luixxiul.
+ * Make the pill text single line ([\#8744](https://github.com/matrix-org/matrix-react-sdk/pull/8744)). Fixes #22427. Contributed by @luixxiul.
+ * Hide overflow of public room description on spotlight dialog result ([\#8870](https://github.com/matrix-org/matrix-react-sdk/pull/8870)). Contributed by @luixxiul.
+ * Fix position of message action bar on the info tile on TimelineCard in message bubble layout ([\#8865](https://github.com/matrix-org/matrix-react-sdk/pull/8865)). Fixes #22614. Contributed by @luixxiul.
+ * Remove inline start margin from display name on reply tiles on TimelineCard ([\#8864](https://github.com/matrix-org/matrix-react-sdk/pull/8864)). Fixes #22613. Contributed by @luixxiul.
+ * Improve homeserver dropdown dialog styling ([\#8850](https://github.com/matrix-org/matrix-react-sdk/pull/8850)). Fixes #22552. Contributed by @justjanne.
+ * Fix crash when drawing blurHash for portrait videos PSB-139 ([\#8855](https://github.com/matrix-org/matrix-react-sdk/pull/8855)). Fixes #22597. Contributed by @andybalaam.
+ * Fix grid blowout on pinned event tiles ([\#8816](https://github.com/matrix-org/matrix-react-sdk/pull/8816)). Fixes #22543. Contributed by @luixxiul.
+ * Fix temporary sync errors if there's weird settings stored in account data ([\#8857](https://github.com/matrix-org/matrix-react-sdk/pull/8857)).
+ * Fix reactions row overflow and gap between reactions ([\#8813](https://github.com/matrix-org/matrix-react-sdk/pull/8813)). Fixes #22093. Contributed by @luixxiul.
+ * Fix issues with the Create new room button in Spotlight ([\#8851](https://github.com/matrix-org/matrix-react-sdk/pull/8851)). Contributed by @justjanne.
+ * Remove margin from E2E icon between avatar and hidden event ([\#8584](https://github.com/matrix-org/matrix-react-sdk/pull/8584)). Fixes #22186. Contributed by @luixxiul.
+ * Fix waveform on a message bubble ([\#8852](https://github.com/matrix-org/matrix-react-sdk/pull/8852)). Contributed by @luixxiul.
+ * Location sharing maps are now loaded after reconnection ([\#8848](https://github.com/matrix-org/matrix-react-sdk/pull/8848)). Fixes #20993.
+ * Update the avatar mask so it doesn’t cut off spaces’ avatars anymore ([\#8849](https://github.com/matrix-org/matrix-react-sdk/pull/8849)). Contributed by @justjanne.
+ * Add a bit of safety around timestamp handling for threads ([\#8845](https://github.com/matrix-org/matrix-react-sdk/pull/8845)).
+ * Remove top margin from event tile on a narrow viewport ([\#8814](https://github.com/matrix-org/matrix-react-sdk/pull/8814)). Contributed by @luixxiul.
+ * Fix keyboard shortcuts on settings tab being wrapped ([\#8825](https://github.com/matrix-org/matrix-react-sdk/pull/8825)). Fixes #22547. Contributed by @luixxiul.
+ * Add try-catch around blurhash loading ([\#8830](https://github.com/matrix-org/matrix-react-sdk/pull/8830)).
+ * Prevent new composer from overflowing from non-breakable text ([\#8829](https://github.com/matrix-org/matrix-react-sdk/pull/8829)). Fixes #22507. Contributed by @justjanne.
+ * Use common subheading on sidebar user settings tab ([\#8823](https://github.com/matrix-org/matrix-react-sdk/pull/8823)). Contributed by @luixxiul.
+ * Fix clickable area of advanced toggle on appearance user settings tab ([\#8820](https://github.com/matrix-org/matrix-react-sdk/pull/8820)). Fixes #22546. Contributed by @luixxiul.
+ * Disable redacting reactions if we don't have sufficient permissions  ([\#8767](https://github.com/matrix-org/matrix-react-sdk/pull/8767)). Fixes #22262.
+ * Update the live timeline when the JS SDK resets it ([\#8806](https://github.com/matrix-org/matrix-react-sdk/pull/8806)). Fixes #22421.
+ * Fix flex blowout on image reply ([\#8809](https://github.com/matrix-org/matrix-react-sdk/pull/8809)). Fixes #22509 and #22510. Contributed by @luixxiul.
+ * Enable background color on hover for chat panel and thread panel ([\#8644](https://github.com/matrix-org/matrix-react-sdk/pull/8644)). Fixes #22273. Contributed by @luixxiul.
+ * Fix #20026: send read marker as soon as we change it ([\#8802](https://github.com/matrix-org/matrix-react-sdk/pull/8802)). Fixes #20026. Contributed by @andybalaam.
+ * Allow AppTiles to shrink as much as necessary ([\#8805](https://github.com/matrix-org/matrix-react-sdk/pull/8805)). Fixes #22499.
+ * Make widgets in video rooms immutable again ([\#8803](https://github.com/matrix-org/matrix-react-sdk/pull/8803)). Fixes #22497.
+ * Use MessageActionBar style declarations on pinned message card ([\#8757](https://github.com/matrix-org/matrix-react-sdk/pull/8757)). Fixes #22444. Contributed by @luixxiul.
+ * Expire video member events after 1 hour ([\#8776](https://github.com/matrix-org/matrix-react-sdk/pull/8776)).
+ * Name lists on invite dialog ([\#8046](https://github.com/matrix-org/matrix-react-sdk/pull/8046)). Fixes #21400 and #19463. Contributed by @luixxiul.
+ * Live location share - show loading UI for beacons with start timestamp in the future ([\#8775](https://github.com/matrix-org/matrix-react-sdk/pull/8775)). Fixes #22437. Contributed by @kerryarchibald.
+ * Fix scroll jump issue with the composer ([\#8788](https://github.com/matrix-org/matrix-react-sdk/pull/8788)). Fixes #22464.
+ * Fix the incorrect nesting of download button on MessageActionBar ([\#8785](https://github.com/matrix-org/matrix-react-sdk/pull/8785)). Contributed by @luixxiul.
+ * Revert link color change in composer ([\#8784](https://github.com/matrix-org/matrix-react-sdk/pull/8784)). Fixes #22468.
+ * Fix 'Logout' inline link on the splash screen ([\#8770](https://github.com/matrix-org/matrix-react-sdk/pull/8770)). Fixes #22449. Contributed by @luixxiul.
+ * Fix disappearing widget poput button when changing the widget layout ([\#8754](https://github.com/matrix-org/matrix-react-sdk/pull/8754)).
+ * Reduce gutter with the new read receipt UI ([\#8736](https://github.com/matrix-org/matrix-react-sdk/pull/8736)). Fixes #21890.
+ * Add ellipsis effect to hidden beacon status ([\#8755](https://github.com/matrix-org/matrix-react-sdk/pull/8755)). Fixes #22441. Contributed by @luixxiul.
+ * Make the pill on the basic message composer compatible with display name in RTL languages ([\#8758](https://github.com/matrix-org/matrix-react-sdk/pull/8758)). Fixes #22445. Contributed by @luixxiul.
+ * Prevent the banner text from being selected, replacing the spacing values with the variable ([\#8756](https://github.com/matrix-org/matrix-react-sdk/pull/8756)). Fixes #22442. Contributed by @luixxiul.
+ * Ensure the first device on a newly-registered account gets cross-signed properly ([\#8750](https://github.com/matrix-org/matrix-react-sdk/pull/8750)). Fixes #21977. Contributed by @duxovni.
+ * Hide live location option in threads composer ([\#8746](https://github.com/matrix-org/matrix-react-sdk/pull/8746)). Fixes #22424. Contributed by @kerryarchibald.
+ * Make sure MessageTimestamp is not hidden by EventTile_line on TimelineCard ([\#8748](https://github.com/matrix-org/matrix-react-sdk/pull/8748)). Contributed by @luixxiul.
+ * Make PiP motion smoother and react to window resizes correctly ([\#8747](https://github.com/matrix-org/matrix-react-sdk/pull/8747)). Fixes #22292.
+ * Prevent Invite and DevTools dialogs from being cut off ([\#8646](https://github.com/matrix-org/matrix-react-sdk/pull/8646)). Fixes #20911 and undefined/matrix-react-sdk#8165. Contributed by @justjanne.
+ * Squish event bubble tiles less ([\#8740](https://github.com/matrix-org/matrix-react-sdk/pull/8740)).
+ * Use random widget IDs for video rooms ([\#8739](https://github.com/matrix-org/matrix-react-sdk/pull/8739)). Fixes #22417.
+ * Fix read avatars overflow from the right chat panel with a maximized widget on bubble message layout ([\#8470](https://github.com/matrix-org/matrix-react-sdk/pull/8470)). Contributed by @luixxiul.
+ * Fix `CallView` crash ([\#8735](https://github.com/matrix-org/matrix-react-sdk/pull/8735)). Fixes #22394.
+
+Changes in [1.10.15](https://github.com/vector-im/element-web/releases/tag/v1.10.15) (2022-06-14)
+=================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix missing element desktop preferences ([\#8798](https://github.com/matrix-org/matrix-react-sdk/pull/8798)). Contributed by @t3chguy.
+
+Changes in [1.10.14](https://github.com/vector-im/element-web/releases/tag/v1.10.14) (2022-06-07)
+=================================================================================================
+
+## ✨ Features
+ * Make Lao translation available ([\#22358](https://github.com/vector-im/element-web/pull/22358)). Fixes #22327.
+ * Option to disable hardware acceleration on Element Desktop ([\#22295](https://github.com/vector-im/element-web/pull/22295)). Contributed by @novocaine.
+ * Configure custom home.html via `.well-known/matrix/client["io.element.embedded_pages"]["home_url"]` for all your element-web/desktop users ([\#7790](https://github.com/matrix-org/matrix-react-sdk/pull/7790)). Contributed by @johannes-krude.
+ * Live location sharing - open location in OpenStreetMap ([\#8695](https://github.com/matrix-org/matrix-react-sdk/pull/8695)). Contributed by @kerryarchibald.
+ * Show a dialog when Jitsi encounters an error ([\#8701](https://github.com/matrix-org/matrix-react-sdk/pull/8701)). Fixes #22284.
+ * Add support for setting the `avatar_url` of widgets by integration managers. ([\#8550](https://github.com/matrix-org/matrix-react-sdk/pull/8550)). Contributed by @Fox32.
+ * Add an option to ignore (block) a user when reporting their events ([\#8471](https://github.com/matrix-org/matrix-react-sdk/pull/8471)).
+ * Add the option to disable hardware acceleration ([\#8655](https://github.com/matrix-org/matrix-react-sdk/pull/8655)). Contributed by @novocaine.
+ * Slightly better presentation of read receipts to screen reader users ([\#8662](https://github.com/matrix-org/matrix-react-sdk/pull/8662)). Fixes #22293. Contributed by @pvagner.
+ * Add jump to related event context menu item ([\#6775](https://github.com/matrix-org/matrix-react-sdk/pull/6775)). Fixes #19883.
+ * Add public room directory hook ([\#8626](https://github.com/matrix-org/matrix-react-sdk/pull/8626)).
+
+## 🐛 Bug Fixes
+ * Stop Jitsi if we time out while connecting to a video room ([\#22301](https://github.com/vector-im/element-web/pull/22301)). Fixes #22283.
+ * Remove inline margin from UTD error message inside a reply tile on ThreadView ([\#8708](https://github.com/matrix-org/matrix-react-sdk/pull/8708)). Fixes #22376. Contributed by @luixxiul.
+ * Move unread notification dots of the threads list to the expected position ([\#8700](https://github.com/matrix-org/matrix-react-sdk/pull/8700)). Fixes #22350. Contributed by @luixxiul.
+ * Prevent overflow of grid items on a bubble with UTD generally ([\#8697](https://github.com/matrix-org/matrix-react-sdk/pull/8697)). Contributed by @luixxiul.
+ * Create 'Unable To Decrypt' grid layout for hidden events on a bubble layout ([\#8704](https://github.com/matrix-org/matrix-react-sdk/pull/8704)). Fixes #22365. Contributed by @luixxiul.
+ * Fix - AccessibleButton does not set disabled attribute ([\#8682](https://github.com/matrix-org/matrix-react-sdk/pull/8682)). Contributed by @kerryarchibald.
+ * Fix font not resetting when logging out ([\#8670](https://github.com/matrix-org/matrix-react-sdk/pull/8670)). Fixes #17228.
+ * Fix local aliases section of room settings not working for some homeservers (ie ([\#8698](https://github.com/matrix-org/matrix-react-sdk/pull/8698)). Fixes #22337.
+ * Align EventTile_line with display name on message bubble ([\#8692](https://github.com/matrix-org/matrix-react-sdk/pull/8692)). Fixes #22343. Contributed by @luixxiul.
+ * Convert references to direct chat -> direct message ([\#8694](https://github.com/matrix-org/matrix-react-sdk/pull/8694)). Contributed by @novocaine.
+ * Improve combining diacritics for U+20D0 to U+20F0 in Chrome ([\#8687](https://github.com/matrix-org/matrix-react-sdk/pull/8687)).
+ * Make the empty thread panel fill BaseCard ([\#8690](https://github.com/matrix-org/matrix-react-sdk/pull/8690)). Fixes #22338. Contributed by @luixxiul.
+ * Fix edge case around composer handling gendered facepalm emoji ([\#8686](https://github.com/matrix-org/matrix-react-sdk/pull/8686)).
+ * Fix a grid blowout due to nowrap displayName on a bubble with UTD ([\#8688](https://github.com/matrix-org/matrix-react-sdk/pull/8688)). Fixes #21914. Contributed by @luixxiul.
+ * Apply the same max-width to image tile on the thread timeline as message bubble ([\#8669](https://github.com/matrix-org/matrix-react-sdk/pull/8669)). Fixes #22313. Contributed by @luixxiul.
+ * Fix dropdown button size for picture-in-picture CallView ([\#8680](https://github.com/matrix-org/matrix-react-sdk/pull/8680)). Fixes #22316. Contributed by @luixxiul.
+ * Live location sharing - fix square border for image-less avatar (PSF-1052) ([\#8679](https://github.com/matrix-org/matrix-react-sdk/pull/8679)). Contributed by @kerryarchibald.
+ * Stop connecting to a video room if the widget messaging disappears ([\#8660](https://github.com/matrix-org/matrix-react-sdk/pull/8660)).
+ * Fix file button and audio player overflowing from message bubble ([\#8666](https://github.com/matrix-org/matrix-react-sdk/pull/8666)). Fixes #22308. Contributed by @luixxiul.
+ * Don't show broken composer format bar when selection is whitespace ([\#8673](https://github.com/matrix-org/matrix-react-sdk/pull/8673)). Fixes #10788.
+ * Fix media upload http 413 handling ([\#8674](https://github.com/matrix-org/matrix-react-sdk/pull/8674)).
+ * Fix emoji picker for editing thread responses ([\#8671](https://github.com/matrix-org/matrix-react-sdk/pull/8671)). Fixes matrix-org/element-web-rageshakes#13129.
+ * Map attribution while sharing live location is now visible ([\#8621](https://github.com/matrix-org/matrix-react-sdk/pull/8621)). Fixes #22236. Contributed by @weeman1337.
+ * Fix info tile overlapping the time stamp on TimelineCard ([\#8639](https://github.com/matrix-org/matrix-react-sdk/pull/8639)). Fixes #22256. Contributed by @luixxiul.
+ * Fix position of wide images on IRC / modern layout ([\#8667](https://github.com/matrix-org/matrix-react-sdk/pull/8667)). Fixes #22309. Contributed by @luixxiul.
+ * Fix other user's displayName being wrapped on the bubble message layout ([\#8456](https://github.com/matrix-org/matrix-react-sdk/pull/8456)). Fixes #22004. Contributed by @luixxiul.
+ * Set spacing declarations to elements in mx_EventTile_mediaLine ([\#8665](https://github.com/matrix-org/matrix-react-sdk/pull/8665)). Fixes #22307. Contributed by @luixxiul.
+ * Fix wide image overflowing from the thumbnail container ([\#8663](https://github.com/matrix-org/matrix-react-sdk/pull/8663)). Fixes #22303. Contributed by @luixxiul.
+ * Fix styles of "Show all" link button on ReactionsRow ([\#8658](https://github.com/matrix-org/matrix-react-sdk/pull/8658)). Fixes #22300. Contributed by @luixxiul.
+ * Automatically log in after registration ([\#8654](https://github.com/matrix-org/matrix-react-sdk/pull/8654)). Fixes #19305. Contributed by @justjanne.
+ * Fix offline status in window title not working reliably ([\#8656](https://github.com/matrix-org/matrix-react-sdk/pull/8656)).
+ * Align input area with event body's first letter in a thread on IRC/modern layout ([\#8636](https://github.com/matrix-org/matrix-react-sdk/pull/8636)). Fixes #22252. Contributed by @luixxiul.
+ * Fix crash on null idp for SSO buttons ([\#8650](https://github.com/matrix-org/matrix-react-sdk/pull/8650)). Contributed by @hughns.
+ * Don't open the regular browser or our context menu on right-clicking the `Options` button in the message action bar ([\#8648](https://github.com/matrix-org/matrix-react-sdk/pull/8648)). Fixes #22279.
+ * Show notifications even when Element is focused ([\#8590](https://github.com/matrix-org/matrix-react-sdk/pull/8590)). Contributed by @sumnerevans.
+ * Remove padding from the buttons on edit message composer of a event tile on a thread ([\#8632](https://github.com/matrix-org/matrix-react-sdk/pull/8632)). Contributed by @luixxiul.
+ * ensure metaspace changes correctly notify listeners ([\#8611](https://github.com/matrix-org/matrix-react-sdk/pull/8611)). Fixes #21006. Contributed by @justjanne.
+ * Hide image banner on stickers, they have a tooltip already ([\#8641](https://github.com/matrix-org/matrix-react-sdk/pull/8641)). Fixes #22244.
+ * Adjust EditMessageComposer style declarations ([\#8631](https://github.com/matrix-org/matrix-react-sdk/pull/8631)). Fixes #22231. Contributed by @luixxiul.
+
+Changes in [1.10.13](https://github.com/vector-im/element-web/releases/tag/v1.10.13) (2022-05-24)
+=================================================================================================
+
+## ✨ Features
+ * Go to space landing page when clicking on a selected space ([\#6442](https://github.com/matrix-org/matrix-react-sdk/pull/6442)). Fixes #20296.
+ * Fall back to untranslated string rather than showing missing translation error ([\#8609](https://github.com/matrix-org/matrix-react-sdk/pull/8609)).
+ * Show file name and size on images on hover ([\#6511](https://github.com/matrix-org/matrix-react-sdk/pull/6511)). Fixes #18197.
+ * Iterate on search results for message bubbles ([\#7047](https://github.com/matrix-org/matrix-react-sdk/pull/7047)). Fixes #20315.
+ * registration: redesign email verification page ([\#8554](https://github.com/matrix-org/matrix-react-sdk/pull/8554)). Fixes #21984.
+ * Show full thread message in hover title on thread summary ([\#8568](https://github.com/matrix-org/matrix-react-sdk/pull/8568)). Fixes #22037.
+ * Tweak video rooms copy ([\#8582](https://github.com/matrix-org/matrix-react-sdk/pull/8582)). Fixes #22176.
+ * Live location share - beacon tooltip in maximised view ([\#8572](https://github.com/matrix-org/matrix-react-sdk/pull/8572)).
+ * Add dialog to navigate long room topics ([\#8517](https://github.com/matrix-org/matrix-react-sdk/pull/8517)). Fixes #9623.
+ * Change spaceroomfacepile tooltip if memberlist is shown ([\#8571](https://github.com/matrix-org/matrix-react-sdk/pull/8571)). Fixes #17406.
+ * Improve message editing UI ([\#8483](https://github.com/matrix-org/matrix-react-sdk/pull/8483)). Fixes #9752 and #22108.
+ * Make date changes more obvious ([\#6410](https://github.com/matrix-org/matrix-react-sdk/pull/6410)). Fixes #16221.
+ * Enable forwarding static locations ([\#8553](https://github.com/matrix-org/matrix-react-sdk/pull/8553)).
+ * Log `TimelinePanel` debugging info when opening the bug report modal ([\#8502](https://github.com/matrix-org/matrix-react-sdk/pull/8502)).
+ * Improve welcome screen, add opt-out analytics ([\#8474](https://github.com/matrix-org/matrix-react-sdk/pull/8474)). Fixes #21946.
+ * Converting selected text to MD link when pasting a URL ([\#8242](https://github.com/matrix-org/matrix-react-sdk/pull/8242)). Fixes #21634. Contributed by @Sinharitik589.
+ * Support Inter on custom themes ([\#8399](https://github.com/matrix-org/matrix-react-sdk/pull/8399)). Fixes #16293.
+ * Add a `Copy link` button to the right-click message context-menu labs feature ([\#8527](https://github.com/matrix-org/matrix-react-sdk/pull/8527)).
+ * Move widget screenshots labs flag to devtools ([\#8522](https://github.com/matrix-org/matrix-react-sdk/pull/8522)).
+ * Remove some labs features which don't get used or create maintenance burden: custom status, multiple integration managers, and do not disturb ([\#8521](https://github.com/matrix-org/matrix-react-sdk/pull/8521)).
+ * Add a way to toggle `ScrollPanel` and `TimelinePanel` debug logs ([\#8513](https://github.com/matrix-org/matrix-react-sdk/pull/8513)).
+ * Spaces: remove blue beta dot ([\#8511](https://github.com/matrix-org/matrix-react-sdk/pull/8511)). Fixes #22061.
+ * Order new search dialog results by recency ([\#8444](https://github.com/matrix-org/matrix-react-sdk/pull/8444)).
+ * Improve pills ([\#6398](https://github.com/matrix-org/matrix-react-sdk/pull/6398)). Fixes #16948 and #21281.
+ * Add a way to maximize/pin widget from the PiP view ([\#7672](https://github.com/matrix-org/matrix-react-sdk/pull/7672)). Fixes #20723.
+ * Iterate video room designs in labs ([\#8499](https://github.com/matrix-org/matrix-react-sdk/pull/8499)).
+ * Improve UI/UX in calls ([\#7791](https://github.com/matrix-org/matrix-react-sdk/pull/7791)). Fixes #19937.
+ * Add ability to change audio and video devices during a call ([\#7173](https://github.com/matrix-org/matrix-react-sdk/pull/7173)). Fixes #15595.
+
+## 🐛 Bug Fixes
+ * Fix video rooms sometimes connecting muted when they shouldn't ([\#22125](https://github.com/vector-im/element-web/pull/22125)).
+ * Avoid flashing the 'join conference' button at the user in video rooms ([\#22120](https://github.com/vector-im/element-web/pull/22120)).
+ * Fully close Jitsi conferences on errors ([\#22060](https://github.com/vector-im/element-web/pull/22060)).
+ * Fix click behavior of notification badges on spaces ([\#8627](https://github.com/matrix-org/matrix-react-sdk/pull/8627)). Fixes #22241.
+ * Add missing return values in Read Receipt animation code ([\#8625](https://github.com/matrix-org/matrix-react-sdk/pull/8625)). Fixes #22175.
+ * Fix 'continue' button not working after accepting identity server terms of service ([\#8619](https://github.com/matrix-org/matrix-react-sdk/pull/8619)). Fixes #20003.
+ * Proactively fix stuck devices in video rooms ([\#8587](https://github.com/matrix-org/matrix-react-sdk/pull/8587)). Fixes #22131.
+ * Fix position of the message action bar on left side bubbles ([\#8398](https://github.com/matrix-org/matrix-react-sdk/pull/8398)). Fixes #21879. Contributed by @luixxiul.
+ * Fix edge case thread summaries around events without a msgtype ([\#8576](https://github.com/matrix-org/matrix-react-sdk/pull/8576)).
+ * Fix favourites metaspace not updating ([\#8594](https://github.com/matrix-org/matrix-react-sdk/pull/8594)). Fixes #22156.
+ * Stop spaces from displaying as rooms in new breadcrumbs ([\#8595](https://github.com/matrix-org/matrix-react-sdk/pull/8595)). Fixes #22165.
+ * Fix avatar position of hidden event on ThreadView ([\#8592](https://github.com/matrix-org/matrix-react-sdk/pull/8592)). Fixes #22199. Contributed by @luixxiul.
+ * Fix MessageTimestamp position next to redacted messages on IRC/modern layout ([\#8591](https://github.com/matrix-org/matrix-react-sdk/pull/8591)). Fixes #22181. Contributed by @luixxiul.
+ * Fix padding of messages in threads ([\#8574](https://github.com/matrix-org/matrix-react-sdk/pull/8574)). Contributed by @luixxiul.
+ * Enable overflow of hidden events content ([\#8585](https://github.com/matrix-org/matrix-react-sdk/pull/8585)). Fixes #22187. Contributed by @luixxiul.
+ * Increase composer line height to avoid cutting off emoji ([\#8583](https://github.com/matrix-org/matrix-react-sdk/pull/8583)). Fixes #22170.
+ * Don't consider threads for breaking continuation until actually created ([\#8581](https://github.com/matrix-org/matrix-react-sdk/pull/8581)). Fixes #22164.
+ * Fix displaying hidden events on threads  ([\#8555](https://github.com/matrix-org/matrix-react-sdk/pull/8555)). Fixes #22058. Contributed by @luixxiul.
+ * Fix button width and align 絵文字 (emoji) on the user panel ([\#8562](https://github.com/matrix-org/matrix-react-sdk/pull/8562)). Fixes #22142. Contributed by @luixxiul.
+ * Standardise the margin for settings tabs ([\#7963](https://github.com/matrix-org/matrix-react-sdk/pull/7963)). Fixes #20767. Contributed by @yuktea.
+ * Fix room history not being visible even if we have historical keys ([\#8563](https://github.com/matrix-org/matrix-react-sdk/pull/8563)). Fixes #16983.
+ * Fix oblong avatars in video room lobbies ([\#8565](https://github.com/matrix-org/matrix-react-sdk/pull/8565)).
+ * Update thread summary when latest event gets decrypted ([\#8564](https://github.com/matrix-org/matrix-react-sdk/pull/8564)). Fixes #22151.
+ * Fix codepath which can wrongly cause automatic space switch from all rooms ([\#8560](https://github.com/matrix-org/matrix-react-sdk/pull/8560)). Fixes #21373.
+ * Fix effect of URL preview toggle not updating live ([\#8561](https://github.com/matrix-org/matrix-react-sdk/pull/8561)). Fixes #22148.
+ * Fix visual bugs on AccessSecretStorageDialog ([\#8160](https://github.com/matrix-org/matrix-react-sdk/pull/8160)). Fixes #19426. Contributed by @luixxiul.
+ * Fix the width bounce of the clock on the AudioPlayer ([\#8320](https://github.com/matrix-org/matrix-react-sdk/pull/8320)). Fixes #21788. Contributed by @luixxiul.
+ * Hide the verification left stroke only on the thread list ([\#8525](https://github.com/matrix-org/matrix-react-sdk/pull/8525)). Fixes #22132. Contributed by @luixxiul.
+ * Hide recently_viewed dropdown when other modal opens ([\#8538](https://github.com/matrix-org/matrix-react-sdk/pull/8538)). Contributed by @yaya-usman.
+ * Only jump to date after pressing the 'go' button ([\#8548](https://github.com/matrix-org/matrix-react-sdk/pull/8548)). Fixes #20799.
+ * Fix download button not working on events that were decrypted too late ([\#8556](https://github.com/matrix-org/matrix-react-sdk/pull/8556)). Fixes #19427.
+ * Align thread summary button with bubble messages on the left side ([\#8388](https://github.com/matrix-org/matrix-react-sdk/pull/8388)). Fixes #21873. Contributed by @luixxiul.
+ * Fix unresponsive notification toggles ([\#8549](https://github.com/matrix-org/matrix-react-sdk/pull/8549)). Fixes #22109.
+ * Set color-scheme property in themes ([\#8547](https://github.com/matrix-org/matrix-react-sdk/pull/8547)). Fixes #22124.
+ * Improve the styling of error messages during search initialization. ([\#6899](https://github.com/matrix-org/matrix-react-sdk/pull/6899)). Fixes #19245 and #18164. Contributed by @KalleStruik.
+ * Don't leave button tooltips open when closing modals ([\#8546](https://github.com/matrix-org/matrix-react-sdk/pull/8546)). Fixes #22121.
+ * update matrix-analytics-events ([\#8543](https://github.com/matrix-org/matrix-react-sdk/pull/8543)).
+ * Handle Jitsi Meet crashes more gracefully ([\#8541](https://github.com/matrix-org/matrix-react-sdk/pull/8541)).
+ * Fix regression around pasting links ([\#8537](https://github.com/matrix-org/matrix-react-sdk/pull/8537)). Fixes #22117.
+ * Fixes suggested room not ellipsized on shrinking ([\#8536](https://github.com/matrix-org/matrix-react-sdk/pull/8536)). Contributed by @yaya-usman.
+ * Add global spacing between display name and location body ([\#8523](https://github.com/matrix-org/matrix-react-sdk/pull/8523)). Fixes #22111. Contributed by @luixxiul.
+ * Add box-shadow to the reply preview on the main (left) panel only ([\#8397](https://github.com/matrix-org/matrix-react-sdk/pull/8397)). Fixes #21894. Contributed by @luixxiul.
+ * Set line-height: 1 to RedactedBody inside GenericEventListSummary for IRC/modern layout ([\#8529](https://github.com/matrix-org/matrix-react-sdk/pull/8529)). Fixes #22112. Contributed by @luixxiul.
+ * Fix position of timestamp on the chat panel in IRC layout and message edits history modal window ([\#8464](https://github.com/matrix-org/matrix-react-sdk/pull/8464)). Fixes #22011 and #22014. Contributed by @luixxiul.
+ * Fix unexpected and inconsistent inheritance of line-height property for mx_TextualEvent ([\#8485](https://github.com/matrix-org/matrix-react-sdk/pull/8485)). Fixes #22041. Contributed by @luixxiul.
+ * Set the same margin to the right side of NewRoomIntro on TimelineCard ([\#8453](https://github.com/matrix-org/matrix-react-sdk/pull/8453)). Contributed by @luixxiul.
+ * Remove duplicate tooltip from user pills ([\#8512](https://github.com/matrix-org/matrix-react-sdk/pull/8512)).
+ * Set max-width for MLocationBody and MLocationBody_map by default ([\#8519](https://github.com/matrix-org/matrix-react-sdk/pull/8519)). Fixes #21983. Contributed by @luixxiul.
+ * Simplify ReplyPreview UI implementation ([\#8516](https://github.com/matrix-org/matrix-react-sdk/pull/8516)). Fixes #22091. Contributed by @luixxiul.
+ * Fix thread summary overflow on narrow message panel on bubble message layout ([\#8520](https://github.com/matrix-org/matrix-react-sdk/pull/8520)). Fixes #22097. Contributed by @luixxiul.
+ * Live location sharing - refresh beacon timers on tab becoming active ([\#8515](https://github.com/matrix-org/matrix-react-sdk/pull/8515)).
+ * Enlarge emoji again ([\#8509](https://github.com/matrix-org/matrix-react-sdk/pull/8509)). Fixes #22086.
+ * Order receipts with the most recent on the right ([\#8506](https://github.com/matrix-org/matrix-react-sdk/pull/8506)). Fixes #22044.
+ * Disconnect from video rooms when leaving ([\#8500](https://github.com/matrix-org/matrix-react-sdk/pull/8500)).
+ * Fix soft crash around threads when room isn't yet in store ([\#8496](https://github.com/matrix-org/matrix-react-sdk/pull/8496)). Fixes #22047.
+ * Fix reading of cached room device setting values ([\#8491](https://github.com/matrix-org/matrix-react-sdk/pull/8491)).
+ * Add loading spinners to threads panels ([\#8490](https://github.com/matrix-org/matrix-react-sdk/pull/8490)). Fixes #21335.
+ * Fix forwarding UI papercuts ([\#8482](https://github.com/matrix-org/matrix-react-sdk/pull/8482)). Fixes #17616.
+
 Changes in [1.10.12](https://github.com/vector-im/element-web/releases/tag/v1.10.12) (2022-05-10)
 =================================================================================================
 

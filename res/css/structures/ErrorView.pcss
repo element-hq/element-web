@@ -14,16 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// import font-size variables manually, ideally this scss would get loaded by the theme which has all variables in context
-@import "../../../node_modules/matrix-react-sdk/res/css/_font-sizes.scss";
+// import font-size variables manually,
+// ideally this file would get loaded by the theme which has all variables in context
+@import "../../../node_modules/matrix-react-sdk/res/css/_font-sizes.pcss";
 
 .mx_ErrorView {
     background: #c5e0f7;
     background: -moz-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
     background: -webkit-linear-gradient(top, #c5e0f7 0%, #ffffff 100%);
     background: linear-gradient(to bottom, #c5e0f7 0%, #ffffff 100%);
+    /* stylelint-disable-next-line function-no-unknown */
     filter: progid:dximagetransform.microsoft.gradient(startColorstr='#c5e0f7', endColorstr='#ffffff', GradientType=0);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol";
     width: 100%;
     min-height: 100%;
     height: auto;

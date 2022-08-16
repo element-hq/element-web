@@ -1,10 +1,7 @@
 {
     "Dismiss": "Avvisa",
-    "powered by Matrix": "drivs av Matrix",
     "Unknown device": "Okänd enhet",
-    "You need to be using HTTPS to place a screen-sharing call.": "Du måste använda HTTPS för att ringa med skärmdelning.",
     "Welcome to Element": "Välkommen till Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Decentraliserad, krypterad chatt &amp; samarbetsplattform baserad på [matrix]",
     "Sign In": "Logga in",
     "Create Account": "Skapa konto",
     "Explore rooms": "Utforska rum",
@@ -13,11 +10,8 @@
     "Unexpected error preparing the app. See console for details.": "Oväntat fel vid appstart. Se konsolen för mer information.",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "Ogiltiga inställningar: det är enbart möjligt att specificera en default_config, default_server, eller default_hs_url.",
     "Invalid configuration: no default server specified.": "Ogiltiga inställningar: ingen standardserver specificerad.",
-    "Open user settings": "Öppna användarinställningar",
     "Go to your browser to complete Sign In": "Gå till din webbläsare för att slutföra inloggningen",
-    "Missing indexeddb worker script!": "Saknar IndexedDB-workerscript!",
     "Unable to load config file: please refresh the page to try again.": "Kan inte ladda konfigurationsfilen: ladda om sidan för att försöka igen.",
-    "Previous/next recently visited room or community": "Föregående/nästa nyligen besökt rum eller gemenskap",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s skrivbord (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Webbläsaren stöds ej",
@@ -34,8 +28,5 @@
     "Your browser can't run %(brand)s": "Din webbläsare kan inte köra %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s använder avancerade webbläsarfunktioner som inte stöds av din aktuella webbläsare.",
     "Use %(brand)s on mobile": "Använd %(brand)s på mobilen",
-    "Switch to space by number": "Byt till utrymme med nummer",
-    "Previous recently visited room or community": "Tidigare nyligen besökta rum eller gemenskap",
-    "Next recently visited room or community": "Nästa nyligen besökta rum eller gemenskap",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentraliserad krypterad chatt &amp; samarbete som drivs av $matrixLogo"
 }

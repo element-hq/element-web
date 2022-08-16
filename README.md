@@ -1,3 +1,12 @@
+[![Chat](https://img.shields.io/matrix/element-web:matrix.org?logo=matrix)](https://matrix.to/#/#element-web:matrix.org)
+![Tests](https://github.com/vector-im/element-web/actions/workflows/tests.yaml/badge.svg)
+![Static Analysis](https://github.com/vector-im/element-web/actions/workflows/static_analysis.yaml/badge.svg)
+[![Weblate](https://translate.element.io/widgets/element-web/-/element-web/svg-badge.svg)](https://translate.element.io/engage/element-web/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=coverage)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-web)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-web&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-web)
+
 Element
 =======
 

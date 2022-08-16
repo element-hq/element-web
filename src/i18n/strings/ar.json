@@ -1,14 +1,10 @@
 {
     "Dismiss": "أهمِل",
     "Unknown device": "جهاز مجهول",
-    "You need to be using HTTPS to place a screen-sharing call.": "عليك استعمال ميفاق HTTPS للاتصال بمشاركة الشاشة.",
-    "powered by Matrix": "مشغل بواسطة Matrix",
     "Welcome to Element": "مرحبًا بك في Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "دردشة وتعاون غير مركزي معمّى، تدعمه [matrix]",
     "Create Account": "أنشِئ حسابًا",
     "Explore rooms": "استكشِف الغرف",
     "Sign In": "لِج",
-    "Missing indexeddb worker script!": "سكربت عامل indexeddb ناقص!",
     "Invalid configuration: can only specify one of default_server_config, default_server_name, or default_hs_url.": "الضبط غير صالح: يمكنك تحديد واحدًا من الآتي فقط: default_server_config أو default_server_name أو default_hs_url.",
     "Invalid configuration: no default server specified.": "الضبط غير صالح: لم تحدّد خادومًا مبدئيًا.",
     "Your Element is misconfigured": "لم يُضبط تطبيق Element كما ينبغي",
@@ -19,8 +15,6 @@
     "Unexpected error preparing the app. See console for details.": "حدث عُطل غير متوقع أثناء تجهيز التطبيق. طالِع المِعراض للتفاصيل.",
     "Download Completed": "اكتمل التنزيل",
     "Open": "افتح",
-    "Open user settings": "افتح إعدادات المستخدم",
-    "Previous/next recently visited room or community": "الغرفة أو المجتمع التالي/السابق الذي زرته حديثًا",
     "%(brand)s Desktop (%(platformName)s)": "‏‏%(brand)s لسطح المكتب (%(platformName)s)",
     "Go to your browser to complete Sign In": "افتح المتصفح لإكمال الولوج",
     "%(appName)s (%(browserName)s, %(osName)s)": "‏‏%(appName)s (‏‏%(browserName)s، ‏‏%(osName)s)",
@@ -34,5 +28,6 @@
     "Failed to start": "فشل البدء",
     "Powered by Matrix": "تدعمه «ماترِكس»",
     "Use %(brand)s on mobile": "استعمل %(brand)s على المحمول",
-    "Switch to space by number": "التبديل إلى المساحة بالرقم"
+    "Switch to space by number": "التبديل إلى المساحة بالرقم",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "محادثة لامركزية، مشفرة &amp; تعمل بواسطة $matrixLogo"
 }

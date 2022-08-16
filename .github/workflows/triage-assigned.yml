@@ -1,0 +1,18 @@
+name: Move issued assigned to specific team members to their boards
+
+on:
+  issues:
+    types: [ assigned ]
+
+jobs:
+  web-app-team:
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.issue.assignees.*.login, 't3chguy') ||
+      contains(github.event.issue.assignees.*.login, 'turt2live')
+    steps:
+      - uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
+        with:
+          project: Web App Team
+          column: "In Progress"
+          repo-token: ${{ secrets.ELEMENT_BOT_TOKEN }}

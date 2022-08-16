@@ -102,7 +102,7 @@ function fetchAsSubject(endpoint) {
         const contentLength = res.headers.get("content-length");
         const context = contentLength ? { length: parseInt(contentLength) } : {};
 
-        const streamer = observeReadableStream(res.body, context, endpoint);
+        const streamer = observeReadableStream(res.body, context);
         streamer.subscribe((value) => {
             fetcher.next(value);
         });

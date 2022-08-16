@@ -1,10 +1,7 @@
 {
     "Unknown device": "Непознато устройство",
-    "You need to be using HTTPS to place a screen-sharing call.": "Трябва да използвате HTTPS, за да споделите екрана си.",
     "Dismiss": "Затвори",
-    "powered by Matrix": "базирано на Matrix",
     "Welcome to Element": "Добре дошли в Element",
-    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "Децентрализиран, шифрован чат и съвместна работа, базирани на [matrix]",
     "Sign In": "Вписване",
     "Create Account": "Създай профил",
     "Explore rooms": "Открий стаи",
@@ -13,11 +10,8 @@
     "Invalid configuration: no default server specified.": "Невалидна конфигурация: не е указан сървър по подразбиране.",
     "The message from the parser is: %(message)s": "Грешката от парсъра е: %(message)s",
     "Invalid JSON": "Невалиден JSON",
-    "Open user settings": "Отвори потребителските настройки",
     "Go to your browser to complete Sign In": "Отидете в браузъра за да завършите влизането",
-    "Missing indexeddb worker script!": "Липсва indexdb worker скриптът!",
     "Unable to load config file: please refresh the page to try again.": "Неуспешно зареждане на конфигурационния файл: презаредете страницата за да опитате пак.",
-    "Previous/next recently visited room or community": "Предишна/следваща наскоро-посетена стая или общност",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s Desktop (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Неподдържан браузър",
@@ -33,5 +27,6 @@
     "Your browser can't run %(brand)s": "Браузърът ви не може да изпълни %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s използва модерни функции на браузъра, които не се поддържат от Вашия.",
     "Powered by Matrix": "Базирано на Matrix",
-    "Use %(brand)s on mobile": "Използвайте %(brand)s на мобилен телефон"
+    "Use %(brand)s on mobile": "Използвайте %(brand)s на мобилен телефон",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализиран, криптиран чат &amp; сътрудничество, захранено от $matrixlogo"
 }
