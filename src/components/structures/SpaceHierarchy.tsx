@@ -504,7 +504,7 @@ export const useRoomHierarchy = (space: Room): {
     loadMore(pageSize?: number): Promise<void>;
 } => {
     const [rooms, setRooms] = useState<IHierarchyRoom[]>([]);
-    const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
+    const [roomHierarchy, setHierarchy] = useState<RoomHierarchy>();
     const [error, setError] = useState<Error | undefined>();
 
     const resetHierarchy = useCallback(() => {
@@ -526,15 +526,21 @@ export const useRoomHierarchy = (space: Room): {
     }));
 
     const loadMore = useCallback(async (pageSize?: number) => {
-        if (hierarchy.loading || !hierarchy.canLoadMore || hierarchy.noSupport || error) return;
-        await hierarchy.load(pageSize).catch(setError);
-        setRooms(hierarchy.rooms);
-    }, [error, hierarchy]);
+        if (roomHierarchy.loading || !roomHierarchy.canLoadMore || roomHierarchy.noSupport || error) return;
+        await roomHierarchy.load(pageSize).catch(setError);
+        setRooms(roomHierarchy.rooms);
+    }, [error, roomHierarchy]);
+
+    // Only return the hierarchy if it is for the space requested
+    let hierarchy = roomHierarchy;
+    if (hierarchy?.root !== space) {
+        hierarchy = undefined;
+    }
 
     return {
         loading: hierarchy?.loading ?? true,
         rooms,
-        hierarchy: hierarchy?.root === space ? hierarchy : undefined,
+        hierarchy,
         loadMore,
         error,
     };
