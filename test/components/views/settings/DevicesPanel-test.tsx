@@ -128,7 +128,7 @@ describe('<DevicesPanel />', () => {
 
             await flushPromises();
             // modal rendering has some weird sleeps
-            await sleep(10);
+            await sleep(100);
 
             expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith([device2.device_id], undefined);
 

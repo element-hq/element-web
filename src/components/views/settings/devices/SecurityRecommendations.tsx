@@ -20,16 +20,19 @@ import { _t } from '../../../../languageHandler';
 import AccessibleButton from '../../elements/AccessibleButton';
 import SettingsSubsection from '../shared/SettingsSubsection';
 import DeviceSecurityCard from './DeviceSecurityCard';
-import { filterDevicesBySecurityRecommendation, INACTIVE_DEVICE_AGE_MS } from './filter';
-import { DevicesDictionary, DeviceSecurityVariation } from './types';
+import { filterDevicesBySecurityRecommendation, INACTIVE_DEVICE_AGE_DAYS } from './filter';
+import {
+    DeviceSecurityVariation,
+    DeviceWithVerification,
+    DevicesDictionary,
+} from './types';
 
 interface Props {
     devices: DevicesDictionary;
 }
-const MS_DAY = 24 * 60 * 60 * 1000;
 
 const SecurityRecommendations: React.FC<Props> = ({ devices }) => {
-    const devicesArray = Object.values(devices);
+    const devicesArray = Object.values<DeviceWithVerification>(devices);
 
     const unverifiedDevicesCount = filterDevicesBySecurityRecommendation(
         devicesArray,
@@ -44,7 +47,7 @@ const SecurityRecommendations: React.FC<Props> = ({ devices }) => {
         return null;
     }
 
-    const inactiveAgeDays = INACTIVE_DEVICE_AGE_MS / MS_DAY;
+    const inactiveAgeDays = INACTIVE_DEVICE_AGE_DAYS;
 
     // TODO(kerrya) stubbed until PSG-640/652
     const noop = () => {};

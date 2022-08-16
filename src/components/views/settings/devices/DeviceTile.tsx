@@ -22,7 +22,7 @@ import { formatDate, formatRelativeTime } from "../../../../DateUtils";
 import TooltipTarget from "../../elements/TooltipTarget";
 import { Alignment } from "../../elements/Tooltip";
 import Heading from "../../typography/Heading";
-import { INACTIVE_DEVICE_AGE_MS, isDeviceInactive } from "./filter";
+import { INACTIVE_DEVICE_AGE_DAYS, isDeviceInactive } from "./filter";
 import { DeviceWithVerification } from "./types";
 export interface DeviceTileProps {
     device: DeviceWithVerification;
@@ -64,12 +64,11 @@ const getInactiveMetadata = (device: DeviceWithVerification): { id: string, valu
     if (!isInactive) {
         return undefined;
     }
-    const inactiveAgeDays = Math.round(INACTIVE_DEVICE_AGE_MS / MS_DAY);
     return { id: 'inactive', value: (
         <>
             <InactiveIcon className="mx_DeviceTile_inactiveIcon" />
             {
-                _t('Inactive for %(inactiveAgeDays)s+ days', { inactiveAgeDays }) +
+                _t('Inactive for %(inactiveAgeDays)s+ days', { inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS }) +
                 ` (${formatLastActivity(device.last_seen_ts)})`
             }
         </>),

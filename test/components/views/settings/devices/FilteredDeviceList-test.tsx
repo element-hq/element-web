@@ -15,25 +15,39 @@ limitations under the License.
 */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 
 import FilteredDeviceList from '../../../../../src/components/views/settings/devices/FilteredDeviceList';
+import { DeviceSecurityVariation } from '../../../../../src/components/views/settings/devices/types';
+import { flushPromises, mockPlatformPeg } from '../../../../test-utils';
 
+mockPlatformPeg();
+
+const MS_DAY = 86400000;
 describe('<FilteredDeviceList />', () => {
-    const noMetaDevice = { device_id: 'no-meta-device', isVerified: true };
-    const oldDevice = { device_id: 'old', last_seen_ts: new Date(1993, 7, 3, 4).getTime(), isVerified: true };
     const newDevice = {
         device_id: 'new',
-        last_seen_ts: new Date().getTime() - 500,
+        last_seen_ts: Date.now() - 500,
         last_seen_ip: '123.456.789',
         display_name: 'My Device',
         isVerified: true,
     };
+    const unverifiedNoMetadata = { device_id: 'unverified-no-metadata', isVerified: false };
+    const verifiedNoMetadata = { device_id: 'verified-no-metadata', isVerified: true };
+    const hundredDaysOld = { device_id: '100-days-old', isVerified: true, last_seen_ts: Date.now() - (MS_DAY * 100) };
+    const hundredDaysOldUnverified = {
+        device_id: 'unverified-100-days-old',
+        isVerified: false,
+        last_seen_ts: Date.now() - (MS_DAY * 100),
+    };
     const defaultProps = {
+        onFilterChange: jest.fn(),
         devices: {
-            [noMetaDevice.device_id]: noMetaDevice,
-            [oldDevice.device_id]: oldDevice,
+            [unverifiedNoMetadata.device_id]: unverifiedNoMetadata,
+            [verifiedNoMetadata.device_id]: verifiedNoMetadata,
             [newDevice.device_id]: newDevice,
+            [hundredDaysOld.device_id]: hundredDaysOld,
+            [hundredDaysOldUnverified.device_id]: hundredDaysOldUnverified,
         },
     };
     const getComponent = (props = {}) =>
@@ -43,14 +57,16 @@ describe('<FilteredDeviceList />', () => {
         const { container } = render(getComponent());
         const tiles = container.querySelectorAll('.mx_DeviceTile');
         expect(tiles[0].getAttribute('data-testid')).toEqual(`device-tile-${newDevice.device_id}`);
-        expect(tiles[1].getAttribute('data-testid')).toEqual(`device-tile-${oldDevice.device_id}`);
-        expect(tiles[2].getAttribute('data-testid')).toEqual(`device-tile-${noMetaDevice.device_id}`);
+        expect(tiles[1].getAttribute('data-testid')).toEqual(`device-tile-${hundredDaysOld.device_id}`);
+        expect(tiles[2].getAttribute('data-testid')).toEqual(`device-tile-${hundredDaysOldUnverified.device_id}`);
+        expect(tiles[3].getAttribute('data-testid')).toEqual(`device-tile-${unverifiedNoMetadata.device_id}`);
+        expect(tiles[4].getAttribute('data-testid')).toEqual(`device-tile-${verifiedNoMetadata.device_id}`);
     });
 
     it('updates list order when devices change', () => {
-        const updatedOldDevice = { ...oldDevice, last_seen_ts: new Date().getTime() };
+        const updatedOldDevice = { ...hundredDaysOld, last_seen_ts: new Date().getTime() };
         const updatedDevices = {
-            [oldDevice.device_id]: updatedOldDevice,
+            [hundredDaysOld.device_id]: updatedOldDevice,
             [newDevice.device_id]: newDevice,
         };
         const { container, rerender } = render(getComponent());
@@ -59,7 +75,108 @@ describe('<FilteredDeviceList />', () => {
 
         const tiles = container.querySelectorAll('.mx_DeviceTile');
         expect(tiles.length).toBe(2);
-        expect(tiles[0].getAttribute('data-testid')).toEqual(`device-tile-${oldDevice.device_id}`);
+        expect(tiles[0].getAttribute('data-testid')).toEqual(`device-tile-${hundredDaysOld.device_id}`);
         expect(tiles[1].getAttribute('data-testid')).toEqual(`device-tile-${newDevice.device_id}`);
+    });
+
+    it('displays no results message when there are no devices', () => {
+        const { container } = render(getComponent({ devices: {} }));
+
+        expect(container.getElementsByClassName('mx_FilteredDeviceList_noResults')).toMatchSnapshot();
+    });
+
+    describe('filtering', () => {
+        const setFilter = async (
+            container: HTMLElement,
+            option: DeviceSecurityVariation | string,
+        ) => await act(async () => {
+            const dropdown = container.querySelector('[aria-label="Filter devices"]');
+
+            fireEvent.click(dropdown);
+            // tick to let dropdown render
+            await flushPromises();
+
+            fireEvent.click(container.querySelector(`#device-list-filter__${option}`));
+        });
+
+        it('does not display filter description when filter is falsy', () => {
+            const { container } = render(getComponent({ filter: undefined }));
+            const tiles = container.querySelectorAll('.mx_DeviceTile');
+            expect(container.getElementsByClassName('mx_FilteredDeviceList_securityCard').length).toBeFalsy();
+            expect(tiles.length).toEqual(5);
+        });
+
+        it('updates filter when prop changes', () => {
+            const { container, rerender } = render(getComponent({ filter: DeviceSecurityVariation.Verified }));
+            const tiles = container.querySelectorAll('.mx_DeviceTile');
+            expect(tiles.length).toEqual(3);
+            expect(tiles[0].getAttribute('data-testid')).toEqual(`device-tile-${newDevice.device_id}`);
+            expect(tiles[1].getAttribute('data-testid')).toEqual(`device-tile-${hundredDaysOld.device_id}`);
+            expect(tiles[2].getAttribute('data-testid')).toEqual(`device-tile-${verifiedNoMetadata.device_id}`);
+
+            rerender(getComponent({ filter: DeviceSecurityVariation.Inactive }));
+
+            const rerenderedTiles = container.querySelectorAll('.mx_DeviceTile');
+            expect(rerenderedTiles.length).toEqual(2);
+            expect(rerenderedTiles[0].getAttribute('data-testid')).toEqual(`device-tile-${hundredDaysOld.device_id}`);
+            expect(rerenderedTiles[1].getAttribute('data-testid')).toEqual(
+                `device-tile-${hundredDaysOldUnverified.device_id}`,
+            );
+        });
+
+        it('calls onFilterChange handler', async () => {
+            const onFilterChange = jest.fn();
+            const { container } = render(getComponent({ onFilterChange }));
+            await setFilter(container, DeviceSecurityVariation.Verified);
+
+            expect(onFilterChange).toHaveBeenCalledWith(DeviceSecurityVariation.Verified);
+        });
+
+        it('calls onFilterChange handler correctly when setting filter to All', async () => {
+            const onFilterChange = jest.fn();
+            const { container } = render(getComponent({ onFilterChange, filter: DeviceSecurityVariation.Verified }));
+            await setFilter(container, 'ALL');
+
+            // filter is cleared
+            expect(onFilterChange).toHaveBeenCalledWith(undefined);
+        });
+
+        it.each([
+            [DeviceSecurityVariation.Verified, [newDevice, hundredDaysOld, verifiedNoMetadata]],
+            [DeviceSecurityVariation.Unverified, [hundredDaysOldUnverified, unverifiedNoMetadata]],
+            [DeviceSecurityVariation.Inactive, [hundredDaysOld, hundredDaysOldUnverified]],
+        ])('filters correctly for %s', (filter, expectedDevices) => {
+            const { container } = render(getComponent({ filter }));
+            expect(container.getElementsByClassName('mx_FilteredDeviceList_securityCard')).toMatchSnapshot();
+            const tileDeviceIds = [...container.querySelectorAll('.mx_DeviceTile')]
+                .map(tile => tile.getAttribute('data-testid'));
+            expect(tileDeviceIds).toEqual(expectedDevices.map(device => `device-tile-${device.device_id}`));
+        });
+
+        it.each([
+            [DeviceSecurityVariation.Verified],
+            [DeviceSecurityVariation.Unverified],
+            [DeviceSecurityVariation.Inactive],
+        ])('renders no results correctly for %s', (filter) => {
+            const { container } = render(getComponent({ filter, devices: {} }));
+            expect(container.getElementsByClassName('mx_FilteredDeviceList_securityCard').length).toBeFalsy();
+            expect(container.getElementsByClassName('mx_FilteredDeviceList_noResults')).toMatchSnapshot();
+        });
+
+        it('clears filter from no results message', () => {
+            const onFilterChange = jest.fn();
+            const { getByTestId } = render(getComponent({
+                onFilterChange,
+                filter: DeviceSecurityVariation.Verified,
+                devices: {
+                    [unverifiedNoMetadata.device_id]: unverifiedNoMetadata,
+                },
+            }));
+            act(() => {
+                fireEvent.click(getByTestId('devices-clear-filter-btn'));
+            });
+
+            expect(onFilterChange).toHaveBeenCalledWith(undefined);
+        });
     });
 });
