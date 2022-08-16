@@ -127,15 +127,15 @@ const setupCompleted = (async function() {
                 joinConference(audioInput as string | null, videoInput as string | null);
                 return {};
             });
-            handleAction(ElementWidgetActions.HangupCall, async () => {
-                meetApi?.executeCommand('hangup');
-                return {};
-            });
-            handleAction(ElementWidgetActions.ForceHangupCall, async () => {
-                meetApi?.dispose();
-                notifyHangup();
-                meetApi = null;
-                closeConference();
+            handleAction(ElementWidgetActions.HangupCall, async ({ force }) => {
+                if (force === true) {
+                    meetApi?.dispose();
+                    notifyHangup();
+                    meetApi = null;
+                    closeConference();
+                } else {
+                    meetApi?.executeCommand('hangup');
+                }
                 return {};
             });
             handleAction(ElementWidgetActions.MuteAudio, async () => {
