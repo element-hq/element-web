@@ -123,8 +123,8 @@ const setupCompleted = (async function() {
                 });
             };
 
-            handleAction(ElementWidgetActions.JoinCall, async ({ audioDevice, videoDevice }) => {
-                joinConference(audioDevice as string | null, videoDevice as string | null);
+            handleAction(ElementWidgetActions.JoinCall, async ({ audioInput, videoInput }) => {
+                joinConference(audioInput as string | null, videoInput as string | null);
                 return {};
             });
             handleAction(ElementWidgetActions.HangupCall, async () => {
@@ -319,11 +319,11 @@ function closeConference() {
 }
 
 // event handler bound in HTML
-// An audio device of undefined instructs Jitsi to start unmuted with whatever
-// audio device it can find, while a device of null instructs it to start muted,
-// and a non-nullish device specifies the label of a specific device to use.
-// Same for video devices.
-function joinConference(audioDevice?: string | null, videoDevice?: string | null) {
+// An audio input of undefined instructs Jitsi to start unmuted with whatever
+// audio input it can find, while an input of null instructs it to start muted,
+// and a non-nullish input specifies the label of a specific device to use.
+// Same for video inputs.
+function joinConference(audioInput?: string | null, videoInput?: string | null) {
     let jwt;
     if (jitsiAuth === JITSI_OPENIDTOKEN_JWT_AUTH) {
         if (!openIdToken?.access_token) { // eslint-disable-line camelcase
@@ -349,8 +349,8 @@ function joinConference(audioDevice?: string | null, videoDevice?: string | null
         parentNode: document.querySelector("#jitsiContainer"),
         roomName: conferenceId,
         devices: {
-            audioInput: audioDevice,
-            videoInput: videoDevice,
+            audioInput,
+            videoInput,
         },
         userInfo: {
             displayName,
@@ -365,8 +365,8 @@ function joinConference(audioDevice?: string | null, videoDevice?: string | null
         configOverwrite: {
             subject: roomName,
             startAudioOnly,
-            startWithAudioMuted: audioDevice === null,
-            startWithVideoMuted: videoDevice === null,
+            startWithAudioMuted: audioInput === null,
+            startWithVideoMuted: videoInput === null,
             // Request some log levels for inclusion in rageshakes
             // Ideally we would capture all possible log levels, but this can
             // cause Jitsi Meet to try to post various circular data structures
