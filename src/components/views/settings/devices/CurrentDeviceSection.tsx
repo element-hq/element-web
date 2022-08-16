@@ -21,12 +21,9 @@ import Spinner from '../../elements/Spinner';
 import SettingsSubsection from '../shared/SettingsSubsection';
 import DeviceDetails from './DeviceDetails';
 import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
-import DeviceSecurityCard from './DeviceSecurityCard';
 import DeviceTile from './DeviceTile';
-import {
-    DeviceSecurityVariation,
-    DeviceWithVerification,
-} from './types';
+import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
+import { DeviceWithVerification } from './types';
 
 interface Props {
     device?: DeviceWithVerification;
@@ -37,15 +34,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
     device, isLoading,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const securityCardProps = device?.isVerified ? {
-        variation: DeviceSecurityVariation.Verified,
-        heading: _t('Verified session'),
-        description: _t('This session is ready for secure messaging.'),
-    } : {
-        variation: DeviceSecurityVariation.Unverified,
-        heading: _t('Unverified session'),
-        description: _t('Verify or sign out from this session for best security and reliability.'),
-    };
+
     return <SettingsSubsection
         heading={_t('Current session')}
         data-testid='current-session-section'
@@ -63,9 +52,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
             </DeviceTile>
             { isExpanded && <DeviceDetails device={device} /> }
             <br />
-            <DeviceSecurityCard
-                {...securityCardProps}
-            />
+            <DeviceVerificationStatusCard device={device} />
         </>
         }
     </SettingsSubsection>;

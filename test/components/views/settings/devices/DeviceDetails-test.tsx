@@ -22,6 +22,7 @@ import DeviceDetails from '../../../../../src/components/views/settings/devices/
 describe('<DeviceDetails />', () => {
     const baseDevice = {
         device_id: 'my-device',
+        isVerified: false,
     };
     const defaultProps = {
         device: baseDevice,
@@ -46,6 +47,15 @@ describe('<DeviceDetails />', () => {
             display_name: 'My Device',
             last_seen_ip: '123.456.789',
             last_seen_ts: now - 60000000,
+        };
+        const { container } = render(getComponent({ device }));
+        expect(container).toMatchSnapshot();
+    });
+
+    it('renders a verified device', () => {
+        const device = {
+            ...baseDevice,
+            isVerified: true,
         };
         const { container } = render(getComponent({ device }));
         expect(container).toMatchSnapshot();
