@@ -1,11 +1,5 @@
-Changes in [1.11.3-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.3-rc.2) (2022-08-12)
-=========================================================================================================
-
-##   Features
- * The first message in a DM can no longer be a sticker. This has been changed to avoid issues with the integration manager. ([\#9180](https://github.com/matrix-org/matrix-react-sdk/pull/9180)).
-
-Changes in [1.11.3-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.3-rc.1) (2022-08-09)
-=========================================================================================================
+Changes in [1.11.3](https://github.com/vector-im/element-web/releases/tag/v1.11.3) (2022-08-16)
+===============================================================================================
 
 ## ✨ Features
  * Improve auth aria attributes and semantics ([\#22948](https://github.com/vector-im/element-web/pull/22948)).
@@ -24,6 +18,7 @@ Changes in [1.11.3-rc.1](https://github.com/vector-im/element-web/releases/tag/v
  * Live location share - leave maximised map open when beacons expire ([\#9098](https://github.com/matrix-org/matrix-react-sdk/pull/9098)). Contributed by @kerryarchibald.
 
 ## 🐛 Bug Fixes
+ * Some slash-commands (`/myroomnick`) have temporarily been disabled before the first message in a DM is sent. ([\#9193](https://github.com/matrix-org/matrix-react-sdk/pull/9193)).
  * Use stable reference for active tab in tabbedView ([\#9145](https://github.com/matrix-org/matrix-react-sdk/pull/9145)). Contributed by @kerryarchibald.
  * Fix pillification sometimes doubling up ([\#9152](https://github.com/matrix-org/matrix-react-sdk/pull/9152)). Fixes #23036.
  * Fix highlights not being applied to plaintext messages ([\#9126](https://github.com/matrix-org/matrix-react-sdk/pull/9126)). Fixes #22787.
