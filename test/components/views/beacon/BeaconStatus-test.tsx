@@ -51,13 +51,13 @@ describe('<BeaconStatus />', () => {
         it('renders without children', () => {
             // mock for stable snapshot
             jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', {}, '$1'));
+            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
             const component = getComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
             expect(component).toMatchSnapshot();
         });
 
         it('renders with children', () => {
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:sever'));
+            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:sever', { isLive: false }));
             const component = getComponent({
                 beacon,
                 children: <span data-test-id='test'>test</span>,
@@ -69,7 +69,7 @@ describe('<BeaconStatus />', () => {
         it('renders static remaining time when displayLiveTimeRemaining is falsy', () => {
             // mock for stable snapshot
             jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', {}, '$1'));
+            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
             const component = getComponent({ beacon, displayStatus: BeaconDisplayStatus.Active });
             expect(component.text().includes('Live until 11:17')).toBeTruthy();
         });
@@ -77,7 +77,7 @@ describe('<BeaconStatus />', () => {
         it('renders live time remaining when displayLiveTimeRemaining is truthy', () => {
             // mock for stable snapshot
             jest.spyOn(Date, 'now').mockReturnValue(123456789);
-            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', {}, '$1'));
+            const beacon = new Beacon(makeBeaconInfoEvent('@user:server', '!room:server', { isLive: false }, '$1'));
             const component = getComponent({
                 beacon, displayStatus: BeaconDisplayStatus.Active,
                 displayLiveTimeRemaining: true,
