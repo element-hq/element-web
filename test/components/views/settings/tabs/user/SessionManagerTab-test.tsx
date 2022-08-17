@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { DeviceInfo } from 'matrix-js-sdk/src/crypto/deviceinfo';
 import { logger } from 'matrix-js-sdk/src/logger';
@@ -191,5 +191,64 @@ describe('<SessionManagerTab />', () => {
         });
 
         expect(getByTestId('other-sessions-section')).toBeTruthy();
+    });
+
+    describe('device detail expansion', () => {
+        it('renders no devices expanded by default', async () => {
+            mockClient.getDevices.mockResolvedValue({
+                devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
+            });
+            const { getByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromisesWithFakeTimers();
+            });
+
+            const otherSessionsSection = getByTestId('other-sessions-section');
+
+            // no expanded device details
+            expect(otherSessionsSection.getElementsByClassName('mx_DeviceDetails').length).toBeFalsy();
+        });
+
+        it('toggles device expansion on click', async () => {
+            mockClient.getDevices.mockResolvedValue({
+                devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
+            });
+            const { getByTestId, queryByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromisesWithFakeTimers();
+            });
+
+            act(() => {
+                const tile = getByTestId(`device-tile-${alicesOlderMobileDevice.device_id}`);
+                const toggle = tile.querySelector('[aria-label="Toggle device details"]');
+                fireEvent.click(toggle);
+            });
+
+            // device details are expanded
+            expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
+
+            act(() => {
+                const tile = getByTestId(`device-tile-${alicesMobileDevice.device_id}`);
+                const toggle = tile.querySelector('[aria-label="Toggle device details"]');
+                fireEvent.click(toggle);
+            });
+
+            // both device details are expanded
+            expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
+            expect(getByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeTruthy();
+
+            act(() => {
+                const tile = getByTestId(`device-tile-${alicesMobileDevice.device_id}`);
+                const toggle = tile.querySelector('[aria-label="Toggle device details"]');
+                fireEvent.click(toggle);
+            });
+
+            // alicesMobileDevice was toggled off
+            expect(queryByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeFalsy();
+            // alicesOlderMobileDevice stayed open
+            expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
+        });
     });
 });

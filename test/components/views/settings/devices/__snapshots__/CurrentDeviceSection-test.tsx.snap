@@ -4,6 +4,7 @@ exports[`<CurrentDeviceSection /> displays device details on toggle click 1`] = 
 HTMLCollection [
   <div
     class="mx_DeviceDetails"
+    data-testid="device-detail-alices_device"
   >
     <section
       class="mx_DeviceDetails_section"
@@ -164,6 +165,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           class="mx_DeviceTile_actions"
         >
           <div
+            aria-label="Toggle device details"
             class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
             data-testid="current-session-toggle-details"
             role="button"
@@ -249,6 +251,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
           class="mx_DeviceTile_actions"
         >
           <div
+            aria-label="Toggle device details"
             class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
             data-testid="current-session-toggle-details"
             role="button"

@@ -1701,6 +1701,7 @@
     "Device": "Device",
     "IP address": "IP address",
     "Session details": "Session details",
+    "Toggle device details": "Toggle device details",
     "Inactive for %(inactiveAgeDays)s+ days": "Inactive for %(inactiveAgeDays)s+ days",
     "Verified": "Verified",
     "Unverified": "Unverified",

@@ -19,6 +19,8 @@ import React from 'react';
 import { _t } from '../../../../languageHandler';
 import AccessibleButton from '../../elements/AccessibleButton';
 import Dropdown from '../../elements/Dropdown';
+import DeviceDetails from './DeviceDetails';
+import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
 import DeviceSecurityCard from './DeviceSecurityCard';
 import DeviceTile from './DeviceTile';
 import {
@@ -33,8 +35,10 @@ import {
 
 interface Props {
     devices: DevicesDictionary;
+    expandedDeviceIds: DeviceWithVerification['device_id'][];
     filter?: DeviceSecurityVariation;
     onFilterChange: (filter: DeviceSecurityVariation | undefined) => void;
+    onDeviceExpandToggle: (deviceId: DeviceWithVerification['device_id']) => void;
 }
 
 // devices without timestamp metadata should be sorted last
@@ -123,11 +127,35 @@ const NoResults: React.FC<NoResultsProps> = ({ filter, clearFilter }) =>
         }
     </div>;
 
+const DeviceListItem: React.FC<{
+    device: DeviceWithVerification;
+    isExpanded: boolean;
+    onDeviceExpandToggle: () => void;
+}> = ({
+    device, isExpanded, onDeviceExpandToggle,
+}) => <li className='mx_FilteredDeviceList_listItem'>
+    <DeviceTile
+        device={device}
+    >
+        <DeviceExpandDetailsButton
+            isExpanded={isExpanded}
+            onClick={onDeviceExpandToggle}
+        />
+    </DeviceTile>
+    { isExpanded && <DeviceDetails device={device} /> }
+</li>;
+
 /**
  * Filtered list of devices
  * Sorted by latest activity descending
  */
-const FilteredDeviceList: React.FC<Props> = ({ devices, filter, onFilterChange }) => {
+const FilteredDeviceList: React.FC<Props> = ({
+    devices,
+    filter,
+    expandedDeviceIds,
+    onFilterChange,
+    onDeviceExpandToggle,
+}) => {
     const sortedDevices = getFilteredSortedDevices(devices, filter);
 
     const options = [
@@ -177,13 +205,12 @@ const FilteredDeviceList: React.FC<Props> = ({ devices, filter, onFilterChange }
             : <NoResults filter={filter} clearFilter={() => onFilterChange(undefined)} />
         }
         <ol className='mx_FilteredDeviceList_list'>
-            { sortedDevices.map((device) =>
-                <li key={device.device_id}>
-                    <DeviceTile
-                        device={device}
-                    />
-                </li>,
-
+            { sortedDevices.map((device) => <DeviceListItem
+                key={device.device_id}
+                device={device}
+                isExpanded={expandedDeviceIds.includes(device.device_id)}
+                onDeviceExpandToggle={() => onDeviceExpandToggle(device.device_id)}
+            />,
             ) }
         </ol>
     </div>
