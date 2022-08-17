@@ -35,6 +35,14 @@ describe('<TooltipTarget />', () => {
         'data-test-id': 'test',
     };
 
+    afterEach(() => {
+        // clean up renderer tooltips
+        const wrapper = document.querySelector('.mx_Tooltip_wrapper');
+        while (wrapper?.firstChild) {
+            wrapper.removeChild(wrapper.lastChild);
+        }
+    });
+
     const getComponent = (props = {}) => {
         const wrapper = renderIntoDocument<HTMLSpanElement>(
         // wrap in element so renderIntoDocument can render functional component
@@ -49,31 +57,20 @@ describe('<TooltipTarget />', () => {
 
     const getVisibleTooltip = () => document.querySelector('.mx_Tooltip.mx_Tooltip_visible');
 
-    afterEach(() => {
-        // clean up visible tooltips
-        const tooltipWrapper = document.querySelector('.mx_Tooltip_wrapper');
-        if (tooltipWrapper) {
-            document.body.removeChild(tooltipWrapper);
-        }
-    });
-
     it('renders container', () => {
         const component = getComponent();
         expect(component).toMatchSnapshot();
         expect(getVisibleTooltip()).toBeFalsy();
     });
 
-    for (const alignment in Alignment) {
-        if (isNaN(Number(alignment))) {
-            it(`displays ${alignment} aligned tooltip on mouseover`, () => {
-                const wrapper = getComponent({ alignment: Alignment[alignment] });
-                act(() => {
-                    Simulate.mouseOver(wrapper);
-                });
-                expect(getVisibleTooltip()).toMatchSnapshot();
-            });
-        }
-    }
+    const alignmentKeys = Object.keys(Alignment).filter((o: any) => isNaN(o));
+    it.each(alignmentKeys)("displays %s aligned tooltip on mouseover", async (alignment) => {
+        const wrapper = getComponent({ alignment: Alignment[alignment] });
+        act(() => {
+            Simulate.mouseOver(wrapper);
+        });
+        expect(getVisibleTooltip()).toMatchSnapshot();
+    });
 
     it('hides tooltip on mouseleave', () => {
         const wrapper = getComponent();
@@ -101,8 +98,8 @@ describe('<TooltipTarget />', () => {
             Simulate.focus(wrapper);
         });
         expect(getVisibleTooltip()).toBeTruthy();
-        await act(async () => {
-            await Simulate.blur(wrapper);
+        act(() => {
+            Simulate.blur(wrapper);
         });
         expect(getVisibleTooltip()).toBeFalsy();
     });
