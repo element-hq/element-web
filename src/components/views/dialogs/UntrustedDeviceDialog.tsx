@@ -58,10 +58,10 @@ const UntrustedDeviceDialog: React.FC<IProps> = ({ device, user, onFinished }) =
         </div>
         <div className='mx_Dialog_buttons'>
             <AccessibleButton kind="primary_outline" onClick={() => onFinished("legacy")}>
-                { _t("Manually Verify by Text") }
+                { _t("Manually verify by text") }
             </AccessibleButton>
             <AccessibleButton kind="primary_outline" onClick={() => onFinished("sas")}>
-                { _t("Interactively verify by Emoji") }
+                { _t("Interactively verify by emoji") }
             </AccessibleButton>
             <AccessibleButton kind="primary" onClick={() => onFinished(false)}>
                 { _t("Done") }
