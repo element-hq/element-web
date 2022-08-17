@@ -112,7 +112,13 @@ export default class LinkPreviewWidget extends React.Component<IProps> {
         let img;
         if (image) {
             img = <div className="mx_LinkPreviewWidget_image" style={{ height: thumbHeight }}>
-                <img ref={this.image} style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }} src={image} onClick={this.onImageClick} />
+                <img
+                    ref={this.image}
+                    style={{ maxWidth: imageMaxWidth, maxHeight: imageMaxHeight }}
+                    src={image}
+                    onClick={this.onImageClick}
+                    alt=""
+                />
             </div>;
         }
 
