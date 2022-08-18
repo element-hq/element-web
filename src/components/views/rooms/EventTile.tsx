@@ -854,9 +854,6 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
     private showContextMenu(ev: React.MouseEvent, permalink?: string): void {
         const clickTarget = ev.target as HTMLElement;
 
-        // Return if message right-click context menu isn't enabled
-        if (!SettingsStore.getValue("feature_message_right_click_context_menu")) return;
-
         // Try to find an anchor element
         const anchorElement = (clickTarget instanceof HTMLAnchorElement) ? clickTarget : clickTarget.closest("a");
 
