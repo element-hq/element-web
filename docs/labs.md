@@ -158,12 +158,6 @@ Threads can be access by clicking their summary below the root event on the room
 
 This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.
 
-## Right-click Message Context Menu (`feature_message_right_click_context_menu`)
-
-Enables showing a right-click context menu when right-clicking messages in the
-timeline. This menu shows options that can usually be found in the message
-action bar or in the message options.
-
 ## Video rooms (`feature_video_rooms`)
 
 Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
