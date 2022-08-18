@@ -240,11 +240,11 @@ describe('<MessageActionBar />', () => {
         });
 
         it('opens message context menu on click', () => {
-            const { findByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+            const { getByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
             act(() => {
                 fireEvent.click(queryByLabelText('Options'));
             });
-            expect(findByTestId('mx_MessageContextMenu')).toBeTruthy();
+            expect(getByTestId('mx_MessageContextMenu')).toBeTruthy();
         });
     });
 
@@ -310,11 +310,11 @@ describe('<MessageActionBar />', () => {
         });
 
         it('opens reaction picker on click', () => {
-            const { queryByLabelText, findByTestId } = getComponent({ mxEvent: alicesMessageEvent });
+            const { queryByLabelText, getByTestId } = getComponent({ mxEvent: alicesMessageEvent });
             act(() => {
                 fireEvent.click(queryByLabelText('React'));
             });
-            expect(findByTestId('mx_ReactionPicker')).toBeTruthy();
+            expect(getByTestId('mx_EmojiPicker')).toBeTruthy();
         });
     });
 
@@ -564,5 +564,39 @@ describe('<MessageActionBar />', () => {
                 expect(queryByLabelText('Favourite')).toBeFalsy();
             });
         });
+    });
+
+    it.each([
+        ["React"],
+        ["Reply"],
+        ["Reply in thread"],
+        ["Favourite"],
+        ["Edit"],
+    ])("does not show context menu when right-clicking", (buttonLabel: string) => {
+        // For favourite button
+        jest.spyOn(SettingsStore, 'getValue').mockReturnValue(true);
+
+        const event = new MouseEvent("contextmenu", {
+            bubbles: true,
+            cancelable: true,
+        });
+        event.stopPropagation = jest.fn();
+        event.preventDefault = jest.fn();
+
+        const { queryByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+        act(() => {
+            fireEvent(queryByLabelText(buttonLabel), event);
+        });
+        expect(event.stopPropagation).toHaveBeenCalled();
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(queryByTestId("mx_MessageContextMenu")).toBeFalsy();
+    });
+
+    it("does shows context menu when right-clicking options", () => {
+        const { queryByTestId, queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
+        act(() => {
+            fireEvent.contextMenu(queryByLabelText("Options"));
+        });
+        expect(queryByTestId("mx_MessageContextMenu")).toBeTruthy();
     });
 });
