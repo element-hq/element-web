@@ -20,21 +20,14 @@ import React, { useCallback } from "react";
 import { Action } from "../../../dispatcher/actions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { useSettingValue } from "../../../hooks/useSettings";
-import { useUserOnboardingContext } from "../../../hooks/useUserOnboardingContext";
-import { useUserOnboardingTasks } from "../../../hooks/useUserOnboardingTasks";
 import { _t } from "../../../languageHandler";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { UseCase } from "../../../settings/enums/UseCase";
 import { SettingLevel } from "../../../settings/SettingLevel";
 import SettingsStore from "../../../settings/SettingsStore";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
-import ProgressBar from "../../views/elements/ProgressBar";
 import Heading from "../../views/typography/Heading";
 import { showUserOnboardingPage } from "./UserOnboardingPage";
-
-function toPercentage(progress: number): string {
-    return (progress * 100).toFixed(0);
-}
 
 interface Props {
     selected: boolean;
@@ -42,40 +35,40 @@ interface Props {
 }
 
 export function UserOnboardingButton({ selected, minimized }: Props) {
-    const context = useUserOnboardingContext();
-    const [completedTasks, waitingTasks] = useUserOnboardingTasks(context);
+    const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection");
+    const visible = useSettingValue<boolean>("FTUE.userOnboardingButton");
 
-    const completed = completedTasks.length;
-    const waiting = waitingTasks.length;
-    const total = completed + waiting;
-
-    let progress = 1;
-    if (context && waiting) {
-        progress = completed / total;
+    if (!visible || minimized || !showUserOnboardingPage(useCase)) {
+        return null;
     }
 
+    return (
+        <UserOnboardingButtonInternal selected={selected} minimized={minimized} />
+    );
+}
+
+function UserOnboardingButtonInternal({ selected, minimized }: Props) {
     const onDismiss = useCallback((ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
         PosthogTrackers.trackInteraction("WebRoomListUserOnboardingIgnoreButton", ev);
         SettingsStore.setValue("FTUE.userOnboardingButton", null, SettingLevel.ACCOUNT, false);
     }, []);
 
     const onClick = useCallback((ev: ButtonEvent) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
         PosthogTrackers.trackInteraction("WebRoomListUserOnboardingButton", ev);
         defaultDispatcher.fire(Action.ViewHomePage);
     }, []);
-
-    const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection");
-    const visible = useSettingValue<boolean>("FTUE.userOnboardingButton");
-    if (!visible || minimized || !showUserOnboardingPage(useCase)) {
-        return null;
-    }
 
     return (
         <AccessibleButton
             className={classNames("mx_UserOnboardingButton", {
                 "mx_UserOnboardingButton_selected": selected,
                 "mx_UserOnboardingButton_minimized": minimized,
-                "mx_UserOnboardingButton_completed": !waiting || !context,
             })}
             onClick={onClick}>
             { !minimized && (
@@ -84,17 +77,11 @@ export function UserOnboardingButton({ selected, minimized }: Props) {
                         <Heading size="h4" className="mx_Heading_h4">
                             { _t("Welcome") }
                         </Heading>
-                        { context && !completed && (
-                            <div className="mx_UserOnboardingButton_percentage">
-                                { toPercentage(progress) }%
-                            </div>
-                        ) }
                         <AccessibleButton
                             className="mx_UserOnboardingButton_close"
                             onClick={onDismiss}
                         />
                     </div>
-                    <ProgressBar value={completed} max={total} animated />
                 </>
             ) }
         </AccessibleButton>
