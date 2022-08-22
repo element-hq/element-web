@@ -62,7 +62,7 @@ export function UserOnboardingList({ completedTasks, waitingTasks }: Props) {
             </div>
             <ol className="mx_UserOnboardingList_list">
                 { tasks.map(([task, completed]) => (
-                    <UserOnboardingTask key={task.title} completed={completed} task={task} />
+                    <UserOnboardingTask key={task.id} completed={completed} task={task} />
                 )) }
             </ol>
         </div>

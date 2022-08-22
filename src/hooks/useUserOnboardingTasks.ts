@@ -25,14 +25,15 @@ import { _t } from "../languageHandler";
 import Modal from "../Modal";
 import { Notifier } from "../Notifier";
 import PosthogTrackers from "../PosthogTrackers";
+import SdkConfig from "../SdkConfig";
 import { UseCase } from "../settings/enums/UseCase";
 import { useSettingValue } from "./useSettings";
 import { UserOnboardingContext } from "./useUserOnboardingContext";
 
 export interface UserOnboardingTask {
     id: string;
-    title: string;
-    description: string;
+    title: string | (() => string);
+    description: string | (() => string);
     relevant?: UseCase[];
     action?: {
         label: string;
@@ -95,8 +96,12 @@ const tasks: InternalUserOnboardingTask[] = [
     },
     {
         id: "download-apps",
-        title: _t("Download Element"),
-        description: _t("Don’t miss a thing by taking Element with you"),
+        title: () => _t("Download %(brand)s", {
+            brand: SdkConfig.get("brand"),
+        }),
+        description: () => _t("Don’t miss a thing by taking %(brand)s with you", {
+            brand: SdkConfig.get("brand"),
+        }),
         completed: (ctx: UserOnboardingContext) => {
             return Boolean(ctx.devices.filter(it => it.device_id !== ctx.myDevice).length);
         },

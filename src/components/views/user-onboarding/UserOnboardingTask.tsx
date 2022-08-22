@@ -27,6 +27,9 @@ interface Props {
 }
 
 export function UserOnboardingTask({ task, completed = false }: Props) {
+    const title = typeof task.title === "function" ? task.title() : task.title;
+    const description = typeof task.description === "function" ? task.description() : task.description;
+
     return (
         <li className={classNames("mx_UserOnboardingTask", {
             "mx_UserOnboardingTask_completed": completed,
@@ -42,10 +45,10 @@ export function UserOnboardingTask({ task, completed = false }: Props) {
                 id={`mx_UserOnboardingTask_${task.id}`}
                 className="mx_UserOnboardingTask_content">
                 <Heading size="h4" className="mx_UserOnboardingTask_title">
-                    { task.title }
+                    { title }
                 </Heading>
                 <div className="mx_UserOnboardingTask_description">
-                    { task.description }
+                    { description }
                 </div>
             </div>
             { task.action && (!task.action.hideOnComplete || !completed) && (

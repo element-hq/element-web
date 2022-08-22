@@ -349,30 +349,34 @@ describe("Spotlight", () => {
         cy.get(".mx_RoomSublist[aria-label=People]").should("contain", bot2Name);
 
         // Invite BotBob into existing DM with ByteBot
-        cy.getDmRooms(bot2.getUserId()).then(dmRooms => dmRooms[0])
-            .then(groupDmId => cy.inviteUser(groupDmId, bot1.getUserId()))
-            .then(() => {
-                cy.roomHeaderName().should("contain", `${bot1Name} and ${bot2Name}`);
-                cy.get(".mx_RoomSublist[aria-label=People]").should("contain", `${bot1Name} and ${bot2Name}`);
+        cy.getDmRooms(bot2.getUserId())
+            .should("have.length", 1)
+            .then(dmRooms => cy.getClient().then(client => client.getRoom(dmRooms[0])))
+            .then(groupDm => {
+                cy.inviteUser(groupDm.roomId, bot1.getUserId());
+                cy.roomHeaderName().should(($element) =>
+                    expect($element.get(0).innerText).contains(groupDm.name));
+                cy.get(".mx_RoomSublist[aria-label=People]").should(($element) =>
+                    expect($element.get(0).innerText).contains(groupDm.name));
+
+                // Search for BotBob by id, should return group DM and user
+                cy.openSpotlightDialog().within(() => {
+                    cy.spotlightFilter(Filter.People);
+                    cy.spotlightSearch().clear().type(bot1.getUserId());
+                    cy.wait(1000); // wait for the dialog code to settle
+                    cy.spotlightResults().should("have.length", 2);
+                    cy.spotlightResults().eq(0).should("contain", groupDm.name);
+                });
+
+                // Search for ByteBot by id, should return group DM and user
+                cy.openSpotlightDialog().within(() => {
+                    cy.spotlightFilter(Filter.People);
+                    cy.spotlightSearch().clear().type(bot2.getUserId());
+                    cy.wait(1000); // wait for the dialog code to settle
+                    cy.spotlightResults().should("have.length", 2);
+                    cy.spotlightResults().eq(0).should("contain", groupDm.name);
+                });
             });
-
-        // Search for BotBob by id, should return group DM and user
-        cy.openSpotlightDialog().within(() => {
-            cy.spotlightFilter(Filter.People);
-            cy.spotlightSearch().clear().type(bot1.getUserId());
-            cy.wait(1000); // wait for the dialog code to settle
-            cy.spotlightResults().should("have.length", 2);
-            cy.spotlightResults().eq(0).should("contain", `${bot1Name} and ${bot2Name}`);
-        });
-
-        // Search for ByteBot by id, should return group DM and user
-        cy.openSpotlightDialog().within(() => {
-            cy.spotlightFilter(Filter.People);
-            cy.spotlightSearch().clear().type(bot2.getUserId());
-            cy.wait(1000); // wait for the dialog code to settle
-            cy.spotlightResults().should("have.length", 2);
-            cy.spotlightResults().eq(0).should("contain", `${bot1Name} and ${bot2Name}`);
-        });
     });
 
     // Test against https://github.com/vector-im/element-web/issues/22851
