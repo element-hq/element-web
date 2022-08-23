@@ -3494,5 +3494,21 @@
     "Your server doesn't support disabling sending read receipts.": "O teu servidor non ten soporte para desactivar o envío de resgardos de lectura.",
     "Share your activity and status with others.": "Comparte a túa actividade e estado con outras persoas.",
     "Presence": "Presenza",
-    "Send read receipts": "Enviar resgardos de lectura"
+    "Send read receipts": "Enviar resgardos de lectura",
+    "Unverified": "Non verificada",
+    "Verified": "Verificada",
+    "Inactive for %(inactiveAgeDays)s+ days": "Inactiva durante %(inactiveAgeDays)s+ días",
+    "Session details": "Detalles da sesión",
+    "IP address": "Enderezo IP",
+    "Device": "Dispositivo",
+    "Last activity": "Última actividade",
+    "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "Para maior seguridade, verifica as túas sesións e pecha calquera sesión que non recoñezas como propia.",
+    "Other sessions": "Outras sesións",
+    "Current session": "Sesión actual",
+    "Sessions": "Sesións",
+    "Verify or sign out from this session for best security and reliability.": "Verifica ou pecha esta sesión para máis seguridade e fiabilidade.",
+    "Unverified session": "Sesión non verificada",
+    "This session is ready for secure messaging.": "Esta sesión está preparada para mensaxería segura.",
+    "Verified session": "Sesión verificada",
+    "Use new session manager (under active development)": "Usar novo xestor da sesión (en desenvolvemento)"
 }
