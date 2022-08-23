@@ -14,7 +14,7 @@
     "Unable to load config file: please refresh the page to try again.": "A konfigurációs fájlt nem sikerült betölteni: frissítse az oldalt és próbálja meg újra.",
     "%(brand)s Desktop (%(platformName)s)": "Asztali %(brand)s (%(platformName)s)",
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
-    "Unsupported browser": "A böngésző nem támogatott",
+    "Unsupported browser": "Nem támogatott böngésző",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "A legjobb élmény érdékében telepítsen <chromeLink>Chrome-ot</chromeLink>, <firefoxLink>Firefoxot</firefoxLink> vagy <safariLink>Safarit</safariLink>.",
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Folytathatja a jelenlegi böngészőjével, de néhány vagy az összes funkció használhatatlan lehet, vagy hibák lehetnek az alkalmazás kinézetében és viselkedésében.",
     "I understand the risks and wish to continue": "Megértettem a kockázatot és folytatom",
@@ -25,8 +25,8 @@
     "Your Element is misconfigured": "Az Element hibásan van beállítva",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Az Element érvénytelen JSON-t tartalmazó konfigurációval rendelkezik. Javítsa és töltse újra az oldalt.",
     "Your browser can't run %(brand)s": "A böngészője nem tudja futtatni ezt: %(brand)s",
-    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s speciális böngészőfunkciókat használ, amelyeket a jelenlegi böngészője nem támogat.",
+    "%(brand)s uses advanced browser features which aren't supported by your current browser.": "A(z) %(brand)s speciális böngészőfunkciókat használ, amelyeket a jelenlegi böngészője nem támogat.",
     "Powered by Matrix": "A gépházban: Matrix",
-    "Use %(brand)s on mobile": "Mobilon használd ezt: %(brand)s",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Elosztott, titkosított csevegés &amp; együttműködés ezzel: $matrixLogo"
+    "Use %(brand)s on mobile": "Mobilon használja ezt: %(brand)s",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Elosztott, titkosított csevegés és együttműködés ezzel: $matrixLogo"
 }
