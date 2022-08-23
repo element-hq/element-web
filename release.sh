@@ -40,7 +40,7 @@ do
     fi
 done
 
-./node_modules/matrix-js-sdk/release.sh -n "$orig_args"
+./node_modules/matrix-js-sdk/release.sh "$orig_args"
 
 release="${1#v}"
 tag="v${release}"
