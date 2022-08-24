@@ -21,7 +21,7 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Du kannst deinen aktuellen Browser weiterhin verwenden. Es ist aber möglich, dass nicht alles richtig funktioniert oder das Aussehen der App inkorrekt ist.",
     "I understand the risks and wish to continue": "Ich verstehe die Risiken und möchte fortfahren",
     "Your Element is misconfigured": "Dein Element ist falsch konfiguriert",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Deine Elementkonfiguration enthält ungültiges JSON. Bitte korrigiere das Problem und lade die Seite neu.",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Deine Element-Konfiguration enthält ungültiges JSON. Bitte korrigiere das Problem und lade die Seite neu.",
     "Download Completed": "Herunterladen fertiggestellt",
     "Open": "Öffnen",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s verwendet erweiterte Browserfunktionen, die von deinem Browser nicht unterstützt werden.",
