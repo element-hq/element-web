@@ -106,7 +106,7 @@ jobs:
       - uses: t3chguy/typescript-check-action@main
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          use-check: true
+          use-check: false
           check-fail-mode: added
           output-behaviour: annotate
           ts-extra-args: '--strict'
