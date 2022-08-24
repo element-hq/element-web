@@ -17,13 +17,13 @@
       "es2020",
       "dom",
       "dom.iterable"
-    ],
+    ]
   },
   "include": [
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "./test/**/*.ts",
-    "./test/**/*.tsx",
+    "./test/**/*.tsx"
   ],
   "exclude": [
     "./test/end-to-end-tests/"

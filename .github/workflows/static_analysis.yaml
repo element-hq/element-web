@@ -90,5 +90,40 @@ jobs:
 
       - name: Dead Code Analysis
         run: |
-          cd element-web 
+          cd element-web
           yarn run analyse:unused-exports
+
+  tsc-strict:
+    name: Typescript Strict Error Checker
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      checks: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get diff lines
+        id: diff
+        uses: Equip-Collaboration/diff-line-numbers@v1.0.0
+        with:
+          include: '["\\.tsx?$"]'
+
+      - name: Detecting files changed
+        id: files
+        uses: futuratrepadeira/changed-files@v3.2.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: '^.*\.tsx?$'
+
+      - uses: t3chguy/typescript-check-action@main
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          use-check: false
+          check-fail-mode: added
+          output-behaviour: annotate
+          ts-extra-args: '--strict'
+          files-changed: ${{ steps.files.outputs.files_updated }}
+          files-added: ${{ steps.files.outputs.files_created }}
+          files-deleted: ${{ steps.files.outputs.files_deleted }}
+          line-numbers: ${{ steps.diff.outputs.lineNumbers }}
