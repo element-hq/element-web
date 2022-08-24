@@ -15,13 +15,13 @@ limitations under the License.
 */
 
 import * as React from "react";
-import { toDataURL, QRCodeSegment, QRCodeToDataURLOptions } from "qrcode";
+import { toDataURL, QRCodeSegment, QRCodeToDataURLOptions, QRCodeRenderersOptions } from "qrcode";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
 import Spinner from "./Spinner";
 
-interface IProps extends QRCodeToDataURLOptions {
+interface IProps extends QRCodeRenderersOptions {
     data: string | QRCodeSegment[];
     className?: string;
 }
