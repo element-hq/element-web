@@ -165,8 +165,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
 
         content[field] = value;
 
-        await this.client.setAccountData(eventType, content);
-
+        // Attach a deferred *before* setting the account data to ensure we catch any requests
+        // which race between different lines.
         const deferred = defer<void>();
         const handler = (event: MatrixEvent) => {
             if (event.getType() !== eventType || event.getContent()[field] !== value) return;
@@ -174,6 +174,8 @@ export default class AccountSettingsHandler extends MatrixClientBackedSettingsHa
             deferred.resolve();
         };
         this.client.on(ClientEvent.AccountData, handler);
+
+        await this.client.setAccountData(eventType, content);
 
         await deferred.promise;
     }

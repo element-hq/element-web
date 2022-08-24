@@ -24,6 +24,7 @@ describe('<DeviceTile />', () => {
     const defaultProps = {
         device: {
             device_id: '123',
+            isVerified: false,
         },
     };
     const getComponent = (props = {}) => (
@@ -39,6 +40,11 @@ describe('<DeviceTile />', () => {
     });
 
     it('renders a device with no metadata', () => {
+        const { container } = render(getComponent());
+        expect(container).toMatchSnapshot();
+    });
+
+    it('renders a verified device with no metadata', () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
     });
@@ -102,6 +108,19 @@ describe('<DeviceTile />', () => {
             };
             const { getByTestId } = render(getComponent({ device }));
             expect(getByTestId('device-metadata-lastActivity').textContent).toEqual('Last activity Dec 29, 2021');
+        });
+
+        it('renders with inactive notice when last activity was more than 90 days ago', () => {
+            const device: IMyDevice = {
+                device_id: '123',
+                last_seen_ip: '1.2.3.4',
+                last_seen_ts: now - (MS_DAY * 100),
+            };
+            const { getByTestId, queryByTestId } = render(getComponent({ device }));
+            expect(getByTestId('device-metadata-inactive').textContent).toEqual('Inactive for 90+ days (Dec 4, 2021)');
+            // last activity and verification not shown when inactive
+            expect(queryByTestId('device-metadata-lastActivity')).toBeFalsy();
+            expect(queryByTestId('device-metadata-verificationStatus')).toBeFalsy();
         });
     });
 });

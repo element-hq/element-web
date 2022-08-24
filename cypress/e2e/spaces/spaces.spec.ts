@@ -237,4 +237,42 @@ describe("Spaces", () => {
             cy.contains(".mx_SpaceHierarchy_roomTile", "Gaming").should("exist");
         });
     });
+
+    it("should render subspaces in the space panel only when expanded", () => {
+        cy.injectAxe();
+
+        cy.createSpace({
+            name: "Child Space",
+            initial_state: [],
+        }).then(spaceId => {
+            cy.createSpace({
+                name: "Root Space",
+                initial_state: [
+                    spaceChildInitialState(spaceId),
+                ],
+            }).as("spaceId");
+        });
+        cy.get('.mx_SpacePanel .mx_SpaceButton[aria-label="Root Space"]').should("exist");
+        cy.get('.mx_SpacePanel .mx_SpaceButton[aria-label="Child Space"]').should("not.exist");
+
+        const axeOptions = {
+            rules: {
+                // Disable this check as it triggers on nested roving tab index elements which are in practice fine
+                'nested-interactive': {
+                    enabled: false,
+                },
+            },
+        };
+        cy.checkA11y(undefined, axeOptions);
+        cy.get(".mx_SpacePanel").percySnapshotElement("Space panel collapsed", { widths: [68] });
+
+        cy.get(".mx_SpaceButton_toggleCollapse").click({ force: true });
+        cy.get(".mx_SpacePanel:not(.collapsed)").should("exist");
+
+        cy.contains(".mx_SpaceItem", "Root Space").should("exist")
+            .contains(".mx_SpaceItem", "Child Space").should("exist");
+
+        cy.checkA11y(undefined, axeOptions);
+        cy.get(".mx_SpacePanel").percySnapshotElement("Space panel expanded", { widths: [258] });
+    });
 });

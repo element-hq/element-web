@@ -23,7 +23,7 @@ import ContentMessages from "../ContentMessages";
 import { IMatrixClientPeg } from "../MatrixClientPeg";
 import ToastStore from "../stores/ToastStore";
 import DeviceListener from "../DeviceListener";
-import { RoomListStoreClass } from "../stores/room-list/RoomListStore";
+import { RoomListStore } from "../stores/room-list/Interface";
 import { PlatformPeg } from "../PlatformPeg";
 import RoomListLayoutStore from "../stores/room-list/RoomListLayoutStore";
 import { IntegrationManagers } from "../integrations/IntegrationManagers";
@@ -79,7 +79,7 @@ declare global {
         mxContentMessages: ContentMessages;
         mxToastStore: ToastStore;
         mxDeviceListener: DeviceListener;
-        mxRoomListStore: RoomListStoreClass;
+        mxRoomListStore: RoomListStore;
         mxRoomListLayoutStore: RoomListLayoutStore;
         mxPlatformPeg: PlatformPeg;
         mxIntegrationManagers: typeof IntegrationManagers;

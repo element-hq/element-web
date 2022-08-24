@@ -3,7 +3,7 @@
     "Account": "ఖాతా",
     "Add": "చేర్చు",
     "Admin": "అడ్మిన్",
-    "Admin Tools": "నిర్వాహక ఉపకరణాలు",
+    "Admin Tools": "నిర్వాహకుని ఉపకరణాలు",
     "No Microphones detected": "మైక్రోఫోన్లు కనుగొనబడలేదు",
     "No Webcams detected": "వెబ్కామ్లు కనుగొనబడలేదు",
     "No media permissions": "మీడియా అనుమతులు లేవు",
@@ -104,7 +104,7 @@
     "remove %(name)s from the directory.": "వివరము నుండి %(name)s ను తొలిగించు.",
     "Failed to add tag %(tagName)s to room": "%(tagName)s ను బొందు జోడించడంలో విఫలమైంది",
     "No update available.": "ఏ నవీకరణ అందుబాటులో లేదు.",
-    "Resend": "మళ్ళి  పంపుము",
+    "Resend": "మళ్ళి పంపుము",
     "Collecting app version information": "అనువర్తన సంస్కరణ సమాచారాన్ని సేకరించడం",
     "Tuesday": "మంగళవారం",
     "Remove %(name)s from the directory?": "వివరము నుండి %(name)s తొలిగించు?",
@@ -134,5 +134,7 @@
     "This email address is already in use": "ఈ ఇమెయిల్ అడ్రస్ ఇప్పటికే వాడుకం లో ఉంది",
     "This phone number is already in use": "ఈ ఫోన్ నంబర్ ఇప్పటికే వాడుకం లో ఉంది",
     "Failed to verify email address: make sure you clicked the link in the email": "ఇమెయిల్ అడ్రస్ ని నిరూపించలేక పోయాము. ఈమెయిల్ లో వచ్చిన లింక్ ని నొక్కారా",
-    "Call Failed": "కాల్ విఫలమయింది"
+    "Call Failed": "కాల్ విఫలమయింది",
+    "Confirm adding email": "ఈమెయిల్ చేర్చుటకు ధ్రువీకరించు",
+    "Single Sign On": "సింగిల్ సైన్ ఆన్"
 }

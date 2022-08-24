@@ -14,18 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { HTMLAttributes } from "react";
 
 import Heading from "../../typography/Heading";
 
-export interface SettingsSubsectionProps {
+export interface SettingsSubsectionProps extends HTMLAttributes<HTMLDivElement> {
     heading: string;
     description?: string | React.ReactNode;
     children?: React.ReactNode;
 }
 
-const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({ heading, description, children }) => (
-    <div className="mx_SettingsSubsection">
+const SettingsSubsection: React.FC<SettingsSubsectionProps> = ({ heading, description, children, ...rest }) => (
+    <div {...rest} className="mx_SettingsSubsection">
         <Heading className="mx_SettingsSubsection_heading" size='h3'>{ heading }</Heading>
         { !!description && <div className="mx_SettingsSubsection_description">{ description }</div> }
         <div className="mx_SettingsSubsection_content">

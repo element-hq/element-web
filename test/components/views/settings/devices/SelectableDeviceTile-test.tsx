@@ -25,6 +25,7 @@ describe('<SelectableDeviceTile />', () => {
         display_name: 'My Device',
         device_id: 'my-device',
         last_seen_ip: '123.456.789',
+        isVerified: false,
     };
     const defaultProps = {
         onClick: jest.fn(),

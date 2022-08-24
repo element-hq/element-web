@@ -16,7 +16,7 @@
     "Invites user with given id to current room": "Lädt den Benutzer mit der angegebenen ID in den aktuellen Raum ein",
     "Changes your display nickname": "Ändert deinen Nicknamen",
     "Change Password": "Passwort ändern",
-    "Commands": "Kommandos",
+    "Commands": "Befehle",
     "Emoji": "Emojis",
     "Sign in": "Anmelden",
     "Warning!": "Warnung!",
@@ -3409,5 +3409,6 @@
     "Presence": "Anwesenheit",
     "Deactivating your account is a permanent action — be careful!": "Die Deaktivierung deines Kontos ist unwiderruflich - sei vorsichtig!",
     "Favourite Messages (under active development)": "Favorisierte Nachrichten (in aktiver Entwicklung)",
-    "Use new session manager (under active development)": "Benutze neue Sitzungsverwaltung (in aktiver Entwicklung)"
+    "Use new session manager (under active development)": "Benutze neue Sitzungsverwaltung (in aktiver Entwicklung)",
+    "Developer command: Discards the current outbound group session and sets up new Olm sessions": "Entwicklerbefehl: Verwirft die aktuell ausgehende Gruppensitzung und setzt eine neue Olm-Sitzung auf"
 }

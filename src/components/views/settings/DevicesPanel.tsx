@@ -22,12 +22,10 @@ import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import { _t } from '../../../languageHandler';
-import Modal from '../../../Modal';
-import { SSOAuthEntry } from "../auth/InteractiveAuthEntryComponents";
-import InteractiveAuthDialog from "../dialogs/InteractiveAuthDialog";
 import DevicesPanelEntry from "./DevicesPanelEntry";
 import Spinner from "../elements/Spinner";
 import AccessibleButton from "../elements/AccessibleButton";
+import { deleteDevicesWithInteractiveAuth } from './devices/deleteDevices';
 
 interface IProps {
     className?: string;
@@ -79,7 +77,6 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                         crossSigningInfo: crossSigningInfo,
                     };
                 });
-                console.log(this.state);
             },
             (error) => {
                 if (this.unmounted) { return; }
@@ -178,75 +175,37 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
         });
     };
 
-    private onDeleteClick = (): void => {
+    private onDeleteClick = async (): Promise<void> => {
         if (this.state.selectedDevices.length === 0) { return; }
 
         this.setState({
             deleting: true,
         });
 
-        this.makeDeleteRequest(null).catch((error) => {
-            if (this.unmounted) { return; }
-            if (error.httpStatus !== 401 || !error.data || !error.data.flows) {
-                // doesn't look like an interactive-auth failure
-                throw error;
-            }
-
-            // pop up an interactive auth dialog
-
-            const numDevices = this.state.selectedDevices.length;
-            const dialogAesthetics = {
-                [SSOAuthEntry.PHASE_PREAUTH]: {
-                    title: _t("Use Single Sign On to continue"),
-                    body: _t("Confirm logging out these devices by using Single Sign On to prove your identity.", {
-                        count: numDevices,
-                    }),
-                    continueText: _t("Single Sign On"),
-                    continueKind: "primary",
+        try {
+            await deleteDevicesWithInteractiveAuth(
+                MatrixClientPeg.get(),
+                this.state.selectedDevices,
+                (success) => {
+                    if (success) {
+                        // Reset selection to [], update device list
+                        this.setState({
+                            selectedDevices: [],
+                        });
+                        this.loadDevices();
+                    }
+                    this.setState({
+                        deleting: false,
+                    });
                 },
-                [SSOAuthEntry.PHASE_POSTAUTH]: {
-                    title: _t("Confirm signing out these devices", {
-                        count: numDevices,
-                    }),
-                    body: _t("Click the button below to confirm signing out these devices.", {
-                        count: numDevices,
-                    }),
-                    continueText: _t("Sign out devices", { count: numDevices }),
-                    continueKind: "danger",
-                },
-            };
-            Modal.createDialog(InteractiveAuthDialog, {
-                title: _t("Authentication"),
-                matrixClient: MatrixClientPeg.get(),
-                authData: error.data,
-                makeRequest: this.makeDeleteRequest.bind(this),
-                aestheticsForStagePhases: {
-                    [SSOAuthEntry.LOGIN_TYPE]: dialogAesthetics,
-                    [SSOAuthEntry.UNSTABLE_LOGIN_TYPE]: dialogAesthetics,
-                },
-            });
-        }).catch((e) => {
-            logger.error("Error deleting sessions", e);
-            if (this.unmounted) { return; }
-        }).finally(() => {
+            );
+        } catch (error) {
+            logger.error("Error deleting sessions", error);
             this.setState({
                 deleting: false,
             });
-        });
+        }
     };
-
-    // TODO: proper typing for auth
-    private makeDeleteRequest(auth?: any): Promise<any> {
-        return MatrixClientPeg.get().deleteMultipleDevices(this.state.selectedDevices, auth).then(
-            () => {
-                // Reset selection to [], update device list
-                this.setState({
-                    selectedDevices: [],
-                });
-                this.loadDevices();
-            },
-        );
-    }
 
     private renderDevice = (device: IMyDevice): JSX.Element => {
         const myDeviceId = MatrixClientPeg.get().getDeviceId();
@@ -289,6 +248,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
 
         const myDeviceId = MatrixClientPeg.get().getDeviceId();
         const myDevice = devices.find((device) => (device.device_id === myDeviceId));
+
         if (!myDevice) {
             return loadError;
         }
@@ -373,6 +333,7 @@ export default class DevicesPanel extends React.Component<IProps, IState> {
                 onClick={this.onDeleteClick}
                 kind="danger_outline"
                 disabled={this.state.selectedDevices.length === 0}
+                data-testid='sign-out-devices-btn'
             >
                 { _t("Sign out %(count)s selected devices", { count: this.state.selectedDevices.length }) }
             </AccessibleButton>;

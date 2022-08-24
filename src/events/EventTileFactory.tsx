@@ -225,6 +225,10 @@ export function pickFactory(
             return noEventFactoryFactory(); // improper event type to render
         }
 
+        if (STATE_EVENT_TILE_TYPES[evType] === TextualEventFactory && !hasText(mxEvent, showHiddenEvents)) {
+            return noEventFactoryFactory();
+        }
+
         return STATE_EVENT_TILE_TYPES[evType] ?? noEventFactoryFactory();
     }
 

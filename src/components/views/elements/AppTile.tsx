@@ -192,7 +192,7 @@ export default class AppTile extends React.Component<IProps, IState> {
     }
 
     private onMyMembership = (room: Room, membership: string): void => {
-        if (membership === "leave" && room.roomId === this.props.room?.roomId) {
+        if ((membership === "leave" || membership === "ban") && room.roomId === this.props.room?.roomId) {
             this.onUserLeftRoom();
         }
     };

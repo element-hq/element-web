@@ -199,7 +199,7 @@
     "Server may be unavailable, overloaded, or you hit a bug.": "Serwer może być niedostępny, przeciążony, lub trafiłeś na błąd.",
     "Server unavailable, overloaded, or something else went wrong.": "Serwer może być niedostępny, przeciążony, lub coś innego poszło źle.",
     "Session ID": "Identyfikator sesji",
-    "Show timestamps in 12 hour format (e.g. 2:30pm)": "Pokaż czas w formacie 12-sto godzinnym (n.p. 2:30pm)",
+    "Show timestamps in 12 hour format (e.g. 2:30pm)": "Pokaż czas w formacie 12-sto godzinnym (np. 2:30pm)",
     "Signed Out": "Wylogowano",
     "Sign in": "Zaloguj",
     "Sign out": "Wyloguj",
@@ -2108,5 +2108,7 @@
     "In spaces %(space1Name)s and %(space2Name)s.": "W przestrzeniach %(space1Name)s i %(space2Name)s.",
     "Jump to the given date in the timeline": "Przeskocz do podanej daty w linii czasu",
     "Failed to invite users to %(roomName)s": "Nie udało się zaprosić użytkowników do %(roomName)s",
-    "That link is no longer supported": "Ten link nie jest już wspierany"
+    "That link is no longer supported": "Ten link nie jest już wspierany",
+    "You're trying to access a community link (%(groupId)s).<br/>Communities are no longer supported and have been replaced by spaces.<br2/><a>Learn more about spaces here.</a>": "Próbujesz dostać się do społeczności przez link (%(groupId)s).<br/>Społeczności nie są już wspierane i zostały zastąpione przez przestrzenie.<br2/><a>Dowiedz się więcej o przestrzeniach tutaj.</a>",
+    "Insert a trailing colon after user mentions at the start of a message": "Wstawiaj dwukropek po wzmiance użytkownika na początku wiadomości"
 }

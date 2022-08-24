@@ -114,6 +114,7 @@ Cypress.Commands.add("startDM", (name: string) => {
     cy.openSpotlightDialog().within(() => {
         cy.spotlightFilter(Filter.People);
         cy.spotlightSearch().clear().type(name);
+        cy.wait(1000); // wait for the dialog code to settle
         cy.get(".mx_Spinner").should("not.exist");
         cy.spotlightResults().should("have.length", 1);
         cy.spotlightResults().eq(0).should("contain", name);
@@ -216,6 +217,7 @@ describe("Spotlight", () => {
     it("should find joined rooms", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightSearch().clear().type(room1Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", room1Name);
             cy.spotlightResults().eq(0).click();
@@ -229,6 +231,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.PublicRooms);
             cy.spotlightSearch().clear().type(room1Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", room1Name);
             cy.spotlightResults().eq(0).should("contain", "View");
@@ -243,6 +246,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.PublicRooms);
             cy.spotlightSearch().clear().type(room2Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", room2Name);
             cy.spotlightResults().eq(0).should("contain", "Join");
@@ -258,6 +262,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.PublicRooms);
             cy.spotlightSearch().clear().type(room3Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", room3Name);
             cy.spotlightResults().eq(0).should("contain", "View");
@@ -296,6 +301,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
             cy.spotlightSearch().clear().type(bot1Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", bot1Name);
             cy.spotlightResults().eq(0).click();
@@ -308,6 +314,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
             cy.spotlightSearch().clear().type(bot2Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", bot2Name);
             cy.spotlightResults().eq(0).click();
@@ -324,6 +331,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
             cy.spotlightSearch().clear().type(bot2Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", bot2Name);
             cy.spotlightResults().eq(0).click();
@@ -341,27 +349,53 @@ describe("Spotlight", () => {
         cy.get(".mx_RoomSublist[aria-label=People]").should("contain", bot2Name);
 
         // Invite BotBob into existing DM with ByteBot
-        cy.getDmRooms(bot2.getUserId()).then(dmRooms => dmRooms[0])
-            .then(groupDmId => cy.inviteUser(groupDmId, bot1.getUserId()))
-            .then(() => {
-                cy.roomHeaderName().should("contain", `${bot1Name} and ${bot2Name}`);
-                cy.get(".mx_RoomSublist[aria-label=People]").should("contain", `${bot1Name} and ${bot2Name}`);
+        cy.getDmRooms(bot2.getUserId())
+            .should("have.length", 1)
+            .then(dmRooms => cy.getClient().then(client => client.getRoom(dmRooms[0])))
+            .then(groupDm => {
+                cy.inviteUser(groupDm.roomId, bot1.getUserId());
+                cy.roomHeaderName().should(($element) =>
+                    expect($element.get(0).innerText).contains(groupDm.name));
+                cy.get(".mx_RoomSublist[aria-label=People]").should(($element) =>
+                    expect($element.get(0).innerText).contains(groupDm.name));
+
+                // Search for BotBob by id, should return group DM and user
+                cy.openSpotlightDialog().within(() => {
+                    cy.spotlightFilter(Filter.People);
+                    cy.spotlightSearch().clear().type(bot1.getUserId());
+                    cy.wait(1000); // wait for the dialog code to settle
+                    cy.spotlightResults().should("have.length", 2);
+                    cy.spotlightResults().eq(0).should("contain", groupDm.name);
+                });
+
+                // Search for ByteBot by id, should return group DM and user
+                cy.openSpotlightDialog().within(() => {
+                    cy.spotlightFilter(Filter.People);
+                    cy.spotlightSearch().clear().type(bot2.getUserId());
+                    cy.wait(1000); // wait for the dialog code to settle
+                    cy.spotlightResults().should("have.length", 2);
+                    cy.spotlightResults().eq(0).should("contain", groupDm.name);
+                });
             });
+    });
 
-        // Search for BotBob by id, should return group DM and user
+    // Test against https://github.com/vector-im/element-web/issues/22851
+    it("should show each person result only once", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
-            cy.spotlightSearch().clear().type(bot1.getUserId());
-            cy.spotlightResults().should("have.length", 2);
-            cy.spotlightResults().eq(0).should("contain", `${bot1Name} and ${bot2Name}`);
-        });
 
-        // Search for ByteBot by id, should return group DM and user
-        cy.openSpotlightDialog().within(() => {
-            cy.spotlightFilter(Filter.People);
-            cy.spotlightSearch().clear().type(bot2.getUserId());
-            cy.spotlightResults().should("have.length", 2);
-            cy.spotlightResults().eq(0).should("contain", `${bot1Name} and ${bot2Name}`);
+            // 2 rounds of search to simulate the bug conditions. Specifically, the first search
+            // should have 1 result (not 2) and the second search should also have 1 result (instead
+            // of the super buggy 3 described by https://github.com/vector-im/element-web/issues/22851)
+            //
+            // We search for user ID to trigger the profile lookup within the dialog.
+            for (let i = 0; i < 2; i++) {
+                cy.log("Iteration: " + i);
+                cy.spotlightSearch().clear().type(bot1.getUserId());
+                cy.wait(1000); // wait for the dialog code to settle
+                cy.spotlightResults().should("have.length", 1);
+                cy.spotlightResults().eq(0).should("contain", bot1.getUserId());
+            }
         });
     });
 
@@ -369,6 +403,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
             cy.spotlightSearch().clear().type(bot2Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.spotlightResults().should("have.length", 1);
             cy.spotlightResults().eq(0).should("contain", bot2Name);
             cy.get(".mx_SpotlightDialog_startGroupChat").should("contain", "Start a group chat");
@@ -390,6 +425,7 @@ describe("Spotlight", () => {
         cy.openSpotlightDialog().within(() => {
             cy.spotlightFilter(Filter.People);
             cy.spotlightSearch().clear().type(bot1Name);
+            cy.wait(1000); // wait for the dialog code to settle
             cy.get(".mx_Spinner").should("not.exist");
             cy.spotlightResults().should("have.length", 1);
         });

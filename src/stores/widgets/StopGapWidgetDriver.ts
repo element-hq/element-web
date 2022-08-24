@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2021 The Matrix.org Foundation C.I.C.
+ * Copyright 2020 - 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import {
     IOpenIDCredentials,
     IOpenIDUpdate,
     ISendEventDetails,
+    ITurnServer,
+    IRoomEvent,
     MatrixCapabilities,
     OpenIDRequestState,
     SimpleObservable,
@@ -29,6 +31,7 @@ import {
     WidgetEventCapability,
     WidgetKind,
 } from "matrix-widget-api";
+import { ClientEvent, ITurnServer as IClientTurnServer } from "matrix-js-sdk/src/client";
 import { EventType } from "matrix-js-sdk/src/@types/event";
 import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
@@ -60,6 +63,12 @@ function getRememberedCapabilitiesForWidget(widget: Widget): Capability[] {
 function setRememberedCapabilitiesForWidget(widget: Widget, caps: Capability[]) {
     localStorage.setItem(`widget_${widget.id}_approved_caps`, JSON.stringify(caps));
 }
+
+const normalizeTurnServer = ({ urls, username, credential }: IClientTurnServer): ITurnServer => ({
+    uris: urls,
+    username,
+    password: credential,
+});
 
 export class StopGapWidgetDriver extends WidgetDriver {
     private allowedCapabilities: Set<Capability>;
@@ -182,6 +191,49 @@ export class StopGapWidgetDriver extends WidgetDriver {
         return { roomId, eventId: r.event_id };
     }
 
+    public async sendToDevice(
+        eventType: string,
+        encrypted: boolean,
+        contentMap: { [userId: string]: { [deviceId: string]: object } },
+    ): Promise<void> {
+        const client = MatrixClientPeg.get();
+
+        if (encrypted) {
+            const deviceInfoMap = await client.crypto.deviceList.downloadKeys(Object.keys(contentMap), false);
+
+            await Promise.all(
+                Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+                    Object.entries(userContentMap).map(async ([deviceId, content]) => {
+                        if (deviceId === "*") {
+                            // Send the message to all devices we have keys for
+                            await client.encryptAndSendToDevices(
+                                Object.values(deviceInfoMap[userId]).map(deviceInfo => ({
+                                    userId, deviceInfo,
+                                })),
+                                content,
+                            );
+                        } else {
+                            // Send the message to a specific device
+                            await client.encryptAndSendToDevices(
+                                [{ userId, deviceInfo: deviceInfoMap[userId][deviceId] }],
+                                content,
+                            );
+                        }
+                    }),
+                ),
+            );
+        } else {
+            await client.queueToDevice({
+                eventType,
+                batch: Object.entries(contentMap).flatMap(([userId, userContentMap]) =>
+                    Object.entries(userContentMap).map(([deviceId, content]) =>
+                        ({ userId, deviceId, payload: content }),
+                    ),
+                ),
+            });
+        }
+    }
+
     private pickRooms(roomIds: (string | Symbols.AnyRoom)[] = null): Room[] {
         const client = MatrixClientPeg.get();
         if (!client) throw new Error("Not attached to a client");
@@ -197,7 +249,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         msgtype: string | undefined,
         limitPerRoom: number,
         roomIds: (string | Symbols.AnyRoom)[] = null,
-    ): Promise<object[]> {
+    ): Promise<IRoomEvent[]> {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);
@@ -224,7 +276,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
         stateKey: string | undefined,
         limitPerRoom: number,
         roomIds: (string | Symbols.AnyRoom)[] = null,
-    ): Promise<object[]> {
+    ): Promise<IRoomEvent[]> {
         limitPerRoom = limitPerRoom > 0 ? Math.min(limitPerRoom, Number.MAX_SAFE_INTEGER) : Number.MAX_SAFE_INTEGER; // relatively arbitrary
 
         const rooms = this.pickRooms(roomIds);
@@ -281,5 +333,37 @@ export class StopGapWidgetDriver extends WidgetDriver {
 
     public async navigate(uri: string): Promise<void> {
         navigateToPermalink(uri);
+    }
+
+    public async* getTurnServers(): AsyncGenerator<ITurnServer> {
+        const client = MatrixClientPeg.get();
+        if (!client.pollingTurnServers || !client.getTurnServers().length) return;
+
+        let setTurnServer: (server: ITurnServer) => void;
+        let setError: (error: Error) => void;
+
+        const onTurnServers = ([server]: IClientTurnServer[]) => setTurnServer(normalizeTurnServer(server));
+        const onTurnServersError = (error: Error, fatal: boolean) => { if (fatal) setError(error); };
+
+        client.on(ClientEvent.TurnServers, onTurnServers);
+        client.on(ClientEvent.TurnServersError, onTurnServersError);
+
+        try {
+            const initialTurnServer = client.getTurnServers()[0];
+            yield normalizeTurnServer(initialTurnServer);
+
+            // Repeatedly listen for new TURN servers until an error occurs or
+            // the caller stops this generator
+            while (true) {
+                yield await new Promise<ITurnServer>((resolve, reject) => {
+                    setTurnServer = resolve;
+                    setError = reject;
+                });
+            }
+        } finally {
+            // The loop was broken - clean up
+            client.off(ClientEvent.TurnServers, onTurnServers);
+            client.off(ClientEvent.TurnServersError, onTurnServersError);
+        }
     }
 }

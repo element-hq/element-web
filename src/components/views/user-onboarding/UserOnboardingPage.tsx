@@ -19,6 +19,7 @@ import * as React from "react";
 
 import { useInitialSyncComplete } from "../../../hooks/useIsInitialSyncComplete";
 import { useSettingValue } from "../../../hooks/useSettings";
+import { useUserOnboardingContext } from "../../../hooks/useUserOnboardingContext";
 import { useUserOnboardingTasks } from "../../../hooks/useUserOnboardingTasks";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import SdkConfig from "../../../SdkConfig";
@@ -47,7 +48,8 @@ export function UserOnboardingPage({ justRegistered = false }: Props) {
     const pageUrl = getHomePageUrl(config);
 
     const useCase = useSettingValue<UseCase | null>("FTUE.useCaseSelection");
-    const [completedTasks, waitingTasks] = useUserOnboardingTasks();
+    const context = useUserOnboardingContext();
+    const [completedTasks, waitingTasks] = useUserOnboardingTasks(context);
 
     const initialSyncComplete = useInitialSyncComplete();
     const [showList, setShowList] = useState<boolean>(false);

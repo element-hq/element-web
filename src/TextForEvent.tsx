@@ -434,29 +434,29 @@ function textForHistoryVisibilityEvent(event: MatrixEvent): () => string | null 
 // Currently will only display a change if a user's power level is changed
 function textForPowerEvent(event: MatrixEvent): () => string | null {
     const senderName = getSenderName(event);
-    if (!event.getPrevContent() || !event.getPrevContent().users ||
-        !event.getContent() || !event.getContent().users) {
+    if (!event.getPrevContent()?.users || !event.getContent()?.users) {
         return null;
     }
-    const previousUserDefault = event.getPrevContent().users_default || 0;
-    const currentUserDefault = event.getContent().users_default || 0;
+    const previousUserDefault: number = event.getPrevContent().users_default || 0;
+    const currentUserDefault: number = event.getContent().users_default || 0;
     // Construct set of userIds
-    const users = [];
-    Object.keys(event.getContent().users).forEach(
-        (userId) => {
-            if (users.indexOf(userId) === -1) users.push(userId);
-        },
-    );
-    Object.keys(event.getPrevContent().users).forEach(
-        (userId) => {
-            if (users.indexOf(userId) === -1) users.push(userId);
-        },
-    );
+    const users: string[] = [];
+    Object.keys(event.getContent().users).forEach((userId) => {
+        if (users.indexOf(userId) === -1) users.push(userId);
+    });
+    Object.keys(event.getPrevContent().users).forEach((userId) => {
+        if (users.indexOf(userId) === -1) users.push(userId);
+    });
 
-    const diffs = [];
+    const diffs: {
+        userId: string;
+        name: string;
+        from: number;
+        to: number;
+    }[] = [];
     users.forEach((userId) => {
         // Previous power level
-        let from = event.getPrevContent().users[userId];
+        let from: number = event.getPrevContent().users[userId];
         if (!Number.isInteger(from)) {
             from = previousUserDefault;
         }

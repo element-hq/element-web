@@ -3498,5 +3498,17 @@
     "Share your activity and status with others.": "Condividi la tua attività e lo stato con gli altri.",
     "Presence": "Presenza",
     "Use new session manager (under active development)": "Usa il nuovo gestore di sessioni (in sviluppo attivo)",
-    "Send read receipts": "Invia le conferme di lettura"
+    "Send read receipts": "Invia le conferme di lettura",
+    "Unverified": "Non verificata",
+    "Verified": "Verificata",
+    "Inactive for %(inactiveAgeDays)s+ days": "Inattivo da %(inactiveAgeDays)s+ giorni",
+    "Session details": "Dettagli sessione",
+    "IP address": "Indirizzo IP",
+    "Device": "Dispositivo",
+    "For best security, verify your sessions and sign out from any session that you don't recognize or use anymore.": "Per una maggiore sicurezza, verifica le tue sessioni e disconnetti quelle che non riconosci o che non usi più.",
+    "Other sessions": "Altre sessioni",
+    "Verify or sign out from this session for best security and reliability.": "Verifica o disconnetti questa sessione per una migliore sicurezza e affidabilità.",
+    "Unverified session": "Sessione non verificata",
+    "This session is ready for secure messaging.": "Questa sessione è pronta per i messaggi sicuri.",
+    "Verified session": "Sessione verificata"
 }

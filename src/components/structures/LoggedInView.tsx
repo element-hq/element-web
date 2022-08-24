@@ -689,6 +689,7 @@ class LoggedInView extends React.Component<IProps, IState> {
                                     data-collapsed={this.props.collapseLhs ? true : undefined}
                                 >
                                     <LeftPanel
+                                        pageType={this.props.page_type as PageTypes}
                                         isMinimized={this.props.collapseLhs || false}
                                         resizeNotifier={this.props.resizeNotifier}
                                     />

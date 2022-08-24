@@ -85,7 +85,7 @@ const UserWelcomeTop = () => {
         </MiniAvatarUploader>
 
         <h1>{ _tDom("Welcome %(name)s", { name: ownProfile.displayName }) }</h1>
-        <h4>{ _tDom("Now, let's help you get started") }</h4>
+        <h2>{ _tDom("Now, let's help you get started") }</h2>
     </div>;
 };
 
@@ -97,8 +97,8 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
     }
 
-    let introSection;
-    if (justRegistered || !!OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE)) {
+    let introSection: JSX.Element;
+    if (justRegistered || !OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE)) {
         introSection = <UserWelcomeTop />;
     } else {
         const brandingConfig = SdkConfig.getObject("branding");
@@ -107,11 +107,11 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         introSection = <React.Fragment>
             <img src={logoUrl} alt={config.brand} />
             <h1>{ _tDom("Welcome to %(appName)s", { appName: config.brand }) }</h1>
-            <h4>{ _tDom("Own your conversations.") }</h4>
+            <h2>{ _tDom("Own your conversations.") }</h2>
         </React.Fragment>;
     }
 
-    return <AutoHideScrollbar className="mx_HomePage mx_HomePage_default">
+    return <AutoHideScrollbar className="mx_HomePage mx_HomePage_default" element="main">
         <div className="mx_HomePage_default_wrapper">
             { introSection }
             <div className="mx_HomePage_default_buttons">

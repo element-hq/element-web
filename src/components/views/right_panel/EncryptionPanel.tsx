@@ -85,7 +85,7 @@ const EncryptionPanel: React.FC<IProps> = (props: IProps) => {
         // handle transitions -> cancelled for mismatches which fire a modal instead of showing a card
         if (request && request.cancelled && MISMATCHES.includes(request.cancellationCode)) {
             Modal.createDialog(ErrorDialog, {
-                headerImage: require("../../../../res/img/e2e/warning.svg").default,
+                headerImage: require("../../../../res/img/e2e/warning-deprecated.svg").default,
                 title: _t("Your messages are not secure"),
                 description: <div>
                     { _t("One of the following may be compromised:") }

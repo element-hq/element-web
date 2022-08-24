@@ -194,6 +194,8 @@ exports[`<SpaceContextMenu /> renders menu correctly 1`] = `
             />
             <div
               className="mx_ContextualMenu"
+              hasBackground={true}
+              onFinished={[MockFunction]}
               role="menu"
               style={Object {}}
             >

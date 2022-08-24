@@ -37,18 +37,15 @@ import { RoomNotificationStateStore } from "../notifications/RoomNotificationSta
 import { VisibilityProvider } from "./filters/VisibilityProvider";
 import { SpaceWatcher } from "./SpaceWatcher";
 import { IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
+import { RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 
 interface IState {
     // state is tracked in underlying classes
 }
 
-/**
- * The event/channel which is called when the room lists have been changed. Raised
- * with one argument: the instance of the store.
- */
-export const LISTS_UPDATE_EVENT = "lists_update";
+export const LISTS_UPDATE_EVENT = RoomListStoreEvent.ListsUpdate;
 
-export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
+export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements Interface {
     /**
      * Set to true if you're running tests on the store. Should not be touched in
      * any other environment.
@@ -365,7 +362,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
         this.algorithm.updatesInhibited = false;
     }
 
-    public async setTagSorting(tagId: TagID, sort: SortAlgorithm) {
+    public setTagSorting(tagId: TagID, sort: SortAlgorithm) {
         this.setAndPersistTagSorting(tagId, sort);
         this.updateFn.trigger();
     }
@@ -602,9 +599,9 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> {
 }
 
 export default class RoomListStore {
-    private static internalInstance: RoomListStoreClass;
+    private static internalInstance: Interface;
 
-    public static get instance(): RoomListStoreClass {
+    public static get instance(): Interface {
         if (!RoomListStore.internalInstance) {
             RoomListStore.internalInstance = new RoomListStoreClass();
         }

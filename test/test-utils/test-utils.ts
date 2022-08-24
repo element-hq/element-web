@@ -74,7 +74,7 @@ export function createTestClient(): MatrixClient {
     const eventEmitter = new EventEmitter();
     let txnId = 1;
 
-    return {
+    const client = {
         getHomeserverUrl: jest.fn(),
         getIdentityServerUrl: jest.fn(),
         getDomain: jest.fn().mockReturnValue("matrix.org"),
@@ -89,6 +89,12 @@ export function createTestClient(): MatrixClient {
             setPendingEvents: jest.fn().mockResolvedValue(undefined),
             storeRoom: jest.fn(),
             removeRoom: jest.fn(),
+        },
+
+        crypto: {
+            deviceList: {
+                downloadKeys: jest.fn(),
+            },
         },
 
         getPushActionsForEvent: jest.fn(),
@@ -112,6 +118,7 @@ export function createTestClient(): MatrixClient {
         getThirdpartyProtocols: jest.fn().mockResolvedValue({}),
         getClientWellKnown: jest.fn().mockReturnValue(null),
         supportsVoip: jest.fn().mockReturnValue(true),
+        getTurnServers: jest.fn().mockReturnValue([]),
         getTurnServersExpiry: jest.fn().mockReturnValue(2 ^ 32),
         getThirdpartyUser: jest.fn().mockResolvedValue([]),
         getAccountData: (type) => {
@@ -163,7 +170,16 @@ export function createTestClient(): MatrixClient {
         downloadKeys: jest.fn(),
         fetchRoomEvent: jest.fn(),
         makeTxnId: jest.fn().mockImplementation(() => `t${txnId++}`),
+        sendToDevice: jest.fn().mockResolvedValue(undefined),
+        queueToDevice: jest.fn().mockResolvedValue(undefined),
+        encryptAndSendToDevices: jest.fn().mockResolvedValue(undefined),
     } as unknown as MatrixClient;
+
+    Object.defineProperty(client, "pollingTurnServers", {
+        configurable: true,
+        get: () => true,
+    });
+    return client;
 }
 
 type MakeEventPassThruProps = {
@@ -176,7 +192,7 @@ type MakeEventPassThruProps = {
 type MakeEventProps = MakeEventPassThruProps & {
     type: string;
     content: IContent;
-    room: Room["roomId"];
+    room?: Room["roomId"]; // to-device messages are roomless
     // eslint-disable-next-line camelcase
     prev_content?: IContent;
     unsigned?: IUnsigned;

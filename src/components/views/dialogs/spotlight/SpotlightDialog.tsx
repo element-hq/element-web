@@ -376,7 +376,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 })),
                 ...roomResults,
                 ...userResults,
-                ...(profile ? [new DirectoryMember(profile)] : []).map(toMemberResult),
+                ...(profile && !alreadyAddedUserIds.has(profile.user_id)
+                    ? [new DirectoryMember(profile)]
+                    : []).map(toMemberResult),
                 ...publicRooms.map(toPublicRoomResult),
             ].filter(result => filter === null || result.filter.includes(filter));
         },

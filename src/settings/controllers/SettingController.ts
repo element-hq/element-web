@@ -63,16 +63,14 @@ export default abstract class SettingController {
      * @param {String} roomId The room ID, may be null.
      * @param {*} newValue The new value for the setting, may be null.
      */
-    public onChange(level: SettingLevel, roomId: string, newValue: any) {
+    public onChange(level: SettingLevel, roomId: string, newValue: any): void {
         // do nothing by default
-
-        // FIXME: force a fresh on the RoomView for the roomId in question
     }
 
     /**
      * Gets whether the setting has been disabled due to this controller.
      */
-    public get settingDisabled() {
+    public get settingDisabled(): boolean {
         return false;
     }
 }

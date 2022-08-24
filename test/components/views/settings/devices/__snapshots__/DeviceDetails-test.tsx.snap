@@ -1,0 +1,320 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceDetails /> renders a verified device 1`] = `
+<div>
+  <div
+    class="mx_DeviceDetails"
+    data-testid="device-detail-my-device"
+  >
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <h3
+        class="mx_Heading_h3"
+      >
+        my-device
+      </h3>
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Verified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Verified session
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            This session is ready for secure messaging.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <p
+        class="mx_DeviceDetails_sectionHeading"
+      >
+        Session details
+      </p>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Session ID
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            >
+              my-device
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Last activity
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            />
+          </tr>
+        </tbody>
+      </table>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <thead>
+          <tr>
+            <th>
+              Device
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              IP address
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            />
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</div>
+`;
+
+exports[`<DeviceDetails /> renders device with metadata 1`] = `
+<div>
+  <div
+    class="mx_DeviceDetails"
+    data-testid="device-detail-my-device"
+  >
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <h3
+        class="mx_Heading_h3"
+      >
+        My Device
+      </h3>
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified session
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify or sign out from this session for best security and reliability.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <p
+        class="mx_DeviceDetails_sectionHeading"
+      >
+        Session details
+      </p>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Session ID
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            >
+              my-device
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Last activity
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            >
+              Sun 22:34
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <thead>
+          <tr>
+            <th>
+              Device
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              IP address
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            >
+              123.456.789
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</div>
+`;
+
+exports[`<DeviceDetails /> renders device without metadata 1`] = `
+<div>
+  <div
+    class="mx_DeviceDetails"
+    data-testid="device-detail-my-device"
+  >
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <h3
+        class="mx_Heading_h3"
+      >
+        my-device
+      </h3>
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified session
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify or sign out from this session for best security and reliability.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <p
+        class="mx_DeviceDetails_sectionHeading"
+      >
+        Session details
+      </p>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Session ID
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            >
+              my-device
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Last activity
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            />
+          </tr>
+        </tbody>
+      </table>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <thead>
+          <tr>
+            <th>
+              Device
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              IP address
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            />
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</div>
+`;

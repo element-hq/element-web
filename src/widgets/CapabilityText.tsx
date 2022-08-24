@@ -17,6 +17,7 @@ limitations under the License.
 import {
     Capability,
     EventDirection,
+    EventKind,
     getTimelineRoomIDFromCapability,
     isTimelineCapability,
     isTimelineCapabilityFor,
@@ -134,7 +135,7 @@ export class CapabilityText {
     };
 
     private static bylineFor(eventCap: WidgetEventCapability): TranslatedString {
-        if (eventCap.isState) {
+        if (eventCap.kind === EventKind.State) {
             return !eventCap.keyStr
                 ? _t("with an empty state key")
                 : _t("with state key %(stateKey)s", { stateKey: eventCap.keyStr });
@@ -143,6 +144,8 @@ export class CapabilityText {
     }
 
     public static for(capability: Capability, kind: WidgetKind): TranslatedCapabilityText {
+        // TODO: Support MSC3819 (to-device capabilities)
+
         // First see if we have a super simple line of text to provide back
         if (CapabilityText.simpleCaps[capability]) {
             const textForKind = CapabilityText.simpleCaps[capability];
@@ -184,13 +187,13 @@ export class CapabilityText {
             // Special case room messages so they show up a bit cleaner to the user. Result is
             // effectively "Send images" instead of "Send messages... of type images" if we were
             // to handle the msgtype nuances in this function.
-            if (!eventCap.isState && eventCap.eventType === EventType.RoomMessage) {
+            if (eventCap.kind === EventKind.Event && eventCap.eventType === EventType.RoomMessage) {
                 return CapabilityText.forRoomMessageCap(eventCap, kind);
             }
 
             // See if we have a static line of text to provide for the given event type and
             // direction. The hope is that we do for common event types for friendlier copy.
-            const evSendRecv = eventCap.isState
+            const evSendRecv = eventCap.kind === EventKind.State
                 ? CapabilityText.stateSendRecvCaps
                 : CapabilityText.nonStateSendRecvCaps;
             if (evSendRecv[eventCap.eventType]) {

@@ -15,21 +15,22 @@ limitations under the License.
 */
 
 import React, { Fragment } from "react";
-import { IMyDevice } from "matrix-js-sdk/src/matrix";
 
+import { Icon as InactiveIcon } from '../../../../../res/img/element-icons/settings/inactive.svg';
 import { _t } from "../../../../languageHandler";
 import { formatDate, formatRelativeTime } from "../../../../DateUtils";
 import TooltipTarget from "../../elements/TooltipTarget";
 import { Alignment } from "../../elements/Tooltip";
 import Heading from "../../typography/Heading";
-
+import { INACTIVE_DEVICE_AGE_DAYS, isDeviceInactive } from "./filter";
+import { DeviceWithVerification } from "./types";
 export interface DeviceTileProps {
-    device: IMyDevice;
+    device: DeviceWithVerification;
     children?: React.ReactNode;
     onClick?: () => void;
 }
 
-const DeviceTileName: React.FC<{ device: IMyDevice }> = ({ device }) => {
+const DeviceTileName: React.FC<{ device: DeviceWithVerification }> = ({ device }) => {
     if (device.display_name) {
         return <TooltipTarget
             alignment={Alignment.Top}
@@ -45,7 +46,8 @@ const DeviceTileName: React.FC<{ device: IMyDevice }> = ({ device }) => {
     </Heading>;
 };
 
-const MS_6_DAYS = 6 * 24 * 60 * 60 * 1000;
+const MS_DAY = 24 * 60 * 60 * 1000;
+const MS_6_DAYS = 6 * MS_DAY;
 const formatLastActivity = (timestamp: number, now = new Date().getTime()): string => {
     // less than a week ago
     if (timestamp + MS_6_DAYS >= now) {
@@ -56,18 +58,41 @@ const formatLastActivity = (timestamp: number, now = new Date().getTime()): stri
     return formatRelativeTime(new Date(timestamp));
 };
 
-const DeviceMetadata: React.FC<{ value: string, id: string }> = ({ value, id }) => (
+const getInactiveMetadata = (device: DeviceWithVerification): { id: string, value: React.ReactNode } | undefined => {
+    const isInactive = isDeviceInactive(device);
+
+    if (!isInactive) {
+        return undefined;
+    }
+    return { id: 'inactive', value: (
+        <>
+            <InactiveIcon className="mx_DeviceTile_inactiveIcon" />
+            {
+                _t('Inactive for %(inactiveAgeDays)s+ days', { inactiveAgeDays: INACTIVE_DEVICE_AGE_DAYS }) +
+                ` (${formatLastActivity(device.last_seen_ts)})`
+            }
+        </>),
+    };
+};
+
+const DeviceMetadata: React.FC<{ value: string | React.ReactNode, id: string }> = ({ value, id }) => (
     value ? <span data-testid={`device-metadata-${id}`}>{ value }</span> : null
 );
 
 const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, onClick }) => {
+    const inactive = getInactiveMetadata(device);
     const lastActivity = device.last_seen_ts && `${_t('Last activity')} ${formatLastActivity(device.last_seen_ts)}`;
-    const metadata = [
-        { id: 'lastActivity', value: lastActivity },
-        { id: 'lastSeenIp', value: device.last_seen_ip },
-    ];
+    const verificationStatus = device.isVerified ? _t('Verified') : _t('Unverified');
+    // if device is inactive, don't display last activity or verificationStatus
+    const metadata = inactive
+        ? [inactive, { id: 'lastSeenIp', value: device.last_seen_ip }]
+        : [
+            { id: 'isVerified', value: verificationStatus },
+            { id: 'lastActivity', value: lastActivity },
+            { id: 'lastSeenIp', value: device.last_seen_ip },
+        ];
 
-    return <div className="mx_DeviceTile">
+    return <div className="mx_DeviceTile" data-testid={`device-tile-${device.device_id}`}>
         <div className="mx_DeviceTile_info" onClick={onClick}>
             <DeviceTileName device={device} />
             <div className="mx_DeviceTile_metadata">

@@ -1,0 +1,296 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CurrentDeviceSection /> displays device details on toggle click 1`] = `
+HTMLCollection [
+  <div
+    class="mx_DeviceDetails"
+    data-testid="device-detail-alices_device"
+  >
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <h3
+        class="mx_Heading_h3"
+      >
+        alices_device
+      </h3>
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified session
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify or sign out from this session for best security and reliability.
+          </p>
+        </div>
+      </div>
+    </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <p
+        class="mx_DeviceDetails_sectionHeading"
+      >
+        Session details
+      </p>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Session ID
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            >
+              alices_device
+            </td>
+          </tr>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              Last activity
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            />
+          </tr>
+        </tbody>
+      </table>
+      <table
+        class="mxDeviceDetails_metadataTable"
+      >
+        <thead>
+          <tr>
+            <th>
+              Device
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
+              class="mxDeviceDetails_metadataLabel"
+            >
+              IP address
+            </td>
+            <td
+              class="mxDeviceDetails_metadataValue"
+            />
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>,
+]
+`;
+
+exports[`<CurrentDeviceSection /> handles when device is falsy 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="current-session-section"
+  >
+    <h3
+      class="mx_Heading_h3 mx_SettingsSubsection_heading"
+    >
+      Current session
+    </h3>
+    <div
+      class="mx_SettingsSubsection_content"
+    />
+  </div>
+</div>
+`;
+
+exports[`<CurrentDeviceSection /> renders device and correct security card when device is unverified 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="current-session-section"
+  >
+    <h3
+      class="mx_Heading_h3 mx_SettingsSubsection_heading"
+    >
+      Current session
+    </h3>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceTile"
+        data-testid="device-tile-alices_device"
+      >
+        <div
+          class="mx_DeviceTile_info"
+        >
+          <h4
+            class="mx_Heading_h4"
+          >
+            alices_device
+          </h4>
+          <div
+            class="mx_DeviceTile_metadata"
+          >
+            <span
+              data-testid="device-metadata-isVerified"
+            >
+              Unverified
+            </span>
+             · 
+             · 
+          </div>
+        </div>
+        <div
+          class="mx_DeviceTile_actions"
+        >
+          <div
+            aria-label="Toggle device details"
+            class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+            data-testid="current-session-toggle-details"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="mx_DeviceExpandDetailsButton_icon"
+            />
+          </div>
+        </div>
+      </div>
+      <br />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified session
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify or sign out from this session for best security and reliability.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<CurrentDeviceSection /> renders device and correct security card when device is verified 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+    data-testid="current-session-section"
+  >
+    <h3
+      class="mx_Heading_h3 mx_SettingsSubsection_heading"
+    >
+      Current session
+    </h3>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div
+        class="mx_DeviceTile"
+        data-testid="device-tile-alices_device"
+      >
+        <div
+          class="mx_DeviceTile_info"
+        >
+          <h4
+            class="mx_Heading_h4"
+          >
+            alices_device
+          </h4>
+          <div
+            class="mx_DeviceTile_metadata"
+          >
+            <span
+              data-testid="device-metadata-isVerified"
+            >
+              Unverified
+            </span>
+             · 
+             · 
+          </div>
+        </div>
+        <div
+          class="mx_DeviceTile_actions"
+        >
+          <div
+            aria-label="Toggle device details"
+            class="mx_AccessibleButton mx_DeviceExpandDetailsButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_icon"
+            data-testid="current-session-toggle-details"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="mx_DeviceExpandDetailsButton_icon"
+            />
+          </div>
+        </div>
+      </div>
+      <br />
+      <div
+        class="mx_DeviceSecurityCard"
+      >
+        <div
+          class="mx_DeviceSecurityCard_icon Unverified"
+        >
+          <div
+            height="16"
+            width="16"
+          />
+        </div>
+        <div
+          class="mx_DeviceSecurityCard_content"
+        >
+          <p
+            class="mx_DeviceSecurityCard_heading"
+          >
+            Unverified session
+          </p>
+          <p
+            class="mx_DeviceSecurityCard_description"
+          >
+            Verify or sign out from this session for best security and reliability.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -137,7 +137,7 @@ describe('RoomList', () => {
         client.getRoom.mockImplementation((roomId) => roomMap[roomId]);
 
         // Now that everything has been set up, prepare and update the store
-        await RoomListStore.instance.makeReady(client);
+        await (RoomListStore.instance as RoomListStoreClass).makeReady(client);
 
         done();
     });
@@ -150,7 +150,7 @@ describe('RoomList', () => {
         }
 
         await RoomListLayoutStore.instance.resetLayouts();
-        await RoomListStore.instance.resetStore();
+        await (RoomListStore.instance as RoomListStoreClass).resetStore();
 
         done();
     });

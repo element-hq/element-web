@@ -15,8 +15,7 @@ limitations under the License.
 */
 
 import * as React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
+import { render } from "@testing-library/react";
 
 import {
     IState,
@@ -32,10 +31,10 @@ const Button = (props) => {
     return <button {...props} onFocus={onFocus} tabIndex={isActive ? 0 : -1} ref={ref} />;
 };
 
-const checkTabIndexes = (buttons: ReactWrapper, expectations: number[]) => {
+const checkTabIndexes = (buttons: NodeListOf<HTMLElement>, expectations: number[]) => {
     expect(buttons.length).toBe(expectations.length);
     for (let i = 0; i < buttons.length; i++) {
-        expect(buttons.at(i).prop("tabIndex")).toBe(expectations[i]);
+        expect(buttons[i].tabIndex).toBe(expectations[i]);
     }
 };
 
@@ -52,15 +51,15 @@ Object.defineProperty(HTMLElement.prototype, "offsetParent", {
 
 describe("RovingTabIndex", () => {
     it("RovingTabIndexProvider renders children as expected", () => {
-        const wrapper = mount(<RovingTabIndexProvider>
+        const { container } = render(<RovingTabIndexProvider>
             { () => <div><span>Test</span></div> }
         </RovingTabIndexProvider>);
-        expect(wrapper.text()).toBe("Test");
-        expect(wrapper.html()).toBe('<div><span>Test</span></div>');
+        expect(container.textContent).toBe("Test");
+        expect(container.innerHTML).toBe('<div><span>Test</span></div>');
     });
 
     it("RovingTabIndexProvider works as expected with useRovingTabIndex", () => {
-        const wrapper = mount(<RovingTabIndexProvider>
+        const { container, rerender } = render(<RovingTabIndexProvider>
             { () => <React.Fragment>
                 { button1 }
                 { button2 }
@@ -69,40 +68,44 @@ describe("RovingTabIndex", () => {
         </RovingTabIndexProvider>);
 
         // should begin with 0th being active
-        checkTabIndexes(wrapper.find("button"), [0, -1, -1]);
+        checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         // focus on 2nd button and test it is the only active one
-        wrapper.find("button").at(2).simulate("focus");
-        wrapper.update();
-        checkTabIndexes(wrapper.find("button"), [-1, -1, 0]);
+        container.querySelectorAll("button")[2].focus();
+        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
 
         // focus on 1st button and test it is the only active one
-        wrapper.find("button").at(1).simulate("focus");
-        wrapper.update();
-        checkTabIndexes(wrapper.find("button"), [-1, 0, -1]);
+        container.querySelectorAll("button")[1].focus();
+        checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         // check that the active button does not change even on an explicit blur event
-        wrapper.find("button").at(1).simulate("blur");
-        wrapper.update();
-        checkTabIndexes(wrapper.find("button"), [-1, 0, -1]);
+        container.querySelectorAll("button")[1].blur();
+        checkTabIndexes(container.querySelectorAll("button"), [-1, 0, -1]);
 
         // update the children, it should remain on the same button
-        wrapper.setProps({
-            children: () => [button1, button4, button2, button3],
-        });
-        wrapper.update();
-        checkTabIndexes(wrapper.find("button"), [-1, -1, 0, -1]);
+        rerender(<RovingTabIndexProvider>
+            { () => <React.Fragment>
+                { button1 }
+                { button4 }
+                { button2 }
+                { button3 }
+            </React.Fragment> }
+        </RovingTabIndexProvider>);
+        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0, -1]);
 
         // update the children, remove the active button, it should move to the next one
-        wrapper.setProps({
-            children: () => [button1, button4, button3],
-        });
-        wrapper.update();
-        checkTabIndexes(wrapper.find("button"), [-1, -1, 0]);
+        rerender(<RovingTabIndexProvider>
+            { () => <React.Fragment>
+                { button1 }
+                { button4 }
+                { button3 }
+            </React.Fragment> }
+        </RovingTabIndexProvider>);
+        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
     it("RovingTabIndexProvider works as expected with RovingTabIndexWrapper", () => {
-        const wrapper = mount(<RovingTabIndexProvider>
+        const { container } = render(<RovingTabIndexProvider>
             { () => <React.Fragment>
                 { button1 }
                 { button2 }
@@ -118,12 +121,11 @@ describe("RovingTabIndex", () => {
         </RovingTabIndexProvider>);
 
         // should begin with 0th being active
-        checkTabIndexes(wrapper.find("button"), [0, -1, -1]);
+        checkTabIndexes(container.querySelectorAll("button"), [0, -1, -1]);
 
         // focus on 2nd button and test it is the only active one
-        wrapper.find("button").at(2).simulate("focus");
-        wrapper.update();
-        checkTabIndexes(wrapper.find("button"), [-1, -1, 0]);
+        container.querySelectorAll("button")[2].focus();
+        checkTabIndexes(container.querySelectorAll("button"), [-1, -1, 0]);
     });
 
     describe("reducer functions as expected", () => {
@@ -206,7 +208,7 @@ describe("RovingTabIndex", () => {
             const ref3 = React.createRef<HTMLElement>();
             const ref4 = React.createRef<HTMLElement>();
 
-            mount(<React.Fragment>
+            render(<React.Fragment>
                 <span ref={ref1} />
                 <span ref={ref2} />
                 <span ref={ref3} />
