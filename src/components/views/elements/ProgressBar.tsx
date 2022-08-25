@@ -25,10 +25,10 @@ interface IProps {
 }
 
 const PROGRESS_BAR_ANIMATION_DURATION = 300;
-const ProgressBar: React.FC<IProps> = ({ value, max, animated }) => {
+const ProgressBar: React.FC<IProps> = ({ value, max, animated = true }) => {
     // Animating progress bars via CSS transition isn’t possible in all of our supported browsers yet.
     // As workaround, we’re using animations through JS requestAnimationFrame
-    const currentValue = useSmoothAnimation(0, value, PROGRESS_BAR_ANIMATION_DURATION, animated);
+    const currentValue = useSmoothAnimation(0, value, animated ? PROGRESS_BAR_ANIMATION_DURATION : 0);
     return <progress className="mx_ProgressBar" max={max} value={currentValue} />;
 };
 
