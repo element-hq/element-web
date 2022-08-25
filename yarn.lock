@@ -7977,6 +7977,22 @@ matrix-events-sdk@^0.0.1-beta.7:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
+"matrix-js-sdk@github:parakeetsystems/beehivez-matrix-js-sdk#develop":
+  version "19.3.0"
+  resolved "https://codeload.github.com/parakeetsystems/beehivez-matrix-js-sdk/tar.gz/b789cc593349843c19fe9763b0ef22b2849617e8"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "^0.0.1-beta.7"
+    p-retry "4"
+    qs "^6.9.6"
+    request "^2.88.2"
+    unhomoglyph "^1.0.6"
+
 matrix-mock-request@^2.0.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.1.2.tgz#11e38ed1233dced88a6f2bfba1684d5c5b3aa2c2"
@@ -7984,9 +8000,9 @@ matrix-mock-request@^2.0.0:
   dependencies:
     expect "^28.1.0"
 
-"matrix-react-sdk@github:matrix-org/matrix-react-sdk#develop":
+"matrix-react-sdk@github:parakeetsystems/beehivez-matrix-react-sdk#develop":
   version "3.52.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-react-sdk/tar.gz/fecc03289d4d4c79bd6117bb67172f9f69cff009"
+  resolved "https://codeload.github.com/parakeetsystems/beehivez-matrix-react-sdk/tar.gz/e11b0cef47dba6226053a4bb3bf9a00ad6c0974b"
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.2.0"

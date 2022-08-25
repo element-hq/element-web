@@ -1,40 +1,4 @@
 {
-    "default_server_name": "matrix.org",
-    "hosting_signup_link": "https://element.io/matrix-services?utm_source=element-web&utm_medium=web",
-    "showLabsSettings": false,
-    "roomDirectory": {
-        "servers": [
-            "matrix.org",
-            "gitter.im",
-            "libera.chat"
-        ]
-    },
-    "terms_and_conditions_links": [
-        {
-            "url": "https://element.io/privacy",
-            "text": "Privacy Policy"
-        },
-        {
-            "url": "https://element.io/cookie-policy",
-            "text": "Cookie Policy"
-        }
-    ],
-    "hostSignup": {
-      "brand": "Element Home",
-      "cookiePolicyUrl": "https://element.io/cookie-policy",
-      "domains": [
-          "matrix.org"
-      ],
-      "privacyPolicyUrl": "https://element.io/privacy",
-      "termsOfServiceUrl": "https://element.io/terms-of-service",
-      "url": "https://ems.element.io/element-home/in-app-loader"
-    },
-    "posthog": {
-        "projectApiKey": "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
-        "apiHost": "https://posthog.element.io"
-    },
-    "privacy_policy_url": "https://element.io/cookie-policy",
-   
     "default_server_config": {
         "m.homeserver": {
             "base_url": "https://matrix-client.matrix.org",
@@ -48,7 +12,7 @@
     "disable_guests": false,
     "disable_login_language_selector": false,
     "disable_3pid_login": false,
-    "brand": "Element",
+    "brand": "beehives",
     "integrations_ui_url": "https://scalar.vector.im/",
     "integrations_rest_url": "https://scalar.vector.im/api",
     "integrations_widgets_urls": [
@@ -82,4 +46,3 @@
     },
     "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
 }
-
