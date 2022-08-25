@@ -1,3 +1,9 @@
+Changes in [3.53.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.53.0-rc.2) (2022-08-25)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Fix progress bar regression throughout the app ([\#9219](https://github.com/matrix-org/matrix-react-sdk/pull/9219)). Fixes vector-im/element-web#23121.
+
 Changes in [3.53.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.53.0-rc.1) (2022-08-23)
 ===============================================================================================================
 
