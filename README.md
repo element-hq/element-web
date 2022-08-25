@@ -294,7 +294,7 @@ having to manually rebuild each time.
 First clone and build `matrix-js-sdk`:
 
 ``` bash
-git clone https://github.com/matrix-org/matrix-js-sdk.git
+git clone https://github.com/parakeetsystems/beehivez-matrix-js-sdk.git matrix-js-sdk
 pushd matrix-js-sdk
 yarn link
 yarn install
@@ -304,7 +304,7 @@ popd
 Then similarly with `matrix-react-sdk`:
 
 ```bash
-git clone https://github.com/matrix-org/matrix-react-sdk.git
+git clone https://github.com/parakeetsystems/beehivez-matrix-react-sdk.git matrix-react-sdk
 pushd matrix-react-sdk
 yarn link
 yarn link matrix-js-sdk
@@ -315,7 +315,7 @@ popd
 Clone the repo and switch to the `element-web` directory:
 
 ```bash
-git clone https://github.com/vector-im/element-web.git
+git clone https://github.com/parakeetsystems/beehivez-element-web.git element-web
 cd element-web
 ```
 
