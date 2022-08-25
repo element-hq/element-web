@@ -37,7 +37,8 @@ describe("Registration", () => {
 
         cy.get(".mx_ServerPicker_change", { timeout: 15000 }).click();
         cy.get(".mx_ServerPickerDialog_continue").should("be.visible");
-        cy.percySnapshot("Server Picker");
+        // Only snapshot the server picker otherwise in the background `matrix.org` may or may not be available
+        cy.get(".mx_Dialog").percySnapshotElement("Server Picker", { widths: [516] });
         cy.checkA11y();
 
         cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);

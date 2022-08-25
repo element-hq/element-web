@@ -58,10 +58,10 @@ const startDMWithBob = function(this: CryptoTestContext) {
 
 const testMessages = function(this: CryptoTestContext) {
     // check the invite message
-    cy.contains(".mx_EventTile_body", "Hey!")
-        .closest(".mx_EventTile")
-        .should("not.have.descendants", ".mx_EventTile_e2eIcon_warning")
-        .should("have.descendants", ".mx_EventTile_receiptSent");
+    cy.contains(".mx_EventTile_body", "Hey!").closest(".mx_EventTile").within(() => {
+        cy.get(".mx_EventTile_e2eIcon_warning").should("not.exist");
+        cy.get(".mx_EventTile_receiptSent").should("exist");
+    });
 
     // Bob sends a response
     cy.get<Room>("@bobsRoom").then((room) => {
