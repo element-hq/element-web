@@ -109,7 +109,7 @@ export default class SecurityRoomSettingsTab extends React.Component<IProps, ISt
                 title: _t('Are you sure you want to add encryption to this public room?'),
                 description: <div>
                     <p> { _t(
-                        "<b>It's not recommended to add encryption to public rooms.</b>" +
+                        "<b>It's not recommended to add encryption to public rooms.</b> " +
                         "Anyone can find and join public rooms, so anyone can read messages in them. " +
                         "You'll get none of the benefits of encryption, and you won't be able to turn it " +
                         "off later. Encrypting messages in a public room will make receiving and sending " +
