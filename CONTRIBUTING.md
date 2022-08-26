@@ -108,12 +108,12 @@ Tests
 -----
 Your PR should include tests.
 
-For new user facing features in `matrix-react-sdk` or `element-web`, you
+For new user facing features in `matrix-js-sdk`, `matrix-react-sdk` or `element-web`, you
 must include:
 
 1. Comprehensive unit tests written in Jest. These are located in `/test`.
 2. "happy path" end-to-end tests.
-   These are located in `/test/end-to-end-tests` in `matrix-react-sdk`, and
+   These are located in `/cypress/e2e` in `matrix-react-sdk`, and
    are run using `element-web`. Ideally, you would also include tests for edge
    and error cases.
 
@@ -129,7 +129,8 @@ end-to-end test; which is best depends on what sort of test most concisely
 exercises the area.
 
 Changes to must be accompanied by unit tests written in Jest.
-These are located in `/spec/`.
+These are located in `/spec/` in `matrix-js-sdk` or `/test/` in `element-web` 
+and `matrix-react-sdk`.
 
 When writing unit tests, please aim for a high level of test coverage
 for new code - 80% or greater. If you cannot achieve that, please document
