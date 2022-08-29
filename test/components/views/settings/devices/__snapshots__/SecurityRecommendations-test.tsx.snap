@@ -44,11 +44,15 @@ exports[`<SecurityRecommendations /> renders both cards when user has both unver
             Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.
           </p>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-            role="button"
-            tabindex="0"
+            class="mx_DeviceSecurityCard_actions"
           >
-            View all (1)
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
           </div>
         </div>
       </div>
@@ -80,11 +84,15 @@ exports[`<SecurityRecommendations /> renders both cards when user has both unver
             Consider signing out from old sessions (90 days or older) you don't use anymore
           </p>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-            role="button"
-            tabindex="0"
+            class="mx_DeviceSecurityCard_actions"
           >
-            View all (1)
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
           </div>
         </div>
       </div>
@@ -137,11 +145,15 @@ exports[`<SecurityRecommendations /> renders inactive devices section when user 
             Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.
           </p>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-            role="button"
-            tabindex="0"
+            class="mx_DeviceSecurityCard_actions"
           >
-            View all (1)
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
           </div>
         </div>
       </div>
@@ -173,11 +185,15 @@ exports[`<SecurityRecommendations /> renders inactive devices section when user 
             Consider signing out from old sessions (90 days or older) you don't use anymore
           </p>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-            role="button"
-            tabindex="0"
+            class="mx_DeviceSecurityCard_actions"
           >
-            View all (1)
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
           </div>
         </div>
       </div>
@@ -230,11 +246,15 @@ exports[`<SecurityRecommendations /> renders unverified devices section when use
             Verify your sessions for enhanced secure messaging or sign out from those you don't recognize or use anymore.
           </p>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-            role="button"
-            tabindex="0"
+            class="mx_DeviceSecurityCard_actions"
           >
-            View all (2)
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              View all (2)
+            </div>
           </div>
         </div>
       </div>
@@ -266,11 +286,15 @@ exports[`<SecurityRecommendations /> renders unverified devices section when use
             Consider signing out from old sessions (90 days or older) you don't use anymore
           </p>
           <div
-            class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
-            role="button"
-            tabindex="0"
+            class="mx_DeviceSecurityCard_actions"
           >
-            View all (1)
+            <div
+              class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+              role="button"
+              tabindex="0"
+            >
+              View all (1)
+            </div>
           </div>
         </div>
       </div>

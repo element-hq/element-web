@@ -47,7 +47,9 @@ const DeviceSecurityCard: React.FC<Props> = ({ variation, heading, description, 
         <div className='mx_DeviceSecurityCard_content'>
             <p className='mx_DeviceSecurityCard_heading'>{ heading }</p>
             <p className='mx_DeviceSecurityCard_description'>{ description }</p>
-            { children }
+            { !!children && <div className='mx_DeviceSecurityCard_actions'>
+                { children }
+            </div> }
         </div>
     </div>;
 };

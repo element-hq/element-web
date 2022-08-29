@@ -1712,6 +1712,7 @@
     "Inactive for %(inactiveAgeDays)s+ days": "Inactive for %(inactiveAgeDays)s+ days",
     "Verified": "Verified",
     "Unverified": "Unverified",
+    "Unknown device type": "Unknown device type",
     "Verified session": "Verified session",
     "This session is ready for secure messaging.": "This session is ready for secure messaging.",
     "Unverified session": "Unverified session",

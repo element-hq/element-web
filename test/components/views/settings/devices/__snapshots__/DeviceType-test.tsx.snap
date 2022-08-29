@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceType /> renders a verified device 1`] = `
+<div>
+  <div
+    class="mx_DeviceType"
+  >
+    <div
+      aria-label="Unknown device type"
+      class="mx_DeviceType_deviceIcon"
+      role="img"
+    />
+    <div
+      aria-label="Verified"
+      class="mx_DeviceType_verificationIcon verified"
+      role="img"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceType /> renders an unverified device 1`] = `
+<div>
+  <div
+    class="mx_DeviceType"
+  >
+    <div
+      aria-label="Unknown device type"
+      class="mx_DeviceType_deviceIcon"
+      role="img"
+    />
+    <div
+      aria-label="Unverified"
+      class="mx_DeviceType_verificationIcon unverified"
+      role="img"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceType /> renders correctly when selected 1`] = `
+<div>
+  <div
+    class="mx_DeviceType mx_DeviceType_selected"
+  >
+    <div
+      aria-label="Unknown device type"
+      class="mx_DeviceType_deviceIcon"
+      role="img"
+    />
+    <div
+      aria-label="Unverified"
+      class="mx_DeviceType_verificationIcon unverified"
+      role="img"
+    />
+  </div>
+</div>
+`;

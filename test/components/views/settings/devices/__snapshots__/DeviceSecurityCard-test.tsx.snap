@@ -57,8 +57,12 @@ exports[`<DeviceSecurityCard /> renders with children 1`] = `
       >
         nice
       </p>
-      <div>
-        hey
+      <div
+        class="mx_DeviceSecurityCard_actions"
+      >
+        <div>
+          hey
+        </div>
       </div>
     </div>
   </div>

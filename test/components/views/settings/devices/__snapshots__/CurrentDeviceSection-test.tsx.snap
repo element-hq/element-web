@@ -142,6 +142,20 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
         data-testid="device-tile-alices_device"
       >
         <div
+          class="mx_DeviceType"
+        >
+          <div
+            aria-label="Unknown device type"
+            class="mx_DeviceType_deviceIcon"
+            role="img"
+          />
+          <div
+            aria-label="Unverified"
+            class="mx_DeviceType_verificationIcon unverified"
+            role="img"
+          />
+        </div>
+        <div
           class="mx_DeviceTile_info"
         >
           <h4
@@ -227,6 +241,20 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
         class="mx_DeviceTile"
         data-testid="device-tile-alices_device"
       >
+        <div
+          class="mx_DeviceType"
+        >
+          <div
+            aria-label="Unknown device type"
+            class="mx_DeviceType_deviceIcon"
+            role="img"
+          />
+          <div
+            aria-label="Unverified"
+            class="mx_DeviceType_verificationIcon unverified"
+            role="img"
+          />
+        </div>
         <div
           class="mx_DeviceTile_info"
         >
