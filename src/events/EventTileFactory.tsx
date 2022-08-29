@@ -67,7 +67,6 @@ export interface EventTileTypeProps {
 
 type FactoryProps = Omit<EventTileTypeProps, "ref">;
 type Factory<X = FactoryProps> = (ref: Optional<React.RefObject<any>>, props: X) => JSX.Element;
-type FactoryMap = Record<string, Factory>;
 
 const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
 const KeyVerificationConclFactory: Factory = (ref, props) => <MKeyVerificationConclusion ref={ref} {...props} />;
@@ -82,40 +81,40 @@ const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...pr
 export const JitsiEventFactory: Factory = (ref, props) => <MJitsiWidgetEvent ref={ref} {...props} />;
 export const JSONEventFactory: Factory = (ref, props) => <ViewSourceEvent ref={ref} {...props} />;
 
-const EVENT_TILE_TYPES: FactoryMap = {
-    [EventType.RoomMessage]: MessageEventFactory, // note that verification requests are handled in pickFactory()
-    [EventType.Sticker]: MessageEventFactory,
-    [M_POLL_START.name]: MessageEventFactory,
-    [M_POLL_START.altName]: MessageEventFactory,
-    [EventType.KeyVerificationCancel]: KeyVerificationConclFactory,
-    [EventType.KeyVerificationDone]: KeyVerificationConclFactory,
-    [EventType.CallInvite]: CallEventFactory, // note that this requires a special factory type
-};
+const EVENT_TILE_TYPES = new Map<string, Factory>([
+    [EventType.RoomMessage, MessageEventFactory], // note that verification requests are handled in pickFactory()
+    [EventType.Sticker, MessageEventFactory],
+    [M_POLL_START.name, MessageEventFactory],
+    [M_POLL_START.altName, MessageEventFactory],
+    [EventType.KeyVerificationCancel, KeyVerificationConclFactory],
+    [EventType.KeyVerificationDone, KeyVerificationConclFactory],
+    [EventType.CallInvite, CallEventFactory], // note that this requires a special factory type
+]);
 
-const STATE_EVENT_TILE_TYPES: FactoryMap = {
-    [EventType.RoomEncryption]: (ref, props) => <EncryptionEvent ref={ref} {...props} />,
-    [EventType.RoomCanonicalAlias]: TextualEventFactory,
-    [EventType.RoomCreate]: (ref, props) => <RoomCreate ref={ref} {...props} />,
-    [EventType.RoomMember]: TextualEventFactory,
-    [EventType.RoomName]: TextualEventFactory,
-    [EventType.RoomAvatar]: (ref, props) => <RoomAvatarEvent ref={ref} {...props} />,
-    [EventType.RoomThirdPartyInvite]: TextualEventFactory,
-    [EventType.RoomHistoryVisibility]: TextualEventFactory,
-    [EventType.RoomTopic]: TextualEventFactory,
-    [EventType.RoomPowerLevels]: TextualEventFactory,
-    [EventType.RoomPinnedEvents]: TextualEventFactory,
-    [EventType.RoomServerAcl]: TextualEventFactory,
+const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
+    [EventType.RoomEncryption, (ref, props) => <EncryptionEvent ref={ref} {...props} />],
+    [EventType.RoomCanonicalAlias, TextualEventFactory],
+    [EventType.RoomCreate, (ref, props) => <RoomCreate ref={ref} {...props} />],
+    [EventType.RoomMember, TextualEventFactory],
+    [EventType.RoomName, TextualEventFactory],
+    [EventType.RoomAvatar, (ref, props) => <RoomAvatarEvent ref={ref} {...props} />],
+    [EventType.RoomThirdPartyInvite, TextualEventFactory],
+    [EventType.RoomHistoryVisibility, TextualEventFactory],
+    [EventType.RoomTopic, TextualEventFactory],
+    [EventType.RoomPowerLevels, TextualEventFactory],
+    [EventType.RoomPinnedEvents, TextualEventFactory],
+    [EventType.RoomServerAcl, TextualEventFactory],
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
-    'im.vector.modular.widgets': TextualEventFactory, // note that Jitsi widgets are special in pickFactory()
-    [WIDGET_LAYOUT_EVENT_TYPE]: TextualEventFactory,
-    [EventType.RoomTombstone]: TextualEventFactory,
-    [EventType.RoomJoinRules]: TextualEventFactory,
-    [EventType.RoomGuestAccess]: TextualEventFactory,
-};
+    ['im.vector.modular.widgets', TextualEventFactory], // note that Jitsi widgets are special in pickFactory()
+    [WIDGET_LAYOUT_EVENT_TYPE, TextualEventFactory],
+    [EventType.RoomTombstone, TextualEventFactory],
+    [EventType.RoomJoinRules, TextualEventFactory],
+    [EventType.RoomGuestAccess, TextualEventFactory],
+]);
 
 // Add all the Mjolnir stuff to the renderer too
 for (const evType of ALL_RULE_TYPES) {
-    STATE_EVENT_TILE_TYPES[evType] = TextualEventFactory;
+    STATE_EVENT_TILE_TYPES.set(evType, TextualEventFactory);
 }
 
 // These events should be recorded in the STATE_EVENT_TILE_TYPES
@@ -225,11 +224,11 @@ export function pickFactory(
             return noEventFactoryFactory(); // improper event type to render
         }
 
-        if (STATE_EVENT_TILE_TYPES[evType] === TextualEventFactory && !hasText(mxEvent, showHiddenEvents)) {
+        if (STATE_EVENT_TILE_TYPES.get(evType) === TextualEventFactory && !hasText(mxEvent, showHiddenEvents)) {
             return noEventFactoryFactory();
         }
 
-        return STATE_EVENT_TILE_TYPES[evType] ?? noEventFactoryFactory();
+        return STATE_EVENT_TILE_TYPES.get(evType) ?? noEventFactoryFactory();
     }
 
     // Blanket override for all events. The MessageEvent component handles redacted states for us.
@@ -241,7 +240,7 @@ export function pickFactory(
         return noEventFactoryFactory();
     }
 
-    return EVENT_TILE_TYPES[evType] ?? noEventFactoryFactory();
+    return EVENT_TILE_TYPES.get(evType) ?? noEventFactoryFactory();
 }
 
 /**
@@ -391,7 +390,7 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
     if (!handler) return false;
     if (handler === TextualEventFactory) {
         return hasText(mxEvent, showHiddenEvents);
-    } else if (handler === STATE_EVENT_TILE_TYPES[EventType.RoomCreate]) {
+    } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
         return Boolean(mxEvent.getContent()['predecessor']);
     } else if (handler === JSONEventFactory) {
         return false;
