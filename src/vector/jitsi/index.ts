@@ -61,7 +61,7 @@ let widgetApi: WidgetApi;
 let meetApi: any; // JitsiMeetExternalAPI
 let skipOurWelcomeScreen = false;
 
-const setupCompleted = (async function() {
+const setupCompleted = (async () => {
     try {
         // Queue a config.json lookup asap, so we can use it later on. We want this to be concurrent with
         // other setup work and therefore do not block.
@@ -102,7 +102,7 @@ const setupCompleted = (async function() {
 
             const handleAction = (
                 action: WidgetApiAction,
-                handler: (request: IWidgetApiRequestData) => Promise<IWidgetApiResponseData>,
+                handler: (request: IWidgetApiRequestData) => void,
             ): void => {
                 widgetApi.on(`action:${action}`, async (ev: CustomEvent<IWidgetApiRequest>) => {
                     ev.preventDefault();
@@ -110,7 +110,8 @@ const setupCompleted = (async function() {
 
                     let response: IWidgetApiResponseData;
                     try {
-                        response = await handler(ev.detail.data);
+                        await handler(ev.detail.data);
+                        response = {};
                     } catch (e) {
                         if (e instanceof Error) {
                             response = { error: { message: e.message } };
@@ -125,7 +126,6 @@ const setupCompleted = (async function() {
 
             handleAction(ElementWidgetActions.JoinCall, async ({ audioInput, videoInput }) => {
                 joinConference(audioInput as string | null, videoInput as string | null);
-                return {};
             });
             handleAction(ElementWidgetActions.HangupCall, async ({ force }) => {
                 if (force === true) {
@@ -136,39 +136,32 @@ const setupCompleted = (async function() {
                 } else {
                     meetApi?.executeCommand('hangup');
                 }
-                return {};
             });
             handleAction(ElementWidgetActions.MuteAudio, async () => {
                 if (meetApi && !await meetApi.isAudioMuted()) {
                     meetApi.executeCommand('toggleAudio');
                 }
-                return {};
             });
             handleAction(ElementWidgetActions.UnmuteAudio, async () => {
                 if (meetApi && await meetApi.isAudioMuted()) {
                     meetApi.executeCommand('toggleAudio');
                 }
-                return {};
             });
             handleAction(ElementWidgetActions.MuteVideo, async () => {
                 if (meetApi && !await meetApi.isVideoMuted()) {
                     meetApi.executeCommand('toggleVideo');
                 }
-                return {};
             });
             handleAction(ElementWidgetActions.UnmuteVideo, async () => {
                 if (meetApi && await meetApi.isVideoMuted()) {
                     meetApi.executeCommand('toggleVideo');
                 }
-                return {};
             });
             handleAction(ElementWidgetActions.TileLayout, async () => {
                 meetApi?.executeCommand('setTileView', true);
-                return {};
             });
             handleAction(ElementWidgetActions.SpotlightLayout, async () => {
                 meetApi?.executeCommand('setTileView', false);
-                return {};
             });
             handleAction(ElementWidgetActions.StartLiveStream, async ({ rtmpStreamKey }) => {
                 if (!meetApi) throw new Error("Conference not joined");
@@ -179,7 +172,6 @@ const setupCompleted = (async function() {
                     //rtmpStreamKey,
                     youtubeStreamKey: rtmpStreamKey,
                 });
-                return {};
             });
         } else {
             logger.warn("No parent URL or no widget ID - assuming no widget API is available");
