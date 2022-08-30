@@ -18,7 +18,7 @@ import React from 'react';
 
 import { _t } from '../../../../languageHandler';
 import AccessibleButton from '../../elements/AccessibleButton';
-import Dropdown from '../../elements/Dropdown';
+import { FilterDropdown, FilterDropdownOption } from '../../elements/FilterDropdown';
 import DeviceDetails from './DeviceDetails';
 import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
 import DeviceSecurityCard from './DeviceSecurityCard';
@@ -45,13 +45,14 @@ interface Props {
 const sortDevicesByLatestActivity = (left: DeviceWithVerification, right: DeviceWithVerification) =>
     (right.last_seen_ts || 0) - (left.last_seen_ts || 0);
 
-const getFilteredSortedDevices = (devices: DevicesDictionary, filter: DeviceSecurityVariation) =>
+const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: DeviceSecurityVariation) =>
     filterDevicesBySecurityRecommendation(Object.values(devices), filter ? [filter] : [])
         .sort(sortDevicesByLatestActivity);
 
 const ALL_FILTER_ID = 'ALL';
+type DeviceFilterKey = DeviceSecurityVariation | typeof ALL_FILTER_ID;
 
-const FilterSecurityCard: React.FC<{ filter?: DeviceSecurityVariation | string }> = ({ filter }) => {
+const FilterSecurityCard: React.FC<{ filter?: DeviceFilterKey }> = ({ filter }) => {
     switch (filter) {
         case DeviceSecurityVariation.Verified:
             return <div className='mx_FilteredDeviceList_securityCard'>
@@ -95,7 +96,7 @@ const FilterSecurityCard: React.FC<{ filter?: DeviceSecurityVariation | string }
     }
 };
 
-const getNoResultsMessage = (filter: DeviceSecurityVariation): string => {
+const getNoResultsMessage = (filter?: DeviceSecurityVariation): string => {
     switch (filter) {
         case DeviceSecurityVariation.Verified:
             return _t('No verified sessions found.');
@@ -107,7 +108,7 @@ const getNoResultsMessage = (filter: DeviceSecurityVariation): string => {
             return _t('No sessions found.');
     }
 };
-interface NoResultsProps { filter: DeviceSecurityVariation, clearFilter: () => void}
+interface NoResultsProps { filter?: DeviceSecurityVariation, clearFilter: () => void}
 const NoResults: React.FC<NoResultsProps> = ({ filter, clearFilter }) =>
     <div className='mx_FilteredDeviceList_noResults'>
         { getNoResultsMessage(filter) }
@@ -158,7 +159,7 @@ const FilteredDeviceList: React.FC<Props> = ({
 }) => {
     const sortedDevices = getFilteredSortedDevices(devices, filter);
 
-    const options = [
+    const options: FilterDropdownOption<DeviceFilterKey>[] = [
         { id: ALL_FILTER_ID, label: _t('All') },
         {
             id: DeviceSecurityVariation.Verified,
@@ -180,7 +181,7 @@ const FilteredDeviceList: React.FC<Props> = ({
         },
     ];
 
-    const onFilterOptionChange = (filterId: DeviceSecurityVariation | typeof ALL_FILTER_ID) => {
+    const onFilterOptionChange = (filterId: DeviceFilterKey) => {
         onFilterChange(filterId === ALL_FILTER_ID ? undefined : filterId as DeviceSecurityVariation);
     };
 
@@ -189,16 +190,14 @@ const FilteredDeviceList: React.FC<Props> = ({
             <span className='mx_FilteredDeviceList_headerLabel'>
                 { _t('Sessions') }
             </span>
-            <Dropdown
+            <FilterDropdown<DeviceFilterKey>
                 id='device-list-filter'
                 label={_t('Filter devices')}
                 value={filter || ALL_FILTER_ID}
                 onOptionChange={onFilterOptionChange}
-            >
-                { options.map(({ id, label }) =>
-                    <div data-test-id={`device-filter-option-${id}`} key={id}>{ label }</div>,
-                ) }
-            </Dropdown>
+                options={options}
+                selectedLabel={_t('Show')}
+            />
         </div>
         { !!sortedDevices.length
             ? <FilterSecurityCard filter={filter} />

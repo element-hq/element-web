@@ -1734,6 +1734,7 @@
     "Inactive": "Inactive",
     "Inactive for %(inactiveAgeDays)s days or longer": "Inactive for %(inactiveAgeDays)s days or longer",
     "Filter devices": "Filter devices",
+    "Show": "Show",
     "Security recommendations": "Security recommendations",
     "Improve your account security by following these recommendations": "Improve your account security by following these recommendations",
     "View all": "View all",
