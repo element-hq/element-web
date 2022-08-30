@@ -27,7 +27,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import AutoHideScrollbar from "../../structures/AutoHideScrollbar";
 import { UIFeature } from "../../../settings/UIFeature";
 import ResizeNotifier from "../../../utils/ResizeNotifier";
-import CallViewForRoom from '../voip/CallViewForRoom';
+import LegacyCallViewForRoom from '../voip/LegacyCallViewForRoom';
 import { objectHasDiff } from "../../../utils/objects";
 
 interface IProps {
@@ -123,7 +123,7 @@ export default class AuxPanel extends React.Component<IProps, IState> {
 
     render() {
         const callView = (
-            <CallViewForRoom
+            <LegacyCallViewForRoom
                 roomId={this.props.room.roomId}
                 resizeNotifier={this.props.resizeNotifier}
                 showApps={this.props.showApps}

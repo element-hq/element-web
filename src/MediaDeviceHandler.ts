@@ -137,4 +137,18 @@ export default class MediaDeviceHandler extends EventEmitter {
             case MediaDeviceKindEnum.VideoInput: return this.getVideoInput();
         }
     }
+
+    public static get startWithAudioMuted(): boolean {
+        return SettingsStore.getValue("audioInputMuted");
+    }
+    public static set startWithAudioMuted(value: boolean) {
+        SettingsStore.setValue("audioInputMuted", null, SettingLevel.DEVICE, value);
+    }
+
+    public static get startWithVideoMuted(): boolean {
+        return SettingsStore.getValue("videoInputMuted");
+    }
+    public static set startWithVideoMuted(value: boolean) {
+        SettingsStore.setValue("videoInputMuted", null, SettingLevel.DEVICE, value);
+    }
 }

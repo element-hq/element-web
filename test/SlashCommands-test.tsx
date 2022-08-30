@@ -23,7 +23,7 @@ import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from '../src/models/LocalRoom';
 import { RoomViewStore } from '../src/stores/RoomViewStore';
 import SettingsStore from '../src/settings/SettingsStore';
-import CallHandler from '../src/CallHandler';
+import LegacyCallHandler from '../src/LegacyCallHandler';
 
 describe('SlashCommands', () => {
     let client: MatrixClient;
@@ -120,7 +120,7 @@ describe('SlashCommands', () => {
         describe("isEnabled", () => {
             describe("when virtual rooms are supported", () => {
                 beforeEach(() => {
-                    jest.spyOn(CallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(true);
+                    jest.spyOn(LegacyCallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(true);
                 });
 
                 it("should return true for Room", () => {
@@ -136,7 +136,7 @@ describe('SlashCommands', () => {
 
             describe("when virtual rooms are not supported", () => {
                 beforeEach(() => {
-                    jest.spyOn(CallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(false);
+                    jest.spyOn(LegacyCallHandler.instance, "getSupportsVirtualRooms").mockReturnValue(false);
                 });
 
                 it("should return false for Room", () => {

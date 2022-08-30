@@ -40,7 +40,7 @@ import DMRoomMap from "../../utils/DMRoomMap";
 import NewRoomIntro from "../views/rooms/NewRoomIntro";
 import HistoryTile from "../views/rooms/HistoryTile";
 import defaultDispatcher from '../../dispatcher/dispatcher';
-import CallEventGrouper from "./CallEventGrouper";
+import LegacyCallEventGrouper from "./LegacyCallEventGrouper";
 import WhoIsTypingTile from '../views/rooms/WhoIsTypingTile';
 import ScrollPanel, { IScrollState } from "./ScrollPanel";
 import GenericEventListSummary from '../views/elements/GenericEventListSummary';
@@ -188,7 +188,7 @@ interface IProps {
     hideThreadedMessages?: boolean;
     disableGrouping?: boolean;
 
-    callEventGroupers: Map<string, CallEventGrouper>;
+    callEventGroupers: Map<string, LegacyCallEventGrouper>;
 }
 
 interface IState {

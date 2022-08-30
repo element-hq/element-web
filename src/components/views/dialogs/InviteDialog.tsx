@@ -56,7 +56,7 @@ import QuestionDialog from "./QuestionDialog";
 import Spinner from "../elements/Spinner";
 import BaseDialog from "./BaseDialog";
 import DialPadBackspaceButton from "../elements/DialPadBackspaceButton";
-import CallHandler from "../../../CallHandler";
+import LegacyCallHandler from "../../../LegacyCallHandler";
 import UserIdentifierCustomisations from '../../../customisations/UserIdentifier';
 import CopyableText from "../elements/CopyableText";
 import { ScreenName } from '../../../PosthogTrackers';
@@ -510,13 +510,13 @@ export default class InviteDialog extends React.PureComponent<IInviteDialogProps
                 return;
             }
 
-            CallHandler.instance.startTransferToMatrixID(
+            LegacyCallHandler.instance.startTransferToMatrixID(
                 this.props.call,
                 targetIds[0],
                 this.state.consultFirst,
             );
         } else {
-            CallHandler.instance.startTransferToPhoneNumber(
+            LegacyCallHandler.instance.startTransferToPhoneNumber(
                 this.props.call,
                 this.state.dialPadValue,
                 this.state.consultFirst,

@@ -117,6 +117,10 @@ module.exports = {
                 "@typescript-eslint/ban-ts-comment": "off",
                 // We're okay with assertion errors when we ask for them
                 "@typescript-eslint/no-non-null-assertion": "off",
+
+                // The non-TypeScript rule produces false positives
+                "func-call-spacing": "off",
+                "@typescript-eslint/func-call-spacing": ["error"],
             },
         },
         // temporary override for offending icon require files

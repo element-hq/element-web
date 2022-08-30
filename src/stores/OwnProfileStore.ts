@@ -37,7 +37,11 @@ const KEY_DISPLAY_NAME = "mx_profile_displayname";
 const KEY_AVATAR_URL = "mx_profile_avatar_url";
 
 export class OwnProfileStore extends AsyncStoreWithClient<IState> {
-    private static internalInstance = new OwnProfileStore();
+    private static readonly internalInstance = (() => {
+        const instance = new OwnProfileStore();
+        instance.start();
+        return instance;
+    })();
 
     private monitoredUser: User;
 

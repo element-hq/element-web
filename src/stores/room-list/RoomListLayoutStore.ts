@@ -34,8 +34,9 @@ export default class RoomListLayoutStore extends AsyncStoreWithClient<IState> {
     }
 
     public static get instance(): RoomListLayoutStore {
-        if (!RoomListLayoutStore.internalInstance) {
-            RoomListLayoutStore.internalInstance = new RoomListLayoutStore();
+        if (!this.internalInstance) {
+            this.internalInstance = new RoomListLayoutStore();
+            this.internalInstance.start();
         }
         return RoomListLayoutStore.internalInstance;
     }

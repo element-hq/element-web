@@ -52,7 +52,7 @@ import SdkConfig from "./SdkConfig";
 import SettingsStore from "./settings/SettingsStore";
 import { UIComponent, UIFeature } from "./settings/UIFeature";
 import { CHAT_EFFECTS } from "./effects";
-import CallHandler from "./CallHandler";
+import LegacyCallHandler from "./LegacyCallHandler";
 import { guessAndSetDMRoom } from "./Rooms";
 import { upgradeRoom } from './utils/RoomUpgrade';
 import UploadConfirmDialog from './components/views/dialogs/UploadConfirmDialog';
@@ -1183,7 +1183,7 @@ export const Commands = [
         description: _td("Switches to this room's virtual room, if it has one"),
         category: CommandCategories.advanced,
         isEnabled(): boolean {
-            return CallHandler.instance.getSupportsVirtualRooms() && !isCurrentLocalRoom();
+            return LegacyCallHandler.instance.getSupportsVirtualRooms() && !isCurrentLocalRoom();
         },
         runFn: (roomId) => {
             return success((async () => {
@@ -1212,7 +1212,7 @@ export const Commands = [
 
             return success((async () => {
                 if (isPhoneNumber) {
-                    const results = await CallHandler.instance.pstnLookup(this.state.value);
+                    const results = await LegacyCallHandler.instance.pstnLookup(this.state.value);
                     if (!results || results.length === 0 || !results[0].userid) {
                         throw newTranslatableError("Unable to find Matrix ID for phone number");
                     }
@@ -1269,7 +1269,7 @@ export const Commands = [
         category: CommandCategories.other,
         isEnabled: () => !isCurrentLocalRoom(),
         runFn: function(roomId, args) {
-            const call = CallHandler.instance.getCallForRoom(roomId);
+            const call = LegacyCallHandler.instance.getCallForRoom(roomId);
             if (!call) {
                 return reject(newTranslatableError("No active call in this room"));
             }
@@ -1284,7 +1284,7 @@ export const Commands = [
         category: CommandCategories.other,
         isEnabled: () => !isCurrentLocalRoom(),
         runFn: function(roomId, args) {
-            const call = CallHandler.instance.getCallForRoom(roomId);
+            const call = LegacyCallHandler.instance.getCallForRoom(roomId);
             if (!call) {
                 return reject(newTranslatableError("No active call in this room"));
             }

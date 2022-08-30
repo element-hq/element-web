@@ -44,10 +44,11 @@ export class EchoStore extends AsyncStoreWithClient<IState> {
     }
 
     public static get instance(): EchoStore {
-        if (!EchoStore._instance) {
-            EchoStore._instance = new EchoStore();
+        if (!this._instance) {
+            this._instance = new EchoStore();
+            this._instance.start();
         }
-        return EchoStore._instance;
+        return this._instance;
     }
 
     public get contexts(): EchoContext[] {

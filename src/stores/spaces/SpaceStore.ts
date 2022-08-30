@@ -1284,7 +1284,11 @@ export class SpaceStoreClass extends AsyncStoreWithClient<IState> {
 }
 
 export default class SpaceStore {
-    private static internalInstance = new SpaceStoreClass();
+    private static readonly internalInstance = (() => {
+        const instance = new SpaceStoreClass();
+        instance.start();
+        return instance;
+    })();
 
     public static get instance(): SpaceStoreClass {
         return SpaceStore.internalInstance;

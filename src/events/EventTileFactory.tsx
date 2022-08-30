@@ -22,12 +22,12 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import EditorStateTransfer from "../utils/EditorStateTransfer";
 import { RoomPermalinkCreator } from "../utils/permalinks/Permalinks";
-import CallEventGrouper from "../components/structures/CallEventGrouper";
+import LegacyCallEventGrouper from "../components/structures/LegacyCallEventGrouper";
 import { GetRelationsForEvent } from "../components/views/rooms/EventTile";
 import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import MKeyVerificationConclusion from "../components/views/messages/MKeyVerificationConclusion";
-import CallEvent from "../components/views/messages/CallEvent";
+import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
 import TextualEvent from "../components/views/messages/TextualEvent";
 import EncryptionEvent from "../components/views/messages/EncryptionEvent";
 import RoomCreate from "../components/views/messages/RoomCreate";
@@ -57,7 +57,7 @@ export interface EventTileTypeProps {
     editState?: EditorStateTransfer;
     replacingEventId?: string;
     permalinkCreator: RoomPermalinkCreator;
-    callEventGrouper?: CallEventGrouper;
+    callEventGrouper?: LegacyCallEventGrouper;
     isSeeingThroughMessageHiddenForModeration?: boolean;
     timestamp?: JSX.Element;
     maxImageHeight?: number; // pixels
@@ -71,8 +71,8 @@ type FactoryMap = Record<string, Factory>;
 
 const MessageEventFactory: Factory = (ref, props) => <MessageEvent ref={ref} {...props} />;
 const KeyVerificationConclFactory: Factory = (ref, props) => <MKeyVerificationConclusion ref={ref} {...props} />;
-const CallEventFactory: Factory<FactoryProps & { callEventGrouper: CallEventGrouper }> = (ref, props) => (
-    <CallEvent ref={ref} {...props} />
+const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
+    <LegacyCallEvent ref={ref} {...props} />
 );
 const TextualEventFactory: Factory = (ref, props) => <TextualEvent ref={ref} {...props} />;
 const VerificationReqFactory: Factory = (ref, props) => <MKeyVerificationRequest ref={ref} {...props} />;
@@ -89,7 +89,7 @@ const EVENT_TILE_TYPES: FactoryMap = {
     [M_POLL_START.altName]: MessageEventFactory,
     [EventType.KeyVerificationCancel]: KeyVerificationConclFactory,
     [EventType.KeyVerificationDone]: KeyVerificationConclFactory,
-    [EventType.CallInvite]: CallEventFactory, // note that this requires a special factory type
+    [EventType.CallInvite]: LegacyCallEventFactory, // note that this requires a special factory type
 };
 
 const STATE_EVENT_TILE_TYPES: FactoryMap = {

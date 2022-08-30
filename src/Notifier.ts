@@ -44,7 +44,7 @@ import { RoomViewStore } from "./stores/RoomViewStore";
 import UserActivity from "./UserActivity";
 import { mediaFromMxc } from "./customisations/Media";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
-import CallHandler from "./CallHandler";
+import LegacyCallHandler from "./LegacyCallHandler";
 import VoipUserMapper from "./VoipUserMapper";
 
 /*
@@ -397,7 +397,7 @@ export const Notifier = {
 
     _evaluateEvent: function(ev: MatrixEvent) {
         let roomId = ev.getRoomId();
-        if (CallHandler.instance.getSupportsVirtualRooms()) {
+        if (LegacyCallHandler.instance.getSupportsVirtualRooms()) {
             // Attempt to translate a virtual room to a native one
             const nativeRoomId = VoipUserMapper.sharedInstance().nativeRoomForVirtualRoom(roomId);
             if (nativeRoomId) {

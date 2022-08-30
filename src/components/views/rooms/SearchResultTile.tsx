@@ -26,7 +26,7 @@ import DateSeparator from "../messages/DateSeparator";
 import EventTile from "./EventTile";
 import { shouldFormContinuation } from "../../structures/MessagePanel";
 import { wantsDateSeparator } from "../../../DateUtils";
-import CallEventGrouper, { buildCallEventGroupers } from "../../structures/CallEventGrouper";
+import LegacyCallEventGrouper, { buildLegacyCallEventGroupers } from "../../structures/LegacyCallEventGrouper";
 import { haveRendererForEvent } from "../../../events/EventTileFactory";
 
 interface IProps {
@@ -44,17 +44,17 @@ export default class SearchResultTile extends React.Component<IProps> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    // A map of <callId, CallEventGrouper>
-    private callEventGroupers = new Map<string, CallEventGrouper>();
+    // A map of <callId, LegacyCallEventGrouper>
+    private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
 
     constructor(props, context) {
         super(props, context);
 
-        this.buildCallEventGroupers(this.props.searchResult.context.getTimeline());
+        this.buildLegacyCallEventGroupers(this.props.searchResult.context.getTimeline());
     }
 
-    private buildCallEventGroupers(events?: MatrixEvent[]): void {
-        this.callEventGroupers = buildCallEventGroupers(this.callEventGroupers, events);
+    private buildLegacyCallEventGroupers(events?: MatrixEvent[]): void {
+        this.callEventGroupers = buildLegacyCallEventGroupers(this.callEventGroupers, events);
     }
 
     public render() {

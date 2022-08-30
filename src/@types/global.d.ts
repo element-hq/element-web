@@ -33,7 +33,7 @@ import { Notifier } from "../Notifier";
 import type { Renderer } from "react-dom";
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import WidgetStore from "../stores/WidgetStore";
-import CallHandler from "../CallHandler";
+import LegacyCallHandler from "../LegacyCallHandler";
 import UserActivity from "../UserActivity";
 import { ModalWidgetStore } from "../stores/ModalWidgetStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
@@ -89,7 +89,7 @@ declare global {
         mxRightPanelStore: RightPanelStore;
         mxWidgetStore: WidgetStore;
         mxWidgetLayoutStore: WidgetLayoutStore;
-        mxCallHandler: CallHandler;
+        mxLegacyCallHandler: LegacyCallHandler;
         mxUserActivity: UserActivity;
         mxModalWidgetStore: ModalWidgetStore;
         mxVoipUserMapper: VoipUserMapper;

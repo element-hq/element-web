@@ -21,7 +21,7 @@ import classNames from "classnames";
 import dis from "../../dispatcher/dispatcher";
 import { _t } from "../../languageHandler";
 import RoomList from "../views/rooms/RoomList";
-import CallHandler from "../../CallHandler";
+import LegacyCallHandler from "../../LegacyCallHandler";
 import { HEADER_HEIGHT } from "../views/rooms/RoomSublist";
 import { Action } from "../../dispatcher/actions";
 import RoomSearch from "./RoomSearch";
@@ -325,7 +325,7 @@ export default class LeftPanel extends React.Component<IProps, IState> {
 
         // If we have dialer support, show a button to bring up the dial pad
         // to start a new call
-        if (CallHandler.instance.getSupportsPstnProtocol()) {
+        if (LegacyCallHandler.instance.getSupportsPstnProtocol()) {
             dialPadButton =
                 <AccessibleTooltipButton
                     className={classNames("mx_LeftPanel_dialPadButton", {})}

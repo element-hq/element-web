@@ -15,110 +15,103 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
-import { act } from "react-dom/test-utils";
-import { mocked } from "jest-mock";
-import { MatrixClient, IMyDevice } from "matrix-js-sdk/src/client";
+import { render, screen, act, fireEvent, waitFor, cleanup } from "@testing-library/react";
+import { mocked, Mocked } from "jest-mock";
+import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MatrixWidgetType } from "matrix-widget-api";
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
+import { Widget } from "matrix-widget-api";
 
+import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
+import type { ClientWidgetApi } from "matrix-widget-api";
+import type { Call } from "../../../src/models/Call";
 import {
     stubClient,
-    stubVideoChannelStore,
-    StubVideoChannelStore,
-    mkRoom,
+    mkRoomMember,
     wrapInMatrixClientContext,
-    mockStateEventImplementation,
-    mkVideoChannelMember,
+    useMockedCalls,
+    MockedCall,
+    setupAsyncStoreWithClient,
 } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
-import { VIDEO_CHANNEL_MEMBER } from "../../../src/utils/VideoChannelUtils";
-import WidgetStore from "../../../src/stores/WidgetStore";
-import _VideoRoomView from "../../../src/components/structures/VideoRoomView";
-import VideoLobby from "../../../src/components/views/voip/VideoLobby";
-import AppTile from "../../../src/components/views/elements/AppTile";
+import { VideoRoomView as UnwrappedVideoRoomView } from "../../../src/components/structures/VideoRoomView";
+import { WidgetMessagingStore } from "../../../src/stores/widgets/WidgetMessagingStore";
+import { CallStore } from "../../../src/stores/CallStore";
+import { ConnectionState } from "../../../src/models/Call";
 
-const VideoRoomView = wrapInMatrixClientContext(_VideoRoomView);
+const VideoRoomView = wrapInMatrixClientContext(UnwrappedVideoRoomView);
 
 describe("VideoRoomView", () => {
-    jest.spyOn(WidgetStore.instance, "getApps").mockReturnValue([{
-        id: "1",
-        eventId: "$1:example.org",
-        roomId: "!1:example.org",
-        type: MatrixWidgetType.JitsiMeet,
-        url: "https://example.org",
-        name: "Video channel",
-        creatorUserId: "@alice:example.org",
-        avatar_url: null,
-        data: { isVideoChannel: true },
-    }]);
+    useMockedCalls();
     Object.defineProperty(navigator, "mediaDevices", {
-        value: { enumerateDevices: () => [] },
+        value: {
+            enumerateDevices: async () => [],
+            getUserMedia: () => null,
+        },
     });
 
-    let cli: MatrixClient;
+    let client: Mocked<MatrixClient>;
     let room: Room;
-    let store: StubVideoChannelStore;
+    let call: Call;
+    let widget: Widget;
+    let alice: RoomMember;
 
     beforeEach(() => {
         stubClient();
-        cli = MatrixClientPeg.get();
-        jest.spyOn(WidgetStore.instance, "matrixClient", "get").mockReturnValue(cli);
-        store = stubVideoChannelStore();
-        room = mkRoom(cli, "!1:example.org");
+        client = mocked(MatrixClientPeg.get());
+
+        room = new Room("!1:example.org", client, "@alice:example.org", {
+            pendingEventOrdering: PendingEventOrdering.Detached,
+        });
+        alice = mkRoomMember(room.roomId, "@alice:example.org");
+        jest.spyOn(room, "getMember").mockImplementation(userId => userId === alice.userId ? alice : null);
+
+        client.getRoom.mockImplementation(roomId => roomId === room.roomId ? room : null);
+        client.getRooms.mockReturnValue([room]);
+        client.reEmitter.reEmit(room, [RoomStateEvent.Events]);
+
+        setupAsyncStoreWithClient(CallStore.instance, client);
+        setupAsyncStoreWithClient(WidgetMessagingStore.instance, client);
+
+        MockedCall.create(room, "1");
+        call = CallStore.instance.get(room.roomId);
+        if (call === null) throw new Error("Failed to create call");
+
+        widget = new Widget(call.widget);
+        WidgetMessagingStore.instance.storeMessaging(widget, room.roomId, {
+            stop: () => {},
+        } as unknown as ClientWidgetApi);
     });
 
-    it("removes stuck devices on mount", async () => {
-        // Simulate an unclean disconnect
-        store.roomId = "!1:example.org";
+    afterEach(() => {
+        cleanup();
+        call.destroy();
+        client.reEmitter.stopReEmitting(room, [RoomStateEvent.Events]);
+        WidgetMessagingStore.instance.stopMessaging(widget, room.roomId);
+    });
 
-        const devices: IMyDevice[] = [
-            {
-                device_id: cli.getDeviceId(),
-                last_seen_ts: new Date().valueOf(),
-            },
-            {
-                device_id: "went offline 2 hours ago",
-                last_seen_ts: new Date().valueOf() - 1000 * 60 * 60 * 2,
-            },
-        ];
-        mocked(cli).getDevices.mockResolvedValue({ devices });
+    const renderView = async (): Promise<void> => {
+        render(<VideoRoomView room={room} resizing={false} />);
+        await act(() => Promise.resolve()); // Let effects settle
+    };
 
-        // Make both devices be stuck
-        mocked(room.currentState).getStateEvents.mockImplementation(mockStateEventImplementation([
-            mkVideoChannelMember(cli.getUserId(), devices.map(d => d.device_id)),
-        ]));
-
-        mount(<VideoRoomView room={room} resizing={false} />);
-        // Wait for state to settle
-        await act(() => Promise.resolve());
-
-        // All devices should have been removed
-        expect(cli.sendStateEvent).toHaveBeenLastCalledWith(
-            "!1:example.org",
-            VIDEO_CHANNEL_MEMBER,
-            { devices: [], expires_ts: expect.any(Number) },
-            cli.getUserId(),
-        );
+    it("calls clean on mount", async () => {
+        const cleanSpy = jest.spyOn(call, "clean");
+        await renderView();
+        expect(cleanSpy).toHaveBeenCalled();
     });
 
     it("shows lobby and keeps widget loaded when disconnected", async () => {
-        const view = mount(<VideoRoomView room={room} resizing={false} />);
-        // Wait for state to settle
-        await act(() => Promise.resolve());
-
-        expect(view.find(VideoLobby).exists()).toEqual(true);
-        expect(view.find(AppTile).exists()).toEqual(true);
+        await renderView();
+        screen.getByRole("button", { name: "Join" });
+        screen.getAllByText(/\bwidget\b/i);
     });
 
     it("only shows widget when connected", async () => {
-        store.connect("!1:example.org");
-        const view = mount(<VideoRoomView room={room} resizing={false} />);
-        // Wait for state to settle
-        await act(() => Promise.resolve());
-
-        expect(view.find(VideoLobby).exists()).toEqual(false);
-        expect(view.find(AppTile).exists()).toEqual(true);
+        await renderView();
+        fireEvent.click(screen.getByRole("button", { name: "Join" }));
+        await waitFor(() => expect(call.connectionState).toBe(ConnectionState.Connected));
+        expect(screen.queryByRole("button", { name: "Join" })).toBe(null);
+        screen.getAllByText(/\bwidget\b/i);
     });
 });

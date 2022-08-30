@@ -52,7 +52,7 @@ import { RoomPermalinkCreator } from "../../utils/permalinks/Permalinks";
 import Spinner from "../views/elements/Spinner";
 import EditorStateTransfer from '../../utils/EditorStateTransfer';
 import ErrorDialog from '../views/dialogs/ErrorDialog';
-import CallEventGrouper, { buildCallEventGroupers } from "./CallEventGrouper";
+import LegacyCallEventGrouper, { buildLegacyCallEventGroupers } from "./LegacyCallEventGrouper";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
@@ -240,8 +240,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
     private readReceiptActivityTimer: Timer;
     private readMarkerActivityTimer: Timer;
 
-    // A map of <callId, CallEventGrouper>
-    private callEventGroupers = new Map<string, CallEventGrouper>();
+    // A map of <callId, LegacyCallEventGrouper>
+    private callEventGroupers = new Map<string, LegacyCallEventGrouper>();
 
     constructor(props, context) {
         super(props, context);
@@ -493,7 +493,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             this.timelineWindow.unpaginate(count, backwards);
 
             const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
-            this.buildCallEventGroupers(events);
+            this.buildLegacyCallEventGroupers(events);
             const newState: Partial<IState> = {
                 events,
                 liveEvents,
@@ -555,7 +555,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             debuglog("paginate complete backwards:"+backwards+"; success:"+r);
 
             const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
-            this.buildCallEventGroupers(events);
+            this.buildLegacyCallEventGroupers(events);
             const newState: Partial<IState> = {
                 [paginatingKey]: false,
                 [canPaginateKey]: r,
@@ -686,7 +686,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             if (this.unmounted) { return; }
 
             const { events, liveEvents, firstVisibleEventIndex } = this.getEvents();
-            this.buildCallEventGroupers(events);
+            this.buildLegacyCallEventGroupers(events);
             const lastLiveEvent = liveEvents[liveEvents.length - 1];
 
             const updatedState: Partial<IState> = {
@@ -855,7 +855,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // TODO: We should restrict this to only events in our timeline,
         // but possibly the event tile itself should just update when this
         // happens to save us re-rendering the whole timeline.
-        this.buildCallEventGroupers(this.state.events);
+        this.buildLegacyCallEventGroupers(this.state.events);
         this.forceUpdate();
     };
 
@@ -1405,7 +1405,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
             onLoaded();
         } else {
             const prom = this.timelineWindow.load(eventId, INITIAL_SIZE);
-            this.buildCallEventGroupers();
+            this.buildLegacyCallEventGroupers();
             this.setState({
                 events: [],
                 liveEvents: [],
@@ -1426,7 +1426,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (this.unmounted) return;
 
         const state = this.getEvents();
-        this.buildCallEventGroupers(state.events);
+        this.buildLegacyCallEventGroupers(state.events);
         this.setState(state);
     }
 
@@ -1707,8 +1707,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         eventType: EventType | string,
     ) => this.props.timelineSet.relations?.getChildEventsForEvent(eventId, relationType, eventType);
 
-    private buildCallEventGroupers(events?: MatrixEvent[]): void {
-        this.callEventGroupers = buildCallEventGroupers(this.callEventGroupers, events);
+    private buildLegacyCallEventGroupers(events?: MatrixEvent[]): void {
+        this.callEventGroupers = buildLegacyCallEventGroupers(this.callEventGroupers, events);
     }
 
     render() {

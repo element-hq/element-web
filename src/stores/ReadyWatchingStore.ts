@@ -26,18 +26,19 @@ import { Action } from "../dispatcher/actions";
 
 export abstract class ReadyWatchingStore extends EventEmitter implements IDestroyable {
     protected matrixClient: MatrixClient;
-    private readonly dispatcherRef: string;
+    private dispatcherRef: string | null = null;
 
     constructor(protected readonly dispatcher: Dispatcher<ActionPayload>) {
         super();
+    }
 
+    public async start(): Promise<void> {
         this.dispatcherRef = this.dispatcher.register(this.onAction);
 
-        if (MatrixClientPeg.get()) {
-            this.matrixClient = MatrixClientPeg.get();
-
-            // noinspection JSIgnoredPromiseFromCall
-            this.onReady();
+        const matrixClient = MatrixClientPeg.get();
+        if (matrixClient) {
+            this.matrixClient = matrixClient;
+            await this.onReady();
         }
     }
 
@@ -50,7 +51,7 @@ export abstract class ReadyWatchingStore extends EventEmitter implements IDestro
     }
 
     public destroy() {
-        this.dispatcher.unregister(this.dispatcherRef);
+        if (this.dispatcherRef !== null) this.dispatcher.unregister(this.dispatcherRef);
     }
 
     protected async onReady() {

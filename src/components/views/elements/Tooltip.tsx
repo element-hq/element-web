@@ -181,7 +181,7 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         style.display = this.props.visible ? "block" : "none";
 
         const tooltip = (
-            <div className={tooltipClasses} style={style}>
+            <div role="tooltip" className={tooltipClasses} style={style}>
                 <div className="mx_Tooltip_chevron" />
                 { this.props.label }
             </div>

@@ -19,11 +19,11 @@ import React, { createRef } from "react";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import classNames from "classnames";
 
+import type { Call } from "../../../models/Call";
 import { RovingTabIndexWrapper } from "../../../accessibility/RovingTabIndex";
 import AccessibleButton, { ButtonEvent } from "../../views/elements/AccessibleButton";
 import defaultDispatcher from '../../../dispatcher/dispatcher';
 import { Action } from "../../../dispatcher/actions";
-import SettingsStore from "../../../settings/SettingsStore";
 import { _t } from "../../../languageHandler";
 import { ChevronFace, ContextMenuTooltipButton } from "../../structures/ContextMenu";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
@@ -45,8 +45,9 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { RoomViewStore } from "../../../stores/RoomViewStore";
-import VideoRoomSummary from "./VideoRoomSummary";
+import { RoomTileCallSummary } from "./RoomTileCallSummary";
 import { RoomGeneralContextMenu } from "../context_menus/RoomGeneralContextMenu";
+import { CallStore, CallStoreEvent } from "../../../stores/CallStore";
 
 interface IProps {
     room: Room;
@@ -61,6 +62,7 @@ interface IState {
     selected: boolean;
     notificationsMenuPosition: PartialDOMRect;
     generalMenuPosition: PartialDOMRect;
+    call: Call | null;
     messagePreview?: string;
 }
 
@@ -79,7 +81,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
     private roomTileRef = createRef<HTMLDivElement>();
     private notificationState: NotificationState;
     private roomProps: RoomEchoChamber;
-    private isVideoRoom: boolean;
 
     constructor(props: IProps) {
         super(props);
@@ -88,6 +89,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             selected: RoomViewStore.instance.getRoomId() === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
+            call: CallStore.instance.get(this.props.room.roomId),
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: "",
         };
@@ -95,7 +97,6 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         this.notificationState = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         this.roomProps = EchoChamber.forRoom(this.props.room);
-        this.isVideoRoom = SettingsStore.getValue("feature_video_rooms") && this.props.room.isElementVideoRoom();
     }
 
     private onRoomNameUpdate = (room: Room) => {
@@ -154,6 +155,11 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         this.notificationState.on(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.on(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
         this.props.room.on(RoomEvent.Name, this.onRoomNameUpdate);
+        CallStore.instance.on(CallStoreEvent.Call, this.onCallChanged);
+
+        // Recalculate the call for this room, since it could've changed between
+        // construction and mounting
+        this.setState({ call: CallStore.instance.get(this.props.room.roomId) });
     }
 
     public componentWillUnmount() {
@@ -166,6 +172,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         defaultDispatcher.unregister(this.dispatcherRef);
         this.notificationState.off(NotificationStateEvents.Update, this.onNotificationUpdate);
         this.roomProps.off(PROPERTY_UPDATED, this.onRoomPropertyUpdate);
+        CallStore.instance.off(CallStoreEvent.Call, this.onCallChanged);
     }
 
     private onAction = (payload: ActionPayload) => {
@@ -183,6 +190,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         if (this.props.room && room.roomId === this.props.room.roomId) {
             this.generatePreview();
         }
+    };
+
+    private onCallChanged = (call: Call, roomId: string) => {
+        if (roomId === this.props.room?.roomId) this.setState({ call });
     };
 
     private async generatePreview() {
@@ -362,10 +373,10 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
         }
 
         let subtitle;
-        if (this.isVideoRoom) {
+        if (this.state.call) {
             subtitle = (
                 <div className="mx_RoomTile_subtitle">
-                    <VideoRoomSummary room={this.props.room} />
+                    <RoomTileCallSummary call={this.state.call} />
                 </div>
             );
         } else if (this.showMessagePreview && this.state.messagePreview) {

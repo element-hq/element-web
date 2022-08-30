@@ -44,6 +44,10 @@ export abstract class AsyncStoreWithClient<T extends Object> extends AsyncStore<
         })(dispatcher);
     }
 
+    public async start(): Promise<void> {
+        await this.readyStore.start();
+    }
+
     get matrixClient(): MatrixClient {
         return this.readyStore.mxClient;
     }

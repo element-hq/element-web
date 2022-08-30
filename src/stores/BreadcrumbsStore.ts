@@ -37,7 +37,11 @@ interface IState {
 }
 
 export class BreadcrumbsStore extends AsyncStoreWithClient<IState> {
-    private static internalInstance = new BreadcrumbsStore();
+    private static readonly internalInstance = (() => {
+        const instance = new BreadcrumbsStore();
+        instance.start();
+        return instance;
+    })();
 
     private waitingRooms: { roomId: string, addedTs: number }[] = [];
 

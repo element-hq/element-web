@@ -45,7 +45,7 @@ import { RoomPermalinkCreator } from '../../utils/permalinks/Permalinks';
 import ResizeNotifier from '../../utils/ResizeNotifier';
 import ContentMessages from '../../ContentMessages';
 import Modal from '../../Modal';
-import CallHandler, { CallHandlerEvent } from '../../CallHandler';
+import LegacyCallHandler, { LegacyCallHandlerEvent } from '../../LegacyCallHandler';
 import dis, { defaultDispatcher } from '../../dispatcher/dispatcher';
 import * as Rooms from '../../Rooms';
 import eventSearch, { searchPagination } from '../../Searching';
@@ -78,7 +78,7 @@ import EffectsOverlay from "../views/elements/EffectsOverlay";
 import { containsEmoji } from '../../effects/utils';
 import { CHAT_EFFECTS } from '../../effects';
 import WidgetStore from "../../stores/WidgetStore";
-import VideoRoomView from "./VideoRoomView";
+import { VideoRoomView } from "./VideoRoomView";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import Notifier from "../../Notifier";
 import { showToast as showNotificationsToast } from "../../toasts/DesktopNotificationsToast";
@@ -810,7 +810,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             callState: callState,
         });
 
-        CallHandler.instance.on(CallHandlerEvent.CallState, this.onCallState);
+        LegacyCallHandler.instance.on(LegacyCallHandlerEvent.CallState, this.onCallState);
         window.addEventListener('beforeunload', this.onPageUnload);
     }
 
@@ -847,7 +847,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         // (We could use isMounted, but facebook have deprecated that.)
         this.unmounted = true;
 
-        CallHandler.instance.removeListener(CallHandlerEvent.CallState, this.onCallState);
+        LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.onCallState);
 
         // update the scroll map before we get unmounted
         if (this.state.roomId) {
@@ -896,7 +896,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
         }
 
-        CallHandler.instance.off(CallHandlerEvent.CallState, this.onCallState);
+        LegacyCallHandler.instance.off(LegacyCallHandlerEvent.CallState, this.onCallState);
 
         // cancel any pending calls to the throttled updated
         this.updateRoomMembers.cancel();
@@ -1655,7 +1655,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
     }
 
     private onCallPlaced = (type: CallType): void => {
-        CallHandler.instance.placeCall(this.state.room?.roomId, type);
+        LegacyCallHandler.instance.placeCall(this.state.room?.roomId, type);
     };
 
     private onAppsClick = () => {
@@ -1872,7 +1872,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (!this.state.room) {
             return null;
         }
-        return CallHandler.instance.getCallForRoom(this.state.room.roomId);
+        return LegacyCallHandler.instance.getCallForRoom(this.state.room.roomId);
     }
 
     // this has to be a proper method rather than an unnamed function,

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { MatrixClient, ClientEvent } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { EventType, RoomCreateTypeField, RoomType } from "matrix-js-sdk/src/@types/event";
 import { ICreateRoomOpts } from "matrix-js-sdk/src/@types/requests";
@@ -37,7 +37,7 @@ import { getAddressType } from "./UserAddress";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
 import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
-import { VIDEO_CHANNEL_MEMBER, addVideoChannel } from "./utils/VideoChannelUtils";
+import { JitsiCall } from "./models/Call";
 import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
@@ -131,8 +131,8 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         if (opts.roomType === RoomType.ElementVideo) {
             createOpts.power_level_content_override = {
                 events: {
-                    // Allow all users to send video member updates
-                    [VIDEO_CHANNEL_MEMBER]: 0,
+                    // Allow all users to send call membership updates
+                    [JitsiCall.MEMBER_EVENT_TYPE]: 0,
                     // Make widgets immutable, even to admins
                     "im.vector.modular.widgets": 200,
                     // Annoyingly, we have to reiterate all the defaults here
@@ -239,7 +239,8 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
     let modal;
     if (opts.spinner) modal = Modal.createDialog(Spinner, null, 'mx_Dialog_spinner');
 
-    let roomId;
+    let roomId: string;
+    let room: Promise<Room>;
     return client.createRoom(createOpts).catch(function(err) {
         // NB This checks for the Synapse-specific error condition of a room creation
         // having been denied because the requesting user wanted to publish the room,
@@ -254,32 +255,43 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         }
     }).finally(function() {
         if (modal) modal.close();
-    }).then(function(res) {
+    }).then(async res => {
         roomId = res.room_id;
-        if (opts.dmUserId) {
-            return Rooms.setDMRoom(roomId, opts.dmUserId);
-        } else {
-            return Promise.resolve();
-        }
+
+        room = new Promise(resolve => {
+            const storedRoom = client.getRoom(roomId);
+            if (storedRoom) {
+                resolve(storedRoom);
+            } else {
+                // The room hasn't arrived down sync yet
+                const onRoom = (emittedRoom: Room) => {
+                    if (emittedRoom.roomId === roomId) {
+                        resolve(emittedRoom);
+                        client.off(ClientEvent.Room, onRoom);
+                    }
+                };
+                client.on(ClientEvent.Room, onRoom);
+            }
+        });
+
+        if (opts.dmUserId) await Rooms.setDMRoom(roomId, opts.dmUserId);
     }).then(() => {
         if (opts.parentSpace) {
             return SpaceStore.instance.addRoomToSpace(opts.parentSpace, roomId, [client.getDomain()], opts.suggested);
         }
     }).then(async () => {
         if (opts.roomType === RoomType.ElementVideo) {
-            // Set up video rooms with a Jitsi widget
-            await addVideoChannel(roomId, createOpts.name);
+            // Set up video rooms with a Jitsi call
+            await JitsiCall.create(await room);
 
             // Reset our power level back to admin so that the widget becomes immutable
-            const room = client.getRoom(roomId);
-            const plEvent = room?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
-            await client.setPowerLevel(roomId, client.getUserId(), 100, plEvent);
+            const plEvent = (await room)?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
+            await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
         }
     }).then(function() {
-        // NB createRoom doesn't block on the client seeing the echo that the
-        // room has been created, so we race here with the client knowing that
-        // the room exists, causing things like
-        // https://github.com/vector-im/vector-web/issues/1813
+        // NB we haven't necessarily blocked on the room promise, so we race
+        // here with the client knowing that the room exists, causing things
+        // like https://github.com/vector-im/vector-web/issues/1813
         // Even if we were to block on the echo, servers tend to split the room
         // state over multiple syncs so we can't atomically know when we have the
         // entire thing.

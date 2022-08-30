@@ -449,7 +449,12 @@ export default class SettingsStore {
      */
 
     /* eslint-enable valid-jsdoc */
-    public static async setValue(settingName: string, roomId: string, level: SettingLevel, value: any): Promise<void> {
+    public static async setValue(
+        settingName: string,
+        roomId: string | null,
+        level: SettingLevel,
+        value: any,
+    ): Promise<void> {
         // Verify that the setting is actually a setting
         const setting = SETTINGS[settingName];
         if (!setting) {

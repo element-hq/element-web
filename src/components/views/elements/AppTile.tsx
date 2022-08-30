@@ -36,10 +36,9 @@ import { aboveLeftOf, ContextMenuButton } from "../../structures/ContextMenu";
 import PersistedElement, { getPersistKey } from "./PersistedElement";
 import { WidgetType } from "../../../widgets/WidgetType";
 import { ElementWidget, StopGapWidget } from "../../../stores/widgets/StopGapWidget";
-import { ElementWidgetActions } from "../../../stores/widgets/ElementWidgetActions";
 import WidgetContextMenu from "../context_menus/WidgetContextMenu";
 import WidgetAvatar from "../avatars/WidgetAvatar";
-import CallHandler from '../../../CallHandler';
+import LegacyCallHandler from '../../../LegacyCallHandler';
 import { IApp } from "../../../stores/WidgetStore";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { OwnProfileStore } from '../../../stores/OwnProfileStore';
@@ -305,7 +304,6 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private setupSgListeners() {
         this.sgWidget.on("preparing", this.onWidgetPreparing);
-        this.sgWidget.on("ready", this.onWidgetReady);
         // emits when the capabilities have been set up or changed
         this.sgWidget.on("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
     }
@@ -313,7 +311,6 @@ export default class AppTile extends React.Component<IProps, IState> {
     private stopSgListeners() {
         if (!this.sgWidget) return;
         this.sgWidget.off("preparing", this.onWidgetPreparing);
-        this.sgWidget.off("ready", this.onWidgetReady);
         this.sgWidget.off("capabilitiesNotified", this.onWidgetCapabilitiesNotified);
     }
 
@@ -393,7 +390,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         }
 
         if (WidgetType.JITSI.matches(this.props.app.type) && this.props.room) {
-            CallHandler.instance.hangupCallApp(this.props.room.roomId);
+            LegacyCallHandler.instance.hangupCallApp(this.props.room.roomId);
         }
 
         // Delete the widget from the persisted store for good measure.
@@ -405,12 +402,6 @@ export default class AppTile extends React.Component<IProps, IState> {
 
     private onWidgetPreparing = (): void => {
         this.setState({ loading: false });
-    };
-
-    private onWidgetReady = (): void => {
-        if (WidgetType.JITSI.matches(this.props.app.type)) {
-            this.sgWidget.widgetApi.transport.send(ElementWidgetActions.ClientReady, {});
-        }
     };
 
     private onWidgetCapabilitiesNotified = (): void => {

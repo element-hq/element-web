@@ -14,79 +14,46 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { FC, useContext, useState, useMemo, useEffect } from "react";
-import { logger } from "matrix-js-sdk/src/logger";
-import { Room } from "matrix-js-sdk/src/models/room";
+import React, { FC, useContext, useEffect } from "react";
 
+import type { Room } from "matrix-js-sdk/src/models/room";
+import type { Call } from "../../models/Call";
+import { useCall, useConnectionState } from "../../hooks/useCall";
+import { isConnected } from "../../models/Call";
 import MatrixClientContext from "../../contexts/MatrixClientContext";
-import { useEventEmitter } from "../../hooks/useEventEmitter";
-import WidgetUtils from "../../utils/WidgetUtils";
-import { addVideoChannel, getVideoChannel, fixStuckDevices } from "../../utils/VideoChannelUtils";
-import WidgetStore, { IApp } from "../../stores/WidgetStore";
-import { UPDATE_EVENT } from "../../stores/AsyncStore";
-import VideoChannelStore, { VideoChannelEvent } from "../../stores/VideoChannelStore";
 import AppTile from "../views/elements/AppTile";
-import VideoLobby from "../views/voip/VideoLobby";
+import { CallLobby } from "../views/voip/CallLobby";
 
-interface IProps {
+interface Props {
     room: Room;
     resizing: boolean;
 }
 
-const VideoRoomView: FC<IProps> = ({ room, resizing }) => {
+const LoadedVideoRoomView: FC<Props & { call: Call }> = ({ room, resizing, call }) => {
     const cli = useContext(MatrixClientContext);
-    const store = VideoChannelStore.instance;
+    const connected = isConnected(useConnectionState(call));
 
-    // In case we mount before the WidgetStore knows about our Jitsi widget
-    const [widgetStoreReady, setWidgetStoreReady] = useState(Boolean(WidgetStore.instance.matrixClient));
-    const [widgetLoaded, setWidgetLoaded] = useState(false);
-    useEventEmitter(WidgetStore.instance, UPDATE_EVENT, (roomId: string) => {
-        if (roomId === null) setWidgetStoreReady(true);
-        if (roomId === null || roomId === room.roomId) {
-            setWidgetLoaded(Boolean(getVideoChannel(room.roomId)));
-        }
-    });
+    // We'll take this opportunity to tidy up our room state
+    useEffect(() => { call?.clean(); }, [call]);
 
-    const app: IApp = useMemo(() => {
-        if (widgetStoreReady) {
-            const app = getVideoChannel(room.roomId);
-            if (!app) {
-                logger.warn(`No video channel for room ${room.roomId}`);
-                // Since widgets in video rooms are mutable, we'll take this opportunity to
-                // reinstate the Jitsi widget in case another client removed it
-                if (WidgetUtils.canUserModifyWidgets(room.roomId)) {
-                    addVideoChannel(room.roomId, room.name);
-                }
-            }
-            return app;
-        }
-    }, [room, widgetStoreReady, widgetLoaded]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // We'll also take this opportunity to fix any stuck devices.
-    // The linter thinks that store.connected should be a dependency, but we explicitly
-    // *only* want this to happen at mount to avoid racing with normal device updates.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => { fixStuckDevices(room, store.connected); }, [room]);
-
-    const [connected, setConnected] = useState(store.connected && store.roomId === room.roomId);
-    useEventEmitter(store, VideoChannelEvent.Connect, () => setConnected(store.roomId === room.roomId));
-    useEventEmitter(store, VideoChannelEvent.Disconnect, () => setConnected(false));
-
-    if (!app) return null;
+    if (!call) return null;
 
     return <div className="mx_VideoRoomView">
-        { connected ? null : <VideoLobby room={room} /> }
+        { connected ? null : <CallLobby room={room} call={call} /> }
         { /* We render the widget even if we're disconnected, so it stays loaded */ }
         <AppTile
-            app={app}
+            app={call.widget}
             room={room}
             userId={cli.credentials.userId}
-            creatorUserId={app.creatorUserId}
-            waitForIframeLoad={app.waitForIframeLoad}
+            creatorUserId={call.widget.creatorUserId}
+            waitForIframeLoad={call.widget.waitForIframeLoad}
             showMenubar={false}
-            pointerEvents={resizing ? "none" : null}
+            pointerEvents={resizing ? "none" : undefined}
         />
     </div>;
 };
 
-export default VideoRoomView;
+export const VideoRoomView: FC<Props> = ({ room, resizing }) => {
+    const call = useCall(room.roomId);
+    return call ? <LoadedVideoRoomView room={room} resizing={resizing} call={call} /> : null;
+};

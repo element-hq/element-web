@@ -93,7 +93,7 @@ describe("AppTile", () => {
             url: "https://example.com",
             name: "Example 1",
             creatorUserId: cli.getUserId(),
-            avatar_url: null,
+            avatar_url: undefined,
         };
         app2 = {
             id: "1",
@@ -103,7 +103,7 @@ describe("AppTile", () => {
             url: "https://example.com",
             name: "Example 2",
             creatorUserId: cli.getUserId(),
-            avatar_url: null,
+            avatar_url: undefined,
         };
         jest.spyOn(WidgetStore.instance, "getApps").mockImplementation(roomId => {
             if (roomId === "r1") return [app1];
