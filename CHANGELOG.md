@@ -1,29 +1,30 @@
-Changes in [1.11.4-rc.2](https://github.com/vector-im/element-web/releases/tag/v1.11.4-rc.2) (2022-08-25)
-=========================================================================================================
-
-## 🐛 Bug Fixes
- * Fix progress bar regression throughout the app ([\#9219](https://github.com/matrix-org/matrix-react-sdk/pull/9219)). Fixes #23121.
-
-Changes in [1.11.4-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.4-rc.1) (2022-08-23)
-=========================================================================================================
+Changes in [1.11.4](https://github.com/vector-im/element-web/releases/tag/v1.11.4) (2022-08-31)
+===============================================================================================
 
 ## ✨ Features
+ * Device manager - scroll to filtered list from security recommendations ([\#9227](https://github.com/matrix-org/matrix-react-sdk/pull/9227)). Contributed by @kerryarchibald.
+ * Device manager - updated dropdown style in filtered device list ([\#9226](https://github.com/matrix-org/matrix-react-sdk/pull/9226)). Contributed by @kerryarchibald.
+ * Device manager - device type and verification icons on device tile ([\#9197](https://github.com/matrix-org/matrix-react-sdk/pull/9197)). Contributed by @kerryarchibald.
  * Ignore unreads in low priority rooms in the space panel ([\#6518](https://github.com/matrix-org/matrix-react-sdk/pull/6518)). Fixes #16836.
  * Release message right-click context menu out of labs ([\#8613](https://github.com/matrix-org/matrix-react-sdk/pull/8613)).
- * Device manager - expandable session details in device list ([\#9188](https://github.com/matrix-org/matrix-react-sdk/pull/9188)).
- * Device manager - device list filtering ([\#9181](https://github.com/matrix-org/matrix-react-sdk/pull/9181)).
- * Device manager - add verification details to session details ([\#9187](https://github.com/matrix-org/matrix-react-sdk/pull/9187)).
- * Device manager - current session expandable details ([\#9185](https://github.com/matrix-org/matrix-react-sdk/pull/9185)).
- * Device manager - security recommendations section ([\#9179](https://github.com/matrix-org/matrix-react-sdk/pull/9179)).
- * The Welcome Home Screen: Return Button ([\#9089](https://github.com/matrix-org/matrix-react-sdk/pull/9089)). Fixes #2291.
- * Device manager - label devices as inactive ([\#9175](https://github.com/matrix-org/matrix-react-sdk/pull/9175)).
- * Device manager - other sessions list ([\#9155](https://github.com/matrix-org/matrix-react-sdk/pull/9155)).
+ * Device manager - expandable session details in device list ([\#9188](https://github.com/matrix-org/matrix-react-sdk/pull/9188)). Contributed by @kerryarchibald.
+ * Device manager - device list filtering ([\#9181](https://github.com/matrix-org/matrix-react-sdk/pull/9181)). Contributed by @kerryarchibald.
+ * Device manager - add verification details to session details ([\#9187](https://github.com/matrix-org/matrix-react-sdk/pull/9187)). Contributed by @kerryarchibald.
+ * Device manager - current session expandable details ([\#9185](https://github.com/matrix-org/matrix-react-sdk/pull/9185)). Contributed by @kerryarchibald.
+ * Device manager - security recommendations section ([\#9179](https://github.com/matrix-org/matrix-react-sdk/pull/9179)). Contributed by @kerryarchibald.
+ * The Welcome Home Screen: Return Button ([\#9089](https://github.com/matrix-org/matrix-react-sdk/pull/9089)). Fixes #22917. Contributed by @justjanne.
+ * Device manager - label devices as inactive ([\#9175](https://github.com/matrix-org/matrix-react-sdk/pull/9175)). Contributed by @kerryarchibald.
+ * Device manager - other sessions list ([\#9155](https://github.com/matrix-org/matrix-react-sdk/pull/9155)). Contributed by @kerryarchibald.
  * Implement MSC3846: Allowing widgets to access TURN servers ([\#9061](https://github.com/matrix-org/matrix-react-sdk/pull/9061)).
  * Allow widgets to send/receive to-device messages ([\#8885](https://github.com/matrix-org/matrix-react-sdk/pull/8885)).
 
 ## 🐛 Bug Fixes
- * Reduce amount of requests done by the onboarding task list ([\#9194](https://github.com/matrix-org/matrix-react-sdk/pull/9194)). Fixes #23085.
- * Avoid hardcoding branding in user onboarding ([\#9206](https://github.com/matrix-org/matrix-react-sdk/pull/9206)). Fixes #23111.
+ * Add super cool feature ([\#9222](https://github.com/matrix-org/matrix-react-sdk/pull/9222)). Contributed by @gefgu.
+ * Make use of js-sdk roomNameGenerator to handle i18n for generated room names ([\#9209](https://github.com/matrix-org/matrix-react-sdk/pull/9209)). Fixes #21369.
+ * Fix progress bar regression throughout the app ([\#9219](https://github.com/matrix-org/matrix-react-sdk/pull/9219)). Fixes #23121.
+ * Reuse empty string & space string logic for event types in devtools ([\#9218](https://github.com/matrix-org/matrix-react-sdk/pull/9218)). Fixes #23115.
+ * Reduce amount of requests done by the onboarding task list ([\#9194](https://github.com/matrix-org/matrix-react-sdk/pull/9194)). Fixes #23085. Contributed by @justjanne.
+ * Avoid hardcoding branding in user onboarding ([\#9206](https://github.com/matrix-org/matrix-react-sdk/pull/9206)). Fixes #23111. Contributed by @justjanne.
  * End jitsi call when member is banned ([\#8879](https://github.com/matrix-org/matrix-react-sdk/pull/8879)). Contributed by @maheichyk.
  * Fix context menu being opened when clicking message action bar buttons ([\#9200](https://github.com/matrix-org/matrix-react-sdk/pull/9200)). Fixes #22279 and #23100.
  * Add gap between checkbox and text in report dialog following the same pattern (8px) used in the gap between the two buttons. It fixes vector-im/element-web#23060 ([\#9195](https://github.com/matrix-org/matrix-react-sdk/pull/9195)). Contributed by @gefgu.
