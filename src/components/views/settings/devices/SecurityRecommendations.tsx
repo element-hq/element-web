@@ -29,9 +29,13 @@ import {
 
 interface Props {
     devices: DevicesDictionary;
+    goToFilteredList: (filter: DeviceSecurityVariation) => void;
 }
 
-const SecurityRecommendations: React.FC<Props> = ({ devices }) => {
+const SecurityRecommendations: React.FC<Props> = ({
+    devices,
+    goToFilteredList,
+}) => {
     const devicesArray = Object.values<DeviceWithVerification>(devices);
 
     const unverifiedDevicesCount = filterDevicesBySecurityRecommendation(
@@ -48,9 +52,6 @@ const SecurityRecommendations: React.FC<Props> = ({ devices }) => {
     }
 
     const inactiveAgeDays = INACTIVE_DEVICE_AGE_DAYS;
-
-    // TODO(kerrya) stubbed until PSG-640/652
-    const noop = () => {};
 
     return <SettingsSubsection
         heading={_t('Security recommendations')}
@@ -69,7 +70,8 @@ const SecurityRecommendations: React.FC<Props> = ({ devices }) => {
             >
                 <AccessibleButton
                     kind='link_inline'
-                    onClick={noop}
+                    onClick={() => goToFilteredList(DeviceSecurityVariation.Unverified)}
+                    data-testid='unverified-devices-cta'
                 >
                     { _t('View all') + ` (${unverifiedDevicesCount})` }
                 </AccessibleButton>
@@ -90,7 +92,8 @@ const SecurityRecommendations: React.FC<Props> = ({ devices }) => {
                 >
                     <AccessibleButton
                         kind='link_inline'
-                        onClick={noop}
+                        onClick={() => goToFilteredList(DeviceSecurityVariation.Inactive)}
+                        data-testid='inactive-devices-cta'
                     >
                         { _t('View all') + ` (${inactiveDevicesCount})` }
                     </AccessibleButton>
