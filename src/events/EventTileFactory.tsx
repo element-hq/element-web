@@ -88,7 +88,7 @@ const EVENT_TILE_TYPES = new Map<string, Factory>([
     [M_POLL_START.altName, MessageEventFactory],
     [EventType.KeyVerificationCancel, KeyVerificationConclFactory],
     [EventType.KeyVerificationDone, KeyVerificationConclFactory],
-    [EventType.CallInvite, CallEventFactory], // note that this requires a special factory type
+    [EventType.CallInvite, LegacyCallEventFactory], // note that this requires a special factory type
 ]);
 
 const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
