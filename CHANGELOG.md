@@ -1,6 +1,11 @@
 Changes in [3.53.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.53.0) (2022-08-31)
 =====================================================================================================
 
+## 🔒 Security
+* Fix for [CVE-2022-36060](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE%2D2022%2D36060)
+
+Find more details at https://matrix.org/blog/2022/08/31/security-releases-matrix-js-sdk-19-4-0-and-matrix-react-sdk-3-53-0
+
 ## ✨ Features
  * Device manager - scroll to filtered list from security recommendations ([\#9227](https://github.com/matrix-org/matrix-react-sdk/pull/9227)). Contributed by @kerryarchibald.
  * Device manager - updated dropdown style in filtered device list ([\#9226](https://github.com/matrix-org/matrix-react-sdk/pull/9226)). Contributed by @kerryarchibald.
