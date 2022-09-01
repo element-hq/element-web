@@ -116,7 +116,7 @@ jobs:
           PROJECT_ID: "PN_kwDOAM0swc1HvQ"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
   
-    Search_issues_to_board:
+  Search_issues_to_board:
     name: Search issues to project board
     runs-on: ubuntu-latest
     if: >
