@@ -592,12 +592,8 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
                 let extraTiles = null;
                 if (orderedTagId === DefaultTagID.Suggested) {
                     extraTiles = this.renderSuggestedRooms();
-                }
-
-                if (this.state.feature_favourite_messages && orderedTagId === DefaultTagID.SavedItems) {
+                } else if (this.state.feature_favourite_messages && orderedTagId === DefaultTagID.SavedItems) {
                     extraTiles = this.renderFavoriteMessagesList();
-                } else {
-                    extraTiles = null;
                 }
 
                 const aesthetics = TAG_AESTHETICS[orderedTagId];
