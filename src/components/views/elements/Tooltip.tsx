@@ -22,6 +22,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 import UIStore from "../../../stores/UIStore";
+import { objectHasDiff } from "../../../utils/objects";
 
 export enum Alignment {
     Natural, // Pick left or right
@@ -91,8 +92,10 @@ export default class Tooltip extends React.PureComponent<ITooltipProps, State> {
         this.updatePosition();
     }
 
-    public componentDidUpdate() {
-        this.updatePosition();
+    public componentDidUpdate(prevProps) {
+        if (objectHasDiff(prevProps, this.props)) {
+            this.updatePosition();
+        }
     }
 
     // Remove the wrapper element, as the tooltip has finished using it
