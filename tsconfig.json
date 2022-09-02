@@ -24,8 +24,5 @@
     "./src/**/*.tsx",
     "./test/**/*.ts",
     "./test/**/*.tsx"
-  ],
-  "exclude": [
-    "./test/end-to-end-tests/"
   ]
 }
