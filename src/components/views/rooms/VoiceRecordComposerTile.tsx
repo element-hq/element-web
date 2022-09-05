@@ -64,6 +64,7 @@ interface IState {
 export default class VoiceRecordComposerTile extends React.PureComponent<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
+    private voiceRecordingId: string;
 
     public constructor(props: IProps) {
         super(props);
@@ -71,10 +72,12 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         this.state = {
             recorder: null, // no recording started by default
         };
+
+        this.voiceRecordingId = VoiceRecordingStore.getVoiceRecordingId(this.props.room, this.props.relation);
     }
 
     public componentDidMount() {
-        const recorder = VoiceRecordingStore.instance.getActiveRecording(this.props.room.roomId);
+        const recorder = VoiceRecordingStore.instance.getActiveRecording(this.voiceRecordingId);
         if (recorder) {
             if (recorder.isRecording || !recorder.hasRecording) {
                 logger.warn("Cached recording hasn't ended yet and might cause issues");
@@ -87,7 +90,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     public async componentWillUnmount() {
         // Stop recording, but keep the recording memory (don't dispose it). This is to let the user
         // come back and finish working with it.
-        const recording = VoiceRecordingStore.instance.getActiveRecording(this.props.room.roomId);
+        const recording = VoiceRecordingStore.instance.getActiveRecording(this.voiceRecordingId);
         await recording?.stop();
 
         // Clean up our listeners by binding a falsy recorder
@@ -106,7 +109,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         let upload: IUpload;
         try {
-            upload = await this.state.recorder.upload(this.props.room.roomId);
+            upload = await this.state.recorder.upload(this.voiceRecordingId);
         } catch (e) {
             logger.error("Error uploading voice message:", e);
 
@@ -179,7 +182,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
     }
 
     private async disposeRecording() {
-        await VoiceRecordingStore.instance.disposeRecording(this.props.room.roomId);
+        await VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
 
         // Reset back to no recording, which means no phase (ie: restart component entirely)
         this.setState({ recorder: null, recordingPhase: null, didUploadFail: false });
@@ -232,8 +235,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         try {
             // stop any noises which might be happening
             PlaybackManager.instance.pauseAllExcept(null);
-
-            const recorder = VoiceRecordingStore.instance.startRecording(this.props.room.roomId);
+            const recorder = VoiceRecordingStore.instance.startRecording(this.voiceRecordingId);
             await recorder.start();
 
             this.bindNewRecorder(recorder);
@@ -244,7 +246,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
             accessError();
 
             // noinspection ES6MissingAwait - if this goes wrong we don't want it to affect the call stack
-            VoiceRecordingStore.instance.disposeRecording(this.props.room.roomId);
+            VoiceRecordingStore.instance.disposeRecording(this.voiceRecordingId);
         }
     };
 

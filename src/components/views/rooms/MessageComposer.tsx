@@ -308,7 +308,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private updateRecordingState() {
-        this.voiceRecording = VoiceRecordingStore.instance.getActiveRecording(this.props.room.roomId);
+        const voiceRecordingId = VoiceRecordingStore.getVoiceRecordingId(this.props.room, this.props.relation);
+        this.voiceRecording = VoiceRecordingStore.instance.getActiveRecording(voiceRecordingId);
         if (this.voiceRecording) {
             // If the recording has already started, it's probably a cached one.
             if (this.voiceRecording.hasRecording && !this.voiceRecording.isRecording) {
@@ -323,7 +324,8 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     private onRecordingStarted = () => {
         // update the recording instance, just in case
-        this.voiceRecording = VoiceRecordingStore.instance.getActiveRecording(this.props.room.roomId);
+        const voiceRecordingId = VoiceRecordingStore.getVoiceRecordingId(this.props.room, this.props.relation);
+        this.voiceRecording = VoiceRecordingStore.instance.getActiveRecording(voiceRecordingId);
         this.setState({
             haveRecording: !!this.voiceRecording,
         });

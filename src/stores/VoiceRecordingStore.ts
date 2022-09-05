@@ -15,14 +15,19 @@ limitations under the License.
 */
 
 import { Optional } from "matrix-events-sdk";
+import { Room } from "matrix-js-sdk/src/models/room";
+import { RelationType } from "matrix-js-sdk/src/@types/event";
+import { IEventRelation } from "matrix-js-sdk/src/models/event";
 
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
 import { VoiceRecording } from "../audio/VoiceRecording";
 
+const SEPARATOR = "|";
+
 interface IState {
-    [roomId: string]: Optional<VoiceRecording>;
+    [voiceRecordingId: string]: Optional<VoiceRecording>;
 }
 
 export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
@@ -45,48 +50,54 @@ export class VoiceRecordingStore extends AsyncStoreWithClient<IState> {
         return;
     }
 
+    public static getVoiceRecordingId(room: Room, relation?: IEventRelation): string {
+        if (relation?.rel_type === "io.element.thread" || relation?.rel_type === RelationType.Thread) {
+            return room.roomId + SEPARATOR + relation.event_id;
+        } else {
+            return room.roomId;
+        }
+    }
+
     /**
      * Gets the active recording instance, if any.
-     * @param {string} roomId The room ID to get the recording in.
+     * @param {string} voiceRecordingId The room ID (with optionally the thread ID if in one) to get the recording in.
      * @returns {Optional<VoiceRecording>} The recording, if any.
      */
-    public getActiveRecording(roomId: string): Optional<VoiceRecording> {
-        return this.state[roomId];
+    public getActiveRecording(voiceRecordingId: string): Optional<VoiceRecording> {
+        return this.state[voiceRecordingId];
     }
 
     /**
      * Starts a new recording if one isn't already in progress. Note that this simply
      * creates a recording instance - whether or not recording is actively in progress
      * can be seen via the VoiceRecording class.
-     * @param {string} roomId The room ID to start recording in.
+     * @param {string} voiceRecordingId The room ID (with optionally the thread ID if in one) to start recording in.
      * @returns {VoiceRecording} The recording.
      */
-    public startRecording(roomId: string): VoiceRecording {
+    public startRecording(voiceRecordingId: string): VoiceRecording {
         if (!this.matrixClient) throw new Error("Cannot start a recording without a MatrixClient");
-        if (!roomId) throw new Error("Recording must be associated with a room");
-        if (this.state[roomId]) throw new Error("A recording is already in progress");
+        if (!voiceRecordingId) throw new Error("Recording must be associated with a room");
+        if (this.state[voiceRecordingId]) throw new Error("A recording is already in progress");
 
         const recording = new VoiceRecording(this.matrixClient);
 
         // noinspection JSIgnoredPromiseFromCall - we can safely run this async
-        this.updateState({ ...this.state, [roomId]: recording });
+        this.updateState({ ...this.state, [voiceRecordingId]: recording });
 
         return recording;
     }
 
     /**
      * Disposes of the current recording, no matter the state of it.
-     * @param {string} roomId The room ID to dispose of the recording in.
+     * @param {string} voiceRecordingId The room ID (with optionally the thread ID if in one) to dispose of the recording in.
      * @returns {Promise<void>} Resolves when complete.
      */
-    public disposeRecording(roomId: string): Promise<void> {
-        if (this.state[roomId]) {
-            this.state[roomId].destroy(); // stops internally
-        }
+    public disposeRecording(voiceRecordingId: string): Promise<void> {
+        this.state[voiceRecordingId]?.destroy(); // stops internally
 
         const {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            [roomId]: _toDelete,
+            [voiceRecordingId]: _toDelete,
             ...newState
         } = this.state;
         // unexpectedly AsyncStore.updateState merges state
