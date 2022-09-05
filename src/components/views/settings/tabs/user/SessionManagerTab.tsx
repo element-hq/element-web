@@ -62,7 +62,11 @@ const SessionManagerTab: React.FC = () => {
     }, [scrollIntoViewTimeoutRef]);
 
     return <SettingsTab heading={_t('Sessions')}>
-        <SecurityRecommendations devices={devices} goToFilteredList={onGoToFilteredList} />
+        <SecurityRecommendations
+            devices={devices}
+            goToFilteredList={onGoToFilteredList}
+            currentDeviceId={currentDeviceId}
+        />
         <CurrentDeviceSection
             device={currentDevice}
             isLoading={isLoading}

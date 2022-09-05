@@ -34,6 +34,7 @@ describe('<SecurityRecommendations />', () => {
     const defaultProps = {
         devices: {},
         goToFilteredList: jest.fn(),
+        currentDeviceId: 'abc123',
     };
     const getComponent = (props = {}) =>
         (<SecurityRecommendations {...defaultProps} {...props} />);
@@ -51,6 +52,16 @@ describe('<SecurityRecommendations />', () => {
         };
         const { container } = render(getComponent({ devices }));
         expect(container).toMatchSnapshot();
+    });
+
+    it('does not render unverified devices section when only the current device is unverified', () => {
+        const devices = {
+            [unverifiedNoMetadata.device_id]: unverifiedNoMetadata,
+            [verifiedNoMetadata.device_id]: verifiedNoMetadata,
+        };
+        const { container } = render(getComponent({ devices, currentDeviceId: unverifiedNoMetadata.device_id }));
+        // nothing to render
+        expect(container.firstChild).toBeFalsy();
     });
 
     it('renders inactive devices section when user has inactive devices', () => {

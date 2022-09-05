@@ -29,11 +29,13 @@ import {
 
 interface Props {
     devices: DevicesDictionary;
+    currentDeviceId: DeviceWithVerification['device_id'];
     goToFilteredList: (filter: DeviceSecurityVariation) => void;
 }
 
 const SecurityRecommendations: React.FC<Props> = ({
     devices,
+    currentDeviceId,
     goToFilteredList,
 }) => {
     const devicesArray = Object.values<DeviceWithVerification>(devices);
@@ -41,7 +43,12 @@ const SecurityRecommendations: React.FC<Props> = ({
     const unverifiedDevicesCount = filterDevicesBySecurityRecommendation(
         devicesArray,
         [DeviceSecurityVariation.Unverified],
-    ).length;
+    )
+        // filter out the current device
+        // as unverfied warning and actions
+        // will be shown in current session section
+        .filter((device) => device.device_id !== currentDeviceId)
+        .length;
     const inactiveDevicesCount = filterDevicesBySecurityRecommendation(
         devicesArray,
         [DeviceSecurityVariation.Inactive],
