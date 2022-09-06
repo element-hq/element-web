@@ -100,7 +100,12 @@ export default class VerificationPanel extends React.PureComponent<IProps, IStat
                 </div>;
             }
             const or = qrBlockDialog && sasBlockDialog ?
-                <div className='mx_VerificationPanel_QRPhase_betweenText'>{ _t("or") }</div> : null;
+                <div className='mx_VerificationPanel_QRPhase_betweenText'>
+                    { _t("%(qrCode)s or %(emojiCompare)s", {
+                        emojiCompare: "",
+                        qrCode: "",
+                    }) }
+                </div> : null;
             return (
                 <div>
                     { _t("Verify this device by completing one of the following:") }

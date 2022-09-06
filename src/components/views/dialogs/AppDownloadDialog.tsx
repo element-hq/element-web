@@ -69,7 +69,10 @@ export const AppDownloadDialog: FC<IDialogProps> = ({ onFinished }: IDialogProps
                         { _t("iOS") }
                     </Heading>
                     <QRCode data={urlAppStore} margin={0} width={172} />
-                    <div className="mx_AppDownloadDialog_info">or</div>
+                    <div className="mx_AppDownloadDialog_info">{ _t("%(qrCode)s or %(appLinks)s", {
+                        appLinks: "",
+                        qrCode: "",
+                    }) }</div>
                     <div className="mx_AppDownloadDialog_links">
                         <AccessibleButton
                             element="a"
@@ -86,7 +89,10 @@ export const AppDownloadDialog: FC<IDialogProps> = ({ onFinished }: IDialogProps
                         { _t("Android") }
                     </Heading>
                     <QRCode data={urlAndroid} margin={0} width={172} />
-                    <div className="mx_AppDownloadDialog_info">or</div>
+                    <div className="mx_AppDownloadDialog_info">{ _t("%(qrCode)s or %(appLinks)s", {
+                        appLinks: "",
+                        qrCode: "",
+                    }) }</div>
                     <div className="mx_AppDownloadDialog_links">
                         <AccessibleButton
                             element="a"

@@ -725,7 +725,10 @@ export default class CreateSecretStorageDialog extends React.PureComponent<IProp
                         >
                             { _t("Download") }
                         </AccessibleButton>
-                        <span>{ _t("or") }</span>
+                        <span>{ _t("%(downloadButton)s or %(copyButton)s", {
+                            downloadButton: "",
+                            copyButton: "",
+                        }) }</span>
                         <AccessibleButton
                             kind='primary'
                             className="mx_Dialog_primary mx_CreateSecretStorageDialog_recoveryKeyButtons_copyBtn"
