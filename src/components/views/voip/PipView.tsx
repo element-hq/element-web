@@ -319,9 +319,9 @@ export default class PipView extends React.Component<IProps, IState> {
 
         if (this.state.showWidgetInPip) {
             const pipViewClasses = classNames({
-                mx_CallView: true,
-                mx_CallView_pip: pipMode,
-                mx_CallView_large: !pipMode,
+                mx_LegacyCallView: true,
+                mx_LegacyCallView_pip: pipMode,
+                mx_LegacyCallView_large: !pipMode,
             });
             const roomId = this.state.persistentRoomId;
             const roomForWidget = MatrixClientPeg.get().getRoom(roomId);
@@ -348,7 +348,7 @@ export default class PipView extends React.Component<IProps, IState> {
 
         if (!!pipContent) {
             return <PictureInPictureDragger
-                className="mx_CallPreview"
+                className="mx_LegacyCallPreview"
                 draggable={pipMode}
                 onDoubleClick={this.onDoubleClick}
                 onMove={this.onMove}

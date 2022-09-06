@@ -141,7 +141,7 @@ describe("Widget PIP", () => {
                     win.mxActiveWidgetStore.setWidgetPersistence(DEMO_WIDGET_ID, roomId, true);
 
                     // checks that pip window is opened
-                    cy.get(".mx_CallView_pip").should("exist");
+                    cy.get(".mx_LegacyCallView_pip").should("exist");
 
                     // checks that widget is opened in pip
                     cy.accessIframe(`iframe[title="${DEMO_WIDGET_NAME}"]`).within({}, () => {
@@ -158,7 +158,7 @@ describe("Widget PIP", () => {
                             }
 
                             // checks that pip window is closed
-                            cy.get(".mx_CallView_pip").should("not.exist");
+                            cy.get(".mx_LegacyCallView_pip").should("not.exist");
                         });
                     });
                 });
