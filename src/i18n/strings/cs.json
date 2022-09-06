@@ -3537,5 +3537,17 @@
     "Manually verify by text": "Ruční ověření pomocí textu",
     "We’d appreciate any feedback on how you’re finding %(brand)s.": "Budeme rádi za jakoukoli zpětnou vazbu o tom, jak se vám %(brand)s osvědčil.",
     "How are you finding %(brand)s so far?": "Jak se vám zatím %(brand)s osvědčil?",
-    "Don’t miss a thing by taking %(brand)s with you": "Vezměte si %(brand)s s sebou a nic vám neunikne"
+    "Don’t miss a thing by taking %(brand)s with you": "Vezměte si %(brand)s s sebou a nic vám neunikne",
+    "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Nedoporučuje se šifrovat veřejné místnosti.</b>Veřejné místnosti může najít a připojit se k nim kdokoli, takže si v nich může číst zprávy kdokoli. Nezískáte tak žádnou z výhod šifrování a nebudete ho moci později vypnout. Šifrování zpráv ve veřejné místnosti zpomalí příjem a odesílání zpráv.",
+    "Empty room (was %(oldName)s)": "Prázdná místnost (dříve %(oldName)s)",
+    "Inviting %(user)s and %(count)s others|one": "Pozvání %(user)s a 1 dalšího",
+    "Inviting %(user)s and %(count)s others|other": "Pozvání %(user)s a %(count)s dalších",
+    "Inviting %(user1)s and %(user2)s": "Pozvání %(user1)s a %(user2)s",
+    "%(user)s and %(count)s others|one": "%(user)s a 1 další",
+    "%(user)s and %(count)s others|other": "%(user)s a %(count)s další",
+    "%(user1)s and %(user2)s": "%(user1)s a %(user2)s",
+    "Unknown device type": "Neznámý typ zařízení",
+    "Show": "Zobrazit",
+    "Video input %(n)s": "Video vstup %(n)s",
+    "Audio input %(n)s": "Zvukový vstup %(n)s"
 }

@@ -3534,5 +3534,20 @@
     "Verified sessions": "已驗證的工作階段",
     "Interactively verify by emoji": "透過表情符號互動式驗證",
     "Manually verify by text": "透過文字手動驗證",
-    "Toggle device details": "切換裝置詳細資訊"
+    "Toggle device details": "切換裝置詳細資訊",
+    "We’d appreciate any feedback on how you’re finding %(brand)s.": "我們想要聽到任何關於您如何找到 %(brand)s 的回饋。",
+    "How are you finding %(brand)s so far?": "您是怎麼找到 %(brand)s 的？",
+    "Don’t miss a thing by taking %(brand)s with you": "隨身攜帶 %(brand)s，不錯過任何事情",
+    "Show": "顯示",
+    "Unknown device type": "未知的裝置類型",
+    "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>不建議為公開聊天室新增加密。</b>任何人都可以找到並加入公開聊天室，所以任何人都可以閱讀其中的訊息。您將無法享受加密帶來的任何好處，且您將無法在稍後將其關閉。在公開聊天室中加密訊息將會讓接收與傳送訊息變慢。",
+    "Video input %(n)s": "視訊輸入 %(n)s",
+    "Audio input %(n)s": "音訊輸入 %(n)s",
+    "Empty room (was %(oldName)s)": "空的聊天室（曾為 %(oldName)s）",
+    "Inviting %(user)s and %(count)s others|one": "正在邀請 %(user)s 與 1 個其他人",
+    "Inviting %(user)s and %(count)s others|other": "正在邀請 %(user)s 與 %(count)s 個其他人",
+    "Inviting %(user1)s and %(user2)s": "正在邀請 %(user1)s 與 %(user2)s",
+    "%(user)s and %(count)s others|one": "%(user)s 與 1 個其他人",
+    "%(user)s and %(count)s others|other": "%(user)s 與 %(count)s 個其他人",
+    "%(user1)s and %(user2)s": "%(user1)s 與 %(user2)s"
 }

@@ -3537,5 +3537,17 @@
     "Toggle device details": "Prepínanie údajov o zariadení",
     "We’d appreciate any feedback on how you’re finding %(brand)s.": "Budeme vďační za akúkoľvek spätnú väzbu o tom, ako sa vám %(brand)s osvedčil.",
     "How are you finding %(brand)s so far?": "Ako sa vám zatiaľ páči %(brand)s?",
-    "Don’t miss a thing by taking %(brand)s with you": "Nezmeškáte nič, ak so sebou vezmete %(brand)s"
+    "Don’t miss a thing by taking %(brand)s with you": "Nezmeškáte nič, ak so sebou vezmete %(brand)s",
+    "<b>It's not recommended to add encryption to public rooms.</b> Anyone can find and join public rooms, so anyone can read messages in them. You'll get none of the benefits of encryption, and you won't be able to turn it off later. Encrypting messages in a public room will make receiving and sending messages slower.": "<b>Neodporúča sa pridávať šifrovanie do verejných miestností.</b> Verejné miestnosti môže nájsť a pripojiť sa k nim ktokoľvek, takže si v nich môže ktokoľvek prečítať správy. Nebudete mať žiadne výhody šifrovania a neskôr ho nebudete môcť vypnúť. Šifrovanie správ vo verejnej miestnosti spomalí prijímanie a odosielanie správ.",
+    "Empty room (was %(oldName)s)": "Prázdna miestnosť (bola %(oldName)s)",
+    "Inviting %(user)s and %(count)s others|one": "Pozývanie %(user)s a 1 ďalšieho",
+    "Inviting %(user)s and %(count)s others|other": "Pozývanie %(user)s a %(count)s ďalších",
+    "Inviting %(user1)s and %(user2)s": "Pozývanie %(user1)s a %(user2)s",
+    "%(user)s and %(count)s others|one": "%(user)s a 1 ďalší",
+    "%(user)s and %(count)s others|other": "%(user)s a %(count)s ďalších",
+    "%(user1)s and %(user2)s": "%(user1)s a %(user2)s",
+    "Unknown device type": "Neznámy typ zariadenia",
+    "Show": "Zobraziť",
+    "Video input %(n)s": "Video vstup %(n)s",
+    "Audio input %(n)s": "Zvukový vstup %(n)s"
 }
