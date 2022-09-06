@@ -43,6 +43,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
+          single-commit: true
 
       - uses: actions/upload-artifact@v3
         with:
