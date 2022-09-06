@@ -55,10 +55,10 @@ const NewRoomIntro = () => {
         ? room.targets[0]?.userId
         : DMRoomMap.shared().getUserIdForRoomId(roomId);
 
-    let body;
+    let body: JSX.Element;
     if (dmPartner) {
         let introMessage = _t("This is the beginning of your direct message history with <displayName/>.");
-        let caption;
+        let caption: string | undefined;
 
         if (isLocalRoom) {
             introMessage = _t("Send your first message to invite <displayName/> to chat");
@@ -67,7 +67,7 @@ const NewRoomIntro = () => {
         }
 
         const member = room?.getMember(dmPartner);
-        const displayName = member?.rawDisplayName || dmPartner;
+        const displayName = room?.name || member?.rawDisplayName || dmPartner;
         body = <React.Fragment>
             <RoomAvatar
                 room={room}
