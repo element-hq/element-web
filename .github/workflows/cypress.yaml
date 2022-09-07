@@ -15,7 +15,13 @@ jobs:
       statuses: write
       issues: read
       pull-requests: read
-    environment: Cypress
+    outputs:
+      uuid: ${{ steps.uuid.outputs.value }}
+      pr_id: ${{ steps.prdetails.outputs.pr_id }}
+      commit_message: ${{ steps.commit.outputs.message }}
+      commit_author: ${{ steps.commit.outputs.author }}
+      commit_email: ${{ steps.commit.outputs.email }}
+      percy_enable: ${{ steps.percy.outputs.value || '1' }}
     steps:
       # Wire up the status check for this workflow_run action
       - uses: haya14busa/action-workflow_run-status@967ed83efa565c257675ed70cfe5231f062ddd94 # v1.0.0
@@ -27,6 +33,49 @@ jobs:
           owner: ${{ github.event.workflow_run.head_repository.owner.login }}
           branch: ${{ github.event.workflow_run.head_branch }}
 
+      - name: Get commit details
+        id: commit
+        if: github.event.workflow_run.event == 'pull_request'
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const response = await github.rest.git.getCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: "${{ github.event.workflow_run.head_sha }}",
+            });
+            core.setOutput("message", response.data.message);
+            core.setOutput("author", response.data.author.name);
+            core.setOutput("email", response.data.author.email);
+
+      # Only run Percy when it is demanded or on develop
+      - name: Disable Percy if not needed
+        id: percy
+        if: |
+          github.event.workflow_run.event == 'pull_request' &&
+          !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
+        run: echo "::set-output name=value::0
+
+      - name: Generate unique ID 💎
+        id: uuid
+        run: echo "::set-output name=value::sha-$GITHUB_SHA-time-$(date +"%s")"
+
+  tests:
+    name: "Run Tests"
+    needs: cypress
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      statuses: write
+      issues: read
+      pull-requests: read
+    environment: Cypress
+    strategy:
+      fail-fast: false
+      matrix:
+        # Run 3 instances in Parallel
+        runner: [1, 2, 3]
+    steps:
       - uses: actions/checkout@v2
         with:
           # XXX: We're checking out untrusted code in a secure context
@@ -46,28 +95,6 @@ jobs:
           name: previewbuild
           path: webapp
 
-      - name: Get commit details
-        if: github.event.workflow_run.event == 'pull_request'
-        uses: actions/github-script@v5
-        with:
-          script: |
-            const response = await github.rest.git.getCommit({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              commit_sha: "${{ github.event.workflow_run.head_sha }}",
-            });
-            core.exportVariable("COMMIT_INFO_MESSAGE", response.data.message);
-            core.exportVariable("COMMIT_INFO_AUTHOR", response.data.author.name);
-            core.exportVariable("COMMIT_INFO_EMAIL", response.data.author.email);
-
-      # Only run Percy when it is demanded or on develop
-      - name: Disable Percy if not needed
-        if: |
-          github.event.workflow_run.event == 'pull_request' &&
-          !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
-        run: |
-          echo "PERCY_ENABLE=0" >> $GITHUB_ENV
-
       - name: Run Cypress tests
         uses: cypress-io/github-action@v4.1.1
         with:
@@ -77,28 +104,40 @@ jobs:
           start: npx serve -p 8080 webapp
           wait-on: 'http://localhost:8080'
           record: true
-          command-prefix: 'yarn percy exec --'
+          parallel: true
+          command-prefix: 'yarn percy exec --parallel --'
+          ci-build-id: ${{ needs.cypress.outputs.uuid }}
         env:
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+          # Use existing chromium rather than downloading another
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # make Node's os.tmpdir() return something where we actually have permissions
+          TMPDIR: ${{ runner.temp }}
+
           # tell Cypress more details about the context of this run
           COMMIT_INFO_BRANCH: ${{ github.event.workflow_run.head_branch }}
           COMMIT_INFO_SHA: ${{ github.event.workflow_run.head_sha }}
           COMMIT_INFO_REMOTE: ${{ github.repositoryUrl }}
+          COMMIT_INFO_MESSAGE: ${{ needs.cypress.outputs.commit_message }}
+          COMMIT_INFO_AUTHOR: ${{ needs.cypress.outputs.commit_author }}
+          COMMIT_INFO_EMAIL: ${{ needs.cypress.outputs.commit_email }}
 
           # pass the Percy token as an environment variable
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          # Use existing chromium rather than downloading another
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PERCY_ENABLE: ${{ needs.cypress.outputs.percy_enable }}
           PERCY_BROWSER_EXECUTABLE: /usr/bin/chromium-browser
           # tell Percy more details about the context of this run
           PERCY_BRANCH: ${{ github.event.workflow_run.head_branch }}
           PERCY_COMMIT: ${{ github.event.workflow_run.head_sha }}
-          PERCY_PULL_REQUEST: ${{ steps.prdetails.outputs.pr_id }}
-          # pass GitHub token to allow accurately detecting a build vs a re-run build
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # make Node's os.tmpdir() return something where we actually have permissions
-          TMPDIR: ${{ runner.temp }}
+          PERCY_PULL_REQUEST: ${{ needs.cypress.outputs.pr_id }}
+          PERCY_PARALLEL_TOTAL: ${{ strategy.job-total }}
+          PERCY_PARALLEL_NONCE: ${{ needs.cypress.outputs.uuid }}
 
       - name: Upload Artifact
         if: failure()
@@ -110,15 +149,18 @@ jobs:
             cypress/videos
             cypress/synapselogs
 
+      - run: mv cypress/performance/*.json cypress/performance/measurements-${{ strategy.job-index }}.json
+
       - name: Upload Benchmark
         uses: actions/upload-artifact@v2
         with:
           name: cypress-benchmark
-          path: cypress/performance/measurements.json
+          path: cypress/performance/*
+          if-no-files-found: ignore
           retention-days: 1
 
   store-benchmark:
-    needs: cypress
+    needs: tests
     runs-on: ubuntu-latest
     if: |
       github.event.workflow_run.event != 'pull_request' &&
@@ -133,6 +175,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: cypress-benchmark
+
+      - name: Merge measurements
+        run: jq -s add measurements-*.json > measurements.json
 
       - name: Store benchmark result
         uses: matrix-org/github-action-benchmark@jsperfentry-6
