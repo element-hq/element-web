@@ -150,6 +150,7 @@ jobs:
             cypress/synapselogs
 
       - run: mv cypress/performance/*.json cypress/performance/measurements-${{ strategy.job-index }}.json
+        continue-on-error: true
 
       - name: Upload Benchmark
         uses: actions/upload-artifact@v2
