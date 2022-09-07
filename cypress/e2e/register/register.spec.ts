@@ -85,4 +85,48 @@ describe("Registration", () => {
         cy.get(".mx_DevicesPanel_myDevice .mx_DevicesPanel_deviceTrust .mx_E2EIcon")
             .should("have.class", "mx_E2EIcon_verified");
     });
+
+    it("should require username to fulfil requirements and be available", () => {
+        cy.get(".mx_ServerPicker_change", { timeout: 15000 }).click();
+        cy.get(".mx_ServerPickerDialog_continue").should("be.visible");
+        cy.get(".mx_ServerPickerDialog_otherHomeserver").type(synapse.baseUrl);
+        cy.get(".mx_ServerPickerDialog_continue").click();
+        // wait for the dialog to go away
+        cy.get('.mx_ServerPickerDialog').should('not.exist');
+
+        cy.get("#mx_RegistrationForm_username").should("be.visible");
+
+        cy.intercept("**/_matrix/client/*/register/available?username=_alice", {
+            statusCode: 400,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: {
+                errcode: "M_INVALID_USERNAME",
+                error: "User ID may not begin with _",
+            },
+        });
+        cy.get("#mx_RegistrationForm_username").type("_alice");
+        cy.get(".mx_Field_tooltip")
+            .should("have.class", "mx_Tooltip_visible")
+            .should("contain.text", "Some characters not allowed");
+
+        cy.intercept("**/_matrix/client/*/register/available?username=bob", {
+            statusCode: 400,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: {
+                errcode: "M_USER_IN_USE",
+                error: "The desired username is already taken",
+            },
+        });
+        cy.get("#mx_RegistrationForm_username").type("{selectAll}{backspace}bob");
+        cy.get(".mx_Field_tooltip")
+            .should("have.class", "mx_Tooltip_visible")
+            .should("contain.text", "Someone already has that username");
+
+        cy.get("#mx_RegistrationForm_username").type("{selectAll}{backspace}foobar");
+        cy.get(".mx_Field_tooltip").should("not.have.class", "mx_Tooltip_visible");
+    });
 });
