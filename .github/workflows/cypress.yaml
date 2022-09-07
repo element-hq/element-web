@@ -54,7 +54,7 @@ jobs:
         if: |
           github.event.workflow_run.event == 'pull_request' &&
           !contains(fromJSON(steps.prdetails.outputs.data).labels.*.name, 'X-Needs-Percy')
-        run: echo "::set-output name=value::0
+        run: echo "::set-output name=value::0"
 
       - name: Generate unique ID 💎
         id: uuid
