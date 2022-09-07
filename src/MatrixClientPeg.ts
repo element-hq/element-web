@@ -36,6 +36,7 @@ import * as StorageManager from './utils/StorageManager';
 import IdentityAuthClient from './IdentityAuthClient';
 import { crossSigningCallbacks, tryToUnlockSecretStorageWithDehydrationKey } from './SecurityManager';
 import SecurityCustomisations from "./customisations/Security";
+import { SlidingSyncManager } from './SlidingSyncManager';
 import CryptoStoreTooNewDialog from "./components/views/dialogs/CryptoStoreTooNewDialog";
 import { _t } from "./languageHandler";
 
@@ -236,6 +237,19 @@ class MatrixClientPegClass implements IMatrixClientPeg {
         opts.lazyLoadMembers = true;
         opts.clientWellKnownPollPeriod = 2 * 60 * 60; // 2 hours
         opts.experimentalThreadSupport = SettingsStore.getValue("feature_thread");
+
+        if (SettingsStore.getValue("feature_sliding_sync")) {
+            const proxyUrl = SettingsStore.getValue("feature_sliding_sync_proxy_url");
+            if (proxyUrl) {
+                logger.log("Activating sliding sync using proxy at ", proxyUrl);
+            } else {
+                logger.log("Activating sliding sync");
+            }
+            opts.slidingSync = SlidingSyncManager.instance.configure(
+                this.matrixClient,
+                proxyUrl || this.matrixClient.baseUrl,
+            );
+        }
 
         // Connect the matrix client to the dispatcher and setting handlers
         MatrixActionCreators.start(this.matrixClient);

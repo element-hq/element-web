@@ -101,12 +101,13 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
 
     const synapseId = await dockerRun({
         image: "matrixdotorg/synapse:develop",
-        containerName: `react-sdk-cypress-synapse-${crypto.randomBytes(4).toString("hex")}`,
+        containerName: `react-sdk-cypress-synapse`,
         params: [
             "--rm",
             "-v", `${synCfg.configDir}:/data`,
             "-p", `${synCfg.port}:8008/tcp`,
         ],
+        cmd: "run",
     });
 
     console.log(`Started synapse with id ${synapseId} on port ${synCfg.port}.`);

@@ -28,6 +28,7 @@ import type {
     RoomStateEvent,
     Visibility,
     RoomMemberEvent,
+    ICreateClientOpts,
 } from "matrix-js-sdk/src/matrix";
 import type { MatrixDispatcher } from "../src/dispatcher/dispatcher";
 import type PerformanceMonitor from "../src/performance";
@@ -55,6 +56,7 @@ declare global {
                 MemoryCryptoStore: typeof MemoryCryptoStore;
                 Visibility: typeof Visibility;
                 Preset: typeof Preset;
+                createClient(opts: ICreateClientOpts | string);
             };
         }
     }

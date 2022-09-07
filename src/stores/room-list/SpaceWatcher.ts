@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { RoomListStoreClass } from "./RoomListStore";
+import { RoomListStore as Interface } from "./Interface";
 import { SpaceFilterCondition } from "./filters/SpaceFilterCondition";
 import SpaceStore from "../spaces/SpaceStore";
 import { MetaSpace, SpaceKey, UPDATE_HOME_BEHAVIOUR, UPDATE_SELECTED_SPACE } from "../spaces";
@@ -28,7 +28,7 @@ export class SpaceWatcher {
     private activeSpace: SpaceKey = SpaceStore.instance.activeSpace;
     private allRoomsInHome: boolean = SpaceStore.instance.allRoomsInHome;
 
-    constructor(private store: RoomListStoreClass) {
+    constructor(private store: Interface) {
         if (SpaceWatcher.needsFilter(this.activeSpace, this.allRoomsInHome)) {
             this.updateFilter();
             store.addFilter(this.filter);

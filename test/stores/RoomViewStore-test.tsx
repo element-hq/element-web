@@ -41,6 +41,7 @@ describe('RoomViewStore', function() {
         joinRoom: jest.fn(),
         getRoom: jest.fn(),
         getRoomIdForAlias: jest.fn(),
+        isGuest: jest.fn(),
     });
     const room = new Room('!room:server', mockClient, userId);
 
@@ -49,6 +50,7 @@ describe('RoomViewStore', function() {
         mockClient.credentials = { userId: "@test:example.com" };
         mockClient.joinRoom.mockResolvedValue(room);
         mockClient.getRoom.mockReturnValue(room);
+        mockClient.isGuest.mockReturnValue(false);
 
         // Reset the state of the store
         RoomViewStore.instance.reset();

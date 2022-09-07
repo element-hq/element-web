@@ -32,7 +32,7 @@ interface IProps extends IDialogProps {
     busyMessage?: string; // pass _td string
     focus?: boolean;
     hasCancel?: boolean;
-    validator?: (fieldState: IFieldState) => IValidationResult; // result of withValidation
+    validator?: (fieldState: IFieldState) => Promise<IValidationResult>; // result of withValidation
     fixedWidth?: boolean;
 }
 

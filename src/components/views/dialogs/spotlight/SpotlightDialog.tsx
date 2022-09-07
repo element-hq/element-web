@@ -92,6 +92,7 @@ import { RoomResultContextMenus } from "./RoomResultContextMenus";
 import { RoomContextDetails } from "../../rooms/RoomContextDetails";
 import { TooltipOption } from "./TooltipOption";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
+import { useSlidingSyncRoomSearch } from "../../../../hooks/useSlidingSyncRoomSearch";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -242,7 +243,7 @@ export const useWebSearchMetrics = (numResults: number, queryLength: number, via
     }, [numResults, queryLength, viaSpotlight]);
 };
 
-const findVisibleRooms = (cli: MatrixClient) => {
+const findVisibleRooms = (cli: MatrixClient): Room[] => {
     return cli.getVisibleRooms().filter(room => {
         // Do not show local rooms
         if (isLocalRoom(room)) return false;
@@ -340,25 +341,43 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         searchProfileInfo,
         searchParams,
     );
+    const isSlidingSyncEnabled = SettingsStore.getValue("feature_sliding_sync");
+    let {
+        loading: slidingSyncRoomSearchLoading,
+        rooms: slidingSyncRooms,
+        search: searchRoomsServerside,
+    } = useSlidingSyncRoomSearch();
+    useDebouncedCallback(isSlidingSyncEnabled, searchRoomsServerside, searchParams);
+    if (!isSlidingSyncEnabled) {
+        slidingSyncRoomSearchLoading = false;
+    }
+
     const possibleResults = useMemo<Result[]>(
         () => {
-            const roomResults = findVisibleRooms(cli).map(toRoomResult);
-            // If we already have a DM with the user we're looking for, we will
-            // show that DM instead of the user themselves
-            const alreadyAddedUserIds = roomResults.reduce((userIds, result) => {
-                const userId = DMRoomMap.shared().getUserIdForRoomId(result.room.roomId);
-                if (!userId) return userIds;
-                if (result.room.getJoinedMemberCount() > 2) return userIds;
-                userIds.add(userId);
-                return userIds;
-            }, new Set<string>());
-            const userResults = [];
-            for (const user of [...findVisibleRoomMembers(cli), ...users]) {
-                // Make sure we don't have any user more than once
-                if (alreadyAddedUserIds.has(user.userId)) continue;
-                alreadyAddedUserIds.add(user.userId);
+            const userResults: IMemberResult[] = [];
+            let roomResults: IRoomResult[];
+            let alreadyAddedUserIds: Set<string>;
+            if (isSlidingSyncEnabled) {
+                // use the rooms sliding sync returned as the server has already worked it out for us
+                roomResults = slidingSyncRooms.map(toRoomResult);
+            } else {
+                roomResults = findVisibleRooms(cli).map(toRoomResult);
+                // If we already have a DM with the user we're looking for, we will
+                // show that DM instead of the user themselves
+                alreadyAddedUserIds = roomResults.reduce((userIds, result) => {
+                    const userId = DMRoomMap.shared().getUserIdForRoomId(result.room.roomId);
+                    if (!userId) return userIds;
+                    if (result.room.getJoinedMemberCount() > 2) return userIds;
+                    userIds.add(userId);
+                    return userIds;
+                }, new Set<string>());
+                for (const user of [...findVisibleRoomMembers(cli), ...users]) {
+                    // Make sure we don't have any user more than once
+                    if (alreadyAddedUserIds.has(user.userId)) continue;
+                    alreadyAddedUserIds.add(user.userId);
 
-                userResults.push(toMemberResult(user));
+                    userResults.push(toMemberResult(user));
+                }
             }
 
             return [
@@ -382,7 +401,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 ...publicRooms.map(toPublicRoomResult),
             ].filter(result => filter === null || result.filter.includes(filter));
         },
-        [cli, users, profile, publicRooms, filter],
+        [cli, users, profile, publicRooms, slidingSyncRooms, isSlidingSyncEnabled, filter],
     );
 
     const results = useMemo<Record<Section, Result[]>>(() => {
@@ -401,10 +420,13 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
 
             possibleResults.forEach(entry => {
                 if (isRoomResult(entry)) {
-                    if (!entry.room.normalizedName?.includes(normalizedQuery) &&
-                        !entry.room.getCanonicalAlias()?.toLowerCase().includes(lcQuery) &&
-                        !entry.query?.some(q => q.includes(lcQuery))
-                    ) return; // bail, does not match query
+                    // sliding sync gives the correct rooms in the list so we don't need to filter
+                    if (!isSlidingSyncEnabled) {
+                        if (!entry.room.normalizedName?.includes(normalizedQuery) &&
+                            !entry.room.getCanonicalAlias()?.toLowerCase().includes(lcQuery) &&
+                            !entry.query?.some(q => q.includes(lcQuery))
+                        ) return; // bail, does not match query
+                    }
                 } else if (isMemberResult(entry)) {
                     if (!entry.query?.some(q => q.includes(lcQuery))) return; // bail, does not match query
                 } else if (isPublicRoomResult(entry)) {
@@ -455,7 +477,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
 
         return results;
-    }, [trimmedQuery, filter, cli, possibleResults, memberComparator]);
+    }, [trimmedQuery, filter, cli, possibleResults, isSlidingSyncEnabled, memberComparator]);
 
     const numResults = sum(Object.values(results).map(it => it.length));
     useWebSearchMetrics(numResults, query.length, true);
@@ -1208,7 +1230,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     aria-label={_t("Search")}
                     aria-describedby="mx_SpotlightDialog_keyboardPrompt"
                 />
-                { (publicRoomsLoading || peopleLoading || profileLoading) && (
+                { (publicRoomsLoading || peopleLoading || profileLoading || slidingSyncRoomSearchLoading) && (
                     <Spinner w={24} h={24} />
                 ) }
             </div>
