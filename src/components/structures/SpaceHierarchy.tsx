@@ -499,12 +499,12 @@ const INITIAL_PAGE_SIZE = 20;
 export const useRoomHierarchy = (space: Room): {
     loading: boolean;
     rooms?: IHierarchyRoom[];
-    hierarchy: RoomHierarchy;
-    error: Error;
+    hierarchy?: RoomHierarchy;
+    error?: Error;
     loadMore(pageSize?: number): Promise<void>;
 } => {
     const [rooms, setRooms] = useState<IHierarchyRoom[]>([]);
-    const [roomHierarchy, setHierarchy] = useState<RoomHierarchy>();
+    const [hierarchy, setHierarchy] = useState<RoomHierarchy>();
     const [error, setError] = useState<Error | undefined>();
 
     const resetHierarchy = useCallback(() => {
@@ -526,19 +526,21 @@ export const useRoomHierarchy = (space: Room): {
     }));
 
     const loadMore = useCallback(async (pageSize?: number) => {
-        if (roomHierarchy.loading || !roomHierarchy.canLoadMore || roomHierarchy.noSupport || error) return;
-        await roomHierarchy.load(pageSize).catch(setError);
-        setRooms(roomHierarchy.rooms);
-    }, [error, roomHierarchy]);
+        if (hierarchy.loading || !hierarchy.canLoadMore || hierarchy.noSupport || error) return;
+        await hierarchy.load(pageSize).catch(setError);
+        setRooms(hierarchy.rooms);
+    }, [error, hierarchy]);
 
     // Only return the hierarchy if it is for the space requested
-    let hierarchy = roomHierarchy;
     if (hierarchy?.root !== space) {
-        hierarchy = undefined;
+        return {
+            loading: true,
+            loadMore,
+        };
     }
 
     return {
-        loading: hierarchy?.loading ?? true,
+        loading: hierarchy.loading,
         rooms,
         hierarchy,
         loadMore,
@@ -689,7 +691,7 @@ const SpaceHierarchy = ({
     const { loading, rooms, hierarchy, loadMore, error: hierarchyError } = useRoomHierarchy(space);
 
     const filteredRoomSet = useMemo<Set<IHierarchyRoom>>(() => {
-        if (!rooms?.length) return new Set();
+        if (!rooms?.length || !hierarchy) return new Set();
         const lcQuery = query.toLowerCase().trim();
         if (!lcQuery) return new Set(rooms);
 
@@ -721,7 +723,7 @@ const SpaceHierarchy = ({
 
     const loaderRef = useIntersectionObserver(loadMore);
 
-    if (!loading && hierarchy.noSupport) {
+    if (!loading && hierarchy!.noSupport) {
         return <p>{ _t("Your server does not support showing space hierarchies.") }</p>;
     }
 
@@ -755,7 +757,7 @@ const SpaceHierarchy = ({
     return <RovingTabIndexProvider onKeyDown={onKeyDown} handleHomeEnd handleUpDown>
         { ({ onKeyDownHandler }) => {
             let content: JSX.Element;
-            if (loading && !rooms?.length) {
+            if (!hierarchy || (loading && !rooms?.length)) {
                 content = <Spinner />;
             } else {
                 const hasPermissions = space?.getMyMembership() === "join" &&
