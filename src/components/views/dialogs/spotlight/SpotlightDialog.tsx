@@ -1221,6 +1221,9 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                     autoFocus
                     type="text"
                     autoComplete="off"
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    spellCheck="false"
                     placeholder={_t("Search")}
                     value={query}
                     onChange={setQuery}
