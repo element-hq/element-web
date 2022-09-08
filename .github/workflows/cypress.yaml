@@ -13,6 +13,7 @@ jobs:
     permissions:
       actions: read
       issues: read
+      statuses: write
       pull-requests: read
     outputs:
       uuid: ${{ steps.uuid.outputs.value }}
@@ -22,6 +23,16 @@ jobs:
       commit_email: ${{ steps.commit.outputs.email }}
       percy_enable: ${{ steps.percy.outputs.value || '1' }}
     steps:
+      # We create the status here and then update it to success/failure in the `report` stage
+      # This provides an easy link to this workflow_run from the PR before Cypress is done.
+      - uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          state: pending
+          context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+          sha: ${{ github.event.workflow_run.head_sha }}
+          target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
       - id: prdetails
         if: github.event.workflow_run.event == 'pull_request'
         uses: matrix-org/pr-details-action@v1.2
@@ -62,7 +73,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: read
-      statuses: write
       issues: read
       pull-requests: read
     environment: Cypress
@@ -156,21 +166,21 @@ jobs:
           if-no-files-found: ignore
           retention-days: 1
 
-
-  # This job cannot have a pretty name due to https://github.com/haya14busa/action-workflow_run-status/issues/158
-  cypress:
+  report:
+    name: Report results
     needs: tests
     runs-on: ubuntu-latest
     if: always()
     permissions:
       statuses: write
     steps:
-      # Wire up the status check for this workflow_run action
-      - uses: haya14busa/action-workflow_run-status@967ed83efa565c257675ed70cfe5231f062ddd94 # v1.0.0
-      
-      - name: Check status
-        if: ${{ needs.tests.result != 'success' }}
-        run: exit 1
+      - uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          state: ${{ needs.tests.result }} == 'success' && 'success' || 'failure'
+          context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
+          sha: ${{ github.event.workflow_run.head_sha }}
+          target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
   store-benchmark:
     needs: tests
