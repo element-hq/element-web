@@ -115,6 +115,29 @@ describe('export', function() {
         });
     }
 
+    function mkImageEvent() {
+        return new MatrixEvent({
+            "content": {
+                "body": "image.png",
+                "info": {
+                    "mimetype": "image/png",
+                    "size": 31613,
+                },
+                "msgtype": "m.image",
+                "url": "mxc://test.org",
+            },
+            "origin_server_ts": 1628872988364,
+            "sender": MY_USER_ID,
+            "type": "m.room.message",
+            "unsigned": {
+                "age": 266,
+                "transaction_id": "m99999999.2",
+            },
+            "event_id": "$99999999999999999999",
+            "room_id": mockRoom.roomId,
+        });
+    }
+
     function mkEvents() {
         const matrixEvents = [];
         let i: number;
@@ -201,6 +224,18 @@ describe('export', function() {
         const fileRegex = /<span class="mx_MFileBody_info_icon">.*?<\/span>/;
         expect(fileRegex.test(
             renderToString(exporter.getEventTile(mkFileEvent(), true))),
+        ).toBeTruthy();
+    });
+
+    it("should export images if attachments are enabled", () => {
+        const exporter = new HTMLExporter(mockRoom, ExportType.Beginning, {
+            numberOfMessages: 5,
+            maxSize: 100 * 1024 * 1024,
+            attachmentsIncluded: true,
+        }, null);
+        const imageRegex = /<img.+ src="mxc:\/\/test.org" alt="image.png"\/>/;
+        expect(imageRegex.test(
+            renderToString(exporter.getEventTile(mkImageEvent(), true))),
         ).toBeTruthy();
     });
 
