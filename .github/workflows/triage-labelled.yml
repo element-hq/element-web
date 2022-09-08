@@ -33,7 +33,7 @@ jobs:
     name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
     steps:
-      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
+      - uses: konradpabjan/move-labeled-or-milestoned-issue@190352295fe309fcb113b49193bc81d9aaa9cb01
         with:
           action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
           project-url: "https://github.com/vector-im/element-web/projects/27"

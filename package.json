@@ -60,7 +60,7 @@
     "browser-request": "^0.3.3",
     "gfm.css": "^1.1.2",
     "jsrsasign": "^10.5.25",
-    "katex": "^0.12.0",
+    "katex": "^0.16.0",
     "matrix-js-sdk": "github:matrix-org/matrix-js-sdk#develop",
     "matrix-react-sdk": "github:matrix-org/matrix-react-sdk#develop",
     "matrix-widget-api": "^1.0.0",
@@ -68,7 +68,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "sanitize-html": "^2.3.2",
-    "ua-parser-js": "^0.7.24"
+    "ua-parser-js": "^0.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
@@ -94,8 +94,8 @@
     "@types/jest": "^29.0.0",
     "@types/modernizr": "^3.5.3",
     "@types/node": "^14.14.22",
-    "@types/react": "17.0.14",
-    "@types/react-dom": "17.0.9",
+    "@types/react": "17.0.49",
+    "@types/react-dom": "17.0.17",
     "@types/sanitize-html": "^2.3.1",
     "@types/ua-parser-js": "^0.7.36",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
@@ -109,7 +109,7 @@
     "cpx": "^1.5.0",
     "css-loader": "^3.6.0",
     "dotenv": "^10.0.0",
-    "eslint": "8.9.0",
+    "eslint": "8.23.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-deprecate": "^0.7.0",
     "eslint-plugin-import": "^2.25.4",
@@ -138,7 +138,7 @@
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "postcss": "^8.4.16",
     "postcss-easings": "^2.0.0",
-    "postcss-hexrgba": "2.0.1",
+    "postcss-hexrgba": "2.1.0",
     "postcss-import": "^12.0.1",
     "postcss-loader": "^3.0.0",
     "postcss-mixins": "^6.2.3",
@@ -167,7 +167,7 @@
     "yaml": "^2.0.1"
   },
   "resolutions": {
-    "@types/react": "17.0.14"
+    "@types/react": "17.0.49"
   },
   "jest": {
     "testEnvironment": "jsdom",
