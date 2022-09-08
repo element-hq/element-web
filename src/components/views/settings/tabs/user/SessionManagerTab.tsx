@@ -24,9 +24,16 @@ import CurrentDeviceSection from '../../devices/CurrentDeviceSection';
 import SecurityRecommendations from '../../devices/SecurityRecommendations';
 import { DeviceSecurityVariation, DeviceWithVerification } from '../../devices/types';
 import SettingsTab from '../SettingsTab';
+import Modal from '../../../../../Modal';
+import SetupEncryptionDialog from '../../../dialogs/security/SetupEncryptionDialog';
 
 const SessionManagerTab: React.FC = () => {
-    const { devices, currentDeviceId, isLoading } = useOwnDevices();
+    const {
+        devices,
+        currentDeviceId,
+        isLoading,
+        refreshDevices,
+    } = useOwnDevices();
     const [filter, setFilter] = useState<DeviceSecurityVariation>();
     const [expandedDeviceIds, setExpandedDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
@@ -57,6 +64,16 @@ const SessionManagerTab: React.FC = () => {
     const { [currentDeviceId]: currentDevice, ...otherDevices } = devices;
     const shouldShowOtherSessions = Object.keys(otherDevices).length > 0;
 
+    const onVerifyCurrentDevice = () => {
+        if (!currentDevice) {
+            return;
+        }
+        Modal.createDialog(
+            SetupEncryptionDialog as unknown as React.ComponentType,
+            { onFinished: refreshDevices },
+        );
+    };
+
     useEffect(() => () => {
         clearTimeout(scrollIntoViewTimeoutRef.current);
     }, [scrollIntoViewTimeoutRef]);
@@ -70,6 +87,7 @@ const SessionManagerTab: React.FC = () => {
         <CurrentDeviceSection
             device={currentDevice}
             isLoading={isLoading}
+            onVerifyCurrentDevice={onVerifyCurrentDevice}
         />
         {
             shouldShowOtherSessions &&

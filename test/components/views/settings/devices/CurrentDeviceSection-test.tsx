@@ -34,6 +34,7 @@ describe('<CurrentDeviceSection />', () => {
 
     const defaultProps = {
         device: alicesVerifiedDevice,
+        onVerifyCurrentDevice: jest.fn(),
         isLoading: false,
     };
     const getComponent = (props = {}): React.ReactElement =>

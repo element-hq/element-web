@@ -28,6 +28,7 @@ import {
     getMockClientWithEventEmitter,
     mockClientMethodsUser,
 } from '../../../../../test-utils';
+import Modal from '../../../../../../src/Modal';
 
 jest.useFakeTimers();
 
@@ -152,6 +153,21 @@ describe('<SessionManagerTab />', () => {
         });
 
         expect(getByTestId('current-session-section')).toMatchSnapshot();
+    });
+
+    it('opens encryption setup dialog when verifiying current session', async () => {
+        mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
+        const { getByTestId } = render(getComponent());
+        const modalSpy = jest.spyOn(Modal, 'createDialog');
+
+        await act(async () => {
+            await flushPromisesWithFakeTimers();
+        });
+
+        // click verify button from current session section
+        fireEvent.click(getByTestId(`verification-status-button-${alicesDevice.device_id}`));
+
+        expect(modalSpy).toHaveBeenCalled();
     });
 
     it('renders current session section with a verified session', async () => {

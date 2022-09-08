@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { logger } from "matrix-js-sdk/src/logger";
@@ -64,6 +64,7 @@ type DevicesState = {
     devices: DevicesDictionary;
     currentDeviceId: string;
     isLoading: boolean;
+    refreshDevices: () => Promise<void>;
     error?: OwnDevicesError;
 };
 export const useOwnDevices = (): DevicesState => {
@@ -75,30 +76,32 @@ export const useOwnDevices = (): DevicesState => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<OwnDevicesError>();
 
-    useEffect(() => {
-        const getDevicesAsync = async () => {
-            setIsLoading(true);
-            try {
-                const devices = await fetchDevicesWithVerification(matrixClient);
-                setDevices(devices);
-                setIsLoading(false);
-            } catch (error) {
-                if (error.httpStatus == 404) {
-                    // 404 probably means the HS doesn't yet support the API.
-                    setError(OwnDevicesError.Unsupported);
-                } else {
-                    logger.error("Error loading sessions:", error);
-                    setError(OwnDevicesError.Default);
-                }
-                setIsLoading(false);
+    const refreshDevices = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const devices = await fetchDevicesWithVerification(matrixClient);
+            setDevices(devices);
+            setIsLoading(false);
+        } catch (error) {
+            if (error.httpStatus == 404) {
+                // 404 probably means the HS doesn't yet support the API.
+                setError(OwnDevicesError.Unsupported);
+            } else {
+                logger.error("Error loading sessions:", error);
+                setError(OwnDevicesError.Default);
             }
-        };
-        getDevicesAsync();
+            setIsLoading(false);
+        }
     }, [matrixClient]);
+
+    useEffect(() => {
+        refreshDevices();
+    }, [refreshDevices]);
 
     return {
         devices,
         currentDeviceId,
+        refreshDevices,
         isLoading,
         error,
     };
