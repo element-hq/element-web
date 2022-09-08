@@ -33,9 +33,13 @@ import { useSettingValue } from "../../../hooks/useSettings";
 import { useReadPinnedEvents, usePinnedEvents } from './PinnedMessagesCard';
 import { showThreadPanel } from "../../../dispatcher/dispatch-actions/threads";
 import SettingsStore from "../../../settings/SettingsStore";
-import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
+import {
+    RoomNotificationStateStore,
+    UPDATE_STATUS_INDICATOR,
+} from "../../../stores/notifications/RoomNotificationStateStore";
 import { NotificationColor } from "../../../stores/notifications/NotificationColor";
 import { ThreadsRoomNotificationState } from "../../../stores/notifications/ThreadsRoomNotificationState";
+import { SummarizedNotificationState } from "../../../stores/notifications/SummarizedNotificationState";
 import { NotificationStateEvents } from "../../../stores/notifications/NotificationState";
 import PosthogTrackers from "../../../PosthogTrackers";
 import { ButtonEvent } from "../elements/AccessibleButton";
@@ -130,26 +134,39 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         RightPanelPhases.ThreadView,
     ];
     private threadNotificationState: ThreadsRoomNotificationState;
+    private globalNotificationState: SummarizedNotificationState;
 
     constructor(props: IProps) {
         super(props, HeaderKind.Room);
 
         this.threadNotificationState = RoomNotificationStateStore.instance.getThreadsRoomState(this.props.room);
+        this.globalNotificationState = RoomNotificationStateStore.instance.globalState;
     }
 
     public componentDidMount(): void {
         super.componentDidMount();
         this.threadNotificationState.on(NotificationStateEvents.Update, this.onThreadNotification);
+        RoomNotificationStateStore.instance.on(UPDATE_STATUS_INDICATOR, this.onUpdateStatus);
     }
 
     public componentWillUnmount(): void {
         super.componentWillUnmount();
         this.threadNotificationState.off(NotificationStateEvents.Update, this.onThreadNotification);
+        RoomNotificationStateStore.instance.off(UPDATE_STATUS_INDICATOR, this.onUpdateStatus);
     }
 
     private onThreadNotification = (): void => {
+        // XXX: why don't we read from this.state.threadNotificationColor in the render methods?
         this.setState({
             threadNotificationColor: this.threadNotificationState.color,
+        });
+    };
+
+    private onUpdateStatus = (notificationState: SummarizedNotificationState): void => {
+        // XXX: why don't we read from this.state.globalNotificationCount in the render methods?
+        this.globalNotificationState = notificationState;
+        this.setState({
+            globalNotificationColor: notificationState.color,
         });
     };
 
@@ -254,7 +271,12 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
                 title={_t('Notifications')}
                 isHighlighted={this.isPhase(RightPanelPhases.NotificationPanel)}
                 onClick={this.onNotificationsClicked}
-            />,
+                isUnread={this.globalNotificationState.color === NotificationColor.Red}
+            >
+                { this.globalNotificationState.color === NotificationColor.Red ?
+                    <UnreadIndicator color={this.globalNotificationState.color} /> :
+                    null }
+            </HeaderButton>,
         );
         rightPanelPhaseButtons.set(RightPanelPhases.RoomSummary,
             <HeaderButton
@@ -269,7 +291,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
         return <>
             {
                 Array.from(rightPanelPhaseButtons.keys()).map((phase) =>
-                    (this.props.excludedRightPanelPhaseButtons.includes(phase)
+                    (this.props.excludedRightPanelPhaseButtons?.includes(phase)
                         ? null
                         : rightPanelPhaseButtons.get(phase)))
             }
