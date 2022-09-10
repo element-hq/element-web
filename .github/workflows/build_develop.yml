@@ -52,7 +52,7 @@ jobs:
           retention-days: 1
 
       - name: Wait for other steps to succeed
-        uses: lewagon/wait-on-check-action@v1.0.0
+        uses: lewagon/wait-on-check-action@v1.1.2
         with:
           ref: ${{ github.ref }}
           running-workflow-name: 'Build & Upload source maps to Sentry'
