@@ -15,24 +15,22 @@ limitations under the License.
 */
 
 import { Room } from "matrix-js-sdk/src/matrix";
-import React, { ComponentPropsWithoutRef, ElementType } from "react";
+import React, { HTMLAttributes, ReactHTML } from "react";
 
 import { roomContextDetails } from "../../../utils/i18n-helpers";
 
-type Props<T extends ElementType> = ComponentPropsWithoutRef<T> & {
+type Props<T extends keyof ReactHTML> = HTMLAttributes<T> & {
     component?: T;
     room: Room;
 };
 
-export function RoomContextDetails<T extends ElementType>({ room, component: Component = "div", ...other }: Props<T>) {
+export function RoomContextDetails<T extends keyof ReactHTML>({ room, component, ...other }: Props<T>) {
     const contextDetails = roomContextDetails(room);
     if (contextDetails) {
-        return <Component
-            {...other}
-            aria-label={contextDetails.ariaLabel}
-        >
-            { contextDetails.details }
-        </Component>;
+        return React.createElement(component ?? "div", {
+            ...other,
+            "aria-label": contextDetails.ariaLabel,
+        }, [contextDetails.details]);
     }
 
     return null;

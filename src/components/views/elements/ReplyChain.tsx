@@ -81,7 +81,7 @@ export default class ReplyChain extends React.Component<IProps, IState> {
 
     private unmounted = false;
     private room: Room;
-    private blockquoteRef = React.createRef<HTMLElement>();
+    private blockquoteRef = React.createRef<HTMLQuoteElement>();
 
     constructor(props: IProps, context: React.ContextType<typeof RoomContext>) {
         super(props, context);

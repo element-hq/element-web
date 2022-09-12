@@ -300,7 +300,7 @@ export default class Dropdown extends React.Component<DropdownProps, IState> {
     }
 
     private getMenuOptions() {
-        const options = React.Children.map(this.props.children, (child) => {
+        const options = React.Children.map(this.props.children, (child: ReactElement) => {
             const highlighted = this.state.highlightedOption === child.key;
             return (
                 <MenuOption

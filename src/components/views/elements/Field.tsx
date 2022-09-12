@@ -38,8 +38,6 @@ export interface IValidateOpts {
 interface IProps {
     // The field's ID, which binds the input and label together. Immutable.
     id?: string;
-    // The field's type (when used as an <input>). Defaults to "text".
-    type?: string;
     // id of a <datalist> element for suggestions
     list?: string;
     // The field's label string.

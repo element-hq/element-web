@@ -18,7 +18,7 @@ limitations under the License.
 */
 
 import url from 'url';
-import React, { ContextType, createRef, MutableRefObject } from 'react';
+import React, { ContextType, createRef, MutableRefObject, ReactNode } from 'react';
 import classNames from 'classnames';
 import { MatrixCapabilities } from "matrix-widget-api";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
@@ -666,7 +666,7 @@ export default class AppTile extends React.Component<IProps, IState> {
             );
         }
 
-        const layoutButtons: React.ReactNodeArray = [];
+        const layoutButtons: ReactNode[] = [];
         if (this.props.showLayoutButtons) {
             const isMaximised = WidgetLayoutStore.instance.
                 isInContainer(this.props.room, this.props.app, Container.Center);
