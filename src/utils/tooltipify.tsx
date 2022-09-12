@@ -47,12 +47,17 @@ export function tooltipifyLinks(rootNodes: ArrayLike<Element>, ignoredNodes: Ele
         if (node.tagName === "A" && node.getAttribute("href")
             && node.getAttribute("href") !== node.textContent.trim()
         ) {
-            const href = node.getAttribute("href");
+            let href = node.getAttribute("href");
+            try {
+                href = new URL(href, window.location.href).toString();
+            } catch (e) {
+                // Not all hrefs will be valid URLs
+            }
 
             // The node's innerHTML was already sanitized before being rendered in the first place, here we are just
             // wrapping the link with the LinkWithTooltip component, keeping the same children. Ideally we'd do this
             // without the superfluous span but this is not something React trivially supports at this time.
-            const tooltip = <LinkWithTooltip tooltip={new URL(href, window.location.href).toString()}>
+            const tooltip = <LinkWithTooltip tooltip={href}>
                 <span dangerouslySetInnerHTML={{ __html: node.innerHTML }} />
             </LinkWithTooltip>;
 
