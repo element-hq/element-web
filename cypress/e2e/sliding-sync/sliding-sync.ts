@@ -319,4 +319,16 @@ describe("Sliding Sync", () => {
             "Join", "Test Room",
         ]);
     });
+
+    it("should show a favourite DM only in the favourite sublist", () => {
+        cy.createRoom({
+            name: "Favourite DM",
+            is_direct: true,
+        }).as("room").then(roomId => {
+            cy.getClient().then(cli => cli.setRoomTag(roomId, "m.favourite", { order: 0.5 }));
+        });
+
+        cy.get('.mx_RoomSublist[aria-label="Favourites"]').contains(".mx_RoomTile", "Favourite DM").should("exist");
+        cy.get('.mx_RoomSublist[aria-label="People"]').contains(".mx_RoomTile", "Favourite DM").should("not.exist");
+    });
 });

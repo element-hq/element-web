@@ -55,6 +55,8 @@ const filterConditions: Record<TagID, MSC3575Filter> = {
         is_dm: true,
         is_invite: false,
         is_tombstoned: false,
+        // If a DM has a Favourite & Low Prio tag then it'll be shown in those lists instead
+        not_tags: ["m.favourite", "m.lowpriority"],
     },
     [DefaultTagID.Untagged]: {
         is_dm: false,
@@ -66,6 +68,8 @@ const filterConditions: Record<TagID, MSC3575Filter> = {
     },
     [DefaultTagID.LowPriority]: {
         tags: ["m.lowpriority"],
+        // If a room has both Favourite & Low Prio tags then it'll be shown under Favourites
+        not_tags: ["m.favourite"],
         is_tombstoned: false,
     },
     // TODO https://github.com/vector-im/element-web/issues/23207
