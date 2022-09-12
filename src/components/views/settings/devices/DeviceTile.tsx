@@ -99,10 +99,12 @@ const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, onClick }) =>
             <DeviceTileName device={device} />
             <div className="mx_DeviceTile_metadata">
                 { metadata.map(({ id, value }, index) =>
-                    <Fragment key={id}>
-                        { !!index && ' · ' }
-                        <DeviceMetadata id={id} value={value} />
-                    </Fragment>,
+                    !!value
+                        ? <Fragment key={id}>
+                            { !!index && ' · ' }
+                            <DeviceMetadata id={id} value={value} />
+                        </Fragment>
+                        : null,
                 ) }
             </div>
         </div>

@@ -141,8 +141,6 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             >
               Unverified
             </span>
-             · 
-             · 
           </div>
         </div>
         <div
@@ -259,8 +257,6 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
               >
                 Unverified
               </span>
-               · 
-               · 
             </div>
           </div>
           <div
@@ -336,8 +332,6 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
               >
                 Unverified
               </span>
-               · 
-               · 
             </div>
           </div>
           <div

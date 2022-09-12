@@ -171,8 +171,6 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             >
               Unverified
             </span>
-             · 
-             · 
           </div>
         </div>
         <div
@@ -283,8 +281,6 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             >
               Unverified
             </span>
-             · 
-             · 
           </div>
         </div>
         <div

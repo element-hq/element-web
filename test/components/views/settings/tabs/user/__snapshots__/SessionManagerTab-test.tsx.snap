@@ -83,8 +83,6 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
           >
             Verified
           </span>
-           · 
-           · 
         </div>
       </div>
       <div
@@ -181,8 +179,6 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
           >
             Unverified
           </span>
-           · 
-           · 
         </div>
       </div>
       <div
@@ -279,8 +275,6 @@ exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
       >
         Verified
       </span>
-       · 
-       · 
     </div>
   </div>
   <div

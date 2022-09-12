@@ -36,8 +36,6 @@ exports[`<DeviceTile /> renders a device with no metadata 1`] = `
         >
           Unverified
         </span>
-         · 
-         · 
       </div>
     </div>
     <div
@@ -83,8 +81,6 @@ exports[`<DeviceTile /> renders a verified device with no metadata 1`] = `
         >
           Unverified
         </span>
-         · 
-         · 
       </div>
     </div>
     <div
@@ -134,8 +130,6 @@ exports[`<DeviceTile /> renders display name with a tooltip 1`] = `
         >
           Unverified
         </span>
-         · 
-         · 
       </div>
     </div>
     <div
