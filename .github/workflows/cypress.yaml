@@ -177,7 +177,7 @@ jobs:
       - uses: Sibz/github-status-action@v1
         with:
           authToken: ${{ secrets.GITHUB_TOKEN }}
-          state: ${{ needs.tests.result }} == 'success' && 'success' || 'failure'
+          state: ${{ needs.tests.result == 'success' && 'success' || 'failure' }}
           context: ${{ github.workflow }} / cypress (${{ github.event.workflow_run.event }} => ${{ github.event_name }})
           sha: ${{ github.event.workflow_run.head_sha }}
           target_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
