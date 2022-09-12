@@ -20,6 +20,8 @@ import { RoomViewStore } from '../../src/stores/RoomViewStore';
 import { Action } from '../../src/dispatcher/actions';
 import * as testUtils from '../test-utils';
 import { flushPromises, getMockClientWithEventEmitter } from '../test-utils';
+import SettingsStore from '../../src/settings/SettingsStore';
+import { SlidingSyncManager } from '../../src/SlidingSyncManager';
 
 const dispatch = testUtils.getDispatchForStore(RoomViewStore.instance);
 
@@ -47,7 +49,7 @@ describe('RoomViewStore', function() {
 
     beforeEach(function() {
         jest.clearAllMocks();
-        mockClient.credentials = { userId: "@test:example.com" };
+        mockClient.credentials = { userId: userId };
         mockClient.joinRoom.mockResolvedValue(room);
         mockClient.getRoom.mockReturnValue(room);
         mockClient.isGuest.mockReturnValue(false);
@@ -58,7 +60,7 @@ describe('RoomViewStore', function() {
 
     it('can be used to view a room by ID and join', async () => {
         dispatch({ action: Action.ViewRoom, room_id: '!randomcharacters:aser.ver' });
-        dispatch({ action: 'join_room' });
+        dispatch({ action: Action.JoinRoom });
         await flushPromises();
         expect(mockClient.joinRoom).toHaveBeenCalledWith('!randomcharacters:aser.ver', { viaServers: [] });
         expect(RoomViewStore.instance.isJoining()).toBe(true);
@@ -78,11 +80,53 @@ describe('RoomViewStore', function() {
         expect(RoomViewStore.instance.getRoomId()).toBe(roomId);
 
         // join the room
-        dispatch({ action: 'join_room' });
+        dispatch({ action: Action.JoinRoom });
 
         expect(RoomViewStore.instance.isJoining()).toBeTruthy();
         await flushPromises();
 
         expect(mockClient.joinRoom).toHaveBeenCalledWith(alias, { viaServers: [] });
+    });
+
+    describe('Sliding Sync', function() {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, 'getValue').mockImplementation((settingName, roomId, value) => {
+                return settingName === "feature_sliding_sync"; // this is enabled, everything else is disabled.
+            });
+            RoomViewStore.instance.reset();
+        });
+
+        it("subscribes to the room", async () => {
+            const setRoomVisible = jest.spyOn(SlidingSyncManager.instance, "setRoomVisible").mockReturnValue(
+                Promise.resolve(""),
+            );
+            const subscribedRoomId = "!sub1:localhost";
+            dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId });
+            await flushPromises();
+            await flushPromises();
+            expect(RoomViewStore.instance.getRoomId()).toBe(subscribedRoomId);
+            expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId, true);
+        });
+
+        // Regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
+        it("doesn't get stuck in a loop if you view rooms quickly", async () => {
+            const setRoomVisible = jest.spyOn(SlidingSyncManager.instance, "setRoomVisible").mockReturnValue(
+                Promise.resolve(""),
+            );
+            const subscribedRoomId = "!sub2:localhost";
+            const subscribedRoomId2 = "!sub3:localhost";
+            dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId });
+            dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId2 });
+            // sub(1) then unsub(1) sub(2)
+            expect(setRoomVisible).toHaveBeenCalledTimes(3);
+            await flushPromises();
+            await flushPromises();
+            // this should not churn, extra call to allow unsub(1)
+            expect(setRoomVisible).toHaveBeenCalledTimes(4);
+            // flush a bit more to ensure this doesn't change
+            await flushPromises();
+            await flushPromises();
+            expect(setRoomVisible).toHaveBeenCalledTimes(4);
+        });
     });
 });

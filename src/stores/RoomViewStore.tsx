@@ -60,6 +60,8 @@ const INITIAL_STATE = {
     joinError: null as Error,
     // The room ID of the room currently being viewed
     roomId: null as string,
+    // The room ID being subscribed to (in Sliding Sync)
+    subscribingRoomId: null as string,
 
     // The event to scroll to when the room is first viewed
     initialEventId: null as string,
@@ -286,6 +288,7 @@ export class RoomViewStore extends Store<ActionPayload> {
                     SlidingSyncManager.instance.setRoomVisible(this.state.roomId, false);
                 }
                 this.setState({
+                    subscribingRoomId: payload.room_id,
                     roomId: payload.room_id,
                     initialEventId: null,
                     initialEventPixelOffset: null,
@@ -300,6 +303,12 @@ export class RoomViewStore extends Store<ActionPayload> {
                 // set this room as the room subscription. We need to await for it as this will fetch
                 // all room state for this room, which is required before we get the state below.
                 await SlidingSyncManager.instance.setRoomVisible(payload.room_id, true);
+                // Whilst we were subscribing another room was viewed, so stop what we're doing and
+                // unsubscribe
+                if (this.state.subscribingRoomId !== payload.room_id) {
+                    SlidingSyncManager.instance.setRoomVisible(this.state.roomId, false);
+                    return;
+                }
                 // Re-fire the payload: we won't re-process it because the prev room ID == payload room ID now
                 dis.dispatch({
                     ...payload,
