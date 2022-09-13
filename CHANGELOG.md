@@ -1,5 +1,5 @@
-Changes in [1.11.5-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.5-rc.1) (2022-09-06)
-=========================================================================================================
+Changes in [1.11.5](https://github.com/vector-im/element-web/releases/tag/v1.11.5) (2022-09-13)
+===============================================================================================
 
 ## ✨ Features
  * Device manager - hide unverified security recommendation when only current session is unverified ([\#9228](https://github.com/matrix-org/matrix-react-sdk/pull/9228)). Contributed by @kerryarchibald.
