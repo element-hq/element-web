@@ -1,5 +1,5 @@
-Changes in [3.54.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.54.0-rc.1) (2022-09-06)
-===============================================================================================================
+Changes in [3.54.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.54.0) (2022-09-13)
+=====================================================================================================
 
 ## ✨ Features
  * Device manager - hide unverified security recommendation when only current session is unverified ([\#9228](https://github.com/matrix-org/matrix-react-sdk/pull/9228)). Contributed by @kerryarchibald.
