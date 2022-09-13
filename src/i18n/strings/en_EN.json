@@ -376,6 +376,7 @@
     "Some invites couldn't be sent": "Some invites couldn't be sent",
     "You need to be logged in.": "You need to be logged in.",
     "You need to be able to invite users to do that.": "You need to be able to invite users to do that.",
+    "You need to be able to kick users to do that.": "You need to be able to kick users to do that.",
     "Unable to create widget.": "Unable to create widget.",
     "Missing roomId.": "Missing roomId.",
     "Failed to send request.": "Failed to send request.",
