@@ -865,6 +865,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         if (this.context) {
             this.context.removeListener(ClientEvent.Room, this.onRoom);
             this.context.removeListener(RoomEvent.Timeline, this.onRoomTimeline);
+            this.context.removeListener(RoomEvent.TimelineReset, this.onRoomTimelineReset);
             this.context.removeListener(RoomEvent.Name, this.onRoomName);
             this.context.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
             this.context.removeListener(RoomEvent.MyMembership, this.onMyMembership);
