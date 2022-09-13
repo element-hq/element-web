@@ -1,3 +1,23 @@
+Changes in [3.54.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.54.0) (2022-09-13)
+=====================================================================================================
+
+## ✨ Features
+ * Device manager - hide unverified security recommendation when only current session is unverified ([\#9228](https://github.com/matrix-org/matrix-react-sdk/pull/9228)). Contributed by @kerryarchibald.
+ * Device manager - scroll to filtered list from security recommendations ([\#9227](https://github.com/matrix-org/matrix-react-sdk/pull/9227)). Contributed by @kerryarchibald.
+ * Device manager - updated dropdown style in filtered device list ([\#9226](https://github.com/matrix-org/matrix-react-sdk/pull/9226)). Contributed by @kerryarchibald.
+ * Device manager - device type and verification icons on device tile ([\#9197](https://github.com/matrix-org/matrix-react-sdk/pull/9197)). Contributed by @kerryarchibald.
+
+## 🐛 Bug Fixes
+ * Description of DM room with more than two other people is now being displayed correctly ([\#9231](https://github.com/matrix-org/matrix-react-sdk/pull/9231)). Fixes vector-im/element-web#23094.
+ * Fix voice messages with multiple composers ([\#9208](https://github.com/matrix-org/matrix-react-sdk/pull/9208)). Fixes vector-im/element-web#23023. Contributed by @grimhilt.
+ * Fix suggested rooms going missing ([\#9236](https://github.com/matrix-org/matrix-react-sdk/pull/9236)). Fixes vector-im/element-web#23190.
+ * Fix tooltip infinitely recursing ([\#9235](https://github.com/matrix-org/matrix-react-sdk/pull/9235)). Fixes matrix-org/element-web-rageshakes#15107, matrix-org/element-web-rageshakes#15093 matrix-org/element-web-rageshakes#15092 and matrix-org/element-web-rageshakes#15077.
+ * Fix plain text export saving ([\#9230](https://github.com/matrix-org/matrix-react-sdk/pull/9230)). Contributed by @jryans.
+ * Add missing space in SecurityRoomSettingsTab ([\#9222](https://github.com/matrix-org/matrix-react-sdk/pull/9222)). Contributed by @gefgu.
+ * Make use of js-sdk roomNameGenerator to handle i18n for generated room names ([\#9209](https://github.com/matrix-org/matrix-react-sdk/pull/9209)). Fixes vector-im/element-web#21369.
+ * Fix progress bar regression throughout the app ([\#9219](https://github.com/matrix-org/matrix-react-sdk/pull/9219)). Fixes vector-im/element-web#23121.
+ * Reuse empty string & space string logic for event types in devtools ([\#9218](https://github.com/matrix-org/matrix-react-sdk/pull/9218)). Fixes vector-im/element-web#23115.
+
 Changes in [3.53.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.53.0) (2022-08-31)
 =====================================================================================================
 
