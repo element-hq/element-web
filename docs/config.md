@@ -3,8 +3,7 @@
 You can configure the app by copying `config.sample.json` to `config.json` or `config.$domain.json` and customising it.
 Element will attempt to load first `config.$domain.json` and if it fails `config.json`. This mechanism allows different
 configuration options depending on if you're hitting e.g. `app1.example.com` or `app2.example.com`. Configs are not mixed
-in any way, it either entirely uses the domain config, or entirely uses `config.json`. Using `config.json` is the
-recommended default solution.
+in any way, it either entirely uses the domain config, or entirely uses `config.json`.
 
 The possible configuration options are described here. If you run into issues, please visit
 [#element-web:matrix.org](https://matrix.to/#/#element-web:matrix.org) on Matrix.
