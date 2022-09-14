@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing...'
             }
         }
         stage('Upload to Nexus') {
