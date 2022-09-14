@@ -318,8 +318,9 @@ The VoIP and Jitsi options are:
    as defined by the `io.element.widgets.layout` state event.
 5. `audio_stream_url`: Optional URL to pass to Jitsi to enable live streaming. This option is considered experimental and may be removed
    at any time without notice.
-6. `element_call_url`: Optional URL of the Element Call instance to use for native group calls. This option is considered experimental
-   and may be removed at any time without notice. Defaults to `https://call.element.io`.
+6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
+   - `url`: The URL of the Element Call instance to use for native group calls. This option is considered experimental
+      and may be removed at any time without notice. Defaults to `https://call.element.io`.
 
 ## Bug reporting
 
