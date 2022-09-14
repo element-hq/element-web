@@ -397,6 +397,13 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
             </FocusLock>;
         }
 
+        // filter props that are invalid for DOM elements
+        const {
+            hasBackground: _hasBackground, // eslint-disable-line @typescript-eslint/no-unused-vars
+            onFinished: _onFinished, // eslint-disable-line @typescript-eslint/no-unused-vars
+            ...divProps
+        } = props;
+
         return (
             <RovingTabIndexProvider handleHomeEnd handleUpDown onKeyDown={this.onKeyDown}>
                 { ({ onKeyDownHandler }) => (
@@ -413,7 +420,7 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
                             style={menuStyle}
                             ref={this.collectContextMenuRect}
                             role={managed ? "menu" : undefined}
-                            {...props}
+                            {...divProps}
                         >
                             { body }
                         </div>
