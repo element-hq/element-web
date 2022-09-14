@@ -40,6 +40,8 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=tag
+          flavor: |
+            latest=${{ contains(github.ref_name, '-rc.') && 'false' || 'auto' }}
 
       - name: Build and push
         uses: docker/build-push-action@v2
