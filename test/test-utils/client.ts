@@ -16,7 +16,7 @@ limitations under the License.
 
 import EventEmitter from "events";
 import { MethodKeysOf, mocked, MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 
@@ -65,6 +65,7 @@ export const unmockClientPeg = () => jest.spyOn(MatrixClientPeg, 'get').mockRest
  */
 export const mockClientMethodsUser = (userId = '@alice:domain') => ({
     getUserId: jest.fn().mockReturnValue(userId),
+    getUser: jest.fn().mockReturnValue(new User(userId)),
     isGuest: jest.fn().mockReturnValue(false),
     mxcUrlToHttp: jest.fn().mockReturnValue('mock-mxcUrlToHttp'),
     credentials: { userId },

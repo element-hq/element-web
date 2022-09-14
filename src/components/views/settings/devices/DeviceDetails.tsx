@@ -24,6 +24,7 @@ import { DeviceWithVerification } from './types';
 
 interface Props {
     device: DeviceWithVerification;
+    onVerifyDevice?: () => void;
 }
 
 interface MetadataTable {
@@ -31,7 +32,10 @@ interface MetadataTable {
     values: { label: string, value?: string | React.ReactNode }[];
 }
 
-const DeviceDetails: React.FC<Props> = ({ device }) => {
+const DeviceDetails: React.FC<Props> = ({
+    device,
+    onVerifyDevice,
+}) => {
     const metadata: MetadataTable[] = [
         {
             values: [
@@ -52,7 +56,10 @@ const DeviceDetails: React.FC<Props> = ({ device }) => {
     return <div className='mx_DeviceDetails' data-testid={`device-detail-${device.device_id}`}>
         <section className='mx_DeviceDetails_section'>
             <Heading size='h3'>{ device.display_name ?? device.device_id }</Heading>
-            <DeviceVerificationStatusCard device={device} />
+            <DeviceVerificationStatusCard
+                device={device}
+                onVerifyDevice={onVerifyDevice}
+            />
         </section>
         <section className='mx_DeviceDetails_section'>
             <p className='mx_DeviceDetails_sectionHeading'>{ _t('Session details') }</p>

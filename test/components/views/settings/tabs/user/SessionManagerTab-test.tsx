@@ -20,6 +20,7 @@ import { act } from 'react-dom/test-utils';
 import { DeviceInfo } from 'matrix-js-sdk/src/crypto/deviceinfo';
 import { logger } from 'matrix-js-sdk/src/logger';
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
+import { VerificationRequest } from 'matrix-js-sdk/src/crypto/verification/request/VerificationRequest';
 
 import SessionManagerTab from '../../../../../../src/components/views/settings/tabs/user/SessionManagerTab';
 import MatrixClientContext from '../../../../../../src/contexts/MatrixClientContext';
@@ -52,12 +53,14 @@ describe('<SessionManagerTab />', () => {
     const mockCrossSigningInfo = {
         checkDeviceTrust: jest.fn(),
     };
+    const mockVerificationRequest = { cancel: jest.fn() } as unknown as VerificationRequest;
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(aliceId),
         getStoredCrossSigningForUser: jest.fn().mockReturnValue(mockCrossSigningInfo),
         getDevices: jest.fn(),
         getStoredDevice: jest.fn(),
         getDeviceId: jest.fn().mockReturnValue(deviceId),
+        requestVerification: jest.fn().mockResolvedValue(mockVerificationRequest),
     });
 
     const defaultProps = {};
@@ -276,6 +279,99 @@ describe('<SessionManagerTab />', () => {
             expect(queryByTestId(`device-detail-${alicesMobileDevice.device_id}`)).toBeFalsy();
             // alicesOlderMobileDevice stayed open
             expect(getByTestId(`device-detail-${alicesOlderMobileDevice.device_id}`)).toBeTruthy();
+        });
+    });
+
+    describe('Device verification', () => {
+        it('does not render device verification cta when current session is not verified', async () => {
+            mockClient.getDevices.mockResolvedValue({
+                devices: [alicesDevice, alicesOlderMobileDevice, alicesMobileDevice],
+            });
+            const { getByTestId, queryByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromisesWithFakeTimers();
+            });
+
+            const tile1 = getByTestId(`device-tile-${alicesOlderMobileDevice.device_id}`);
+            const toggle1 = tile1.querySelector('[aria-label="Toggle device details"]') as Element;
+            fireEvent.click(toggle1);
+
+            // verify device button is not rendered
+            expect(queryByTestId(`verification-status-button-${alicesOlderMobileDevice.device_id}`)).toBeFalsy();
+        });
+
+        it('renders device verification cta on other sessions when current session is verified', async () => {
+            const modalSpy = jest.spyOn(Modal, 'createDialog');
+
+            // make the current device verified
+            mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
+            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
+            mockCrossSigningInfo.checkDeviceTrust
+                .mockImplementation((_userId, { deviceId }) => {
+                    console.log('hhh', deviceId);
+                    if (deviceId === alicesDevice.device_id) {
+                        return new DeviceTrustLevel(true, true, false, false);
+                    }
+                    throw new Error('everything else unverified');
+                });
+
+            const { getByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromisesWithFakeTimers();
+            });
+
+            const tile1 = getByTestId(`device-tile-${alicesMobileDevice.device_id}`);
+            const toggle1 = tile1.querySelector('[aria-label="Toggle device details"]') as Element;
+            fireEvent.click(toggle1);
+
+            // click verify button from current session section
+            fireEvent.click(getByTestId(`verification-status-button-${alicesMobileDevice.device_id}`));
+
+            expect(mockClient.requestVerification).toHaveBeenCalledWith(aliceId, [alicesMobileDevice.device_id]);
+            expect(modalSpy).toHaveBeenCalled();
+        });
+
+        it('refreshes devices after verifying other device', async () => {
+            const modalSpy = jest.spyOn(Modal, 'createDialog');
+
+            // make the current device verified
+            mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice, alicesMobileDevice] });
+            mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
+            mockCrossSigningInfo.checkDeviceTrust
+                .mockImplementation((_userId, { deviceId }) => {
+                    console.log('hhh', deviceId);
+                    if (deviceId === alicesDevice.device_id) {
+                        return new DeviceTrustLevel(true, true, false, false);
+                    }
+                    throw new Error('everything else unverified');
+                });
+
+            const { getByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromisesWithFakeTimers();
+            });
+
+            const tile1 = getByTestId(`device-tile-${alicesMobileDevice.device_id}`);
+            const toggle1 = tile1.querySelector('[aria-label="Toggle device details"]') as Element;
+            fireEvent.click(toggle1);
+
+            // reset mock counter before triggering verification
+            mockClient.getDevices.mockClear();
+
+            // click verify button from current session section
+            fireEvent.click(getByTestId(`verification-status-button-${alicesMobileDevice.device_id}`));
+
+            const { onFinished: modalOnFinished } = modalSpy.mock.calls[0][1] as any;
+            // simulate modal completing process
+            await modalOnFinished();
+
+            // cancelled in case it was a failure exit from modal
+            expect(mockVerificationRequest.cancel).toHaveBeenCalled();
+            // devices refreshed
+            expect(mockClient.getDevices).toHaveBeenCalled();
         });
     });
 });

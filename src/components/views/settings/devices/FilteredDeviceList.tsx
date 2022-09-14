@@ -39,6 +39,7 @@ interface Props {
     filter?: DeviceSecurityVariation;
     onFilterChange: (filter: DeviceSecurityVariation | undefined) => void;
     onDeviceExpandToggle: (deviceId: DeviceWithVerification['device_id']) => void;
+    onRequestDeviceVerification?: (deviceId: DeviceWithVerification['device_id']) => void;
 }
 
 // devices without timestamp metadata should be sorted last
@@ -132,8 +133,10 @@ const DeviceListItem: React.FC<{
     device: DeviceWithVerification;
     isExpanded: boolean;
     onDeviceExpandToggle: () => void;
+    onRequestDeviceVerification?: () => void;
 }> = ({
     device, isExpanded, onDeviceExpandToggle,
+    onRequestDeviceVerification,
 }) => <li className='mx_FilteredDeviceList_listItem'>
     <DeviceTile
         device={device}
@@ -143,7 +146,7 @@ const DeviceListItem: React.FC<{
             onClick={onDeviceExpandToggle}
         />
     </DeviceTile>
-    { isExpanded && <DeviceDetails device={device} /> }
+    { isExpanded && <DeviceDetails device={device} onVerifyDevice={onRequestDeviceVerification} /> }
 </li>;
 
 /**
@@ -157,6 +160,7 @@ export const FilteredDeviceList =
         expandedDeviceIds,
         onFilterChange,
         onDeviceExpandToggle,
+        onRequestDeviceVerification,
     }: Props, ref: ForwardedRef<HTMLDivElement>) => {
         const sortedDevices = getFilteredSortedDevices(devices, filter);
 
@@ -210,6 +214,11 @@ export const FilteredDeviceList =
                     device={device}
                     isExpanded={expandedDeviceIds.includes(device.device_id)}
                     onDeviceExpandToggle={() => onDeviceExpandToggle(device.device_id)}
+                    onRequestDeviceVerification={
+                        onRequestDeviceVerification
+                            ? () => onRequestDeviceVerification(device.device_id)
+                            : undefined
+                    }
                 />,
                 ) }
             </ol>
