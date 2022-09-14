@@ -16,7 +16,9 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing...'
+                container('node') {
+                    sh 'ci/test.sh'
+                }
             }
         }
         stage('Upload to Nexus') {
