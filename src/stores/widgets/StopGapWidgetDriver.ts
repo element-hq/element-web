@@ -21,6 +21,7 @@ import {
     IOpenIDUpdate,
     ISendEventDetails,
     ITurnServer,
+    IReadEventRelationsResult,
     IRoomEvent,
     MatrixCapabilities,
     OpenIDRequestState,
@@ -37,6 +38,7 @@ import { IContent, IEvent, MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
+import { Direction } from "matrix-js-sdk/src/matrix";
 
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
@@ -365,5 +367,48 @@ export class StopGapWidgetDriver extends WidgetDriver {
             client.off(ClientEvent.TurnServers, onTurnServers);
             client.off(ClientEvent.TurnServersError, onTurnServersError);
         }
+    }
+
+    public async readEventRelations(
+        eventId: string,
+        roomId?: string,
+        relationType?: string,
+        eventType?: string,
+        from?: string,
+        to?: string,
+        limit?: number,
+        direction?: 'f' | 'b',
+    ): Promise<IReadEventRelationsResult> {
+        const client = MatrixClientPeg.get();
+        const dir = direction as Direction;
+        roomId = roomId ?? RoomViewStore.instance.getRoomId() ?? undefined;
+
+        if (typeof roomId !== "string") {
+            throw new Error('Error while reading the current room');
+        }
+
+        const {
+            originalEvent,
+            events,
+            nextBatch,
+            prevBatch,
+        } = await client.relations(
+            roomId,
+            eventId,
+            relationType ?? null,
+            eventType ?? null,
+            {
+                from,
+                to,
+                limit,
+                direction: dir,
+            });
+
+        return {
+            originalEvent: originalEvent?.getEffectiveEvent(),
+            chunk: events.map(e => e.getEffectiveEvent()),
+            nextBatch,
+            prevBatch,
+        };
     }
 }
