@@ -50,7 +50,7 @@ HTMLCollection [
         Session details
       </p>
       <table
-        class="mxDeviceDetails_metadataTable"
+        class="mx_DeviceDetails_metadataTable"
       >
         <tbody>
           <tr>
@@ -78,7 +78,7 @@ HTMLCollection [
         </tbody>
       </table>
       <table
-        class="mxDeviceDetails_metadataTable"
+        class="mx_DeviceDetails_metadataTable"
       >
         <thead>
           <tr>
@@ -100,6 +100,18 @@ HTMLCollection [
           </tr>
         </tbody>
       </table>
+    </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+        data-testid="device-detail-sign-out-cta"
+        role="button"
+        tabindex="0"
+      >
+        Sign out of this session
+      </div>
     </section>
   </div>,
 ]

@@ -1,5 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
+<div
+  class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+  data-testid="device-detail-sign-out-cta"
+  role="button"
+  tabindex="0"
+>
+  Sign out of this session
+</div>
+`;
+
 exports[`<SessionManagerTab /> goes to filtered list from security recommendations 1`] = `
 <div
   class="mx_FilteredDeviceList_header"

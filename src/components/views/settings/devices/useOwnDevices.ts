@@ -19,7 +19,7 @@ import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import { User } from "matrix-js-sdk/src/models/user";
-import { MatrixError } from "matrix-js-sdk/src/matrix";
+import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";

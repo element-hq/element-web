@@ -35,6 +35,7 @@ describe('<CurrentDeviceSection />', () => {
     const defaultProps = {
         device: alicesVerifiedDevice,
         onVerifyCurrentDevice: jest.fn(),
+        onSignOutCurrentDevice: jest.fn(),
         isLoading: false,
     };
     const getComponent = (props = {}): React.ReactElement =>

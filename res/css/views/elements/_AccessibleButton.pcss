@@ -138,15 +138,25 @@ limitations under the License.
     }
 
     &.mx_AccessibleButton_kind_link,
-    &.mx_AccessibleButton_kind_link_inline {
-        color: $accent;
+    &.mx_AccessibleButton_kind_link_inline,
+    &.mx_AccessibleButton_kind_danger_inline {
         font-size: inherit;
         font-weight: normal;
         line-height: inherit;
         padding: 0;
     }
 
+    &.mx_AccessibleButton_kind_link,
     &.mx_AccessibleButton_kind_link_inline {
+        color: $accent;
+    }
+
+    &.mx_AccessibleButton_kind_danger_inline {
+        color: $alert;
+    }
+
+    &.mx_AccessibleButton_kind_link_inline,
+    &.mx_AccessibleButton_kind_danger_inline {
         display: inline;
     }
 

@@ -27,6 +27,7 @@ import SettingsTab from '../SettingsTab';
 import Modal from '../../../../../Modal';
 import SetupEncryptionDialog from '../../../dialogs/security/SetupEncryptionDialog';
 import VerificationRequestDialog from '../../../dialogs/VerificationRequestDialog';
+import LogoutDialog from '../../../dialogs/LogoutDialog';
 
 const SessionManagerTab: React.FC = () => {
     const {
@@ -90,6 +91,15 @@ const SessionManagerTab: React.FC = () => {
         });
     }, [requestDeviceVerification, refreshDevices, currentUserMember]);
 
+    const onSignOutCurrentDevice = () => {
+        if (!currentDevice) {
+            return;
+        }
+        Modal.createDialog(LogoutDialog,
+            /* props= */{}, /* className= */undefined,
+            /* isPriority= */false, /* isStatic= */true);
+    };
+
     useEffect(() => () => {
         clearTimeout(scrollIntoViewTimeoutRef.current);
     }, [scrollIntoViewTimeoutRef]);
@@ -104,6 +114,7 @@ const SessionManagerTab: React.FC = () => {
             device={currentDevice}
             isLoading={isLoading}
             onVerifyCurrentDevice={onVerifyCurrentDevice}
+            onSignOutCurrentDevice={onSignOutCurrentDevice}
         />
         {
             shouldShowOtherSessions &&

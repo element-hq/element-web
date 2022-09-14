@@ -18,6 +18,7 @@ import React from 'react';
 
 import { formatDate } from '../../../../DateUtils';
 import { _t } from '../../../../languageHandler';
+import AccessibleButton from '../../elements/AccessibleButton';
 import Heading from '../../typography/Heading';
 import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
 import { DeviceWithVerification } from './types';
@@ -25,6 +26,9 @@ import { DeviceWithVerification } from './types';
 interface Props {
     device: DeviceWithVerification;
     onVerifyDevice?: () => void;
+    // @TODO(kerry) optional while signout only implemented
+    // for current device (PSG-744)
+    onSignOutDevice?: () => void;
 }
 
 interface MetadataTable {
@@ -35,6 +39,7 @@ interface MetadataTable {
 const DeviceDetails: React.FC<Props> = ({
     device,
     onVerifyDevice,
+    onSignOutDevice,
 }) => {
     const metadata: MetadataTable[] = [
         {
@@ -64,7 +69,7 @@ const DeviceDetails: React.FC<Props> = ({
         <section className='mx_DeviceDetails_section'>
             <p className='mx_DeviceDetails_sectionHeading'>{ _t('Session details') }</p>
             { metadata.map(({ heading, values }, index) => <table
-                className='mxDeviceDetails_metadataTable'
+                className='mx_DeviceDetails_metadataTable'
                 key={index}
             >
                 { heading &&
@@ -82,6 +87,15 @@ const DeviceDetails: React.FC<Props> = ({
             </table>,
             ) }
         </section>
+        { !!onSignOutDevice && <section className='mx_DeviceDetails_section'>
+            <AccessibleButton
+                onClick={onSignOutDevice}
+                kind='danger_inline'
+                data-testid='device-detail-sign-out-cta'
+            >
+                { _t('Sign out of this session') }
+            </AccessibleButton>
+        </section> }
     </div>;
 };
 

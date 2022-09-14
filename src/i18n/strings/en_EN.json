@@ -1712,6 +1712,7 @@
     "Device": "Device",
     "IP address": "IP address",
     "Session details": "Session details",
+    "Sign out of this session": "Sign out of this session",
     "Toggle device details": "Toggle device details",
     "Inactive for %(inactiveAgeDays)s+ days": "Inactive for %(inactiveAgeDays)s+ days",
     "Verified": "Verified",

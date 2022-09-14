@@ -30,6 +30,7 @@ import {
     mockClientMethodsUser,
 } from '../../../../../test-utils';
 import Modal from '../../../../../../src/Modal';
+import LogoutDialog from '../../../../../../src/components/views/dialogs/LogoutDialog';
 
 jest.useFakeTimers();
 
@@ -53,7 +54,7 @@ describe('<SessionManagerTab />', () => {
     const mockCrossSigningInfo = {
         checkDeviceTrust: jest.fn(),
     };
-    const mockVerificationRequest = { cancel: jest.fn() } as unknown as VerificationRequest;
+    const mockVerificationRequest = { cancel: jest.fn(), on: jest.fn() } as unknown as VerificationRequest;
     const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(aliceId),
         getStoredCrossSigningForUser: jest.fn().mockReturnValue(mockCrossSigningInfo),
@@ -372,6 +373,31 @@ describe('<SessionManagerTab />', () => {
             expect(mockVerificationRequest.cancel).toHaveBeenCalled();
             // devices refreshed
             expect(mockClient.getDevices).toHaveBeenCalled();
+        });
+    });
+
+    describe('Sign out', () => {
+        it('Signs out of current device', async () => {
+            const modalSpy = jest.spyOn(Modal, 'createDialog');
+
+            mockClient.getDevices.mockResolvedValue({ devices: [alicesDevice] });
+            const { getByTestId } = render(getComponent());
+
+            await act(async () => {
+                await flushPromisesWithFakeTimers();
+            });
+
+            // open device detail
+            const tile1 = getByTestId(`device-tile-${alicesDevice.device_id}`);
+            const toggle1 = tile1.querySelector('[aria-label="Toggle device details"]') as Element;
+            fireEvent.click(toggle1);
+
+            const signOutButton = getByTestId('device-detail-sign-out-cta');
+            expect(signOutButton).toMatchSnapshot();
+            fireEvent.click(signOutButton);
+
+            // logout dialog opened
+            expect(modalSpy).toHaveBeenCalledWith(LogoutDialog, {}, undefined, false, true);
         });
     });
 });
