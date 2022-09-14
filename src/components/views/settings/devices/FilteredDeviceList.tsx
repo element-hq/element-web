@@ -36,9 +36,11 @@ import {
 interface Props {
     devices: DevicesDictionary;
     expandedDeviceIds: DeviceWithVerification['device_id'][];
+    signingOutDeviceIds: DeviceWithVerification['device_id'][];
     filter?: DeviceSecurityVariation;
     onFilterChange: (filter: DeviceSecurityVariation | undefined) => void;
     onDeviceExpandToggle: (deviceId: DeviceWithVerification['device_id']) => void;
+    onSignOutDevices: (deviceIds: DeviceWithVerification['device_id'][]) => void;
     onRequestDeviceVerification?: (deviceId: DeviceWithVerification['device_id']) => void;
 }
 
@@ -132,10 +134,16 @@ const NoResults: React.FC<NoResultsProps> = ({ filter, clearFilter }) =>
 const DeviceListItem: React.FC<{
     device: DeviceWithVerification;
     isExpanded: boolean;
+    isSigningOut: boolean;
     onDeviceExpandToggle: () => void;
+    onSignOutDevice: () => void;
     onRequestDeviceVerification?: () => void;
 }> = ({
-    device, isExpanded, onDeviceExpandToggle,
+    device,
+    isExpanded,
+    isSigningOut,
+    onDeviceExpandToggle,
+    onSignOutDevice,
     onRequestDeviceVerification,
 }) => <li className='mx_FilteredDeviceList_listItem'>
     <DeviceTile
@@ -146,7 +154,15 @@ const DeviceListItem: React.FC<{
             onClick={onDeviceExpandToggle}
         />
     </DeviceTile>
-    { isExpanded && <DeviceDetails device={device} onVerifyDevice={onRequestDeviceVerification} /> }
+    {
+        isExpanded &&
+        <DeviceDetails
+            device={device}
+            isSigningOut={isSigningOut}
+            onVerifyDevice={onRequestDeviceVerification}
+            onSignOutDevice={onSignOutDevice}
+        />
+    }
 </li>;
 
 /**
@@ -158,8 +174,10 @@ export const FilteredDeviceList =
         devices,
         filter,
         expandedDeviceIds,
+        signingOutDeviceIds,
         onFilterChange,
         onDeviceExpandToggle,
+        onSignOutDevices,
         onRequestDeviceVerification,
     }: Props, ref: ForwardedRef<HTMLDivElement>) => {
         const sortedDevices = getFilteredSortedDevices(devices, filter);
@@ -213,7 +231,9 @@ export const FilteredDeviceList =
                     key={device.device_id}
                     device={device}
                     isExpanded={expandedDeviceIds.includes(device.device_id)}
+                    isSigningOut={signingOutDeviceIds.includes(device.device_id)}
                     onDeviceExpandToggle={() => onDeviceExpandToggle(device.device_id)}
+                    onSignOutDevice={() => onSignOutDevices([device.device_id])}
                     onRequestDeviceVerification={
                         onRequestDeviceVerification
                             ? () => onRequestDeviceVerification(device.device_id)

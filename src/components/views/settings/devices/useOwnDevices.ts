@@ -18,7 +18,6 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { IMyDevice, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { CrossSigningInfo } from "matrix-js-sdk/src/crypto/CrossSigning";
 import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
-import { User } from "matrix-js-sdk/src/models/user";
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -74,10 +73,9 @@ export enum OwnDevicesError {
     Unsupported = 'Unsupported',
     Default = 'Default',
 }
-type DevicesState = {
+export type DevicesState = {
     devices: DevicesDictionary;
     currentDeviceId: string;
-    currentUserMember?: User;
     isLoading: boolean;
     // not provided when current session cannot request verification
     requestDeviceVerification?: (deviceId: DeviceWithVerification['device_id']) => Promise<VerificationRequest>;
@@ -135,7 +133,6 @@ export const useOwnDevices = (): DevicesState => {
     return {
         devices,
         currentDeviceId,
-        currentUserMember: userId && matrixClient.getUser(userId) || undefined,
         requestDeviceVerification,
         refreshDevices,
         isLoading,

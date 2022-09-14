@@ -101,6 +101,22 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
         </tbody>
       </table>
     </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+        data-testid="device-detail-sign-out-cta"
+        role="button"
+        tabindex="0"
+      >
+        <span
+          class="mx_DeviceDetails_signOutButtonContent"
+        >
+          Sign out of this session
+        </span>
+      </div>
+    </section>
   </div>
 </div>
 `;
@@ -210,6 +226,22 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
         </tbody>
       </table>
     </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+        data-testid="device-detail-sign-out-cta"
+        role="button"
+        tabindex="0"
+      >
+        <span
+          class="mx_DeviceDetails_signOutButtonContent"
+        >
+          Sign out of this session
+        </span>
+      </div>
+    </section>
   </div>
 </div>
 `;
@@ -314,6 +346,22 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
           </tr>
         </tbody>
       </table>
+    </section>
+    <section
+      class="mx_DeviceDetails_section"
+    >
+      <div
+        class="mx_AccessibleButton mx_AccessibleButton_hasKind mx_AccessibleButton_kind_danger_inline"
+        data-testid="device-detail-sign-out-cta"
+        role="button"
+        tabindex="0"
+      >
+        <span
+          class="mx_DeviceDetails_signOutButtonContent"
+        >
+          Sign out of this session
+        </span>
+      </div>
     </section>
   </div>
 </div>

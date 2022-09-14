@@ -7,7 +7,11 @@ exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
   role="button"
   tabindex="0"
 >
-  Sign out of this session
+  <span
+    class="mx_DeviceDetails_signOutButtonContent"
+  >
+    Sign out of this session
+  </span>
 </div>
 `;
 

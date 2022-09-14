@@ -28,6 +28,7 @@ import { DeviceWithVerification } from './types';
 interface Props {
     device?: DeviceWithVerification;
     isLoading: boolean;
+    isSigningOut: boolean;
     onVerifyCurrentDevice: () => void;
     onSignOutCurrentDevice: () => void;
 }
@@ -35,6 +36,7 @@ interface Props {
 const CurrentDeviceSection: React.FC<Props> = ({
     device,
     isLoading,
+    isSigningOut,
     onVerifyCurrentDevice,
     onSignOutCurrentDevice,
 }) => {
@@ -58,6 +60,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
             { isExpanded &&
                 <DeviceDetails
                     device={device}
+                    isSigningOut={isSigningOut}
                     onSignOutDevice={onSignOutCurrentDevice}
                 />
             }
