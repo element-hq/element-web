@@ -31,7 +31,7 @@ pipeline {
                       protocol: 'https',
                       nexusUrl: 'nexus.shire.blue',
                       groupId: 'shire.vendored',
-                      version: '${currentBuild.startTimeInMillis}',
+                      version: "${currentBuild.startTimeInMillis}",
                       repository: 'shire-raw',
                       credentialsId: 'nexus-docker-config',
                       artifacts: [
