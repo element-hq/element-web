@@ -32,6 +32,7 @@ import {
     DeviceSecurityVariation,
     DeviceWithVerification,
 } from './types';
+import { DevicesState } from './useOwnDevices';
 
 interface Props {
     devices: DevicesDictionary;
@@ -41,6 +42,7 @@ interface Props {
     onFilterChange: (filter: DeviceSecurityVariation | undefined) => void;
     onDeviceExpandToggle: (deviceId: DeviceWithVerification['device_id']) => void;
     onSignOutDevices: (deviceIds: DeviceWithVerification['device_id'][]) => void;
+    saveDeviceName: DevicesState['saveDeviceName'];
     onRequestDeviceVerification?: (deviceId: DeviceWithVerification['device_id']) => void;
 }
 
@@ -137,6 +139,7 @@ const DeviceListItem: React.FC<{
     isSigningOut: boolean;
     onDeviceExpandToggle: () => void;
     onSignOutDevice: () => void;
+    saveDeviceName: (deviceName: string) => Promise<void>;
     onRequestDeviceVerification?: () => void;
 }> = ({
     device,
@@ -144,6 +147,7 @@ const DeviceListItem: React.FC<{
     isSigningOut,
     onDeviceExpandToggle,
     onSignOutDevice,
+    saveDeviceName,
     onRequestDeviceVerification,
 }) => <li className='mx_FilteredDeviceList_listItem'>
     <DeviceTile
@@ -161,6 +165,7 @@ const DeviceListItem: React.FC<{
             isSigningOut={isSigningOut}
             onVerifyDevice={onRequestDeviceVerification}
             onSignOutDevice={onSignOutDevice}
+            saveDeviceName={saveDeviceName}
         />
     }
 </li>;
@@ -177,6 +182,7 @@ export const FilteredDeviceList =
         signingOutDeviceIds,
         onFilterChange,
         onDeviceExpandToggle,
+        saveDeviceName,
         onSignOutDevices,
         onRequestDeviceVerification,
     }: Props, ref: ForwardedRef<HTMLDivElement>) => {
@@ -234,6 +240,7 @@ export const FilteredDeviceList =
                     isSigningOut={signingOutDeviceIds.includes(device.device_id)}
                     onDeviceExpandToggle={() => onDeviceExpandToggle(device.device_id)}
                     onSignOutDevice={() => onSignOutDevices([device.device_id])}
+                    saveDeviceName={(deviceName: string) => saveDeviceName(device.device_id, deviceName)}
                     onRequestDeviceVerification={
                         onRequestDeviceVerification
                             ? () => onRequestDeviceVerification(device.device_id)

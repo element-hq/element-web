@@ -85,11 +85,15 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
       <div
         class="mx_DeviceTile_info"
       >
-        <h4
-          class="mx_Heading_h4"
+        <div
+          tabindex="0"
         >
-          alices_device
-        </h4>
+          <h4
+            class="mx_Heading_h4"
+          >
+            Alices device
+          </h4>
+        </div>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -181,11 +185,15 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
       <div
         class="mx_DeviceTile_info"
       >
-        <h4
-          class="mx_Heading_h4"
+        <div
+          tabindex="0"
         >
-          alices_device
-        </h4>
+          <h4
+            class="mx_Heading_h4"
+          >
+            Alices device
+          </h4>
+        </div>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -277,11 +285,15 @@ exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
   <div
     class="mx_DeviceTile_info"
   >
-    <h4
-      class="mx_Heading_h4"
+    <div
+      tabindex="0"
     >
-      alices_device
-    </h4>
+      <h4
+        class="mx_Heading_h4"
+      >
+        Alices device
+      </h4>
+    </div>
     <div
       class="mx_DeviceTile_metadata"
     >

@@ -20,7 +20,7 @@ import { formatDate } from '../../../../DateUtils';
 import { _t } from '../../../../languageHandler';
 import AccessibleButton from '../../elements/AccessibleButton';
 import Spinner from '../../elements/Spinner';
-import Heading from '../../typography/Heading';
+import { DeviceDetailHeading } from './DeviceDetailHeading';
 import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
 import { DeviceWithVerification } from './types';
 
@@ -29,6 +29,7 @@ interface Props {
     isSigningOut: boolean;
     onVerifyDevice?: () => void;
     onSignOutDevice: () => void;
+    saveDeviceName: (deviceName: string) => Promise<void>;
 }
 
 interface MetadataTable {
@@ -41,6 +42,7 @@ const DeviceDetails: React.FC<Props> = ({
     isSigningOut,
     onVerifyDevice,
     onSignOutDevice,
+    saveDeviceName,
 }) => {
     const metadata: MetadataTable[] = [
         {
@@ -61,7 +63,10 @@ const DeviceDetails: React.FC<Props> = ({
     ];
     return <div className='mx_DeviceDetails' data-testid={`device-detail-${device.device_id}`}>
         <section className='mx_DeviceDetails_section'>
-            <Heading size='h3'>{ device.display_name ?? device.device_id }</Heading>
+            <DeviceDetailHeading
+                device={device}
+                saveDeviceName={saveDeviceName}
+            />
             <DeviceVerificationStatusCard
                 device={device}
                 onVerifyDevice={onVerifyDevice}

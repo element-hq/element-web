@@ -31,6 +31,7 @@ interface Props {
     isSigningOut: boolean;
     onVerifyCurrentDevice: () => void;
     onSignOutCurrentDevice: () => void;
+    saveDeviceName: (deviceName: string) => Promise<void>;
 }
 
 const CurrentDeviceSection: React.FC<Props> = ({
@@ -39,6 +40,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
     isSigningOut,
     onVerifyCurrentDevice,
     onSignOutCurrentDevice,
+    saveDeviceName,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -46,7 +48,8 @@ const CurrentDeviceSection: React.FC<Props> = ({
         heading={_t('Current session')}
         data-testid='current-session-section'
     >
-        { isLoading && <Spinner /> }
+        { /* only show big spinner on first load */ }
+        { isLoading && !device && <Spinner /> }
         { !!device && <>
             <DeviceTile
                 device={device}
@@ -61,7 +64,9 @@ const CurrentDeviceSection: React.FC<Props> = ({
                 <DeviceDetails
                     device={device}
                     isSigningOut={isSigningOut}
+                    onVerifyDevice={onVerifyCurrentDevice}
                     onSignOutDevice={onSignOutCurrentDevice}
+                    saveDeviceName={saveDeviceName}
                 />
             }
             <br />

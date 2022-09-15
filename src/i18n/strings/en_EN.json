@@ -1707,6 +1707,8 @@
     "Sign out devices|other": "Sign out devices",
     "Sign out devices|one": "Sign out device",
     "Authentication": "Authentication",
+    "Rename session": "Rename session",
+    "Please be aware that session names are also visible to people you communicate with": "Please be aware that session names are also visible to people you communicate with",
     "Session ID": "Session ID",
     "Last activity": "Last activity",
     "Device": "Device",

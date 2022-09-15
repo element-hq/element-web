@@ -9,11 +9,24 @@ exports[`<DeviceDetails /> renders a verified device 1`] = `
     <section
       class="mx_DeviceDetails_section"
     >
-      <h3
-        class="mx_Heading_h3"
+      <div
+        class="mx_DeviceDetailHeading"
+        data-testid="device-detail-heading"
       >
-        my-device
-      </h3>
+        <h3
+          class="mx_Heading_h3"
+        >
+          my-device
+        </h3>
+        <div
+          class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          data-testid="device-heading-rename-cta"
+          role="button"
+          tabindex="0"
+        >
+          Rename
+        </div>
+      </div>
       <div
         class="mx_DeviceSecurityCard"
       >
@@ -130,11 +143,24 @@ exports[`<DeviceDetails /> renders device with metadata 1`] = `
     <section
       class="mx_DeviceDetails_section"
     >
-      <h3
-        class="mx_Heading_h3"
+      <div
+        class="mx_DeviceDetailHeading"
+        data-testid="device-detail-heading"
       >
-        My Device
-      </h3>
+        <h3
+          class="mx_Heading_h3"
+        >
+          My Device
+        </h3>
+        <div
+          class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          data-testid="device-heading-rename-cta"
+          role="button"
+          tabindex="0"
+        >
+          Rename
+        </div>
+      </div>
       <div
         class="mx_DeviceSecurityCard"
       >
@@ -255,11 +281,24 @@ exports[`<DeviceDetails /> renders device without metadata 1`] = `
     <section
       class="mx_DeviceDetails_section"
     >
-      <h3
-        class="mx_Heading_h3"
+      <div
+        class="mx_DeviceDetailHeading"
+        data-testid="device-detail-heading"
       >
-        my-device
-      </h3>
+        <h3
+          class="mx_Heading_h3"
+        >
+          my-device
+        </h3>
+        <div
+          class="mx_AccessibleButton mx_DeviceDetailHeading_renameCta mx_AccessibleButton_hasKind mx_AccessibleButton_kind_link_inline"
+          data-testid="device-heading-rename-cta"
+          role="button"
+          tabindex="0"
+        >
+          Rename
+        </div>
+      </div>
       <div
         class="mx_DeviceSecurityCard"
       >
