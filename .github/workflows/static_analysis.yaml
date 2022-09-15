@@ -108,7 +108,6 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           use-check: false
           check-fail-mode: added
-          output-behaviour: annotate
           ts-extra-args: '--strict'
           files-changed: ${{ steps.files.outputs.files_updated }}
           files-added: ${{ steps.files.outputs.files_created }}
