@@ -337,8 +337,9 @@ export class RoomViewStore extends Store<ActionPayload> {
             // Allow being given an event to be replied to when switching rooms but sanity check its for this room
             if (payload.replyingToEvent?.getRoomId() === payload.room_id) {
                 newState.replyingToEvent = payload.replyingToEvent;
-            } else if (this.state.roomId === payload.room_id) {
-                // if the room isn't being changed, e.g visiting a permalink then maintain replyingToEvent
+            } else if (this.state.replyingToEvent?.getRoomId() === payload.room_id) {
+                // if the reply-to matches the desired room, e.g visiting a permalink then maintain replyingToEvent
+                // See https://github.com/vector-im/element-web/issues/21462
                 newState.replyingToEvent = this.state.replyingToEvent;
             }
 

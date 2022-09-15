@@ -331,4 +331,69 @@ describe("Sliding Sync", () => {
         cy.get('.mx_RoomSublist[aria-label="Favourites"]').contains(".mx_RoomTile", "Favourite DM").should("exist");
         cy.get('.mx_RoomSublist[aria-label="People"]').contains(".mx_RoomTile", "Favourite DM").should("not.exist");
     });
+
+    // Regression test for a bug in SS mode, but would be useful to have in non-SS mode too.
+    // This ensures we are setting RoomViewStore state correctly.
+    it("should clear the reply to field when swapping rooms", () => {
+        cy.createRoom({ name: "Other Room" }).as("roomA").then(() => cy.contains(".mx_RoomSublist", "Other Room"));
+        cy.get<string>("@roomId").then((roomId) => {
+            return cy.sendEvent(roomId, null, "m.room.message", {
+                body: "Hello world",
+                msgtype: "m.text",
+            });
+        });
+        // select the room
+        cy.contains(".mx_RoomTile", "Test Room").click();
+        cy.get(".mx_ReplyPreview").should("not.exist");
+        // click reply-to on the Hello World message
+        cy.contains(".mx_EventTile", "Hello world").find('.mx_AccessibleButton[aria-label="Reply"]').click(
+            { force: true },
+        );
+        // check it's visible
+        cy.get(".mx_ReplyPreview").should("exist");
+        // now click Other Room
+        cy.contains(".mx_RoomTile", "Other Room").click();
+        // ensure the reply-to disappears
+        cy.get(".mx_ReplyPreview").should("not.exist");
+        // click back
+        cy.contains(".mx_RoomTile", "Test Room").click();
+        // ensure the reply-to reappears
+        cy.get(".mx_ReplyPreview").should("exist");
+    });
+
+    // Regression test for https://github.com/vector-im/element-web/issues/21462
+    it("should not cancel replies when permalinks are clicked ", () => {
+        cy.get<string>("@roomId").then((roomId) => {
+            // we require a first message as you cannot click the permalink text with the avatar in the way
+            return cy.sendEvent(roomId, null, "m.room.message", {
+                body: "First message",
+                msgtype: "m.text",
+            }).then(() => {
+                return cy.sendEvent(roomId, null, "m.room.message", {
+                    body: "Permalink me",
+                    msgtype: "m.text",
+                });
+            }).then(() => {
+                cy.sendEvent(roomId, null, "m.room.message", {
+                    body: "Reply to me",
+                    msgtype: "m.text",
+                });
+            });
+        });
+        // select the room
+        cy.contains(".mx_RoomTile", "Test Room").click();
+        cy.get(".mx_ReplyPreview").should("not.exist");
+        // click reply-to on the Reply to me message
+        cy.contains(".mx_EventTile", "Reply to me").find('.mx_AccessibleButton[aria-label="Reply"]').click(
+            { force: true },
+        );
+        // check it's visible
+        cy.get(".mx_ReplyPreview").should("exist");
+        // now click on the permalink for Permalink me
+        cy.contains(".mx_EventTile", "Permalink me").find("a").click({ force: true });
+        // make sure it is now selected with the little green |
+        cy.contains(".mx_EventTile_selected", "Permalink me").should("exist");
+        // ensure the reply-to does not disappear
+        cy.get(".mx_ReplyPreview").should("exist");
+    });
 });
