@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Caption /> renders plain text children 1`] = `
+Object {
+  "container": <div>
+    <span
+      class="mx_Caption"
+      data-testid="test test id"
+    >
+      test
+    </span>
+  </div>,
+}
+`;
+
+exports[`<Caption /> renders react children 1`] = `
+Object {
+  "container": <div>
+    <span
+      class="mx_Caption"
+      data-testid="test test id"
+    >
+      Test 
+      <b>
+        test but bold
+      </b>
+    </span>
+  </div>,
+}
+`;
