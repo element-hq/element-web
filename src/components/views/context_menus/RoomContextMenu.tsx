@@ -105,10 +105,14 @@ const RoomContextMenu = ({ room, onFinished, ...props }: IProps) => {
     }
 
     const isDm = DMRoomMap.shared().getUserIdForRoomId(room.roomId);
-    const isVideoRoom = useFeatureEnabled("feature_video_rooms") && room.isElementVideoRoom();
+    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
+    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
+    const isVideoRoom = videoRoomsEnabled && (
+        room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom())
+    );
 
     let inviteOption: JSX.Element;
-    if (room.canInvite(cli.getUserId()) && !isDm) {
+    if (room.canInvite(cli.getUserId()!) && !isDm) {
         const onInviteClick = (ev: ButtonEvent) => {
             ev.preventDefault();
             ev.stopPropagation();

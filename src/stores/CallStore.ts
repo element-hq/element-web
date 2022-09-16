@@ -22,7 +22,6 @@ import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import type { RoomState } from "matrix-js-sdk/src/models/room-state";
 import defaultDispatcher from "../dispatcher/dispatcher";
-import { ActionPayload } from "../dispatcher/payloads";
 import { UPDATE_EVENT } from "./AsyncStore";
 import { AsyncStoreWithClient } from "./AsyncStoreWithClient";
 import WidgetStore from "./WidgetStore";
@@ -51,7 +50,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         super(defaultDispatcher);
     }
 
-    protected async onAction(payload: ActionPayload): Promise<void> {
+    protected async onAction(): Promise<void> {
         // nothing to do
     }
 

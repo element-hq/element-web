@@ -37,7 +37,7 @@ import { getAddressType } from "./UserAddress";
 import { VIRTUAL_ROOM_EVENT_TYPE } from "./call-types";
 import SpaceStore from "./stores/spaces/SpaceStore";
 import { makeSpaceParentEvent } from "./utils/space";
-import { JitsiCall } from "./models/Call";
+import { JitsiCall, ElementCall } from "./models/Call";
 import { Action } from "./dispatcher/actions";
 import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import Spinner from "./components/views/elements/Spinner";
@@ -66,6 +66,17 @@ export interface IOpts {
     suggested?: boolean;
     joinRule?: JoinRule;
 }
+
+const DEFAULT_EVENT_POWER_LEVELS = {
+    [EventType.RoomName]: 50,
+    [EventType.RoomAvatar]: 50,
+    [EventType.RoomPowerLevels]: 100,
+    [EventType.RoomHistoryVisibility]: 100,
+    [EventType.RoomCanonicalAlias]: 50,
+    [EventType.RoomTombstone]: 100,
+    [EventType.RoomServerAcl]: 100,
+    [EventType.RoomEncryption]: 100,
+};
 
 /**
  * Create a new room, and switch to it.
@@ -131,23 +142,29 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         if (opts.roomType === RoomType.ElementVideo) {
             createOpts.power_level_content_override = {
                 events: {
+                    ...DEFAULT_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
                     [JitsiCall.MEMBER_EVENT_TYPE]: 0,
                     // Make widgets immutable, even to admins
                     "im.vector.modular.widgets": 200,
-                    // Annoyingly, we have to reiterate all the defaults here
-                    [EventType.RoomName]: 50,
-                    [EventType.RoomAvatar]: 50,
-                    [EventType.RoomPowerLevels]: 100,
-                    [EventType.RoomHistoryVisibility]: 100,
-                    [EventType.RoomCanonicalAlias]: 50,
-                    [EventType.RoomTombstone]: 100,
-                    [EventType.RoomServerAcl]: 100,
-                    [EventType.RoomEncryption]: 100,
                 },
                 users: {
                     // Temporarily give ourselves the power to set up a widget
-                    [client.getUserId()]: 200,
+                    [client.getUserId()!]: 200,
+                },
+            };
+        } else if (opts.roomType === RoomType.UnstableCall) {
+            createOpts.power_level_content_override = {
+                events: {
+                    ...DEFAULT_EVENT_POWER_LEVELS,
+                    // Allow all users to send call membership updates
+                    "org.matrix.msc3401.call.member": 0,
+                    // Make calls immutable, even to admins
+                    "org.matrix.msc3401.call": 200,
+                },
+                users: {
+                    // Temporarily give ourselves the power to set up a call
+                    [client.getUserId()!]: 200,
                 },
             };
         }
@@ -281,11 +298,18 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
         }
     }).then(async () => {
         if (opts.roomType === RoomType.ElementVideo) {
-            // Set up video rooms with a Jitsi call
+            // Set up this video room with a Jitsi call
             await JitsiCall.create(await room);
 
             // Reset our power level back to admin so that the widget becomes immutable
-            const plEvent = (await room)?.currentState.getStateEvents(EventType.RoomPowerLevels, "");
+            const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
+            await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
+        } else if (opts.roomType === RoomType.UnstableCall) {
+            // Set up this video room with an Element call
+            await ElementCall.create(await room);
+
+            // Reset our power level back to admin so that the call becomes immutable
+            const plEvent = (await room).currentState.getStateEvents(EventType.RoomPowerLevels, "");
             await client.setPowerLevel(roomId, client.getUserId()!, 100, plEvent);
         }
     }).then(function() {

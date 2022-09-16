@@ -20,7 +20,7 @@ import { Room } from "matrix-js-sdk/src/models/room";
 
 import WidgetUtils from '../../../utils/WidgetUtils';
 import AppTile from "./AppTile";
-import { IApp } from '../../../stores/WidgetStore';
+import WidgetStore from '../../../stores/WidgetStore';
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 
 interface IProps {
@@ -37,44 +37,27 @@ export default class PersistentApp extends React.Component<IProps> {
 
     constructor(props: IProps, context: ContextType<typeof MatrixClientContext>) {
         super(props, context);
-        this.room = context.getRoom(this.props.persistentRoomId);
+        this.room = context.getRoom(this.props.persistentRoomId)!;
     }
 
-    private get app(): IApp | null {
-        // get the widget data
-        const appEvent = WidgetUtils.getRoomWidgets(this.room).find(ev =>
-            ev.getStateKey() === this.props.persistentWidgetId,
-        );
+    public render(): JSX.Element | null {
+        const app = WidgetStore.instance.get(this.props.persistentWidgetId, this.props.persistentRoomId);
+        if (!app) return null;
 
-        if (appEvent) {
-            return WidgetUtils.makeAppConfig(
-                appEvent.getStateKey(), appEvent.getContent(), appEvent.getSender(),
-                this.room.roomId, appEvent.getId(),
-            );
-        } else {
-            return null;
-        }
-    }
-
-    public render(): JSX.Element {
-        const app = this.app;
-        if (app) {
-            return <AppTile
-                key={app.id}
-                app={app}
-                fullWidth={true}
-                room={this.room}
-                userId={this.context.credentials.userId}
-                creatorUserId={app.creatorUserId}
-                widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
-                waitForIframeLoad={app.waitForIframeLoad}
-                miniMode={true}
-                showMenubar={false}
-                pointerEvents={this.props.pointerEvents}
-                movePersistedElement={this.props.movePersistedElement}
-            />;
-        }
-        return null;
+        return <AppTile
+            key={app.id}
+            app={app}
+            fullWidth={true}
+            room={this.room}
+            userId={this.context.credentials.userId}
+            creatorUserId={app.creatorUserId}
+            widgetPageTitle={WidgetUtils.getWidgetDataTitle(app)}
+            waitForIframeLoad={app.waitForIframeLoad}
+            miniMode={true}
+            showMenubar={false}
+            pointerEvents={this.props.pointerEvents}
+            movePersistedElement={this.props.movePersistedElement}
+        />;
     }
 }
 

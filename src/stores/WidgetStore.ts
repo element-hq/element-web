@@ -30,11 +30,11 @@ import WidgetUtils from "../utils/WidgetUtils";
 import { WidgetType } from "../widgets/WidgetType";
 import { UPDATE_EVENT } from "./AsyncStore";
 
-interface IState {}
+interface IState { }
 
 export interface IApp extends IWidget {
     roomId: string;
-    eventId: string;
+    eventId?: string; // not present on virtual widgets
     // eslint-disable-next-line camelcase
     avatar_url?: string; // MSC2765 https://github.com/matrix-org/matrix-doc/pull/2765
 }
@@ -118,7 +118,12 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         // otherwise we are out of sync with the rest of the app with stale widget events during removal
         Array.from(this.widgetMap.values()).forEach(app => {
             if (app.roomId !== room.roomId) return; // skip - wrong room
-            this.widgetMap.delete(WidgetUtils.getWidgetUid(app));
+            if (app.eventId === undefined) {
+                // virtual widget - keep it
+                roomInfo.widgets.push(app);
+            } else {
+                this.widgetMap.delete(WidgetUtils.getWidgetUid(app));
+            }
         });
 
         let edited = false;
@@ -169,14 +174,36 @@ export default class WidgetStore extends AsyncStoreWithClient<IState> {
         this.emit(UPDATE_EVENT, roomId);
     };
 
-    public getRoom = (roomId: string, initIfNeeded = false) => {
+    public get(widgetId: string, roomId: string | undefined): IApp | undefined {
+        return this.widgetMap.get(WidgetUtils.calcWidgetUid(widgetId, roomId));
+    }
+
+    public getRoom(roomId: string, initIfNeeded = false): IRoomWidgets {
         if (initIfNeeded) this.initRoom(roomId); // internally handles "if needed"
-        return this.roomMap.get(roomId);
-    };
+        return this.roomMap.get(roomId)!;
+    }
 
     public getApps(roomId: string): IApp[] {
         const roomInfo = this.getRoom(roomId);
         return roomInfo?.widgets || [];
+    }
+
+    public addVirtualWidget(widget: IWidget, roomId: string): IApp {
+        this.initRoom(roomId);
+        const app = WidgetUtils.makeAppConfig(widget.id, widget, widget.creatorUserId, roomId, undefined);
+        this.widgetMap.set(WidgetUtils.getWidgetUid(app), app);
+        this.roomMap.get(roomId)!.widgets.push(app);
+        return app;
+    }
+
+    public removeVirtualWidget(widgetId: string, roomId: string): void {
+        this.widgetMap.delete(WidgetUtils.calcWidgetUid(widgetId, roomId));
+        const roomApps = this.roomMap.get(roomId);
+        if (roomApps) {
+            roomApps.widgets = roomApps.widgets.filter(app =>
+                !(app.id === widgetId && app.roomId === roomId),
+            );
+        }
     }
 
     public doesRoomHaveConference(room: Room): boolean {

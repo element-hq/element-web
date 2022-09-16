@@ -165,10 +165,8 @@ export default class AppTile extends React.Component<IProps, IState> {
         if (!props.room) return true; // user widgets always have permissions
 
         const currentlyAllowedWidgets = SettingsStore.getValue("allowedWidgets", props.room.roomId);
-        if (currentlyAllowedWidgets[props.app.eventId] === undefined) {
-            return props.userId === props.creatorUserId;
-        }
-        return !!currentlyAllowedWidgets[props.app.eventId];
+        const allowed = props.app.eventId !== undefined && (currentlyAllowedWidgets[props.app.eventId] ?? false);
+        return allowed || props.userId === props.creatorUserId;
     };
 
     private onUserLeftRoom() {
@@ -442,7 +440,7 @@ export default class AppTile extends React.Component<IProps, IState> {
         const roomId = this.props.room?.roomId;
         logger.info("Granting permission for widget to load: " + this.props.app.eventId);
         const current = SettingsStore.getValue("allowedWidgets", roomId);
-        current[this.props.app.eventId] = true;
+        if (this.props.app.eventId !== undefined) current[this.props.app.eventId] = true;
         const level = SettingsStore.firstSupportedLevel("allowedWidgets");
         SettingsStore.setValue("allowedWidgets", roomId, level, current).then(() => {
             this.setState({ hasPermissionToLoad: true });

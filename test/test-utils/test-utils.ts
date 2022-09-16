@@ -99,7 +99,7 @@ export function createTestClient(): MatrixClient {
         },
 
         getPushActionsForEvent: jest.fn(),
-        getRoom: jest.fn().mockImplementation(mkStubRoom),
+        getRoom: jest.fn().mockImplementation(roomId => mkStubRoom(roomId, "My room", client)),
         getRooms: jest.fn().mockReturnValue([]),
         getVisibleRooms: jest.fn().mockReturnValue([]),
         loginFlows: jest.fn(),
@@ -335,8 +335,10 @@ export function mkRoomMember(roomId: string, userId: string, membership = "join"
         name: userId,
         rawDisplayName: userId,
         roomId,
+        events: {},
         getAvatarUrl: () => {},
         getMxcAvatarUrl: () => {},
+        getDMInviter: () => {},
     } as unknown as RoomMember;
 }
 

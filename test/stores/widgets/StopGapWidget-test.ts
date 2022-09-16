@@ -39,6 +39,7 @@ describe("StopGapWidget", () => {
                 creatorUserId: "@alice:example.org",
                 type: "example",
                 url: "https://example.org",
+                roomId: "!1:example.org",
             },
             room: mkRoom(client, "!1:example.org"),
             userId: "@alice:example.org",

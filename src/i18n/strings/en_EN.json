@@ -909,6 +909,7 @@
     "Jump to date (adds /jumptodate and jump to date headers)": "Jump to date (adds /jumptodate and jump to date headers)",
     "Send read receipts": "Send read receipts",
     "Sliding Sync mode (under active development, cannot be disabled)": "Sliding Sync mode (under active development, cannot be disabled)",
+    "Element Call video rooms": "Element Call video rooms",
     "Live Location Sharing (temporary implementation: locations persist in room history)": "Live Location Sharing (temporary implementation: locations persist in room history)",
     "Favourite Messages (under active development)": "Favourite Messages (under active development)",
     "Voice broadcast (under active development)": "Voice broadcast (under active development)",

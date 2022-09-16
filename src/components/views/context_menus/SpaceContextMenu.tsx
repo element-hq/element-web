@@ -35,6 +35,7 @@ import { ButtonEvent } from "../elements/AccessibleButton";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { BetaPill } from "../beta/BetaCard";
 import SettingsStore from "../../../settings/SettingsStore";
+import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { Action } from "../../../dispatcher/actions";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { UIComponent } from "../../../settings/UIFeature";
@@ -48,9 +49,9 @@ interface IProps extends IContextMenuProps {
 
 const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) => {
     const cli = useContext(MatrixClientContext);
-    const userId = cli.getUserId();
+    const userId = cli.getUserId()!;
 
-    let inviteOption;
+    let inviteOption: JSX.Element | null = null;
     if (space.getJoinRule() === "public" || space.canInvite(userId)) {
         const onInviteClick = (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -71,8 +72,8 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         );
     }
 
-    let settingsOption;
-    let leaveOption;
+    let settingsOption: JSX.Element | null = null;
+    let leaveOption: JSX.Element | null = null;
     if (shouldShowSpaceSettings(space)) {
         const onSettingsClick = (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -110,7 +111,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         );
     }
 
-    let devtoolsOption;
+    let devtoolsOption: JSX.Element | null = null;
     if (SettingsStore.getValue("developerMode")) {
         const onViewTimelineClick = (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -134,12 +135,15 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
         );
     }
 
+    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
+    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
+
     const hasPermissionToAddSpaceChild = space.currentState.maySendStateEvent(EventType.SpaceChild, userId);
     const canAddRooms = hasPermissionToAddSpaceChild && shouldShowComponent(UIComponent.CreateRooms);
-    const canAddVideoRooms = canAddRooms && SettingsStore.getValue("feature_video_rooms");
+    const canAddVideoRooms = canAddRooms && videoRoomsEnabled;
     const canAddSubSpaces = hasPermissionToAddSpaceChild && shouldShowComponent(UIComponent.CreateSpaces);
 
-    let newRoomSection: JSX.Element;
+    let newRoomSection: JSX.Element | null = null;
     if (canAddRooms || canAddSubSpaces) {
         const onNewRoomClick = (ev: ButtonEvent) => {
             ev.preventDefault();
@@ -154,7 +158,7 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
             ev.preventDefault();
             ev.stopPropagation();
 
-            showCreateNewRoom(space, RoomType.ElementVideo);
+            showCreateNewRoom(space, elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo);
             onFinished();
         };
 
@@ -266,4 +270,3 @@ const SpaceContextMenu = ({ space, hideHeader, onFinished, ...props }: IProps) =
 };
 
 export default SpaceContextMenu;
-

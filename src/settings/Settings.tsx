@@ -423,6 +423,14 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         supportedLevels: LEVELS_DEVICE_ONLY_SETTINGS_WITH_CONFIG,
         default: "",
     },
+    "feature_element_call_video_rooms": {
+        isFeature: true,
+        supportedLevels: LEVELS_FEATURE,
+        labsGroup: LabGroup.Rooms,
+        displayName: _td("Element Call video rooms"),
+        controller: new ReloadOnChangeController(),
+        default: false,
+    },
     "feature_location_share_live": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,

@@ -482,8 +482,8 @@ export default class WidgetUtils {
         appId: string,
         app: Partial<IApp>,
         senderUserId: string,
-        roomId: string | null,
-        eventId: string,
+        roomId: string | undefined,
+        eventId: string | undefined,
     ): IApp {
         if (!senderUserId) {
             throw new Error("Widgets must be created by someone - provide a senderUserId");

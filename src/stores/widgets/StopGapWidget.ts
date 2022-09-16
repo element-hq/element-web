@@ -54,6 +54,7 @@ import defaultDispatcher from "../../dispatcher/dispatcher";
 import { Action } from "../../dispatcher/actions";
 import { ElementWidgetActions, IHangupCallApiRequest, IViewRoomApiRequest } from "./ElementWidgetActions";
 import { ModalWidgetStore } from "../ModalWidgetStore";
+import { IApp } from "../WidgetStore";
 import ThemeWatcher from "../../settings/watchers/ThemeWatcher";
 import { getCustomTheme } from "../../theme";
 import { ElementWidgetCapabilities } from "./ElementWidgetCapabilities";
@@ -69,7 +70,7 @@ import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
 
 interface IAppTileProps {
     // Note: these are only the props we care about
-    app: IWidget;
+    app: IApp;
     room?: Room; // without a room it is a user widget
     userId: string;
     creatorUserId: string;
@@ -155,6 +156,7 @@ export class StopGapWidget extends EventEmitter {
     private scalarToken: string;
     private roomId?: string;
     private kind: WidgetKind;
+    private readonly virtual: boolean;
     private readUpToMap: { [roomId: string]: string } = {}; // room ID to event ID
 
     constructor(private appTileProps: IAppTileProps) {
@@ -171,6 +173,7 @@ export class StopGapWidget extends EventEmitter {
         this.mockWidget = new ElementWidget(app);
         this.roomId = appTileProps.room?.roomId;
         this.kind = appTileProps.userWidget ? WidgetKind.Account : WidgetKind.Room; // probably
+        this.virtual = app.eventId === undefined;
     }
 
     private get eventListenerRoomId(): string {
@@ -265,14 +268,18 @@ export class StopGapWidget extends EventEmitter {
         if (this.started) return;
 
         const allowedCapabilities = this.appTileProps.whitelistCapabilities || [];
-        const driver = new StopGapWidgetDriver(allowedCapabilities, this.mockWidget, this.kind, this.roomId);
+        const driver = new StopGapWidgetDriver(
+            allowedCapabilities, this.mockWidget, this.kind, this.virtual, this.roomId,
+        );
 
         this.messaging = new ClientWidgetApi(this.mockWidget, iframe, driver);
         this.messaging.on("preparing", () => this.emit("preparing"));
-        this.messaging.on("ready", () => this.emit("ready"));
+        this.messaging.on("ready", () => {
+            WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.messaging);
+            this.emit("ready");
+        });
         this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
-        WidgetMessagingStore.instance.storeMessaging(this.mockWidget, this.roomId, this.messaging);
 
         // Always attach a handler for ViewRoom, but permission check it internally
         this.messaging.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {

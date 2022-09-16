@@ -23,17 +23,21 @@ import { Call } from "../../src/models/Call";
 
 export class MockedCall extends Call {
     private static EVENT_TYPE = "org.example.mocked_call";
+    public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
 
-    private constructor(private readonly room: Room, private readonly id: string) {
-        super({
-            id,
-            eventId: "$1:example.org",
-            roomId: room.roomId,
-            type: MatrixWidgetType.Custom,
-            url: "https://example.org",
-            name: "Group call",
-            creatorUserId: "@alice:example.org",
-        });
+    private constructor(room: Room, id: string) {
+        super(
+            {
+                id,
+                eventId: "$1:example.org",
+                roomId: room.roomId,
+                type: MatrixWidgetType.Custom,
+                url: "https://example.org",
+                name: "Group call",
+                creatorUserId: "@alice:example.org",
+            },
+            room.client,
+        );
     }
 
     public static get(room: Room): MockedCall | null {
@@ -61,12 +65,10 @@ export class MockedCall extends Call {
     }
 
     // No action needed for any of the following methods since this is just a mock
-    public async clean(): Promise<void> {}
+    protected getDevices(): string[] { return []; }
+    protected async setDevices(): Promise<void> { }
     // Public to allow spying
-    public async performConnection(
-        audioInput: MediaDeviceInfo | null,
-        videoInput: MediaDeviceInfo | null,
-    ): Promise<void> {}
+    public async performConnection(): Promise<void> {}
     public async performDisconnection(): Promise<void> {}
 
     public destroy() {
@@ -77,7 +79,7 @@ export class MockedCall extends Call {
             room: this.room.roomId,
             user: "@alice:example.org",
             content: { terminated: true },
-            skey: this.id,
+            skey: this.widget.id,
         })]);
 
         super.destroy();

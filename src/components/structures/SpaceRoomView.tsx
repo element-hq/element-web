@@ -108,8 +108,9 @@ const SpaceLandingAddButton = ({ space }) => {
     const canCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
     const canCreateSpace = shouldShowComponent(UIComponent.CreateSpaces);
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
+    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
 
-    let contextMenu;
+    let contextMenu: JSX.Element | null = null;
     if (menuDisplayed) {
         const rect = handle.current.getBoundingClientRect();
         contextMenu = <IconizedContextMenu
@@ -145,7 +146,12 @@ const SpaceLandingAddButton = ({ space }) => {
                                 e.stopPropagation();
                                 closeMenu();
 
-                                if (await showCreateNewRoom(space, RoomType.ElementVideo)) {
+                                if (
+                                    await showCreateNewRoom(
+                                        space,
+                                        elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                                    )
+                                ) {
                                     defaultDispatcher.fire(Action.UpdateSpaceHierarchy);
                                 }
                             }}

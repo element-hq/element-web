@@ -16,18 +16,23 @@ limitations under the License.
 
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 import { logger } from "matrix-js-sdk/src/logger";
+import { randomString } from "matrix-js-sdk/src/randomstring";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { RoomEvent } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
-import { IWidgetApiRequest } from "matrix-widget-api";
+import { NamespacedValue } from "matrix-js-sdk/src/NamespacedValue";
+import { IWidgetApiRequest, MatrixWidgetType } from "matrix-widget-api";
 
 import type EventEmitter from "events";
 import type { IMyDevice } from "matrix-js-sdk/src/client";
+import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import type { IApp } from "../stores/WidgetStore";
+import SdkConfig from "../SdkConfig";
+import SettingsStore from "../settings/SettingsStore";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../MediaDeviceHandler";
 import { timeout } from "../utils/promise";
 import WidgetUtils from "../utils/WidgetUtils";
@@ -40,15 +45,19 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from "../stores/ActiveWidge
 const TIMEOUT_MS = 16000;
 
 // Waits until an event is emitted satisfying the given predicate
-const waitForEvent = async (emitter: EventEmitter, event: string, pred: (...args) => boolean = () => true) => {
-    let listener: (...args) => void;
+const waitForEvent = async (
+    emitter: EventEmitter,
+    event: string,
+    pred: (...args: any[]) => boolean = () => true,
+): Promise<void> => {
+    let listener: (...args: any[]) => void;
     const wait = new Promise<void>(resolve => {
         listener = (...args) => { if (pred(...args)) resolve(); };
         emitter.on(event, listener);
     });
 
     const timedOut = await timeout(wait, false, TIMEOUT_MS) === false;
-    emitter.off(event, listener);
+    emitter.off(event, listener!);
     if (timedOut) throw new Error("Timed out");
 };
 
@@ -74,18 +83,17 @@ interface CallEventHandlerMap {
     [CallEvent.Destroy]: () => void;
 }
 
-interface JitsiCallMemberContent {
-    // Connected device IDs
-    devices: string[];
-    // Time at which this state event should be considered stale
-    expires_ts: number;
-}
-
 /**
  * A group call accessed through a widget.
  */
 export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandlerMap> {
     protected readonly widgetUid = WidgetUtils.getWidgetUid(this.widget);
+    protected readonly room = this.client.getRoom(this.roomId)!;
+
+    /**
+     * The time after which device member state should be considered expired.
+     */
+    public abstract readonly STUCK_DEVICE_TIMEOUT_MS: number;
 
     private _messaging: ClientWidgetApi | null = null;
     /**
@@ -130,6 +138,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
          * The widget used to access this call.
          */
         public readonly widget: IApp,
+        protected readonly client: MatrixClient,
     ) {
         super();
     }
@@ -140,21 +149,77 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * @returns {Call | null} The call.
      */
     public static get(room: Room): Call | null {
-        // There's currently only one implementation
-        return JitsiCall.get(room);
+        return ElementCall.get(room) ?? JitsiCall.get(room);
+    }
+
+    /**
+     * Gets the connected devices associated with the given user in room state.
+     * @param userId The user's ID.
+     * @returns The IDs of the user's connected devices.
+     */
+    protected abstract getDevices(userId: string): string[];
+
+    /**
+     * Sets the connected devices associated with ourselves in room state.
+     * @param devices The devices with which we're connected.
+     */
+    protected abstract setDevices(devices: string[]): Promise<void>;
+
+    /**
+     * Updates our member state with the devices returned by the given function.
+     * @param fn A function from the current devices to the new devices. If it
+     *     returns null, the update is skipped.
+     */
+    protected async updateDevices(fn: (devices: string[]) => (string[] | null)): Promise<void> {
+        if (this.room.getMyMembership() !== "join") return;
+
+        const devices = fn(this.getDevices(this.client.getUserId()!));
+        if (devices) {
+            await this.setDevices(devices);
+        }
     }
 
     /**
      * Performs a routine check of the call's associated room state, cleaning up
      * any data left over from an unclean disconnection.
      */
-    public abstract clean(): Promise<void>;
+    public async clean(): Promise<void> {
+        const now = Date.now();
+        const { devices: myDevices } = await this.client.getDevices();
+        const deviceMap = new Map<string, IMyDevice>(myDevices.map(d => [d.device_id, d]));
+
+        // Clean up our member state by filtering out logged out devices,
+        // inactive devices, and our own device (if we're disconnected)
+        await this.updateDevices(devices => {
+            const newDevices = devices.filter(d => {
+                const device = deviceMap.get(d);
+                return device?.last_seen_ts !== undefined
+                    && !(d === this.client.getDeviceId() && !this.connected)
+                    && (now - device.last_seen_ts) < this.STUCK_DEVICE_TIMEOUT_MS;
+            });
+
+            // Skip the update if the devices are unchanged
+            return newDevices.length === devices.length ? null : newDevices;
+        });
+    }
+
+    protected async addOurDevice(): Promise<void> {
+        await this.updateDevices(devices => Array.from(new Set(devices).add(this.client.getDeviceId())));
+    }
+
+    protected async removeOurDevice(): Promise<void> {
+        await this.updateDevices(devices => {
+            const devicesSet = new Set(devices);
+            devicesSet.delete(this.client.getDeviceId());
+            return Array.from(devicesSet);
+        });
+    }
 
     /**
      * Contacts the widget to connect to the call.
-     * @param {MediaDeviceInfo | null} audioDevice The audio input to use, or
+     * @param {MediaDeviceInfo | null} audioInput The audio input to use, or
      *   null to start muted.
-     * @param {MediaDeviceInfo | null} audioDevice The video input to use, or
+     * @param {MediaDeviceInfo | null} audioInput The video input to use, or
      *   null to start muted.
      */
     protected abstract performConnection(
@@ -219,6 +284,8 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
             throw e;
         }
 
+        this.room.on(RoomEvent.MyMembership, this.onMyMembership);
+        window.addEventListener("beforeunload", this.beforeUnload);
         this.connectionState = ConnectionState.Connected;
     }
 
@@ -237,6 +304,8 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
      * Manually marks the call as disconnected and cleans up.
      */
     public setDisconnected() {
+        this.room.off(RoomEvent.MyMembership, this.onMyMembership);
+        window.removeEventListener("beforeunload", this.beforeUnload);
         this.messaging = null;
         this.connectionState = ConnectionState.Disconnected;
     }
@@ -248,6 +317,19 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         if (this.connected) this.setDisconnected();
         this.emit(CallEvent.Destroy);
     }
+
+    private onMyMembership = async (_room: Room, membership: string) => {
+        if (membership !== "join") this.setDisconnected();
+    };
+
+    private beforeUnload = () => this.setDisconnected();
+}
+
+export interface JitsiCallMemberContent {
+    // Connected device IDs
+    devices: string[];
+    // Time at which this state event should be considered stale
+    expires_ts: number;
 }
 
 /**
@@ -255,14 +337,13 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
  */
 export class JitsiCall extends Call {
     public static readonly MEMBER_EVENT_TYPE = "io.element.video.member";
-    public static readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
+    public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
 
-    private room: Room = this.client.getRoom(this.roomId)!;
     private resendDevicesTimer: number | null = null;
     private participantsExpirationTimer: number | null = null;
 
-    private constructor(widget: IApp, private readonly client: MatrixClient) {
-        super(widget);
+    private constructor(widget: IApp, client: MatrixClient) {
+        super(widget, client);
 
         this.room.on(RoomStateEvent.Update, this.onRoomState);
         this.on(CallEvent.ConnectionState, this.onConnectionState);
@@ -270,10 +351,15 @@ export class JitsiCall extends Call {
     }
 
     public static get(room: Room): JitsiCall | null {
-        const apps = WidgetStore.instance.getApps(room.roomId);
-        // The isVideoChannel field differentiates rich Jitsi calls from bare Jitsi widgets
-        const jitsiWidget = apps.find(app => WidgetType.JITSI.matches(app.type) && app.data?.isVideoChannel);
-        return jitsiWidget ? new JitsiCall(jitsiWidget, room.client) : null;
+        // Only supported in video rooms
+        if (SettingsStore.getValue("feature_video_rooms") && room.isElementVideoRoom()) {
+            const apps = WidgetStore.instance.getApps(room.roomId);
+            // The isVideoChannel field differentiates rich Jitsi calls from bare Jitsi widgets
+            const jitsiWidget = apps.find(app => WidgetType.JITSI.matches(app.type) && app.data?.isVideoChannel);
+            if (jitsiWidget) return new JitsiCall(jitsiWidget, room.client);
+        }
+
+        return null;
     }
 
     public static async create(room: Room): Promise<void> {
@@ -293,15 +379,15 @@ export class JitsiCall extends Call {
         for (const e of this.room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE)) {
             const member = this.room.getMember(e.getStateKey()!);
             const content = e.getContent<JitsiCallMemberContent>();
-            let devices = Array.isArray(content.devices) ? content.devices : [];
             const expiresAt = typeof content.expires_ts === "number" ? content.expires_ts : -Infinity;
+            let devices = expiresAt > now && Array.isArray(content.devices) ? content.devices : [];
 
             // Apply local echo for the disconnected case
             if (!this.connected && member?.userId === this.client.getUserId()) {
                 devices = devices.filter(d => d !== this.client.getDeviceId());
             }
-            // Must have a connected device, be unexpired, and still be joined to the room
-            if (devices.length && expiresAt > now && member?.membership === "join") {
+            // Must have a connected device and still be joined to the room
+            if (devices.length && member?.membership === "join") {
                 members.add(member);
                 if (expiresAt < allExpireAt) allExpireAt = expiresAt;
             }
@@ -316,59 +402,22 @@ export class JitsiCall extends Call {
         }
     }
 
-    // Helper method that updates our member state with the devices returned by
-    // the given function. If it returns null, the update is skipped.
-    private async updateDevices(fn: (devices: string[]) => (string[] | null)): Promise<void> {
-        if (this.room.getMyMembership() !== "join") return;
+    protected getDevices(userId: string): string[] {
+        const event = this.room.currentState.getStateEvents(JitsiCall.MEMBER_EVENT_TYPE, userId);
+        const content = event?.getContent<JitsiCallMemberContent>();
+        const expiresAt = typeof content?.expires_ts === "number" ? content.expires_ts : -Infinity;
+        return expiresAt > Date.now() && Array.isArray(content?.devices) ? content.devices : [];
+    }
 
-        const devicesState = this.room.currentState.getStateEvents(
-            JitsiCall.MEMBER_EVENT_TYPE, this.client.getUserId()!,
+    protected async setDevices(devices: string[]): Promise<void> {
+        const content: JitsiCallMemberContent = {
+            devices,
+            expires_ts: Date.now() + this.STUCK_DEVICE_TIMEOUT_MS,
+        };
+
+        await this.client.sendStateEvent(
+            this.roomId, JitsiCall.MEMBER_EVENT_TYPE, content, this.client.getUserId()!,
         );
-        const devices = devicesState?.getContent<JitsiCallMemberContent>().devices ?? [];
-        const newDevices = fn(devices);
-
-        if (newDevices) {
-            const content: JitsiCallMemberContent = {
-                devices: newDevices,
-                expires_ts: Date.now() + JitsiCall.STUCK_DEVICE_TIMEOUT_MS,
-            };
-
-            await this.client.sendStateEvent(
-                this.roomId, JitsiCall.MEMBER_EVENT_TYPE, content, this.client.getUserId()!,
-            );
-        }
-    }
-
-    private async addOurDevice(): Promise<void> {
-        await this.updateDevices(devices => Array.from(new Set(devices).add(this.client.getDeviceId())));
-    }
-
-    private async removeOurDevice(): Promise<void> {
-        await this.updateDevices(devices => {
-            const devicesSet = new Set(devices);
-            devicesSet.delete(this.client.getDeviceId());
-            return Array.from(devicesSet);
-        });
-    }
-
-    public async clean(): Promise<void> {
-        const now = Date.now();
-        const { devices: myDevices } = await this.client.getDevices();
-        const deviceMap = new Map<string, IMyDevice>(myDevices.map(d => [d.device_id, d]));
-
-        // Clean up our member state by filtering out logged out devices,
-        // inactive devices, and our own device (if we're disconnected)
-        await this.updateDevices(devices => {
-            const newDevices = devices.filter(d => {
-                const device = deviceMap.get(d);
-                return device?.last_seen_ts
-                    && !(d === this.client.getDeviceId() && !this.connected)
-                    && (now - device.last_seen_ts) < JitsiCall.STUCK_DEVICE_TIMEOUT_MS;
-            });
-
-            // Skip the update if the devices are unchanged
-            return newDevices.length === devices.length ? null : newDevices;
-        });
     }
 
     protected async performConnection(
@@ -433,8 +482,6 @@ export class JitsiCall extends Call {
 
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.on(ActiveWidgetStoreEvent.Undock, this.onUndock);
-        this.room.on(RoomEvent.MyMembership, this.onMyMembership);
-        window.addEventListener("beforeunload", this.beforeUnload);
     }
 
     protected async performDisconnection(): Promise<void> {
@@ -459,14 +506,12 @@ export class JitsiCall extends Call {
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Dock, this.onDock);
         ActiveWidgetStore.instance.off(ActiveWidgetStoreEvent.Undock, this.onUndock);
-        this.room.off(RoomEvent.MyMembership, this.onMyMembership);
-        window.removeEventListener("beforeunload", this.beforeUnload);
 
         super.setDisconnected();
     }
 
     public destroy() {
-        this.room.off(RoomStateEvent.Update, this.updateParticipants);
+        this.room.off(RoomStateEvent.Update, this.onRoomState);
         this.on(CallEvent.ConnectionState, this.onConnectionState);
         if (this.participantsExpirationTimer !== null) {
             clearTimeout(this.participantsExpirationTimer);
@@ -483,8 +528,8 @@ export class JitsiCall extends Call {
     private onRoomState = () => this.updateParticipants();
 
     private onConnectionState = async (state: ConnectionState, prevState: ConnectionState) => {
-        if (state === ConnectionState.Connected && prevState === ConnectionState.Connecting) {
-            this.updateParticipants();
+        if (state === ConnectionState.Connected && !isConnected(prevState)) {
+            this.updateParticipants(); // Local echo
 
             // Tell others that we're connected, by adding our device to room state
             await this.addOurDevice();
@@ -492,12 +537,14 @@ export class JitsiCall extends Call {
             this.resendDevicesTimer = setInterval(async () => {
                 logger.log(`Resending video member event for ${this.roomId}`);
                 await this.addOurDevice();
-            }, (JitsiCall.STUCK_DEVICE_TIMEOUT_MS * 3) / 4);
+            }, (this.STUCK_DEVICE_TIMEOUT_MS * 3) / 4);
         } else if (state === ConnectionState.Disconnected && isConnected(prevState)) {
-            this.updateParticipants();
+            this.updateParticipants(); // Local echo
 
-            clearInterval(this.resendDevicesTimer);
-            this.resendDevicesTimer = null;
+            if (this.resendDevicesTimer !== null) {
+                clearInterval(this.resendDevicesTimer);
+                this.resendDevicesTimer = null;
+            }
             // Tell others that we're disconnected, by removing our device from room state
             await this.removeOurDevice();
         }
@@ -514,12 +561,6 @@ export class JitsiCall extends Call {
         await this.messaging!.transport.send(ElementWidgetActions.SpotlightLayout, {});
     };
 
-    private onMyMembership = async (room: Room, membership: string) => {
-        if (membership !== "join") this.setDisconnected();
-    };
-
-    private beforeUnload = () => this.setDisconnected();
-
     private onHangup = async (ev: CustomEvent<IWidgetApiRequest>) => {
         // If we're already in the middle of a client-initiated disconnection,
         // ignore the event
@@ -533,6 +574,242 @@ export class JitsiCall extends Call {
             await waitForEvent(this, CallEvent.ConnectionState);
         }
 
+        await this.messaging!.transport.reply(ev.detail, {}); // ack
+        this.setDisconnected();
+    };
+}
+
+export interface ElementCallMemberContent {
+    "m.expires_ts": number;
+    "m.calls": {
+        "m.call_id": string;
+        "m.devices": {
+            device_id: string;
+            session_id: string;
+            feeds: unknown[]; // We don't care about what these are
+        }[];
+    }[];
+}
+
+/**
+ * A group call using MSC3401 and Element Call as a backend.
+ * (somewhat cheekily named)
+ */
+export class ElementCall extends Call {
+    public static readonly CALL_EVENT_TYPE = new NamespacedValue(null, "org.matrix.msc3401.call");
+    public static readonly MEMBER_EVENT_TYPE = new NamespacedValue(null, "org.matrix.msc3401.call.member");
+    public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
+
+    private participantsExpirationTimer: number | null = null;
+
+    private constructor(public readonly groupCall: MatrixEvent, client: MatrixClient) {
+        // Splice together the Element Call URL for this call
+        const url = new URL(SdkConfig.get("element_call").url);
+        url.pathname = "/room";
+        const params = new URLSearchParams({
+            embed: "",
+            preload: "",
+            hideHeader: "",
+            userId: client.getUserId()!,
+            deviceId: client.getDeviceId(),
+            roomId: groupCall.getRoomId()!,
+        });
+        url.hash = `#?${params.toString()}`;
+
+        // To use Element Call without touching room state, we create a virtual
+        // widget (one that doesn't have a corresponding state event)
+        super(
+            WidgetStore.instance.addVirtualWidget({
+                id: randomString(24), // So that it's globally unique
+                creatorUserId: client.getUserId()!,
+                name: "Element Call",
+                type: MatrixWidgetType.Custom,
+                url: url.toString(),
+            }, groupCall.getRoomId()!),
+            client,
+        );
+
+        this.room.on(RoomStateEvent.Update, this.onRoomState);
+        this.on(CallEvent.ConnectionState, this.onConnectionState);
+        this.updateParticipants();
+    }
+
+    public static get(room: Room): ElementCall | null {
+        // Only supported in video rooms (for now)
+        if (
+            SettingsStore.getValue("feature_video_rooms")
+            && SettingsStore.getValue("feature_element_call_video_rooms")
+            && room.isCallRoom()
+        ) {
+            const groupCalls = ElementCall.CALL_EVENT_TYPE.names.flatMap(eventType =>
+                room.currentState.getStateEvents(eventType),
+            );
+
+            // Find the newest unterminated call
+            let groupCall: MatrixEvent | null = null;
+            for (const event of groupCalls) {
+                if (
+                    !("m.terminated" in event.getContent())
+                    && (groupCall === null || event.getTs() > groupCall.getTs())
+                ) {
+                    groupCall = event;
+                }
+            }
+
+            if (groupCall !== null) return new ElementCall(groupCall, room.client);
+        }
+
+        return null;
+    }
+
+    public static async create(room: Room): Promise<void> {
+        await room.client.sendStateEvent(room.roomId, ElementCall.CALL_EVENT_TYPE.name, {
+            "m.intent": "m.room",
+            "m.type": "m.video",
+        }, randomString(24));
+    }
+
+    private updateParticipants() {
+        if (this.participantsExpirationTimer !== null) {
+            clearTimeout(this.participantsExpirationTimer);
+            this.participantsExpirationTimer = null;
+        }
+
+        const members = new Set<RoomMember>();
+        const now = Date.now();
+        let allExpireAt = Infinity;
+
+        const memberEvents = ElementCall.MEMBER_EVENT_TYPE.names.flatMap(eventType =>
+            this.room.currentState.getStateEvents(eventType),
+        );
+
+        for (const e of memberEvents) {
+            const member = this.room.getMember(e.getStateKey()!);
+            const content = e.getContent<ElementCallMemberContent>();
+            const expiresAt = typeof content["m.expires_ts"] === "number" ? content["m.expires_ts"] : -Infinity;
+            const calls = expiresAt > now && Array.isArray(content["m.calls"]) ? content["m.calls"] : [];
+            const call = calls.find(call => call["m.call_id"] === this.groupCall.getStateKey());
+            let devices = Array.isArray(call?.["m.devices"]) ? call!["m.devices"] : [];
+
+            // Apply local echo for the disconnected case
+            if (!this.connected && member?.userId === this.client.getUserId()) {
+                devices = devices.filter(d => d.device_id !== this.client.getDeviceId());
+            }
+            // Must have a connected device and still be joined to the room
+            if (devices.length && member?.membership === "join") {
+                members.add(member);
+                if (expiresAt < allExpireAt) allExpireAt = expiresAt;
+            }
+        }
+
+        // Apply local echo for the connected case
+        if (this.connected) members.add(this.room.getMember(this.client.getUserId()!)!);
+
+        this.participants = members;
+        if (allExpireAt < Infinity) {
+            this.participantsExpirationTimer = setTimeout(() => this.updateParticipants(), allExpireAt - now);
+        }
+    }
+
+    private getCallsState(userId: string): ElementCallMemberContent["m.calls"] {
+        const event = (() => {
+            for (const eventType of ElementCall.MEMBER_EVENT_TYPE.names) {
+                const e = this.room.currentState.getStateEvents(eventType, userId);
+                if (e) return e;
+            }
+            return null;
+        })();
+        const content = event?.getContent<ElementCallMemberContent>();
+        const expiresAt = typeof content?.["m.expires_ts"] === "number" ? content["m.expires_ts"] : -Infinity;
+        return expiresAt > Date.now() && Array.isArray(content?.["m.calls"]) ? content!["m.calls"] : [];
+    }
+
+    protected getDevices(userId: string): string[] {
+        const calls = this.getCallsState(userId);
+        const call = calls.find(call => call["m.call_id"] === this.groupCall.getStateKey());
+        const devices = Array.isArray(call?.["m.devices"]) ? call!["m.devices"] : [];
+        return devices.map(d => d.device_id);
+    }
+
+    protected async setDevices(devices: string[]): Promise<void> {
+        const calls = this.getCallsState(this.client.getUserId()!);
+        const call = calls.find(c => c["m.call_id"] === this.groupCall.getStateKey())!;
+        const prevDevices = Array.isArray(call?.["m.devices"]) ? call!["m.devices"] : [];
+        const prevDevicesMap = new Map(prevDevices.map(d => [d.device_id, d]));
+
+        const newContent: ElementCallMemberContent = {
+            "m.expires_ts": Date.now() + this.STUCK_DEVICE_TIMEOUT_MS,
+            "m.calls": [
+                {
+                    "m.call_id": this.groupCall.getStateKey()!,
+                    // This method will only ever be used to remove devices, so
+                    // it's safe to assume that all requested devices are
+                    // present in the map
+                    "m.devices": devices.map(d => prevDevicesMap.get(d)!),
+                },
+                ...calls.filter(c => c !== call),
+            ],
+        };
+
+        await this.client.sendStateEvent(
+            this.roomId, ElementCall.MEMBER_EVENT_TYPE.name, newContent, this.client.getUserId()!,
+        );
+    }
+
+    protected async performConnection(
+        audioInput: MediaDeviceInfo | null,
+        videoInput: MediaDeviceInfo | null,
+    ): Promise<void> {
+        try {
+            await this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
+                audioInput: audioInput?.deviceId ?? null,
+                videoInput: videoInput?.deviceId ?? null,
+            });
+        } catch (e) {
+            throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
+        }
+
+        this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+    }
+
+    protected async performDisconnection(): Promise<void> {
+        try {
+            await this.messaging!.transport.send(ElementWidgetActions.HangupCall, {});
+        } catch (e) {
+            throw new Error(`Failed to hangup call in room ${this.roomId}: ${e}`);
+        }
+    }
+
+    public setDisconnected() {
+        this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        super.setDisconnected();
+    }
+
+    public destroy() {
+        WidgetStore.instance.removeVirtualWidget(this.widget.id, this.groupCall.getRoomId()!);
+        this.room.off(RoomStateEvent.Update, this.onRoomState);
+        this.off(CallEvent.ConnectionState, this.onConnectionState);
+        if (this.participantsExpirationTimer !== null) {
+            clearTimeout(this.participantsExpirationTimer);
+            this.participantsExpirationTimer = null;
+        }
+
+        super.destroy();
+    }
+
+    private onRoomState = () => this.updateParticipants();
+
+    private onConnectionState = async (state: ConnectionState, prevState: ConnectionState) => {
+        if (
+            (state === ConnectionState.Connected && !isConnected(prevState))
+            || (state === ConnectionState.Disconnected && isConnected(prevState))
+        ) {
+            this.updateParticipants(); // Local echo
+        }
+    };
+
+    private onHangup = async (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
         await this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
     };

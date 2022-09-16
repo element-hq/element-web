@@ -32,6 +32,7 @@ import { _t, _td } from "../../../languageHandler";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import PosthogTrackers from "../../../PosthogTrackers";
 import SettingsStore from "../../../settings/SettingsStore";
+import { useFeatureEnabled } from "../../../hooks/useSettings";
 import { UIComponent } from "../../../settings/UIFeature";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
@@ -200,8 +201,10 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
     });
 
     const showCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
+    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
+    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
 
-    let contextMenuContent: JSX.Element;
+    let contextMenuContent: JSX.Element | null = null;
     if (menuDisplayed && activeSpace) {
         const canAddRooms = activeSpace.currentState.maySendStateEvent(EventType.SpaceChild,
             MatrixClientPeg.get().getUserId());
@@ -239,7 +242,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                             tooltip={canAddRooms ? undefined
                                 : _t("You do not have permissions to create new rooms in this space")}
                         />
-                        { SettingsStore.getValue("feature_video_rooms") && (
+                        { videoRoomsEnabled && (
                             <IconizedContextMenuOption
                                 label={_t("New video room")}
                                 iconClassName="mx_RoomList_iconNewVideoRoom"
@@ -247,7 +250,10 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     closeMenu();
-                                    showCreateNewRoom(activeSpace, RoomType.ElementVideo);
+                                    showCreateNewRoom(
+                                        activeSpace,
+                                        elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
+                                    );
                                 }}
                                 disabled={!canAddRooms}
                                 tooltip={canAddRooms ? undefined
@@ -287,7 +293,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                         PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuCreateRoomItem", e);
                     }}
                 />
-                { SettingsStore.getValue("feature_video_rooms") && (
+                { videoRoomsEnabled && (
                     <IconizedContextMenuOption
                         label={_t("New video room")}
                         iconClassName="mx_RoomList_iconNewVideoRoom"
@@ -297,7 +303,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                             closeMenu();
                             defaultDispatcher.dispatch({
                                 action: "view_create_room",
-                                type: RoomType.ElementVideo,
+                                type: elementCallVideoRoomsEnabled ? RoomType.UnstableCall : RoomType.ElementVideo,
                             });
                         }}
                     >
@@ -319,7 +325,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
         </IconizedContextMenuOptionList>;
     }
 
-    let contextMenu: JSX.Element;
+    let contextMenu: JSX.Element | null = null;
     if (menuDisplayed) {
         contextMenu = <IconizedContextMenu {...auxButtonContextMenuPosition(handle)} onFinished={closeMenu} compact>
             { contextMenuContent }

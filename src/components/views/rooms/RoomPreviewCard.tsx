@@ -51,6 +51,8 @@ interface IProps {
 const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButtonClicked }) => {
     const cli = useContext(MatrixClientContext);
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
+    const elementCallVideoRoomsEnabled = useFeatureEnabled("feature_element_call_video_rooms");
+    const isVideoRoom = room.isElementVideoRoom() || (elementCallVideoRoomsEnabled && room.isCallRoom());
     const myMembership = useMyRoomMembership(room);
     useDispatcher(defaultDispatcher, payload => {
         if (payload.action === Action.JoinRoomError && payload.roomId === room.roomId) {
@@ -69,7 +71,7 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         initialTabId: UserTab.Labs,
     });
 
-    let inviterSection: JSX.Element;
+    let inviterSection: JSX.Element | null = null;
     let joinButtons: JSX.Element;
     if (myMembership === "join") {
         joinButtons = (
@@ -86,10 +88,11 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
             </AccessibleButton>
         );
     } else if (myMembership === "invite") {
-        const inviteSender = room.getMember(cli.getUserId())?.events.member?.getSender();
-        const inviter = inviteSender && room.getMember(inviteSender);
+        const inviteSender = room.getMember(cli.getUserId()!)?.events.member?.getSender();
 
         if (inviteSender) {
+            const inviter = room.getMember(inviteSender);
+
             inviterSection = <div className="mx_RoomPreviewCard_inviter">
                 <MemberAvatar member={inviter} fallbackUserId={inviteSender} width={32} height={32} />
                 <div>
@@ -102,10 +105,6 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
                         { inviteSender }
                     </div> : null }
                 </div>
-                { room.isElementVideoRoom()
-                    ? <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
-                    : null
-                }
             </div>;
         }
 
@@ -152,10 +151,11 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
     }
 
     let avatarRow: JSX.Element;
-    if (room.isElementVideoRoom()) {
+    if (isVideoRoom) {
         avatarRow = <>
             <RoomAvatar room={room} height={50} width={50} viewAvatarOnClick />
             <div className="mx_RoomPreviewCard_video" />
+            <BetaPill onClick={viewLabs} tooltipTitle={_t("Video rooms are a beta feature")} />
         </>;
     } else if (room.isSpaceRoom()) {
         avatarRow = <RoomAvatar room={room} height={80} width={80} viewAvatarOnClick />;
@@ -163,12 +163,12 @@ const RoomPreviewCard: FC<IProps> = ({ room, onJoinButtonClicked, onRejectButton
         avatarRow = <RoomAvatar room={room} height={50} width={50} viewAvatarOnClick />;
     }
 
-    let notice: string;
+    let notice: string | null = null;
     if (cannotJoin) {
         notice = _t("To view %(roomName)s, you need an invite", {
             roomName: room.name,
         });
-    } else if (room.isElementVideoRoom() && !videoRoomsEnabled) {
+    } else if (isVideoRoom && !videoRoomsEnabled) {
         notice = myMembership === "join"
             ? _t("To view, please enable video rooms in Labs first")
             : _t("To join, please enable video rooms in Labs first");
