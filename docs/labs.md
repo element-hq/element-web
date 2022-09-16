@@ -162,6 +162,12 @@ This feature might work in degraded mode if the homeserver a user is connected t
 
 Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
 
+## Element Call video rooms (`feature_element_call_video_rooms`) [In Development]
+
+Enables support for video rooms that use Element Call rather than Jitsi, and causes the 'New video room' option to create Element Call video rooms rather than Jitsi ones.
+
+This flag will not have any effect unless `feature_video_rooms` is also enabled.
+
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
 Enables rendering of MD / HTML in room topics.

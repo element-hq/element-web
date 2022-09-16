@@ -247,8 +247,9 @@ When Element is deployed alongside a homeserver with SSO-only login, some option
 
 ## VoIP / Jitsi calls
 
-Currently, Element uses Jitsi to offer conference calls in rooms. A set of defaults are applied, pointing at our Jitsi instance,
-to ensure conference calling works, however you can point Element at your own Jitsi if you prefer.
+Currently, Element uses Jitsi to offer conference calls in rooms, with an experimental Element Call implementation in the works.
+A set of defaults are applied, pointing at our Jitsi and Element Call instances, to ensure conference calling works, however you
+can point Element at your own if you prefer.
 
 More information about the Jitsi setup can be found [here](./jitsi.md).
 
@@ -317,6 +318,9 @@ The VoIP and Jitsi options are:
    as defined by the `io.element.widgets.layout` state event.
 5. `audio_stream_url`: Optional URL to pass to Jitsi to enable live streaming. This option is considered experimental and may be removed
    at any time without notice.
+6. `element_call`: Optional configuration for native group calls using Element Call, with the following subkeys:
+   - `url`: The URL of the Element Call instance to use for native group calls. This option is considered experimental
+      and may be removed at any time without notice. Defaults to `https://call.element.io`.
 
 ## Bug reporting
 
