@@ -534,8 +534,11 @@ describe('<SessionManagerTab />', () => {
                 ) as Element).getAttribute('aria-disabled')).toEqual("true");
 
                 await flushPromisesWithFakeTimers();
-                // modal rendering has some weird sleeps
-                await sleep(100);
+
+                // Modal rendering has some weird sleeps.
+                // Resetting ourselves twice in the main loop gives modal the chance to settle.
+                await sleep(0);
+                await sleep(0);
 
                 expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
                     [alicesMobileDevice.device_id], undefined,
