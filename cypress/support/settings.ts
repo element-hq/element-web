@@ -111,8 +111,8 @@ Cypress.Commands.add("setSettingValue", (
     level: SettingLevel,
     value: any,
 ): Chainable<void> => {
-    return cy.getSettingsStore().then(async (store: typeof SettingsStore) => {
-        return store.setValue(name, roomId, level, value);
+    return cy.getSettingsStore().then((store: typeof SettingsStore) => {
+        return cy.wrap(store.setValue(name, roomId, level, value));
     });
 });
 
