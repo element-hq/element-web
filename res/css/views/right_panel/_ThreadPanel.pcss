@@ -84,6 +84,14 @@ limitations under the License.
         .mx_MessageComposer_sendMessage {
             margin-right: 0;
         }
+
+        // Make use of the space above the composer buttons too
+        .mx_Autocomplete {
+            width: calc(100% + 140px);
+        }
+        &.mx_ThreadView_narrow .mx_Autocomplete {
+            width: calc(100% + 108px);
+        }
     }
 
     .mx_RoomView_messagePanel { /* To avoid the rule from being applied to .mx_ThreadPanel_empty */
