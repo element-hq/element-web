@@ -28,7 +28,7 @@ import LocationShareMenu from './LocationShareMenu';
 interface IProps {
     roomId: string;
     sender: RoomMember;
-    menuPosition: AboveLeftOf;
+    menuPosition?: AboveLeftOf;
     relation?: IEventRelation;
 }
 

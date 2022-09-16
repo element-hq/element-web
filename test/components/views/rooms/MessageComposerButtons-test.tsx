@@ -34,7 +34,7 @@ const mockProps: React.ComponentProps<typeof MessageComposerButtons> = {
     addEmoji: () => false,
     haveRecording: false,
     isStickerPickerOpen: false,
-    menuPosition: null,
+    menuPosition: undefined,
     onRecordStartEndClick: () => {},
     setStickerPickerOpen: () => {},
     toggleButtonMenu: () => {},
@@ -44,11 +44,11 @@ describe("MessageComposerButtons", () => {
     it("Renders emoji and upload buttons in wide mode", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
+                {...mockProps}
                 isMenuOpen={false}
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                {...mockProps}
             />,
             false,
         );
@@ -63,11 +63,11 @@ describe("MessageComposerButtons", () => {
     it("Renders other buttons in menu in wide mode", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
+                {...mockProps}
                 isMenuOpen={true}
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                {...mockProps}
             />,
             false,
         );
@@ -88,11 +88,11 @@ describe("MessageComposerButtons", () => {
     it("Renders only some buttons in narrow mode", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
+                {...mockProps}
                 isMenuOpen={false}
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                {...mockProps}
             />,
             true,
         );
@@ -106,11 +106,11 @@ describe("MessageComposerButtons", () => {
     it("Renders other buttons in menu (except voice messages) in narrow mode", () => {
         const buttons = wrapAndRender(
             <MessageComposerButtons
+                {...mockProps}
                 isMenuOpen={true}
                 showLocationButton={true}
                 showPollsButton={true}
                 showStickersButton={true}
-                {...mockProps}
             />,
             true,
         );
@@ -131,11 +131,11 @@ describe("MessageComposerButtons", () => {
         it('should render when asked to', () => {
             const buttons = wrapAndRender(
                 <MessageComposerButtons
+                    {...mockProps}
                     isMenuOpen={true}
                     showLocationButton={true}
                     showPollsButton={true}
                     showStickersButton={true}
-                    {...mockProps}
                 />,
                 true,
             );
@@ -155,11 +155,11 @@ describe("MessageComposerButtons", () => {
         it('should not render when asked not to', () => {
             const buttons = wrapAndRender(
                 <MessageComposerButtons
+                    {...mockProps}
                     isMenuOpen={true}
                     showLocationButton={true}
                     showPollsButton={false} // !! the change from the alternate test
                     showStickersButton={true}
-                    {...mockProps}
                 />,
                 true,
             );
@@ -171,6 +171,35 @@ describe("MessageComposerButtons", () => {
                     "Attachment",
                     "Sticker",
                     // "Poll", // should be hidden
+                    "Location",
+                ],
+            ]);
+        });
+    });
+
+    describe("with showVoiceBroadcastButton = true", () => {
+        it("should render the »Voice broadcast« button", () => {
+            const buttons = wrapAndRender(
+                <MessageComposerButtons
+                    {...mockProps}
+                    isMenuOpen={true}
+                    showLocationButton={true}
+                    showPollsButton={true}
+                    showStickersButton={true}
+                    showVoiceBroadcastButton={true}
+                />,
+                false,
+            );
+
+            expect(buttonLabels(buttons)).toEqual([
+                "Emoji",
+                "Attachment",
+                "More options",
+                [
+                    "Sticker",
+                    "Voice Message",
+                    "Voice broadcast",
+                    "Poll",
                     "Location",
                 ],
             ]);

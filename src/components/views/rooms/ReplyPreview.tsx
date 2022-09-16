@@ -34,13 +34,13 @@ function cancelQuoting(context: TimelineRenderingType) {
 
 interface IProps {
     permalinkCreator: RoomPermalinkCreator;
-    replyToEvent: MatrixEvent;
+    replyToEvent?: MatrixEvent;
 }
 
 export default class ReplyPreview extends React.Component<IProps> {
     public static contextType = RoomContext;
 
-    public render(): JSX.Element {
+    public render(): JSX.Element | null {
         if (!this.props.replyToEvent) return null;
 
         return <div className="mx_ReplyPreview">

@@ -40,6 +40,7 @@ import { IRoomState } from "../../../../src/components/structures/RoomView";
 import { RoomPermalinkCreator } from "../../../../src/utils/permalinks/Permalinks";
 import { mockPlatformPeg } from "../../../test-utils/platform";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
+import { addTextToComposer } from "../../../test-utils/composer";
 
 jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),
@@ -185,20 +186,6 @@ describe('<SendMessageComposer/>', () => {
         beforeEach(() => {
             localStorage.clear();
             spyDispatcher.mockReset();
-        });
-
-        const addTextToComposer = (wrapper, text) => act(() => {
-            // couldn't get input event on contenteditable to work
-            // paste works without illegal private method access
-            const pasteEvent = {
-                clipboardData: {
-                    types: [],
-                    files: [],
-                    getData: type => type === "text/plain" ? text : undefined,
-                },
-            };
-            wrapper.find('[role="textbox"]').simulate('paste', pasteEvent);
-            wrapper.update();
         });
 
         const defaultProps = {
