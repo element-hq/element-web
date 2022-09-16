@@ -94,6 +94,15 @@ describe('Permalinks', function() {
         expect(creator.serverCandidates.length).toBe(0);
     });
 
+    it('should gracefully handle invalid MXIDs', () => {
+        const roomId = "!fake:example.org";
+        const alice50 = makeMemberWithPL(roomId, "@alice:pl_50:org", 50);
+        const room = mockRoom(roomId, [alice50]);
+        const creator = new RoomPermalinkCreator(room);
+        creator.load();
+        expect(creator.serverCandidates).toBeTruthy();
+    });
+
     it('should pick a candidate server for the highest power level user in the room', function() {
         const roomId = "!fake:example.org";
         const alice50 = makeMemberWithPL(roomId, "@alice:pl_50", 50);

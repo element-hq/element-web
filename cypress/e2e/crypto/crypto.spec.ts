@@ -50,7 +50,7 @@ const checkDMRoom = () => {
 
 const startDMWithBob = function(this: CryptoTestContext) {
     cy.get('.mx_RoomList [aria-label="Start chat"]').click();
-    cy.get('[data-test-id="invite-dialog-input"]').type(this.bob.getUserId());
+    cy.get('[data-testid="invite-dialog-input"]').type(this.bob.getUserId());
     cy.contains(".mx_InviteDialog_tile_nameStack_name", "Bob").click();
     cy.contains(".mx_InviteDialog_userTile_pill .mx_InviteDialog_userTile_name", "Bob").should("exist");
     cy.get(".mx_InviteDialog_goButton").click();
