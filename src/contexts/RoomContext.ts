@@ -45,6 +45,7 @@ const RoomContext = createContext<IRoomState>({
     canReact: false,
     canSelfRedact: false,
     canSendMessages: false,
+    canSendVoiceBroadcasts: false,
     resizing: false,
     layout: Layout.Group,
     lowBandwidth: false,

@@ -79,6 +79,7 @@ interface IProps {
     relation?: IEventRelation;
     e2eStatus?: E2EStatus;
     compact?: boolean;
+    showVoiceBroadcastButton?: boolean;
 }
 
 interface IState {
@@ -107,6 +108,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
     public static defaultProps = {
         compact: false,
+        showVoiceBroadcastButton: false,
     };
 
     public constructor(props: IProps) {
@@ -368,6 +370,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         return this.state.showStickersButton && !isLocalRoom(this.props.room);
     }
 
+    private get showVoiceBroadcastButton(): boolean {
+        return this.props.showVoiceBroadcastButton && this.state.showVoiceBroadcastButton;
+    }
+
     public render() {
         const controls = [
             this.props.e2eStatus ?
@@ -495,7 +501,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             showPollsButton={this.state.showPollsButton}
                             showStickersButton={this.showStickersButton}
                             toggleButtonMenu={this.toggleButtonMenu}
-                            showVoiceBroadcastButton={this.state.showVoiceBroadcastButton}
+                            showVoiceBroadcastButton={this.showVoiceBroadcastButton}
                             onStartVoiceBroadcastClick={() => {
                                 // Sends a voice message. To be replaced by voice broadcast during development.
                                 this.voiceRecordingButton.current?.onRecordStartEndClick();
