@@ -8208,6 +8208,23 @@ matrix-events-sdk@^0.0.1-beta.7:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
+matrix-js-sdk@19.6.0-rc.1:
+  version "19.6.0-rc.1"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-19.6.0-rc.1.tgz#27d445147d1a2884769cf3fc6ee2f68c4f964818"
+  integrity sha512-7ljlrIFQ9gnPm/ESfAriLDMbh4mUomq4ck92Za1eAh1be6yfEsn6sXk9v60dC9o/h4sUIcyBIUOkNCnhHegfsw==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "^0.0.1-beta.7"
+    p-retry "4"
+    qs "^6.9.6"
+    request "^2.88.2"
+    unhomoglyph "^1.0.6"
+
 "matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
   version "19.5.0"
   resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/d32d190a8a6a8f43dccc57b5341bb6e87c0085b4"
@@ -8274,7 +8291,7 @@ matrix-mock-request@^2.0.0:
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "^0.0.1-beta.7"
     matrix-js-sdk "github:matrix-org/matrix-js-sdk#develop"
-    matrix-widget-api "^1.1.1"
+    matrix-widget-api "^1.0.0"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
     pako "^2.0.3"
