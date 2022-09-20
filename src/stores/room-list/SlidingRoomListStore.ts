@@ -30,6 +30,7 @@ import SpaceStore from "../spaces/SpaceStore";
 import { MetaSpace, SpaceKey, UPDATE_SELECTED_SPACE } from "../spaces";
 import { LISTS_LOADING_EVENT } from "./RoomListStore";
 import { RoomViewStore } from "../RoomViewStore";
+import { UPDATE_EVENT } from "../AsyncStore";
 
 interface IState {
     // state is tracked in underlying classes
@@ -313,7 +314,7 @@ export class SlidingRoomListStoreClass extends AsyncStoreWithClient<IState> impl
         logger.info("SlidingRoomListStore.onReady");
         // permanent listeners: never get destroyed. Could be an issue if we want to test this in isolation.
         SlidingSyncManager.instance.slidingSync.on(SlidingSyncEvent.List, this.onSlidingSyncListUpdate.bind(this));
-        RoomViewStore.instance.addListener(this.onRoomViewStoreUpdated.bind(this));
+        RoomViewStore.instance.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdated.bind(this));
         SpaceStore.instance.on(UPDATE_SELECTED_SPACE, this.onSelectedSpaceUpdated.bind(this));
         if (SpaceStore.instance.activeSpace) {
             this.onSelectedSpaceUpdated(SpaceStore.instance.activeSpace, false);

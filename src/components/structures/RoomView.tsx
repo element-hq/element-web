@@ -24,7 +24,6 @@ import React, { createRef, ReactElement, ReactNode, RefObject, useContext } from
 import classNames from 'classnames';
 import { IRecommendedVersion, NotificationCountType, Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { IThreadBundledRelationship, MatrixEvent, MatrixEventEvent } from "matrix-js-sdk/src/models/event";
-import { EventSubscription } from "fbemitter";
 import { ISearchResults } from 'matrix-js-sdk/src/@types/search';
 import { logger } from "matrix-js-sdk/src/logger";
 import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
@@ -366,7 +365,6 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
 
 export class RoomView extends React.Component<IRoomProps, IRoomState> {
     private readonly dispatcherRef: string;
-    private readonly roomStoreToken: EventSubscription;
     private settingWatchers: string[];
 
     private unmounted = false;
@@ -439,7 +437,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         context.on(CryptoEvent.KeysChanged, this.onCrossSigningKeysChanged);
         context.on(MatrixEventEvent.Decrypted, this.onEventDecrypted);
         // Start listening for RoomViewStore updates
-        this.roomStoreToken = RoomViewStore.instance.addListener(this.onRoomViewStoreUpdate);
+        RoomViewStore.instance.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
 
@@ -883,10 +881,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         window.removeEventListener('beforeunload', this.onPageUnload);
 
-        // Remove RoomStore listener
-        if (this.roomStoreToken) {
-            this.roomStoreToken.remove();
-        }
+        RoomViewStore.instance.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
 
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
         WidgetEchoStore.removeListener(UPDATE_EVENT, this.onWidgetEchoStoreUpdate);

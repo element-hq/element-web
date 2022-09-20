@@ -35,7 +35,6 @@ import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
-import dis from '../../src/dispatcher/dispatcher';
 import { makeType } from "../../src/utils/TypeUtils";
 import { ValidatedServerConfig } from "../../src/utils/ValidatedServerConfig";
 import { EnhancedMap } from "../../src/utils/maps";
@@ -454,18 +453,6 @@ export function mkServerConfig(hsUrl, isUrl) {
         hsNameIsDifferent: false, // yes, we lie
         isUrl,
     });
-}
-
-export function getDispatchForStore(store) {
-    // Mock the dispatcher by gut-wrenching. Stores can only __emitChange whilst a
-    // dispatcher `_isDispatching` is true.
-    return (payload) => {
-        // these are private properties in flux dispatcher
-        // fool ts
-        (dis as any)._isDispatching = true;
-        (dis as any)._callbacks[store._dispatchToken](payload);
-        (dis as any)._isDispatching = false;
-    };
 }
 
 // These methods make some use of some private methods on the AsyncStoreWithClient to simplify getting into a consistent

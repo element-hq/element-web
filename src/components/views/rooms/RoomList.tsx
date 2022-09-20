@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import * as fbEmitter from "fbemitter";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";
 import React, { ComponentType, createRef, ReactComponentElement, RefObject } from "react";
@@ -37,6 +36,7 @@ import { UIComponent } from "../../../settings/UIFeature";
 import { RoomNotificationStateStore } from "../../../stores/notifications/RoomNotificationStateStore";
 import { ITagMap } from "../../../stores/room-list/algorithms/models";
 import { DefaultTagID, TagID } from "../../../stores/room-list/models";
+import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import RoomListStore, { LISTS_UPDATE_EVENT } from "../../../stores/room-list/RoomListStore";
 import { RoomViewStore } from "../../../stores/RoomViewStore";
 import {
@@ -403,7 +403,6 @@ const TAG_AESTHETICS: ITagAestheticsMap = {
 
 export default class RoomList extends React.PureComponent<IProps, IState> {
     private dispatcherRef;
-    private roomStoreToken: fbEmitter.EventSubscription;
     private treeRef = createRef<HTMLDivElement>();
     private favouriteMessageWatcher: string;
 
@@ -422,7 +421,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
 
     public componentDidMount(): void {
         this.dispatcherRef = defaultDispatcher.register(this.onAction);
-        this.roomStoreToken = RoomViewStore.instance.addListener(this.onRoomViewStoreUpdate);
+        RoomViewStore.instance.on(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         SpaceStore.instance.on(UPDATE_SUGGESTED_ROOMS, this.updateSuggestedRooms);
         RoomListStore.instance.on(LISTS_UPDATE_EVENT, this.updateLists);
         this.favouriteMessageWatcher =
@@ -437,7 +436,7 @@ export default class RoomList extends React.PureComponent<IProps, IState> {
         RoomListStore.instance.off(LISTS_UPDATE_EVENT, this.updateLists);
         SettingsStore.unwatchSetting(this.favouriteMessageWatcher);
         defaultDispatcher.unregister(this.dispatcherRef);
-        if (this.roomStoreToken) this.roomStoreToken.remove();
+        RoomViewStore.instance.off(UPDATE_EVENT, this.onRoomViewStoreUpdate);
     }
 
     private onRoomViewStoreUpdate = () => {

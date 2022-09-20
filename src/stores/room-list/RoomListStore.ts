@@ -39,6 +39,7 @@ import { SpaceWatcher } from "./SpaceWatcher";
 import { IRoomTimelineActionPayload } from "../../actions/MatrixActionCreators";
 import { RoomListStore as Interface, RoomListStoreEvent } from "./Interface";
 import { SlidingRoomListStoreClass } from "./SlidingRoomListStore";
+import { UPDATE_EVENT } from "../AsyncStore";
 
 interface IState {
     // state is tracked in underlying classes
@@ -104,7 +105,7 @@ export class RoomListStoreClass extends AsyncStoreWithClient<IState> implements 
             this.readyStore.useUnitTestClient(forcedClient);
         }
 
-        RoomViewStore.instance.addListener(() => this.handleRVSUpdate({}));
+        RoomViewStore.instance.addListener(UPDATE_EVENT, () => this.handleRVSUpdate({}));
         this.algorithm.on(LIST_UPDATED_EVENT, this.onAlgorithmListUpdated);
         this.algorithm.on(FILTER_CHANGED, this.onAlgorithmFilterUpdated);
         this.setupWatchers();
