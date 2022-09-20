@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { EmojiPart, PlainPart } from "../../src/editor/parts";
+import { createPartCreator } from "./mock";
 
 describe("editor/parts", () => {
     describe("appendUntilRejected", () => {
@@ -31,5 +32,11 @@ describe("editor/parts", () => {
             expect(part.appendUntilRejected(femaleFacepalmEmoji, "")).toBeUndefined();
             expect(part.text).toEqual(femaleFacepalmEmoji);
         });
+    });
+
+    it("should not explode on room pills for unknown rooms", () => {
+        const pc = createPartCreator();
+        const part = pc.roomPill("#room:server");
+        expect(() => part.toDOMNode()).not.toThrow();
     });
 });
