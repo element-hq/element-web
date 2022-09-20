@@ -3545,5 +3545,22 @@
     "Inviting %(user1)s and %(user2)s": "%(user1)s en %(user2)s uitnodigen",
     "%(user)s and %(count)s others|one": "%(user)s en 1 andere",
     "%(user)s and %(count)s others|other": "%(user)s en %(count)s anderen",
-    "%(user1)s and %(user2)s": "%(user1)s en %(user2)s"
+    "%(user1)s and %(user2)s": "%(user1)s en %(user2)s",
+    "Sliding Sync mode (under active development, cannot be disabled)": "Scrollende Synchronisatie-modus (in actieve ontwikkeling, kan niet worden uitgeschakeld)",
+    "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s of %(copyButton)s",
+    "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s of %(recoveryFile)s",
+    "Proxy URL": "Proxy URL",
+    "Proxy URL (optional)": "Proxy-URL (optioneel)",
+    "To disable you will need to log out and back in, use with caution!": "Om uit te schakelen moet u uitloggen en weer inloggen, wees voorzichtig!",
+    "Sliding Sync configuration": "Scrollende Synchronisatie-configuratie",
+    "Your server lacks native support, you must specify a proxy": "Uw server heeft geen native ondersteuning, u moet een proxy opgeven",
+    "Your server lacks native support": "Uw server heeft geen native ondersteuning",
+    "Your server has native support": "Uw server heeft native ondersteuning",
+    "Checking...": "Controleren...",
+    "%(qrCode)s or %(appLinks)s": "%(qrCode)s of %(appLinks)s",
+    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s of %(emojiCompare)s",
+    "Show": "Toon",
+    "Unknown device type": "Onbekend apparaattype",
+    "Video input %(n)s": "Video input %(n)s",
+    "Audio input %(n)s": "Audio input %(n)s"
 }

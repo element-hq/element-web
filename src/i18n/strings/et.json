@@ -3549,5 +3549,21 @@
     "We're creating a room with %(names)s": "Me loome jututoa järgnevaist: %(names)s",
     "Show": "Näita",
     "Audio input %(n)s": "Helisisend %(n)s",
-    "Video input %(n)s": "Videosisend %(n)s"
+    "Video input %(n)s": "Videosisend %(n)s",
+    "%(downloadButton)s or %(copyButton)s": "%(downloadButton)s või %(copyButton)s",
+    "%(securityKey)s or %(recoveryFile)s": "%(securityKey)s või %(recoveryFile)s",
+    "%(qrCode)s or %(appLinks)s": "%(qrCode)s või %(appLinks)s",
+    "%(qrCode)s or %(emojiCompare)s": "%(qrCode)s või %(emojiCompare)s",
+    "Proxy URL": "Puhverserveri aadress",
+    "Proxy URL (optional)": "Puhverserveri aadress (kui vaja)",
+    "To disable you will need to log out and back in, use with caution!": "Väljalülitamiseks palun logi välja ning seejärel tagasi, kuid ole sellega ettevaatlik!",
+    "Your server lacks native support, you must specify a proxy": "Selle funktsionaalsuse tugi on sinu koduserveris puudu, palun kasuta puhverserverit",
+    "Your server lacks native support": "Selle funktsionaalsuse tugi on sinu koduserveris puudu",
+    "Your server has native support": "Selle funktsionaalsuse tugi on sinu koduserveris olemas",
+    "Checking...": "Kontrollime...",
+    "Sign out of this session": "Logi sellest sessioonist välja",
+    "You need to be able to kick users to do that.": "Selle tegevuse jaoks peaks sul olema õigus teistele kasutajatele müksamiseks.",
+    "Please be aware that session names are also visible to people you communicate with": "Palun arvesta, et sessioonide nimed on näha ka kõikidele osapooltele, kellega sa suhtled",
+    "Rename session": "Muuda sessiooni nime",
+    "Element Call video rooms": "Element Call videotoad"
 }
