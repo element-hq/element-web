@@ -16,7 +16,7 @@
     "%(appName)s (%(browserName)s, %(osName)s)": "%(appName)s (%(browserName)s, %(osName)s)",
     "Unsupported browser": "Niewspierana przeglądarka",
     "Please install <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, or <safariLink>Safari</safariLink> for the best experience.": "Zainstaluj <chromeLink>Chrome</chromeLink>, <firefoxLink>Firefox</firefoxLink>, lub <safariLink>Safari</safariLink> w celu zapewnienia najlepszego działania.",
-    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Możesz kontynuować używanie obecnej przeglądarki, lecz niektóre lub wszystkie funkcje mogą nie działać oraz wygląd aplikacji może być niepoprawny.",
+    "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Możesz kontynuować używając obecnej przeglądarki, lecz niektóre lub wszystkie funkcje mogą nie działać oraz wygląd aplikacji może być niepoprawny.",
     "I understand the risks and wish to continue": "Rozumiem ryzyko i chcę kontynuować",
     "Go to element.io": "Przejdź do element.io",
     "Failed to start": "Nie udało się wystartować",
@@ -24,12 +24,12 @@
     "Open": "Otwórz",
     "Your browser can't run %(brand)s": "Twoja przeglądarka nie obsługuje %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s używa zaawansowanych funkcji które nie są dostępne w obecnej przeglądarce.",
-    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Konfiguracja Elementa zawiera niepoprawny JSON. Popraw konfiguracje i odśwież stronę.",
-    "Your Element is misconfigured": "Element jest nieprawidłowo skonfigurowany",
+    "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "Twoja konfiguracja Elementa zawiera niepoprawny JSON. Rozwiąż problem i odśwież stronę.",
+    "Your Element is misconfigured": "Twój Element jest nieprawidłowo skonfigurowany",
     "Powered by Matrix": "Zasilane przez Matrix",
     "Use %(brand)s on mobile": "Użyj %(brand)s w telefonie",
     "Switch to space by number": "Przełącz na przestrzeń według numeru",
     "Next recently visited room or community": "Następne ostatnio odwiedzone pokoje i społeczności",
     "Previous recently visited room or community": "Ostatnio odwiedzone pokoje i społeczności",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Zdecentralizowany, szyfrowany czat i współpraca wspierana przez $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Zdecentralizowany, szyfrowany czat i współpraca oparte na $matrixLogo"
 }
