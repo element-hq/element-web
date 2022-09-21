@@ -28,6 +28,7 @@ import {
     arrayIntersection,
     ArrayUtil,
     GroupedArray,
+    concat,
 } from "../../src/utils/arrays";
 
 type TestParams = { input: number[], output: number[] };
@@ -373,6 +374,33 @@ describe('arrays', () => {
             expect(result).toBeDefined();
             expect(result.value).toBeDefined();
             expect(result.value).toEqual(output);
+        });
+    });
+
+    describe("concat", () => {
+        const emptyArray = () => new Uint8Array(0);
+        const array1 = () => new Uint8Array([1, 2, 3]);
+        const array2 = () => new Uint8Array([4, 5, 6]);
+        const array3 = () => new Uint8Array([7, 8, 9]);
+
+        it("should work for empty arrays", () => {
+            expect(concat(emptyArray(), emptyArray())).toEqual(emptyArray());
+        });
+
+        it("should concat an empty and non-empty array", () => {
+            expect(concat(emptyArray(), array1())).toEqual(array1());
+        });
+
+        it("should concat an non-empty and empty array", () => {
+            expect(concat(array1(), emptyArray())).toEqual(array1());
+        });
+
+        it("should concat two arrays", () => {
+            expect(concat(array1(), array2())).toEqual(new Uint8Array([1, 2, 3, 4, 5, 6]));
+        });
+
+        it("should concat three arrays", () => {
+            expect(concat(array1(), array2(), array3())).toEqual(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9]));
         });
     });
 });

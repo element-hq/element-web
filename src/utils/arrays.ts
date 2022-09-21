@@ -304,3 +304,12 @@ export class GroupedArray<K, T> {
         return new ArrayUtil(a);
     }
 }
+
+export const concat = (...arrays: Uint8Array[]): Uint8Array => {
+    return arrays.reduce((concatenatedSoFar: Uint8Array, toBeConcatenated: Uint8Array) => {
+        const concatenated = new Uint8Array(concatenatedSoFar.length + toBeConcatenated.length);
+        concatenated.set(concatenatedSoFar, 0);
+        concatenated.set(toBeConcatenated, concatenatedSoFar.length);
+        return concatenated;
+    }, new Uint8Array(0));
+};

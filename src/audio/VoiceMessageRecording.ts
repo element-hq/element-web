@@ -18,6 +18,7 @@ import { IEncryptedFile, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { SimpleObservable } from "matrix-widget-api";
 
 import { uploadFile } from "../ContentMessages";
+import { concat } from "../utils/arrays";
 import { IDestroyable } from "../utils/IDestroyable";
 import { Singleflight } from "../utils/Singleflight";
 import { Playback } from "./Playback";
@@ -148,10 +149,7 @@ export class VoiceMessageRecording implements IDestroyable {
 
     private onDataAvailable = (data: ArrayBuffer) => {
         const buf = new Uint8Array(data);
-        const newBuf = new Uint8Array(this.buffer.length + buf.length);
-        newBuf.set(this.buffer, 0);
-        newBuf.set(buf, this.buffer.length);
-        this.buffer = newBuf;
+        this.buffer = concat(this.buffer, buf);
     };
 
     private get audioBuffer(): Uint8Array {
