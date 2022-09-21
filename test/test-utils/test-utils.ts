@@ -49,7 +49,7 @@ import MatrixClientBackedSettingsHandler from "../../src/settings/handlers/Matri
  * the react context, we can get rid of this and just inject a test client
  * via the context instead.
  */
-export function stubClient() {
+export function stubClient(): MatrixClient {
     const client = createTestClient();
 
     // stub out the methods in MatrixClientPeg
@@ -63,6 +63,7 @@ export function stubClient() {
     // fast stub function rather than a sinon stub
     peg.get = function() { return client; };
     MatrixClientBackedSettingsHandler.matrixClient = client;
+    return client;
 }
 
 /**

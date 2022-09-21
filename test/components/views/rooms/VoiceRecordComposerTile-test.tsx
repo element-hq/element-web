@@ -21,9 +21,10 @@ import { ISendEventResponse, MatrixClient, MsgType, Room } from "matrix-js-sdk/s
 import { mocked } from "jest-mock";
 
 import VoiceRecordComposerTile from "../../../../src/components/views/rooms/VoiceRecordComposerTile";
-import { IUpload, VoiceRecording } from "../../../../src/audio/VoiceRecording";
+import { VoiceRecording } from "../../../../src/audio/VoiceRecording";
 import { doMaybeLocalRoomAction } from "../../../../src/utils/local-room";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
+import { IUpload } from "../../../../src/audio/VoiceMessageRecording";
 
 jest.mock("../../../../src/utils/local-room", () => ({
     doMaybeLocalRoomAction: jest.fn(),

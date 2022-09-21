@@ -16,13 +16,14 @@ limitations under the License.
 
 import React from "react";
 
-import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES, VoiceRecording } from "../../../audio/VoiceRecording";
+import { IRecordingUpdate, RECORDING_PLAYBACK_SAMPLES } from "../../../audio/VoiceRecording";
 import { arrayFastResample, arraySeed } from "../../../utils/arrays";
 import Waveform from "./Waveform";
 import { MarkedExecution } from "../../../utils/MarkedExecution";
+import { VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 
 interface IProps {
-    recorder: VoiceRecording;
+    recorder: VoiceMessageRecording;
 }
 
 interface IState {

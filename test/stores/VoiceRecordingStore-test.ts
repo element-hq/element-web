@@ -17,10 +17,10 @@ limitations under the License.
 
 import { MatrixClient } from "matrix-js-sdk/src/matrix";
 
-import { VoiceRecording } from '../../src/audio/VoiceRecording';
 import { VoiceRecordingStore } from '../../src/stores/VoiceRecordingStore';
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
 import { flushPromises } from "../test-utils";
+import { VoiceMessageRecording } from "../../src/audio/VoiceMessageRecording";
 
 const stubClient = {} as undefined as MatrixClient;
 jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(stubClient);
@@ -29,8 +29,8 @@ describe('VoiceRecordingStore', () => {
     const room1Id = '!room1:server.org';
     const room2Id = '!room2:server.org';
     const room3Id = '!room3:server.org';
-    const room1Recording = { destroy: jest.fn() } as unknown as VoiceRecording;
-    const room2Recording = { destroy: jest.fn() } as unknown as VoiceRecording;
+    const room1Recording = { destroy: jest.fn() } as unknown as VoiceMessageRecording;
+    const room2Recording = { destroy: jest.fn() } as unknown as VoiceMessageRecording;
 
     const state = {
         [room1Id]: room1Recording,
@@ -63,7 +63,7 @@ describe('VoiceRecordingStore', () => {
 
             await flushPromises();
 
-            expect(result).toBeInstanceOf(VoiceRecording);
+            expect(result).toBeInstanceOf(VoiceMessageRecording);
             expect(store.getActiveRecording(room2Id)).toEqual(result);
         });
     });

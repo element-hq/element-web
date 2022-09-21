@@ -23,7 +23,7 @@ import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { _t } from "../../../languageHandler";
-import { IUpload, RecordingState, VoiceRecording } from "../../../audio/VoiceRecording";
+import { RecordingState } from "../../../audio/VoiceRecording";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
 import LiveRecordingWaveform from "../audio_messages/LiveRecordingWaveform";
 import LiveRecordingClock from "../audio_messages/LiveRecordingClock";
@@ -44,6 +44,7 @@ import { attachRelation } from "./SendMessageComposer";
 import { addReplyToMessageContent } from "../../../utils/Reply";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext from "../../../contexts/RoomContext";
+import { IUpload, VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
 
 interface IProps {
     room: Room;
@@ -53,7 +54,7 @@ interface IProps {
 }
 
 interface IState {
-    recorder?: VoiceRecording;
+    recorder?: VoiceMessageRecording;
     recordingPhase?: RecordingState;
     didUploadFail?: boolean;
 }
@@ -250,7 +251,7 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
         }
     };
 
-    private bindNewRecorder(recorder: Optional<VoiceRecording>) {
+    private bindNewRecorder(recorder: Optional<VoiceMessageRecording>) {
         if (this.state.recorder) {
             this.state.recorder.off(UPDATE_EVENT, this.onRecordingUpdate);
         }
