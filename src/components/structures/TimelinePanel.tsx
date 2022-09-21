@@ -30,6 +30,7 @@ import { ClientEvent } from "matrix-js-sdk/src/client";
 import { Thread } from 'matrix-js-sdk/src/models/thread';
 import { ReceiptType } from "matrix-js-sdk/src/@types/read_receipts";
 import { MatrixError } from 'matrix-js-sdk/src/http-api';
+import { ReadReceipt } from 'matrix-js-sdk/src/models/read-receipt';
 
 import SettingsStore from "../../settings/SettingsStore";
 import { Layout } from "../../settings/enums/Layout";
@@ -179,7 +180,7 @@ interface IState {
     // disappearance when switching into the room.
     readMarkerVisible: boolean;
 
-    readMarkerEventId: string;
+    readMarkerEventId: string | null;
 
     backPaginating: boolean;
     forwardPaginating: boolean;
@@ -229,8 +230,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         disableGrouping: false,
     };
 
-    private lastRRSentEventId: string = undefined;
-    private lastRMSentEventId: string = undefined;
+    private lastRRSentEventId: string | null | undefined = undefined;
+    private lastRMSentEventId: string | null | undefined = undefined;
 
     private readonly messagePanel = createRef<MessagePanel>();
     private readonly dispatcherRef: string;
@@ -250,7 +251,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
 
         // XXX: we could track RM per TimelineSet rather than per Room.
         // but for now we just do it per room for simplicity.
-        let initialReadMarker = null;
+        let initialReadMarker: string | null = null;
         if (this.props.manageReadMarkers) {
             const readmarker = this.props.timelineSet.room.getAccountData('m.fully_read');
             if (readmarker) {
@@ -942,13 +943,13 @@ class TimelinePanel extends React.Component<IProps, IState> {
         if (lastReadEventIndex === null) {
             shouldSendRR = false;
         }
-        let lastReadEvent = this.state.events[lastReadEventIndex];
+        let lastReadEvent: MatrixEvent | null = this.state.events[lastReadEventIndex ?? 0];
         shouldSendRR = shouldSendRR &&
             // Only send a RR if the last read event is ahead in the timeline relative to
             // the current RR event.
             lastReadEventIndex > currentRREventIndex &&
             // Only send a RR if the last RR set != the one we would send
-            this.lastRRSentEventId != lastReadEvent.getId();
+            this.lastRRSentEventId !== lastReadEvent?.getId();
 
         // Only send a RM if the last RM sent != the one we would send
         const shouldSendRM =
@@ -958,7 +959,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         // same one at the server repeatedly
         if (shouldSendRR || shouldSendRM) {
             if (shouldSendRR) {
-                this.lastRRSentEventId = lastReadEvent.getId();
+                this.lastRRSentEventId = lastReadEvent?.getId();
             } else {
                 lastReadEvent = null;
             }
@@ -974,48 +975,57 @@ class TimelinePanel extends React.Component<IProps, IState> {
                 `prr=${lastReadEvent?.getId()}`,
 
             );
-            MatrixClientPeg.get().setRoomReadMarkers(
-                roomId,
-                this.state.readMarkerEventId,
-                sendRRs ? lastReadEvent : null, // Public read receipt (could be null)
-                lastReadEvent, // Private read receipt (could be null)
-            ).catch(async (e) => {
-                // /read_markers API is not implemented on this HS, fallback to just RR
-                if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
-                    if (
-                        !sendRRs
-                        && !MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2285.stable")
-                    ) return;
 
-                    try {
-                        return await MatrixClientPeg.get().sendReadReceipt(
-                            lastReadEvent,
-                            sendRRs ? ReceiptType.Read : ReceiptType.ReadPrivate,
-                        );
-                    } catch (error) {
+            if (this.props.timelineSet.thread && sendRRs && lastReadEvent) {
+                // There's no support for fully read markers on threads
+                // as defined by MSC3771
+                cli.sendReadReceipt(
+                    lastReadEvent,
+                    sendRRs ? ReceiptType.Read : ReceiptType.ReadPrivate,
+                );
+            } else {
+                cli.setRoomReadMarkers(
+                    roomId,
+                    this.state.readMarkerEventId ?? "",
+                    sendRRs ? (lastReadEvent ?? undefined) : undefined, // Public read receipt (could be null)
+                    lastReadEvent ?? undefined, // Private read receipt (could be null)
+                ).catch(async (e) => {
+                    // /read_markers API is not implemented on this HS, fallback to just RR
+                    if (e.errcode === 'M_UNRECOGNIZED' && lastReadEvent) {
+                        if (
+                            !sendRRs
+                            && !cli.doesServerSupportUnstableFeature("org.matrix.msc2285.stable")
+                        ) return;
+                        try {
+                            return await cli.sendReadReceipt(
+                                lastReadEvent,
+                                sendRRs ? ReceiptType.Read : ReceiptType.ReadPrivate,
+                            );
+                        } catch (error) {
+                            logger.error(e);
+                            this.lastRRSentEventId = undefined;
+                        }
+                    } else {
                         logger.error(e);
-                        this.lastRRSentEventId = undefined;
                     }
-                } else {
-                    logger.error(e);
-                }
-                // it failed, so allow retries next time the user is active
-                this.lastRRSentEventId = undefined;
-                this.lastRMSentEventId = undefined;
-            });
-
-            // do a quick-reset of our unreadNotificationCount to avoid having
-            // to wait from the remote echo from the homeserver.
-            // we only do this if we're right at the end, because we're just assuming
-            // that sending an RR for the latest message will set our notif counter
-            // to zero: it may not do this if we send an RR for somewhere before the end.
-            if (this.isAtEndOfLiveTimeline()) {
-                this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Total, 0);
-                this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Highlight, 0);
-                dis.dispatch({
-                    action: 'on_room_read',
-                    roomId: this.props.timelineSet.room.roomId,
+                    // it failed, so allow retries next time the user is active
+                    this.lastRRSentEventId = undefined;
+                    this.lastRMSentEventId = undefined;
                 });
+
+                // do a quick-reset of our unreadNotificationCount to avoid having
+                // to wait from the remote echo from the homeserver.
+                // we only do this if we're right at the end, because we're just assuming
+                // that sending an RR for the latest message will set our notif counter
+                // to zero: it may not do this if we send an RR for somewhere before the end.
+                if (this.isAtEndOfLiveTimeline()) {
+                    this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Total, 0);
+                    this.props.timelineSet.room.setUnreadNotificationCount(NotificationCountType.Highlight, 0);
+                    dis.dispatch({
+                        action: 'on_room_read',
+                        roomId: this.props.timelineSet.room.roomId,
+                    });
+                }
             }
         }
     };
@@ -1149,7 +1159,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
         const rmId = this.getCurrentReadReceipt();
 
         // Look up the timestamp if we can find it
-        const tl = this.props.timelineSet.getTimelineForEvent(rmId);
+        const tl = this.props.timelineSet.getTimelineForEvent(rmId ?? "");
         let rmTs: number;
         if (tl) {
             const event = tl.getEvents().find((e) => { return e.getId() == rmId; });
@@ -1554,7 +1564,8 @@ class TimelinePanel extends React.Component<IProps, IState> {
         return 0;
     }
 
-    private indexForEventId(evId: string): number | null {
+    private indexForEventId(evId: string | null): number | null {
+        if (evId === null) { return null; }
         /* Threads do not have server side support for read receipts and the concept
         is very tied to the main room timeline, we are forcing the timeline to
         send read receipts for threaded events */
@@ -1655,7 +1666,7 @@ class TimelinePanel extends React.Component<IProps, IState> {
      *                                    SDK.
      * @return {String} the event ID
      */
-    private getCurrentReadReceipt(ignoreSynthesized = false): string {
+    private getCurrentReadReceipt(ignoreSynthesized = false): string | null {
         const client = MatrixClientPeg.get();
         // the client can be null on logout
         if (client == null) {
@@ -1663,21 +1674,23 @@ class TimelinePanel extends React.Component<IProps, IState> {
         }
 
         const myUserId = client.credentials.userId;
-        return this.props.timelineSet.room.getEventReadUpTo(myUserId, ignoreSynthesized);
+        const receiptStore: ReadReceipt<any, any> =
+            this.props.timelineSet.thread ?? this.props.timelineSet.room;
+        return receiptStore?.getEventReadUpTo(myUserId, ignoreSynthesized);
     }
 
-    private setReadMarker(eventId: string, eventTs: number, inhibitSetState = false): void {
-        const roomId = this.props.timelineSet.room.roomId;
+    private setReadMarker(eventId: string | null, eventTs: number, inhibitSetState = false): void {
+        const roomId = this.props.timelineSet.room?.roomId;
 
         // don't update the state (and cause a re-render) if there is
         // no change to the RM.
-        if (eventId === this.state.readMarkerEventId) {
+        if (eventId === this.state.readMarkerEventId || eventId === null) {
             return;
         }
 
         // in order to later figure out if the read marker is
         // above or below the visible timeline, we stash the timestamp.
-        TimelinePanel.roomReadMarkerTsMap[roomId] = eventTs;
+        TimelinePanel.roomReadMarkerTsMap[roomId ?? ""] = eventTs;
 
         if (inhibitSetState) {
             return;

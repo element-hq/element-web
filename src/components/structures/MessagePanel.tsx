@@ -25,6 +25,8 @@ import { logger } from 'matrix-js-sdk/src/logger';
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { M_BEACON_INFO } from 'matrix-js-sdk/src/@types/beacon';
 import { isSupportedReceiptType } from "matrix-js-sdk/src/utils";
+import { ReadReceipt } from 'matrix-js-sdk/src/models/read-receipt';
+import { ListenerMap } from 'matrix-js-sdk/src/models/typed-event-emitter';
 
 import shouldHideEvent from '../../shouldHideEvent';
 import { wantsDateSeparator } from '../../DateUtils';
@@ -135,7 +137,7 @@ interface IProps {
     showUrlPreview?: boolean;
 
     // event after which we should show a read marker
-    readMarkerEventId?: string;
+    readMarkerEventId?: string | null;
 
     // whether the read marker should be visible
     readMarkerVisible?: boolean;
@@ -826,8 +828,13 @@ export default class MessagePanel extends React.Component<IProps, IState> {
         if (!room) {
             return null;
         }
+
+        const receiptDestination: ReadReceipt<string, ListenerMap<string>> = this.context.threadId
+            ? room.getThread(this.context.threadId)
+            : room;
+
         const receipts: IReadReceiptProps[] = [];
-        room.getReceiptsForEvent(event).forEach((r) => {
+        receiptDestination.getReceiptsForEvent(event).forEach((r) => {
             if (
                 !r.userId ||
                 !isSupportedReceiptType(r.type) ||

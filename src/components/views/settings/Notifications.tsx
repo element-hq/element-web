@@ -398,12 +398,13 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
     };
 
     private onClearNotificationsClicked = () => {
-        MatrixClientPeg.get().getRooms().forEach(r => {
+        const client = MatrixClientPeg.get();
+        client.getRooms().forEach(r => {
             if (r.getUnreadNotificationCount() > 0) {
                 const events = r.getLiveTimeline().getEvents();
                 if (events.length) {
                     // noinspection JSIgnoredPromiseFromCall
-                    MatrixClientPeg.get().sendReadReceipt(events[events.length - 1]);
+                    client.sendReadReceipt(events[events.length - 1]);
                 }
             }
         });

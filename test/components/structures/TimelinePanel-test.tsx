@@ -42,7 +42,7 @@ const newReceipt = (eventId: string, userId: string, readTs: number, fullyReadTs
             [ReceiptType.FullyRead]: { [userId]: { ts: fullyReadTs } },
         },
     };
-    return new MatrixEvent({ content: receiptContent, type: "m.receipt" });
+    return new MatrixEvent({ content: receiptContent, type: EventType.Receipt });
 };
 
 const renderPanel = (room: Room, events: MatrixEvent[]): RenderResult => {
@@ -154,7 +154,7 @@ describe('TimelinePanel', () => {
             });
 
             renderPanel(room, events);
-            expect(client.setRoomReadMarkers).toHaveBeenCalledWith(room.roomId, null, events[0], events[0]);
+            expect(client.setRoomReadMarkers).toHaveBeenCalledWith(room.roomId, "", events[0], events[0]);
         });
 
         it("does not send public read receipt when enabled", () => {
@@ -169,7 +169,7 @@ describe('TimelinePanel', () => {
             });
 
             renderPanel(room, events);
-            expect(client.setRoomReadMarkers).toHaveBeenCalledWith(room.roomId, null, null, events[0]);
+            expect(client.setRoomReadMarkers).toHaveBeenCalledWith(room.roomId, "", undefined, events[0]);
         });
     });
 });
