@@ -43,7 +43,6 @@ import { MatrixClientPeg } from "./MatrixClientPeg";
 import { ROOM_SECURITY_TAB } from "./components/views/dialogs/RoomSettingsDialog";
 import AccessibleButton from './components/views/elements/AccessibleButton';
 import RightPanelStore from './stores/right-panel/RightPanelStore';
-import UserIdentifierCustomisations from './customisations/UserIdentifier';
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
 import { isLocationEvent } from './utils/EventUtils';
 
@@ -55,7 +54,7 @@ function getRoomMemberDisplayname(event: MatrixEvent, userId = event.getSender()
     const client = MatrixClientPeg.get();
     const roomId = event.getRoomId();
     const member = client.getRoom(roomId)?.getMember(userId);
-    return member?.rawDisplayName || userId || _t("Someone");
+    return member?.name || member?.rawDisplayName || userId || _t("Someone");
 }
 
 // These functions are frequently used just to check whether an event has
@@ -467,7 +466,7 @@ function textForPowerEvent(event: MatrixEvent): () => string | null {
         }
         if (from === previousUserDefault && to === currentUserDefault) { return; }
         if (to !== from) {
-            const name = UserIdentifierCustomisations.getDisplayUserIdentifier(userId, { roomId: event.getRoomId() });
+            const name = getRoomMemberDisplayname(event, userId);
             diffs.push({ userId, name, from, to });
         }
     });

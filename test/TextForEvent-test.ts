@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
 import TestRenderer from 'react-test-renderer';
 import { ReactElement } from "react";
 
@@ -174,14 +174,17 @@ describe('TextForEvent', () => {
         const userA = {
             id: '@a',
             name: 'Alice',
+            rawDisplayName: 'Alice',
         };
         const userB = {
             id: '@b',
-            name: 'Bob',
+            name: 'Bob (@b)',
+            rawDisplayName: 'Bob',
         };
         const userC = {
             id: '@c',
-            name: 'Carl',
+            name: 'Bob (@c)',
+            rawDisplayName: 'Bob',
         };
         interface PowerEventProps {
             usersDefault?: number;
@@ -191,19 +194,23 @@ describe('TextForEvent', () => {
         }
         const mockPowerEvent = ({
             usersDefault, prevDefault, users, prevUsers,
-        }: PowerEventProps): MatrixEvent => new MatrixEvent({
-            type: EventType.RoomPowerLevels,
-            sender: userA.id,
-            state_key: "",
-            content: {
-                users_default: usersDefault,
-                users,
-            },
-            prev_content: {
-                users: prevUsers,
-                users_default: prevDefault,
-            },
-        });
+        }: PowerEventProps): MatrixEvent => {
+            const mxEvent = new MatrixEvent({
+                type: EventType.RoomPowerLevels,
+                sender: userA.id,
+                state_key: "",
+                content: {
+                    users_default: usersDefault,
+                    users,
+                },
+                prev_content: {
+                    users: prevUsers,
+                    users_default: prevDefault,
+                },
+            });
+            mxEvent.sender = { name: userA.name } as RoomMember;
+            return mxEvent;
+        };
 
         beforeAll(() => {
             mockClient = createTestClient();
@@ -256,7 +263,7 @@ describe('TextForEvent', () => {
                     [userB.id]: 50,
                 },
             });
-            const expectedText = "@a changed the power level of @b from Moderator to Admin.";
+            const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Admin.";
             expect(textForEvent(event)).toEqual(expectedText);
         });
 
@@ -271,7 +278,7 @@ describe('TextForEvent', () => {
                     [userB.id]: 50,
                 },
             });
-            const expectedText = "@a changed the power level of @b from Moderator to Default.";
+            const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Default.";
             expect(textForEvent(event)).toEqual(expectedText);
         });
 
@@ -284,7 +291,7 @@ describe('TextForEvent', () => {
                     [userB.id]: 50,
                 },
             });
-            const expectedText = "@a changed the power level of @b from Moderator to Custom (-1).";
+            const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Custom (-1).";
             expect(textForEvent(event)).toEqual(expectedText);
         });
 
@@ -299,27 +306,9 @@ describe('TextForEvent', () => {
                     [userC.id]: 101,
                 },
             });
-            const expectedText =
-                "@a changed the power level of @b from Moderator to Admin, @c from Custom (101) to Moderator.";
+            const expectedText = "Alice changed the power level of Bob (@b) from Moderator to Admin,"
+                + " Bob (@c) from Custom (101) to Moderator.";
             expect(textForEvent(event)).toEqual(expectedText);
-        });
-
-        it("uses userIdentifier customisation", () => {
-            (UserIdentifierCustomisations.getDisplayUserIdentifier as jest.Mock)
-                .mockImplementation(userId => 'customised ' + userId);
-            const event = mockPowerEvent({
-                users: {
-                    [userB.id]: 100,
-                },
-                prevUsers: {
-                    [userB.id]: 50,
-                },
-            });
-            // uses customised user id
-            const expectedText = "@a changed the power level of customised @b from Moderator to Admin.";
-            expect(textForEvent(event)).toEqual(expectedText);
-            expect(UserIdentifierCustomisations.getDisplayUserIdentifier)
-                .toHaveBeenCalledWith(userB.id, { roomId: event.getRoomId() });
         });
     });
 
