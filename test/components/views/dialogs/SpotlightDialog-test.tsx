@@ -29,6 +29,9 @@ import { LocalRoom, LOCAL_ROOM_ID_PREFIX } from "../../../../src/models/LocalRoo
 import { DirectoryMember, startDmOnFirstMessage } from "../../../../src/utils/direct-messages";
 import DMRoomMap from "../../../../src/utils/DMRoomMap";
 import { mkRoom, stubClient } from "../../../test-utils";
+import { shouldShowFeedback } from "../../../../src/utils/Feedback";
+
+jest.mock("../../../../src/utils/Feedback");
 
 jest.mock("../../../../src/utils/direct-messages", () => ({
     // @ts-ignore
@@ -138,6 +141,7 @@ describe("Spotlight Dialog", () => {
             getUserIdForRoomId: jest.fn(),
         } as unknown as DMRoomMap);
     });
+
     describe("should apply filters supplied via props", () => {
         it("without filter", async () => {
             const wrapper = mount(
@@ -369,5 +373,33 @@ describe("Spotlight Dialog", () => {
         expect(startDmOnFirstMessage).toHaveBeenCalledWith(mockedClient, [new DirectoryMember(testPerson)]);
 
         wrapper.unmount();
+    });
+
+    describe("Feedback prompt", () => {
+        it("should show feedback prompt if feedback is enabled", async () => {
+            mocked(shouldShowFeedback).mockReturnValue(true);
+
+            const wrapper = mount(<SpotlightDialog initialText="test23" onFinished={() => null} />);
+            await act(async () => {
+                await sleep(200);
+            });
+            wrapper.update();
+
+            const content = wrapper.find(".mx_SpotlightDialog_footer");
+            expect(content.childAt(0).text()).toBe("Results not as expected? Please give feedback.");
+        });
+
+        it("should hide feedback prompt if feedback is disabled", async () => {
+            mocked(shouldShowFeedback).mockReturnValue(false);
+
+            const wrapper = mount(<SpotlightDialog initialText="test23" onFinished={() => null} />);
+            await act(async () => {
+                await sleep(200);
+            });
+            wrapper.update();
+
+            const content = wrapper.find(".mx_SpotlightDialog_footer");
+            expect(content.text()).toBeFalsy();
+        });
     });
 });

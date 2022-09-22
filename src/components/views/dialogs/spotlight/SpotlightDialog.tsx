@@ -60,7 +60,6 @@ import Modal from "../../../../Modal";
 import { PosthogAnalytics } from "../../../../PosthogAnalytics";
 import { getCachedRoomIDForAlias } from "../../../../RoomAliasCache";
 import { showStartChatInviteDialog } from "../../../../RoomInvite";
-import SdkConfig from "../../../../SdkConfig";
 import { SettingLevel } from "../../../../settings/SettingLevel";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
@@ -93,6 +92,7 @@ import { RoomContextDetails } from "../../rooms/RoomContextDetails";
 import { TooltipOption } from "./TooltipOption";
 import { isLocalRoom } from "../../../../utils/localRoom/isLocalRoom";
 import { useSlidingSyncRoomSearch } from "../../../../hooks/useSlidingSyncRoomSearch";
+import { shouldShowFeedback } from "../../../../utils/Feedback";
 
 const MAX_RECENT_SEARCHES = 10;
 const SECTION_LIMIT = 50; // only show 50 results per section for performance reasons
@@ -1171,7 +1171,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         }
     };
 
-    const openFeedback = SdkConfig.get().bug_report_endpoint_url ? () => {
+    const openFeedback = shouldShowFeedback() ? () => {
         Modal.createDialog(FeedbackDialog, {
             feature: "spotlight",
         });

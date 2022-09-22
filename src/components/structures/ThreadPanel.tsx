@@ -33,7 +33,6 @@ import Measured from '../views/elements/Measured';
 import PosthogTrackers from "../../PosthogTrackers";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
 import { BetaPill } from '../views/beta/BetaCard';
-import SdkConfig from '../../SdkConfig';
 import Modal from '../../Modal';
 import BetaFeedbackDialog from '../views/dialogs/BetaFeedbackDialog';
 import { Action } from '../../dispatcher/actions';
@@ -41,6 +40,7 @@ import { UserTab } from '../views/dialogs/UserTab';
 import dis from '../../dispatcher/dispatcher';
 import Spinner from "../views/elements/Spinner";
 import Heading from '../views/typography/Heading';
+import { shouldShowFeedback } from "../../utils/Feedback";
 
 interface IProps {
     roomId: string;
@@ -234,7 +234,7 @@ const ThreadPanel: React.FC<IProps> = ({
         }
     }, [timelineSet, timelinePanel]);
 
-    const openFeedback = SdkConfig.get().bug_report_endpoint_url ? () => {
+    const openFeedback = shouldShowFeedback() ? () => {
         Modal.createDialog(BetaFeedbackDialog, {
             featureId: "feature_thread",
         });

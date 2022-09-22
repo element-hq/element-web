@@ -444,6 +444,8 @@ export function mkStubRoom(roomId: string = null, name: string, client: MatrixCl
         canInvite: jest.fn(),
         getThreads: jest.fn().mockReturnValue([]),
         eventShouldLiveIn: jest.fn().mockReturnValue({}),
+        createThreadsTimelineSets: jest.fn().mockReturnValue(new Promise(() => {})),
+        fetchRoomThreads: jest.fn().mockReturnValue(new Promise(() => {})),
     } as unknown as Room;
 }
 

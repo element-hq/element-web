@@ -22,9 +22,10 @@ import SdkConfig from "../../../SdkConfig";
 import AccessibleButton from "../../views/elements/AccessibleButton";
 import Heading from "../../views/typography/Heading";
 import FeedbackDialog from "../dialogs/FeedbackDialog";
+import { shouldShowFeedback } from "../../../utils/Feedback";
 
 export function UserOnboardingFeedback() {
-    if (!SdkConfig.get().bug_report_endpoint_url) {
+    if (!shouldShowFeedback()) {
         return null;
     }
 

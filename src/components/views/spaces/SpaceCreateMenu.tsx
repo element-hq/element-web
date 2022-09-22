@@ -31,14 +31,13 @@ import AccessibleButton from "../elements/AccessibleButton";
 import Field from "../elements/Field";
 import withValidation from "../elements/Validation";
 import RoomAliasField from "../elements/RoomAliasField";
-import SdkConfig from "../../../SdkConfig";
 import Modal from "../../../Modal";
 import GenericFeatureFeedbackDialog from "../dialogs/GenericFeatureFeedbackDialog";
 import SettingsStore from "../../../settings/SettingsStore";
 import { getKeyBindingsManager } from "../../../KeyBindingsManager";
 import { KeyBindingAction } from "../../../accessibility/KeyboardShortcuts";
 import { MatrixClientPeg } from "../../../MatrixClientPeg";
-import { UIFeature } from "../../../settings/UIFeature";
+import { shouldShowFeedback } from "../../../utils/Feedback";
 
 export const createSpace = async (
     name: string,
@@ -101,7 +100,7 @@ const nameToLocalpart = (name: string): string => {
 
 // XXX: Temporary for the Spaces release only
 export const SpaceFeedbackPrompt = ({ onClick }: { onClick?: () => void }) => {
-    if (!SdkConfig.get().bug_report_endpoint_url || !SettingsStore.getValue(UIFeature.Feedback)) return null;
+    if (!shouldShowFeedback()) return null;
 
     return <div className="mx_SpaceFeedbackPrompt">
         <span className="mx_SpaceFeedbackPrompt_text">{ _t("Spaces are a new feature.") }</span>

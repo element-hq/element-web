@@ -28,6 +28,7 @@ import SettingsFlag from "../elements/SettingsFlag";
 import { useFeatureEnabled } from "../../../hooks/useSettings";
 import InlineSpinner from "../elements/InlineSpinner";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
+import { shouldShowFeedback } from "../../../utils/Feedback";
 
 // XXX: Keep this around for re-use in future Betas
 
@@ -88,7 +89,7 @@ const BetaCard = ({ title: titleOverride, featureId }: IProps) => {
     } = info;
 
     let feedbackButton;
-    if (value && feedbackLabel && feedbackSubheading && SdkConfig.get().bug_report_endpoint_url) {
+    if (value && feedbackLabel && feedbackSubheading && shouldShowFeedback()) {
         feedbackButton = <AccessibleButton
             onClick={() => {
                 Modal.createDialog(BetaFeedbackDialog, { featureId });
