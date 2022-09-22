@@ -19,53 +19,21 @@ limitations under the License.
 import { createClient } from "matrix-js-sdk/src/matrix";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ILoginParams, LoginFlow } from "matrix-js-sdk/src/@types/auth";
 
 import { IMatrixClientCreds } from "./MatrixClientPeg";
 import SecurityCustomisations from "./customisations/Security";
 
+export {
+    IdentityProviderBrand,
+    IIdentityProvider,
+    ISSOFlow,
+    LoginFlow,
+} from "matrix-js-sdk/src/@types/auth";
+
 interface ILoginOptions {
     defaultDeviceDisplayName?: string;
 }
-
-// TODO: Move this to JS SDK
-interface IPasswordFlow {
-    type: "m.login.password";
-}
-
-export enum IdentityProviderBrand {
-    Gitlab = "gitlab",
-    Github = "github",
-    Apple = "apple",
-    Google = "google",
-    Facebook = "facebook",
-    Twitter = "twitter",
-}
-
-export interface IIdentityProvider {
-    id: string;
-    name: string;
-    icon?: string;
-    brand?: IdentityProviderBrand | string;
-}
-
-export interface ISSOFlow {
-    type: "m.login.sso" | "m.login.cas";
-    // eslint-disable-next-line camelcase
-    identity_providers?: IIdentityProvider[];
-}
-
-export type LoginFlow = ISSOFlow | IPasswordFlow;
-
-// TODO: Move this to JS SDK
-/* eslint-disable camelcase */
-interface ILoginParams {
-    identifier?: object;
-    password?: string;
-    token?: string;
-    device_id?: string;
-    initial_device_display_name?: string;
-}
-/* eslint-enable camelcase */
 
 export default class Login {
     private hsUrl: string;
