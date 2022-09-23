@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { parseQsFromFragment, parseQs } from "../../src/vector/url_utils";
+import { parseQsFromFragment, parseQs } from "../../../src/vector/url_utils";
 
 describe("url_utils.ts", function() {
     // @ts-ignore
