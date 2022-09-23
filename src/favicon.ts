@@ -84,12 +84,19 @@ export default class Favicon {
         }
     }
 
-    private reset() {
+    private reset(): void {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
     }
 
-    private options(n: number | string, params: IParams) {
+    private options(n: number | string, params: IParams): {
+        n: string | number;
+        len: number;
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    } {
         const opt = {
             n: ((typeof n) === "number") ? Math.abs(n as number | 0) : n,
             len: ("" + n).length,
@@ -124,7 +131,7 @@ export default class Favicon {
         return opt;
     }
 
-    private circle(n: number | string, opts?: Partial<IParams>) {
+    private circle(n: number | string, opts?: Partial<IParams>): void {
         const params = { ...this.params, ...opts };
         const opt = this.options(n, params);
 
@@ -177,19 +184,19 @@ export default class Favicon {
         this.context.closePath();
     }
 
-    private ready() {
+    private ready(): void {
         if (this.isReady) return;
         this.isReady = true;
         this.readyCb?.();
     }
 
-    private setIcon(canvas) {
+    private setIcon(canvas: HTMLCanvasElement): void {
         setImmediate(() => {
             this.setIconSrc(canvas.toDataURL("image/png"));
         });
     }
 
-    private setIconSrc(url) {
+    private setIconSrc(url: string): void {
         // if is attached to fav icon
         if (this.browser.ff || this.browser.opera) {
             // for FF we need to "recreate" element, attach to dom and remove old <link>
@@ -200,9 +207,7 @@ export default class Favicon {
             newIcon.setAttribute("type", "image/png");
             window.document.getElementsByTagName("head")[0].appendChild(newIcon);
             newIcon.setAttribute("href", url);
-            if (old.parentNode) {
-                old.parentNode.removeChild(old);
-            }
+            old.parentNode?.removeChild(old);
         } else {
             this.icons.forEach(icon => {
                 icon.setAttribute("href", url);
@@ -210,7 +215,7 @@ export default class Favicon {
         }
     }
 
-    public badge(content: number | string, opts?: Partial<IParams>) {
+    public badge(content: number | string, opts?: Partial<IParams>): void {
         if (!this.isReady) {
             this.readyCb = () => {
                 this.badge(content, opts);
@@ -227,7 +232,7 @@ export default class Favicon {
         this.setIcon(this.canvas);
     }
 
-    private static getLinks() {
+    private static getLinks(): HTMLLinkElement[] {
         const icons: HTMLLinkElement[] = [];
         const links = window.document.getElementsByTagName("head")[0].getElementsByTagName("link");
         for (const link of links) {
@@ -238,7 +243,7 @@ export default class Favicon {
         return icons;
     }
 
-    private static getIcons() {
+    private static getIcons(): HTMLLinkElement[] {
         // get favicon link elements
         let elms = Favicon.getLinks();
         if (elms.length === 0) {
