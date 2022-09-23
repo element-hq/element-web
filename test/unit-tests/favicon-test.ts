@@ -47,4 +47,15 @@ describe("Favicon", () => {
         favicon.badge(0);
         expect(favicon["context"].__getDrawCalls()).toMatchSnapshot();
     });
+
+    it("should recreate link element for firefox and opera", () => {
+        window["InstallTrigger"] = {};
+        window["opera"] = {};
+        const favicon = new Favicon();
+        const originalLink = window.document.querySelector("link");
+        favicon.badge(123);
+        jest.runAllTimers();
+        const newLink = window.document.querySelector("link");
+        expect(originalLink).not.toStrictEqual(newLink);
+    });
 });
