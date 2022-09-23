@@ -85,15 +85,11 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
       <div
         class="mx_DeviceTile_info"
       >
-        <div
-          tabindex="0"
+        <h4
+          class="mx_Heading_h4"
         >
-          <h4
-            class="mx_Heading_h4"
-          >
-            Alices device
-          </h4>
-        </div>
+          Alices device
+        </h4>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -101,6 +97,12 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
             data-testid="device-metadata-isVerified"
           >
             Verified
+          </span>
+           · 
+          <span
+            data-testid="device-metadata-deviceId"
+          >
+            alices_device
           </span>
         </div>
       </div>
@@ -185,15 +187,11 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
       <div
         class="mx_DeviceTile_info"
       >
-        <div
-          tabindex="0"
+        <h4
+          class="mx_Heading_h4"
         >
-          <h4
-            class="mx_Heading_h4"
-          >
-            Alices device
-          </h4>
-        </div>
+          Alices device
+        </h4>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -201,6 +199,12 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
             data-testid="device-metadata-isVerified"
           >
             Unverified
+          </span>
+           · 
+          <span
+            data-testid="device-metadata-deviceId"
+          >
+            alices_device
           </span>
         </div>
       </div>
@@ -285,15 +289,11 @@ exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
   <div
     class="mx_DeviceTile_info"
   >
-    <div
-      tabindex="0"
+    <h4
+      class="mx_Heading_h4"
     >
-      <h4
-        class="mx_Heading_h4"
-      >
-        Alices device
-      </h4>
-    </div>
+      Alices device
+    </h4>
     <div
       class="mx_DeviceTile_metadata"
     >
@@ -301,6 +301,12 @@ exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
         data-testid="device-metadata-isVerified"
       >
         Verified
+      </span>
+       · 
+      <span
+        data-testid="device-metadata-deviceId"
+      >
+        alices_device
       </span>
     </div>
   </div>

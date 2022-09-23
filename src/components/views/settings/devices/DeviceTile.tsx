@@ -19,8 +19,6 @@ import React, { Fragment } from "react";
 import { Icon as InactiveIcon } from '../../../../../res/img/element-icons/settings/inactive.svg';
 import { _t } from "../../../../languageHandler";
 import { formatDate, formatRelativeTime } from "../../../../DateUtils";
-import TooltipTarget from "../../elements/TooltipTarget";
-import { Alignment } from "../../elements/Tooltip";
 import Heading from "../../typography/Heading";
 import { INACTIVE_DEVICE_AGE_DAYS, isDeviceInactive } from "./filter";
 import { DeviceWithVerification } from "./types";
@@ -32,18 +30,8 @@ export interface DeviceTileProps {
 }
 
 const DeviceTileName: React.FC<{ device: DeviceWithVerification }> = ({ device }) => {
-    if (device.display_name) {
-        return <TooltipTarget
-            alignment={Alignment.Top}
-            label={`${device.display_name} (${device.device_id})`}
-        >
-            <Heading size='h4'>
-                { device.display_name }
-            </Heading>
-        </TooltipTarget>;
-    }
     return <Heading size='h4'>
-        { device.device_id }
+        { device.display_name || device.device_id }
     </Heading>;
 };
 
@@ -91,6 +79,7 @@ const DeviceTile: React.FC<DeviceTileProps> = ({ device, children, onClick }) =>
             { id: 'isVerified', value: verificationStatus },
             { id: 'lastActivity', value: lastActivity },
             { id: 'lastSeenIp', value: device.last_seen_ip },
+            { id: 'deviceId', value: device.device_id },
         ];
 
     return <div className="mx_DeviceTile" data-testid={`device-tile-${device.device_id}`}>

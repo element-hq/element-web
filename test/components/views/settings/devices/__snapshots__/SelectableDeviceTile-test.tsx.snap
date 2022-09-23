@@ -53,15 +53,11 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
       <div
         class="mx_DeviceTile_info"
       >
-        <div
-          tabindex="0"
+        <h4
+          class="mx_Heading_h4"
         >
-          <h4
-            class="mx_Heading_h4"
-          >
-            My Device
-          </h4>
-        </div>
+          My Device
+        </h4>
         <div
           class="mx_DeviceTile_metadata"
         >
@@ -75,6 +71,12 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
             data-testid="device-metadata-lastSeenIp"
           >
             123.456.789
+          </span>
+           · 
+          <span
+            data-testid="device-metadata-deviceId"
+          >
+            my-device
           </span>
         </div>
       </div>

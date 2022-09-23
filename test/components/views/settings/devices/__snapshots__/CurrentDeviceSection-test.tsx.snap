@@ -212,6 +212,12 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
             >
               Unverified
             </span>
+             · 
+            <span
+              data-testid="device-metadata-deviceId"
+            >
+              alices_device
+            </span>
           </div>
         </div>
         <div
@@ -321,6 +327,12 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
               data-testid="device-metadata-isVerified"
             >
               Unverified
+            </span>
+             · 
+            <span
+              data-testid="device-metadata-deviceId"
+            >
+              alices_device
             </span>
           </div>
         </div>
