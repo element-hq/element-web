@@ -168,6 +168,12 @@ Enables support for video rooms that use Element Call rather than Jitsi, and cau
 
 This flag will not have any effect unless `feature_video_rooms` is also enabled.
 
+## New group call experience (`feature_group_calls`) [In Development]
+
+This feature allows users to place and join native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
+
+If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
+
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
 Enables rendering of MD / HTML in room topics.
