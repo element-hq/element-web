@@ -87,7 +87,7 @@ export function useEventEmitterState<T>(
     eventName: string | symbol,
     fn: Mapper<T>,
 ): T {
-    const [value, setValue] = useState<T>(fn());
+    const [value, setValue] = useState<T>(fn);
     const handler = useCallback((...args: any[]) => {
         setValue(fn(...args));
     }, [fn]);

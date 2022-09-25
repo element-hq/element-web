@@ -118,6 +118,7 @@ export interface IConfigOptions {
     };
     element_call: {
         url: string;
+        use_exclusively: boolean;
     };
 
     logout_redirect_url?: string;

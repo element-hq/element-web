@@ -30,7 +30,7 @@ import { EventTimeline } from 'matrix-js-sdk/src/models/event-timeline';
 import { EventType } from 'matrix-js-sdk/src/@types/event';
 import { RoomState, RoomStateEvent } from 'matrix-js-sdk/src/models/room-state';
 import { EventTimelineSet } from "matrix-js-sdk/src/models/event-timeline-set";
-import { CallState, CallType, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
+import { CallState, MatrixCall } from "matrix-js-sdk/src/webrtc/call";
 import { throttle } from "lodash";
 import { MatrixError } from 'matrix-js-sdk/src/http-api';
 import { ClientEvent } from "matrix-js-sdk/src/client";
@@ -149,7 +149,7 @@ interface IRoomProps extends MatrixClientProps {
 enum MainSplitContentType {
     Timeline,
     MaximisedWidget,
-    Video, // immersive voip
+    Call,
 }
 export interface IRoomState {
     room?: Room;
@@ -299,7 +299,6 @@ function LocalRoomView(props: LocalRoomViewProps): ReactElement {
                     e2eStatus={E2EStatus.Normal}
                     onAppsClick={null}
                     appsShown={false}
-                    onCallPlaced={null}
                     excludedRightPanelPhaseButtons={[]}
                     showButtons={false}
                     enableRoomOptionsMenu={false}
@@ -350,7 +349,6 @@ function LocalRoomCreateLoader(props: ILocalRoomCreateLoaderProps): ReactElement
                     e2eStatus={E2EStatus.Normal}
                     onAppsClick={null}
                     appsShown={false}
-                    onCallPlaced={null}
                     excludedRightPanelPhaseButtons={[]}
                     showButtons={false}
                     enableRoomOptionsMenu={false}
@@ -517,7 +515,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
     private getMainSplitContentType = (room: Room) => {
         if (SettingsStore.getValue("feature_video_rooms") && isVideoRoom(room)) {
-            return MainSplitContentType.Video;
+            return MainSplitContentType.Call;
         }
         if (WidgetLayoutStore.instance.hasMaximisedWidget(room)) {
             return MainSplitContentType.MaximisedWidget;
@@ -1660,10 +1658,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         return ret;
     }
 
-    private onCallPlaced = (type: CallType): void => {
-        LegacyCallHandler.instance.placeCall(this.state.room?.roomId, type);
-    };
-
     private onAppsClick = () => {
         dis.dispatch({
             action: "appsDrawer",
@@ -2330,7 +2324,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
 
         const mainClasses = classNames("mx_RoomView", {
             mx_RoomView_inCall: Boolean(activeCall),
-            mx_RoomView_immersive: this.state.mainSplitContentType === MainSplitContentType.Video,
+            mx_RoomView_immersive: this.state.mainSplitContentType === MainSplitContentType.Call,
         });
 
         const showChatEffects = SettingsStore.getValue('showChatEffects');
@@ -2371,7 +2365,7 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     { previewBar }
                 </>;
                 break;
-            case MainSplitContentType.Video: {
+            case MainSplitContentType.Call: {
                 mainSplitContentClassName = "mx_MainSplit_video";
                 mainSplitBody = <>
                     <VideoRoomView room={this.state.room} resizing={this.state.resizing} />
@@ -2382,7 +2376,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
         const mainSplitContentClasses = classNames("mx_RoomView_body", mainSplitContentClassName);
 
         let excludedRightPanelPhaseButtons = [RightPanelPhases.Timeline];
-        let onCallPlaced = this.onCallPlaced;
         let onAppsClick = this.onAppsClick;
         let onForgetClick = this.onForgetClick;
         let onSearchClick = this.onSearchClick;
@@ -2399,13 +2392,12 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                 onForgetClick = null;
                 onSearchClick = null;
                 break;
-            case MainSplitContentType.Video:
+            case MainSplitContentType.Call:
                 excludedRightPanelPhaseButtons = [
                     RightPanelPhases.ThreadPanel,
                     RightPanelPhases.PinnedMessages,
                     RightPanelPhases.NotificationPanel,
                 ];
-                onCallPlaced = null;
                 onAppsClick = null;
                 onForgetClick = null;
                 onSearchClick = null;
@@ -2432,7 +2424,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                             e2eStatus={this.state.e2eStatus}
                             onAppsClick={this.state.hasPinnedWidgets ? onAppsClick : null}
                             appsShown={this.state.showApps}
-                            onCallPlaced={onCallPlaced}
                             excludedRightPanelPhaseButtons={excludedRightPanelPhaseButtons}
                             showButtons={!this.viewsLocalRoom}
                             enableRoomOptionsMenu={!this.viewsLocalRoom}

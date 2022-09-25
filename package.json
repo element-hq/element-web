@@ -138,6 +138,7 @@
     "@percy/cypress": "^3.1.1",
     "@sentry/types": "^6.10.0",
     "@sinonjs/fake-timers": "^9.1.2",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
     "@types/classnames": "^2.2.11",
     "@types/commonmark": "^0.27.4",

@@ -15,12 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from 'react';
+import React, { FC, useState, useMemo, useCallback } from 'react';
 import classNames from 'classnames';
 import { throttle } from 'lodash';
-import { MatrixEvent, Room, RoomStateEvent } from 'matrix-js-sdk/src/matrix';
+import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
 
+import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import type { Room } from "matrix-js-sdk/src/models/room";
 import { _t } from '../../../languageHandler';
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -30,13 +32,14 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
+import { ButtonEvent } from "../elements/AccessibleButton";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
 import { E2EStatus } from '../../../utils/ShieldUtils';
 import { IOOBData } from '../../../stores/ThreepidInviteStore';
 import { SearchScope } from './SearchBar';
-import { ContextMenuTooltipButton } from '../../structures/ContextMenu';
+import { aboveLeftOf, ContextMenuTooltipButton, useContextMenu } from '../../structures/ContextMenu';
 import RoomContextMenu from "../context_menus/RoomContextMenu";
 import { contextMenuBelow } from './RoomTile';
 import { RoomNotificationStateStore } from '../../../stores/notifications/RoomNotificationStateStore';
@@ -48,6 +51,272 @@ import { BetaPill } from "../beta/BetaCard";
 import RightPanelStore from "../../../stores/right-panel/RightPanelStore";
 import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
+import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
+import { useFeatureEnabled, useSettingValue } from "../../../hooks/useSettings";
+import SdkConfig from "../../../SdkConfig";
+import { useEventEmitterState, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
+import { useWidgets } from "../right_panel/RoomSummaryCard";
+import { WidgetType } from "../../../widgets/WidgetType";
+import { useCall } from "../../../hooks/useCall";
+import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
+import { ElementCall } from "../../../models/Call";
+import IconizedContextMenu, {
+    IconizedContextMenuOption,
+    IconizedContextMenuOptionList,
+} from "../context_menus/IconizedContextMenu";
+import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+
+class DisabledWithReason {
+    constructor(public readonly reason: string) { }
+}
+
+interface VoiceCallButtonProps {
+    room: Room;
+    busy: boolean;
+    setBusy: (value: boolean) => void;
+    behavior: DisabledWithReason | "legacy_or_jitsi";
+}
+
+/**
+ * Button for starting voice calls, supporting only legacy 1:1 calls and Jitsi
+ * widgets.
+ */
+const VoiceCallButton: FC<VoiceCallButtonProps> = ({ room, busy, setBusy, behavior }) => {
+    const { onClick, tooltip, disabled } = useMemo(() => {
+        if (behavior instanceof DisabledWithReason) {
+            return {
+                onClick: () => {},
+                tooltip: behavior.reason,
+                disabled: true,
+            };
+        } else { // behavior === "legacy_or_jitsi"
+            return {
+                onClick: async (ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    setBusy(true);
+                    await LegacyCallHandler.instance.placeCall(room.roomId, CallType.Voice);
+                    setBusy(false);
+                },
+                disabled: false,
+            };
+        }
+    }, [behavior, room, setBusy]);
+
+    return <AccessibleTooltipButton
+        className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
+        onClick={onClick}
+        title={_t("Voice call")}
+        tooltip={tooltip ?? _t("Voice call")}
+        disabled={disabled || busy}
+    />;
+};
+
+interface VideoCallButtonProps {
+    room: Room;
+    busy: boolean;
+    setBusy: (value: boolean) => void;
+    behavior: DisabledWithReason | "legacy_or_jitsi" | "element" | "jitsi_or_element";
+}
+
+/**
+ * Button for starting video calls, supporting both legacy 1:1 calls, Jitsi
+ * widgets, and native group calls. If multiple calling options are available,
+ * this shows a menu to pick between them.
+ */
+const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavior }) => {
+    const [menuOpen, buttonRef, openMenu, closeMenu] = useContextMenu();
+
+    const startLegacyCall = useCallback(async () => {
+        setBusy(true);
+        await LegacyCallHandler.instance.placeCall(room.roomId, CallType.Video);
+        setBusy(false);
+    }, [setBusy, room]);
+
+    const startElementCall = useCallback(() => {
+        setBusy(true);
+        defaultDispatcher.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            view_call: true,
+            metricsTrigger: undefined,
+        });
+        setBusy(false);
+    }, [setBusy, room]);
+
+    const { onClick, tooltip, disabled } = useMemo(() => {
+        if (behavior instanceof DisabledWithReason) {
+            return {
+                onClick: () => {},
+                tooltip: behavior.reason,
+                disabled: true,
+            };
+        } else if (behavior === "legacy_or_jitsi") {
+            return {
+                onClick: async (ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    await startLegacyCall();
+                },
+                disabled: false,
+            };
+        } else if (behavior === "element") {
+            return {
+                onClick: async (ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    startElementCall();
+                },
+                disabled: false,
+            };
+        } else { // behavior === "jitsi_or_element"
+            return {
+                onClick: async (ev: ButtonEvent) => {
+                    ev.preventDefault();
+                    openMenu();
+                },
+                disabled: false,
+            };
+        }
+    }, [behavior, startLegacyCall, startElementCall, openMenu]);
+
+    const onJitsiClick = useCallback(async (ev: ButtonEvent) => {
+        ev.preventDefault();
+        closeMenu();
+        await startLegacyCall();
+    }, [closeMenu, startLegacyCall]);
+
+    const onElementClick = useCallback((ev: ButtonEvent) => {
+        ev.preventDefault();
+        closeMenu();
+        startElementCall();
+    }, [closeMenu, startElementCall]);
+
+    let menu: JSX.Element | null = null;
+    if (menuOpen) {
+        const buttonRect = buttonRef.current!.getBoundingClientRect();
+        menu = <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
+            <IconizedContextMenuOptionList>
+                <IconizedContextMenuOption label={_t("Video call (Jitsi)")} onClick={onJitsiClick} />
+                <IconizedContextMenuOption label={_t("Video call (Element Call)")} onClick={onElementClick} />
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>;
+    }
+
+    return <>
+        <AccessibleTooltipButton
+            inputRef={buttonRef}
+            className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
+            onClick={onClick}
+            title={_t("Video call")}
+            tooltip={tooltip ?? _t("Video call")}
+            disabled={disabled || busy}
+        />
+        { menu }
+    </>;
+};
+
+interface CallButtonsProps {
+    room: Room;
+}
+
+// The header buttons for placing calls have become stupidly complex, so here
+// they are as a separate component
+const CallButtons: FC<CallButtonsProps> = ({ room }) => {
+    const [busy, setBusy] = useState(false);
+    const showButtons = useSettingValue<boolean>("showCallButtonsInComposer");
+    const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
+    const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
+    const isVideoRoom = useMemo(() => videoRoomsEnabled && calcIsVideoRoom(room), [videoRoomsEnabled, room]);
+    const useElementCallExclusively = useMemo(() => SdkConfig.get("element_call").use_exclusively, []);
+
+    const hasLegacyCall = useEventEmitterState(
+        LegacyCallHandler.instance,
+        LegacyCallHandlerEvent.CallsChanged,
+        useCallback(() => LegacyCallHandler.instance.getCallForRoom(room.roomId) !== null, [room]),
+    );
+
+    const widgets = useWidgets(room);
+    const hasJitsiWidget = useMemo(() => widgets.some(widget => WidgetType.JITSI.matches(widget.type)), [widgets]);
+
+    const hasGroupCall = useCall(room.roomId) !== null;
+
+    const [functionalMembers, mayEditWidgets, mayCreateElementCalls] = useTypedEventEmitterState(
+        room,
+        RoomStateEvent.Update,
+        useCallback(() => [
+            getJoinedNonFunctionalMembers(room),
+            room.currentState.mayClientSendStateEvent("im.vector.modular.widgets", room.client),
+            room.currentState.mayClientSendStateEvent(ElementCall.CALL_EVENT_TYPE.name, room.client),
+        ], [room]),
+    );
+
+    const makeVoiceCallButton = (behavior: VoiceCallButtonProps["behavior"]): JSX.Element =>
+        <VoiceCallButton room={room} busy={busy} setBusy={setBusy} behavior={behavior} />;
+    const makeVideoCallButton = (behavior: VideoCallButtonProps["behavior"]): JSX.Element =>
+        <VideoCallButton room={room} busy={busy} setBusy={setBusy} behavior={behavior} />;
+
+    if (isVideoRoom || !showButtons) {
+        return null;
+    } else if (groupCallsEnabled) {
+        if (useElementCallExclusively) {
+            if (hasGroupCall) {
+                return makeVideoCallButton(new DisabledWithReason(_t("Ongoing call")));
+            } else if (mayCreateElementCalls) {
+                return makeVideoCallButton("element");
+            } else {
+                return makeVideoCallButton(
+                    new DisabledWithReason(_t("You do not have permission to start video calls")),
+                );
+            }
+        } else if (hasLegacyCall || hasJitsiWidget || hasGroupCall) {
+            return <>
+                { makeVoiceCallButton(new DisabledWithReason(_t("Ongoing call"))) }
+                { makeVideoCallButton(new DisabledWithReason(_t("Ongoing call"))) }
+            </>;
+        } else if (functionalMembers.length <= 1) {
+            return <>
+                { makeVoiceCallButton(new DisabledWithReason(_t("There's no one here to call"))) }
+                { makeVideoCallButton(new DisabledWithReason(_t("There's no one here to call"))) }
+            </>;
+        } else if (functionalMembers.length === 2) {
+            return <>
+                { makeVoiceCallButton("legacy_or_jitsi") }
+                { makeVideoCallButton("legacy_or_jitsi") }
+            </>;
+        } else if (mayEditWidgets) {
+            return <>
+                { makeVoiceCallButton("legacy_or_jitsi") }
+                { makeVideoCallButton(mayCreateElementCalls ? "jitsi_or_element" : "legacy_or_jitsi") }
+            </>;
+        } else {
+            const videoCallBehavior = mayCreateElementCalls
+                ? "element"
+                : new DisabledWithReason(_t("You do not have permission to start video calls"));
+            return <>
+                { makeVoiceCallButton(new DisabledWithReason(_t("You do not have permission to start voice calls"))) }
+                { makeVideoCallButton(videoCallBehavior) }
+            </>;
+        }
+    } else if (hasLegacyCall || hasJitsiWidget) {
+        return <>
+            { makeVoiceCallButton(new DisabledWithReason(_t("Ongoing call"))) }
+            { makeVideoCallButton(new DisabledWithReason(_t("Ongoing call"))) }
+        </>;
+    } else if (functionalMembers.length <= 1) {
+        return <>
+            { makeVoiceCallButton(new DisabledWithReason(_t("There's no one here to call"))) }
+            { makeVideoCallButton(new DisabledWithReason(_t("There's no one here to call"))) }
+        </>;
+    } else if (functionalMembers.length === 2 || mayEditWidgets) {
+        return <>
+            { makeVoiceCallButton("legacy_or_jitsi") }
+            { makeVideoCallButton("legacy_or_jitsi") }
+        </>;
+    } else {
+        return <>
+            { makeVoiceCallButton(new DisabledWithReason(_t("You do not have permission to start voice calls"))) }
+            { makeVideoCallButton(new DisabledWithReason(_t("You do not have permission to start video calls"))) }
+        </>;
+    }
+};
 
 export interface ISearchInfo {
     searchTerm: string;
@@ -55,15 +324,14 @@ export interface ISearchInfo {
     searchCount: number;
 }
 
-interface IProps {
+export interface IProps {
     room: Room;
     oobData?: IOOBData;
     inRoom: boolean;
-    onSearchClick: () => void;
-    onInviteClick: () => void;
-    onForgetClick: () => void;
-    onCallPlaced: (type: CallType) => void;
-    onAppsClick: () => void;
+    onSearchClick: (() => void) | null;
+    onInviteClick: (() => void) | null;
+    onForgetClick: (() => void) | null;
+    onAppsClick: (() => void) | null;
     e2eStatus: E2EStatus;
     appsShown: boolean;
     searchInfo: ISearchInfo;
@@ -89,7 +357,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
 
-    constructor(props, context) {
+    constructor(props: IProps, context: IState) {
         super(props, context);
         const notiStore = RoomNotificationStateStore.instance.getRoomState(props.room);
         notiStore.on(NotificationStateEvents.Update, this.onNotificationUpdate);
@@ -141,30 +409,14 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     };
 
     private onContextMenuCloseClick = () => {
-        this.setState({ contextMenuPosition: null });
+        this.setState({ contextMenuPosition: undefined });
     };
 
     private renderButtons(): JSX.Element[] {
         const buttons: JSX.Element[] = [];
 
-        if (this.props.inRoom &&
-            this.props.onCallPlaced &&
-            !this.context.tombstone &&
-            SettingsStore.getValue("showCallButtonsInComposer")
-        ) {
-            const voiceCallButton = <AccessibleTooltipButton
-                className="mx_RoomHeader_button mx_RoomHeader_voiceCallButton"
-                onClick={() => this.props.onCallPlaced(CallType.Voice)}
-                title={_t("Voice call")}
-                key="voice"
-            />;
-            const videoCallButton = <AccessibleTooltipButton
-                className="mx_RoomHeader_button mx_RoomHeader_videoCallButton"
-                onClick={() => this.props.onCallPlaced(CallType.Video)}
-                title={_t("Video call")}
-                key="video"
-            />;
-            buttons.push(voiceCallButton, videoCallButton);
+        if (this.props.inRoom && !this.context.tombstone) {
+            buttons.push(<CallButtons key="calls" room={this.props.room} />);
         }
 
         if (this.props.onForgetClick) {
@@ -212,8 +464,8 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         return buttons;
     }
 
-    private renderName(oobName) {
-        let contextMenu: JSX.Element;
+    private renderName(oobName: string) {
+        let contextMenu: JSX.Element | null = null;
         if (this.state.contextMenuPosition && this.props.room) {
             contextMenu = (
                 <RoomContextMenu
@@ -267,7 +519,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     }
 
     public render() {
-        let searchStatus = null;
+        let searchStatus: JSX.Element | null = null;
 
         // don't display the search count until the search completes and
         // gives us a valid (possibly zero) searchCount.
@@ -291,7 +543,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             className="mx_RoomHeader_topic"
         />;
 
-        let roomAvatar;
+        let roomAvatar: JSX.Element | null = null;
         if (this.props.room) {
             roomAvatar = <DecoratedRoomAvatar
                 room={this.props.room}
@@ -301,7 +553,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             />;
         }
 
-        let buttons;
+        let buttons: JSX.Element | null = null;
         if (this.props.showButtons) {
             buttons = <React.Fragment>
                 <div className="mx_RoomHeader_buttons">

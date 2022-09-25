@@ -111,7 +111,7 @@ class WidgetEchoStore extends EventEmitter {
     }
 }
 
-let singletonWidgetEchoStore = null;
+let singletonWidgetEchoStore: WidgetEchoStore | null = null;
 if (!singletonWidgetEchoStore) {
     singletonWidgetEchoStore = new WidgetEchoStore();
 }

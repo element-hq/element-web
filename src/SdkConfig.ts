@@ -32,6 +32,7 @@ export const DEFAULTS: IConfigOptions = {
     },
     element_call: {
         url: "https://call.element.io",
+        use_exclusively: false,
     },
 
     // @ts-ignore - we deliberately use the camelCase version here so we trigger

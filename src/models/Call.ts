@@ -635,11 +635,13 @@ export class ElementCall extends Call {
     }
 
     public static get(room: Room): ElementCall | null {
-        // Only supported in video rooms (for now)
+        // Only supported in the new group call experience or in video rooms
         if (
-            SettingsStore.getValue("feature_video_rooms")
-            && SettingsStore.getValue("feature_element_call_video_rooms")
-            && room.isCallRoom()
+            SettingsStore.getValue("feature_group_calls") || (
+                SettingsStore.getValue("feature_video_rooms")
+                && SettingsStore.getValue("feature_element_call_video_rooms")
+                && room.isCallRoom()
+            )
         ) {
             const groupCalls = ElementCall.CALL_EVENT_TYPE.names.flatMap(eventType =>
                 room.currentState.getStateEvents(eventType),

@@ -47,6 +47,7 @@ export interface ViewRoomPayload extends Pick<ActionPayload, "action"> {
     forceTimeline?: boolean; // Whether to override default behaviour to end up at a timeline
     show_room_tile?: boolean; // Whether to ensure that the room tile is visible in the room list
     clear_search?: boolean; // Whether to clear the room list search
+    view_call?: boolean; // Whether to view the call or call lobby for the room
 
     deferred_action?: ActionPayload; // Action to fire after MatrixChat handles this ViewRoom action
 

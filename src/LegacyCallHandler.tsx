@@ -820,10 +820,10 @@ export default class LegacyCallHandler extends EventEmitter {
         }
     }
 
-    public placeCall(roomId: string, type?: CallType, transferee?: MatrixCall): void {
+    public async placeCall(roomId: string, type?: CallType, transferee?: MatrixCall): Promise<void> {
         // We might be using managed hybrid widgets
         if (isManagedHybridWidgetEnabled()) {
-            addManagedHybridWidget(roomId);
+            await addManagedHybridWidget(roomId);
             return;
         }
 
@@ -870,9 +870,9 @@ export default class LegacyCallHandler extends EventEmitter {
         } else if (members.length === 2) {
             logger.info(`Place ${type} call in ${roomId}`);
 
-            this.placeMatrixCall(roomId, type, transferee);
+            await this.placeMatrixCall(roomId, type, transferee);
         } else { // > 2
-            this.placeJitsiCall(roomId, type);
+            await this.placeJitsiCall(roomId, type);
         }
     }
 
