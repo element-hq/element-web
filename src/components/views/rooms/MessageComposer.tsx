@@ -54,6 +54,11 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { isLocalRoom } from '../../../utils/localRoom/isLocalRoom';
 import { Features } from '../../../settings/Settings';
 import { VoiceMessageRecording } from '../../../audio/VoiceMessageRecording';
+import {
+    VoiceBroadcastInfoEventContent,
+    VoiceBroadcastInfoEventType,
+    VoiceBroadcastInfoState,
+} from '../../../voice-broadcast';
 
 let instanceCount = 0;
 
@@ -503,12 +508,18 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             showStickersButton={this.showStickersButton}
                             toggleButtonMenu={this.toggleButtonMenu}
                             showVoiceBroadcastButton={this.showVoiceBroadcastButton}
-                            onStartVoiceBroadcastClick={() => {
-                                // Sends a voice message. To be replaced by voice broadcast during development.
-                                this.voiceRecordingButton.current?.onRecordStartEndClick();
-                                if (this.context.narrow) {
-                                    this.toggleButtonMenu();
-                                }
+                            onStartVoiceBroadcastClick={async () => {
+                                const client = MatrixClientPeg.get();
+                                client.sendStateEvent(
+                                    this.props.room.roomId,
+                                    VoiceBroadcastInfoEventType,
+                                    {
+                                        state: VoiceBroadcastInfoState.Started,
+                                        chunk_length: 300,
+                                    } as VoiceBroadcastInfoEventContent,
+                                    client.getUserId(),
+                                );
+                                this.toggleButtonMenu();
                             }}
                         /> }
                         { showSendButton && (

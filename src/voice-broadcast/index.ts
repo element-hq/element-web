@@ -14,4 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/**
+ * Voice Broadcast module
+ * {@link https://github.com/vector-im/element-meta/discussions/632}
+ */
+
+import { RelationType } from "matrix-js-sdk/src/matrix";
+
+export * from "./components";
+export * from "./utils";
+
 export const VoiceBroadcastInfoEventType = "io.element.voice_broadcast_info";
+
+export enum VoiceBroadcastInfoState {
+    Started = "started",
+    Paused = "paused",
+    Running = "running",
+    Stopped = "stopped",
+}
+
+export interface VoiceBroadcastInfoEventContent {
+    state: VoiceBroadcastInfoState;
+    chunk_length: number;
+    ["m.relates_to"]?: {
+        rel_type: RelationType;
+        event_id: string;
+    };
+}

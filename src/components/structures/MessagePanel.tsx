@@ -59,6 +59,7 @@ import { IReadReceiptInfo } from "../views/rooms/ReadReceiptMarker";
 import { haveRendererForEvent } from "../../events/EventTileFactory";
 import { editorRoomKey } from "../../Editing";
 import { hasThreadSummary } from "../../utils/EventUtils";
+import { VoiceBroadcastInfoEventType } from '../../voice-broadcast';
 
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000; // 5 minutes
 const continuedTypes = [EventType.Sticker, EventType.RoomMessage];
@@ -1091,11 +1092,20 @@ class CreationGrouper extends BaseGrouper {
             && (ev.getStateKey() !== createEvent.getSender() || ev.getContent()["membership"] !== "join")) {
             return false;
         }
+
+        const eventType = ev.getType();
+
         // beacons are not part of room creation configuration
         // should be shown in timeline
-        if (M_BEACON_INFO.matches(ev.getType())) {
+        if (M_BEACON_INFO.matches(eventType)) {
             return false;
         }
+
+        if (VoiceBroadcastInfoEventType === eventType) {
+            // always show voice broadcast info events in timeline
+            return false;
+        }
+
         if (ev.isState() && ev.getSender() === createEvent.getSender()) {
             return true;
         }

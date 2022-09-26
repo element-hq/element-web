@@ -88,6 +88,7 @@ export function createMessageContent(
     model = unescapeMessage(model);
 
     const body = textSerialize(model);
+
     const content: IContent = {
         msgtype: isEmote ? "m.emote" : "m.text",
         body: body,

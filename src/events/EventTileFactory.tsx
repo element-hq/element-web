@@ -43,6 +43,7 @@ import { getMessageModerationState, MessageModerationState } from "../utils/Even
 import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
+import { shouldDisplayAsVoiceBroadcastTile } from "../voice-broadcast/utils/shouldDisplayAsVoiceBroadcastTile";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps {
@@ -217,6 +218,10 @@ export function pickFactory(
     // Try and pick a state event factory, if we can.
     if (mxEvent.isState()) {
         if (shouldDisplayAsBeaconTile(mxEvent)) {
+            return MessageEventFactory;
+        }
+
+        if (shouldDisplayAsVoiceBroadcastTile(mxEvent)) {
             return MessageEventFactory;
         }
 

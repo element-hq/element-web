@@ -140,6 +140,7 @@
     "@sinonjs/fake-timers": "^9.1.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.4.3",
     "@types/classnames": "^2.2.11",
     "@types/commonmark": "^0.27.4",
     "@types/counterpart": "^0.18.1",
