@@ -2573,10 +2573,10 @@ ajv@^8.0.1, ajv@^8.6.2:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-allchange@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.0.6.tgz#f905918255541dc92d6a1f5cdf758db4597f569c"
-  integrity sha512-37a4J55oSxhLmlS/DeBOKjKn5dbjkyR4qMJ9is8+CKLPTe7NybcWBYvrPLr9kVLBa6aigWrdovRHrQj/4v6k4w==
+allchange@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/allchange/-/allchange-1.1.0.tgz#f8fa129e4b40c0b0a2c072c530f2324c6590e208"
+  integrity sha512-brDWf2feuL3FRyivSyC6AKOgpX+bYgs1Z7+ZmLti6PnBdZgIjRSnKvlc68N8+1UX2rCISx2I+XuUvE3/GJNG2A==
   dependencies:
     "@actions/core" "^1.4.0"
     "@actions/github" "^5.0.0"
@@ -6925,9 +6925,10 @@ matrix-events-sdk@^0.0.1-beta.7:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
-"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
-  version "19.5.0"
-  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/59c82cb67972257cded956d25291961c21bd27ba"
+matrix-js-sdk@19.6.0:
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-19.6.0.tgz#8e531b4d140f98f5c3d8c2aca1e7fae2ef839f3e"
+  integrity sha512-VU+FTixX+NfWeUbFNR1I0+RUQlXJCoYrg+qDcYje0faalcRN2zWJmS2KWD0hXIqXQS2q44zbPc7WzpPjd0ToAQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     another-json "^0.2.0"
