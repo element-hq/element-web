@@ -279,26 +279,48 @@ export async function setTheme(theme?: string): Promise<void> {
             resolve();
         };
 
-        // turns out that Firefox preloads the CSS for link elements with
-        // the disabled attribute, but Chrome doesn't.
+        const isStyleSheetLoaded = () => Boolean(
+            [...document.styleSheets]
+                .find(styleSheet => styleSheet?.href === styleElements[stylesheetName].href),
+        );
 
-        let cssLoaded = false;
-
-        styleElements[stylesheetName].onload = () => {
-            switchTheme();
-        };
-
-        for (let i = 0; i < document.styleSheets.length; i++) {
-            const ss = document.styleSheets[i];
-            if (ss && ss.href === styleElements[stylesheetName].href) {
-                cssLoaded = true;
-                break;
+        function waitForStyleSheetLoading() {
+            // turns out that Firefox preloads the CSS for link elements with
+            // the disabled attribute, but Chrome doesn't.
+            if (isStyleSheetLoaded()) {
+                switchTheme();
+                return;
             }
+
+            let counter = 0;
+
+            // In case of theme toggling (white => black => white)
+            // Chrome doesn't fire the `load` event when the white theme is selected the second times
+            const intervalId = setInterval(() => {
+                if (isStyleSheetLoaded()) {
+                    clearInterval(intervalId);
+                    styleElements[stylesheetName].onload = undefined;
+                    styleElements[stylesheetName].onerror = undefined;
+                    switchTheme();
+                }
+
+                // Avoid to be stuck in an endless loop if there is an issue in the stylesheet loading
+                counter++;
+                if (counter === 5) {
+                    clearInterval(intervalId);
+                }
+            }, 100);
+
+            styleElements[stylesheetName].onload = () => {
+                clearInterval(intervalId);
+                switchTheme();
+            };
+
+            styleElements[stylesheetName].onerror = () => {
+                clearInterval(intervalId);
+            };
         }
 
-        if (cssLoaded) {
-            styleElements[stylesheetName].onload = undefined;
-            switchTheme();
-        }
+        waitForStyleSheetLoading();
     });
 }
