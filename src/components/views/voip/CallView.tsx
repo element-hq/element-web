@@ -14,24 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { FC, useState, useMemo, useRef, useEffect, useCallback } from "react";
+import React, { FC, ReactNode, useState, useContext, useEffect, useMemo, useRef, useCallback } from "react";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
-import { Room } from "matrix-js-sdk/src/models/room";
+import { defer, IDeferred } from "matrix-js-sdk/src/utils";
 
+import type { Room } from "matrix-js-sdk/src/models/room";
+import type { ConnectionState } from "../../../models/Call";
+import { Call, CallEvent, ElementCall, isConnected } from "../../../models/Call";
+import { useCall, useConnectionState, useParticipants } from "../../../hooks/useCall";
+import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import AppTile from "../elements/AppTile";
 import { _t } from "../../../languageHandler";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../MediaDeviceHandler";
-import { useParticipants } from "../../../hooks/useCall";
 import { CallStore } from "../../../stores/CallStore";
-import { Call } from "../../../models/Call";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
 } from "../context_menus/IconizedContextMenu";
 import { aboveLeftOf, ContextMenuButton, useContextMenu } from "../../structures/ContextMenu";
 import { Alignment } from "../elements/Tooltip";
-import AccessibleButton from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import FacePile from "../elements/FacePile";
 import MemberAvatar from "../avatars/MemberAvatar";
@@ -52,14 +56,14 @@ interface DeviceButtonProps {
 const DeviceButton: FC<DeviceButtonProps> = ({
     kind, devices, setDevice, deviceListLabel, fallbackDeviceLabel, muted, disabled, toggle, unmutedTitle, mutedTitle,
 }) => {
-    const [menuDisplayed, buttonRef, openMenu, closeMenu] = useContextMenu();
-    let contextMenu;
-    if (menuDisplayed) {
-        const selectDevice = (device: MediaDeviceInfo) => {
-            setDevice(device);
-            closeMenu();
-        };
+    const [showMenu, buttonRef, openMenu, closeMenu] = useContextMenu();
+    const selectDevice = useCallback((device: MediaDeviceInfo) => {
+        setDevice(device);
+        closeMenu();
+    }, [setDevice, closeMenu]);
 
+    let contextMenu: JSX.Element | null = null;
+    if (showMenu) {
         const buttonRect = buttonRef.current!.getBoundingClientRect();
         contextMenu = <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <IconizedContextMenuOptionList>
@@ -77,12 +81,12 @@ const DeviceButton: FC<DeviceButtonProps> = ({
     if (!devices.length) return null;
 
     return <div
-        className={classNames("mx_CallLobby_deviceButtonWrapper", {
-            "mx_CallLobby_deviceButtonWrapper_muted": muted,
+        className={classNames("mx_CallView_deviceButtonWrapper", {
+            "mx_CallView_deviceButtonWrapper_muted": muted,
         })}
     >
         <AccessibleTooltipButton
-            className={`mx_CallLobby_deviceButton mx_CallLobby_deviceButton_${kind}`}
+            className={`mx_CallView_deviceButton mx_CallView_deviceButton_${kind}`}
             title={muted ? mutedTitle : unmutedTitle}
             alignment={Alignment.Top}
             onClick={toggle}
@@ -90,10 +94,10 @@ const DeviceButton: FC<DeviceButtonProps> = ({
         />
         { devices.length > 1 ? (
             <ContextMenuButton
-                className="mx_CallLobby_deviceListButton"
+                className="mx_CallView_deviceListButton"
                 inputRef={buttonRef}
                 onClick={openMenu}
-                isExpanded={menuDisplayed}
+                isExpanded={showMenu}
                 label={deviceListLabel}
                 disabled={disabled}
             />
@@ -104,15 +108,15 @@ const DeviceButton: FC<DeviceButtonProps> = ({
 
 const MAX_FACES = 8;
 
-interface Props {
+interface LobbyProps {
     room: Room;
-    call: Call;
+    connect: () => Promise<void>;
+    children?: ReactNode;
 }
 
-export const CallLobby: FC<Props> = ({ room, call }) => {
+export const Lobby: FC<LobbyProps> = ({ room, connect, children }) => {
     const [connecting, setConnecting] = useState(false);
     const me = useMemo(() => room.getMember(room.myUserId)!, [room]);
-    const participants = useParticipants(call);
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const [audioInputs, videoInputs] = useAsyncMemo(async () => {
@@ -173,32 +177,20 @@ export const CallLobby: FC<Props> = ({ room, call }) => {
         }
     }, [videoStream]);
 
-    const connect = useCallback(async () => {
+    const onConnectClick = useCallback(async (ev: ButtonEvent) => {
+        ev.preventDefault();
         setConnecting(true);
         try {
-            // Disconnect from any other active calls first, since we don't yet support holding
-            await Promise.all([...CallStore.instance.activeCalls].map(call => call.disconnect()));
-            await call.connect();
+            await connect();
         } catch (e) {
             logger.error(e);
             setConnecting(false);
         }
-    }, [call, setConnecting]);
+    }, [connect, setConnecting]);
 
-    let facePile: JSX.Element | null = null;
-    if (participants.size) {
-        const shownMembers = [...participants].slice(0, MAX_FACES);
-        const overflow = participants.size > shownMembers.length;
-
-        facePile = <div className="mx_CallLobby_participants">
-            { _t("%(count)s people joined", { count: participants.size }) }
-            <FacePile members={shownMembers} faceSize={24} overflow={overflow} />
-        </div>;
-    }
-
-    return <div className="mx_CallLobby">
-        { facePile }
-        <div className="mx_CallLobby_preview">
+    return <div className="mx_CallView_lobby">
+        { children }
+        <div className="mx_CallView_preview">
             <MemberAvatar key={me.userId} member={me} width={200} height={200} resizeMethod="scale" />
             <video
                 ref={videoRef}
@@ -207,7 +199,7 @@ export const CallLobby: FC<Props> = ({ room, call }) => {
                 playsInline
                 disablePictureInPicture
             />
-            <div className="mx_CallLobby_controls">
+            <div className="mx_CallView_controls">
                 <DeviceButton
                     kind="audio"
                     devices={audioInputs}
@@ -235,12 +227,152 @@ export const CallLobby: FC<Props> = ({ room, call }) => {
             </div>
         </div>
         <AccessibleButton
-            className="mx_CallLobby_connectButton"
+            className="mx_CallView_connectButton"
             kind="primary"
             disabled={connecting}
-            onClick={connect}
+            onClick={onConnectClick}
         >
             { _t("Join") }
         </AccessibleButton>
     </div>;
+};
+
+interface StartCallViewProps {
+    room: Room;
+    resizing: boolean;
+    call: Call | null;
+    setStartingCall: (value: boolean) => void;
+}
+
+const StartCallView: FC<StartCallViewProps> = ({ room, resizing, call, setStartingCall }) => {
+    const cli = useContext(MatrixClientContext);
+
+    // Since connection has to be split across two different callbacks, we
+    // create a promise to communicate the results back to the caller
+    const connectDeferredRef = useRef<IDeferred<void>>();
+    if (connectDeferredRef.current === undefined) {
+        connectDeferredRef.current = defer();
+    }
+    const connectDeferred = connectDeferredRef.current!;
+
+    // Since the call might be null, we have to track connection state by hand.
+    // The alternative would be to split this component in two depending on
+    // whether we've received the call, so we could use the useConnectionState
+    // hook, but then React would remount the lobby when the call arrives.
+    const [connected, setConnected] = useState(() => call !== null && isConnected(call.connectionState));
+    useEffect(() => {
+        if (call !== null) {
+            const onConnectionState = (state: ConnectionState) => setConnected(isConnected(state));
+            call.on(CallEvent.ConnectionState, onConnectionState);
+            return () => { call.off(CallEvent.ConnectionState, onConnectionState); };
+        }
+    }, [call]);
+
+    const connect = useCallback(async () => {
+        setStartingCall(true);
+        await ElementCall.create(room);
+        await connectDeferred.promise;
+    }, [room, setStartingCall, connectDeferred]);
+
+    useEffect(() => {
+        (async () => {
+            // If the call was successfully started, connect automatically
+            if (call !== null) {
+                try {
+                    // Disconnect from any other active calls first, since we don't yet support holding
+                    await Promise.all([...CallStore.instance.activeCalls].map(call => call.disconnect()));
+                    await call.connect();
+                    connectDeferred.resolve();
+                } catch (e) {
+                    connectDeferred.reject(e);
+                }
+            }
+        })();
+    }, [call, connectDeferred]);
+
+    return <div className="mx_CallView">
+        { connected ? null : <Lobby room={room} connect={connect} /> }
+        { call !== null && <AppTile
+            app={call.widget}
+            room={room}
+            userId={cli.credentials.userId}
+            creatorUserId={call.widget.creatorUserId}
+            waitForIframeLoad={call.widget.waitForIframeLoad}
+            showMenubar={false}
+            pointerEvents={resizing ? "none" : undefined}
+        /> }
+    </div>;
+};
+
+interface JoinCallViewProps {
+    room: Room;
+    resizing: boolean;
+    call: Call;
+}
+
+const JoinCallView: FC<JoinCallViewProps> = ({ room, resizing, call }) => {
+    const cli = useContext(MatrixClientContext);
+    const connected = isConnected(useConnectionState(call));
+    const participants = useParticipants(call);
+
+    const connect = useCallback(async () => {
+        // Disconnect from any other active calls first, since we don't yet support holding
+        await Promise.all([...CallStore.instance.activeCalls].map(call => call.disconnect()));
+        await call.connect();
+    }, [call]);
+
+    // We'll take this opportunity to tidy up our room state
+    useEffect(() => { call.clean(); }, [call]);
+
+    let lobby: JSX.Element | null = null;
+    if (!connected) {
+        let facePile: JSX.Element | null = null;
+        if (participants.size) {
+            const shownMembers = [...participants].slice(0, MAX_FACES);
+            const overflow = participants.size > shownMembers.length;
+
+            facePile = <div className="mx_CallView_participants">
+                { _t("%(count)s people joined", { count: participants.size }) }
+                <FacePile members={shownMembers} faceSize={24} overflow={overflow} />
+            </div>;
+        }
+
+        lobby = <Lobby room={room} connect={connect}>{ facePile }</Lobby>;
+    }
+
+    return <div className="mx_CallView">
+        { lobby }
+        { /* We render the widget even if we're disconnected, so it stays loaded */ }
+        <AppTile
+            app={call.widget}
+            room={room}
+            userId={cli.credentials.userId}
+            creatorUserId={call.widget.creatorUserId}
+            waitForIframeLoad={call.widget.waitForIframeLoad}
+            showMenubar={false}
+            pointerEvents={resizing ? "none" : undefined}
+        />
+    </div>;
+};
+
+interface CallViewProps {
+    room: Room;
+    resizing: boolean;
+    /**
+     * If true, the view will be blank until a call appears. Otherwise, the join
+     * button will create a call if there isn't already one.
+     */
+    waitForCall: boolean;
+}
+
+export const CallView: FC<CallViewProps> = ({ room, resizing, waitForCall }) => {
+    const call = useCall(room.roomId);
+    const [startingCall, setStartingCall] = useState(false);
+
+    if (call === null || startingCall) {
+        if (waitForCall) return null;
+        return <StartCallView room={room} resizing={resizing} call={call} setStartingCall={setStartingCall} />;
+    } else {
+        return <JoinCallView room={room} resizing={resizing} call={call} />;
+    }
 };

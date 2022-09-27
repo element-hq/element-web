@@ -19,7 +19,7 @@ import { MatrixWidgetType } from "matrix-widget-api";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { mkEvent } from "./test-utils";
-import { Call } from "../../src/models/Call";
+import { Call, ElementCall, JitsiCall } from "../../src/models/Call";
 
 export class MockedCall extends Call {
     private static EVENT_TYPE = "org.example.mocked_call";
@@ -91,4 +91,6 @@ export class MockedCall extends Call {
  */
 export const useMockedCalls = () => {
     Call.get = room => MockedCall.get(room);
+    JitsiCall.create = async room => MockedCall.create(room, "1");
+    ElementCall.create = async room => MockedCall.create(room, "1");
 };
