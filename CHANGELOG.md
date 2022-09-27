@@ -1,4 +1,4 @@
-Changes in [1.11.6-rc.1](https://github.com/vector-im/element-web/releases/tag/v1.11.6-rc.1) (2022-09-20)
+Changes in [1.11.6](https://github.com/vector-im/element-web/releases/tag/v1.11.6) (2022-09-20)
 =========================================================================================================
 
 ## ✨ Features
