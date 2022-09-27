@@ -50,6 +50,7 @@ import SettingsStore from "../settings/SettingsStore";
 import { SlidingSyncManager } from "../SlidingSyncManager";
 import { awaitRoomDownSync } from "../utils/RoomUpgrade";
 import { UPDATE_EVENT } from "./AsyncStore";
+import { CallStore } from "./CallStore";
 
 const NUM_JOIN_RETRY = 5;
 
@@ -286,6 +287,8 @@ export class RoomViewStore extends EventEmitter {
 
     private async viewRoom(payload: ViewRoomPayload): Promise<void> {
         if (payload.room_id) {
+            const room = MatrixClientPeg.get().getRoom(payload.room_id);
+
             if (payload.metricsTrigger !== null && payload.room_id !== this.state.roomId) {
                 let activeSpace: ViewRoomEvent["activeSpace"];
                 if (SpaceStore.instance.activeSpace === MetaSpace.Home) {
@@ -303,10 +306,11 @@ export class RoomViewStore extends EventEmitter {
                     trigger: payload.metricsTrigger,
                     viaKeyboard: payload.metricsViaKeyboard,
                     isDM: !!DMRoomMap.shared().getUserIdForRoomId(payload.room_id),
-                    isSpace: MatrixClientPeg.get().getRoom(payload.room_id)?.isSpaceRoom(),
+                    isSpace: room?.isSpaceRoom(),
                     activeSpace,
                 });
             }
+
             if (SettingsStore.getValue("feature_sliding_sync") && this.state.roomId !== payload.room_id) {
                 if (this.state.subscribingRoomId && this.state.subscribingRoomId !== payload.room_id) {
                     // unsubscribe from this room, but don't await it as we don't care when this gets done.
@@ -359,8 +363,9 @@ export class RoomViewStore extends EventEmitter {
                 viaServers: payload.via_servers ?? [],
                 wasContextSwitch: payload.context_switch ?? false,
                 viewingCall: payload.view_call ?? (
-                    // Reset to false when switching rooms
-                    payload.room_id === this.state.roomId ? this.state.viewingCall : false
+                    payload.room_id === this.state.roomId
+                        ? this.state.viewingCall
+                        : CallStore.instance.hasActiveCall(payload.room_id)
                 ),
             };
 

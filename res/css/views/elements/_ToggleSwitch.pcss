@@ -26,6 +26,10 @@ limitations under the License.
 
     background-color: $togglesw-off-color;
     opacity: 0.5;
+
+    &[aria-disabled="true"] {
+        cursor: not-allowed;
+    }
 }
 
 .mx_ToggleSwitch_enabled {

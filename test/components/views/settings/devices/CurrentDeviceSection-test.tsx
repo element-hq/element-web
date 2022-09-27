@@ -40,6 +40,7 @@ describe('<CurrentDeviceSection />', () => {
         isLoading: false,
         isSigningOut: false,
     };
+
     const getComponent = (props = {}): React.ReactElement =>
         (<CurrentDeviceSection {...defaultProps} {...props} />);
 

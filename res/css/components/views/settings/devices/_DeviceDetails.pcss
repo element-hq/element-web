@@ -46,6 +46,13 @@ limitations under the License.
 
 .mx_DeviceDetails_sectionHeading {
     margin: 0;
+
+    .mx_DeviceDetails_sectionSubheading {
+        display: block;
+        font-size: $font-12px;
+        color: $secondary-content;
+        line-height: $font-14px;
+    }
 }
 
 .mx_DeviceDetails_metadataTable {
@@ -80,4 +87,11 @@ limitations under the License.
     flex-direction: row;
     align-items: center;
     gap: $spacing-4;
+}
+
+.mx_DeviceDetails_pushNotifications {
+    display: block;
+    .mx_ToggleSwitch {
+        float: right;
+    }
 }

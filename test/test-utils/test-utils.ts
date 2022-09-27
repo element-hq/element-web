@@ -30,6 +30,7 @@ import {
     EventType,
     IEventRelation,
     IUnsigned,
+    IPusher,
 } from 'matrix-js-sdk/src/matrix';
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
@@ -541,3 +542,14 @@ export const mkSpace = (
     )));
     return space;
 };
+
+export const mkPusher = (extra: Partial<IPusher> = {}): IPusher => ({
+    app_display_name: "app",
+    app_id: "123",
+    data: {},
+    device_display_name: "name",
+    kind: "http",
+    lang: "en",
+    pushkey: "pushpush",
+    ...extra,
+});

@@ -79,7 +79,7 @@ export enum CallEvent {
 
 interface CallEventHandlerMap {
     [CallEvent.ConnectionState]: (state: ConnectionState, prevState: ConnectionState) => void;
-    [CallEvent.Participants]: (participants: Set<RoomMember>) => void;
+    [CallEvent.Participants]: (participants: Set<RoomMember>, prevParticipants: Set<RoomMember>) => void;
     [CallEvent.Destroy]: () => void;
 }
 
@@ -129,8 +129,9 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         return this._participants;
     }
     protected set participants(value: Set<RoomMember>) {
+        const prevValue = this._participants;
         this._participants = value;
-        this.emit(CallEvent.Participants, value);
+        this.emit(CallEvent.Participants, value, prevValue);
     }
 
     constructor(
@@ -601,6 +602,7 @@ export class ElementCall extends Call {
     public readonly STUCK_DEVICE_TIMEOUT_MS = 1000 * 60 * 60; // 1 hour
 
     private participantsExpirationTimer: number | null = null;
+    private terminationTimer: number | null = null;
 
     private constructor(public readonly groupCall: MatrixEvent, client: MatrixClient) {
         // Splice together the Element Call URL for this call
@@ -631,6 +633,7 @@ export class ElementCall extends Call {
 
         this.room.on(RoomStateEvent.Update, this.onRoomState);
         this.on(CallEvent.ConnectionState, this.onConnectionState);
+        this.on(CallEvent.Participants, this.onParticipants);
         this.updateParticipants();
     }
 
@@ -665,8 +668,12 @@ export class ElementCall extends Call {
     }
 
     public static async create(room: Room): Promise<void> {
+        const isVideoRoom = SettingsStore.getValue("feature_video_rooms")
+            && SettingsStore.getValue("feature_element_call_video_rooms")
+            && room.isCallRoom();
+
         await room.client.sendStateEvent(room.roomId, ElementCall.CALL_EVENT_TYPE.name, {
-            "m.intent": "m.room",
+            "m.intent": isVideoRoom ? "m.room" : "m.prompt",
             "m.type": "m.video",
         }, randomString(24));
     }
@@ -791,22 +798,69 @@ export class ElementCall extends Call {
         WidgetStore.instance.removeVirtualWidget(this.widget.id, this.groupCall.getRoomId()!);
         this.room.off(RoomStateEvent.Update, this.onRoomState);
         this.off(CallEvent.ConnectionState, this.onConnectionState);
+        this.off(CallEvent.Participants, this.onParticipants);
+
         if (this.participantsExpirationTimer !== null) {
             clearTimeout(this.participantsExpirationTimer);
             this.participantsExpirationTimer = null;
+        }
+        if (this.terminationTimer !== null) {
+            clearTimeout(this.terminationTimer);
+            this.terminationTimer = null;
         }
 
         super.destroy();
     }
 
-    private onRoomState = () => this.updateParticipants();
+    private get mayTerminate(): boolean {
+        return this.groupCall.getContent()["m.intent"] !== "m.room"
+            && this.room.currentState.mayClientSendStateEvent(ElementCall.CALL_EVENT_TYPE.name, this.client);
+    }
 
-    private onConnectionState = async (state: ConnectionState, prevState: ConnectionState) => {
+    private async terminate(): Promise<void> {
+        await this.client.sendStateEvent(
+            this.roomId,
+            ElementCall.CALL_EVENT_TYPE.name,
+            { ...this.groupCall.getContent(), "m.terminated": "Call ended" },
+            this.groupCall.getStateKey(),
+        );
+    }
+
+    private onRoomState = () => {
+        this.updateParticipants();
+
+        // Destroy the call if it's been terminated
+        const newGroupCall = this.room.currentState.getStateEvents(
+            this.groupCall.getType(), this.groupCall.getStateKey()!,
+        );
+        if ("m.terminated" in newGroupCall.getContent()) this.destroy();
+    };
+
+    private onConnectionState = (state: ConnectionState, prevState: ConnectionState) => {
         if (
             (state === ConnectionState.Connected && !isConnected(prevState))
             || (state === ConnectionState.Disconnected && isConnected(prevState))
         ) {
             this.updateParticipants(); // Local echo
+        }
+    };
+
+    private onParticipants = async (participants: Set<RoomMember>, prevParticipants: Set<RoomMember>) => {
+        // If the last participant disconnected, terminate the call
+        if (participants.size === 0 && prevParticipants.size > 0 && this.mayTerminate) {
+            if (prevParticipants.has(this.room.getMember(this.client.getUserId()!)!)) {
+                // If we were that last participant, do the termination ourselves
+                await this.terminate();
+            } else {
+                // We don't appear to have been the last participant, but because of
+                // the potential for races, users lacking permission, and a myriad of
+                // other reasons, we can't rely on other clients to terminate the call.
+                // Since it's likely that other clients are using this same logic, we wait
+                // randomly between 2 and 8 seconds before terminating the call, to
+                // probabilistically reduce event spam. If someone else beats us to it,
+                // this timer will be automatically cleared upon the call's destruction.
+                this.terminationTimer = setTimeout(() => this.terminate(), Math.random() * 6000 + 2000);
+            }
         }
     };
 

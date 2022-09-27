@@ -156,6 +156,16 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         return this.calls.get(roomId) ?? null;
     }
 
+    /**
+     * Determines whether the given room has an active call.
+     * @param roomId The room's ID.
+     * @returns Whether the given room has an active call.
+     */
+    public hasActiveCall(roomId: string): boolean {
+        const call = this.get(roomId);
+        return call !== null && this.activeCalls.has(call);
+    }
+
     private onRoom = (room: Room) => this.updateRoom(room);
 
     private onRoomState = (event: MatrixEvent, state: RoomState) => {
