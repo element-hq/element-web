@@ -45,6 +45,7 @@ describe('<FilteredDeviceList />', () => {
         onDeviceExpandToggle: jest.fn(),
         onSignOutDevices: jest.fn(),
         saveDeviceName: jest.fn(),
+        setPusherEnabled: jest.fn(),
         expandedDeviceIds: [],
         signingOutDeviceIds: [],
         devices: {
@@ -54,7 +55,10 @@ describe('<FilteredDeviceList />', () => {
             [hundredDaysOld.device_id]: hundredDaysOld,
             [hundredDaysOldUnverified.device_id]: hundredDaysOldUnverified,
         },
+        pushers: [],
+        supportsMSC3881: true,
     };
+
     const getComponent = (props = {}) =>
         (<FilteredDeviceList {...defaultProps} {...props} />);
 

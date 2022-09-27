@@ -87,11 +87,14 @@ const useSignOut = (
 const SessionManagerTab: React.FC = () => {
     const {
         devices,
+        pushers,
         currentDeviceId,
         isLoadingDeviceList,
         requestDeviceVerification,
         refreshDevices,
         saveDeviceName,
+        setPusherEnabled,
+        supportsMSC3881,
     } = useOwnDevices();
     const [filter, setFilter] = useState<DeviceSecurityVariation>();
     const [expandedDeviceIds, setExpandedDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
@@ -186,6 +189,7 @@ const SessionManagerTab: React.FC = () => {
             >
                 <FilteredDeviceList
                     devices={otherDevices}
+                    pushers={pushers}
                     filter={filter}
                     expandedDeviceIds={expandedDeviceIds}
                     signingOutDeviceIds={signingOutDeviceIds}
@@ -194,7 +198,9 @@ const SessionManagerTab: React.FC = () => {
                     onRequestDeviceVerification={requestDeviceVerification ? onTriggerDeviceVerification : undefined}
                     onSignOutDevices={onSignOutOtherDevices}
                     saveDeviceName={saveDeviceName}
+                    setPusherEnabled={setPusherEnabled}
                     ref={filteredDeviceListRef}
+                    supportsMSC3881={supportsMSC3881}
                 />
             </SettingsSubsection>
         }

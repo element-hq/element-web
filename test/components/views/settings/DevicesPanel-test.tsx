@@ -19,11 +19,13 @@ import { act } from 'react-dom/test-utils';
 import { CrossSigningInfo } from 'matrix-js-sdk/src/crypto/CrossSigning';
 import { DeviceInfo } from 'matrix-js-sdk/src/crypto/deviceinfo';
 import { sleep } from 'matrix-js-sdk/src/utils';
+import { PUSHER_DEVICE_ID, PUSHER_ENABLED } from 'matrix-js-sdk/src/@types/event';
 
 import DevicesPanel from "../../../../src/components/views/settings/DevicesPanel";
 import {
     flushPromises,
     getMockClientWithEventEmitter,
+    mkPusher,
     mockClientMethodsUser,
 } from "../../../test-utils";
 
@@ -40,6 +42,8 @@ describe('<DevicesPanel />', () => {
         getStoredCrossSigningForUser: jest.fn().mockReturnValue(new CrossSigningInfo(userId, {}, {})),
         getStoredDevice: jest.fn().mockReturnValue(new DeviceInfo('id')),
         generateClientSecret: jest.fn(),
+        getPushers: jest.fn(),
+        setPusher: jest.fn(),
     });
 
     const getComponent = () => <DevicesPanel />;
@@ -50,6 +54,15 @@ describe('<DevicesPanel />', () => {
         mockClient.getDevices
             .mockReset()
             .mockResolvedValue({ devices: [device1, device2, device3] });
+
+        mockClient.getPushers
+            .mockReset()
+            .mockResolvedValue({
+                pushers: [mkPusher({
+                    [PUSHER_DEVICE_ID.name]: device1.device_id,
+                    [PUSHER_ENABLED.name]: true,
+                })],
+            });
     });
 
     it('renders device panel with devices', async () => {
