@@ -237,8 +237,8 @@ export async function setTheme(theme?: string): Promise<void> {
 
     // look for the stylesheet elements.
     // styleElements is a map from style name to HTMLLinkElement.
-    const styleElements = Object.create(null);
-    const themes = Array.from(document.querySelectorAll('[data-mx-theme]'));
+    const styleElements: Record<string, HTMLLinkElement> = Object.create(null);
+    const themes = Array.from(document.querySelectorAll<HTMLLinkElement>('[data-mx-theme]'));
     themes.forEach(theme => {
         styleElements[theme.attributes['data-mx-theme'].value.toLowerCase()] = theme;
     });
