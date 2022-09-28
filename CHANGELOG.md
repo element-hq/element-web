@@ -1,3 +1,9 @@
+Changes in [1.11.8](https://github.com/vector-im/element-web/releases/tag/v1.11.8) (2022-09-28)
+===============================================================================================
+
+## 🐛 Bug Fixes
+ * Bump IDB crypto store version ([\#2705](https://github.com/matrix-org/matrix-js-sdk/pull/2705)).
+
 Changes in [1.11.7](https://github.com/vector-im/element-web/releases/tag/v1.11.7) (2022-09-28)
 ===============================================================================================
 
