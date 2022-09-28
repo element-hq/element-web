@@ -21,6 +21,8 @@ describe('theme', () => {
         let lightTheme;
         let darkTheme;
 
+        let spyQuerySelectorAll: jest.MockInstance<NodeListOf<Element>, [selectors: string]>;
+
         beforeEach(() => {
             const styles = [
                 {
@@ -48,7 +50,7 @@ describe('theme', () => {
             darkTheme = styles[1];
 
             jest.spyOn(document.body, 'style', 'get').mockReturnValue([] as any);
-            jest.spyOn(document, 'querySelectorAll').mockReturnValue(styles as any);
+            spyQuerySelectorAll = jest.spyOn(document, 'querySelectorAll').mockReturnValue(styles as any);
         });
 
         afterEach(() => {
@@ -64,6 +66,8 @@ describe('theme', () => {
             });
 
             // Then
+            expect(spyQuerySelectorAll).toHaveBeenCalledWith('[data-mx-theme]');
+            expect(spyQuerySelectorAll).toBeCalledTimes(1);
             expect(lightTheme.disabled).toBe(false);
             expect(darkTheme.disabled).toBe(true);
         });
