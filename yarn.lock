@@ -8208,23 +8208,6 @@ matrix-events-sdk@^0.0.1-beta.7:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
-matrix-js-sdk@19.6.0:
-  version "19.6.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-19.6.0.tgz#8e531b4d140f98f5c3d8c2aca1e7fae2ef839f3e"
-  integrity sha512-VU+FTixX+NfWeUbFNR1I0+RUQlXJCoYrg+qDcYje0faalcRN2zWJmS2KWD0hXIqXQS2q44zbPc7WzpPjd0ToAQ==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    another-json "^0.2.0"
-    browser-request "^0.3.3"
-    bs58 "^5.0.0"
-    content-type "^1.0.4"
-    loglevel "^1.7.1"
-    matrix-events-sdk "^0.0.1-beta.7"
-    p-retry "4"
-    qs "^6.9.6"
-    request "^2.88.2"
-    unhomoglyph "^1.0.6"
-
 matrix-js-sdk@19.7.0:
   version "19.7.0"
   resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-19.7.0.tgz#ccadae630c56032b040c87b163475a04601409ce"
@@ -8249,10 +8232,10 @@ matrix-mock-request@^2.0.0:
   dependencies:
     expect "^28.1.0"
 
-matrix-react-sdk@3.55.0:
-  version "3.55.0"
-  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.55.0.tgz#949a43167a2f3db44a520c2957ae356cd6aa0b6e"
-  integrity sha512-V6om14XA1UBQ3c3Xo4nfQpgiCOIqddFCy1eP38lytMH3+OLVlYvnztexvHtXtqFJbb7iW6xDAT89e+sPw3HziA==
+matrix-react-sdk@3.56.0:
+  version "3.56.0"
+  resolved "https://registry.yarnpkg.com/matrix-react-sdk/-/matrix-react-sdk-3.56.0.tgz#28bc382150b0cee959633bebe74c2fdd02bbf5dc"
+  integrity sha512-VzyhqeoRu1rNhnvpTXYcfFrcqoIVxN19JQHWaeKYj88R6Q94c8Bxdyc59Bhx3J1SlNboEPFbjypNZ8f22HcFwQ==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@matrix-org/analytics-events" "^0.2.0"
@@ -8292,7 +8275,7 @@ matrix-react-sdk@3.55.0:
     maplibre-gl "^1.15.2"
     matrix-encrypt-attachment "^1.0.3"
     matrix-events-sdk "^0.0.1-beta.7"
-    matrix-js-sdk "19.6.0"
+    matrix-js-sdk "19.7.0"
     matrix-widget-api "^1.1.1"
     minimist "^1.2.5"
     opus-recorder "^8.0.3"
