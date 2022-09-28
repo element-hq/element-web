@@ -8283,6 +8283,22 @@ matrix-js-sdk@19.7.0:
     request "^2.88.2"
     unhomoglyph "^1.0.6"
 
+"matrix-js-sdk@github:matrix-org/matrix-js-sdk#develop":
+  version "19.7.0"
+  resolved "https://codeload.github.com/matrix-org/matrix-js-sdk/tar.gz/14aa7846a5ac4559dd0489726f06d6eab54f5de5"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    another-json "^0.2.0"
+    browser-request "^0.3.3"
+    bs58 "^5.0.0"
+    content-type "^1.0.4"
+    loglevel "^1.7.1"
+    matrix-events-sdk "^0.0.1-beta.7"
+    p-retry "4"
+    qs "^6.9.6"
+    request "^2.88.2"
+    unhomoglyph "^1.0.6"
+
 matrix-mock-request@^2.0.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/matrix-mock-request/-/matrix-mock-request-2.1.2.tgz#11e38ed1233dced88a6f2bfba1684d5c5b3aa2c2"
@@ -8300,6 +8316,7 @@ matrix-react-sdk@3.56.0:
     "@matrix-org/react-sdk-module-api" "^0.0.3"
     "@sentry/browser" "^6.11.0"
     "@sentry/tracing" "^6.11.0"
+    "@testing-library/react" "^12.1.5"
     "@types/geojson" "^7946.0.8"
     await-lock "^2.1.0"
     blurhash "^1.1.3"
