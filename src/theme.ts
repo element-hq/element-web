@@ -237,13 +237,13 @@ export async function setTheme(theme?: string): Promise<void> {
 
     // look for the stylesheet elements.
     // styleElements is a map from style name to HTMLLinkElement.
-    const styleElements: Record<string, HTMLLinkElement> = Object.create(null);
+    const styleElements = new Map<string, HTMLLinkElement>();
     const themes = Array.from(document.querySelectorAll<HTMLLinkElement>('[data-mx-theme]'));
     themes.forEach(theme => {
-        styleElements[theme.attributes['data-mx-theme'].value.toLowerCase()] = theme;
+        styleElements.set(theme.attributes['data-mx-theme'].value.toLowerCase(), theme);
     });
 
-    if (!(stylesheetName in styleElements)) {
+    if (!styleElements.has(stylesheetName)) {
         throw new Error("Unknown theme " + stylesheetName);
     }
 
@@ -258,7 +258,8 @@ export async function setTheme(theme?: string): Promise<void> {
     // having them interact badly... but this causes a flash of unstyled app
     // which is even uglier.  So we don't.
 
-    styleElements[stylesheetName].disabled = false;
+    const styleSheet = styleElements.get(stylesheetName);
+    styleSheet.disabled = false;
 
     return new Promise((resolve) => {
         const switchTheme = function() {
@@ -266,9 +267,9 @@ export async function setTheme(theme?: string): Promise<void> {
             // theme set request as per https://github.com/vector-im/element-web/issues/5601.
             // We could alternatively lock or similar to stop the race, but
             // this is probably good enough for now.
-            styleElements[stylesheetName].disabled = false;
-            Object.values(styleElements).forEach((a: HTMLStyleElement) => {
-                if (a == styleElements[stylesheetName]) return;
+            styleSheet.disabled = false;
+            styleElements.forEach(a => {
+                if (a == styleSheet) return;
                 a.disabled = true;
             });
             const bodyStyles = global.getComputedStyle(document.body);
@@ -281,7 +282,7 @@ export async function setTheme(theme?: string): Promise<void> {
 
         const isStyleSheetLoaded = () => Boolean(
             [...document.styleSheets]
-                .find(styleSheet => styleSheet?.href === styleElements[stylesheetName].href),
+                .find(_styleSheet => _styleSheet?.href === styleSheet.href),
         );
 
         function waitForStyleSheetLoading() {
@@ -299,8 +300,8 @@ export async function setTheme(theme?: string): Promise<void> {
             const intervalId = setInterval(() => {
                 if (isStyleSheetLoaded()) {
                     clearInterval(intervalId);
-                    styleElements[stylesheetName].onload = undefined;
-                    styleElements[stylesheetName].onerror = undefined;
+                    styleSheet.onload = undefined;
+                    styleSheet.onerror = undefined;
                     switchTheme();
                 }
 
@@ -311,12 +312,12 @@ export async function setTheme(theme?: string): Promise<void> {
                 }
             }, 100);
 
-            styleElements[stylesheetName].onload = () => {
+            styleSheet.onload = () => {
                 clearInterval(intervalId);
                 switchTheme();
             };
 
-            styleElements[stylesheetName].onerror = () => {
+            styleSheet.onerror = () => {
                 clearInterval(intervalId);
             };
         }
