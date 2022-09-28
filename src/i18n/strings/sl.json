@@ -26,5 +26,6 @@
     "You can continue using your current browser, but some or all features may not work and the look and feel of the application may be incorrect.": "Lahko nadaljujete z uporabo vašega trenutnega brskalnika, vendar lahko to privede do manjkajočih funkcionalnosti ali napačnega izgleda aplikacije.",
     "I understand the risks and wish to continue": "Razumem riziko in želim vseeno nadaljevati",
     "Go to element.io": "Pojdi na element.io",
-    "Failed to start": "Neuspel zagon"
+    "Failed to start": "Neuspel zagon",
+    "Use %(brand)s on mobile": "Uporabi %(brand)s na mobilni napravi"
 }
