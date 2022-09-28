@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MatrixClient, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
-import { Relations } from "matrix-js-sdk/src/models/relations";
+import { MatrixClient, MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { mocked } from "jest-mock";
 
 import {
@@ -26,8 +25,11 @@ import {
     VoiceBroadcastInfoEventType,
     VoiceBroadcastInfoState,
     VoiceBroadcastRecordingBody,
+    VoiceBroadcastRecordingsStore,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingEvent,
 } from "../../../src/voice-broadcast";
-import { mkEvent, stubClient } from "../../test-utils";
+import { mkEvent, mkStubRoom, stubClient } from "../../test-utils";
 import { IBodyProps } from "../../../src/components/views/messages/IBodyProps";
 
 jest.mock("../../../src/voice-broadcast/components/molecules/VoiceBroadcastRecordingBody", () => ({
@@ -38,10 +40,10 @@ describe("VoiceBroadcastBody", () => {
     const roomId = "!room:example.com";
     const recordingTestid = "voice-recording";
     let client: MatrixClient;
-    let getRelationsForEvent: (eventId: string, relationType: string, eventType: string) => Relations;
-    let event: MatrixEvent;
-    let relatedEvent: MatrixEvent;
-    let recordingElement: HTMLElement;
+    let room: Room;
+    let infoEvent: MatrixEvent;
+    let recording: VoiceBroadcastRecording;
+    let onRecordingStateChanged: (state: VoiceBroadcastInfoState) => void;
 
     const mkVoiceBroadcastInfoEvent = (state: VoiceBroadcastInfoState) => {
         return mkEvent({
@@ -55,13 +57,13 @@ describe("VoiceBroadcastBody", () => {
         });
     };
 
-    const renderVoiceBroadcast = async () => {
+    const renderVoiceBroadcast = () => {
         const props: IBodyProps = {
-            getRelationsForEvent,
-            mxEvent: event,
+            mxEvent: infoEvent,
         } as unknown as IBodyProps;
-        const result = render(<VoiceBroadcastBody {...props} />);
-        recordingElement = await result.findByTestId(recordingTestid);
+        render(<VoiceBroadcastBody {...props} />);
+        recording = VoiceBroadcastRecordingsStore.instance().getByInfoEvent(infoEvent, client);
+        recording.on(VoiceBroadcastRecordingEvent.StateChanged, onRecordingStateChanged);
     };
 
     const itShouldRenderALiveVoiceBroadcast = () => {
@@ -70,12 +72,14 @@ describe("VoiceBroadcastBody", () => {
                 {
                     onClick: expect.any(Function),
                     live: true,
-                    member: event.sender,
+                    member: infoEvent.sender,
                     userId: client.getUserId(),
-                    title: "@userId:matrix.org • My room",
+                    title: "@userId:matrix.org • test room",
                 },
                 {},
             );
+            screen.getByTestId(recordingTestid);
+            screen.getByText("Live");
         });
     };
 
@@ -85,12 +89,15 @@ describe("VoiceBroadcastBody", () => {
                 {
                     onClick: expect.any(Function),
                     live: false,
-                    member: event.sender,
+                    member: infoEvent.sender,
                     userId: client.getUserId(),
-                    title: "@userId:matrix.org • My room",
+                    title: "@userId:matrix.org • test room",
                 },
                 {},
             );
+            expect(screen.getByTestId(recordingTestid)).not.toBeNull();
+            screen.getByTestId(recordingTestid);
+            expect(screen.queryByText("live")).toBeNull();
         });
     };
 
@@ -108,74 +115,48 @@ describe("VoiceBroadcastBody", () => {
                         data-testid={recordingTestid}
                         onClick={onClick}
                     >
-                        { title }
-                        { live && "Live" }
+                        <div>{ title }</div>
+                        <div>{ live && "Live" }</div>
                     </div>
                 );
             },
         );
         client = stubClient();
-        event = mkVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started);
+        room = mkStubRoom(roomId, "test room", client);
+        mocked(client.getRoom).mockImplementation((getRoomId: string) => {
+            if (getRoomId === roomId) {
+                return room;
+            }
+        });
+        infoEvent = mkVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started);
+        onRecordingStateChanged = jest.fn();
     });
 
-    describe("when getRelationsForEvent is undefined", () => {
-        beforeEach(async () => {
-            await renderVoiceBroadcast();
+    afterEach(() => {
+        if (recording && onRecordingStateChanged) {
+            recording.off(VoiceBroadcastRecordingEvent.StateChanged, onRecordingStateChanged);
+        }
+    });
+
+    describe("when there is a Started Voice Broadcast info event", () => {
+        beforeEach(() => {
+            renderVoiceBroadcast();
         });
 
         itShouldRenderALiveVoiceBroadcast();
 
-        describe("and the Voice Broadcast tile has been clicked", () => {
+        describe("and it is clicked", () => {
             beforeEach(async () => {
-                await userEvent.click(recordingElement);
+                mocked(VoiceBroadcastRecordingBody).mockClear();
+                mocked(onRecordingStateChanged).mockClear();
+                await userEvent.click(screen.getByTestId(recordingTestid));
             });
 
-            it("should emit a Voice Broadcast stop state event", () => {
-                expect(mocked(client.sendStateEvent)).toHaveBeenCalledWith(
-                    roomId,
-                    VoiceBroadcastInfoEventType,
-                    {
-                        state: VoiceBroadcastInfoState.Stopped,
-                        ["m.relates_to"]: {
-                            rel_type: RelationType.Reference,
-                            event_id: event.getId(),
-                        },
-                    },
-                    client.getUserId(),
-                );
-            });
-        });
-    });
+            itShouldRenderANonLiveVoiceBroadcast();
 
-    describe("when getRelationsForEvent returns null", () => {
-        beforeEach(async () => {
-            getRelationsForEvent = jest.fn().mockReturnValue(null);
-            await renderVoiceBroadcast();
-        });
-
-        itShouldRenderALiveVoiceBroadcast();
-    });
-
-    describe("when getRelationsForEvent returns a stopped Voice Broadcast info", () => {
-        beforeEach(async () => {
-            relatedEvent = mkVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Stopped);
-            getRelationsForEvent = jest.fn().mockReturnValue({
-                getRelations: jest.fn().mockReturnValue([
-                    relatedEvent,
-                ]),
-            });
-            await renderVoiceBroadcast();
-        });
-
-        itShouldRenderANonLiveVoiceBroadcast();
-
-        describe("and the Voice Broadcast tile has been clicked", () => {
-            beforeEach(async () => {
-                await userEvent.click(recordingElement);
-            });
-
-            it("should not emit a voice broadcast stop state event", () => {
-                expect(mocked(client.sendStateEvent)).not.toHaveBeenCalled();
+            it("should call stop on the recording", () => {
+                expect(recording.state).toBe(VoiceBroadcastInfoState.Stopped);
+                expect(onRecordingStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Stopped);
             });
         });
     });

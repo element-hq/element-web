@@ -55,9 +55,8 @@ import { isLocalRoom } from '../../../utils/localRoom/isLocalRoom';
 import { Features } from '../../../settings/Settings';
 import { VoiceMessageRecording } from '../../../audio/VoiceMessageRecording';
 import {
-    VoiceBroadcastInfoEventContent,
-    VoiceBroadcastInfoEventType,
-    VoiceBroadcastInfoState,
+    startNewVoiceBroadcastRecording,
+    VoiceBroadcastRecordingsStore,
 } from '../../../voice-broadcast';
 
 let instanceCount = 0;
@@ -508,16 +507,11 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             showStickersButton={this.showStickersButton}
                             toggleButtonMenu={this.toggleButtonMenu}
                             showVoiceBroadcastButton={this.showVoiceBroadcastButton}
-                            onStartVoiceBroadcastClick={async () => {
-                                const client = MatrixClientPeg.get();
-                                client.sendStateEvent(
+                            onStartVoiceBroadcastClick={() => {
+                                startNewVoiceBroadcastRecording(
                                     this.props.room.roomId,
-                                    VoiceBroadcastInfoEventType,
-                                    {
-                                        state: VoiceBroadcastInfoState.Started,
-                                        chunk_length: 300,
-                                    } as VoiceBroadcastInfoEventContent,
-                                    client.getUserId(),
+                                    MatrixClientPeg.get(),
+                                    VoiceBroadcastRecordingsStore.instance(),
                                 );
                                 this.toggleButtonMenu();
                             }}
