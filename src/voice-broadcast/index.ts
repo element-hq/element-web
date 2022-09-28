@@ -22,7 +22,9 @@ limitations under the License.
 import { RelationType } from "matrix-js-sdk/src/matrix";
 
 export * from "./components";
+export * from "./models";
 export * from "./utils";
+export * from "./stores";
 
 export const VoiceBroadcastInfoEventType = "io.element.voice_broadcast_info";
 
@@ -35,7 +37,7 @@ export enum VoiceBroadcastInfoState {
 
 export interface VoiceBroadcastInfoEventContent {
     state: VoiceBroadcastInfoState;
-    chunk_length: number;
+    chunk_length?: number;
     ["m.relates_to"]?: {
         rel_type: RelationType;
         event_id: string;
