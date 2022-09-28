@@ -17,6 +17,7 @@ limitations under the License.
 import React from 'react';
 import { IPusher } from 'matrix-js-sdk/src/@types/PushRules';
 import { PUSHER_ENABLED } from 'matrix-js-sdk/src/@types/event';
+import { LocalNotificationSettings } from 'matrix-js-sdk/src/@types/local_notifications';
 
 import { formatDate } from '../../../../DateUtils';
 import { _t } from '../../../../languageHandler';
@@ -30,11 +31,12 @@ import { DeviceWithVerification } from './types';
 interface Props {
     device: DeviceWithVerification;
     pusher?: IPusher | undefined;
+    localNotificationSettings?: LocalNotificationSettings | undefined;
     isSigningOut: boolean;
     onVerifyDevice?: () => void;
     onSignOutDevice: () => void;
     saveDeviceName: (deviceName: string) => Promise<void>;
-    setPusherEnabled?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
+    setPushNotifications?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
     supportsMSC3881?: boolean | undefined;
 }
 
@@ -46,11 +48,12 @@ interface MetadataTable {
 const DeviceDetails: React.FC<Props> = ({
     device,
     pusher,
+    localNotificationSettings,
     isSigningOut,
     onVerifyDevice,
     onSignOutDevice,
     saveDeviceName,
-    setPusherEnabled,
+    setPushNotifications,
     supportsMSC3881,
 }) => {
     const metadata: MetadataTable[] = [
@@ -70,6 +73,21 @@ const DeviceDetails: React.FC<Props> = ({
             ],
         },
     ];
+
+    const showPushNotificationSection = !!pusher || !!localNotificationSettings;
+
+    function isPushNotificationsEnabled(pusher: IPusher, notificationSettings: LocalNotificationSettings): boolean {
+        if (pusher) return pusher[PUSHER_ENABLED.name];
+        if (localNotificationSettings) return !localNotificationSettings.is_silenced;
+        return true;
+    }
+
+    function isCheckboxDisabled(pusher: IPusher, notificationSettings: LocalNotificationSettings): boolean {
+        if (localNotificationSettings) return false;
+        if (pusher && !supportsMSC3881) return true;
+        return false;
+    }
+
     return <div className='mx_DeviceDetails' data-testid={`device-detail-${device.device_id}`}>
         <section className='mx_DeviceDetails_section'>
             <DeviceDetailHeading
@@ -102,7 +120,7 @@ const DeviceDetails: React.FC<Props> = ({
             </table>,
             ) }
         </section>
-        { pusher && (
+        { showPushNotificationSection && (
             <section
                 className='mx_DeviceDetails_section mx_DeviceDetails_pushNotifications'
                 data-testid='device-detail-push-notification'
@@ -110,9 +128,9 @@ const DeviceDetails: React.FC<Props> = ({
                 <ToggleSwitch
                     // For backwards compatibility, if `enabled` is missing
                     // default to `true`
-                    checked={pusher?.[PUSHER_ENABLED.name] ?? true}
-                    disabled={!supportsMSC3881}
-                    onChange={(checked) => setPusherEnabled?.(device.device_id, checked)}
+                    checked={isPushNotificationsEnabled(pusher, localNotificationSettings)}
+                    disabled={isCheckboxDisabled(pusher, localNotificationSettings)}
+                    onChange={checked => setPushNotifications?.(device.device_id, checked)}
                     aria-label={_t("Toggle push notifications on this session.")}
                     data-testid='device-detail-push-notification-checkbox'
                 />

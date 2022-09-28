@@ -22,7 +22,13 @@ import { logger } from 'matrix-js-sdk/src/logger';
 import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 import { VerificationRequest } from 'matrix-js-sdk/src/crypto/verification/request/VerificationRequest';
 import { sleep } from 'matrix-js-sdk/src/utils';
-import { IMyDevice, PUSHER_DEVICE_ID, PUSHER_ENABLED } from 'matrix-js-sdk/src/matrix';
+import {
+    IMyDevice,
+    LOCAL_NOTIFICATION_SETTINGS_PREFIX,
+    MatrixEvent,
+    PUSHER_DEVICE_ID,
+    PUSHER_ENABLED,
+} from 'matrix-js-sdk/src/matrix';
 
 import SessionManagerTab from '../../../../../../src/components/views/settings/tabs/user/SessionManagerTab';
 import MatrixClientContext from '../../../../../../src/contexts/MatrixClientContext';
@@ -71,6 +77,8 @@ describe('<SessionManagerTab />', () => {
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(true),
         getPushers: jest.fn(),
         setPusher: jest.fn(),
+        getAccountData: jest.fn(),
+        setLocalNotificationSettings: jest.fn(),
     });
 
     const defaultProps = {};
@@ -113,6 +121,19 @@ describe('<SessionManagerTab />', () => {
                     [PUSHER_DEVICE_ID.name]: alicesMobileDevice.device_id,
                     [PUSHER_ENABLED.name]: true,
                 })],
+            });
+
+        mockClient.getAccountData
+            .mockReset()
+            .mockImplementation(eventType => {
+                if (eventType.startsWith(LOCAL_NOTIFICATION_SETTINGS_PREFIX.name)) {
+                    return new MatrixEvent({
+                        type: eventType,
+                        content: {
+                            is_silenced: false,
+                        },
+                    });
+                }
             });
     });
 
@@ -333,7 +354,6 @@ describe('<SessionManagerTab />', () => {
             mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrossSigningInfo.checkDeviceTrust
                 .mockImplementation((_userId, { deviceId }) => {
-                    console.log('hhh', deviceId);
                     if (deviceId === alicesDevice.device_id) {
                         return new DeviceTrustLevel(true, true, false, false);
                     }
@@ -363,7 +383,6 @@ describe('<SessionManagerTab />', () => {
             mockClient.getStoredDevice.mockImplementation((_userId, deviceId) => new DeviceInfo(deviceId));
             mockCrossSigningInfo.checkDeviceTrust
                 .mockImplementation((_userId, { deviceId }) => {
-                    console.log('hhh', deviceId);
                     if (deviceId === alicesDevice.device_id) {
                         return new DeviceTrustLevel(true, true, false, false);
                     }
@@ -701,5 +720,29 @@ describe('<SessionManagerTab />', () => {
         fireEvent.click(checkbox);
 
         expect(mockClient.setPusher).toHaveBeenCalled();
+    });
+
+    it("lets you change the local notification settings state", async () => {
+        const { getByTestId } = render(getComponent());
+
+        await act(async () => {
+            await flushPromisesWithFakeTimers();
+        });
+
+        toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+
+        // device details are expanded
+        expect(getByTestId(`device-detail-${alicesDevice.device_id}`)).toBeTruthy();
+        expect(getByTestId('device-detail-push-notification')).toBeTruthy();
+
+        const checkbox = getByTestId('device-detail-push-notification-checkbox');
+
+        expect(checkbox).toBeTruthy();
+        fireEvent.click(checkbox);
+
+        expect(mockClient.setLocalNotificationSettings).toHaveBeenCalledWith(
+            alicesDevice.device_id,
+            { is_silenced: true },
+        );
     });
 });

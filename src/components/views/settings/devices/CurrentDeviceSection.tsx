@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { LocalNotificationSettings } from 'matrix-js-sdk/src/@types/local_notifications';
 import React, { useState } from 'react';
 
 import { _t } from '../../../../languageHandler';
@@ -29,6 +30,8 @@ interface Props {
     device?: DeviceWithVerification;
     isLoading: boolean;
     isSigningOut: boolean;
+    localNotificationSettings?: LocalNotificationSettings | undefined;
+    setPushNotifications?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
     onVerifyCurrentDevice: () => void;
     onSignOutCurrentDevice: () => void;
     saveDeviceName: (deviceName: string) => Promise<void>;
@@ -38,6 +41,8 @@ const CurrentDeviceSection: React.FC<Props> = ({
     device,
     isLoading,
     isSigningOut,
+    localNotificationSettings,
+    setPushNotifications,
     onVerifyCurrentDevice,
     onSignOutCurrentDevice,
     saveDeviceName,
@@ -63,6 +68,8 @@ const CurrentDeviceSection: React.FC<Props> = ({
             { isExpanded &&
                 <DeviceDetails
                     device={device}
+                    localNotificationSettings={localNotificationSettings}
+                    setPushNotifications={setPushNotifications}
                     isSigningOut={isSigningOut}
                     onVerifyDevice={onVerifyCurrentDevice}
                     onSignOutDevice={onSignOutCurrentDevice}
