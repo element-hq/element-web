@@ -628,9 +628,11 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
         }
 
         if (!userTrust.isCrossSigningVerified()) {
-            // user is not verified, so default to everything is normal
+            // If the message is unauthenticated, then display a grey
+            // shield, otherwise if the user isn't cross-signed then
+            // nothing's needed
             this.setState({
-                verified: E2EState.Normal,
+                verified: encryptionInfo.authenticated ? E2EState.Normal : E2EState.Unauthenticated,
             }, this.props.onHeightChanged); // Decryption may have caused a change in size
             return;
         }
