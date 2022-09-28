@@ -1,3 +1,9 @@
+Changes in [3.57.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.57.0) (2022-09-28)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Bump IDB crypto store version ([\#2705](https://github.com/matrix-org/matrix-js-sdk/pull/2705)).
+
 Changes in [3.56.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.56.0) (2022-09-28)
 =====================================================================================================
 
