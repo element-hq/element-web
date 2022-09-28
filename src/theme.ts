@@ -261,7 +261,7 @@ export async function setTheme(theme?: string): Promise<void> {
     const styleSheet = styleElements.get(stylesheetName);
     styleSheet.disabled = false;
 
-    return new Promise((resolve) => {
+    return new Promise(((resolve, reject) => {
         const switchTheme = function() {
             // we re-enable our theme here just in case we raced with another
             // theme set request as per https://github.com/vector-im/element-web/issues/5601.
@@ -307,21 +307,23 @@ export async function setTheme(theme?: string): Promise<void> {
 
                 // Avoid to be stuck in an endless loop if there is an issue in the stylesheet loading
                 counter++;
-                if (counter === 5) {
+                if (counter === 10) {
                     clearInterval(intervalId);
+                    reject();
                 }
-            }, 100);
+            }, 200);
 
             styleSheet.onload = () => {
                 clearInterval(intervalId);
                 switchTheme();
             };
 
-            styleSheet.onerror = () => {
+            styleSheet.onerror = (e) => {
                 clearInterval(intervalId);
+                reject(e);
             };
         }
 
         waitForStyleSheetLoading();
-    });
+    }));
 }
