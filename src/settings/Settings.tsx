@@ -790,6 +790,10 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         default: false,
         controller: new NotificationsEnabledController(),
     },
+    "deviceNotificationsEnabled": {
+        supportedLevels: [SettingLevel.DEVICE],
+        default: false,
+    },
     "notificationSound": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,
         default: false,

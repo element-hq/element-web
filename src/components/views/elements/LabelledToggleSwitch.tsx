@@ -18,12 +18,15 @@ import React from "react";
 import classNames from "classnames";
 
 import ToggleSwitch from "./ToggleSwitch";
+import { Caption } from "../typography/Caption";
 
 interface IProps {
     // The value for the toggle switch
     value: boolean;
     // The translated label for the switch
     label: string;
+    // The translated caption for the switch
+    caption?: string;
     // Whether or not to disable the toggle switch
     disabled?: boolean;
     // True to put the toggle in front of the label
@@ -38,8 +41,14 @@ interface IProps {
 export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
     public render() {
         // This is a minimal version of a SettingsFlag
-
-        let firstPart = <span className="mx_SettingsFlag_label">{ this.props.label }</span>;
+        const { label, caption } = this.props;
+        let firstPart = <span className="mx_SettingsFlag_label">
+            { label }
+            { caption && <>
+                <br />
+                <Caption>{ caption }</Caption>
+            </> }
+        </span>;
         let secondPart = <ToggleSwitch
             checked={this.props.value}
             disabled={this.props.disabled}

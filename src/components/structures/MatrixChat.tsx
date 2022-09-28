@@ -1,5 +1,5 @@
 /*
-Copyright 2015-2021 The Matrix.org Foundation C.I.C.
+Copyright 2015-2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -137,6 +137,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { UseCaseSelection } from '../views/elements/UseCaseSelection';
 import { ValidatedServerConfig } from '../../utils/ValidatedServerConfig';
 import { isLocalRoom } from '../../utils/localRoom/isLocalRoom';
+import { createLocalNotificationSettingsIfNeeded } from '../../utils/notifications';
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1256,6 +1257,9 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         ThemeController.isLogin = false;
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
+
+        const cli = MatrixClientPeg.get();
+        createLocalNotificationSettingsIfNeeded(cli);
 
         if (
             MatrixClientPeg.currentUserIsJustRegistered() &&
