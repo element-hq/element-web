@@ -18,6 +18,7 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import { mocked } from "jest-mock";
 
 import {
+    localNotificationsAreSilenced,
     createLocalNotificationSettingsIfNeeded,
     getLocalNotificationAccountDataEventType,
 } from "../../src/utils/notifications";
@@ -27,7 +28,7 @@ import { getMockClientWithEventEmitter } from "../test-utils/client";
 jest.mock("../../src/settings/SettingsStore");
 
 describe('notifications', () => {
-    const accountDataStore = {};
+    let accountDataStore = {};
     const mockClient = getMockClientWithEventEmitter({
         isGuest: jest.fn().mockReturnValue(false),
         getAccountData: jest.fn().mockImplementation(eventType => accountDataStore[eventType]),
@@ -42,6 +43,7 @@ describe('notifications', () => {
     const accountDataEventKey = getLocalNotificationAccountDataEventType(mockClient.deviceId);
 
     beforeEach(() => {
+        accountDataStore = {};
         mocked(SettingsStore).getValue.mockReturnValue(false);
     });
 
@@ -74,6 +76,19 @@ describe('notifications', () => {
             await createLocalNotificationSettingsIfNeeded(mockClient);
             const event = mockClient.getAccountData(accountDataEventKey);
             expect(event?.getContent().is_silenced).toBe(false);
+        });
+    });
+
+    describe('localNotificationsAreSilenced', () => {
+        it('defaults to true when no setting exists', () => {
+            expect(localNotificationsAreSilenced(mockClient)).toBeTruthy();
+        });
+        it('checks the persisted value', () => {
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
+            expect(localNotificationsAreSilenced(mockClient)).toBeTruthy();
+
+            mockClient.setAccountData(accountDataEventKey, { is_silenced: false });
+            expect(localNotificationsAreSilenced(mockClient)).toBeFalsy();
         });
     });
 });

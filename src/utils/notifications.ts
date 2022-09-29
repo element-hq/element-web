@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import { LOCAL_NOTIFICATION_SETTINGS_PREFIX } from "matrix-js-sdk/src/@types/event";
+import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
 import { MatrixClient } from "matrix-js-sdk/src/client";
 
 import SettingsStore from "../settings/SettingsStore";
@@ -32,7 +33,6 @@ export function getLocalNotificationAccountDataEventType(deviceId: string): stri
 export async function createLocalNotificationSettingsIfNeeded(cli: MatrixClient): Promise<void> {
     const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
     const event = cli.getAccountData(eventType);
-
     // New sessions will create an account data event to signify they support
     // remote toggling of push notifications on this device. Default `is_silenced=true`
     // For backwards compat purposes, older sessions will need to check settings value
@@ -46,4 +46,10 @@ export async function createLocalNotificationSettingsIfNeeded(cli: MatrixClient)
             is_silenced: isSilenced,
         });
     }
+}
+
+export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
+    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
+    const event = cli.getAccountData(eventType);
+    return event?.getContent<LocalNotificationSettings>()?.is_silenced ?? true;
 }
