@@ -14,31 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_FilteredDeviceList {
-    .mx_Dropdown {
-        flex: 1 0 80px;
-    }
-}
-
-.mx_FilteredDeviceList_list {
-    list-style-type: none;
-    display: grid;
-    grid-gap: $spacing-16;
-    margin: 0;
-    padding: 0 $spacing-8;
-}
-
-.mx_FilteredDeviceList_listItem {
+.mx_FilteredDeviceListHeader {
     display: flex;
-    flex-direction: column;
-}
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    gap: $spacing-8;
 
-.mx_FilteredDeviceList_securityCard {
-    margin-bottom: $spacing-32;
-}
-
-.mx_FilteredDeviceList_noResults {
     width: 100%;
-    text-align: center;
+    height: 48px;
+    padding: 0 $spacing-16;
     margin-bottom: $spacing-32;
+
+    background-color: $system;
+    border-radius: 8px;
+    color: $secondary-content;
+}
+
+.mx_FilteredDeviceListHeader_label {
+    flex: 1 1 100%;
 }

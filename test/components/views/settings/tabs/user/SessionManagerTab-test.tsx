@@ -279,7 +279,7 @@ describe('<SessionManagerTab />', () => {
         await flushPromisesWithFakeTimers();
 
         // unverified filter is set
-        expect(container.querySelector('.mx_FilteredDeviceList_header')).toMatchSnapshot();
+        expect(container.querySelector('.mx_FilteredDeviceListHeader')).toMatchSnapshot();
     });
 
     describe('device detail expansion', () => {

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FilteredDeviceListHeader /> renders correctly when no devices are selected 1`] = `
+<div>
+  <div
+    class="mx_FilteredDeviceListHeader"
+    data-testid="test123"
+  >
+    <span
+      class="mx_FilteredDeviceListHeader_label"
+    >
+      Sessions
+    </span>
+    <div>
+      test
+    </div>
+  </div>
+</div>
+`;

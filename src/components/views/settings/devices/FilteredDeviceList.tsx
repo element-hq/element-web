@@ -36,6 +36,7 @@ import {
     DeviceWithVerification,
 } from './types';
 import { DevicesState } from './useOwnDevices';
+import FilteredDeviceListHeader from './FilteredDeviceListHeader';
 
 interface Props {
     devices: DevicesDictionary;
@@ -242,10 +243,7 @@ export const FilteredDeviceList =
         };
 
         return <div className='mx_FilteredDeviceList' ref={ref}>
-            <div className='mx_FilteredDeviceList_header'>
-                <span className='mx_FilteredDeviceList_headerLabel'>
-                    { _t('Sessions') }
-                </span>
+            <FilteredDeviceListHeader selectedDeviceCount={0}>
                 <FilterDropdown<DeviceFilterKey>
                     id='device-list-filter'
                     label={_t('Filter devices')}
@@ -254,7 +252,7 @@ export const FilteredDeviceList =
                     options={options}
                     selectedLabel={_t('Show')}
                 />
-            </div>
+            </FilteredDeviceListHeader>
             { !!sortedDevices.length
                 ? <FilterSecurityCard filter={filter} />
                 : <NoResults filter={filter} clearFilter={() => onFilterChange(undefined)} />

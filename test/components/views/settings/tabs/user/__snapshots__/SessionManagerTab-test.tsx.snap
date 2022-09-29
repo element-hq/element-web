@@ -17,10 +17,10 @@ exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
 
 exports[`<SessionManagerTab /> goes to filtered list from security recommendations 1`] = `
 <div
-  class="mx_FilteredDeviceList_header"
+  class="mx_FilteredDeviceListHeader"
 >
   <span
-    class="mx_FilteredDeviceList_headerLabel"
+    class="mx_FilteredDeviceListHeader_label"
   >
     Sessions
   </span>
