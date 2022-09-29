@@ -57,7 +57,7 @@ describe("<VoiceRecordComposerTile/>", () => {
             durationSeconds: 1337,
             contentType: "audio/ogg",
             getPlayback: () => ({
-                thumbnailWaveform: [],
+                thumbnailWaveform: [1.4, 2.5, 3.6],
             }),
         } as unknown as VoiceRecording;
         voiceRecordComposerTile = mount(<VoiceRecordComposerTile {...props} />);
@@ -88,7 +88,11 @@ describe("<VoiceRecordComposerTile/>", () => {
                 "msgtype": MsgType.Audio,
                 "org.matrix.msc1767.audio": {
                     "duration": 1337000,
-                    "waveform": [],
+                    "waveform": [
+                        1434,
+                        2560,
+                        3686,
+                    ],
                 },
                 "org.matrix.msc1767.file": {
                     "file": undefined,
