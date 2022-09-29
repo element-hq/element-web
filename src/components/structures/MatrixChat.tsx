@@ -401,6 +401,8 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         }
     }
 
+    private get cli(): MatrixClient { return MatrixClientPeg.get(); }
+
     public componentDidMount(): void {
         window.addEventListener("resize", this.onWindowResized);
     }
@@ -1258,8 +1260,7 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
         this.themeWatcher.recheck();
         StorageManager.tryPersistStorage();
 
-        const cli = MatrixClientPeg.get();
-        createLocalNotificationSettingsIfNeeded(cli);
+        this.cli.on(ClientEvent.Sync, this.onInitialSync);
 
         if (
             MatrixClientPeg.currentUserIsJustRegistered() &&
@@ -1286,6 +1287,14 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             return this.onShowPostLoginScreen();
         }
     }
+
+    private onInitialSync = (): void => {
+        if (this.cli.isInitialSyncComplete()) {
+            this.cli.off(ClientEvent.Sync, this.onInitialSync);
+        }
+
+        createLocalNotificationSettingsIfNeeded(this.cli);
+    };
 
     private async onShowPostLoginScreen(useCase?: UseCase) {
         if (useCase) {

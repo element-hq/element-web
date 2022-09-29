@@ -16,10 +16,12 @@ limitations under the License.
 
 import { useCallback, useContext, useEffect, useState } from "react";
 import {
+    ClientEvent,
     IMyDevice,
     IPusher,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixClient,
+    MatrixEvent,
     PUSHER_DEVICE_ID,
     PUSHER_ENABLED,
 } from "matrix-js-sdk/src/matrix";
@@ -32,6 +34,7 @@ import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifi
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";
 import { DevicesDictionary, DeviceWithVerification } from "./types";
+import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 
 const isDeviceVerified = (
     matrixClient: MatrixClient,
@@ -160,6 +163,16 @@ export const useOwnDevices = (): DevicesState => {
     useEffect(() => {
         refreshDevices();
     }, [refreshDevices]);
+
+    useEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
+        const type = event.getType();
+        if (type.startsWith(LOCAL_NOTIFICATION_SETTINGS_PREFIX.name)) {
+            const newSettings = new Map(localNotificationSettings);
+            const deviceId = type.slice(type.lastIndexOf(".") + 1);
+            newSettings.set(deviceId, event.getContent<LocalNotificationSettings>());
+            setLocalNotificationSettings(newSettings);
+        }
+    });
 
     const isCurrentDeviceVerified = !!devices[currentDeviceId]?.isVerified;
 

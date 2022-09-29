@@ -23,6 +23,7 @@ import { DeviceTrustLevel } from 'matrix-js-sdk/src/crypto/CrossSigning';
 import { VerificationRequest } from 'matrix-js-sdk/src/crypto/verification/request/VerificationRequest';
 import { sleep } from 'matrix-js-sdk/src/utils';
 import {
+    ClientEvent,
     IMyDevice,
     LOCAL_NOTIFICATION_SETTINGS_PREFIX,
     MatrixEvent,
@@ -744,5 +745,38 @@ describe('<SessionManagerTab />', () => {
             alicesDevice.device_id,
             { is_silenced: true },
         );
+    });
+
+    it("updates the UI when another session changes the local notifications", async () => {
+        const { getByTestId } = render(getComponent());
+
+        await act(async () => {
+            await flushPromisesWithFakeTimers();
+        });
+
+        toggleDeviceDetails(getByTestId, alicesDevice.device_id);
+
+        // device details are expanded
+        expect(getByTestId(`device-detail-${alicesDevice.device_id}`)).toBeTruthy();
+        expect(getByTestId('device-detail-push-notification')).toBeTruthy();
+
+        const checkbox = getByTestId('device-detail-push-notification-checkbox');
+
+        expect(checkbox).toBeTruthy();
+
+        expect(checkbox.getAttribute('aria-checked')).toEqual("true");
+
+        const evt = new MatrixEvent({
+            type: LOCAL_NOTIFICATION_SETTINGS_PREFIX.name + "." + alicesDevice.device_id,
+            content: {
+                is_silenced: true,
+            },
+        });
+
+        await act(async () => {
+            mockClient.emit(ClientEvent.AccountData, evt);
+        });
+
+        expect(checkbox.getAttribute('aria-checked')).toEqual("false");
     });
 });
