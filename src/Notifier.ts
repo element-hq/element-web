@@ -336,7 +336,7 @@ export const Notifier = {
         }
         const isGuest = client.isGuest();
         return !isGuest && this.supportsDesktopNotifications() && !isPushNotifyDisabled() &&
-            !localNotificationsAreSilenced(client) && !this.isEnabled() && !this._isPromptHidden();
+               !this.isEnabled() && !this._isPromptHidden();
     },
 
     _isPromptHidden: function() {

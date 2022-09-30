@@ -18,9 +18,16 @@ import { _t } from "../languageHandler";
 import Notifier from "../Notifier";
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
+import { MatrixClientPeg } from "../MatrixClientPeg";
+import { getLocalNotificationAccountDataEventType } from "../utils/notifications";
 
 const onAccept = () => {
     Notifier.setEnabled(true);
+    const cli = MatrixClientPeg.get();
+    const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
+    cli.setAccountData(eventType, {
+        is_silenced: false,
+    });
 };
 
 const onReject = () => {

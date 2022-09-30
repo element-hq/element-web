@@ -122,7 +122,7 @@ export default class Notifications extends React.PureComponent<IProps, IState> {
 
         this.state = {
             phase: Phase.Loading,
-            deviceNotificationsEnabled: SettingsStore.getValue("deviceNotificationsEnabled") ?? false,
+            deviceNotificationsEnabled: SettingsStore.getValue("deviceNotificationsEnabled") ?? true,
             desktopNotifications: SettingsStore.getValue("notificationsEnabled"),
             desktopShowBody: SettingsStore.getValue("notificationBodyEnabled"),
             audioNotifications: SettingsStore.getValue("audioNotificationsEnabled"),

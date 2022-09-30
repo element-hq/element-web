@@ -792,7 +792,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     },
     "deviceNotificationsEnabled": {
         supportedLevels: [SettingLevel.DEVICE],
-        default: false,
+        default: true,
     },
     "notificationSound": {
         supportedLevels: LEVELS_ROOM_OR_ACCOUNT,

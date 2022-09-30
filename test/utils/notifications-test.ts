@@ -19,7 +19,6 @@ import { mocked } from "jest-mock";
 
 import {
     localNotificationsAreSilenced,
-    createLocalNotificationSettingsIfNeeded,
     getLocalNotificationAccountDataEventType,
 } from "../../src/utils/notifications";
 import SettingsStore from "../../src/settings/SettingsStore";
@@ -45,38 +44,6 @@ describe('notifications', () => {
     beforeEach(() => {
         accountDataStore = {};
         mocked(SettingsStore).getValue.mockReturnValue(false);
-    });
-
-    describe('createLocalNotification', () => {
-        it('creates account data event', async () => {
-            await createLocalNotificationSettingsIfNeeded(mockClient);
-            const event = mockClient.getAccountData(accountDataEventKey);
-            expect(event?.getContent().is_silenced).toBe(true);
-        });
-
-        // Can't figure out why the mock does not override the value here
-        /*.each(deviceNotificationSettingsKeys) instead of skip */
-        it.skip("unsilenced for existing sessions", async (/*settingKey*/) => {
-            mocked(SettingsStore)
-                .getValue
-                .mockImplementation((key) => {
-                    // return key === settingKey;
-                });
-
-            await createLocalNotificationSettingsIfNeeded(mockClient);
-            const event = mockClient.getAccountData(accountDataEventKey);
-            expect(event?.getContent().is_silenced).toBe(false);
-        });
-
-        it("does not override an existing account event data", async () => {
-            mockClient.setAccountData(accountDataEventKey, {
-                is_silenced: false,
-            });
-
-            await createLocalNotificationSettingsIfNeeded(mockClient);
-            const event = mockClient.getAccountData(accountDataEventKey);
-            expect(event?.getContent().is_silenced).toBe(false);
-        });
     });
 
     describe('localNotificationsAreSilenced', () => {
