@@ -37,6 +37,45 @@ describe('WebPlatform', () => {
         expect(navigator.serviceWorker.register).toHaveBeenCalled();
     });
 
+    it("should call reload on window location object", () => {
+        delete window.location;
+        window.location = {
+            reload: jest.fn(),
+        } as unknown as Location;
+
+        const platform = new WebPlatform();
+        expect(window.location.reload).not.toHaveBeenCalled();
+        platform.reload();
+        expect(window.location.reload).toHaveBeenCalled();
+    });
+
+    it("should call reload to install update", () => {
+        delete window.location;
+        window.location = {
+            reload: jest.fn(),
+        } as unknown as Location;
+
+        const platform = new WebPlatform();
+        expect(window.location.reload).not.toHaveBeenCalled();
+        platform.installUpdate();
+        expect(window.location.reload).toHaveBeenCalled();
+    });
+
+    describe("getDefaultDeviceDisplayName", () => {
+        it.each([[
+            "https://develop.element.io/#/room/!foo:bar",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+            "develop.element.io (Chrome, macOS)",
+        ]])("%s & %s = %s", (url, userAgent, result) => {
+            delete window.navigator;
+            window.navigator = { userAgent } as unknown as Navigator;
+            delete window.location;
+            window.location = { href: url } as unknown as Location;
+            const platform = new WebPlatform();
+            expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
+        });
+    });
+
     describe('notification support', () => {
         const mockNotification = {
             requestPermission: jest.fn(),
