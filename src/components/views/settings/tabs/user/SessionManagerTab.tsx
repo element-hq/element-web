@@ -19,23 +19,23 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
 
 import { _t } from "../../../../../languageHandler";
-import { DevicesState, useOwnDevices } from '../../devices/useOwnDevices';
+import MatrixClientContext from '../../../../../contexts/MatrixClientContext';
+import Modal from '../../../../../Modal';
 import SettingsSubsection from '../../shared/SettingsSubsection';
+import SetupEncryptionDialog from '../../../dialogs/security/SetupEncryptionDialog';
+import VerificationRequestDialog from '../../../dialogs/VerificationRequestDialog';
+import LogoutDialog from '../../../dialogs/LogoutDialog';
+import { useOwnDevices } from '../../devices/useOwnDevices';
 import { FilteredDeviceList } from '../../devices/FilteredDeviceList';
 import CurrentDeviceSection from '../../devices/CurrentDeviceSection';
 import SecurityRecommendations from '../../devices/SecurityRecommendations';
 import { DeviceSecurityVariation, DeviceWithVerification } from '../../devices/types';
-import SettingsTab from '../SettingsTab';
-import Modal from '../../../../../Modal';
-import SetupEncryptionDialog from '../../../dialogs/security/SetupEncryptionDialog';
-import VerificationRequestDialog from '../../../dialogs/VerificationRequestDialog';
-import LogoutDialog from '../../../dialogs/LogoutDialog';
-import MatrixClientContext from '../../../../../contexts/MatrixClientContext';
 import { deleteDevicesWithInteractiveAuth } from '../../devices/deleteDevices';
+import SettingsTab from '../SettingsTab';
 
 const useSignOut = (
     matrixClient: MatrixClient,
-    refreshDevices: DevicesState['refreshDevices'],
+    onSignoutResolvedCallback: () => Promise<void>,
 ): {
         onSignOutCurrentDevice: () => void;
         onSignOutOtherDevices: (deviceIds: DeviceWithVerification['device_id'][]) => Promise<void>;
@@ -64,9 +64,7 @@ const useSignOut = (
                 deviceIds,
                 async (success) => {
                     if (success) {
-                        // @TODO(kerrya) clear selection if was bulk deletion
-                        // when added in PSG-659
-                        await refreshDevices();
+                        await onSignoutResolvedCallback();
                     }
                     setSigningOutDeviceIds(signingOutDeviceIds.filter(deviceId => !deviceIds.includes(deviceId)));
                 },
@@ -99,6 +97,7 @@ const SessionManagerTab: React.FC = () => {
     } = useOwnDevices();
     const [filter, setFilter] = useState<DeviceSecurityVariation>();
     const [expandedDeviceIds, setExpandedDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
+    const [selectedDeviceIds, setSelectedDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
     const scrollIntoViewTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -116,7 +115,6 @@ const SessionManagerTab: React.FC = () => {
 
     const onGoToFilteredList = (filter: DeviceSecurityVariation) => {
         setFilter(filter);
-        // @TODO(kerrya) clear selection when added in PSG-659
         clearTimeout(scrollIntoViewTimeoutRef.current);
         // wait a tick for the filtered section to rerender with different height
         scrollIntoViewTimeoutRef.current =
@@ -154,15 +152,24 @@ const SessionManagerTab: React.FC = () => {
         });
     }, [requestDeviceVerification, refreshDevices, currentUserMember]);
 
+    const onSignoutResolvedCallback = async () => {
+        await refreshDevices();
+        setSelectedDeviceIds([]);
+    };
     const {
         onSignOutCurrentDevice,
         onSignOutOtherDevices,
         signingOutDeviceIds,
-    } = useSignOut(matrixClient, refreshDevices);
+    } = useSignOut(matrixClient, onSignoutResolvedCallback);
 
     useEffect(() => () => {
         clearTimeout(scrollIntoViewTimeoutRef.current);
     }, [scrollIntoViewTimeoutRef]);
+
+    // clear selection when filter changes
+    useEffect(() => {
+        setSelectedDeviceIds([]);
+    }, [filter, setSelectedDeviceIds]);
 
     return <SettingsTab heading={_t('Sessions')}>
         <SecurityRecommendations
@@ -197,6 +204,8 @@ const SessionManagerTab: React.FC = () => {
                     filter={filter}
                     expandedDeviceIds={expandedDeviceIds}
                     signingOutDeviceIds={signingOutDeviceIds}
+                    selectedDeviceIds={selectedDeviceIds}
+                    setSelectedDeviceIds={setSelectedDeviceIds}
                     onFilterChange={setFilter}
                     onDeviceExpandToggle={onDeviceExpandToggle}
                     onRequestDeviceVerification={requestDeviceVerification ? onTriggerDeviceVerification : undefined}

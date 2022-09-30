@@ -3,6 +3,7 @@
 exports[`<SelectableDeviceTile /> renders selected tile 1`] = `
 <input
   checked=""
+  data-testid="device-tile-checkbox-my-device"
   id="device-tile-checkbox-my-device"
   type="checkbox"
 />
@@ -17,6 +18,7 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
       class="mx_Checkbox mx_SelectableDeviceTile_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
     >
       <input
+        data-testid="device-tile-checkbox-my-device"
         id="device-tile-checkbox-my-device"
         type="checkbox"
       />

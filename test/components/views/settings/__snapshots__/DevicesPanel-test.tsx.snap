@@ -214,6 +214,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
           class="mx_Checkbox mx_SelectableDeviceTile_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
         >
           <input
+            data-testid="device-tile-checkbox-device_2"
             id="device-tile-checkbox-device_2"
             type="checkbox"
           />
@@ -295,6 +296,7 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
           class="mx_Checkbox mx_SelectableDeviceTile_checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
         >
           <input
+            data-testid="device-tile-checkbox-device_3"
             id="device-tile-checkbox-device_3"
             type="checkbox"
           />
