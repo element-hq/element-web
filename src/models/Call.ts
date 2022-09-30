@@ -771,8 +771,8 @@ export class ElementCall extends Call {
     ): Promise<void> {
         try {
             await this.messaging!.transport.send(ElementWidgetActions.JoinCall, {
-                audioInput: audioInput?.deviceId ?? null,
-                videoInput: videoInput?.deviceId ?? null,
+                audioInput: audioInput?.label ?? null,
+                videoInput: videoInput?.label ?? null,
             });
         } catch (e) {
             throw new Error(`Failed to join call in room ${this.roomId}: ${e}`);
