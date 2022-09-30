@@ -158,9 +158,9 @@ export default async function createRoom(opts: IOpts): Promise<string | null> {
                 events: {
                     ...DEFAULT_EVENT_POWER_LEVELS,
                     // Allow all users to send call membership updates
-                    "org.matrix.msc3401.call.member": 0,
+                    [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
                     // Make calls immutable, even to admins
-                    "org.matrix.msc3401.call": 200,
+                    [ElementCall.CALL_EVENT_TYPE.name]: 200,
                 },
                 users: {
                     // Temporarily give ourselves the power to set up a call

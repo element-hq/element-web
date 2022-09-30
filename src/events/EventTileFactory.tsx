@@ -28,6 +28,7 @@ import { TimelineRenderingType } from "../contexts/RoomContext";
 import MessageEvent from "../components/views/messages/MessageEvent";
 import MKeyVerificationConclusion from "../components/views/messages/MKeyVerificationConclusion";
 import LegacyCallEvent from "../components/views/messages/LegacyCallEvent";
+import { CallEvent } from "../components/views/messages/CallEvent";
 import TextualEvent from "../components/views/messages/TextualEvent";
 import EncryptionEvent from "../components/views/messages/EncryptionEvent";
 import RoomCreate from "../components/views/messages/RoomCreate";
@@ -44,6 +45,7 @@ import HiddenBody from "../components/views/messages/HiddenBody";
 import ViewSourceEvent from "../components/views/messages/ViewSourceEvent";
 import { shouldDisplayAsBeaconTile } from "../utils/beacon/timeline";
 import { shouldDisplayAsVoiceBroadcastTile } from "../voice-broadcast/utils/shouldDisplayAsVoiceBroadcastTile";
+import { ElementCall } from "../models/Call";
 
 // Subset of EventTile's IProps plus some mixins
 export interface EventTileTypeProps {
@@ -74,6 +76,7 @@ const KeyVerificationConclFactory: Factory = (ref, props) => <MKeyVerificationCo
 const LegacyCallEventFactory: Factory<FactoryProps & { callEventGrouper: LegacyCallEventGrouper }> = (ref, props) => (
     <LegacyCallEvent ref={ref} {...props} />
 );
+const CallEventFactory: Factory = (ref, props) => <CallEvent ref={ref} {...props} />;
 const TextualEventFactory: Factory = (ref, props) => <TextualEvent ref={ref} {...props} />;
 const VerificationReqFactory: Factory = (ref, props) => <MKeyVerificationRequest ref={ref} {...props} />;
 const HiddenEventFactory: Factory = (ref, props) => <HiddenBody ref={ref} {...props} />;
@@ -112,6 +115,10 @@ const STATE_EVENT_TILE_TYPES = new Map<string, Factory>([
     [EventType.RoomJoinRules, TextualEventFactory],
     [EventType.RoomGuestAccess, TextualEventFactory],
 ]);
+
+for (const evType of ElementCall.CALL_EVENT_TYPE.names) {
+    STATE_EVENT_TILE_TYPES.set(evType, CallEventFactory);
+}
 
 // Add all the Mjolnir stuff to the renderer too
 for (const evType of ALL_RULE_TYPES) {
@@ -397,6 +404,15 @@ export function haveRendererForEvent(mxEvent: MatrixEvent, showHiddenEvents: boo
         return hasText(mxEvent, showHiddenEvents);
     } else if (handler === STATE_EVENT_TILE_TYPES.get(EventType.RoomCreate)) {
         return Boolean(mxEvent.getContent()['predecessor']);
+    } else if (ElementCall.CALL_EVENT_TYPE.names.some(eventType => handler === STATE_EVENT_TILE_TYPES.get(eventType))) {
+        const intent = mxEvent.getContent()['m.intent'];
+        const prevContent = mxEvent.getPrevContent();
+        // If the call became unterminated or previously had invalid contents,
+        // then this event marks the start of the call
+        const newlyStarted = 'm.terminated' in prevContent
+            || !('m.intent' in prevContent) || !('m.type' in prevContent);
+        // Only interested in events that mark the start of a non-room call
+        return typeof intent === 'string' && intent !== 'm.room' && newlyStarted;
     } else if (handler === JSONEventFactory) {
         return false;
     } else {

@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import React, { FC } from "react";
-import classNames from "classnames";
 
 import type { Call } from "../../../models/Call";
-import { _t, TranslatedString } from "../../../languageHandler";
+import { _t } from "../../../languageHandler";
 import { useConnectionState, useParticipants } from "../../../hooks/useCall";
 import { ConnectionState } from "../../../models/Call";
+import { LiveContentSummary, LiveContentType } from "./LiveContentSummary";
 
 interface Props {
     call: Call;
@@ -30,7 +30,7 @@ export const RoomTileCallSummary: FC<Props> = ({ call }) => {
     const connectionState = useConnectionState(call);
     const participants = useParticipants(call);
 
-    let text: TranslatedString;
+    let text: string;
     let active: boolean;
 
     switch (connectionState) {
@@ -49,23 +49,10 @@ export const RoomTileCallSummary: FC<Props> = ({ call }) => {
             break;
     }
 
-    return <span className="mx_RoomTileCallSummary">
-        <span
-            className={classNames(
-                "mx_RoomTileCallSummary_text",
-                { "mx_RoomTileCallSummary_text_active": active },
-            )}
-        >
-            { text }
-        </span>
-        { participants.size ? <>
-            { " · " }
-            <span
-                className="mx_RoomTileCallSummary_participants"
-                aria-label={_t("%(count)s participants", { count: participants.size })}
-            >
-                { participants.size }
-            </span>
-        </> : null }
-    </span>;
+    return <LiveContentSummary
+        type={LiveContentType.Video}
+        text={text}
+        active={active}
+        participantCount={participants.size}
+    />;
 };

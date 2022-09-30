@@ -83,6 +83,7 @@ import { ReadReceiptGroup } from './ReadReceiptGroup';
 import { useTooltip } from "../../../utils/useTooltip";
 import { ShowThreadPayload } from "../../../dispatcher/payloads/ShowThreadPayload";
 import { isLocalRoom } from '../../../utils/localRoom/isLocalRoom';
+import { ElementCall } from "../../../models/Call";
 
 export type GetRelationsForEvent = (eventId: string, relationType: string, eventType: string) => Relations;
 
@@ -937,7 +938,7 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
 
     public render() {
         const msgtype = this.props.mxEvent.getContent().msgtype;
-        const eventType = this.props.mxEvent.getType() as EventType;
+        const eventType = this.props.mxEvent.getType();
         const {
             hasRenderer,
             isBubbleMessage,
@@ -999,7 +1000,9 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             mx_EventTile_sending: !isEditing && isSending,
             mx_EventTile_highlight: this.shouldHighlight(),
             mx_EventTile_selected: this.props.isSelectedEvent || this.state.contextMenu,
-            mx_EventTile_continuation: isContinuation || eventType === EventType.CallInvite,
+            mx_EventTile_continuation: isContinuation
+                || eventType === EventType.CallInvite
+                || ElementCall.CALL_EVENT_TYPE.matches(eventType),
             mx_EventTile_last: this.props.last,
             mx_EventTile_lastInSection: this.props.lastInSection,
             mx_EventTile_contextual: this.props.contextual,
@@ -1053,8 +1056,9 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             avatarSize = 14;
             needsSenderProfile = true;
         } else if (
-            (this.props.continuation && this.context.timelineRenderingType !== TimelineRenderingType.File) ||
-            eventType === EventType.CallInvite
+            (this.props.continuation && this.context.timelineRenderingType !== TimelineRenderingType.File)
+            || eventType === EventType.CallInvite
+            || ElementCall.CALL_EVENT_TYPE.matches(eventType)
         ) {
             // no avatar or sender profile for continuation messages and call tiles
             avatarSize = 0;
