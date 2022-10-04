@@ -18,6 +18,7 @@ limitations under the License.
 import { EventEmitter } from "events";
 import { mocked } from "jest-mock";
 import { Room } from "matrix-js-sdk/src/matrix";
+import { logger } from "matrix-js-sdk/src/logger";
 
 import DeviceListener from "../src/DeviceListener";
 import { MatrixClientPeg } from "../src/MatrixClientPeg";
@@ -27,6 +28,9 @@ import * as BulkUnverifiedSessionsToast from "../src/toasts/BulkUnverifiedSessio
 import { isSecretStorageBeingAccessed } from "../src/SecurityManager";
 import dis from "../src/dispatcher/dispatcher";
 import { Action } from "../src/dispatcher/actions";
+import SettingsStore from "../src/settings/SettingsStore";
+import { mockPlatformPeg } from "./test-utils";
+import { SettingLevel } from "../src/settings/SettingLevel";
 
 // don't litter test console with logs
 jest.mock("matrix-js-sdk/src/logger");
@@ -40,7 +44,10 @@ jest.mock("../src/SecurityManager", () => ({
     isSecretStorageBeingAccessed: jest.fn(), accessSecretStorage: jest.fn(),
 }));
 
+const deviceId = 'my-device-id';
+
 class MockClient extends EventEmitter {
+    isGuest = jest.fn();
     getUserId = jest.fn();
     getKeyBackupVersion = jest.fn().mockResolvedValue(undefined);
     getRooms = jest.fn().mockReturnValue([]);
@@ -57,6 +64,8 @@ class MockClient extends EventEmitter {
     downloadKeys = jest.fn();
     isRoomEncrypted = jest.fn();
     getClientWellKnown = jest.fn();
+    getDeviceId = jest.fn().mockReturnValue(deviceId);
+    setAccountData = jest.fn();
 }
 const mockDispatcher = mocked(dis);
 const flushPromises = async () => await new Promise(process.nextTick);
@@ -75,8 +84,12 @@ describe('DeviceListener', () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
+        mockPlatformPeg({
+            getAppVersion: jest.fn().mockResolvedValue('1.2.3'),
+        });
         mockClient = new MockClient();
         jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mockClient);
+        jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
     });
 
     const createAndStart = async (): Promise<DeviceListener> => {
@@ -85,6 +98,115 @@ describe('DeviceListener', () => {
         await flushPromises();
         return instance;
     };
+
+    describe('client information', () => {
+        it('watches device client information setting', async () => {
+            const watchSettingSpy = jest.spyOn(SettingsStore, 'watchSetting');
+            const unwatchSettingSpy = jest.spyOn(SettingsStore, 'unwatchSetting');
+            const deviceListener = await createAndStart();
+
+            expect(watchSettingSpy).toHaveBeenCalledWith(
+                'deviceClientInformationOptIn', null, expect.any(Function),
+            );
+
+            deviceListener.stop();
+
+            expect(unwatchSettingSpy).toHaveBeenCalled();
+        });
+
+        describe('when device client information feature is enabled', () => {
+            beforeEach(() => {
+                jest.spyOn(SettingsStore, 'getValue').mockImplementation(
+                    settingName => settingName === 'deviceClientInformationOptIn',
+                );
+            });
+            it('saves client information on start', async () => {
+                await createAndStart();
+
+                expect(mockClient.setAccountData).toHaveBeenCalledWith(
+                    `io.element.matrix_client_information.${deviceId}`,
+                    { name: 'Element', url: 'localhost', version: '1.2.3' },
+                );
+            });
+
+            it('catches error and logs when saving client information fails', async () => {
+                const errorLogSpy = jest.spyOn(logger, 'error');
+                const error = new Error('oups');
+                mockClient.setAccountData.mockRejectedValue(error);
+
+                // doesn't throw
+                await createAndStart();
+
+                expect(errorLogSpy).toHaveBeenCalledWith(
+                    'Failed to record client information',
+                    error,
+                );
+            });
+
+            it('saves client information on logged in action', async () => {
+                const instance = await createAndStart();
+
+                mockClient.setAccountData.mockClear();
+
+                // @ts-ignore calling private function
+                instance.onAction({ action: Action.OnLoggedIn });
+
+                await flushPromises();
+
+                expect(mockClient.setAccountData).toHaveBeenCalledWith(
+                    `io.element.matrix_client_information.${deviceId}`,
+                    { name: 'Element', url: 'localhost', version: '1.2.3' },
+                );
+            });
+        });
+
+        describe('when device client information feature is disabled', () => {
+            beforeEach(() => {
+                jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
+            });
+
+            it('does not save client information on start', async () => {
+                await createAndStart();
+
+                expect(mockClient.setAccountData).not.toHaveBeenCalledWith(
+                    `io.element.matrix_client_information.${deviceId}`,
+                    { name: 'Element', url: 'localhost', version: '1.2.3' },
+                );
+            });
+
+            it('does not save client information on logged in action', async () => {
+                const instance = await createAndStart();
+
+                // @ts-ignore calling private function
+                instance.onAction({ action: Action.OnLoggedIn });
+
+                await flushPromises();
+
+                expect(mockClient.setAccountData).not.toHaveBeenCalledWith(
+                    `io.element.matrix_client_information.${deviceId}`,
+                    { name: 'Element', url: 'localhost', version: '1.2.3' },
+                );
+            });
+
+            it('saves client information after setting is enabled', async () => {
+                const watchSettingSpy = jest.spyOn(SettingsStore, 'watchSetting');
+                await createAndStart();
+
+                const [settingName, roomId, callback] = watchSettingSpy.mock.calls[0];
+                expect(settingName).toEqual('deviceClientInformationOptIn');
+                expect(roomId).toBeNull();
+
+                callback('deviceClientInformationOptIn', null, SettingLevel.DEVICE, SettingLevel.DEVICE, true);
+
+                await flushPromises();
+
+                expect(mockClient.setAccountData).toHaveBeenCalledWith(
+                    `io.element.matrix_client_information.${deviceId}`,
+                    { name: 'Element', url: 'localhost', version: '1.2.3' },
+                );
+            });
+        });
+    });
 
     describe('recheck', () => {
         it('does nothing when cross signing feature is not supported', async () => {

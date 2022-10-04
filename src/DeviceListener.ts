@@ -40,6 +40,10 @@ import { isSecureBackupRequired } from './utils/WellKnownUtils';
 import { ActionPayload } from "./dispatcher/payloads";
 import { Action } from "./dispatcher/actions";
 import { isLoggedIn } from "./utils/login";
+import SdkConfig from "./SdkConfig";
+import PlatformPeg from "./PlatformPeg";
+import { recordClientInformation } from "./utils/device/clientInformation";
+import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
 
@@ -60,6 +64,8 @@ export default class DeviceListener {
     // The set of device IDs we're currently displaying toasts for
     private displayingToastsForDeviceIds = new Set<string>();
     private running = false;
+    private shouldRecordClientInformation = false;
+    private deviceClientInformationSettingWatcherRef: string | undefined;
 
     public static sharedInstance() {
         if (!window.mxDeviceListener) window.mxDeviceListener = new DeviceListener();
@@ -76,8 +82,15 @@ export default class DeviceListener {
         MatrixClientPeg.get().on(ClientEvent.AccountData, this.onAccountData);
         MatrixClientPeg.get().on(ClientEvent.Sync, this.onSync);
         MatrixClientPeg.get().on(RoomStateEvent.Events, this.onRoomStateEvents);
+        this.shouldRecordClientInformation = SettingsStore.getValue('deviceClientInformationOptIn');
+        this.deviceClientInformationSettingWatcherRef = SettingsStore.watchSetting(
+            'deviceClientInformationOptIn',
+            null,
+            this.onRecordClientInformationSettingChange,
+        );
         this.dispatcherRef = dis.register(this.onAction);
         this.recheck();
+        this.recordClientInformation();
     }
 
     public stop() {
@@ -94,6 +107,9 @@ export default class DeviceListener {
             MatrixClientPeg.get().removeListener(ClientEvent.AccountData, this.onAccountData);
             MatrixClientPeg.get().removeListener(ClientEvent.Sync, this.onSync);
             MatrixClientPeg.get().removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
+        }
+        if (this.deviceClientInformationSettingWatcherRef) {
+            SettingsStore.unwatchSetting(this.deviceClientInformationSettingWatcherRef);
         }
         if (this.dispatcherRef) {
             dis.unregister(this.dispatcherRef);
@@ -200,6 +216,7 @@ export default class DeviceListener {
     private onAction = ({ action }: ActionPayload) => {
         if (action !== Action.OnLoggedIn) return;
         this.recheck();
+        this.recordClientInformation();
     };
 
     // The server doesn't tell us when key backup is set up, so we poll
@@ -341,6 +358,35 @@ export default class DeviceListener {
 
         if (isKeyBackupEnabled === false) {
             dis.dispatch({ action: Action.ReportKeyBackupNotEnabled });
+        }
+    };
+
+    private onRecordClientInformationSettingChange: CallbackFn = (
+        _originalSettingName, _roomId, _level, _newLevel, newValue,
+    ) => {
+        const prevValue = this.shouldRecordClientInformation;
+
+        this.shouldRecordClientInformation = !!newValue;
+
+        if (this.shouldRecordClientInformation && !prevValue) {
+            this.recordClientInformation();
+        }
+    };
+
+    private recordClientInformation = async () => {
+        if (!this.shouldRecordClientInformation) {
+            return;
+        }
+        try {
+            await recordClientInformation(
+                MatrixClientPeg.get(),
+                SdkConfig.get(),
+                PlatformPeg.get(),
+            );
+        } catch (error) {
+            // this is a best effort operation
+            // log the error without rethrowing
+            logger.error('Failed to record client information', error);
         }
     };
 }

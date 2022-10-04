@@ -319,6 +319,12 @@ export default class SecurityUserSettingsTab extends React.Component<IProps, ISt
                             level={SettingLevel.ACCOUNT} />
                     ) }
                 </div>
+                <div className="mx_SettingsTab_section">
+                    <span className="mx_SettingsTab_subheading">{ _t("Sessions") }</span>
+                    <SettingsFlag
+                        name="deviceClientInformationOptIn"
+                        level={SettingLevel.ACCOUNT} />
+                </div>
             </React.Fragment>;
         }
 

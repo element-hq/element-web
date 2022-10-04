@@ -740,6 +740,14 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         displayName: _td('Send analytics data'),
         default: null,
     },
+    "deviceClientInformationOptIn": {
+        supportedLevels: [SettingLevel.ACCOUNT],
+        displayName: _td(
+            `Record the client name, version, and url ` +
+            `to recognise sessions more easily in session manager`,
+        ),
+        default: false,
+    },
     "FTUE.useCaseSelection": {
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,
         default: null,
