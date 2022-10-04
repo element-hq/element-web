@@ -19,6 +19,31 @@ exports[`<SessionManagerTab /> goes to filtered list from security recommendatio
 <div
   class="mx_FilteredDeviceListHeader"
 >
+  <div
+    tabindex="0"
+  >
+    <span
+      class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+    >
+      <input
+        aria-label="Select all"
+        data-testid="device-select-all-checkbox"
+        id="device-select-all-checkbox"
+        type="checkbox"
+      />
+      <label
+        for="device-select-all-checkbox"
+      >
+        <div
+          class="mx_Checkbox_background"
+        >
+          <div
+            class="mx_Checkbox_checkmark"
+          />
+        </div>
+      </label>
+    </span>
+  </div>
   <span
     class="mx_FilteredDeviceListHeader_label"
   >

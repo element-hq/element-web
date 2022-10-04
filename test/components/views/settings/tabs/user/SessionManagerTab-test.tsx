@@ -38,10 +38,17 @@ import {
     getMockClientWithEventEmitter,
     mkPusher,
     mockClientMethodsUser,
+    mockPlatformPeg,
 } from '../../../../../test-utils';
 import Modal from '../../../../../../src/Modal';
 import LogoutDialog from '../../../../../../src/components/views/dialogs/LogoutDialog';
-import { DeviceWithVerification } from '../../../../../../src/components/views/settings/devices/types';
+import {
+    DeviceSecurityVariation,
+    DeviceWithVerification,
+} from '../../../../../../src/components/views/settings/devices/types';
+import { INACTIVE_DEVICE_AGE_MS } from '../../../../../../src/components/views/settings/devices/filter';
+
+mockPlatformPeg();
 
 describe('<SessionManagerTab />', () => {
     const aliceId = '@alice:server.org';
@@ -59,6 +66,11 @@ describe('<SessionManagerTab />', () => {
     const alicesOlderMobileDevice = {
         device_id: 'alices_older_mobile_device',
         last_seen_ts: Date.now() - 600000,
+    };
+
+    const alicesInactiveDevice = {
+        device_id: 'alices_older_mobile_device',
+        last_seen_ts: Date.now() - (INACTIVE_DEVICE_AGE_MS + 1000),
     };
 
     const mockCrossSigningInfo = {
@@ -108,10 +120,27 @@ describe('<SessionManagerTab />', () => {
         fireEvent.click(checkbox);
     };
 
+    const setFilter = async (
+        container: HTMLElement,
+        option: DeviceSecurityVariation | string,
+    ) => await act(async () => {
+        const dropdown = container.querySelector('[aria-label="Filter devices"]');
+
+        fireEvent.click(dropdown as Element);
+        // tick to let dropdown render
+        await flushPromisesWithFakeTimers();
+
+        fireEvent.click(container.querySelector(`#device-list-filter__${option}`) as Element);
+    });
+
     const isDeviceSelected = (
         getByTestId: ReturnType<typeof render>['getByTestId'],
         deviceId: DeviceWithVerification['device_id'],
     ): boolean => !!(getByTestId(`device-tile-checkbox-${deviceId}`) as HTMLInputElement).checked;
+
+    const isSelectAllChecked = (
+        getByTestId: ReturnType<typeof render>['getByTestId'],
+    ): boolean => !!(getByTestId('device-select-all-checkbox') as HTMLInputElement).checked;
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -810,6 +839,96 @@ describe('<SessionManagerTab />', () => {
 
             // unselected
             expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeFalsy();
+        });
+
+        describe('toggling select all', () => {
+            it('selects all sessions when there is not existing selection', async () => {
+                const { getByTestId, getByText } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromisesWithFakeTimers();
+                });
+
+                fireEvent.click(getByTestId('device-select-all-checkbox'));
+
+                // header displayed correctly
+                expect(getByText('2 sessions selected')).toBeTruthy();
+                expect(isSelectAllChecked(getByTestId)).toBeTruthy();
+
+                // devices selected
+                expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+            });
+
+            it('selects all sessions when some sessions are already selected', async () => {
+                const { getByTestId, getByText } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromisesWithFakeTimers();
+                });
+
+                toggleDeviceSelection(getByTestId, alicesMobileDevice.device_id);
+
+                fireEvent.click(getByTestId('device-select-all-checkbox'));
+
+                // header displayed correctly
+                expect(getByText('2 sessions selected')).toBeTruthy();
+                expect(isSelectAllChecked(getByTestId)).toBeTruthy();
+
+                // devices selected
+                expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+            });
+
+            it('deselects all sessions when all sessions are selected', async () => {
+                const { getByTestId, getByText } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromisesWithFakeTimers();
+                });
+
+                fireEvent.click(getByTestId('device-select-all-checkbox'));
+
+                // header displayed correctly
+                expect(getByText('2 sessions selected')).toBeTruthy();
+                expect(isSelectAllChecked(getByTestId)).toBeTruthy();
+
+                // devices selected
+                expect(isDeviceSelected(getByTestId, alicesMobileDevice.device_id)).toBeTruthy();
+                expect(isDeviceSelected(getByTestId, alicesOlderMobileDevice.device_id)).toBeTruthy();
+            });
+
+            it('selects only sessions that are part of the active filter', async () => {
+                mockClient.getDevices.mockResolvedValue({ devices: [
+                    alicesDevice,
+                    alicesMobileDevice,
+                    alicesInactiveDevice,
+                ] });
+                const { getByTestId, container } = render(getComponent());
+
+                await act(async () => {
+                    await flushPromisesWithFakeTimers();
+                });
+
+                // filter for inactive sessions
+                await setFilter(container, DeviceSecurityVariation.Inactive);
+
+                // select all inactive sessions
+                fireEvent.click(getByTestId('device-select-all-checkbox'));
+
+                expect(isSelectAllChecked(getByTestId)).toBeTruthy();
+
+                // sign out of all selected sessions
+                fireEvent.click(getByTestId('sign-out-selection-cta'));
+
+                // only called with session from active filter
+                expect(mockClient.deleteMultipleDevices).toHaveBeenCalledWith(
+                    [
+                        alicesInactiveDevice.device_id,
+                    ],
+                    undefined,
+                );
+            });
         });
     });
 

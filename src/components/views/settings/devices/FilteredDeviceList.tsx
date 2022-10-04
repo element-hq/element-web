@@ -266,8 +266,21 @@ export const FilteredDeviceList =
             onFilterChange(filterId === ALL_FILTER_ID ? undefined : filterId as DeviceSecurityVariation);
         };
 
+        const isAllSelected = selectedDeviceIds.length >= sortedDevices.length;
+        const toggleSelectAll = () => {
+            if (isAllSelected) {
+                setSelectedDeviceIds([]);
+            } else {
+                setSelectedDeviceIds(sortedDevices.map(device => device.device_id));
+            }
+        };
+
         return <div className='mx_FilteredDeviceList' ref={ref}>
-            <FilteredDeviceListHeader selectedDeviceCount={selectedDeviceIds.length}>
+            <FilteredDeviceListHeader
+                selectedDeviceCount={selectedDeviceIds.length}
+                isAllSelected={isAllSelected}
+                toggleSelectAll={toggleSelectAll}
+            >
                 { selectedDeviceIds.length
                     ? <>
                         <AccessibleButton
