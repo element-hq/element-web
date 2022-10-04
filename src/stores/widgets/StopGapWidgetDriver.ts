@@ -434,7 +434,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
         }
 
         const {
-            originalEvent,
             events,
             nextBatch,
             prevBatch,
@@ -451,7 +450,6 @@ export class StopGapWidgetDriver extends WidgetDriver {
             });
 
         return {
-            originalEvent: originalEvent?.getEffectiveEvent(),
             chunk: events.map(e => e.getEffectiveEvent()),
             nextBatch,
             prevBatch,
