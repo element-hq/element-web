@@ -125,9 +125,12 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
     }
 
     public async componentDidMount(): Promise<void> {
+        const cli = MatrixClientPeg.get();
+
         this.setState({
             disablingReadReceiptsSupported: (
-                await MatrixClientPeg.get().doesServerSupportUnstableFeature("org.matrix.msc2285.stable")
+                (await cli.doesServerSupportUnstableFeature("org.matrix.msc2285.stable"))
+                || (await cli.isVersionSupported("v1.4"))
             ),
         });
     }
