@@ -76,6 +76,7 @@ HTMLCollection [
       </p>
       <table
         class="mx_DeviceDetails_metadataTable"
+        data-testid="device-detail-metadata-session"
       >
         <tbody>
           <tr>
@@ -89,39 +90,6 @@ HTMLCollection [
             >
               alices_device
             </td>
-          </tr>
-          <tr>
-            <td
-              class="mxDeviceDetails_metadataLabel"
-            >
-              Last activity
-            </td>
-            <td
-              class="mxDeviceDetails_metadataValue"
-            />
-          </tr>
-        </tbody>
-      </table>
-      <table
-        class="mx_DeviceDetails_metadataTable"
-      >
-        <thead>
-          <tr>
-            <th>
-              Device
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td
-              class="mxDeviceDetails_metadataLabel"
-            >
-              IP address
-            </td>
-            <td
-              class="mxDeviceDetails_metadataValue"
-            />
           </tr>
         </tbody>
       </table>

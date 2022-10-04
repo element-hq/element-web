@@ -19,6 +19,12 @@ import { MatrixClient } from "matrix-js-sdk/src/client";
 import BasePlatform from "../../BasePlatform";
 import { IConfigOptions } from "../../IConfigOptions";
 
+export type DeviceClientInformation = {
+    name?: string;
+    version?: string;
+    url?: string;
+};
+
 const formatUrl = (): string | undefined => {
     // don't record url for electron clients
     if (window.electron) {
@@ -34,7 +40,7 @@ const formatUrl = (): string | undefined => {
     ].join("");
 };
 
-const getClientInformationEventType = (deviceId: string): string =>
+export const getClientInformationEventType = (deviceId: string): string =>
     `io.element.matrix_client_information.${deviceId}`;
 
 /**
@@ -58,3 +64,23 @@ export const recordClientInformation = async (
         url,
     });
 };
+
+const sanitizeContentString = (value: unknown): string | undefined =>
+    value && typeof value === 'string' ? value : undefined;
+
+export const getDeviceClientInformation = (matrixClient: MatrixClient, deviceId: string): DeviceClientInformation => {
+    const event = matrixClient.getAccountData(getClientInformationEventType(deviceId));
+
+    if (!event) {
+        return {};
+    }
+
+    const { name, version, url } = event.getContent();
+
+    return {
+        name: sanitizeContentString(name),
+        version: sanitizeContentString(version),
+        url: sanitizeContentString(url),
+    };
+};
+

@@ -29,8 +29,8 @@ import { isSecretStorageBeingAccessed } from "../src/SecurityManager";
 import dis from "../src/dispatcher/dispatcher";
 import { Action } from "../src/dispatcher/actions";
 import SettingsStore from "../src/settings/SettingsStore";
-import { mockPlatformPeg } from "./test-utils";
 import { SettingLevel } from "../src/settings/SettingLevel";
+import { mockPlatformPeg } from "./test-utils";
 
 // don't litter test console with logs
 jest.mock("matrix-js-sdk/src/logger");

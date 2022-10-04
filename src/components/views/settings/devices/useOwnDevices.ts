@@ -33,7 +33,8 @@ import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifi
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";
-import { DevicesDictionary, DeviceWithVerification } from "./types";
+import { getDeviceClientInformation } from "../../../../utils/device/clientInformation";
+import { DevicesDictionary, DeviceWithVerification, ExtendedDeviceInfo } from "./types";
 import { useEventEmitter } from "../../../../hooks/useEventEmitter";
 
 const isDeviceVerified = (
@@ -62,6 +63,16 @@ const isDeviceVerified = (
     }
 };
 
+const parseDeviceExtendedInformation = (matrixClient: MatrixClient, device: IMyDevice): ExtendedDeviceInfo => {
+    const { name, version, url } = getDeviceClientInformation(matrixClient, device.device_id);
+
+    return {
+        clientName: name,
+        clientVersion: version,
+        url,
+    };
+};
+
 const fetchDevicesWithVerification = async (
     matrixClient: MatrixClient,
     userId: string,
@@ -75,6 +86,7 @@ const fetchDevicesWithVerification = async (
         [device.device_id]: {
             ...device,
             isVerified: isDeviceVerified(matrixClient, crossSigningInfo, device),
+            ...parseDeviceExtendedInformation(matrixClient, device),
         },
     }), {});
 

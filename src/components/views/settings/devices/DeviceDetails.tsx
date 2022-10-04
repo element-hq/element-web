@@ -26,10 +26,10 @@ import Spinner from '../../elements/Spinner';
 import ToggleSwitch from '../../elements/ToggleSwitch';
 import { DeviceDetailHeading } from './DeviceDetailHeading';
 import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
-import { DeviceWithVerification } from './types';
+import { ExtendedDevice } from './types';
 
 interface Props {
-    device: DeviceWithVerification;
+    device: ExtendedDevice;
     pusher?: IPusher | undefined;
     localNotificationSettings?: LocalNotificationSettings | undefined;
     isSigningOut: boolean;
@@ -41,6 +41,7 @@ interface Props {
 }
 
 interface MetadataTable {
+    id: string;
     heading?: string;
     values: { label: string, value?: string | React.ReactNode }[];
 }
@@ -58,6 +59,7 @@ const DeviceDetails: React.FC<Props> = ({
 }) => {
     const metadata: MetadataTable[] = [
         {
+            id: 'session',
             values: [
                 { label: _t('Session ID'), value: device.device_id },
                 {
@@ -67,12 +69,28 @@ const DeviceDetails: React.FC<Props> = ({
             ],
         },
         {
+            id: 'application',
+            heading: _t('Application'),
+            values: [
+                { label: _t('Name'), value: device.clientName },
+                { label: _t('Version'), value: device.clientVersion },
+                { label: _t('URL'), value: device.url },
+            ],
+        },
+        {
+            id: 'device',
             heading: _t('Device'),
             values: [
                 { label: _t('IP address'), value: device.last_seen_ip },
             ],
         },
-    ];
+    ].map(section =>
+        // filter out falsy values
+        ({ ...section, values: section.values.filter(row => !!row.value) }))
+        .filter(section =>
+        // then filter out sections with no values
+            section.values.length,
+        );
 
     const showPushNotificationSection = !!pusher || !!localNotificationSettings;
 
@@ -101,9 +119,10 @@ const DeviceDetails: React.FC<Props> = ({
         </section>
         <section className='mx_DeviceDetails_section'>
             <p className='mx_DeviceDetails_sectionHeading'>{ _t('Session details') }</p>
-            { metadata.map(({ heading, values }, index) => <table
+            { metadata.map(({ heading, values, id }, index) => <table
                 className='mx_DeviceDetails_metadataTable'
                 key={index}
+                data-testid={`device-detail-metadata-${id}`}
             >
                 { heading &&
                     <thead>

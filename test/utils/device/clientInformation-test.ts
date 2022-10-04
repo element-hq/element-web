@@ -14,9 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
+
 import BasePlatform from "../../../src/BasePlatform";
 import { IConfigOptions } from "../../../src/IConfigOptions";
-import { recordClientInformation } from "../../../src/utils/device/clientInformation";
+import {
+    getDeviceClientInformation,
+    recordClientInformation,
+} from "../../../src/utils/device/clientInformation";
 import { getMockClientWithEventEmitter } from "../../test-utils";
 
 describe('recordClientInformation()', () => {
@@ -84,3 +89,58 @@ describe('recordClientInformation()', () => {
         );
     });
 });
+
+describe('getDeviceClientInformation()', () => {
+    const deviceId = 'my-device-id';
+
+    const mockClient = getMockClientWithEventEmitter({
+        getAccountData: jest.fn(),
+    });
+
+    beforeEach(() => {
+        jest.resetAllMocks();
+    });
+
+    it('returns an empty object when no event exists for the device', () => {
+        expect(getDeviceClientInformation(mockClient, deviceId)).toEqual({});
+
+        expect(mockClient.getAccountData).toHaveBeenCalledWith(
+            `io.element.matrix_client_information.${deviceId}`,
+        );
+    });
+
+    it('returns client information for the device', () => {
+        const eventContent = {
+            name: 'Element Web',
+            version: '1.2.3',
+            url: 'test.com',
+        };
+        const event = new MatrixEvent({
+            type: `io.element.matrix_client_information.${deviceId}`,
+            content: eventContent,
+        });
+        mockClient.getAccountData.mockReturnValue(event);
+        expect(getDeviceClientInformation(mockClient, deviceId)).toEqual(eventContent);
+    });
+
+    it('excludes values with incorrect types', () => {
+        const eventContent = {
+            extraField: 'hello',
+            name: 'Element Web',
+            // wrong format
+            version: { value: '1.2.3' },
+            url: 'test.com',
+        };
+        const event = new MatrixEvent({
+            type: `io.element.matrix_client_information.${deviceId}`,
+            content: eventContent,
+        });
+        mockClient.getAccountData.mockReturnValue(event);
+        // invalid fields excluded
+        expect(getDeviceClientInformation(mockClient, deviceId)).toEqual({
+            name: eventContent.name,
+            url: eventContent.url,
+        });
+    });
+});
+
