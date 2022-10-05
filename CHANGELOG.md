@@ -1,3 +1,9 @@
+Changes in [3.58.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.58.0-rc.2) (2022-10-05)
+===============================================================================================================
+
+## 🐛 Bug Fixes
+ * Use the correct sender key when checking shared secret ([\#2730](https://github.com/matrix-org/matrix-js-sdk/pull/2730)). Fixes vector-im/element-web#23374.
+
 Changes in [3.58.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.58.0-rc.1) (2022-10-04)
 ===============================================================================================================
 
