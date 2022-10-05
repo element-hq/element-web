@@ -325,7 +325,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     };
 
     private onWysiwygChange = (content: string) => {
-        console.log('content', content);
         this.setState({
             isComposerEmpty: content?.length === 0,
         });

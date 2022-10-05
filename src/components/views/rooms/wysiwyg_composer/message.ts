@@ -95,7 +95,6 @@ export function sendMessage(
     mxClient: MatrixClient,
     { roomContext, ...params }: SendMessageParams,
 ) {
-    console.log('message', message);
     const { relation, replyToEvent } = params;
     const { room } = roomContext;
     const { roomId } = room;

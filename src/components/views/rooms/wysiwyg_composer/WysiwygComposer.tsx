@@ -34,7 +34,7 @@ interface WysiwygProps {
 }
 
 export function WysiwygComposer(
-    { disabled = false, onChange, children, ...props }: WysiwygProps, forwardRef,
+    { disabled = false, onChange, children, ...props }: WysiwygProps,
 ) {
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
@@ -50,9 +50,9 @@ export function WysiwygComposer(
     );
 
     return (
-        <div className="mx_SendMessageComposer" style={{ minHeight: '30px' }} ref={ref} contentEditable={!disabled && isWysiwygReady} suppressContentEditableWarning={true}>
-            <br />
+        <>
+            <div className="mx_SendMessageComposer" style={{ minHeight: '30px' }} ref={ref} contentEditable={!disabled && isWysiwygReady} />
             { children?.(memoizedSendMessage) }
-        </div>
+        </>
     );
 }
