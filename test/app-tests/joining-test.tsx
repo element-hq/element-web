@@ -46,7 +46,7 @@ describe('joining a room', function() {
 
         beforeEach(function() {
             httpBackend = new MockHttpBackend();
-            jssdk.request(httpBackend.requestFn);
+            window.fetch = httpBackend.fetchFn;
             parentDiv = document.createElement('div');
 
             // uncomment this to actually add the div to the UI, to help with

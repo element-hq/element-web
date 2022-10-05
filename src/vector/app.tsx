@@ -18,7 +18,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// To ensure we load the browser-request version
 import "matrix-js-sdk"; // eslint-disable-line no-restricted-imports
 
 import React from 'react';

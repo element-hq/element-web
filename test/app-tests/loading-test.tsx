@@ -32,7 +32,7 @@ import * as test_utils from '../test-utils';
 import MockHttpBackend from 'matrix-mock-request';
 import {parseQs, parseQsFromFragment} from '../../src/vector/url_utils';
 import {makeType} from "matrix-react-sdk/src/utils/TypeUtils";
-import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/AutoDiscoveryUtils";
+import {ValidatedServerConfig} from "matrix-react-sdk/src/utils/ValidatedServerConfig";
 import {sleep} from "../test-utils";
 import "fake-indexeddb/auto";
 import {cleanLocalstorage} from "../test-utils";
@@ -60,7 +60,7 @@ describe('loading:', function() {
 
     beforeEach(function() {
         httpBackend = new MockHttpBackend();
-        jssdk.request(httpBackend.requestFn);
+        window.fetch = httpBackend.fetchFn;
         parentDiv = document.createElement('div');
 
         // uncomment this to actually add the div to the UI, to help with
