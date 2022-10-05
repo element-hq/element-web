@@ -31,7 +31,6 @@ import Resizer from "../../../resizer/resizer";
 import PercentageDistributor from "../../../resizer/distributors/percentage";
 import { Container, WidgetLayoutStore } from "../../../stores/widgets/WidgetLayoutStore";
 import { clamp, percentageOf, percentageWithin } from "../../../utils/numbers";
-import { useStateCallback } from "../../../hooks/useStateCallback";
 import UIStore from "../../../stores/UIStore";
 import { IApp } from "../../../stores/WidgetStore";
 import { ActionPayload } from "../../../dispatcher/payloads";
@@ -330,13 +329,8 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
         defaultHeight = 280;
     }
 
-    const [height, setHeight] = useStateCallback(defaultHeight, newHeight => {
-        newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
-        WidgetLayoutStore.instance.setContainerHeight(room, Container.Top, newHeight);
-    });
-
     return <Resizable
-        size={{ height: Math.min(height, maxHeight), width: undefined }}
+        size={{ height: Math.min(defaultHeight, maxHeight), width: undefined }}
         minHeight={minHeight}
         maxHeight={maxHeight}
         onResizeStart={() => {
@@ -346,7 +340,15 @@ const PersistentVResizer: React.FC<IPersistentResizerProps> = ({
             resizeNotifier.notifyTimelineHeightChanged();
         }}
         onResizeStop={(e, dir, ref, d) => {
-            setHeight(height + d.height);
+            let newHeight = defaultHeight + d.height;
+            newHeight = percentageOf(newHeight, minHeight, maxHeight) * 100;
+
+            WidgetLayoutStore.instance.setContainerHeight(
+                room,
+                Container.Top,
+                newHeight,
+            );
+
             resizeNotifier.stopResizing();
         }}
         handleWrapperClass={handleWrapperClass}
