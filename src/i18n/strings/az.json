@@ -10,6 +10,7 @@
     "The message from the parser is: %(message)s": "Sözügedən mesaj: %(message)s",
     "Dismiss": "Nəzərə almayın",
     "Welcome to Element": "Element-ə xoş gəlmişsiniz",
+    "Decentralised, encrypted chat &amp; collaboration powered by [matrix]": "[matrix] tərəfindən təchiz edilmiş mərkəziləşdirilməmiş, şifrələnmiş çat və əməkdaşlıq platforması",
     "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo tərəfindən dəstəklənən mərkəzləşdirilməmiş ,şifrələnmiş söhbət &amp; əməkdaşlıq",
     "Failed to start": "Başlatmaq alınmadı",
     "Go to element.io": "element.io saytına keçin",

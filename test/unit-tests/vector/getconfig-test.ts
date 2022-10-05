@@ -101,4 +101,12 @@ describe('getVectorConfig()', () => {
         await expect(getVectorConfig()).rejects.toBe("err-general");
     });
 
+    it('rejects with an error when config is invalid JSON', async () => {
+        fetchMock.getOnce("/config.app.element.io.json", { throws: "err-specific" });
+        fetchMock.getOnce("/config.json", '{"invalid": "json",}');
+
+        await expect(getVectorConfig()).rejects.toEqual({
+            err: new SyntaxError("Unexpected token } in JSON at position 19"),
+        });
+    });
 });

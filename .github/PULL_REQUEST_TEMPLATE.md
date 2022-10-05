@@ -1,11 +1,18 @@
-<!-- Please read https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.md before submitting your pull request -->
+<!-- Thanks for submitting a PR! Please ensure the following requirements are met in order for us to review your PR -->
 
-<!-- Include a Sign-Off as described in https://github.com/matrix-org/matrix-js-sdk/blob/develop/CONTRIBUTING.md#sign-off -->
+## Checklist
 
-<!-- To specify text for the changelog entry (otherwise the PR title will be used):
-Notes:
+* [ ] Tests written for new code (and old code if feasible)
+* [ ] Linter and other CI checks pass
+* [ ] Sign-off given on the changes (see [CONTRIBUTING.md](https://github.com/vector-im/element-web/blob/develop/CONTRIBUTING.md))
 
-Changelog entries will also appear in element-desktop. For PRs that *only* affect the desktop version:
+<!--
+If you would like to specify text for the changelog entry other than your PR title, add the following:
+
+Notes: Add super cool feature
+
+For PRs which *only* affect the desktop version, please use:
+
 Notes: none
-element-desktop notes: <notes>
+element-desktop notes: Add super cool feature
 -->

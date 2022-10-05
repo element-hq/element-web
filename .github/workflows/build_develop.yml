@@ -6,6 +6,9 @@ on:
     branches: [ develop ]
   repository_dispatch:
     types: [ element-web-notify ]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
 jobs:
   build:
     name: "Build & Upload source maps to Sentry"
@@ -29,5 +32,30 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_ORG: sentry
+          SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
+
+      - run: mv dist/element-*.tar.gz dist/develop.tar.gz
+
+      # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
+      # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
+      - name: Deploy develop.tar.gz to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          single-commit: true
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: webapp
+          path: dist/develop.tar.gz
+          retention-days: 1
+
+      - name: Wait for other steps to succeed
+        uses: lewagon/wait-on-check-action@v1.1.2
+        with:
+          ref: ${{ github.ref }}
+          running-workflow-name: 'Build & Upload source maps to Sentry'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          check-regexp: ^((?!SonarQube|issues|board).)*$

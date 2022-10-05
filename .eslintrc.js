@@ -18,11 +18,13 @@ module.exports = {
         }
     },
     overrides: [{
-        files: ["src/**/*.{ts,tsx}"],
+        files: ["src/**/*.{ts,tsx}", "module_system/**/*.{ts,tsx}"],
         extends: [
             "plugin:matrix-org/typescript",
             "plugin:matrix-org/react",
         ],
+        // NOTE: These rules are frozen and new rules should not be added here.
+        // New changes belong in https://github.com/matrix-org/eslint-plugin-matrix-org/
         rules: {
             // Things we do that break the ideal style
             "prefer-promise-reject-errors": "off",

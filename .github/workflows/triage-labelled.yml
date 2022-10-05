@@ -33,7 +33,7 @@ jobs:
     name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
     steps:
-      - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
+      - uses: konradpabjan/move-labeled-or-milestoned-issue@190352295fe309fcb113b49193bc81d9aaa9cb01
         with:
           action-token: "${{ secrets.ELEMENT_BOT_TOKEN }}"
           project-url: "https://github.com/vector-im/element-web/projects/27"
@@ -44,14 +44,7 @@ jobs:
     name: P1 X-Needs-Design to Design project board
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
-      (contains(github.event.issue.labels.*.name, 'S-Critical') &&
-       (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-        contains(github.event.issue.labels.*.name, 'O-Occasional')) ||
-       contains(github.event.issue.labels.*.name, 'S-Major') &&
-       contains(github.event.issue.labels.*.name, 'O-Frequent') ||
-       contains(github.event.issue.labels.*.name, 'A11y') &&
-       contains(github.event.issue.labels.*.name, 'O-Frequent'))
+      contains(github.event.issue.labels.*.name, 'X-Needs-Design')
     steps:
       - uses: octokit/graphql-action@v2.x
         id: add_to_project
@@ -100,6 +93,9 @@ jobs:
     runs-on: ubuntu-latest
     if: >
       contains(github.event.issue.labels.*.name, 'A-New-Search-Experience') ||
+      (contains(github.event.issue.labels.*.name, 'A-Threads') &&
+        (contains(github.event.issue.labels.*.name, 'S-Major') ||
+         contains(github.event.issue.labels.*.name, 'S-Critical'))) ||
       contains(github.event.issue.labels.*.name, 'Team: Delight') ||
       contains(github.event.issue.labels.*.name, 'Z-NewUserJourney')
     steps:
@@ -118,6 +114,29 @@ jobs:
           contentid: ${{ github.event.issue.node_id }}
         env:
           PROJECT_ID: "PN_kwDOAM0swc1HvQ"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+  
+  Search_issues_to_board:
+    name: Search issues to project board
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'A-New-Search-Experience')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4ADtaO"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_voice-message_issues:
@@ -142,30 +161,6 @@ jobs:
         env:
           PROJECT_ID: "PN_kwDOAM0swc2KCw"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
-  move_threads_issues:
-    name: A-Threads to Thread board
-    runs-on: ubuntu-latest
-    if: >
-      contains(github.event.issue.labels.*.name, 'A-Threads')
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-                projectNextItem {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PN_kwDOAM0swc0rRA"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
   move_message_bubbles_issues:
     name: A-Message-Bubbles to Message bubbles board
     runs-on: ubuntu-latest
