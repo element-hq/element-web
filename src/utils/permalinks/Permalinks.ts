@@ -295,10 +295,6 @@ export function makeRoomPermalink(roomId: string): string {
     return permalinkCreator.forShareableRoom();
 }
 
-export function makeGroupPermalink(groupId: string): string {
-    return getPermalinkConstructor().forGroup(groupId);
-}
-
 export function isPermalinkHost(host: string): boolean {
     // Always check if the permalink is a spec permalink (callers are likely to call
     // parsePermalink after this function).
@@ -319,7 +315,6 @@ export function tryTransformEntityToPermalink(entity: string): string {
     // Check to see if it is a bare entity for starters
     if (entity[0] === '#' || entity[0] === '!') return makeRoomPermalink(entity);
     if (entity[0] === '@') return makeUserPermalink(entity);
-    if (entity[0] === '+') return makeGroupPermalink(entity);
 
     if (entity.slice(0, 7) === "matrix:") {
         try {
@@ -332,8 +327,6 @@ export function tryTransformEntityToPermalink(entity: string): string {
                         pl += new MatrixToPermalinkConstructor().encodeServerCandidates(permalinkParts.viaServers);
                     }
                     return pl;
-                } else if (permalinkParts.groupId) {
-                    return matrixtoBaseUrl + `/#/${permalinkParts.groupId}`;
                 } else if (permalinkParts.userId) {
                     return matrixtoBaseUrl + `/#/${permalinkParts.userId}`;
                 }
@@ -381,8 +374,6 @@ export function tryTransformPermalinkToLocalHref(permalink: string): string {
                 }
             } else if (permalinkParts.userId) {
                 permalink = `#/user/${permalinkParts.userId}`;
-            } else if (permalinkParts.groupId) {
-                permalink = `#/group/${permalinkParts.groupId}`;
             } // else not a valid permalink for our purposes - do not handle
         }
     } catch (e) {
@@ -410,7 +401,6 @@ export function getPrimaryPermalinkEntity(permalink: string): string {
         if (!permalinkParts) return null; // not processable
         if (permalinkParts.userId) return permalinkParts.userId;
         if (permalinkParts.roomIdOrAlias) return permalinkParts.roomIdOrAlias;
-        if (permalinkParts.groupId) return permalinkParts.groupId;
     } catch (e) {
         // no entity - not a permalink
     }

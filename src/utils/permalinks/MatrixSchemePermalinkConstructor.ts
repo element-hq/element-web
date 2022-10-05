@@ -51,10 +51,6 @@ export default class MatrixSchemePermalinkConstructor extends PermalinkConstruct
         return `matrix:${this.encodeEntity(userId)}`;
     }
 
-    forGroup(groupId: string): string {
-        throw new Error("Deliberately not implemented");
-    }
-
     forEntity(entityId: string): string {
         return `matrix:${this.encodeEntity(entityId)}`;
     }

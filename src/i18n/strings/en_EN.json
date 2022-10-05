@@ -52,8 +52,6 @@
     "%(value)sh": "%(value)sh",
     "%(value)sm": "%(value)sm",
     "%(value)ss": "%(value)ss",
-    "That link is no longer supported": "That link is no longer supported",
-    "You're trying to access a community link (%(groupId)s).<br/>Communities are no longer supported and have been replaced by spaces.<br2/><a>Learn more about spaces here.</a>": "You're trying to access a community link (%(groupId)s).<br/>Communities are no longer supported and have been replaced by spaces.<br2/><a>Learn more about spaces here.</a>",
     "Identity server has no terms of service": "Identity server has no terms of service",
     "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.": "This action requires accessing the default identity server <server /> to validate an email address or phone number, but the server does not have any terms of service.",
     "Only continue if you trust the owner of the server.": "Only continue if you trust the owner of the server.",
