@@ -72,8 +72,8 @@ const DeviceDetails: React.FC<Props> = ({
             id: 'application',
             heading: _t('Application'),
             values: [
-                { label: _t('Name'), value: device.clientName },
-                { label: _t('Version'), value: device.clientVersion },
+                { label: _t('Name'), value: device.appName },
+                { label: _t('Version'), value: device.appVersion },
                 { label: _t('URL'), value: device.url },
             ],
         },

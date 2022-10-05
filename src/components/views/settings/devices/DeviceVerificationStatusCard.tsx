@@ -21,11 +21,11 @@ import AccessibleButton from '../../elements/AccessibleButton';
 import DeviceSecurityCard from './DeviceSecurityCard';
 import {
     DeviceSecurityVariation,
-    DeviceWithVerification,
+    ExtendedDevice,
 } from './types';
 
 interface Props {
-    device: DeviceWithVerification;
+    device: ExtendedDevice;
     onVerifyDevice?: () => void;
 }
 

@@ -21,33 +21,39 @@ import { Icon as UnknownDeviceIcon } from '../../../../../res/img/element-icons/
 import { Icon as VerifiedIcon } from '../../../../../res/img/e2e/verified.svg';
 import { Icon as UnverifiedIcon } from '../../../../../res/img/e2e/warning.svg';
 import { _t } from '../../../../languageHandler';
-import { DeviceWithVerification } from './types';
+import { ExtendedDevice } from './types';
+import { DeviceType } from '../../../../utils/device/parseUserAgent';
 
 interface Props {
-    isVerified?: DeviceWithVerification['isVerified'];
+    isVerified?: ExtendedDevice['isVerified'];
     isSelected?: boolean;
+    deviceType?: DeviceType;
 }
 
-export const DeviceType: React.FC<Props> = ({ isVerified, isSelected }) => (
-    <div className={classNames('mx_DeviceType', {
-        mx_DeviceType_selected: isSelected,
+export const DeviceTypeIcon: React.FC<Props> = ({
+    isVerified,
+    isSelected,
+    deviceType,
+}) => (
+    <div className={classNames('mx_DeviceTypeIcon', {
+        mx_DeviceTypeIcon_selected: isSelected,
     })}
     >
         { /* TODO(kerrya) all devices have an unknown type until PSG-650 */ }
         <UnknownDeviceIcon
-            className='mx_DeviceType_deviceIcon'
+            className='mx_DeviceTypeIcon_deviceIcon'
             role='img'
             aria-label={_t('Unknown device type')}
         />
         {
             isVerified
                 ? <VerifiedIcon
-                    className={classNames('mx_DeviceType_verificationIcon', 'verified')}
+                    className={classNames('mx_DeviceTypeIcon_verificationIcon', 'verified')}
                     role='img'
                     aria-label={_t('Verified')}
                 />
                 : <UnverifiedIcon
-                    className={classNames('mx_DeviceType_verificationIcon', 'unverified')}
+                    className={classNames('mx_DeviceTypeIcon_verificationIcon', 'unverified')}
                     role='img'
                     aria-label={_t('Unverified')}
                 />

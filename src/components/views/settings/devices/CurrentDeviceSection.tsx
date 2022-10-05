@@ -24,10 +24,10 @@ import DeviceDetails from './DeviceDetails';
 import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
 import DeviceTile from './DeviceTile';
 import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
-import { DeviceWithVerification } from './types';
+import { ExtendedDevice } from './types';
 
 interface Props {
-    device?: DeviceWithVerification;
+    device?: ExtendedDevice;
     isLoading: boolean;
     isSigningOut: boolean;
     localNotificationSettings?: LocalNotificationSettings | undefined;

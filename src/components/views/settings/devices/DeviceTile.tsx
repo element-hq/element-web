@@ -21,16 +21,16 @@ import { _t } from "../../../../languageHandler";
 import { formatDate, formatRelativeTime } from "../../../../DateUtils";
 import Heading from "../../typography/Heading";
 import { INACTIVE_DEVICE_AGE_DAYS, isDeviceInactive } from "./filter";
-import { DeviceWithVerification } from "./types";
-import { DeviceType } from "./DeviceType";
+import { ExtendedDevice } from "./types";
+import { DeviceTypeIcon } from "./DeviceTypeIcon";
 export interface DeviceTileProps {
-    device: DeviceWithVerification;
+    device: ExtendedDevice;
     isSelected?: boolean;
     children?: React.ReactNode;
     onClick?: () => void;
 }
 
-const DeviceTileName: React.FC<{ device: DeviceWithVerification }> = ({ device }) => {
+const DeviceTileName: React.FC<{ device: ExtendedDevice }> = ({ device }) => {
     return <Heading size='h4'>
         { device.display_name || device.device_id }
     </Heading>;
@@ -48,7 +48,7 @@ const formatLastActivity = (timestamp: number, now = new Date().getTime()): stri
     return formatRelativeTime(new Date(timestamp));
 };
 
-const getInactiveMetadata = (device: DeviceWithVerification): { id: string, value: React.ReactNode } | undefined => {
+const getInactiveMetadata = (device: ExtendedDevice): { id: string, value: React.ReactNode } | undefined => {
     const isInactive = isDeviceInactive(device);
 
     if (!isInactive) {
@@ -89,7 +89,11 @@ const DeviceTile: React.FC<DeviceTileProps> = ({
         ];
 
     return <div className="mx_DeviceTile" data-testid={`device-tile-${device.device_id}`}>
-        <DeviceType isVerified={device.isVerified} isSelected={isSelected} />
+        <DeviceTypeIcon
+            isVerified={device.isVerified}
+            isSelected={isSelected}
+            deviceType={device.deviceType}
+        />
         <div className="mx_DeviceTile_info" onClick={onClick}>
             <DeviceTileName device={device} />
             <div className="mx_DeviceTile_metadata">
