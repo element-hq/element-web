@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import UAParser from 'ua-parser-js';
+
 export enum DeviceType {
     Desktop = 'Desktop',
     Mobile = 'Mobile',
@@ -26,11 +28,61 @@ export type ExtendedDeviceInformation = {
     deviceModel?: string;
     // eg Android 11
     deviceOperatingSystem?: string;
-    // eg Firefox
-    clientName?: string;
-    // eg 1.1.0
-    clientVersion?: string;
+    // eg Firefox 1.1.0
+    client?: string;
 };
+
+// Element/1.8.21 (iPhone XS Max; iOS 15.2; Scale/3.00)
+const IOS_KEYWORD = "; iOS ";
+const BROWSER_KEYWORD = "Mozilla/";
+
+const getDeviceType = (
+    userAgent: string,
+    device: UAParser.IDevice,
+    browser: UAParser.IBrowser,
+    operatingSystem: UAParser.IOS,
+): DeviceType => {
+    if (browser.name === 'Electron') {
+        return DeviceType.Desktop;
+    }
+    if (!!browser.name) {
+        return DeviceType.Web;
+    }
+    if (
+        device.type === 'mobile' ||
+        operatingSystem.name?.includes('Android') ||
+        userAgent.indexOf(IOS_KEYWORD) > -1
+    ) {
+        return DeviceType.Mobile;
+    }
+    return DeviceType.Unknown;
+};
+
+/**
+ * Some mobile model and OS strings are not recognised
+ * by the UA parsing library
+ * check they exist by hand
+ */
+const checkForCustomValues = (userAgent: string): {
+    customDeviceModel?: string;
+    customDeviceOS?: string;
+} => {
+    if (userAgent.includes(BROWSER_KEYWORD)) {
+        return {};
+    }
+
+    const mightHaveDevice = userAgent.includes('(');
+    if (!mightHaveDevice) {
+        return {};
+    }
+    const deviceInfoSegments = userAgent.substring(userAgent.indexOf('(') + 1).split('; ');
+    const customDeviceModel = deviceInfoSegments[0] || undefined;
+    const customDeviceOS = deviceInfoSegments[1] || undefined;
+    return { customDeviceModel, customDeviceOS };
+};
+
+const concatenateNameAndVersion = (name?: string, version?: string): string | undefined =>
+    name && [name, version].filter(Boolean).join(' ');
 
 export const parseUserAgent = (userAgent?: string): ExtendedDeviceInformation => {
     if (!userAgent) {
@@ -38,8 +90,24 @@ export const parseUserAgent = (userAgent?: string): ExtendedDeviceInformation =>
             deviceType: DeviceType.Unknown,
         };
     }
-    // @TODO(kerrya) not yet implemented
+
+    const parser = new UAParser(userAgent);
+
+    const browser = parser.getBrowser();
+    const device = parser.getDevice();
+    const operatingSystem = parser.getOS();
+
+    const deviceOperatingSystem = concatenateNameAndVersion(operatingSystem.name, operatingSystem.version);
+    const deviceModel = concatenateNameAndVersion(device.vendor, device.model);
+    const client = concatenateNameAndVersion(browser.name, browser.major || browser.version);
+
+    const { customDeviceModel, customDeviceOS } = checkForCustomValues(userAgent);
+    const deviceType = getDeviceType(userAgent, device, browser, operatingSystem);
+
     return {
-        deviceType: DeviceType.Unknown,
+        deviceType,
+        deviceModel: deviceModel || customDeviceModel,
+        deviceOperatingSystem: deviceOperatingSystem || customDeviceOS,
+        client,
     };
 };
