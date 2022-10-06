@@ -105,8 +105,8 @@ describe('getVectorConfig()', () => {
         fetchMock.getOnce("/config.app.element.io.json", { throws: "err-specific" });
         fetchMock.getOnce("/config.json", '{"invalid": "json",}');
 
-        await expect(getVectorConfig()).rejects.toEqual({
-            err: new SyntaxError("Unexpected token } in JSON at position 19"),
-        });
+        // We can't assert it'll be a SyntaxError as node-fetch behaves differently
+        // https://github.com/wheresrhys/fetch-mock/issues/270
+        await expect(getVectorConfig()).rejects.toThrow("Unexpected token } in JSON at position 19");
     });
 });
