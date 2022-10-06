@@ -25,7 +25,7 @@ import {
     MsgType,
     Room,
 } from 'matrix-js-sdk/src/matrix';
-import { Thread } from 'matrix-js-sdk/src/models/thread';
+import { FeatureSupport, Thread } from 'matrix-js-sdk/src/models/thread';
 
 import MessageActionBar from '../../../../src/components/views/messages/MessageActionBar';
 import {
@@ -388,13 +388,13 @@ describe('<MessageActionBar />', () => {
 
     describe('thread button', () => {
         beforeEach(() => {
-            Thread.setServerSideSupport(true, false);
+            Thread.setServerSideSupport(FeatureSupport.Stable);
         });
 
         describe('when threads feature is not enabled', () => {
             it('does not render thread button when threads does not have server support', () => {
                 jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
-                Thread.setServerSideSupport(false, false);
+                Thread.setServerSideSupport(FeatureSupport.None);
                 const { queryByLabelText } = getComponent({ mxEvent: alicesMessageEvent });
                 expect(queryByLabelText('Reply in thread')).toBeFalsy();
             });
