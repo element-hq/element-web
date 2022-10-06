@@ -339,6 +339,7 @@ export const KEYBOARD_SHORTCUTS: IKeyboardShortcuts = {
     [KeyBindingAction.FormatQuote]: {
         default: {
             ctrlOrCmdKey: true,
+            shiftKey: true,
             key: Key.GREATER_THAN,
         },
         displayName: _td("Toggle Quote"),

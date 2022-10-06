@@ -27,9 +27,9 @@ jobs:
         run: "yarn run lint:types"
 
       - name: Switch js-sdk to release mode
+        working-directory: node_modules/matrix-js-sdk
         run: |
-          scripts/ci/js-sdk-to-release.js
-          cd node_modules/matrix-js-sdk
+          scripts/switch_package_to_release.js
           yarn install
           yarn run build:compile
           yarn run build:types

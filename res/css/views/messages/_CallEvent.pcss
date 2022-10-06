@@ -1,0 +1,77 @@
+/*
+Copyright 2022 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+.mx_CallEvent_wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.mx_CallEvent {
+    padding: 12px;
+    box-sizing: border-box;
+    min-height: 60px;
+    max-width: 600px;
+    width: 100%;
+    background-color: $system;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-8;
+
+    .mx_CallEvent_title {
+        font-size: $font-15px;
+        line-height: 24px; /* in px to match the avatar */
+    }
+
+    &.mx_CallEvent_inactive .mx_CallEvent_title::before {
+        display: inline-block;
+        vertical-align: middle;
+        content: '';
+        background-color: $secondary-content;
+        mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+        mask-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+    }
+
+    &.mx_CallEvent_active .mx_CallEvent_title {
+        font-weight: 600;
+    }
+
+    > .mx_BaseAvatar {
+        align-self: flex-start;
+    }
+
+    > .mx_CallEvent_infoRows {
+        flex-grow: 1;
+
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-4;
+    }
+
+    > .mx_CallDuration {
+        padding: $spacing-4;
+    }
+
+    > .mx_CallEvent_button {
+        box-sizing: border-box;
+        min-width: 120px;
+    }
+}

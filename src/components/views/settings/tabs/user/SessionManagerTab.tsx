@@ -19,29 +19,29 @@ import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from 'matrix-js-sdk/src/logger';
 
 import { _t } from "../../../../../languageHandler";
-import { DevicesState, useOwnDevices } from '../../devices/useOwnDevices';
-import SettingsSubsection from '../../shared/SettingsSubsection';
-import { FilteredDeviceList } from '../../devices/FilteredDeviceList';
-import CurrentDeviceSection from '../../devices/CurrentDeviceSection';
-import SecurityRecommendations from '../../devices/SecurityRecommendations';
-import { DeviceSecurityVariation, DeviceWithVerification } from '../../devices/types';
-import SettingsTab from '../SettingsTab';
+import MatrixClientContext from '../../../../../contexts/MatrixClientContext';
 import Modal from '../../../../../Modal';
+import SettingsSubsection from '../../shared/SettingsSubsection';
 import SetupEncryptionDialog from '../../../dialogs/security/SetupEncryptionDialog';
 import VerificationRequestDialog from '../../../dialogs/VerificationRequestDialog';
 import LogoutDialog from '../../../dialogs/LogoutDialog';
-import MatrixClientContext from '../../../../../contexts/MatrixClientContext';
+import { useOwnDevices } from '../../devices/useOwnDevices';
+import { FilteredDeviceList } from '../../devices/FilteredDeviceList';
+import CurrentDeviceSection from '../../devices/CurrentDeviceSection';
+import SecurityRecommendations from '../../devices/SecurityRecommendations';
+import { DeviceSecurityVariation, ExtendedDevice } from '../../devices/types';
 import { deleteDevicesWithInteractiveAuth } from '../../devices/deleteDevices';
+import SettingsTab from '../SettingsTab';
 
 const useSignOut = (
     matrixClient: MatrixClient,
-    refreshDevices: DevicesState['refreshDevices'],
+    onSignoutResolvedCallback: () => Promise<void>,
 ): {
         onSignOutCurrentDevice: () => void;
-        onSignOutOtherDevices: (deviceIds: DeviceWithVerification['device_id'][]) => Promise<void>;
-        signingOutDeviceIds: DeviceWithVerification['device_id'][];
+        onSignOutOtherDevices: (deviceIds: ExtendedDevice['device_id'][]) => Promise<void>;
+        signingOutDeviceIds: ExtendedDevice['device_id'][];
     } => {
-    const [signingOutDeviceIds, setSigningOutDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
+    const [signingOutDeviceIds, setSigningOutDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
 
     const onSignOutCurrentDevice = () => {
         Modal.createDialog(
@@ -53,7 +53,7 @@ const useSignOut = (
         );
     };
 
-    const onSignOutOtherDevices = async (deviceIds: DeviceWithVerification['device_id'][]) => {
+    const onSignOutOtherDevices = async (deviceIds: ExtendedDevice['device_id'][]) => {
         if (!deviceIds.length) {
             return;
         }
@@ -64,9 +64,7 @@ const useSignOut = (
                 deviceIds,
                 async (success) => {
                     if (success) {
-                        // @TODO(kerrya) clear selection if was bulk deletion
-                        // when added in PSG-659
-                        await refreshDevices();
+                        await onSignoutResolvedCallback();
                     }
                     setSigningOutDeviceIds(signingOutDeviceIds.filter(deviceId => !deviceIds.includes(deviceId)));
                 },
@@ -88,16 +86,18 @@ const SessionManagerTab: React.FC = () => {
     const {
         devices,
         pushers,
+        localNotificationSettings,
         currentDeviceId,
         isLoadingDeviceList,
         requestDeviceVerification,
         refreshDevices,
         saveDeviceName,
-        setPusherEnabled,
+        setPushNotifications,
         supportsMSC3881,
     } = useOwnDevices();
     const [filter, setFilter] = useState<DeviceSecurityVariation>();
-    const [expandedDeviceIds, setExpandedDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
+    const [expandedDeviceIds, setExpandedDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
+    const [selectedDeviceIds, setSelectedDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
     const scrollIntoViewTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -105,7 +105,7 @@ const SessionManagerTab: React.FC = () => {
     const userId = matrixClient.getUserId();
     const currentUserMember = userId && matrixClient.getUser(userId) || undefined;
 
-    const onDeviceExpandToggle = (deviceId: DeviceWithVerification['device_id']): void => {
+    const onDeviceExpandToggle = (deviceId: ExtendedDevice['device_id']): void => {
         if (expandedDeviceIds.includes(deviceId)) {
             setExpandedDeviceIds(expandedDeviceIds.filter(id => id !== deviceId));
         } else {
@@ -115,7 +115,6 @@ const SessionManagerTab: React.FC = () => {
 
     const onGoToFilteredList = (filter: DeviceSecurityVariation) => {
         setFilter(filter);
-        // @TODO(kerrya) clear selection when added in PSG-659
         clearTimeout(scrollIntoViewTimeoutRef.current);
         // wait a tick for the filtered section to rerender with different height
         scrollIntoViewTimeoutRef.current =
@@ -137,7 +136,7 @@ const SessionManagerTab: React.FC = () => {
         );
     };
 
-    const onTriggerDeviceVerification = useCallback((deviceId: DeviceWithVerification['device_id']) => {
+    const onTriggerDeviceVerification = useCallback((deviceId: ExtendedDevice['device_id']) => {
         if (!requestDeviceVerification) {
             return;
         }
@@ -153,15 +152,24 @@ const SessionManagerTab: React.FC = () => {
         });
     }, [requestDeviceVerification, refreshDevices, currentUserMember]);
 
+    const onSignoutResolvedCallback = async () => {
+        await refreshDevices();
+        setSelectedDeviceIds([]);
+    };
     const {
         onSignOutCurrentDevice,
         onSignOutOtherDevices,
         signingOutDeviceIds,
-    } = useSignOut(matrixClient, refreshDevices);
+    } = useSignOut(matrixClient, onSignoutResolvedCallback);
 
     useEffect(() => () => {
         clearTimeout(scrollIntoViewTimeoutRef.current);
     }, [scrollIntoViewTimeoutRef]);
+
+    // clear selection when filter changes
+    useEffect(() => {
+        setSelectedDeviceIds([]);
+    }, [filter, setSelectedDeviceIds]);
 
     return <SettingsTab heading={_t('Sessions')}>
         <SecurityRecommendations
@@ -171,9 +179,11 @@ const SessionManagerTab: React.FC = () => {
         />
         <CurrentDeviceSection
             device={currentDevice}
-            isSigningOut={signingOutDeviceIds.includes(currentDevice?.device_id)}
+            localNotificationSettings={localNotificationSettings.get(currentDeviceId)}
+            setPushNotifications={setPushNotifications}
+            isSigningOut={signingOutDeviceIds.includes(currentDeviceId)}
             isLoading={isLoadingDeviceList}
-            saveDeviceName={(deviceName) => saveDeviceName(currentDevice?.device_id, deviceName)}
+            saveDeviceName={(deviceName) => saveDeviceName(currentDeviceId, deviceName)}
             onVerifyCurrentDevice={onVerifyCurrentDevice}
             onSignOutCurrentDevice={onSignOutCurrentDevice}
         />
@@ -190,15 +200,18 @@ const SessionManagerTab: React.FC = () => {
                 <FilteredDeviceList
                     devices={otherDevices}
                     pushers={pushers}
+                    localNotificationSettings={localNotificationSettings}
                     filter={filter}
                     expandedDeviceIds={expandedDeviceIds}
                     signingOutDeviceIds={signingOutDeviceIds}
+                    selectedDeviceIds={selectedDeviceIds}
+                    setSelectedDeviceIds={setSelectedDeviceIds}
                     onFilterChange={setFilter}
                     onDeviceExpandToggle={onDeviceExpandToggle}
                     onRequestDeviceVerification={requestDeviceVerification ? onTriggerDeviceVerification : undefined}
                     onSignOutDevices={onSignOutOtherDevices}
                     saveDeviceName={saveDeviceName}
-                    setPusherEnabled={setPusherEnabled}
+                    setPushNotifications={setPushNotifications}
                     ref={filteredDeviceListRef}
                     supportsMSC3881={supportsMSC3881}
                 />

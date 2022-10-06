@@ -1,3 +1,18 @@
+Changes in [3.57.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.57.0) (2022-09-28)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Bump IDB crypto store version ([\#2705](https://github.com/matrix-org/matrix-js-sdk/pull/2705)).
+
+Changes in [3.56.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.56.0) (2022-09-28)
+=====================================================================================================
+
+## 🔒 Security
+* Fix for [CVE-2022-39249](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE%2D2022%2D39249)
+* Fix for [CVE-2022-39250](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE%2D2022%2D39250)
+* Fix for [CVE-2022-39251](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE%2D2022%2D39251)
+* Fix for [CVE-2022-39236](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=CVE%2D2022%2D39236)
+
 Changes in [3.55.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.55.0) (2022-09-20)
 ===============================================================================================================
 

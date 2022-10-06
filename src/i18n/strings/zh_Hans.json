@@ -3525,5 +3525,17 @@
     "Check if you want to hide all current and future messages from this user.": "若想隐藏来自此用户的全部当前和未来的消息，请打勾。",
     "Inviting %(user1)s and %(user2)s": "正在邀请 %(user1)s 与 %(user2)s",
     "%(user)s and %(count)s others|one": "%(user)s 与 1 个人",
-    "%(user)s and %(count)s others|other": "%(user)s 与 %(count)s 个人"
+    "%(user)s and %(count)s others|other": "%(user)s 与 %(count)s 个人",
+    "Please be aware that session names are also visible to people you communicate with": "请注意，与你交流的人也能看到会话名称",
+    "Voice broadcast (under active development)": "语音广播（正在积极开发）",
+    "Voice broadcast": "语音广播",
+    "Element Call video rooms": "Element通话视频房间",
+    "Voice broadcasts": "语音广播",
+    "New group call experience": "新的群通话体验",
+    "Video call (Jitsi)": "视频通话（Jitsi）",
+    "Video call (Element Call)": "视频通话（Element通话）",
+    "Ongoing call": "正在进行的通话",
+    "You do not have permission to start video calls": "你没有权限开始视频通话",
+    "There's no one here to call": "这里没有人可以打电话",
+    "You do not have permission to start voice calls": "你没有权限开始语音通话"
 }

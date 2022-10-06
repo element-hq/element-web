@@ -22,10 +22,10 @@ import Field from '../../elements/Field';
 import Spinner from '../../elements/Spinner';
 import { Caption } from '../../typography/Caption';
 import Heading from '../../typography/Heading';
-import { DeviceWithVerification } from './types';
+import { ExtendedDevice } from './types';
 
 interface Props {
-    device: DeviceWithVerification;
+    device: ExtendedDevice;
     saveDeviceName: (deviceName: string) => Promise<void>;
 }
 

@@ -754,7 +754,7 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
             [Formatting.Bold]: ctrlShortcutLabel("B"),
             [Formatting.Italics]: ctrlShortcutLabel("I"),
             [Formatting.Code]: ctrlShortcutLabel("E"),
-            [Formatting.Quote]: ctrlShortcutLabel(">"),
+            [Formatting.Quote]: ctrlShortcutLabel(">", true),
             [Formatting.InsertLink]: ctrlShortcutLabel("L", true),
         };
 

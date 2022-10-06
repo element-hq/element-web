@@ -20,11 +20,13 @@ import { PUSHER_ENABLED } from 'matrix-js-sdk/src/@types/event';
 
 import DeviceDetails from '../../../../../src/components/views/settings/devices/DeviceDetails';
 import { mkPusher } from '../../../../test-utils/test-utils';
+import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
 
 describe('<DeviceDetails />', () => {
     const baseDevice = {
         device_id: 'my-device',
         isVerified: false,
+        deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
         device: baseDevice,
@@ -33,7 +35,7 @@ describe('<DeviceDetails />', () => {
         isLoading: false,
         onSignOutDevice: jest.fn(),
         saveDeviceName: jest.fn(),
-        setPusherEnabled: jest.fn(),
+        setPushNotifications: jest.fn(),
         supportsMSC3881: true,
     };
 
@@ -58,6 +60,7 @@ describe('<DeviceDetails />', () => {
             display_name: 'My Device',
             last_seen_ip: '123.456.789',
             last_seen_ts: now - 60000000,
+            appName: 'Element Web',
         };
         const { container } = render(getComponent({ device }));
         expect(container).toMatchSnapshot();
@@ -157,6 +160,27 @@ describe('<DeviceDetails />', () => {
 
         fireEvent.click(checkbox);
 
-        expect(defaultProps.setPusherEnabled).toHaveBeenCalledWith(device.device_id, !enabled);
+        expect(defaultProps.setPushNotifications).toHaveBeenCalledWith(device.device_id, !enabled);
+    });
+
+    it('changes the local notifications settings status when clicked', () => {
+        const device = {
+            ...baseDevice,
+        };
+
+        const enabled = false;
+
+        const { getByTestId } = render(getComponent({
+            device,
+            localNotificationSettings: {
+                is_silenced: !enabled,
+            },
+            isSigningOut: true,
+        }));
+
+        const checkbox = getByTestId('device-detail-push-notification-checkbox');
+        fireEvent.click(checkbox);
+
+        expect(defaultProps.setPushNotifications).toHaveBeenCalledWith(device.device_id, !enabled);
     });
 });

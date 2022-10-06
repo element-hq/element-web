@@ -17,15 +17,15 @@ limitations under the License.
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { DeviceType } from '../../../../../src/components/views/settings/devices/DeviceType';
+import { DeviceTypeIcon } from '../../../../../src/components/views/settings/devices/DeviceTypeIcon';
 
-describe('<DeviceType />', () => {
+describe('<DeviceTypeIcon />', () => {
     const defaultProps = {
         isVerified: false,
         isSelected: false,
     };
     const getComponent = (props = {}) =>
-        <DeviceType {...defaultProps} {...props} />;
+        <DeviceTypeIcon {...defaultProps} {...props} />;
 
     it('renders an unverified device', () => {
         const { container } = render(getComponent());

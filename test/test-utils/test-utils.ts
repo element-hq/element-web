@@ -34,6 +34,7 @@ import {
 } from 'matrix-js-sdk/src/matrix';
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
+import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import { makeType } from "../../src/utils/TypeUtils";
@@ -175,6 +176,11 @@ export function createTestClient(): MatrixClient {
         sendToDevice: jest.fn().mockResolvedValue(undefined),
         queueToDevice: jest.fn().mockResolvedValue(undefined),
         encryptAndSendToDevices: jest.fn().mockResolvedValue(undefined),
+
+        getMediaHandler: jest.fn().mockReturnValue({
+            setVideoInput: jest.fn(),
+            setAudioInput: jest.fn(),
+        } as unknown as MediaHandler),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

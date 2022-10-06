@@ -187,6 +187,35 @@ describe("CallLobby", () => {
     });
 
     describe("device buttons", () => {
+        const fakeVideoInput1: MediaDeviceInfo = {
+            deviceId: "v1",
+            groupId: "v1",
+            label: "Webcam",
+            kind: "videoinput",
+            toJSON: () => {},
+        };
+        const fakeVideoInput2: MediaDeviceInfo = {
+            deviceId: "v2",
+            groupId: "v2",
+            label: "Othercam",
+            kind: "videoinput",
+            toJSON: () => {},
+        };
+        const fakeAudioInput1: MediaDeviceInfo = {
+            deviceId: "v1",
+            groupId: "v1",
+            label: "Headphones",
+            kind: "audioinput",
+            toJSON: () => {},
+        };
+        const fakeAudioInput2: MediaDeviceInfo = {
+            deviceId: "v2",
+            groupId: "v2",
+            label: "Tailphones",
+            kind: "audioinput",
+            toJSON: () => {},
+        };
+
         it("hide when no devices are available", async () => {
             await renderView();
             expect(screen.queryByRole("button", { name: /microphone/ })).toBe(null);
@@ -194,13 +223,7 @@ describe("CallLobby", () => {
         });
 
         it("show without dropdown when only one device is available", async () => {
-            mocked(navigator.mediaDevices.enumerateDevices).mockResolvedValue([{
-                deviceId: "1",
-                groupId: "1",
-                label: "Webcam",
-                kind: "videoinput",
-                toJSON: () => {},
-            }]);
+            mocked(navigator.mediaDevices.enumerateDevices).mockResolvedValue([fakeVideoInput1]);
 
             await renderView();
             screen.getByRole("button", { name: /camera/ });
@@ -209,27 +232,40 @@ describe("CallLobby", () => {
 
         it("show with dropdown when multiple devices are available", async () => {
             mocked(navigator.mediaDevices.enumerateDevices).mockResolvedValue([
-                {
-                    deviceId: "1",
-                    groupId: "1",
-                    label: "Headphones",
-                    kind: "audioinput",
-                    toJSON: () => {},
-                },
-                {
-                    deviceId: "2",
-                    groupId: "1",
-                    label: "", // Should fall back to "Audio input 2"
-                    kind: "audioinput",
-                    toJSON: () => {},
-                },
+                fakeAudioInput1, fakeAudioInput2,
             ]);
 
             await renderView();
             screen.getByRole("button", { name: /microphone/ });
             fireEvent.click(screen.getByRole("button", { name: "Audio devices" }));
             screen.getByRole("menuitem", { name: "Headphones" });
-            screen.getByRole("menuitem", { name: "Audio input 2" });
+            screen.getByRole("menuitem", { name: "Tailphones" });
+        });
+
+        it("sets video device when selected", async () => {
+            mocked(navigator.mediaDevices.enumerateDevices).mockResolvedValue([
+                fakeVideoInput1, fakeVideoInput2,
+            ]);
+
+            await renderView();
+            screen.getByRole("button", { name: /camera/ });
+            fireEvent.click(screen.getByRole("button", { name: "Video devices" }));
+            fireEvent.click(screen.getByRole("menuitem", { name: fakeVideoInput2.label }));
+
+            expect(client.getMediaHandler().setVideoInput).toHaveBeenCalledWith(fakeVideoInput2.deviceId);
+        });
+
+        it("sets audio device when selected", async () => {
+            mocked(navigator.mediaDevices.enumerateDevices).mockResolvedValue([
+                fakeAudioInput1, fakeAudioInput2,
+            ]);
+
+            await renderView();
+            screen.getByRole("button", { name: /microphone/ });
+            fireEvent.click(screen.getByRole("button", { name: "Audio devices" }));
+            fireEvent.click(screen.getByRole("menuitem", { name: fakeAudioInput2.label }));
+
+            expect(client.getMediaHandler().setAudioInput).toHaveBeenCalledWith(fakeAudioInput2.deviceId);
         });
     });
 });

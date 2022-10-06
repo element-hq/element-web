@@ -60,9 +60,10 @@ exports[`<Notifications /> main notification switches renders only enable notifi
     className="mx_UserNotifSettings"
   >
     <LabelledToggleSwitch
+      caption="Turn off to disable notifications on all your devices and sessions"
       data-test-id="notif-master-switch"
       disabled={false}
-      label="Enable for this account"
+      label="Enable notifications for this account"
       onChange={[Function]}
       value={false}
     >
@@ -72,10 +73,18 @@ exports[`<Notifications /> main notification switches renders only enable notifi
         <span
           className="mx_SettingsFlag_label"
         >
-          Enable for this account
+          Enable notifications for this account
+          <br />
+          <Caption>
+            <span
+              className="mx_Caption"
+            >
+              Turn off to disable notifications on all your devices and sessions
+            </span>
+          </Caption>
         </span>
         <_default
-          aria-label="Enable for this account"
+          aria-label="Enable notifications for this account"
           checked={false}
           disabled={false}
           onChange={[Function]}
@@ -83,7 +92,7 @@ exports[`<Notifications /> main notification switches renders only enable notifi
           <AccessibleButton
             aria-checked={false}
             aria-disabled={false}
-            aria-label="Enable for this account"
+            aria-label="Enable notifications for this account"
             className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
             element="div"
             onClick={[Function]}
@@ -93,7 +102,7 @@ exports[`<Notifications /> main notification switches renders only enable notifi
             <div
               aria-checked={false}
               aria-disabled={false}
-              aria-label="Enable for this account"
+              aria-label="Enable notifications for this account"
               className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
               onClick={[Function]}
               onKeyDown={[Function]}

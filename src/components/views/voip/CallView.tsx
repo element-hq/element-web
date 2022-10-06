@@ -45,7 +45,6 @@ interface DeviceButtonProps {
     devices: MediaDeviceInfo[];
     setDevice: (device: MediaDeviceInfo) => void;
     deviceListLabel: string;
-    fallbackDeviceLabel: (n: number) => string;
     muted: boolean;
     disabled: boolean;
     toggle: () => void;
@@ -54,7 +53,7 @@ interface DeviceButtonProps {
 }
 
 const DeviceButton: FC<DeviceButtonProps> = ({
-    kind, devices, setDevice, deviceListLabel, fallbackDeviceLabel, muted, disabled, toggle, unmutedTitle, mutedTitle,
+    kind, devices, setDevice, deviceListLabel, muted, disabled, toggle, unmutedTitle, mutedTitle,
 }) => {
     const [showMenu, buttonRef, openMenu, closeMenu] = useContextMenu();
     const selectDevice = useCallback((device: MediaDeviceInfo) => {
@@ -67,10 +66,10 @@ const DeviceButton: FC<DeviceButtonProps> = ({
         const buttonRect = buttonRef.current!.getBoundingClientRect();
         contextMenu = <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <IconizedContextMenuOptionList>
-                { devices.map((d, index) =>
+                { devices.map((d) =>
                     <IconizedContextMenuOption
                         key={d.deviceId}
-                        label={d.label || fallbackDeviceLabel(index + 1)}
+                        label={d.label}
                         onClick={() => selectDevice(d)}
                     />,
                 ) }
@@ -119,25 +118,7 @@ export const Lobby: FC<LobbyProps> = ({ room, connect, children }) => {
     const me = useMemo(() => room.getMember(room.myUserId)!, [room]);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const [audioInputs, videoInputs] = useAsyncMemo(async () => {
-        try {
-            const devices = await MediaDeviceHandler.getDevices();
-            return [devices[MediaDeviceKindEnum.AudioInput], devices[MediaDeviceKindEnum.VideoInput]];
-        } catch (e) {
-            logger.warn(`Failed to get media device list`, e);
-            return [[], []];
-        }
-    }, [], [[], []]);
-
     const [videoInputId, setVideoInputId] = useState<string>(() => MediaDeviceHandler.getVideoInput());
-
-    const setAudioInput = useCallback((device: MediaDeviceInfo) => {
-        MediaDeviceHandler.instance.setAudioInput(device.deviceId);
-    }, []);
-    const setVideoInput = useCallback((device: MediaDeviceInfo) => {
-        MediaDeviceHandler.instance.setVideoInput(device.deviceId);
-        setVideoInputId(device.deviceId);
-    }, []);
 
     const [audioMuted, setAudioMuted] = useState(() => MediaDeviceHandler.startWithAudioMuted);
     const [videoMuted, setVideoMuted] = useState(() => MediaDeviceHandler.startWithVideoMuted);
@@ -151,18 +132,46 @@ export const Lobby: FC<LobbyProps> = ({ room, connect, children }) => {
         setVideoMuted(!videoMuted);
     }, [videoMuted, setVideoMuted]);
 
-    const videoStream = useAsyncMemo(async () => {
-        if (videoInputId && !videoMuted) {
-            try {
-                return await navigator.mediaDevices.getUserMedia({
-                    video: { deviceId: videoInputId },
-                });
-            } catch (e) {
-                logger.error(`Failed to get stream for device ${videoInputId}`, e);
-            }
+    const [videoStream, audioInputs, videoInputs] = useAsyncMemo(async () => {
+        let previewStream: MediaStream;
+        try {
+            // We get the preview stream before requesting devices: this is because
+            // we need (in some browsers) an active media stream in order to get
+            // non-blank labels for the devices. According to the docs, we
+            // need a stream of each type (audio + video) if we want to enumerate
+            // audio & video devices, although this didn't seem to be the case
+            // in practice for me. We request both anyway.
+            // For similar reasons, we also request a stream even if video is muted,
+            // which could be a bit strange but allows us to get the device list
+            // reliably. One option could be to try & get devices without a stream,
+            // then try again with a stream if we get blank deviceids, but... ew.
+            previewStream = await navigator.mediaDevices.getUserMedia({
+                video: { deviceId: videoInputId },
+                audio: { deviceId: MediaDeviceHandler.getAudioInput() },
+            });
+        } catch (e) {
+            logger.error(`Failed to get stream for device ${videoInputId}`, e);
         }
-        return null;
-    }, [videoInputId, videoMuted]);
+
+        const devices = await MediaDeviceHandler.getDevices();
+
+        // If video is muted, we don't actually want the stream, so we can get rid of
+        // it now.
+        if (videoMuted) {
+            previewStream.getTracks().forEach(t => t.stop());
+            previewStream = undefined;
+        }
+
+        return [previewStream, devices[MediaDeviceKindEnum.AudioInput], devices[MediaDeviceKindEnum.VideoInput]];
+    }, [videoInputId, videoMuted], [null, [], []]);
+
+    const setAudioInput = useCallback((device: MediaDeviceInfo) => {
+        MediaDeviceHandler.instance.setAudioInput(device.deviceId);
+    }, []);
+    const setVideoInput = useCallback((device: MediaDeviceInfo) => {
+        MediaDeviceHandler.instance.setVideoInput(device.deviceId);
+        setVideoInputId(device.deviceId);
+    }, []);
 
     useEffect(() => {
         if (videoStream) {
@@ -205,7 +214,6 @@ export const Lobby: FC<LobbyProps> = ({ room, connect, children }) => {
                     devices={audioInputs}
                     setDevice={setAudioInput}
                     deviceListLabel={_t("Audio devices")}
-                    fallbackDeviceLabel={n => _t("Audio input %(n)s", { n })}
                     muted={audioMuted}
                     disabled={connecting}
                     toggle={toggleAudio}
@@ -217,7 +225,6 @@ export const Lobby: FC<LobbyProps> = ({ room, connect, children }) => {
                     devices={videoInputs}
                     setDevice={setVideoInput}
                     deviceListLabel={_t("Video devices")}
-                    fallbackDeviceLabel={n => _t("Video input %(n)s", { n })}
                     muted={videoMuted}
                     disabled={connecting}
                     toggle={toggleVideo}

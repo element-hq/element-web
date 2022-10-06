@@ -125,7 +125,7 @@ Cypress.Commands.add("startDM", (name: string) => {
         .should("have.focus")
         .type("Hey!{enter}");
     cy.contains(".mx_EventTile_body", "Hey!");
-    cy.get(".mx_RoomSublist[aria-label=People]").should("contain", name);
+    cy.contains(".mx_RoomSublist[aria-label=People]", name);
 });
 
 describe("Spotlight", () => {
@@ -365,7 +365,10 @@ describe("Spotlight", () => {
                     cy.spotlightSearch().clear().type(bot1.getUserId());
                     cy.wait(1000); // wait for the dialog code to settle
                     cy.spotlightResults().should("have.length", 2);
-                    cy.spotlightResults().eq(0).should("contain", groupDm.name);
+                    cy.contains(
+                        ".mx_SpotlightDialog_section.mx_SpotlightDialog_results .mx_SpotlightDialog_option",
+                        groupDm.name,
+                    );
                 });
 
                 // Search for ByteBot by id, should return group DM and user
@@ -374,7 +377,10 @@ describe("Spotlight", () => {
                     cy.spotlightSearch().clear().type(bot2.getUserId());
                     cy.wait(1000); // wait for the dialog code to settle
                     cy.spotlightResults().should("have.length", 2);
-                    cy.spotlightResults().eq(0).should("contain", groupDm.name);
+                    cy.contains(
+                        ".mx_SpotlightDialog_section.mx_SpotlightDialog_results .mx_SpotlightDialog_option",
+                        groupDm.name,
+                    );
                 });
             });
     });

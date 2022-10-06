@@ -16,7 +16,6 @@ limitations under the License.
 
 import React, { ReactNode } from "react";
 import { Room } from "matrix-js-sdk/src/models/room";
-import { MsgType } from "matrix-js-sdk/src/@types/event";
 import { logger } from "matrix-js-sdk/src/logger";
 import { Optional } from "matrix-events-sdk";
 import { IEventRelation, MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -45,6 +44,7 @@ import { addReplyToMessageContent } from "../../../utils/Reply";
 import { RoomPermalinkCreator } from "../../../utils/permalinks/Permalinks";
 import RoomContext from "../../../contexts/RoomContext";
 import { IUpload, VoiceMessageRecording } from "../../../audio/VoiceMessageRecording";
+import { createVoiceMessageContent } from "../../../utils/createVoiceMessageContent";
 
 interface IProps {
     room: Room;
@@ -122,36 +122,14 @@ export default class VoiceRecordComposerTile extends React.PureComponent<IProps,
 
         try {
             // noinspection ES6MissingAwait - we don't care if it fails, it'll get queued.
-            const content = {
-                "body": "Voice message",
-                //"msgtype": "org.matrix.msc2516.voice",
-                "msgtype": MsgType.Audio,
-                "url": upload.mxc,
-                "file": upload.encrypted,
-                "info": {
-                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
-                    mimetype: this.state.recorder.contentType,
-                    size: this.state.recorder.contentLength,
-                },
-
-                // MSC1767 + Ideals of MSC2516 as MSC3245
-                // https://github.com/matrix-org/matrix-doc/pull/3245
-                "org.matrix.msc1767.text": "Voice message",
-                "org.matrix.msc1767.file": {
-                    url: upload.mxc,
-                    file: upload.encrypted,
-                    name: "Voice message.ogg",
-                    mimetype: this.state.recorder.contentType,
-                    size: this.state.recorder.contentLength,
-                },
-                "org.matrix.msc1767.audio": {
-                    duration: Math.round(this.state.recorder.durationSeconds * 1000),
-
-                    // https://github.com/matrix-org/matrix-doc/pull/3246
-                    waveform: this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
-                },
-                "org.matrix.msc3245.voice": {}, // No content, this is a rendering hint
-            };
+            const content = createVoiceMessageContent(
+                upload.mxc,
+                this.state.recorder.contentType,
+                Math.round(this.state.recorder.durationSeconds * 1000),
+                this.state.recorder.contentLength,
+                upload.encrypted,
+                this.state.recorder.getPlayback().thumbnailWaveform.map(v => Math.round(v * 1024)),
+            );
 
             attachRelation(content, relation);
             if (replyToEvent) {

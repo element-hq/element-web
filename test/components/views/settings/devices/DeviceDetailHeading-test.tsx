@@ -19,6 +19,7 @@ import { fireEvent, render, RenderResult } from '@testing-library/react';
 
 import { DeviceDetailHeading } from '../../../../../src/components/views/settings/devices/DeviceDetailHeading';
 import { flushPromisesWithFakeTimers } from '../../../../test-utils';
+import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
 
 jest.useFakeTimers();
 
@@ -27,6 +28,7 @@ describe('<DeviceDetailHeading />', () => {
         device_id: '123',
         display_name: 'My device',
         isVerified: true,
+        deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
         device,
