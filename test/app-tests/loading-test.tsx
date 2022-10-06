@@ -62,7 +62,6 @@ describe('loading:', function() {
     beforeEach(function() {
         httpBackend = new MockHttpBackend();
         window.fetch = httpBackend.fetchFn;
-        AutoDiscovery.setFetchFn(httpBackend.fetchFn);
         parentDiv = document.createElement('div');
 
         // uncomment this to actually add the div to the UI, to help with
