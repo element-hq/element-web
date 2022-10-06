@@ -41,6 +41,7 @@ import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/struc
 import LoginComponent from 'matrix-react-sdk/src/components/structures/auth/Login';
 import WelcomeComponent from "matrix-react-sdk/src/components/views/auth/Welcome";
 import EmbeddedPage from "matrix-react-sdk/src/components/structures/EmbeddedPage";
+import { AutoDiscovery } from 'matrix-js-sdk/src/matrix';
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -61,6 +62,7 @@ describe('loading:', function() {
     beforeEach(function() {
         httpBackend = new MockHttpBackend();
         window.fetch = httpBackend.fetchFn;
+        AutoDiscovery.setFetchFn(httpBackend.fetchFn);
         parentDiv = document.createElement('div');
 
         // uncomment this to actually add the div to the UI, to help with
@@ -421,7 +423,6 @@ describe('loading:', function() {
 
     describe('Guest auto-registration:', function() {
         it('shows a welcome page by default', function() {
-
             loadApp();
 
             return sleep(1).then(() => {
