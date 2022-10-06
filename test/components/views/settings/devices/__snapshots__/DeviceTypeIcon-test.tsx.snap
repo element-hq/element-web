@@ -6,10 +6,14 @@ exports[`<DeviceTypeIcon /> renders a verified device 1`] = `
     class="mx_DeviceTypeIcon"
   >
     <div
-      aria-label="Unknown device type"
-      class="mx_DeviceTypeIcon_deviceIcon"
-      role="img"
-    />
+      class="mx_DeviceTypeIcon_deviceIconWrapper"
+    >
+      <div
+        aria-label="Unknown session type"
+        class="mx_DeviceTypeIcon_deviceIcon"
+        role="img"
+      />
+    </div>
     <div
       aria-label="Verified"
       class="mx_DeviceTypeIcon_verificationIcon verified"
@@ -25,10 +29,14 @@ exports[`<DeviceTypeIcon /> renders an unverified device 1`] = `
     class="mx_DeviceTypeIcon"
   >
     <div
-      aria-label="Unknown device type"
-      class="mx_DeviceTypeIcon_deviceIcon"
-      role="img"
-    />
+      class="mx_DeviceTypeIcon_deviceIconWrapper"
+    >
+      <div
+        aria-label="Unknown session type"
+        class="mx_DeviceTypeIcon_deviceIcon"
+        role="img"
+      />
+    </div>
     <div
       aria-label="Unverified"
       class="mx_DeviceTypeIcon_verificationIcon unverified"
@@ -44,10 +52,14 @@ exports[`<DeviceTypeIcon /> renders correctly when selected 1`] = `
     class="mx_DeviceTypeIcon mx_DeviceTypeIcon_selected"
   >
     <div
-      aria-label="Unknown device type"
-      class="mx_DeviceTypeIcon_deviceIcon"
-      role="img"
-    />
+      class="mx_DeviceTypeIcon_deviceIconWrapper"
+    >
+      <div
+        aria-label="Unknown session type"
+        class="mx_DeviceTypeIcon_deviceIcon"
+        role="img"
+      />
+    </div>
     <div
       aria-label="Unverified"
       class="mx_DeviceTypeIcon_verificationIcon unverified"
