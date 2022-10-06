@@ -14,15 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { EventType, MatrixEvent, RoomMember } from "matrix-js-sdk/src/matrix";
+import { EventType, MatrixClient, MatrixEvent, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import TestRenderer from 'react-test-renderer';
 import { ReactElement } from "react";
+import { mocked } from "jest-mock";
 
 import { getSenderName, textForEvent } from "../src/TextForEvent";
 import SettingsStore from "../src/settings/SettingsStore";
-import { createTestClient } from './test-utils';
+import { createTestClient, stubClient } from './test-utils';
 import { MatrixClientPeg } from '../src/MatrixClientPeg';
 import UserIdentifierCustomisations from '../src/customisations/UserIdentifier';
+import { ElementCall } from "../src/models/Call";
 
 jest.mock("../src/settings/SettingsStore");
 jest.mock('../src/customisations/UserIdentifier', () => ({
@@ -442,6 +444,44 @@ describe('TextForEvent', () => {
 
         it("returns correct message for normal message", () => {
             expect(textForEvent(messageEvent)).toEqual('@a: test message');
+        });
+    });
+
+    describe("textForCallEvent()", () => {
+        let mockClient: MatrixClient;
+        let callEvent: MatrixEvent;
+
+        beforeEach(() => {
+            stubClient();
+            mockClient = MatrixClientPeg.get();
+
+            mocked(mockClient.getRoom).mockReturnValue({
+                name: "Test room",
+            } as unknown as Room);
+
+            callEvent = {
+                getRoomId: jest.fn(),
+                getType: jest.fn(),
+                isState: jest.fn().mockReturnValue(true),
+            } as unknown as MatrixEvent;
+        });
+
+        describe.each(ElementCall.CALL_EVENT_TYPE.names)("eventType=%s", (eventType: string) => {
+            beforeEach(() => {
+                mocked(callEvent).getType.mockReturnValue(eventType);
+            });
+
+            it("returns correct message for call event when supported", () => {
+                expect(textForEvent(callEvent)).toEqual('Video call started in Test room.');
+            });
+
+            it("returns correct message for call event when supported", () => {
+                mocked(mockClient).supportsVoip.mockReturnValue(false);
+
+                expect(textForEvent(callEvent)).toEqual(
+                    'Video call started in Test room. (not supported by this browser)',
+                );
+            });
         });
     });
 });
