@@ -162,7 +162,7 @@ describe("Spotlight", () => {
                 cy.window({ log: false }).then(({ matrixcs: { Visibility } }) => {
                     cy.createRoom({ name: room1Name, visibility: Visibility.Public }).then(_room1Id => {
                         room1Id = _room1Id;
-                        cy.inviteUser(room1Id, bot1.getUserId());
+                        bot1.joinRoom(room1Id);
                         cy.visit("/#/room/" + room1Id);
                     });
                     bot2.createRoom({ name: room2Name, visibility: Visibility.Public })

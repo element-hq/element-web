@@ -18,6 +18,8 @@ import React, { FC } from "react";
 import classNames from "classnames";
 
 import { _t } from "../../../languageHandler";
+import { Call } from "../../../models/Call";
+import { useParticipants } from "../../../hooks/useCall";
 
 export enum LiveContentType {
     Video,
@@ -55,3 +57,18 @@ export const LiveContentSummary: FC<Props> = ({ type, text, active, participantC
         </> }
     </span>
 );
+
+interface LiveContentSummaryWithCallProps {
+    call: Call;
+}
+
+export function LiveContentSummaryWithCall({ call }: LiveContentSummaryWithCallProps) {
+    const participants = useParticipants(call);
+
+    return <LiveContentSummary
+        type={LiveContentType.Video}
+        text={_t("Video")}
+        active={false}
+        participantCount={participants.size}
+    />;
+}

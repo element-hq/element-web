@@ -73,7 +73,10 @@ describe("Threads", () => {
 
     it("should be usable for a conversation", () => {
         let bot: MatrixClient;
-        cy.getBot(synapse, { displayName: "BotBob" }).then(_bot => {
+        cy.getBot(synapse, {
+            displayName: "BotBob",
+            autoAcceptInvites: false,
+        }).then(_bot => {
             bot = _bot;
         });
 
@@ -81,6 +84,7 @@ describe("Threads", () => {
         cy.createRoom({}).then(_roomId => {
             roomId = _roomId;
             cy.inviteUser(roomId, bot.getUserId());
+            bot.joinRoom(roomId);
             cy.visit("/#/room/" + roomId);
         });
 

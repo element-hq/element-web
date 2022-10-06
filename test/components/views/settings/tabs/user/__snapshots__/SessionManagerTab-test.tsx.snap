@@ -97,10 +97,14 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
         class="mx_DeviceTypeIcon"
       >
         <div
-          aria-label="Unknown device type"
-          class="mx_DeviceTypeIcon_deviceIcon"
-          role="img"
-        />
+          class="mx_DeviceTypeIcon_deviceIconWrapper"
+        >
+          <div
+            aria-label="Unknown session type"
+            class="mx_DeviceTypeIcon_deviceIcon"
+            role="img"
+          />
+        </div>
         <div
           aria-label="Verified"
           class="mx_DeviceTypeIcon_verificationIcon verified"
@@ -199,10 +203,14 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
         class="mx_DeviceTypeIcon"
       >
         <div
-          aria-label="Unknown device type"
-          class="mx_DeviceTypeIcon_deviceIcon"
-          role="img"
-        />
+          class="mx_DeviceTypeIcon_deviceIconWrapper"
+        >
+          <div
+            aria-label="Unknown session type"
+            class="mx_DeviceTypeIcon_deviceIcon"
+            role="img"
+          />
+        </div>
         <div
           aria-label="Unverified"
           class="mx_DeviceTypeIcon_verificationIcon unverified"
@@ -301,10 +309,14 @@ exports[`<SessionManagerTab /> sets device verification status correctly 1`] = `
     class="mx_DeviceTypeIcon"
   >
     <div
-      aria-label="Unknown device type"
-      class="mx_DeviceTypeIcon_deviceIcon"
-      role="img"
-    />
+      class="mx_DeviceTypeIcon_deviceIconWrapper"
+    >
+      <div
+        aria-label="Unknown session type"
+        class="mx_DeviceTypeIcon_deviceIcon"
+        role="img"
+      />
+    </div>
     <div
       aria-label="Verified"
       class="mx_DeviceTypeIcon_verificationIcon verified"

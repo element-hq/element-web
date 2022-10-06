@@ -115,10 +115,14 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
           class="mx_DeviceTypeIcon"
         >
           <div
-            aria-label="Unknown device type"
-            class="mx_DeviceTypeIcon_deviceIcon"
-            role="img"
-          />
+            class="mx_DeviceTypeIcon_deviceIconWrapper"
+          >
+            <div
+              aria-label="Unknown session type"
+              class="mx_DeviceTypeIcon_deviceIcon"
+              role="img"
+            />
+          </div>
           <div
             aria-label="Unverified"
             class="mx_DeviceTypeIcon_verificationIcon unverified"
@@ -238,10 +242,14 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             class="mx_DeviceTypeIcon"
           >
             <div
-              aria-label="Unknown device type"
-              class="mx_DeviceTypeIcon_deviceIcon"
-              role="img"
-            />
+              class="mx_DeviceTypeIcon_deviceIconWrapper"
+            >
+              <div
+                aria-label="Unknown session type"
+                class="mx_DeviceTypeIcon_deviceIcon"
+                role="img"
+              />
+            </div>
             <div
               aria-label="Unverified"
               class="mx_DeviceTypeIcon_verificationIcon unverified"
@@ -320,10 +328,14 @@ exports[`<DevicesPanel /> renders device panel with devices 1`] = `
             class="mx_DeviceTypeIcon"
           >
             <div
-              aria-label="Unknown device type"
-              class="mx_DeviceTypeIcon_deviceIcon"
-              role="img"
-            />
+              class="mx_DeviceTypeIcon_deviceIconWrapper"
+            >
+              <div
+                aria-label="Unknown session type"
+                class="mx_DeviceTypeIcon_deviceIcon"
+                role="img"
+              />
+            </div>
             <div
               aria-label="Unverified"
               class="mx_DeviceTypeIcon_verificationIcon unverified"

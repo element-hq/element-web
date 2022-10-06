@@ -18,6 +18,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 
 import { DeviceTypeIcon } from '../../../../../src/components/views/settings/devices/DeviceTypeIcon';
+import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
 
 describe('<DeviceTypeIcon />', () => {
     const defaultProps = {
@@ -40,5 +41,34 @@ describe('<DeviceTypeIcon />', () => {
     it('renders correctly when selected', () => {
         const { container } = render(getComponent({ isSelected: true }));
         expect(container).toMatchSnapshot();
+    });
+
+    it('renders an unknown device icon when no device type given', () => {
+        const { getByLabelText } = render(getComponent());
+        expect(getByLabelText('Unknown session type')).toBeTruthy();
+    });
+
+    it('renders a desktop device type', () => {
+        const deviceType = DeviceType.Desktop;
+        const { getByLabelText } = render(getComponent({ deviceType }));
+        expect(getByLabelText('Desktop session')).toBeTruthy();
+    });
+
+    it('renders a web device type', () => {
+        const deviceType = DeviceType.Web;
+        const { getByLabelText } = render(getComponent({ deviceType }));
+        expect(getByLabelText('Web session')).toBeTruthy();
+    });
+
+    it('renders a mobile device type', () => {
+        const deviceType = DeviceType.Mobile;
+        const { getByLabelText } = render(getComponent({ deviceType }));
+        expect(getByLabelText('Mobile session')).toBeTruthy();
+    });
+
+    it('renders an unknown device type', () => {
+        const deviceType = DeviceType.Unknown;
+        const { getByLabelText } = render(getComponent({ deviceType }));
+        expect(getByLabelText('Unknown session type')).toBeTruthy();
     });
 });

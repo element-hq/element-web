@@ -47,6 +47,9 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import LegacyCallHandler from "./LegacyCallHandler";
 import VoipUserMapper from "./VoipUserMapper";
 import { localNotificationsAreSilenced } from "./utils/notifications";
+import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
+import ToastStore from "./stores/ToastStore";
+import { ElementCall } from "./models/Call";
 
 /*
  * Dispatches:
@@ -358,7 +361,7 @@ export const Notifier = {
 
     onEvent: function(ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.getSender() === MatrixClientPeg.get().credentials.userId) return;
+        if (ev.getSender() === MatrixClientPeg.get().getUserId()) return;
 
         MatrixClientPeg.get().decryptEventIfNeeded(ev);
 
@@ -419,6 +422,8 @@ export const Notifier = {
 
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions?.notify) {
+            this._performCustomEventHandling(ev);
+
             if (RoomViewStore.instance.getRoomId() === room.roomId &&
                 UserActivity.sharedInstance().userActiveRecently() &&
                 !Modal.hasDialogs()
@@ -434,6 +439,24 @@ export const Notifier = {
                 PlatformPeg.get().loudNotification(ev, room);
                 this._playAudioNotification(ev, room);
             }
+        }
+    },
+
+    /**
+     * Some events require special handling such as showing in-app toasts
+     */
+    _performCustomEventHandling: function(ev: MatrixEvent) {
+        if (
+            ElementCall.CALL_EVENT_TYPE.names.includes(ev.getType())
+            && SettingsStore.getValue("feature_group_calls")
+        ) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: getIncomingCallToastKey(ev.getStateKey()),
+                priority: 100,
+                component: IncomingCallToast,
+                bodyClassName: "mx_IncomingCallToast",
+                props: { callEvent: ev },
+            });
         }
     },
 };

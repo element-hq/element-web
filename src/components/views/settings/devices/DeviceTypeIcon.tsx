@@ -18,6 +18,9 @@ import React from 'react';
 import classNames from 'classnames';
 
 import { Icon as UnknownDeviceIcon } from '../../../../../res/img/element-icons/settings/unknown-device.svg';
+import { Icon as DesktopIcon } from '../../../../../res/img/element-icons/settings/desktop.svg';
+import { Icon as WebIcon } from '../../../../../res/img/element-icons/settings/web.svg';
+import { Icon as MobileIcon } from '../../../../../res/img/element-icons/settings/mobile.svg';
 import { Icon as VerifiedIcon } from '../../../../../res/img/e2e/verified.svg';
 import { Icon as UnverifiedIcon } from '../../../../../res/img/e2e/warning.svg';
 import { _t } from '../../../../languageHandler';
@@ -30,33 +33,51 @@ interface Props {
     deviceType?: DeviceType;
 }
 
+const deviceTypeIcon: Record<DeviceType, React.FC<React.SVGProps<SVGSVGElement>>> = {
+    [DeviceType.Desktop]: DesktopIcon,
+    [DeviceType.Mobile]: MobileIcon,
+    [DeviceType.Web]: WebIcon,
+    [DeviceType.Unknown]: UnknownDeviceIcon,
+};
+const deviceTypeLabel: Record<DeviceType, string> = {
+    [DeviceType.Desktop]: _t('Desktop session'),
+    [DeviceType.Mobile]: _t('Mobile session'),
+    [DeviceType.Web]: _t('Web session'),
+    [DeviceType.Unknown]: _t('Unknown session type'),
+};
+
 export const DeviceTypeIcon: React.FC<Props> = ({
     isVerified,
     isSelected,
     deviceType,
-}) => (
-    <div className={classNames('mx_DeviceTypeIcon', {
-        mx_DeviceTypeIcon_selected: isSelected,
-    })}
-    >
-        { /* TODO(kerrya) all devices have an unknown type until PSG-650 */ }
-        <UnknownDeviceIcon
-            className='mx_DeviceTypeIcon_deviceIcon'
-            role='img'
-            aria-label={_t('Unknown device type')}
-        />
-        {
-            isVerified
-                ? <VerifiedIcon
-                    className={classNames('mx_DeviceTypeIcon_verificationIcon', 'verified')}
+}) => {
+    const Icon = deviceTypeIcon[deviceType] || deviceTypeIcon[DeviceType.Unknown];
+    const label = deviceTypeLabel[deviceType] || deviceTypeLabel[DeviceType.Unknown];
+    return (
+        <div className={classNames('mx_DeviceTypeIcon', {
+            mx_DeviceTypeIcon_selected: isSelected,
+        })}
+        >
+            <div className='mx_DeviceTypeIcon_deviceIconWrapper'>
+                <Icon
+                    className='mx_DeviceTypeIcon_deviceIcon'
                     role='img'
-                    aria-label={_t('Verified')}
+                    aria-label={label}
                 />
-                : <UnverifiedIcon
-                    className={classNames('mx_DeviceTypeIcon_verificationIcon', 'unverified')}
-                    role='img'
-                    aria-label={_t('Unverified')}
-                />
-        }
-    </div>);
+            </div>
+            {
+                isVerified
+                    ? <VerifiedIcon
+                        className={classNames('mx_DeviceTypeIcon_verificationIcon', 'verified')}
+                        role='img'
+                        aria-label={_t('Verified')}
+                    />
+                    : <UnverifiedIcon
+                        className={classNames('mx_DeviceTypeIcon_verificationIcon', 'unverified')}
+                        role='img'
+                        aria-label={_t('Unverified')}
+                    />
+            }
+        </div>);
+};
 
