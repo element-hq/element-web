@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
+
 import type { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/request/VerificationRequest";
 import type { ISasEvent } from "matrix-js-sdk/src/crypto/verification/SAS";
-import type { MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { SynapseInstance } from "../../plugins/synapsedocker";
 import Chainable = Cypress.Chainable;
 
@@ -60,7 +61,6 @@ const testMessages = function(this: CryptoTestContext) {
     // check the invite message
     cy.contains(".mx_EventTile_body", "Hey!").closest(".mx_EventTile").within(() => {
         cy.get(".mx_EventTile_e2eIcon_warning").should("not.exist");
-        cy.get(".mx_EventTile_receiptSent").should("exist");
     });
 
     // Bob sends a response
@@ -73,17 +73,31 @@ const testMessages = function(this: CryptoTestContext) {
 };
 
 const bobJoin = function(this: CryptoTestContext) {
-    cy.botJoinRoomByName(this.bob, "Alice").as("bobsRoom");
+    cy.window({ log: false }).then(async win => {
+        const bobRooms = this.bob.getRooms();
+        if (!bobRooms.length) {
+            await new Promise<void>(resolve => {
+                const onMembership = (_event) => {
+                    this.bob.off(win.matrixcs.RoomMemberEvent.Membership, onMembership);
+                    resolve();
+                };
+                this.bob.on(win.matrixcs.RoomMemberEvent.Membership, onMembership);
+            });
+        }
+    }).then(() => {
+        cy.botJoinRoomByName(this.bob, "Alice").as("bobsRoom");
+    });
+
     cy.contains(".mx_TextualEvent", "Bob joined the room").should("exist");
 };
 
 const handleVerificationRequest = (request: VerificationRequest): Chainable<EmojiMapping[]> => {
     return cy.wrap(new Promise<EmojiMapping[]>((resolve) => {
         const onShowSas = (event: ISasEvent) => {
-            resolve(event.sas.emoji);
             verifier.off("show_sas", onShowSas);
             event.confirm();
             verifier.done();
+            resolve(event.sas.emoji);
         };
 
         const verifier = request.beginKeyVerification("m.sas.v1");
