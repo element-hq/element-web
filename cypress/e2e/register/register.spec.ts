@@ -72,7 +72,7 @@ describe("Registration", () => {
         cy.startMeasuring("from-submit-to-home");
         cy.get(".mx_InteractiveAuthEntryComponents_termsSubmit").click();
 
-        cy.get(".mx_UseCaseSelection_skip").should("exist");
+        cy.get(".mx_UseCaseSelection_skip", { timeout: 30000 }).should("exist");
         cy.percySnapshot("Use-case selection screen");
         cy.checkA11y();
         cy.get(".mx_UseCaseSelection_skip .mx_AccessibleButton").click();
