@@ -325,6 +325,8 @@ The VoIP and Jitsi options are:
       the app, removing the ability to start legacy 1:1 calls or Jitsi calls. Defaults to `false`.
    - `participant_limit`: The maximum number of users who can join a call; if
      this number is exceeded, the user will not be able to join a given call.
+   - `brand`: Optional name for the app. Defaults to `Element Call`. This is
+     used throughout the application in various strings/locations.
 
 ## Bug reporting
 
