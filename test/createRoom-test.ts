@@ -25,6 +25,7 @@ import WidgetStore from "../src/stores/WidgetStore";
 import WidgetUtils from "../src/utils/WidgetUtils";
 import { JitsiCall, ElementCall } from "../src/models/Call";
 import createRoom, { canEncryptToAllUsers } from '../src/createRoom';
+import SettingsStore from "../src/settings/SettingsStore";
 
 describe("createRoom", () => {
     mockPlatformPeg();
@@ -85,7 +86,7 @@ describe("createRoom", () => {
                     [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
                 },
             },
-        }]] = client.createRoom.mock.calls as any; // no good type
+        }]] = client.createRoom.mock.calls;
 
         // We should have had enough power to be able to set up the call
         expect(userPower).toBeGreaterThanOrEqual(callPower);
@@ -108,6 +109,26 @@ describe("createRoom", () => {
 
         expect(createJitsiCallSpy).not.toHaveBeenCalled();
         expect(createElementCallSpy).not.toHaveBeenCalled();
+    });
+
+    it("correctly sets up MSC3401 power levels", async () => {
+        jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+            if (name === "feature_group_calls") return true;
+        });
+
+        await createRoom({});
+
+        const [[{
+            power_level_content_override: {
+                events: {
+                    [ElementCall.CALL_EVENT_TYPE.name]: callPower,
+                    [ElementCall.MEMBER_EVENT_TYPE.name]: callMemberPower,
+                },
+            },
+        }]] = client.createRoom.mock.calls;
+
+        expect(callPower).toBe(100);
+        expect(callMemberPower).toBe(100);
     });
 });
 

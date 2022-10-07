@@ -16,30 +16,35 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, RenderResult } from "@testing-library/react";
-import { EventType, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { MatrixClient } from "matrix-js-sdk/src/client";
+import { EventType } from "matrix-js-sdk/src/@types/event";
 
 import RolesRoomSettingsTab from "../../../../../../src/components/views/settings/tabs/room/RolesRoomSettingsTab";
 import { mkStubRoom, stubClient } from "../../../../../test-utils";
 import { MatrixClientPeg } from "../../../../../../src/MatrixClientPeg";
 import { VoiceBroadcastInfoEventType } from "../../../../../../src/voice-broadcast";
+import SettingsStore from "../../../../../../src/settings/SettingsStore";
+import { ElementCall } from "../../../../../../src/models/Call";
 
 describe("RolesRoomSettingsTab", () => {
     const roomId = "!room:example.com";
-    let rolesRoomSettingsTab: RenderResult;
     let cli: MatrixClient;
 
+    const renderTab = (): RenderResult => {
+        return render(<RolesRoomSettingsTab roomId={roomId} />);
+    };
+
     const getVoiceBroadcastsSelect = () => {
-        return rolesRoomSettingsTab.container.querySelector("select[label='Voice broadcasts']");
+        return renderTab().container.querySelector("select[label='Voice broadcasts']");
     };
 
     const getVoiceBroadcastsSelectedOption = () => {
-        return rolesRoomSettingsTab.container.querySelector("select[label='Voice broadcasts'] option:checked");
+        return renderTab().container.querySelector("select[label='Voice broadcasts'] option:checked");
     };
 
     beforeEach(() => {
         stubClient();
         cli = MatrixClientPeg.get();
-        rolesRoomSettingsTab = render(<RolesRoomSettingsTab roomId={roomId} />);
         mkStubRoom(roomId, "test room", cli);
     });
 
@@ -64,6 +69,98 @@ describe("RolesRoomSettingsTab", () => {
                     },
                 },
             );
+        });
+    });
+
+    describe("Element Call", () => {
+        const setGroupCallsEnabled = (val: boolean): void => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name === "feature_group_calls") return val;
+            });
+        };
+
+        const getStartCallSelect = (tab: RenderResult) => {
+            return tab.container.querySelector("select[label='Start Element Call calls']");
+        };
+
+        const getStartCallSelectedOption = (tab: RenderResult) => {
+            return tab.container.querySelector("select[label='Start Element Call calls'] option:checked");
+        };
+
+        const getJoinCallSelect = (tab: RenderResult) => {
+            return tab.container.querySelector("select[label='Join Element Call calls']");
+        };
+
+        const getJoinCallSelectedOption = (tab: RenderResult) => {
+            return tab.container.querySelector("select[label='Join Element Call calls'] option:checked");
+        };
+
+        describe("Element Call enabled", () => {
+            beforeEach(() => {
+                setGroupCallsEnabled(true);
+            });
+
+            describe("Join Element calls", () => {
+                it("defaults to moderator for joining calls", () => {
+                    expect(getJoinCallSelectedOption(renderTab())?.textContent).toBe("Moderator");
+                });
+
+                it("can change joining calls power level", () => {
+                    const tab = renderTab();
+
+                    fireEvent.change(getJoinCallSelect(tab), {
+                        target: { value: 0 },
+                    });
+
+                    expect(getJoinCallSelectedOption(tab)?.textContent).toBe("Default");
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                        roomId,
+                        EventType.RoomPowerLevels,
+                        {
+                            events: {
+                                [ElementCall.MEMBER_EVENT_TYPE.name]: 0,
+                            },
+                        },
+                    );
+                });
+            });
+
+            describe("Start Element calls", () => {
+                it("defaults to moderator for starting calls", () => {
+                    expect(getStartCallSelectedOption(renderTab())?.textContent).toBe("Moderator");
+                });
+
+                it("can change starting calls power level", () => {
+                    const tab = renderTab();
+
+                    fireEvent.change(getStartCallSelect(tab), {
+                        target: { value: 0 },
+                    });
+
+                    expect(getStartCallSelectedOption(tab)?.textContent).toBe("Default");
+                    expect(cli.sendStateEvent).toHaveBeenCalledWith(
+                        roomId,
+                        EventType.RoomPowerLevels,
+                        {
+                            events: {
+                                [ElementCall.CALL_EVENT_TYPE.name]: 0,
+                            },
+                        },
+                    );
+                });
+            });
+        });
+
+        it("hides when group calls disabled", () => {
+            setGroupCallsEnabled(false);
+
+            const tab = renderTab();
+
+            expect(getStartCallSelect(tab)).toBeFalsy();
+            expect(getStartCallSelectedOption(tab)).toBeFalsy();
+
+            expect(getJoinCallSelect(tab)).toBeFalsy();
+            expect(getJoinCallSelectedOption(tab)).toBeFalsy();
         });
     });
 });

@@ -195,10 +195,11 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
     let menu: JSX.Element | null = null;
     if (menuOpen) {
         const buttonRect = buttonRef.current!.getBoundingClientRect();
+        const brand = SdkConfig.get("element_call").brand;
         menu = <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <IconizedContextMenuOptionList>
                 <IconizedContextMenuOption label={_t("Video call (Jitsi)")} onClick={onJitsiClick} />
-                <IconizedContextMenuOption label={_t("Video call (Element Call)")} onClick={onElementClick} />
+                <IconizedContextMenuOption label={_t("Video call (%(brand)s)", { brand })} onClick={onElementClick} />
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>;
     }

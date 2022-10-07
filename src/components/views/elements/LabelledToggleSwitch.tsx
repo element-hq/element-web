@@ -27,6 +27,8 @@ interface IProps {
     label: string;
     // The translated caption for the switch
     caption?: string;
+    // Tooltip to display
+    tooltip?: string;
     // Whether or not to disable the toggle switch
     disabled?: boolean;
     // True to put the toggle in front of the label
@@ -53,7 +55,8 @@ export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
             checked={this.props.value}
             disabled={this.props.disabled}
             onChange={this.props.onChange}
-            aria-label={this.props.label}
+            title={this.props.label}
+            tooltip={this.props.tooltip}
         />;
 
         if (this.props.toggleInFront) {
@@ -66,7 +69,7 @@ export default class LabelledToggleSwitch extends React.PureComponent<IProps> {
             "mx_SettingsFlag_toggleInFront": this.props.toggleInFront,
         });
         return (
-            <div className={classes}>
+            <div data-testid={this.props["data-testid"]} className={classes}>
                 { firstPart }
                 { secondPart }
             </div>

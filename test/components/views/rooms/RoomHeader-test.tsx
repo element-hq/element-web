@@ -505,7 +505,9 @@ describe("RoomHeader (React Testing Library)", () => {
         + "and there's an ongoing call",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put({ element_call: { url: "https://call.element.io", use_exclusively: true } });
+            SdkConfig.put(
+                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
+            );
             await ElementCall.create(room);
 
             renderHeader();
@@ -519,7 +521,9 @@ describe("RoomHeader (React Testing Library)", () => {
         + "use Element Call exclusively",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put({ element_call: { url: "https://call.element.io", use_exclusively: true } });
+            SdkConfig.put(
+                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
+            );
 
             renderHeader();
             expect(screen.queryByRole("button", { name: "Voice call" })).toBeNull();
@@ -541,7 +545,9 @@ describe("RoomHeader (React Testing Library)", () => {
         + "and the user lacks permission",
         () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put({ element_call: { url: "https://call.element.io", use_exclusively: true } });
+            SdkConfig.put(
+                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
+            );
             mockEventPowerLevels({ [ElementCall.CALL_EVENT_TYPE.name]: 100 });
 
             renderHeader();
