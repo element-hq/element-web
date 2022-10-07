@@ -74,10 +74,8 @@ describe('loading:', function() {
 
     afterEach(async function() {
         console.log(`${Date.now()}: loading: afterEach`);
-        if (parentDiv) {
-            try {
-                ReactDOM.unmountComponentAtNode(parentDiv);
-            } catch (e) {}
+        if (matrixChat) {
+            ReactDOM.unmountComponentAtNode(parentDiv);
             parentDiv.remove();
             parentDiv = null;
         }
