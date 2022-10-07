@@ -214,7 +214,10 @@ export default class PreferencesUserSettingsTab extends React.Component<IProps, 
                         { _t("Share your activity and status with others.") }
                     </span>
                     <SettingsFlag
-                        disabled={!this.state.disablingReadReceiptsSupported}
+                        disabled={
+                            !this.state.disablingReadReceiptsSupported
+                            && SettingsStore.getValue("sendReadReceipts") // Make sure the feature can always be enabled
+                        }
                         disabledDescription={_t("Your server doesn't support disabling sending read receipts.")}
                         name="sendReadReceipts"
                         level={SettingLevel.ACCOUNT}
