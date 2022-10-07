@@ -19,7 +19,6 @@ import { MatrixEvent } from "matrix-js-sdk/src/models/event";
 
 import { _t } from '../languageHandler';
 import RoomAvatar from '../components/views/avatars/RoomAvatar';
-import AccessibleButton from '../components/views/elements/AccessibleButton';
 import { MatrixClientPeg } from "../MatrixClientPeg";
 import defaultDispatcher from "../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
@@ -31,13 +30,33 @@ import {
     LiveContentSummaryWithCall,
     LiveContentType,
 } from "../components/views/rooms/LiveContentSummary";
-import { useCall } from "../hooks/useCall";
+import { useCall, useJoinCallButtonDisabledTooltip } from "../hooks/useCall";
 import { useRoomState } from "../hooks/useRoomState";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
 import { useDispatcher } from "../hooks/useDispatcher";
 import { ActionPayload } from "../dispatcher/payloads";
+import { Call } from "../models/Call";
 
 export const getIncomingCallToastKey = (stateKey: string) => `call_${stateKey}`;
+
+interface JoinCallButtonWithCallProps {
+    onClick: (e: ButtonEvent) => void;
+    call: Call;
+}
+
+function JoinCallButtonWithCall({ onClick, call }: JoinCallButtonWithCallProps) {
+    const tooltip = useJoinCallButtonDisabledTooltip(call);
+
+    return <AccessibleTooltipButton
+        className="mx_IncomingCallToast_joinButton"
+        onClick={onClick}
+        disabled={Boolean(tooltip)}
+        tooltip={tooltip}
+        kind="primary"
+    >
+        { _t("Join") }
+    </AccessibleTooltipButton>;
+}
 
 interface Props {
     callEvent: MatrixEvent;
@@ -114,13 +133,16 @@ export function IncomingCallToast({ callEvent }: Props) {
                     />
                 }
             </div>
-            <AccessibleButton
-                className="mx_IncomingCallToast_joinButton"
-                onClick={onJoinClick}
-                kind="primary"
-            >
-                { _t("Join") }
-            </AccessibleButton>
+            { call
+                ? <JoinCallButtonWithCall onClick={onJoinClick} call={call} />
+                : <AccessibleTooltipButton
+                    className="mx_IncomingCallToast_joinButton"
+                    onClick={onJoinClick}
+                    kind="primary"
+                >
+                    { _t("Join") }
+                </AccessibleTooltipButton>
+            }
         </div>
         <AccessibleTooltipButton
             className="mx_IncomingCallToast_closeButton"

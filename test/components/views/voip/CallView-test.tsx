@@ -22,6 +22,7 @@ import { MatrixClient, PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { Widget } from "matrix-widget-api";
+import "@testing-library/jest-dom";
 
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
@@ -38,6 +39,7 @@ import { CallView as _CallView } from "../../../../src/components/views/voip/Cal
 import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
 import { CallStore } from "../../../../src/stores/CallStore";
 import { Call, ConnectionState } from "../../../../src/models/Call";
+import SdkConfig from "../../../../src/SdkConfig";
 
 const CallView = wrapInMatrixClientContext(_CallView);
 
@@ -162,6 +164,23 @@ describe("CallLobby", () => {
             const connectSpy = jest.spyOn(call, "connect");
             fireEvent.click(screen.getByRole("button", { name: "Join" }));
             await waitFor(() => expect(connectSpy).toHaveBeenCalled(), { interval: 1 });
+        });
+
+        it("disables join button when the participant limit has been exceeded", async () => {
+            const bob = mkRoomMember(room.roomId, "@bob:example.org");
+            const carol = mkRoomMember(room.roomId, "@carol:example.org");
+
+            SdkConfig.put({
+                "element_call": { participant_limit: 2, url: "", use_exclusively: false, brand: "Element Call" },
+            });
+            call.participants = new Set([bob, carol]);
+
+            await renderView();
+            const connectSpy = jest.spyOn(call, "connect");
+            const joinButton = screen.getByRole("button", { name: "Join" });
+            expect(joinButton).toHaveAttribute("aria-disabled", "true");
+            fireEvent.click(joinButton);
+            await waitFor(() => expect(connectSpy).not.toHaveBeenCalled(), { interval: 1 });
         });
     });
 
