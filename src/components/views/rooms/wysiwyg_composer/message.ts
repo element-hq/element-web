@@ -173,12 +173,6 @@ export function sendMessage(
     // TODO save history
     // TODO save local state
 
-    // this.sendHistoryManager.save(model, replyToEvent);
-    // clear composer
-    // model.reset([]);
-    // this.editorRef.current?.clearUndoHistory();
-    // this.editorRef.current?.focus();
-    //    this.clearStoredEditorState();
     //if (shouldSend && SettingsStore.getValue("scrollToBottomOnMessageSent")) {
     if (SettingsStore.getValue("scrollToBottomOnMessageSent")) {
         dis.dispatch({
