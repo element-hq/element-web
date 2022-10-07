@@ -46,7 +46,7 @@ export function WysiwygComposer(
     } });
 
     const memoizedSendMessage = useCallback(() => {
-        sendMessage(content, mxClient, { roomContext, ...props });
+        sendMessage(content, { mxClient, roomContext, ...props });
         wysiwyg.clear();
         ref.current?.focus();
     }, [content, mxClient, roomContext, wysiwyg, props, ref]);

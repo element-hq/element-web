@@ -32,6 +32,7 @@ import { IRoomState } from "../../../structures/RoomView";
 import dis from '../../../../dispatcher/dispatcher';
 
 interface SendMessageParams {
+    mxClient: MatrixClient;
     relation: IEventRelation;
     replyToEvent?: MatrixEvent;
     roomContext: IRoomState;
@@ -43,7 +44,7 @@ interface SendMessageParams {
 export function createMessageContent(
     message: string,
     { relation, replyToEvent, permalinkCreator, includeReplyLegacyFallback = true }:
-    Omit<SendMessageParams, 'roomContext'>,
+    Omit<SendMessageParams, 'roomContext' | 'mxClient'>,
 ): IContent {
     const isEmote = false;
 
@@ -92,8 +93,7 @@ export function createMessageContent(
 
 export function sendMessage(
     message: string,
-    mxClient: MatrixClient,
-    { roomContext, ...params }: SendMessageParams,
+    { roomContext, mxClient, ...params }: SendMessageParams,
 ) {
     const { relation, replyToEvent } = params;
     const { room } = roomContext;
