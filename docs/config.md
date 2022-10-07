@@ -323,6 +323,8 @@ The VoIP and Jitsi options are:
       and may be removed at any time without notice. Defaults to `https://call.element.io`.
    - `use_exclusively`: A boolean specifying whether Element Call should be used exclusively as the only VoIP stack in
       the app, removing the ability to start legacy 1:1 calls or Jitsi calls. Defaults to `false`.
+   - `participant_limit`: The maximum number of users who can join a call; if
+     this number is exceeded, the user will not be able to join a given call.
 
 ## Bug reporting
 
