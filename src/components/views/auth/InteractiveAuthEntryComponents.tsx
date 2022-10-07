@@ -493,7 +493,6 @@ export class EmailIdentityAuthEntry extends
                                 ? _t("Resent!")
                                 : _t("Resend")}
                             alignment={Alignment.Right}
-                            tooltipClassName="mx_Tooltip_noMargin"
                             onHideTooltip={this.state.requested
                                 ? () => this.setState({ requested: false })
                                 : undefined}

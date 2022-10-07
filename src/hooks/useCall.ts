@@ -17,14 +17,14 @@ limitations under the License.
 import { useState, useCallback } from "react";
 
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import type { Call, ConnectionState } from "../models/Call";
+import type { Call, ConnectionState, ElementCall, Layout } from "../models/Call";
 import { useTypedEventEmitterState } from "./useEventEmitter";
 import { CallEvent } from "../models/Call";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import { useEventEmitter } from "./useEventEmitter";
 
 export const useCall = (roomId: string): Call | null => {
-    const [call, setCall] = useState(() => CallStore.instance.get(roomId));
+    const [call, setCall] = useState(() => CallStore.instance.getCall(roomId));
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, (call: Call | null, forRoomId: string) => {
         if (forRoomId === roomId) setCall(call);
     });
@@ -43,4 +43,11 @@ export const useParticipants = (call: Call): Set<RoomMember> =>
         call,
         CallEvent.Participants,
         useCallback(state => state ?? call.participants, [call]),
+    );
+
+export const useLayout = (call: ElementCall): Layout =>
+    useTypedEventEmitterState(
+        call,
+        CallEvent.Layout,
+        useCallback(state => state ?? call.layout, [call]),
     );

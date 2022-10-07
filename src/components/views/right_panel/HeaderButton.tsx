@@ -23,6 +23,7 @@ import classNames from 'classnames';
 
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import { ButtonEvent } from "../elements/AccessibleButton";
+import { Alignment } from "../elements/Tooltip";
 
 interface IProps {
     // Whether this button is highlighted
@@ -54,6 +55,7 @@ export default class HeaderButton extends React.Component<IProps> {
             aria-selected={isHighlighted}
             role="tab"
             title={title}
+            alignment={Alignment.Bottom}
             className={classes}
             onClick={onClick}
         />;

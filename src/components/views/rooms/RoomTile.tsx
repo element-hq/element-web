@@ -89,7 +89,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
             selected: RoomViewStore.instance.getRoomId() === this.props.room.roomId,
             notificationsMenuPosition: null,
             generalMenuPosition: null,
-            call: CallStore.instance.get(this.props.room.roomId),
+            call: CallStore.instance.getCall(this.props.room.roomId),
             // generatePreview() will return nothing if the user has previews disabled
             messagePreview: "",
         };
@@ -159,7 +159,7 @@ export default class RoomTile extends React.PureComponent<IProps, IState> {
 
         // Recalculate the call for this room, since it could've changed between
         // construction and mounting
-        this.setState({ call: CallStore.instance.get(this.props.room.roomId) });
+        this.setState({ call: CallStore.instance.getCall(this.props.room.roomId) });
     }
 
     public componentWillUnmount() {

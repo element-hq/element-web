@@ -365,7 +365,7 @@ export class RoomViewStore extends EventEmitter {
                 viewingCall: payload.view_call ?? (
                     payload.room_id === this.state.roomId
                         ? this.state.viewingCall
-                        : CallStore.instance.hasActiveCall(payload.room_id)
+                        : CallStore.instance.getActiveCall(payload.room_id) !== null
                 ),
             };
 

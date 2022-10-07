@@ -282,7 +282,7 @@ export default class RoomHeaderButtons extends HeaderButtons<IProps> {
             <HeaderButton
                 key="roomSummaryButton"
                 name="roomSummaryButton"
-                title={_t('Room Info')}
+                title={_t('Room info')}
                 isHighlighted={this.isPhase(ROOM_INFO_PHASES)}
                 onClick={this.onRoomSummaryClicked}
             />,

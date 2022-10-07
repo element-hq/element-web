@@ -19,16 +19,27 @@ limitations under the License.
     border-bottom: 1px solid $primary-hairline-color;
     background-color: $background;
 
-    .mx_RoomHeader_e2eIcon {
+    .mx_RoomHeader_icon {
         height: 12px;
         width: 12px;
 
-        .mx_E2EIcon {
-            margin: 0;
-            position: absolute;
-            height: 12px;
-            width: 12px;
+        &.mx_RoomHeader_icon_video {
+            height: 14px;
+            width: 14px;
+            background-color: $secondary-content;
+            mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+            mask-size: 100%;
         }
+
+        &.mx_E2EIcon {
+            margin: 0;
+            height: 100%; /* To give the tooltip room to breathe */
+        }
+    }
+
+    .mx_CallDuration {
+        margin-top: calc(($font-15px - $font-13px) / 2); /* To align with the name */
+        font-size: $font-13px;
     }
 }
 
@@ -38,7 +49,7 @@ limitations under the License.
     align-items: center;
     min-width: 0;
     margin: 0 20px 0 16px;
-    padding-top: 8px;
+    padding-top: 6px;
     border-bottom: 1px solid $system;
 
     .mx_InviteOnlyIcon_large {
@@ -77,11 +88,6 @@ limitations under the License.
     padding-right: 12px;
 }
 
-.mx_RoomHeader_buttons {
-    display: flex;
-    background-color: $background;
-}
-
 .mx_RoomHeader_info {
     display: flex;
     flex: 1;
@@ -93,9 +99,11 @@ limitations under the License.
     overflow: hidden;
     color: $primary-content;
     font-weight: $font-semi-bold;
-    font-size: $font-18px;
+    font-size: $font-15px;
+    min-height: 24px;
+    align-items: center;
     border-radius: 6px;
-    margin: 0 7px;
+    margin: 0 3px;
     padding: 1px 4px;
     display: flex;
     user-select: none;
@@ -112,10 +120,10 @@ limitations under the License.
 
     .mx_RoomHeader_chevron {
         align-self: center;
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         mask-position: center;
-        mask-size: contain;
+        mask-size: 20px;
         mask-repeat: no-repeat;
         mask-image: url('$(res)/img/feather-customised/chevron-down.svg');
         background-color: $tertiary-content;
@@ -160,9 +168,6 @@ limitations under the License.
     line-height: $lineHeight;
     max-height: calc($lineHeight * $lines);
 
-    /* to align baseline of topic with room name */
-    margin: 4px 7px 0;
-
     overflow: hidden;
     -webkit-line-clamp: $lines; /* See: https://drafts.csswg.org/css-overflow-3/#webkit-line-clamp */
     -webkit-box-orient: vertical;
@@ -177,7 +182,7 @@ limitations under the License.
 
 .mx_RoomHeader_avatar {
     flex: 0;
-    margin: 0 6px 0 7px;
+    margin: 0 7px;
     position: relative;
 }
 
@@ -206,7 +211,7 @@ limitations under the License.
         mask-size: contain;
     }
 
-    &:hover {
+    &:not(.mx_RoomHeader_closeButton):hover {
         background: rgba($accent, 0.1);
 
         &::before {
@@ -247,6 +252,37 @@ limitations under the License.
 
 .mx_RoomHeader_videoCallButton::before {
     mask-image: url('$(res)/img/element-icons/call/video-call.svg');
+}
+
+.mx_RoomHeader_layoutButton--freedom::before,
+.mx_RoomHeader_freedomIcon::before {
+    mask-image: url('$(res)/img/element-icons/call/freedom.svg');
+}
+
+.mx_RoomHeader_layoutButton--spotlight::before,
+.mx_RoomHeader_spotlightIcon::before {
+    mask-image: url('$(res)/img/element-icons/call/spotlight.svg');
+}
+
+.mx_RoomHeader_closeButton::before {
+    mask-image: url('$(res)/img/cancel.svg');
+    mask-size: 20px;
+    mask-position: center;
+}
+
+.mx_RoomHeader_minimiseButton::before {
+    mask-image: url('$(res)/img/element-icons/reduce.svg');
+}
+
+.mx_RoomHeader_layoutMenu .mx_IconizedContextMenu_icon::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    display: block;
+    mask-position: center;
+    mask-size: 20px;
+    mask-repeat: no-repeat;
+    background: $primary-content;
 }
 
 @media only screen and (max-width: 480px) {

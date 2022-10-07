@@ -77,7 +77,7 @@ describe("IncomingCallEvent", () => {
         ));
 
         MockedCall.create(room, "1");
-        const maybeCall = CallStore.instance.get(room.roomId);
+        const maybeCall = CallStore.instance.getCall(room.roomId);
         if (!(maybeCall instanceof MockedCall)) throw new Error("Failed to create call");
         call = maybeCall;
 
