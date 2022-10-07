@@ -75,7 +75,9 @@ describe('loading:', function() {
     afterEach(async function() {
         console.log(`${Date.now()}: loading: afterEach`);
         if (parentDiv) {
-            ReactDOM.unmountComponentAtNode(parentDiv);
+            try {
+                ReactDOM.unmountComponentAtNode(parentDiv);
+            } catch (e) {}
             parentDiv.remove();
             parentDiv = null;
         }
