@@ -155,4 +155,18 @@ describe("IncomingCallEvent", () => {
 
         defaultDispatcher.unregister(dispatcherRef);
     });
+
+    it("closes toast when the call lobby is viewed", async () => {
+        renderToast();
+
+        defaultDispatcher.dispatch({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            view_call: true,
+        });
+
+        await waitFor(() => expect(toastStore.dismissToast).toHaveBeenCalledWith(
+            getIncomingCallToastKey(call.event.getStateKey()!),
+        ));
+    });
 });

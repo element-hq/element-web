@@ -34,6 +34,8 @@ import {
 import { useCall } from "../hooks/useCall";
 import { useRoomState } from "../hooks/useRoomState";
 import { ButtonEvent } from "../components/views/elements/AccessibleButton";
+import { useDispatcher } from "../hooks/useDispatcher";
+import { ActionPayload } from "../dispatcher/payloads";
 
 export const getIncomingCallToastKey = (stateKey: string) => `call_${stateKey}`;
 
@@ -59,6 +61,16 @@ export function IncomingCallToast({ callEvent }: Props) {
             dismissToast();
         }
     }, [latestEvent, dismissToast]);
+
+    useDispatcher(defaultDispatcher, useCallback((payload: ActionPayload) => {
+        if (
+            payload.action === Action.ViewRoom
+            && payload.room_id === roomId
+            && payload.view_call
+        ) {
+            dismissToast();
+        }
+    }, [roomId, dismissToast]));
 
     const onJoinClick = useCallback((e: ButtonEvent): void => {
         e.stopPropagation();
