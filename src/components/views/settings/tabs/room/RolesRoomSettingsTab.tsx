@@ -32,7 +32,7 @@ import SettingsFieldset from '../../SettingsFieldset';
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { VoiceBroadcastInfoEventType } from '../../../../../voice-broadcast';
 import { ElementCall } from "../../../../../models/Call";
-import SdkConfig from "../../../../../SdkConfig";
+import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -446,7 +446,7 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
             let label = plEventsToLabels[eventType];
             if (label) {
-                const brand = SdkConfig.get("element_call").brand;
+                const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
                 label = _t(label, { brand });
             } else {
                 label = _t("Send %(eventType)s events", { eventType });

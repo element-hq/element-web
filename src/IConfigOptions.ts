@@ -117,9 +117,9 @@ export interface IConfigOptions {
         obey_asserted_identity?: boolean; // MSC3086
     };
     element_call: {
-        url: string;
-        use_exclusively: boolean;
-        brand: string;
+        url?: string;
+        use_exclusively?: boolean;
+        brand?: string;
     };
 
     logout_redirect_url?: string;

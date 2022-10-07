@@ -31,7 +31,7 @@ import type { Room } from "matrix-js-sdk/src/models/room";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import type { IApp } from "../stores/WidgetStore";
-import SdkConfig from "../SdkConfig";
+import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../MediaDeviceHandler";
 import { timeout } from "../utils/promise";
@@ -622,7 +622,7 @@ export class ElementCall extends Call {
 
     private constructor(public readonly groupCall: MatrixEvent, client: MatrixClient) {
         // Splice together the Element Call URL for this call
-        const url = new URL(SdkConfig.get("element_call").url);
+        const url = new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url);
         url.pathname = "/room";
         const params = new URLSearchParams({
             embed: "",

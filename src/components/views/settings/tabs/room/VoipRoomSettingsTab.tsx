@@ -25,7 +25,7 @@ import SettingsSubsection from "../../shared/SettingsSubsection";
 import SettingsTab from "../SettingsTab";
 import { ElementCall } from "../../../../../models/Call";
 import { useRoomState } from "../../../../../hooks/useRoomState";
-import SdkConfig from "../../../../../SdkConfig";
+import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 
 interface ElementCallSwitchProps {
     roomId: string;
@@ -69,7 +69,7 @@ const ElementCallSwitch: React.FC<ElementCallSwitchProps> = ({ roomId }) => {
         });
     }, [roomId, content, events, isPublic]);
 
-    const brand = SdkConfig.get("element_call").brand;
+    const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
 
     return <LabelledToggleSwitch
         data-testid="element-call-switch"

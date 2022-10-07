@@ -40,7 +40,7 @@ import { logger } from "matrix-js-sdk/src/logger";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { Direction } from "matrix-js-sdk/src/matrix";
 
-import SdkConfig from "../../SdkConfig";
+import SdkConfig, { DEFAULTS } from "../../SdkConfig";
 import { iterableDiff, iterableIntersection } from "../../utils/iterables";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import Modal from "../../Modal";
@@ -104,7 +104,10 @@ export class StopGapWidgetDriver extends WidgetDriver {
             // Auto-approve the legacy visibility capability. We send it regardless of capability.
             // Widgets don't technically need to request this capability, but Scalar still does.
             this.allowedCapabilities.add("visibility");
-        } else if (virtual && new URL(SdkConfig.get("element_call").url).origin === this.forWidget.origin) {
+        } else if (
+            virtual
+            && new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url).origin === this.forWidget.origin
+        ) {
             // This is a trusted Element Call widget that we control
             this.allowedCapabilities.add(MatrixCapabilities.AlwaysOnScreen);
             this.allowedCapabilities.add(MatrixCapabilities.MSC3846TurnServers);
