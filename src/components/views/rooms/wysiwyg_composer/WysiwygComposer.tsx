@@ -52,9 +52,11 @@ export function WysiwygComposer(
     }, [content, mxClient, roomContext, wysiwyg, props, ref]);
 
     return (
-        <>
-            <div className="mx_SendMessageComposer" style={{ minHeight: '30px', marginBottom: '5px' }} ref={ref} contentEditable={!disabled && isWysiwygReady} />
+        <div className="mx_WysiwygComposer">
+            <div className="mx_WysiwygComposer_container">
+                <div className="mx_WysiwygComposer_content" ref={ref} contentEditable={!disabled && isWysiwygReady} />
+            </div>
             { children?.(memoizedSendMessage) }
-        </>
+        </div>
     );
 }
