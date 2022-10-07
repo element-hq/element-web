@@ -97,7 +97,7 @@ Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: str
 
         return cy.visit("/").then(() => {
             // wait for the app to load
-            return cy.get(".mx_MatrixChat", { timeout: 15000 });
+            return cy.get(".mx_MatrixChat", { timeout: 30000 });
         }).then(() => ({
             password,
             accessToken: response.body.access_token,
