@@ -40,18 +40,20 @@ export function WysiwygComposer(
     const mxClient = useMatrixClientContext();
 
     const [content, setContent] = useState<string>();
-    const { ref, isWysiwygReady } = useWysiwyg({ onChange: (_content) => {
+    const { ref, isWysiwygReady, wysiwyg } = useWysiwyg({ onChange: (_content) => {
         setContent(_content);
         onChange(_content);
     } });
 
-    const memoizedSendMessage = useCallback(() => sendMessage(content, mxClient, { roomContext, ...props }),
-        [content, mxClient, roomContext, props],
-    );
+    const memoizedSendMessage = useCallback(() => {
+        sendMessage(content, mxClient, { roomContext, ...props });
+        wysiwyg.clear();
+        ref.current?.focus();
+    }, [content, mxClient, roomContext, wysiwyg, props, ref]);
 
     return (
         <>
-            <div className="mx_SendMessageComposer" style={{ minHeight: '30px' }} ref={ref} contentEditable={!disabled && isWysiwygReady} />
+            <div className="mx_SendMessageComposer" style={{ minHeight: '30px', marginBottom: '5px' }} ref={ref} contentEditable={!disabled && isWysiwygReady} />
             { children?.(memoizedSendMessage) }
         </>
     );
