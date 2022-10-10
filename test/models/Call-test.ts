@@ -15,7 +15,6 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import { isEqual } from "lodash";
 import { mocked } from "jest-mock";
 import { waitFor } from "@testing-library/react";
 import { RoomType } from "matrix-js-sdk/src/@types/event";
@@ -28,7 +27,7 @@ import type { Mocked } from "jest-mock";
 import type { MatrixClient, IMyDevice } from "matrix-js-sdk/src/client";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
-import type { JitsiCallMemberContent, ElementCallMemberContent } from "../../src/models/Call";
+import { JitsiCallMemberContent, ElementCallMemberContent, Layout } from "../../src/models/Call";
 import { stubClient, mkEvent, mkRoomMember, setupAsyncStoreWithClient, mockPlatformPeg } from "../test-utils";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../src/MediaDeviceHandler";
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -404,30 +403,35 @@ describe("JitsiCall", () => {
         });
 
         it("emits events when connection state changes", async () => {
-            const events: ConnectionState[] = [];
-            const onConnectionState = (state: ConnectionState) => events.push(state);
+            const onConnectionState = jest.fn();
             call.on(CallEvent.ConnectionState, onConnectionState);
 
             await call.connect();
             await call.disconnect();
-            expect(events).toEqual([
-                ConnectionState.Connecting,
-                ConnectionState.Connected,
-                ConnectionState.Disconnecting,
-                ConnectionState.Disconnected,
+            expect(onConnectionState.mock.calls).toEqual([
+                [ConnectionState.Connecting, ConnectionState.Disconnected],
+                [ConnectionState.Connected, ConnectionState.Connecting],
+                [ConnectionState.Disconnecting, ConnectionState.Connected],
+                [ConnectionState.Disconnected, ConnectionState.Disconnecting],
             ]);
+
+            call.off(CallEvent.ConnectionState, onConnectionState);
         });
 
         it("emits events when participants change", async () => {
-            const events: Set<RoomMember>[] = [];
-            const onParticipants = (participants: Set<RoomMember>) => {
-                if (!isEqual(participants, events[events.length - 1])) events.push(participants);
-            };
+            const onParticipants = jest.fn();
             call.on(CallEvent.Participants, onParticipants);
 
             await call.connect();
             await call.disconnect();
-            expect(events).toEqual([new Set([alice]), new Set()]);
+            expect(onParticipants.mock.calls).toEqual([
+                [new Set([alice]), new Set()],
+                [new Set([alice]), new Set([alice])],
+                [new Set(), new Set([alice])],
+                [new Set(), new Set()],
+            ]);
+
+            call.off(CallEvent.Participants, onParticipants);
         });
 
         it("switches to spotlight layout when the widget becomes a PiP", async () => {
@@ -725,31 +729,80 @@ describe("ElementCall", () => {
             expect([...call.participants]).toEqual([bob]);
         });
 
+        it("tracks layout", async () => {
+            await call.connect();
+            expect(call.layout).toBe(Layout.Tile);
+
+            messaging.emit(
+                `action:${ElementWidgetActions.SpotlightLayout}`,
+                new CustomEvent("widgetapirequest", { detail: {} }),
+            );
+            expect(call.layout).toBe(Layout.Spotlight);
+
+            messaging.emit(
+                `action:${ElementWidgetActions.TileLayout}`,
+                new CustomEvent("widgetapirequest", { detail: {} }),
+            );
+            expect(call.layout).toBe(Layout.Tile);
+        });
+
+        it("sets layout", async () => {
+            await call.connect();
+
+            await call.setLayout(Layout.Spotlight);
+            expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.SpotlightLayout, {});
+
+            await call.setLayout(Layout.Tile);
+            expect(messaging.transport.send).toHaveBeenCalledWith(ElementWidgetActions.TileLayout, {});
+        });
+
         it("emits events when connection state changes", async () => {
-            const events: ConnectionState[] = [];
-            const onConnectionState = (state: ConnectionState) => events.push(state);
+            const onConnectionState = jest.fn();
             call.on(CallEvent.ConnectionState, onConnectionState);
 
             await call.connect();
             await call.disconnect();
-            expect(events).toEqual([
-                ConnectionState.Connecting,
-                ConnectionState.Connected,
-                ConnectionState.Disconnecting,
-                ConnectionState.Disconnected,
+            expect(onConnectionState.mock.calls).toEqual([
+                [ConnectionState.Connecting, ConnectionState.Disconnected],
+                [ConnectionState.Connected, ConnectionState.Connecting],
+                [ConnectionState.Disconnecting, ConnectionState.Connected],
+                [ConnectionState.Disconnected, ConnectionState.Disconnecting],
             ]);
+
+            call.off(CallEvent.ConnectionState, onConnectionState);
         });
 
         it("emits events when participants change", async () => {
-            const events: Set<RoomMember>[] = [];
-            const onParticipants = (participants: Set<RoomMember>) => {
-                if (!isEqual(participants, events[events.length - 1])) events.push(participants);
-            };
+            const onParticipants = jest.fn();
             call.on(CallEvent.Participants, onParticipants);
 
             await call.connect();
             await call.disconnect();
-            expect(events).toEqual([new Set([alice]), new Set()]);
+            expect(onParticipants.mock.calls).toEqual([
+                [new Set([alice]), new Set()],
+                [new Set(), new Set()],
+                [new Set(), new Set([alice])],
+            ]);
+
+            call.off(CallEvent.Participants, onParticipants);
+        });
+
+        it("emits events when layout changes", async () => {
+            await call.connect();
+            const onLayout = jest.fn();
+            call.on(CallEvent.Layout, onLayout);
+
+            messaging.emit(
+                `action:${ElementWidgetActions.SpotlightLayout}`,
+                new CustomEvent("widgetapirequest", { detail: {} }),
+            );
+            messaging.emit(
+                `action:${ElementWidgetActions.TileLayout}`,
+                new CustomEvent("widgetapirequest", { detail: {} }),
+            );
+            expect(onLayout.mock.calls).toEqual([[Layout.Spotlight], [Layout.Tile]]);
+
+            call.off(CallEvent.Layout, onLayout);
         });
 
         it("ends the call immediately if we're the last participant to leave", async () => {

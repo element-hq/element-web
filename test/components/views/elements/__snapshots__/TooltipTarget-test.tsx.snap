@@ -4,7 +4,7 @@ exports[`<TooltipTarget /> displays Bottom aligned tooltip on mouseover 1`] = `
 <div
   class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
   role="tooltip"
-  style="display: block; top: 6px; left: 0px; transform: translate(-50%);"
+  style="display: block; top: 6px; transform: translate(max(10px, min(calc(0px - 50%), calc(100vw - 100% - 10px))));"
 >
   <div
     class="mx_Tooltip_chevron"
@@ -17,7 +17,7 @@ exports[`<TooltipTarget /> displays InnerBottom aligned tooltip on mouseover 1`]
 <div
   class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
   role="tooltip"
-  style="display: block; top: -50px; left: 0px; transform: translate(-50%);"
+  style="display: block; top: -50px; transform: translate(max(10px, min(calc(0px - 50%), calc(100vw - 100% - 10px))));"
 >
   <div
     class="mx_Tooltip_chevron"
@@ -69,7 +69,7 @@ exports[`<TooltipTarget /> displays Top aligned tooltip on mouseover 1`] = `
 <div
   class="mx_Tooltip test tooltipClassName mx_Tooltip_visible"
   role="tooltip"
-  style="display: block; top: -6px; left: 0px; transform: translate(-50%, -100%);"
+  style="display: block; top: -6px; transform: translate(max(10px, min(calc(0px - 50%), calc(100vw - 100% - 10px))), -100%);"
 >
   <div
     class="mx_Tooltip_chevron"

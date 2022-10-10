@@ -33,7 +33,7 @@ import SelectableDeviceTile from './SelectableDeviceTile';
 import {
     DevicesDictionary,
     DeviceSecurityVariation,
-    DeviceWithVerification,
+    ExtendedDevice,
 } from './types';
 import { DevicesState } from './useOwnDevices';
 import FilteredDeviceListHeader from './FilteredDeviceListHeader';
@@ -42,27 +42,27 @@ interface Props {
     devices: DevicesDictionary;
     pushers: IPusher[];
     localNotificationSettings: Map<string, LocalNotificationSettings>;
-    expandedDeviceIds: DeviceWithVerification['device_id'][];
-    signingOutDeviceIds: DeviceWithVerification['device_id'][];
-    selectedDeviceIds: DeviceWithVerification['device_id'][];
+    expandedDeviceIds: ExtendedDevice['device_id'][];
+    signingOutDeviceIds: ExtendedDevice['device_id'][];
+    selectedDeviceIds: ExtendedDevice['device_id'][];
     filter?: DeviceSecurityVariation;
     onFilterChange: (filter: DeviceSecurityVariation | undefined) => void;
-    onDeviceExpandToggle: (deviceId: DeviceWithVerification['device_id']) => void;
-    onSignOutDevices: (deviceIds: DeviceWithVerification['device_id'][]) => void;
+    onDeviceExpandToggle: (deviceId: ExtendedDevice['device_id']) => void;
+    onSignOutDevices: (deviceIds: ExtendedDevice['device_id'][]) => void;
     saveDeviceName: DevicesState['saveDeviceName'];
-    onRequestDeviceVerification?: (deviceId: DeviceWithVerification['device_id']) => void;
+    onRequestDeviceVerification?: (deviceId: ExtendedDevice['device_id']) => void;
     setPushNotifications: (deviceId: string, enabled: boolean) => Promise<void>;
-    setSelectedDeviceIds: (deviceIds: DeviceWithVerification['device_id'][]) => void;
+    setSelectedDeviceIds: (deviceIds: ExtendedDevice['device_id'][]) => void;
     supportsMSC3881?: boolean | undefined;
 }
 
 const isDeviceSelected = (
-    deviceId: DeviceWithVerification['device_id'],
-    selectedDeviceIds: DeviceWithVerification['device_id'][],
+    deviceId: ExtendedDevice['device_id'],
+    selectedDeviceIds: ExtendedDevice['device_id'][],
 ) => selectedDeviceIds.includes(deviceId);
 
 // devices without timestamp metadata should be sorted last
-const sortDevicesByLatestActivity = (left: DeviceWithVerification, right: DeviceWithVerification) =>
+const sortDevicesByLatestActivity = (left: ExtendedDevice, right: ExtendedDevice) =>
     (right.last_seen_ts || 0) - (left.last_seen_ts || 0);
 
 const getFilteredSortedDevices = (devices: DevicesDictionary, filter?: DeviceSecurityVariation) =>
@@ -149,7 +149,7 @@ const NoResults: React.FC<NoResultsProps> = ({ filter, clearFilter }) =>
     </div>;
 
 const DeviceListItem: React.FC<{
-    device: DeviceWithVerification;
+    device: ExtendedDevice;
     pusher?: IPusher | undefined;
     localNotificationSettings?: LocalNotificationSettings | undefined;
     isExpanded: boolean;
@@ -227,11 +227,11 @@ export const FilteredDeviceList =
     }: Props, ref: ForwardedRef<HTMLDivElement>) => {
         const sortedDevices = getFilteredSortedDevices(devices, filter);
 
-        function getPusherForDevice(device: DeviceWithVerification): IPusher | undefined {
+        function getPusherForDevice(device: ExtendedDevice): IPusher | undefined {
             return pushers.find(pusher => pusher[PUSHER_DEVICE_ID.name] === device.device_id);
         }
 
-        const toggleSelection = (deviceId: DeviceWithVerification['device_id']): void => {
+        const toggleSelection = (deviceId: ExtendedDevice['device_id']): void => {
             if (isDeviceSelected(deviceId, selectedDeviceIds)) {
                 // remove from selection
                 setSelectedDeviceIds(selectedDeviceIds.filter(id => id !== deviceId));

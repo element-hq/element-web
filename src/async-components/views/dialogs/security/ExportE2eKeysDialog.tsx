@@ -1,5 +1,6 @@
 /*
 Copyright 2017 Vector Creations Ltd
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +16,7 @@ limitations under the License.
 */
 
 import FileSaver from 'file-saver';
-import React, { createRef } from 'react';
+import React from 'react';
 import { MatrixClient } from 'matrix-js-sdk/src/client';
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -23,6 +24,8 @@ import { _t } from '../../../../languageHandler';
 import * as MegolmExportEncryption from '../../../../utils/MegolmExportEncryption';
 import { IDialogProps } from "../../../../components/views/dialogs/IDialogProps";
 import BaseDialog from "../../../../components/views/dialogs/BaseDialog";
+import Field from "../../../../components/views/elements/Field";
+import { KeysStartingWith } from "../../../../@types/common";
 
 enum Phase {
     Edit = "edit",
@@ -36,12 +39,14 @@ interface IProps extends IDialogProps {
 interface IState {
     phase: Phase;
     errStr: string;
+    passphrase1: string;
+    passphrase2: string;
 }
+
+type AnyPassphrase = KeysStartingWith<IState, "passphrase">;
 
 export default class ExportE2eKeysDialog extends React.Component<IProps, IState> {
     private unmounted = false;
-    private passphrase1 = createRef<HTMLInputElement>();
-    private passphrase2 = createRef<HTMLInputElement>();
 
     constructor(props: IProps) {
         super(props);
@@ -49,6 +54,8 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
         this.state = {
             phase: Phase.Edit,
             errStr: null,
+            passphrase1: "",
+            passphrase2: "",
         };
     }
 
@@ -59,8 +66,8 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
     private onPassphraseFormSubmit = (ev: React.FormEvent): boolean => {
         ev.preventDefault();
 
-        const passphrase = this.passphrase1.current.value;
-        if (passphrase !== this.passphrase2.current.value) {
+        const passphrase = this.state.passphrase1;
+        if (passphrase !== this.state.passphrase2) {
             this.setState({ errStr: _t('Passphrases must match') });
             return false;
         }
@@ -112,6 +119,12 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
         return false;
     };
 
+    private onPassphraseChange = (ev: React.ChangeEvent<HTMLInputElement>, phrase: AnyPassphrase) => {
+        this.setState({
+            [phrase]: ev.target.value,
+        } as Pick<IState, AnyPassphrase>);
+    };
+
     public render(): JSX.Element {
         const disableForm = (this.state.phase === Phase.Exporting);
 
@@ -146,36 +159,25 @@ export default class ExportE2eKeysDialog extends React.Component<IProps, IState>
                         </div>
                         <div className='mx_E2eKeysDialog_inputTable'>
                             <div className='mx_E2eKeysDialog_inputRow'>
-                                <div className='mx_E2eKeysDialog_inputLabel'>
-                                    <label htmlFor='passphrase1'>
-                                        { _t("Enter passphrase") }
-                                    </label>
-                                </div>
-                                <div className='mx_E2eKeysDialog_inputCell'>
-                                    <input
-                                        ref={this.passphrase1}
-                                        id='passphrase1'
-                                        autoFocus={true}
-                                        size={64}
-                                        type='password'
-                                        disabled={disableForm}
-                                    />
-                                </div>
+                                <Field
+                                    label={_t("Enter passphrase")}
+                                    value={this.state.passphrase1}
+                                    onChange={e => this.onPassphraseChange(e, "passphrase1")}
+                                    autoFocus={true}
+                                    size={64}
+                                    type="password"
+                                    disabled={disableForm}
+                                />
                             </div>
                             <div className='mx_E2eKeysDialog_inputRow'>
-                                <div className='mx_E2eKeysDialog_inputLabel'>
-                                    <label htmlFor='passphrase2'>
-                                        { _t("Confirm passphrase") }
-                                    </label>
-                                </div>
-                                <div className='mx_E2eKeysDialog_inputCell'>
-                                    <input ref={this.passphrase2}
-                                        id='passphrase2'
-                                        size={64}
-                                        type='password'
-                                        disabled={disableForm}
-                                    />
-                                </div>
+                                <Field
+                                    label={_t("Confirm passphrase")}
+                                    value={this.state.passphrase2}
+                                    onChange={e => this.onPassphraseChange(e, "passphrase2")}
+                                    size={64}
+                                    type="password"
+                                    disabled={disableForm}
+                                />
                             </div>
                         </div>
                     </div>

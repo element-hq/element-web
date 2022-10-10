@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeviceTypeIcon /> renders a verified device 1`] = `
+<div>
+  <div
+    class="mx_DeviceTypeIcon"
+  >
+    <div
+      class="mx_DeviceTypeIcon_deviceIconWrapper"
+    >
+      <div
+        aria-label="Unknown session type"
+        class="mx_DeviceTypeIcon_deviceIcon"
+        role="img"
+      />
+    </div>
+    <div
+      aria-label="Verified"
+      class="mx_DeviceTypeIcon_verificationIcon verified"
+      role="img"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceTypeIcon /> renders an unverified device 1`] = `
+<div>
+  <div
+    class="mx_DeviceTypeIcon"
+  >
+    <div
+      class="mx_DeviceTypeIcon_deviceIconWrapper"
+    >
+      <div
+        aria-label="Unknown session type"
+        class="mx_DeviceTypeIcon_deviceIcon"
+        role="img"
+      />
+    </div>
+    <div
+      aria-label="Unverified"
+      class="mx_DeviceTypeIcon_verificationIcon unverified"
+      role="img"
+    />
+  </div>
+</div>
+`;
+
+exports[`<DeviceTypeIcon /> renders correctly when selected 1`] = `
+<div>
+  <div
+    class="mx_DeviceTypeIcon mx_DeviceTypeIcon_selected"
+  >
+    <div
+      class="mx_DeviceTypeIcon_deviceIconWrapper"
+    >
+      <div
+        aria-label="Unknown session type"
+        class="mx_DeviceTypeIcon_deviceIcon"
+        role="img"
+      />
+    </div>
+    <div
+      aria-label="Unverified"
+      class="mx_DeviceTypeIcon_verificationIcon unverified"
+      role="img"
+    />
+  </div>
+</div>
+`;

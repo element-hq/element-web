@@ -109,7 +109,7 @@ describe("Lazy Loading", () => {
     }
 
     function openMemberlist(): void {
-        cy.get('.mx_HeaderButtons [aria-label="Room Info"]').click();
+        cy.get('.mx_HeaderButtons [aria-label="Room info"]').click();
         cy.get(".mx_RoomSummaryCard").within(() => {
             cy.get(".mx_RoomSummaryCard_icon_people").click();
         });

@@ -512,6 +512,7 @@ export default class WidgetUtils {
             'theme=$theme',
             'roomName=$roomName',
             `supportsScreensharing=${PlatformPeg.get().supportsJitsiScreensharing()}`,
+            'language=$org.matrix.msc2873.client_language',
         ];
         if (opts.auth) {
             queryStringParts.push(`auth=${opts.auth}`);

@@ -32,8 +32,10 @@ import SettingsStore from "../../../settings/SettingsStore";
 import { UIFeature } from "../../../settings/UIFeature";
 import BaseDialog from "./BaseDialog";
 import { Action } from '../../../dispatcher/actions';
+import { VoipRoomSettingsTab } from "../settings/tabs/room/VoipRoomSettingsTab";
 
 export const ROOM_GENERAL_TAB = "ROOM_GENERAL_TAB";
+export const ROOM_VOIP_TAB = "ROOM_VOIP_TAB";
 export const ROOM_SECURITY_TAB = "ROOM_SECURITY_TAB";
 export const ROOM_ROLES_TAB = "ROOM_ROLES_TAB";
 export const ROOM_NOTIFICATIONS_TAB = "ROOM_NOTIFICATIONS_TAB";
@@ -96,6 +98,14 @@ export default class RoomSettingsDialog extends React.Component<IProps, IState> 
             <GeneralRoomSettingsTab roomId={this.props.roomId} />,
             "RoomSettingsGeneral",
         ));
+        if (SettingsStore.getValue("feature_group_calls")) {
+            tabs.push(new Tab(
+                ROOM_VOIP_TAB,
+                _td("Voice & Video"),
+                "mx_RoomSettingsDialog_voiceIcon",
+                <VoipRoomSettingsTab roomId={this.props.roomId} />,
+            ));
+        }
         tabs.push(new Tab(
             ROOM_SECURITY_TAB,
             _td("Security & Privacy"),

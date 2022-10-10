@@ -26,6 +26,7 @@ import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import {
     PermissionChanged as PermissionChangedEvent,
 } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
+import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -47,6 +48,10 @@ import ErrorDialog from "./components/views/dialogs/ErrorDialog";
 import LegacyCallHandler from "./LegacyCallHandler";
 import VoipUserMapper from "./VoipUserMapper";
 import { localNotificationsAreSilenced } from "./utils/notifications";
+import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
+import ToastStore from "./stores/ToastStore";
+import { ElementCall } from "./models/Call";
+import { createLocalNotificationSettingsIfNeeded } from './utils/notifications';
 
 /*
  * Dispatches:
@@ -348,17 +353,25 @@ export const Notifier = {
         return this.toolbarHidden;
     },
 
-    onSyncStateChange: function(state: string) {
-        if (state === "SYNCING") {
+    onSyncStateChange: function(state: SyncState, prevState?: SyncState, data?: ISyncStateData) {
+        if (state === SyncState.Syncing) {
             this.isSyncing = true;
-        } else if (state === "STOPPED" || state === "ERROR") {
+        } else if (state === SyncState.Stopped || state === SyncState.Error) {
             this.isSyncing = false;
+        }
+
+        // wait for first non-cached sync to complete
+        if (
+            ![SyncState.Stopped, SyncState.Error].includes(state) &&
+            !data?.fromCache
+        ) {
+            createLocalNotificationSettingsIfNeeded(MatrixClientPeg.get());
         }
     },
 
     onEvent: function(ev: MatrixEvent) {
         if (!this.isSyncing) return; // don't alert for any messages initially
-        if (ev.getSender() === MatrixClientPeg.get().credentials.userId) return;
+        if (ev.getSender() === MatrixClientPeg.get().getUserId()) return;
 
         MatrixClientPeg.get().decryptEventIfNeeded(ev);
 
@@ -419,6 +432,8 @@ export const Notifier = {
 
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
         if (actions?.notify) {
+            this._performCustomEventHandling(ev);
+
             if (RoomViewStore.instance.getRoomId() === room.roomId &&
                 UserActivity.sharedInstance().userActiveRecently() &&
                 !Modal.hasDialogs()
@@ -434,6 +449,24 @@ export const Notifier = {
                 PlatformPeg.get().loudNotification(ev, room);
                 this._playAudioNotification(ev, room);
             }
+        }
+    },
+
+    /**
+     * Some events require special handling such as showing in-app toasts
+     */
+    _performCustomEventHandling: function(ev: MatrixEvent) {
+        if (
+            ElementCall.CALL_EVENT_TYPE.names.includes(ev.getType())
+            && SettingsStore.getValue("feature_group_calls")
+        ) {
+            ToastStore.sharedInstance().addOrReplaceToast({
+                key: getIncomingCallToastKey(ev.getStateKey()),
+                priority: 100,
+                component: IncomingCallToast,
+                bodyClassName: "mx_IncomingCallToast",
+                props: { callEvent: ev },
+            });
         }
     },
 };

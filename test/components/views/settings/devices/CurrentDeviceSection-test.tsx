@@ -19,6 +19,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 
 import CurrentDeviceSection from '../../../../../src/components/views/settings/devices/CurrentDeviceSection';
+import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
 
 describe('<CurrentDeviceSection />', () => {
     const deviceId = 'alices_device';
@@ -26,10 +27,12 @@ describe('<CurrentDeviceSection />', () => {
     const alicesVerifiedDevice = {
         device_id: deviceId,
         isVerified: false,
+        deviceType: DeviceType.Unknown,
     };
     const alicesUnverifiedDevice = {
         device_id: deviceId,
         isVerified: false,
+        deviceType: DeviceType.Unknown,
     };
 
     const defaultProps = {

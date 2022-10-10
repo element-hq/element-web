@@ -16,14 +16,17 @@ limitations under the License.
 
 import { IMyDevice } from "matrix-js-sdk/src/matrix";
 
+import { ExtendedDeviceInformation } from "../../../../utils/device/parseUserAgent";
+
 export type DeviceWithVerification = IMyDevice & { isVerified: boolean | null };
-export type ExtendedDeviceInfo = {
-    clientName?: string;
-    clientVersion?: string;
+export type ExtendedDeviceAppInfo = {
+    // eg Element Web
+    appName?: string;
+    appVersion?: string;
     url?: string;
 };
-export type ExtendedDevice = DeviceWithVerification & ExtendedDeviceInfo;
-export type DevicesDictionary = Record<DeviceWithVerification['device_id'], ExtendedDevice>;
+export type ExtendedDevice = DeviceWithVerification & ExtendedDeviceAppInfo & ExtendedDeviceInformation;
+export type DevicesDictionary = Record<ExtendedDevice['device_id'], ExtendedDevice>;
 
 export enum DeviceSecurityVariation {
     Verified = 'Verified',

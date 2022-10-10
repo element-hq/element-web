@@ -7,16 +7,20 @@ exports[`<DeviceTile /> renders a device with no metadata 1`] = `
     data-testid="device-tile-123"
   >
     <div
-      class="mx_DeviceType"
+      class="mx_DeviceTypeIcon"
     >
       <div
-        aria-label="Unknown device type"
-        class="mx_DeviceType_deviceIcon"
-        role="img"
-      />
+        class="mx_DeviceTypeIcon_deviceIconWrapper"
+      >
+        <div
+          aria-label="Unknown session type"
+          class="mx_DeviceTypeIcon_deviceIcon"
+          role="img"
+        />
+      </div>
       <div
         aria-label="Unverified"
-        class="mx_DeviceType_verificationIcon unverified"
+        class="mx_DeviceTypeIcon_verificationIcon unverified"
         role="img"
       />
     </div>
@@ -58,16 +62,20 @@ exports[`<DeviceTile /> renders a verified device with no metadata 1`] = `
     data-testid="device-tile-123"
   >
     <div
-      class="mx_DeviceType"
+      class="mx_DeviceTypeIcon"
     >
       <div
-        aria-label="Unknown device type"
-        class="mx_DeviceType_deviceIcon"
-        role="img"
-      />
+        class="mx_DeviceTypeIcon_deviceIconWrapper"
+      >
+        <div
+          aria-label="Unknown session type"
+          class="mx_DeviceTypeIcon_deviceIcon"
+          role="img"
+        />
+      </div>
       <div
         aria-label="Unverified"
-        class="mx_DeviceType_verificationIcon unverified"
+        class="mx_DeviceTypeIcon_verificationIcon unverified"
         role="img"
       />
     </div>
@@ -109,16 +117,20 @@ exports[`<DeviceTile /> renders display name with a tooltip 1`] = `
     data-testid="device-tile-123"
   >
     <div
-      class="mx_DeviceType"
+      class="mx_DeviceTypeIcon"
     >
       <div
-        aria-label="Unknown device type"
-        class="mx_DeviceType_deviceIcon"
-        role="img"
-      />
+        class="mx_DeviceTypeIcon_deviceIconWrapper"
+      >
+        <div
+          aria-label="Unknown session type"
+          class="mx_DeviceTypeIcon_deviceIcon"
+          role="img"
+        />
+      </div>
       <div
         aria-label="Unverified"
-        class="mx_DeviceType_verificationIcon unverified"
+        class="mx_DeviceTypeIcon_verificationIcon unverified"
         role="img"
       />
     </div>
@@ -160,16 +172,20 @@ exports[`<DeviceTile /> separates metadata with a dot 1`] = `
     data-testid="device-tile-123"
   >
     <div
-      class="mx_DeviceType"
+      class="mx_DeviceTypeIcon"
     >
       <div
-        aria-label="Unknown device type"
-        class="mx_DeviceType_deviceIcon"
-        role="img"
-      />
+        class="mx_DeviceTypeIcon_deviceIconWrapper"
+      >
+        <div
+          aria-label="Unknown session type"
+          class="mx_DeviceTypeIcon_deviceIcon"
+          role="img"
+        />
+      </div>
       <div
         aria-label="Unverified"
-        class="mx_DeviceType_verificationIcon unverified"
+        class="mx_DeviceTypeIcon_verificationIcon unverified"
         role="img"
       />
     </div>

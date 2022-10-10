@@ -17,14 +17,16 @@ limitations under the License.
 import { useState, useCallback } from "react";
 
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
-import type { Call, ConnectionState } from "../models/Call";
+import { Call, ConnectionState, ElementCall, Layout } from "../models/Call";
 import { useTypedEventEmitterState } from "./useEventEmitter";
 import { CallEvent } from "../models/Call";
 import { CallStore, CallStoreEvent } from "../stores/CallStore";
 import { useEventEmitter } from "./useEventEmitter";
+import SdkConfig, { DEFAULTS } from "../SdkConfig";
+import { _t } from "../languageHandler";
 
 export const useCall = (roomId: string): Call | null => {
-    const [call, setCall] = useState(() => CallStore.instance.get(roomId));
+    const [call, setCall] = useState(() => CallStore.instance.getCall(roomId));
     useEventEmitter(CallStore.instance, CallStoreEvent.Call, (call: Call | null, forRoomId: string) => {
         if (forRoomId === roomId) setCall(call);
     });
@@ -43,4 +45,29 @@ export const useParticipants = (call: Call): Set<RoomMember> =>
         call,
         CallEvent.Participants,
         useCallback(state => state ?? call.participants, [call]),
+    );
+
+export const useFull = (call: Call): boolean => {
+    const participants = useParticipants(call);
+
+    return (
+        participants.size
+        >= (SdkConfig.get("element_call").participant_limit ?? DEFAULTS.element_call.participant_limit)
+    );
+};
+
+export const useJoinCallButtonDisabledTooltip = (call: Call): string | null => {
+    const isFull = useFull(call);
+    const state = useConnectionState(call);
+
+    if (state === ConnectionState.Connecting) return _t("Connecting");
+    if (isFull) return _t("Sorry — this call is currently full");
+    return null;
+};
+
+export const useLayout = (call: ElementCall): Layout =>
+    useTypedEventEmitterState(
+        call,
+        CallEvent.Layout,
+        useCallback(state => state ?? call.layout, [call]),
     );

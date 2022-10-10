@@ -25,6 +25,8 @@ import { Room } from "matrix-js-sdk/src/models/room";
 import { RoomStateEvent } from "matrix-js-sdk/src/models/room-state";
 import { PendingEventOrdering } from "matrix-js-sdk/src/client";
 import { CallType } from "matrix-js-sdk/src/webrtc/call";
+import { ClientWidgetApi, Widget } from "matrix-widget-api";
+import EventEmitter from "events";
 
 import type { MatrixClient } from "matrix-js-sdk/src/client";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
@@ -53,6 +55,10 @@ import LegacyCallHandler from "../../../../src/LegacyCallHandler";
 import defaultDispatcher from "../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../src/dispatcher/actions";
 import WidgetStore from "../../../../src/stores/WidgetStore";
+import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
+import WidgetUtils from "../../../../src/utils/WidgetUtils";
+import { ElementWidgetActions } from "../../../../src/stores/widgets/ElementWidgetActions";
+import MediaDeviceHandler, { MediaDeviceKindEnum } from "../../../../src/MediaDeviceHandler";
 
 describe('RoomHeader (Enzyme)', () => {
     it('shows the room avatar in a room with only ourselves', () => {
@@ -173,13 +179,13 @@ describe('RoomHeader (Enzyme)', () => {
     it("should render buttons if not passing showButtons (default true)", () => {
         const room = createRoom({ name: "Room", isDm: false, userIds: [] });
         const wrapper = mountHeader(room);
-        expect(wrapper.find(".mx_RoomHeader_buttons")).toHaveLength(1);
+        expect(wrapper.find(".mx_RoomHeader_button")).not.toHaveLength(0);
     });
 
     it("should not render buttons if passing showButtons = false", () => {
         const room = createRoom({ name: "Room", isDm: false, userIds: [] });
         const wrapper = mountHeader(room, { showButtons: false });
-        expect(wrapper.find(".mx_RoomHeader_buttons")).toHaveLength(0);
+        expect(wrapper.find(".mx_RoomHeader_button")).toHaveLength(0);
     });
 
     it("should render the room options context menu if not passing enableRoomOptionsMenu (default true)", () => {
@@ -252,6 +258,8 @@ function mountHeader(room: Room, propsOverride = {}, roomContext?: Partial<IRoom
             searchScope: SearchScope.Room,
             searchCount: 0,
         },
+        viewingCall: false,
+        activeCall: null,
         ...propsOverride,
     };
 
@@ -381,6 +389,12 @@ describe("RoomHeader (React Testing Library)", () => {
         await Promise.all([CallStore.instance, WidgetStore.instance].map(
             store => setupAsyncStoreWithClient(store, client),
         ));
+
+        jest.spyOn(MediaDeviceHandler, "getDevices").mockResolvedValue({
+            [MediaDeviceKindEnum.AudioInput]: [],
+            [MediaDeviceKindEnum.VideoInput]: [],
+            [MediaDeviceKindEnum.AudioOutput]: [],
+        });
     });
 
     afterEach(async () => {
@@ -419,6 +433,32 @@ describe("RoomHeader (React Testing Library)", () => {
     const mockLegacyCall = () => {
         jest.spyOn(LegacyCallHandler.instance, "getCallForRoom").mockReturnValue({} as unknown as MatrixCall);
     };
+    const withCall = async (fn: (call: ElementCall) => (void | Promise<void>)): Promise<void> => {
+        await ElementCall.create(room);
+        const call = CallStore.instance.getCall(room.roomId);
+        if (!(call instanceof ElementCall)) throw new Error("Failed to create call");
+
+        const widget = new Widget(call.widget);
+
+        const eventEmitter = new EventEmitter();
+        const messaging = {
+            on: eventEmitter.on.bind(eventEmitter),
+            off: eventEmitter.off.bind(eventEmitter),
+            once: eventEmitter.once.bind(eventEmitter),
+            emit: eventEmitter.emit.bind(eventEmitter),
+            stop: jest.fn(),
+            transport: {
+                send: jest.fn(),
+                reply: jest.fn(),
+            },
+        } as unknown as Mocked<ClientWidgetApi>;
+        WidgetMessagingStore.instance.storeMessaging(widget, call.roomId, messaging);
+
+        await fn(call);
+
+        call.destroy();
+        WidgetMessagingStore.instance.stopMessaging(widget, call.roomId);
+    };
 
     const renderHeader = (props: Partial<RoomHeaderProps> = {}, roomContext: Partial<IRoomState> = {}) => {
         render(
@@ -437,6 +477,8 @@ describe("RoomHeader (React Testing Library)", () => {
                         searchScope: SearchScope.Room,
                         searchCount: 0,
                     }}
+                    viewingCall={false}
+                    activeCall={null}
                     {...props}
                 />
             </RoomContext.Provider>,
@@ -463,7 +505,9 @@ describe("RoomHeader (React Testing Library)", () => {
         + "and there's an ongoing call",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put({ element_call: { url: "https://call.element.io", use_exclusively: true } });
+            SdkConfig.put(
+                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
+            );
             await ElementCall.create(room);
 
             renderHeader();
@@ -477,7 +521,9 @@ describe("RoomHeader (React Testing Library)", () => {
         + "use Element Call exclusively",
         async () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put({ element_call: { url: "https://call.element.io", use_exclusively: true } });
+            SdkConfig.put(
+                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
+            );
 
             renderHeader();
             expect(screen.queryByRole("button", { name: "Voice call" })).toBeNull();
@@ -499,7 +545,9 @@ describe("RoomHeader (React Testing Library)", () => {
         + "and the user lacks permission",
         () => {
             mockEnabledSettings(["showCallButtonsInComposer", "feature_group_calls"]);
-            SdkConfig.put({ element_call: { url: "https://call.element.io", use_exclusively: true } });
+            SdkConfig.put(
+                { element_call: { url: "https://call.element.io", use_exclusively: true, brand: "Element Call" } },
+            );
             mockEventPowerLevels({ [ElementCall.CALL_EVENT_TYPE.name]: 100 });
 
             renderHeader();
@@ -723,5 +771,100 @@ describe("RoomHeader (React Testing Library)", () => {
         renderHeader();
         expect(screen.getByRole("button", { name: "Voice call" })).toHaveAttribute("aria-disabled", "true");
         expect(screen.getByRole("button", { name: "Video call" })).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("shows a close button when viewing a call lobby that returns to the timeline when pressed", async () => {
+        mockEnabledSettings(["feature_group_calls"]);
+
+        renderHeader({ viewingCall: true });
+
+        const dispatcherSpy = jest.fn();
+        const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+        fireEvent.click(screen.getByRole("button", { name: /close/i }));
+        await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
+            action: Action.ViewRoom,
+            room_id: room.roomId,
+            view_call: false,
+        }));
+        defaultDispatcher.unregister(dispatcherRef);
+    });
+
+    it("shows a reduce button when viewing a call that returns to the timeline when pressed", async () => {
+        mockEnabledSettings(["feature_group_calls"]);
+
+        await withCall(async call => {
+            renderHeader({ viewingCall: true, activeCall: call });
+
+            const dispatcherSpy = jest.fn();
+            const dispatcherRef = defaultDispatcher.register(dispatcherSpy);
+            fireEvent.click(screen.getByRole("button", { name: /timeline/i }));
+            await waitFor(() => expect(dispatcherSpy).toHaveBeenCalledWith({
+                action: Action.ViewRoom,
+                room_id: room.roomId,
+                view_call: false,
+            }));
+            defaultDispatcher.unregister(dispatcherRef);
+        });
+    });
+
+    it("shows a layout button when viewing a call that shows a menu when pressed", async () => {
+        mockEnabledSettings(["feature_group_calls"]);
+
+        await withCall(async call => {
+            await call.connect();
+            const messaging = WidgetMessagingStore.instance.getMessagingForUid(WidgetUtils.getWidgetUid(call.widget));
+            renderHeader({ viewingCall: true, activeCall: call });
+
+            // Should start with Freedom selected
+            fireEvent.click(screen.getByRole("button", { name: /layout/i }));
+            screen.getByRole("menuitemradio", { name: "Freedom", checked: true });
+
+            // Clicking Spotlight should tell the widget to switch and close the menu
+            fireEvent.click(screen.getByRole("menuitemradio", { name: "Spotlight" }));
+            expect(mocked(messaging.transport).send).toHaveBeenCalledWith(ElementWidgetActions.SpotlightLayout, {});
+            expect(screen.queryByRole("menu")).toBeNull();
+
+            // When the widget responds and the user reopens the menu, they should see Spotlight selected
+            act(() => {
+                messaging.emit(
+                    `action:${ElementWidgetActions.SpotlightLayout}`,
+                    new CustomEvent("widgetapirequest", { detail: { data: {} } }),
+                );
+            });
+            fireEvent.click(screen.getByRole("button", { name: /layout/i }));
+            screen.getByRole("menuitemradio", { name: "Spotlight", checked: true });
+
+            // Now try switching back to Freedom
+            fireEvent.click(screen.getByRole("menuitemradio", { name: "Freedom" }));
+            expect(mocked(messaging.transport).send).toHaveBeenCalledWith(ElementWidgetActions.TileLayout, {});
+            expect(screen.queryByRole("menu")).toBeNull();
+
+            // When the widget responds and the user reopens the menu, they should see Freedom selected
+            act(() => {
+                messaging.emit(
+                    `action:${ElementWidgetActions.TileLayout}`,
+                    new CustomEvent("widgetapirequest", { detail: { data: {} } }),
+                );
+            });
+            fireEvent.click(screen.getByRole("button", { name: /layout/i }));
+            screen.getByRole("menuitemradio", { name: "Freedom", checked: true });
+        });
+    });
+
+    it("shows an invite button in video rooms", () => {
+        mockEnabledSettings(["feature_video_rooms", "feature_element_call_video_rooms"]);
+        mockRoomType(RoomType.UnstableCall);
+
+        const onInviteClick = jest.fn();
+        renderHeader({ onInviteClick, viewingCall: true });
+
+        fireEvent.click(screen.getByRole("button", { name: /invite/i }));
+        expect(onInviteClick).toHaveBeenCalled();
+    });
+
+    it("hides the invite button in non-video rooms when viewing a call", () => {
+        renderHeader({ onInviteClick: () => {}, viewingCall: true });
+
+        expect(screen.queryByRole("button", { name: /invite/i })).toBeNull();
     });
 });

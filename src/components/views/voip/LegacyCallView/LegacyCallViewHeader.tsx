@@ -32,7 +32,7 @@ const LegacyCallViewHeaderControls: React.FC<LegacyCallControlsProps> = ({ onExp
         { onMaximize && <AccessibleTooltipButton
             className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_fullscreen"
             onClick={onMaximize}
-            title={_t("Fill Screen")}
+            title={_t("Fill screen")}
         /> }
         { onPin && <AccessibleTooltipButton
             className="mx_LegacyCallViewHeader_button mx_LegacyCallViewHeader_button_pin"

@@ -20,6 +20,7 @@ import { act, fireEvent, render } from '@testing-library/react';
 import { FilteredDeviceList } from '../../../../../src/components/views/settings/devices/FilteredDeviceList';
 import { DeviceSecurityVariation } from '../../../../../src/components/views/settings/devices/types';
 import { flushPromises, mockPlatformPeg } from '../../../../test-utils';
+import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
 
 mockPlatformPeg();
 
@@ -31,14 +32,26 @@ describe('<FilteredDeviceList />', () => {
         last_seen_ip: '123.456.789',
         display_name: 'My Device',
         isVerified: true,
+        deviceType: DeviceType.Unknown,
     };
-    const unverifiedNoMetadata = { device_id: 'unverified-no-metadata', isVerified: false };
-    const verifiedNoMetadata = { device_id: 'verified-no-metadata', isVerified: true };
-    const hundredDaysOld = { device_id: '100-days-old', isVerified: true, last_seen_ts: Date.now() - (MS_DAY * 100) };
+    const unverifiedNoMetadata = {
+        device_id: 'unverified-no-metadata',
+        isVerified: false,
+        deviceType: DeviceType.Unknown };
+    const verifiedNoMetadata = {
+        device_id: 'verified-no-metadata',
+        isVerified: true,
+        deviceType: DeviceType.Unknown };
+    const hundredDaysOld = {
+        device_id: '100-days-old',
+        isVerified: true,
+        last_seen_ts: Date.now() - (MS_DAY * 100),
+        deviceType: DeviceType.Unknown };
     const hundredDaysOldUnverified = {
         device_id: 'unverified-100-days-old',
         isVerified: false,
         last_seen_ts: Date.now() - (MS_DAY * 100),
+        deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
         onFilterChange: jest.fn(),

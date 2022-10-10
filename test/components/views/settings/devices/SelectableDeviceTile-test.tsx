@@ -19,6 +19,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 
 import SelectableDeviceTile from '../../../../../src/components/views/settings/devices/SelectableDeviceTile';
+import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
 
 describe('<SelectableDeviceTile />', () => {
     const device = {
@@ -26,6 +27,7 @@ describe('<SelectableDeviceTile />', () => {
         device_id: 'my-device',
         last_seen_ip: '123.456.789',
         isVerified: false,
+        deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
         onClick: jest.fn(),

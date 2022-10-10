@@ -31,7 +31,7 @@ import type { Room } from "matrix-js-sdk/src/models/room";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import type { ClientWidgetApi } from "matrix-widget-api";
 import type { IApp } from "../stores/WidgetStore";
-import SdkConfig from "../SdkConfig";
+import SdkConfig, { DEFAULTS } from "../SdkConfig";
 import SettingsStore from "../settings/SettingsStore";
 import MediaDeviceHandler, { MediaDeviceKindEnum } from "../MediaDeviceHandler";
 import { timeout } from "../utils/promise";
@@ -71,15 +71,22 @@ export enum ConnectionState {
 export const isConnected = (state: ConnectionState): boolean =>
     state === ConnectionState.Connected || state === ConnectionState.Disconnecting;
 
+export enum Layout {
+    Tile = "tile",
+    Spotlight = "spotlight",
+}
+
 export enum CallEvent {
     ConnectionState = "connection_state",
     Participants = "participants",
+    Layout = "layout",
     Destroy = "destroy",
 }
 
 interface CallEventHandlerMap {
     [CallEvent.ConnectionState]: (state: ConnectionState, prevState: ConnectionState) => void;
     [CallEvent.Participants]: (participants: Set<RoomMember>, prevParticipants: Set<RoomMember>) => void;
+    [CallEvent.Layout]: (layout: Layout) => void;
     [CallEvent.Destroy]: () => void;
 }
 
@@ -110,7 +117,7 @@ export abstract class Call extends TypedEventEmitter<CallEvent, CallEventHandler
         return this.widget.roomId;
     }
 
-    private _connectionState: ConnectionState = ConnectionState.Disconnected;
+    private _connectionState = ConnectionState.Disconnected;
     public get connectionState(): ConnectionState {
         return this._connectionState;
     }
@@ -604,9 +611,18 @@ export class ElementCall extends Call {
     private participantsExpirationTimer: number | null = null;
     private terminationTimer: number | null = null;
 
+    private _layout = Layout.Tile;
+    public get layout(): Layout {
+        return this._layout;
+    }
+    protected set layout(value: Layout) {
+        this._layout = value;
+        this.emit(CallEvent.Layout, value);
+    }
+
     private constructor(public readonly groupCall: MatrixEvent, client: MatrixClient) {
         // Splice together the Element Call URL for this call
-        const url = new URL(SdkConfig.get("element_call").url);
+        const url = new URL(SdkConfig.get("element_call").url ?? DEFAULTS.element_call.url);
         url.pathname = "/room";
         const params = new URLSearchParams({
             embed: "",
@@ -779,6 +795,8 @@ export class ElementCall extends Call {
         }
 
         this.messaging!.on(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
+        this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
     }
 
     protected async performDisconnection(): Promise<void> {
@@ -791,6 +809,8 @@ export class ElementCall extends Call {
 
     public setDisconnected() {
         this.messaging!.off(`action:${ElementWidgetActions.HangupCall}`, this.onHangup);
+        this.messaging!.on(`action:${ElementWidgetActions.TileLayout}`, this.onTileLayout);
+        this.messaging!.on(`action:${ElementWidgetActions.SpotlightLayout}`, this.onSpotlightLayout);
         super.setDisconnected();
     }
 
@@ -810,6 +830,18 @@ export class ElementCall extends Call {
         }
 
         super.destroy();
+    }
+
+    /**
+     * Sets the call's layout.
+     * @param layout The layout to switch to.
+     */
+    public async setLayout(layout: Layout): Promise<void> {
+        const action = layout === Layout.Tile
+            ? ElementWidgetActions.TileLayout
+            : ElementWidgetActions.SpotlightLayout;
+
+        await this.messaging!.transport.send(action, {});
     }
 
     private get mayTerminate(): boolean {
@@ -868,5 +900,17 @@ export class ElementCall extends Call {
         ev.preventDefault();
         await this.messaging!.transport.reply(ev.detail, {}); // ack
         this.setDisconnected();
+    };
+
+    private onTileLayout = async (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
+        this.layout = Layout.Tile;
+        await this.messaging!.transport.reply(ev.detail, {}); // ack
+    };
+
+    private onSpotlightLayout = async (ev: CustomEvent<IWidgetApiRequest>) => {
+        ev.preventDefault();
+        this.layout = Layout.Spotlight;
+        await this.messaging!.transport.reply(ev.detail, {}); // ack
     };
 }

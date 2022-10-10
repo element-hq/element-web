@@ -188,8 +188,6 @@ interface IState {
     currentRoomId?: string;
     // If we're trying to just view a user ID (i.e. /user URL), this is it
     currentUserId?: string;
-    // Group ID for legacy "communities don't exist" page
-    currentGroupId?: string;
     // this is persisted as mx_lhs_size, loaded in LoggedInView
     collapseLhs: boolean;
     // Parameters used in the registration dance with the IS
@@ -679,9 +677,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 }
                 break;
             }
-            case 'view_legacy_group':
-                this.viewLegacyGroup(payload.groupId);
-                break;
             case Action.ViewUserSettings: {
                 const tabPayload = payload as OpenToTabPayload;
                 Modal.createDialog(UserSettingsDialog,
@@ -1021,16 +1016,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
             this.setState({ currentUserId: userId });
             this.setPage(PageType.UserView);
         });
-    }
-
-    private viewLegacyGroup(groupId: string) {
-        this.setStateForNewView({
-            view: Views.LOGGED_IN,
-            currentRoomId: null,
-            currentGroupId: groupId,
-        });
-        this.notifyNewScreen('group/' + groupId);
-        this.setPage(PageType.LegacyGroupView);
     }
 
     private async createRoom(defaultPublic = false, defaultName?: string, type?: RoomType) {
@@ -1802,12 +1787,6 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 action: 'view_user_info',
                 userId: userId,
                 subAction: params.action,
-            });
-        } else if (screen.indexOf('group/') === 0) {
-            const groupId = screen.substring(6);
-            dis.dispatch({
-                action: 'view_legacy_group',
-                groupId: groupId,
             });
         } else {
             logger.info("Ignoring showScreen for '%s'", screen);

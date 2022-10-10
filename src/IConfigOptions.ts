@@ -117,8 +117,10 @@ export interface IConfigOptions {
         obey_asserted_identity?: boolean; // MSC3086
     };
     element_call: {
-        url: string;
-        use_exclusively: boolean;
+        url?: string;
+        use_exclusively?: boolean;
+        participant_limit?: number;
+        brand?: string;
     };
 
     logout_redirect_url?: string;
@@ -179,9 +181,6 @@ export interface IConfigOptions {
 
     sync_timeline_limit?: number;
     dangerously_allow_unsafe_and_insecure_passwords?: boolean; // developer option
-
-    // XXX: Undocumented URL for the "Learn more about spaces" link in the "Communities don't exist" messaging.
-    spaces_learn_more_url?: string;
 }
 
 export interface ISsoRedirectOptions {

@@ -20,7 +20,7 @@ import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Call, ConnectionState } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
-import { useCall, useConnectionState, useParticipants } from "../../../hooks/useCall";
+import { useCall, useConnectionState, useJoinCallButtonDisabledTooltip, useParticipants } from "../../../hooks/useCall";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
@@ -28,9 +28,9 @@ import type { ButtonEvent } from "../elements/AccessibleButton";
 import MemberAvatar from "../avatars/MemberAvatar";
 import { LiveContentSummary, LiveContentType } from "../rooms/LiveContentSummary";
 import FacePile from "../elements/FacePile";
-import AccessibleButton from "../elements/AccessibleButton";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
 import { CallDuration, CallDurationFromEvent } from "../voip/CallDuration";
+import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 
 const MAX_FACES = 8;
 
@@ -39,6 +39,8 @@ interface ActiveCallEventProps {
     participants: Set<RoomMember>;
     buttonText: string;
     buttonKind: string;
+    buttonTooltip?: string;
+    buttonDisabled?: boolean;
     onButtonClick: ((ev: ButtonEvent) => void) | null;
 }
 
@@ -49,6 +51,8 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
             participants,
             buttonText,
             buttonKind,
+            buttonDisabled,
+            buttonTooltip,
             onButtonClick,
         },
         ref,
@@ -80,14 +84,15 @@ const ActiveCallEvent = forwardRef<any, ActiveCallEventProps>(
                     <FacePile members={facePileMembers} faceSize={24} overflow={facePileOverflow} />
                 </div>
                 <CallDurationFromEvent mxEvent={mxEvent} />
-                <AccessibleButton
+                <AccessibleTooltipButton
                     className="mx_CallEvent_button"
                     kind={buttonKind}
-                    disabled={onButtonClick === null}
+                    disabled={onButtonClick === null || buttonDisabled}
                     onClick={onButtonClick}
+                    tooltip={buttonTooltip}
                 >
                     { buttonText }
-                </AccessibleButton>
+                </AccessibleTooltipButton>
             </div>
         </div>;
     },
@@ -101,6 +106,7 @@ interface ActiveLoadedCallEventProps {
 const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxEvent, call }, ref) => {
     const connectionState = useConnectionState(call);
     const participants = useParticipants(call);
+    const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
 
     const connect = useCallback((ev: ButtonEvent) => {
         ev.preventDefault();
@@ -132,6 +138,8 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
         participants={participants}
         buttonText={buttonText}
         buttonKind={buttonKind}
+        buttonDisabled={Boolean(joinCallButtonDisabledTooltip)}
+        buttonTooltip={joinCallButtonDisabledTooltip}
         onButtonClick={onButtonClick}
     />;
 });

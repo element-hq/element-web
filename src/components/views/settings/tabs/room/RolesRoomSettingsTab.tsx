@@ -31,6 +31,8 @@ import PowerSelector from "../../../elements/PowerSelector";
 import SettingsFieldset from '../../SettingsFieldset';
 import SettingsStore from "../../../../../settings/SettingsStore";
 import { VoiceBroadcastInfoEventType } from '../../../../../voice-broadcast';
+import { ElementCall } from "../../../../../models/Call";
+import SdkConfig, { DEFAULTS } from "../../../../../SdkConfig";
 
 interface IEventShowOpts {
     isState?: boolean;
@@ -59,6 +61,10 @@ const plEventsToShow: Record<string, IEventShowOpts> = {
     [EventType.RoomPinnedEvents]: { isState: true, hideForSpace: true },
     [EventType.Reaction]: { isState: false, hideForSpace: true },
     [EventType.RoomRedaction]: { isState: false, hideForSpace: true },
+
+    // MSC3401: Native Group VoIP signaling
+    [ElementCall.CALL_EVENT_TYPE.name]: { isState: true, hideForSpace: true },
+    [ElementCall.MEMBER_EVENT_TYPE.name]: { isState: true, hideForSpace: true },
 
     // TODO: Enable support for m.widget event type (https://github.com/vector-im/element-web/issues/13111)
     "im.vector.modular.widgets": { isState: true, hideForSpace: true },
@@ -252,6 +258,11 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
         if (SettingsStore.getValue("feature_pinning")) {
             plEventsToLabels[EventType.RoomPinnedEvents] = _td("Manage pinned events");
         }
+        // MSC3401: Native Group VoIP signaling
+        if (SettingsStore.getValue("feature_group_calls")) {
+            plEventsToLabels[ElementCall.CALL_EVENT_TYPE.name] = _td("Start %(brand)s calls");
+            plEventsToLabels[ElementCall.MEMBER_EVENT_TYPE.name] = _td("Join %(brand)s calls");
+        }
 
         const powerLevelDescriptors: Record<string, IPowerLevelDescriptor> = {
             "users_default": {
@@ -435,7 +446,8 @@ export default class RolesRoomSettingsTab extends React.Component<IProps> {
 
             let label = plEventsToLabels[eventType];
             if (label) {
-                label = _t(label);
+                const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
+                label = _t(label, { brand });
             } else {
                 label = _t("Send %(eventType)s events", { eventType });
             }

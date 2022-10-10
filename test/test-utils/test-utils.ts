@@ -160,6 +160,7 @@ export function createTestClient(): MatrixClient {
         getIdentityAccount: jest.fn().mockResolvedValue({}),
         getTerms: jest.fn().mockResolvedValueOnce(undefined),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(undefined),
+        isVersionSupported: jest.fn().mockResolvedValue(undefined),
         getPushRules: jest.fn().mockResolvedValue(undefined),
         getPushers: jest.fn().mockResolvedValue({ pushers: [] }),
         getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),

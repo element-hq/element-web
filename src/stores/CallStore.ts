@@ -73,7 +73,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
             await Promise.all([
                 ...uncleanlyDisconnectedRoomIds.map(async uncleanlyDisconnectedRoomId => {
                     logger.log(`Cleaning up call state for room ${uncleanlyDisconnectedRoomId}`);
-                    await this.get(uncleanlyDisconnectedRoomId)?.clean();
+                    await this.getCall(uncleanlyDisconnectedRoomId)?.clean();
                 }),
                 SettingsStore.setValue("activeCallRoomIds", null, SettingLevel.DEVICE, []),
             ]);
@@ -152,18 +152,18 @@ export class CallStore extends AsyncStoreWithClient<{}> {
      * @param {string} roomId The room's ID.
      * @returns {Call | null} The call.
      */
-    public get(roomId: string): Call | null {
+    public getCall(roomId: string): Call | null {
         return this.calls.get(roomId) ?? null;
     }
 
     /**
-     * Determines whether the given room has an active call.
+     * Gets the active call associated with the given room, if any.
      * @param roomId The room's ID.
-     * @returns Whether the given room has an active call.
+     * @returns The active call.
      */
-    public hasActiveCall(roomId: string): boolean {
-        const call = this.get(roomId);
-        return call !== null && this.activeCalls.has(call);
+    public getActiveCall(roomId: string): Call | null {
+        const call = this.getCall(roomId);
+        return call !== null && this.activeCalls.has(call) ? call : null;
     }
 
     private onRoom = (room: Room) => this.updateRoom(room);

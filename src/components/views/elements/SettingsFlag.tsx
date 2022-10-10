@@ -114,7 +114,7 @@ export default class SettingsFlag extends React.Component<IProps, IState> {
                         checked={this.state.value}
                         onChange={this.onChange}
                         disabled={this.props.disabled || !canChange}
-                        aria-label={label}
+                        title={label}
                     />
                 </div>
             );

@@ -24,7 +24,6 @@ import LegacyCallView from "./LegacyCallView";
 import { RoomViewStore } from '../../../stores/RoomViewStore';
 import LegacyCallHandler, { LegacyCallHandlerEvent } from '../../../LegacyCallHandler';
 import PersistentApp from "../elements/PersistentApp";
-import SettingsStore from "../../../settings/SettingsStore";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import PictureInPictureDragger from './PictureInPictureDragger';
 import dis from '../../../dispatcher/dispatcher';
@@ -35,6 +34,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from '../../../stores/Activ
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
+import { CallStore } from "../../../stores/CallStore";
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -116,7 +116,6 @@ function getPrimarySecondaryCallsForPip(roomId: string): [MatrixCall, MatrixCall
  */
 
 export default class PipView extends React.Component<IProps, IState> {
-    private settingsWatcherRef: string;
     private movePersistedElement = createRef<() => void>();
 
     constructor(props: IProps) {
@@ -157,7 +156,6 @@ export default class PipView extends React.Component<IProps, IState> {
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
         MatrixClientPeg.get().removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         RoomViewStore.instance.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
-        SettingsStore.unwatchSetting(this.settingsWatcherRef);
         const room = MatrixClientPeg.get().getRoom(this.state.viewedRoomId);
         if (room) {
             WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
@@ -278,6 +276,14 @@ export default class PipView extends React.Component<IProps, IState> {
         });
     };
 
+    private onViewCall = (): void =>
+        dis.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: this.state.persistentRoomId,
+            view_call: true,
+            metricsTrigger: undefined,
+        });
+
     // Accepts a persistentWidgetId to be able to skip awaiting the setState for persistentWidgetId
     public updateShowWidgetInPip(
         persistentWidgetId = this.state.persistentWidgetId,
@@ -323,18 +329,19 @@ export default class PipView extends React.Component<IProps, IState> {
                 mx_LegacyCallView_large: !pipMode,
             });
             const roomId = this.state.persistentRoomId;
-            const roomForWidget = MatrixClientPeg.get().getRoom(roomId);
+            const roomForWidget = MatrixClientPeg.get().getRoom(roomId)!;
             const viewingCallRoom = this.state.viewedRoomId === roomId;
+            const isCall = CallStore.instance.getActiveCall(roomId) !== null;
 
-            pipContent = ({ onStartMoving, _onResize }) =>
+            pipContent = ({ onStartMoving }) =>
                 <div className={pipViewClasses}>
                     <LegacyCallViewHeader
                         onPipMouseDown={(event) => { onStartMoving(event); this.onStartMoving.bind(this)(); }}
                         pipMode={pipMode}
                         callRooms={[roomForWidget]}
-                        onExpand={!viewingCallRoom && this.onExpand}
-                        onPin={viewingCallRoom && this.onPin}
-                        onMaximize={viewingCallRoom && this.onMaximize}
+                        onExpand={!isCall && !viewingCallRoom ? this.onExpand : undefined}
+                        onPin={!isCall && viewingCallRoom ? this.onPin : undefined}
+                        onMaximize={isCall ? this.onViewCall : viewingCallRoom ? this.onMaximize : undefined}
                     />
                     <PersistentApp
                         persistentWidgetId={this.state.persistentWidgetId}

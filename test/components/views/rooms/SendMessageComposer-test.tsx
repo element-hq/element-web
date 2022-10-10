@@ -91,6 +91,7 @@ describe('<SendMessageComposer/>', () => {
         canSelfRedact: false,
         resizing: false,
         narrow: false,
+        activeCall: null,
     };
     describe("createMessageContent", () => {
         const permalinkCreator = jest.fn() as any;

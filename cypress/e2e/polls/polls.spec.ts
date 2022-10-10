@@ -105,6 +105,8 @@ describe("Polls", () => {
             roomId = _roomId;
             cy.inviteUser(roomId, bot.getUserId());
             cy.visit('/#/room/' + roomId);
+            // wait until Bob joined
+            cy.contains(".mx_TextualEvent", "BotBob joined the room").should("exist");
         });
 
         cy.openMessageComposerOptions().within(() => {
@@ -173,6 +175,8 @@ describe("Polls", () => {
             cy.inviteUser(roomId, botBob.getUserId());
             cy.inviteUser(roomId, botCharlie.getUserId());
             cy.visit('/#/room/' + roomId);
+            // wait until the bots joined
+            cy.contains(".mx_TextualEvent", "and one other were invited and joined").should("exist");
         });
 
         cy.openMessageComposerOptions().within(() => {

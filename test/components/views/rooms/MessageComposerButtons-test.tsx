@@ -268,6 +268,7 @@ function createRoomState(room: Room, narrow: boolean): IRoomState {
         liveTimeline: undefined,
         resizing: false,
         narrow,
+        activeCall: null,
     };
 }
 

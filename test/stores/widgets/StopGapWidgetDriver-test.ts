@@ -209,31 +209,12 @@ describe("StopGapWidgetDriver", () => {
             });
 
             await expect(driver.readEventRelations('$event')).resolves.toEqual({
-                originalEvent: expect.objectContaining({ content: {} }),
                 chunk: [],
                 nextBatch: undefined,
                 prevBatch: undefined,
             });
 
             expect(client.relations).toBeCalledWith('!this-room-id', '$event', null, null, {});
-        });
-
-        it('reads related events if the original event is missing', async () => {
-            client.relations.mockResolvedValue({
-                // the relations function can return an undefined event, even
-                // though the typings don't permit an undefined value.
-                originalEvent: undefined as any,
-                events: [],
-            });
-
-            await expect(driver.readEventRelations('$event', '!room-id')).resolves.toEqual({
-                originalEvent: undefined,
-                chunk: [],
-                nextBatch: undefined,
-                prevBatch: undefined,
-            });
-
-            expect(client.relations).toBeCalledWith('!room-id', '$event', null, null, {});
         });
 
         it('reads related events from a selected room', async () => {
@@ -244,7 +225,6 @@ describe("StopGapWidgetDriver", () => {
             });
 
             await expect(driver.readEventRelations('$event', '!room-id')).resolves.toEqual({
-                originalEvent: expect.objectContaining({ content: {} }),
                 chunk: [
                     expect.objectContaining({ content: {} }),
                     expect.objectContaining({ content: {} }),
@@ -272,7 +252,6 @@ describe("StopGapWidgetDriver", () => {
                 25,
                 'f',
             )).resolves.toEqual({
-                originalEvent: expect.objectContaining({ content: {} }),
                 chunk: [],
                 nextBatch: undefined,
                 prevBatch: undefined,

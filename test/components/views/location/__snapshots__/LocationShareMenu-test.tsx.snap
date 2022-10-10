@@ -42,36 +42,53 @@ exports[`<LocationShareMenu /> with live location disabled goes to labs flag scr
         Enable live location sharing
       </span>
       <_default
-        aria-label="Enable live location sharing"
         checked={false}
         onChange={[Function]}
+        title="Enable live location sharing"
       >
-        <AccessibleButton
+        <AccessibleTooltipButton
           aria-checked={false}
           aria-disabled={false}
-          aria-label="Enable live location sharing"
           className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
-          element="div"
           onClick={[Function]}
           role="switch"
-          tabIndex={0}
+          title="Enable live location sharing"
         >
-          <div
+          <AccessibleButton
             aria-checked={false}
             aria-disabled={false}
             aria-label="Enable live location sharing"
-            className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            className="mx_ToggleSwitch mx_ToggleSwitch_enabled"
+            element="div"
+            onBlur={[Function]}
             onClick={[Function]}
-            onKeyDown={[Function]}
-            onKeyUp={[Function]}
+            onFocus={[Function]}
+            onMouseLeave={[Function]}
+            onMouseOver={[Function]}
             role="switch"
             tabIndex={0}
           >
             <div
-              className="mx_ToggleSwitch_ball"
-            />
-          </div>
-        </AccessibleButton>
+              aria-checked={false}
+              aria-disabled={false}
+              aria-label="Enable live location sharing"
+              className="mx_AccessibleButton mx_ToggleSwitch mx_ToggleSwitch_enabled"
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseLeave={[Function]}
+              onMouseOver={[Function]}
+              role="switch"
+              tabIndex={0}
+            >
+              <div
+                className="mx_ToggleSwitch_ball"
+              />
+            </div>
+          </AccessibleButton>
+        </AccessibleTooltipButton>
       </_default>
     </div>
   </LabelledToggleSwitch>

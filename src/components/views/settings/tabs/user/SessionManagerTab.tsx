@@ -29,7 +29,7 @@ import { useOwnDevices } from '../../devices/useOwnDevices';
 import { FilteredDeviceList } from '../../devices/FilteredDeviceList';
 import CurrentDeviceSection from '../../devices/CurrentDeviceSection';
 import SecurityRecommendations from '../../devices/SecurityRecommendations';
-import { DeviceSecurityVariation, DeviceWithVerification } from '../../devices/types';
+import { DeviceSecurityVariation, ExtendedDevice } from '../../devices/types';
 import { deleteDevicesWithInteractiveAuth } from '../../devices/deleteDevices';
 import SettingsTab from '../SettingsTab';
 
@@ -38,10 +38,10 @@ const useSignOut = (
     onSignoutResolvedCallback: () => Promise<void>,
 ): {
         onSignOutCurrentDevice: () => void;
-        onSignOutOtherDevices: (deviceIds: DeviceWithVerification['device_id'][]) => Promise<void>;
-        signingOutDeviceIds: DeviceWithVerification['device_id'][];
+        onSignOutOtherDevices: (deviceIds: ExtendedDevice['device_id'][]) => Promise<void>;
+        signingOutDeviceIds: ExtendedDevice['device_id'][];
     } => {
-    const [signingOutDeviceIds, setSigningOutDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
+    const [signingOutDeviceIds, setSigningOutDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
 
     const onSignOutCurrentDevice = () => {
         Modal.createDialog(
@@ -53,7 +53,7 @@ const useSignOut = (
         );
     };
 
-    const onSignOutOtherDevices = async (deviceIds: DeviceWithVerification['device_id'][]) => {
+    const onSignOutOtherDevices = async (deviceIds: ExtendedDevice['device_id'][]) => {
         if (!deviceIds.length) {
             return;
         }
@@ -96,8 +96,8 @@ const SessionManagerTab: React.FC = () => {
         supportsMSC3881,
     } = useOwnDevices();
     const [filter, setFilter] = useState<DeviceSecurityVariation>();
-    const [expandedDeviceIds, setExpandedDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
-    const [selectedDeviceIds, setSelectedDeviceIds] = useState<DeviceWithVerification['device_id'][]>([]);
+    const [expandedDeviceIds, setExpandedDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
+    const [selectedDeviceIds, setSelectedDeviceIds] = useState<ExtendedDevice['device_id'][]>([]);
     const filteredDeviceListRef = useRef<HTMLDivElement>(null);
     const scrollIntoViewTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -105,7 +105,7 @@ const SessionManagerTab: React.FC = () => {
     const userId = matrixClient.getUserId();
     const currentUserMember = userId && matrixClient.getUser(userId) || undefined;
 
-    const onDeviceExpandToggle = (deviceId: DeviceWithVerification['device_id']): void => {
+    const onDeviceExpandToggle = (deviceId: ExtendedDevice['device_id']): void => {
         if (expandedDeviceIds.includes(deviceId)) {
             setExpandedDeviceIds(expandedDeviceIds.filter(id => id !== deviceId));
         } else {
@@ -136,7 +136,7 @@ const SessionManagerTab: React.FC = () => {
         );
     };
 
-    const onTriggerDeviceVerification = useCallback((deviceId: DeviceWithVerification['device_id']) => {
+    const onTriggerDeviceVerification = useCallback((deviceId: ExtendedDevice['device_id']) => {
         if (!requestDeviceVerification) {
             return;
         }

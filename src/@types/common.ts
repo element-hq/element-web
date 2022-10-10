@@ -49,3 +49,8 @@ export type KeysWithObjectShape<Input> = {
         ? (Input[P] extends Array<unknown> ? never : P)
         : never;
 }[keyof Input];
+
+export type KeysStartingWith<Input extends object, Str extends string> = {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    [P in keyof Input]: P extends `${Str}${infer _X}` ? P : never; // we don't use _X
+}[keyof Input];

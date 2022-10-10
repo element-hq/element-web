@@ -100,7 +100,9 @@ async function synapseStart(template: string): Promise<SynapseInstance> {
     console.log(`Starting synapse with config dir ${synCfg.configDir}...`);
 
     const synapseId = await dockerRun({
-        image: "matrixdotorg/synapse:develop",
+        // XXX: switch back to `develop` tag once the threads receipts issue is fixed
+        // https://github.com/vector-im/element-web/issues/23451
+        image: "matrixdotorg/synapse:latest",
         containerName: `react-sdk-cypress-synapse`,
         params: [
             "--rm",

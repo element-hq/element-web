@@ -27,7 +27,7 @@ import {
     EventType,
 } from 'matrix-js-sdk/src/matrix';
 import { ExtensibleEvent, MessageEvent, M_POLL_KIND_DISCLOSED, PollStartEvent } from 'matrix-events-sdk';
-import { Thread } from "matrix-js-sdk/src/models/thread";
+import { FeatureSupport, Thread } from "matrix-js-sdk/src/models/thread";
 import { mocked } from "jest-mock";
 import { act } from '@testing-library/react';
 
@@ -469,7 +469,7 @@ describe('MessageContextMenu', () => {
             const eventContent = MessageEvent.from("hello");
             const mxEvent = new MatrixEvent(eventContent.serialize());
 
-            Thread.hasServerSideSupport = true;
+            Thread.hasServerSideSupport = FeatureSupport.Stable;
             const context = {
                 canSendMessages: true,
             };

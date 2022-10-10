@@ -20,11 +20,13 @@ import { PUSHER_ENABLED } from 'matrix-js-sdk/src/@types/event';
 
 import DeviceDetails from '../../../../../src/components/views/settings/devices/DeviceDetails';
 import { mkPusher } from '../../../../test-utils/test-utils';
+import { DeviceType } from '../../../../../src/utils/device/parseUserAgent';
 
 describe('<DeviceDetails />', () => {
     const baseDevice = {
         device_id: 'my-device',
         isVerified: false,
+        deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
         device: baseDevice,
@@ -58,7 +60,10 @@ describe('<DeviceDetails />', () => {
             display_name: 'My Device',
             last_seen_ip: '123.456.789',
             last_seen_ts: now - 60000000,
-            clientName: 'Element Web',
+            appName: 'Element Web',
+            client: 'Firefox 100',
+            deviceModel: 'Iphone X',
+            deviceOperatingSystem: 'Windows 95',
         };
         const { container } = render(getComponent({ device }));
         expect(container).toMatchSnapshot();

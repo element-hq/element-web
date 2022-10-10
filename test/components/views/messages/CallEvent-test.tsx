@@ -82,7 +82,7 @@ describe("CallEvent", () => {
         ));
 
         MockedCall.create(room, "1");
-        const maybeCall = CallStore.instance.get(room.roomId);
+        const maybeCall = CallStore.instance.getCall(room.roomId);
         if (!(maybeCall instanceof MockedCall)) throw new Error("Failed to create call");
         call = maybeCall;
 
@@ -113,7 +113,7 @@ describe("CallEvent", () => {
     });
 
     it("shows placeholder info if the call isn't loaded yet", () => {
-        jest.spyOn(CallStore.instance, "get").mockReturnValue(null);
+        jest.spyOn(CallStore.instance, "getCall").mockReturnValue(null);
         jest.advanceTimersByTime(90000);
         renderEvent();
 

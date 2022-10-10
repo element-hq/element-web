@@ -58,7 +58,7 @@ describe("Login", () => {
             cy.startMeasuring("from-submit-to-home");
             cy.get(".mx_Login_submit").click();
 
-            cy.url().should('contain', '/#/home');
+            cy.url().should('contain', '/#/home', { timeout: 30000 });
             cy.stopMeasuring("from-submit-to-home");
         });
     });

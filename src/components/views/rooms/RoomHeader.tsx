@@ -24,7 +24,6 @@ import { CallType } from "matrix-js-sdk/src/webrtc/call";
 import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { Room } from "matrix-js-sdk/src/models/room";
 import { _t } from '../../../languageHandler';
-import { MatrixClientPeg } from '../../../MatrixClientPeg';
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import { Action } from "../../../dispatcher/actions";
 import { UserTab } from "../dialogs/UserTab";
@@ -32,7 +31,7 @@ import SettingsStore from "../../../settings/SettingsStore";
 import RoomHeaderButtons from '../right_panel/RoomHeaderButtons';
 import E2EIcon from './E2EIcon';
 import DecoratedRoomAvatar from "../avatars/DecoratedRoomAvatar";
-import { ButtonEvent } from "../elements/AccessibleButton";
+import AccessibleButton, { ButtonEvent } from "../elements/AccessibleButton";
 import AccessibleTooltipButton from "../elements/AccessibleTooltipButton";
 import RoomTopic from "../elements/RoomTopic";
 import RoomName from "../elements/RoomName";
@@ -53,18 +52,21 @@ import { UPDATE_EVENT } from "../../../stores/AsyncStore";
 import { isVideoRoom as calcIsVideoRoom } from "../../../utils/video-rooms";
 import LegacyCallHandler, { LegacyCallHandlerEvent } from "../../../LegacyCallHandler";
 import { useFeatureEnabled, useSettingValue } from "../../../hooks/useSettings";
-import SdkConfig from "../../../SdkConfig";
+import SdkConfig, { DEFAULTS } from "../../../SdkConfig";
 import { useEventEmitterState, useTypedEventEmitterState } from "../../../hooks/useEventEmitter";
 import { useWidgets } from "../right_panel/RoomSummaryCard";
 import { WidgetType } from "../../../widgets/WidgetType";
-import { useCall } from "../../../hooks/useCall";
+import { useCall, useLayout } from "../../../hooks/useCall";
 import { getJoinedNonFunctionalMembers } from "../../../utils/room/getJoinedNonFunctionalMembers";
-import { ElementCall } from "../../../models/Call";
+import { Call, ElementCall, Layout } from "../../../models/Call";
 import IconizedContextMenu, {
     IconizedContextMenuOption,
     IconizedContextMenuOptionList,
+    IconizedContextMenuRadio,
 } from "../context_menus/IconizedContextMenu";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
+import { CallDurationFromEvent } from "../voip/CallDuration";
+import { Alignment } from "../elements/Tooltip";
 
 class DisabledWithReason {
     constructor(public readonly reason: string) { }
@@ -107,6 +109,7 @@ const VoiceCallButton: FC<VoiceCallButtonProps> = ({ room, busy, setBusy, behavi
         onClick={onClick}
         title={_t("Voice call")}
         tooltip={tooltip ?? _t("Voice call")}
+        alignment={Alignment.Bottom}
         disabled={disabled || busy}
     />;
 };
@@ -192,10 +195,11 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
     let menu: JSX.Element | null = null;
     if (menuOpen) {
         const buttonRect = buttonRef.current!.getBoundingClientRect();
+        const brand = SdkConfig.get("element_call").brand ?? DEFAULTS.element_call.brand;
         menu = <IconizedContextMenu {...aboveLeftOf(buttonRect)} onFinished={closeMenu}>
             <IconizedContextMenuOptionList>
                 <IconizedContextMenuOption label={_t("Video call (Jitsi)")} onClick={onJitsiClick} />
-                <IconizedContextMenuOption label={_t("Video call (Element Call)")} onClick={onElementClick} />
+                <IconizedContextMenuOption label={_t("Video call (%(brand)s)", { brand })} onClick={onElementClick} />
             </IconizedContextMenuOptionList>
         </IconizedContextMenu>;
     }
@@ -207,6 +211,7 @@ const VideoCallButton: FC<VideoCallButtonProps> = ({ room, busy, setBusy, behavi
             onClick={onClick}
             title={_t("Video call")}
             tooltip={tooltip ?? _t("Video call")}
+            alignment={Alignment.Bottom}
             disabled={disabled || busy}
         />
         { menu }
@@ -225,7 +230,9 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
     const groupCallsEnabled = useFeatureEnabled("feature_group_calls");
     const videoRoomsEnabled = useFeatureEnabled("feature_video_rooms");
     const isVideoRoom = useMemo(() => videoRoomsEnabled && calcIsVideoRoom(room), [videoRoomsEnabled, room]);
-    const useElementCallExclusively = useMemo(() => SdkConfig.get("element_call").use_exclusively, []);
+    const useElementCallExclusively = useMemo(() => {
+        return SdkConfig.get("element_call").use_exclusively ?? DEFAULTS.element_call.use_exclusively;
+    }, []);
 
     const hasLegacyCall = useEventEmitterState(
         LegacyCallHandler.instance,
@@ -318,6 +325,72 @@ const CallButtons: FC<CallButtonsProps> = ({ room }) => {
     }
 };
 
+interface CallLayoutSelectorProps {
+    call: ElementCall;
+}
+
+const CallLayoutSelector: FC<CallLayoutSelectorProps> = ({ call }) => {
+    const layout = useLayout(call);
+    const [menuOpen, buttonRef, openMenu, closeMenu] = useContextMenu();
+
+    const onClick = useCallback((ev: ButtonEvent) => {
+        ev.preventDefault();
+        openMenu();
+    }, [openMenu]);
+
+    const onFreedomClick = useCallback((ev: ButtonEvent) => {
+        ev.preventDefault();
+        closeMenu();
+        call.setLayout(Layout.Tile);
+    }, [closeMenu, call]);
+
+    const onSpotlightClick = useCallback((ev: ButtonEvent) => {
+        ev.preventDefault();
+        closeMenu();
+        call.setLayout(Layout.Spotlight);
+    }, [closeMenu, call]);
+
+    let menu: JSX.Element | null = null;
+    if (menuOpen) {
+        const buttonRect = buttonRef.current!.getBoundingClientRect();
+        menu = <IconizedContextMenu
+            className="mx_RoomHeader_layoutMenu"
+            {...aboveLeftOf(buttonRect)}
+            onFinished={closeMenu}
+        >
+            <IconizedContextMenuOptionList>
+                <IconizedContextMenuRadio
+                    iconClassName="mx_RoomHeader_freedomIcon"
+                    label={_t("Freedom")}
+                    active={layout === Layout.Tile}
+                    onClick={onFreedomClick}
+                />
+                <IconizedContextMenuRadio
+                    iconClassName="mx_RoomHeader_spotlightIcon"
+                    label={_t("Spotlight")}
+                    active={layout === Layout.Spotlight}
+                    onClick={onSpotlightClick}
+                />
+            </IconizedContextMenuOptionList>
+        </IconizedContextMenu>;
+    }
+
+    return <>
+        <AccessibleTooltipButton
+            inputRef={buttonRef}
+            className={classNames("mx_RoomHeader_button", {
+                "mx_RoomHeader_layoutButton--freedom": layout === Layout.Tile,
+                "mx_RoomHeader_layoutButton--spotlight": layout === Layout.Spotlight,
+            })}
+            onClick={onClick}
+            title={_t("Layout type")}
+            alignment={Alignment.Bottom}
+            key="layout"
+        />
+        { menu }
+    </>;
+};
+
 export interface ISearchInfo {
     searchTerm: string;
     searchScope: SearchScope;
@@ -338,6 +411,8 @@ export interface IProps {
     excludedRightPanelPhaseButtons?: Array<RightPanelPhases>;
     showButtons?: boolean;
     enableRoomOptionsMenu?: boolean;
+    viewingCall: boolean;
+    activeCall: Call | null;
 }
 
 interface IState {
@@ -356,6 +431,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
 
     static contextType = RoomContext;
     public context!: React.ContextType<typeof RoomContext>;
+    private readonly client = this.props.room.client;
 
     constructor(props: IProps, context: IState) {
         super(props, context);
@@ -367,14 +443,12 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
-        const cli = MatrixClientPeg.get();
-        cli.on(RoomStateEvent.Events, this.onRoomStateEvents);
+        this.client.on(RoomStateEvent.Events, this.onRoomStateEvents);
         RightPanelStore.instance.on(UPDATE_EVENT, this.onRightPanelStoreUpdate);
     }
 
     public componentWillUnmount() {
-        const cli = MatrixClientPeg.get();
-        cli?.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
+        this.client.removeListener(RoomStateEvent.Events, this.onRoomStateEvents);
         const notiStore = RoomNotificationStateStore.instance.getRoomState(this.props.room);
         notiStore.removeListener(NotificationStateEvents.Update, this.onNotificationUpdate);
         RightPanelStore.instance.off(UPDATE_EVENT, this.onRightPanelStoreUpdate);
@@ -401,7 +475,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         this.forceUpdate();
     }, 500, { leading: true, trailing: true });
 
-    private onContextMenuOpenClick = (ev: React.MouseEvent) => {
+    private onContextMenuOpenClick = (ev: ButtonEvent) => {
         ev.preventDefault();
         ev.stopPropagation();
         const target = ev.target as HTMLButtonElement;
@@ -412,56 +486,98 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         this.setState({ contextMenuPosition: undefined });
     };
 
-    private renderButtons(): JSX.Element[] {
-        const buttons: JSX.Element[] = [];
+    private onHideCallClick = (ev: ButtonEvent) => {
+        ev.preventDefault();
+        defaultDispatcher.dispatch<ViewRoomPayload>({
+            action: Action.ViewRoom,
+            room_id: this.props.room.roomId,
+            view_call: false,
+            metricsTrigger: undefined,
+        });
+    };
 
-        if (this.props.inRoom && !this.context.tombstone) {
-            buttons.push(<CallButtons key="calls" room={this.props.room} />);
+    private renderButtons(isVideoRoom: boolean): React.ReactNode {
+        const startButtons: JSX.Element[] = [];
+
+        if (!this.props.viewingCall && this.props.inRoom && !this.context.tombstone) {
+            startButtons.push(<CallButtons key="calls" room={this.props.room} />);
         }
 
-        if (this.props.onForgetClick) {
-            const forgetButton = <AccessibleTooltipButton
+        if (this.props.viewingCall && this.props.activeCall instanceof ElementCall) {
+            startButtons.push(<CallLayoutSelector call={this.props.activeCall} />);
+        }
+
+        if (!this.props.viewingCall && this.props.onForgetClick) {
+            startButtons.push(<AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_forgetButton"
                 onClick={this.props.onForgetClick}
                 title={_t("Forget room")}
+                alignment={Alignment.Bottom}
                 key="forget"
-            />;
-            buttons.push(forgetButton);
+            />);
         }
 
-        if (this.props.onAppsClick) {
-            const appsButton = <AccessibleTooltipButton
+        if (!this.props.viewingCall && this.props.onAppsClick) {
+            startButtons.push(<AccessibleTooltipButton
                 className={classNames("mx_RoomHeader_button mx_RoomHeader_appsButton", {
                     mx_RoomHeader_appsButton_highlight: this.props.appsShown,
                 })}
                 onClick={this.props.onAppsClick}
                 title={this.props.appsShown ? _t("Hide Widgets") : _t("Show Widgets")}
+                alignment={Alignment.Bottom}
                 key="apps"
-            />;
-            buttons.push(appsButton);
+            />);
         }
 
-        if (this.props.onSearchClick && this.props.inRoom) {
-            const searchButton = <AccessibleTooltipButton
+        if (!this.props.viewingCall && this.props.onSearchClick && this.props.inRoom) {
+            startButtons.push(<AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_searchButton"
                 onClick={this.props.onSearchClick}
                 title={_t("Search")}
+                alignment={Alignment.Bottom}
                 key="search"
-            />;
-            buttons.push(searchButton);
+            />);
         }
 
-        if (this.props.onInviteClick && this.props.inRoom) {
-            const inviteButton = <AccessibleTooltipButton
+        if (this.props.onInviteClick && (!this.props.viewingCall || isVideoRoom) && this.props.inRoom) {
+            startButtons.push(<AccessibleTooltipButton
                 className="mx_RoomHeader_button mx_RoomHeader_inviteButton"
                 onClick={this.props.onInviteClick}
                 title={_t("Invite")}
+                alignment={Alignment.Bottom}
                 key="invite"
-            />;
-            buttons.push(inviteButton);
+            />);
         }
 
-        return buttons;
+        const endButtons: JSX.Element[] = [];
+
+        if (this.props.viewingCall && !isVideoRoom) {
+            if (this.props.activeCall === null) {
+                endButtons.push(<AccessibleButton
+                    className="mx_RoomHeader_button mx_RoomHeader_closeButton"
+                    onClick={this.onHideCallClick}
+                    title={_t("Close call")}
+                    key="close"
+                />);
+            } else {
+                endButtons.push(<AccessibleTooltipButton
+                    className="mx_RoomHeader_button mx_RoomHeader_minimiseButton"
+                    onClick={this.onHideCallClick}
+                    title={_t("View chat timeline")}
+                    alignment={Alignment.Bottom}
+                    key="minimise"
+                />);
+            }
+        }
+
+        return <>
+            { startButtons }
+            <RoomHeaderButtons
+                room={this.props.room}
+                excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons}
+            />
+            { endButtons }
+        </>;
     }
 
     private renderName(oobName: string) {
@@ -480,7 +596,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
         let settingsHint = false;
         const members = this.props.room ? this.props.room.getJoinedMembers() : undefined;
         if (members) {
-            if (members.length === 1 && members[0].userId === MatrixClientPeg.get().credentials.userId) {
+            if (members.length === 1 && members[0].userId === this.client.credentials.userId) {
                 const nameEvent = this.props.room.currentState.getStateEvents('m.room.name', '');
                 if (!nameEvent || !nameEvent.getContent().name) {
                     settingsHint = true;
@@ -505,6 +621,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     onClick={this.onContextMenuOpenClick}
                     isExpanded={!!this.state.contextMenuPosition}
                     title={_t("Room options")}
+                    alignment={Alignment.Bottom}
                 >
                     { roomName }
                     { this.props.room && <div className="mx_RoomHeader_chevron" /> }
@@ -519,6 +636,57 @@ export default class RoomHeader extends React.Component<IProps, IState> {
     }
 
     public render() {
+        const isVideoRoom = SettingsStore.getValue("feature_video_rooms") && calcIsVideoRoom(this.props.room);
+
+        let roomAvatar: JSX.Element | null = null;
+        if (this.props.room) {
+            roomAvatar = <DecoratedRoomAvatar
+                room={this.props.room}
+                avatarSize={24}
+                oobData={this.props.oobData}
+                viewAvatarOnClick={true}
+            />;
+        }
+
+        const icon = this.props.viewingCall
+            ? <div className="mx_RoomHeader_icon mx_RoomHeader_icon_video" />
+            : this.props.e2eStatus
+                ? <E2EIcon
+                    className="mx_RoomHeader_icon"
+                    status={this.props.e2eStatus}
+                    tooltipAlignment={Alignment.Bottom}
+                />
+                // If we're expecting an E2EE status to come in, but it hasn't
+                // yet been loaded, insert a blank div to reserve space
+                : this.client.isRoomEncrypted(this.props.room.roomId) && this.client.isCryptoEnabled()
+                    ? <div className="mx_RoomHeader_icon" />
+                    : null;
+
+        const buttons = this.props.showButtons ? this.renderButtons(isVideoRoom) : null;
+
+        if (this.props.viewingCall && !isVideoRoom) {
+            return (
+                <header className="mx_RoomHeader light-panel">
+                    <div
+                        className="mx_RoomHeader_wrapper"
+                        aria-owns={this.state.rightPanelOpen ? "mx_RightPanel" : undefined}
+                    >
+                        <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
+                        { icon }
+                        <div className="mx_RoomHeader_name mx_RoomHeader_name--textonly mx_RoomHeader_name--small">
+                            { _t("Video call") }
+                        </div>
+                        { this.props.activeCall instanceof ElementCall && (
+                            <CallDurationFromEvent mxEvent={this.props.activeCall.groupCall} />
+                        ) }
+                        { /* Empty topic element to fill out space */ }
+                        <div className="mx_RoomHeader_topic" />
+                        { buttons }
+                    </div>
+                </header>
+            );
+        }
+
         let searchStatus: JSX.Element | null = null;
 
         // don't display the search count until the search completes and
@@ -543,29 +711,6 @@ export default class RoomHeader extends React.Component<IProps, IState> {
             className="mx_RoomHeader_topic"
         />;
 
-        let roomAvatar: JSX.Element | null = null;
-        if (this.props.room) {
-            roomAvatar = <DecoratedRoomAvatar
-                room={this.props.room}
-                avatarSize={24}
-                oobData={this.props.oobData}
-                viewAvatarOnClick={true}
-            />;
-        }
-
-        let buttons: JSX.Element | null = null;
-        if (this.props.showButtons) {
-            buttons = <React.Fragment>
-                <div className="mx_RoomHeader_buttons">
-                    { this.renderButtons() }
-                </div>
-                <RoomHeaderButtons room={this.props.room} excludedRightPanelPhaseButtons={this.props.excludedRightPanelPhaseButtons} />
-            </React.Fragment>;
-        }
-
-        const e2eIcon = this.props.e2eStatus ? <E2EIcon status={this.props.e2eStatus} /> : undefined;
-
-        const isVideoRoom = SettingsStore.getValue("feature_video_rooms") && calcIsVideoRoom(this.props.room);
         const viewLabs = () => defaultDispatcher.dispatch({
             action: Action.ViewUserSettings,
             initialTabId: UserTab.Labs,
@@ -581,7 +726,7 @@ export default class RoomHeader extends React.Component<IProps, IState> {
                     aria-owns={this.state.rightPanelOpen ? "mx_RightPanel" : undefined}
                 >
                     <div className="mx_RoomHeader_avatar">{ roomAvatar }</div>
-                    <div className="mx_RoomHeader_e2eIcon">{ e2eIcon }</div>
+                    { icon }
                     { name }
                     { searchStatus }
                     { topicElement }

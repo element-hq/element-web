@@ -128,7 +128,7 @@ Cypress.Commands.add("botJoinRoomByName", (cli: MatrixClient, roomName: string):
         return cy.botJoinRoom(cli, room.roomId);
     }
 
-    return cy.wrap(Promise.reject());
+    return cy.wrap(Promise.reject(`Bot room join failed. Cannot find room '${roomName}'`));
 });
 
 Cypress.Commands.add("botSendMessage", (

@@ -62,6 +62,7 @@ const DeviceDetails: React.FC<Props> = ({
             id: 'session',
             values: [
                 { label: _t('Session ID'), value: device.device_id },
+                { label: _t('Client'), value: device.client },
                 {
                     label: _t('Last activity'),
                     value: device.last_seen_ts && formatDate(new Date(device.last_seen_ts)),
@@ -72,8 +73,8 @@ const DeviceDetails: React.FC<Props> = ({
             id: 'application',
             heading: _t('Application'),
             values: [
-                { label: _t('Name'), value: device.clientName },
-                { label: _t('Version'), value: device.clientVersion },
+                { label: _t('Name'), value: device.appName },
+                { label: _t('Version'), value: device.appVersion },
                 { label: _t('URL'), value: device.url },
             ],
         },
@@ -81,6 +82,8 @@ const DeviceDetails: React.FC<Props> = ({
             id: 'device',
             heading: _t('Device'),
             values: [
+                { label: _t('Model'), value: device.deviceModel },
+                { label: _t('Operating system'), value: device.deviceOperatingSystem },
                 { label: _t('IP address'), value: device.last_seen_ip },
             ],
         },
@@ -150,7 +153,7 @@ const DeviceDetails: React.FC<Props> = ({
                     checked={isPushNotificationsEnabled(pusher, localNotificationSettings)}
                     disabled={isCheckboxDisabled(pusher, localNotificationSettings)}
                     onChange={checked => setPushNotifications?.(device.device_id, checked)}
-                    aria-label={_t("Toggle push notifications on this session.")}
+                    title={_t("Toggle push notifications on this session.")}
                     data-testid='device-detail-push-notification-checkbox'
                 />
                 <p className='mx_DeviceDetails_sectionHeading'>

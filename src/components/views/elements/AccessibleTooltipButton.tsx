@@ -21,7 +21,7 @@ import AccessibleButton from "./AccessibleButton";
 import Tooltip, { Alignment } from './Tooltip';
 
 interface IProps extends React.ComponentProps<typeof AccessibleButton> {
-    title: string;
+    title?: string;
     tooltip?: React.ReactNode;
     label?: string;
     tooltipClassName?: string;
@@ -78,7 +78,7 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         const { title, tooltip, children, tooltipClassName, forceHide, alignment, onHideTooltip,
             ...props } = this.props;
 
-        const tip = this.state.hover && <Tooltip
+        const tip = this.state.hover && (title || tooltip) && <Tooltip
             tooltipClassName={tooltipClassName}
             label={tooltip || title}
             alignment={alignment}
@@ -86,11 +86,11 @@ export default class AccessibleTooltipButton extends React.PureComponent<IProps,
         return (
             <AccessibleButton
                 {...props}
-                onMouseOver={this.showTooltip}
-                onMouseLeave={this.hideTooltip}
-                onFocus={this.onFocus}
-                onBlur={this.hideTooltip}
-                aria-label={title}
+                onMouseOver={this.showTooltip || props.onMouseOver}
+                onMouseLeave={this.hideTooltip || props.onMouseLeave}
+                onFocus={this.onFocus || props.onFocus}
+                onBlur={this.hideTooltip || props.onBlur}
+                aria-label={title || props["aria-label"]}
             >
                 { children }
                 { this.props.label }
