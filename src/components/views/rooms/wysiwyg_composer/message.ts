@@ -45,9 +45,7 @@ export function createMessageContent(
     { relation, replyToEvent, permalinkCreator, includeReplyLegacyFallback = true }:
     Omit<SendMessageParams, 'roomContext' | 'mxClient'>,
 ): IContent {
-    const isEmote = false;
-
-    // TODO do somethings about emote ?
+    // TODO emote ?
 
     /*const isEmote = containsEmote(model);
     if (isEmote) {
@@ -62,7 +60,9 @@ export function createMessageContent(
     const body = message;
 
     const content: IContent = {
-        msgtype: isEmote ? "m.emote" : "m.text",
+        // TODO emote
+    //    msgtype: isEmote ? "m.emote" : "m.text",
+        msgtype: "m.text",
         body: body,
     };
 
@@ -106,10 +106,12 @@ export function sendMessage(
         isReply: Boolean(replyToEvent),
         inThread: relation?.rel_type === THREAD_RELATION_TYPE.name,
     };
-    if (posthogEvent.inThread) {
+
+    // TODO thread
+    /*if (posthogEvent.inThread) {
         const threadRoot = room.findEventById(relation?.event_id);
         posthogEvent.startsThread = threadRoot?.getThread()?.events.length === 1;
-    }
+    }*/
     PosthogAnalytics.instance.trackEvent<ComposerEvent>(posthogEvent);
 
     let content: IContent;
