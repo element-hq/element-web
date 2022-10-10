@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { useCallback, useState } from 'react';
-import { useWysiwyg } from "matrix-wysiwyg";
+import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
 import { IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
 import { useRoomContext } from '../../../../contexts/RoomContext';

@@ -1549,6 +1549,11 @@
   resolved "https://registry.yarnpkg.com/@matrix-org/analytics-events/-/analytics-events-0.2.0.tgz#453925c939ecdd5ca6c797d293deb8cf0933f1b8"
   integrity sha512-+0/Sydm4MNOcqd8iySJmojVPB74Axba4BXlwTsiKmL5fgYqdUkwmqkO39K7Pn8i+a+8pg11oNvBPkpWs3O5Qww==
 
+"@matrix-org/matrix-wysiwyg@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-wysiwyg/-/matrix-wysiwyg-0.0.1.tgz#8a6dc546f5c2b44be9cf96eec2380071b70a03e3"
+  integrity sha512-sInK28oglwY8vgfwVO+SdDMbG3PgaBIkiFHPH+zAZjuSt28oWCLyLfhNKFy44l3cvFy8TUMRDftmimGaLJI7DQ==
+
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz":
   version "3.2.8"
   resolved "https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.8.tgz#8d53636d045e1776e2a2ec6613e57330dd9ce856"
@@ -6969,10 +6974,6 @@ matrix-widget-api@^1.1.1:
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
-
-"matrix-wysiwyg@link:../matrix-wysiwyg/platforms/web":
-  version "0.0.0"
-  uid ""
 
 mdurl@~1.0.1:
   version "1.0.1"
