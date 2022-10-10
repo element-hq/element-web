@@ -96,6 +96,7 @@ describe('message', () => {
             canSelfRedact: false,
             resizing: false,
             narrow: false,
+            activeCall: null,
         };
 
         const spyDispatcher = jest.spyOn(defaultDispatcher, "dispatch");

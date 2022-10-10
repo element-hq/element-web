@@ -91,6 +91,7 @@ describe('WysiwygComposer', () => {
         canSelfRedact: false,
         resizing: false,
         narrow: false,
+        activeCall: null,
     };
 
     let sendMessage: () => void;
