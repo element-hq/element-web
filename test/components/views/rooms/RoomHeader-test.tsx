@@ -18,7 +18,6 @@ import React from 'react';
 // eslint-disable-next-line deprecate/import
 import { mount, ReactWrapper } from 'enzyme';
 import { render, screen, act, fireEvent, waitFor, getByRole } from "@testing-library/react";
-import "@testing-library/jest-dom";
 import { mocked, Mocked } from "jest-mock";
 import { EventType, RoomType } from "matrix-js-sdk/src/@types/event";
 import { Room } from "matrix-js-sdk/src/models/room";

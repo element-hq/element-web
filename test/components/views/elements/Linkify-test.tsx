@@ -12,18 +12,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { fireEvent, render } from "@testing-library/react";
 import React, { useState } from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
 
 import { Linkify } from "../../../../src/components/views/elements/Linkify";
 
 describe("Linkify", () => {
     it("linkifies the context", () => {
-        const wrapper = mount(<Linkify>
+        const { container } = render(<Linkify>
             https://perdu.com
         </Linkify>);
-        expect(wrapper.html()).toBe(
+        expect(container.innerHTML).toBe(
             "<div><a href=\"https://perdu.com\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">"+
             "https://perdu.com" +
             "</a></div>",
@@ -31,10 +30,10 @@ describe("Linkify", () => {
     });
 
     it("correctly linkifies a room alias", () => {
-        const wrapper = mount(<Linkify>
+        const { container } = render(<Linkify>
             #element-web:matrix.org
         </Linkify>);
-        expect(wrapper.html()).toBe(
+        expect(container.innerHTML).toBe(
             "<div>" +
             "<a href=\"https://matrix.to/#/#element-web:matrix.org\" class=\"linkified\" rel=\"noreferrer noopener\">" +
             "#element-web:matrix.org" +
@@ -45,11 +44,11 @@ describe("Linkify", () => {
     it("changes the root tag name", () => {
         const TAG_NAME = "p";
 
-        const wrapper = mount(<Linkify as={TAG_NAME}>
+        const { container } = render(<Linkify as={TAG_NAME}>
             Hello world!
         </Linkify>);
 
-        expect(wrapper.find("p")).toHaveLength(1);
+        expect(container.querySelectorAll("p")).toHaveLength(1);
     });
 
     it("relinkifies on update", () => {
@@ -70,18 +69,18 @@ describe("Linkify", () => {
             </div>;
         }
 
-        const wrapper = mount(<DummyTest />);
+        const { container } = render(<DummyTest />);
 
-        expect(wrapper.html()).toBe(
+        expect(container.innerHTML).toBe(
             "<div><div>" +
             "<a href=\"https://perdu.com\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">" +
             "https://perdu.com" +
             "</a></div></div>",
         );
 
-        wrapper.find('div').at(0).simulate('click');
+        fireEvent.click(container.querySelector("div"));
 
-        expect(wrapper.html()).toBe(
+        expect(container.innerHTML).toBe(
             "<div><div>" +
             "<a href=\"https://matrix.org\" class=\"linkified\" target=\"_blank\" rel=\"noreferrer noopener\">" +
             "https://matrix.org" +
