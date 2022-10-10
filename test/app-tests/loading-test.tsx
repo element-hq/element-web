@@ -74,21 +74,25 @@ describe('loading:', function() {
 
     afterEach(async function() {
         console.log(`${Date.now()}: loading: afterEach`);
-        if (matrixChat) {
-            ReactDOM.unmountComponentAtNode(parentDiv);
-            parentDiv.remove();
-            parentDiv = null;
+        try {
+            if (matrixChat) {
+                ReactDOM.unmountComponentAtNode(parentDiv);
+                parentDiv.remove();
+                parentDiv = null;
+            }
+
+            // unmounting should have cleared the MatrixClientPeg
+            expect(MatrixClientPeg.get()).toBe(null);
+
+            // clear the indexeddbs so we can start from a clean slate next time.
+            await Promise.all([
+                test_utils.deleteIndexedDB('matrix-js-sdk:crypto'),
+                test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync'),
+            ]);
+            cleanLocalstorage();
+        } catch (e) {
+            console.error(e);
         }
-
-        // unmounting should have cleared the MatrixClientPeg
-        expect(MatrixClientPeg.get()).toBe(null);
-
-        // clear the indexeddbs so we can start from a clean slate next time.
-        await Promise.all([
-            test_utils.deleteIndexedDB('matrix-js-sdk:crypto'),
-            test_utils.deleteIndexedDB('matrix-js-sdk:riot-web-sync'),
-        ]);
-        cleanLocalstorage();
         console.log(`${Date.now()}: loading: afterEach complete`);
     });
 
