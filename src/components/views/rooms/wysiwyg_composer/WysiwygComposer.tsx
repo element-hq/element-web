@@ -26,7 +26,7 @@ import { useMatrixClientContext } from '../../../../contexts/MatrixClientContext
 interface WysiwygProps {
     disabled?: boolean;
     onChange: (content: string) => void;
-    relation: IEventRelation;
+    relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     permalinkCreator: RoomPermalinkCreator;
     includeReplyLegacyFallback?: boolean;
@@ -54,7 +54,16 @@ export function WysiwygComposer(
     return (
         <div className="mx_WysiwygComposer">
             <div className="mx_WysiwygComposer_container">
-                <div className="mx_WysiwygComposer_content" ref={ref} contentEditable={!disabled && isWysiwygReady} />
+                <div className="mx_WysiwygComposer_content"
+                    ref={ref}
+                    contentEditable={!disabled && isWysiwygReady}
+                    role="textbox"
+                    aria-multiline="true"
+                    aria-autocomplete="list"
+                    aria-haspopup="listbox"
+                    dir="auto"
+                    aria-disabled={!disabled && isWysiwygReady}
+                />
             </div>
             { children?.(memoizedSendMessage) }
         </div>
