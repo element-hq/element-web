@@ -65,6 +65,24 @@ export const recordClientInformation = async (
     });
 };
 
+/**
+ * Remove extra client information
+ * @todo(kerrya) revisit after MSC3391: account data deletion is done
+ * (PSBE-12)
+ */
+export const removeClientInformation = async (
+    matrixClient: MatrixClient,
+): Promise<void> => {
+    const deviceId = matrixClient.getDeviceId();
+    const type = getClientInformationEventType(deviceId);
+    const clientInformation = getDeviceClientInformation(matrixClient, deviceId);
+
+    // if a non-empty client info event exists, overwrite to remove the content
+    if (clientInformation.name || clientInformation.version || clientInformation.url) {
+        await matrixClient.setAccountData(type, {});
+    }
+};
+
 const sanitizeContentString = (value: unknown): string | undefined =>
     value && typeof value === 'string' ? value : undefined;
 
