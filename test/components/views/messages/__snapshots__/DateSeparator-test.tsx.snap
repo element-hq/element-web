@@ -1,16 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DateSeparator renders the date separator correctly 1`] = `
-<DateSeparator
-  now="2021-12-17T08:09:00.000Z"
-  roomId="!unused:example.org"
-  ts={1639728540000}
->
+<DocumentFragment>
   <div
     aria-label="Today"
-    className="mx_DateSeparator"
+    class="mx_DateSeparator"
     role="separator"
-    tabIndex={-1}
+    tabindex="-1"
   >
     <hr
       role="none"
@@ -24,85 +20,40 @@ exports[`DateSeparator renders the date separator correctly 1`] = `
       role="none"
     />
   </div>
-</DateSeparator>
+</DocumentFragment>
 `;
 
 exports[`DateSeparator when feature_jump_to_date is enabled renders the date separator correctly 1`] = `
-<DateSeparator
-  now="2021-12-17T08:09:00.000Z"
-  roomId="!unused:example.org"
-  ts={1639728540000}
->
+<DocumentFragment>
   <div
     aria-label="Fri, Dec 17 2021"
-    className="mx_DateSeparator"
+    class="mx_DateSeparator"
     role="separator"
-    tabIndex={-1}
+    tabindex="-1"
   >
     <hr
       role="none"
     />
-    <ContextMenuTooltipButton
-      className="mx_DateSeparator_jumpToDateMenu"
-      isExpanded={false}
-      onClick={[Function]}
-      title="Jump to date"
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Jump to date"
+      class="mx_AccessibleButton mx_DateSeparator_jumpToDateMenu"
+      role="button"
+      tabindex="0"
     >
-      <AccessibleTooltipButton
-        aria-expanded={false}
-        aria-haspopup={true}
-        className="mx_DateSeparator_jumpToDateMenu"
-        forceHide={false}
-        onClick={[Function]}
-        onContextMenu={[Function]}
-        title="Jump to date"
+      <h2
+        aria-hidden="true"
       >
-        <AccessibleButton
-          aria-expanded={false}
-          aria-haspopup={true}
-          aria-label="Jump to date"
-          className="mx_DateSeparator_jumpToDateMenu"
-          element="div"
-          onBlur={[Function]}
-          onClick={[Function]}
-          onContextMenu={[Function]}
-          onFocus={[Function]}
-          onMouseLeave={[Function]}
-          onMouseOver={[Function]}
-          role="button"
-          tabIndex={0}
-        >
-          <div
-            aria-expanded={false}
-            aria-haspopup={true}
-            aria-label="Jump to date"
-            className="mx_AccessibleButton mx_DateSeparator_jumpToDateMenu"
-            onBlur={[Function]}
-            onClick={[Function]}
-            onContextMenu={[Function]}
-            onFocus={[Function]}
-            onKeyDown={[Function]}
-            onKeyUp={[Function]}
-            onMouseLeave={[Function]}
-            onMouseOver={[Function]}
-            role="button"
-            tabIndex={0}
-          >
-            <h2
-              aria-hidden="true"
-            >
-              Fri, Dec 17 2021
-            </h2>
-            <div
-              className="mx_DateSeparator_chevron"
-            />
-          </div>
-        </AccessibleButton>
-      </AccessibleTooltipButton>
-    </ContextMenuTooltipButton>
+        Fri, Dec 17 2021
+      </h2>
+      <div
+        class="mx_DateSeparator_chevron"
+      />
+    </div>
     <hr
       role="none"
     />
   </div>
-</DateSeparator>
+</DocumentFragment>
 `;

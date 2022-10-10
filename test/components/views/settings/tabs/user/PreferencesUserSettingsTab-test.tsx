@@ -16,7 +16,6 @@ limitations under the License.
 
 import React from "react";
 import { fireEvent, render, RenderResult, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom";
 
 import PreferencesUserSettingsTab from
     "../../../../../../src/components/views/settings/tabs/user/PreferencesUserSettingsTab";

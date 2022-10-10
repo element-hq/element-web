@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import "@testing-library/jest-dom";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 // eslint-disable-next-line deprecate/import
 import { configure } from "enzyme";

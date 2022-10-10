@@ -15,9 +15,8 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount } from "enzyme";
 import { mocked } from "jest-mock";
+import { render } from "@testing-library/react";
 
 import { formatFullDateNoTime } from "../../../../src/DateUtils";
 import SettingsStore from "../../../../src/settings/SettingsStore";
@@ -48,10 +47,11 @@ describe("DateSeparator", () => {
 
     const mockClient = getMockClientWithEventEmitter({});
     const getComponent = (props = {}) =>
-        mount(<DateSeparator {...defaultProps} {...props} />, {
-            wrappingComponent: MatrixClientContext.Provider,
-            wrappingComponentProps: { value: mockClient },
-        });
+        render((
+            <MatrixClientContext.Provider value={mockClient}>
+                <DateSeparator {...defaultProps} {...props} />
+            </MatrixClientContext.Provider>
+        ));
 
     type TestCase = [string, number, string];
     const testCases: TestCase[] = [
@@ -81,18 +81,19 @@ describe("DateSeparator", () => {
     });
 
     it('renders the date separator correctly', () => {
-        const component = getComponent();
-        expect(component).toMatchSnapshot();
+        const { asFragment } = getComponent();
+        expect(asFragment()).toMatchSnapshot();
         expect(SettingsStore.getValue).toHaveBeenCalledWith(UIFeature.TimelineEnableRelativeDates);
     });
 
     it.each(testCases)('formats date correctly when current time is %s', (_d, ts, result) => {
-        expect(getComponent({ ts, forExport: false }).text()).toEqual(result);
+        expect(getComponent({ ts, forExport: false }).container.textContent).toEqual(result);
     });
 
     describe('when forExport is true', () => {
         it.each(testCases)('formats date in full when current time is %s', (_d, ts) => {
-            expect(getComponent({ ts, forExport: true }).text()).toEqual(formatFullDateNoTime(new Date(ts)));
+            expect(getComponent({ ts, forExport: true }).container.textContent)
+                .toEqual(formatFullDateNoTime(new Date(ts)));
         });
     });
 
@@ -105,7 +106,8 @@ describe("DateSeparator", () => {
             });
         });
         it.each(testCases)('formats date in full when current time is %s', (_d, ts) => {
-            expect(getComponent({ ts, forExport: false }).text()).toEqual(formatFullDateNoTime(new Date(ts)));
+            expect(getComponent({ ts, forExport: false }).container.textContent)
+                .toEqual(formatFullDateNoTime(new Date(ts)));
         });
     });
 
@@ -118,8 +120,8 @@ describe("DateSeparator", () => {
             });
         });
         it('renders the date separator correctly', () => {
-            const component = getComponent();
-            expect(component).toMatchSnapshot();
+            const { asFragment } = getComponent();
+            expect(asFragment()).toMatchSnapshot();
         });
     });
 });
