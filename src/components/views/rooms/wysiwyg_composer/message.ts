@@ -23,7 +23,6 @@ import { PosthogAnalytics } from "../../../../PosthogAnalytics";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../../sendTimePerformanceMetrics";
 import { attachRelation } from "../SendMessageComposer";
-import { addReplyToMessageContent } from "../../../../utils/Reply";
 import { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { doMaybeLocalRoomAction } from "../../../../utils/local-room";
 import { CHAT_EFFECTS } from "../../../../effects";
@@ -33,7 +32,7 @@ import dis from '../../../../dispatcher/dispatcher';
 
 interface SendMessageParams {
     mxClient: MatrixClient;
-    relation: IEventRelation;
+    relation?: IEventRelation;
     replyToEvent?: MatrixEvent;
     roomContext: IRoomState;
     permalinkCreator: RoomPermalinkCreator;
@@ -81,12 +80,14 @@ export function createMessageContent(
     }
 
     attachRelation(content, relation);
-    if (replyToEvent) {
+
+    // TODO reply
+    /*if (replyToEvent) {
         addReplyToMessageContent(content, replyToEvent, {
             permalinkCreator,
             includeLegacyFallback: includeReplyLegacyFallback,
         });
-    }
+    }*/
 
     return content;
 }
@@ -106,7 +107,7 @@ export function sendMessage(
         inThread: relation?.rel_type === THREAD_RELATION_TYPE.name,
     };
     if (posthogEvent.inThread) {
-        const threadRoot = room.findEventById(relation.event_id);
+        const threadRoot = room.findEventById(relation?.event_id);
         posthogEvent.startsThread = threadRoot?.getThread()?.events.length === 1;
     }
     PosthogAnalytics.instance.trackEvent<ComposerEvent>(posthogEvent);
@@ -144,7 +145,9 @@ export function sendMessage(
         (actualRoomId: string) => mxClient.sendMessage(actualRoomId, threadId, content),
         mxClient,
     );
-    if (replyToEvent) {
+
+    // TODO reply
+    /*if (replyToEvent) {
         // Clear reply_to_event as we put the message into the queue
         // if the send fails, retry will handle resending.
         dis.dispatch({
@@ -152,7 +155,7 @@ export function sendMessage(
             event: null,
             context: roomContext.timelineRenderingType,
         });
-    }
+    }*/
     dis.dispatch({ action: "message_sent" });
     CHAT_EFFECTS.forEach((effect) => {
         if (containsEmoji(content, effect.emojis)) {
@@ -180,4 +183,6 @@ export function sendMessage(
             timelineRenderingType: roomContext.timelineRenderingType,
         });
     }
+
+    return prom;
 }
