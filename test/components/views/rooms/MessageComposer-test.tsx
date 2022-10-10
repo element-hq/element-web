@@ -361,6 +361,8 @@ describe("MessageComposer", () => {
 
         SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, true);
         const wrapper = wrapAndRender({ room });
+
+        SettingsStore.setValue("feature_wysiwyg_composer", null, SettingLevel.DEVICE, false);
         expect(wrapper.find(WysiwygComposer)).toBeTruthy();
     });
 });
