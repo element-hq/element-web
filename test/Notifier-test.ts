@@ -14,19 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { MockedObject } from "jest-mock";
-import { MatrixClient } from "matrix-js-sdk/src/client";
+import { mocked, MockedObject } from "jest-mock";
+import { ClientEvent, MatrixClient } from "matrix-js-sdk/src/client";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { MatrixEvent } from "matrix-js-sdk/src/models/event";
+import { SyncState } from "matrix-js-sdk/src/sync";
 
 import BasePlatform from "../src/BasePlatform";
 import { ElementCall } from "../src/models/Call";
 import Notifier from "../src/Notifier";
 import SettingsStore from "../src/settings/SettingsStore";
 import ToastStore from "../src/stores/ToastStore";
-import { getLocalNotificationAccountDataEventType } from "../src/utils/notifications";
+import {
+    createLocalNotificationSettingsIfNeeded,
+    getLocalNotificationAccountDataEventType,
+} from "../src/utils/notifications";
 import { getMockClientWithEventEmitter, mkEvent, mkRoom, mockPlatformPeg } from "./test-utils";
 import { IncomingCallToast } from "../src/toasts/IncomingCallToast";
+
+jest.mock("../src/utils/notifications", () => ({
+    // @ts-ignore
+    ...jest.requireActual("../src/utils/notifications"),
+    createLocalNotificationSettingsIfNeeded: jest.fn(),
+}));
 
 describe("Notifier", () => {
     const roomId = "!room1:server";
@@ -111,7 +121,7 @@ describe("Notifier", () => {
                 tweaks: {},
             });
 
-            Notifier.onSyncStateChange("SYNCING");
+            Notifier.onSyncStateChange(SyncState.Syncing);
         });
 
         afterEach(() => {
@@ -167,6 +177,48 @@ describe("Notifier", () => {
             callOnEvent("event_type");
 
             expect(ToastStore.sharedInstance().addOrReplaceToast).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('local notification settings', () => {
+        const createLocalNotificationSettingsIfNeededMock = mocked(createLocalNotificationSettingsIfNeeded);
+        let hasStartedNotiferBefore = false;
+        beforeEach(() => {
+            // notifier defines some listener functions in start
+            // and references them in stop
+            // so blows up if stopped before it was started
+            if (hasStartedNotiferBefore) {
+                Notifier.stop();
+            }
+            Notifier.start();
+            hasStartedNotiferBefore = true;
+            createLocalNotificationSettingsIfNeededMock.mockClear();
+        });
+
+        afterAll(() => {
+            Notifier.stop();
+        });
+
+        it('does not create local notifications event after a sync error', () => {
+            mockClient.emit(ClientEvent.Sync, SyncState.Error, SyncState.Syncing);
+            expect(createLocalNotificationSettingsIfNeededMock).not.toHaveBeenCalled();
+        });
+
+        it('does not create local notifications event after sync stops', () => {
+            mockClient.emit(ClientEvent.Sync, SyncState.Stopped, SyncState.Syncing);
+            expect(createLocalNotificationSettingsIfNeededMock).not.toHaveBeenCalled();
+        });
+
+        it('does not create local notifications event after a cached sync', () => {
+            mockClient.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing, {
+                fromCache: true,
+            });
+            expect(createLocalNotificationSettingsIfNeededMock).not.toHaveBeenCalled();
+        });
+
+        it('creates local notifications event after a non-cached sync', () => {
+            mockClient.emit(ClientEvent.Sync, SyncState.Syncing, SyncState.Syncing, {});
+            expect(createLocalNotificationSettingsIfNeededMock).toHaveBeenCalled();
         });
     });
 });

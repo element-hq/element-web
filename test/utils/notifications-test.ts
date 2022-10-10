@@ -20,6 +20,8 @@ import { mocked } from "jest-mock";
 import {
     localNotificationsAreSilenced,
     getLocalNotificationAccountDataEventType,
+    createLocalNotificationSettingsIfNeeded,
+    deviceNotificationSettingsKeys,
 } from "../../src/utils/notifications";
 import SettingsStore from "../../src/settings/SettingsStore";
 import { getMockClientWithEventEmitter } from "../test-utils/client";
@@ -44,6 +46,38 @@ describe('notifications', () => {
     beforeEach(() => {
         accountDataStore = {};
         mocked(SettingsStore).getValue.mockReturnValue(false);
+    });
+
+    describe('createLocalNotification', () => {
+        it('creates account data event', async () => {
+            await createLocalNotificationSettingsIfNeeded(mockClient);
+            const event = mockClient.getAccountData(accountDataEventKey);
+            expect(event?.getContent().is_silenced).toBe(true);
+        });
+
+        it.each(deviceNotificationSettingsKeys)(
+            'unsilenced for existing sessions when %s setting is truthy',
+            async (settingKey) => {
+                mocked(SettingsStore)
+                    .getValue
+                    .mockImplementation((key) => {
+                        return key === settingKey;
+                    });
+
+                await createLocalNotificationSettingsIfNeeded(mockClient);
+                const event = mockClient.getAccountData(accountDataEventKey);
+                expect(event?.getContent().is_silenced).toBe(false);
+            });
+
+        it("does not override an existing account event data", async () => {
+            mockClient.setAccountData(accountDataEventKey, {
+                is_silenced: false,
+            });
+
+            await createLocalNotificationSettingsIfNeeded(mockClient);
+            const event = mockClient.getAccountData(accountDataEventKey);
+            expect(event?.getContent().is_silenced).toBe(false);
+        });
     });
 
     describe('localNotificationsAreSilenced', () => {

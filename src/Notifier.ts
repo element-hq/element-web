@@ -26,6 +26,7 @@ import { M_LOCATION } from "matrix-js-sdk/src/@types/location";
 import {
     PermissionChanged as PermissionChangedEvent,
 } from "@matrix-org/analytics-events/types/typescript/PermissionChanged";
+import { ISyncStateData, SyncState } from "matrix-js-sdk/src/sync";
 
 import { MatrixClientPeg } from './MatrixClientPeg';
 import { PosthogAnalytics } from "./PosthogAnalytics";
@@ -50,6 +51,7 @@ import { localNotificationsAreSilenced } from "./utils/notifications";
 import { getIncomingCallToastKey, IncomingCallToast } from "./toasts/IncomingCallToast";
 import ToastStore from "./stores/ToastStore";
 import { ElementCall } from "./models/Call";
+import { createLocalNotificationSettingsIfNeeded } from './utils/notifications';
 
 /*
  * Dispatches:
@@ -351,11 +353,19 @@ export const Notifier = {
         return this.toolbarHidden;
     },
 
-    onSyncStateChange: function(state: string) {
-        if (state === "SYNCING") {
+    onSyncStateChange: function(state: SyncState, prevState?: SyncState, data?: ISyncStateData) {
+        if (state === SyncState.Syncing) {
             this.isSyncing = true;
-        } else if (state === "STOPPED" || state === "ERROR") {
+        } else if (state === SyncState.Stopped || state === SyncState.Error) {
             this.isSyncing = false;
+        }
+
+        // wait for first non-cached sync to complete
+        if (
+            ![SyncState.Stopped, SyncState.Error].includes(state) &&
+            !data?.fromCache
+        ) {
+            createLocalNotificationSettingsIfNeeded(MatrixClientPeg.get());
         }
     },
 
