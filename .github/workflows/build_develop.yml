@@ -1,13 +1,13 @@
 # Separate to the main build workflow for access to develop
 # environment secrets, largely similar to build.yaml.
-name: Build and Package develop
+name: Build and Deploy develop
 on:
   push:
     branches: [ develop, t3chguy/develop ]
   repository_dispatch:
     types: [ element-web-notify ]
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
+  group: ${{ github.repository_owner }}-${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
 jobs:
   build:
