@@ -1,11 +1,9 @@
-Changes in [3.58.0-rc.2](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.58.0-rc.2) (2022-10-05)
+Changes in [3.58.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.58.0) (2022-10-11)
 ===============================================================================================================
 
-## 🐛 Bug Fixes
- * Use the correct sender key when checking shared secret ([\#2730](https://github.com/matrix-org/matrix-js-sdk/pull/2730)). Fixes vector-im/element-web#23374.
+##   Deprecations
 
-Changes in [3.58.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.58.0-rc.1) (2022-10-04)
-===============================================================================================================
+ * Legacy Piwik config.json option `piwik.policy_url` is deprecated in favour of `privacy_policy_url`. Support will be removed in the next release.
 
 ## ✨ Features
  * Device manager - select all devices ([\#9330](https://github.com/matrix-org/matrix-react-sdk/pull/9330)).
@@ -22,6 +20,7 @@ Changes in [3.58.0-rc.1](https://github.com/matrix-org/matrix-react-sdk/releases
  * Read receipts for threads ([\#9239](https://github.com/matrix-org/matrix-react-sdk/pull/9239)). Fixes vector-im/element-web#23191.
 
 ## 🐛 Bug Fixes
+ * Use the correct sender key when checking shared secret ([\#2730](https://github.com/matrix-org/matrix-js-sdk/pull/2730)). Fixes vector-im/element-web#23374.
  * Fix device selection in pre-join screen for Element Call video rooms ([\#9321](https://github.com/matrix-org/matrix-react-sdk/pull/9321)). Fixes vector-im/element-web#23331.
  * Don't render a 1px high room topic if the room topic is empty ([\#9317](https://github.com/matrix-org/matrix-react-sdk/pull/9317)). Contributed by @Arnei.
  * Don't show feedback prompts when that UIFeature is disabled ([\#9305](https://github.com/matrix-org/matrix-react-sdk/pull/9305)). Fixes vector-im/element-web#23327.
