@@ -34,8 +34,13 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
+          SKIP_DIR_RM: 1
 
-      - run: mv dist/element-*.tar.gz dist/develop.tar.gz
+      - id: package
+        run: |
+          mv dist/element-*.tar.gz dist/develop.tar.gz
+          files=$(dist/element-*/bundles/)
+          echo "::set-output name=bundlehash::${files[0]}"
 
       # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
@@ -69,12 +74,15 @@ jobs:
 
       - name: Deploy to R2
         run: |
+          aws s3 ls s3://$$2_BUCKET/bundles/
           aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url ${{ secrets.CF_R2_S3_API }}
-          aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url ${{ secrets.CF_R2_S3_API }} file://.github/r2_cors.json
+          aws s3 cp dist/*/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive  --endpoint-url ${{ secrets.CF_R2_S3_API }}
+          # aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url ${{ secrets.CF_R2_S3_API }} file://.github/r2_cors.json
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
           R2_BUCKET: 'dev-ew-cf'
+          HASH: ${{ steps.package.outputs.bundlehash }}
           
       - name: Deploy to develop.element.io
         uses: cloudflare/pages-action@1
