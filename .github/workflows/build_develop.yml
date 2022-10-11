@@ -77,7 +77,7 @@ jobs:
           aws s3 ls s3://$$2_BUCKET/bundles/
           aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url ${{ secrets.CF_R2_S3_API }}
           aws s3 cp dist/*/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive  --endpoint-url ${{ secrets.CF_R2_S3_API }}
-          # aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url ${{ secrets.CF_R2_S3_API }} file://.github/r2_cors.json
+          aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url ${{ secrets.CF_R2_S3_API }} file://.github/r2_cors.yaml
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
