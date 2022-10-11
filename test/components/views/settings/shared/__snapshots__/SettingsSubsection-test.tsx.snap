@@ -5,15 +5,44 @@ exports[`<SettingsSubsection /> renders with plain text description 1`] = `
   <div
     class="mx_SettingsSubsection"
   >
-    <h3
-      class="mx_Heading_h3 mx_SettingsSubsection_heading"
+    <div
+      class="mx_SettingsSubsectionHeading"
     >
-      Test
-    </h3>
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Test
+      </h3>
+    </div>
     <div
       class="mx_SettingsSubsection_description"
     >
       This describes the subsection
+    </div>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div>
+        test settings content
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SettingsSubsection /> renders with plain text heading 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <div
+      class="mx_SettingsSubsectionHeading"
+    >
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Test
+      </h3>
     </div>
     <div
       class="mx_SettingsSubsection_content"
@@ -31,11 +60,15 @@ exports[`<SettingsSubsection /> renders with react element description 1`] = `
   <div
     class="mx_SettingsSubsection"
   >
-    <h3
-      class="mx_Heading_h3 mx_SettingsSubsection_heading"
+    <div
+      class="mx_SettingsSubsectionHeading"
     >
-      Test
-    </h3>
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Test
+      </h3>
+    </div>
     <div
       class="mx_SettingsSubsection_description"
     >
@@ -59,16 +92,39 @@ exports[`<SettingsSubsection /> renders with react element description 1`] = `
 </div>
 `;
 
+exports[`<SettingsSubsection /> renders with react element heading 1`] = `
+<div>
+  <div
+    class="mx_SettingsSubsection"
+  >
+    <h3>
+      This is the heading
+    </h3>
+    <div
+      class="mx_SettingsSubsection_content"
+    >
+      <div>
+        test settings content
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`<SettingsSubsection /> renders without description 1`] = `
 <div>
   <div
     class="mx_SettingsSubsection"
   >
-    <h3
-      class="mx_Heading_h3 mx_SettingsSubsection_heading"
+    <div
+      class="mx_SettingsSubsectionHeading"
     >
-      Test
-    </h3>
+      <h3
+        class="mx_Heading_h3 mx_SettingsSubsectionHeading_heading"
+      >
+        Test
+      </h3>
+    </div>
     <div
       class="mx_SettingsSubsection_content"
     >

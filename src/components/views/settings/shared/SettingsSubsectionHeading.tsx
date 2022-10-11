@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-.mx_SettingsSubsection {
-    width: 100%;
-    box-sizing: border-box;
+import React, { HTMLAttributes } from "react";
+
+import Heading from "../../typography/Heading";
+
+export interface SettingsSubsectionHeadingProps extends HTMLAttributes<HTMLDivElement> {
+    heading: string;
+    children?: React.ReactNode;
 }
 
-.mx_SettingsSubsection_description {
-    width: 100%;
-    box-sizing: inherit;
-    line-height: $font-24px;
-    margin-bottom: $spacing-32;
-    color: $secondary-content;
-}
-
-.mx_SettingsSubsection_content {
-    width: 100%;
-}
+export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({ heading, children, ...rest }) => (
+    <div {...rest} className="mx_SettingsSubsectionHeading">
+        <Heading className="mx_SettingsSubsectionHeading_heading" size='h3'>{ heading }</Heading>
+        { children }
+    </div>
+);
