@@ -65,7 +65,7 @@ describe('WebPlatform', () => {
         it.each([[
             "https://develop.element.io/#/room/!foo:bar",
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
-            "develop.element.io (Chrome, macOS)",
+            "develop.element.io: Chrome on macOS",
         ]])("%s & %s = %s", (url, userAgent, result) => {
             delete window.navigator;
             window.navigator = { userAgent } as unknown as Navigator;
