@@ -25,6 +25,10 @@ export interface MatrixClientProps {
     mxClient: MatrixClient;
 }
 
+export function useMatrixClientContext() {
+    return useContext(MatrixClientContext);
+}
+
 const matrixHOC = <ComposedComponentProps extends {}>(
     ComposedComponent: ComponentClass<ComposedComponentProps>,
 ) => {
