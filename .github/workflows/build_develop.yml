@@ -3,7 +3,7 @@
 name: Build and Package develop
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, t3chguy/develop ]
   repository_dispatch:
     types: [ element-web-notify ]
 concurrency:
@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    name: "Build & Upload source maps to Sentry"
+    name: "Build & Upload source maps to Sentry & Deploy to develop.element.io"
     # Only respect triggers from our develop branch, ignore that of forks
     if: github.repository == 'vector-im/element-web'
     runs-on: ubuntu-latest
@@ -39,6 +39,7 @@ jobs:
 
       # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
+      # TODO: remove this once the element-desktop fetch script is updated to grab develop.element.io/develop.tar.gz
       - name: Deploy develop.tar.gz to Github Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
@@ -59,3 +60,21 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           check-regexp: ^((?!SonarQube|issues|board).)*$
+        
+      - name: Deploy to R2
+        run: |
+          pip3 install awscli
+          aws s3api list-buckets --endpoint-url ${{ secrets.CF_R2_S3_API }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+          
+      - name: Deploy to develop.element.io
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CF_PAGES_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: element-web-develop
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+    
