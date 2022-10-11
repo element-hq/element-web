@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    name: "Build & Upload source maps to Sentry & Deploy to develop.element.io"
+    name: "Build & Deploy"
     # Only respect triggers from our develop branch, ignore that of forks
     if: github.repository == 'vector-im/element-web'
     runs-on: ubuntu-latest
@@ -56,7 +56,7 @@ jobs:
         uses: lewagon/wait-on-check-action@v1.1.2
         with:
           ref: ${{ github.ref }}
-          running-workflow-name: 'Build & Upload source maps to Sentry'
+          running-workflow-name: 'Build & Deploy'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
           check-regexp: ^((?!SonarQube|issues|board).)*$
