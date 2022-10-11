@@ -16,6 +16,7 @@ limitations under the License.
 
 import request from 'browser-request';
 import EventEmitter from 'events';
+import { MatrixClient, Room } from 'matrix-js-sdk/src/matrix';
 import { UpdateCheckStatus } from 'matrix-react-sdk/src/BasePlatform';
 import { MatrixClientPeg } from 'matrix-react-sdk/src/MatrixClientPeg';
 
@@ -26,12 +27,17 @@ class MockElectron extends EventEmitter {
 }
 
 describe('ElectronPlatform', () => {
+    const defaultUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
     const mockElectron = new MockElectron();
+
+    const mockClient = {} as unknown as MatrixClient;
 
     window.electron = mockElectron;
     beforeEach(() => {
         window.electron = mockElectron;
         jest.clearAllMocks();
+        delete window.navigator;
+        window.navigator = { userAgent: defaultUserAgent } as unknown as Navigator;
     });
 
     it('returns human readable name', () => {
@@ -57,6 +63,48 @@ describe('ElectronPlatform', () => {
             window.navigator = { userAgent } as unknown as Navigator;
             const platform = new ElectronPlatform();
             expect(platform.getDefaultDeviceDisplayName()).toEqual(result);
+        });
+    });
+
+    it('returns true for needsUrlTooltips', () => {
+        const platform = new ElectronPlatform();
+        expect(platform.needsUrlTooltips()).toBe(true);
+    });
+
+    it('should override browser shortcuts', () => {
+        const platform = new ElectronPlatform();
+        expect(platform.overrideBrowserShortcuts()).toBe(true);
+    });
+
+    it('allows overriding native context menus', () => {
+        const platform = new ElectronPlatform();
+        expect(platform.allowOverridingNativeContextMenus()).toBe(true);
+    });
+
+    it('indicates support for desktop capturer', () => {
+        const platform = new ElectronPlatform();
+        expect(platform.supportsDesktopCapturer()).toBe(true);
+    });
+
+    it('indicates support for spellcheck settings', () => {
+        const platform = new ElectronPlatform();
+        expect(platform.supportsSpellCheckSettings()).toBe(true);
+    });
+
+    it('indicates no support for jitsi screensharing', () => {
+        const platform = new ElectronPlatform();
+        expect(platform.supportsJitsiScreensharing()).toBe(false);
+    });
+
+    describe('notifications', () => {
+        it('indicates support for notifications', () => {
+            const platform = new ElectronPlatform();
+            expect(platform.supportsNotifications()).toBe(true);
+        });
+
+        it('may send notifications', () => {
+            const platform = new ElectronPlatform();
+            expect(platform.maySendNotifications()).toBe(true);
         });
     });
 });
