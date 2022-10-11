@@ -61,12 +61,6 @@ jobs:
 #          wait-interval: 10
 #          check-regexp: ^((?!SonarQube|issues|board).)*$
 
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          ./aws/install
-
       - name: Prepare deployment
         run: |
           mkdir cfp_dist
