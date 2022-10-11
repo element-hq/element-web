@@ -58,6 +58,7 @@ export class IPCManager {
         }
 
         const callbacks = this.pendingIpcCalls[payload.id];
+
         delete this.pendingIpcCalls[payload.id];
         if (payload.error) {
             callbacks.reject(payload.error);
