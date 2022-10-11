@@ -1,8 +1,13 @@
+Changes in [3.58.1](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.58.1) (2022-10-11)
+=====================================================================================================
+
+## 🐛 Bug Fixes
+ * Use correct default for notification silencing ([\#9388](https://github.com/matrix-org/matrix-react-sdk/pull/9388)). Fixes vector-im/element-web#23456.
+
 Changes in [3.58.0](https://github.com/matrix-org/matrix-react-sdk/releases/tag/v3.58.0) (2022-10-11)
 ===============================================================================================================
 
 ##   Deprecations
-
  * Legacy Piwik config.json option `piwik.policy_url` is deprecated in favour of `privacy_policy_url`. Support will be removed in the next release.
 
 ## ✨ Features
