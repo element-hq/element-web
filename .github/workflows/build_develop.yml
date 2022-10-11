@@ -73,7 +73,7 @@ jobs:
         uses: cloudflare/pages-action@1
         with:
           apiToken: ${{ secrets.CF_PAGES_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
           projectName: element-web-develop
           directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
