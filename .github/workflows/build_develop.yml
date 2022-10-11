@@ -1,17 +1,17 @@
 # Separate to the main build workflow for access to develop
 # environment secrets, largely similar to build.yaml.
-name: Build and Package develop
+name: Build and Deploy develop
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, t3chguy/develop ]
   repository_dispatch:
     types: [ element-web-notify ]
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_branch }}
+  group: ${{ github.repository_owner }}-${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
 jobs:
   build:
-    name: "Build & Upload source maps to Sentry"
+    name: "Build & Deploy"
     # Only respect triggers from our develop branch, ignore that of forks
     if: github.repository == 'vector-im/element-web'
     runs-on: ubuntu-latest
@@ -34,28 +34,62 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_ORG: element
           SENTRY_PROJECT: riot-web
+          SKIP_DIR_RM: 1
 
-      - run: mv dist/element-*.tar.gz dist/develop.tar.gz
+      - id: package
+        run: |
+          mv dist/element-*.tar.gz dist/develop.tar.gz
+          files=$(ls dist/element-*/bundles/)
+          echo "::set-output name=bundlehash::${files[0]}"
 
       # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
-      - name: Deploy develop.tar.gz to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: dist
-          single-commit: true
+      # TODO: remove this once the element-desktop fetch script is updated to grab develop.element.io/develop.tar.gz
+#      - name: Deploy develop.tar.gz to Github Pages
+#        uses: JamesIves/github-pages-deploy-action@v4
+#        with:
+#          folder: dist
+#          single-commit: true
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: webapp
-          path: dist/develop.tar.gz
-          retention-days: 1
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: webapp
+#          path: dist/develop.tar.gz
+#          retention-days: 1
 
-      - name: Wait for other steps to succeed
-        uses: lewagon/wait-on-check-action@v1.1.2
+#      - name: Wait for other steps to succeed
+#        uses: lewagon/wait-on-check-action@v1.1.2
+#        with:
+#          ref: ${{ github.ref }}
+#          running-workflow-name: 'Build & Deploy'
+#          repo-token: ${{ secrets.GITHUB_TOKEN }}
+#          wait-interval: 10
+#          check-regexp: ^((?!SonarQube|issues|board).)*$
+
+      - name: Prepare deployment
+        run: |
+          mkdir cfp_dist
+          echo "/develop.tar.gz https://pub-e63db452ab5c4047b1d0357cb18528e4.r2.dev/develop.tar.gz 301" >> cfp_dist/_redirects
+          echo "Testing" >> cfp_dist/index.html
+
+      - name: Deploy to R2
+        run: |
+          aws s3 ls s3://$$2_BUCKET/bundles/
+          aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url ${{ secrets.CF_R2_S3_API }}
+          aws s3 cp dist/*/bundles/$HASH s3://$R2_BUCKET/bundles/$HASH --recursive  --endpoint-url ${{ secrets.CF_R2_S3_API }}
+          aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url ${{ secrets.CF_R2_S3_API }} file://.github/r2_cors.yaml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+          R2_BUCKET: 'dev-ew-cf'
+          HASH: ${{ steps.package.outputs.bundlehash }}
+          
+      - name: Deploy to develop.element.io
+        uses: cloudflare/pages-action@1
         with:
-          ref: ${{ github.ref }}
-          running-workflow-name: 'Build & Upload source maps to Sentry'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          check-regexp: ^((?!SonarQube|issues|board).)*$
+          apiToken: ${{ secrets.CF_PAGES_TOKEN }}
+          accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
+          projectName: element-web-develop
+          directory: cfp_dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+    
