@@ -25,5 +25,5 @@ export function getLocalNotificationAccountDataEventType(deviceId: string): stri
 export function localNotificationsAreSilenced(cli: MatrixClient): boolean {
     const eventType = getLocalNotificationAccountDataEventType(cli.deviceId);
     const event = cli.getAccountData(eventType);
-    return event?.getContent<LocalNotificationSettings>()?.is_silenced ?? true;
+    return event?.getContent<LocalNotificationSettings>()?.is_silenced ?? false;
 }
