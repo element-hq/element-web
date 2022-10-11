@@ -81,8 +81,8 @@ describe('notifications', () => {
     });
 
     describe('localNotificationsAreSilenced', () => {
-        it('defaults to true when no setting exists', () => {
-            expect(localNotificationsAreSilenced(mockClient)).toBeTruthy();
+        it('defaults to false when no setting exists', () => {
+            expect(localNotificationsAreSilenced(mockClient)).toBeFalsy();
         });
         it('checks the persisted value', () => {
             mockClient.setAccountData(accountDataEventKey, { is_silenced: true });
