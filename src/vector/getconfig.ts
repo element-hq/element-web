@@ -37,7 +37,9 @@ export async function getVectorConfig(relativeLocation=''): Promise<IConfigOptio
 }
 
 async function getConfig(configJsonFilename: string): Promise<IConfigOptions> {
-    const res = await fetch(configJsonFilename, {
+    const url = new URL(configJsonFilename, window.location.href);
+    url.searchParams.set("cachebuster", Date.now().toString());
+    const res = await fetch(url, {
         cache: "no-cache",
         method: "GET",
     });
