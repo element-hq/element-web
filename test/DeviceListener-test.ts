@@ -17,7 +17,7 @@ limitations under the License.
 
 import { EventEmitter } from "events";
 import { mocked } from "jest-mock";
-import { Room } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent, Room } from "matrix-js-sdk/src/matrix";
 import { logger } from "matrix-js-sdk/src/logger";
 
 import DeviceListener from "../src/DeviceListener";
@@ -66,6 +66,7 @@ class MockClient extends EventEmitter {
     getClientWellKnown = jest.fn();
     getDeviceId = jest.fn().mockReturnValue(deviceId);
     setAccountData = jest.fn();
+    getAccountData = jest.fn();
 }
 const mockDispatcher = mocked(dis);
 const flushPromises = async () => await new Promise(process.nextTick);
@@ -138,7 +139,7 @@ describe('DeviceListener', () => {
                 await createAndStart();
 
                 expect(errorLogSpy).toHaveBeenCalledWith(
-                    'Failed to record client information',
+                    'Failed to update client information',
                     error,
                 );
             });
@@ -161,17 +162,37 @@ describe('DeviceListener', () => {
         });
 
         describe('when device client information feature is disabled', () => {
+            const clientInfoEvent = new MatrixEvent({ type: `io.element.matrix_client_information.${deviceId}`,
+                content: { name: 'hello' },
+            });
+            const emptyClientInfoEvent = new MatrixEvent({ type: `io.element.matrix_client_information.${deviceId}` });
             beforeEach(() => {
                 jest.spyOn(SettingsStore, 'getValue').mockReturnValue(false);
+
+                mockClient.getAccountData.mockReturnValue(undefined);
             });
 
             it('does not save client information on start', async () => {
                 await createAndStart();
 
-                expect(mockClient.setAccountData).not.toHaveBeenCalledWith(
+                expect(mockClient.setAccountData).not.toHaveBeenCalled();
+            });
+
+            it('removes client information on start if it exists', async () => {
+                mockClient.getAccountData.mockReturnValue(clientInfoEvent);
+                await createAndStart();
+
+                expect(mockClient.setAccountData).toHaveBeenCalledWith(
                     `io.element.matrix_client_information.${deviceId}`,
-                    { name: 'Element', url: 'localhost', version: '1.2.3' },
+                    {},
                 );
+            });
+
+            it('does not try to remove client info event that are already empty', async () => {
+                mockClient.getAccountData.mockReturnValue(emptyClientInfoEvent);
+                await createAndStart();
+
+                expect(mockClient.setAccountData).not.toHaveBeenCalled();
             });
 
             it('does not save client information on logged in action', async () => {
@@ -182,10 +203,7 @@ describe('DeviceListener', () => {
 
                 await flushPromises();
 
-                expect(mockClient.setAccountData).not.toHaveBeenCalledWith(
-                    `io.element.matrix_client_information.${deviceId}`,
-                    { name: 'Element', url: 'localhost', version: '1.2.3' },
-                );
+                expect(mockClient.setAccountData).not.toHaveBeenCalled();
             });
 
             it('saves client information after setting is enabled', async () => {

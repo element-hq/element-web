@@ -42,7 +42,10 @@ import { Action } from "./dispatcher/actions";
 import { isLoggedIn } from "./utils/login";
 import SdkConfig from "./SdkConfig";
 import PlatformPeg from "./PlatformPeg";
-import { recordClientInformation } from "./utils/device/clientInformation";
+import {
+    recordClientInformation,
+    removeClientInformation,
+} from "./utils/device/clientInformation";
 import SettingsStore, { CallbackFn } from "./settings/SettingsStore";
 
 const KEY_BACKUP_POLL_INTERVAL = 5 * 60 * 1000;
@@ -90,7 +93,7 @@ export default class DeviceListener {
         );
         this.dispatcherRef = dis.register(this.onAction);
         this.recheck();
-        this.recordClientInformation();
+        this.updateClientInformation();
     }
 
     public stop() {
@@ -216,7 +219,7 @@ export default class DeviceListener {
     private onAction = ({ action }: ActionPayload) => {
         if (action !== Action.OnLoggedIn) return;
         this.recheck();
-        this.recordClientInformation();
+        this.updateClientInformation();
     };
 
     // The server doesn't tell us when key backup is set up, so we poll
@@ -368,25 +371,26 @@ export default class DeviceListener {
 
         this.shouldRecordClientInformation = !!newValue;
 
-        if (this.shouldRecordClientInformation && !prevValue) {
-            this.recordClientInformation();
+        if (this.shouldRecordClientInformation !== prevValue) {
+            this.updateClientInformation();
         }
     };
 
-    private recordClientInformation = async () => {
-        if (!this.shouldRecordClientInformation) {
-            return;
-        }
+    private updateClientInformation = async () => {
         try {
-            await recordClientInformation(
-                MatrixClientPeg.get(),
-                SdkConfig.get(),
-                PlatformPeg.get(),
-            );
+            if (this.shouldRecordClientInformation) {
+                await recordClientInformation(
+                    MatrixClientPeg.get(),
+                    SdkConfig.get(),
+                    PlatformPeg.get(),
+                );
+            } else {
+                await removeClientInformation(MatrixClientPeg.get());
+            }
         } catch (error) {
             // this is a best effort operation
             // log the error without rethrowing
-            logger.error('Failed to record client information', error);
+            logger.error('Failed to update client information', error);
         }
     };
 }
