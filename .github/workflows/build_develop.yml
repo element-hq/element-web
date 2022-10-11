@@ -23,48 +23,57 @@ jobs:
         with:
           cache: 'yarn'
 
-      - name: Install Dependencies
-        run: "./scripts/layered.sh"
+#      - name: Install Dependencies
+#        run: "./scripts/layered.sh"
 
-      - name: Build, Package & Upload sourcemaps
-        run: "./scripts/ci_package.sh"
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_URL: ${{ secrets.SENTRY_URL }}
-          SENTRY_ORG: element
-          SENTRY_PROJECT: riot-web
+#      - name: Build, Package & Upload sourcemaps
+#        run: "./scripts/ci_package.sh"
+#        env:
+#          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+#          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+#          SENTRY_URL: ${{ secrets.SENTRY_URL }}
+#          SENTRY_ORG: element
+#          SENTRY_PROJECT: riot-web
 
-      - run: mv dist/element-*.tar.gz dist/develop.tar.gz
+#      - run: mv dist/element-*.tar.gz dist/develop.tar.gz
 
       # We keep the latest develop.tar.gz as the artifact uploaded later expires after 24 and requires auth to download
       # Element Desktop's fetch script uses this tarball to fetch latest develop to build Nightlies.
       # TODO: remove this once the element-desktop fetch script is updated to grab develop.element.io/develop.tar.gz
-      - name: Deploy develop.tar.gz to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: dist
-          single-commit: true
+#      - name: Deploy develop.tar.gz to Github Pages
+#        uses: JamesIves/github-pages-deploy-action@v4
+#        with:
+#          folder: dist
+#          single-commit: true
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: webapp
-          path: dist/develop.tar.gz
-          retention-days: 1
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: webapp
+#          path: dist/develop.tar.gz
+#          retention-days: 1
 
-      - name: Wait for other steps to succeed
-        uses: lewagon/wait-on-check-action@v1.1.2
-        with:
-          ref: ${{ github.ref }}
-          running-workflow-name: 'Build & Deploy'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
-          check-regexp: ^((?!SonarQube|issues|board).)*$
-        
+#      - name: Wait for other steps to succeed
+#        uses: lewagon/wait-on-check-action@v1.1.2
+#        with:
+#          ref: ${{ github.ref }}
+#          running-workflow-name: 'Build & Deploy'
+#          repo-token: ${{ secrets.GITHUB_TOKEN }}
+#          wait-interval: 10
+#          check-regexp: ^((?!SonarQube|issues|board).)*$
+
+      - name: Install S3 cli
+        run: pip3 install awscli
+
+      - name: Prepare deployment
+        run: |
+          mkdir cfp_dist
+          echo "/develop.tar.gz https://pub-e63db452ab5c4047b1d0357cb18528e4.r2.dev/develop.tar.gz 301" >> cfp_dist/_redirects
+          echo "Testing" >> cfp_dist/index.html
+
       - name: Deploy to R2
         run: |
-          pip3 install awscli
-          aws s3api list-buckets --endpoint-url ${{ secrets.CF_R2_S3_API }}
+          aws s3 cp cfp_dist/index.html s3://dev-ew-cf/index.html --endpoint-url ${{ secrets.CF_R2_S3_API }}
+          aws s3 cp dist/develop.tar.gz s3://dev-ew-cf/develop.tar.gz --endpoint-url ${{ secrets.CF_R2_S3_API }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
@@ -75,6 +84,6 @@ jobs:
           apiToken: ${{ secrets.CF_PAGES_TOKEN }}
           accountId: ${{ secrets.CF_PAGES_ACCOUNT_ID }}
           projectName: element-web-develop
-          directory: dist
+          directory: cfp_dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
     
