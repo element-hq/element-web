@@ -46,64 +46,64 @@ describe('getVectorConfig()', () => {
     });
 
     it('requests specific config for document domain', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", specificConfig);
-        fetchMock.getOnce("/config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json", specificConfig);
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
         await expect(getVectorConfig()).resolves.toEqual(specificConfig);
     });
 
     it('adds trailing slash to relativeLocation when not an empty string', async () => {
-        fetchMock.getOnce("../config.app.element.io.json", specificConfig);
-        fetchMock.getOnce("../config.json", generalConfig);
+        fetchMock.getOnce("express:../config.app.element.io.json", specificConfig);
+        fetchMock.getOnce("express:../config.json", generalConfig);
 
         await expect(getVectorConfig("..")).resolves.toEqual(specificConfig);
     });
 
     it('returns general config when specific config succeeds but is empty', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", {});
-        fetchMock.getOnce("/config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json", {});
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
         await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config 404s', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", { status: 404 });
-        fetchMock.getOnce("/config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json", { status: 404 });
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
         await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config is fetched from a file and is empty', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", 0);
-        fetchMock.getOnce("/config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json", 0);
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
         await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config returns a non-200 status', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", { status: 401 });
-        fetchMock.getOnce("/config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json", { status: 401 });
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
         await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('returns general config when specific config returns an error', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", { throws: "err1" });
-        fetchMock.getOnce("/config.json", generalConfig);
+        fetchMock.getOnce("express:/config.app.element.io.json", { throws: "err1" });
+        fetchMock.getOnce("express:/config.json", generalConfig);
 
         await expect(getVectorConfig()).resolves.toEqual(generalConfig);
     });
 
     it('rejects with an error when general config rejects', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", { throws: "err-specific" });
-        fetchMock.getOnce("/config.json", { throws: "err-general" });
+        fetchMock.getOnce("express:/config.app.element.io.json", { throws: "err-specific" });
+        fetchMock.getOnce("express:/config.json", { throws: "err-general" });
 
         await expect(getVectorConfig()).rejects.toBe("err-general");
     });
 
     it('rejects with an error when config is invalid JSON', async () => {
-        fetchMock.getOnce("/config.app.element.io.json", { throws: "err-specific" });
-        fetchMock.getOnce("/config.json", '{"invalid": "json",}');
+        fetchMock.getOnce("express:/config.app.element.io.json", { throws: "err-specific" });
+        fetchMock.getOnce("express:/config.json", '{"invalid": "json",}');
 
         // We can't assert it'll be a SyntaxError as node-fetch behaves differently
         // https://github.com/wheresrhys/fetch-mock/issues/270
