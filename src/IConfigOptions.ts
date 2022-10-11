@@ -181,6 +181,11 @@ export interface IConfigOptions {
 
     sync_timeline_limit?: number;
     dangerously_allow_unsafe_and_insecure_passwords?: boolean; // developer option
+
+    voice_broadcast?: {
+        // length per voice chunk in seconds
+        chunk_length?: number;
+    };
 }
 
 export interface ISsoRedirectOptions {

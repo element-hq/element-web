@@ -31,7 +31,7 @@ interface EventMap {
  * This store provides access to the current and specific Voice Broadcast recordings.
  */
 export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadcastRecordingsStoreEvent, EventMap> {
-    private _current: VoiceBroadcastRecording | null;
+    private current: VoiceBroadcastRecording | null;
     private recordings = new Map<string, VoiceBroadcastRecording>();
 
     public constructor() {
@@ -39,15 +39,15 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
     }
 
     public setCurrent(current: VoiceBroadcastRecording): void {
-        if (this._current === current) return;
+        if (this.current === current) return;
 
-        this._current = current;
+        this.current = current;
         this.recordings.set(current.infoEvent.getId(), current);
         this.emit(VoiceBroadcastRecordingsStoreEvent.CurrentChanged, current);
     }
 
-    public get current(): VoiceBroadcastRecording {
-        return this._current;
+    public getCurrent(): VoiceBroadcastRecording {
+        return this.current;
     }
 
     public getByInfoEvent(infoEvent: MatrixEvent, client: MatrixClient): VoiceBroadcastRecording {
@@ -60,12 +60,12 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
         return this.recordings.get(infoEventId);
     }
 
-    public static readonly _instance = new VoiceBroadcastRecordingsStore();
+    private static readonly cachedInstance = new VoiceBroadcastRecordingsStore();
 
     /**
      * TODO Michael W: replace when https://github.com/matrix-org/matrix-react-sdk/pull/9293 has been merged
      */
-    public static instance() {
-        return VoiceBroadcastRecordingsStore._instance;
+    public static instance(): VoiceBroadcastRecordingsStore {
+        return VoiceBroadcastRecordingsStore.cachedInstance;
     }
 }

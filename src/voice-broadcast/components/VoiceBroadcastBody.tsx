@@ -31,7 +31,7 @@ export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
     const client = MatrixClientPeg.get();
     const room = client.getRoom(mxEvent.getRoomId());
     const recording = VoiceBroadcastRecordingsStore.instance().getByInfoEvent(mxEvent, client);
-    const [recordingState, setRecordingState] = useState(recording.state);
+    const [recordingState, setRecordingState] = useState(recording.getState());
 
     useTypedEventEmitter(
         recording,

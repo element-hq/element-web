@@ -155,7 +155,7 @@ describe("VoiceBroadcastBody", () => {
             itShouldRenderANonLiveVoiceBroadcast();
 
             it("should call stop on the recording", () => {
-                expect(recording.state).toBe(VoiceBroadcastInfoState.Stopped);
+                expect(recording.getState()).toBe(VoiceBroadcastInfoState.Stopped);
                 expect(onRecordingStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Stopped);
             });
         });

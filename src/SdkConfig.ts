@@ -46,6 +46,9 @@ export const DEFAULTS: IConfigOptions = {
         logo: require("../res/img/element-desktop-logo.svg").default,
         url: "https://element.io/get-started",
     },
+    voice_broadcast: {
+        chunk_length: 60 * 1000, // one minute
+    },
 };
 
 export default class SdkConfig {
