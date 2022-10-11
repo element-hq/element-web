@@ -62,7 +62,7 @@ export function WysiwygComposer(
                     aria-autocomplete="list"
                     aria-haspopup="listbox"
                     dir="auto"
-                    aria-disabled={!disabled && isWysiwygReady}
+                    aria-disabled={disabled || !isWysiwygReady}
                 />
             </div>
             { children?.(memoizedSendMessage) }
