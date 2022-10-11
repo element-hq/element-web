@@ -161,14 +161,6 @@ describe('ElectronPlatform', () => {
             expect(args).toEqual([userId, deviceId])
         });
 
-        it('catches error and returns null when getPickleKey rejects', async () => {
-            const platform = new ElectronPlatform();
-            mockElectron.send.mockClear().mockImplementation(() => { throw new Error('oups') });
-            const result = await platform.getPickleKey(userId, deviceId);
-
-            expect(result).toEqual(null);
-        });
-
         it('makes correct ipc call to create pickle key', () => {
             const platform = new ElectronPlatform();
             mockElectron.send.mockClear();
@@ -177,14 +169,6 @@ describe('ElectronPlatform', () => {
             const [, { name, args }] = mockElectron.send.mock.calls[0];
             expect(name).toEqual('createPickleKey')
             expect(args).toEqual([userId, deviceId])
-        });
-
-        it('catches error and returns null when createPickleKey rejects', async () => {
-            const platform = new ElectronPlatform();
-            mockElectron.send.mockClear().mockImplementation(() => { throw new Error('oups') });
-            const result = await platform.createPickleKey(userId, deviceId);
-
-            expect(result).toEqual(null);
         });
 
         it('makes correct ipc call to destroy pickle key', () => {
