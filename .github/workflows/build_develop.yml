@@ -72,10 +72,12 @@ jobs:
 
       - name: Deploy to R2
         run: |
-          aws s3 cp dist/develop.tar.gz s3://dev-ew-cf/develop.tar.gz --endpoint-url ${{ secrets.CF_R2_S3_API }}
+          aws s3 cp dist/develop.tar.gz s3://$R2_BUCKET/develop.tar.gz --endpoint-url ${{ secrets.CF_R2_S3_API }}
+          aws s3api put-bucket-cors --bucket $R2_BUCKET --endpoint-url ${{ secrets.CF_R2_S3_API }} file://.github/r2_cors.json
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_TOKEN }}
+          R2_BUCKET: 'dev-ew-cf'
           
       - name: Deploy to develop.element.io
         uses: cloudflare/pages-action@1
