@@ -20,7 +20,6 @@ import DeviceListener from '../DeviceListener';
 import GenericToast from "../components/views/toasts/GenericToast";
 import ToastStore from "../stores/ToastStore";
 import { Action } from "../dispatcher/actions";
-import { UserTab } from "../components/views/dialogs/UserTab";
 
 const TOAST_KEY = "reviewsessions";
 
@@ -29,8 +28,7 @@ export const showToast = (deviceIds: Set<string>) => {
         DeviceListener.sharedInstance().dismissUnverifiedSessions(deviceIds);
 
         dis.dispatch({
-            action: Action.ViewUserSettings,
-            initialTabId: UserTab.Security,
+            action: Action.ViewUserDeviceSettings,
         });
     };
 

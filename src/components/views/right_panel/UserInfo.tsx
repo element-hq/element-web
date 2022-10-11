@@ -48,7 +48,6 @@ import EncryptionPanel from "./EncryptionPanel";
 import { useAsyncMemo } from '../../../hooks/useAsyncMemo';
 import { legacyVerifyUser, verifyDevice, verifyUser } from '../../../verification';
 import { Action } from "../../../dispatcher/actions";
-import { UserTab } from "../dialogs/UserTab";
 import { useIsEncrypted } from "../../../hooks/useIsEncrypted";
 import BaseCard from "./BaseCard";
 import { E2EStatus } from "../../../utils/ShieldUtils";
@@ -1331,8 +1330,7 @@ const BasicUserInfo: React.FC<{
                 className="mx_UserInfo_field"
                 onClick={() => {
                     dis.dispatch({
-                        action: Action.ViewUserSettings,
-                        initialTabId: UserTab.Security,
+                        action: Action.ViewUserDeviceSettings,
                     });
                 }}
             >

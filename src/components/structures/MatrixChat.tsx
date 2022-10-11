@@ -137,6 +137,7 @@ import { TimelineRenderingType } from "../../contexts/RoomContext";
 import { UseCaseSelection } from '../views/elements/UseCaseSelection';
 import { ValidatedServerConfig } from '../../utils/ValidatedServerConfig';
 import { isLocalRoom } from '../../utils/localRoom/isLocalRoom';
+import { viewUserDeviceSettings } from '../../actions/handlers/viewUserDeviceSettings';
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -675,6 +676,10 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                         dis.dispatch(payload.deferred_action);
                     });
                 }
+                break;
+            }
+            case Action.ViewUserDeviceSettings: {
+                viewUserDeviceSettings(SettingsStore.getValue("feature_new_device_manager"));
                 break;
             }
             case Action.ViewUserSettings: {
