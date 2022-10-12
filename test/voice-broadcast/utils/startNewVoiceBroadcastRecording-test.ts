@@ -89,6 +89,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             event: true,
             type: VoiceBroadcastInfoEventType,
             content: {
+                device_id: client.getDeviceId(),
                 state: VoiceBroadcastInfoState.Started,
             },
             user: client.getUserId(),

@@ -65,6 +65,7 @@ export const startNewVoiceBroadcastRecording = async (
         roomId,
         VoiceBroadcastInfoEventType,
         {
+            device_id: client.getDeviceId(),
             state: VoiceBroadcastInfoState.Started,
             chunk_length: 300,
         } as VoiceBroadcastInfoEventContent,

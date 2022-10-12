@@ -160,6 +160,7 @@ describe("VoiceBroadcastRecording", () => {
     describe("when created for a Voice Broadcast Info without relations", () => {
         beforeEach(() => {
             infoEvent = mkVoiceBroadcastInfoEvent({
+                device_id: client.getDeviceId(),
                 state: VoiceBroadcastInfoState.Started,
             });
             setUpVoiceBroadcastRecording();
@@ -179,6 +180,7 @@ describe("VoiceBroadcastRecording", () => {
                     roomId,
                     VoiceBroadcastInfoEventType,
                     {
+                        device_id: client.getDeviceId(),
                         state: VoiceBroadcastInfoState.Stopped,
                         ["m.relates_to"]: {
                             rel_type: RelationType.Reference,
@@ -344,6 +346,7 @@ describe("VoiceBroadcastRecording", () => {
     describe("when created for a Voice Broadcast Info with a Stopped relation", () => {
         beforeEach(() => {
             infoEvent = mkVoiceBroadcastInfoEvent({
+                device_id: client.getDeviceId(),
                 state: VoiceBroadcastInfoState.Started,
                 chunk_length: 300,
             });
@@ -353,6 +356,7 @@ describe("VoiceBroadcastRecording", () => {
             } as unknown as Relations;
             mocked(relationsContainer.getRelations).mockReturnValue([
                 mkVoiceBroadcastInfoEvent({
+                    device_id: client.getDeviceId(),
                     state: VoiceBroadcastInfoState.Stopped,
                     ["m.relates_to"]: {
                         rel_type: RelationType.Reference,

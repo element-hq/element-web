@@ -40,6 +40,7 @@ export enum VoiceBroadcastInfoState {
 }
 
 export interface VoiceBroadcastInfoEventContent {
+    device_id: string;
     state: VoiceBroadcastInfoState;
     chunk_length?: number;
     ["m.relates_to"]?: {

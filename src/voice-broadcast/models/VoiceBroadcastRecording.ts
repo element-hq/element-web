@@ -146,6 +146,7 @@ export class VoiceBroadcastRecording
             this.infoEvent.getRoomId(),
             VoiceBroadcastInfoEventType,
             {
+                device_id: this.client.getDeviceId(),
                 state: VoiceBroadcastInfoState.Stopped,
                 ["m.relates_to"]: {
                     rel_type: RelationType.Reference,
