@@ -1104,12 +1104,13 @@ export const Commands = [
 
                 MatrixClientPeg.get().forceDiscardSession(roomId);
 
-                // noinspection JSIgnoredPromiseFromCall
-                MatrixClientPeg.get().crypto.ensureOlmSessionsForUsers(room.getMembers().map(m => m.userId), true);
+                return success(room.getEncryptionTargetMembers().then(members => {
+                    // noinspection JSIgnoredPromiseFromCall
+                    MatrixClientPeg.get().crypto.ensureOlmSessionsForUsers(members.map(m => m.userId), true);
+                }));
             } catch (e) {
                 return reject(e.message);
             }
-            return success();
         },
         category: CommandCategories.advanced,
         renderingTypes: [TimelineRenderingType.Room],
