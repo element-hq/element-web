@@ -16,19 +16,31 @@ limitations under the License.
 
 import request from 'browser-request';
 import EventEmitter from 'events';
+import { logger } from 'matrix-js-sdk/src/logger';
 import { MatrixClient, MatrixEvent, Room } from 'matrix-js-sdk/src/matrix';
 import { UpdateCheckStatus } from 'matrix-react-sdk/src/BasePlatform';
+import { Action } from 'matrix-react-sdk/src/dispatcher/actions';
+import dispatcher from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { MatrixClientPeg } from 'matrix-react-sdk/src/MatrixClientPeg';
+import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
 
 import ElectronPlatform from '../../../../src/vector/platform/ElectronPlatform';
 
-class MockElectron extends EventEmitter {
-    send = jest.fn();
-}
+jest.mock('matrix-react-sdk/src/rageshake/rageshake', () => ({
+    flush: jest.fn()
+}))
+
 
 describe('ElectronPlatform', () => {
     const defaultUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
-    const mockElectron = new MockElectron();
+    const mockElectron = {
+        on: jest.fn(),
+        send: jest.fn()
+    };
+
+    const dispatchSpy = jest.spyOn(dispatcher, 'dispatch');
+    const dispatchFireSpy = jest.spyOn(dispatcher, 'fire');
+    const logSpy = jest.spyOn(logger, 'log').mockImplementation(() => {});
 
     const userId = '@alice:server.org';
     const deviceId = 'device-id';
@@ -40,6 +52,59 @@ describe('ElectronPlatform', () => {
         delete window.navigator;
         window.navigator = { userAgent: defaultUserAgent } as unknown as Navigator;
     });
+
+    const getElectronEventHandlerCall = (eventType: string): [type: string, handler: Function] | undefined =>
+        mockElectron.on.mock.calls.find(([type]) => type === eventType);
+
+    it('flushes rageshake before quitting', () => {
+        new ElectronPlatform();
+            const [event, handler] = getElectronEventHandlerCall('before-quit');
+            // correct event bound
+            expect(event).toBeTruthy();
+
+            handler();
+
+            expect(logSpy).toHaveBeenCalled();
+            expect(rageshake.flush).toHaveBeenCalled();
+    });
+
+    it('dispatches view settings action on preferences event', () => {
+        new ElectronPlatform();
+            const [event, handler] = getElectronEventHandlerCall('preferences');
+            // correct event bound
+            expect(event).toBeTruthy();
+
+            handler();
+
+            expect(dispatchFireSpy).toHaveBeenCalledWith(Action.ViewUserSettings);
+    });
+
+    describe('updates', () => {
+        it('dispatches on check updates action', () => {
+            new ElectronPlatform();
+            const [event, handler] = getElectronEventHandlerCall('check_updates');
+            // correct event bound
+            expect(event).toBeTruthy();
+    
+            handler({}, true);
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: Action.CheckUpdates,
+                status: UpdateCheckStatus.Downloading
+            })
+        });
+
+        it('dispatches on check updates action when update not available', () => {
+            new ElectronPlatform();
+            const [, handler] = getElectronEventHandlerCall('check_updates');
+    
+            handler({}, false);
+            expect(dispatchSpy).toHaveBeenCalledWith({
+                action: Action.CheckUpdates,
+                status: UpdateCheckStatus.NotAvailable
+            })
+        });
+    });
+
 
     it('returns human readable name', () => {
         const platform = new ElectronPlatform();
