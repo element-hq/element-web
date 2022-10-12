@@ -28,5 +28,7 @@
     "Your browser can't run %(brand)s": "Ваш браузер не може запустити %(brand)s",
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s використовує передові властивості, які ваш браузер не підтримує.",
     "Use %(brand)s on mobile": "Користуйтеся %(brand)s на мобільному",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентралізована, зашифрована бесіда та співпраця на основі $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентралізована, зашифрована бесіда та співпраця на основі $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s на %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s для комп'ютера: %(platformName)s"
 }
