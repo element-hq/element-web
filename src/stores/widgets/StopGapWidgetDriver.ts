@@ -449,7 +449,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
                 from,
                 to,
                 limit,
-                direction: dir,
+                dir,
             });
 
         return {
