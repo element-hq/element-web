@@ -110,7 +110,7 @@ Features can be controlled at the config level using the following structure:
 ```
 
 When `true`, the user will see the feature as enabled. Similarly, when `false` the user will see the feature as disabled.
-The user will only be able to change/see these states if `showLabsSettings: true` is in the config.
+The user will only be able to change/see these states if `show_labs_settings: true` is in the config.
 
 ### Determining if a feature is enabled
 
