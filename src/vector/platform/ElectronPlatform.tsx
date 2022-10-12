@@ -45,7 +45,6 @@ import VectorBasePlatform from './VectorBasePlatform';
 import { SeshatIndexManager } from "./SeshatIndexManager";
 import { IPCManager } from "./IPCManager";
 
-const electron = window.electron;
 const isMac = navigator.platform.toUpperCase().includes('MAC');
 
 function platformFriendlyName(): string {
@@ -70,7 +69,7 @@ function platformFriendlyName(): string {
 function onAction(payload: ActionPayload): void {
     // Whitelist payload actions, no point sending most across
     if (['call_state'].includes(payload.action)) {
-        electron.send('app_onAction', payload);
+        window.electron.send('app_onAction', payload);
     }
 }
 
@@ -103,7 +102,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
             false if there is not
             or the error if one is encountered
          */
-        electron.on('check_updates', (event, status) => {
+        window.electron.on('check_updates', (event, status) => {
             dis.dispatch<CheckUpdatesPayload>({
                 action: Action.CheckUpdates,
                 ...getUpdateCheckStatus(status),
@@ -111,27 +110,27 @@ export default class ElectronPlatform extends VectorBasePlatform {
         });
 
         // try to flush the rageshake logs to indexeddb before quit.
-        electron.on('before-quit', function() {
+        window.electron.on('before-quit', function() {
             logger.log('element-desktop closing');
             rageshake.flush();
         });
 
-        electron.on('update-downloaded', this.onUpdateDownloaded);
+        window.electron.on('update-downloaded', this.onUpdateDownloaded);
 
-        electron.on('preferences', () => {
+        window.electron.on('preferences', () => {
             dis.fire(Action.ViewUserSettings);
         });
 
-        electron.on('userDownloadCompleted', (ev, { id, name }) => {
+        window.electron.on('userDownloadCompleted', (ev, { id, name }) => {
             const key = `DOWNLOAD_TOAST_${id}`;
 
             const onAccept = () => {
-                electron.send('userDownloadAction', { id, open: true });
+                window.electron.send('userDownloadAction', { id, open: true });
                 ToastStore.sharedInstance().dismissToast(key);
             };
 
             const onDismiss = () => {
-                electron.send('userDownloadAction', { id });
+                window.electron.send('userDownloadAction', { id });
             };
 
             ToastStore.sharedInstance().addOrReplaceToast({
@@ -187,7 +186,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
         if (this.notificationCount === count) return;
         super.setNotificationCount(count);
 
-        electron.send('setBadgeCount', count);
+        window.electron.send('setBadgeCount', count);
     }
 
     public supportsNotifications(): boolean {
@@ -233,7 +232,7 @@ export default class ElectronPlatform extends VectorBasePlatform {
     }
 
     public loudNotification(ev: MatrixEvent, room: Room) {
-        electron.send('loudNotification');
+        window.electron.send('loudNotification');
     }
 
     public needsUrlTooltips(): boolean {
@@ -269,19 +268,19 @@ export default class ElectronPlatform extends VectorBasePlatform {
 
     public startUpdateCheck() {
         super.startUpdateCheck();
-        electron.send('check_updates');
+        window.electron.send('check_updates');
     }
 
     public installUpdate() {
         // IPC to the main process to install the update, since quitAndInstall
         // doesn't fire the before-quit event so the main process needs to know
         // it should exit.
-        electron.send('install_update');
+        window.electron.send('install_update');
     }
 
     public getDefaultDeviceDisplayName(): string {
         const brand = SdkConfig.get().brand;
-        return _t('%(brand)s Desktop (%(platformName)s)', {
+        return _t('%(brand)s Desktop: %(platformName)s', {
             brand,
             platformName: platformFriendlyName(),
         });

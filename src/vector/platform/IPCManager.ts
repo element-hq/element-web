@@ -19,8 +19,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 
 import { ElectronChannel } from "../../@types/global";
 
-const electron = window.electron;
-
 interface IPCPayload {
     id?: number;
     error?: string;
@@ -35,7 +33,7 @@ export class IPCManager {
         private readonly sendChannel: ElectronChannel = "ipcCall",
         private readonly recvChannel: ElectronChannel = "ipcReply",
     ) {
-        electron.on(this.recvChannel, this.onIpcReply);
+        window.electron.on(this.recvChannel, this.onIpcReply);
     }
 
     public async call(name: string, ...args: any[]): Promise<any> {
