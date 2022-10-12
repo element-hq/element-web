@@ -43,6 +43,8 @@ import MjolnirBody from "./MjolnirBody";
 import MBeaconBody from "./MBeaconBody";
 import { IEventTileOps } from "../rooms/EventTile";
 import { VoiceBroadcastBody, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from '../../../voice-broadcast';
+import { Features } from '../../../settings/Settings';
+import { SettingLevel } from '../../../settings/SettingLevel';
 
 // onMessageAllowed is handled internally
 interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper"> {
@@ -58,6 +60,10 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
 
 export interface IOperableEventTile {
     getEventTileOps(): IEventTileOps;
+}
+
+interface State {
+    voiceBroadcastEnabled: boolean;
 }
 
 const baseBodyTypes = new Map<string, typeof React.Component>([
@@ -78,7 +84,7 @@ const baseEvTypes = new Map<string, React.ComponentType<Partial<IBodyProps>>>([
     [VoiceBroadcastInfoEventType, VoiceBroadcastBody],
 ]);
 
-export default class MessageEvent extends React.Component<IProps> implements IMediaBody, IOperableEventTile {
+export default class MessageEvent extends React.Component<IProps, State> implements IMediaBody, IOperableEventTile {
     private body: React.RefObject<React.Component | IOperableEventTile> = createRef();
     private mediaHelper: MediaEventHelper;
     private bodyTypes = new Map<string, typeof React.Component>(baseBodyTypes.entries());
@@ -86,6 +92,7 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
 
     public static contextType = MatrixClientContext;
     public context!: React.ContextType<typeof MatrixClientContext>;
+    private voiceBroadcastSettingWatcherRef: string;
 
     public constructor(props: IProps, context: React.ContextType<typeof MatrixClientContext>) {
         super(props, context);
@@ -95,15 +102,29 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         }
 
         this.updateComponentMaps();
+
+        this.state = {
+            // only check voice broadcast settings for a voice broadcast event
+            voiceBroadcastEnabled: this.props.mxEvent.getType() === VoiceBroadcastInfoEventType
+                && SettingsStore.getValue(Features.VoiceBroadcast),
+        };
     }
 
     public componentDidMount(): void {
         this.props.mxEvent.addListener(MatrixEventEvent.Decrypted, this.onDecrypted);
+
+        if (this.props.mxEvent.getType() === VoiceBroadcastInfoEventType) {
+            this.watchVoiceBroadcastFeatureSetting();
+        }
     }
 
     public componentWillUnmount() {
         this.props.mxEvent.removeListener(MatrixEventEvent.Decrypted, this.onDecrypted);
         this.mediaHelper?.destroy();
+
+        if (this.voiceBroadcastSettingWatcherRef) {
+            SettingsStore.unwatchSetting(this.voiceBroadcastSettingWatcherRef);
+        }
     }
 
     public componentDidUpdate(prevProps: Readonly<IProps>) {
@@ -147,6 +168,16 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
         this.forceUpdate();
     };
 
+    private watchVoiceBroadcastFeatureSetting(): void {
+        this.voiceBroadcastSettingWatcherRef = SettingsStore.watchSetting(
+            Features.VoiceBroadcast,
+            null,
+            (settingName: string, roomId: string, atLevel: SettingLevel, newValAtLevel, newValue: boolean) => {
+                this.setState({ voiceBroadcastEnabled: newValue });
+            },
+        );
+    }
+
     public render() {
         const content = this.props.mxEvent.getContent();
         const type = this.props.mxEvent.getType();
@@ -174,7 +205,11 @@ export default class MessageEvent extends React.Component<IProps> implements IMe
                 BodyType = MLocationBody;
             }
 
-            if (type === VoiceBroadcastInfoEventType && content?.state === VoiceBroadcastInfoState.Started) {
+            if (
+                this.state.voiceBroadcastEnabled
+                && type === VoiceBroadcastInfoEventType
+                && content?.state === VoiceBroadcastInfoState.Started
+            ) {
                 BodyType = VoiceBroadcastBody;
             }
         }
