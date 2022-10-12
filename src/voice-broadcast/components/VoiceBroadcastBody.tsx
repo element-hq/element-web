@@ -46,13 +46,10 @@ export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
         recording.stop();
     };
 
-    const senderId = mxEvent.getSender();
-    const sender = mxEvent.sender;
     return <VoiceBroadcastRecordingBody
         onClick={stopVoiceBroadcast}
         live={recordingState === VoiceBroadcastInfoState.Started}
-        member={sender}
-        userId={senderId}
-        title={`${sender?.name ?? senderId} • ${room.name}`}
+        sender={mxEvent.sender}
+        roomName={room.name}
     />;
 };

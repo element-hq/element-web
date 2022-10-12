@@ -29,6 +29,7 @@ const iconTypeMap = new Map([
 export enum IconColour {
     Accent = "accent",
     LiveBadge = "live-badge",
+    CompoundSecondaryContent = "compound-secondary-content",
 }
 
 export enum IconSize {

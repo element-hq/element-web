@@ -17,40 +17,31 @@ limitations under the License.
 import React, { MouseEventHandler } from "react";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
 
-import { LiveBadge } from "../..";
-import MemberAvatar from "../../../components/views/avatars/MemberAvatar";
+import { VoiceBroadcastHeader } from "../..";
 
 interface VoiceBroadcastRecordingBodyProps {
     live: boolean;
-    member: RoomMember;
     onClick: MouseEventHandler<HTMLDivElement>;
-    title: string;
-    userId: string;
+    roomName: string;
+    sender: RoomMember;
 }
 
 export const VoiceBroadcastRecordingBody: React.FC<VoiceBroadcastRecordingBodyProps> = ({
     live,
-    member,
     onClick,
-    title,
-    userId,
+    roomName,
+    sender,
 }) => {
-    const liveBadge = live
-        ? <LiveBadge />
-        : null;
-
     return (
         <div
             className="mx_VoiceBroadcastRecordingBody"
             onClick={onClick}
         >
-            <MemberAvatar member={member} fallbackUserId={userId} />
-            <div className="mx_VoiceBroadcastRecordingBody_content">
-                <div className="mx_VoiceBroadcastRecordingBody_title">
-                    { title }
-                </div>
-            </div>
-            { liveBadge }
+            <VoiceBroadcastHeader
+                live={live}
+                sender={sender}
+                roomName={roomName}
+            />
         </div>
     );
 };

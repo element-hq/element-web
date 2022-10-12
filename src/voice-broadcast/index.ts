@@ -24,6 +24,7 @@ import { RelationType } from "matrix-js-sdk/src/matrix";
 export * from "./audio/VoiceBroadcastRecorder";
 export * from "./components/VoiceBroadcastBody";
 export * from "./components/atoms/LiveBadge";
+export * from "./components/atoms/VoiceBroadcastHeader";
 export * from "./components/molecules/VoiceBroadcastRecordingBody";
 export * from "./models/VoiceBroadcastRecording";
 export * from "./stores/VoiceBroadcastRecordingsStore";
