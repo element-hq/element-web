@@ -27,5 +27,8 @@
     "Open": "열기",
     "Download Completed": "다운로드 완료",
     "Your Element configuration contains invalid JSON. Please correct the problem and reload the page.": "당신의 Element 설정은 유효하지 않은 JSON을 포함합니다. 이 문제를 해결하고 페이지를 새로고침해주세요.",
-    "Your Element is misconfigured": "당신의 Element가 잘못 설정되었습니다"
+    "Your Element is misconfigured": "당신의 Element가 잘못 설정되었습니다",
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "$matrixLogo 에서 제공하는 탈중앙화되고 암호화된 협업",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(osName)s 의 %(browserName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s 데스크탑: %(platformName)s"
 }
