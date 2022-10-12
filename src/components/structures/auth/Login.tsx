@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { ReactNode } from 'react';
-import { MatrixError } from "matrix-js-sdk/src/http-api";
+import { ConnectionError, MatrixError } from "matrix-js-sdk/src/http-api";
 import classNames from "classnames";
 import { logger } from "matrix-js-sdk/src/logger";
 
@@ -453,7 +453,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
         let errorText: ReactNode = _t("There was a problem communicating with the homeserver, " +
             "please try again later.") + (errCode ? " (" + errCode + ")" : "");
 
-        if (err["cors"] === 'rejected') { // browser-request specific error field
+        if (err instanceof ConnectionError) {
             if (window.location.protocol === 'https:' &&
                 (this.props.serverConfig.hsUrl.startsWith("http:") ||
                  !this.props.serverConfig.hsUrl.startsWith("http"))

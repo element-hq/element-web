@@ -130,6 +130,20 @@ describe("createRoom", () => {
         expect(callPower).toBe(100);
         expect(callMemberPower).toBe(100);
     });
+
+    it("should upload avatar if one is passed", async () => {
+        client.uploadContent.mockResolvedValue({ content_uri: "mxc://foobar" });
+        const avatar = new File([], "avatar.png");
+        await createRoom({ avatar });
+        expect(client.createRoom).toHaveBeenCalledWith(expect.objectContaining({
+            initial_state: expect.arrayContaining([{
+                content: {
+                    url: "mxc://foobar",
+                },
+                type: "m.room.avatar",
+            }]),
+        }));
+    });
 });
 
 describe("canEncryptToAllUsers", () => {

@@ -16,8 +16,6 @@ limitations under the License.
 
 /// <reference types="cypress" />
 
-import request from "browser-request";
-
 import type { ISendEventResponse, MatrixClient, Room } from "matrix-js-sdk/src/matrix";
 import { SynapseInstance } from "../plugins/synapsedocker";
 import Chainable = Cypress.Chainable;
@@ -86,7 +84,6 @@ Cypress.Commands.add("getBot", (synapse: SynapseInstance, opts: CreateBotOpts): 
                 userId: credentials.userId,
                 deviceId: credentials.deviceId,
                 accessToken: credentials.accessToken,
-                request,
                 store: new win.matrixcs.MemoryStore(),
                 scheduler: new win.matrixcs.MatrixScheduler(),
                 cryptoStore: new win.matrixcs.MemoryCryptoStore(),

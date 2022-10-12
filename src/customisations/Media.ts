@@ -151,7 +151,7 @@ export class Media {
  * @param {MatrixClient} client? Optional client to use.
  * @returns {Media} The media object.
  */
-export function mediaFromContent(content: IMediaEventContent, client?: MatrixClient): Media {
+export function mediaFromContent(content: Partial<IMediaEventContent>, client?: MatrixClient): Media {
     return new Media(prepEventContentAsMedia(content), client);
 }
 

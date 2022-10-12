@@ -17,7 +17,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
 import counterpart from 'counterpart';
 import React from 'react';
 import { logger } from "matrix-js-sdk/src/logger";
@@ -386,6 +385,11 @@ export function setMissingEntryGenerator(f: (value: string) => void) {
     counterpart.setMissingEntryGenerator(f);
 }
 
+type Language = {
+    fileName: string;
+    label: string;
+};
+
 export function setLanguage(preferredLangs: string | string[]) {
     if (!Array.isArray(preferredLangs)) {
         preferredLangs = [preferredLangs];
@@ -396,8 +400,8 @@ export function setLanguage(preferredLangs: string | string[]) {
         plaf.setLanguage(preferredLangs);
     }
 
-    let langToUse;
-    let availLangs;
+    let langToUse: string;
+    let availLangs: { [lang: string]: Language };
     return getLangsJson().then((result) => {
         availLangs = result;
 
@@ -532,29 +536,21 @@ export function pickBestLanguage(langs: string[]): string {
     return langs[0];
 }
 
-function getLangsJson(): Promise<object> {
-    return new Promise((resolve, reject) => {
-        let url;
-        if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
-            url = webpackLangJsonUrl;
-        } else {
-            url = i18nFolder + 'languages.json';
-        }
-        request(
-            { method: "GET", url },
-            (err, response, body) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                if (response.status < 200 || response.status >= 300) {
-                    reject(new Error(`Failed to load ${url}, got ${response.status}`));
-                    return;
-                }
-                resolve(JSON.parse(body));
-            },
-        );
-    });
+async function getLangsJson(): Promise<{ [lang: string]: Language }> {
+    let url: string;
+    if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
+        url = webpackLangJsonUrl;
+    } else {
+        url = i18nFolder + 'languages.json';
+    }
+
+    const res = await fetch(url, { method: "GET" });
+
+    if (!res.ok) {
+        throw new Error(`Failed to load ${url}, got ${res.status}`);
+    }
+
+    return res.json();
 }
 
 interface ICounterpartTranslation {
@@ -571,23 +567,14 @@ async function getLanguageRetry(langPath: string, num = 3): Promise<ICounterpart
     });
 }
 
-function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
-    return new Promise((resolve, reject) => {
-        request(
-            { method: "GET", url: langPath },
-            (err, response, body) => {
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                if (response.status < 200 || response.status >= 300) {
-                    reject(new Error(`Failed to load ${langPath}, got ${response.status}`));
-                    return;
-                }
-                resolve(JSON.parse(body));
-            },
-        );
-    });
+async function getLanguage(langPath: string): Promise<ICounterpartTranslation> {
+    const res = await fetch(langPath, { method: "GET" });
+
+    if (!res.ok) {
+        throw new Error(`Failed to load ${langPath}, got ${res.status}`);
+    }
+
+    return res.json();
 }
 
 export interface ICustomTranslations {

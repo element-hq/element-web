@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { IAbortablePromise, MatrixClient, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 import {
@@ -108,7 +108,7 @@ export class VoiceBroadcastRecording
         await this.sendVoiceMessage(chunk, url, file);
     };
 
-    private uploadFile(chunk: ChunkRecordedPayload): IAbortablePromise<{ url?: string, file?: IEncryptedFile }> {
+    private uploadFile(chunk: ChunkRecordedPayload): ReturnType<typeof uploadFile> {
         return uploadFile(
             this.client,
             this.infoEvent.getRoomId(),

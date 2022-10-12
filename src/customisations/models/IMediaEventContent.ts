@@ -46,6 +46,7 @@ export interface IMediaEventInfo {
 }
 
 export interface IMediaEventContent {
+    msgtype: string;
     body?: string;
     filename?: string; // `m.file` optional field
     url?: string; // required on unencrypted media
@@ -69,7 +70,7 @@ export interface IMediaObject {
  * @returns {IPreparedMedia} A prepared media object.
  * @throws Throws if the given content cannot be packaged into a prepared media object.
  */
-export function prepEventContentAsMedia(content: IMediaEventContent): IPreparedMedia {
+export function prepEventContentAsMedia(content: Partial<IMediaEventContent>): IPreparedMedia {
     let thumbnail: IMediaObject = null;
     if (content?.info?.thumbnail_url) {
         thumbnail = {

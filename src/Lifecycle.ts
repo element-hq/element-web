@@ -739,7 +739,7 @@ export function logout(): void {
     _isLoggingOut = true;
     const client = MatrixClientPeg.get();
     PlatformPeg.get().destroyPickleKey(client.getUserId(), client.getDeviceId());
-    client.logout(undefined, true).then(onLoggedOut, (err) => {
+    client.logout(true).then(onLoggedOut, (err) => {
         // Just throwing an error here is going to be very unhelpful
         // if you're trying to log out because your server's down and
         // you want to log into a different server, so just forget the

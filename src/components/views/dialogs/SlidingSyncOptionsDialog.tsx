@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from 'react';
-import { MatrixClient } from 'matrix-js-sdk/src/matrix';
+import { MatrixClient, Method } from 'matrix-js-sdk/src/matrix';
 import { logger } from 'matrix-js-sdk/src/logger';
 
 import { _t } from '../../../languageHandler';
@@ -33,17 +33,10 @@ import { SettingLevel } from "../../../settings/SettingLevel";
  * @throws if the proxy server is unreachable or not configured to the given homeserver
  */
 async function syncHealthCheck(cli: MatrixClient): Promise<void> {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 10 * 1000); // 10s
-    const url = cli.http.getUrl("/sync", {}, "/_matrix/client/unstable/org.matrix.msc3575");
-    const res = await fetch(url, {
-        signal: controller.signal,
-        method: "POST",
+    await cli.http.authedRequest(Method.Post, "/sync", undefined, undefined, {
+        localTimeoutMs: 10 * 1000, // 10s
+        prefix: "/_matrix/client/unstable/org.matrix.msc3575",
     });
-    clearTimeout(id);
-    if (res.status != 200) {
-        throw new Error(`syncHealthCheck: server returned HTTP ${res.status}`);
-    }
     logger.info("server natively support sliding sync OK");
 }
 

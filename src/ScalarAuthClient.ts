@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 import url from 'url';
-import request from "browser-request";
 import { SERVICE_TYPES } from "matrix-js-sdk/src/service-types";
 import { Room } from "matrix-js-sdk/src/models/room";
 import { logger } from "matrix-js-sdk/src/logger";
+import { IOpenIDToken } from 'matrix-js-sdk/src/matrix';
 
 import SettingsStore from "./settings/SettingsStore";
 import { Service, startTermsFlow, TermsInteractionCallback, TermsNotSignedError } from './Terms';
@@ -103,29 +103,29 @@ export default class ScalarAuthClient {
         }
     }
 
-    private getAccountName(token: string): Promise<string> {
-        const url = this.apiUrl + "/account";
+    private async getAccountName(token: string): Promise<string> {
+        const url = new URL(this.apiUrl + "/account");
+        url.searchParams.set("scalar_token", token);
+        url.searchParams.set("v", imApiVersion);
 
-        return new Promise(function(resolve, reject) {
-            request({
-                method: "GET",
-                uri: url,
-                qs: { scalar_token: token, v: imApiVersion },
-                json: true,
-            }, (err, response, body) => {
-                if (err) {
-                    reject(err);
-                } else if (body && body.errcode === 'M_TERMS_NOT_SIGNED') {
-                    reject(new TermsNotSignedError());
-                } else if (response.statusCode / 100 !== 2) {
-                    reject(body);
-                } else if (!body || !body.user_id) {
-                    reject(new Error("Missing user_id in response"));
-                } else {
-                    resolve(body.user_id);
-                }
-            });
+        const res = await fetch(url, {
+            method: "GET",
         });
+
+        const body = await res.json();
+        if (body?.errcode === "M_TERMS_NOT_SIGNED") {
+            throw new TermsNotSignedError();
+        }
+
+        if (!res.ok) {
+            throw body;
+        }
+
+        if (!body?.user_id) {
+            throw new Error("Missing user_id in response");
+        }
+
+        return body.user_id;
     }
 
     private checkToken(token: string): Promise<string> {
@@ -183,56 +183,41 @@ export default class ScalarAuthClient {
         });
     }
 
-    exchangeForScalarToken(openidTokenObject: any): Promise<string> {
-        const scalarRestUrl = this.apiUrl;
+    public async exchangeForScalarToken(openidTokenObject: IOpenIDToken): Promise<string> {
+        const scalarRestUrl = new URL(this.apiUrl + "/register");
+        scalarRestUrl.searchParams.set("v", imApiVersion);
 
-        return new Promise(function(resolve, reject) {
-            request({
-                method: 'POST',
-                uri: scalarRestUrl + '/register',
-                qs: { v: imApiVersion },
-                body: openidTokenObject,
-                json: true,
-            }, (err, response, body) => {
-                if (err) {
-                    reject(err);
-                } else if (response.statusCode / 100 !== 2) {
-                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
-                } else if (!body || !body.scalar_token) {
-                    reject(new Error("Missing scalar_token in response"));
-                } else {
-                    resolve(body.scalar_token);
-                }
-            });
+        const res = await fetch(scalarRestUrl, {
+            method: "POST",
+            body: JSON.stringify(openidTokenObject),
         });
+
+        if (!res.ok) {
+            throw new Error(`Scalar request failed: ${res.status}`);
+        }
+
+        const body = await res.json();
+        if (!body?.scalar_token) {
+            throw new Error("Missing scalar_token in response");
+        }
+
+        return body.scalar_token;
     }
 
-    getScalarPageTitle(url: string): Promise<string> {
-        let scalarPageLookupUrl = this.apiUrl + '/widgets/title_lookup';
-        scalarPageLookupUrl = this.getStarterLink(scalarPageLookupUrl);
-        scalarPageLookupUrl += '&curl=' + encodeURIComponent(url);
+    public async getScalarPageTitle(url: string): Promise<string> {
+        const scalarPageLookupUrl = new URL(this.getStarterLink(this.apiUrl + '/widgets/title_lookup'));
+        scalarPageLookupUrl.searchParams.set("curl", encodeURIComponent(url));
 
-        return new Promise(function(resolve, reject) {
-            request({
-                method: 'GET',
-                uri: scalarPageLookupUrl,
-                json: true,
-            }, (err, response, body) => {
-                if (err) {
-                    reject(err);
-                } else if (response.statusCode / 100 !== 2) {
-                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
-                } else if (!body) {
-                    reject(new Error("Missing page title in response"));
-                } else {
-                    let title = "";
-                    if (body.page_title_cache_item && body.page_title_cache_item.cached_title) {
-                        title = body.page_title_cache_item.cached_title;
-                    }
-                    resolve(title);
-                }
-            });
+        const res = await fetch(scalarPageLookupUrl, {
+            method: "GET",
         });
+
+        if (!res.ok) {
+            throw new Error(`Scalar request failed: ${res.status}`);
+        }
+
+        const body = await res.json();
+        return body?.page_title_cache_item?.cached_title;
     }
 
     /**
@@ -243,31 +228,24 @@ export default class ScalarAuthClient {
      * @param  {string} widgetId   The widget ID to disable assets for
      * @return {Promise}           Resolves on completion
      */
-    disableWidgetAssets(widgetType: WidgetType, widgetId: string): Promise<void> {
-        let url = this.apiUrl + '/widgets/set_assets_state';
-        url = this.getStarterLink(url);
-        return new Promise<void>((resolve, reject) => {
-            request({
-                method: 'GET', // XXX: Actions shouldn't be GET requests
-                uri: url,
-                json: true,
-                qs: {
-                    'widget_type': widgetType.preferred,
-                    'widget_id': widgetId,
-                    'state': 'disable',
-                },
-            }, (err, response, body) => {
-                if (err) {
-                    reject(err);
-                } else if (response.statusCode / 100 !== 2) {
-                    reject(new Error(`Scalar request failed: ${response.statusCode}`));
-                } else if (!body) {
-                    reject(new Error("Failed to set widget assets state"));
-                } else {
-                    resolve();
-                }
-            });
+    public async disableWidgetAssets(widgetType: WidgetType, widgetId: string): Promise<void> {
+        const url = new URL(this.getStarterLink(this.apiUrl + "/widgets/set_assets_state"));
+        url.searchParams.set("widget_type", widgetType.preferred);
+        url.searchParams.set("widget_id", widgetId);
+        url.searchParams.set("state", "disable");
+
+        const res = await fetch(url, {
+            method: "GET", // XXX: Actions shouldn't be GET requests
         });
+
+        if (!res.ok) {
+            throw new Error(`Scalar request failed: ${res.status}`);
+        }
+
+        const body = await res.text();
+        if (!body) {
+            throw new Error("Failed to set widget assets state");
+        }
     }
 
     getScalarInterfaceUrlForRoom(room: Room, screen: string, id: string): string {

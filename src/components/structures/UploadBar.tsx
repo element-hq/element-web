@@ -17,7 +17,7 @@ limitations under the License.
 import React from 'react';
 import { Room } from "matrix-js-sdk/src/models/room";
 import filesize from "filesize";
-import { IAbortablePromise, IEventRelation } from 'matrix-js-sdk/src/matrix';
+import { IEventRelation } from 'matrix-js-sdk/src/matrix';
 import { Optional } from "matrix-events-sdk";
 
 import ContentMessages from '../../ContentMessages';
@@ -26,8 +26,7 @@ import { _t } from '../../languageHandler';
 import { Action } from "../../dispatcher/actions";
 import ProgressBar from "../views/elements/ProgressBar";
 import AccessibleButton, { ButtonEvent } from "../views/elements/AccessibleButton";
-import { IUpload } from "../../models/IUpload";
-import MatrixClientContext from "../../contexts/MatrixClientContext";
+import { RoomUpload } from "../../models/RoomUpload";
 import { ActionPayload } from '../../dispatcher/payloads';
 import { UploadPayload } from "../../dispatcher/payloads/UploadPayload";
 
@@ -38,7 +37,7 @@ interface IProps {
 
 interface IState {
     currentFile?: string;
-    currentPromise?: IAbortablePromise<any>;
+    currentUpload?: RoomUpload;
     currentLoaded?: number;
     currentTotal?: number;
     countFiles: number;
@@ -55,8 +54,6 @@ function isUploadPayload(payload: ActionPayload): payload is UploadPayload {
 }
 
 export default class UploadBar extends React.PureComponent<IProps, IState> {
-    static contextType = MatrixClientContext;
-
     private dispatcherRef: Optional<string>;
     private mounted = false;
 
@@ -78,7 +75,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
         dis.unregister(this.dispatcherRef!);
     }
 
-    private getUploadsInRoom(): IUpload[] {
+    private getUploadsInRoom(): RoomUpload[] {
         const uploads = ContentMessages.sharedInstance().getCurrentUploads(this.props.relation);
         return uploads.filter(u => u.roomId === this.props.room.roomId);
     }
@@ -86,8 +83,8 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
     private calculateState(): IState {
         const [currentUpload, ...otherUploads] = this.getUploadsInRoom();
         return {
+            currentUpload,
             currentFile: currentUpload?.fileName,
-            currentPromise: currentUpload?.promise,
             currentLoaded: currentUpload?.loaded,
             currentTotal: currentUpload?.total,
             countFiles: otherUploads.length + 1,
@@ -103,7 +100,7 @@ export default class UploadBar extends React.PureComponent<IProps, IState> {
 
     private onCancelClick = (ev: ButtonEvent) => {
         ev.preventDefault();
-        ContentMessages.sharedInstance().cancelUpload(this.state.currentPromise!, this.context);
+        ContentMessages.sharedInstance().cancelUpload(this.state.currentUpload!);
     };
 
     render() {

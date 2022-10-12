@@ -27,10 +27,7 @@ import {
 import { stubClient } from '../test-utils';
 
 describe('languageHandler', function() {
-    /*
-      See /__mocks__/browser-request.js/ for how we are stubbing out translations
-      to provide fixture data for these tests
-     */
+    // See setupLanguage.ts for how we are stubbing out translations to provide fixture data for these tests
     const basicString = 'Rooms';
     const selfClosingTagSub = 'Accept <policyLink /> to continue:';
     const textInTagSub = '<a>Upgrade</a> to your own domain';

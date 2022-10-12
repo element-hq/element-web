@@ -111,7 +111,7 @@ export default class ProfileSettings extends React.Component<{}, IState> {
                 logger.log(
                     `Uploading new avatar, ${this.state.avatarFile.name} of type ${this.state.avatarFile.type},` +
                     ` (${this.state.avatarFile.size}) bytes`);
-                const uri = await client.uploadContent(this.state.avatarFile);
+                const { content_uri: uri } = await client.uploadContent(this.state.avatarFile);
                 await client.setAvatarUrl(uri);
                 newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
                 newState.originalAvatarUrl = newState.avatarUrl;

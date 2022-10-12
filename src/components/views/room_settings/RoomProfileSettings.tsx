@@ -134,7 +134,7 @@ export default class RoomProfileSettings extends React.Component<IProps, IState>
         }
 
         if (this.state.avatarFile) {
-            const uri = await client.uploadContent(this.state.avatarFile);
+            const { content_uri: uri } = await client.uploadContent(this.state.avatarFile);
             await client.sendStateEvent(this.props.roomId, 'm.room.avatar', { url: uri }, '');
             newState.avatarUrl = mediaFromMxc(uri).getSquareThumbnailHttp(96);
             newState.originalAvatarUrl = newState.avatarUrl;

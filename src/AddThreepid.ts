@@ -85,7 +85,7 @@ export default class AddThreepid {
             const identityAccessToken = await authClient.getAccessToken();
             return MatrixClientPeg.get().requestEmailToken(
                 emailAddress, this.clientSecret, 1,
-                undefined, undefined, identityAccessToken,
+                undefined, identityAccessToken,
             ).then((res) => {
                 this.sessionId = res.sid;
                 return res;
@@ -142,7 +142,7 @@ export default class AddThreepid {
             const identityAccessToken = await authClient.getAccessToken();
             return MatrixClientPeg.get().requestMsisdnToken(
                 phoneCountry, phoneNumber, this.clientSecret, 1,
-                undefined, undefined, identityAccessToken,
+                undefined, identityAccessToken,
             ).then((res) => {
                 this.sessionId = res.sid;
                 return res;
