@@ -56,6 +56,7 @@ export const Icon: React.FC<IconProps> = ({
 
     const styles: React.CSSProperties = {
         maskImage: `url("${iconTypeMap.get(type)}")`,
+        WebkitMaskImage: `url("${iconTypeMap.get(type)}")`,
     };
 
     return (
