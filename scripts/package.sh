@@ -24,9 +24,7 @@ rm element-$version/config.json || true
 $(dirname $0)/normalize-version.sh ${version} > element-$version/version
 
 tar chvzf dist/element-$version.tar.gz element-$version
-if [ -z "$SKIP_DIR_RM" ]; then
-    rm -r element-$version
-fi
+rm -r element-$version
 
 echo
 echo "Packaged dist/element-$version.tar.gz"
