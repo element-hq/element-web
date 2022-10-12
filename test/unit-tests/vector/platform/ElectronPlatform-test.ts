@@ -103,6 +103,18 @@ describe('ElectronPlatform', () => {
                 status: UpdateCheckStatus.NotAvailable
             })
         });
+
+        it('starts update check', () => {
+            const platform = new ElectronPlatform();
+            platform.startUpdateCheck();
+            expect(mockElectron.send).toHaveBeenCalledWith('check_updates')
+        });
+
+        it('installs update', () => {
+            const platform = new ElectronPlatform();
+            platform.installUpdate();
+            expect(mockElectron.send).toHaveBeenCalledWith('install_update')
+        });
     });
 
 
@@ -195,6 +207,15 @@ describe('ElectronPlatform', () => {
             const platform = new ElectronPlatform();
             platform.loudNotification(new MatrixEvent(), new Room('!room:server', {} as any, userId));
             expect(mockElectron.send).toHaveBeenCalledWith('loudNotification');
+        });
+
+        it('sets notification count when count is changing', async () => {
+            const platform = new ElectronPlatform();
+            platform.setNotificationCount(0);
+            // not called because matches internal notificaiton count
+            expect(mockElectron.send).not.toHaveBeenCalledWith('setBadgeCount', 0);
+            platform.setNotificationCount(1);
+            expect(mockElectron.send).toHaveBeenCalledWith('setBadgeCount', 1);
         });
     });
 
