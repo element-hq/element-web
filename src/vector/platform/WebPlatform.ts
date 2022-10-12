@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import { UpdateCheckStatus, UpdateStatus } from "matrix-react-sdk/src/BasePlatform";
-import request from 'browser-request';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
 import { _t } from 'matrix-react-sdk/src/languageHandler';
 import { hideToast as hideUpdateToast, showToast as showUpdateToast } from "matrix-react-sdk/src/toasts/UpdateToast";
@@ -87,31 +86,17 @@ export default class WebPlatform extends VectorBasePlatform {
         });
     }
 
-    private getMostRecentVersion(): Promise<string> {
-        // We add a cachebuster to the request to make sure that we know about
-        // the most recent version on the origin server. That might not
-        // actually be the version we'd get on a reload (particularly in the
-        // presence of intermediate caching proxies), but still: we're trying
-        // to tell the user that there is a new version.
-
-        return new Promise((resolve, reject) => {
-            request(
-                {
-                    method: "GET",
-                    url: "version",
-                    qs: { cachebuster: Date.now() },
-                },
-                (err, response, body) => {
-                    if (err || response.status < 200 || response.status >= 300) {
-                        if (err === null) err = { status: response.status };
-                        reject(err);
-                        return;
-                    }
-
-                    resolve(getNormalizedAppVersion(body.trim()));
-                },
-            );
+    private async getMostRecentVersion(): Promise<string> {
+        const res = await fetch("version", {
+            method: "GET",
+            cache: "no-cache",
         });
+
+        if (res.ok) {
+            return getNormalizedAppVersion(await res.text());
+        }
+
+        return Promise.reject({ status: res.status });
     }
 
     public getAppVersion(): Promise<string> {

@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
+import fetchMock from "fetch-mock-jest";
 import { UpdateCheckStatus } from 'matrix-react-sdk/src/BasePlatform';
 import { MatrixClientPeg } from 'matrix-react-sdk/src/MatrixClientPeg';
 
 import WebPlatform from '../../../../src/vector/platform/WebPlatform';
+
+fetchMock.config.overwriteRoutes = true;
 
 describe('WebPlatform', () => {
     beforeEach(() => {
@@ -120,9 +122,6 @@ describe('WebPlatform', () => {
         const envVersion = process.env.VERSION;
         const prodVersion = '1.10.13';
 
-        const setRequestMockImplementation = (err?: unknown, response?: { status: number }, body?: string) =>
-            request.mockImplementation((_opts, callback) => callback(err, response, body));
-
         beforeEach(() => {
             jest.spyOn(MatrixClientPeg, 'userRegisteredWithinLastHours').mockReturnValue(false);
         })
@@ -157,7 +156,7 @@ describe('WebPlatform', () => {
         describe('pollForUpdate()', () => {
             it('should return not available and call showNoUpdate when current version matches most recent version', async () => {
                 process.env.VERSION = prodVersion;
-                setRequestMockImplementation(undefined, { status: 200}, prodVersion);
+                fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
@@ -171,7 +170,7 @@ describe('WebPlatform', () => {
 
             it('should strip v prefix from versions before comparing', async () => {
                 process.env.VERSION = prodVersion;
-                setRequestMockImplementation(undefined, { status: 200}, `v${prodVersion}`);
+                fetchMock.getOnce("/version", `v${prodVersion}`);
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
@@ -186,7 +185,7 @@ describe('WebPlatform', () => {
 
             it('should return ready and call showUpdate when current version differs from most recent version', async () => {
                 process.env.VERSION = '0.0.0'; // old version
-                setRequestMockImplementation(undefined, { status: 200}, prodVersion);
+                fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
@@ -201,7 +200,7 @@ describe('WebPlatform', () => {
             it('should return ready without showing update when user registered in last 24', async () => {
                 process.env.VERSION = '0.0.0'; // old version
                 jest.spyOn(MatrixClientPeg, 'userRegisteredWithinLastHours').mockReturnValue(true);
-                setRequestMockImplementation(undefined, { status: 200}, prodVersion);
+                fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
@@ -214,7 +213,7 @@ describe('WebPlatform', () => {
             });
 
             it('should return error when version check fails', async () => {
-                setRequestMockImplementation('oups');
+                fetchMock.getOnce("/version", { throws: "oups" });
                 const platform = new WebPlatform();
 
                 const showUpdate = jest.fn();
