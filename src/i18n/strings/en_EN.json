@@ -2060,7 +2060,6 @@
     "Stop recording": "Stop recording",
     "Italic": "Italic",
     "Underline": "Underline",
-    "Strike through": "Strike through",
     "Error updating main address": "Error updating main address",
     "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.": "There was an error updating the room's main address. It may not be allowed by the server or a temporary failure occurred.",
     "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.": "There was an error updating the room's alternative addresses. It may not be allowed by the server or a temporary failure occurred.",
