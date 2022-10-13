@@ -17,6 +17,7 @@ limitations under the License.
 import { parseQsFromFragment, parseQs } from "../../../src/vector/url_utils";
 
 describe("url_utils.ts", function() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const location: Location = {
         hash: "",

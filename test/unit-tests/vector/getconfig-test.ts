@@ -26,10 +26,10 @@ describe('getVectorConfig()', () => {
     const now = 1234567890;
     const specificConfig = {
         brand: 'specific',
-    }
+    };
     const generalConfig = {
         brand: 'general',
-    }
+    };
 
     beforeEach(() => {
         document.domain = elementDomain;
