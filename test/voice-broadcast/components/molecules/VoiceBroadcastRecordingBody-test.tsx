@@ -14,45 +14,43 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import { render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-import { VoiceBroadcastHeader, VoiceBroadcastRecordingBody } from "../../../../src/voice-broadcast";
-
-jest.mock("../../../../src/voice-broadcast/components/atoms/VoiceBroadcastHeader", () => ({
-    VoiceBroadcastHeader: ({ live, sender, roomName }: React.ComponentProps<typeof VoiceBroadcastHeader>) => {
-        return <div data-testid="voice-broadcast-header">
-            live: { live },
-            sender: { sender.userId },
-            room name: { roomName }
-        </div>;
-    },
-}));
+import {
+    VoiceBroadcastInfoEventType,
+    VoiceBroadcastInfoState,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingBody,
+} from "../../../../src/voice-broadcast";
+import { mkEvent, stubClient } from "../../../test-utils";
 
 describe("VoiceBroadcastRecordingBody", () => {
-    const testRoomName = "test room name";
     const userId = "@user:example.com";
-    const roomMember = new RoomMember("!room:example.com", userId);
-    let onClick: MouseEventHandler<HTMLDivElement>;
+    const roomId = "!room:example.com";
+    let client: MatrixClient;
+    let infoEvent: MatrixEvent;
+    let recording: VoiceBroadcastRecording;
 
-    beforeEach(() => {
-        onClick = jest.fn();
+    beforeAll(() => {
+        client = stubClient();
+        infoEvent = mkEvent({
+            event: true,
+            type: VoiceBroadcastInfoEventType,
+            content: {},
+            room: roomId,
+            user: userId,
+        });
+        recording = new VoiceBroadcastRecording(infoEvent, client);
     });
 
-    describe("when rendered", () => {
+    describe("when rendering a live broadcast", () => {
         let renderResult: RenderResult;
 
         beforeEach(() => {
-            renderResult = render(
-                <VoiceBroadcastRecordingBody
-                    onClick={onClick}
-                    roomName={testRoomName}
-                    live={true}
-                    sender={roomMember}
-                />,
-            );
+            renderResult = render(<VoiceBroadcastRecordingBody recording={recording} />);
         });
 
         it("should render the expected HTML", () => {
@@ -61,27 +59,21 @@ describe("VoiceBroadcastRecordingBody", () => {
 
         describe("and clicked", () => {
             beforeEach(async () => {
-                await userEvent.click(renderResult.getByTestId("voice-broadcast-header"));
+                await userEvent.click(renderResult.getByText("My room"));
             });
 
-            it("should call the onClick prop", () => {
-                expect(onClick).toHaveBeenCalled();
+            it("should stop the recording", () => {
+                expect(recording.getState()).toBe(VoiceBroadcastInfoState.Stopped);
             });
         });
     });
 
-    describe("when non-live rendered", () => {
+    describe("when rendering a non-live broadcast", () => {
         let renderResult: RenderResult;
 
         beforeEach(() => {
-            renderResult = render(
-                <VoiceBroadcastRecordingBody
-                    onClick={onClick}
-                    roomName={testRoomName}
-                    live={false}
-                    sender={roomMember}
-                />,
-            );
+            recording.stop();
+            renderResult = render(<VoiceBroadcastRecordingBody recording={recording} />);
         });
 
         it("should not render the live badge", () => {

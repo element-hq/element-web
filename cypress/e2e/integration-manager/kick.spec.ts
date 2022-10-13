@@ -84,15 +84,10 @@ function sendActionFromIntegrationManager(integrationManagerUrl: string, targetR
 
 function expectKickedMessage(shouldExist: boolean) {
     // Expand any event summaries
-    cy.get(".mx_RoomView_MessageList").within(roomView => {
-        if (roomView.find(".mx_GenericEventListSummary_toggle[aria-expanded=false]").length > 0) {
-            cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click({ multiple: true });
-        }
-    });
+    cy.get(".mx_GenericEventListSummary_toggle[aria-expanded=false]").click({ multiple: true });
 
     // Check for the event message (or lack thereof)
-    cy.get(".mx_EventTile_line")
-        .contains(`${USER_DISPLAY_NAME} removed ${BOT_DISPLAY_NAME}: ${KICK_REASON}`)
+    cy.contains(".mx_EventTile_line", `${USER_DISPLAY_NAME} removed ${BOT_DISPLAY_NAME}: ${KICK_REASON}`)
         .should(shouldExist ? "exist" : "not.exist");
 }
 

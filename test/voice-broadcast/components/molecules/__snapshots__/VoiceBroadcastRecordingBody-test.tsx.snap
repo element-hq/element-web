@@ -1,18 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VoiceBroadcastRecordingBody when rendered should render the expected HTML 1`] = `
+exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should render the expected HTML 1`] = `
 <div>
   <div
     class="mx_VoiceBroadcastRecordingBody"
   >
     <div
-      data-testid="voice-broadcast-header"
+      class="mx_VoiceBroadcastHeader"
     >
-      live: 
-      , sender: 
-      @user:example.com
-      , room name: 
-      test room name
+      <span
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 26px; width: 40px; line-height: 40px;"
+        >
+          U
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          src="data:image/png;base64,00"
+          style="width: 40px; height: 40px;"
+          title="@user:example.com"
+        />
+      </span>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_sender"
+        >
+          @user:example.com
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          My room
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+        Live
+      </div>
     </div>
   </div>
 </div>

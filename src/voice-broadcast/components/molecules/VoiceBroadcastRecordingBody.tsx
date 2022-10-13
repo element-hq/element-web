@@ -1,12 +1,9 @@
 /*
 Copyright 2022 The Matrix.org Foundation C.I.C.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,28 +11,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEventHandler } from "react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import React from "react";
 
-import { VoiceBroadcastHeader } from "../..";
+import { useVoiceBroadcastRecording, VoiceBroadcastHeader, VoiceBroadcastRecording } from "../..";
 
 interface VoiceBroadcastRecordingBodyProps {
-    live: boolean;
-    onClick: MouseEventHandler<HTMLDivElement>;
-    roomName: string;
-    sender: RoomMember;
+    recording: VoiceBroadcastRecording;
 }
 
-export const VoiceBroadcastRecordingBody: React.FC<VoiceBroadcastRecordingBodyProps> = ({
-    live,
-    onClick,
-    roomName,
-    sender,
-}) => {
+export const VoiceBroadcastRecordingBody: React.FC<VoiceBroadcastRecordingBodyProps> = ({ recording }) => {
+    const {
+        live,
+        roomName,
+        sender,
+        stopRecording,
+    } = useVoiceBroadcastRecording(recording);
+
     return (
         <div
             className="mx_VoiceBroadcastRecordingBody"
-            onClick={onClick}
+            onClick={stopRecording}
         >
             <VoiceBroadcastHeader
                 live={live}

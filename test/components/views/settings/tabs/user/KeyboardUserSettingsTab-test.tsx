@@ -15,15 +15,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import { render } from "@testing-library/react";
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
 
+import KeyboardUserSettingsTab from
+    "../../../../../../src/components/views/settings/tabs/user/KeyboardUserSettingsTab";
 import { Key } from "../../../../../../src/Keyboard";
+import { mockPlatformPeg } from "../../../../../test-utils/platform";
 
 const PATH_TO_KEYBOARD_SHORTCUTS = "../../../../../../src/accessibility/KeyboardShortcuts";
 const PATH_TO_KEYBOARD_SHORTCUT_UTILS = "../../../../../../src/accessibility/KeyboardShortcutUtils";
-const PATH_TO_COMPONENT = "../../../../../../src/components/views/settings/tabs/user/KeyboardUserSettingsTab";
 
 const mockKeyboardShortcuts = (override) => {
     jest.doMock(PATH_TO_KEYBOARD_SHORTCUTS, () => {
@@ -45,17 +46,17 @@ const mockKeyboardShortcutUtils = (override) => {
     });
 };
 
-const renderKeyboardUserSettingsTab = async (component): Promise<ReactWrapper> => {
-    const Component = (await import(PATH_TO_COMPONENT))[component];
-    return mount(<Component />);
+const renderKeyboardUserSettingsTab = () => {
+    return render(<KeyboardUserSettingsTab />).container;
 };
 
 describe("KeyboardUserSettingsTab", () => {
     beforeEach(() => {
         jest.resetModules();
+        mockPlatformPeg();
     });
 
-    it("renders list of keyboard shortcuts", async () => {
+    it("renders list of keyboard shortcuts", () => {
         mockKeyboardShortcuts({
             "CATEGORIES": {
                 "Composer": {
@@ -101,7 +102,7 @@ describe("KeyboardUserSettingsTab", () => {
             },
         });
 
-        const body = await renderKeyboardUserSettingsTab("default");
+        const body = renderKeyboardUserSettingsTab();
         expect(body).toMatchSnapshot();
     });
 });
