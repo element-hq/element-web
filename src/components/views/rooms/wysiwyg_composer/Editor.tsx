@@ -26,7 +26,7 @@ export const Editor = memo(
         ) {
             return <div className="mx_WysiwygComposer_container">
                 <div className="mx_WysiwygComposer_content"
-                    ref={ref}
+                    ref={ref!}
                     contentEditable={!disabled}
                     role="textbox"
                     aria-multiline="true"

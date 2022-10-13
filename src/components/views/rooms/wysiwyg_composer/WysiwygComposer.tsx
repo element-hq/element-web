@@ -44,10 +44,10 @@ export function WysiwygComposer(
     const { ref, isWysiwygReady, content, formattingStates, wysiwyg } = useWysiwyg();
 
     useEffect(() => {
-        if (content !== null) {
+        if (!disabled && content !== null) {
             onChange(content);
         }
-    }, [onChange, content]);
+    }, [onChange, content, disabled]);
 
     const memoizedSendMessage = useCallback(() => {
         sendMessage(content, { mxClient, roomContext, ...props });
