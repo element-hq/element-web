@@ -157,7 +157,8 @@ describe('WebPlatform', () => {
         });
 
         describe('pollForUpdate()', () => {
-            it('should return not available and call showNoUpdate when current version matches most recent version', async () => {
+            it('should return not available and call showNoUpdate when current version ' +
+                'matches most recent version', async () => {
                 process.env.VERSION = prodVersion;
                 fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();
@@ -186,7 +187,8 @@ describe('WebPlatform', () => {
                 expect(showNoUpdate).toHaveBeenCalled();
             });
 
-            it('should return ready and call showUpdate when current version differs from most recent version', async () => {
+            it('should return ready and call showUpdate when current version ' +
+                'differs from most recent version', async () => {
                 process.env.VERSION = '0.0.0'; // old version
                 fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();
