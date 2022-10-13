@@ -38,7 +38,7 @@ interface IProps {
 
 interface IState {
     searchQuery: string;
-    langs: string[];
+    langs: Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
 }
 
 export default class LanguageDropdown extends React.Component<IProps, IState> {
@@ -60,7 +60,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
             });
             this.setState({ langs });
         }).catch(() => {
-            this.setState({ langs: ['en'] });
+            this.setState({ langs: [{ value: 'en', label: "English" }] });
         });
 
         if (!this.props.value) {
@@ -83,7 +83,7 @@ export default class LanguageDropdown extends React.Component<IProps, IState> {
             return <Spinner />;
         }
 
-        let displayedLanguages;
+        let displayedLanguages: Awaited<ReturnType<typeof languageHandler.getAllLanguagesFromJson>>;
         if (this.state.searchQuery) {
             displayedLanguages = this.state.langs.filter((lang) => {
                 return languageMatchesSearchQuery(this.state.searchQuery, lang);

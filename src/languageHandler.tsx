@@ -385,9 +385,11 @@ export function setMissingEntryGenerator(f: (value: string) => void) {
     counterpart.setMissingEntryGenerator(f);
 }
 
-type Language = {
-    fileName: string;
-    label: string;
+type Languages = {
+    [lang: string]: {
+        fileName: string;
+        label: string;
+    };
 };
 
 export function setLanguage(preferredLangs: string | string[]) {
@@ -401,7 +403,7 @@ export function setLanguage(preferredLangs: string | string[]) {
     }
 
     let langToUse: string;
-    let availLangs: { [lang: string]: Language };
+    let availLangs: Languages;
     return getLangsJson().then((result) => {
         availLangs = result;
 
@@ -438,9 +440,14 @@ export function setLanguage(preferredLangs: string | string[]) {
     });
 }
 
-export function getAllLanguagesFromJson() {
+type Language = {
+    value: string;
+    label: string;
+};
+
+export function getAllLanguagesFromJson(): Promise<Language[]> {
     return getLangsJson().then((langsObject) => {
-        const langs = [];
+        const langs: Language[] = [];
         for (const langKey in langsObject) {
             if (langsObject.hasOwnProperty(langKey)) {
                 langs.push({
@@ -536,7 +543,7 @@ export function pickBestLanguage(langs: string[]): string {
     return langs[0];
 }
 
-async function getLangsJson(): Promise<{ [lang: string]: Language }> {
+async function getLangsJson(): Promise<Languages> {
     let url: string;
     if (typeof(webpackLangJsonUrl) === 'string') { // in Jest this 'url' isn't a URL, so just fall through
         url = webpackLangJsonUrl;
