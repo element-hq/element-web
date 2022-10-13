@@ -233,6 +233,17 @@ limitations under the License.
     }
 }
 
+/*
+    The wysisyg composer increase the size of the MessageComposer. We temporary move the buttons
+    Soon the dom structure of the MessageComposer will change with the next evolution of the wysiwyg composer
+    and this workaround will disappear
+*/
+.mx_MessageComposer_wysiwyg {
+    .mx_MessageComposer_e2eIcon.mx_E2EIcon,.mx_MessageComposer_button, .mx_MessageComposer_sendMessage {
+        margin-top: 22px;
+    }
+}
+
 .mx_MessageComposer_upload::before {
     mask-image: url('$(res)/img/element-icons/room/composer/attach.svg');
 }

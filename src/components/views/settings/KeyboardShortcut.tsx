@@ -38,9 +38,10 @@ export const KeyboardKey: React.FC<IKeyboardKeyProps> = ({ name, last }) => {
 
 interface IKeyboardShortcutProps {
     value: KeyCombo;
+    className?: string;
 }
 
-export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value }) => {
+export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value, className = 'mx_KeyboardShortcut' }) => {
     if (!value) return null;
 
     const modifiersElement = [];
@@ -58,7 +59,7 @@ export const KeyboardShortcut: React.FC<IKeyboardShortcutProps> = ({ value }) =>
         modifiersElement.push(<KeyboardKey key="shiftKey" name={Key.SHIFT} />);
     }
 
-    return <div className="mx_KeyboardShortcut">
+    return <div className={className}>
         { modifiersElement }
         <KeyboardKey name={value.key} last />
     </div>;
