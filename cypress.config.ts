@@ -30,4 +30,8 @@ export default defineConfig({
         experimentalSessionAndOrigin: true,
         specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
     },
+    retries: {
+        runMode: 4,
+        openMode: 0,
+    },
 });

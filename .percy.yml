@@ -3,3 +3,5 @@ snapshot:
   widths:
     - 1024
     - 1920
+percy:
+  defer-uploads: true
