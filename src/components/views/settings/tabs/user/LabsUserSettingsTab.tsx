@@ -80,7 +80,10 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
 
         let betaSection;
         if (betas.length) {
-            betaSection = <div className="mx_SettingsTab_section">
+            betaSection = <div
+                data-testid="labs-beta-section"
+                className="mx_SettingsTab_section"
+            >
                 { betas.map(f => <BetaCard key={f} featureId={f} />) }
             </div>;
         }
@@ -137,7 +140,11 @@ export default class LabsUserSettingsTab extends React.Component<{}, IState> {
 
             labsSections = <>
                 { sortBy(Array.from(groups.entries()), "0").map(([group, flags]) => (
-                    <div className="mx_SettingsTab_section" key={group}>
+                    <div
+                        className="mx_SettingsTab_section"
+                        key={group}
+                        data-testid={`labs-group-${group}`}
+                    >
                         <span className="mx_SettingsTab_subheading">{ _t(labGroupNames[group]) }</span>
                         { flags }
                     </div>

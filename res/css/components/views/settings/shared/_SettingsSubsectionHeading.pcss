@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,15 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IEventRelation } from "matrix-js-sdk/src/matrix";
-import { IAbortablePromise } from "matrix-js-sdk/src/@types/partials";
+.mx_SettingsSubsectionHeading {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: $spacing-8;
 
-export interface IUpload {
-    fileName: string;
-    roomId: string;
-    relation?: IEventRelation;
-    total: number;
-    loaded: number;
-    promise: IAbortablePromise<any>;
-    canceled?: boolean;
+    gap: $spacing-8;
+}
+
+.mx_SettingsSubsectionHeading_heading {
+    flex: 1 1 100%;
 }

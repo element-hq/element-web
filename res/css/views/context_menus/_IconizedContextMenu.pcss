@@ -82,7 +82,8 @@ limitations under the License.
             display: flex;
             align-items: center;
 
-            &:hover {
+            &:hover,
+            &:focus {
                 background-color: $menu-selected-color;
             }
 
@@ -186,4 +187,8 @@ limitations under the License.
         margin-left: 20px;
         color: $tertiary-content;
     }
+}
+
+.mx_IconizedContextMenu_item.mx_IconizedContextMenu_itemDestructive {
+    color: $alert !important;
 }

@@ -17,7 +17,6 @@ limitations under the License.
 */
 
 import React from 'react';
-import request from 'browser-request';
 import sanitizeHtml from 'sanitize-html';
 import classnames from 'classnames';
 import { logger } from "matrix-js-sdk/src/logger";
@@ -61,6 +60,37 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
         return sanitizeHtml(_t(s));
     }
 
+    private async fetchEmbed() {
+        let res: Response;
+
+        try {
+            res = await fetch(this.props.url, { method: "GET" });
+        } catch (err) {
+            if (this.unmounted) return;
+            logger.warn(`Error loading page: ${err}`);
+            this.setState({ page: _t("Couldn't load page") });
+            return;
+        }
+
+        if (this.unmounted) return;
+
+        if (!res.ok) {
+            logger.warn(`Error loading page: ${res.status}`);
+            this.setState({ page: _t("Couldn't load page") });
+            return;
+        }
+
+        let body = (await res.text()).replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1) => this.translate(g1));
+
+        if (this.props.replaceMap) {
+            Object.keys(this.props.replaceMap).forEach(key => {
+                body = body.split(key).join(this.props.replaceMap[key]);
+            });
+        }
+
+        this.setState({ page: body });
+    }
+
     public componentDidMount(): void {
         this.unmounted = false;
 
@@ -68,34 +98,10 @@ export default class EmbeddedPage extends React.PureComponent<IProps, IState> {
             return;
         }
 
-        // we use request() to inline the page into the react component
+        // We use fetch to inline the page into the react component
         // so that it can inherit CSS and theming easily rather than mess around
         // with iframes and trying to synchronise document.stylesheets.
-
-        request(
-            { method: "GET", url: this.props.url },
-            (err, response, body) => {
-                if (this.unmounted) {
-                    return;
-                }
-
-                if (err || response.status < 200 || response.status >= 300) {
-                    logger.warn(`Error loading page: ${err}`);
-                    this.setState({ page: _t("Couldn't load page") });
-                    return;
-                }
-
-                body = body.replace(/_t\(['"]([\s\S]*?)['"]\)/mg, (match, g1) => this.translate(g1));
-
-                if (this.props.replaceMap) {
-                    Object.keys(this.props.replaceMap).forEach(key => {
-                        body = body.split(key).join(this.props.replaceMap[key]);
-                    });
-                }
-
-                this.setState({ page: body });
-            },
-        );
+        this.fetchEmbed();
 
         this.dispatcherRef = dis.register(this.onAction);
     }

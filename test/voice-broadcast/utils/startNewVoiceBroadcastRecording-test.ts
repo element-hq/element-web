@@ -89,6 +89,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             event: true,
             type: VoiceBroadcastInfoEventType,
             content: {
+                device_id: client.getDeviceId(),
                 state: VoiceBroadcastInfoState.Started,
             },
             user: client.getUserId(),
@@ -109,6 +110,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             return {
                 infoEvent,
                 client,
+                start: jest.fn(),
             } as unknown as VoiceBroadcastRecording;
         });
     });
@@ -120,6 +122,7 @@ describe("startNewVoiceBroadcastRecording", () => {
             expect(ok).toBe(true);
             expect(mocked(room.off)).toHaveBeenCalledWith(RoomStateEvent.Events, roomOnStateEventsCallback);
             expect(recording.infoEvent).toBe(infoEvent);
+            expect(recording.start).toHaveBeenCalled();
             done();
         });
 

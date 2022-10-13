@@ -72,9 +72,8 @@ describe("VoiceBroadcastBody", () => {
                 {
                     onClick: expect.any(Function),
                     live: true,
-                    member: infoEvent.sender,
-                    userId: client.getUserId(),
-                    title: "@userId:matrix.org • test room",
+                    sender: infoEvent.sender,
+                    roomName: room.name,
                 },
                 {},
             );
@@ -89,9 +88,8 @@ describe("VoiceBroadcastBody", () => {
                 {
                     onClick: expect.any(Function),
                     live: false,
-                    member: infoEvent.sender,
-                    userId: client.getUserId(),
-                    title: "@userId:matrix.org • test room",
+                    sender: infoEvent.sender,
+                    roomName: room.name,
                 },
                 {},
             );
@@ -105,17 +103,17 @@ describe("VoiceBroadcastBody", () => {
         mocked(VoiceBroadcastRecordingBody).mockImplementation(
             ({
                 live,
-                member: _member,
+                sender,
                 onClick,
-                title,
-                userId: _userId,
+                roomName,
             }) => {
                 return (
                     <div
                         data-testid={recordingTestid}
                         onClick={onClick}
                     >
-                        <div>{ title }</div>
+                        <div>{ sender.name }</div>
+                        <div>{ roomName }</div>
                         <div>{ live && "Live" }</div>
                     </div>
                 );
@@ -155,7 +153,7 @@ describe("VoiceBroadcastBody", () => {
             itShouldRenderANonLiveVoiceBroadcast();
 
             it("should call stop on the recording", () => {
-                expect(recording.state).toBe(VoiceBroadcastInfoState.Stopped);
+                expect(recording.getState()).toBe(VoiceBroadcastInfoState.Stopped);
                 expect(onRecordingStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Stopped);
             });
         });

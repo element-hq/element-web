@@ -27,6 +27,17 @@ describe('<SettingsSubsection />', () => {
     const getComponent = (props = {}): React.ReactElement =>
         (<SettingsSubsection {...defaultProps} {...props} />);
 
+    it('renders with plain text heading', () => {
+        const { container } = render(getComponent());
+        expect(container).toMatchSnapshot();
+    });
+
+    it('renders with react element heading', () => {
+        const heading = <h3>This is the heading</h3>;
+        const { container } = render(getComponent({ heading }));
+        expect(container).toMatchSnapshot();
+    });
+
     it('renders without description', () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();

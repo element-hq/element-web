@@ -17,16 +17,16 @@ limitations under the License.
 */
 
 import { MatrixClient } from "matrix-js-sdk/src/client";
-import { IUploadOpts } from "matrix-js-sdk/src/@types/requests";
 import { MsgType } from "matrix-js-sdk/src/@types/event";
 import encrypt from "matrix-encrypt-attachment";
 import extractPngChunks from "png-chunks-extract";
-import { IAbortablePromise, IImageInfo } from "matrix-js-sdk/src/@types/partials";
+import { IImageInfo } from "matrix-js-sdk/src/@types/partials";
 import { logger } from "matrix-js-sdk/src/logger";
-import { IEventRelation, ISendEventResponse, MatrixError, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { IEventRelation, ISendEventResponse, MatrixEvent, UploadOpts, UploadProgress } from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
+import { removeElement } from "matrix-js-sdk/src/utils";
 
-import { IEncryptedFile, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
+import { IEncryptedFile, IMediaEventContent, IMediaEventInfo } from "./customisations/models/IMediaEventContent";
 import dis from './dispatcher/dispatcher';
 import { _t } from './languageHandler';
 import Modal from './Modal';
@@ -39,7 +39,7 @@ import {
     UploadProgressPayload,
     UploadStartedPayload,
 } from "./dispatcher/payloads/UploadPayload";
-import { IUpload } from "./models/IUpload";
+import { RoomUpload } from "./models/RoomUpload";
 import SettingsStore from "./settings/SettingsStore";
 import { decorateStartSendingTime, sendRoundTripMetric } from "./sendTimePerformanceMetrics";
 import { TimelineRenderingType } from "./contexts/RoomContext";
@@ -62,14 +62,6 @@ interface IMediaConfig {
     "m.upload.size"?: number;
 }
 
-interface IContent {
-    body: string;
-    msgtype: string;
-    info: IMediaEventInfo;
-    file?: string;
-    url?: string;
-}
-
 /**
  * Load a file into a newly created image element.
  *
@@ -78,7 +70,7 @@ interface IContent {
  */
 async function loadImageElement(imageFile: File) {
     // Load the file into an html element
-    const img = document.createElement("img");
+    const img = new Image();
     const objectUrl = URL.createObjectURL(imageFile);
     const imgPromise = new Promise((resolve, reject) => {
         img.onload = function() {
@@ -93,7 +85,7 @@ async function loadImageElement(imageFile: File) {
 
     // check for hi-dpi PNGs and fudge display resolution as needed.
     // this is mainly needed for macOS screencaps
-    let parsePromise;
+    let parsePromise: Promise<boolean>;
     if (imageFile.type === "image/png") {
         // in practice macOS happens to order the chunks so they fall in
         // the first 0x1000 bytes (thanks to a massive ICC header).
@@ -277,71 +269,58 @@ function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
  * @param {File} file The file to upload.
  * @param {Function?} progressHandler optional callback to be called when a chunk of
  *    data is uploaded.
+ * @param {AbortController?} controller optional abortController to use for this upload.
  * @return {Promise} A promise that resolves with an object.
  *  If the file is unencrypted then the object will have a "url" key.
  *  If the file is encrypted then the object will have a "file" key.
  */
-export function uploadFile(
+export async function uploadFile(
     matrixClient: MatrixClient,
     roomId: string,
     file: File | Blob,
-    progressHandler?: IUploadOpts["progressHandler"],
-): IAbortablePromise<{ url?: string, file?: IEncryptedFile }> {
-    let canceled = false;
+    progressHandler?: UploadOpts["progressHandler"],
+    controller?: AbortController,
+): Promise<{ url?: string, file?: IEncryptedFile }> {
+    const abortController = controller ?? new AbortController();
+
+    // If the room is encrypted then encrypt the file before uploading it.
     if (matrixClient.isRoomEncrypted(roomId)) {
-        // If the room is encrypted then encrypt the file before uploading it.
         // First read the file into memory.
-        let uploadPromise: IAbortablePromise<string>;
-        const prom = readFileAsArrayBuffer(file).then(function(data) {
-            if (canceled) throw new UploadCanceledError();
-            // Then encrypt the file.
-            return encrypt.encryptAttachment(data);
-        }).then(function(encryptResult) {
-            if (canceled) throw new UploadCanceledError();
+        const data = await readFileAsArrayBuffer(file);
+        if (abortController.signal.aborted) throw new UploadCanceledError();
 
-            // Pass the encrypted data as a Blob to the uploader.
-            const blob = new Blob([encryptResult.data]);
-            uploadPromise = matrixClient.uploadContent(blob, {
-                progressHandler,
-                includeFilename: false,
-            });
+        // Then encrypt the file.
+        const encryptResult = await encrypt.encryptAttachment(data);
+        if (abortController.signal.aborted) throw new UploadCanceledError();
 
-            return uploadPromise.then(url => {
-                if (canceled) throw new UploadCanceledError();
+        // Pass the encrypted data as a Blob to the uploader.
+        const blob = new Blob([encryptResult.data]);
 
-                // If the attachment is encrypted then bundle the URL along
-                // with the information needed to decrypt the attachment and
-                // add it under a file key.
-                return {
-                    file: {
-                        ...encryptResult.info,
-                        url,
-                    },
-                };
-            });
-        }) as IAbortablePromise<{ file: IEncryptedFile }>;
-        prom.abort = () => {
-            canceled = true;
-            if (uploadPromise) matrixClient.cancelUpload(uploadPromise);
+        const { content_uri: url } = await matrixClient.uploadContent(blob, {
+            progressHandler,
+            abortController,
+            includeFilename: false,
+        });
+        if (abortController.signal.aborted) throw new UploadCanceledError();
+
+        // If the attachment is encrypted then bundle the URL along with the information
+        // needed to decrypt the attachment and add it under a file key.
+        return {
+            file: {
+                ...encryptResult.info,
+                url,
+            } as IEncryptedFile,
         };
-        return prom;
     } else {
-        const basePromise = matrixClient.uploadContent(file, { progressHandler });
-        const promise1 = basePromise.then(function(url) {
-            if (canceled) throw new UploadCanceledError();
-            // If the attachment isn't encrypted then include the URL directly.
-            return { url };
-        }) as IAbortablePromise<{ url: string }>;
-        promise1.abort = () => {
-            canceled = true;
-            matrixClient.cancelUpload(basePromise);
-        };
-        return promise1;
+        const { content_uri: url } = await matrixClient.uploadContent(file, { progressHandler, abortController });
+        if (abortController.signal.aborted) throw new UploadCanceledError();
+        // If the attachment isn't encrypted then include the URL directly.
+        return { url };
     }
 }
 
 export default class ContentMessages {
-    private inprogress: IUpload[] = [];
+    private inprogress: RoomUpload[] = [];
     private mediaConfig: IMediaConfig = null;
 
     public sendStickerContentToRoom(
@@ -460,36 +439,33 @@ export default class ContentMessages {
         });
     }
 
-    public getCurrentUploads(relation?: IEventRelation): IUpload[] {
-        return this.inprogress.filter(upload => {
-            const noRelation = !relation && !upload.relation;
-            const matchingRelation = relation && upload.relation
-                && relation.rel_type === upload.relation.rel_type
-                && relation.event_id === upload.relation.event_id;
+    public getCurrentUploads(relation?: IEventRelation): RoomUpload[] {
+        return this.inprogress.filter(roomUpload => {
+            const noRelation = !relation && !roomUpload.relation;
+            const matchingRelation = relation && roomUpload.relation
+                && relation.rel_type === roomUpload.relation.rel_type
+                && relation.event_id === roomUpload.relation.event_id;
 
-            return (noRelation || matchingRelation) && !upload.canceled;
+            return (noRelation || matchingRelation) && !roomUpload.cancelled;
         });
     }
 
-    public cancelUpload(promise: IAbortablePromise<any>, matrixClient: MatrixClient): void {
-        const upload = this.inprogress.find(item => item.promise === promise);
-        if (upload) {
-            upload.canceled = true;
-            matrixClient.cancelUpload(upload.promise);
-            dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
-        }
+    public cancelUpload(upload: RoomUpload): void {
+        upload.abort();
+        dis.dispatch<UploadCanceledPayload>({ action: Action.UploadCanceled, upload });
     }
 
-    private sendContentToRoom(
+    public async sendContentToRoom(
         file: File,
         roomId: string,
         relation: IEventRelation | undefined,
         matrixClient: MatrixClient,
         replyToEvent: MatrixEvent | undefined,
-        promBefore: Promise<any>,
+        promBefore?: Promise<any>,
     ) {
-        const content: Omit<IContent, "info"> & { info: Partial<IMediaEventInfo> } = {
-            body: file.name || 'Attachment',
+        const fileName = file.name || _t("Attachment");
+        const content: Omit<IMediaEventContent, "info"> & { info: Partial<IMediaEventInfo> } = {
+            body: fileName,
             info: {
                 size: file.size,
             },
@@ -512,91 +488,72 @@ export default class ContentMessages {
             content.info.mimetype = file.type;
         }
 
-        const prom = new Promise<void>((resolve) => {
-            if (file.type.indexOf('image/') === 0) {
-                content.msgtype = MsgType.Image;
-                infoForImageFile(matrixClient, roomId, file).then((imageInfo) => {
-                    Object.assign(content.info, imageInfo);
-                    resolve();
-                }, (e) => {
-                    // Failed to thumbnail, fall back to uploading an m.file
-                    logger.error(e);
-                    content.msgtype = MsgType.File;
-                    resolve();
-                });
-            } else if (file.type.indexOf('audio/') === 0) {
-                content.msgtype = MsgType.Audio;
-                resolve();
-            } else if (file.type.indexOf('video/') === 0) {
-                content.msgtype = MsgType.Video;
-                infoForVideoFile(matrixClient, roomId, file).then((videoInfo) => {
-                    Object.assign(content.info, videoInfo);
-                    resolve();
-                }, (e) => {
-                    // Failed to thumbnail, fall back to uploading an m.file
-                    logger.error(e);
-                    content.msgtype = MsgType.File;
-                    resolve();
-                });
-            } else {
-                content.msgtype = MsgType.File;
-                resolve();
-            }
-        }) as IAbortablePromise<void>;
-
-        // create temporary abort handler for before the actual upload gets passed off to js-sdk
-        prom.abort = () => {
-            upload.canceled = true;
-        };
-
-        const upload: IUpload = {
-            fileName: file.name || 'Attachment',
-            roomId,
-            relation,
-            total: file.size,
-            loaded: 0,
-            promise: prom,
-        };
+        const upload = new RoomUpload(roomId, fileName, relation, file.size);
         this.inprogress.push(upload);
         dis.dispatch<UploadStartedPayload>({ action: Action.UploadStarted, upload });
 
-        function onProgress(ev) {
-            upload.total = ev.total;
-            upload.loaded = ev.loaded;
+        function onProgress(progress: UploadProgress) {
+            upload.onProgress(progress);
             dis.dispatch<UploadProgressPayload>({ action: Action.UploadProgress, upload });
         }
 
-        let error: MatrixError;
-        return prom.then(() => {
-            if (upload.canceled) throw new UploadCanceledError();
-            // XXX: upload.promise must be the promise that
-            // is returned by uploadFile as it has an abort()
-            // method hacked onto it.
-            upload.promise = uploadFile(matrixClient, roomId, file, onProgress);
-            return upload.promise.then(function(result) {
-                content.file = result.file;
-                content.url = result.url;
-            });
-        }).then(() => {
-            // Await previous message being sent into the room
-            return promBefore;
-        }).then(function() {
-            if (upload.canceled) throw new UploadCanceledError();
-            const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name
-                ? relation.event_id
-                : null;
-            const prom = matrixClient.sendMessage(roomId, threadId, content);
-            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
-                prom.then(resp => {
-                    sendRoundTripMetric(matrixClient, roomId, resp.event_id);
-                });
+        try {
+            if (file.type.startsWith('image/')) {
+                content.msgtype = MsgType.Image;
+                try {
+                    const imageInfo = await infoForImageFile(matrixClient, roomId, file);
+                    Object.assign(content.info, imageInfo);
+                } catch (e) {
+                    // Failed to thumbnail, fall back to uploading an m.file
+                    logger.error(e);
+                    content.msgtype = MsgType.File;
+                }
+            } else if (file.type.indexOf('audio/') === 0) {
+                content.msgtype = MsgType.Audio;
+            } else if (file.type.indexOf('video/') === 0) {
+                content.msgtype = MsgType.Video;
+                try {
+                    const videoInfo = await infoForVideoFile(matrixClient, roomId, file);
+                    Object.assign(content.info, videoInfo);
+                } catch (e) {
+                    // Failed to thumbnail, fall back to uploading an m.file
+                    logger.error(e);
+                    content.msgtype = MsgType.File;
+                }
+            } else {
+                content.msgtype = MsgType.File;
             }
-            return prom;
-        }, function(err: MatrixError) {
-            error = err;
-            if (!upload.canceled) {
+
+            if (upload.cancelled) throw new UploadCanceledError();
+            const result = await uploadFile(matrixClient, roomId, file, onProgress, upload.abortController);
+            content.file = result.file;
+            content.url = result.url;
+
+            if (upload.cancelled) throw new UploadCanceledError();
+            // Await previous message being sent into the room
+            if (promBefore) await promBefore;
+
+            if (upload.cancelled) throw new UploadCanceledError();
+            const threadId = relation?.rel_type === THREAD_RELATION_TYPE.name ? relation.event_id : null;
+
+            const response = await matrixClient.sendMessage(roomId, threadId, content);
+
+            if (SettingsStore.getValue("Performance.addSendMessageTimingMetadata")) {
+                sendRoundTripMetric(matrixClient, roomId, response.event_id);
+            }
+
+            dis.dispatch<UploadFinishedPayload>({ action: Action.UploadFinished, upload });
+            dis.dispatch({ action: 'message_sent' });
+        } catch (error) {
+            // 413: File was too big or upset the server in some way:
+            // clear the media size limit so we fetch it again next time we try to upload
+            if (error?.httpStatus === 413) {
+                this.mediaConfig = null;
+            }
+
+            if (!upload.cancelled) {
                 let desc = _t("The file '%(fileName)s' failed to upload.", { fileName: upload.fileName });
-                if (err.httpStatus === 413) {
+                if (error.httpStatus === 413) {
                     desc = _t(
                         "The file '%(fileName)s' exceeds this homeserver's size limit for uploads",
                         { fileName: upload.fileName },
@@ -606,27 +563,11 @@ export default class ContentMessages {
                     title: _t('Upload Failed'),
                     description: desc,
                 });
-            }
-        }).finally(() => {
-            for (let i = 0; i < this.inprogress.length; ++i) {
-                if (this.inprogress[i].promise === upload.promise) {
-                    this.inprogress.splice(i, 1);
-                    break;
-                }
-            }
-            if (error) {
-                // 413: File was too big or upset the server in some way:
-                // clear the media size limit so we fetch it again next time
-                // we try to upload
-                if (error?.httpStatus === 413) {
-                    this.mediaConfig = null;
-                }
                 dis.dispatch<UploadErrorPayload>({ action: Action.UploadFailed, upload, error });
-            } else {
-                dis.dispatch<UploadFinishedPayload>({ action: Action.UploadFinished, upload });
-                dis.dispatch({ action: 'message_sent' });
             }
-        });
+        } finally {
+            removeElement(this.inprogress, e => e.promise === upload.promise);
+        }
     }
 
     private isFileSizeAcceptable(file: File) {

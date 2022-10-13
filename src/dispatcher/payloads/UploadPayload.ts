@@ -16,13 +16,13 @@ limitations under the License.
 
 import { ActionPayload } from "../payloads";
 import { Action } from "../actions";
-import { IUpload } from "../../models/IUpload";
+import { RoomUpload } from "../../models/RoomUpload";
 
 export interface UploadPayload extends ActionPayload {
     /**
      * The upload with fields representing the new upload state.
      */
-    upload: IUpload;
+    upload: RoomUpload;
 }
 
 export interface UploadStartedPayload extends UploadPayload {

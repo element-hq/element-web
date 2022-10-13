@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { mocked } from "jest-mock";
-import { IAbortablePromise, IEncryptedFile, IUploadOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
+import { IEncryptedFile, UploadOpts, MatrixClient } from "matrix-js-sdk/src/matrix";
 
 import { createVoiceMessageRecording, VoiceMessageRecording } from "../../src/audio/VoiceMessageRecording";
 import { RecordingState, VoiceRecording } from "../../src/audio/VoiceRecording";
@@ -161,8 +161,8 @@ describe("VoiceMessageRecording", () => {
                     matrixClient: MatrixClient,
                     roomId: string,
                     file: File | Blob,
-                    _progressHandler?: IUploadOpts["progressHandler"],
-                ): IAbortablePromise<{ url?: string, file?: IEncryptedFile }> => {
+                    _progressHandler?: UploadOpts["progressHandler"],
+                ): Promise<{ url?: string, file?: IEncryptedFile }> => {
                     uploadFileClient = matrixClient;
                     uploadFileRoomId = roomId;
                     uploadBlob = file;

@@ -14,17 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { LocalNotificationSettings } from 'matrix-js-sdk/src/@types/local_notifications';
 import React, { useState } from 'react';
+import { LocalNotificationSettings } from 'matrix-js-sdk/src/@types/local_notifications';
 
 import { _t } from '../../../../languageHandler';
 import Spinner from '../../elements/Spinner';
 import SettingsSubsection from '../shared/SettingsSubsection';
+import { SettingsSubsectionHeading } from '../shared/SettingsSubsectionHeading';
 import DeviceDetails from './DeviceDetails';
 import DeviceExpandDetailsButton from './DeviceExpandDetailsButton';
 import DeviceTile from './DeviceTile';
 import { DeviceVerificationStatusCard } from './DeviceVerificationStatusCard';
 import { ExtendedDevice } from './types';
+import { KebabContextMenu } from '../../context_menus/KebabContextMenu';
+import { IconizedContextMenuOption } from '../../context_menus/IconizedContextMenu';
 
 interface Props {
     device?: ExtendedDevice;
@@ -34,8 +37,47 @@ interface Props {
     setPushNotifications?: (deviceId: string, enabled: boolean) => Promise<void> | undefined;
     onVerifyCurrentDevice: () => void;
     onSignOutCurrentDevice: () => void;
+    signOutAllOtherSessions?: () => void;
     saveDeviceName: (deviceName: string) => Promise<void>;
 }
+
+type CurrentDeviceSectionHeadingProps =
+    Pick<Props, 'onSignOutCurrentDevice' | 'signOutAllOtherSessions'>
+    & { disabled?: boolean };
+
+const CurrentDeviceSectionHeading: React.FC<CurrentDeviceSectionHeadingProps> = ({
+    onSignOutCurrentDevice,
+    signOutAllOtherSessions,
+    disabled,
+}) => {
+    const menuOptions = [
+        <IconizedContextMenuOption
+            key="sign-out"
+            label={_t('Sign out')}
+            onClick={onSignOutCurrentDevice}
+            isDestructive
+        />,
+        ...(signOutAllOtherSessions
+            ? [
+                <IconizedContextMenuOption
+                    key="sign-out-all-others"
+                    label={_t('Sign out all other sessions')}
+                    onClick={signOutAllOtherSessions}
+                    isDestructive
+                />,
+            ]
+            : []
+        ),
+    ];
+    return <SettingsSubsectionHeading heading={_t('Current session')}>
+        <KebabContextMenu
+            disabled={disabled}
+            title={_t('Options')}
+            options={menuOptions}
+            data-testid='current-session-menu'
+        />
+    </SettingsSubsectionHeading>;
+};
 
 const CurrentDeviceSection: React.FC<Props> = ({
     device,
@@ -45,13 +87,18 @@ const CurrentDeviceSection: React.FC<Props> = ({
     setPushNotifications,
     onVerifyCurrentDevice,
     onSignOutCurrentDevice,
+    signOutAllOtherSessions,
     saveDeviceName,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return <SettingsSubsection
-        heading={_t('Current session')}
         data-testid='current-session-section'
+        heading={<CurrentDeviceSectionHeading
+            onSignOutCurrentDevice={onSignOutCurrentDevice}
+            signOutAllOtherSessions={signOutAllOtherSessions}
+            disabled={isLoading || !device || isSigningOut}
+        />}
     >
         { /* only show big spinner on first load */ }
         { isLoading && !device && <Spinner /> }

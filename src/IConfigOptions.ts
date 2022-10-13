@@ -141,9 +141,6 @@ export interface IConfigOptions {
         servers: string[];
     };
 
-    piwik?: false | {
-        policy_url: string; // deprecated in favour of `privacy_policy_url` at root instead
-    };
     posthog?: {
         project_api_key: string;
         api_host: string; // hostname
@@ -181,6 +178,11 @@ export interface IConfigOptions {
 
     sync_timeline_limit?: number;
     dangerously_allow_unsafe_and_insecure_passwords?: boolean; // developer option
+
+    voice_broadcast?: {
+        // length per voice chunk in seconds
+        chunk_length?: number;
+    };
 }
 
 export interface ISsoRedirectOptions {

@@ -45,6 +45,7 @@ global.matchMedia = mockMatchMedia;
 
 // maplibre requires a createObjectURL mock
 global.URL.createObjectURL = jest.fn();
+global.URL.revokeObjectURL = jest.fn();
 
 // polyfilling TextEncoder as it is not available on JSDOM
 // view https://github.com/facebook/jest/issues/9983

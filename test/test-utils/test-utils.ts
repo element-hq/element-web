@@ -158,7 +158,7 @@ export function createTestClient(): MatrixClient {
         getOpenIdToken: jest.fn().mockResolvedValue(undefined),
         registerWithIdentityServer: jest.fn().mockResolvedValue({}),
         getIdentityAccount: jest.fn().mockResolvedValue({}),
-        getTerms: jest.fn().mockResolvedValueOnce(undefined),
+        getTerms: jest.fn().mockResolvedValue({ policies: [] }),
         doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(undefined),
         isVersionSupported: jest.fn().mockResolvedValue(undefined),
         getPushRules: jest.fn().mockResolvedValue(undefined),
@@ -182,6 +182,7 @@ export function createTestClient(): MatrixClient {
             setVideoInput: jest.fn(),
             setAudioInput: jest.fn(),
         } as unknown as MediaHandler),
+        uploadContent: jest.fn(),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

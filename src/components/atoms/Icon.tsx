@@ -29,6 +29,7 @@ const iconTypeMap = new Map([
 export enum IconColour {
     Accent = "accent",
     LiveBadge = "live-badge",
+    CompoundSecondaryContent = "compound-secondary-content",
 }
 
 export enum IconSize {
@@ -55,6 +56,7 @@ export const Icon: React.FC<IconProps> = ({
 
     const styles: React.CSSProperties = {
         maskImage: `url("${iconTypeMap.get(type)}")`,
+        WebkitMaskImage: `url("${iconTypeMap.get(type)}")`,
     };
 
     return (

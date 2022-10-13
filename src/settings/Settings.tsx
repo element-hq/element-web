@@ -475,8 +475,24 @@ export const SETTINGS: {[setting: string]: ISetting} = {
         isFeature: true,
         labsGroup: LabGroup.Experimental,
         supportedLevels: LEVELS_FEATURE,
-        displayName: _td("Use new session manager (under active development)"),
+        displayName: _td("Use new session manager"),
         default: false,
+        betaInfo: {
+            title: _td('New session manager'),
+            caption: () => <>
+                <p>
+                    { _td('Have greater visibility and control over all your sessions.') }
+                </p>
+                <p>
+                    { _td(
+                        'Our new sessions manager provides better visibility of all your sessions, '
+                        + 'and greater control over them including the ability to remotely toggle push notifications.',
+                    )
+                    }
+                </p>
+
+            </>,
+        },
     },
     "baseFontSize": {
         displayName: _td("Font size"),

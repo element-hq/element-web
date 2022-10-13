@@ -90,7 +90,7 @@ export class CallStore extends AsyncStoreWithClient<{}> {
         }
         this.callListeners.clear();
         this.calls.clear();
-        this.activeCalls = new Set();
+        this._activeCalls.clear();
 
         this.matrixClient.off(ClientEvent.Room, this.onRoom);
         this.matrixClient.off(RoomStateEvent.Events, this.onRoomState);

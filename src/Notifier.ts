@@ -431,6 +431,7 @@ export const Notifier = {
         const room = MatrixClientPeg.get().getRoom(roomId);
 
         const actions = MatrixClientPeg.get().getPushActionsForEvent(ev);
+
         if (actions?.notify) {
             this._performCustomEventHandling(ev);
 

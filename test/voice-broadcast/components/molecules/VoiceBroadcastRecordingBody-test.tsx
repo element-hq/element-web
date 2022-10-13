@@ -18,23 +18,27 @@ import React, { MouseEventHandler } from "react";
 import { render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RoomMember } from "matrix-js-sdk/src/matrix";
-import { mocked } from "jest-mock";
 
-import { VoiceBroadcastRecordingBody } from "../../../../src/voice-broadcast";
-import MemberAvatar from "../../../../src/components/views/avatars/MemberAvatar";
+import { VoiceBroadcastHeader, VoiceBroadcastRecordingBody } from "../../../../src/voice-broadcast";
 
-jest.mock("../../../../src/components/views/avatars/MemberAvatar", () => jest.fn());
+jest.mock("../../../../src/voice-broadcast/components/atoms/VoiceBroadcastHeader", () => ({
+    VoiceBroadcastHeader: ({ live, sender, roomName }: React.ComponentProps<typeof VoiceBroadcastHeader>) => {
+        return <div data-testid="voice-broadcast-header">
+            live: { live },
+            sender: { sender.userId },
+            room name: { roomName }
+        </div>;
+    },
+}));
 
 describe("VoiceBroadcastRecordingBody", () => {
-    const title = "Test Title";
+    const testRoomName = "test room name";
     const userId = "@user:example.com";
     const roomMember = new RoomMember("!room:example.com", userId);
     let onClick: MouseEventHandler<HTMLDivElement>;
 
     beforeEach(() => {
         onClick = jest.fn();
-        // @ts-ignore
-        mocked(MemberAvatar).mockReturnValue(<div data-testid="member-avatar" />);
     });
 
     describe("when rendered", () => {
@@ -44,10 +48,9 @@ describe("VoiceBroadcastRecordingBody", () => {
             renderResult = render(
                 <VoiceBroadcastRecordingBody
                     onClick={onClick}
-                    title={title}
-                    userId={userId}
+                    roomName={testRoomName}
                     live={true}
-                    member={roomMember}
+                    sender={roomMember}
                 />,
             );
         });
@@ -56,19 +59,9 @@ describe("VoiceBroadcastRecordingBody", () => {
             expect(renderResult.container).toMatchSnapshot();
         });
 
-        it("should pass the props to MemberAvatar", () => {
-            expect(mocked(MemberAvatar)).toHaveBeenCalledWith(
-                {
-                    member: roomMember,
-                    fallbackUserId: userId,
-                },
-                {},
-            );
-        });
-
         describe("and clicked", () => {
             beforeEach(async () => {
-                await userEvent.click(renderResult.getByText(title));
+                await userEvent.click(renderResult.getByTestId("voice-broadcast-header"));
             });
 
             it("should call the onClick prop", () => {
@@ -84,10 +77,9 @@ describe("VoiceBroadcastRecordingBody", () => {
             renderResult = render(
                 <VoiceBroadcastRecordingBody
                     onClick={onClick}
-                    title={title}
-                    userId={userId}
+                    roomName={testRoomName}
                     live={false}
-                    member={roomMember}
+                    sender={roomMember}
                 />,
             );
         });

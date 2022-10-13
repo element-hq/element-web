@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadcast info should render the header with a live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastHeader"
+  >
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 26px; width: 40px; line-height: 40px;"
+      >
+        T
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        src="data:image/png;base64,00"
+        style="width: 40px; height: 40px;"
+        title="@user:example.com"
+      />
+    </span>
+    <div
+      class="mx_VoiceBroadcastHeader_content"
+    >
+      <div
+        class="mx_VoiceBroadcastHeader_sender"
+      >
+        test user
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_room"
+      >
+        test room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+        Voice broadcast
+      </div>
+    </div>
+    <div
+      class="mx_LiveBadge"
+    >
+      <i
+        aria-hidden="true"
+        class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
+        role="presentation"
+        style="mask-image: url(\\"image-file-stub\\");"
+      />
+      Live
+    </div>
+  </div>
+</div>
+`;
+
+exports[`VoiceBroadcastHeader when rendering a non-live broadcast header should render the header without a live badge 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastHeader"
+  >
+    <span
+      class="mx_BaseAvatar"
+      role="presentation"
+    >
+      <span
+        aria-hidden="true"
+        class="mx_BaseAvatar_initial"
+        style="font-size: 26px; width: 40px; line-height: 40px;"
+      >
+        T
+      </span>
+      <img
+        alt=""
+        aria-hidden="true"
+        class="mx_BaseAvatar_image"
+        src="data:image/png;base64,00"
+        style="width: 40px; height: 40px;"
+        title="@user:example.com"
+      />
+    </span>
+    <div
+      class="mx_VoiceBroadcastHeader_content"
+    >
+      <div
+        class="mx_VoiceBroadcastHeader_sender"
+      >
+        test user
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_room"
+      >
+        test room
+      </div>
+    </div>
+  </div>
+</div>
+`;

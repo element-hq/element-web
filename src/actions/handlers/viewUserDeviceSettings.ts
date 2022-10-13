@@ -14,4 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export * from "./VoiceBroadcastRecordingsStore";
+import { UserTab } from "../../components/views/dialogs/UserTab";
+import { Action } from "../../dispatcher/actions";
+import defaultDispatcher from "../../dispatcher/dispatcher";
+
+/**
+ * Redirect to the correct device manager section
+ * Based on the labs setting
+ */
+export const viewUserDeviceSettings = (isNewDeviceManagerEnabled: boolean) => {
+    defaultDispatcher.dispatch({
+        action: Action.ViewUserSettings,
+        initialTabId: isNewDeviceManagerEnabled ? UserTab.SessionManager : UserTab.Security,
+    });
+};

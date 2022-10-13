@@ -184,7 +184,7 @@ export default class MultiInviter {
                 }
             }
 
-            return this.matrixClient.invite(roomId, addr, undefined, this.reason);
+            return this.matrixClient.invite(roomId, addr, this.reason);
         } else {
             throw new Error('Unsupported address');
         }

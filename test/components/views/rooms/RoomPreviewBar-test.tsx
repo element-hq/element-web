@@ -364,7 +364,7 @@ describe('<RoomPreviewBar />', () => {
 
                     expect(getMessage(component)).toMatchSnapshot();
                     expect(MatrixClientPeg.get().lookupThreePid).toHaveBeenCalledWith(
-                        'email', invitedEmail, undefined, 'mock-token',
+                        'email', invitedEmail, 'mock-token',
                     );
                     await testJoinButton({ inviterName, invitedEmail })();
                 });

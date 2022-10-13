@@ -171,6 +171,10 @@ const SessionManagerTab: React.FC = () => {
         setSelectedDeviceIds([]);
     }, [filter, setSelectedDeviceIds]);
 
+    const signOutAllOtherSessions = shouldShowOtherSessions ? () => {
+        onSignOutOtherDevices(Object.keys(otherDevices));
+    }: undefined;
+
     return <SettingsTab heading={_t('Sessions')}>
         <SecurityRecommendations
             devices={devices}
@@ -186,6 +190,7 @@ const SessionManagerTab: React.FC = () => {
             saveDeviceName={(deviceName) => saveDeviceName(currentDeviceId, deviceName)}
             onVerifyCurrentDevice={onVerifyCurrentDevice}
             onSignOutCurrentDevice={onSignOutCurrentDevice}
+            signOutAllOtherSessions={signOutAllOtherSessions}
         />
         {
             shouldShowOtherSessions &&

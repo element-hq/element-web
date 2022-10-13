@@ -14,5 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export * from "./shouldDisplayAsVoiceBroadcastTile";
-export * from "./startNewVoiceBroadcastRecording";
+import React, { HTMLAttributes } from "react";
+
+import Heading from "../../typography/Heading";
+
+export interface SettingsSubsectionHeadingProps extends HTMLAttributes<HTMLDivElement> {
+    heading: string;
+    children?: React.ReactNode;
+}
+
+export const SettingsSubsectionHeading: React.FC<SettingsSubsectionHeadingProps> = ({ heading, children, ...rest }) => (
+    <div {...rest} className="mx_SettingsSubsectionHeading">
+        <Heading className="mx_SettingsSubsectionHeading_heading" size='h3'>{ heading }</Heading>
+        { children }
+    </div>
+);

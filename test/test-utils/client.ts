@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import EventEmitter from "events";
-import { MethodKeysOf, mocked, MockedObject } from "jest-mock";
+import { MethodKeysOf, mocked, MockedObject, PropertyKeysOf } from "jest-mock";
 import { MatrixClient, User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -71,6 +71,7 @@ export const mockClientMethodsUser = (userId = '@alice:domain') => ({
     credentials: { userId },
     getThreePids: jest.fn().mockResolvedValue({ threepids: [] }),
     getAccessToken: jest.fn(),
+    getDeviceId: jest.fn(),
 });
 
 /**
@@ -94,6 +95,35 @@ export const mockClientMethodsServer = (): Partial<Record<MethodKeysOf<MatrixCli
     getIdentityServerUrl: jest.fn(),
     getHomeserverUrl: jest.fn(),
     getCapabilities: jest.fn().mockReturnValue({}),
+    getClientWellKnown: jest.fn().mockReturnValue({}),
     doesServerSupportUnstableFeature: jest.fn().mockResolvedValue(false),
+});
+
+export const mockClientMethodsDevice = (
+    deviceId = 'test-device-id',
+): Partial<Record<MethodKeysOf<MatrixClient>, unknown>> => ({
+    getDeviceId: jest.fn().mockReturnValue(deviceId),
+    getDeviceEd25519Key: jest.fn(),
+    getDevices: jest.fn().mockResolvedValue({ devices: [] }),
+});
+
+export const mockClientMethodsCrypto = (): Partial<Record<
+    MethodKeysOf<MatrixClient> & PropertyKeysOf<MatrixClient>, unknown>
+> => ({
+    isCryptoEnabled: jest.fn(),
+    isSecretStorageReady: jest.fn(),
+    isCrossSigningReady: jest.fn(),
+    isKeyBackupKeyStored: jest.fn(),
+    getCrossSigningCacheCallbacks: jest.fn().mockReturnValue({ getCrossSigningKeyCache: jest.fn() }),
+    getStoredCrossSigningForUser: jest.fn(),
+    checkKeyBackup: jest.fn().mockReturnValue({}),
+    crypto: {
+        getSessionBackupPrivateKey: jest.fn(),
+        secretStorage: { hasKey: jest.fn() },
+        crossSigningInfo: {
+            getId: jest.fn(),
+            isStoredInSecretStorage: jest.fn(),
+        },
+    },
 });
 

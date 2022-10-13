@@ -76,7 +76,7 @@ describe("VoiceBroadcastRecordingsStore", () => {
         });
 
         it("should return it as current", () => {
-            expect(recordings.current).toBe(recording);
+            expect(recordings.getCurrent()).toBe(recording);
         });
 
         it("should return it by id", () => {

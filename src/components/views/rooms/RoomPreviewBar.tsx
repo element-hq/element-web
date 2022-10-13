@@ -148,7 +148,6 @@ export default class RoomPreviewBar extends React.Component<IProps, IState> {
                 const result = await MatrixClientPeg.get().lookupThreePid(
                     'email',
                     this.props.invitedEmail,
-                    undefined /* callback */,
                     identityAccessToken,
                 );
                 this.setState({ invitedEmailMxid: result.mxid });

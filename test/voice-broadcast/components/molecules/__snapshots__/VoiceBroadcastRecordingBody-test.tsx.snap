@@ -6,27 +6,13 @@ exports[`VoiceBroadcastRecordingBody when rendered should render the expected HT
     class="mx_VoiceBroadcastRecordingBody"
   >
     <div
-      data-testid="member-avatar"
-    />
-    <div
-      class="mx_VoiceBroadcastRecordingBody_content"
+      data-testid="voice-broadcast-header"
     >
-      <div
-        class="mx_VoiceBroadcastRecordingBody_title"
-      >
-        Test Title
-      </div>
-    </div>
-    <div
-      class="mx_LiveBadge"
-    >
-      <i
-        aria-hidden="true"
-        class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
-        role="presentation"
-        style="mask-image: url(\\"image-file-stub\\");"
-      />
-      Live
+      live: 
+      , sender: 
+      @user:example.com
+      , room name: 
+      test room name
     </div>
   </div>
 </div>

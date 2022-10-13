@@ -266,7 +266,7 @@ describe("StopGapWidgetDriver", () => {
                     limit: 25,
                     from: 'from-token',
                     to: 'to-token',
-                    direction: Direction.Forward,
+                    dir: Direction.Forward,
                 },
             );
         });

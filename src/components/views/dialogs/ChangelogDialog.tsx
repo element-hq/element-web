@@ -16,7 +16,6 @@ Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
  */
 
 import React from 'react';
-import request from 'browser-request';
 
 import { _t } from '../../../languageHandler';
 import QuestionDialog from "./QuestionDialog";
@@ -37,22 +36,33 @@ export default class ChangelogDialog extends React.Component<IProps> {
         this.state = {};
     }
 
+    private async fetchChanges(repo: string, oldVersion: string, newVersion: string): Promise<void> {
+        const url = `https://riot.im/github/repos/${repo}/compare/${oldVersion}...${newVersion}`;
+
+        try {
+            const res = await fetch(url);
+
+            if (!res.ok) {
+                this.setState({ [repo]: res.statusText });
+                return;
+            }
+
+            const body = await res.json();
+            this.setState({ [repo]: body.commits });
+        } catch (err) {
+            this.setState({ [repo]: err.message });
+        }
+    }
+
     public componentDidMount() {
         const version = this.props.newVersion.split('-');
         const version2 = this.props.version.split('-');
         if (version == null || version2 == null) return;
         // parse versions of form: [vectorversion]-react-[react-sdk-version]-js-[js-sdk-version]
-        for (let i=0; i<REPOS.length; i++) {
+        for (let i = 0; i < REPOS.length; i++) {
             const oldVersion = version2[2*i];
             const newVersion = version[2*i];
-            const url = `https://riot.im/github/repos/${REPOS[i]}/compare/${oldVersion}...${newVersion}`;
-            request(url, (err, response, body) => {
-                if (response.statusCode < 200 || response.statusCode >= 300) {
-                    this.setState({ [REPOS[i]]: response.statusText });
-                    return;
-                }
-                this.setState({ [REPOS[i]]: JSON.parse(body).commits });
-            });
+            this.fetchChanges(REPOS[i], oldVersion, newVersion);
         }
     }
 
