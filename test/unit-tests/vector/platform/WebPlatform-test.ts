@@ -33,6 +33,7 @@ describe('WebPlatform', () => {
     });
 
     it('registers service worker', () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - mocking readonly object
         navigator.serviceWorker = { register: jest.fn() };
         new WebPlatform();
@@ -66,7 +67,8 @@ describe('WebPlatform', () => {
     describe("getDefaultDeviceDisplayName", () => {
         it.each([[
             "https://develop.element.io/#/room/!foo:bar",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) " +
+            "Chrome/105.0.0.0 Safari/537.36",
             "develop.element.io: Chrome on macOS",
         ]])("%s & %s = %s", (url, userAgent, result) => {
             delete window.navigator;
@@ -82,14 +84,16 @@ describe('WebPlatform', () => {
         const mockNotification = {
             requestPermission: jest.fn(),
             permission: 'notGranted',
-        }
+        };
         beforeEach(() => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             window.Notification = mockNotification;
             mockNotification.permission = 'notGranted';
         });
 
         it('supportsNotifications returns false when platform does not support notifications', () => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             window.Notification = undefined;
             expect(new WebPlatform().supportsNotifications()).toBe(false);
@@ -104,7 +108,7 @@ describe('WebPlatform', () => {
         });
 
         it('maySendNotifications returns true when notification permissions are granted', () => {
-            mockNotification.permission = 'granted'
+            mockNotification.permission = 'granted';
             expect(new WebPlatform().maySendNotifications()).toBe(true);
         });
 
@@ -115,7 +119,6 @@ describe('WebPlatform', () => {
             const result = await platform.requestNotificationPermission();
             expect(result).toEqual('test');
         });
-
     });
 
     describe('app version', () => {
@@ -124,7 +127,7 @@ describe('WebPlatform', () => {
 
         beforeEach(() => {
             jest.spyOn(MatrixClientPeg, 'userRegisteredWithinLastHours').mockReturnValue(false);
-        })
+        });
 
         afterAll(() => {
             process.env.VERSION = envVersion;
@@ -154,7 +157,8 @@ describe('WebPlatform', () => {
         });
 
         describe('pollForUpdate()', () => {
-            it('should return not available and call showNoUpdate when current version matches most recent version', async () => {
+            it('should return not available and call showNoUpdate when current version ' +
+                'matches most recent version', async () => {
                 process.env.VERSION = prodVersion;
                 fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();
@@ -183,7 +187,8 @@ describe('WebPlatform', () => {
                 expect(showNoUpdate).toHaveBeenCalled();
             });
 
-            it('should return ready and call showUpdate when current version differs from most recent version', async () => {
+            it('should return ready and call showUpdate when current version ' +
+                'differs from most recent version', async () => {
                 process.env.VERSION = '0.0.0'; // old version
                 fetchMock.getOnce("/version", prodVersion);
                 const platform = new WebPlatform();

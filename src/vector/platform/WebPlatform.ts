@@ -137,7 +137,8 @@ export default class WebPlatform extends VectorBasePlatform {
         return true;
     }
 
-    private pollForUpdate = (
+    // Exported for tests
+    public pollForUpdate = (
         showUpdate: (currentVersion: string, mostRecentVersion: string) => void,
         showNoUpdate?: () => void,
     ): Promise<UpdateStatus> => {

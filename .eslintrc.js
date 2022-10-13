@@ -14,11 +14,15 @@ module.exports = {
     },
     settings: {
         react: {
-            version: 'detect'
-        }
+            version: 'detect',
+        },
     },
     overrides: [{
-        files: ["src/**/*.{ts,tsx}", "module_system/**/*.{ts,tsx}"],
+        files: [
+            "src/**/*.{ts,tsx}",
+            "test/**/*.{ts,tsx}",
+            "module_system/**/*.{ts,tsx}",
+        ],
         extends: [
             "plugin:matrix-org/typescript",
             "plugin:matrix-org/react",

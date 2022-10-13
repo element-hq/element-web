@@ -14,28 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
-import EventEmitter from 'events';
 import { logger } from 'matrix-js-sdk/src/logger';
-import { MatrixClient, MatrixEvent, Room } from 'matrix-js-sdk/src/matrix';
+import { MatrixEvent, Room } from 'matrix-js-sdk/src/matrix';
 import { UpdateCheckStatus } from 'matrix-react-sdk/src/BasePlatform';
 import { Action } from 'matrix-react-sdk/src/dispatcher/actions';
 import dispatcher from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import { MatrixClientPeg } from 'matrix-react-sdk/src/MatrixClientPeg';
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
 
 import ElectronPlatform from '../../../../src/vector/platform/ElectronPlatform';
 
 jest.mock('matrix-react-sdk/src/rageshake/rageshake', () => ({
-    flush: jest.fn()
-}))
-
+    flush: jest.fn(),
+}));
 
 describe('ElectronPlatform', () => {
-    const defaultUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
+    const defaultUserAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 ' +
+        '(KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36';
     const mockElectron = {
         on: jest.fn(),
-        send: jest.fn()
+        send: jest.fn(),
     };
 
     const dispatchSpy = jest.spyOn(dispatcher, 'dispatch');
@@ -58,25 +55,25 @@ describe('ElectronPlatform', () => {
 
     it('flushes rageshake before quitting', () => {
         new ElectronPlatform();
-            const [event, handler] = getElectronEventHandlerCall('before-quit');
-            // correct event bound
-            expect(event).toBeTruthy();
+        const [event, handler] = getElectronEventHandlerCall('before-quit');
+        // correct event bound
+        expect(event).toBeTruthy();
 
-            handler();
+        handler();
 
-            expect(logSpy).toHaveBeenCalled();
-            expect(rageshake.flush).toHaveBeenCalled();
+        expect(logSpy).toHaveBeenCalled();
+        expect(rageshake.flush).toHaveBeenCalled();
     });
 
     it('dispatches view settings action on preferences event', () => {
         new ElectronPlatform();
-            const [event, handler] = getElectronEventHandlerCall('preferences');
-            // correct event bound
-            expect(event).toBeTruthy();
+        const [event, handler] = getElectronEventHandlerCall('preferences');
+        // correct event bound
+        expect(event).toBeTruthy();
 
-            handler();
+        handler();
 
-            expect(dispatchFireSpy).toHaveBeenCalledWith(Action.ViewUserSettings);
+        expect(dispatchFireSpy).toHaveBeenCalledWith(Action.ViewUserSettings);
     });
 
     describe('updates', () => {
@@ -85,38 +82,37 @@ describe('ElectronPlatform', () => {
             const [event, handler] = getElectronEventHandlerCall('check_updates');
             // correct event bound
             expect(event).toBeTruthy();
-    
+
             handler({}, true);
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.CheckUpdates,
-                status: UpdateCheckStatus.Downloading
-            })
+                status: UpdateCheckStatus.Downloading,
+            });
         });
 
         it('dispatches on check updates action when update not available', () => {
             new ElectronPlatform();
             const [, handler] = getElectronEventHandlerCall('check_updates');
-    
+
             handler({}, false);
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.CheckUpdates,
-                status: UpdateCheckStatus.NotAvailable
-            })
+                status: UpdateCheckStatus.NotAvailable,
+            });
         });
 
         it('starts update check', () => {
             const platform = new ElectronPlatform();
             platform.startUpdateCheck();
-            expect(mockElectron.send).toHaveBeenCalledWith('check_updates')
+            expect(mockElectron.send).toHaveBeenCalledWith('check_updates');
         });
 
         it('installs update', () => {
             const platform = new ElectronPlatform();
             platform.installUpdate();
-            expect(mockElectron.send).toHaveBeenCalledWith('install_update')
+            expect(mockElectron.send).toHaveBeenCalledWith('install_update');
         });
     });
-
 
     it('returns human readable name', () => {
         const platform = new ElectronPlatform();
@@ -125,11 +121,13 @@ describe('ElectronPlatform', () => {
 
     describe("getDefaultDeviceDisplayName", () => {
         it.each([[
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36",
             "Element Desktop: macOS",
         ],
         [
-            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) electron/1.0.0 Chrome/53.0.2785.113 Electron/1.4.3 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) " +
+            "electron/1.0.0 Chrome/53.0.2785.113 Electron/1.4.3 Safari/537.36",
             "Element Desktop: Windows",
         ],
         [
@@ -151,9 +149,7 @@ describe('ElectronPlatform', () => {
         [
             "custom user agent",
             "Element Desktop: Unknown",
-        ],
-
-    ])("%s = %s", (userAgent, result) => {
+        ]])("%s = %s", (userAgent, result) => {
             delete window.navigator;
             window.navigator = { userAgent } as unknown as Navigator;
             const platform = new ElectronPlatform();
@@ -232,7 +228,7 @@ describe('ElectronPlatform', () => {
 
             const [channel, { name }] = mockElectron.send.mock.calls[0];
             expect(channel).toEqual("ipcCall");
-            expect(name).toEqual('getAvailableSpellCheckLanguages')
+            expect(name).toEqual('getAvailableSpellCheckLanguages');
         });
     });
 
@@ -243,8 +239,8 @@ describe('ElectronPlatform', () => {
             platform.getPickleKey(userId, deviceId);
 
             const [, { name, args }] = mockElectron.send.mock.calls[0];
-            expect(name).toEqual('getPickleKey')
-            expect(args).toEqual([userId, deviceId])
+            expect(name).toEqual('getPickleKey');
+            expect(args).toEqual([userId, deviceId]);
         });
 
         it('makes correct ipc call to create pickle key', () => {
@@ -253,8 +249,8 @@ describe('ElectronPlatform', () => {
             platform.createPickleKey(userId, deviceId);
 
             const [, { name, args }] = mockElectron.send.mock.calls[0];
-            expect(name).toEqual('createPickleKey')
-            expect(args).toEqual([userId, deviceId])
+            expect(name).toEqual('createPickleKey');
+            expect(args).toEqual([userId, deviceId]);
         });
 
         it('makes correct ipc call to destroy pickle key', () => {
@@ -263,8 +259,8 @@ describe('ElectronPlatform', () => {
             platform.destroyPickleKey(userId, deviceId);
 
             const [, { name, args }] = mockElectron.send.mock.calls[0];
-            expect(name).toEqual('destroyPickleKey')
-            expect(args).toEqual([userId, deviceId])
+            expect(name).toEqual('destroyPickleKey');
+            expect(args).toEqual([userId, deviceId]);
         });
     });
 
