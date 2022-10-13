@@ -14,14 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import request from 'browser-request';
-import EventEmitter from 'events';
 import { logger } from 'matrix-js-sdk/src/logger';
-import { MatrixClient, MatrixEvent, Room } from 'matrix-js-sdk/src/matrix';
+import { MatrixEvent, Room } from 'matrix-js-sdk/src/matrix';
 import { UpdateCheckStatus } from 'matrix-react-sdk/src/BasePlatform';
 import { Action } from 'matrix-react-sdk/src/dispatcher/actions';
 import dispatcher from 'matrix-react-sdk/src/dispatcher/dispatcher';
-import { MatrixClientPeg } from 'matrix-react-sdk/src/MatrixClientPeg';
 import * as rageshake from 'matrix-react-sdk/src/rageshake/rageshake';
 
 import ElectronPlatform from '../../../../src/vector/platform/ElectronPlatform';
@@ -85,7 +82,7 @@ describe('ElectronPlatform', () => {
             const [event, handler] = getElectronEventHandlerCall('check_updates');
             // correct event bound
             expect(event).toBeTruthy();
-    
+
             handler({}, true);
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.CheckUpdates,
@@ -96,7 +93,7 @@ describe('ElectronPlatform', () => {
         it('dispatches on check updates action when update not available', () => {
             new ElectronPlatform();
             const [, handler] = getElectronEventHandlerCall('check_updates');
-    
+
             handler({}, false);
             expect(dispatchSpy).toHaveBeenCalledWith({
                 action: Action.CheckUpdates,

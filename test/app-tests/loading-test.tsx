@@ -24,7 +24,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import MatrixReactTestUtils from 'matrix-react-test-utils';
-import * as jssdk from 'matrix-js-sdk/src/matrix';
 import {MatrixClientPeg} from 'matrix-react-sdk/src/MatrixClientPeg';
 import MatrixChat, {Views} from 'matrix-react-sdk/src/components/structures/MatrixChat';
 import dis from 'matrix-react-sdk/src/dispatcher/dispatcher';
@@ -41,7 +40,6 @@ import { RoomView as RoomViewClass } from 'matrix-react-sdk/src/components/struc
 import LoginComponent from 'matrix-react-sdk/src/components/structures/auth/Login';
 import WelcomeComponent from "matrix-react-sdk/src/components/views/auth/Welcome";
 import EmbeddedPage from "matrix-react-sdk/src/components/structures/EmbeddedPage";
-import { AutoDiscovery } from 'matrix-js-sdk/src/matrix';
 
 const DEFAULT_HS_URL='http://my_server';
 const DEFAULT_IS_URL='http://my_is';
@@ -149,7 +147,7 @@ describe('loading:', function() {
 
         const params = parseQs(windowLocation);
 
-        tokenLoginCompletePromise = new Promise(resolve => {
+        tokenLoginCompletePromise = new Promise<void>(resolve => {
             matrixChat = ReactDOM.render(
                 <MatrixChat
                     onNewScreen={onNewScreen}
