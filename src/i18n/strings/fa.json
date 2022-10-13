@@ -28,5 +28,7 @@
     "Failed to start": "خطا در شروع",
     "Powered by Matrix": "راه اندازی شده با استفاده از ماتریکس",
     "Use %(brand)s on mobile": "از %(brand)s گوشی استفاده کنید",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "همکاری چت غیرمتمرکز و رمزگذاری شده &amp; توسعه یافته با استفاده از $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "همکاری چت غیرمتمرکز و رمزگذاری شده &amp; توسعه یافته با استفاده از $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s: روی %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s دسکتاپ: %(platformName)s"
 }

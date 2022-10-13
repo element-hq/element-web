@@ -28,5 +28,7 @@
     "Powered by Matrix": "Běží na Matrixu",
     "%(brand)s Desktop (%(platformName)s)": "%(brand)s pro desktopový počítač (%(platformName)s)",
     "Use %(brand)s on mobile": "Používání %(brand)s v mobilních zařízeních",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizovaný, šifrovaný chat a spolupráce na platformě $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Decentralizovaný, šifrovaný chat a spolupráce na platformě $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s na %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
 }
