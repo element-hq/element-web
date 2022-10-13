@@ -200,7 +200,7 @@ describe('loading:', function() {
                 // Wait for another trip around the event loop for the UI to update
                 return awaitWelcomeComponent(matrixChat);
             }).then(() => {
-                expect(windowLocation.hash).toEqual("#/welcome");
+                return waitFor(() => expect(windowLocation.hash).toEqual("#/welcome"));
             });
         });
 
