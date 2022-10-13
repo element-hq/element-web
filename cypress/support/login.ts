@@ -21,6 +21,7 @@ import { SynapseInstance } from "../plugins/synapsedocker";
 
 export interface UserCredentials {
     accessToken: string;
+    username: string;
     userId: string;
     deviceId: string;
     password: string;
@@ -42,26 +43,25 @@ declare global {
                 displayName: string,
                 prelaunchFn?: () => void,
             ): Chainable<UserCredentials>;
+            /**
+             * Logs into synapse with the given username/password
+             * @param synapse the synapse returned by startSynapse
+             * @param username login username
+             * @param password login password
+             */
+            loginUser(
+                synapse: SynapseInstance,
+                username: string,
+                password: string,
+            ): Chainable<UserCredentials>;
         }
     }
 }
 
 // eslint-disable-next-line max-len
-Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: string, prelaunchFn?: () => void): Chainable<UserCredentials> => {
-    // XXX: work around Cypress not clearing IDB between tests
-    cy.window({ log: false }).then(win => {
-        win.indexedDB.databases().then(databases => {
-            databases.forEach(database => {
-                win.indexedDB.deleteDatabase(database.name);
-            });
-        });
-    });
-
-    const username = Cypress._.uniqueId("userId_");
-    const password = Cypress._.uniqueId("password_");
-    return cy.registerUser(synapse, username, password, displayName).then(() => {
-        const url = `${synapse.baseUrl}/_matrix/client/r0/login`;
-        return cy.request<{
+Cypress.Commands.add("loginUser", (synapse: SynapseInstance, username: string, password: string): Chainable<UserCredentials> => {
+    const url = `${synapse.baseUrl}/_matrix/client/r0/login`;
+    return cy.request<{
             access_token: string;
             user_id: string;
             device_id: string;
@@ -77,14 +77,38 @@ Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: str
                 },
                 "password": password,
             },
+        }).then(response => ({
+            password,
+            username,
+            accessToken: response.body.access_token,
+            userId: response.body.user_id,
+            deviceId: response.body.device_id,
+            homeServer: response.body.home_server,
+        }));
+});
+
+// eslint-disable-next-line max-len
+Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: string, prelaunchFn?: () => void): Chainable<UserCredentials> => {
+    // XXX: work around Cypress not clearing IDB between tests
+    cy.window({ log: false }).then(win => {
+        win.indexedDB.databases().then(databases => {
+            databases.forEach(database => {
+                win.indexedDB.deleteDatabase(database.name);
+            });
         });
+    });
+
+    const username = Cypress._.uniqueId("userId_");
+    const password = Cypress._.uniqueId("password_");
+    return cy.registerUser(synapse, username, password, displayName).then(() => {
+        return cy.loginUser(synapse, username, password);
     }).then(response => {
         cy.window({ log: false }).then(win => {
             // Seed the localStorage with the required credentials
             win.localStorage.setItem("mx_hs_url", synapse.baseUrl);
-            win.localStorage.setItem("mx_user_id", response.body.user_id);
-            win.localStorage.setItem("mx_access_token", response.body.access_token);
-            win.localStorage.setItem("mx_device_id", response.body.device_id);
+            win.localStorage.setItem("mx_user_id", response.userId);
+            win.localStorage.setItem("mx_access_token", response.accessToken);
+            win.localStorage.setItem("mx_device_id", response.deviceId);
             win.localStorage.setItem("mx_is_guest", "false");
             win.localStorage.setItem("mx_has_pickle_key", "false");
             win.localStorage.setItem("mx_has_access_token", "true");
@@ -100,10 +124,11 @@ Cypress.Commands.add("initTestUser", (synapse: SynapseInstance, displayName: str
             return cy.get(".mx_MatrixChat", { timeout: 30000 });
         }).then(() => ({
             password,
-            accessToken: response.body.access_token,
-            userId: response.body.user_id,
-            deviceId: response.body.device_id,
-            homeServer: response.body.home_server,
+            username,
+            accessToken: response.accessToken,
+            userId: response.userId,
+            deviceId: response.deviceId,
+            homeServer: response.homeServer,
         }));
     });
 });
