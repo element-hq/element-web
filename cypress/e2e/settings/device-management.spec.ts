@@ -107,9 +107,6 @@ describe("Device manager", () => {
             cy.get('[data-testid="device-detail-sign-out-cta"]').click();
         });
 
-        // list updated after sign out
-        cy.get('.mx_FilteredDeviceList_list').find('.mx_FilteredDeviceList_listItem').should('have.length', 1);
-
         // no other sessions or security recommendations sections when only one session
         cy.contains('Other sessions').should('not.exist');
         cy.get('[data-testid="security-recommendations-section"]').should('not.exist');
