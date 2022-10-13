@@ -93,7 +93,8 @@ export default class WebPlatform extends VectorBasePlatform {
         });
 
         if (res.ok) {
-            return getNormalizedAppVersion(await res.text());
+            const text = await res.text();
+            return getNormalizedAppVersion(text.trim());
         }
 
         return Promise.reject({ status: res.status });
