@@ -28,5 +28,7 @@
     "Your browser can't run %(brand)s": "Dein Browser kann %(brand)s nicht ausführen",
     "Powered by Matrix": "Betrieben mit Matrix",
     "Use %(brand)s on mobile": "Verwende %(brand)s am Handy",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dezentralisierter, verschlüsselter Chat &amp; Zusammenarbeit unterstützt von $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Dezentralisierter, verschlüsselter Chat &amp; Zusammenarbeit unterstützt von $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s auf %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
 }
