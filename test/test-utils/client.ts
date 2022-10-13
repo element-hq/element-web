@@ -16,6 +16,7 @@ limitations under the License.
 
 import EventEmitter from "events";
 import { MethodKeysOf, mocked, MockedObject, PropertyKeysOf } from "jest-mock";
+import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 import { MatrixClient, User } from "matrix-js-sdk/src/matrix";
 
 import { MatrixClientPeg } from "../../src/MatrixClientPeg";
@@ -50,6 +51,11 @@ export const getMockClientWithEventEmitter = (
     const mock = mocked(new MockClientWithEventEmitter(mockProperties) as unknown as MatrixClient);
 
     jest.spyOn(MatrixClientPeg, 'get').mockReturnValue(mock);
+
+    mock.canSupport = new Map();
+    Object.keys(Feature).forEach(feature => {
+        mock.canSupport.set(feature as Feature, ServerSupport.Stable);
+    });
     return mock;
 };
 
