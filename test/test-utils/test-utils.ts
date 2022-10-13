@@ -35,6 +35,7 @@ import {
 import { normalize } from "matrix-js-sdk/src/utils";
 import { ReEmitter } from "matrix-js-sdk/src/ReEmitter";
 import { MediaHandler } from "matrix-js-sdk/src/webrtc/mediaHandler";
+import { Feature, ServerSupport } from "matrix-js-sdk/src/feature";
 
 import { MatrixClientPeg as peg } from '../../src/MatrixClientPeg';
 import { makeType } from "../../src/utils/TypeUtils";
@@ -186,6 +187,11 @@ export function createTestClient(): MatrixClient {
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);
+
+    client.canSupport = new Map();
+    Object.keys(Feature).forEach(feature => {
+        client.canSupport.set(feature as Feature, ServerSupport.Stable);
+    });
 
     Object.defineProperty(client, "pollingTurnServers", {
         configurable: true,
