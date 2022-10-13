@@ -50,6 +50,13 @@ export class VoiceBroadcastRecordingsStore extends TypedEventEmitter<VoiceBroadc
         return this.current;
     }
 
+    public clearCurrent(): void {
+        if (this.current === null) return;
+
+        this.current = null;
+        this.emit(VoiceBroadcastRecordingsStoreEvent.CurrentChanged, null);
+    }
+
     public getByInfoEvent(infoEvent: MatrixEvent, client: MatrixClient): VoiceBroadcastRecording {
         const infoEventId = infoEvent.getId();
 

@@ -97,6 +97,20 @@ describe("VoiceBroadcastRecordingsStore", () => {
                 expect(onCurrentChanged).not.toHaveBeenCalled();
             });
         });
+
+        describe("and calling clearCurrent()", () => {
+            beforeEach(() => {
+                recordings.clearCurrent();
+            });
+
+            it("should clear the current recording", () => {
+                expect(recordings.getCurrent()).toBeNull();
+            });
+
+            it("should emit a current changed event", () => {
+                expect(onCurrentChanged).toHaveBeenCalledWith(null);
+            });
+        });
     });
 
     describe("getByInfoEventId", () => {
