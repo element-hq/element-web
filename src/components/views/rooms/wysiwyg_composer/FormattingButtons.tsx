@@ -64,6 +64,6 @@ export function FormattingButtons({ wysiwyg, formattingStates }: FormattingButto
         <Button isActive={formattingStates.bold === 'reversed'} label={_td("Bold")} keyCombo={{ ctrlOrCmdKey: true, key: 'b' }} onClick={() => wysiwyg.bold()} className="mx_FormattingButtons_Button_bold" />
         <Button isActive={formattingStates.italic === 'reversed'} label={_td('Italic')} keyCombo={{ ctrlOrCmdKey: true, key: 'i' }} onClick={() => wysiwyg.italic()} className="mx_FormattingButtons_Button_italic" />
         <Button isActive={formattingStates.underline === 'reversed'} label={_td('Underline')} keyCombo={{ ctrlOrCmdKey: true, key: 'u' }} onClick={() => wysiwyg.underline()} className="mx_FormattingButtons_Button_underline" />
-        <Button isActive={formattingStates.strikeThrough === 'reversed'} label={_td('Strike through')} onClick={() => wysiwyg.strikeThrough()} className="mx_FormattingButtons_Button_strike-through" />
+        <Button isActive={formattingStates.strikeThrough === 'reversed'} label={_td('Strikethrough')} onClick={() => wysiwyg.strikeThrough()} className="mx_FormattingButtons_Button_strikethrough" />
     </div>;
 }
