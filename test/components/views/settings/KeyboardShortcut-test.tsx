@@ -16,17 +16,14 @@ limitations under the License.
 */
 
 import React from "react";
-// eslint-disable-next-line deprecate/import
-import { mount, ReactWrapper } from "enzyme";
+import { render } from "@testing-library/react";
 
 import { Key } from "../../../../src/Keyboard";
 import { mockPlatformPeg, unmockPlatformPeg } from "../../../test-utils/platform";
+import { KeyboardKey, KeyboardShortcut } from "../../../../src/components/views/settings/KeyboardShortcut";
 
-const PATH_TO_COMPONENT = "../../../../src/components/views/settings/KeyboardShortcut.tsx";
-
-const renderKeyboardShortcut = async (component, props?): Promise<ReactWrapper> => {
-    const Component = (await import(PATH_TO_COMPONENT))[component];
-    return mount(<Component {...props} />);
+const renderKeyboardShortcut = (Component, props?) => {
+    return render(<Component {...props} />).container;
 };
 
 describe("KeyboardShortcut", () => {
@@ -35,24 +32,24 @@ describe("KeyboardShortcut", () => {
         unmockPlatformPeg();
     });
 
-    it("renders key icon", async () => {
-        const body = await renderKeyboardShortcut("KeyboardKey", { name: Key.ARROW_DOWN });
+    it("renders key icon", () => {
+        const body = renderKeyboardShortcut(KeyboardKey, { name: Key.ARROW_DOWN });
         expect(body).toMatchSnapshot();
     });
 
-    it("renders alternative key name", async () => {
-        const body = await renderKeyboardShortcut("KeyboardKey", { name: Key.PAGE_DOWN });
+    it("renders alternative key name", () => {
+        const body = renderKeyboardShortcut(KeyboardKey, { name: Key.PAGE_DOWN });
         expect(body).toMatchSnapshot();
     });
 
-    it("doesn't render + if last", async () => {
-        const body = await renderKeyboardShortcut("KeyboardKey", { name: Key.A, last: true });
+    it("doesn't render + if last", () => {
+        const body = renderKeyboardShortcut(KeyboardKey, { name: Key.A, last: true });
         expect(body).toMatchSnapshot();
     });
 
-    it("doesn't render same modifier twice", async () => {
+    it("doesn't render same modifier twice", () => {
         mockPlatformPeg({ overrideBrowserShortcuts: jest.fn().mockReturnValue(false) });
-        const body1 = await renderKeyboardShortcut("KeyboardShortcut", {
+        const body1 = renderKeyboardShortcut(KeyboardShortcut, {
             value: {
                 key: Key.A,
                 ctrlOrCmdKey: true,
@@ -61,7 +58,7 @@ describe("KeyboardShortcut", () => {
         });
         expect(body1).toMatchSnapshot();
 
-        const body2 = await renderKeyboardShortcut("KeyboardShortcut", {
+        const body2 = renderKeyboardShortcut(KeyboardShortcut, {
             value: {
                 key: Key.A,
                 ctrlOrCmdKey: true,

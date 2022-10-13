@@ -1,116 +1,73 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`KeyboardShortcut doesn't render + if last 1`] = `
-<KeyboardKey
-  last={true}
-  name="a"
->
+<div>
   <kbd>
      
     a
      
   </kbd>
-</KeyboardKey>
+</div>
 `;
 
 exports[`KeyboardShortcut doesn't render same modifier twice 1`] = `
-<KeyboardShortcut
-  value={
-    Object {
-      "ctrlOrCmdKey": true,
-      "key": "a",
-      "metaKey": true,
-    }
-  }
->
+<div>
   <div
-    className="mx_KeyboardShortcut"
+    class="mx_KeyboardShortcut"
   >
-    <KeyboardKey
-      key="ctrlOrCmdKey"
-      name="Control"
-    >
-      <kbd>
-         
-        Ctrl
-         
-      </kbd>
-      +
-    </KeyboardKey>
-    <KeyboardKey
-      last={true}
-      name="a"
-    >
-      <kbd>
-         
-        a
-         
-      </kbd>
-    </KeyboardKey>
+    <kbd>
+       
+      Ctrl
+       
+    </kbd>
+    +
+    <kbd>
+       
+      a
+       
+    </kbd>
   </div>
-</KeyboardShortcut>
+</div>
 `;
 
 exports[`KeyboardShortcut doesn't render same modifier twice 2`] = `
-<KeyboardShortcut
-  value={
-    Object {
-      "ctrlKey": true,
-      "ctrlOrCmdKey": true,
-      "key": "a",
-    }
-  }
->
+<div>
   <div
-    className="mx_KeyboardShortcut"
+    class="mx_KeyboardShortcut"
   >
-    <KeyboardKey
-      key="ctrlOrCmdKey"
-      name="Control"
-    >
-      <kbd>
-         
-        Ctrl
-         
-      </kbd>
-      +
-    </KeyboardKey>
-    <KeyboardKey
-      last={true}
-      name="a"
-    >
-      <kbd>
-         
-        a
-         
-      </kbd>
-    </KeyboardKey>
+    <kbd>
+       
+      Ctrl
+       
+    </kbd>
+    +
+    <kbd>
+       
+      a
+       
+    </kbd>
   </div>
-</KeyboardShortcut>
+</div>
 `;
 
 exports[`KeyboardShortcut renders alternative key name 1`] = `
-<KeyboardKey
-  name="PageDown"
->
+<div>
   <kbd>
      
     Page Down
      
   </kbd>
   +
-</KeyboardKey>
+</div>
 `;
 
 exports[`KeyboardShortcut renders key icon 1`] = `
-<KeyboardKey
-  name="ArrowDown"
->
+<div>
   <kbd>
      
     ↓
      
   </kbd>
   +
-</KeyboardKey>
+</div>
 `;
