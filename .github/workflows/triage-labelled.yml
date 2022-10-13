@@ -229,3 +229,81 @@ jobs:
         env:
           PROJECT_ID: "PN_kwDOAM0swc4AArk0"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  ps_features1:
+    name: Add labelled issues to PS features team 1
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'A-Polls') ||
+      contains(github.event.issue.labels.*.name, 'A-Location-Sharing') ||
+      (contains(github.event.issue.labels.*.name, 'A-Voice-Messages') &&
+        !contains(github.event.issue.labels.*.name, 'A-Broadcast')) ||
+      (contains(github.event.issue.labels.*.name, 'A-Session-Mgmt') &&
+        contains(github.event.issue.labels.*.name, 'A-User-Settings'))
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4AHJKF"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  ps_features2:
+    name: Add labelled issues to PS features team 2
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'A-DM-Start') ||
+      contains(github.event.issue.labels.*.name, 'A-Broadcast')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4AHJKd"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  ps_features3:
+    name: Add labelled issues to PS features team 3
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.issue.labels.*.name, 'A-Composer-WYSIWYG')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        id: add_to_project
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+              mutation add_to_project($projectid:ID!,$contentid:ID!) {
+                addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                  }
+                }
+              }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PVT_kwDOAM0swc4AHJKW"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
