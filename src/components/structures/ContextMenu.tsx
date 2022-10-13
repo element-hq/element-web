@@ -92,6 +92,9 @@ export interface IProps extends IPosition {
     // within an existing FocusLock e.g inside a modal.
     focusLock?: boolean;
 
+    // call onFinished on any interaction with the menu
+    closeOnInteraction?: boolean;
+
     // Function to be called on menu close
     onFinished();
     // on resize callback
@@ -186,6 +189,10 @@ export default class ContextMenu extends React.PureComponent<IProps, IState> {
     private onClick = (ev: React.MouseEvent) => {
         // Don't allow clicks to escape the context menu wrapper
         ev.stopPropagation();
+
+        if (this.props.closeOnInteraction) {
+            this.props.onFinished?.();
+        }
     };
 
     // We now only handle closing the ContextMenu in this keyDown handler.

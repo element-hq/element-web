@@ -39,6 +39,7 @@ interface IOptionListProps {
 
 interface IOptionProps extends React.ComponentProps<typeof MenuItem> {
     iconClassName?: string;
+    isDestructive?: boolean;
 }
 
 interface ICheckboxProps extends React.ComponentProps<typeof MenuItemCheckbox> {
@@ -112,12 +113,14 @@ export const IconizedContextMenuOption: React.FC<IOptionProps> = ({
     className,
     iconClassName,
     children,
+    isDestructive,
     ...props
 }) => {
     return <MenuItem
         {...props}
         className={classNames(className, {
             mx_IconizedContextMenu_item: true,
+            mx_IconizedContextMenu_itemDestructive: isDestructive,
         })}
         label={label}
     >

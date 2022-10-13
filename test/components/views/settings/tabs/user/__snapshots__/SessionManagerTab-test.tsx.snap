@@ -15,68 +15,7 @@ exports[`<SessionManagerTab /> Sign out Signs out of current device 1`] = `
 </div>
 `;
 
-exports[`<SessionManagerTab /> goes to filtered list from security recommendations 1`] = `
-<div
-  class="mx_FilteredDeviceListHeader"
->
-  <div
-    tabindex="0"
-  >
-    <span
-      class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
-    >
-      <input
-        aria-label="Select all"
-        data-testid="device-select-all-checkbox"
-        id="device-select-all-checkbox"
-        type="checkbox"
-      />
-      <label
-        for="device-select-all-checkbox"
-      >
-        <div
-          class="mx_Checkbox_background"
-        >
-          <div
-            class="mx_Checkbox_checkmark"
-          />
-        </div>
-      </label>
-    </span>
-  </div>
-  <span
-    class="mx_FilteredDeviceListHeader_label"
-  >
-    Sessions
-  </span>
-  <div
-    class="mx_Dropdown mx_FilterDropdown"
-  >
-    <div
-      aria-describedby="device-list-filter_value"
-      aria-expanded="false"
-      aria-haspopup="listbox"
-      aria-label="Filter devices"
-      aria-owns="device-list-filter_input"
-      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
-      role="button"
-      tabindex="0"
-    >
-      <div
-        class="mx_Dropdown_option"
-        id="device-list-filter_value"
-      >
-        Show: Unverified
-      </div>
-      <span
-        class="mx_Dropdown_arrow"
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`<SessionManagerTab /> renders current session section with a verified session 1`] = `
+exports[`<SessionManagerTab /> current session section renders current session section with a verified session 1`] = `
 <div
   class="mx_SettingsSubsection"
   data-testid="current-session-section"
@@ -89,6 +28,18 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
     >
       Current session
     </h3>
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="mx_AccessibleButton"
+      data-testid="current-session-menu"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_KebabContextMenu_icon"
+      />
+    </div>
   </div>
   <div
     class="mx_SettingsSubsection_content"
@@ -186,7 +137,7 @@ exports[`<SessionManagerTab /> renders current session section with a verified s
 </div>
 `;
 
-exports[`<SessionManagerTab /> renders current session section with an unverified session 1`] = `
+exports[`<SessionManagerTab /> current session section renders current session section with an unverified session 1`] = `
 <div
   class="mx_SettingsSubsection"
   data-testid="current-session-section"
@@ -199,6 +150,18 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
     >
       Current session
     </h3>
+    <div
+      aria-expanded="false"
+      aria-haspopup="true"
+      class="mx_AccessibleButton"
+      data-testid="current-session-menu"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_KebabContextMenu_icon"
+      />
+    </div>
   </div>
   <div
     class="mx_SettingsSubsection_content"
@@ -303,6 +266,67 @@ exports[`<SessionManagerTab /> renders current session section with an unverifie
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<SessionManagerTab /> goes to filtered list from security recommendations 1`] = `
+<div
+  class="mx_FilteredDeviceListHeader"
+>
+  <div
+    tabindex="0"
+  >
+    <span
+      class="mx_Checkbox mx_Checkbox_hasKind mx_Checkbox_kind_solid"
+    >
+      <input
+        aria-label="Select all"
+        data-testid="device-select-all-checkbox"
+        id="device-select-all-checkbox"
+        type="checkbox"
+      />
+      <label
+        for="device-select-all-checkbox"
+      >
+        <div
+          class="mx_Checkbox_background"
+        >
+          <div
+            class="mx_Checkbox_checkmark"
+          />
+        </div>
+      </label>
+    </span>
+  </div>
+  <span
+    class="mx_FilteredDeviceListHeader_label"
+  >
+    Sessions
+  </span>
+  <div
+    class="mx_Dropdown mx_FilterDropdown"
+  >
+    <div
+      aria-describedby="device-list-filter_value"
+      aria-expanded="false"
+      aria-haspopup="listbox"
+      aria-label="Filter devices"
+      aria-owns="device-list-filter_input"
+      class="mx_AccessibleButton mx_Dropdown_input mx_no_textinput"
+      role="button"
+      tabindex="0"
+    >
+      <div
+        class="mx_Dropdown_option"
+        id="device-list-filter_value"
+      >
+        Show: Unverified
+      </div>
+      <span
+        class="mx_Dropdown_arrow"
+      />
     </div>
   </div>
 </div>
