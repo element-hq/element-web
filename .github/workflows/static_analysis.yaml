@@ -19,6 +19,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: 'yarn'
+          node-version: 16
 
       - name: Install Dependencies
         run: "./scripts/layered.sh"
@@ -39,6 +40,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: 'yarn'
+          node-version: 16
 
       # Does not need branch matching as only analyses this layer
       - name: Install Deps
@@ -56,6 +58,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: 'yarn'
+          node-version: 16
 
       # Needs branch matching as it inherits .stylelintrc.js from matrix-react-sdk
       - name: Install Dependencies
@@ -73,6 +76,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache: 'yarn'
+          node-version: 16
 
       - name: Install Deps
         run: "scripts/layered.sh"
