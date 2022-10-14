@@ -1078,13 +1078,15 @@ export class UnwrappedEventTile extends React.Component<IProps, IState> {
             } else {
                 member = this.props.mxEvent.sender;
             }
+            // In the ThreadsList view we use the entire EventTile as a click target to open the thread instead
+            const viewUserOnClick = this.context.timelineRenderingType !== TimelineRenderingType.ThreadsList;
             avatar = (
                 <div className="mx_EventTile_avatar">
                     <MemberAvatar
                         member={member}
                         width={avatarSize}
                         height={avatarSize}
-                        viewUserOnClick={true}
+                        viewUserOnClick={viewUserOnClick}
                         forceHistorical={this.props.mxEvent.getType() === EventType.RoomMember}
                     />
                 </div>
