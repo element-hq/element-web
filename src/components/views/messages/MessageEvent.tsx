@@ -58,6 +58,10 @@ interface IProps extends Omit<IBodyProps, "onMessageAllowed" | "mediaEventHelper
     isSeeingThroughMessageHiddenForModeration?: boolean;
 }
 
+interface State {
+    voiceBroadcastEnabled: boolean;
+}
+
 export interface IOperableEventTile {
     getEventTileOps(): IEventTileOps;
 }
@@ -81,7 +85,6 @@ const baseEvTypes = new Map<string, React.ComponentType<Partial<IBodyProps>>>([
     [M_POLL_START.altName, MPollBody],
     [M_BEACON_INFO.name, MBeaconBody],
     [M_BEACON_INFO.altName, MBeaconBody],
-    [VoiceBroadcastInfoEventType, VoiceBroadcastBody],
 ]);
 
 export default class MessageEvent extends React.Component<IProps, State> implements IMediaBody, IOperableEventTile {

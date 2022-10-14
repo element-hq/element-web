@@ -15,19 +15,42 @@ limitations under the License.
 */
 
 import React from "react";
+import { MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastRecordingBody,
     VoiceBroadcastRecordingsStore,
+    shouldDisplayAsVoiceBroadcastRecordingTile,
+    VoiceBroadcastInfoEventType,
+    VoiceBroadcastPlaybacksStore,
+    VoiceBroadcastPlaybackBody,
+    VoiceBroadcastInfoState,
 } from "..";
 import { IBodyProps } from "../../components/views/messages/IBodyProps";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 
 export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
     const client = MatrixClientPeg.get();
-    const recording = VoiceBroadcastRecordingsStore.instance().getByInfoEvent(mxEvent, client);
+    const room = client.getRoom(mxEvent.getRoomId());
+    const relations = room?.getUnfilteredTimelineSet()?.relations?.getChildEventsForEvent(
+        mxEvent.getId(),
+        RelationType.Reference,
+        VoiceBroadcastInfoEventType,
+    );
+    const relatedEvents = relations?.getRelations();
+    const state = !relatedEvents?.find((event: MatrixEvent) => {
+        return event.getContent()?.state === VoiceBroadcastInfoState.Stopped;
+    }) ? VoiceBroadcastInfoState.Started : VoiceBroadcastInfoState.Stopped;
 
-    return <VoiceBroadcastRecordingBody
-        recording={recording}
+    if (shouldDisplayAsVoiceBroadcastRecordingTile(state, client, mxEvent)) {
+        const recording = VoiceBroadcastRecordingsStore.instance().getByInfoEvent(mxEvent, client);
+        return <VoiceBroadcastRecordingBody
+            recording={recording}
+        />;
+    }
+
+    const playback = VoiceBroadcastPlaybacksStore.instance().getByInfoEvent(mxEvent);
+    return <VoiceBroadcastPlaybackBody
+        playback={playback}
     />;
 };
