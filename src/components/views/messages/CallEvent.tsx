@@ -20,7 +20,13 @@ import type { MatrixEvent } from "matrix-js-sdk/src/models/event";
 import type { RoomMember } from "matrix-js-sdk/src/models/room-member";
 import { Call, ConnectionState } from "../../../models/Call";
 import { _t } from "../../../languageHandler";
-import { useCall, useConnectionState, useJoinCallButtonDisabledTooltip, useParticipants } from "../../../hooks/useCall";
+import {
+    useCall,
+    useConnectionState,
+    useJoinCallButtonDisabled,
+    useJoinCallButtonTooltip,
+    useParticipants,
+} from "../../../hooks/useCall";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
 import type { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
@@ -106,7 +112,8 @@ interface ActiveLoadedCallEventProps {
 const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxEvent, call }, ref) => {
     const connectionState = useConnectionState(call);
     const participants = useParticipants(call);
-    const joinCallButtonDisabledTooltip = useJoinCallButtonDisabledTooltip(call);
+    const joinCallButtonTooltip = useJoinCallButtonTooltip(call);
+    const joinCallButtonDisabled = useJoinCallButtonDisabled(call);
 
     const connect = useCallback((ev: ButtonEvent) => {
         ev.preventDefault();
@@ -138,8 +145,8 @@ const ActiveLoadedCallEvent = forwardRef<any, ActiveLoadedCallEventProps>(({ mxE
         participants={participants}
         buttonText={buttonText}
         buttonKind={buttonKind}
-        buttonDisabled={Boolean(joinCallButtonDisabledTooltip)}
-        buttonTooltip={joinCallButtonDisabledTooltip}
+        buttonDisabled={joinCallButtonDisabled}
+        buttonTooltip={joinCallButtonTooltip}
         onButtonClick={onButtonClick}
     />;
 });
