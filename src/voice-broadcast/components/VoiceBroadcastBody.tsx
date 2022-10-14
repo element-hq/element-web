@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React from "react";
-import { MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
 import {
     VoiceBroadcastRecordingBody,
@@ -28,15 +28,11 @@ import {
 } from "..";
 import { IBodyProps } from "../../components/views/messages/IBodyProps";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import { getReferenceRelationsForEvent } from "../../events";
 
 export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
     const client = MatrixClientPeg.get();
-    const room = client.getRoom(mxEvent.getRoomId());
-    const relations = room?.getUnfilteredTimelineSet()?.relations?.getChildEventsForEvent(
-        mxEvent.getId(),
-        RelationType.Reference,
-        VoiceBroadcastInfoEventType,
-    );
+    const relations = getReferenceRelationsForEvent(mxEvent, VoiceBroadcastInfoEventType, client);
     const relatedEvents = relations?.getRelations();
     const state = !relatedEvents?.find((event: MatrixEvent) => {
         return event.getContent()?.state === VoiceBroadcastInfoState.Stopped;
@@ -49,7 +45,7 @@ export const VoiceBroadcastBody: React.FC<IBodyProps> = ({ mxEvent }) => {
         />;
     }
 
-    const playback = VoiceBroadcastPlaybacksStore.instance().getByInfoEvent(mxEvent);
+    const playback = VoiceBroadcastPlaybacksStore.instance().getByInfoEvent(mxEvent, client);
     return <VoiceBroadcastPlaybackBody
         playback={playback}
     />;

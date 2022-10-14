@@ -184,6 +184,7 @@ export function createTestClient(): MatrixClient {
             setAudioInput: jest.fn(),
         } as unknown as MediaHandler),
         uploadContent: jest.fn(),
+        getEventMapper: () => (opts) => new MatrixEvent(opts),
     } as unknown as MatrixClient;
 
     client.reEmitter = new ReEmitter(client);

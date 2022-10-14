@@ -79,7 +79,7 @@ describe("VoiceBroadcastBody", () => {
         client = stubClient();
         infoEvent = mkVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started);
         testRecording = new VoiceBroadcastRecording(infoEvent, client);
-        testPlayback = new VoiceBroadcastPlayback(infoEvent);
+        testPlayback = new VoiceBroadcastPlayback(infoEvent, client);
         mocked(VoiceBroadcastRecordingBody).mockImplementation(({ recording }) => {
             if (testRecording === recording) {
                 return <div data-testid="voice-broadcast-recording-body" />;
