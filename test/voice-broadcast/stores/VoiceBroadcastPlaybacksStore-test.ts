@@ -80,7 +80,7 @@ describe("VoiceBroadcastPlaybacksStore", () => {
         });
 
         it("should return it by id", () => {
-            expect(playbacks.getByInfoEvent(infoEvent)).toBe(playback);
+            expect(playbacks.getByInfoEvent(infoEvent, client)).toBe(playback);
         });
 
         it("should emit a CurrentChanged event", () => {
@@ -105,7 +105,7 @@ describe("VoiceBroadcastPlaybacksStore", () => {
         describe("when retrieving a known playback", () => {
             beforeEach(() => {
                 playbacks.setCurrent(playback);
-                returnedPlayback = playbacks.getByInfoEvent(infoEvent);
+                returnedPlayback = playbacks.getByInfoEvent(infoEvent, client);
             });
 
             it("should return the playback", () => {
@@ -115,7 +115,7 @@ describe("VoiceBroadcastPlaybacksStore", () => {
 
         describe("when retrieving an unknown playback", () => {
             beforeEach(() => {
-                returnedPlayback = playbacks.getByInfoEvent(infoEvent);
+                returnedPlayback = playbacks.getByInfoEvent(infoEvent, client);
             });
 
             it("should return the playback", () => {
