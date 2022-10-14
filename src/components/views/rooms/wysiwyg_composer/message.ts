@@ -22,13 +22,23 @@ import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 import { PosthogAnalytics } from "../../../../PosthogAnalytics";
 import SettingsStore from "../../../../settings/SettingsStore";
 import { decorateStartSendingTime, sendRoundTripMetric } from "../../../../sendTimePerformanceMetrics";
-import { attachRelation } from "../SendMessageComposer";
 import { RoomPermalinkCreator } from "../../../../utils/permalinks/Permalinks";
 import { doMaybeLocalRoomAction } from "../../../../utils/local-room";
 import { CHAT_EFFECTS } from "../../../../effects";
 import { containsEmoji } from "../../../../effects/utils";
 import { IRoomState } from "../../../structures/RoomView";
 import dis from '../../../../dispatcher/dispatcher';
+import { addReplyToMessageContent } from "../../../../utils/Reply";
+
+// Merges favouring the given relation
+function attachRelation(content: IContent, relation?: IEventRelation): void {
+    if (relation) {
+        content['m.relates_to'] = {
+            ...(content['m.relates_to'] || {}),
+            ...relation,
+        };
+    }
+}
 
 interface SendMessageParams {
     mxClient: MatrixClient;
@@ -81,13 +91,12 @@ export function createMessageContent(
 
     attachRelation(content, relation);
 
-    // TODO reply
-    /*if (replyToEvent) {
+    if (replyToEvent) {
         addReplyToMessageContent(content, replyToEvent, {
             permalinkCreator,
             includeLegacyFallback: includeReplyLegacyFallback,
         });
-    }*/
+    }
 
     return content;
 }
@@ -148,8 +157,7 @@ export function sendMessage(
         mxClient,
     );
 
-    // TODO reply
-    /*if (replyToEvent) {
+    if (replyToEvent) {
         // Clear reply_to_event as we put the message into the queue
         // if the send fails, retry will handle resending.
         dis.dispatch({
@@ -157,7 +165,8 @@ export function sendMessage(
             event: null,
             context: roomContext.timelineRenderingType,
         });
-    }*/
+    }
+
     dis.dispatch({ action: "message_sent" });
     CHAT_EFFECTS.forEach((effect) => {
         if (containsEmoji(content, effect.emojis)) {

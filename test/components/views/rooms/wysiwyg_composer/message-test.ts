@@ -22,9 +22,14 @@ import { createTestClient, mkEvent, mkStubRoom } from "../../../../test-utils";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 import { SettingLevel } from "../../../../../src/settings/SettingLevel";
+import { RoomPermalinkCreator } from "../../../../../src/utils/permalinks/Permalinks";
 
 describe('message', () => {
-    const permalinkCreator = jest.fn() as any;
+    const permalinkCreator = {
+        forEvent(eventId: string): string {
+            return "$$permalink$$";
+        },
+    } as RoomPermalinkCreator;
     const message = '<i><b>hello</b> world</i>';
     const mockEvent = mkEvent({
         type: "m.room.message",
@@ -45,10 +50,51 @@ describe('message', () => {
 
             // Then
             expect(content).toEqual({
-                body: message,
-                format: "org.matrix.custom.html",
-                formatted_body: message,
-                msgtype: "m.text",
+                "body": message,
+                "format": "org.matrix.custom.html",
+                "formatted_body": message,
+                "msgtype": "m.text",
+            });
+        });
+
+        it('Should add reply to message content', () => {
+            // When
+            const content = createMessageContent(message, { permalinkCreator, replyToEvent: mockEvent });
+
+            // Then
+            expect(content).toEqual({
+                "body": "> <myfakeuser> Replying to this\n\n<i><b>hello</b> world</i>",
+                "format": "org.matrix.custom.html",
+                "formatted_body": "<mx-reply><blockquote><a href=\"$$permalink$$\">In reply to</a>" +
+                                    " <a href=\"https://matrix.to/#/myfakeuser\">myfakeuser</a>"+
+                                    "<br>Replying to this</blockquote></mx-reply><i><b>hello</b> world</i>",
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        "event_id": mockEvent.getId(),
+                    },
+                },
+            });
+        });
+
+        it("Should add relation to message", () => {
+            // When
+            const relation = {
+                rel_type: "m.thread",
+                event_id: "myFakeThreadId",
+            };
+            const content = createMessageContent(message, { permalinkCreator, relation });
+
+            // Then
+            expect(content).toEqual({
+                "body": message,
+                "format": "org.matrix.custom.html",
+                "formatted_body": message,
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "event_id": "myFakeThreadId",
+                    "rel_type": "m.thread",
+                },
             });
         });
     });
@@ -103,6 +149,15 @@ describe('message', () => {
 
         it('Should not send empty html message', async () => {
             // When
+            await sendMessage('', { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+
+            // Then
+            expect(mockClient.sendMessage).toBeCalledTimes(0);
+            expect(spyDispatcher).toBeCalledTimes(0);
+        });
+
+        it('Should send html message', async () => {
+            // When
             await sendMessage(message, { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
 
             // Then
@@ -116,13 +171,44 @@ describe('message', () => {
             expect(spyDispatcher).toBeCalledWith({ action: 'message_sent' });
         });
 
-        it('Should send html message', async () => {
+        it('Should send reply to html message', async () => {
+            const mockReplyEvent = mkEvent({
+                type: "m.room.message",
+                room: 'myfakeroom',
+                user: 'myfakeuser2',
+                content: { "msgtype": "m.text", "body": "My reply" },
+                event: true,
+            });
+
             // When
-            await sendMessage('', { roomContext: defaultRoomContext, mxClient: mockClient, permalinkCreator });
+            await sendMessage(message, {
+                roomContext: defaultRoomContext,
+                mxClient: mockClient,
+                permalinkCreator,
+                replyToEvent: mockReplyEvent,
+            });
 
             // Then
-            expect(mockClient.sendMessage).toBeCalledTimes(0);
-            expect(spyDispatcher).toBeCalledTimes(0);
+            expect(spyDispatcher).toBeCalledWith({
+                action: 'reply_to_event',
+                event: null,
+                context: defaultRoomContext.timelineRenderingType,
+            });
+
+            const expectedContent = {
+                "body": "> <myfakeuser2> My reply\n\n<i><b>hello</b> world</i>",
+                "format": "org.matrix.custom.html",
+                "formatted_body": "<mx-reply><blockquote><a href=\"$$permalink$$\">In reply to</a>" +
+                                    " <a href=\"https://matrix.to/#/myfakeuser2\">myfakeuser2</a>" +
+                                    "<br>My reply</blockquote></mx-reply><i><b>hello</b> world</i>",
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "m.in_reply_to": {
+                        "event_id": mockReplyEvent.getId(),
+                    },
+                },
+            };
+            expect(mockClient.sendMessage).toBeCalledWith('myfakeroom', null, expectedContent);
         });
 
         it('Should scroll to bottom after sending a html message', async () => {
