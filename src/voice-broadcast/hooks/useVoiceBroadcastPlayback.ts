@@ -41,7 +41,7 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
     );
 
     return {
-        roomName: room.name,
+        room: room,
         sender: playback.infoEvent.sender,
         toggle: playbackToggle,
         playbackState,

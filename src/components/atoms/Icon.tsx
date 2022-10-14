@@ -17,17 +17,20 @@ limitations under the License.
 import React from "react";
 
 import liveIcon from "../../../res/img/element-icons/live.svg";
+import microphoneIcon from "../../../res/img/voip/call-view/mic-on.svg";
 import pauseIcon from "../../../res/img/element-icons/pause.svg";
 import playIcon from "../../../res/img/element-icons/play.svg";
 
 export enum IconType {
     Live,
+    Microphone,
     Pause,
     Play,
 }
 
 const iconTypeMap = new Map([
     [IconType.Live, liveIcon],
+    [IconType.Microphone, microphoneIcon],
     [IconType.Pause, pauseIcon],
     [IconType.Play, playIcon],
 ]);

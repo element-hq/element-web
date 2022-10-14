@@ -12,24 +12,24 @@ limitations under the License.
 */
 
 import React from "react";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
-import MemberAvatar from "../../../components/views/avatars/MemberAvatar";
 import { LiveBadge } from "../..";
 import { Icon, IconColour, IconType } from "../../../components/atoms/Icon";
 import { _t } from "../../../languageHandler";
+import RoomAvatar from "../../../components/views/avatars/RoomAvatar";
 
 interface VoiceBroadcastHeaderProps {
     live: boolean;
     sender: RoomMember;
-    roomName: string;
+    room: Room;
     showBroadcast?: boolean;
 }
 
 export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
     live,
     sender,
-    roomName,
+    room,
     showBroadcast = false,
 }) => {
     const broadcast = showBroadcast
@@ -40,13 +40,14 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
         : null;
     const liveBadge = live ? <LiveBadge /> : null;
     return <div className="mx_VoiceBroadcastHeader">
-        <MemberAvatar member={sender} fallbackUserId={sender.userId} />
+        <RoomAvatar room={room} width={32} height={32} />
         <div className="mx_VoiceBroadcastHeader_content">
-            <div className="mx_VoiceBroadcastHeader_sender">
-                { sender.name }
-            </div>
             <div className="mx_VoiceBroadcastHeader_room">
-                { roomName }
+                { room.name }
+            </div>
+            <div className="mx_VoiceBroadcastHeader_line">
+                <Icon type={IconType.Microphone} colour={IconColour.CompoundSecondaryContent} />
+                { sender.name }
             </div>
             { broadcast }
         </div>
