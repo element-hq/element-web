@@ -76,6 +76,27 @@ describe('message', () => {
                 },
             });
         });
+
+        it("Should add relation to message", () => {
+            // When
+            const relation = {
+                rel_type: "m.thread",
+                event_id: "myFakeThreadId",
+            };
+            const content = createMessageContent(message, { permalinkCreator, relation });
+
+            // Then
+            expect(content).toEqual({
+                "body": message,
+                "format": "org.matrix.custom.html",
+                "formatted_body": message,
+                "msgtype": "m.text",
+                "m.relates_to": {
+                    "event_id": "myFakeThreadId",
+                    "rel_type": "m.thread",
+                },
+            });
+        });
     });
 
     describe('sendMessage', () => {
