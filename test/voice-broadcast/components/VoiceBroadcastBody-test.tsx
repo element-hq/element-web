@@ -26,6 +26,10 @@ import {
     VoiceBroadcastRecordingBody,
     VoiceBroadcastRecordingsStore,
     VoiceBroadcastRecording,
+    shouldDisplayAsVoiceBroadcastRecordingTile,
+    VoiceBroadcastPlaybackBody,
+    VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybacksStore,
 } from "../../../src/voice-broadcast";
 import { mkEvent, stubClient } from "../../test-utils";
 
@@ -33,11 +37,20 @@ jest.mock("../../../src/voice-broadcast/components/molecules/VoiceBroadcastRecor
     VoiceBroadcastRecordingBody: jest.fn(),
 }));
 
+jest.mock("../../../src/voice-broadcast/components/molecules/VoiceBroadcastPlaybackBody", () => ({
+    VoiceBroadcastPlaybackBody: jest.fn(),
+}));
+
+jest.mock("../../../src/voice-broadcast/utils/shouldDisplayAsVoiceBroadcastRecordingTile", () => ({
+    shouldDisplayAsVoiceBroadcastRecordingTile: jest.fn(),
+}));
+
 describe("VoiceBroadcastBody", () => {
     const roomId = "!room:example.com";
     let client: MatrixClient;
     let infoEvent: MatrixEvent;
     let testRecording: VoiceBroadcastRecording;
+    let testPlayback: VoiceBroadcastPlayback;
 
     const mkVoiceBroadcastInfoEvent = (state: VoiceBroadcastInfoState) => {
         return mkEvent({
@@ -66,9 +79,16 @@ describe("VoiceBroadcastBody", () => {
         client = stubClient();
         infoEvent = mkVoiceBroadcastInfoEvent(VoiceBroadcastInfoState.Started);
         testRecording = new VoiceBroadcastRecording(infoEvent, client);
+        testPlayback = new VoiceBroadcastPlayback(infoEvent);
         mocked(VoiceBroadcastRecordingBody).mockImplementation(({ recording }) => {
             if (testRecording === recording) {
                 return <div data-testid="voice-broadcast-recording-body" />;
+            }
+        });
+
+        mocked(VoiceBroadcastPlaybackBody).mockImplementation(({ playback }) => {
+            if (testPlayback === playback) {
+                return <div data-testid="voice-broadcast-playback-body" />;
             }
         });
 
@@ -79,12 +99,35 @@ describe("VoiceBroadcastBody", () => {
                 }
             },
         );
+
+        jest.spyOn(VoiceBroadcastPlaybacksStore.instance(), "getByInfoEvent").mockImplementation(
+            (getEvent: MatrixEvent) => {
+                if (getEvent === infoEvent) {
+                    return testPlayback;
+                }
+            },
+        );
     });
 
-    describe("when rendering a voice broadcast", () => {
+    describe("when displaying a voice broadcast recording", () => {
+        beforeEach(() => {
+            mocked(shouldDisplayAsVoiceBroadcastRecordingTile).mockReturnValue(true);
+        });
+
         it("should render a voice broadcast recording body", () => {
             renderVoiceBroadcast();
             screen.getByTestId("voice-broadcast-recording-body");
+        });
+    });
+
+    describe("when displaying a voice broadcast playback", () => {
+        beforeEach(() => {
+            mocked(shouldDisplayAsVoiceBroadcastRecordingTile).mockReturnValue(false);
+        });
+
+        it("should render a voice broadcast playback body", () => {
+            renderVoiceBroadcast();
+            screen.getByTestId("voice-broadcast-playback-body");
         });
     });
 });

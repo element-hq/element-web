@@ -21,13 +21,18 @@ limitations under the License.
 
 import { RelationType } from "matrix-js-sdk/src/matrix";
 
+export * from "./models/VoiceBroadcastPlayback";
+export * from "./models/VoiceBroadcastRecording";
 export * from "./audio/VoiceBroadcastRecorder";
 export * from "./components/VoiceBroadcastBody";
 export * from "./components/atoms/LiveBadge";
+export * from "./components/atoms/PlaybackControlButton";
 export * from "./components/atoms/VoiceBroadcastHeader";
+export * from "./components/molecules/VoiceBroadcastPlaybackBody";
 export * from "./components/molecules/VoiceBroadcastRecordingBody";
-export * from "./models/VoiceBroadcastRecording";
+export * from "./stores/VoiceBroadcastPlaybacksStore";
 export * from "./stores/VoiceBroadcastRecordingsStore";
+export * from "./utils/shouldDisplayAsVoiceBroadcastRecordingTile";
 export * from "./utils/shouldDisplayAsVoiceBroadcastTile";
 export * from "./utils/startNewVoiceBroadcastRecording";
 export * from "./hooks/useVoiceBroadcastRecording";

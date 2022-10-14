@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastPlaybackBody when rendering a broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastPlaybackBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <span
+        class="mx_BaseAvatar"
+        role="presentation"
+      >
+        <span
+          aria-hidden="true"
+          class="mx_BaseAvatar_initial"
+          style="font-size: 26px; width: 40px; line-height: 40px;"
+        >
+          U
+        </span>
+        <img
+          alt=""
+          aria-hidden="true"
+          class="mx_BaseAvatar_image"
+          src="data:image/png;base64,00"
+          style="width: 40px; height: 40px;"
+          title="@user:example.com"
+        />
+      </span>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_sender"
+        >
+          @user:example.com
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          My room
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <i
+            aria-hidden="true"
+            class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+            role="presentation"
+            style="mask-image: url(\\"image-file-stub\\");"
+          />
+          Voice broadcast
+        </div>
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastPlaybackBody_controls"
+    >
+      <div
+        aria-label="resume voice broadcast"
+        class="mx_AccessibleButton mx_BroadcastPlaybackControlButton"
+        role="button"
+        tabindex="0"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
