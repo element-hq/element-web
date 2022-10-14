@@ -61,5 +61,15 @@
     "element_call": {
         "url": "https://element-call.netlify.app"
     },
-    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx"
+    "map_style_url": "https://api.maptiler.com/maps/streets/style.json?key=fU3vlMsMn4Jb6dnEIFsx",
+    "login_with_qr": {
+        "login": {
+            "enable_showing": true
+        },
+        "reciprocate": {
+            "enable_scanning": true,
+            "enable_showing": true
+        },
+        "fallback_http_transport_server": "https://rendezvous.lab.element.dev"
+    }
 }
