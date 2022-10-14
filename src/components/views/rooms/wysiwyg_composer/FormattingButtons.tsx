@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
 import classNames from "classnames";
 
@@ -39,7 +39,7 @@ function Tooltip({ label, keyCombo }: TooltipProps) {
 interface ButtonProps extends TooltipProps {
     className: string;
     isActive: boolean;
-    onClick: () => void;
+    onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
 function Button({ label, keyCombo, onClick, isActive, className }: ButtonProps) {
