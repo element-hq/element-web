@@ -389,6 +389,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
     }
 
     public render() {
+        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
         const controls = [
             this.props.e2eStatus ?
                 <E2EIcon key="e2eIcon" status={this.props.e2eStatus} className="mx_MessageComposer_e2eIcon" /> :
@@ -403,8 +404,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
 
         const canSendMessages = this.context.canSendMessages && !this.context.tombstone;
         if (canSendMessages) {
-            const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
-
             if (isWysiwygComposerEnabled) {
                 controls.push(
                     <WysiwygComposer key="controls_input"
@@ -503,6 +502,7 @@ export default class MessageComposer extends React.Component<IProps, IState> {
             "mx_MessageComposer": true,
             "mx_MessageComposer--compact": this.props.compact,
             "mx_MessageComposer_e2eStatus": this.props.e2eStatus != undefined,
+            "mx_MessageComposer_wysiwyg": isWysiwygComposerEnabled,
         });
 
         return (

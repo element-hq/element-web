@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
 import { IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
 
@@ -22,6 +22,8 @@ import { useRoomContext } from '../../../../contexts/RoomContext';
 import { sendMessage } from './message';
 import { RoomPermalinkCreator } from '../../../../utils/permalinks/Permalinks';
 import { useMatrixClientContext } from '../../../../contexts/MatrixClientContext';
+import { FormattingButtons } from './FormattingButtons';
+import { Editor } from './Editor';
 
 interface WysiwygProps {
     disabled?: boolean;
@@ -39,11 +41,13 @@ export function WysiwygComposer(
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
 
-    const [content, setContent] = useState<string>();
-    const { ref, isWysiwygReady, wysiwyg } = useWysiwyg({ onChange: (_content) => {
-        setContent(_content);
-        onChange(_content);
-    } });
+    const { ref, isWysiwygReady, content, formattingStates, wysiwyg } = useWysiwyg();
+
+    useEffect(() => {
+        if (!disabled && content !== null) {
+            onChange(content);
+        }
+    }, [onChange, content, disabled]);
 
     const memoizedSendMessage = useCallback(() => {
         sendMessage(content, { mxClient, roomContext, ...props });
@@ -53,18 +57,8 @@ export function WysiwygComposer(
 
     return (
         <div className="mx_WysiwygComposer">
-            <div className="mx_WysiwygComposer_container">
-                <div className="mx_WysiwygComposer_content"
-                    ref={ref}
-                    contentEditable={!disabled && isWysiwygReady}
-                    role="textbox"
-                    aria-multiline="true"
-                    aria-autocomplete="list"
-                    aria-haspopup="listbox"
-                    dir="auto"
-                    aria-disabled={disabled || !isWysiwygReady}
-                />
-            </div>
+            <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
+            <Editor ref={ref} disabled={!isWysiwygReady || disabled} />
             { children?.(memoizedSendMessage) }
         </div>
     );

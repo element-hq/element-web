@@ -306,7 +306,7 @@ export const SETTINGS: {[setting: string]: ISetting} = {
     "feature_wysiwyg_composer": {
         isFeature: true,
         labsGroup: LabGroup.Messaging,
-        displayName: _td("Wysiwyg composer (plain text mode coming soon) (under active development)"),
+        displayName: _td("Try out the rich text editor (plain text mode coming soon)"),
         supportedLevels: LEVELS_FEATURE,
         default: false,
     },
