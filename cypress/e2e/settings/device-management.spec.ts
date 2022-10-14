@@ -74,8 +74,8 @@ describe("Device manager", () => {
         cy.get('.mx_FilteredDeviceList_list').find('.mx_FilteredDeviceList_listItem').should('have.length', 3);
 
         // select two sessions
-        cy.get('.mx_FilteredDeviceList_list .mx_FilteredDeviceList_listItem').first().click();
-        cy.get('.mx_FilteredDeviceList_list .mx_FilteredDeviceList_listItem').last().click();
+        cy.get('.mx_FilteredDeviceList_list .mx_FilteredDeviceList_listItem .mx_Checkbox').first().click();
+        cy.get('.mx_FilteredDeviceList_list .mx_FilteredDeviceList_listItem .mx_Checkbox').last().click();
         // sign out from list selection action buttons
         cy.get('[data-testid="sign-out-selection-cta"]').click();
         // list updated after sign out
@@ -84,7 +84,7 @@ describe("Device manager", () => {
         cy.get('[data-testid="unverified-devices-cta"]').should('have.text', 'View all (1)');
 
         const sessionName = `Alice's device`;
-        // select the first session
+        // open the first session
         cy.get('.mx_FilteredDeviceList_list .mx_FilteredDeviceList_listItem').first().within(() => {
             cy.get('[aria-label="Toggle device details"]').click();
 

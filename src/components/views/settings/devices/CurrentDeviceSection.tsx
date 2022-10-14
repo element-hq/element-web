@@ -105,6 +105,7 @@ const CurrentDeviceSection: React.FC<Props> = ({
         { !!device && <>
             <DeviceTile
                 device={device}
+                onClick={() => setIsExpanded(!isExpanded)}
             >
                 <DeviceExpandDetailsButton
                     data-testid='current-session-toggle-details'

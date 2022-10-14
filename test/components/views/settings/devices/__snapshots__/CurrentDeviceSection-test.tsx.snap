@@ -181,7 +181,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
       class="mx_SettingsSubsection_content"
     >
       <div
-        class="mx_DeviceTile"
+        class="mx_DeviceTile mx_DeviceTile_interactive"
         data-testid="device-tile-alices_device"
       >
         <div
@@ -317,7 +317,7 @@ exports[`<CurrentDeviceSection /> renders device and correct security card when 
       class="mx_SettingsSubsection_content"
     >
       <div
-        class="mx_DeviceTile"
+        class="mx_DeviceTile mx_DeviceTile_interactive"
         data-testid="device-tile-alices_device"
       >
         <div

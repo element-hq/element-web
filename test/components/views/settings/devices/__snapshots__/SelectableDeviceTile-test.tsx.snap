@@ -35,7 +35,7 @@ exports[`<SelectableDeviceTile /> renders unselected device tile with checkbox 1
       </label>
     </span>
     <div
-      class="mx_DeviceTile"
+      class="mx_DeviceTile mx_DeviceTile_interactive"
       data-testid="device-tile-my-device"
     >
       <div

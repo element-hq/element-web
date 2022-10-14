@@ -179,7 +179,8 @@ const DeviceListItem: React.FC<{
 }) => <li className='mx_FilteredDeviceList_listItem'>
     <SelectableDeviceTile
         isSelected={isSelected}
-        onClick={toggleSelected}
+        onSelect={toggleSelected}
+        onClick={onDeviceExpandToggle}
         device={device}
     >
         <DeviceExpandDetailsButton

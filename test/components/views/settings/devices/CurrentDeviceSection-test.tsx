@@ -67,6 +67,23 @@ describe('<CurrentDeviceSection />', () => {
         expect(container).toMatchSnapshot();
     });
 
+    it('displays device details on main tile click', () => {
+        const { getByTestId, container } = render(getComponent({ device: alicesUnverifiedDevice }));
+
+        act(() => {
+            fireEvent.click(getByTestId(`device-tile-${alicesUnverifiedDevice.device_id}`));
+        });
+
+        expect(container.getElementsByClassName('mx_DeviceDetails').length).toBeTruthy();
+
+        act(() => {
+            fireEvent.click(getByTestId(`device-tile-${alicesUnverifiedDevice.device_id}`));
+        });
+
+        // device details are hidden
+        expect(container.getElementsByClassName('mx_DeviceDetails').length).toBeFalsy();
+    });
+
     it('displays device details on toggle click', () => {
         const { container, getByTestId } = render(getComponent({ device: alicesUnverifiedDevice }));
 

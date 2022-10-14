@@ -173,7 +173,7 @@ export default class DevicesPanelEntry extends React.Component<IProps, IState> {
 
         return (
             <div className="mx_DevicesPanel_device">
-                <SelectableDeviceTile device={extendedDevice} onClick={this.onDeviceToggled} isSelected={this.props.selected}>
+                <SelectableDeviceTile device={extendedDevice} onSelect={this.onDeviceToggled} isSelected={this.props.selected}>
                     { buttons }
                 </SelectableDeviceTile>
             </div>

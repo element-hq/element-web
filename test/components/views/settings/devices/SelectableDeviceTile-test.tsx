@@ -30,6 +30,7 @@ describe('<SelectableDeviceTile />', () => {
         deviceType: DeviceType.Unknown,
     };
     const defaultProps = {
+        onSelect: jest.fn(),
         onClick: jest.fn(),
         device,
         children: <div>test</div>,
@@ -48,15 +49,15 @@ describe('<SelectableDeviceTile />', () => {
         expect(container.querySelector(`#device-tile-checkbox-${device.device_id}`)).toMatchSnapshot();
     });
 
-    it('calls onClick on checkbox click', () => {
-        const onClick = jest.fn();
-        const { container } = render(getComponent({ onClick }));
+    it('calls onSelect on checkbox click', () => {
+        const onSelect = jest.fn();
+        const { container } = render(getComponent({ onSelect }));
 
         act(() => {
             fireEvent.click(container.querySelector(`#device-tile-checkbox-${device.device_id}`));
         });
 
-        expect(onClick).toHaveBeenCalled();
+        expect(onSelect).toHaveBeenCalled();
     });
 
     it('calls onClick on device tile info click', () => {

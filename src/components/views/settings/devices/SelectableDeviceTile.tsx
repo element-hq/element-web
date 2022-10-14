@@ -21,15 +21,22 @@ import DeviceTile, { DeviceTileProps } from './DeviceTile';
 
 interface Props extends DeviceTileProps {
     isSelected: boolean;
-    onClick: () => void;
+    onSelect: () => void;
+    onClick?: () => void;
 }
 
-const SelectableDeviceTile: React.FC<Props> = ({ children, device, isSelected, onClick }) => {
+const SelectableDeviceTile: React.FC<Props> = ({
+    children,
+    device,
+    isSelected,
+    onSelect,
+    onClick,
+}) => {
     return <div className='mx_SelectableDeviceTile'>
         <StyledCheckbox
             kind={CheckboxStyle.Solid}
             checked={isSelected}
-            onChange={onClick}
+            onChange={onSelect}
             className='mx_SelectableDeviceTile_checkbox'
             id={`device-tile-checkbox-${device.device_id}`}
             data-testid={`device-tile-checkbox-${device.device_id}`}

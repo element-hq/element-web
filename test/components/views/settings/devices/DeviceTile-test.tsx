@@ -46,6 +46,14 @@ describe('<DeviceTile />', () => {
         expect(container).toMatchSnapshot();
     });
 
+    it('applies interactive class when tile has click handler', () => {
+        const onClick = jest.fn();
+        const { getByTestId } = render(getComponent({ onClick }));
+        expect(
+            getByTestId('device-tile-123').className.includes('mx_DeviceTile_interactive'),
+        ).toBeTruthy();
+    });
+
     it('renders a verified device with no metadata', () => {
         const { container } = render(getComponent());
         expect(container).toMatchSnapshot();
