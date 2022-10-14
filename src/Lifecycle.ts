@@ -699,7 +699,7 @@ async function persistCredentials(credentials: IMatrixClientCreds): Promise<void
         } catch (e) {
             localStorage.setItem("mx_access_token", credentials.accessToken);
         }
-        if (localStorage.getItem("mx_has_pickle_key")) {
+        if (localStorage.getItem("mx_has_pickle_key") === "true") {
             logger.error("Expected a pickle key, but none provided.  Encryption may not work.");
         }
     }
