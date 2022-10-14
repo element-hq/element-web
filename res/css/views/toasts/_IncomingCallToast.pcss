@@ -21,11 +21,14 @@ limitations under the License.
     pointer-events: initial; /* restore pointer events so the user can accept/decline */
     width: 250px;
 
+    $closeButtonSize: 16px;
+
     .mx_IncomingCallToast_content {
         display: flex;
         flex-direction: column;
         margin-left: 8px;
         width: 100%;
+        overflow: hidden;
 
         .mx_IncomingCallToast_info {
             margin-bottom: $spacing-16;
@@ -33,10 +36,12 @@ limitations under the License.
             .mx_IncomingCallToast_room {
                 display: inline-block;
 
-                font-weight: bold;
+                font-weight: $font-semi-bold;
                 font-size: $font-15px;
                 line-height: $font-24px;
 
+                /* Prevent overlap with the close button */
+                width: calc(100% - $closeButtonSize - 2 * $spacing-4);
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -86,8 +91,8 @@ limitations under the License.
         right: $spacing-4;
 
         display: flex;
-        height: 16px;
-        width: 16px;
+        height: $closeButtonSize;
+        width: $closeButtonSize;
 
         &::before {
             content: '';
