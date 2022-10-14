@@ -27,6 +27,14 @@ import {
 } from "../../../../src/voice-broadcast";
 import { mkEvent, stubClient } from "../../../test-utils";
 
+// mock RoomAvatar, because it is doing too much fancy stuff
+jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
+    __esModule: true,
+    default: jest.fn().mockImplementation(({ room }) => {
+        return <div data-testid="room-avatar">room avatar: { room.name }</div>;
+    }),
+}));
+
 describe("VoiceBroadcastPlaybackBody", () => {
     const userId = "@user:example.com";
     const roomId = "!room:example.com";

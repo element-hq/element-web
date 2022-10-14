@@ -5,38 +5,30 @@ exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadc
   <div
     class="mx_VoiceBroadcastHeader"
   >
-    <span
-      class="mx_BaseAvatar"
-      role="presentation"
+    <div
+      data-testid="room-avatar"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 26px; width: 40px; line-height: 40px;"
-      >
-        T
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        src="data:image/png;base64,00"
-        style="width: 40px; height: 40px;"
-        title="@user:example.com"
-      />
-    </span>
+      room avatar: 
+      !room:example.com
+    </div>
     <div
       class="mx_VoiceBroadcastHeader_content"
     >
       <div
-        class="mx_VoiceBroadcastHeader_sender"
-      >
-        test user
-      </div>
-      <div
         class="mx_VoiceBroadcastHeader_room"
       >
-        test room
+        !room:example.com
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+        test user
       </div>
       <div
         class="mx_VoiceBroadcastHeader_line"
@@ -70,38 +62,30 @@ exports[`VoiceBroadcastHeader when rendering a non-live broadcast header should 
   <div
     class="mx_VoiceBroadcastHeader"
   >
-    <span
-      class="mx_BaseAvatar"
-      role="presentation"
+    <div
+      data-testid="room-avatar"
     >
-      <span
-        aria-hidden="true"
-        class="mx_BaseAvatar_initial"
-        style="font-size: 26px; width: 40px; line-height: 40px;"
-      >
-        T
-      </span>
-      <img
-        alt=""
-        aria-hidden="true"
-        class="mx_BaseAvatar_image"
-        src="data:image/png;base64,00"
-        style="width: 40px; height: 40px;"
-        title="@user:example.com"
-      />
-    </span>
+      room avatar: 
+      !room:example.com
+    </div>
     <div
       class="mx_VoiceBroadcastHeader_content"
     >
       <div
-        class="mx_VoiceBroadcastHeader_sender"
-      >
-        test user
-      </div>
-      <div
         class="mx_VoiceBroadcastHeader_room"
       >
-        test room
+        !room:example.com
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_line"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+        test user
       </div>
     </div>
   </div>

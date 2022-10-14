@@ -13,15 +13,25 @@ limitations under the License.
 
 import React from "react";
 import { Container } from "react-dom";
-import { RoomMember } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, Room, RoomMember } from "matrix-js-sdk/src/matrix";
 import { render, RenderResult } from "@testing-library/react";
 
 import { VoiceBroadcastHeader } from "../../../../src/voice-broadcast";
+import { mkRoom, stubClient } from "../../../test-utils";
+
+// mock RoomAvatar, because it is doing too much fancy stuff
+jest.mock("../../../../src/components/views/avatars/RoomAvatar", () => ({
+    __esModule: true,
+    default: jest.fn().mockImplementation(({ room }) => {
+        return <div data-testid="room-avatar">room avatar: { room.name }</div>;
+    }),
+}));
 
 describe("VoiceBroadcastHeader", () => {
     const userId = "@user:example.com";
     const roomId = "!room:example.com";
-    const roomName = "test room";
+    let client: MatrixClient;
+    let room: Room;
     const sender = new RoomMember(roomId, userId);
     let container: Container;
 
@@ -29,12 +39,14 @@ describe("VoiceBroadcastHeader", () => {
         return render(<VoiceBroadcastHeader
             live={live}
             sender={sender}
-            roomName={roomName}
+            room={room}
             showBroadcast={showBroadcast}
         />);
     };
 
     beforeAll(() => {
+        client = stubClient();
+        room = mkRoom(client, roomId);
         sender.name = "test user";
     });
 

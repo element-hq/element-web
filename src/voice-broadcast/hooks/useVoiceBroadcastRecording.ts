@@ -44,7 +44,7 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
 
     return {
         live,
-        roomName: room.name,
+        room,
         sender: recording.infoEvent.sender,
         stopRecording,
     };
