@@ -640,6 +640,7 @@
     "Live": "Live",
     "pause voice broadcast": "pause voice broadcast",
     "resume voice broadcast": "resume voice broadcast",
+    "stop voice broadcast": "stop voice broadcast",
     "Voice broadcast": "Voice broadcast",
     "Cannot reach homeserver": "Cannot reach homeserver",
     "Ensure you have a stable internet connection, or get in touch with the server admin": "Ensure you have a stable internet connection, or get in touch with the server admin",

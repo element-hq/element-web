@@ -20,12 +20,14 @@ import liveIcon from "../../../res/img/element-icons/live.svg";
 import microphoneIcon from "../../../res/img/voip/call-view/mic-on.svg";
 import pauseIcon from "../../../res/img/element-icons/pause.svg";
 import playIcon from "../../../res/img/element-icons/play.svg";
+import stopIcon from "../../../res/img/element-icons/Stop.svg";
 
 export enum IconType {
     Live,
     Microphone,
     Pause,
     Play,
+    Stop,
 }
 
 const iconTypeMap = new Map([
@@ -33,6 +35,7 @@ const iconTypeMap = new Map([
     [IconType.Microphone, microphoneIcon],
     [IconType.Pause, pauseIcon],
     [IconType.Play, playIcon],
+    [IconType.Stop, stopIcon],
 ]);
 
 export enum IconColour {

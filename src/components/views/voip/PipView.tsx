@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { createRef } from 'react';
+import React, { createRef, useState } from 'react';
 import { CallEvent, CallState, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import { logger } from "matrix-js-sdk/src/logger";
 import classNames from 'classnames';
@@ -35,6 +35,13 @@ import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
 import { CallStore } from "../../../stores/CallStore";
+import {
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingPip,
+    VoiceBroadcastRecordingsStore,
+    VoiceBroadcastRecordingsStoreEvent,
+} from '../../../voice-broadcast';
+import { useTypedEventEmitter } from '../../../hooks/useEventEmitter';
 
 const SHOW_CALL_IN_STATES = [
     CallState.Connected,
@@ -46,6 +53,7 @@ const SHOW_CALL_IN_STATES = [
 ];
 
 interface IProps {
+    voiceBroadcastRecording?: VoiceBroadcastRecording;
 }
 
 interface IState {
@@ -115,7 +123,7 @@ function getPrimarySecondaryCallsForPip(roomId: string): [MatrixCall, MatrixCall
  * and all widgets that are active but not shown in any other possible container.
  */
 
-export default class PipView extends React.Component<IProps, IState> {
+class PipView extends React.Component<IProps, IState> {
     private movePersistedElement = createRef<() => void>();
 
     constructor(props: IProps) {
@@ -353,6 +361,14 @@ export default class PipView extends React.Component<IProps, IState> {
                 </div>;
         }
 
+        if (this.props.voiceBroadcastRecording) {
+            pipContent = ({ onStartMoving }) => <div onMouseDown={onStartMoving}>
+                <VoiceBroadcastRecordingPip
+                    recording={this.props.voiceBroadcastRecording}
+                />
+            </div>;
+        }
+
         if (!!pipContent) {
             return <PictureInPictureDragger
                 className="mx_LegacyCallPreview"
@@ -367,3 +383,27 @@ export default class PipView extends React.Component<IProps, IState> {
         return null;
     }
 }
+
+const PipViewHOC: React.FC<IProps> = (props) => {
+    // TODO Michael W: extract to custom hook
+
+    const voiceBroadcastRecordingsStore = VoiceBroadcastRecordingsStore.instance();
+    const [voiceBroadcastRecording, setVoiceBroadcastRecording] = useState(
+        voiceBroadcastRecordingsStore.getCurrent(),
+    );
+
+    useTypedEventEmitter(
+        voiceBroadcastRecordingsStore,
+        VoiceBroadcastRecordingsStoreEvent.CurrentChanged,
+        (recording: VoiceBroadcastRecording) => {
+            setVoiceBroadcastRecording(recording);
+        },
+    );
+
+    return <PipView
+        voiceBroadcastRecording={voiceBroadcastRecording}
+        {...props}
+    />;
+};
+
+export default PipViewHOC;

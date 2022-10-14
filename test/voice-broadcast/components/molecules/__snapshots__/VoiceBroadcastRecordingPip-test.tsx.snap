@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VoiceBroadcastRecordingPip when rendering should create the expected result 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastRecordingPip"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          My room
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <i
+            aria-hidden="true"
+            class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+            role="presentation"
+            style="mask-image: url(\\"image-file-stub\\");"
+          />
+          @user:example.com
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+        Live
+      </div>
+    </div>
+    <hr
+      class="mx_VoiceBroadcastRecordingPip_divider"
+    />
+    <div
+      class="mx_VoiceBroadcastRecordingPip_controls"
+    >
+      <div
+        aria-label="stop voice broadcast"
+        class="mx_AccessibleButton mx_BroadcastPlaybackControlButton"
+        role="button"
+        tabindex="0"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
