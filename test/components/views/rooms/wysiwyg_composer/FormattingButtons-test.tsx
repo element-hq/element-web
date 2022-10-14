@@ -41,7 +41,7 @@ describe('FormattingButtons', () => {
 
     it('Should have the correspond CSS classes', () => {
         // When
-        render(<FormattingButtons wysiwyg={wysiwyg} formattingStates={formattingStates} />);
+        render(<FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />);
 
         // Then
         expect(screen.getByLabelText('Bold')).toHaveClass('mx_FormattingButtons_active');
@@ -52,7 +52,7 @@ describe('FormattingButtons', () => {
 
     it('Should call wysiwyg function on button click', () => {
         // When
-        render(<FormattingButtons wysiwyg={wysiwyg} formattingStates={formattingStates} />);
+        render(<FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />);
         screen.getByLabelText('Bold').click();
         screen.getByLabelText('Italic').click();
         screen.getByLabelText('Underline').click();
@@ -68,7 +68,7 @@ describe('FormattingButtons', () => {
     it('Should display the tooltip on mouse over', async () => {
         // When
         const user = userEvent.setup();
-        render(<FormattingButtons wysiwyg={wysiwyg} formattingStates={formattingStates} />);
+        render(<FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />);
         await user.hover(screen.getByLabelText('Bold'));
 
         // Then

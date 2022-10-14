@@ -57,7 +57,7 @@ export function WysiwygComposer(
 
     return (
         <div className="mx_WysiwygComposer">
-            <FormattingButtons wysiwyg={wysiwyg} formattingStates={formattingStates} />
+            <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
             <Editor ref={ref} disabled={!isWysiwygReady || disabled} />
             { children?.(memoizedSendMessage) }
         </div>
