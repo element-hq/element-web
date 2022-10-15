@@ -28,5 +28,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s използва модерни функции на браузъра, които не се поддържат от Вашия.",
     "Powered by Matrix": "Базирано на Matrix",
     "Use %(brand)s on mobile": "Използвайте %(brand)s на мобилен телефон",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализиран, криптиран чат &amp; сътрудничество, захранено от $matrixlogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализиран, криптиран чат &amp; сътрудничество, захранено от $matrixlogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s под %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
 }
