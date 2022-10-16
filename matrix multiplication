@@ -1,0 +1,90 @@
+#include<stdio.h>
+int main()
+{
+    int a[50][50],b[50][50],result[50][50],i,j,row1,col1,row2,col2,k,sum=0;
+    printf("Enter  rows and col for first matrix:");
+    scanf("%d %d",&row1,&col1);
+
+    printf("Enter  rows and col for second matrix:");
+    scanf("%d %d",&row2,&col2);
+
+
+    while(col1!=row2)
+    {
+        printf("error !!column of the first matrix  is not equal to row of the second matrix");
+        printf("\n Enter  rows and col for first matrix:");
+        scanf("%d %d",&row1,&col1);
+
+        printf("Enter  rows and col for second matrix:");
+        scanf("%d %d",&row2,&col2);
+    }
+
+    printf("Enter first matrix element:\n");
+    for(i=0; i<row1; i++)
+    {
+        for(j=0; j<col1; j++)
+        {
+            printf("first[%d][%d]=",i,j);
+            scanf("%d",&a[i][j]);
+        }
+
+    }
+    printf("first matrix is:\n");
+    for(i=0; i<row1; i++)
+    {
+        for(j=0; j<col1; j++)
+        {
+            printf("%d ",a[i][j]);
+        }
+        printf("\n");
+
+    }
+    printf("Enter second matrix element:\n");
+    for(i=0; i<row2; i++)
+    {
+        for(j=0; j<col2; j++)
+        {
+            printf("second[%d][%d]=",i,j);
+            scanf("%d",&b[i][j]);
+        }
+
+    }
+
+    printf("second matrix is:\n");
+
+    for(i=0; i<row2; i++)
+    {
+        for(j=0; j<col2; j++)
+        {
+            printf("%d ",b[i][j]);
+        }
+        printf("\n");
+
+    }
+    for(i=0;i<row1;i++)
+    {
+        for(j=0;j<col2;j++)
+        {
+
+            for(k=0;k<col1;k++)
+            {
+
+                sum=sum+a[i][k]*b[k][j];
+
+            }
+            result[i][j]=sum;
+            sum=0;
+        }
+    }
+    printf("result=\n");
+    for(i=0; i<row1; i++)
+    {
+        for(j=0; j<col2; j++)
+        {
+            printf("%d ",result[i][j]);
+        }
+        printf("\n");
+
+    }
+return 0;
+}
