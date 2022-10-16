@@ -65,6 +65,7 @@ import { arrayFastClone } from "../../utils/arrays";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import Modal from "../../Modal";
 import ErrorDialog from "../../components/views/dialogs/ErrorDialog";
+import { VoiceBroadcastRecordingsStore } from "../../voice-broadcast";
 
 // TODO: Destroy all of this code
 
@@ -280,6 +281,10 @@ export class StopGapWidget extends EventEmitter {
         });
         this.messaging.on("capabilitiesNotified", () => this.emit("capabilitiesNotified"));
         this.messaging.on(`action:${WidgetApiFromWidgetAction.OpenModalWidget}`, this.onOpenModal);
+        this.messaging.on(`action:${ElementWidgetActions.JoinCall}`, () => {
+            // stop voice broadcast recording when any widget sends a "join"
+            VoiceBroadcastRecordingsStore.instance().getCurrent()?.stop();
+        });
 
         // Always attach a handler for ViewRoom, but permission check it internally
         this.messaging.on(`action:${ElementWidgetActions.ViewRoom}`, (ev: CustomEvent<IViewRoomApiRequest>) => {

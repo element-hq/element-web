@@ -30,6 +30,8 @@ import { uploadFile } from "../../ContentMessages";
 import { IEncryptedFile } from "../../customisations/models/IMediaEventContent";
 import { createVoiceMessageContent } from "../../utils/createVoiceMessageContent";
 import { IDestroyable } from "../../utils/IDestroyable";
+import dis from "../../dispatcher/dispatcher";
+import { ActionPayload } from "../../dispatcher/payloads";
 
 export enum VoiceBroadcastRecordingEvent {
     StateChanged = "liveness_changed",
@@ -45,6 +47,7 @@ export class VoiceBroadcastRecording
     private state: VoiceBroadcastInfoState;
     private recorder: VoiceBroadcastRecorder;
     private sequence = 1;
+    private dispatcherRef: string;
 
     public constructor(
         public readonly infoEvent: MatrixEvent,
@@ -62,8 +65,9 @@ export class VoiceBroadcastRecording
         this.state = !relatedEvents?.find((event: MatrixEvent) => {
             return event.getContent()?.state === VoiceBroadcastInfoState.Stopped;
         }) ? VoiceBroadcastInfoState.Started : VoiceBroadcastInfoState.Stopped;
-
         // TODO Michael W: add listening for updates
+
+        this.dispatcherRef = dis.register(this.onAction);
     }
 
     public async start(): Promise<void> {
@@ -96,7 +100,15 @@ export class VoiceBroadcastRecording
         }
 
         this.removeAllListeners();
+        dis.unregister(this.dispatcherRef);
     }
+
+    private onAction = (payload: ActionPayload) => {
+        if (payload.action !== "call_state") return;
+
+        // stop on any call action
+        this.stop();
+    };
 
     private setState(state: VoiceBroadcastInfoState): void {
         this.state = state;

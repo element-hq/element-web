@@ -41,6 +41,7 @@ import {
     VoiceBroadcastRecordingEvent,
 } from "../../../src/voice-broadcast";
 import { mkEvent, mkStubRoom, stubClient } from "../../test-utils";
+import dis from "../../../src/dispatcher/dispatcher";
 
 jest.mock("../../../src/voice-broadcast/audio/VoiceBroadcastRecorder", () => ({
     ...jest.requireActual("../../../src/voice-broadcast/audio/VoiceBroadcastRecorder") as object,
@@ -81,6 +82,12 @@ describe("VoiceBroadcastRecording", () => {
         voiceBroadcastRecording = new VoiceBroadcastRecording(infoEvent, client);
         voiceBroadcastRecording.on(VoiceBroadcastRecordingEvent.StateChanged, onStateChanged);
         jest.spyOn(voiceBroadcastRecording, "removeAllListeners");
+    };
+
+    const itShouldBeInState = (state: VoiceBroadcastInfoState) => {
+        it(`should be in state stopped ${state}`, () => {
+            expect(voiceBroadcastRecording.getState()).toBe(state);
+        });
     };
 
     beforeEach(() => {
@@ -191,9 +198,7 @@ describe("VoiceBroadcastRecording", () => {
                 );
             });
 
-            it("should be in state stopped", () => {
-                expect(voiceBroadcastRecording.getState()).toBe(VoiceBroadcastInfoState.Stopped);
-            });
+            itShouldBeInState(VoiceBroadcastInfoState.Stopped);
 
             it("should emit a stopped state changed event", () => {
                 expect(onStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Stopped);
@@ -207,6 +212,16 @@ describe("VoiceBroadcastRecording", () => {
 
             it("should start the recorder", () => {
                 expect(voiceBroadcastRecorder.start).toHaveBeenCalled();
+            });
+
+            describe("and receiving a call action", () => {
+                beforeEach(() => {
+                    dis.dispatch({
+                        action: "call_state",
+                    }, true);
+                });
+
+                itShouldBeInState(VoiceBroadcastInfoState.Stopped);
             });
 
             describe("and a chunk has been recorded", () => {

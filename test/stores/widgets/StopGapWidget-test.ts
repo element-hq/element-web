@@ -15,12 +15,19 @@ limitations under the License.
 */
 
 import { mocked, MockedObject } from "jest-mock";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { MatrixClient, ClientEvent } from "matrix-js-sdk/src/client";
 import { ClientWidgetApi } from "matrix-widget-api";
 
 import { stubClient, mkRoom, mkEvent } from "../../test-utils";
 import { MatrixClientPeg } from "../../../src/MatrixClientPeg";
 import { StopGapWidget } from "../../../src/stores/widgets/StopGapWidget";
+import { ElementWidgetActions } from "../../../src/stores/widgets/ElementWidgetActions";
+import {
+    VoiceBroadcastInfoEventType,
+    VoiceBroadcastRecording,
+    VoiceBroadcastRecordingsStore,
+} from "../../../src/voice-broadcast";
 
 jest.mock("matrix-widget-api/lib/ClientWidgetApi");
 
@@ -67,5 +74,40 @@ describe("StopGapWidget", () => {
         client.emit(ClientEvent.ToDeviceEvent, event);
         await Promise.resolve(); // flush promises
         expect(messaging.feedToDevice).toHaveBeenCalledWith(event.getEffectiveEvent(), false);
+    });
+
+    describe("when there is a voice broadcast recording", () => {
+        let voiceBroadcastInfoEvent: MatrixEvent;
+        let voiceBroadcastRecording: VoiceBroadcastRecording;
+
+        beforeEach(() => {
+            voiceBroadcastInfoEvent = mkEvent({
+                event: true,
+                room: client.getRoom("x").roomId,
+                user: client.getUserId(),
+                type: VoiceBroadcastInfoEventType,
+                content: {},
+            });
+            voiceBroadcastRecording = new VoiceBroadcastRecording(voiceBroadcastInfoEvent, client);
+            jest.spyOn(voiceBroadcastRecording, "stop");
+            jest.spyOn(VoiceBroadcastRecordingsStore.instance(), "getCurrent").mockReturnValue(voiceBroadcastRecording);
+        });
+
+        describe(`and receiving a action:${ElementWidgetActions.JoinCall} message`, () => {
+            beforeEach(async () => {
+                messaging.on.mock.calls.find(
+                    ([event, listener]) => {
+                        if (event === `action:${ElementWidgetActions.JoinCall}`) {
+                            listener();
+                            return true;
+                        }
+                    },
+                );
+            });
+
+            it("should stop the current voice broadcast recording", () => {
+                expect(voiceBroadcastRecording.stop).toHaveBeenCalled();
+            });
+        });
     });
 });
