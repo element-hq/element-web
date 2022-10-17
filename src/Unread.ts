@@ -42,7 +42,6 @@ export function eventTriggersUnreadCount(ev: MatrixEvent): boolean {
         case EventType.RoomThirdPartyInvite:
         case EventType.CallAnswer:
         case EventType.CallHangup:
-        case EventType.RoomAliases:
         case EventType.RoomCanonicalAlias:
         case EventType.RoomServerAcl:
         case M_BEACON.name:

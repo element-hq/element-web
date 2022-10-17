@@ -103,7 +103,6 @@ describe('eventTriggersUnreadCount()', () => {
         EventType.RoomThirdPartyInvite,
         EventType.CallAnswer,
         EventType.CallHangup,
-        EventType.RoomAliases,
         EventType.RoomCanonicalAlias,
         EventType.RoomServerAcl,
     ];
