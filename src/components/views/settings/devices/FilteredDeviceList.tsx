@@ -37,6 +37,7 @@ import {
 } from './types';
 import { DevicesState } from './useOwnDevices';
 import FilteredDeviceListHeader from './FilteredDeviceListHeader';
+import Spinner from '../../elements/Spinner';
 
 interface Props {
     devices: DevicesDictionary;
@@ -183,6 +184,7 @@ const DeviceListItem: React.FC<{
         onClick={onDeviceExpandToggle}
         device={device}
     >
+        { isSigningOut && <Spinner w={16} h={16} /> }
         <DeviceExpandDetailsButton
             isExpanded={isExpanded}
             onClick={onDeviceExpandToggle}
@@ -276,6 +278,8 @@ export const FilteredDeviceList =
             }
         };
 
+        const isSigningOut = !!signingOutDeviceIds.length;
+
         return <div className='mx_FilteredDeviceList' ref={ref}>
             <FilteredDeviceListHeader
                 selectedDeviceCount={selectedDeviceIds.length}
@@ -287,14 +291,17 @@ export const FilteredDeviceList =
                         <AccessibleButton
                             data-testid='sign-out-selection-cta'
                             kind='danger_inline'
+                            disabled={isSigningOut}
                             onClick={() => onSignOutDevices(selectedDeviceIds)}
                             className='mx_FilteredDeviceList_headerButton'
                         >
+                            { isSigningOut && <Spinner w={16} h={16} /> }
                             { _t('Sign out') }
                         </AccessibleButton>
                         <AccessibleButton
                             data-testid='cancel-selection-cta'
                             kind='content_inline'
+                            disabled={isSigningOut}
                             onClick={() => setSelectedDeviceIds([])}
                             className='mx_FilteredDeviceList_headerButton'
                         >
