@@ -14,10 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { IProtocol } from 'matrix-js-sdk/src/matrix';
-import { CallEvent, CallState, CallType } from 'matrix-js-sdk/src/webrtc/call';
+import {
+    IProtocol,
+    LOCAL_NOTIFICATION_SETTINGS_PREFIX,
+    MatrixEvent,
+    PushRuleKind,
+    RuleId,
+    TweakName,
+} from 'matrix-js-sdk/src/matrix';
+import { CallEvent, CallState, CallType, MatrixCall } from 'matrix-js-sdk/src/webrtc/call';
 import EventEmitter from 'events';
 import { mocked } from 'jest-mock';
+import { CallEventHandlerEvent } from 'matrix-js-sdk/src/webrtc/callEventHandler';
 
 import LegacyCallHandler, {
     LegacyCallHandlerEvent, PROTOCOL_PSTN, PROTOCOL_PSTN_PREFIXED, PROTOCOL_SIP_NATIVE, PROTOCOL_SIP_VIRTUAL,
@@ -28,6 +36,8 @@ import DMRoomMap from '../src/utils/DMRoomMap';
 import SdkConfig from '../src/SdkConfig';
 import { Action } from "../src/dispatcher/actions";
 import { getFunctionalMembers } from "../src/utils/room/getFunctionalMembers";
+import SettingsStore from '../src/settings/SettingsStore';
+import { UIFeature } from '../src/settings/UIFeature';
 
 jest.mock("../src/utils/room/getFunctionalMembers", () => ({
     getFunctionalMembers: jest.fn(),
@@ -126,6 +136,7 @@ describe('LegacyCallHandler', () => {
     // what addresses the app has looked up via pstn and native lookup
     let pstnLookup: string;
     let nativeLookup: string;
+    const deviceId = 'my-device';
 
     beforeEach(async () => {
         stubClient();
@@ -136,6 +147,7 @@ describe('LegacyCallHandler', () => {
             fakeCall = new FakeCall(roomId);
             return fakeCall;
         };
+        MatrixClientPeg.get().deviceId = deviceId;
 
         MatrixClientPeg.get().getThirdpartyProtocols = () => {
             return Promise.resolve({
@@ -425,5 +437,138 @@ describe('LegacyCallHandler without third party protocols', () => {
 
         // but it should appear to the user to be in thw native room for Bob
         expect(callHandler.roomIdForCall(fakeCall)).toEqual(NATIVE_ROOM_ALICE);
+    });
+
+    describe('incoming calls', () => {
+        const roomId = 'test-room-id';
+
+        const mockAudioElement = {
+            play: jest.fn(),
+            pause: jest.fn(),
+        } as unknown as HTMLMediaElement;
+        beforeEach(() => {
+            jest.clearAllMocks();
+            jest.spyOn(SettingsStore, 'getValue').mockImplementation(setting =>
+                setting === UIFeature.Voip);
+
+            jest.spyOn(MatrixClientPeg.get(), 'supportsVoip').mockReturnValue(true);
+
+            MatrixClientPeg.get().isFallbackICEServerAllowed = jest.fn();
+            MatrixClientPeg.get().prepareToEncrypt = jest.fn();
+
+            MatrixClientPeg.get().pushRules = {
+                global: {
+                    [PushRuleKind.Override]: [{
+                        rule_id: RuleId.IncomingCall,
+                        default: false,
+                        enabled: true,
+                        actions: [
+                            {
+                                set_tweak: TweakName.Sound,
+                                value: 'ring',
+                            },
+                        ]
+                        ,
+                    }],
+                },
+            };
+
+            jest.spyOn(document, 'getElementById').mockReturnValue(mockAudioElement);
+
+            // silence local notifications by default
+            jest.spyOn(MatrixClientPeg.get(), 'getAccountData').mockImplementation((eventType) => {
+                if (eventType.includes(LOCAL_NOTIFICATION_SETTINGS_PREFIX.name)) {
+                    return new MatrixEvent({
+                        type: eventType,
+                        content: {
+                            is_silenced: true,
+                        },
+                    });
+                }
+            });
+        });
+
+        it('listens for incoming call events when voip is enabled', () => {
+            const call = new MatrixCall({
+                client: MatrixClientPeg.get(),
+                roomId,
+            });
+            const cli = MatrixClientPeg.get();
+
+            cli.emit(CallEventHandlerEvent.Incoming, call);
+
+            // call added to call map
+            expect(callHandler.getCallForRoom(roomId)).toEqual(call);
+        });
+
+        it('rings when incoming call state is ringing and notifications set to ring', () => {
+            // remove local notification silencing mock for this test
+            jest.spyOn(MatrixClientPeg.get(), 'getAccountData').mockReturnValue(undefined);
+            const call = new MatrixCall({
+                client: MatrixClientPeg.get(),
+                roomId,
+            });
+            const cli = MatrixClientPeg.get();
+
+            cli.emit(CallEventHandlerEvent.Incoming, call);
+
+            // call added to call map
+            expect(callHandler.getCallForRoom(roomId)).toEqual(call);
+            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected);
+
+            // ringer audio element started
+            expect(mockAudioElement.play).toHaveBeenCalled();
+        });
+
+        it('does not ring when incoming call state is ringing but local notifications are silenced', () => {
+            const call = new MatrixCall({
+                client: MatrixClientPeg.get(),
+                roomId,
+            });
+            const cli = MatrixClientPeg.get();
+
+            cli.emit(CallEventHandlerEvent.Incoming, call);
+
+            // call added to call map
+            expect(callHandler.getCallForRoom(roomId)).toEqual(call);
+            call.emit(CallEvent.State, CallState.Ringing, CallState.Connected);
+
+            // ringer audio element started
+            expect(mockAudioElement.play).not.toHaveBeenCalled();
+            expect(callHandler.isCallSilenced(call.callId)).toEqual(true);
+        });
+
+        it('should force calls to silent when local notifications are silenced', async () => {
+            const call = new MatrixCall({
+                client: MatrixClientPeg.get(),
+                roomId,
+            });
+            const cli = MatrixClientPeg.get();
+
+            cli.emit(CallEventHandlerEvent.Incoming, call);
+
+            expect(callHandler.isForcedSilent()).toEqual(true);
+            expect(callHandler.isCallSilenced(call.callId)).toEqual(true);
+        });
+
+        it('does not unsilence calls when local notifications are silenced', async () => {
+            const call = new MatrixCall({
+                client: MatrixClientPeg.get(),
+                roomId,
+            });
+            const cli = MatrixClientPeg.get();
+            const callHandlerEmitSpy = jest.spyOn(callHandler, 'emit');
+
+            cli.emit(CallEventHandlerEvent.Incoming, call);
+            // reset emit call count
+            callHandlerEmitSpy.mockClear();
+
+            callHandler.unSilenceCall(call.callId);
+            expect(callHandlerEmitSpy).not.toHaveBeenCalled();
+            // call still silenced
+            expect(callHandler.isCallSilenced(call.callId)).toEqual(true);
+            // ringer not played
+            expect(mockAudioElement.play).not.toHaveBeenCalled();
+        });
     });
 });

@@ -197,7 +197,7 @@ describe('<DevicesPanel />', () => {
 
             await flushPromises();
             // modal rendering has some weird sleeps
-            await sleep(10);
+            await sleep(20);
 
             // close the modal without submission
             act(() => {
