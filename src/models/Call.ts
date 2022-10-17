@@ -636,6 +636,7 @@ export class ElementCall extends Call {
             userId: client.getUserId()!,
             deviceId: client.getDeviceId(),
             roomId: groupCall.getRoomId()!,
+            baseUrl: client.baseUrl,
             lang: getCurrentLanguage().replace("_", "-"),
         });
         // Currently, the screen-sharing support is the same is it is for Jitsi
