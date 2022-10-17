@@ -15,15 +15,16 @@ limitations under the License.
 */
 
 import React, { useCallback, useEffect } from 'react';
-import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
 import { IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
+import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
 
-import { useRoomContext } from '../../../../contexts/RoomContext';
-import { sendMessage } from './message';
-import { RoomPermalinkCreator } from '../../../../utils/permalinks/Permalinks';
-import { useMatrixClientContext } from '../../../../contexts/MatrixClientContext';
-import { FormattingButtons } from './FormattingButtons';
 import { Editor } from './Editor';
+import { FormattingButtons } from './FormattingButtons';
+import { RoomPermalinkCreator } from '../../../../utils/permalinks/Permalinks';
+import { sendMessage } from './message';
+import { useMatrixClientContext } from '../../../../contexts/MatrixClientContext';
+import { useRoomContext } from '../../../../contexts/RoomContext';
+import { useWysiwygActionHandler } from './useWysiwygActionHandler';
 
 interface WysiwygProps {
     disabled?: boolean;
@@ -54,6 +55,8 @@ export function WysiwygComposer(
         wysiwyg.clear();
         ref.current?.focus();
     }, [content, mxClient, roomContext, wysiwyg, props, ref]);
+
+    useWysiwygActionHandler(disabled, ref);
 
     return (
         <div className="mx_WysiwygComposer">
