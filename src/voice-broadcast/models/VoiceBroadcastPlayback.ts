@@ -56,7 +56,6 @@ export class VoiceBroadcastPlayback
     private state = VoiceBroadcastPlaybackState.Stopped;
     private infoState: VoiceBroadcastInfoState;
     private chunkEvents = new Map<string, MatrixEvent>();
-    /** Holds the playback queue with a 1-based index (sequence number) */
     private queue: Playback[] = [];
     private currentlyPlaying: Playback;
     private lastInfoEvent: MatrixEvent;
@@ -138,7 +137,7 @@ export class VoiceBroadcastPlayback
 
     private async enqueueChunk(chunkEvent: MatrixEvent) {
         const sequenceNumber = parseInt(chunkEvent.getContent()?.[VoiceBroadcastChunkEventType]?.sequence, 10);
-        if (isNaN(sequenceNumber)) return;
+        if (isNaN(sequenceNumber) || sequenceNumber < 1) return;
 
         const helper = new MediaEventHelper(chunkEvent);
         const blob = await helper.sourceBlob.value;
@@ -146,7 +145,7 @@ export class VoiceBroadcastPlayback
         const playback = PlaybackManager.instance.createPlaybackInstance(buffer);
         await playback.prepare();
         playback.clockInfo.populatePlaceholdersFrom(chunkEvent);
-        this.queue[sequenceNumber] = playback;
+        this.queue[sequenceNumber - 1] = playback; // -1 because the sequence number starts at 1
         playback.on(UPDATE_EVENT, (state) => this.onPlaybackStateChange(playback, state));
     }
 
@@ -171,17 +170,18 @@ export class VoiceBroadcastPlayback
             await this.loadChunks();
         }
 
-        if (this.queue.length === 0 || !this.queue[1]) {
-            // set to stopped fi the queue is empty of the first chunk (sequence number: 1-based index) is missing
+        const toPlayIndex = this.getInfoState() === VoiceBroadcastInfoState.Stopped
+            ? 0 // start at the beginning for an ended voice broadcast
+            : this.queue.length - 1; // start at the current chunk for an ongoing voice broadcast
+
+        if (this.queue.length === 0 || !this.queue[toPlayIndex]) {
             this.setState(VoiceBroadcastPlaybackState.Stopped);
             return;
         }
 
         this.setState(VoiceBroadcastPlaybackState.Playing);
-        // index of the first chunk is the first sequence number
-        const first = this.queue[1];
-        this.currentlyPlaying = first;
-        await first.play();
+        this.currentlyPlaying = this.queue[toPlayIndex];
+        await this.currentlyPlaying.play();
     }
 
     public get length(): number {
