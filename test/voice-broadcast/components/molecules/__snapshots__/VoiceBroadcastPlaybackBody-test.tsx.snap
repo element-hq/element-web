@@ -31,7 +31,9 @@ exports[`VoiceBroadcastPlaybackBody when rendering a broadcast should render as 
             role="presentation"
             style="mask-image: url(\\"image-file-stub\\");"
           />
-          @user:example.com
+          <span>
+            @user:example.com
+          </span>
         </div>
         <div
           class="mx_VoiceBroadcastHeader_line"
@@ -109,7 +111,9 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
             role="presentation"
             style="mask-image: url(\\"image-file-stub\\");"
           />
-          @user:example.com
+          <span>
+            @user:example.com
+          </span>
         </div>
         <div
           class="mx_VoiceBroadcastHeader_line"

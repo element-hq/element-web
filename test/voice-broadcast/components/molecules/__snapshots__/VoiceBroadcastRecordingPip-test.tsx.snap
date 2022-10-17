@@ -31,7 +31,9 @@ exports[`VoiceBroadcastRecordingPip when rendering should create the expected re
             role="presentation"
             style="mask-image: url(\\"image-file-stub\\");"
           />
-          @user:example.com
+          <span>
+            @user:example.com
+          </span>
         </div>
       </div>
       <div

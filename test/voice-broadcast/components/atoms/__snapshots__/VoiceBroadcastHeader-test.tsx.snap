@@ -28,7 +28,9 @@ exports[`VoiceBroadcastHeader when rendering a live broadcast header with broadc
           role="presentation"
           style="mask-image: url(\\"image-file-stub\\");"
         />
-        test user
+        <span>
+          test user
+        </span>
       </div>
       <div
         class="mx_VoiceBroadcastHeader_line"
@@ -85,7 +87,9 @@ exports[`VoiceBroadcastHeader when rendering a non-live broadcast header should 
           role="presentation"
           style="mask-image: url(\\"image-file-stub\\");"
         />
-        test user
+        <span>
+          test user
+        </span>
       </div>
     </div>
   </div>

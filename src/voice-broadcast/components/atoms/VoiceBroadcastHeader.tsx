@@ -47,7 +47,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
             </div>
             <div className="mx_VoiceBroadcastHeader_line">
                 <Icon type={IconType.Microphone} colour={IconColour.CompoundSecondaryContent} />
-                { sender.name }
+                <span>{ sender.name }</span>
             </div>
             { broadcast }
         </div>
