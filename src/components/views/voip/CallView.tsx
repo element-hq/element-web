@@ -246,9 +246,9 @@ export const Lobby: FC<LobbyProps> = ({ room, joinCallButtonDisabled, joinCallBu
             kind="primary"
             disabled={connecting || joinCallButtonDisabled}
             onClick={onConnectClick}
-            title={_t("Join")}
             label={_t("Join")}
             tooltip={connecting ? _t("Connecting") : joinCallButtonTooltip}
+            alignment={Alignment.Bottom}
         />
     </div>;
 };
