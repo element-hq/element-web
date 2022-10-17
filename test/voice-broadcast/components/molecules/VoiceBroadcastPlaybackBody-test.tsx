@@ -18,11 +18,13 @@ import React from "react";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
 import { render, RenderResult } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { mocked } from "jest-mock";
 
 import {
     VoiceBroadcastInfoEventType,
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybackBody,
+    VoiceBroadcastPlaybackState,
 } from "../../../../src/voice-broadcast";
 import { mkEvent, stubClient } from "../../../test-utils";
 
@@ -40,6 +42,7 @@ describe("VoiceBroadcastPlaybackBody", () => {
     let client: MatrixClient;
     let infoEvent: MatrixEvent;
     let playback: VoiceBroadcastPlayback;
+    let renderResult: RenderResult;
 
     beforeAll(() => {
         client = stubClient();
@@ -50,13 +53,29 @@ describe("VoiceBroadcastPlaybackBody", () => {
             room: roomId,
             user: userId,
         });
+    });
+
+    beforeEach(() => {
         playback = new VoiceBroadcastPlayback(infoEvent, client);
         jest.spyOn(playback, "toggle");
+        jest.spyOn(playback, "getState");
+    });
+
+    describe("when rendering a buffering voice broadcast", () => {
+        beforeEach(() => {
+            mocked(playback.getState).mockReturnValue(VoiceBroadcastPlaybackState.Buffering);
+        });
+
+        beforeEach(() => {
+            renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
+        });
+
+        it("should render as expected", () => {
+            expect(renderResult.container).toMatchSnapshot();
+        });
     });
 
     describe("when rendering a broadcast", () => {
-        let renderResult: RenderResult;
-
         beforeEach(() => {
             renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
         });

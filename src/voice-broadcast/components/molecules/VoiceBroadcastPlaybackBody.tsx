@@ -20,7 +20,9 @@ import {
     PlaybackControlButton,
     VoiceBroadcastHeader,
     VoiceBroadcastPlayback,
+    VoiceBroadcastPlaybackState,
 } from "../..";
+import Spinner from "../../../components/views/elements/Spinner";
 import { useVoiceBroadcastPlayback } from "../../hooks/useVoiceBroadcastPlayback";
 
 interface VoiceBroadcastPlaybackBodyProps {
@@ -38,6 +40,10 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
         playbackState,
     } = useVoiceBroadcastPlayback(playback);
 
+    const control = playbackState === VoiceBroadcastPlaybackState.Buffering
+        ? <Spinner />
+        : <PlaybackControlButton onClick={toggle} state={playbackState} />;
+
     return (
         <div className="mx_VoiceBroadcastPlaybackBody">
             <VoiceBroadcastHeader
@@ -47,10 +53,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
                 showBroadcast={true}
             />
             <div className="mx_VoiceBroadcastPlaybackBody_controls">
-                <PlaybackControlButton
-                    onClick={toggle}
-                    state={playbackState}
-                />
+                { control }
             </div>
         </div>
     );

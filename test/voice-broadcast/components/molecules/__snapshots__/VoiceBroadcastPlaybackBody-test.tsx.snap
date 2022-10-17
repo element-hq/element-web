@@ -77,3 +77,78 @@ exports[`VoiceBroadcastPlaybackBody when rendering a broadcast should render as 
   </div>
 </div>
 `;
+
+exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast should render as expected 1`] = `
+<div>
+  <div
+    class="mx_VoiceBroadcastPlaybackBody"
+  >
+    <div
+      class="mx_VoiceBroadcastHeader"
+    >
+      <div
+        data-testid="room-avatar"
+      >
+        room avatar: 
+        My room
+      </div>
+      <div
+        class="mx_VoiceBroadcastHeader_content"
+      >
+        <div
+          class="mx_VoiceBroadcastHeader_room"
+        >
+          My room
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <i
+            aria-hidden="true"
+            class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+            role="presentation"
+            style="mask-image: url(\\"image-file-stub\\");"
+          />
+          @user:example.com
+        </div>
+        <div
+          class="mx_VoiceBroadcastHeader_line"
+        >
+          <i
+            aria-hidden="true"
+            class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
+            role="presentation"
+            style="mask-image: url(\\"image-file-stub\\");"
+          />
+          Voice broadcast
+        </div>
+      </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+        Live
+      </div>
+    </div>
+    <div
+      class="mx_VoiceBroadcastPlaybackBody_controls"
+    >
+      <div
+        class="mx_Spinner"
+      >
+        <div
+          aria-label="Loading..."
+          class="mx_Spinner_icon"
+          role="progressbar"
+          style="width: 32px; height: 32px;"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
