@@ -14,7 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MouseEvent, ComponentProps, ComponentType, createRef, InputHTMLAttributes, LegacyRef } from "react";
+import React, {
+    MouseEvent,
+    ComponentProps,
+    ComponentType,
+    createRef,
+    InputHTMLAttributes,
+    LegacyRef,
+    forwardRef,
+    RefObject,
+} from "react";
 import classNames from "classnames";
 import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
@@ -54,7 +63,7 @@ interface IButtonProps extends Omit<ComponentProps<typeof AccessibleTooltipButto
     onClick?(ev?: ButtonEvent): void;
 }
 
-export const SpaceButton: React.FC<IButtonProps> = ({
+export const SpaceButton = forwardRef<HTMLElement, IButtonProps>(({
     space,
     spaceKey,
     className,
@@ -67,9 +76,9 @@ export const SpaceButton: React.FC<IButtonProps> = ({
     children,
     ContextMenuComponent,
     ...props
-}) => {
-    const [menuDisplayed, ref, openMenu, closeMenu] = useContextMenu<HTMLElement>();
-    const [onFocus, isActive, handle] = useRovingTabIndex(ref);
+}, ref: RefObject<HTMLElement>) => {
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>(ref);
+    const [onFocus, isActive] = useRovingTabIndex(handle);
     const tabIndex = isActive ? 0 : -1;
 
     let avatar = <div className="mx_SpaceButton_avatarPlaceholder"><div className="mx_SpaceButton_icon" /></div>;
@@ -150,7 +159,7 @@ export const SpaceButton: React.FC<IButtonProps> = ({
             </div>
         </AccessibleTooltipButton>
     );
-};
+});
 
 interface IItemProps extends InputHTMLAttributes<HTMLLIElement> {
     space: Room;

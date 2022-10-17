@@ -565,8 +565,13 @@ type ContextMenuTuple<T> = [
     (val: boolean) => void,
 ];
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<T> => {
-    const button = useRef<T>(null);
+export const useContextMenu = <T extends any = HTMLElement>(inputRef?: RefObject<T>): ContextMenuTuple<T> => {
+    let button = useRef<T>(null);
+    if (inputRef) {
+        // if we are given a ref, use it instead of ours
+        button = inputRef;
+    }
+
     const [isOpen, setIsOpen] = useState(false);
     const open = (ev?: SyntheticEvent) => {
         ev?.preventDefault();
@@ -579,7 +584,7 @@ export const useContextMenu = <T extends any = HTMLElement>(): ContextMenuTuple<
         setIsOpen(false);
     };
 
-    return [isOpen, button, open, close, setIsOpen];
+    return [button.current ? isOpen : false, button, open, close, setIsOpen];
 };
 
 // XXX: Deprecated, used only for dynamic Tooltips. Avoid using at all costs.

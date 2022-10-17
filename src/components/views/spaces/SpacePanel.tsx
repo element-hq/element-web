@@ -204,9 +204,7 @@ const CreateSpaceButton = ({
     isPanelCollapsed,
     setPanelCollapsed,
 }: Pick<IInnerSpacePanelProps, "isPanelCollapsed" | "setPanelCollapsed">) => {
-    // We don't need the handle as we position the menu in a constant location
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [menuDisplayed, _handle, openMenu, closeMenu] = useContextMenu<void>();
+    const [menuDisplayed, handle, openMenu, closeMenu] = useContextMenu<HTMLElement>();
 
     useEffect(() => {
         if (!isPanelCollapsed && menuDisplayed) {
@@ -231,13 +229,14 @@ const CreateSpaceButton = ({
         role="treeitem"
     >
         <SpaceButton
-            data-test-id='create-space-button'
+            data-testid='create-space-button'
             className={classNames("mx_SpaceButton_new", {
                 mx_SpaceButton_newCancel: menuDisplayed,
             })}
             label={menuDisplayed ? _t("Cancel") : _t("Create a space")}
             onClick={onNewClick}
             isNarrow={isPanelCollapsed}
+            ref={handle}
         />
 
         { contextMenu }
