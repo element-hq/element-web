@@ -28,5 +28,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s kasutab mitmeid uusi brauseri-põhiseid tehnoloogiaid, mis ei ole veel sinu veebibrauseris toetatud.",
     "Powered by Matrix": "Põhineb Matrix'il",
     "Use %(brand)s on mobile": "Kasuta rakendust %(brand)s nutiseadmes",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Hajutatud ja krüpteeritud suhtlus- ning ühistöörakendus, mille aluseks on $matrixLogo",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s operatsioonisüsteemis %(osName)s",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Desktop: %(platformName)s"
 }
