@@ -45,6 +45,17 @@ exports[`VoiceBroadcastPlaybackBody when rendering a broadcast should render as 
           Voice broadcast
         </div>
       </div>
+      <div
+        class="mx_LiveBadge"
+      >
+        <i
+          aria-hidden="true"
+          class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
+          role="presentation"
+          style="mask-image: url(\\"image-file-stub\\");"
+        />
+        Live
+      </div>
     </div>
     <div
       class="mx_VoiceBroadcastPlaybackBody_controls"

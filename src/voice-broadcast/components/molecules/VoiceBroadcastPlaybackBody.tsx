@@ -31,6 +31,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
     playback,
 }) => {
     const {
+        live,
         room,
         sender,
         toggle,
@@ -40,7 +41,7 @@ export const VoiceBroadcastPlaybackBody: React.FC<VoiceBroadcastPlaybackBodyProp
     return (
         <div className="mx_VoiceBroadcastPlaybackBody">
             <VoiceBroadcastHeader
-                live={false}
+                live={live}
                 sender={sender}
                 room={room}
                 showBroadcast={true}

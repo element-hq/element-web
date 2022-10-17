@@ -18,20 +18,19 @@ import {
     EventType,
     MatrixClient,
     MatrixEvent,
-    MatrixEventEvent,
     MsgType,
     RelationType,
 } from "matrix-js-sdk/src/matrix";
-import { Relations, RelationsEvent } from "matrix-js-sdk/src/models/relations";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 import { Playback, PlaybackState } from "../../audio/Playback";
 import { PlaybackManager } from "../../audio/PlaybackManager";
-import { getReferenceRelationsForEvent } from "../../events";
 import { UPDATE_EVENT } from "../../stores/AsyncStore";
 import { MediaEventHelper } from "../../utils/MediaEventHelper";
 import { IDestroyable } from "../../utils/IDestroyable";
-import { VoiceBroadcastChunkEventType } from "..";
+import { VoiceBroadcastChunkEventType, VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "..";
+import { RelationsHelper, RelationsHelperEvent } from "../../events/RelationsHelper";
+import { getReferenceRelationsForEvent } from "../../events";
 
 export enum VoiceBroadcastPlaybackState {
     Paused,
@@ -42,29 +41,55 @@ export enum VoiceBroadcastPlaybackState {
 export enum VoiceBroadcastPlaybackEvent {
     LengthChanged = "length_changed",
     StateChanged = "state_changed",
+    InfoStateChanged = "info_state_changed",
 }
 
 interface EventMap {
     [VoiceBroadcastPlaybackEvent.LengthChanged]: (length: number) => void;
     [VoiceBroadcastPlaybackEvent.StateChanged]: (state: VoiceBroadcastPlaybackState) => void;
+    [VoiceBroadcastPlaybackEvent.InfoStateChanged]: (state: VoiceBroadcastInfoState) => void;
 }
 
 export class VoiceBroadcastPlayback
     extends TypedEventEmitter<VoiceBroadcastPlaybackEvent, EventMap>
     implements IDestroyable {
     private state = VoiceBroadcastPlaybackState.Stopped;
+    private infoState: VoiceBroadcastInfoState;
     private chunkEvents = new Map<string, MatrixEvent>();
-    /** Holds the playback qeue with a 1-based index (sequence number) */
+    /** Holds the playback queue with a 1-based index (sequence number) */
     private queue: Playback[] = [];
     private currentlyPlaying: Playback;
-    private relations: Relations;
+    private lastInfoEvent: MatrixEvent;
+    private chunkRelationHelper: RelationsHelper;
+    private infoRelationHelper: RelationsHelper;
 
     public constructor(
         public readonly infoEvent: MatrixEvent,
         private client: MatrixClient,
     ) {
         super();
-        this.setUpRelations();
+        this.addInfoEvent(this.infoEvent);
+        this.setUpRelationsHelper();
+    }
+
+    private setUpRelationsHelper(): void {
+        this.infoRelationHelper = new RelationsHelper(
+            this.infoEvent,
+            RelationType.Reference,
+            VoiceBroadcastInfoEventType,
+            this.client,
+        );
+        this.infoRelationHelper.on(RelationsHelperEvent.Add, this.addInfoEvent);
+        this.infoRelationHelper.emitCurrent();
+
+        this.chunkRelationHelper = new RelationsHelper(
+            this.infoEvent,
+            RelationType.Reference,
+            EventType.RoomMessage,
+            this.client,
+        );
+        this.chunkRelationHelper.on(RelationsHelperEvent.Add, this.addChunkEvent);
+        this.chunkRelationHelper.emitCurrent();
     }
 
     private addChunkEvent(event: MatrixEvent): boolean {
@@ -81,41 +106,21 @@ export class VoiceBroadcastPlayback
         return true;
     }
 
-    private setUpRelations(): void {
-        const relations = getReferenceRelationsForEvent(this.infoEvent, EventType.RoomMessage, this.client);
-
-        if (!relations) {
-            // No related events, yet. Set up relation watcher.
-            this.infoEvent.on(MatrixEventEvent.RelationsCreated, this.onRelationsCreated);
+    private addInfoEvent = (event: MatrixEvent): void => {
+        if (this.lastInfoEvent && this.lastInfoEvent.getTs() >= event.getTs()) {
+            // Only handle newer events
             return;
         }
 
-        this.relations = relations;
-        relations.getRelations()?.forEach(e => this.addChunkEvent(e));
-        relations.on(RelationsEvent.Add, this.onRelationsEventAdd);
+        const state = event.getContent()?.state;
 
-        if (this.chunkEvents.size > 0) {
-            this.emitLengthChanged();
-        }
-    }
-
-    private onRelationsEventAdd = (event: MatrixEvent) => {
-        if (this.addChunkEvent(event)) {
-            this.emitLengthChanged();
-        }
-    };
-
-    private emitLengthChanged(): void {
-        this.emit(VoiceBroadcastPlaybackEvent.LengthChanged, this.chunkEvents.size);
-    }
-
-    private onRelationsCreated = (relationType: string) => {
-        if (relationType !== RelationType.Reference) {
+        if (!Object.values(VoiceBroadcastInfoState).includes(state)) {
+            // Do not handle unknown voice broadcast states
             return;
         }
 
-        this.infoEvent.off(MatrixEventEvent.RelationsCreated, this.onRelationsCreated);
-        this.setUpRelations();
+        this.lastInfoEvent = event;
+        this.setInfoState(state);
     };
 
     private async loadChunks(): Promise<void> {
@@ -173,7 +178,7 @@ export class VoiceBroadcastPlayback
         }
 
         this.setState(VoiceBroadcastPlaybackState.Playing);
-        // index of the first schunk is the first sequence number
+        // index of the first chunk is the first sequence number
         const first = this.queue[1];
         this.currentlyPlaying = first;
         await first.play();
@@ -238,17 +243,27 @@ export class VoiceBroadcastPlayback
         this.emit(VoiceBroadcastPlaybackEvent.StateChanged, state);
     }
 
+    public getInfoState(): VoiceBroadcastInfoState {
+        return this.infoState;
+    }
+
+    private setInfoState(state: VoiceBroadcastInfoState): void {
+        if (this.infoState === state) {
+            return;
+        }
+
+        this.infoState = state;
+        this.emit(VoiceBroadcastPlaybackEvent.InfoStateChanged, state);
+    }
+
     private destroyQueue(): void {
         this.queue.forEach(p => p.destroy());
         this.queue = [];
     }
 
     public destroy(): void {
-        if (this.relations) {
-            this.relations.off(RelationsEvent.Add, this.onRelationsEventAdd);
-        }
-
-        this.infoEvent.off(MatrixEventEvent.RelationsCreated, this.onRelationsCreated);
+        this.chunkRelationHelper.destroy();
+        this.infoRelationHelper.destroy();
         this.removeAllListeners();
         this.destroyQueue();
     }

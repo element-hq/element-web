@@ -19,6 +19,7 @@ import { useState } from "react";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
 import {
+    VoiceBroadcastInfoState,
     VoiceBroadcastPlayback,
     VoiceBroadcastPlaybackEvent,
     VoiceBroadcastPlaybackState,
@@ -40,7 +41,17 @@ export const useVoiceBroadcastPlayback = (playback: VoiceBroadcastPlayback) => {
         },
     );
 
+    const [playbackInfoState, setPlaybackInfoState] = useState(playback.getInfoState());
+    useTypedEventEmitter(
+        playback,
+        VoiceBroadcastPlaybackEvent.InfoStateChanged,
+        (state: VoiceBroadcastInfoState) => {
+            setPlaybackInfoState(state);
+        },
+    );
+
     return {
+        live: playbackInfoState !== VoiceBroadcastInfoState.Stopped,
         room: room,
         sender: playback.infoEvent.sender,
         toggle: playbackToggle,
