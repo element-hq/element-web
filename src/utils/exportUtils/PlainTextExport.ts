@@ -1,5 +1,5 @@
 /*
-Copyright 2021 The Matrix.org Foundation C.I.C.
+Copyright 2021 - 2022 The Matrix.org Foundation C.I.C.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import { logger } from "matrix-js-sdk/src/logger";
 import React from "react";
 
 import Exporter from "./Exporter";
-import { formatFullDateNoDay } from "../../DateUtils";
 import { _t } from "../../languageHandler";
 import { ExportType, IExportOptions } from "./exportUtils";
 import { textForEvent } from "../../TextForEvent";
@@ -41,6 +40,10 @@ export default class PlainTextExporter extends Exporter {
         this.mediaOmitText = !this.exportOptions.attachmentsIncluded
             ? _t("Media omitted")
             : _t("Media omitted - file size limit exceeded");
+    }
+
+    public get destinationFileName(): string {
+        return this.makeFileNameNoExtension() + ".txt";
     }
 
     public textForReplyEvent = (content: IContent) => {
@@ -137,7 +140,7 @@ export default class PlainTextExporter extends Exporter {
             this.addFile("export.txt", new Blob([text]));
             await this.downloadZIP();
         } else {
-            const fileName = `matrix-export-${formatFullDateNoDay(new Date())}.txt`;
+            const fileName = this.destinationFileName;
             this.downloadPlainText(fileName, text);
         }
 
