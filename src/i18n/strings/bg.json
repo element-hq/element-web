@@ -2163,5 +2163,15 @@
     "You cannot place calls in this browser.": "Не можете да провеждате обаждания в този браузър.",
     "Calls are unsupported": "Обажданията не се поддържат",
     "The user you called is busy.": "Потребителят, когото потърсихте, е зает.",
-    "User Busy": "Потребителят е зает"
+    "User Busy": "Потребителят е зает",
+    "Some invites couldn't be sent": "Някои покани не можаха да бъдат изпратени",
+    "We sent the others, but the below people couldn't be invited to <RoomName/>": "Изпратихме останалите покани, но следните хора не можаха да бъдат поканени в <RoomName/>",
+    "Empty room (was %(oldName)s)": "Празна стая (беше %(oldName)s)",
+    "Inviting %(user)s and %(count)s others|one": "Канене на %(user)s и още 1 друг",
+    "Inviting %(user)s and %(count)s others|other": "Канене на %(user)s и %(count)s други",
+    "Inviting %(user1)s and %(user2)s": "Канене на %(user1)s и %(user2)s",
+    "%(user)s and %(count)s others|one": "%(user)s и още 1",
+    "%(user)s and %(count)s others|other": "%(user)s и %(count)s други",
+    "%(user1)s and %(user2)s": "%(user1)s и %(user2)s",
+    "Empty room": "Празна стая"
 }
