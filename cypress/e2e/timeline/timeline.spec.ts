@@ -329,7 +329,7 @@ describe("Timeline", () => {
             cy.getComposer().type(`${MESSAGE}{enter}`);
 
             // Reply to the message
-            cy.get(".mx_RoomView_body").contains(".mx_EventTile_line", "Hello world").within(() => {
+            cy.contains(".mx_RoomView_body .mx_EventTile_line", "Hello world").within(() => {
                 cy.get('[aria-label="Reply"]').click({ force: true }); // Cypress has no ability to hover
             });
         };

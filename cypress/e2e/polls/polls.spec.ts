@@ -122,7 +122,7 @@ describe("Polls", () => {
         createPoll(pollParams);
 
         // Wait for message to send, get its ID and save as @pollId
-        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", pollParams.title)
+        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", pollParams.title)
             .invoke("attr", "data-scroll-tokens").as("pollId");
 
         cy.get<string>("@pollId").then(pollId => {
@@ -190,7 +190,7 @@ describe("Polls", () => {
         createPoll(pollParams);
 
         // Wait for message to send, get its ID and save as @pollId
-        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", pollParams.title)
+        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", pollParams.title)
             .invoke("attr", "data-scroll-tokens").as("pollId");
 
         cy.get<string>("@pollId").then(pollId => {

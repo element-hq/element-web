@@ -93,7 +93,7 @@ describe("Room Directory", () => {
         cy.get(".mx_RoomDirectory_dialogWrapper").percySnapshotElement("Room Directory - filtered no results");
 
         cy.get('.mx_RoomDirectory_dialogWrapper [name="dirsearch"]').type("{selectAll}{backspace}test1234");
-        cy.get(".mx_RoomDirectory_dialogWrapper").contains(".mx_RoomDirectory_listItem", name)
+        cy.contains(".mx_RoomDirectory_dialogWrapper .mx_RoomDirectory_listItem", name)
             .should("exist").as("resultRow");
         cy.get(".mx_RoomDirectory_dialogWrapper").percySnapshotElement("Room Directory - filtered one result");
         cy.get("@resultRow").find(".mx_AccessibleButton").contains("Join").click();

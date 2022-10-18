@@ -24,7 +24,7 @@ function assertNoToasts(): void {
 }
 
 function getToast(expectedTitle: string): Chainable<JQuery> {
-    return cy.get(".mx_Toast_toast").contains("h2", expectedTitle).should("exist").closest(".mx_Toast_toast");
+    return cy.contains(".mx_Toast_toast h2", expectedTitle).should("exist").closest(".mx_Toast_toast");
 }
 
 function acceptToast(expectedTitle: string): void {
