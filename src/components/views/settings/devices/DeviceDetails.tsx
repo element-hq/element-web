@@ -62,7 +62,6 @@ const DeviceDetails: React.FC<Props> = ({
             id: 'session',
             values: [
                 { label: _t('Session ID'), value: device.device_id },
-                { label: _t('Client'), value: device.client },
                 {
                     label: _t('Last activity'),
                     value: device.last_seen_ts && formatDate(new Date(device.last_seen_ts)),
@@ -84,6 +83,7 @@ const DeviceDetails: React.FC<Props> = ({
             values: [
                 { label: _t('Model'), value: device.deviceModel },
                 { label: _t('Operating system'), value: device.deviceOperatingSystem },
+                { label: _t('Browser'), value: device.client },
                 { label: _t('IP address'), value: device.last_seen_ip },
             ],
         },
