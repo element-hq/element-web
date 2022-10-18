@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 import {
     VoiceBroadcastInfoState,
@@ -22,15 +22,40 @@ import {
     VoiceBroadcastRecordingEvent,
     VoiceBroadcastRecordingsStore,
 } from "..";
+import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
+import { _t } from "../../languageHandler";
 import { MatrixClientPeg } from "../../MatrixClientPeg";
+import Modal from "../../Modal";
+
+const showStopBroadcastingDialog = async (): Promise<boolean> => {
+    const { finished } = Modal.createDialog(
+        QuestionDialog,
+        {
+            title: _t("Stop live broadcasting?"),
+            description: (
+                <p>
+                    { _t("Are you sure you want to stop your live broadcast?"
+                        + "This will end the broadcast and the full recording will be available in the room.") }
+                </p>
+            ),
+            button: _t("Yes, stop broadcast"),
+        },
+    );
+    const [confirmed] = await finished;
+    return confirmed;
+};
 
 export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) => {
     const client = MatrixClientPeg.get();
     const room = client.getRoom(recording.infoEvent.getRoomId());
-    const stopRecording = () => {
-        recording.stop();
-        VoiceBroadcastRecordingsStore.instance().clearCurrent();
+    const stopRecording = async () => {
+        const confirmed = await showStopBroadcastingDialog();
+
+        if (confirmed) {
+            recording.stop();
+            VoiceBroadcastRecordingsStore.instance().clearCurrent();
+        }
     };
 
     const [live, setLive] = useState(recording.getState() === VoiceBroadcastInfoState.Started);

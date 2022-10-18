@@ -16,11 +16,14 @@ limitations under the License.
 //
 
 import React from "react";
-import { render, RenderResult } from "@testing-library/react";
+import { render, RenderResult, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MatrixClient, MatrixEvent } from "matrix-js-sdk/src/matrix";
+import { sleep } from "matrix-js-sdk/src/utils";
 
 import {
     VoiceBroadcastInfoEventType,
+    VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingPip,
 } from "../../../../src/voice-broadcast";
@@ -62,6 +65,28 @@ describe("VoiceBroadcastRecordingPip", () => {
 
         it("should create the expected result", () => {
             expect(renderResult.container).toMatchSnapshot();
+        });
+
+        describe("and clicking the stop button", () => {
+            beforeEach(async () => {
+                await userEvent.click(screen.getByLabelText("stop voice broadcast"));
+                // modal rendering has some weird sleeps
+                await sleep(100);
+            });
+
+            it("should display the confirm end dialog", () => {
+                screen.getByText("Stop live broadcasting?");
+            });
+
+            describe("and confirming the dialog", () => {
+                beforeEach(async () => {
+                    await userEvent.click(screen.getByText("Yes, stop broadcast"));
+                });
+
+                it("should end the recording", () => {
+                    expect(recording.getState()).toBe(VoiceBroadcastInfoState.Stopped);
+                });
+            });
         });
     });
 });
