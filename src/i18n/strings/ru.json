@@ -28,5 +28,7 @@
     "%(brand)s uses advanced browser features which aren't supported by your current browser.": "%(brand)s использует расширенные возможности, которые не поддерживаются вашим браузером.",
     "Powered by Matrix": "На технологии Matrix",
     "Use %(brand)s on mobile": "Воспользуйтесь %(brand)s на мобильном телефоне",
-    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализованное, зашифрованное общение и сотрудничество на основе $matrixLogo"
+    "Decentralised, encrypted chat &amp; collaboration powered by $matrixLogo": "Децентрализованное, зашифрованное общение и сотрудничество на основе $matrixLogo",
+    "%(brand)s Desktop: %(platformName)s": "%(brand)s Рабочий стол: %(platformName)s",
+    "%(appName)s: %(browserName)s on %(osName)s": "%(appName)s: %(browserName)s на %(osName)s"
 }
