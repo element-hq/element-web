@@ -83,7 +83,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
     getRelationsForEvent,
 }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
-    const [onFocus, isActive, ref] = useRovingTabIndex(button);
+    const [onFocus, isActive] = useRovingTabIndex(button);
     useEffect(() => {
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
@@ -123,7 +123,7 @@ const OptionsButton: React.FC<IOptionsButtonProps> = ({
             onClick={onOptionsClick}
             onContextMenu={onOptionsClick}
             isExpanded={menuDisplayed}
-            inputRef={ref}
+            inputRef={button}
             onFocus={onFocus}
             tabIndex={isActive ? 0 : -1}
         >
@@ -141,7 +141,7 @@ interface IReactButtonProps {
 
 const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusChange }) => {
     const [menuDisplayed, button, openMenu, closeMenu] = useContextMenu();
-    const [onFocus, isActive, ref] = useRovingTabIndex(button);
+    const [onFocus, isActive] = useRovingTabIndex(button);
     useEffect(() => {
         onFocusChange(menuDisplayed);
     }, [onFocusChange, menuDisplayed]);
@@ -173,7 +173,7 @@ const ReactButton: React.FC<IReactButtonProps> = ({ mxEvent, reactions, onFocusC
             onClick={onClick}
             onContextMenu={onClick}
             isExpanded={menuDisplayed}
-            inputRef={ref}
+            inputRef={button}
             onFocus={onFocus}
             tabIndex={isActive ? 0 : -1}
         >
