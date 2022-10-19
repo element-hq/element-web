@@ -25,10 +25,10 @@ import { WidgetLayoutStore } from "../src/stores/widgets/WidgetLayoutStore";
 import WidgetStore from "../src/stores/WidgetStore";
 
 /**
- * A class which provides the same API as Stores but adds additional unsafe setters which can
+ * A class which provides the same API as SdkContextClass but adds additional unsafe setters which can
  * replace individual stores. This is useful for tests which need to mock out stores.
  */
-export class TestStores extends SdkContextClass {
+export class TestSdkContext extends SdkContextClass {
     public _RightPanelStore?: RightPanelStore;
     public _RoomNotificationStateStore?: RoomNotificationStateStore;
     public _RoomViewStore?: RoomViewStore;

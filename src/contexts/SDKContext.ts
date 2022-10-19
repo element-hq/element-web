@@ -25,6 +25,7 @@ import { RoomNotificationStateStore } from "../stores/notifications/RoomNotifica
 import RightPanelStore from "../stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../stores/RoomViewStore";
 import SpaceStore, { SpaceStoreClass } from "../stores/spaces/SpaceStore";
+import TypingStore from "../stores/TypingStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
 import WidgetStore from "../stores/WidgetStore";
 
@@ -59,6 +60,7 @@ export class SdkContextClass {
     protected _SlidingSyncManager?: SlidingSyncManager;
     protected _SpaceStore?: SpaceStoreClass;
     protected _LegacyCallHandler?: LegacyCallHandler;
+    protected _TypingStore?: TypingStore;
 
     /**
      * Automatically construct stores which need to be created eagerly so they can register with
@@ -123,5 +125,12 @@ export class SdkContextClass {
             this._SpaceStore = SpaceStore.instance;
         }
         return this._SpaceStore;
+    }
+    public get typingStore(): TypingStore {
+        if (!this._TypingStore) {
+            this._TypingStore = new TypingStore(this);
+            window.mxTypingStore = this._TypingStore;
+        }
+        return this._TypingStore;
     }
 }
