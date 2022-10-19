@@ -41,14 +41,14 @@ limitations under the License.
 
     &::before {
         display: inline-block;
-        vertical-align: text-top;
+        vertical-align: middle;
         content: "";
         background-color: $secondary-content;
         mask-size: 16px;
+        mask-position-y: center;
         width: 16px;
-        height: 16px;
-        margin-right: 4px;
-        bottom: 2px;
+        height: 1.2em; /* to match line height */
+        margin-right: 8px;
         mask-image: url("$(res)/img/element-icons/call/video-call.svg");
     }
 }
