@@ -31,6 +31,7 @@ import { VerificationRequest } from "matrix-js-sdk/src/crypto/verification/reque
 import { MatrixError } from "matrix-js-sdk/src/http-api";
 import { logger } from "matrix-js-sdk/src/logger";
 import { LocalNotificationSettings } from "matrix-js-sdk/src/@types/local_notifications";
+import { CryptoEvent } from "matrix-js-sdk/src/crypto";
 
 import MatrixClientContext from "../../../../contexts/MatrixClientContext";
 import { _t } from "../../../../languageHandler";
@@ -178,6 +179,12 @@ export const useOwnDevices = (): DevicesState => {
     useEffect(() => {
         refreshDevices();
     }, [refreshDevices]);
+
+    useEventEmitter(matrixClient, CryptoEvent.DevicesUpdated, (users: string[]): void => {
+        if (users.includes(userId)) {
+            refreshDevices();
+        }
+    });
 
     useEventEmitter(matrixClient, ClientEvent.AccountData, (event: MatrixEvent): void => {
         const type = event.getType();

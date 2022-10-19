@@ -32,6 +32,10 @@ import SecurityRecommendations from '../../devices/SecurityRecommendations';
 import { DeviceSecurityVariation, ExtendedDevice } from '../../devices/types';
 import { deleteDevicesWithInteractiveAuth } from '../../devices/deleteDevices';
 import SettingsTab from '../SettingsTab';
+import LoginWithQRSection from '../../devices/LoginWithQRSection';
+import LoginWithQR, { Mode } from '../../../auth/LoginWithQR';
+import SettingsStore from '../../../../../settings/SettingsStore';
+import { useAsyncMemo } from '../../../../../hooks/useAsyncMemo';
 
 const useSignOut = (
     matrixClient: MatrixClient,
@@ -104,6 +108,7 @@ const SessionManagerTab: React.FC = () => {
     const matrixClient = useContext(MatrixClientContext);
     const userId = matrixClient.getUserId();
     const currentUserMember = userId && matrixClient.getUser(userId) || undefined;
+    const clientVersions = useAsyncMemo(() => matrixClient.getVersions(), [matrixClient]);
 
     const onDeviceExpandToggle = (deviceId: ExtendedDevice['device_id']): void => {
         if (expandedDeviceIds.includes(deviceId)) {
@@ -175,6 +180,26 @@ const SessionManagerTab: React.FC = () => {
         onSignOutOtherDevices(Object.keys(otherDevices));
     }: undefined;
 
+    const [signInWithQrMode, setSignInWithQrMode] = useState<Mode | null>();
+
+    const showQrCodeEnabled = SettingsStore.getValue("feature_qr_signin_reciprocate_show");
+
+    const onQrFinish = useCallback(() => {
+        setSignInWithQrMode(null);
+    }, [setSignInWithQrMode]);
+
+    const onShowQrClicked = useCallback(() => {
+        setSignInWithQrMode(Mode.Show);
+    }, [setSignInWithQrMode]);
+
+    if (showQrCodeEnabled && signInWithQrMode) {
+        return <LoginWithQR
+            mode={signInWithQrMode}
+            onFinished={onQrFinish}
+            client={matrixClient}
+        />;
+    }
+
     return <SettingsTab heading={_t('Sessions')}>
         <SecurityRecommendations
             devices={devices}
@@ -221,6 +246,10 @@ const SessionManagerTab: React.FC = () => {
                     supportsMSC3881={supportsMSC3881}
                 />
             </SettingsSubsection>
+        }
+        { showQrCodeEnabled ?
+            <LoginWithQRSection onShowQr={onShowQrClicked} versions={clientVersions} />
+            : null
         }
     </SettingsTab>;
 };
