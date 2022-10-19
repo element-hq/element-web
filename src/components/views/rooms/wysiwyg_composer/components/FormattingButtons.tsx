@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import React, { MouseEventHandler } from "react";
-import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
+import { FormattingFunctions, FormattingStates } from "@matrix-org/matrix-wysiwyg";
 import classNames from "classnames";
 
 import AccessibleTooltipButton from "../../../elements/AccessibleTooltipButton";
@@ -23,7 +23,6 @@ import { Alignment } from "../../../elements/Tooltip";
 import { KeyboardShortcut } from "../../../settings/KeyboardShortcut";
 import { KeyCombo } from "../../../../../KeyBindingsManager";
 import { _td } from "../../../../../languageHandler";
-import { Wysiwyg } from "../types";
 
 interface TooltipProps {
     label: string;
@@ -56,8 +55,8 @@ function Button({ label, keyCombo, onClick, isActive, className }: ButtonProps) 
 }
 
 interface FormattingButtonsProps {
-    composer: Wysiwyg;
-    formattingStates: ReturnType<typeof useWysiwyg>['formattingStates'];
+    composer: FormattingFunctions;
+    formattingStates: FormattingStates;
 }
 
 export function FormattingButtons({ composer, formattingStates }: FormattingButtonsProps) {
