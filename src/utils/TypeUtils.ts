@@ -28,3 +28,14 @@ export function makeType(Type: any, opts: any) {
     Object.assign(c, opts);
     return c;
 }
+
+/**
+ * Typeguard that checks if an unknown variable is an array of numbers
+ * @param value the variable to check
+ * @returns true if the variable is an array of numbers, false otherwise
+ */
+export function isNumberArray(value: unknown): value is number[] {
+    return (
+        Array.isArray(value) && value.every(element => typeof element === "number")
+    );
+}

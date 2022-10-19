@@ -138,6 +138,7 @@ import { UseCaseSelection } from '../views/elements/UseCaseSelection';
 import { ValidatedServerConfig } from '../../utils/ValidatedServerConfig';
 import { isLocalRoom } from '../../utils/localRoom/isLocalRoom';
 import { viewUserDeviceSettings } from '../../actions/handlers/viewUserDeviceSettings';
+import { isNumberArray } from '../../utils/TypeUtils';
 
 // legacy export
 export { default as Views } from "../../Views";
@@ -1125,6 +1126,29 @@ export default class MatrixChat extends React.PureComponent<IProps, IState> {
                 ));
             }
         }
+
+        const client = MatrixClientPeg.get();
+        const plEvent = roomToLeave.currentState.getStateEvents(EventType.RoomPowerLevels, '');
+        const plContent = plEvent ? (plEvent.getContent() || {}) : {};
+        const userLevels = plContent.users || {};
+        const currentUserLevel = userLevels[client.getUserId()];
+        const userLevelValues = Object.values(userLevels);
+        if (isNumberArray(userLevelValues)) {
+            const maxUserLevel = Math.max(...userLevelValues);
+            // If the user is the only user with highest power level
+            if (maxUserLevel === currentUserLevel &&
+                userLevelValues.lastIndexOf(maxUserLevel) == userLevelValues.indexOf(maxUserLevel)) {
+                warnings.push((
+                    <span className="warning" key="last_admin_warning">
+                        { ' '/* Whitespace, otherwise the sentences get smashed together */ }
+                        { _t("You are the sole person with the highest role in this room. " +
+                        "If you leave, the room could become unmoderable. Consider giving " +
+                        "another user your role.") }
+                    </span>
+                ));
+            }
+        }
+
         return warnings;
     }
 
