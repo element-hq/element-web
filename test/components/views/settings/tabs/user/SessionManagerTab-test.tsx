@@ -34,6 +34,7 @@ import {
 import SessionManagerTab from '../../../../../../src/components/views/settings/tabs/user/SessionManagerTab';
 import MatrixClientContext from '../../../../../../src/contexts/MatrixClientContext';
 import {
+    flushPromises,
     flushPromisesWithFakeTimers,
     getMockClientWithEventEmitter,
     mkPusher,
@@ -47,6 +48,7 @@ import {
     ExtendedDevice,
 } from '../../../../../../src/components/views/settings/devices/types';
 import { INACTIVE_DEVICE_AGE_MS } from '../../../../../../src/components/views/settings/devices/filter';
+import SettingsStore from '../../../../../../src/settings/SettingsStore';
 
 mockPlatformPeg();
 
@@ -1141,5 +1143,51 @@ describe('<SessionManagerTab />', () => {
         });
 
         expect(checkbox.getAttribute('aria-checked')).toEqual("false");
+    });
+
+    describe('QR code login', () => {
+        const settingsValueSpy = jest.spyOn(SettingsStore, 'getValue');
+
+        beforeEach(() => {
+            settingsValueSpy.mockClear().mockReturnValue(false);
+            // enable server support for qr login
+            mockClient.getVersions.mockResolvedValue({
+                versions: [],
+                unstable_features: {
+                    'org.matrix.msc3882': true,
+                    'org.matrix.msc3886': true,
+                },
+            });
+        });
+
+        it('does not render qr code login section when disabled', () => {
+            settingsValueSpy.mockReturnValue(false);
+            const { queryByText } = render(getComponent());
+
+            expect(settingsValueSpy).toHaveBeenCalledWith('feature_qr_signin_reciprocate_show');
+
+            expect(queryByText('Sign in with QR code')).toBeFalsy();
+        });
+
+        it('renders qr code login section when enabled', async () => {
+            settingsValueSpy.mockImplementation(settingName => settingName === 'feature_qr_signin_reciprocate_show');
+            const { getByText } = render(getComponent());
+
+            // wait for versions call to settle
+            await flushPromises();
+
+            expect(getByText('Sign in with QR code')).toBeTruthy();
+        });
+
+        it('enters qr code login section when show QR code button clicked', async () => {
+            settingsValueSpy.mockImplementation(settingName => settingName === 'feature_qr_signin_reciprocate_show');
+            const { getByText, getByTestId } = render(getComponent());
+            // wait for versions call to settle
+            await flushPromises();
+
+            fireEvent.click(getByText('Show QR code'));
+
+            expect(getByTestId("login-with-qr")).toBeTruthy();
+        });
     });
 });
