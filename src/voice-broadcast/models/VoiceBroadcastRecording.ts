@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { logger } from "matrix-js-sdk/src/logger";
-import { MatrixClient, MatrixEvent, RelationType } from "matrix-js-sdk/src/matrix";
+import { MatrixClient, MatrixEvent, MatrixEventEvent, RelationType } from "matrix-js-sdk/src/matrix";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
 import {
@@ -67,6 +67,7 @@ export class VoiceBroadcastRecording
         }) ? VoiceBroadcastInfoState.Started : VoiceBroadcastInfoState.Stopped;
         // TODO Michael W: add listening for updates
 
+        this.infoEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
         this.dispatcherRef = dis.register(this.onAction);
     }
 
@@ -99,9 +100,18 @@ export class VoiceBroadcastRecording
             this.recorder.stop();
         }
 
+        this.infoEvent.off(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
         this.removeAllListeners();
         dis.unregister(this.dispatcherRef);
     }
+
+    private onBeforeRedaction = () => {
+        if (this.getState() !== VoiceBroadcastInfoState.Stopped) {
+            this.setState(VoiceBroadcastInfoState.Stopped);
+            // destroy cleans up everything
+            this.destroy();
+        }
+    };
 
     private onAction = (payload: ActionPayload) => {
         if (payload.action !== "call_state") return;

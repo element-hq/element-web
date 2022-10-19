@@ -20,7 +20,6 @@ import {
     VoiceBroadcastInfoState,
     VoiceBroadcastRecording,
     VoiceBroadcastRecordingEvent,
-    VoiceBroadcastRecordingsStore,
 } from "..";
 import QuestionDialog from "../../components/views/dialogs/QuestionDialog";
 import { useTypedEventEmitter } from "../../hooks/useEventEmitter";
@@ -54,7 +53,6 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
 
         if (confirmed) {
             recording.stop();
-            VoiceBroadcastRecordingsStore.instance().clearCurrent();
         }
     };
 

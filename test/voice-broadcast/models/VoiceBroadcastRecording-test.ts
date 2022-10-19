@@ -20,6 +20,7 @@ import {
     EventType,
     MatrixClient,
     MatrixEvent,
+    MatrixEventEvent,
     MsgType,
     RelationType,
     Room,
@@ -81,6 +82,7 @@ describe("VoiceBroadcastRecording", () => {
     const setUpVoiceBroadcastRecording = () => {
         voiceBroadcastRecording = new VoiceBroadcastRecording(infoEvent, client);
         voiceBroadcastRecording.on(VoiceBroadcastRecordingEvent.StateChanged, onStateChanged);
+        jest.spyOn(voiceBroadcastRecording, "destroy");
         jest.spyOn(voiceBroadcastRecording, "removeAllListeners");
     };
 
@@ -212,6 +214,18 @@ describe("VoiceBroadcastRecording", () => {
 
             it("should start the recorder", () => {
                 expect(voiceBroadcastRecorder.start).toHaveBeenCalled();
+            });
+
+            describe("and the info event is redacted", () => {
+                beforeEach(() => {
+                    infoEvent.emit(MatrixEventEvent.BeforeRedaction, null, null);
+                });
+
+                itShouldBeInState(VoiceBroadcastInfoState.Stopped);
+
+                it("should destroy the recording", () => {
+                    expect(voiceBroadcastRecording.destroy).toHaveBeenCalled();
+                });
             });
 
             describe("and receiving a call action", () => {
