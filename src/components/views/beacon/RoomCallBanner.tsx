@@ -24,13 +24,13 @@ import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../../../dispatcher/actions";
 import { Call, ConnectionState, ElementCall } from "../../../models/Call";
 import { useCall } from "../../../hooks/useCall";
-import { RoomViewStore } from "../../../stores/RoomViewStore";
 import { useEventEmitterState } from "../../../hooks/useEventEmitter";
 import {
     OwnBeaconStore,
     OwnBeaconStoreEvent,
 } from "../../../stores/OwnBeaconStore";
 import { CallDurationFromEvent } from "../voip/CallDuration";
+import { SdkContextClass } from "../../../contexts/SDKContext";
 
 interface RoomCallBannerProps {
     roomId: Room["roomId"];
@@ -114,7 +114,7 @@ const RoomCallBanner: React.FC<Props> = ({ roomId }) => {
     }
 
     // Check if the call is already showing. No banner is needed in this case.
-    if (RoomViewStore.instance.isViewingCall()) {
+    if (SdkContextClass.instance.roomViewStore.isViewingCall()) {
         return null;
     }
 

@@ -27,7 +27,6 @@ import { _t } from "../languageHandler";
 import ErrorDialog from "../components/views/dialogs/ErrorDialog";
 import { isMetaSpace } from "../stores/spaces";
 import SpaceStore from "../stores/spaces/SpaceStore";
-import { RoomViewStore } from "../stores/RoomViewStore";
 import dis from "../dispatcher/dispatcher";
 import { ViewRoomPayload } from "../dispatcher/payloads/ViewRoomPayload";
 import { Action } from "../dispatcher/actions";
@@ -35,6 +34,7 @@ import { ViewHomePagePayload } from "../dispatcher/payloads/ViewHomePagePayload"
 import LeaveSpaceDialog from "../components/views/dialogs/LeaveSpaceDialog";
 import { AfterLeaveRoomPayload } from "../dispatcher/payloads/AfterLeaveRoomPayload";
 import { bulkSpaceBehaviour } from "./space";
+import { SdkContextClass } from "../contexts/SDKContext";
 
 export async function leaveRoomBehaviour(roomId: string, retry = true, spinner = true) {
     let spinnerModal: IHandle<any>;
@@ -130,7 +130,7 @@ export async function leaveRoomBehaviour(roomId: string, retry = true, spinner =
 
     if (!isMetaSpace(SpaceStore.instance.activeSpace) &&
         SpaceStore.instance.activeSpace !== roomId &&
-        RoomViewStore.instance.getRoomId() === roomId
+        SdkContextClass.instance.roomViewStore.getRoomId() === roomId
     ) {
         dis.dispatch<ViewRoomPayload>({
             action: Action.ViewRoom,

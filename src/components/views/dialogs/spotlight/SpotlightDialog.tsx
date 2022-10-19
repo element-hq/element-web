@@ -66,7 +66,7 @@ import { BreadcrumbsStore } from "../../../../stores/BreadcrumbsStore";
 import { RoomNotificationState } from "../../../../stores/notifications/RoomNotificationState";
 import { RoomNotificationStateStore } from "../../../../stores/notifications/RoomNotificationStateStore";
 import { RecentAlgorithm } from "../../../../stores/room-list/algorithms/tag-sorting/RecentAlgorithm";
-import { RoomViewStore } from "../../../../stores/RoomViewStore";
+import { SdkContextClass } from "../../../../contexts/SDKContext";
 import { getMetaSpaceName } from "../../../../stores/spaces";
 import SpaceStore from "../../../../stores/spaces/SpaceStore";
 import { DirectoryMember, Member, startDmOnFirstMessage } from "../../../../utils/direct-messages";
@@ -1060,7 +1060,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                 </h4>
                 <div>
                     { BreadcrumbsStore.instance.rooms
-                        .filter(r => r.roomId !== RoomViewStore.instance.getRoomId())
+                        .filter(r => r.roomId !== SdkContextClass.instance.roomViewStore.getRoomId())
                         .map(room => (
                             <TooltipOption
                                 id={`mx_SpotlightDialog_button_recentlyViewed_${room.roomId}`}

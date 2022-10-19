@@ -21,10 +21,21 @@ import { Action } from '../../src/dispatcher/actions';
 import { getMockClientWithEventEmitter, untilDispatch, untilEmission } from '../test-utils';
 import SettingsStore from '../../src/settings/SettingsStore';
 import { SlidingSyncManager } from '../../src/SlidingSyncManager';
+import { PosthogAnalytics } from '../../src/PosthogAnalytics';
 import { TimelineRenderingType } from '../../src/contexts/RoomContext';
 import { MatrixDispatcher } from '../../src/dispatcher/dispatcher';
 import { UPDATE_EVENT } from '../../src/stores/AsyncStore';
 import { ActiveRoomChangedPayload } from '../../src/dispatcher/payloads/ActiveRoomChangedPayload';
+import { SpaceStoreClass } from '../../src/stores/spaces/SpaceStore';
+import { TestStores } from '../TestStores';
+
+// mock out the injected classes
+jest.mock('../../src/PosthogAnalytics');
+const MockPosthogAnalytics = <jest.Mock<PosthogAnalytics>><unknown>PosthogAnalytics;
+jest.mock('../../src/SlidingSyncManager');
+const MockSlidingSyncManager = <jest.Mock<SlidingSyncManager>><unknown>SlidingSyncManager;
+jest.mock('../../src/stores/spaces/SpaceStore');
+const MockSpaceStore = <jest.Mock<SpaceStoreClass>><unknown>SpaceStoreClass;
 
 jest.mock('../../src/utils/DMRoomMap', () => {
     const mock = {
@@ -51,6 +62,9 @@ describe('RoomViewStore', function() {
         isGuest: jest.fn(),
     });
     const room = new Room(roomId, mockClient, userId);
+
+    let roomViewStore: RoomViewStore;
+    let slidingSyncManager: SlidingSyncManager;
     let dis: MatrixDispatcher;
 
     beforeEach(function() {
@@ -60,10 +74,17 @@ describe('RoomViewStore', function() {
         mockClient.getRoom.mockReturnValue(room);
         mockClient.isGuest.mockReturnValue(false);
 
-        // Reset the state of the store
+        // Make the RVS to test
         dis = new MatrixDispatcher();
-        RoomViewStore.instance.reset();
-        RoomViewStore.instance.resetDispatcher(dis);
+        slidingSyncManager = new MockSlidingSyncManager();
+        const stores = new TestStores();
+        stores._SlidingSyncManager = slidingSyncManager;
+        stores._PosthogAnalytics = new MockPosthogAnalytics();
+        stores._SpaceStore = new MockSpaceStore();
+        roomViewStore = new RoomViewStore(
+            dis, stores,
+        );
+        stores._RoomViewStore = roomViewStore;
     });
 
     it('can be used to view a room by ID and join', async () => {
@@ -71,14 +92,14 @@ describe('RoomViewStore', function() {
         dis.dispatch({ action: Action.JoinRoom });
         await untilDispatch(Action.JoinRoomReady, dis);
         expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { viaServers: [] });
-        expect(RoomViewStore.instance.isJoining()).toBe(true);
+        expect(roomViewStore.isJoining()).toBe(true);
     });
 
     it('can auto-join a room', async () => {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId, auto_join: true });
         await untilDispatch(Action.JoinRoomReady, dis);
         expect(mockClient.joinRoom).toHaveBeenCalledWith(roomId, { viaServers: [] });
-        expect(RoomViewStore.instance.isJoining()).toBe(true);
+        expect(roomViewStore.isJoining()).toBe(true);
     });
 
     it('emits ActiveRoomChanged when the viewed room changes', async () => {
@@ -97,7 +118,7 @@ describe('RoomViewStore', function() {
     it('invokes room activity listeners when the viewed room changes', async () => {
         const roomId2 = "!roomid:2";
         const callback = jest.fn();
-        RoomViewStore.instance.addRoomListener(roomId, callback);
+        roomViewStore.addRoomListener(roomId, callback);
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis) as ActiveRoomChangedPayload;
         expect(callback).toHaveBeenCalledWith(true);
@@ -116,14 +137,14 @@ describe('RoomViewStore', function() {
         }, dis);
 
         // roomId is set to id of the room alias
-        expect(RoomViewStore.instance.getRoomId()).toBe(roomId);
+        expect(roomViewStore.getRoomId()).toBe(roomId);
 
         // join the room
         dis.dispatch({ action: Action.JoinRoom }, true);
 
         await untilDispatch(Action.JoinRoomReady, dis);
 
-        expect(RoomViewStore.instance.isJoining()).toBeTruthy();
+        expect(roomViewStore.isJoining()).toBeTruthy();
         expect(mockClient.joinRoom).toHaveBeenCalledWith(alias, { viaServers: [] });
     });
 
@@ -134,7 +155,7 @@ describe('RoomViewStore', function() {
         const payload = await untilDispatch(Action.ViewRoomError, dis);
         expect(payload.room_id).toBeNull();
         expect(payload.room_alias).toEqual(alias);
-        expect(RoomViewStore.instance.getRoomAlias()).toEqual(alias);
+        expect(roomViewStore.getRoomAlias()).toEqual(alias);
     });
 
     it('emits JoinRoomError if joining the room fails', async () => {
@@ -143,8 +164,8 @@ describe('RoomViewStore', function() {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         dis.dispatch({ action: Action.JoinRoom });
         await untilDispatch(Action.JoinRoomError, dis);
-        expect(RoomViewStore.instance.isJoining()).toBe(false);
-        expect(RoomViewStore.instance.getJoinError()).toEqual(joinErr);
+        expect(roomViewStore.isJoining()).toBe(false);
+        expect(roomViewStore.getJoinError()).toEqual(joinErr);
     });
 
     it('remembers the event being replied to when swapping rooms', async () => {
@@ -154,13 +175,13 @@ describe('RoomViewStore', function() {
             getRoomId: () => roomId,
         };
         dis.dispatch({ action: 'reply_to_event', event: replyToEvent, context: TimelineRenderingType.Room });
-        await untilEmission(RoomViewStore.instance, UPDATE_EVENT);
-        expect(RoomViewStore.instance.getQuotingEvent()).toEqual(replyToEvent);
+        await untilEmission(roomViewStore, UPDATE_EVENT);
+        expect(roomViewStore.getQuotingEvent()).toEqual(replyToEvent);
         // view the same room, should remember the event.
         // set the highlighed flag to make sure there is a state change so we get an update event
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId, highlighted: true });
-        await untilEmission(RoomViewStore.instance, UPDATE_EVENT);
-        expect(RoomViewStore.instance.getQuotingEvent()).toEqual(replyToEvent);
+        await untilEmission(roomViewStore, UPDATE_EVENT);
+        expect(roomViewStore.getQuotingEvent()).toEqual(replyToEvent);
     });
 
     it('swaps to the replied event room if it is not the current room', async () => {
@@ -172,18 +193,18 @@ describe('RoomViewStore', function() {
         };
         dis.dispatch({ action: 'reply_to_event', event: replyToEvent, context: TimelineRenderingType.Room });
         await untilDispatch(Action.ViewRoom, dis);
-        expect(RoomViewStore.instance.getQuotingEvent()).toEqual(replyToEvent);
-        expect(RoomViewStore.instance.getRoomId()).toEqual(roomId2);
+        expect(roomViewStore.getQuotingEvent()).toEqual(replyToEvent);
+        expect(roomViewStore.getRoomId()).toEqual(roomId2);
     });
 
     it('removes the roomId on ViewHomePage', async () => {
         dis.dispatch({ action: Action.ViewRoom, room_id: roomId });
         await untilDispatch(Action.ActiveRoomChanged, dis);
-        expect(RoomViewStore.instance.getRoomId()).toEqual(roomId);
+        expect(roomViewStore.getRoomId()).toEqual(roomId);
 
         dis.dispatch({ action: Action.ViewHomePage });
-        await untilEmission(RoomViewStore.instance, UPDATE_EVENT);
-        expect(RoomViewStore.instance.getRoomId()).toBeNull();
+        await untilEmission(roomViewStore, UPDATE_EVENT);
+        expect(roomViewStore.getRoomId()).toBeNull();
     });
 
     describe('Sliding Sync', function() {
@@ -191,23 +212,22 @@ describe('RoomViewStore', function() {
             jest.spyOn(SettingsStore, 'getValue').mockImplementation((settingName, roomId, value) => {
                 return settingName === "feature_sliding_sync"; // this is enabled, everything else is disabled.
             });
-            RoomViewStore.instance.reset();
         });
 
         it("subscribes to the room", async () => {
-            const setRoomVisible = jest.spyOn(SlidingSyncManager.instance, "setRoomVisible").mockReturnValue(
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(
                 Promise.resolve(""),
             );
             const subscribedRoomId = "!sub1:localhost";
             dis.dispatch({ action: Action.ViewRoom, room_id: subscribedRoomId });
             await untilDispatch(Action.ActiveRoomChanged, dis);
-            expect(RoomViewStore.instance.getRoomId()).toBe(subscribedRoomId);
+            expect(roomViewStore.getRoomId()).toBe(subscribedRoomId);
             expect(setRoomVisible).toHaveBeenCalledWith(subscribedRoomId, true);
         });
 
         // Regression test for an in-the-wild bug where rooms would rapidly switch forever in sliding sync mode
         it("doesn't get stuck in a loop if you view rooms quickly", async () => {
-            const setRoomVisible = jest.spyOn(SlidingSyncManager.instance, "setRoomVisible").mockReturnValue(
+            const setRoomVisible = jest.spyOn(slidingSyncManager, "setRoomVisible").mockReturnValue(
                 Promise.resolve(""),
             );
             const subscribedRoomId = "!sub1:localhost";
