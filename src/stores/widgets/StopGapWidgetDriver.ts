@@ -47,7 +47,7 @@ import Modal from "../../Modal";
 import WidgetOpenIDPermissionsDialog from "../../components/views/dialogs/WidgetOpenIDPermissionsDialog";
 import WidgetCapabilitiesPromptDialog from "../../components/views/dialogs/WidgetCapabilitiesPromptDialog";
 import { WidgetPermissionCustomisations } from "../../customisations/WidgetPermissions";
-import { OIDCState, WidgetPermissionStore } from "./WidgetPermissionStore";
+import { OIDCState } from "./WidgetPermissionStore";
 import { WidgetType } from "../../widgets/WidgetType";
 import { CHAT_EFFECTS } from "../../effects";
 import { containsEmoji } from "../../effects/utils";
@@ -350,7 +350,7 @@ export class StopGapWidgetDriver extends WidgetDriver {
     }
 
     public async askOpenID(observer: SimpleObservable<IOpenIDUpdate>) {
-        const oidcState = WidgetPermissionStore.instance.getOIDCState(
+        const oidcState = SdkContextClass.instance.widgetPermissionStore.getOIDCState(
             this.forWidget, this.forWidgetKind, this.inRoomId,
         );
 

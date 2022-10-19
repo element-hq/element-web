@@ -22,6 +22,7 @@ import RightPanelStore from "../src/stores/right-panel/RightPanelStore";
 import { RoomViewStore } from "../src/stores/RoomViewStore";
 import { SpaceStoreClass } from "../src/stores/spaces/SpaceStore";
 import { WidgetLayoutStore } from "../src/stores/widgets/WidgetLayoutStore";
+import { WidgetPermissionStore } from "../src/stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../src/stores/WidgetStore";
 
 /**
@@ -32,6 +33,7 @@ export class TestSdkContext extends SdkContextClass {
     public _RightPanelStore?: RightPanelStore;
     public _RoomNotificationStateStore?: RoomNotificationStateStore;
     public _RoomViewStore?: RoomViewStore;
+    public _WidgetPermissionStore?: WidgetPermissionStore;
     public _WidgetLayoutStore?: WidgetLayoutStore;
     public _WidgetStore?: WidgetStore;
     public _PosthogAnalytics?: PosthogAnalytics;

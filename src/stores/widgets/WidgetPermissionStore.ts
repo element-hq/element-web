@@ -17,8 +17,8 @@
 import { Widget, WidgetKind } from "matrix-widget-api";
 
 import SettingsStore from "../../settings/SettingsStore";
-import { MatrixClientPeg } from "../../MatrixClientPeg";
 import { SettingLevel } from "../../settings/SettingLevel";
+import { SdkContextClass } from "../../contexts/SDKContext";
 
 export enum OIDCState {
     Allowed, // user has set the remembered value as allowed
@@ -27,16 +27,7 @@ export enum OIDCState {
 }
 
 export class WidgetPermissionStore {
-    private static internalInstance: WidgetPermissionStore;
-
-    private constructor() {
-    }
-
-    public static get instance(): WidgetPermissionStore {
-        if (!WidgetPermissionStore.internalInstance) {
-            WidgetPermissionStore.internalInstance = new WidgetPermissionStore();
-        }
-        return WidgetPermissionStore.internalInstance;
+    public constructor(private readonly context: SdkContextClass) {
     }
 
     // TODO (all functions here): Merge widgetKind with the widget definition
@@ -44,7 +35,7 @@ export class WidgetPermissionStore {
     private packSettingKey(widget: Widget, kind: WidgetKind, roomId?: string): string {
         let location = roomId;
         if (kind !== WidgetKind.Room) {
-            location = MatrixClientPeg.get().getUserId();
+            location = this.context.client?.getUserId();
         }
         if (kind === WidgetKind.Modal) {
             location = '*MODAL*-' + location; // to guarantee differentiation from whatever spawned it
@@ -71,7 +62,10 @@ export class WidgetPermissionStore {
     public setOIDCState(widget: Widget, kind: WidgetKind, roomId: string, newState: OIDCState) {
         const settingsKey = this.packSettingKey(widget, kind, roomId);
 
-        const currentValues = SettingsStore.getValue("widgetOpenIDPermissions");
+        let currentValues = SettingsStore.getValue("widgetOpenIDPermissions");
+        if (!currentValues) {
+            currentValues = {};
+        }
         if (!currentValues.allow) currentValues.allow = [];
         if (!currentValues.deny) currentValues.deny = [];
 

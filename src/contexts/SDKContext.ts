@@ -27,6 +27,7 @@ import { RoomViewStore } from "../stores/RoomViewStore";
 import SpaceStore, { SpaceStoreClass } from "../stores/spaces/SpaceStore";
 import TypingStore from "../stores/TypingStore";
 import { WidgetLayoutStore } from "../stores/widgets/WidgetLayoutStore";
+import { WidgetPermissionStore } from "../stores/widgets/WidgetPermissionStore";
 import WidgetStore from "../stores/WidgetStore";
 
 export const SDKContext = createContext<SdkContextClass>(undefined);
@@ -51,6 +52,7 @@ export class SdkContextClass {
     public client?: MatrixClient;
 
     // All protected fields to make it easier to derive test stores
+    protected _WidgetPermissionStore?: WidgetPermissionStore;
     protected _RightPanelStore?: RightPanelStore;
     protected _RoomNotificationStateStore?: RoomNotificationStateStore;
     protected _RoomViewStore?: RoomViewStore;
@@ -101,6 +103,12 @@ export class SdkContextClass {
             this._WidgetLayoutStore = WidgetLayoutStore.instance;
         }
         return this._WidgetLayoutStore;
+    }
+    public get widgetPermissionStore(): WidgetPermissionStore {
+        if (!this._WidgetPermissionStore) {
+            this._WidgetPermissionStore = new WidgetPermissionStore(this);
+        }
+        return this._WidgetPermissionStore;
     }
     public get widgetStore(): WidgetStore {
         if (!this._WidgetStore) {
