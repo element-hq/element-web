@@ -85,7 +85,6 @@ interface IProps {
     relation?: IEventRelation;
     e2eStatus?: E2EStatus;
     compact?: boolean;
-    showVoiceBroadcastButton?: boolean;
 }
 
 interface IState {
@@ -384,10 +383,6 @@ export default class MessageComposer extends React.Component<IProps, IState> {
         return this.state.showStickersButton && !isLocalRoom(this.props.room);
     }
 
-    private get showVoiceBroadcastButton(): boolean {
-        return this.props.showVoiceBroadcastButton && this.state.showVoiceBroadcastButton;
-    }
-
     public render() {
         const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
         const controls = [
@@ -532,10 +527,10 @@ export default class MessageComposer extends React.Component<IProps, IState> {
                             showPollsButton={this.state.showPollsButton}
                             showStickersButton={this.showStickersButton}
                             toggleButtonMenu={this.toggleButtonMenu}
-                            showVoiceBroadcastButton={this.showVoiceBroadcastButton}
+                            showVoiceBroadcastButton={this.state.showVoiceBroadcastButton}
                             onStartVoiceBroadcastClick={() => {
                                 startNewVoiceBroadcastRecording(
-                                    this.props.room.roomId,
+                                    this.props.room,
                                     MatrixClientPeg.get(),
                                     VoiceBroadcastRecordingsStore.instance(),
                                 );

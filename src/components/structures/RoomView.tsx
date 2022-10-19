@@ -113,7 +113,6 @@ import { isLocalRoom } from '../../utils/localRoom/isLocalRoom';
 import { ShowThreadPayload } from "../../dispatcher/payloads/ShowThreadPayload";
 import { RoomStatusBarUnsentMessages } from './RoomStatusBarUnsentMessages';
 import { LargeLoader } from './LargeLoader';
-import { VoiceBroadcastInfoEventType } from '../../voice-broadcast';
 import { isVideoRoom } from '../../utils/video-rooms';
 import { SDKContext } from '../../contexts/SDKContext';
 import { CallStore, CallStoreEvent } from "../../stores/CallStore";
@@ -199,7 +198,6 @@ export interface IRoomState {
     upgradeRecommendation?: IRecommendedVersion;
     canReact: boolean;
     canSendMessages: boolean;
-    canSendVoiceBroadcasts: boolean;
     tombstone?: MatrixEvent;
     resizing: boolean;
     layout: Layout;
@@ -404,7 +402,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             statusBarVisible: false,
             canReact: false,
             canSendMessages: false,
-            canSendVoiceBroadcasts: false,
             resizing: false,
             layout: SettingsStore.getValue("layout"),
             lowBandwidth: SettingsStore.getValue("lowBandwidth"),
@@ -1377,12 +1374,10 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
             );
             const canSendMessages = room.maySendMessage();
             const canSelfRedact = room.currentState.maySendEvent(EventType.RoomRedaction, me);
-            const canSendVoiceBroadcasts = room.currentState.maySendEvent(VoiceBroadcastInfoEventType, me);
 
             this.setState({
                 canReact,
                 canSendMessages,
-                canSendVoiceBroadcasts,
                 canSelfRedact,
             });
         }
@@ -2253,7 +2248,6 @@ export class RoomView extends React.Component<IRoomProps, IRoomState> {
                     resizeNotifier={this.props.resizeNotifier}
                     replyToEvent={this.state.replyToEvent}
                     permalinkCreator={this.permalinkCreator}
-                    showVoiceBroadcastButton={this.state.canSendVoiceBroadcasts}
                 />;
         }
 

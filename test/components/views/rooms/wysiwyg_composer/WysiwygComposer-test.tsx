@@ -91,7 +91,6 @@ describe('WysiwygComposer', () => {
         statusBarVisible: false,
         canReact: false,
         canSendMessages: false,
-        canSendVoiceBroadcasts: false,
         layout: Layout.Group,
         lowBandwidth: false,
         alwaysShowTimestamps: false,
