@@ -44,18 +44,18 @@ export function EditWysiwygComposer({ editorStateTransfer, ...props }: EditWysiw
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || Boolean(initialContent);
 
-    const { editMessage, endEditing, setContent } = useEditing(initialContent, editorStateTransfer);
+    const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(initialContent, editorStateTransfer);
 
     return isReady && <WysiwygComposer
         initialContent={initialContent}
-        onChange={setContent}
+        onChange={onChange}
         onSend={editMessage}
         {...props}>
         { (ref, wysiwyg,
             content) => (
             <>
                 <Content disabled={props.disabled} ref={ref} />
-                <EditionButtons onCancelClick={endEditing} onSaveClick={editMessage} />
+                <EditionButtons onCancelClick={endEditing} onSaveClick={editMessage} isSaveDisabled={isSaveDisabled} />
             </>)
         }
     </WysiwygComposer>;

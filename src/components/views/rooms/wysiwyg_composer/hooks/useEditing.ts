@@ -26,13 +26,18 @@ export function useEditing(initialContent: string, editorStateTransfer: EditorSt
     const roomContext = useRoomContext();
     const mxClient = useMatrixClientContext();
 
+    const [isSaveDisabled, setIsSaveDisabled] = useState(true);
     const [content, setContent] = useState(initialContent);
+    const onChange = useCallback((_content: string) => {
+        setContent(_content);
+        setIsSaveDisabled(_isSaveDisabled => _isSaveDisabled && _content === initialContent);
+    }, [initialContent]);
+
     const editMessageMemoized = useCallback(() =>
         editMessage(content, { roomContext, mxClient, editorStateTransfer }),
     [content, roomContext, mxClient, editorStateTransfer],
     );
 
     const endEditingMemoized = useCallback(() => endEditing(roomContext), [roomContext]);
-
-    return { setContent, editMessage: editMessageMemoized, endEditing: endEditingMemoized };
+    return { onChange, editMessage: editMessageMemoized, endEditing: endEditingMemoized, isSaveDisabled };
 }

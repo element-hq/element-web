@@ -22,14 +22,15 @@ import AccessibleButton from '../../../elements/AccessibleButton';
 interface EditionButtonsProps {
     onCancelClick: MouseEventHandler<HTMLButtonElement>;
     onSaveClick: MouseEventHandler<HTMLButtonElement>;
+    isSaveDisabled?: boolean;
 }
 
-export function EditionButtons({ onCancelClick, onSaveClick }: EditionButtonsProps) {
+export function EditionButtons({ onCancelClick, onSaveClick, isSaveDisabled = false }: EditionButtonsProps) {
     return <div className="mx_EditMessageComposer_buttons">
         <AccessibleButton kind="secondary" onClick={onCancelClick}>
             { _t("Cancel") }
         </AccessibleButton>
-        <AccessibleButton kind="primary" disabled={false} onClick={onSaveClick}>
+        <AccessibleButton kind="primary" onClick={onSaveClick} disabled={isSaveDisabled}>
             { _t("Save") }
         </AccessibleButton>
     </div>;
