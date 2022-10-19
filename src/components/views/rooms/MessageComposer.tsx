@@ -316,9 +316,8 @@ class MessageComposer extends React.Component<IProps, IState> {
         }
 
         this.messageComposerInput.current?.sendMessage();
-        // this.composerSendMessage?.();
-        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
 
+        const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
         if (isWysiwygComposerEnabled) {
             const { permalinkCreator, relation, replyToEvent } = this.props;
             sendMessage(this.state.composerContent,

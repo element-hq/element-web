@@ -833,8 +833,6 @@ export default class BasicMessageEditor extends React.Component<IProps, IState> 
     }
 
     public insertPlaintext(text: string): void {
-        console.log('insertPlaintext', text);
-        debugger;
         this.modifiedFlag = true;
         const { model } = this.props;
         const { partCreator } = model;
