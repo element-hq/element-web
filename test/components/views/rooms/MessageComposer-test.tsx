@@ -39,7 +39,7 @@ import { SendMessageComposer } from "../../../../src/components/views/rooms/Send
 import { E2EStatus } from "../../../../src/utils/ShieldUtils";
 import { addTextToComposer } from "../../../test-utils/composer";
 import UIStore, { UI_EVENTS } from "../../../../src/stores/UIStore";
-import { WysiwygComposer } from "../../../../src/components/views/rooms/wysiwyg_composer/WysiwygComposer";
+import { WysiwygComposer } from "../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 
 // The wysiwyg fetch wasm bytes and a specific workaround is needed to make it works in a node (jest) environnement
 // See https://github.com/matrix-org/matrix-wysiwyg/blob/main/platforms/web/test.setup.ts

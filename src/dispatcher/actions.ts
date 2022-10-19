@@ -76,6 +76,11 @@ export enum Action {
     FocusSendMessageComposer = "focus_send_message_composer",
 
     /**
+     * Clear the  to the send message composer. Should be used with a FocusComposerPayload.
+     */
+     ClearAndFocusSendMessageComposer = "clear_focus_send_message_composer",
+
+    /**
      * Focuses the user's cursor to the edit message composer. Should be used with a FocusComposerPayload.
      */
     FocusEditMessageComposer = "focus_edit_message_composer",

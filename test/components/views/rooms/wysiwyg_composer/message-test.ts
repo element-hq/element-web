@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
-import { createMessageContent, sendMessage } from "../../../../../src/components/views/rooms/wysiwyg_composer/message";
+import { createMessageContent, sendMessage } from "../../../../../src/components/views/rooms/wysiwyg_composer/utils/message";
 import { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../../test-utils";

@@ -24,7 +24,7 @@ import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import { Layout } from "../../../../../src/settings/enums/Layout";
-import { WysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer/WysiwygComposer";
+import { WysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer/components/WysiwygComposer";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../../test-utils";
 
 // The wysiwyg fetch wasm bytes and a specific workaround is needed to make it works in a node (jest) environnement
