@@ -29,7 +29,7 @@ interface WysiwygComposerProps {
     children?: (
         ref: MutableRefObject<HTMLDivElement | null>,
         wysiwyg: FormattingFunctions,
-        content: string) => ReactNode;
+    ) => ReactNode;
 }
 
 export const WysiwygComposer = memo(function WysiwygComposer(
@@ -50,7 +50,7 @@ export const WysiwygComposer = memo(function WysiwygComposer(
         <div className="mx_WysiwygComposer">
             <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
             <Editor ref={ref} disabled={!isWysiwygReady || disabled} />
-            { children?.(ref, wysiwyg, content) }
+            { children?.(ref, wysiwyg) }
         </div>
     );
 });

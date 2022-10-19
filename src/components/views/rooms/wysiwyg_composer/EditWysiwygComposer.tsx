@@ -51,8 +51,7 @@ export function EditWysiwygComposer({ editorStateTransfer, ...props }: EditWysiw
         onChange={onChange}
         onSend={editMessage}
         {...props}>
-        { (ref, wysiwyg,
-            content) => (
+        { (ref) => (
             <>
                 <Content disabled={props.disabled} ref={ref} />
                 <EditionButtons onCancelClick={endEditing} onSaveClick={editMessage} isSaveDisabled={isSaveDisabled} />
