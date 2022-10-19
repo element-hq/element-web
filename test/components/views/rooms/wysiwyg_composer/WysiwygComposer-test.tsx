@@ -17,6 +17,7 @@ limitations under the License.
 import "@testing-library/jest-dom";
 import React from "react";
 import { act, render, screen, waitFor } from "@testing-library/react";
+import { InputEventProcessor, Wysiwyg, WysiwygProps } from "@matrix-org/matrix-wysiwyg";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
 import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
@@ -26,13 +27,31 @@ import { IRoomState } from "../../../../../src/components/structures/RoomView";
 import { Layout } from "../../../../../src/settings/enums/Layout";
 import { WysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer/WysiwygComposer";
 import { createTestClient, mkEvent, mkStubRoom } from "../../../../test-utils";
+import SettingsStore from "../../../../../src/settings/SettingsStore";
+
+// Work around missing ClipboardEvent type
+class MyClipbardEvent {}
+window.ClipboardEvent = MyClipbardEvent as any;
+
+let inputEventProcessor: InputEventProcessor | null = null;
 
 // The wysiwyg fetch wasm bytes and a specific workaround is needed to make it works in a node (jest) environnement
 // See https://github.com/matrix-org/matrix-wysiwyg/blob/main/platforms/web/test.setup.ts
 jest.mock("@matrix-org/matrix-wysiwyg", () => ({
-    useWysiwyg: () => {
-        return { ref: { current: null }, content: '<b>html</b>', isWysiwygReady: true, wysiwyg: { clear: () => void 0 },
-            formattingStates: { bold: 'enabled', italic: 'enabled', underline: 'enabled', strikeThrough: 'enabled' } };
+    useWysiwyg: (props: WysiwygProps) => {
+        inputEventProcessor = props.inputEventProcessor ?? null;
+        return {
+            ref: { current: null },
+            content: '<b>html</b>',
+            isWysiwygReady: true,
+            wysiwyg: { clear: () => void 0 },
+            formattingStates: {
+                bold: 'enabled',
+                italic: 'enabled',
+                underline: 'enabled',
+                strikeThrough: 'enabled',
+            },
+        };
     },
 }));
 
@@ -195,6 +214,63 @@ describe('WysiwygComposer', () => {
 
         // Then we don't get it because we are disabled
         expect(screen.getByRole('textbox')).not.toHaveFocus();
+    });
+
+    it('sends a message when Enter is pressed', async () => {
+        // Given a composer
+        customRender(() => {}, false);
+
+        // When we tell its inputEventProcesser that the user pressed Enter
+        const event = new InputEvent("insertParagraph", { inputType: "insertParagraph" });
+        const wysiwyg = { actions: { clear: () => {} } } as Wysiwyg;
+        inputEventProcessor(event, wysiwyg);
+
+        // Then it sends a message
+        expect(mockClient.sendMessage).toBeCalledWith(
+            "myfakeroom",
+            null,
+            {
+                "body": "<b>html</b>",
+                "format": "org.matrix.custom.html",
+                "formatted_body": "<b>html</b>",
+                "msgtype": "m.text",
+            },
+        );
+        // TODO: plain text body above is wrong - will be fixed when we provide markdown for it
+    });
+
+    describe('when settings require Ctrl+Enter to send', () => {
+        beforeEach(() => {
+            jest.spyOn(SettingsStore, "getValue").mockImplementation((name: string) => {
+                if (name === "MessageComposerInput.ctrlEnterToSend") return true;
+            });
+        });
+
+        it('does not send a message when Enter is pressed', async () => {
+            // Given a composer
+            customRender(() => {}, false);
+
+            // When we tell its inputEventProcesser that the user pressed Enter
+            const event = new InputEvent("input", { inputType: "insertParagraph" });
+            const wysiwyg = { actions: { clear: () => {} } } as Wysiwyg;
+            inputEventProcessor(event, wysiwyg);
+
+            // Then it does not send a message
+            expect(mockClient.sendMessage).toBeCalledTimes(0);
+        });
+
+        it('sends a message when Ctrl+Enter is pressed', async () => {
+            // Given a composer
+            customRender(() => {}, false);
+
+            // When we tell its inputEventProcesser that the user pressed Ctrl+Enter
+            const event = new InputEvent("input", { inputType: "sendMessage" });
+            const wysiwyg = { actions: { clear: () => {} } } as Wysiwyg;
+            inputEventProcessor(event, wysiwyg);
+
+            // Then it sends a message
+            expect(mockClient.sendMessage).toBeCalledTimes(1);
+        });
     });
 });
 
