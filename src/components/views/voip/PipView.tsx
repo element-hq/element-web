@@ -21,7 +21,6 @@ import classNames from 'classnames';
 import { Room } from "matrix-js-sdk/src/models/room";
 
 import LegacyCallView from "./LegacyCallView";
-import { RoomViewStore } from '../../../stores/RoomViewStore';
 import LegacyCallHandler, { LegacyCallHandlerEvent } from '../../../LegacyCallHandler';
 import PersistentApp from "../elements/PersistentApp";
 import { MatrixClientPeg } from '../../../MatrixClientPeg';
@@ -34,6 +33,7 @@ import ActiveWidgetStore, { ActiveWidgetStoreEvent } from '../../../stores/Activ
 import WidgetStore, { IApp } from "../../../stores/WidgetStore";
 import { ViewRoomPayload } from "../../../dispatcher/payloads/ViewRoomPayload";
 import { UPDATE_EVENT } from '../../../stores/AsyncStore';
+import { SdkContextClass } from '../../../contexts/SDKContext';
 import { CallStore } from "../../../stores/CallStore";
 import {
     VoiceBroadcastRecording,
@@ -129,7 +129,7 @@ class PipView extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
-        const roomId = RoomViewStore.instance.getRoomId();
+        const roomId = SdkContextClass.instance.roomViewStore.getRoomId();
 
         const [primaryCall, secondaryCalls] = getPrimarySecondaryCallsForPip(roomId);
 
@@ -147,7 +147,7 @@ class PipView extends React.Component<IProps, IState> {
     public componentDidMount() {
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallChangeRoom, this.updateCalls);
         LegacyCallHandler.instance.addListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
-        RoomViewStore.instance.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        SdkContextClass.instance.roomViewStore.addListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         MatrixClientPeg.get().on(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
         const room = MatrixClientPeg.get()?.getRoom(this.state.viewedRoomId);
         if (room) {
@@ -164,7 +164,7 @@ class PipView extends React.Component<IProps, IState> {
         LegacyCallHandler.instance.removeListener(LegacyCallHandlerEvent.CallState, this.updateCalls);
         const cli = MatrixClientPeg.get();
         cli?.removeListener(CallEvent.RemoteHoldUnhold, this.onCallRemoteHold);
-        RoomViewStore.instance.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
+        SdkContextClass.instance.roomViewStore.removeListener(UPDATE_EVENT, this.onRoomViewStoreUpdate);
         const room = cli?.getRoom(this.state.viewedRoomId);
         if (room) {
             WidgetLayoutStore.instance.off(WidgetLayoutStore.emissionForRoom(room), this.updateCalls);
@@ -186,7 +186,7 @@ class PipView extends React.Component<IProps, IState> {
     private onMove = () => this.movePersistedElement.current?.();
 
     private onRoomViewStoreUpdate = () => {
-        const newRoomId = RoomViewStore.instance.getRoomId();
+        const newRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
         const oldRoomId = this.state.viewedRoomId;
         if (newRoomId === oldRoomId) return;
         // The WidgetLayoutStore observer always tracks the currently viewed Room,

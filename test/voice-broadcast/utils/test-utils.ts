@@ -14,8 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
+import { MatrixEvent } from "matrix-js-sdk/src/matrix";
 
-// TODO
-// Change when the matrix-wysiwyg typescript definition will be refined
-export type Wysiwyg = ReturnType<typeof useWysiwyg>['wysiwyg'];
+import { VoiceBroadcastInfoEventType, VoiceBroadcastInfoState } from "../../../src/voice-broadcast";
+import { mkEvent } from "../../test-utils";
+
+export const mkVoiceBroadcastInfoStateEvent = (
+    roomId: string,
+    state: VoiceBroadcastInfoState,
+    sender: string,
+): MatrixEvent => {
+    return mkEvent({
+        event: true,
+        room: roomId,
+        user: sender,
+        type: VoiceBroadcastInfoEventType,
+        skey: sender,
+        content: {
+            state,
+        },
+    });
+};

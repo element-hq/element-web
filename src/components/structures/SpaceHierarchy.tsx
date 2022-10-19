@@ -60,13 +60,13 @@ import MatrixClientContext from "../../contexts/MatrixClientContext";
 import { useTypedEventEmitterState } from "../../hooks/useEventEmitter";
 import { IOOBData } from "../../stores/ThreepidInviteStore";
 import { awaitRoomDownSync } from "../../utils/RoomUpgrade";
-import { RoomViewStore } from "../../stores/RoomViewStore";
 import { ViewRoomPayload } from "../../dispatcher/payloads/ViewRoomPayload";
 import { JoinRoomReadyPayload } from "../../dispatcher/payloads/JoinRoomReadyPayload";
 import { KeyBindingAction } from "../../accessibility/KeyboardShortcuts";
 import { getKeyBindingsManager } from "../../KeyBindingsManager";
 import { Alignment } from "../views/elements/Tooltip";
 import { getTopic } from "../../hooks/room/useTopic";
+import { SdkContextClass } from "../../contexts/SDKContext";
 
 interface IProps {
     space: Room;
@@ -378,7 +378,7 @@ export const joinRoom = (cli: MatrixClient, hierarchy: RoomHierarchy, roomId: st
             metricsTrigger: "SpaceHierarchy",
         });
     }, err => {
-        RoomViewStore.instance.showJoinRoomError(err, roomId);
+        SdkContextClass.instance.roomViewStore.showJoinRoomError(err, roomId);
     });
 
     return prom;

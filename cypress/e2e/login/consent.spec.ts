@@ -46,7 +46,7 @@ describe("Consent", () => {
 
         // Accept terms & conditions
         cy.get(".mx_QuestionDialog").within(() => {
-            cy.get("#mx_BaseDialog_title").contains("Terms and Conditions");
+            cy.contains("#mx_BaseDialog_title", "Terms and Conditions");
             cy.get(".mx_Dialog_primary").click();
         });
 
@@ -58,7 +58,7 @@ describe("Consent", () => {
                 cy.visit(url);
 
                 cy.get('[type="submit"]').click();
-                cy.get("p").contains("Danke schon");
+                cy.contains("p", "Danke schon");
             });
         });
 

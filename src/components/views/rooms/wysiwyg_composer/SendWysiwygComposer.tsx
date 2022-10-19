@@ -15,32 +15,33 @@ limitations under the License.
 */
 
 import React, { forwardRef, RefObject } from 'react';
+import { FormattingFunctions } from '@matrix-org/matrix-wysiwyg';
 
 import { useWysiwygSendActionHandler } from './hooks/useWysiwygSendActionHandler';
 import { WysiwygComposer } from './components/WysiwygComposer';
-import { Wysiwyg } from './types';
 
 interface SendWysiwygComposerProps {
     disabled?: boolean;
     onChange?: (content: string) => void;
-}
-
-export function SendWysiwygComposer(props: SendWysiwygComposerProps) {
-    return (
-        <WysiwygComposer {...props}>{ (ref, wysiwyg) => (
-            <Content disabled={props.disabled} ref={ref} wysiwyg={wysiwyg} />
-        ) }
-        </WysiwygComposer>);
+    onSend(): () => void;
 }
 
 interface ContentProps {
     disabled: boolean;
-    wysiwyg: Wysiwyg;
+    formattingFunctions: FormattingFunctions;
 }
 
 const Content = forwardRef<HTMLElement, ContentProps>(
-    function Content({ disabled, wysiwyg }: ContentProps, forwardRef: RefObject<HTMLElement>) {
+    function Content({ disabled, formattingFunctions: wysiwyg }: ContentProps, forwardRef: RefObject<HTMLElement>) {
         useWysiwygSendActionHandler(disabled, forwardRef, wysiwyg);
         return null;
     },
 );
+
+export function SendWysiwygComposer(props: SendWysiwygComposerProps) {
+    return (
+        <WysiwygComposer {...props}>{ (ref, wysiwyg) => (
+            <Content disabled={props.disabled} ref={ref} formattingFunctions={wysiwyg} />
+        ) }
+        </WysiwygComposer>);
+}

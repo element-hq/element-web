@@ -62,7 +62,6 @@ import InfoDialog from "./components/views/dialogs/InfoDialog";
 import SlashCommandHelpDialog from "./components/views/dialogs/SlashCommandHelpDialog";
 import { shouldShowComponent } from "./customisations/helpers/UIComponents";
 import { TimelineRenderingType } from './contexts/RoomContext';
-import { RoomViewStore } from "./stores/RoomViewStore";
 import { XOR } from "./@types/common";
 import { PosthogAnalytics } from "./PosthogAnalytics";
 import { ViewRoomPayload } from "./dispatcher/payloads/ViewRoomPayload";
@@ -70,6 +69,7 @@ import VoipUserMapper from './VoipUserMapper';
 import { htmlSerializeFromMdIfNeeded } from './editor/serialize';
 import { leaveRoomBehaviour } from "./utils/leave-behaviour";
 import { isLocalRoom } from './utils/localRoom/isLocalRoom';
+import { SdkContextClass } from './contexts/SDKContext';
 
 // XXX: workaround for https://github.com/microsoft/TypeScript/issues/31816
 interface HTMLInputEvent extends Event {
@@ -209,7 +209,7 @@ function successSync(value: any) {
 
 const isCurrentLocalRoom = (): boolean => {
     const cli = MatrixClientPeg.get();
-    const room = cli.getRoom(RoomViewStore.instance.getRoomId());
+    const room = cli.getRoom(SdkContextClass.instance.roomViewStore.getRoomId());
     return isLocalRoom(room);
 };
 
@@ -868,7 +868,7 @@ export const Commands = [
         description: _td('Define the power level of a user'),
         isEnabled(): boolean {
             const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(RoomViewStore.instance.getRoomId());
+            const room = cli.getRoom(SdkContextClass.instance.roomViewStore.getRoomId());
             return room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId())
                 && !isLocalRoom(room);
         },
@@ -909,7 +909,7 @@ export const Commands = [
         description: _td('Deops user with given id'),
         isEnabled(): boolean {
             const cli = MatrixClientPeg.get();
-            const room = cli.getRoom(RoomViewStore.instance.getRoomId());
+            const room = cli.getRoom(SdkContextClass.instance.roomViewStore.getRoomId());
             return room?.currentState.maySendStateEvent(EventType.RoomPowerLevels, cli.getUserId())
                 && !isLocalRoom(room);
         },

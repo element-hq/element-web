@@ -2774,5 +2774,6 @@
     "Start messages with <code>/plain</code> to send without markdown and <code>/md</code> to send with.": "התחילו הודעות עם <code>/plain</code> לשליחה ללא סימון ו-<code>/md</code> לשליחה.",
     "Get notified only with mentions and keywords as set up in your <a>settings</a>": "קבלו התראה רק עם אזכורים ומילות מפתח כפי שהוגדרו ב<a>הגדרות</a> שלכם",
     "New keyword": "מילת מפתח חדשה",
-    "Keyword": "מילת מפתח"
+    "Keyword": "מילת מפתח",
+    "Empty room": "חדר ריק"
 }

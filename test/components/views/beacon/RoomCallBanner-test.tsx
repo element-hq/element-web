@@ -42,8 +42,8 @@ import RoomCallBanner from "../../../../src/components/views/beacon/RoomCallBann
 import { CallStore } from "../../../../src/stores/CallStore";
 import { WidgetMessagingStore } from "../../../../src/stores/widgets/WidgetMessagingStore";
 import { MatrixClientPeg } from "../../../../src/MatrixClientPeg";
-import { RoomViewStore } from "../../../../src/stores/RoomViewStore";
 import { ConnectionState } from "../../../../src/models/Call";
+import { SdkContextClass } from "../../../../src/contexts/SDKContext";
 
 describe("<RoomCallBanner />", () => {
     let client: Mocked<MatrixClient>;
@@ -132,7 +132,8 @@ describe("<RoomCallBanner />", () => {
         });
 
         it("doesn't show banner if the call is shown", async () => {
-            jest.spyOn(RoomViewStore.instance, 'isViewingCall').mockReturnValue(true);
+            jest.spyOn(SdkContextClass.instance.roomViewStore, "isViewingCall");
+            mocked(SdkContextClass.instance.roomViewStore.isViewingCall).mockReturnValue(true);
             await renderBanner();
             const banner = await screen.queryByText("Video call");
             expect(banner).toBeFalsy();

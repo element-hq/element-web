@@ -153,7 +153,7 @@ Cypress.Commands.add("openRoomSettings", (tab?: string): Chainable<JQuery<HTMLEl
 
 Cypress.Commands.add("switchTab", (tab: string): Chainable<JQuery<HTMLElement>> => {
     return cy.get(".mx_TabbedView_tabLabels").within(() => {
-        cy.get(".mx_TabbedView_tabLabel").contains(tab).click();
+        cy.contains(".mx_TabbedView_tabLabel", tab).click();
     });
 });
 
@@ -162,13 +162,13 @@ Cypress.Commands.add("closeDialog", (): Chainable<JQuery<HTMLElement>> => {
 });
 
 Cypress.Commands.add("joinBeta", (name: string): Chainable<JQuery<HTMLElement>> => {
-    return cy.get(".mx_BetaCard_title").contains(name).closest(".mx_BetaCard").within(() => {
+    return cy.contains(".mx_BetaCard_title", name).closest(".mx_BetaCard").within(() => {
         return cy.get(".mx_BetaCard_buttons").contains("Join the beta").click();
     });
 });
 
 Cypress.Commands.add("leaveBeta", (name: string): Chainable<JQuery<HTMLElement>> => {
-    return cy.get(".mx_BetaCard_title").contains(name).closest(".mx_BetaCard").within(() => {
+    return cy.contains(".mx_BetaCard_title", name).closest(".mx_BetaCard").within(() => {
         return cy.get(".mx_BetaCard_buttons").contains("Leave the beta").click();
     });
 });

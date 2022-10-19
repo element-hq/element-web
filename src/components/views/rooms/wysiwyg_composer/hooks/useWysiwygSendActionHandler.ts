@@ -15,19 +15,19 @@ limitations under the License.
 */
 
 import { RefObject, useCallback, useRef } from "react";
+import { FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 
 import defaultDispatcher from "../../../../../dispatcher/dispatcher";
 import { Action } from "../../../../../dispatcher/actions";
 import { ActionPayload } from "../../../../../dispatcher/payloads";
 import { TimelineRenderingType, useRoomContext } from "../../../../../contexts/RoomContext";
 import { useDispatcher } from "../../../../../hooks/useDispatcher";
-import { Wysiwyg } from "../types";
 import { focusComposer } from "./utils";
 
 export function useWysiwygSendActionHandler(
     disabled: boolean,
     composerElement: RefObject<HTMLElement>,
-    wysiwyg: Wysiwyg,
+    wysiwyg: FormattingFunctions,
 ) {
     const roomContext = useRoomContext();
     const timeoutId = useRef<number>();

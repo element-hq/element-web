@@ -86,7 +86,6 @@ interface IProps extends MatrixClientProps {
     relation?: IEventRelation;
     e2eStatus?: E2EStatus;
     compact?: boolean;
-    showVoiceBroadcastButton?: boolean;
 }
 
 interface IState {
@@ -395,10 +394,6 @@ class MessageComposer extends React.Component<IProps, IState> {
         return this.state.showStickersButton && !isLocalRoom(this.props.room);
     }
 
-    private get showVoiceBroadcastButton(): boolean {
-        return this.props.showVoiceBroadcastButton && this.state.showVoiceBroadcastButton;
-    }
-
     public render() {
         const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
         const controls = [
@@ -420,6 +415,7 @@ class MessageComposer extends React.Component<IProps, IState> {
                     <SendWysiwygComposer key="controls_input"
                         disabled={this.state.haveRecording}
                         onChange={this.onWysiwygChange}
+                        onSend={() => this.sendMessage}
                     />,
                 );
             } else {
@@ -537,10 +533,10 @@ class MessageComposer extends React.Component<IProps, IState> {
                             showPollsButton={this.state.showPollsButton}
                             showStickersButton={this.showStickersButton}
                             toggleButtonMenu={this.toggleButtonMenu}
-                            showVoiceBroadcastButton={this.showVoiceBroadcastButton}
+                            showVoiceBroadcastButton={this.state.showVoiceBroadcastButton}
                             onStartVoiceBroadcastClick={() => {
                                 startNewVoiceBroadcastRecording(
-                                    this.props.room.roomId,
+                                    this.props.room,
                                     MatrixClientPeg.get(),
                                     VoiceBroadcastRecordingsStore.instance(),
                                 );

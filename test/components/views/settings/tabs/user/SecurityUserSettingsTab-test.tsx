@@ -17,6 +17,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 
 import SecurityUserSettingsTab from "../../../../../../src/components/views/settings/tabs/user/SecurityUserSettingsTab";
+import MatrixClientContext from '../../../../../../src/contexts/MatrixClientContext';
 import SettingsStore from '../../../../../../src/settings/SettingsStore';
 import {
     getMockClientWithEventEmitter,
@@ -31,11 +32,10 @@ describe('<SecurityUserSettingsTab />', () => {
     const defaultProps = {
         closeSettingsFn: jest.fn(),
     };
-    const getComponent = () => <SecurityUserSettingsTab {...defaultProps} />;
 
     const userId = '@alice:server.org';
     const deviceId = 'alices-device';
-    getMockClientWithEventEmitter({
+    const mockClient = getMockClientWithEventEmitter({
         ...mockClientMethodsUser(userId),
         ...mockClientMethodsServer(),
         ...mockClientMethodsDevice(deviceId),
@@ -43,6 +43,11 @@ describe('<SecurityUserSettingsTab />', () => {
         getRooms: jest.fn().mockReturnValue([]),
         getIgnoredUsers: jest.fn(),
     });
+
+    const getComponent = () =>
+        <MatrixClientContext.Provider value={mockClient}>
+            <SecurityUserSettingsTab {...defaultProps} />
+        </MatrixClientContext.Provider>;
 
     const settingsValueSpy = jest.spyOn(SettingsStore, 'getValue');
 

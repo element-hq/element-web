@@ -34,7 +34,7 @@ import {
 import { ActionPayload } from "../../dispatcher/payloads";
 import { Action } from "../../dispatcher/actions";
 import { ActiveRoomChangedPayload } from "../../dispatcher/payloads/ActiveRoomChangedPayload";
-import { RoomViewStore } from "../RoomViewStore";
+import { SdkContextClass } from "../../contexts/SDKContext";
 
 /**
  * A class for tracking the state of the right panel between layouts and
@@ -64,7 +64,7 @@ export default class RightPanelStore extends ReadyWatchingStore {
     }
 
     protected async onReady(): Promise<any> {
-        this.viewedRoomId = RoomViewStore.instance.getRoomId();
+        this.viewedRoomId = SdkContextClass.instance.roomViewStore.getRoomId();
         this.matrixClient.on(CryptoEvent.VerificationRequest, this.onVerificationRequestUpdate);
         this.loadCacheFromSettings();
         this.emitAndUpdateSettings();

@@ -426,7 +426,7 @@ export async function restoreFromLocalStorage(opts?: { ignoreGuest?: boolean }):
     const { hsUrl, isUrl, hasAccessToken, accessToken, userId, deviceId, isGuest } = await getStoredSessionVars();
 
     if (hasAccessToken && !accessToken) {
-        abortLogin();
+        await abortLogin();
     }
 
     if (accessToken && userId && hsUrl) {

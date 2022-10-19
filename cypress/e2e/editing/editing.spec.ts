@@ -62,7 +62,7 @@ describe("Editing", () => {
             cy.get(".mx_BasicMessageComposer_input").type("Foo{backspace}{backspace}{backspace}{enter}");
             cy.checkA11y();
         });
-        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Message");
+        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Message");
 
         // Assert that the edit composer has gone away
         cy.get(".mx_EditMessageComposer").should("not.exist");

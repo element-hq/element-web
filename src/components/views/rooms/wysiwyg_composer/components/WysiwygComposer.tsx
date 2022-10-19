@@ -14,24 +14,31 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { MutableRefObject, ReactNode, useEffect } from 'react';
-import { useWysiwyg } from "@matrix-org/matrix-wysiwyg";
+import React, { memo, MutableRefObject, ReactNode, useEffect } from 'react';
+import { useWysiwyg, FormattingFunctions } from "@matrix-org/matrix-wysiwyg";
 
 import { FormattingButtons } from './FormattingButtons';
 import { Editor } from './Editor';
-import { Wysiwyg } from '../types';
+import { useInputEventProcessor } from '../hooks/useInputEventProcessor';
 
 interface WysiwygComposerProps {
     disabled?: boolean;
     onChange?: (content: string) => void;
+    onSend: () => void;
     initialContent?: string;
-    children?: (ref: MutableRefObject<HTMLDivElement | null>, wysiwyg: Wysiwyg, content: string) => ReactNode;
+    children?: (
+        ref: MutableRefObject<HTMLDivElement | null>,
+        wysiwyg: FormattingFunctions,
+        content: string) => ReactNode;
 }
 
-export function WysiwygComposer(
-    { disabled = false, onChange, initialContent, children }: WysiwygComposerProps,
+export const WysiwygComposer = memo(function WysiwygComposer(
+    { disabled = false, onChange, onSend, initialContent, children }: WysiwygComposerProps,
 ) {
-    const { ref, isWysiwygReady, content, formattingStates, wysiwyg } = useWysiwyg({ initialContent });
+    const inputEventProcessor = useInputEventProcessor(onSend);
+
+    const { ref, isWysiwygReady, content, formattingStates, wysiwyg } =
+        useWysiwyg({ initialContent, inputEventProcessor });
 
     useEffect(() => {
         if (!disabled && content !== null) {
@@ -46,4 +53,4 @@ export function WysiwygComposer(
             { children?.(ref, wysiwyg, content) }
         </div>
     );
-}
+});

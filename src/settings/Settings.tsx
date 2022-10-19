@@ -494,6 +494,16 @@ export const SETTINGS: {[setting: string]: ISetting} = {
             </>,
         },
     },
+    "feature_qr_signin_reciprocate_show": {
+        isFeature: true,
+        labsGroup: LabGroup.Experimental,
+        supportedLevels: LEVELS_FEATURE,
+        displayName: _td(
+            "Allow a QR code to be shown in session manager to sign in another device " +
+            "(requires compatible homeserver)",
+        ),
+        default: false,
+    },
     "baseFontSize": {
         displayName: _td("Font size"),
         supportedLevels: LEVELS_ACCOUNT_SETTINGS,

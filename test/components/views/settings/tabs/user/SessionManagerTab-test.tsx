@@ -92,6 +92,7 @@ describe('<SessionManagerTab />', () => {
         getPushers: jest.fn(),
         setPusher: jest.fn(),
         setLocalNotificationSettings: jest.fn(),
+        getVersions: jest.fn().mockResolvedValue({}),
     });
 
     const defaultProps = {};

@@ -179,6 +179,7 @@ const EmojiButton: React.FC<IEmojiButtonProps> = ({ addEmoji, menuPosition }) =>
             iconClassName="mx_MessageComposer_emoji"
             onClick={openMenu}
             title={_t("Emoji")}
+            inputRef={button}
         />
 
         { contextMenu }

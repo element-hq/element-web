@@ -53,6 +53,7 @@ describe("Threads", () => {
             cy.window().should("have.prop", "beforeReload", true);
 
             cy.leaveBeta("Threads");
+            cy.wait(1000);
             // after reload the property should be gone
             cy.window().should("not.have.prop", "beforeReload");
         });
@@ -66,6 +67,7 @@ describe("Threads", () => {
             cy.window().should("have.prop", "beforeReload", true);
 
             cy.joinBeta("Threads");
+            cy.wait(1000);
             // after reload the property should be gone
             cy.window().should("not.have.prop", "beforeReload");
         });
@@ -92,7 +94,7 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
 
         // Wait for message to send, get its ID and save as @threadId
-        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
             .invoke("attr", "data-scroll-tokens").as("threadId");
 
         // Bot starts thread
@@ -116,21 +118,21 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should("contain", "Test");
 
         // User reacts to message instead
-        cy.get(".mx_ThreadView .mx_EventTile").contains(".mx_EventTile_line", "Hello there")
+        cy.contains(".mx_ThreadView .mx_EventTile .mx_EventTile_line", "Hello there")
             .find('[aria-label="React"]').click({ force: true }); // Cypress has no ability to hover
         cy.get(".mx_EmojiPicker").within(() => {
             cy.get('input[type="text"]').type("wave");
-            cy.get('[role="menuitem"]').contains("👋").click();
+            cy.contains('[role="menuitem"]', "👋").click();
         });
 
         // User redacts their prior response
-        cy.get(".mx_ThreadView .mx_EventTile").contains(".mx_EventTile_line", "Test")
+        cy.contains(".mx_ThreadView .mx_EventTile .mx_EventTile_line", "Test")
             .find('[aria-label="Options"]').click({ force: true }); // Cypress has no ability to hover
         cy.get(".mx_IconizedContextMenu").within(() => {
-            cy.get('[role="menuitem"]').contains("Remove").click();
+            cy.contains('[role="menuitem"]', "Remove").click();
         });
         cy.get(".mx_TextInputDialog").within(() => {
-            cy.get(".mx_Dialog_primary").contains("Remove").click();
+            cy.contains(".mx_Dialog_primary", "Remove").click();
         });
 
         // User asserts summary was updated correctly
@@ -171,7 +173,7 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_ThreadSummary .mx_ThreadSummary_content").should("contain", "Great!");
 
         // User edits & asserts
-        cy.get(".mx_ThreadView .mx_EventTile_last").contains(".mx_EventTile_line", "Great!").within(() => {
+        cy.contains(".mx_ThreadView .mx_EventTile_last .mx_EventTile_line", "Great!").within(() => {
             cy.get('[aria-label="Edit"]').click({ force: true }); // Cypress has no ability to hover
             cy.get(".mx_BasicMessageComposer_input").type(" How about yourself?{enter}");
         });
@@ -234,7 +236,7 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
 
         // Create thread
-        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
             .realHover().find(".mx_MessageActionBar_threadButton").click();
         cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
 
@@ -256,7 +258,7 @@ describe("Threads", () => {
         cy.get(".mx_RoomView_body .mx_BasicMessageComposer_input").type("Hello Mr. Bot{enter}");
 
         // Create thread
-        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
             .realHover().find(".mx_MessageActionBar_threadButton").click();
         cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
 
@@ -268,7 +270,7 @@ describe("Threads", () => {
         cy.get(".mx_BaseCard_close").click();
 
         // Open existing thread
-        cy.get(".mx_RoomView_body .mx_EventTile").contains(".mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
+        cy.contains(".mx_RoomView_body .mx_EventTile[data-scroll-tokens]", "Hello Mr. Bot")
             .realHover().find(".mx_MessageActionBar_threadButton").click();
         cy.get(".mx_ThreadView_timelinePanelWrapper").should("have.length", 1);
         cy.get(".mx_BaseCard .mx_EventTile").should("contain", "Hello Mr. Bot");
