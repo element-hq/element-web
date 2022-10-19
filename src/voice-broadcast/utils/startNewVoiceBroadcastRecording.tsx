@@ -113,6 +113,11 @@ export const startNewVoiceBroadcastRecording = async (
     client: MatrixClient,
     recordingsStore: VoiceBroadcastRecordingsStore,
 ): Promise<VoiceBroadcastRecording | null> => {
+    if (recordingsStore.getCurrent()) {
+        showAlreadyRecordingDialog();
+        return null;
+    }
+
     const currentUserId = client.getUserId();
 
     if (!room.currentState.maySendStateEvent(VoiceBroadcastInfoEventType, currentUserId)) {
