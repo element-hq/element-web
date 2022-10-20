@@ -16,25 +16,24 @@ limitations under the License.
 
 import React from "react";
 
-import { Icon, IconColour, IconType } from "../../../components/atoms/Icon";
 import AccessibleButton from "../../../components/views/elements/AccessibleButton";
-import { _t } from "../../../languageHandler";
 
 interface Props {
+    icon: React.FC<React.SVGProps<SVGSVGElement>>;
+    label: string;
     onClick: () => void;
 }
 
-export const StopButton: React.FC<Props> = ({
+export const VoiceBroadcastControl: React.FC<Props> = ({
+    icon: Icon,
+    label,
     onClick,
 }) => {
     return <AccessibleButton
-        className="mx_BroadcastPlaybackControlButton"
+        className="mx_VoiceBroadcastControl"
         onClick={onClick}
-        aria-label={_t("stop voice broadcast")}
+        aria-label={label}
     >
-        <Icon
-            colour={IconColour.CompoundSecondaryContent}
-            type={IconType.Stop}
-        />
+        <Icon className="mx_Icon mx_Icon_16" />
     </AccessibleButton>;
 };

@@ -15,7 +15,8 @@ import React from "react";
 import { Room, RoomMember } from "matrix-js-sdk/src/matrix";
 
 import { LiveBadge } from "../..";
-import { Icon, IconColour, IconType } from "../../../components/atoms/Icon";
+import { Icon as LiveIcon } from "../../../../res/img/element-icons/live.svg";
+import { Icon as MicrophoneIcon } from "../../../../res/img/voip/call-view/mic-on.svg";
 import { _t } from "../../../languageHandler";
 import RoomAvatar from "../../../components/views/avatars/RoomAvatar";
 
@@ -34,7 +35,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
 }) => {
     const broadcast = showBroadcast
         ? <div className="mx_VoiceBroadcastHeader_line">
-            <Icon type={IconType.Live} colour={IconColour.CompoundSecondaryContent} />
+            <LiveIcon className="mx_Icon mx_Icon_16" />
             { _t("Voice broadcast") }
         </div>
         : null;
@@ -46,7 +47,7 @@ export const VoiceBroadcastHeader: React.FC<VoiceBroadcastHeaderProps> = ({
                 { room.name }
             </div>
             <div className="mx_VoiceBroadcastHeader_line">
-                <Icon type={IconType.Microphone} colour={IconColour.CompoundSecondaryContent} />
+                <MicrophoneIcon className="mx_Icon mx_Icon_16" />
                 <span>{ sender.name }</span>
             </div>
             { broadcast }

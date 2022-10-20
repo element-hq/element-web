@@ -64,9 +64,6 @@ describe("VoiceBroadcastPlaybackBody", () => {
     describe("when rendering a buffering voice broadcast", () => {
         beforeEach(() => {
             mocked(playback.getState).mockReturnValue(VoiceBroadcastPlaybackState.Buffering);
-        });
-
-        beforeEach(() => {
             renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
         });
 
@@ -75,23 +72,34 @@ describe("VoiceBroadcastPlaybackBody", () => {
         });
     });
 
-    describe("when rendering a broadcast", () => {
+    describe(`when rendering a ${VoiceBroadcastPlaybackState.Stopped} broadcast`, () => {
         beforeEach(() => {
+            mocked(playback.getState).mockReturnValue(VoiceBroadcastPlaybackState.Stopped);
             renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
-        });
-
-        it("should render as expected", () => {
-            expect(renderResult.container).toMatchSnapshot();
         });
 
         describe("and clicking the play button", () => {
             beforeEach(async () => {
-                await userEvent.click(renderResult.getByLabelText("resume voice broadcast"));
+                await userEvent.click(renderResult.getByLabelText("play voice broadcast"));
             });
 
             it("should toggle the recording", () => {
                 expect(playback.toggle).toHaveBeenCalled();
             });
+        });
+    });
+
+    describe.each([
+        VoiceBroadcastPlaybackState.Paused,
+        VoiceBroadcastPlaybackState.Playing,
+    ])("when rendering a %s broadcast", (playbackState: VoiceBroadcastPlaybackState) => {
+        beforeEach(() => {
+            mocked(playback.getState).mockReturnValue(playbackState);
+            renderResult = render(<VoiceBroadcastPlaybackBody playback={playback} />);
+        });
+
+        it("should render as expected", () => {
+            expect(renderResult.container).toMatchSnapshot();
         });
     });
 });

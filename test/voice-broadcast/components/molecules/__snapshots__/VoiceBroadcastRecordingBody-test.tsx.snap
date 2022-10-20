@@ -25,11 +25,8 @@ exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should rend
         <div
           class="mx_VoiceBroadcastHeader_line"
         >
-          <i
-            aria-hidden="true"
-            class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
-            role="presentation"
-            style="mask-image: url(\\"image-file-stub\\");"
+          <div
+            class="mx_Icon mx_Icon_16"
           />
           <span>
             @user:example.com
@@ -39,11 +36,8 @@ exports[`VoiceBroadcastRecordingBody when rendering a live broadcast should rend
       <div
         class="mx_LiveBadge"
       >
-        <i
-          aria-hidden="true"
-          class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
-          role="presentation"
-          style="mask-image: url(\\"image-file-stub\\");"
+        <div
+          class="mx_Icon mx_Icon_16"
         />
         Live
       </div>

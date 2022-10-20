@@ -25,11 +25,8 @@ exports[`VoiceBroadcastRecordingPip when rendering should create the expected re
         <div
           class="mx_VoiceBroadcastHeader_line"
         >
-          <i
-            aria-hidden="true"
-            class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
-            role="presentation"
-            style="mask-image: url(\\"image-file-stub\\");"
+          <div
+            class="mx_Icon mx_Icon_16"
           />
           <span>
             @user:example.com
@@ -39,11 +36,8 @@ exports[`VoiceBroadcastRecordingPip when rendering should create the expected re
       <div
         class="mx_LiveBadge"
       >
-        <i
-          aria-hidden="true"
-          class="mx_Icon mx_Icon_16 mx_Icon_live-badge"
-          role="presentation"
-          style="mask-image: url(\\"image-file-stub\\");"
+        <div
+          class="mx_Icon mx_Icon_16"
         />
         Live
       </div>
@@ -55,16 +49,13 @@ exports[`VoiceBroadcastRecordingPip when rendering should create the expected re
       class="mx_VoiceBroadcastRecordingPip_controls"
     >
       <div
-        aria-label="stop voice broadcast"
-        class="mx_AccessibleButton mx_BroadcastPlaybackControlButton"
+        aria-label="Stop Recording"
+        class="mx_AccessibleButton mx_VoiceBroadcastControl"
         role="button"
         tabindex="0"
       >
-        <i
-          aria-hidden="true"
-          class="mx_Icon mx_Icon_16 mx_Icon_compound-secondary-content"
-          role="presentation"
-          style="mask-image: url(\\"image-file-stub\\");"
+        <div
+          class="mx_Icon mx_Icon_16"
         />
       </div>
     </div>

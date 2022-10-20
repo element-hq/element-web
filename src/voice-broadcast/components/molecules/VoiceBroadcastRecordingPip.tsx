@@ -17,11 +17,12 @@ limitations under the License.
 import React from "react";
 
 import {
-    StopButton,
+    VoiceBroadcastControl,
     VoiceBroadcastRecording,
 } from "../..";
 import { useVoiceBroadcastRecording } from "../../hooks/useVoiceBroadcastRecording";
 import { VoiceBroadcastHeader } from "../atoms/VoiceBroadcastHeader";
+import { Icon as StopIcon } from "../../../../res/img/element-icons/Stop.svg";
 
 interface VoiceBroadcastRecordingPipProps {
     recording: VoiceBroadcastRecording;
@@ -45,7 +46,11 @@ export const VoiceBroadcastRecordingPip: React.FC<VoiceBroadcastRecordingPipProp
         />
         <hr className="mx_VoiceBroadcastRecordingPip_divider" />
         <div className="mx_VoiceBroadcastRecordingPip_controls">
-            <StopButton onClick={stopRecording} />
+            <VoiceBroadcastControl
+                icon={StopIcon}
+                label="Stop Recording"
+                onClick={stopRecording}
+            />
         </div>
     </div>;
 };

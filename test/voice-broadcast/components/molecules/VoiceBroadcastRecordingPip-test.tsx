@@ -69,7 +69,7 @@ describe("VoiceBroadcastRecordingPip", () => {
 
         describe("and clicking the stop button", () => {
             beforeEach(async () => {
-                await userEvent.click(screen.getByLabelText("stop voice broadcast"));
+                await userEvent.click(screen.getByLabelText("Stop Recording"));
                 // modal rendering has some weird sleeps
                 await sleep(100);
             });
