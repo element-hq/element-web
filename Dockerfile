@@ -1,5 +1,5 @@
 # Builder
-FROM node:14-buster as builder
+FROM node:16-buster as builder
 
 # Support custom branches of the react-sdk and js-sdk. This also helps us build
 # images of element-web develop.
@@ -26,9 +26,6 @@ RUN cp /src/config.sample.json /src/webapp/config.json
 FROM nginx:alpine
 
 COPY --from=builder /src/webapp /app
-
-# Insert wasm type into Nginx mime.types file so they load correctly.
-RUN sed -i '3i\ \ \ \ application/wasm wasm\;' /etc/nginx/mime.types
 
 # Override default nginx config
 COPY /nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf

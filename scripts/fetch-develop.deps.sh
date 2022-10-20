@@ -6,7 +6,7 @@
 # the branch the current checkout is on, use that branch. Otherwise,
 # use develop.
 
-set -ex
+set -x
 
 GIT_CLONE_ARGS=("$@")
 [ -z "$defbranch" ] && defbranch="develop"

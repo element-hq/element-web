@@ -2,7 +2,7 @@
 Copyright 2015, 2016 OpenMarket Ltd
 Copyright 2017 Vector Creations Ltd
 Copyright 2019 Michael Telatynski <7t3chguy@gmail.com>
-Copyright 2018 - 2021 New Vector Ltd
+Copyright 2018 - 2022 New Vector Ltd
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -29,11 +29,15 @@ import PlatformPeg from "matrix-react-sdk/src/PlatformPeg";
 import SdkConfig from "matrix-react-sdk/src/SdkConfig";
 import { setTheme } from "matrix-react-sdk/src/theme";
 import { logger } from "matrix-js-sdk/src/logger";
+import { ModuleRunner } from "matrix-react-sdk/src/modules/ModuleRunner";
 
 import ElectronPlatform from "./platform/ElectronPlatform";
 import PWAPlatform from "./platform/PWAPlatform";
 import WebPlatform from "./platform/WebPlatform";
 import { initRageshake, initRageshakeStore } from "./rageshakesetup";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - this path is created at runtime and therefore won't exist at typecheck time
+import { INSTALLED_MODULES } from "../modules";
 
 export const rageshakePromise = initRageshake();
 
@@ -88,8 +92,8 @@ export function loadOlm(): Promise<void> {
         locateFile: () => olmWasmPath,
     }).then(() => {
         logger.log("Using WebAssembly Olm");
-    }).catch((e) => {
-        logger.log("Failed to load Olm: trying legacy version", e);
+    }).catch((wasmLoadError) => {
+        logger.log("Failed to load Olm: trying legacy version", wasmLoadError);
         return new Promise((resolve, reject) => {
             const s = document.createElement('script');
             s.src = 'olm_legacy.js'; // XXX: This should be cache-busted too
@@ -102,8 +106,8 @@ export function loadOlm(): Promise<void> {
             return window.Olm.init();
         }).then(() => {
             logger.log("Using legacy Olm");
-        }).catch((e) => {
-            logger.log("Both WebAssembly and asm.js Olm failed!", e);
+        }).catch((legacyLoadError) => {
+            logger.log("Both WebAssembly and asm.js Olm failed!", legacyLoadError);
         });
     });
 }
@@ -155,6 +159,14 @@ export async function showIncompatibleBrowser(onAccept) {
         "../async-components/structures/CompatibilityView")).default;
     window.matrixChat = ReactDOM.render(<CompatibilityView onAccept={onAccept} />,
         document.getElementById('matrixchat'));
+}
+
+export async function loadModules() {
+    for (const InstalledModule of INSTALLED_MODULES) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore - we know the constructor exists even if TypeScript can't be convinced of that
+        ModuleRunner.instance.registerModule((api) => new InstalledModule(api));
+    }
 }
 
 export const _t = languageHandler._t;

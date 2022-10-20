@@ -117,6 +117,13 @@ add_header X-Content-Type-Options nosniff;
 add_header X-XSS-Protection "1; mode=block";
 add_header Content-Security-Policy "frame-ancestors 'none'";
 ```
+For Apache, the configuration looks like:
+```
+Header set X-Frame-Options SAMEORIGIN
+Header set X-Content-Type-Options nosniff
+Header set X-XSS-Protection "1; mode=block"
+Header set Content-Security-Policy "frame-ancestors 'none'"
+```
 
 Note: In case you are already setting a `Content-Security-Policy` header
 elsewhere, you should modify it to include the `frame-ancestors` directive

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import React, { CSSProperties } from 'react';
+import * as React from 'react';
 import SdkConfig from 'matrix-react-sdk/src/SdkConfig';
 
 import VectorAuthFooter from "./VectorAuthFooter";
@@ -47,12 +47,12 @@ export default class VectorAuthPage extends React.PureComponent {
             background: `center/cover fixed url(${VectorAuthPage.getWelcomeBackgroundUrl()})`,
         };
 
-        const modalStyle: CSSProperties = {
+        const modalStyle: React.CSSProperties = {
             position: 'relative',
             background: 'initial',
         };
 
-        const blurStyle: CSSProperties = {
+        const blurStyle: React.CSSProperties = {
             position: 'absolute',
             top: 0,
             right: 0,
@@ -62,7 +62,7 @@ export default class VectorAuthPage extends React.PureComponent {
             background: pageStyle.background,
         };
 
-        const modalContentStyle: CSSProperties = {
+        const modalContentStyle: React.CSSProperties = {
             display: 'flex',
             zIndex: 1,
             background: 'rgba(255, 255, 255, 0.59)',

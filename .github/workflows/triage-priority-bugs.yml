@@ -23,7 +23,7 @@ jobs:
        contains(github.event.issue.labels.*.name, 'A11y') &&
        contains(github.event.issue.labels.*.name, 'O-Frequent'))
     steps:
-      - uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
+      - uses: alex-page/github-project-automation-plus@be108970955040d35dd6d053c3aff3faaf678026
         with:
           project: Crypto Team
           column: Ready

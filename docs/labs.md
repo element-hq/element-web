@@ -111,10 +111,6 @@ To enable message previews for reactions in DMs only, enable `feature_roomlist_p
 Allows users to receive encrypted messages by creating a device that is stored
 encrypted on the server, as described in [MSC2697](https://github.com/matrix-org/matrix-doc/pull/2697).
 
-## Hidden read receipts (`feature_hidden_read_receipts`)
-
-Enables sending hidden read receipts as per [MSC2285](https://github.com/matrix-org/matrix-doc/pull/2285)
-
 ## Breadcrumbs v2 (`feature_breadcrumbs_v2`)
 
 Instead of showing the horizontal list of breadcrumbs under the filter field, the new UX is an interactive context menu
@@ -149,14 +145,6 @@ If no right panel state is known for the room or it was closed on the last room
 visit, it will default to the room member list. Otherwise, the saved card last
 used in that room is shown.
 
-## Show current profile of users on historical messages (`feature_use_only_current_profiles`)
-
-An experimental flag to determine how the app would behave if a user's current display
-name and avatar (profile) were shown on historical messages instead of the profile details
-at the time when the message was sent.
-
-When enabled, historical messages will use the current profile for the sender.
-
 ## Pin drop location sharing (`feature_location_share_pin_drop`) [In Development]
 
 Enables sharing a pin drop location to the timeline.
@@ -165,12 +153,29 @@ Enables sharing a pin drop location to the timeline.
 
 Enables sharing your current location to the timeline, with live updates.
 
-## Right-click Message Context Menu (`feature_message_right_click_context_menu`)
+## Threaded Messaging (`feature_thread`)
 
-Enables showing a right-click context menu when right-clicking messages in the
-timeline. This menu shows options that can usually be found in the message
-action bar or in the message options.
+Threading allows users to branch out a new conversation from the main timeline of a room. This is particularly useful in high traffic rooms where multiple conversations can happen in parallel or when a single discussion might stretch over a very long period of time.
 
+Threads can be access by clicking their summary below the root event on the room timeline. Users can find a comprehensive list of threads by click the icon on the room header button.
+
+This feature might work in degraded mode if the homeserver a user is connected to does not advertise support for the unstable feature `org.matrix.msc3440`  when calling the `/versions` API endpoint.
+
+## Video rooms (`feature_video_rooms`)
+
+Enables support for creating and joining video rooms, which are persistent video chats that users can jump in and out of.
+
+## Element Call video rooms (`feature_element_call_video_rooms`) [In Development]
+
+Enables support for video rooms that use Element Call rather than Jitsi, and causes the 'New video room' option to create Element Call video rooms rather than Jitsi ones.
+
+This flag will not have any effect unless `feature_video_rooms` is also enabled.
+
+## New group call experience (`feature_group_calls`) [In Development]
+
+This feature allows users to place and join native [MSC3401](https://github.com/matrix-org/matrix-spec-proposals/pull/3401) group calls in compatible rooms, using Element Call.
+
+If you're enabling this at the deployment level, you may also want to reference the docs for the `element_call` config section.
 
 ## Rich text in room topics (`feature_html_topic`) [In Development]
 
@@ -180,3 +185,7 @@ Enables rendering of MD / HTML in room topics.
 
 Enables exploring public spaces in the new search dialog. Requires the server to
 have [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827) enabled.
+
+## Favourite Messages (`feature_favourite_messages`) [In Development]
+
+Enables users to bookmark a message or content for a later reference.

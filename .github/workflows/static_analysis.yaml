@@ -57,9 +57,25 @@ jobs:
         with:
           cache: 'yarn'
 
-      # Does not need branch matching as only analyses this layer
-      - name: Install Deps
-        run: "yarn install --pure-lockfile"
+      # Needs branch matching as it inherits .stylelintrc.js from matrix-react-sdk
+      - name: Install Dependencies
+        run: "./scripts/layered.sh"
 
       - name: Run Linter
         run: "yarn run lint:style"
+
+  analyse_dead_code:
+    name: "Analyse Dead Code"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install Deps
+        run: "scripts/layered.sh"
+
+      - name: Dead Code Analysis
+        run: "yarn run analyse:unused-exports"

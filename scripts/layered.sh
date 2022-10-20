@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -ex
 
 # Creates a layered environment with the full repo for the app and SDKs cloned
 # and linked. This gives an element-web dev environment ready to build with
