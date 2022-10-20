@@ -52,23 +52,31 @@ export const useVoiceBroadcastRecording = (recording: VoiceBroadcastRecording) =
         const confirmed = await showStopBroadcastingDialog();
 
         if (confirmed) {
-            recording.stop();
+            await recording.stop();
         }
     };
 
-    const [live, setLive] = useState(recording.getState() === VoiceBroadcastInfoState.Started);
+    const [recordingState, setRecordingState] = useState(recording.getState());
     useTypedEventEmitter(
         recording,
         VoiceBroadcastRecordingEvent.StateChanged,
         (state: VoiceBroadcastInfoState, _recording: VoiceBroadcastRecording) => {
-            setLive(state === VoiceBroadcastInfoState.Started);
+            setRecordingState(state);
         },
     );
 
+    const live = [
+        VoiceBroadcastInfoState.Started,
+        VoiceBroadcastInfoState.Paused,
+        VoiceBroadcastInfoState.Running,
+    ].includes(recordingState);
+
     return {
         live,
+        recordingState,
         room,
         sender: recording.infoEvent.sender,
         stopRecording,
+        toggleRecording: recording.toggle,
     };
 };

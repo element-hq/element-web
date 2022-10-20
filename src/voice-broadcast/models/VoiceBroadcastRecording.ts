@@ -76,10 +76,37 @@ export class VoiceBroadcastRecording
     }
 
     public async stop(): Promise<void> {
+        if (this.state === VoiceBroadcastInfoState.Stopped) return;
+
         this.setState(VoiceBroadcastInfoState.Stopped);
         await this.stopRecorder();
-        await this.sendStoppedStateEvent();
+        await this.sendInfoStateEvent(VoiceBroadcastInfoState.Stopped);
     }
+
+    public async pause(): Promise<void> {
+        // stopped or already paused recordings cannot be paused
+        if ([VoiceBroadcastInfoState.Stopped, VoiceBroadcastInfoState.Paused].includes(this.state)) return;
+
+        this.setState(VoiceBroadcastInfoState.Paused);
+        await this.stopRecorder();
+        await this.sendInfoStateEvent(VoiceBroadcastInfoState.Paused);
+    }
+
+    public async resume(): Promise<void> {
+        if (this.state !== VoiceBroadcastInfoState.Paused) return;
+
+        this.setState(VoiceBroadcastInfoState.Running);
+        await this.getRecorder().start();
+        await this.sendInfoStateEvent(VoiceBroadcastInfoState.Running);
+    }
+
+    public toggle = async (): Promise<void> => {
+        if (this.getState() === VoiceBroadcastInfoState.Paused) return this.resume();
+
+        if ([VoiceBroadcastInfoState.Started, VoiceBroadcastInfoState.Running].includes(this.getState())) {
+            return this.pause();
+        }
+    };
 
     public getState(): VoiceBroadcastInfoState {
         return this.state;
@@ -162,14 +189,14 @@ export class VoiceBroadcastRecording
         await this.client.sendMessage(this.infoEvent.getRoomId(), content);
     }
 
-    private async sendStoppedStateEvent(): Promise<void> {
+    private async sendInfoStateEvent(state: VoiceBroadcastInfoState): Promise<void> {
         // TODO Michael W: add error handling for state event
         await this.client.sendStateEvent(
             this.infoEvent.getRoomId(),
             VoiceBroadcastInfoEventType,
             {
                 device_id: this.client.getDeviceId(),
-                state: VoiceBroadcastInfoState.Stopped,
+                state,
                 ["m.relates_to"]: {
                     rel_type: RelationType.Reference,
                     event_id: this.infoEvent.getId(),

@@ -21,6 +21,7 @@ import { VoiceRecording } from "../../audio/VoiceRecording";
 import SdkConfig, { DEFAULTS } from "../../SdkConfig";
 import { concat } from "../../utils/arrays";
 import { IDestroyable } from "../../utils/IDestroyable";
+import { Singleflight } from "../../utils/Singleflight";
 
 export enum VoiceBroadcastRecorderEvent {
     ChunkRecorded = "chunk_recorded",
@@ -65,6 +66,8 @@ export class VoiceBroadcastRecorder
      */
     public async stop(): Promise<Optional<ChunkRecordedPayload>> {
         await this.voiceRecording.stop();
+        // forget about that call, so that we can stop it again later
+        Singleflight.forgetAllFor(this.voiceRecording);
         return this.extractChunk();
     }
 

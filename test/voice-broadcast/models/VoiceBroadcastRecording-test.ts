@@ -92,6 +92,25 @@ describe("VoiceBroadcastRecording", () => {
         });
     };
 
+    const itShouldSendAnInfoEvent = (state: VoiceBroadcastInfoState) => {
+        it(`should send a ${state} info event`, () => {
+            expect(client.sendStateEvent).toHaveBeenCalledWith(
+                roomId,
+                VoiceBroadcastInfoEventType,
+                {
+
+                    device_id: client.getDeviceId(),
+                    state,
+                    ["m.relates_to"]: {
+                        rel_type: RelationType.Reference,
+                        event_id: infoEvent.getId(),
+                    },
+                },
+                client.getUserId(),
+            );
+        });
+    };
+
     beforeEach(() => {
         client = stubClient();
         room = mkStubRoom(roomId, "Test Room", client);
@@ -355,6 +374,26 @@ describe("VoiceBroadcastRecording", () => {
                 });
             });
 
+            describe.each([
+                ["pause", async () => voiceBroadcastRecording.pause()],
+                ["toggle", async () => voiceBroadcastRecording.toggle()],
+            ])("and calling %s", (_case: string, action: Function) => {
+                beforeEach(async () => {
+                    await action();
+                });
+
+                itShouldBeInState(VoiceBroadcastInfoState.Paused);
+                itShouldSendAnInfoEvent(VoiceBroadcastInfoState.Paused);
+
+                it("should stop the recorder", () => {
+                    expect(mocked(voiceBroadcastRecorder.stop)).toHaveBeenCalled();
+                });
+
+                it("should emit a paused state changed event", () => {
+                    expect(onStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Paused);
+                });
+            });
+
             describe("and calling destroy", () => {
                 beforeEach(() => {
                     voiceBroadcastRecording.destroy();
@@ -367,6 +406,32 @@ describe("VoiceBroadcastRecording", () => {
                         onChunkRecorded,
                     );
                     expect(mocked(voiceBroadcastRecording.removeAllListeners)).toHaveBeenCalled();
+                });
+            });
+        });
+
+        describe("and it is in paused state", () => {
+            beforeEach(async () => {
+                await voiceBroadcastRecording.pause();
+            });
+
+            describe.each([
+                ["resume", async () => voiceBroadcastRecording.resume()],
+                ["toggle", async () => voiceBroadcastRecording.toggle()],
+            ])("and calling %s", (_case: string, action: Function) => {
+                beforeEach(async () => {
+                    await action();
+                });
+
+                itShouldBeInState(VoiceBroadcastInfoState.Running);
+                itShouldSendAnInfoEvent(VoiceBroadcastInfoState.Running);
+
+                it("should start the recorder", () => {
+                    expect(mocked(voiceBroadcastRecorder.start)).toHaveBeenCalled();
+                });
+
+                it("should emit a running state changed event", () => {
+                    expect(onStateChanged).toHaveBeenCalledWith(VoiceBroadcastInfoState.Running);
                 });
             });
         });
