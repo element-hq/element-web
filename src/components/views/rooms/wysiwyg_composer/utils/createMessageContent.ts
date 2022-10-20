@@ -89,15 +89,15 @@ export function createMessageContent(
 
         const htmlPrefix = isReply ? getHtmlReplyFallback(editedEvent) : '';
         content.formatted_body = isEditing ? `${htmlPrefix} * ${formattedBody}` : formattedBody;
+    }
 
-        if (isEditing) {
-            content['m.new_content'] = {
-                "msgtype": content.msgtype,
-                "body": body,
-                "format": "org.matrix.custom.html",
-                'formatted_body': formattedBody,
-            };
-        }
+    if (isEditing) {
+        content['m.new_content'] = {
+            "msgtype": content.msgtype,
+            "body": body,
+            "format": "org.matrix.custom.html",
+            'formatted_body': formattedBody,
+        };
     }
 
     const newRelation = isEditing ?
