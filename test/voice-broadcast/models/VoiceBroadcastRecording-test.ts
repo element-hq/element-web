@@ -442,7 +442,7 @@ describe("VoiceBroadcastRecording", () => {
             infoEvent = mkVoiceBroadcastInfoEvent({
                 device_id: client.getDeviceId(),
                 state: VoiceBroadcastInfoState.Started,
-                chunk_length: 300,
+                chunk_length: 120,
             });
 
             const relationsContainer = {

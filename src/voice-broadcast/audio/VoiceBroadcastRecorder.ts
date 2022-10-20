@@ -17,8 +17,8 @@ limitations under the License.
 import { Optional } from "matrix-events-sdk";
 import { TypedEventEmitter } from "matrix-js-sdk/src/models/typed-event-emitter";
 
+import { getChunkLength } from "..";
 import { VoiceRecording } from "../../audio/VoiceRecording";
-import SdkConfig, { DEFAULTS } from "../../SdkConfig";
 import { concat } from "../../utils/arrays";
 import { IDestroyable } from "../../utils/IDestroyable";
 import { Singleflight } from "../../utils/Singleflight";
@@ -139,6 +139,5 @@ export class VoiceBroadcastRecorder
 }
 
 export const createVoiceBroadcastRecorder = (): VoiceBroadcastRecorder => {
-    const targetChunkLength = SdkConfig.get("voice_broadcast")?.chunk_length || DEFAULTS.voice_broadcast!.chunk_length;
-    return new VoiceBroadcastRecorder(new VoiceRecording(), targetChunkLength);
+    return new VoiceBroadcastRecorder(new VoiceRecording(), getChunkLength());
 };

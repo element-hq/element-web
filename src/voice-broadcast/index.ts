@@ -34,6 +34,7 @@ export * from "./components/molecules/VoiceBroadcastRecordingPip";
 export * from "./hooks/useVoiceBroadcastRecording";
 export * from "./stores/VoiceBroadcastPlaybacksStore";
 export * from "./stores/VoiceBroadcastRecordingsStore";
+export * from "./utils/getChunkLength";
 export * from "./utils/hasRoomLiveVoiceBroadcast";
 export * from "./utils/shouldDisplayAsVoiceBroadcastRecordingTile";
 export * from "./utils/shouldDisplayAsVoiceBroadcastTile";

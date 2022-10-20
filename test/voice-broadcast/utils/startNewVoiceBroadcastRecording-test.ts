@@ -122,7 +122,7 @@ describe("startNewVoiceBroadcastRecording", () => {
                     roomId,
                     VoiceBroadcastInfoEventType,
                     {
-                        chunk_length: 300,
+                        chunk_length: 120,
                         device_id: client.getDeviceId(),
                         state: VoiceBroadcastInfoState.Started,
                     },
