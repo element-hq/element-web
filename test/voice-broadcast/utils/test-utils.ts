@@ -23,7 +23,17 @@ export const mkVoiceBroadcastInfoStateEvent = (
     roomId: string,
     state: VoiceBroadcastInfoState,
     sender: string,
+    startedInfoEvent?: MatrixEvent,
 ): MatrixEvent => {
+    const relationContent = {};
+
+    if (startedInfoEvent) {
+        relationContent["m.relates_to"] = {
+            event_id: startedInfoEvent.getId(),
+            rel_type: "m.reference",
+        };
+    }
+
     return mkEvent({
         event: true,
         room: roomId,
@@ -32,6 +42,7 @@ export const mkVoiceBroadcastInfoStateEvent = (
         skey: sender,
         content: {
             state,
+            ...relationContent,
         },
     });
 };
