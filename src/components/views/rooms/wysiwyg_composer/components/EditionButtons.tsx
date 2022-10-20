@@ -26,7 +26,7 @@ interface EditionButtonsProps {
 }
 
 export function EditionButtons({ onCancelClick, onSaveClick, isSaveDisabled = false }: EditionButtonsProps) {
-    return <div className="mx_EditMessageComposer_buttons">
+    return <div className="mx_EditWysiwygComposer_buttons">
         <AccessibleButton kind="secondary" onClick={onCancelClick}>
             { _t("Cancel") }
         </AccessibleButton>

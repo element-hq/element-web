@@ -22,10 +22,10 @@ limitations under the License.
     flex-direction: column;
     max-width: 100%; /* disable overflow */
     width: auto;
-    gap: 5px;
-    padding: 3px var(--EditWysiwygComposer-padding-inline);
+    gap: 8px;
+    padding: 8px var(--EditWysiwygComposer-padding-inline);
 
-    .mx_WysiwygComposer_container {
+    .mx_WysiwygComposer_content {
         border-radius: 4px;
         border: solid 1px $primary-hairline-color;
         background-color: $background;
@@ -48,6 +48,12 @@ limitations under the License.
             flex: 1;
             box-sizing: border-box;
             min-width: 100px; /* magic number to align the edge of the button with the input area */
+        }
+    }
+
+    .mx_FormattingButtons_Button {
+        &:first-child {
+            margin-left: 0px;
         }
     }
 }

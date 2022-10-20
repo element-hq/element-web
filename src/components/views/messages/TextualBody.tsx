@@ -565,7 +565,7 @@ export default class TextualBody extends React.Component<IBodyProps, IState> {
         if (this.props.editState) {
             const isWysiwygComposerEnabled = SettingsStore.getValue("feature_wysiwyg_composer");
             return isWysiwygComposerEnabled ?
-                <EditWysiwygComposer editorStateTransfer={this.props.editState} /> :
+                <EditWysiwygComposer editorStateTransfer={this.props.editState} className="mx_EventTile_content" /> :
                 <EditMessageComposer editState={this.props.editState} className="mx_EventTile_content" />;
         }
         const mxEvent = this.props.mxEvent;

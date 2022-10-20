@@ -15,6 +15,7 @@ limitations under the License.
 */
 
 import React, { forwardRef, RefObject } from 'react';
+import classNames from 'classnames';
 
 import EditorStateTransfer from '../../../../utils/EditorStateTransfer';
 import { WysiwygComposer } from './components/WysiwygComposer';
@@ -38,16 +39,17 @@ interface EditWysiwygComposerProps {
     disabled?: boolean;
     onChange?: (content: string) => void;
     editorStateTransfer: EditorStateTransfer;
+    className?: string;
 }
 
-export function EditWysiwygComposer({ editorStateTransfer, ...props }: EditWysiwygComposerProps) {
+export function EditWysiwygComposer({ editorStateTransfer, className, ...props }: EditWysiwygComposerProps) {
     const initialContent = useInitialContent(editorStateTransfer);
     const isReady = !editorStateTransfer || Boolean(initialContent);
 
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(initialContent, editorStateTransfer);
 
     return isReady && <WysiwygComposer
-        className="mx_EditWysiwygComposer"
+        className={classNames("mx_EditWysiwygComposer", className)}
         initialContent={initialContent}
         onChange={onChange}
         onSend={editMessage}
