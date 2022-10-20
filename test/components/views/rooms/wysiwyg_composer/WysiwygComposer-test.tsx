@@ -20,13 +20,12 @@ import { act, render, screen, waitFor } from "@testing-library/react";
 import { InputEventProcessor, Wysiwyg, WysiwygProps } from "@matrix-org/matrix-wysiwyg";
 
 import MatrixClientContext from "../../../../../src/contexts/MatrixClientContext";
-import RoomContext, { TimelineRenderingType } from "../../../../../src/contexts/RoomContext";
+import RoomContext from "../../../../../src/contexts/RoomContext";
 import defaultDispatcher from "../../../../../src/dispatcher/dispatcher";
 import { Action } from "../../../../../src/dispatcher/actions";
 import { IRoomState } from "../../../../../src/components/structures/RoomView";
-import { Layout } from "../../../../../src/settings/enums/Layout";
 import { WysiwygComposer } from "../../../../../src/components/views/rooms/wysiwyg_composer/WysiwygComposer";
-import { createTestClient, mkEvent, mkStubRoom } from "../../../../test-utils";
+import { createTestClient, getRoomContext, mkEvent, mkStubRoom } from "../../../../test-utils";
 import SettingsStore from "../../../../../src/settings/SettingsStore";
 
 // Work around missing ClipboardEvent type
@@ -74,43 +73,7 @@ describe('WysiwygComposer', () => {
         return eventId === mockEvent.getId() ? mockEvent : null;
     });
 
-    const defaultRoomContext: IRoomState = {
-        room: mockRoom,
-        roomLoading: true,
-        peekLoading: false,
-        shouldPeek: true,
-        membersLoaded: false,
-        numUnreadMessages: 0,
-        canPeek: false,
-        showApps: false,
-        isPeeking: false,
-        showRightPanel: true,
-        joining: false,
-        atEndOfLiveTimeline: true,
-        showTopUnreadMessagesBar: false,
-        statusBarVisible: false,
-        canReact: false,
-        canSendMessages: false,
-        layout: Layout.Group,
-        lowBandwidth: false,
-        alwaysShowTimestamps: false,
-        showTwelveHourTimestamps: false,
-        readMarkerInViewThresholdMs: 3000,
-        readMarkerOutOfViewThresholdMs: 30000,
-        showHiddenEvents: false,
-        showReadReceipts: true,
-        showRedactions: true,
-        showJoinLeaves: true,
-        showAvatarChanges: true,
-        showDisplaynameChanges: true,
-        matrixClientIsReady: false,
-        timelineRenderingType: TimelineRenderingType.Room,
-        liveTimeline: undefined,
-        canSelfRedact: false,
-        resizing: false,
-        narrow: false,
-        activeCall: null,
-    };
+    const defaultRoomContext: IRoomState = getRoomContext(mockRoom, {});
 
     let sendMessage: () => void;
     const customRender = (onChange = (_content: string) => void 0, disabled = false) => {

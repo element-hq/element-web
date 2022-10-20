@@ -33,6 +33,7 @@ exports[`<LoginWithQR /> approves login and waits for new device 1`] = `
             <div
               aria-label="Loading..."
               class="mx_Spinner_icon"
+              data-testid="spinner"
               role="progressbar"
               style="width: 32px; height: 32px;"
             />
@@ -218,6 +219,7 @@ exports[`<LoginWithQR /> displays qr code after it is created 1`] = `
             <div
               aria-label="Loading..."
               class="mx_Spinner_icon"
+              data-testid="spinner"
               role="progressbar"
               style="width: 32px; height: 32px;"
             />
@@ -359,6 +361,7 @@ exports[`<LoginWithQR /> renders spinner while generating code 1`] = `
             <div
               aria-label="Loading..."
               class="mx_Spinner_icon"
+              data-testid="spinner"
               role="progressbar"
               style="width: 32px; height: 32px;"
             />

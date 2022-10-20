@@ -40,6 +40,7 @@ export default class Spinner extends React.PureComponent<IProps> {
                     style={{ width: w, height: h }}
                     aria-label={_t("Loading...")}
                     role="progressbar"
+                    data-testid="spinner"
                 />
             </div>
         );

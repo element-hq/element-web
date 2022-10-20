@@ -195,6 +195,7 @@ exports[`VoiceBroadcastPlaybackBody when rendering a buffering voice broadcast s
         <div
           aria-label="Loading..."
           class="mx_Spinner_icon"
+          data-testid="spinner"
           role="progressbar"
           style="width: 32px; height: 32px;"
         />

@@ -73,6 +73,7 @@ function SendButton(props: ISendButtonProps) {
             className="mx_MessageComposer_sendMessage"
             onClick={props.onClick}
             title={props.title ?? _t('Send message')}
+            data-testid="sendmessagebtn"
         />
     );
 }
