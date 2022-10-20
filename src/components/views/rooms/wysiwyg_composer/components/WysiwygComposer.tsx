@@ -26,6 +26,7 @@ interface WysiwygComposerProps {
     onChange?: (content: string) => void;
     onSend: () => void;
     initialContent?: string;
+    className?: string;
     children?: (
         ref: MutableRefObject<HTMLDivElement | null>,
         wysiwyg: FormattingFunctions,
@@ -33,7 +34,7 @@ interface WysiwygComposerProps {
 }
 
 export const WysiwygComposer = memo(function WysiwygComposer(
-    { disabled = false, onChange, onSend, initialContent, children }: WysiwygComposerProps,
+    { disabled = false, onChange, onSend, initialContent, className, children }: WysiwygComposerProps,
 ) {
     const inputEventProcessor = useInputEventProcessor(onSend);
 
@@ -47,7 +48,7 @@ export const WysiwygComposer = memo(function WysiwygComposer(
     }, [onChange, content, disabled]);
 
     return (
-        <div className="mx_WysiwygComposer">
+        <div className={className}>
             <FormattingButtons composer={wysiwyg} formattingStates={formattingStates} />
             <Editor ref={ref} disabled={!isWysiwygReady || disabled} />
             { children?.(ref, wysiwyg) }

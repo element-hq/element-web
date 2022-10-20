@@ -39,7 +39,7 @@ const Content = forwardRef<HTMLElement, ContentProps>(
 
 export function SendWysiwygComposer(props: SendWysiwygComposerProps) {
     return (
-        <WysiwygComposer {...props}>{ (ref, wysiwyg) => (
+        <WysiwygComposer className="mx_SendWysiwygComposer" {...props}>{ (ref, wysiwyg) => (
             <Content disabled={props.disabled} ref={ref} formattingFunctions={wysiwyg} />
         ) }
         </WysiwygComposer>);

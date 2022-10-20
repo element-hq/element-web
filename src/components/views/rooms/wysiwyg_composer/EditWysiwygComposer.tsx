@@ -47,6 +47,7 @@ export function EditWysiwygComposer({ editorStateTransfer, ...props }: EditWysiw
     const { editMessage, endEditing, onChange, isSaveDisabled } = useEditing(initialContent, editorStateTransfer);
 
     return isReady && <WysiwygComposer
+        className="mx_EditWysiwygComposer"
         initialContent={initialContent}
         onChange={onChange}
         onSend={editMessage}
