@@ -18,7 +18,6 @@ limitations under the License.
 
 import PluginEvents = Cypress.PluginEvents;
 import PluginConfigOptions = Cypress.PluginConfigOptions;
-import { performance } from "./performance";
 import { synapseDocker } from "./synapsedocker";
 import { slidingSyncProxyDocker } from "./sliding-sync";
 import { webserver } from "./webserver";
@@ -30,7 +29,6 @@ import { log } from "./log";
  */
 export default function(on: PluginEvents, config: PluginConfigOptions) {
     docker(on, config);
-    performance(on, config);
     synapseDocker(on, config);
     slidingSyncProxyDocker(on, config);
     webserver(on, config);
