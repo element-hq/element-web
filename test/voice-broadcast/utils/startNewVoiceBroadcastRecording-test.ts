@@ -70,7 +70,12 @@ describe("startNewVoiceBroadcastRecording", () => {
             getCurrent: jest.fn(),
         } as unknown as VoiceBroadcastRecordingsStore;
 
-        infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, client.getUserId());
+        infoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            VoiceBroadcastInfoState.Started,
+            client.getUserId(),
+            client.getDeviceId(),
+        );
         otherEvent = mkEvent({
             event: true,
             type: EventType.RoomMember,
@@ -154,7 +159,12 @@ describe("startNewVoiceBroadcastRecording", () => {
         describe("when there already is a live broadcast of the current user in the room", () => {
             beforeEach(async () => {
                 room.currentState.setStateEvents([
-                    mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Running, client.getUserId()),
+                    mkVoiceBroadcastInfoStateEvent(
+                        roomId,
+                        VoiceBroadcastInfoState.Running,
+                        client.getUserId(),
+                        client.getDeviceId(),
+                    ),
                 ]);
 
                 result = await startNewVoiceBroadcastRecording(room, client, recordingsStore);
@@ -172,7 +182,12 @@ describe("startNewVoiceBroadcastRecording", () => {
         describe("when there already is a live broadcast of another user", () => {
             beforeEach(async () => {
                 room.currentState.setStateEvents([
-                    mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Running, otherUserId),
+                    mkVoiceBroadcastInfoStateEvent(
+                        roomId,
+                        VoiceBroadcastInfoState.Running,
+                        otherUserId,
+                        "ASD123",
+                    ),
                 ]);
 
                 result = await startNewVoiceBroadcastRecording(room, client, recordingsStore);

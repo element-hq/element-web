@@ -35,7 +35,12 @@ describe("hasRoomLiveVoiceBroadcast", () => {
         sender: string,
     ) => {
         room.currentState.setStateEvents([
-            mkVoiceBroadcastInfoStateEvent(room.roomId, state, sender),
+            mkVoiceBroadcastInfoStateEvent(
+                room.roomId,
+                state,
+                sender,
+                "ASD123",
+            ),
         ]);
     };
 

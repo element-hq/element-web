@@ -22,7 +22,8 @@ import { mkEvent } from "../../test-utils";
 export const mkVoiceBroadcastInfoStateEvent = (
     roomId: string,
     state: VoiceBroadcastInfoState,
-    sender: string,
+    senderId: string,
+    senderDeviceId: string,
     startedInfoEvent?: MatrixEvent,
 ): MatrixEvent => {
     const relationContent = {};
@@ -37,11 +38,12 @@ export const mkVoiceBroadcastInfoStateEvent = (
     return mkEvent({
         event: true,
         room: roomId,
-        user: sender,
+        user: senderId,
         type: VoiceBroadcastInfoEventType,
-        skey: sender,
+        skey: senderId,
         content: {
             state,
+            device_id: senderDeviceId,
             ...relationContent,
         },
     });

@@ -52,9 +52,23 @@ export class VoiceBroadcastRecording
     public constructor(
         public readonly infoEvent: MatrixEvent,
         private client: MatrixClient,
+        initialState?: VoiceBroadcastInfoState,
     ) {
         super();
 
+        if (initialState) {
+            this.state = initialState;
+        } else {
+            this.setInitialStateFromInfoEvent();
+        }
+
+        // TODO Michael W: listen for state updates
+        //
+        this.infoEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
+        this.dispatcherRef = dis.register(this.onAction);
+    }
+
+    private setInitialStateFromInfoEvent(): void {
         const room = this.client.getRoom(this.infoEvent.getRoomId());
         const relations = room?.getUnfilteredTimelineSet()?.relations?.getChildEventsForEvent(
             this.infoEvent.getId(),
@@ -65,10 +79,6 @@ export class VoiceBroadcastRecording
         this.state = !relatedEvents?.find((event: MatrixEvent) => {
             return event.getContent()?.state === VoiceBroadcastInfoState.Stopped;
         }) ? VoiceBroadcastInfoState.Started : VoiceBroadcastInfoState.Stopped;
-        // TODO Michael W: add listening for updates
-
-        this.infoEvent.on(MatrixEventEvent.BeforeRedaction, this.onBeforeRedaction);
-        this.dispatcherRef = dis.register(this.onAction);
     }
 
     public async start(): Promise<void> {

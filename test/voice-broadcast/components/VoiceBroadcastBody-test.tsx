@@ -67,11 +67,17 @@ describe("VoiceBroadcastBody", () => {
             if (getRoomId === roomId) return room;
         });
 
-        infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, client.getUserId());
+        infoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            VoiceBroadcastInfoState.Started,
+            client.getUserId(),
+            client.getDeviceId(),
+        );
         stoppedEvent = mkVoiceBroadcastInfoStateEvent(
             roomId,
             VoiceBroadcastInfoState.Stopped,
             client.getUserId(),
+            client.getDeviceId(),
             infoEvent,
         );
         room.addEventsToTimeline([infoEvent], true, room.getLiveTimeline());

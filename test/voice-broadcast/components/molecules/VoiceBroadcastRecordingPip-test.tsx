@@ -47,13 +47,13 @@ describe("VoiceBroadcastRecordingPip", () => {
     let renderResult: RenderResult;
 
     const renderPip = (state: VoiceBroadcastInfoState) => {
-        infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, state, client.getUserId());
-        recording = new VoiceBroadcastRecording(infoEvent, client);
-
-        if (state === VoiceBroadcastInfoState.Paused) {
-            recording.pause();
-        }
-
+        infoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            state,
+            client.getUserId(),
+            client.getDeviceId(),
+        );
+        recording = new VoiceBroadcastRecording(infoEvent, client, state);
         renderResult = render(<VoiceBroadcastRecordingPip recording={recording} />);
     };
 

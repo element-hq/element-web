@@ -45,8 +45,18 @@ describe("VoiceBroadcastRecordingsStore", () => {
                 return room;
             }
         });
-        infoEvent = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, client.getUserId());
-        otherInfoEvent = mkVoiceBroadcastInfoStateEvent(roomId, VoiceBroadcastInfoState.Started, client.getUserId());
+        infoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            VoiceBroadcastInfoState.Started,
+            client.getUserId(),
+            client.getDeviceId(),
+        );
+        otherInfoEvent = mkVoiceBroadcastInfoStateEvent(
+            roomId,
+            VoiceBroadcastInfoState.Started,
+            client.getUserId(),
+            client.getDeviceId(),
+        );
         recording = new VoiceBroadcastRecording(infoEvent, client);
         otherRecording = new VoiceBroadcastRecording(otherInfoEvent, client);
         recordings = new VoiceBroadcastRecordingsStore();
