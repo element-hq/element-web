@@ -175,14 +175,22 @@ const NewRoomIntro = () => {
         }
 
         const avatarUrl = room.currentState.getStateEvents(EventType.RoomAvatar, "")?.getContent()?.url;
-        body = <React.Fragment>
-            <MiniAvatarUploader
-                hasAvatar={!!avatarUrl}
+        let avatar = (
+            <RoomAvatar room={room} width={AVATAR_SIZE} height={AVATAR_SIZE} viewAvatarOnClick={!!avatarUrl} />
+        );
+
+        if (!avatarUrl) {
+            avatar = <MiniAvatarUploader
+                hasAvatar={false}
                 noAvatarLabel={_t("Add a photo, so people can easily spot your room.")}
                 setAvatarUrl={url => cli.sendStateEvent(roomId, EventType.RoomAvatar, { url }, '')}
             >
-                <RoomAvatar room={room} width={AVATAR_SIZE} height={AVATAR_SIZE} viewAvatarOnClick={true} />
-            </MiniAvatarUploader>
+                { avatar }
+            </MiniAvatarUploader>;
+        }
+
+        body = <React.Fragment>
+            { avatar }
 
             <h2>{ room.name }</h2>
 
