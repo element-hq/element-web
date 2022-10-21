@@ -54,8 +54,8 @@ export function createMessageContent(
 ): IContent {
     // TODO emote ?
 
-    const isReply = Boolean(replyToEvent?.replyEventId);
     const isEditing = Boolean(editedEvent);
+    const isReply = isEditing ? Boolean(editedEvent?.replyEventId) : Boolean(replyToEvent);
 
     /*const isEmote = containsEmote(model);
     if (isEmote) {
@@ -87,7 +87,7 @@ export function createMessageContent(
     if (formattedBody) {
         content.format = "org.matrix.custom.html";
 
-        const htmlPrefix = isReply ? getHtmlReplyFallback(editedEvent) : '';
+        const htmlPrefix = isReply && isEditing ? getHtmlReplyFallback(editedEvent) : '';
         content.formatted_body = isEditing ? `${htmlPrefix} * ${formattedBody}` : formattedBody;
     }
 

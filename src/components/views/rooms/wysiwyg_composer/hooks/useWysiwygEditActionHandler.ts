@@ -38,7 +38,7 @@ export function useWysiwygEditActionHandler(
         const context = payload.context ?? TimelineRenderingType.Room;
 
         switch (payload.action) {
-            case Action.FocusSendMessageComposer:
+            case Action.FocusEditMessageComposer:
                 focusComposer(composerElement, context, roomContext, timeoutId);
                 break;
         }

@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Composer as ComposerEvent } from "@matrix-org/analytics-events/types/typescript/Composer";
 import { IContent, IEventRelation, MatrixEvent } from 'matrix-js-sdk/src/models/event';
-import { MatrixClient } from "matrix-js-sdk/src/matrix";
+import { ISendEventResponse, MatrixClient } from "matrix-js-sdk/src/matrix";
 import { THREAD_RELATION_TYPE } from "matrix-js-sdk/src/models/thread";
 
 import { PosthogAnalytics } from "../../../../../PosthogAnalytics";
@@ -160,6 +160,7 @@ export function editMessage(
         isReply: Boolean(editedEvent.replyEventId),
     });
 
+    // TODO emoji
     // Replace emoticon at the end of the message
     /*    if (SettingsStore.getValue('MessageComposerInput.autoReplaceEmoji')) {
         const caret = this.editorRef.current?.getCaret();
@@ -182,6 +183,8 @@ export function editMessage(
         return;
     }
 
+    let response: Promise<ISendEventResponse> | undefined;
+
     // If content is modified then send an updated event into the room
     if (isContentModified(newContent, editorStateTransfer)) {
         const roomId = editedEvent.getRoomId();
@@ -194,11 +197,11 @@ export function editMessage(
             const event = editorStateTransfer.getEvent();
             const threadId = event.threadRootId || null;
 
-            console.log('editContent', editContent);
-            mxClient.sendMessage(roomId, threadId, editContent);
+            response = mxClient.sendMessage(roomId, threadId, editContent);
             dis.dispatch({ action: "message_sent" });
         }
     }
 
     endEditing(roomContext);
+    return response;
 }
